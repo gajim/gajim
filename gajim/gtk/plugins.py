@@ -75,9 +75,6 @@ class Plugins(Adw.PreferencesGroup, EventHelper, SignalManager):
         self.set_description(description_text)
         self.set_header_suffix(self._file_chooser_button)
 
-        self._load_installed_manifests()
-        self._load_repository_manifests()
-
         self.register_events(
             [
                 ("plugin-removed", ged.GUI1, self._on_plugin_removed),
@@ -91,6 +88,10 @@ class Plugins(Adw.PreferencesGroup, EventHelper, SignalManager):
         app.plugin_repository.connect(
             "plugin-updates-available", self._on_plugin_updates_available
         )
+
+        # Load manifests in idle fashion, since it blocks the UI
+        GLib.idle_add(self._load_installed_manifests)
+        GLib.idle_add(self._load_repository_manifests)
 
     def do_unroot(self) -> None:
         self._disconnect_all()
