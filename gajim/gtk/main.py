@@ -647,11 +647,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
                 try:
                     shutil.copyfile(preview.orig_path, target_path)
-                except PermissionError as e:
+                except Exception as e:
                     InformationAlertDialog(
                         _("Could Not Save File"),
                         _(
-                            "You do not have permissions for this directory.\n"
+                            "There was an error while trying to save the file.\n"
                             "Error: %s."
                         )
                         % e,
