@@ -168,13 +168,23 @@ class Preview:
     def thumb_exists(self) -> bool:
         if self.thumb_path is None:
             return False
-        return self.thumb_path.exists()
+
+        try:
+            return self.thumb_path.exists()
+        except Exception as error:
+            log.error("Could not check if thumbnail exists: %s", error)
+            return False
 
     @property
     def orig_exists(self) -> bool:
         if self.orig_path is None:
             return False
-        return self.orig_path.exists()
+
+        try:
+            return self.orig_path.exists()
+        except Exception as error:
+            log.error("Could not check if original file exists: %s", error)
+            return False
 
     def update_widget(self, data: bytes | None = None) -> None:
         self._widget.update(self, data)
