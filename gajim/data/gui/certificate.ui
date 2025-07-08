@@ -52,7 +52,7 @@
                         </style>
                         <child>
                           <object class="AdwActionRow" id="account_label_row">
-                            <property name="title">Account Label</property>
+                            <property name="title" translatable="yes">Account Label</property>
                             <property name="subtitle-selectable">True</property>
                             <style>
                               <class name="property"/>
@@ -61,7 +61,7 @@
                         </child>
                         <child>
                           <object class="AdwActionRow" id="account_address_row">
-                            <property name="title">Account Address</property>
+                            <property name="title" translatable="yes">Account Address</property>
                             <property name="subtitle-selectable">True</property>
                             <style>
                               <class name="property"/>
