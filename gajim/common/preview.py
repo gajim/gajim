@@ -351,13 +351,19 @@ class PreviewManager:
                             preview)
 
     def create_thumbnail(self, preview: Preview, data: bytes) -> None:
-        future = app.process_pool.submit(
-            create_thumbnail,
-            data,
-            preview.size,
-            preview.mime_type,
-        )
-        future.add_done_callback(partial(self._write_thumbnail, preview))
+        try:
+            future = app.process_pool.submit(
+                create_thumbnail,
+                data,
+                preview.size,
+                preview.mime_type,
+            )
+            future.add_done_callback(partial(self._write_thumbnail, preview))
+        except Exception as error:
+            preview.info_message = _('Creating thumbnail failed')
+            preview.update_widget()
+            log.warning('Creating thumbnail failed for: %s %s',
+                        preview.orig_path, error)
 
     def _write_thumbnail(self, preview: Preview, future: Future[bytes | None]) -> None:
         try:
