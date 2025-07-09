@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
-"PO-Revision-Date: 2025-06-18 03:12+0000\n"
-"Last-Translator: 翻訳者X <tairanto2@wail.ch>\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"PO-Revision-Date: 2025-07-03 02:12+0000\n"
+"Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
 "Language: ja\n"
@@ -406,6 +406,14 @@ msgstr ""
 msgid "Account Added"
 msgstr "アカウントを追加しました"
 
+#, fuzzy
+msgid "Account Address"
+msgstr "アカウントのアドレス: "
+
+#, fuzzy
+msgid "Account Label"
+msgstr "アカウントは無効です"
+
 msgid "Account Name..."
 msgstr "アカウント名前…"
 
@@ -593,9 +601,9 @@ msgstr "詳細設定"
 msgid "Advanced settings"
 msgstr "詳細設定"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Adw Version: %s"
-msgstr "GTK バージョン: %s"
+msgstr "Adw バージョン: %s"
 
 msgid "Affiliation"
 msgstr "分掌"
@@ -754,6 +762,7 @@ msgstr "Gajim のウィンドウを閉じる際、終了するか尋ねる"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
+"この相手先にグループを割り当てます。グループごとにチャットを絞り込めます。"
 
 msgid "Attention Message Received"
 msgstr "注目メッセージを受信した"
@@ -841,9 +850,8 @@ msgctxt "User status"
 msgid "Available"
 msgstr "在席"
 
-#, fuzzy
 msgid "Available Features"
-msgstr "在席"
+msgstr "利用可能な機能"
 
 msgid "Avatar file size too big"
 msgstr "アバター画像が大きすぎます"
@@ -1007,9 +1015,6 @@ msgstr "証明書は失効しています"
 msgid "Certificate signature failure"
 msgstr "証明書の署名の失敗"
 
-msgid "Ch_ange Subject"
-msgstr "題を変更 (_A)"
-
 msgid "Change"
 msgstr "変更"
 
@@ -1077,10 +1082,12 @@ msgid ""
 "and synchronize chats between all your devices. Gajim is interoperable with "
 "many other chat apps – and it's free."
 msgstr ""
+"自由にチャット: 好きな場所でチャットを楽しめます。お好みのプロバイダーを選択"
+"し、すべてのデバイス間でチャットを同期できます。Gajim は多くの他のチャットア"
+"プリと互換性があり、しかも無料です。"
 
-#, fuzzy
 msgid "Chat window"
-msgstr "タブ化チャットウィンドウ"
+msgstr "チャットウィンドウ"
 
 msgid "Chats"
 msgstr "チャット"
@@ -1100,9 +1107,8 @@ msgstr "更新をチェックする"
 msgid "Check for updates periodically"
 msgstr "定期的に更新をチェックします"
 
-#, fuzzy
 msgid "Check which features are available"
-msgstr "音声メッセージは利用できません"
+msgstr "利用可能な機能をチェック"
 
 msgid "Choose Device"
 msgstr "デバイスを選択"
@@ -1450,7 +1456,7 @@ msgid "D-Bus Interface"
 msgstr "D-Bus インターフェース"
 
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 msgid "Dark Theme"
 msgstr "ダークテーマ"
@@ -1537,11 +1543,16 @@ msgstr "すべての相手先の申し込みを拒否"
 msgid "Description"
 msgstr "説明"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "談話室を閉鎖…"
 
 msgid "Destroy This Chat"
 msgstr "この談話室を閉鎖"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "閉鎖 (_D)"
 
 msgid "Details"
 msgstr "詳細"
@@ -1870,7 +1881,7 @@ msgid "Expires on: "
 msgstr "至: "
 
 msgid "Expiry date"
-msgstr ""
+msgstr "至"
 
 msgid "Export"
 msgstr "書き出し"
@@ -1906,6 +1917,8 @@ msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
 msgstr ""
+"自分自身を表現: 時に言葉は十分ではありません。リアクション、返信、録音メッ"
+"セージを使用し、在籍状況の更新を送信して、存分に自分自身を表現します。"
 
 msgid "Extended Address"
 msgstr "建物名など"
@@ -2265,7 +2278,6 @@ msgstr "非公開"
 msgid "Hide"
 msgstr "隠す"
 
-#, fuzzy
 msgid "Hide Chat List"
 msgstr "チャット一覧を隠す"
 
@@ -2482,9 +2494,8 @@ msgstr "招待者"
 msgid "Is a microphone plugged in and accessible?"
 msgstr "マイクは接続されていてアクセス可能ですか ?"
 
-#, fuzzy
 msgid "Issue date"
-msgstr "証明対象"
+msgstr "自"
 
 msgid "Issued by"
 msgstr "証明者"
@@ -2619,6 +2630,9 @@ msgstr "読み込み中…"
 msgid "Local System Time"
 msgstr "ローカルのシステム時刻"
 
+msgid "Local Time"
+msgstr "現地時間"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "近くの自助グループ"
@@ -2672,9 +2686,8 @@ msgstr "男性"
 msgid "Manage"
 msgstr "管理"
 
-#, fuzzy
 msgid "Manage Accounts…"
-msgstr "アカウントを管理…(_M)"
+msgstr "アカウントを管理…"
 
 msgid "Manage Contact List"
 msgstr "相手先一覧を管理"
@@ -2767,7 +2780,7 @@ msgid "Messages are archived on the server"
 msgstr "メッセージはサーバーに記録されます"
 
 msgid "Messages from this users are blocked"
-msgstr ""
+msgstr "このユーザーからのメッセージは遮断されます"
 
 msgid "Minimize"
 msgstr "最小化"
@@ -2910,7 +2923,6 @@ msgstr "パスワード不要"
 msgid "No Proxy"
 msgstr "プロキシなし"
 
-#, fuzzy
 msgid "No Results Found"
 msgstr "見つかりません"
 
@@ -3202,7 +3214,7 @@ msgid "PNG files"
 msgstr "PNG ファイル"
 
 msgid "Packages"
-msgstr ""
+msgstr "パッケージ"
 
 #, python-format
 msgid "Pango Version: %s"
@@ -3281,6 +3293,9 @@ msgstr "発言権を保留"
 
 msgid "Permanently"
 msgstr "永久に"
+
+msgid "Permanently remove this group chat from the server"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3917,9 +3932,8 @@ msgstr ""
 "談話室を全体的に検索します\n"
 "(リターンで検索開始)"
 
-#, fuzzy
 msgid "Search in chats…"
-msgstr "参加者を検索…"
+msgstr "チャットを検索…"
 
 msgid "Searching"
 msgstr "検索"
@@ -3946,6 +3960,8 @@ msgid ""
 "conversations. Share messages, pictures, and files with your contacts – and "
 "only with them."
 msgstr ""
+"安全な会話: 会話のための最先端の端末間暗号化。相手先(しかも相手先のみ)とメッ"
+"セージ、画像、ファイルを共有します。"
 
 msgid "Security"
 msgstr "セキュリティ"
@@ -4091,6 +4107,10 @@ msgstr "サービスは見つかりませんでした"
 msgid "Set Trust"
 msgstr "信頼を設定"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "この談話室に招待"
+
 msgid "Set configuration directory"
 msgstr "設定ファイルのディレクトリを指定"
 
@@ -4124,7 +4144,6 @@ msgstr "動画を共有"
 msgid "Share my online status"
 msgstr "在席状況を知らせる"
 
-#, fuzzy
 msgid "Show Chat List"
 msgstr "チャット一覧を表示"
 
@@ -4164,9 +4183,8 @@ msgstr "状況変更を表示する"
 msgid "Show Subject"
 msgstr "題を表示する"
 
-#, fuzzy
 msgid "Show Title Bar"
-msgstr "タスクバーに表示する"
+msgstr "タイトルバーを表示"
 
 msgid "Show Transfers"
 msgstr "中継先を表示"
@@ -4240,9 +4258,8 @@ msgstr "ショートコードのヒントを表示します。例 :+1:"
 msgid "Show the application's version"
 msgstr "アプリケーションのバージョンを表示"
 
-#, fuzzy
 msgid "Show the window’s title bar"
-msgstr "ウィンドウをタスクバーに表示します"
+msgstr "ウィンドウのタイトルタスクバーを表示します"
 
 msgid "Show window in the taskbar"
 msgstr "ウィンドウをタスクバーに表示します"
@@ -4279,6 +4296,9 @@ msgstr "プレビュー画像のサイズ (単位: ピクセル)"
 
 msgid "Sleeping"
 msgstr "睡眠中"
+
+msgid "Software"
+msgstr "ソフトウェア"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "何かがうまくいきませんでした。ビデオ機能は無効でした。"
@@ -4399,6 +4419,10 @@ msgid ""
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
+"連絡を保つ: チャットとグループは友人や家族とのつながりを維持するのに役立ちま"
+"す。同じ興味を持つ人々とつながることで、コミュニティを築くことができます。グ"
+"ループを使って、ちょっとした用事から次の大きなイベントまで、様々なことを整理"
+"しましょう。"
 
 msgid "Stop Sharing Online Status?"
 msgstr "在席状況を知らせるのをやめますか ?"
@@ -4475,13 +4499,13 @@ msgid "Switch to the previous unread chat"
 msgstr "前の未読チャットへ切替"
 
 msgid "Sync Group Chat Blocklist"
-msgstr "談話室の遮断一覧を同期"
+msgstr "談話室の追放者一覧を同期"
 
 msgid "Sync Threshold"
 msgstr "同期の制限"
 
 msgid "Sync group chat blocklist with other devices"
-msgstr "談話室の遮断一覧を他のデバイスと同期します"
+msgstr "談話室の追放者一覧を他のデバイスと同期します"
 
 msgid "Synchronize"
 msgstr "同期"
@@ -4535,9 +4559,8 @@ msgstr "テキストファイル"
 msgid "Thanks"
 msgstr "多謝"
 
-#, fuzzy
 msgid "Thanks to all the package maintainers."
-msgstr "すべてのパッケージのメンテナに感謝いたします。"
+msgstr "すべてのパッケージのメンテナーに感謝いたします。"
 
 msgid "The certificate does not match the expected identity of the site"
 msgstr "証明書はサイトと一致しません"
@@ -4613,9 +4636,8 @@ msgstr "Gajim プラグインの更新があります"
 msgid "There has been an error while trying to fetch messages: %s"
 msgstr "メッセージを取得しようとした際にエラーが発生しました: %s"
 
-#, fuzzy
 msgid "There is an update available for this plugin"
-msgstr "Gajim プラグインの更新があります"
+msgstr "このプラグインには利用可能な更新があります"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -4635,6 +4657,12 @@ msgid ""
 "There was an error while attempting to verify the SSL certificate of your "
 "XMPP server (%s)."
 msgstr "XMPP サーバー (%s) の SSL 証明書を検証する際にエラーがありました。"
+
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr "メッセージを取得しようとした際にエラーが発生しました: %s"
 
 msgid "This Device"
 msgstr "このデバイス"
@@ -4687,6 +4715,9 @@ msgstr "この談話室は参加者がいなくなっても存続します"
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "この談話室は最後の参加者が退出すると閉鎖されます"
+
+msgid "This information will be publicly visible."
+msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "これは公開談話室です。暗号化はできません。"
@@ -4767,9 +4798,8 @@ msgstr "このサービスのタイプには表示する項目がありません
 msgid "This will clear the devices store for your account."
 msgstr "アカウントのデバイス一覧を消去します。"
 
-#, fuzzy
 msgid "This will purge all locally stored chat history"
-msgstr "このメッセージはローカルの会話履歴から削除されます"
+msgstr "すべてのローカルの会話履歴を削除します"
 
 msgid "This will remove your account from Gajim."
 msgstr "アカウントを Gajim から除去します。"
@@ -4844,7 +4874,7 @@ msgid "Try Again"
 msgstr "再試行"
 
 msgid "Try a different search"
-msgstr ""
+msgstr "別の検索を試す"
 
 msgid "Trying to change password..."
 msgstr "パスワードを変更しています…"
@@ -4914,16 +4944,14 @@ msgstr "ルート証明書が検証できません"
 msgid "Unblock"
 msgstr "遮断の解除"
 
-#, fuzzy
 msgid "Unblock Participant?"
-msgstr "参加者"
+msgstr "参加者の遮断を解除しますか ?"
 
 msgid "Unencrypted"
 msgstr "暗号化しない"
 
-#, fuzzy
 msgid "Uninstall"
-msgstr "プラグインをアンインストール"
+msgstr "アンインストール"
 
 msgid "Unknown"
 msgstr "不明"
@@ -4986,9 +5014,9 @@ msgstr "アバターを更新"
 msgid "Update automatically"
 msgstr "自動で更新する"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Update available: Version %s"
-msgstr "利用可能な更新があります"
+msgstr "利用可能な更新: バージョン %s"
 
 msgid "Update plugins automatically"
 msgstr "プラグインを自動で更新します"
@@ -4999,9 +5027,8 @@ msgstr "更新"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "更新は次の Gajim の起動時にインストールされます"
 
-#, fuzzy
 msgid "Updating Plugin…"
-msgstr "プラグインを開く…"
+msgstr "プラグインを更新中…"
 
 msgid "Updating provider list…"
 msgstr "プロバイダー一覧を更新中…"
@@ -5038,7 +5065,7 @@ msgid "Use Unencrypted Connection"
 msgstr "非暗号化接続を使用"
 
 msgid "Use a profile to run multiple Gajim instances"
-msgstr ""
+msgstr "プロファイルを使用して複数のGajimインスタンスを実行"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "サーバーに暗号化されていない接続を用います"
@@ -5142,7 +5169,7 @@ msgid "Web _Search for it"
 msgstr "ウェブで検索する (_S)"
 
 msgid "WebSocket URL"
-msgstr ""
+msgstr "WebSocket の URL"
 
 msgid "Website"
 msgstr "ウェブサイト"
@@ -5305,14 +5332,6 @@ msgstr "この相手先の在席状況を見ることはできません"
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "相手先がオフラインの場合、私信を送ることはできません。"
 
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"このディレクトリにファイルを作成する権限がありません。\n"
-"エラー: %s"
-
 msgid "You don't share your status with this contact"
 msgstr "あなたはこの相手先と状況を共有しません"
 
@@ -5433,9 +5452,8 @@ msgstr ""
 "お使いのサーバーは談話室サービスを提供していません。別のサーバーのアドレスを"
 "指定してください。"
 
-#, fuzzy
 msgid "Your server offers the following features"
-msgstr "あなたは次の係 (hat) です: %s"
+msgstr "サーバーは以下の機能を提供します"
 
 msgid "ZIP files"
 msgstr "ZIP ファイル"
@@ -5548,16 +5566,14 @@ msgstr "ホスト名 (_H)"
 msgid "_Hostname"
 msgstr "ホスト名 (_H)"
 
-#, fuzzy
 msgid "_Import"
-msgstr "取り込み"
+msgstr "取り込み (_I)"
 
 msgid "_Join"
 msgstr "参加 (_J)"
 
-#, fuzzy
 msgid "_Join Support Chat"
-msgstr "サポートチャットに参加"
+msgstr "サポートチャットに参加 (_J)"
 
 msgid "_Keyboard Shortcuts"
 msgstr "キーボードショートカット (_K)"
@@ -5668,9 +5684,8 @@ msgstr "継読 (_S)"
 msgid "_Type"
 msgstr "種類 (_T)"
 
-#, fuzzy
 msgid "_Unblock"
-msgstr "遮断の解除"
+msgstr "遮断を解除 (_U)"
 
 msgid "_Unregister account from service"
 msgstr "サービスからアカウントを抹消する (_U)"
@@ -6233,6 +6248,9 @@ msgstr "…またはここにドロップ"
 #~ "証明書 \n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "題を変更 (_A)"
+
 #~ msgid "Chat history"
 #~ msgstr "会話の履歴"
 
@@ -6541,9 +6559,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "Last seen %s"
 #~ msgstr "理由: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "現地時間"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6799,9 +6814,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "ファイル転送の一覧を表示します"
 
-#~ msgid "Software"
-#~ msgstr "ソフトウェア"
-
 #~ msgid "Sta_tus"
 #~ msgstr "状態 (_T)"
 
@@ -6966,6 +6978,14 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "接続していないと、相手先に合わせることはできません。"
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "このディレクトリにファイルを作成する権限がありません。\n"
+#~ "エラー: %s"
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "このディレクトリにファイルを作成する権限がありません。"

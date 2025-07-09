@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -404,6 +404,14 @@ msgstr "Всі вікна балачок і групових балачок бу
 
 msgid "Account Added"
 msgstr "Додано обліковий запис"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Додано обліковий запис"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Обліковий запис вимкнено"
 
 msgid "Account Name..."
 msgstr "Назва облікового запису..."
@@ -1045,9 +1053,6 @@ msgstr "Сертифікат відкликано"
 msgid "Certificate signature failure"
 msgstr "Помилка під час підписування сертифіката"
 
-msgid "Ch_ange Subject"
-msgstr "З_мінити тему"
-
 msgid "Change"
 msgstr "Змінити"
 
@@ -1601,11 +1606,16 @@ msgstr "Прийняти усі запити додавання до конта�
 msgid "Description"
 msgstr "Опис"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Знищити групову балачку…"
 
 msgid "Destroy This Chat"
 msgstr "Знищити цю балачку"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Знищення %s"
 
 msgid "Details"
 msgstr "Подробиці"
@@ -2793,6 +2803,10 @@ msgstr "Завантаження"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Локальний jid:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3537,6 +3551,9 @@ msgid "Pending Voice Requests"
 msgstr "Запит на голосову розмову"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4493,6 +4510,10 @@ msgstr "Не вдалося знайти службу"
 msgid "Set Trust"
 msgstr "_Керування звуками"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Запросити _контакти"
+
 msgid "Set configuration directory"
 msgstr "Призначити конфігураційний каталог"
 
@@ -4712,6 +4733,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Сплю"
+
+#, fuzzy
+msgid "Software"
+msgstr "Збережено за адресою: %s"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5112,6 +5137,15 @@ msgstr ""
 "помилка: %(error)s\n"
 "Ви все ще маєте намір з’єднатися з сервером?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Під час спроби перевірки сертифіката SSL вашого сервера jabber сталася "
+"помилка: %(error)s\n"
+"Ви все ще маєте намір з’єднатися з сервером?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Вибрати пристрій"
@@ -5169,6 +5203,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -5847,12 +5884,6 @@ msgstr "Ви не можете додавати себе ж до реєстру.
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6844,6 +6875,9 @@ msgstr ""
 #~ "Сертифікат для \n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "З_мінити тему"
+
 #~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
 #~ msgstr ""
 #~ "Спілкуватися з наскрізним шифруванням за допомогою OMEMO або OpenPGP"
@@ -7120,10 +7154,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Підстава"
-
-#, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Локальний jid:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7488,6 +7518,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Можливістю синхронізації можна скористатися, лише якщо обліковий запис "
 #~ "з’єднано з сервером."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,6 +421,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Налог"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Налог"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Смајлији искључени"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1130,10 +1138,6 @@ msgid "Certificate signature failure"
 msgstr "Грешка у потпису сертификата"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Промени _тему..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Промени _надимак..."
 
@@ -1756,12 +1760,16 @@ msgid "Description"
 msgstr "Опис"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Нови групни разговор"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Нови групни разговор"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Уништавам %s"
 
 msgid "Details"
 msgstr ""
@@ -2981,6 +2989,10 @@ msgstr "Програмира"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Локални џабер ИД:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3725,6 +3737,9 @@ msgid "Pending Voice Requests"
 msgstr "Захтев за преносом датотеке"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4684,6 +4699,10 @@ msgid "Set Trust"
 msgstr "Подешавање налога"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Позови контакте"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Конфигурација собе"
 
@@ -4904,6 +4923,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Спавам"
+
+#, fuzzy
+msgid "Software"
+msgstr "Сервер је одговорио: %s"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5305,6 +5328,15 @@ msgstr ""
 "%(error)s\n"
 "Да ли и даље желите да се конектујете на овај сервер?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Дошло је до грешке приликом верификовања SSL сертификата Вашег џабер сервера:"
+"%(error)s\n"
+"Да ли и даље желите да се конектујете на овај сервер?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Одаберите слику"
@@ -5362,6 +5394,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6036,12 +6071,6 @@ msgstr "Не можете додати себе у Вашу листу конт�
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Немате привилегија за писање у овој фасцикли"
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -7000,6 +7029,10 @@ msgstr ""
 #~ msgstr "за налог %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Промени _тему..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Слање профила..."
 
@@ -7245,10 +7278,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Разлог"
-
-#, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Локални џабер ИД:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7590,6 +7619,12 @@ msgstr ""
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Не можете се синхронизовати са налогом ако нисте повезани."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Немате привилегија за писање у овој фасцикли"
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

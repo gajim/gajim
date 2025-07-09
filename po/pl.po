@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
-"PO-Revision-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"PO-Revision-Date: 2025-07-09 07:12+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -408,6 +408,12 @@ msgstr ""
 msgid "Account Added"
 msgstr "Dodano konto"
 
+msgid "Account Address"
+msgstr "Adres konta"
+
+msgid "Account Label"
+msgstr "Etykieta konta"
+
 msgid "Account Name..."
 msgstr "Nazwa konta…"
 
@@ -757,6 +763,7 @@ msgstr "Pytaj przed wyjściem gdy okno Gajima jest zamknięte"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
+"Przydziel grupy do tego kontaktu. Możesz filtrować rozmowy według grup."
 
 msgid "Attention Message Received"
 msgstr "Otrzymano ważną wiadomość"
@@ -1007,9 +1014,6 @@ msgstr "Certyfikat został unieważniony"
 
 msgid "Certificate signature failure"
 msgstr "Błąd podpisu certyfikatu"
-
-msgid "Ch_ange Subject"
-msgstr "Zmień tem_at"
 
 msgid "Change"
 msgstr "Zmień"
@@ -1539,11 +1543,14 @@ msgstr "Odrzucaj wszystkie żądania kontaktu"
 msgid "Description"
 msgstr "Opis"
 
-msgid "Destroy Group Chat…"
-msgstr "Zniszcz rozmowę grupową…"
+msgid "Destroy Group Chat"
+msgstr "Zniszcz rozmowę grupową"
 
 msgid "Destroy This Chat"
 msgstr "Zniszcz tę rozmowę"
+
+msgid "Destroy…"
+msgstr "Zniszcz…"
 
 msgid "Details"
 msgstr "Szczegóły"
@@ -2624,6 +2631,9 @@ msgstr "Ładowanie…"
 msgid "Local System Time"
 msgstr "Lokalny czas systemu"
 
+msgid "Local Time"
+msgstr "Lokalny czas"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Lokalna grupa pomocy"
@@ -3275,6 +3285,9 @@ msgstr "Trwające prośby o prawo głosu"
 
 msgid "Permanently"
 msgstr "Na stałe"
+
+msgid "Permanently remove this group chat from the server"
+msgstr "Całkowicie usuń tę rozmowę grupową z serwera"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4087,6 +4100,9 @@ msgstr "Usługa nieodnaleziona"
 msgid "Set Trust"
 msgstr "Ustaw zaufanie"
 
+msgid "Set a subject for this chat"
+msgstr "Ustaw temat tej rozmowy"
+
 msgid "Set configuration directory"
 msgstr "Ustaw katalog konfiguracyjny"
 
@@ -4272,6 +4288,9 @@ msgstr "Rozmiar podglądu obrazu w pikselach"
 
 msgid "Sleeping"
 msgstr "Śpię"
+
+msgid "Software"
+msgstr "Oprogramowanie"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Coś poszło nie tak. Funkcjonalność wideo wyłączona."
@@ -4635,6 +4654,14 @@ msgstr ""
 "Wystąpił błąd podczas weryfikowania certyfikatu SSL Twojego serwera XMPP "
 "(%s)."
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Wystąpił błąd podczas próby zapisania pliku.\n"
+"Błąd: %s."
+
 msgid "This Device"
 msgstr "To urządzenie"
 
@@ -4686,6 +4713,9 @@ msgstr "Ta rozmowa grupowa istnieje nawet gdy nie ma uczestników"
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "Ta rozmowa grupowa zostanie zniszczona gdy opuści ją ostatni uczestnik"
+
+msgid "This information will be publicly visible."
+msgstr "Te informacje będą widoczne publicznie."
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "To jest publiczna rozmowa grupowa. Szyfrowanie nie jest dostępne."
@@ -5305,14 +5335,6 @@ msgstr "Nie możesz zobaczyć stanu połączenia tego kontaktu"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "Nie możesz wysyłać prywatnych wiadomości do rozłączonych kontaktów."
-
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"Nie masz uprawnień do tego katalogu.\n"
-"Błąd: %s."
 
 msgid "You don't share your status with this contact"
 msgstr "Nie udostępniasz swojego statusu temu kontaktowi"
@@ -6251,6 +6273,9 @@ msgstr "…lub upuść tutaj"
 #~ "Certyfikat dla \n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Zmień tem_at"
+
 #~ msgid "Chat history"
 #~ msgstr "Historia rozmów"
 
@@ -6575,9 +6600,6 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Last seen %s"
 #~ msgstr "Ostatnio widziany: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Lokalny czas"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6843,9 +6865,6 @@ msgstr "…lub upuść tutaj"
 #~ msgstr ""
 #~ "Wyświetla listę przesłanych plików pomiędzy tobą a twoimi kontaktami"
 
-#~ msgid "Software"
-#~ msgstr "Oprogramowanie"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7014,6 +7033,14 @@ msgstr "…lub upuść tutaj"
 #~ msgstr ""
 #~ "Nie możesz zsynchronizować się z kontem dopóki nie jest ono połączone "
 #~ "z siecią."
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "Nie masz uprawnień do tego katalogu.\n"
+#~ "Błąd: %s."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "Nie masz uprawnień do tworzenia plików w tym katalogu."

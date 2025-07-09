@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -408,6 +408,14 @@ msgstr "Toate ferestrele de chat și de chat în grup vor fi închise."
 
 msgid "Account Added"
 msgstr "Cont adăugat"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Cont adăugat"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Cont dezactivat"
 
 msgid "Account Name..."
 msgstr "Numele contului..."
@@ -1027,9 +1035,6 @@ msgstr "Certificat revocat"
 msgid "Certificate signature failure"
 msgstr "Eșecul certificării semnăturii"
 
-msgid "Ch_ange Subject"
-msgstr "Sch_imbă subiectul"
-
 msgid "Change"
 msgstr "Schimbă"
 
@@ -1574,11 +1579,16 @@ msgstr "Acceptați toate cererile de contact"
 msgid "Description"
 msgstr "Descriere"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Distrugeți Grupchatul…"
 
 msgid "Destroy This Chat"
 msgstr "Distruge acest chat"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "_Distrugeți"
 
 msgid "Details"
 msgstr "Detalii"
@@ -2703,6 +2713,9 @@ msgstr "Încărcare…"
 msgid "Local System Time"
 msgstr "Ora sistemului local"
 
+msgid "Local Time"
+msgstr "Ora locală"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Grup de ajutor local"
@@ -3375,6 +3388,9 @@ msgstr "Solicitări vocale în așteptare"
 
 msgid "Permanently"
 msgstr "Permanent"
+
+msgid "Permanently remove this group chat from the server"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4220,6 +4236,10 @@ msgstr "Serverul de la distanță nu a fost găsit"
 msgid "Set Trust"
 msgstr "Gestionați Încrederea"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Invitați la acest chat"
+
 msgid "Set configuration directory"
 msgstr "Setați directorul de configurare"
 
@@ -4413,6 +4433,9 @@ msgstr "Dimensiunea imaginilor de previzualizare în pixeli"
 
 msgid "Sleeping"
 msgstr "Dormit"
+
+msgid "Software"
+msgstr "Software-ul"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Ceva a mers prost. Funcția video a fost dezactivată."
@@ -4783,6 +4806,12 @@ msgstr ""
 "S-a produs o eroare în timpul încercării de verificare a certificatului SSL "
 "al serverului XMPP (%s)."
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr "S-a produs o eroare în timpul încercării de preluare a mesajelor: %s"
+
 msgid "This Device"
 msgstr "Acest Dispozitiv"
 
@@ -4836,6 +4865,9 @@ msgstr "Acest chat de grup persistă chiar dacă nu există participanți"
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "Acest chat de grup va fi distrus odată ce ultimul participant a plecat"
+
+msgid "This information will be publicly visible."
+msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "Acesta este un chat de grup public. Criptarea nu este disponibilă."
@@ -5461,14 +5493,6 @@ msgstr "Nu puteți vedea starea online a acestui contact"
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 "Nu puteți trimite mesaje private contactelor dacă acestea sunt offline."
-
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"Nu aveți permisiuni pentru acest director.\n"
-"Eroare: %s."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6399,6 +6423,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Certificat pentru \n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Sch_imbă subiectul"
+
 #~ msgid "Chat history"
 #~ msgstr "Istoric chat"
 
@@ -6722,9 +6749,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Last seen %s"
 #~ msgstr "Ultima vizualizare: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Ora locală"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6986,9 +7010,6 @@ msgstr "...sau lăsați-o aici"
 #~ "Afișează o listă de transferuri de fișiere între dumneavoastră și "
 #~ "contactele voastre"
 
-#~ msgid "Software"
-#~ msgstr "Software-ul"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_re"
 
@@ -7156,6 +7177,14 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Nu puteți sincroniza cu un cont decât dacă acesta este conectat."
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "Nu aveți permisiuni pentru acest director.\n"
+#~ "Eroare: %s."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."

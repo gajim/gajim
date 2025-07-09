@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -424,6 +424,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Λογαριασμός"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Λογαριασμός"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1125,10 +1133,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Αλλαγή _θέματος"
-
-#, fuzzy
 msgid "Change"
 msgstr "Αλλαγή _ψευδώνυμου"
 
@@ -1748,12 +1752,16 @@ msgid "Description"
 msgstr "Περιγραφή"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Αρχηγός ομάδας παραθύρων"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Αρχηγός ομάδας παραθύρων"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Περιγραφή: %s"
 
 msgid "Details"
 msgstr "<b>Λεπτομέρειες</b>"
@@ -2972,6 +2980,10 @@ msgstr "Σύνθεση"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Τοπικό jid:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3718,6 +3730,9 @@ msgid "Pending Voice Requests"
 msgstr "Αίτηση μεταφοράς αρχείου"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4680,6 +4695,10 @@ msgid "Set Trust"
 msgstr "Διαχείριση λογαριασμών"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Επαφές"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Ρυθμίσεις δωματίου"
 
@@ -4891,6 +4910,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Κοιμάμαι"
+
+#, fuzzy
+msgid "Software"
+msgstr "Χαρακτηριστικά διακομιστή"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5284,6 +5307,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Επιλογή εικόνας"
@@ -5341,6 +5370,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6017,12 +6049,6 @@ msgstr "Επιθυμώ να σε προσθέσω στη λίστα επαφών
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6982,6 +7008,10 @@ msgstr ""
 #~ msgstr "για το λογαριασμό %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Αλλαγή _θέματος"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Όνομα προφίλ:"
 
@@ -7232,10 +7262,6 @@ msgstr ""
 #~ msgstr "Αιτία"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Τοπικό jid:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Μηνύματα"
 
@@ -7443,10 +7469,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Δείχνει τη λίστα μεταφορών αρχείων μεταξύ εσάς και άλλων"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Χαρακτηριστικά διακομιστή"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Κατάσ_ταση"
 
@@ -7577,6 +7599,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Δε μπορείτε να συμμετάσχετε σε μια ομαδική συζήτηση εκτός αν είστε "
 #~ "συνδεδεμένος."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

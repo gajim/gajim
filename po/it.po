@@ -10,15 +10,20 @@
 # sbadux <enricobe@hotmail.com>, 2022.
 # pjammo <adrianoghr@hotmail.it>, 2022, 2023, 2024.
 # Marco Ciampa <ciampix@posteo.net>, 2023.
-# Robert oResoli <roberto@resolutions.it>, 2024.
+# Robert oResoli <roberto@resolutions.it>, 2024, 2025.
 # "qa@@NGaZRs7ZopdfFbXX" <fabiol@mailbox.org>, 2025.
+# Robert Resoli <roberto@resolutions.it>, 2025.
+# Mario Sabatino <mariosabatino@posteo.net>, 2025.
+# Roberto Resoli <roberto@resolutions.it>, 2025.
+# lorenzo sintoni <lorenzo@mail.bobadin.icu>, 2025.
+# ? <scompo@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
-"PO-Revision-Date: 2025-06-08 09:12+0000\n"
-"Last-Translator: \"qa@@NGaZRs7ZopdfFbXX\" <fabiol@mailbox.org>\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"PO-Revision-Date: 2025-07-05 12:12+0000\n"
+"Last-Translator: Roberto Resoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
 ">\n"
 "Language: it\n"
@@ -29,14 +34,14 @@ msgstr ""
 "X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
-msgstr " (Conversazione Video)"
+msgstr " (Chiamata Video)"
 
 msgid " (Voice Call)"
-msgstr " (Conversazione Vocale)"
+msgstr " (Chiamata Vocale)"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr "%(contact)s ha declinato il tuo invito a %(chat)s"
+msgstr "%(contact)s ha rifiutato il tuo invito a %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
@@ -56,7 +61,7 @@ msgstr "%(days)s giorni, %(hours)s ore"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr "%(minutes)s min %(seconds)s s"
+msgstr "%(minutes)s min %(seconds)s sec"
 
 #, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
@@ -377,7 +382,9 @@ msgid "A new group chat has been created"
 msgstr "È stata creata una nuova conversazione di gruppo"
 
 msgid "A restart may be required for some settings to take effect"
-msgstr "Alcune modifiche avranno effetto solo dopo aver riavviato il programma"
+msgstr ""
+"Potrebbe essere necessario un riavvio perché alcune impostazioni abbiano "
+"effetto"
 
 msgid "A setting not related to privacy has been changed"
 msgstr "È stata cambiata un'impostazione non riguardante la privacy"
@@ -418,6 +425,14 @@ msgstr ""
 
 msgid "Account Added"
 msgstr "Account Aggiunto"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Indirizzo account: "
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Account disabilitato"
 
 msgid "Account Name..."
 msgstr "Nome account..."
@@ -482,7 +497,7 @@ msgid "Activate"
 msgstr "Attiva"
 
 msgid "Activated"
-msgstr "Attivo"
+msgstr "Attivato"
 
 msgid "Active"
 msgstr "Attivo"
@@ -527,7 +542,7 @@ msgid "Add Workspace"
 msgstr "Aggiungi spazio di lavoro"
 
 msgid "Add a checkmark to received messages"
-msgstr "Mostra una spunta quando il destinatario riceve il messaggio"
+msgstr "Aggiungi una spunta ai messaggi ricevuti"
 
 msgid "Add a name and color for your account"
 msgstr "Aggiungete un nome e un colore per il vostro account"
@@ -654,7 +669,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 "Consente a Gajim di trasmettere informazioni utili tramite D-Bus. Inoltre "
-"consente ad altre applicazioni di controllare Gajim."
+"consente ad altre applicazioni di controllare Gajim da remoto."
 
 msgid "Alternate venue (optional)..."
 msgstr "Sede alternativa (facoltativa)..."
@@ -675,14 +690,16 @@ msgid "An error occurred during account creation"
 msgstr "Si è verificato un errore durante la creazione dell'account"
 
 msgid "An error occurred while exporting your messages"
-msgstr "Errore durante l'esportazione dei messaggi"
+msgstr "Si è verificato un errore durante l'esportazione dei messaggi"
 
 msgid "An error occurred while trying to change your password."
 msgstr "Si è verificato un errore durante la modifica della password."
 
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
-msgstr "Errore nella creazione di un file in %(path)s: %(error)s"
+msgstr ""
+"Si è verificato un errore durante la creazione di un file in %(path)s: "
+"%(error)s"
 
 #, python-brace-format
 msgid ""
@@ -707,8 +724,7 @@ msgid "Anonymous login not supported"
 msgstr "Accesso anonimo non supportato"
 
 msgid "Any participant is allowed to see your full XMPP Address"
-msgstr ""
-"A qualsiasi partecipante è permesso vedere il tuo indirizzo XMPP completo"
+msgstr "Qualsiasi partecipante può vedere il tuo indirizzo XMPP completo"
 
 msgid "Anyone can join"
 msgstr "Chiunque si può unire"
@@ -738,24 +754,24 @@ msgid "Archive empty"
 msgstr "Archivio vuoto"
 
 msgid "Archive is malformed"
-msgstr "Mrchivio malformato"
+msgstr "L'archivio è malformato"
 
 msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Archiviazione"
 
 msgid "Archiving Preferences"
-msgstr "Preferenze Archiviazione"
+msgstr "Preferenze di Archiviazione"
 
 msgid "Archiving Preferences Error"
-msgstr "Errore Archiviazione Preferenze"
+msgstr "Errore Preferenze di Archiviazione"
 
 msgid "Archiving Preferences Saved"
-msgstr "Preferenze Archiviazione Salvate"
+msgstr "Preferenze di Archiviazione Salvate"
 
 #, python-format
 msgid "Archiving Preferences for %s"
-msgstr "Preferenze Archiviazione per %s"
+msgstr "Preferenze di Archiviazione per %s"
 
 msgid "Ask For Status Message on…"
 msgstr "Chiedi Messaggio di Stato in fase di…"
@@ -769,6 +785,8 @@ msgstr "Chiedi prima di uscire, quando la finestra di Gajim è chiusa"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
+"Assegna gruppi a questo contatto. E' possibile filtrare le conversazioni per "
+"gruppo."
 
 msgid "Attention Message Received"
 msgstr "Richiesta di Attenzione Ricevuta"
@@ -780,7 +798,7 @@ msgid "Audio File"
 msgstr "File Audio"
 
 msgid "Audio Input Device"
-msgstr "Dispositivo Ingresso Audio"
+msgstr "Dispositivo di Ingresso Audio"
 
 msgid "Audio Preview"
 msgstr "Anteprima audio"
@@ -792,7 +810,7 @@ msgid "Audio test"
 msgstr "Test audio"
 
 msgid "Authentication aborted"
-msgstr "Autorizzazione annullata"
+msgstr "Autenticazione annullata"
 
 msgid "Authentication currently not possible"
 msgstr "Attualmente l'autenticazione non è possibile"
@@ -810,7 +828,7 @@ msgid "Author"
 msgstr "Autore"
 
 msgid "Authority and issuer serial number mismatch"
-msgstr "L'autorità e il numero seriale dell'entità emittente non coincidono"
+msgstr "Mancata corrispondenza tra autorità e numero seriale dell'emittente"
 
 msgid "Authority and subject key identifier mismatch"
 msgstr "L'autorità e l'identificatore di chiave del soggetto non coincidono"
@@ -819,16 +837,16 @@ msgid "Authors"
 msgstr "Autori"
 
 msgid "Auto Away"
-msgstr "Auto Assente"
+msgstr "Assente Automatico"
 
 msgid "Auto Away Settings"
-msgstr "Impostazioni Auto Assente"
+msgstr "Impostazioni di Assente Automatico"
 
 msgid "Auto Extended Away Settings"
 msgstr "Impostazioni Auto Assenza Prolungata"
 
 msgid "Auto Not Available"
-msgstr "Auto Non Disponibile"
+msgstr "Non Disponibile Automatico"
 
 msgid "Autodetect"
 msgstr "Rileva automaticamente"
@@ -859,7 +877,7 @@ msgid "Available Features"
 msgstr "Funzionalità disponibili"
 
 msgid "Avatar file size too big"
-msgstr "Avatar troppo grande"
+msgstr "Dimensione del file dell'Avatar troppo grande"
 
 msgctxt "User status"
 msgid "Away"
@@ -879,7 +897,7 @@ msgstr "Bandisci"
 
 #, python-format
 msgid "Ban %s"
-msgstr "Banna %s"
+msgstr "Bandisci %s"
 
 msgid "Ban…"
 msgstr "Bandisci…"
@@ -888,7 +906,7 @@ msgid "Before"
 msgstr "Prima"
 
 msgid "Behaviour of Application Window"
-msgstr "Comportamento finestra applicazione"
+msgstr "Comportamento finestra dell'applicazione"
 
 msgid "Birthday"
 msgstr "Data di Nascita"
@@ -1020,9 +1038,6 @@ msgstr "Certificato revocato"
 msgid "Certificate signature failure"
 msgstr "Fallimento firma del certificato"
 
-msgid "Ch_ange Subject"
-msgstr "C_ambia argomento"
-
 msgid "Change"
 msgstr "Cambia"
 
@@ -1033,7 +1048,7 @@ msgid "Change Nickname…"
 msgstr "Cambia Soprannome…"
 
 msgid "Change Password"
-msgstr "Modifica Password"
+msgstr "Modifica password"
 
 msgid "Change Subject"
 msgstr "Cambia Argomento"
@@ -1056,7 +1071,7 @@ msgid "Changed by %s"
 msgstr "Cambiato da %s"
 
 msgid "Changing Password..."
-msgstr "Modifica Password..."
+msgstr "Modifica password..."
 
 msgid ""
 "Character to add after nickname when using nickname completion (tab) in "
@@ -1081,7 +1096,7 @@ msgid "Chat Details and Settings"
 msgstr "Impostazioni e dettagli della chat"
 
 msgid "Chat List"
-msgstr "Lista conversazioni"
+msgstr "Lista Chat"
 
 msgid "Chat Type"
 msgstr "Tipo di chat"
@@ -1091,10 +1106,12 @@ msgid ""
 "and synchronize chats between all your devices. Gajim is interoperable with "
 "many other chat apps – and it's free."
 msgstr ""
+"Chatta liberamente: Porta le tue chat dove vuoi. Usa un provider di tua "
+"scelta e sincronizza le chat tra tutti i tuoi dispositivi. Gajim è "
+"interoperabile con molte altre app di chat ed è gratuito."
 
-#, fuzzy
 msgid "Chat window"
-msgstr "Finestra delle conversazioni dotata di schede"
+msgstr "Finestra delle conversazioni"
 
 msgid "Chats"
 msgstr "Conversazioni"
@@ -1108,7 +1125,7 @@ msgid "Check For Updates"
 msgstr "Controlla Aggiornamenti"
 
 msgid "Check for Gajim updates periodically"
-msgstr "Controllo periodico degli aggiornamenti di Gajim"
+msgstr "Controlla gli aggiornamenti di Gajim periodicamente"
 
 msgid "Check for updates"
 msgstr "Cerca aggiornamenti"
@@ -1550,11 +1567,16 @@ msgstr "Rifiuta tutte le richieste di contatto"
 msgid "Description"
 msgstr "Descrizione"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Distruggi chat di gruppo…"
 
 msgid "Destroy This Chat"
 msgstr "Distruggi Questa Conversazione"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "_Distruggi"
 
 msgid "Details"
 msgstr "Dettagli"
@@ -1588,8 +1610,8 @@ msgid ""
 "Directory \"%s\" is not writable. You do not have the proper permissions to "
 "create files in this directory."
 msgstr ""
-"La cartella \"%s\" non è scrivibile. Non hai i permessi adatti per creare "
-"file in questa cartella."
+"La cartella \"%s\" non è scrivibile. Non hai i permessi per creare file in "
+"questa cartella."
 
 msgid "Directory Not Writable"
 msgstr "Cartella non scrivibile"
@@ -1672,8 +1694,8 @@ msgid ""
 "Please note that retracting a message does not guarantee that your provider "
 "or your contact’s device will remove it."
 msgstr ""
-"Vuoi ritrattare questo messaggio?\n"
-"Nota che ritrattare un messaggio non garantisce che il tuo provider o il "
+"Vuoi ritirare questo messaggio?\n"
+"Nota che ritirare un messaggio non garantisce che il tuo provider o il "
 "dispositivo del tuo contatto lo rimuova."
 
 #, python-format
@@ -1840,7 +1862,7 @@ msgid "Error Loading Image"
 msgstr "Errore caricamento immagine"
 
 msgid "Error in audio data stream."
-msgstr "Errore nello flusso di dati audio"
+msgstr "Errore nello flusso dati audio."
 
 msgid "Error opening file"
 msgstr "Errore nell'apertura del file"
@@ -1899,19 +1921,19 @@ msgid "Export"
 msgstr "Esporta"
 
 msgid "Export CSV"
-msgstr "Esporta"
+msgstr "Esporta CSV"
 
 msgid "Export Chat History"
 msgstr "Esporta cronologia conversazioni"
 
 msgid "Export Contacts"
-msgstr "Importa Contatti"
+msgstr "Esporta i Contatti"
 
 msgid "Export Finished"
 msgstr "Esportazione terminata"
 
 msgid "Export History…"
-msgstr "Esporta cronologia conversazioni"
+msgstr "Esporta cronologia conversazioni…"
 
 msgid "Export your chat history from Gajim"
 msgstr "Esporta da Gajim la cronologia delle chat"
@@ -1923,12 +1945,15 @@ msgid "Exporting your messages..."
 msgstr "Esportazione messaggi…"
 
 msgid "Export…"
-msgstr "Esporta"
+msgstr "Esporta…"
 
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
 msgstr ""
+"Esprimiti: A volte le parole non bastano. Usa le reazioni, le risposte, "
+"registra messaggi vocali e invia aggiornamenti di stato per esprimere "
+"pienamente te stesso."
 
 msgid "Extended Address"
 msgstr "Indirizzo esteso"
@@ -1980,16 +2005,16 @@ msgid "File Size Limit"
 msgstr "Limite della dimensione file"
 
 msgid "File Transfer"
-msgstr "Trasferimento File"
+msgstr "Trasferimento file"
 
 msgid "File Transfer Cancelled"
 msgstr "Trasferimento file annullato"
 
 msgid "File Transfer Completed"
-msgstr "Trasferimento File Completato"
+msgstr "Trasferimento file completato"
 
 msgid "File Transfer Stopped"
-msgstr "Trasferimento File Interrotto"
+msgstr "Trasferimento file interrotto"
 
 msgid "File Verification Failed"
 msgstr "Verifica del file fallita"
@@ -2011,7 +2036,7 @@ msgid "File size unknown"
 msgstr "Dimensione file sconosciuta"
 
 msgid "File too big"
-msgstr "Avatar troppo grande"
+msgstr "File troppo grande"
 
 msgid "File transfers"
 msgstr "Trasferimento file"
@@ -2027,10 +2052,10 @@ msgid "Filter Chats"
 msgstr "Filtrare le chat"
 
 msgid "Filters"
-msgstr "Filtro"
+msgstr "Filtri"
 
 msgid "Filters (active)"
-msgstr "Primo Messaggio Ricevuto"
+msgstr "Fitri (Attivi)"
 
 msgid "Fingerprint"
 msgstr "Impronte digitali"
@@ -2049,7 +2074,7 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
-"Sincronizzazione terminata.\n"
+"Sincronizzazione terminata:\n"
 "%s messaggi scaricati"
 
 #, python-format
@@ -2069,11 +2094,10 @@ msgid "Forget Group Chat"
 msgstr "Dimenticare la chat di gruppo"
 
 msgid "Forget this Group Chat?"
-msgstr "Dimentica questa chat di gruppo"
+msgstr "Dimenticare questa chat di gruppo?"
 
-#, fuzzy
 msgid "Forget this Group Chat…"
-msgstr "Dimentica questa chat di gruppo"
+msgstr "Dimentica questa chat di gruppo…"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Errore di formato nel campo lastUpdate della CRL"
@@ -2146,7 +2170,7 @@ msgid "Gajim Update"
 msgstr "Aggiornamenti Gajim"
 
 msgid "Gajim Update Check"
-msgstr "Aggiornamenti Gajim"
+msgstr "Controllo aggiornamenti Gajim"
 
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
@@ -2239,7 +2263,7 @@ msgid "Group chat does not exist"
 msgstr "La conversazione di gruppo non esiste"
 
 msgid "Group chat has been destroyed"
-msgstr "La conversazione di gruppo è stata distrutta%s"
+msgstr "La conversazione di gruppo è stata distrutta"
 
 msgid "Group chat is closed"
 msgstr "La conversazione di gruppo è chiusa"
@@ -2283,9 +2307,8 @@ msgstr "Nascosto"
 msgid "Hide"
 msgstr "Nascondi"
 
-#, fuzzy
 msgid "Hide Chat List"
-msgstr "Nascondi la lista delle chat"
+msgstr "Nascondi l'elenco delle chat"
 
 msgid "Home"
 msgstr "Casa"
@@ -2315,7 +2338,7 @@ msgid "I would like to add you to my roster."
 msgstr "Vorrei aggiungerti ai miei contatti."
 
 msgid "ID"
-msgstr "JID"
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Secondo lo standard IEC, KiB = 1024 byte, KB = 1000 byte."
@@ -2328,7 +2351,7 @@ msgid "IP / Port"
 msgstr "Porta"
 
 msgid "Id"
-msgstr "ID"
+msgstr "Id"
 
 msgid "Identified Error"
 msgstr "Errore Identificato"
@@ -2380,22 +2403,22 @@ msgid "Image"
 msgstr "Immagine"
 
 msgid "Import"
-msgstr "Esporta"
+msgstr "Importa"
 
 msgid "Import Contacts"
 msgstr "Importa Contatti"
 
 msgid "Import Contacts?"
-msgstr "Importa Contatti"
+msgstr "Importare i Contatti?"
 
 msgid "Import Error"
 msgstr "Errore di importazione"
 
 msgid "Import from Account"
-msgstr "Supporto per account multipli"
+msgstr "Importa dall'Account"
 
 msgid "Import from File"
-msgstr "Installa da File…"
+msgstr "Importa dal file"
 
 msgid "Import…"
 msgstr "Importa…"
@@ -2468,7 +2491,7 @@ msgid "Invalid Server Name"
 msgstr "Nome Server Non Valido"
 
 msgid "Invalid Stanza"
-msgstr "Nome Non Valido"
+msgstr "Stanza XML non valida"
 
 msgid "Invalid XMPP Address"
 msgstr "Indirizzo XMPP non valido"
@@ -2481,10 +2504,10 @@ msgid "Invalid domain name"
 msgstr "Nome dominio non valido"
 
 msgid "Invitation"
-msgstr "Mostra Posizione"
+msgstr "Invito"
 
 msgid "Invitation Declined"
-msgstr "Invito alla conversazione di gruppo rifiutato"
+msgstr "Invito rifiutato"
 
 msgid "Invite"
 msgstr "Invita"
@@ -2493,7 +2516,7 @@ msgid "Invite Contacts"
 msgstr "Invita contatti"
 
 msgid "Invite to this chat"
-msgstr "Passa alla scheda precedente"
+msgstr "Invita a questa chat"
 
 msgid "Invitees"
 msgstr "Invitati"
@@ -2556,7 +2579,7 @@ msgid "Join Groupchat…"
 msgstr "Unisciti alla conversazione di gruppo…"
 
 msgid "Joining Group Chat…"
-msgstr "Unisciti ad una Conversazione di Gruppo come…"
+msgstr "Unisciti alla Conversazione di Gruppo…"
 
 msgid "Joining…"
 msgstr "Unione…"
@@ -2574,7 +2597,7 @@ msgid "Key usage does not include certificate signing"
 msgstr "L'uso della chiave non include la firma del certificato"
 
 msgid "Kick"
-msgstr "_Caccia"
+msgstr "Caccia"
 
 #, python-format
 msgid "Kick %s"
@@ -2595,7 +2618,7 @@ msgid "Last seen: %s"
 msgstr "Ultimo accesso: %s"
 
 msgid "Leave Group Chat?"
-msgstr "Abbandona Conversazione di Gruppo"
+msgstr "Abbandonare la conversazione di gruppo?"
 
 msgid "Leave _Permanently"
 msgstr "Abbandona_Permanentemente"
@@ -2620,13 +2643,13 @@ msgid "Live Preview"
 msgstr "Anteprima"
 
 msgid "Load Image"
-msgstr "Incolla immagine"
+msgstr "Carica immagine"
 
 msgid "Loading Avatar Failed"
 msgstr "Caricamento avatar fallito"
 
 msgid "Loading Preview…"
-msgstr "Caricamento…"
+msgstr "Caricamento anteprima…"
 
 msgid "Loading avatar image failed"
 msgstr "Caricamento avatar fallito"
@@ -2637,13 +2660,16 @@ msgstr "Caricamento…"
 msgid "Local System Time"
 msgstr "Ora Locale di Sistema"
 
+msgid "Local Time"
+msgstr "Ora Locale di Sistema"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Gruppo di aiuto locale"
 
 msgctxt "Group chat description"
 msgid "Local news and reports"
-msgstr "Notizie segnalazioni locali"
+msgstr "Notizie locali e resoconti"
 
 #, python-format
 msgid "Location at %s"
@@ -2688,9 +2714,8 @@ msgstr "Maschio"
 msgid "Manage"
 msgstr "Gestione"
 
-#, fuzzy
 msgid "Manage Accounts…"
-msgstr "_Modifica gli Account…"
+msgstr "Modifica gli Account…"
 
 msgid "Manage Contact List"
 msgstr "Lista Contatti"
@@ -2726,7 +2751,7 @@ msgid "Maximum file size for preview downloads"
 msgstr "Dimensione massima per le anteprime dei file scaricati"
 
 msgid "Me"
-msgstr "Meschino"
+msgstr "Io"
 
 msgid "Media Playback"
 msgstr "Riproduzione multimediale"
@@ -2744,10 +2769,10 @@ msgstr "Membri"
 
 msgctxt "Group chat feature"
 msgid "Members Only"
-msgstr "Membri"
+msgstr "Solo Membri"
 
 msgid "Mention: Message Background Color"
-msgstr "Banner - Colore Sfondo"
+msgstr "Menzione: Colore di Sfondo del Messaggio"
 
 msgid "Message"
 msgstr "Messaggio"
@@ -2756,7 +2781,7 @@ msgid "Message Receipts (✔)"
 msgstr "Ricevute di Ritorno (✔)"
 
 msgid "Message Received"
-msgstr "Primo Messaggio Ricevuto"
+msgstr "Messaggio Ricevuto"
 
 msgid "Message Sent"
 msgstr "Messaggio Inviato"
@@ -2765,7 +2790,7 @@ msgid "Message composition"
 msgstr "Composizione Messaggi"
 
 msgid "Message content unknown"
-msgstr "Messaggio Inviato"
+msgstr "Contenuto del messaggio sconosciuto"
 
 #, python-format
 msgid ""
@@ -2782,7 +2807,7 @@ msgid "Messages from this users are blocked"
 msgstr "I messaggi da questo utente sono bloccati"
 
 msgid "Minimize"
-msgstr "Esci alla Chiusura"
+msgstr "Riduci a icona"
 
 msgid "Minutes until your status gets changed"
 msgstr "Minuti che devono trascorrere prima che lo stato sia cambiato"
@@ -2797,25 +2822,25 @@ msgid "Missing necessary encryption plugin"
 msgstr "È necessario il plugin di crittografia"
 
 msgid "Moderate Message?"
-msgstr "Messaggio di Stato"
+msgstr "Moderare il messaggio?"
 
 msgid "Moderate Messages?"
-msgstr "Messaggio di Stato"
+msgstr "Moderare i messaggi?"
 
 msgctxt "Message row action"
 msgid "Moderate all messages…"
-msgstr "Ritirare il messaggio?"
+msgstr "Moderare tutti i messaggi…"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
-msgstr "Moderatore"
+msgstr "Moderato"
 
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr "Moderatore"
+msgstr "Modera…"
 
 msgid "Moderation"
-msgstr "Moderatore"
+msgstr "Moderazione"
 
 msgctxt "Group chat contact role"
 msgid "Moderator"
@@ -2832,16 +2857,16 @@ msgid "More infos at providers.xmpp.net"
 msgstr "Maggiori informazioni presso providers.xmpp.net"
 
 msgid "Move"
-msgstr "Conversazione privata"
+msgstr "Sposta"
 
 msgid "Move Chat"
-msgstr "Conversazione privata"
+msgstr "Sposta Conversazione"
 
 msgid "Move Contact to New Group?"
-msgstr "Lista contatti: Font del gruppo"
+msgstr "Sposta il contatto nel nuovo Gruppo?"
 
 msgid "Move to Group"
-msgstr "Elimina Gruppo"
+msgstr "Sposta nel Gruppo"
 
 msgid "Movie"
 msgstr "Film"
@@ -2850,7 +2875,7 @@ msgid "Must be a port number"
 msgstr "La porta deve essere un numero"
 
 msgid "Mute Chat"
-msgstr "Conversazione privata"
+msgstr "Silenzia conversazione"
 
 msgid "Mute Sounds"
 msgstr "Disattiva Suoni"
@@ -2865,7 +2890,7 @@ msgid "Name <b>default</b> is not allowed"
 msgstr "Il nome <b>default</b> non è consentito"
 
 msgid "Needs libspelling to be installed"
-msgstr "Necessita l'installazione di gspell"
+msgstr "Necessita l'installazione di libspelling"
 
 msgid "Never"
 msgstr "Mai"
@@ -2877,7 +2902,7 @@ msgid "New Group"
 msgstr "Nuova Conversazione di Gruppo"
 
 msgid "New Group…"
-msgstr "Nuova Conversazione di Gruppo"
+msgstr "Nuova Conversazione di Gruppo…"
 
 msgid "New Search"
 msgstr "Nuova Ricerca"
@@ -2886,7 +2911,7 @@ msgid "New Workspace"
 msgstr "Aggiungi spazio di lavoro"
 
 msgid "New message from"
-msgstr "Nuovo messaggio da %(nickname)s"
+msgstr "Nuovo messaggio da"
 
 msgctxt "Group chat name"
 msgid "News"
@@ -2902,25 +2927,24 @@ msgid "Nickname contains invalid characters"
 msgstr "La password contiene caratteri non consentiti"
 
 msgid "Nickname…"
-msgstr "Soprannome"
+msgstr "Soprannome…"
 
 msgid "No"
 msgstr "No"
 
 msgid "No File Transfer available"
-msgstr "Trasferimento File non disponibile"
+msgstr "Trasferimento file non disponibile"
 
 msgid "No Messages Found"
 msgstr "Nessun Risultato Trovato"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
-msgstr "Password Richiesta"
+msgstr "Nessuna password richiesta"
 
 msgid "No Proxy"
 msgstr "Nessun Proxy"
 
-#, fuzzy
 msgid "No Results Found"
 msgstr "Nessun risultato trovato"
 
@@ -3007,7 +3031,7 @@ msgstr "Nessuno"
 
 msgctxt "Group chat feature"
 msgid "Not Anonymous"
-msgstr "Accesso Anonimo"
+msgstr "Non anonimo"
 
 msgid "Not Available"
 msgstr "Non Disponibile"
@@ -3027,7 +3051,7 @@ msgstr "Non Connesso"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
-msgstr "Non cifrato"
+msgstr "Non Moderato"
 
 msgid "Not accelerated"
 msgstr "Non cifrato"
@@ -3083,17 +3107,17 @@ msgstr "OK"
 
 msgctxt "Switch"
 msgid "Off"
-msgstr "Non in Linea"
+msgstr "No"
 
 msgid "Offline"
 msgstr "Non in Linea"
 
 msgctxt "Switch"
 msgid "On"
-msgstr "Apri"
+msgstr "Sì"
 
 msgid "One Month"
-msgstr "1 Mese"
+msgstr "Un Mese"
 
 msgid "One Year"
 msgstr "1 Anno"
@@ -3117,13 +3141,13 @@ msgid "Open Email Composer"
 msgstr "Apri Compositore Email"
 
 msgid "Open Folder"
-msgstr "_Apri Cartella"
+msgstr "Apri Cartella"
 
 msgid "Open Link in Browser"
 msgstr "Apri Collegamento nel Browser"
 
 msgid "Open Link in _Browser"
-msgstr "Apri Collegamento nel Browser"
+msgstr "Apri Collegamento nel _Browser"
 
 msgid "Open _Folder"
 msgstr "Apri _Cartella"
@@ -3132,7 +3156,7 @@ msgid "Open as _Link"
 msgstr "Apri come _Collegamento"
 
 msgid "Open folder"
-msgstr "Apri _Cartella"
+msgstr "Apri cartella"
 
 msgid "Open search bar"
 msgstr "Apri barra di ricerca"
@@ -3141,7 +3165,7 @@ msgid "OpenGL accelerated"
 msgstr "Accelerazione OpenGL"
 
 msgid "Operating System"
-msgstr "Client / Sistema Operativo"
+msgstr "Sistema Operativo"
 
 msgctxt "Profile"
 msgid "Organisation"
@@ -3226,7 +3250,7 @@ msgid "Participants"
 msgstr "Partecipanti"
 
 msgid "Participants Count"
-msgstr "Partecipanti"
+msgstr "Numero Partecipanti"
 
 msgid "Participants asking for voice:"
 msgstr "Partecipanti che chiedono di poter parlare:"
@@ -3244,7 +3268,7 @@ msgstr ""
 "permesso di inviare messaggi"
 
 msgid "Pass_word"
-msgstr "Pass_word"
+msgstr "_Password"
 
 msgid "Password"
 msgstr "Password"
@@ -3256,7 +3280,7 @@ msgid "Password Changed"
 msgstr "Password Modificata"
 
 msgid "Password Required"
-msgstr "Password Richiesta"
+msgstr "Password richiesta"
 
 msgctxt "Group chat feature"
 msgid "Password Required"
@@ -3272,25 +3296,28 @@ msgid "Paste Last Input"
 msgstr "Incolla Ultimo Input"
 
 msgid "Paste as Code Block"
-msgstr "Incolla come citazione"
+msgstr "Incolla come Blocco di Codice"
 
 msgid "Paste as Quote"
 msgstr "Incolla come citazione"
 
 msgid "Pasting Content Failed"
-msgstr "Modifica Password Fallita"
+msgstr "Errore Incollando il Contenuto"
 
 msgid "Path length constraint exceeded"
 msgstr "Limite della lunghezza del percorso superato"
 
 msgid "Pending"
-msgstr "Mostra _Eventi in Attesa"
+msgstr "In attesa"
 
 msgid "Pending Voice Requests"
-msgstr "Richiesta di Parola"
+msgstr "Richieste Vocali in Sospeso"
 
 msgid "Permanently"
 msgstr "Permanentemente"
+
+msgid "Permanently remove this group chat from the server"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3306,10 +3333,10 @@ msgid "Phone No."
 msgstr "Telefono"
 
 msgid "Picture and Name"
-msgstr "Immagine da usare"
+msgstr "Immagine e Nome"
 
 msgid "Pin Chat"
-msgstr "Conversazione privata"
+msgstr "Appunta la conversazione"
 
 msgid "Pinned"
 msgstr "Fissato"
@@ -3330,10 +3357,10 @@ msgid "Play sounds to notify about events"
 msgstr "Riproduci dei suoni per notificare gli eventi"
 
 msgid "Please choose an account"
-msgstr "Scegliere una stanza"
+msgstr "Seleziona un account per favore"
 
 msgid "Please enter an XMPP address"
-msgstr "Inserisci un nuovo nome"
+msgstr "Inserisci un indirizzo XMPP per favore"
 
 msgid "Please enter your credentials or Sign Up"
 msgstr "Inserisci le tue credenziali o Registrati"
@@ -3374,7 +3401,7 @@ msgid "Plugin Settings"
 msgstr "Impostazioni Estensioni"
 
 msgid "Plugin Update"
-msgstr "Plugin fallito"
+msgstr "Aggiorna plugin"
 
 msgid "Plugin already exists"
 msgstr "L'estensione esiste già"
@@ -3383,7 +3410,7 @@ msgid "Plugins"
 msgstr "Estensioni"
 
 msgid "Plugins Updated Successfully"
-msgstr "Plugin fallito"
+msgstr "Aggiornamento plugin completato con successo"
 
 msgid "Port"
 msgstr "Porta"
@@ -3417,7 +3444,7 @@ msgid "Preview all Image URLs"
 msgstr "Anteprima di tutti gli URL delle immagini"
 
 msgid "Preview in Public Group Chats"
-msgstr "Esci dalle conversazioni di gruppo"
+msgstr "Anteprima nelle conversazioni di gruppo pubbliche"
 
 msgid "Preview new messages in notification popup?"
 msgstr "Mostrare l'anteprima dei nuovi messaggi nelle notifiche popup?"
@@ -3438,7 +3465,7 @@ msgid "Private"
 msgstr "Conversazione privata"
 
 msgid "Processing image…"
-msgstr "Errore elaborazione immagine"
+msgstr "Immagine in elaborazione…"
 
 msgid "Profile"
 msgstr "Profilo"
@@ -3482,11 +3509,11 @@ msgid "Proxy, custom hostname and port"
 msgstr "Proxy, host personalizzato e porta"
 
 msgid "Public"
-msgstr "_Pubblica"
+msgstr "Pubblica"
 
 msgctxt "Group chat feature"
 msgid "Public"
-msgstr "_Pubblica"
+msgstr "Pubblica"
 
 msgctxt "Profile"
 msgid "Public Encryption Key"
@@ -3496,7 +3523,7 @@ msgid "Public Information"
 msgstr "Informazioni"
 
 msgid "Public Key Information"
-msgstr "Informazioni"
+msgstr "Informazioni Chiave Pubblica"
 
 msgid "Public Key: "
 msgstr "Chiave pubblica: "
@@ -3509,26 +3536,26 @@ msgid "Purge"
 msgstr "Elimina"
 
 msgid "Purge Chat History"
-msgstr "Elimina cronologia conversazioni…"
+msgstr "Elimina cronologia conversazioni"
 
 msgid "Purge all Chat History?"
-msgstr "Conserva Cronologia Conversazioni"
+msgstr "Elimina cronologia di tutte le conversazioni?"
 
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "Versione PyGObject: %s"
 
 msgid "Quit"
-msgstr "_Esci"
+msgstr "Esci"
 
 msgid "Quit Gajim"
 msgstr "Esci da Gajim"
 
 msgid "Quote next message"
-msgstr "Invia messaggio"
+msgstr "Cita il prossimo messaggio"
 
 msgid "Quote previous message"
-msgstr "Inoltra messaggi non letti"
+msgstr "Cita messaggio precedente"
 
 msgid "Re-Login Now?"
 msgstr "Effettuare di nuovo l'accesso?"
@@ -3563,7 +3590,7 @@ msgstr "Primo Messaggio Ricevuto"
 
 msgctxt "Message state"
 msgid "Received"
-msgstr "Primo Messaggio Ricevuto"
+msgstr "Ricevuto"
 
 msgid "Recent history"
 msgstr "Cronologia Recente"
@@ -3598,7 +3625,7 @@ msgid "Registration successful"
 msgstr "Registrazione avvenuta con successo"
 
 msgid "Reject file transfer"
-msgstr "Rimozione del trasferimento file selezionato"
+msgstr "Rifiuta trasferimento file"
 
 msgid "Remember Last Status"
 msgstr "Ricorda Ultimo Stato"
@@ -3614,7 +3641,7 @@ msgstr "Rimuovi"
 
 #, python-format
 msgid "Remove %s contacts from your contact list?"
-msgstr "Rimuovere il contatto %s dalla lista contatti?"
+msgstr "Rimuovere i contatti %s dalla lista contatti?"
 
 msgid "Remove Account"
 msgstr "Rimuovi Account"
@@ -3626,28 +3653,28 @@ msgid "Remove Contact"
 msgstr "Rimuovi Contatto"
 
 msgid "Remove Contacts?"
-msgstr "Rimuovi Contatto"
+msgstr "Rimuovi Contatti?"
 
 msgid "Remove Contact…"
-msgstr "Rimuovi Contatto"
+msgstr "Rimuovi Contatto…"
 
 msgid "Remove From Contact List?"
-msgstr "Rimuovi il contatto dalla lista contatti"
+msgstr "Rimuovi il contatto dalla lista contatti?"
 
 msgid "Remove Group?"
-msgstr "Elimina Gruppo"
+msgstr "Elimina Gruppo?"
 
 msgid "Remove Group…"
-msgstr "Elimina Gruppo"
+msgstr "Elimina Gruppo…"
 
 msgid "Remove History…"
-msgstr "Sincronizzazione Cronologia…"
+msgstr "Cancella Cronologia…"
 
 msgid "Remove Proxy"
 msgstr "Rimuovi Proxy"
 
 msgid "Remove Proxy?"
-msgstr "Rimuovi Proxy"
+msgstr "Rimuovi il Proxy?"
 
 msgid "Remove Setting"
 msgstr "Rimuovi Impostazione"
@@ -3656,22 +3683,22 @@ msgid "Remove Theme"
 msgstr "Rimuovi Tema"
 
 msgid "Remove Workspace?"
-msgstr "Rimuovi Contatto"
+msgstr "Rimuovi Spazio di Lavoro?"
 
 msgid "Remove from Contact List…"
-msgstr "Rimuovi il contatto dalla lista contatti"
+msgstr "Rimuovi il contatto dalla lista contatti…"
 
 msgid "Remove from Group"
-msgstr "Elimina Gruppo"
+msgstr "Rimuovi dal Gruppo"
 
 msgid "Remove this workspace"
 msgstr "Rimuovi questo spazio di lavoro"
 
 msgid "Remove your group chat avatar"
-msgstr "Rimuovi immagine di profilo"
+msgstr "Rimuovi il tuo avatar per la chat di gruppo"
 
 msgid "Remove your profile picture"
-msgstr "Rimuovi immagine di profilo"
+msgstr "Rimuovi la tua immagine di profilo"
 
 #, python-format
 msgid "Removed %(count)s contact"
@@ -3683,13 +3710,13 @@ msgid "Removing Account..."
 msgstr "Rimozione Account..."
 
 msgid "Rename"
-msgstr "_Nome Utente"
+msgstr "Rinomina"
 
 msgid "Rename Contact?"
-msgstr "Rimuovi Contatto"
+msgstr "Rinominare il contatto?"
 
 msgid "Rename…"
-msgstr "_Nome Utente"
+msgstr "Rinomina…"
 
 msgctxt "Group chat name"
 msgid "Repairs"
@@ -3699,7 +3726,7 @@ msgid "Reply…"
 msgstr "Rispondi…"
 
 msgid "Request"
-msgstr "_Richiedi la voce"
+msgstr "Richiesta"
 
 msgid "Request Search Form"
 msgstr "Modulo Ricerca"
@@ -3708,29 +3735,28 @@ msgid "Request Voice"
 msgstr "Chiedi di poter Parlare"
 
 msgid "Request contact information (Tune, Location)"
-msgstr ""
-"Richiesta informazioni contatto (Umore, Attività, Brano Musicale, Posizione)"
+msgstr "Richiedi informazioni del contatto (Brano Musicale, Posizione)"
 
 msgid "Request pending"
-msgstr "Richiede: Gspell"
+msgstr "Richiesta in sospeso"
 
 msgid "Request to see this contact's online status"
-msgstr "_Chiedi al contatto di poter vedere il suo stato"
+msgstr "Richiedi al contatto di vedere il suo stato"
 
 msgid "Requesting Command List"
-msgstr "Richiedi Lista Comandi"
+msgstr "Richiedendo la lista dei comandi"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "Richiesta Spazio per Caricamento File HTTP…"
 
 msgid "Requesting Register Form"
-msgstr "Modulo Ricerca"
+msgstr "Richiedendo il Form di Registrazione"
 
 msgid "Requesting register form from server…"
 msgstr "Richiesta del modulo di registrazione dal server…"
 
 msgid "Requesting search form from server"
-msgstr "Modulo Ricerca"
+msgstr "Richiedendo il Form di ricerca dal server"
 
 msgid "Required"
 msgstr "Richiesto"
@@ -3745,7 +3771,7 @@ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr "Richiede: gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
-msgstr "Richiede: Gspell"
+msgstr "Richiede: libspelling"
 
 msgid "Requires: libxss"
 msgstr "Richiede: libxss"
@@ -3757,13 +3783,13 @@ msgid "Reset"
 msgstr "Ripristina"
 
 msgid "Reset Filters"
-msgstr "Ripristina Suggerimenti"
+msgstr "Ripristina Filtri"
 
 msgid "Reset Hints"
 msgstr "Ripristina Suggerimenti"
 
 msgid "Reset User Interface Font Size"
-msgstr "Riduci dimensione caratteri interfaccia utente"
+msgstr "Ripristina la dimensione dei caratteri dell'interfaccia utente"
 
 msgid "Reset all chats to the current default value"
 msgstr "Ripristina tutte le conversazioni al valore predefinito impostato"
@@ -3782,7 +3808,7 @@ msgid "Resource"
 msgstr "Risorsa"
 
 msgid "Restart Gajim to finish this update"
-msgstr "Alcune modifiche avranno effetto solo dopo aver riavviato il programma"
+msgstr "Riavvia Gajim per concludere questo aggiornamento"
 
 msgid "Restart Pending"
 msgstr "Richiede: Gspell"
@@ -3799,7 +3825,7 @@ msgstr ""
 "precedente"
 
 msgid "Retract Message?"
-msgstr "Messaggio di Stato"
+msgstr "Ritirare il messaggio?"
 
 msgctxt "Message row action"
 msgid "Retract…"
@@ -3889,7 +3915,7 @@ msgid "Scroll down"
 msgstr "Scorri verso il basso"
 
 msgid "Scroll to this message"
-msgstr "Imposta messaggio di stato"
+msgstr "Scorri fino a questo messaggio"
 
 msgid "Scroll up"
 msgstr "Scorri verso l'alto"
@@ -3901,10 +3927,10 @@ msgid "Search"
 msgstr "Cerca"
 
 msgid "Search Filters"
-msgstr "Messaggio Inviato"
+msgstr "Filtri di Ricerca"
 
 msgid "Search Filters (Active)"
-msgstr "Primo Messaggio Ricevuto"
+msgstr "Filtri di Ricerca (Attivi)"
 
 msgid "Search Participants…"
 msgstr "Cerca partecipanti…"
@@ -3913,7 +3939,7 @@ msgid "Search Result"
 msgstr "Risultato Ricerca"
 
 msgid "Search all Chats"
-msgstr "Cerca nel database"
+msgstr "Cerca in tutte le Chat"
 
 msgid "Search contacts..."
 msgstr "Cerca contatti..."
@@ -3928,15 +3954,14 @@ msgstr ""
 "Cerca conversazioni di gruppo globalmente\n"
 "(premi \"Invio\" per iniziare la ricerca)"
 
-#, fuzzy
 msgid "Search in chats…"
-msgstr "Cerca partecipanti…"
+msgstr "Cerca nelle chat…"
 
 msgid "Searching"
-msgstr "Cerca"
+msgstr "Ricerca in corso"
 
 msgid "Searching…"
-msgstr "Cerca…"
+msgstr "Ricerca in corso…"
 
 #, python-format
 msgid ""
@@ -3957,12 +3982,15 @@ msgid ""
 "conversations. Share messages, pictures, and files with your contacts – and "
 "only with them."
 msgstr ""
+"Conversazioni protette: Crittografia da punto a punto (end-to-end) "
+"all'avanguardia per le tue conversazioni. Condividi messaggi, immagini e "
+"file con i tuoi contatti e solo con loro."
 
 msgid "Security"
 msgstr "Sicurezza"
 
 msgid "Security Labels"
-msgstr "Sicurezza"
+msgstr "Etichette sulla Sicurezza"
 
 msgid "Security Warning"
 msgstr "Avviso di Sicurezza"
@@ -4000,7 +4028,7 @@ msgstr "Certificato autofirmato nella catena di certificazione"
 
 msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
-msgstr "Accesso Anonimo"
+msgstr "Semi-Anonimo"
 
 msgid "Send Chat Markers"
 msgstr "Invia Lettura Conversazione"
@@ -4034,7 +4062,7 @@ msgid "Send Message Receipts"
 msgstr "Invia Ricevute di Ritorno"
 
 msgid "Send Messages with Control+Enter"
-msgstr "Invia messaggio al contatto"
+msgstr "Invia messaggio con Ctrl+Invio"
 
 msgid "Send Read Markers"
 msgstr "Invia Conferme di Lettura"
@@ -4069,7 +4097,7 @@ msgid "Server Info"
 msgstr "Info Server"
 
 msgid "Server Shutdown"
-msgstr "Software Server"
+msgstr "Spegnimento del Server"
 
 msgid "Server Software"
 msgstr "Software Server"
@@ -4092,7 +4120,7 @@ msgid "Service Discovery using account %s"
 msgstr "Ricerca Servizi tramite l'account %s"
 
 msgid "Service Gateway"
-msgstr "Servizio"
+msgstr "Servizio di Gateway"
 
 msgid "Service Not Browsable"
 msgstr "Impossibile consultare il servizio"
@@ -4103,11 +4131,15 @@ msgstr "Server remoto non trovato"
 msgid "Set Trust"
 msgstr "Gestione fiducia"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Invita a questa chat"
+
 msgid "Set configuration directory"
 msgstr "Imposta la cartella di configurazione"
 
 msgid "Set date…"
-msgstr "Moderatore"
+msgstr "Imposta la data…"
 
 msgid "Set status message"
 msgstr "Imposta messaggio di stato"
@@ -4123,7 +4155,7 @@ msgid "Settings"
 msgstr "Impostazioni"
 
 msgid "Share Contact…"
-msgstr "Aggiungi _Contatto…"
+msgstr "Condividi il Contatto…"
 
 msgid "Share Group Chat…"
 msgstr "Crea conversazione di gruppo…"
@@ -4141,9 +4173,8 @@ msgstr "video"
 msgid "Share my online status"
 msgstr "Modifica stato"
 
-#, fuzzy
 msgid "Show Chat List"
-msgstr "Mostra Posizione"
+msgstr "Mostra l'elenco delle chat"
 
 msgid "Show Commands"
 msgstr "Comandi"
@@ -4181,9 +4212,8 @@ msgstr "Mostra Cambiamenti di Stato"
 msgid "Show Subject"
 msgstr "Mostra Argomento"
 
-#, fuzzy
 msgid "Show Title Bar"
-msgstr "Mostra Transport"
+msgstr "Mostra la barra del titolo"
 
 msgid "Show Transfers"
 msgstr "Mostra Transport"
@@ -4261,9 +4291,8 @@ msgstr "Mostra suggerimenti per i codici brevi, es. :+1:"
 msgid "Show the application's version"
 msgstr "Mostra la versione dell'applicazione"
 
-#, fuzzy
 msgid "Show the window’s title bar"
-msgstr "Mostra finestra nella barra delle applicazioni"
+msgstr "Mostra la barra del titolo della finestra"
 
 msgid "Show window in the taskbar"
 msgstr "Mostra finestra nella barra delle applicazioni"
@@ -4297,6 +4326,9 @@ msgstr "Dimensione in pixel delle immagini di anteprima"
 
 msgid "Sleeping"
 msgstr "Dormo"
+
+msgid "Software"
+msgstr "Software Server"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Qualcosa è andato storto. Funzione video disattivata."
@@ -4393,7 +4425,7 @@ msgid "Status Messages in Participants List"
 msgstr "Messaggio di Stato - Carattere"
 
 msgid "Status is not shared"
-msgstr "Messaggio di Stato"
+msgstr "Lo stato non è condiviso"
 
 msgid "Status is shared"
 msgstr "Messaggio di Stato"
@@ -4418,6 +4450,10 @@ msgid ""
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
+"Rimani in contatto: Le chat e i gruppi ti aiutano a rimanere in contatto con "
+"i tuoi amici e familiari. Costruisci comunità collegandoti a persone con gli "
+"stessi interessi. Usa i gruppi per organizzare le piccole cose o il prossimo "
+"grande evento."
 
 msgid "Stop Sharing Online Status?"
 msgstr "Smettere di condividere lo status online?"
@@ -4445,7 +4481,7 @@ msgid "Subscribed"
 msgstr "Iscritti"
 
 msgid "Subscription"
-msgstr "Iscrizione:"
+msgstr "Iscrizione"
 
 msgid "Subscription:"
 msgstr "Iscrizione:"
@@ -4454,7 +4490,7 @@ msgid "Successfully Added Contacts"
 msgstr "Contatti selezionati"
 
 msgid "Successfully Removed Contacts"
-msgstr "Rimuovi Contatto"
+msgstr "Contatti rimossi con successo"
 
 msgid "Support"
 msgstr "Supporto"
@@ -4588,7 +4624,7 @@ msgid "The last message was written on a mobile client"
 msgstr "L'ultimo messaggio è stato scritto su un client mobile"
 
 msgid "The referenced message is not available."
-msgstr "Conversazioni video non disponibili"
+msgstr "I messaggi referenziati non sono disponibili."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -4660,6 +4696,13 @@ msgstr ""
 "Si è verificato un errore durante il tentativo di verifica del certificato "
 "SSL del tuo server XMPP (%s)."
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Si è verificato un errore durante il tentativo di recuperare i messaggi: %s"
+
 msgid "This Device"
 msgstr "Seleziona dispositivo"
 
@@ -4681,7 +4724,7 @@ msgstr ""
 "membri."
 
 msgid "This contact does not share their status with you"
-msgstr "Ha smesso di condividere il suo stato con te"
+msgstr "Questo contatto non condivide il suo stato con te"
 
 msgid "This contact is a bot"
 msgstr "Lista Contatti"
@@ -4716,6 +4759,9 @@ msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 "La conversazione di gruppo sarà distrutta quando sarà senza partecipanti"
 
+msgid "This information will be publicly visible."
+msgstr ""
+
 msgid "This is a public group chat. Encryption is not available."
 msgstr ""
 "Questa è una chat di gruppo pubblica. La crittografia non è disponibile."
@@ -4731,7 +4777,7 @@ msgid "This is your XMPP address"
 msgstr "Il tuo indirizzo XMPP è visibile solo ai moderatori"
 
 msgid "This message has been moderated"
-msgstr "Questo messaggio è stato ritirato da %s."
+msgstr "Questo messaggio è stato moderato"
 
 #, python-format
 msgid "This message has been moderated by %s"
@@ -4783,8 +4829,8 @@ msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely a legacy service or broken."
 msgstr ""
-"Questo servizio ha fornito informazioni dettagliate.\n"
-"Potrebbe essere obsoleto o malfunzionante."
+"Questo servizio non è riuscito a fornire informazioni dettagliate.\n"
+"Probabilmente è un servizio obsoleto o malfunzionante."
 
 msgid "This service does not contain any items to browse."
 msgstr "Questo servizio non contiene elementi consultabili."
@@ -4799,7 +4845,7 @@ msgid "This will clear the devices store for your account."
 msgstr "Il tuo account sarà rimosso da Gajim."
 
 msgid "This will purge all locally stored chat history"
-msgstr "Scorri verso l'alto per caricare la cronologia…"
+msgstr "Questo rimuoverà tutta la cronologia locale della chat"
 
 msgid "This will remove your account from Gajim."
 msgstr "Il tuo account sarà rimosso da Gajim."
@@ -4815,7 +4861,7 @@ msgstr ""
 "nell'area di lavoro successiva. Rimuoverlo comunque?"
 
 msgid "Three Months"
-msgstr "3 Mesi"
+msgstr "Tre Mesi"
 
 msgid "Time Until Away"
 msgstr "Tempo di Attesa per Assente"
@@ -4873,7 +4919,7 @@ msgid "Try Again"
 msgstr "Riprova"
 
 msgid "Try a different search"
-msgstr ""
+msgstr "Prova con un ricerca differente"
 
 msgid "Trying to change password..."
 msgstr "Tentativo modifica password..."
@@ -4943,7 +4989,7 @@ msgid "Unblock"
 msgstr "Sblocca"
 
 msgid "Unblock Participant?"
-msgstr "Participante"
+msgstr "Sblocca partecipante?"
 
 msgid "Unencrypted"
 msgstr "Non cifrato"
@@ -4980,7 +5026,7 @@ msgid "Unknown command: %s"
 msgstr "Comando sconosciuto: %s"
 
 msgid "Unknown error."
-msgstr "Errore SSL \"%s\" sconosciuto"
+msgstr "Errore sconosciuto."
 
 msgid "Unknown language"
 msgstr "Titolo Sconosciuto"
@@ -4992,7 +5038,7 @@ msgid "Unmute Chat"
 msgstr "Conversazione di Gruppo"
 
 msgid "Unpin Chat"
-msgstr "Conversazione di Gruppo"
+msgstr "Rilascia la conversazione"
 
 msgid "Unsupported certificate purpose"
 msgstr "Scopo del certificato non supportato"
@@ -5029,7 +5075,7 @@ msgid "Updating Plugin…"
 msgstr "Apri estensioni…"
 
 msgid "Updating provider list…"
-msgstr "Impossibile aggiornare la lista dei server"
+msgstr "Lista dei fornitori in aggiornamento…"
 
 msgid "Upload File…"
 msgstr "Carica File…"
@@ -5063,7 +5109,7 @@ msgid "Use Unencrypted Connection"
 msgstr "Usa Connessione Non Cifrata"
 
 msgid "Use a profile to run multiple Gajim instances"
-msgstr ""
+msgstr "Usa un profilo per far girare più istanze di Gajim"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "La connessione al server non sarà cifrata"
@@ -5213,7 +5259,7 @@ msgid "Workspace Settings"
 msgstr "Impostazioni Avanzate"
 
 msgid "Workspace settings…"
-msgstr "Impostazioni Avanzate"
+msgstr "Impostazione degli spazi di lavoro…"
 
 msgid "Workspaces"
 msgstr "Aggiungi spazio di lavoro"
@@ -5254,7 +5300,7 @@ msgid "You are a visitor"
 msgstr "Sei un visitatore"
 
 msgid "You are a visitor."
-msgstr "Sei un visitatore"
+msgstr "Sei un visitatore."
 
 #, python-format
 msgid ""
@@ -5271,7 +5317,7 @@ msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
 msgstr "Stai per rimuovere %(name)s (%(jid)s) dalla lista contatti."
 
 msgid "You are currently not joined this group chat"
-msgstr "Chiunque si può unire a questa conversazione di gruppo"
+msgstr "Attualmente non sei unito a questa conversazione di gruppo"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5332,14 +5378,6 @@ msgstr "Permetti al contatto di vedere il mio stato"
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "Non puoi inviare messaggi privati ai contatti se sono offline."
 
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"Non hai i permessi per questa cartella.\n"
-"Errore: %s."
-
 msgid "You don't share your status with this contact"
 msgstr "Non condividi il tuo stato con questo contatto"
 
@@ -5362,7 +5400,7 @@ msgid "You have been kicked by %s"
 msgstr "Sei stato cacciato da %s"
 
 msgid "You have been removed from this group chat"
-msgstr "Sei stato rimosso dalla conversazione di gruppo{actor}{reason}"
+msgstr "Sei stato rimosso dalla conversazione di gruppo"
 
 #, python-format
 msgid "You have been removed from this group chat by %s"
@@ -5576,16 +5614,14 @@ msgstr "_Host"
 msgid "_Hostname"
 msgstr "_Hostname"
 
-#, fuzzy
 msgid "_Import"
-msgstr "Esporta"
+msgstr "_Importa"
 
 msgid "_Join"
 msgstr "_Unisciti"
 
-#, fuzzy
 msgid "_Join Support Chat"
-msgstr "Unisciti ad una Conversazione di Gruppo"
+msgstr "_Unisciti alla Chat di Assistenza"
 
 msgid "_Keyboard Shortcuts"
 msgstr "_Scorciatoie da Tastiera"
@@ -6259,6 +6295,9 @@ msgstr "…o trascinalo qui"
 #~ "Certificato per\n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "C_ambia argomento"
+
 #~ msgid "Chat history"
 #~ msgstr "Cronologia delle conversazioni"
 
@@ -6581,9 +6620,6 @@ msgstr "…o trascinalo qui"
 #~ msgid "Last seen %s"
 #~ msgstr "Motivo: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Ora Locale di Sistema"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6864,9 +6900,6 @@ msgstr "…o trascinalo qui"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Mostra la lista dei file trasferiti tra te e i tuoi contatti"
 
-#~ msgid "Software"
-#~ msgstr "Software Server"
-
 #~ msgid "Sta_tus"
 #~ msgstr "S_tato"
 
@@ -7044,6 +7077,14 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Non puoi sincronizzarti con un account finché non sei connesso."
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "Non hai i permessi per questa cartella.\n"
+#~ "Errore: %s."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "Non hai il permesso di creare file in questa cartella."

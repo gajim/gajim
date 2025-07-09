@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -416,6 +416,14 @@ msgstr "Usie adčynienyja vokny razmovy buduć začynienyja. Praciahnuć?"
 #, fuzzy
 msgid "Account Added"
 msgstr "Kont"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Kont"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Šyfravańnie adklučanaje"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1118,10 +1126,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Źmiani _temu"
-
-#, fuzzy
 msgid "Change"
 msgstr "Źmiani _mianušku"
 
@@ -1742,12 +1746,16 @@ msgid "Description"
 msgstr "Apisańnie"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Novaja hrupavaja razmova"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Novaja hrupavaja razmova"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Apisańnie: %s"
 
 msgid "Details"
 msgstr "Padrabiaznaści"
@@ -2968,6 +2976,10 @@ msgstr "Uvod paviedamleńnia"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Lakalny JID:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3715,6 +3727,9 @@ msgid "Pending Voice Requests"
 msgstr "Zapyt na pieradaču fajłu"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4672,6 +4687,10 @@ msgid "Set Trust"
 msgstr "Kiruj kontami"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Kantakty"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Kanfihuracyja pakoju"
 
@@ -4891,6 +4910,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Splu"
+
+#, fuzzy
+msgid "Software"
+msgstr "Zdolnaści serveraŭ"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5284,6 +5307,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Abiary vyjavu"
@@ -5341,6 +5370,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6010,12 +6042,6 @@ msgstr "Ja chaču dadać ciabie ŭ svoj śpis kantaktaŭ."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6963,6 +6989,10 @@ msgstr ""
 #~ msgstr "dla kontu %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Źmiani _temu"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Dasyłańnie profilu..."
 
@@ -7212,10 +7242,6 @@ msgstr ""
 #~ msgstr "Pryčyna"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Lakalny JID:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Paviedamleńni"
 
@@ -7421,10 +7447,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Pakažy śpis pieradačaŭ fajłaŭ"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Zdolnaści serveraŭ"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7554,6 +7576,12 @@ msgstr ""
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr ""
 #~ "Niemahčyma ŭdzielničać u hrupavoj razmovie, nie dałučyŭšysia da servera."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

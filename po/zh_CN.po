@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
-"PO-Revision-Date: 2025-06-30 02:12+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"PO-Revision-Date: 2025-07-09 05:12+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -405,6 +405,12 @@ msgstr ""
 msgid "Account Added"
 msgstr "账号已添加"
 
+msgid "Account Address"
+msgstr "账号地址"
+
+msgid "Account Label"
+msgstr "账号标签"
+
 msgid "Account Name..."
 msgstr "账号名称…"
 
@@ -745,7 +751,7 @@ msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "关闭 Gajim 窗口时，退出前询问"
 
 msgid "Assign groups to this contact. You can filter chats by group."
-msgstr ""
+msgstr "将此联系人分配至分组。您可以按分组筛选聊天。"
 
 msgid "Attention Message Received"
 msgstr "收到注意消息"
@@ -997,9 +1003,6 @@ msgstr "证书已吊销"
 msgid "Certificate signature failure"
 msgstr "证书签名失败"
 
-msgid "Ch_ange Subject"
-msgstr "更改主题(_A)"
-
 msgid "Change"
 msgstr "更改"
 
@@ -1019,7 +1022,7 @@ msgid "Change your account’s password, etc."
 msgstr "更改您的账号密码等"
 
 msgid "Change your profile picture"
-msgstr "更改您的个人资料照片"
+msgstr "更改头像"
 
 msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "将您的状态在一定时间后更改为“离开”"
@@ -1521,11 +1524,14 @@ msgstr "拒绝所有联系人请求"
 msgid "Description"
 msgstr "描述"
 
-msgid "Destroy Group Chat…"
-msgstr "解散群聊…"
+msgid "Destroy Group Chat"
+msgstr "解散群聊"
 
 msgid "Destroy This Chat"
 msgstr "解散此聊天"
+
+msgid "Destroy…"
+msgstr "解散…"
 
 msgid "Details"
 msgstr "详情"
@@ -2583,6 +2589,9 @@ msgstr "正在加载…"
 msgid "Local System Time"
 msgstr "本地系统时间"
 
+msgid "Local Time"
+msgstr "本地时间"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "本地互助组"
@@ -2626,7 +2635,7 @@ msgid "Make Owner"
 msgstr "设为所有者"
 
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr "对所有人或仅您的联系人显示您的个人资料。"
+msgstr "将您的个人资料设置为所有人可见或仅联系人可见。"
 
 msgid "Male"
 msgstr "男性"
@@ -3227,6 +3236,9 @@ msgstr "待处理的发言权请求"
 
 msgid "Permanently"
 msgstr "永久"
+
+msgid "Permanently remove this group chat from the server"
+msgstr "从服务器永久移除此群聊"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4031,6 +4043,9 @@ msgstr "未找到服务"
 msgid "Set Trust"
 msgstr "设置信任"
 
+msgid "Set a subject for this chat"
+msgstr "设置此聊天的主题"
+
 msgid "Set configuration directory"
 msgstr "设置配置目录"
 
@@ -4207,6 +4222,9 @@ msgstr "预览图片的大小（像素）"
 
 msgid "Sleeping"
 msgstr "正在睡觉"
+
+msgid "Software"
+msgstr "软件"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "出了点问题。视频功能已禁用。"
@@ -4553,6 +4571,14 @@ msgid ""
 "XMPP server (%s)."
 msgstr "尝试验证 XMPP 服务器（%s）的 SSL 证书时出错。"
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"尝试保存文件时出错。\n"
+"错误：%s。"
+
 msgid "This Device"
 msgstr "此设备"
 
@@ -4604,6 +4630,9 @@ msgstr "即使没有参与者，此群聊仍然存在"
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "最后一位参与者离开后，将会解散此群聊"
+
+msgid "This information will be publicly visible."
+msgstr "此信息将公开可见。"
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "这是公开群聊，无法加密。"
@@ -5202,14 +5231,6 @@ msgstr "您无法查看对方的在线状态"
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "当对方离线时，您无法向其发送私信。"
 
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"您没有此目录的权限。\n"
-"错误：%s。"
-
 msgid "You don't share your status with this contact"
 msgstr "您未与对方分享状态"
 
@@ -5299,7 +5320,7 @@ msgstr ""
 "这可能需要一段时间…"
 
 msgid "Your connection to the server is secured by this certificate"
-msgstr "您与服务器的连接由此证书保护"
+msgstr "此证书保护着您与服务器的连接"
 
 msgid "Your message can not be sent until you are connected."
 msgstr "连接后才能发送您的消息。"
@@ -6137,6 +6158,9 @@ msgstr "…或将其拖放到此处"
 #~ "证书 \n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "更改主题(_A)"
+
 #~ msgid "Chat history"
 #~ msgstr "聊天记录"
 
@@ -6448,9 +6472,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Last seen %s"
 #~ msgstr "最后上线 %s"
 
-#~ msgid "Local Time"
-#~ msgstr "本地时间"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6703,9 +6724,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "显示您与您的联系人之间的传输文件列表"
 
-#~ msgid "Software"
-#~ msgstr "软件"
-
 #~ msgid "Sta_tus"
 #~ msgstr "状态(_T)"
 
@@ -6869,6 +6887,14 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "只有连接后才能与账号同步。"
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "您没有此目录的权限。\n"
+#~ "错误：%s。"
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "您没有权限在这个目录里创建文件。"

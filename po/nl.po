@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -417,6 +417,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Accountrijlettertype"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Accountrijlettertype"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Account is uitgeschakeld"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1109,10 +1117,6 @@ msgid "Certificate signature failure"
 msgstr "Certificaatsondertekeningsfout"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Onderwerp veranderen"
-
-#, fuzzy
 msgid "Change"
 msgstr "Bijnaam veranderen"
 
@@ -1720,12 +1724,16 @@ msgid "Description"
 msgstr "Beschrijving"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Nieuw groepsgesprek"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Nieuw groepsgesprek"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "%s vernietigen"
 
 msgid "Details"
 msgstr "Details"
@@ -2959,6 +2967,10 @@ msgstr "Bezig met laden"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Lokale JID:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3695,6 +3707,9 @@ msgid "Pending Voice Requests"
 msgstr "Audiogespreksverzoek"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4637,6 +4652,10 @@ msgstr "De dienst kon niet gevonden worden"
 msgid "Set Trust"
 msgstr "Beheer geluiden"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Wisselen naar het vorig tabblad"
+
 msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
 
@@ -4855,6 +4874,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Slapen"
+
+#, fuzzy
+msgid "Software"
+msgstr "Serversoftware"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5247,6 +5270,15 @@ msgstr ""
 "server: %(error)s\n"
 "Wil je nog steeds met deze server verbinden?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Er trad een fout op bij het verifiëren van het SSL-certificaat van je XMPP-"
+"server: %(error)s\n"
+"Wil je nog steeds met deze server verbinden?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Kies archief"
@@ -5306,6 +5338,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -5992,12 +6027,6 @@ msgstr "Je kan jezelf niet aan je rooster toevoegen."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6974,6 +7003,10 @@ msgstr ""
 #~ "Certificaat voor account\n"
 #~ "%s"
 
+#, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Onderwerp veranderen"
+
 #~ msgid "Chat history"
 #~ msgstr "Gespreksgeschiedenis"
 
@@ -7291,10 +7324,6 @@ msgstr ""
 #~ msgid "Last seen %s"
 #~ msgstr "Reden"
 
-#, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Lokale JID:"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -7551,10 +7580,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Serversoftware"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7720,6 +7745,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Het is niet mogelijk met een account te synchroniseren zonder dat deze "
 #~ "verbonden is."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

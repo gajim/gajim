@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -420,6 +420,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Account"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Account"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Emoticons disabled"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1129,10 +1137,6 @@ msgid "Certificate signature failure"
 msgstr "Certificate signature failure"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Change _Subject..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Change _Nickname..."
 
@@ -1754,12 +1758,16 @@ msgid "Description"
 msgstr "Description"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "New Group Chat"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "New Group Chat"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Destroying %s"
 
 msgid "Details"
 msgstr "Details"
@@ -2975,6 +2983,10 @@ msgstr "Coding"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Local jid:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3720,6 +3732,9 @@ msgid "Pending Voice Requests"
 msgstr "File Transfer Request"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4678,6 +4693,10 @@ msgid "Set Trust"
 msgstr "Manage Accounts"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Invite _Contacts"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Room Configuration"
 
@@ -4898,6 +4917,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Sleeping"
+
+#, fuzzy
+msgid "Software"
+msgstr "Servers Features"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5298,6 +5321,15 @@ msgstr ""
 "%(error)s\n"
 "Do you still want to connect to this server?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"There was an error verifying the SSL certificate of your jabber server: "
+"%(error)s\n"
+"Do you still want to connect to this server?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Choose Image"
@@ -5355,6 +5387,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6028,12 +6063,6 @@ msgstr "You cannot add yourself to your roster."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "You do not have permission to create files in this directory."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6993,6 +7022,10 @@ msgstr ""
 #~ msgstr "for account %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Change _Subject..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Sending profile..."
 
@@ -7240,10 +7273,6 @@ msgstr ""
 #~ msgstr "Reason"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Local jid:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
 
@@ -7454,10 +7483,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Shows a list of file transfers between you and others"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Servers Features"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7587,6 +7612,12 @@ msgstr ""
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "You cannot synchronise with an account unless it is connected."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "You do not have permission to create files in this directory."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

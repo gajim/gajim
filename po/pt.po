@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -410,6 +410,14 @@ msgstr "Todas as janelas de bate-papo e bate-papo em grupo serão fechadas."
 
 msgid "Account Added"
 msgstr "Conta Adicionada"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Conta Adicionada"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Conta desativada"
 
 msgid "Account Name..."
 msgstr "Nome da Conta..."
@@ -1043,9 +1051,6 @@ msgstr "Certificado revogado"
 msgid "Certificate signature failure"
 msgstr "Falha na assinatura do certificado"
 
-msgid "Ch_ange Subject"
-msgstr "Mu_dar Assunto"
-
 msgid "Change"
 msgstr "Mudar"
 
@@ -1608,11 +1613,16 @@ msgstr "Aceite todas as Solicitações de Contato"
 msgid "Description"
 msgstr "Descrição"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Destruir Grupo de Bate-papo…"
 
 msgid "Destroy This Chat"
 msgstr "Destruir Este Bate-papo"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "_Destruir"
 
 msgid "Details"
 msgstr "Detalhes"
@@ -2754,6 +2764,9 @@ msgstr "Carregando…"
 msgid "Local System Time"
 msgstr "Hora de Sistema Local"
 
+msgid "Local Time"
+msgstr "Hora Local"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3459,6 +3472,9 @@ msgid "Pending Voice Requests"
 msgstr "Solicitação de Voz"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4327,6 +4343,10 @@ msgstr "Servidor remoto não encontrado"
 msgid "Set Trust"
 msgstr "Gerenciar Soms"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Mudar para a aba anterior"
+
 msgid "Set configuration directory"
 msgstr "Definir diretório de configuração"
 
@@ -4534,6 +4554,9 @@ msgstr "Tamanho da imagem de visualização"
 
 msgid "Sleeping"
 msgstr "Dormindo"
+
+msgid "Software"
+msgstr "Software"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Algo deu errado. Recurso de vídeo desativado."
@@ -4910,6 +4933,14 @@ msgstr ""
 "Ocorreu um erro ao tentar verificar o certificado SSL do seu servidor XMPP "
 "(%s)."
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Ocorreu um erro ao tentar verificar o certificado SSL do seu servidor XMPP "
+"(%s)."
+
 #, fuzzy
 msgid "This Device"
 msgstr "Escolha Dispositivo"
@@ -4964,6 +4995,9 @@ msgstr "Este bate-papo em grupo persiste mesmo se não houver participantes"
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 "Este bate-papo em grupo será destruído assim que o último participante sair"
+
+msgid "This information will be publicly visible."
+msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr ""
@@ -5612,12 +5646,6 @@ msgstr "Você não pode ver o status online deste contato"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Você não tem permissões para criar arquivos neste diretório."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6555,6 +6583,9 @@ msgstr "…ou solte aqui"
 #~ "Certificado para\n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Mu_dar Assunto"
+
 #~ msgid "Chat history"
 #~ msgstr "Histórico de Bate-papo"
 
@@ -6875,9 +6906,6 @@ msgstr "…ou solte aqui"
 #~ msgid "Last seen %s"
 #~ msgstr "Motivo: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Hora Local"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -7132,9 +7160,6 @@ msgstr "…ou solte aqui"
 #~ msgstr ""
 #~ "Mostra uma lista de transferências de arquivos entre você e seus contatos"
 
-#~ msgid "Software"
-#~ msgstr "Software"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7294,6 +7319,12 @@ msgstr "…ou solte aqui"
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr ""
 #~ "Você não pode sincronizar com uma conta a menos que ela esteja conectada."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Você não tem permissões para criar arquivos neste diretório."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "Você não tem permissões para criar arquivos neste diretório."

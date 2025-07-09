@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -391,6 +391,14 @@ msgstr ""
 
 msgid "Account Added"
 msgstr ""
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Contos"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Conto"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1002,9 +1010,6 @@ msgstr ""
 msgid "Certificate signature failure"
 msgstr ""
 
-msgid "Ch_ange Subject"
-msgstr ""
-
 msgid "Change"
 msgstr ""
 
@@ -1536,10 +1541,13 @@ msgstr ""
 msgid "Description"
 msgstr "Descrition"
 
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr ""
 
 msgid "Destroy This Chat"
+msgstr ""
+
+msgid "Destroy…"
 msgstr ""
 
 msgid "Details"
@@ -2592,6 +2600,9 @@ msgstr "Cargante…"
 msgid "Local System Time"
 msgstr ""
 
+msgid "Local Time"
+msgstr ""
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3233,6 +3244,9 @@ msgid "Pending Voice Requests"
 msgstr ""
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4048,6 +4062,9 @@ msgstr ""
 msgid "Set Trust"
 msgstr ""
 
+msgid "Set a subject for this chat"
+msgstr ""
+
 msgid "Set configuration directory"
 msgstr ""
 
@@ -4225,6 +4242,9 @@ msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
+msgstr ""
+
+msgid "Software"
 msgstr ""
 
 msgid "Something went wrong. Video feature disabled."
@@ -4567,6 +4587,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 msgid "This Device"
 msgstr ""
 
@@ -4615,6 +4641,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -5208,12 +5237,6 @@ msgid "You cannot see this contact's online status"
 msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
-msgstr ""
-
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
 msgstr ""
 
 msgid "You don't share your status with this contact"

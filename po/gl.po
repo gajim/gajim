@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -426,6 +426,14 @@ msgstr "Todas as charlas e os grupos de charlas pecharanse. Desexa continuar?"
 #, fuzzy
 msgid "Account Added"
 msgstr "Conta"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Conta"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Cifrado desactivado"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1128,10 +1136,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Cambiar o _tema"
-
-#, fuzzy
 msgid "Change"
 msgstr "Cambiar o _alcume"
 
@@ -1754,12 +1758,16 @@ msgid "Description"
 msgstr "Descrición"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Novo grupo de charla"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Novo grupo de charla"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Descrición: %s"
 
 msgid "Details"
 msgstr "Detalles"
@@ -2976,6 +2984,10 @@ msgstr "A compor"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "JID local"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3723,6 +3735,9 @@ msgid "Pending Voice Requests"
 msgstr "Solicitude de transferencia de ficheiro"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4679,6 +4694,10 @@ msgid "Set Trust"
 msgstr "Xestionar as contas"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Contactos"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Configuración da sala"
 
@@ -4898,6 +4917,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "A durmir"
+
+#, fuzzy
+msgid "Software"
+msgstr "Características dos servidores"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5293,6 +5316,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Elixir unha imaxe"
@@ -5350,6 +5379,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6022,12 +6054,6 @@ msgstr "Gustaríame engadilo á miña listaxe de contactos"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Non ten autorización para crear ficheiros neste directorio."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6989,6 +7015,10 @@ msgstr ""
 #~ msgstr "para a conta %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Cambiar o _tema"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "A enviar o perfil..."
 
@@ -7238,10 +7268,6 @@ msgstr ""
 #~ msgstr "Motivo"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "JID local"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Mensaxes"
 
@@ -7448,10 +7474,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Amosa unha listaxe de transferencias entre vostede e outra persoa"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Características dos servidores"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Es_tado"
 
@@ -7580,6 +7602,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Non pode entrar nunha sala de charla até que non se conecte."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Non ten autorización para crear ficheiros neste directorio."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

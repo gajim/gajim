@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -390,6 +390,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Fila del compte "
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Fila del compte "
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Comptes"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1075,10 +1083,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Canvia Tema..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Canvia _Nick..."
 
@@ -1674,12 +1678,16 @@ msgid "Description"
 msgstr ""
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Grups de xat"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Grups de xat"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "_Destrueix Sala"
 
 msgid "Details"
 msgstr ""
@@ -2838,6 +2846,9 @@ msgstr "Envia _Fitxer"
 msgid "Local System Time"
 msgstr ""
 
+msgid "Local Time"
+msgstr ""
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3561,6 +3572,9 @@ msgid "Pending Voice Requests"
 msgstr "_Veu"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4489,6 +4503,10 @@ msgstr ""
 msgid "Set Trust"
 msgstr "Gestiona sons"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Convida _Contactes"
+
 msgid "Set configuration directory"
 msgstr ""
 
@@ -4693,6 +4711,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr ""
+
+#, fuzzy
+msgid "Software"
+msgstr "Servidor:"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5068,6 +5090,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Connexió"
@@ -5121,6 +5149,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -5755,12 +5786,6 @@ msgid "You cannot see this contact's online status"
 msgstr "Voldria afegir-te a la meva llista de contactes."
 
 msgid "You can’t send private messages to contacts if they are offline."
-msgstr ""
-
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
 msgstr ""
 
 msgid "You don't share your status with this contact"
@@ -6574,6 +6599,10 @@ msgstr ""
 #~ "Certificate for \n"
 #~ "%s"
 #~ msgstr "El Certificat està xifrat"
+
+#, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Canvia Tema..."
 
 #, fuzzy
 #~ msgid "Choose the contact's groups"

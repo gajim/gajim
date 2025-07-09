@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -427,6 +427,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Nalog"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Nalog"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Smajliji isključeni"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1137,10 +1145,6 @@ msgid "Certificate signature failure"
 msgstr "Greška u potpisu sertifikata"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Promeni _temu..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Promeni _nadimak..."
 
@@ -1762,12 +1766,16 @@ msgid "Description"
 msgstr "Opis"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Novi grupni razgovor"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Novi grupni razgovor"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Uništavam %s"
 
 msgid "Details"
 msgstr "Detalji"
@@ -2986,6 +2994,10 @@ msgstr "Programira"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Lokalni džaber ID:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3730,6 +3742,9 @@ msgid "Pending Voice Requests"
 msgstr "Zahtev za prenosom datoteke"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4691,6 +4706,10 @@ msgid "Set Trust"
 msgstr "Podešavanje naloga"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Pozovi kontakte"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Konfiguracija sobe"
 
@@ -4911,6 +4930,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Spavam"
+
+#, fuzzy
+msgid "Software"
+msgstr "Mogućnosti servera"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5312,6 +5335,15 @@ msgstr ""
 "servera:%(error)s\n"
 "Da li i dalje želite da se konektujete na ovaj server?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Došlo je do greške prilikom verifikovanja SSL sertifikata Vašeg džaber "
+"servera:%(error)s\n"
+"Da li i dalje želite da se konektujete na ovaj server?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Odaberite sliku"
@@ -5369,6 +5401,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6041,12 +6076,6 @@ msgstr "Ne možete dodati sebe u Vašu listu kontakata."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Nemate privilegija za pisanje u ovoj fascikli"
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -7006,6 +7035,10 @@ msgstr ""
 #~ msgstr "za nalog %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Promeni _temu..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Slanje profila..."
 
@@ -7253,10 +7286,6 @@ msgstr ""
 #~ msgstr "Razlog"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Lokalni džaber ID:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Poruke"
 
@@ -7466,10 +7495,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Prikazuje listu prenosa datoteka između Vas i ostalih"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Mogućnosti servera"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7599,6 +7624,12 @@ msgstr ""
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Ne možete se sinhronizovati sa nalogom ako niste povezani."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Nemate privilegija za pisanje u ovoj fascikli"
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

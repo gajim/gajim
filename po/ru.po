@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2025-06-20 08:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -416,6 +416,14 @@ msgstr "Все окна чатов и комнат будут закрыты."
 
 msgid "Account Added"
 msgstr "Учётная запись добавлена"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Учётная запись добавлена"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Учётная запись отключена"
 
 msgid "Account Name..."
 msgstr "Имя учётной записи…"
@@ -1032,9 +1040,6 @@ msgstr "Сертификат аннулирован"
 msgid "Certificate signature failure"
 msgstr "Ошибка подписи сертификата"
 
-msgid "Ch_ange Subject"
-msgstr "И_зменить тему"
-
 msgid "Change"
 msgstr "Изменить"
 
@@ -1576,11 +1581,17 @@ msgstr "Принять все запросы на добавление в кон
 msgid "Description"
 msgstr "Описание"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Удалить групповой чат…"
 
 msgid "Destroy This Chat"
 msgstr "Удалить этот чат"
+
+# смотря где вылазит меседж - нужно присмотреться
+#, fuzzy
+msgid "Destroy…"
+msgstr "_Удалить"
 
 msgid "Details"
 msgstr "Детали"
@@ -2703,6 +2714,9 @@ msgstr "Загрузка…"
 msgid "Local System Time"
 msgstr "Местное системное время"
 
+msgid "Local Time"
+msgstr "Местное время"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Местная группа помощи"
@@ -3371,6 +3385,9 @@ msgstr "Непросмотренные запросы на право голос
 
 msgid "Permanently"
 msgstr "Навсегда"
+
+msgid "Permanently remove this group chat from the server"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4216,6 +4233,10 @@ msgstr "Удалённый сервер не найден"
 msgid "Set Trust"
 msgstr "Управление доверием"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Пригласить в этот чат"
+
 msgid "Set configuration directory"
 msgstr "Установить каталог конфигурации"
 
@@ -4411,6 +4432,9 @@ msgstr "Размер предпросмотра изображения в пик
 
 msgid "Sleeping"
 msgstr "Сплю"
+
+msgid "Software"
+msgstr "Приложение"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Возникла ошибка. Функция видео отключена."
@@ -4782,6 +4806,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Ошибка при попытке проверки SSL-сертификата вашего XMPP-сервера (%s)."
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr "При попытке получения сообщений произошла ошибка: %s"
+
 msgid "This Device"
 msgstr "Данное устройство"
 
@@ -4835,6 +4865,9 @@ msgstr "Этот групповой чат сохраняется даже пр�
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "Этот групповой чат будет уничтожен после ухода последнего участника"
+
+msgid "This information will be publicly visible."
+msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "Это публичный групповой чат. Шифрование недоступно."
@@ -5458,12 +5491,6 @@ msgstr "У вас нет доступа к сетевому статусу ко�
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "Отправка частных сообщений контактам невозможна, если они не в сети."
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "У вас отсутствуют разрешения на создание файлов в этом каталоге."
 
 msgid "You don't share your status with this contact"
 msgstr "Вы не делитесь статусом с этим контактом"
@@ -6400,6 +6427,9 @@ msgstr "…или перетащите его сюда"
 #~ "Сертификат для\n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "И_зменить тему"
+
 #~ msgid "Chat history"
 #~ msgstr "История чата"
 
@@ -6724,9 +6754,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Last seen %s"
 #~ msgstr "Причина: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Местное время"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6993,9 +7020,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Показывает список переданных файлов между вами и вашими контактами"
 
-#~ msgid "Software"
-#~ msgstr "Приложение"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Ста_тус"
 
@@ -7164,6 +7188,12 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Невозможно синхронизировать учётную запись, если она не подключена."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "У вас отсутствуют разрешения на создание файлов в этом каталоге."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "У вас отсутствуют разрешения на создание файлов в этом каталоге."

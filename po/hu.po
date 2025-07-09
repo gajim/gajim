@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
-"PO-Revision-Date: 2025-06-29 20:12+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"PO-Revision-Date: 2025-07-09 09:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -398,6 +398,12 @@ msgstr ""
 msgid "Account Added"
 msgstr "A fiók elkészült"
 
+msgid "Account Address"
+msgstr "Fiókcím"
+
+msgid "Account Label"
+msgstr "Fióknév"
+
 msgid "Account Name..."
 msgstr "Fióknév…"
 
@@ -745,7 +751,7 @@ msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "A Gajim ablakának bezárásakor kilépés előtt legyen megerősítés"
 
 msgid "Assign groups to this contact. You can filter chats by group."
-msgstr ""
+msgstr "A névjegy csoportjai. A csoportokkal lehet szűrni a társalgásokat."
 
 msgid "Attention Message Received"
 msgstr "Figyelemfelhívás érkezett"
@@ -996,9 +1002,6 @@ msgstr "Visszavont tanúsítvány"
 
 msgid "Certificate signature failure"
 msgstr "Tanúsítvány-aláírási hiba"
-
-msgid "Ch_ange Subject"
-msgstr "Tém_aváltás"
 
 msgid "Change"
 msgstr "Módosítás"
@@ -1532,11 +1535,14 @@ msgstr "Minden kérés elutasítása"
 msgid "Description"
 msgstr "Leírás"
 
-msgid "Destroy Group Chat…"
-msgstr "Társalgó megszüntetése…"
+msgid "Destroy Group Chat"
+msgstr "Társalgó megszüntetése"
 
 msgid "Destroy This Chat"
 msgstr "A társalgó megszüntetése"
+
+msgid "Destroy…"
+msgstr "Megszüntetés…"
 
 msgid "Details"
 msgstr "Tulajdonságok"
@@ -2607,6 +2613,9 @@ msgstr "Betöltés…"
 msgid "Local System Time"
 msgstr "Helyi rendszeridő"
 
+msgid "Local Time"
+msgstr "Helyi idő"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Helyi segítőcsoport"
@@ -3253,6 +3262,9 @@ msgstr "Várakozó szólási kérelmek"
 
 msgid "Permanently"
 msgstr "Állandó"
+
+msgid "Permanently remove this group chat from the server"
+msgstr "A társalgó végleges törlése a kiszolgálóról"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4064,6 +4076,9 @@ msgstr "Nem található szolgáltatás"
 msgid "Set Trust"
 msgstr "Megbízhatóság"
 
+msgid "Set a subject for this chat"
+msgstr "A társalgó témájának megadása"
+
 msgid "Set configuration directory"
 msgstr "A beállítási könyvtár megadása"
 
@@ -4247,6 +4262,9 @@ msgstr "Az előnézeti képek pixelben megadott mérete"
 
 msgid "Sleeping"
 msgstr "Alvás"
+
+msgid "Software"
+msgstr "Szoftver"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Valami nem működik. A videófunkció le lett tiltva."
@@ -4606,6 +4624,14 @@ msgid ""
 msgstr ""
 "Hiba történt az XMPP-kiszolgáló (%s) SSL-tanúsítványának ellenőrzése során."
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Hiba történt a fájl mentése közben.\n"
+"Hiba: %s."
+
 msgid "This Device"
 msgstr "Saját eszköz"
 
@@ -4658,6 +4684,9 @@ msgstr "A társalgó azután is létezik, ha már nem tartózkodik benne senki"
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "A társalgó megszűnik, miután az utolsó résztvevő is elhagyja"
+
+msgid "This information will be publicly visible."
+msgstr "Nyilvánosan elérhető tájékoztatás."
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "Nyilvános társalgóban az üzeneteket nem lehet titkosítani."
@@ -5268,14 +5297,6 @@ msgstr "Nem osztja meg a jelenléti állapotát"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr "Offline félnek nem lehet privát üzenetet küldeni."
-
-#, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr ""
-"Nincs hozzáférési engedély ehhez a könyvtárhoz.\n"
-"Hiba: %s."
 
 msgid "You don't share your status with this contact"
 msgstr "A jelenléti állapot nincs megosztva az ismerőssel"
@@ -6212,6 +6233,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Tanúsítvány ehhez a fiókhoz:\n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Tém_aváltás"
+
 #~ msgid "Chat history"
 #~ msgstr "Előzmények"
 
@@ -6543,9 +6567,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Last seen %s"
 #~ msgstr "Legutóbb látva: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Helyi idő"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6805,9 +6826,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A küldött és fogadott fájlok megjelenítése"
 
-#~ msgid "Software"
-#~ msgstr "Szoftver"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Jelenléti állapo_t"
 
@@ -6972,6 +6990,14 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Kapcsolódás nélkül a fiók nem szinkronizálható."
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "Nincs hozzáférési engedély ehhez a könyvtárhoz.\n"
+#~ "Hiba: %s."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "A könyvtár jogosultságai nem teszik lehetővé fájlok létrehozását."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -425,6 +425,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Акаунт"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Акаунт"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Емотиконите са изключени"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1132,10 +1140,6 @@ msgid "Certificate signature failure"
 msgstr "Грешка при проверката на подписа на сертификата"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Промяна на _темата…"
-
-#, fuzzy
 msgid "Change"
 msgstr "Смяна на псе_вдоним…"
 
@@ -1757,12 +1761,16 @@ msgid "Description"
 msgstr "Описание"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Нова стая"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Нова стая"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Унищожаване на %s"
 
 msgid "Details"
 msgstr "Подробности"
@@ -2992,6 +3000,10 @@ msgstr "Програмирам"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Локален JID:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3737,6 +3749,9 @@ msgid "Pending Voice Requests"
 msgstr "Запитване за файлов трансфер"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4696,6 +4711,10 @@ msgid "Set Trust"
 msgstr "Управление на акаунти"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Покана на _контакти"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Настройки на стаята"
 
@@ -4915,6 +4934,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Спя"
+
+#, fuzzy
+msgid "Software"
+msgstr "Функционалности на сървърите"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5316,6 +5339,15 @@ msgstr ""
 "%(error)s\n"
 "Все още ли искате да се свържете със сървъра?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"Възникна грешка при проверката на сертификата за вашия сървър на Джабър: "
+"%(error)s\n"
+"Все още ли искате да се свържете със сървъра?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Избор на изображение"
@@ -5373,6 +5405,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6050,12 +6085,6 @@ msgstr "Не може да добавите себе си към списъка.
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Нямата права да създавате файлове в тази папка."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -7018,6 +7047,10 @@ msgstr ""
 #~ msgstr "за акаунт „%s“"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Промяна на _темата…"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Изпращане на профила…"
 
@@ -7266,10 +7299,6 @@ msgstr ""
 #~ msgstr "Причина"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Локален JID:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Съобщения"
 
@@ -7481,10 +7510,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Показва списък с файловите трансфери между вас и останалите"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Функционалности на сървърите"
-
 #~ msgid "Sta_tus"
 #~ msgstr "С_ъстояние"
 
@@ -7614,6 +7639,12 @@ msgstr ""
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Не може да се синхронизирате с акаунт, ако не е свързан."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Нямата права да създавате файлове в тази папка."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

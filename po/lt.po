@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -408,6 +408,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Prieiga"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Prieiga"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Account name is in use"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1106,10 +1114,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Keisti _Temą..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Keisti _Slapyvardį..."
 
@@ -1726,12 +1730,16 @@ msgid "Description"
 msgstr "Description"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "New Group Chat"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "New Group Chat"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Description"
 
 msgid "Details"
 msgstr ""
@@ -2938,6 +2946,10 @@ msgstr "Banning..."
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Vietinis jid:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3683,6 +3695,9 @@ msgid "Pending Voice Requests"
 msgstr "File Transfer Request"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4634,6 +4649,10 @@ msgid "Set Trust"
 msgstr "Prieigų valdymas"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Kviesti Kontaktus"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Kambario nustatymai"
 
@@ -4853,6 +4872,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Sleeping"
+
+#, fuzzy
+msgid "Software"
+msgstr "Serverio teikiamos paslaugos"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5246,6 +5269,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Choose Image"
@@ -5303,6 +5332,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -5965,12 +5997,6 @@ msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "You do not have permission to create files in this directory."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6895,6 +6921,10 @@ msgstr ""
 #~ msgstr "Įveskite naują prieigos %s pavadinimą"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Keisti _Temą..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Sending profile..."
 
@@ -7133,10 +7163,6 @@ msgstr ""
 #~ msgstr "Reason"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Vietinis jid:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
 
@@ -7327,10 +7353,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Rodyti failų siuntimų sąrašą tarp jūsų ir kitų"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Serverio teikiamos paslaugos"
-
 #~ msgid "Sta_tus"
 #~ msgstr "_Būklė"
 
@@ -7438,6 +7460,12 @@ msgstr ""
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "You are not connected to the server"
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "You do not have permission to create files in this directory."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

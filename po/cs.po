@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -408,6 +408,14 @@ msgstr "Všechna okna konverzací budou zavřena."
 
 msgid "Account Added"
 msgstr "Účet"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Účet"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Účet byl vypnut"
 
 msgid "Account Name..."
 msgstr "Účet"
@@ -1026,9 +1034,6 @@ msgstr "Certifikát je zrušený"
 msgid "Certificate signature failure"
 msgstr "Chyba podpisu certifikátu"
 
-msgid "Ch_ange Subject"
-msgstr "Změnit"
-
 msgid "Change"
 msgstr "Změnit"
 
@@ -1572,11 +1577,16 @@ msgstr "Žádost o hlasový rozhovor"
 msgid "Description"
 msgstr "Popis"
 
-msgid "Destroy Group Chat…"
+#, fuzzy
+msgid "Destroy Group Chat"
 msgstr "Smazat skupinovou konverzaci…"
 
 msgid "Destroy This Chat"
 msgstr "Smazat tuto konverzaci"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Zničit"
 
 msgid "Details"
 msgstr "Detaily"
@@ -2689,6 +2699,9 @@ msgstr "Načítám…"
 msgid "Local System Time"
 msgstr "Místní systémový čas"
 
+msgid "Local Time"
+msgstr "Místní čas"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Místní pomocná skupina"
@@ -3364,6 +3377,9 @@ msgid "Pending Voice Requests"
 msgstr "Žádosti o hlasový rozhovor"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4217,6 +4233,10 @@ msgstr "Vzdálený server nebyl nalezen"
 msgid "Set Trust"
 msgstr "Spravovat zvuky"
 
+#, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Přepnout na předchozí konverzaci"
+
 msgid "Set configuration directory"
 msgstr "Zvolit adresář nastavení"
 
@@ -4409,6 +4429,9 @@ msgstr "Velikost náhledů v pixelech"
 
 msgid "Sleeping"
 msgstr "Spím"
+
+msgid "Software"
+msgstr "Software"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Něco se pokazilo. Funkce videa jsou vypnuta."
@@ -4774,6 +4797,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Nastala chyba při ověřování SSL certifikátu vašeho XMPP serveru (%s)."
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr "Nastala chyba při ověřování SSL certifikátu vašeho XMPP serveru (%s)."
+
 #, fuzzy
 msgid "This Device"
 msgstr "Vyberte zařízení"
@@ -4826,6 +4855,9 @@ msgstr "Tato skupinová konverzace přetrvá, i když v ní nebudou žádní ú�
 
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "Tato skupinová konverzace bude zničena až odejde poslední účastník"
+
+msgid "This information will be publicly visible."
+msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "Toto je veřejná skupinová konverzace. Šifrování není k dispozici."
@@ -5455,12 +5487,6 @@ msgstr "Stav připojení tohoto kontaktu se vám nezobrazí"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6420,6 +6446,9 @@ msgstr "...nebo přetáhněte sem"
 #~ "Certifikát pro\n"
 #~ "%s"
 
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Změnit"
+
 #~ msgid "Chat history"
 #~ msgstr "Historie konverzací"
 
@@ -6734,9 +6763,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Last seen %s"
 #~ msgstr "Důvod: %s"
 
-#~ msgid "Local Time"
-#~ msgstr "Místní čas"
-
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6993,9 +7019,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobrazí výpis přenosů souborů mezi vámi a vašimi kontakty"
 
-#~ msgid "Software"
-#~ msgstr "Software"
-
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
 
@@ -7157,6 +7180,12 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Nemůžete synchronyzovat účet pokud nění připojen."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
 
 #~ msgid "You do not have permissions to create files in this directory."
 #~ msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."

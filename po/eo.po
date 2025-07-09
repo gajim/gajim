@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -417,6 +417,14 @@ msgstr "Ĉiuj konversaciajn fenestrojn fermitos. Ĉu daŭrigu?"
 #, fuzzy
 msgid "Account Added"
 msgstr "Konto"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Konto"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Ĉifrado malebligata"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1115,10 +1123,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Ŝanĝi _temon"
-
-#, fuzzy
 msgid "Change"
 msgstr "Ŝanĝi kaŝ_nomon"
 
@@ -1741,12 +1745,16 @@ msgid "Description"
 msgstr "Priskribo"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Nova babilejo"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Nova babilejo"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Priskribo: %s"
 
 msgid "Details"
 msgstr "Detalaĵoj"
@@ -2964,6 +2972,10 @@ msgstr "Tajpas mesaĝon"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Loka JID:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3711,6 +3723,9 @@ msgid "Pending Voice Requests"
 msgstr "Mendo de dosiera transmeto"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4668,6 +4683,10 @@ msgid "Set Trust"
 msgstr "Administri kontojn"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Kontaktoj"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Agordo de babilejo"
 
@@ -4887,6 +4906,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Dormas"
+
+#, fuzzy
+msgid "Software"
+msgstr "Servilaj trajtoj"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5280,6 +5303,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Elektu bildon"
@@ -5337,6 +5366,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6007,12 +6039,6 @@ msgstr "_Permesi al tiu kontakto vidi mian staton"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6971,6 +6997,10 @@ msgstr ""
 #~ msgstr "por konto %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Ŝanĝi _temon"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Publicas vizitkarton..."
 
@@ -7224,10 +7254,6 @@ msgstr ""
 #~ msgstr "Kialo"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Loka JID:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Mesaĝoj"
 
@@ -7443,10 +7469,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Montras liston de dosiertransmetojn inter vi kaj aliaj"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Servilaj trajtoj"
-
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_to"
 
@@ -7585,6 +7607,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Vi ne povas aliĝi al babilejo dum vi estas senkonekta."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

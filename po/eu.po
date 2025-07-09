@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -418,6 +418,14 @@ msgstr "Elkarrizketa guztiak itxiko dira. Jarraitu nahi al duzu?"
 #, fuzzy
 msgid "Account Added"
 msgstr "Kontua"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Kontua"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Enkriptazioa desaktibatuta"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1118,10 +1126,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Aldatu _Gaia"
-
-#, fuzzy
 msgid "Change"
 msgstr "Aldatu _Izengoitia"
 
@@ -1744,12 +1748,16 @@ msgid "Description"
 msgstr "Deskribapena"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Txat Taldea Berria"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Txat Taldea Berria"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Deskribapena: %s"
 
 msgid "Details"
 msgstr "Zehaztapenak"
@@ -2966,6 +2974,10 @@ msgstr "Sortzen"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Tokiko jid-a:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3713,6 +3725,9 @@ msgid "Pending Voice Requests"
 msgstr "Fitxeroa Transferitzeko Baimena"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4670,6 +4685,10 @@ msgid "Set Trust"
 msgstr "Kontuak moldatu"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Kontaktua"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Gelaren Konfigurazioa"
 
@@ -4889,6 +4908,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Lotan"
+
+#, fuzzy
+msgid "Software"
+msgstr "Zerbitzariaren Ezaugarriak:"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5284,6 +5307,12 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+#, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+
 #, fuzzy
 msgid "This Device"
 msgstr "Aukeratu Irudia"
@@ -5341,6 +5370,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6012,12 +6044,6 @@ msgstr "Nire zerrendara gehitu nahi zaitut."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6969,6 +6995,10 @@ msgstr ""
 #~ msgstr "%s konturako"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Aldatu _Gaia"
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Profila bidaltzen..."
 
@@ -7218,10 +7248,6 @@ msgstr ""
 #~ msgstr "Arrazoia"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Tokiko jid-a:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Mezuak"
 
@@ -7427,10 +7453,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Erakutsi zu eta beste baten arteko fitxero transferentzia"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Zerbitzariaren Ezaugarriak:"
-
 #~ msgid "Sta_tus"
 #~ msgstr "E_goera"
 
@@ -7559,6 +7581,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Ezin duzu txat talde batera sartu konektatuta ez zauden bitartean."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

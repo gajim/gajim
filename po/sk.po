@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -420,6 +420,14 @@ msgstr ""
 #, fuzzy
 msgid "Account Added"
 msgstr "Účet"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "Účet"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "Emotikony zakázané"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1126,10 +1134,6 @@ msgid "Certificate signature failure"
 msgstr "Podpísanie certifikátu zlyhalo"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "Zmeniť _predmet..."
-
-#, fuzzy
 msgid "Change"
 msgstr "Zmeniť p_rezývku..."
 
@@ -1751,12 +1755,16 @@ msgid "Description"
 msgstr "Popis"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "Nová diskusná skupina"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "Nová diskusná skupina"
+
+#, fuzzy
+msgid "Destroy…"
+msgstr "Ničí sa %s"
 
 msgid "Details"
 msgstr "Podrobnosti"
@@ -2971,6 +2979,10 @@ msgstr "Kódim"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "Miestne jid:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3714,6 +3726,9 @@ msgid "Pending Voice Requests"
 msgstr "Požiadavka na hlasový rozhovor"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4671,6 +4686,10 @@ msgid "Set Trust"
 msgstr "Spravovať účty"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "Pozvať _kontakty"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "%s konfiguračná chyba"
 
@@ -4891,6 +4910,10 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Spím"
+
+#, fuzzy
+msgid "Software"
+msgstr "Vlastnosti servera"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5292,6 +5315,17 @@ msgstr ""
 "SSL chyba: %(error)s\n"
 "Chcete sa ešte pripojiť k tomuto serveru?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"<b>Bezpečnostné upozornenie</b>\n"
+"\n"
+"Pôvod %(hostname)s SSL certifikátu môže byť neplatný.\n"
+"SSL chyba: %(error)s\n"
+"Chcete sa ešte pripojiť k tomuto serveru?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "Vybrať obrázok"
@@ -5349,6 +5383,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6022,12 +6059,6 @@ msgstr "Nemôžete pridať seba do vášho zoznamu kontaktov."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "Nemáte oprávnenie vytvoriť súbor v tomto priečinku."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -6983,6 +7014,10 @@ msgstr ""
 #~ msgstr "pre účet %s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Zmeniť _predmet..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Odosielanie profilu..."
 
@@ -7230,10 +7265,6 @@ msgstr ""
 #~ msgstr "Dôvod"
 
 #, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "Miestne jid:"
-
-#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Správy"
 
@@ -7443,10 +7474,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobraziť zoznam prenosov súborov medzi vami a ostatnými"
 
-#, fuzzy
-#~ msgid "Software"
-#~ msgstr "Vlastnosti servera"
-
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
 
@@ -7575,6 +7602,12 @@ msgstr ""
 
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Nemôžete sa synchronizovať s kontaktom ak nie je prihlásený."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Nemáte oprávnenie vytvoriť súbor v tomto priečinku."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."

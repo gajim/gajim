@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 20:06+0000\n"
+"POT-Creation-Date: 2025-07-08 21:21+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -445,6 +445,14 @@ msgstr "כל חלונות שיחה וחלונות שיחת קבוצה ייסגר
 #, fuzzy
 msgid "Account Added"
 msgstr "שורת חשבון"
+
+#, fuzzy
+msgid "Account Address"
+msgstr "שורת חשבון"
+
+#, fuzzy
+msgid "Account Label"
+msgstr "חשבון מנוטרל"
 
 #, fuzzy
 msgid "Account Name..."
@@ -1162,10 +1170,6 @@ msgid "Certificate signature failure"
 msgstr "כשל תעודת חתימה"
 
 #, fuzzy
-msgid "Ch_ange Subject"
-msgstr "שנה _נושא..."
-
-#, fuzzy
 msgid "Change"
 msgstr "שנה שם _כינוי..."
 
@@ -1798,12 +1802,17 @@ msgid "Description"
 msgstr "תיאור"
 
 #, fuzzy
-msgid "Destroy Group Chat…"
+msgid "Destroy Group Chat"
 msgstr "שיחת קבוצה חדשה"
 
 #, fuzzy
 msgid "Destroy This Chat"
 msgstr "שיחת קבוצה חדשה"
+
+# Destroying is "at this moment".  It should be Destroy without ing
+#, fuzzy
+msgid "Destroy…"
+msgstr "החרבת ‫%s"
 
 msgid "Details"
 msgstr "פרטים"
@@ -3060,6 +3069,10 @@ msgstr "כעת טוען"
 msgid "Local System Time"
 msgstr ""
 
+#, fuzzy
+msgid "Local Time"
+msgstr "‏JID מקומית:"
+
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3807,6 +3820,9 @@ msgid "Pending Voice Requests"
 msgstr "בקשה לשיחה קולית"
 
 msgid "Permanently"
+msgstr ""
+
+msgid "Permanently remove this group chat from the server"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4791,6 +4807,10 @@ msgid "Set Trust"
 msgstr "ניהול צלילים"
 
 #, fuzzy
+msgid "Set a subject for this chat"
+msgstr "הזמן _אנשי קשר"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "cli"
 
@@ -5013,6 +5033,10 @@ msgstr ""
 # יושן
 msgid "Sleeping"
 msgstr "ישן"
+
+#, fuzzy
+msgid "Software"
+msgstr "תגובת שרת: %s"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5416,6 +5440,14 @@ msgstr ""
 "אירעה שגיאה תוך כדי אימות תעודת SSL של שרת Jabber זה: %(error)s\n"
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
+#, fuzzy, python-format
+msgid ""
+"There was an error while trying to save the file.\n"
+"Error: %s."
+msgstr ""
+"אירעה שגיאה תוך כדי אימות תעודת SSL של שרת Jabber זה: %(error)s\n"
+"האם עדיין יש ברצונך להתחבר לשרת זה?"
+
 #, fuzzy
 msgid "This Device"
 msgstr "בחירת ארכיון"
@@ -5474,6 +5506,9 @@ msgid "This group chat persists even if there are no participants"
 msgstr ""
 
 msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid "This information will be publicly visible."
 msgstr ""
 
 msgid "This is a public group chat. Encryption is not available."
@@ -6170,12 +6205,6 @@ msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You do not have permissions for this directory.\n"
-"Error: %s."
-msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
 msgid "You don't share your status with this contact"
 msgstr ""
@@ -7156,6 +7185,10 @@ msgstr ""
 #~ msgstr "תעודה עבור חשבון ‫%s"
 
 #, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "שנה _נושא..."
+
+#, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "כעת בודק קובץ..."
 
@@ -7437,10 +7470,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "סיבה"
-
-#, fuzzy
-#~ msgid "Local Time"
-#~ msgstr "‏JID מקומית:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7813,6 +7842,12 @@ msgstr ""
 # עד אשר זה לא יחובר
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "אין באפשרותך להסתנכרן עם חשבון אלא אם כן החשבון הינו מחובר."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
 #, fuzzy
 #~ msgid "You do not have permissions to create files in this directory."
