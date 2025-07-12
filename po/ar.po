@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-08 21:21+0000\n"
-"PO-Revision-Date: 2025-07-09 05:12+0000\n"
+"PO-Revision-Date: 2025-07-10 01:12+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/>"
 "\n"
@@ -3188,7 +3188,7 @@ msgstr "المشاركون"
 
 msgctxt "Group chat contact role"
 msgid "Participants"
-msgstr "مشاركون"
+msgstr "المشاركون"
 
 msgid "Participants Count"
 msgstr "عدد المشاركين"
@@ -3341,7 +3341,7 @@ msgid "Plugin Update"
 msgstr "تحديث الملحق"
 
 msgid "Plugin already exists"
-msgstr "الملحق موجودة بالفعل"
+msgstr "الملحق موجود بالفعل"
 
 msgid "Plugins"
 msgstr "الملحقات"
@@ -4968,7 +4968,7 @@ msgid "Updates will be installed next time Gajim is started"
 msgstr "ستنصَّب التحديثات في المرة القادمة التي يُشغَّل فيها غاجم"
 
 msgid "Updating Plugin…"
-msgstr "تُحدَّث الإضافة…"
+msgstr "يحدَّث الملحق…"
 
 msgid "Updating provider list…"
 msgstr "تُحدَّث قائمة الموفِّرين…"
@@ -5816,7 +5816,7 @@ msgid "{nick} is now {show}{status}"
 msgstr "أصبحت حالة {nick} الآن {show}{status}"
 
 msgid "…or drop it here"
-msgstr "…أو ألقِه هنا"
+msgstr "…أو أفلِت هنا"
 
 #, python-format
 #~ msgid " by %s"
