@@ -128,6 +128,8 @@ class Migration:
             self._v15()
         if user_version < 16:
             self._v16()
+        if user_version < 17:
+            self._v17()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -358,6 +360,21 @@ class Migration:
         app.ged.raise_event(DBMigrationStart(version=16))
         mod.Base.metadata.create_all(self._engine)
         self._execute_multiple(["PRAGMA user_version=16"])
+
+    def _v17(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=17))
+        statements = [
+            "PRAGMA foreign_keys=OFF",
+            "DROP TABLE IF EXISTS ft_source_jinglepub",
+            "DROP TABLE IF EXISTS ft_source_urldata",
+            "DROP TABLE IF EXISTS ft_source_jingleft",
+            "DROP TABLE IF EXISTS ft_source",
+            "DROP TABLE IF EXISTS filetransfer",
+            "PRAGMA foreign_keys=ON",
+        ]
+        self._execute_multiple(statements)
+        mod.Base.metadata.create_all(self._engine)
+        self._execute_multiple(["PRAGMA user_version=17"])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

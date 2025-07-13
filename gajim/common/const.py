@@ -749,16 +749,16 @@ GIO_TLS_ERRORS = {
 }
 
 
-class FTState(Enum):
-    INIT = 'init'
-    PREPARING = 'prepare'
-    ENCRYPTING = 'encrypting'
-    DECRYPTING = 'decrypting'
-    STARTED = 'started'
-    IN_PROGRESS = 'progress'
-    FINISHED = 'finished'
-    ERROR = 'error'
-    CANCELLED = 'cancelled'
+class FTState(IntEnum):
+    CREATED = 0
+    PREPARING = 1
+    ENCRYPTING = 2
+    DECRYPTING = 3
+    STARTED = 4
+    IN_PROGRESS = 5
+    FINISHED = 6
+    ERROR = 7
+    CANCELLED = 8
 
     @property
     def is_preparing(self):

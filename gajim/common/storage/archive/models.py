@@ -490,61 +490,70 @@ class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         return True
 
 
-class FileTransferSource(MappedAsDataclass, Base, kw_only=True):
-    __tablename__ = "ft_source"
+class FileTransferSource(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = "filetransfer_source"
+    __no_table_cols__ = ["account_", "remote_jid_", "occupant", "occupant_"]
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
-    fk_filetransfer_pk: Mapped[int] = mapped_column(
-        ForeignKey("filetransfer.pk", ondelete="CASCADE"), init=False
+
+    account_: str = dataclasses.field(repr=False)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
-    type: Mapped[str]
+
+    remote_jid_: JID = dataclasses.field(repr=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
+
+    occupant_: Occupant | None = dataclasses.field(repr=False)
+    occupant: Mapped[Occupant | None] = relationship(
+        lazy="joined", viewonly=True, init=False
+    )
+    fk_occupant_pk: Mapped[int | None] = mapped_column(
+        ForeignKey("occupant.pk"), default=None, init=False
+    )
+    message_ref_id: Mapped[str] = mapped_column()
+    id: Mapped[str] = mapped_column()
+    direction: Mapped[int] = mapped_column()
+    timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
+    source_type: Mapped[str]
 
     __mapper_args__ = {
         "polymorphic_identity": "source",
-        "polymorphic_on": "type",
+        "polymorphic_on": "source_type",
     }
 
-
-class UrlData(FileTransferSource):
-    __tablename__ = "ft_source_urldata"
-
-    fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
-    )
-    target: Mapped[str]
-    scheme_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
-
-    __mapper_args__ = {
-        "polymorphic_load": "selectin",
-        "polymorphic_identity": "urldata",
-    }
-
-
-class JingleFT(FileTransferSource):
-    __tablename__ = "ft_source_jingleft"
-
-    fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
-    )
-    sid: Mapped[str]
-
-    __mapper_args__ = {
-        "polymorphic_load": "selectin",
-        "polymorphic_identity": "jingleft",
-    }
+    # __table_args__ = (
+    #     Index(
+    #         'idx_ft_source_id',
+    #         'message_ref_id',
+    #         'id',
+    #         'fk_remote_pk',
+    #         'fk_account_pk',
+    #         'url_target',
+    #         unique=True,
+    #         sqlite_where=fk_occupant_pk.is_(None),
+    #     ),
+    #     Index(
+    #         'idx_ft_source_id_gc',
+    #         'message_ref_id',
+    #         'id',
+    #         'fk_remote_pk',
+    #         'fk_occupant_pk',
+    #         'fk_account_pk',
+    #         'url_target',
+    #         unique=True,
+    #         sqlite_where=fk_occupant_pk.isnot(None),
+    #     ),
+    # )
 
 
-class JinglePub(FileTransferSource):
-    __tablename__ = "ft_source_jinglepub"
-
-    fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
-    )
-    id: Mapped[str]
+class UrlSource(FileTransferSource):
+    url_target: Mapped[str] = mapped_column(nullable=True)
+    url_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
 
     __mapper_args__ = {
-        "polymorphic_load": "selectin",
-        "polymorphic_identity": "jinglepub",
+        "polymorphic_identity": "url",
+        "polymorphic_load": "inline",
     }
 
 
@@ -556,6 +565,7 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey("message.pk", ondelete="CASCADE"), init=False
     )
 
+    id: Mapped[str] = mapped_column()
     date: Mapped[datetime.datetime | None] = mapped_column(
         EpochTimestampType, default=None
     )
@@ -569,15 +579,9 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     size: Mapped[int | None] = mapped_column(default=None)
     width: Mapped[int | None] = mapped_column(default=None)
 
-    state: Mapped[int | None]
-    path: Mapped[str | None] = mapped_column(default=None, init=False)
-
-    source: Mapped[list[FileTransferSource]] = relationship(
-        lazy="selectin",
-        default_factory=list,
-        cascade="all, delete",
-        passive_deletes=True,
-    )
+    state: Mapped[int]
+    error: Mapped[int | None] = mapped_column(default=None)
+    filename: Mapped[str | None] = mapped_column(default=None, init=False)
 
 
 class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
@@ -872,12 +876,14 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         cascade="all, delete",
         passive_deletes=True,
     )
+
     call: Mapped[Call | None] = relationship(
         lazy="joined",
         default=None,
         cascade="all, delete",
         passive_deletes=True,
     )
+
     oob: Mapped[list[OOB]] = relationship(
         lazy="selectin",
         default_factory=list,
@@ -890,6 +896,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         cascade="all, delete",
         passive_deletes=True,
     )
+
     reply: Mapped[Reply | None] = relationship(
         lazy="joined",
         default=None,

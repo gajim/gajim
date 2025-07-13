@@ -17,6 +17,7 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import FTState
 from gajim.common.const import RETRACTION_FALLBACK
 from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
@@ -25,6 +26,7 @@ from gajim.common.events import MessageReceived
 from gajim.common.events import MessageRetracted
 from gajim.common.events import MessageSent
 from gajim.common.events import ReactionUpdated
+from gajim.common.helpers import get_uuid
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import convert_message_type
@@ -207,9 +209,90 @@ class Message(BaseModule):
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
 
-        if not message_text:
-            self._log.debug('Received message without text')
-            return
+        filetransfers: list[mod.FileTransfer] = []
+        sources: list[mod.FileTransferSource] = []
+
+        if (m_type != MessageType.GROUPCHAT or
+                (stanza_id is not None and occupant is not None)
+        ):
+            # Only accept filetransfers in MUCs with
+            # stanza-id and occupant-id support
+
+            for ft in properties.sfs:
+                ft_id = ft.id or get_uuid()
+                filetransfers.append(
+                    mod.FileTransfer(
+                    id=ft_id,
+                    date=ft.file.date,
+                    desc=None if not ft.file.desc else ft.file.desc.any()[1],
+                    hash=None,  # todo
+                    hash_algo="",  # todo
+                    height=ft.file.height,
+                    length=ft.file.length,
+                    media_type=ft.file.media_type,
+                    name=ft.file.name,
+                    size=ft.file.size,
+                    width=ft.file.width,
+                    state=FTState.CREATED,
+                    )
+                )
+
+                if ft.sources is None:
+                    continue
+
+                message_ref_id = message_id
+                if m_type == MessageType.GROUPCHAT:
+                    message_ref_id = stanza_id
+                    assert message_ref_id is not None
+
+                for url_data in ft.sources.sources:
+                    sources.append(
+                        mod.UrlSource(
+                            url_target=url_data.target,
+                            url_data=None,
+                            account_=self._account,
+                            remote_jid_=remote_jid,
+                            occupant_=occupant,
+                            message_ref_id=message_ref_id,
+                            id=ft.sources.id or ft_id,
+                            direction=direction,
+                            timestamp=timestamp,
+                            source_type="url",
+                        )
+                    )
+
+            if filetransfers:
+                oob_data = []
+
+            for sfs_sources in properties.sfs_sources:
+                for url_data in sfs_sources.sources:
+                    assert sfs_sources.id is not None
+                    assert properties.attach_to is not None
+                    sources.append(
+                        mod.UrlSource(
+                            url_target=url_data.target,
+                            url_data=None,
+                            account_=self._account,
+                            remote_jid_=remote_jid,
+                            occupant_=occupant,
+                            message_ref_id=properties.attach_to,
+                            id=sfs_sources.id,
+                            direction=direction,
+                            timestamp=timestamp,
+                            source_type="url",
+                        )
+                    )
+
+            for source in sources:
+                try:
+                    pk = app.storage.archive.insert_object(
+                        source, ignore_on_conflict=False)
+                except sqlalchemy.exc.IntegrityError:
+                    self._log.exception('Insertion Error')
+
+            if not message_text and not properties.sfs:
+                self._log.debug('No storable content for message')
+                return
 
         securitylabel_data = get_security_label(
             self._account, remote_jid, timestamp, properties.security_label)
@@ -241,6 +324,7 @@ class Message(BaseModule):
             reply=reply,
             thread_id_=properties.thread,
             og=og_data,
+            filetransfers=filetransfers,
         )
 
         try:

@@ -70,8 +70,7 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 16
-
+CURRENT_USER_VERSION = 17
 
 log = logging.getLogger("gajim.c.storage.archive")
 
