@@ -212,6 +212,13 @@ class Message(BaseModule):
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
 
+        # if properties.sfs_sources:
+        #     for sources in properties.sfs_sources:
+        #         for ftsource in sources.sources:
+        #             pass
+
+        #     return
+
         if not message_text:
             self._log.debug('Received message without text')
             return
