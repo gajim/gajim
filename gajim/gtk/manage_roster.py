@@ -552,7 +552,7 @@ class RosterListItem(GObject.Object):
 
         super().__init__(
             jid=str(item.jid),
-            name=item.name,
+            name=item.name or "",
             ask=ask,
             subscription=subscription,
             group=group,
