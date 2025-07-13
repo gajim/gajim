@@ -46,6 +46,9 @@
     <control>pointing</control>
   </recommends>
   <releases>
+    <release version="2.3.3" date="2025-07-13">
+      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.3/ChangeLog</url>
+    </release>
     <release version="2.3.2" date="2025-07-02">
       <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.2/ChangeLog</url>
     </release>

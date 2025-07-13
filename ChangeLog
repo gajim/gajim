@@ -1,3 +1,29 @@
+Gajim 2.3.3 (13 Jul 2025)
+
+  Improvements
+
+  * Group chat management: Use Adw widgets
+  * Preferences: Improve display of locked settings (#12354)
+  * Add support for the urgency hint on win32
+  * Present main window when clicking systray icon
+
+  Performance
+
+  * Preferences: Load plugin manifests in idle fashion to avoid blocking the UI
+  * Main window: Display (empty) main window early to indicate startup progress
+
+  Bug Fixes
+
+  * Manage roster: Fix renaming contacts without nickname (#12369)
+  * Disable accesskit on Windows to prevent segfaults (#12364)
+  * Preview: Guard for more errors while trying to save file (#12337)
+  * Preview: Guard file access checks (#12361)
+  * Preview: Guard for errors while trying to create thumbnails (#12360)
+  * Styling: Add extra CSS on Windows to fix issues (#12333)
+  * Status icon: Call shutdown when handling Gajim core shutdown
+  * Windows: Make --user-profile work correctly with portable installations (#12356)
+  * GroupChat: Don’t allow sending messages if contact is not joined (#12351)
+
 Gajim 2.3.2 (30 Jun 2025)
 
   Improvements
