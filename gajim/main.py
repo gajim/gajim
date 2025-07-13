@@ -130,6 +130,10 @@ def _set_env_vars() -> None:
     if sys.platform != "win32":
         return
 
+    # Disable accesskit due to segfaults when calling app.window.set_visible(True)
+    # https://github.com/msys2/MINGW-packages/issues/24812
+    os.environ["GTK_A11Y"] = "none"
+
     if "GTK_CSD" in os.environ:
         # Respect user settings
         return
