@@ -472,7 +472,7 @@ class FileTransferSource(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     message_ref_id: Mapped[str] = mapped_column()
-    id: Mapped[int] = mapped_column()
+    id: Mapped[str] = mapped_column()
     direction: Mapped[int] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
@@ -526,7 +526,8 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     size: Mapped[int | None] = mapped_column(default=None)
     width: Mapped[int | None] = mapped_column(default=None)
 
-    state: Mapped[int | None]
+    state: Mapped[int]
+    error: Mapped[int | None] = mapped_column(default=None)
     filename: Mapped[str | None] = mapped_column(default=None, init=False)
 
 

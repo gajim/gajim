@@ -18,7 +18,7 @@ class FileTransfer(Observable):
 
         self._progress = 0
 
-        self._state = FTState.INIT
+        self._state = FTState.CREATED
         self._error_text: str = ''
         self._error_domain: str | None = None
 

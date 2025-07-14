@@ -17,6 +17,7 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import FTState
 from gajim.common.const import RETRACTION_FALLBACK
 from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
@@ -26,6 +27,7 @@ from gajim.common.events import MessageRetracted
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.events import ReactionUpdated
+from gajim.common.helpers import get_uuid
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import convert_message_type
@@ -212,15 +214,75 @@ class Message(BaseModule):
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
 
-        # if properties.sfs_sources:
-        #     for sources in properties.sfs_sources:
-        #         for ftsource in sources.sources:
-        #             pass
+        filetransfers: list[mod.FileTransfer] = []
+        sources: list[mod.FileTransferSource] = []
 
-        #     return
+        for ft in properties.sfs:
+            ft_id = ft.id or get_uuid()
+            filetransfers.append(
+                mod.FileTransfer(
+                id=ft_id,
+                date=ft.file.date,
+                desc=None if not ft.file.desc else ft.file.desc.any(),
+                hash=None,  # todo
+                hash_algo="",  # todo
+                height=ft.file.height,
+                length=ft.file.length,
+                media_type=ft.file.media_type,
+                name=ft.file.name,
+                size=ft.file.size,
+                width=ft.file.width,
+                state=FTState.CREATED,
+                )
+            )
 
-        if not message_text:
-            self._log.debug('Received message without text')
+            if ft.sources is None:
+                continue
+
+            for url_data in ft.sources.sources:
+                sources.append(
+                    mod.FileTransferSource(
+                        account_=self._account,
+                        remote_jid_=remote_jid,
+                        occupant_=occupant,
+                        message_ref_id=None,  # todo
+                        id=ft.sources.id or ft_id,
+                        direction=direction,
+                        timestamp=timestamp,
+                        url_target=url_data.target,
+                        url_data=None,
+                    )
+                )
+
+        if filetransfers:
+            oob_data = None
+
+        for sfs_sources in properties.sfs_sources:
+            for url_data in sfs_sources.sources:
+                assert sfs_sources.id is not None
+                sources.append(
+                    mod.FileTransferSource(
+                        account_=self._account,
+                        remote_jid_=remote_jid,
+                        occupant_=occupant,
+                        message_ref_id=None,  # todo
+                        id=sfs_sources.id,
+                        direction=direction,
+                        timestamp=timestamp,
+                        url_target=url_data.target,
+                        url_data=None,
+                    )
+                )
+
+        for source in sources:
+            try:
+                pk = app.storage.archive.insert_object(
+                    source, ignore_on_conflict=False)
+            except sqlalchemy.exc.IntegrityError:
+                self._log.exception('Insertion Error')
+
+        if not message_text and not properties.sfs:
+            self._log.debug('No storable content for message')
             return
 
         securitylabel_data = get_security_label(
@@ -250,6 +312,7 @@ class Message(BaseModule):
             security_label_=securitylabel_data,
             reply=reply,
             thread_id_=properties.thread,
+            filetransfers=filetransfers,
         )
 
         try:
