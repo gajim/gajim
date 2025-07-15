@@ -217,73 +217,85 @@ class Message(BaseModule):
         filetransfers: list[mod.FileTransfer] = []
         sources: list[mod.FileTransferSource] = []
 
-        for ft in properties.sfs:
-            ft_id = ft.id or get_uuid()
-            filetransfers.append(
-                mod.FileTransfer(
-                id=ft_id,
-                date=ft.file.date,
-                desc=None if not ft.file.desc else ft.file.desc.any(),
-                hash=None,  # todo
-                hash_algo="",  # todo
-                height=ft.file.height,
-                length=ft.file.length,
-                media_type=ft.file.media_type,
-                name=ft.file.name,
-                size=ft.file.size,
-                width=ft.file.width,
-                state=FTState.CREATED,
-                )
-            )
+        if (m_type != MessageType.GROUPCHAT or
+                (stanza_id is not None and occupant is not None)
+        ):
+            # Only accept filetransfers in MUCs with
+            # stanza-id and occupant-id support
 
-            if ft.sources is None:
-                continue
-
-            for url_data in ft.sources.sources:
-                sources.append(
-                    mod.FileTransferSource(
-                        account_=self._account,
-                        remote_jid_=remote_jid,
-                        occupant_=occupant,
-                        message_ref_id=None,  # todo
-                        id=ft.sources.id or ft_id,
-                        direction=direction,
-                        timestamp=timestamp,
-                        url_target=url_data.target,
-                        url_data=None,
+            for ft in properties.sfs:
+                ft_id = ft.id or get_uuid()
+                filetransfers.append(
+                    mod.FileTransfer(
+                    id=ft_id,
+                    date=ft.file.date,
+                    desc=None if not ft.file.desc else ft.file.desc.any(),
+                    hash=None,  # todo
+                    hash_algo="",  # todo
+                    height=ft.file.height,
+                    length=ft.file.length,
+                    media_type=ft.file.media_type,
+                    name=ft.file.name,
+                    size=ft.file.size,
+                    width=ft.file.width,
+                    state=FTState.CREATED,
                     )
                 )
 
-        if filetransfers:
-            oob_data = None
+                if ft.sources is None:
+                    continue
 
-        for sfs_sources in properties.sfs_sources:
-            for url_data in sfs_sources.sources:
-                assert sfs_sources.id is not None
-                sources.append(
-                    mod.FileTransferSource(
-                        account_=self._account,
-                        remote_jid_=remote_jid,
-                        occupant_=occupant,
-                        message_ref_id=None,  # todo
-                        id=sfs_sources.id,
-                        direction=direction,
-                        timestamp=timestamp,
-                        url_target=url_data.target,
-                        url_data=None,
+                message_ref_id = message_id
+                if m_type == MessageType.GROUPCHAT:
+                    message_ref_id = stanza_id
+                    assert message_ref_id is not None
+
+                for url_data in ft.sources.sources:
+                    sources.append(
+                        mod.FileTransferSource(
+                            account_=self._account,
+                            remote_jid_=remote_jid,
+                            occupant_=occupant,
+                            message_ref_id=message_ref_id,
+                            id=ft.sources.id or ft_id,
+                            direction=direction,
+                            timestamp=timestamp,
+                            url_target=url_data.target,
+                            url_data=None,
+                        )
                     )
-                )
 
-        for source in sources:
-            try:
-                pk = app.storage.archive.insert_object(
-                    source, ignore_on_conflict=False)
-            except sqlalchemy.exc.IntegrityError:
-                self._log.exception('Insertion Error')
+            if filetransfers:
+                oob_data = []
 
-        if not message_text and not properties.sfs:
-            self._log.debug('No storable content for message')
-            return
+            for sfs_sources in properties.sfs_sources:
+                for url_data in sfs_sources.sources:
+                    assert sfs_sources.id is not None
+                    assert properties.attach_to is not None
+                    sources.append(
+                        mod.FileTransferSource(
+                            account_=self._account,
+                            remote_jid_=remote_jid,
+                            occupant_=occupant,
+                            message_ref_id=properties.attach_to,
+                            id=sfs_sources.id,
+                            direction=direction,
+                            timestamp=timestamp,
+                            url_target=url_data.target,
+                            url_data=None,
+                        )
+                    )
+
+            for source in sources:
+                try:
+                    pk = app.storage.archive.insert_object(
+                        source, ignore_on_conflict=False)
+                except sqlalchemy.exc.IntegrityError:
+                    self._log.exception('Insertion Error')
+
+            if not message_text and not properties.sfs:
+                self._log.debug('No storable content for message')
+                return
 
         securitylabel_data = get_security_label(
             self._account, remote_jid, timestamp, properties.security_label)
