@@ -869,7 +869,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             log.warning("Could not determine clipboard mime types")
             return
 
-        if "image/png" in mime_types:
+        if "image/png" in mime_types or "image/bmp" in mime_types:
             self._ui.input_overlay.set_visible(True)
             self._ui.input_overlay_label.set_text(_("Processing image…"))
             clipboard.read_texture_async(None, self._on_clipboard_read_texture_finished)
@@ -881,6 +881,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             clipboard.read_value_async(
                 Gdk.FileList, 0, None, self._on_clipboard_read_value_finished
             )
+            return
+
+        log.info("Could not process clipboard mime type %s", mime_types)
 
     def _on_clipboard_read_value_finished(
         self,
