@@ -120,6 +120,8 @@ class Migration:
             self._v11_and_v12()
         if user_version < 13:
             self._v13()
+        if user_version < 14:
+            self._v14()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -294,6 +296,20 @@ class Migration:
             ('PRAGMA user_version=13', None)
         ]
         self._execute_multiple_with_error(statements)
+
+    def _v14(self) -> None:
+        statements = [
+            'PRAGMA foreign_keys=OFF',
+            'DROP TABLE IF EXISTS ft_source_jinglepub',
+            'DROP TABLE IF EXISTS ft_source_urldata',
+            'DROP TABLE IF EXISTS ft_source_jingleft',
+            'DROP TABLE IF EXISTS ft_source',
+            'DROP TABLE IF EXISTS filetransfer',
+            'PRAGMA foreign_keys=ON',
+        ]
+        self._execute_multiple(statements)
+        mod.Base.metadata.create_all(self._engine)
+        self._execute_multiple(['PRAGMA user_version=14'])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

@@ -530,9 +530,9 @@ class ChatControl(EventHelper):
             self._jump_to_end_button.add_unread_count()
 
     def _add_db_row(self, message: Message):
-        if message.filetransfers:
-            self._scrolled_view.add_jingle_file_transfer(message=message)
-            return
+        # if message.filetransfers:
+        #     self._scrolled_view.add_jingle_file_transfer(message=message)
+        #     return
 
         if message.call is not None:
             self._scrolled_view.add_call_message(message=message)

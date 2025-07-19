@@ -59,7 +59,7 @@ from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 13
+CURRENT_USER_VERSION = 14
 
 
 log = logging.getLogger('gajim.c.storage.archive')

@@ -450,7 +450,7 @@ class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class FileTransferSource(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'ft_source'
+    __tablename__ = 'filetransfer_source'
     __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
@@ -475,33 +475,46 @@ class FileTransferSource(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     id: Mapped[str] = mapped_column()
     direction: Mapped[int] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
+    source_type: Mapped[str]
 
-    url_target: Mapped[str]
+    __mapper_args__ = {
+        "polymorphic_identity": "source",
+        "polymorphic_on": "source_type",
+    }
+
+    # __table_args__ = (
+    #     Index(
+    #         'idx_ft_source_id',
+    #         'message_ref_id',
+    #         'id',
+    #         'fk_remote_pk',
+    #         'fk_account_pk',
+    #         'url_target',
+    #         unique=True,
+    #         sqlite_where=fk_occupant_pk.is_(None),
+    #     ),
+    #     Index(
+    #         'idx_ft_source_id_gc',
+    #         'message_ref_id',
+    #         'id',
+    #         'fk_remote_pk',
+    #         'fk_occupant_pk',
+    #         'fk_account_pk',
+    #         'url_target',
+    #         unique=True,
+    #         sqlite_where=fk_occupant_pk.isnot(None),
+    #     ),
+    # )
+
+
+class UrlSource(FileTransferSource):
+    url_target: Mapped[str] = mapped_column(nullable=True)
     url_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
 
-    __table_args__ = (
-        Index(
-            'idx_ft_source_id',
-            'message_ref_id',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
-            'url_target',
-            unique=True,
-            sqlite_where=fk_occupant_pk.is_(None),
-        ),
-        Index(
-            'idx_ft_source_id_gc',
-            'message_ref_id',
-            'id',
-            'fk_remote_pk',
-            'fk_occupant_pk',
-            'fk_account_pk',
-            'url_target',
-            unique=True,
-            sqlite_where=fk_occupant_pk.isnot(None),
-        ),
-    )
+    __mapper_args__ = {
+        "polymorphic_identity": "url",
+        "polymorphic_load": "inline",
+    }
 
 
 class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):

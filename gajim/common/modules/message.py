@@ -229,7 +229,7 @@ class Message(BaseModule):
                     mod.FileTransfer(
                     id=ft_id,
                     date=ft.file.date,
-                    desc=None if not ft.file.desc else ft.file.desc.any(),
+                    desc=None if not ft.file.desc else ft.file.desc.any()[1],
                     hash=None,  # todo
                     hash_algo="",  # todo
                     height=ft.file.height,
@@ -252,7 +252,9 @@ class Message(BaseModule):
 
                 for url_data in ft.sources.sources:
                     sources.append(
-                        mod.FileTransferSource(
+                        mod.UrlSource(
+                            url_target=url_data.target,
+                            url_data=None,
                             account_=self._account,
                             remote_jid_=remote_jid,
                             occupant_=occupant,
@@ -260,8 +262,7 @@ class Message(BaseModule):
                             id=ft.sources.id or ft_id,
                             direction=direction,
                             timestamp=timestamp,
-                            url_target=url_data.target,
-                            url_data=None,
+                            source_type="url",
                         )
                     )
 
@@ -273,7 +274,9 @@ class Message(BaseModule):
                     assert sfs_sources.id is not None
                     assert properties.attach_to is not None
                     sources.append(
-                        mod.FileTransferSource(
+                        mod.UrlSource(
+                            url_target=url_data.target,
+                            url_data=None,
                             account_=self._account,
                             remote_jid_=remote_jid,
                             occupant_=occupant,
@@ -281,8 +284,7 @@ class Message(BaseModule):
                             id=sfs_sources.id,
                             direction=direction,
                             timestamp=timestamp,
-                            url_target=url_data.target,
-                            url_data=None,
+                            source_type="url",
                         )
                     )
 
