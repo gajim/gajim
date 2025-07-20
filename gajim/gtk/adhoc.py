@@ -339,7 +339,7 @@ class Stage(Page):
         self._dataform_widget.validate()
         self.append(self._dataform_widget)
 
-    def _show_notes(self, notes: list[AdHocCommandNote] | None):
+    def _show_notes(self, notes: list[AdHocCommandNote] | None) -> None:
         for note in self._notes:
             self.remove(note)
         self._notes = []
@@ -362,9 +362,13 @@ class Stage(Page):
         self.update_page_complete()
 
     def get_visible_buttons(self) -> list[str]:
+        assert self._last_stage_data is not None
+        assert self._last_stage_data.actions is not None
         return [action.value for action in self._last_stage_data.actions]
 
     def get_default_button(self) -> str:
+        assert self._last_stage_data is not None
+        assert self._last_stage_data.default is not None
         return self._last_stage_data.default.value
 
 
@@ -408,7 +412,7 @@ class Completed(Page):
         self._show_notes(stage_data.notes)
         self._show_form(stage_data.data)
         self._show_icon_text(stage_data.data is None)
-        self._show_icon(len(stage_data.notes) <= 1)
+        self._show_icon(len(stage_data.notes or []) <= 1)
 
     def _set_status(self, status: str):
         self.title = status
@@ -440,8 +444,11 @@ class Completed(Page):
         self._dataform_widget = DataFormWidget(form, options={"read-only": True})
         self.append(self._dataform_widget)
 
-    def _show_notes(self, notes: list[AdHocCommandNote]):
+    def _show_notes(self, notes: list[AdHocCommandNote] | None) -> None:
         container_remove_all(self._notes)
+
+        if notes is None:
+            return
 
         for i, note in enumerate(notes):
             if len(notes) > 1:
