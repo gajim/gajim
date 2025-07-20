@@ -89,6 +89,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         )
 
         server_info = self._client.get_module("Discovery").server_info
+        assert server_info is not None
         self._add_contact_addresses(server_info.dataforms)
 
         self._add_connection_info()
@@ -111,6 +112,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         address = nbxmpp_client.current_address
 
         assert address is not None
+        assert address.domain is not None
         self._ui.domain_row.set_subtitle(address.domain)
 
         visible = address.service is not None
@@ -130,6 +132,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
             self._ui.connection_type_row.add_css_class("error")
 
         assert nbxmpp_client is not None
+        assert nbxmpp_client.tls_version is not None
         tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
         self._ui.tls_version_row.set_subtitle(tls_version or _("Not available"))
 
@@ -259,6 +262,8 @@ class ServerInfo(GajimAppWindow, EventHelper):
             if max_size is not None:
                 max_size = GLib.format_size_full(int(max_size), self._units)
                 http_upload_info = f"{http_upload_info} (max. {max_size})"
+
+        assert self._client.features is not None
 
         return [
             Feature(
