@@ -41,6 +41,7 @@ from gajim.common.helpers import get_resource
 from gajim.common.helpers import Observable
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.i18n import _
+from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
@@ -170,6 +171,7 @@ class Client(Observable, ClientModules):
 
         self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
+        self._client.set_lang(get_rfc5646_lang())
         self._client.set_domain(self._address.domain)
         self._client.set_username(self._address.localpart)
         self._client.set_resource(get_resource(self._account))
