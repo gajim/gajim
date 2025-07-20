@@ -32,6 +32,7 @@ from gajim.common.i18n import _
 from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import DefaultPage
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
@@ -69,6 +70,7 @@ class AdHocCommands(Assistant):
                 "stage": Stage(),
                 "completed": Completed(),
                 "error": Error(),
+                "end": End(),
                 "executing": Executing(),
             }
         )
@@ -99,6 +101,9 @@ class AdHocCommands(Assistant):
     def get_page(self, name: Literal["error"]) -> Error: ...
 
     @overload
+    def get_page(self, name: Literal["end"]) -> End: ...
+
+    @overload
     def get_page(self, name: Literal["executing"]) -> Executing: ...
 
     def get_page(self, name: str) -> Page:
@@ -108,12 +113,19 @@ class AdHocCommands(Assistant):
     def _received_command_list(self, task: Task) -> None:
         try:
             commands = cast(list[AdHocCommand] | None, task.finish())
-        except (StanzaError, MalformedStanzaError) as error:
-            self._set_error(to_user_string(error), False)
+        except StanzaError as error:
+            if error.condition == "feature-not-implemented":
+                commands = []
+            else:
+                self._set_error(to_user_string(error), False)
+                return
+
+        except MalformedStanzaError:
+            self._set_error(_("Invalid server response"), False)
             return
 
         if not commands:
-            self._set_error(_("No commands available"), False)
+            self._set_end(_("No commands available"))
             return
 
         commands_page = self.get_page("commands")
@@ -124,8 +136,12 @@ class AdHocCommands(Assistant):
     def _received_stage(self, task: Task) -> None:
         try:
             stage = cast(AdHocCommand, task.finish())
-        except (StanzaError, MalformedStanzaError) as error:
+        except StanzaError as error:
             self._set_error(to_user_string(error), True)
+            return
+
+        except MalformedStanzaError:
+            self._set_error(_("Invalid server response"), False)
             return
 
         page_name = "stage"
@@ -141,6 +157,11 @@ class AdHocCommands(Assistant):
         error_page.set_show_commands_button(show_command_button)
         error_page.set_text(text)
         self.show_page("error")
+
+    def _set_end(self, text: str = "") -> None:
+        end = self.get_page("end")
+        end.set_text(text)
+        self.show_page("end")
 
     def _cleanup(self) -> None:
         self._destroyed = True
@@ -469,6 +490,12 @@ class Error(ErrorPage):
         if self._show_commands_button:
             return ["commands"]
         return []
+
+
+class End(DefaultPage):
+    def __init__(self) -> None:
+        DefaultPage.__init__(self)
+        self.title = _("Completed")
 
 
 class Executing(ProgressPage):
