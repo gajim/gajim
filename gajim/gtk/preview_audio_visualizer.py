@@ -8,14 +8,13 @@ import logging
 import math
 from statistics import mean
 
+from gi.repository import Adw
 from gi.repository import Graphene
 from gi.repository import Gsk
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.preview import AudioSampleT
-
-from gajim.gtk.util.styling import make_rgba
 
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 
@@ -45,17 +44,24 @@ class AudioVisualizerWidget(Gtk.Widget):
 
         self._waveform_path = None
 
-        # TODO: Hard code colors for now
-        self._color_default = make_rgba("rgb(170,180,200)")
-        self._color_progress = make_rgba("rgb(30,144,255)")
-        self._color_seek = make_rgba("rgb(77,166,255)")
+        style_manager = Adw.StyleManager.get_default()
+        accent_color = style_manager.get_accent_color_rgba()
+
+        self._color_progress = accent_color
+
+        color_seek = accent_color.copy()
+        color_seek.alpha = color_seek.alpha - 0.2
+        self._color_seek = color_seek
+
+        color_default = accent_color.copy()
+        color_default.alpha = color_default.alpha - 0.4
+        self._color_default = color_default
 
     def do_unroot(self) -> None:
         Gtk.Widget.do_unroot(self)
         app.check_finalize(self)
 
     def set_parameters(self, position: float, animation_period: int = 1) -> None:
-
         self._position = position
         self._animation_period = animation_period
 
