@@ -241,7 +241,9 @@ class Page(Gtk.Box, SignalManager):
 
 
 class DefaultPage(Page):
-    def __init__(self, icon_name: str, icon_css_class: str) -> None:
+    def __init__(
+        self, icon_name: str | None = None, icon_css_class: str | None = None
+    ) -> None:
         Page.__init__(self)
 
         self._heading = Gtk.Label(
@@ -251,10 +253,14 @@ class DefaultPage(Page):
             justify=Gtk.Justification.CENTER,
         )
         self._heading.add_css_class("title-1")
+        self.append(self._heading)
 
-        icon = Gtk.Image.new_from_icon_name(icon_name)
-        icon.set_pixel_size(64)
-        icon.add_css_class(icon_css_class)
+        if icon_name is not None:
+            icon = Gtk.Image.new_from_icon_name(icon_name)
+            icon.set_pixel_size(64)
+            if icon_css_class is not None:
+                icon.add_css_class(icon_css_class)
+            self.append(icon)
 
         self._label = Gtk.Label(
             wrap=True,
@@ -262,9 +268,6 @@ class DefaultPage(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-
-        self.append(self._heading)
-        self.append(icon)
         self.append(self._label)
 
     def set_heading(self, heading: str) -> None:
