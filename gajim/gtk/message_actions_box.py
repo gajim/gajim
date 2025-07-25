@@ -257,6 +257,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _on_emoji_picked(self, _emoji_chooser: EmojiChooser, text: str) -> None:
         self.msg_textview.insert_text(text)
+        GLib.idle_add(self.msg_textview.grab_focus_delayed)
 
     def _on_action(
         self, action: Gio.SimpleAction, param: GLib.Variant | None
