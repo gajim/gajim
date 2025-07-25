@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import Final
 
+import locale
 import logging
 
 from gi.repository import Gdk
@@ -158,7 +159,15 @@ def parse_emoji_data(bytes_data: GLib.Bytes, loc: str) -> Gio.ListStore:
         )
         store.append(item)
 
+    store.sort(_sort_short_name)
     return store
+
+
+@staticmethod
+def _sort_short_name(
+    item1: EmojiCompletionListItem, item2: EmojiCompletionListItem
+) -> int:
+    return locale.strcoll(item1.short_name, item2.short_name)
 
 
 class EmojiCompletionListItem(BaseCompletionListItem, GObject.Object):
