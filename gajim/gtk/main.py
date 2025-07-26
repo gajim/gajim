@@ -513,7 +513,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     self._chat_page.remove_chat(
                         control.contact.account, control.contact.jid
                     )
-                    return None
+                else:
+                    workspace_id = self.get_active_workspace()
+                    if workspace_id is not None:
+                        app.window.activate_workspace(workspace_id)
+
+                return None
 
             elif action_name == "close-chat":
                 self._chat_page.remove_chat(
