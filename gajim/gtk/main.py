@@ -526,7 +526,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 )
                 return None
 
-        if action_name == "escape" and app.settings.get("escape_key_closes"):
+        if action_name == "escape":
             self.close()
 
         elif action_name == "restore-chat":
