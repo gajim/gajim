@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import sys
+import uuid
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
@@ -17,6 +18,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.commands import ChatCommands
@@ -112,8 +114,14 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         overlay.set_child(box)
 
         # TODO: support dnd for contacts (MUC invitations)
-        drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
-        self._connect(drop_target, "accept", self._on_drop_accept)
+
+        format_builder = Gdk.ContentFormatsBuilder()
+        format_builder.add_gtype(Gdk.Texture)
+        format_builder.add_gtype(Gdk.FileList)
+
+        drop_target = Gtk.DropTarget(
+            actions=Gdk.DragAction.COPY, formats=format_builder.to_formats()
+        )
         self._connect(drop_target, "drop", self._on_file_drop)
         self._connect(drop_target, "enter", self._on_drag_enter)
         self._connect(drop_target, "leave", self._on_drag_leave)
@@ -738,30 +746,56 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_drag_leave(self, _drop_target: Gtk.DropTarget) -> None:
         self._drop_area.set_visible(False)
 
-    def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
-        formats = drop.get_formats()
-        return bool(formats.contain_gtype(Gdk.FileList))
-
     def _on_file_drop(
-        self, _target: Gtk.DropTarget, value: Gdk.FileList | None, _x: float, _y: float
+        self,
+        target: Gtk.DropTargetAsync,
+        value: Gdk.FileList | Gdk.Texture | None,
+        _x: float,
+        _y: float,
     ) -> bool:
+
         if value is None:
             log.debug("Drop received, but value is None")
             return False
 
-        log.debug("Drop received: %s", value)
-        files = value.get_files()
-        if not files:
+        if not self._chat_control.has_active_chat():
             return False
 
-        if self._chat_control.has_active_chat():
-            self._chat_control.drag_data_file_transfer(
-                [file.get_uri() for file in files]
-            )
-            self._drop_area.set_visible(False)
-            return True
+        files: list[str] = []
 
-        return False
+        log.debug("Drop received: %s", value)
+        if isinstance(value, Gdk.Texture):
+            try:
+                image = value.save_to_png_bytes()
+                image_bytes = image.get_data()
+            except GLib.Error as e:
+                log.error("Error while trying to store dropped image: %s", e)
+                return False
+
+            if image_bytes is None:
+                log.error("Could not process dropped image")
+                return False
+
+            temp_dir = configpaths.get_temp_dir()
+            image_path = temp_dir / f"{uuid.uuid4()}.png"
+            try:
+                image_path.write_bytes(image_bytes)
+            except Exception as e:
+                log.error("Could not write dropped image: %s", e)
+                return False
+
+            files = [image_path.as_uri()]
+
+        if isinstance(value, Gdk.FileList):
+            files = [file.get_uri() for file in value.get_files()]
+
+        if not files:
+            log.error("No path for dropped image")
+            return False
+
+        self._chat_control.drag_data_file_transfer(files)
+        self._drop_area.set_visible(False)
+        return True
 
     def _show_chat_function_page(
         self,
