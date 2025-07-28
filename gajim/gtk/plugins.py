@@ -381,11 +381,14 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
         return image
 
     def _get_error(self) -> tuple[bool, str]:
+        """Returns has_error, error_text"""
         if not self._installed:
             return False, ""
 
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
-        assert plugin is not None
+        if plugin is None:
+            return True, _("Plugin could not be loaded")
+
         if not plugin.activatable:
             return True, plugin.available_text
         return False, ""

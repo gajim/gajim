@@ -161,7 +161,9 @@ class PluginManager(metaclass=Singleton):
             assert spec.loader is not None
             spec.loader.exec_module(module)
         except Exception as error:
-            log.warning('Error while loading module: %s', error)
+            log.warning(
+                '%s: Error while loading module: %s', manifest.short_name, error
+            )
             return None
 
         for module_attr_name in dir(module):
