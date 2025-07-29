@@ -835,9 +835,6 @@ list.sidebar-switcher .sidebar-row-header {
     color: var(--window-fg-color);
 }
 
-/* FullMessageWindow */
-#FullMessageWindow textview { padding: 10px; }
-
 /* ManageRoster */
 #ManageRoster listview header {
     font-weight: bold;
