@@ -69,6 +69,12 @@ class MessageRow(BaseRow):
         self.direction = ChatDirection(message.direction)
         self._is_outgoing = self.direction == ChatDirection.OUTGOING
 
+        # Classes for identifying message direction via CSS
+        if self._is_outgoing:
+            self.add_css_class("outgoing-message")
+        else:
+            self.add_css_class("incoming-message")
+
         self.orig_pk = message.pk
         self.pk = self.orig_pk
 
