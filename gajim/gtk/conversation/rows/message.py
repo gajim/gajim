@@ -239,12 +239,13 @@ class MessageRow(BaseRow):
             self._set_error(error_text)
 
     def _set_text_direction(self, text: str) -> None:
-        if is_rtl_text(text):
+        global_rtl = self._message_widget.get_direction() == Gtk.TextDirection.RTL
+        message_rtl = is_rtl_text(text)
+
+        if (global_rtl and not message_rtl) or (not global_rtl and message_rtl):
+            # LTR message in an RTL environment (align to the left) or
+            # RTL message in an LTR environment (align to the right)
             self._bottom_box.set_halign(Gtk.Align.END)
-            self._message_widget.set_direction(Gtk.TextDirection.RTL)
-        else:
-            self._bottom_box.set_halign(Gtk.Align.FILL)
-            self._message_widget.set_direction(Gtk.TextDirection.LTR)
 
     @property
     def _muc_context(self) -> str | None:
