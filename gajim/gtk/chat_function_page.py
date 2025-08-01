@@ -43,6 +43,14 @@ class FunctionMode(Enum):
     CONFIG_FAILED = "config-failed"
 
 
+MUC_ERROR_CONDITION_TEXT = {
+    "registration-required": _(
+        "This group chat is members-only, but you are not on the members list. "
+        "An authorized person needs to invite you."
+    )
+}
+
+
 class ChatFunctionPage(Gtk.Box, SignalManager):
 
     __gsignals__ = {
@@ -54,7 +62,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         Gtk.Box.__init__(
             self,
             orientation=Gtk.Orientation.VERTICAL,
-            spacing=18,
+            spacing=6,
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
         )
@@ -76,8 +84,17 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         self._heading.add_css_class("title-2")
         self.append(self._heading)
 
-        self._content_box = Gtk.Box()
-        self._content_box.set_halign(Gtk.Align.CENTER)
+        self._subheading = Gtk.Label(
+            max_width_chars=40,
+            wrap=True,
+            wrap_mode=Pango.WrapMode.WORD,
+        )
+        self._subheading.add_css_class("small-label")
+        self._subheading.add_css_class("pb-18")
+        self.append(self._subheading)
+
+        self._content_box = Gtk.Box(halign=Gtk.Align.CENTER)
+        self._content_box.add_css_class("pb-12")
         self.append(self._content_box)
 
         cancel_button = Gtk.Button(label=_("Cancel"))
@@ -152,6 +169,8 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         else:
             self._heading.set_text(self._contact.name)
 
+        self._subheading.set_text(str(self._contact.jid))
+
         if mode == FunctionMode.INVITE:
             self._confirm_button.set_label(_("Invite"))
             self._confirm_button.add_css_class("suggested-action")
@@ -225,10 +244,10 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
                 )
                 self._forget_button.set_visible(is_bookmark)
 
-            error_text = str(self._contact.jid)
-            if data is not None:
-                error_text = f"{error_text}\n{data}"
-            self._widget = ErrorWidget(mode=mode, error_text=error_text)
+            self._widget = ErrorWidget(
+                mode=mode,
+                error_text=data,
+            )
 
         assert self._widget is not None
         self._content_box.append(self._widget)
@@ -457,16 +476,17 @@ class InputWidget(Gtk.Box, SignalManager):
 
 class ErrorWidget(Gtk.Box):
     def __init__(
-        self, mode: FunctionMode | None = None, error_text: str | None = None
+        self,
+        mode: FunctionMode | None = None,
+        error_text: str | None = None,
     ) -> None:
-
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
+
         image = Gtk.Image.new_from_icon_name("dialog-error-symbolic")
         image.set_pixel_size(32)
         image.add_css_class("error")
+        self.append(image)
 
-        heading = Gtk.Label()
-        heading.add_css_class("title-3")
         heading_text = _("An Error Occurred")
         if mode == FunctionMode.JOIN_FAILED:
             heading_text = _("Failed to Join Group Chat")
@@ -474,13 +494,17 @@ class ErrorWidget(Gtk.Box):
             heading_text = _("Failed to Create Group Chat")
         elif mode == FunctionMode.CONFIG_FAILED:
             heading_text = _("Failed to Configure Group Chat")
-        heading.set_text(heading_text)
 
-        label = Gtk.Label()
-        label.set_max_width_chars(40)
-        if error_text is not None:
-            label.set_text(error_text)
-
-        self.append(image)
+        heading = Gtk.Label(label=heading_text)
+        heading.add_css_class("title-4")
         self.append(heading)
-        self.append(label)
+
+        if error_text is not None:
+            error_text = MUC_ERROR_CONDITION_TEXT.get(error_text, error_text)
+            error_label = Gtk.Label(
+                max_width_chars=50,
+                wrap=True,
+                wrap_mode=Pango.WrapMode.WORD,
+                label=error_text,
+            )
+            self.append(error_label)
