@@ -25,7 +25,7 @@ FUNCTION_DATA = {
     FunctionMode.KICK: "Nasty User",
     FunctionMode.BAN: "Nasty User",
     FunctionMode.CAPTCHA_ERROR: "Captcha error message",
-    FunctionMode.JOIN_FAILED: "Join failed message",
+    FunctionMode.JOIN_FAILED: "registration-required",
     FunctionMode.CREATION_FAILED: "Creation failed message",
     FunctionMode.CONFIG_FAILED: "Config failed message",
 }
