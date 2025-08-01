@@ -203,6 +203,7 @@ class StartChatDialog(GajimAppWindow):
         self._connect(action, "change-state", self._on_sort_by_show_changed)
         self.window.add_action(action)
 
+        self._ui.search_entry.grab_focus()
         log.debug("Loading dialog finished")
         self.show()
 
