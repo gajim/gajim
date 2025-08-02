@@ -30,7 +30,7 @@ class Annotations(BaseModule):
 
     def request_annotations(self) -> None:
         self._nbxmpp('Annotations').request_annotations(
-            callback=self._annotations_received)  # type: ignore
+            callback=self._annotations_received)
 
     def _annotations_received(self, task: Task) -> None:
         try:

@@ -215,7 +215,7 @@ class Bookmarks(BaseModule):
 
         self._request_in_progress = True
         self._nbxmpp(self._bookmark_module()).request_bookmarks(
-            callback=self._bookmarks_received)  # type: ignore
+            callback=self._bookmarks_received)
 
     def _bookmarks_received(self, task: Task) -> None:
         try:

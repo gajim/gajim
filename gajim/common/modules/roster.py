@@ -78,7 +78,7 @@ class Roster(BaseModule):
 
         self._log.info('Request version: %s', version)
         self._nbxmpp('Roster').request_roster(
-            version, callback=self._on_request_roster)  # type: ignore
+            version, callback=self._on_request_roster)
 
     def _on_request_roster(self, task: Task) -> None:
         try:
