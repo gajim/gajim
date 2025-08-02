@@ -621,7 +621,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
             uris = None
             if param is not None:
-                uris = param.get_strv() or None
+                uris = param.get_strv()
+                if all("" == uri for uri in param.get_strv()):
+                    # All list entries are "" (default when invoking "send-file" action)
+                    uris = None
             self._show_chat_function_page(FunctionMode.SEND_FILE, method, uris)
 
         elif action_name == "show-contact-info":
