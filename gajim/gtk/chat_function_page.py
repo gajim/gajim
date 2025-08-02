@@ -147,7 +147,10 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         self._mode = mode
         self._data = data
 
-        self._heading.set_text(self._contact.name)
+        if isinstance(contact, BareContact) and contact.is_self:
+            self._heading.set_text(_("Note to myself"))
+        else:
+            self._heading.set_text(self._contact.name)
 
         if mode == FunctionMode.INVITE:
             self._confirm_button.set_label(_("Invite"))
