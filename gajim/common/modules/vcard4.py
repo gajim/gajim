@@ -6,17 +6,91 @@
 
 from __future__ import annotations
 
+from typing import Any
+from typing import cast
+
+import inspect
+import time
+import weakref
+from collections.abc import Callable
+
+from gi.repository import GLib
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules.vcard4 import VCard
+from nbxmpp.protocol import JID
+from nbxmpp.task import Task
+
 from gajim.common import types
 from gajim.common.modules.base import BaseModule
+
+MAX_CACHE_SECONDS = 60
 
 
 class VCard4(BaseModule):
 
     _nbxmpp_extends = 'VCard4'
     _nbxmpp_methods = [
-        'request_vcard',
         'set_vcard',
     ]
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
+        self._vcard_cache: dict[JID, tuple[float, VCard]] = {}
+
+    def request_vcard(
+        self, jid: JID, callback: Any, use_cache: bool = False
+    ) -> None | VCard:
+        if use_cache:
+            self._expire_cache()
+            cached_result = self._vcard_cache.get(jid)
+            if cached_result is not None:
+                _, vcard = cached_result
+                GLib.idle_add(self._on_vcard_from_cache, jid, vcard, callback)
+                return
+
+        if inspect.ismethod(callback):
+            weak_callable = weakref.WeakMethod(callback)
+        elif inspect.isfunction(callback):
+            weak_callable = weakref.ref(callback)
+        else:
+            raise TypeError('Unknown callback type: %s' % callback)
+
+        self._nbxmpp('VCard4').request_vcard(
+            jid,
+            timeout=10,
+            callback=self._on_vcard_received,
+            user_data=(jid, weak_callable),
+        )
+
+    def _expire_cache(self) -> None:
+        for jid, data in list(self._vcard_cache.items()):
+            cache_time, _ = data
+            if time.time() - MAX_CACHE_SECONDS > cache_time:
+                self._vcard_cache.pop(jid)
+
+    def _on_vcard_from_cache(
+        self, jid: JID, vcard: VCard, callback: Callable[[JID, VCard], Any]
+    ) -> int:
+        callback(jid, vcard)
+        return GLib.SOURCE_REMOVE
+
+    def _on_vcard_received(self, task: Task) -> None:
+        try:
+            vcard = cast(VCard | None, task.finish())
+        except StanzaError as err:
+            self._log.info('Error loading VCard: %s', err)
+            vcard = None
+
+        jid, weak_callable = task.get_user_data()
+
+        if vcard is None:
+            vcard = VCard()
+        else:
+            self._log.info('Received VCard for %s', jid)
+            self._vcard_cache[jid] = (time.time(), vcard)
+
+        callback = weak_callable()
+        if callback is None:
+            return
+
+        callback(jid, vcard)

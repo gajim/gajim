@@ -12,9 +12,9 @@ from enum import IntEnum
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gtk
-from nbxmpp.errors import StanzaError
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.structs import AnnotationNote
 from nbxmpp.structs import SoftwareVersionResult
 from nbxmpp.task import Task
@@ -313,16 +313,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         )
         self._tasks.append(task)
 
-    def _on_vcard_received(self, task: Task) -> None:
-        try:
-            vcard = cast(VCard | None, task.finish())
-        except StanzaError as err:
-            log.info("Error loading VCard: %s", err)
-            vcard = None
-
-        if vcard is None:
-            vcard = VCard()
-
+    def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
         self._vcard_grid.set_vcard(vcard)
 
     def _load_avatar(self) -> None:

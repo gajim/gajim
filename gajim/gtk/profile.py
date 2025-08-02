@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 from typing import Any
-from typing import cast
 
 import logging
 from pathlib import Path
@@ -17,6 +16,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.modules.user_avatar import Avatar
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -131,7 +131,10 @@ class ProfileWindow(GajimAppWindow):
         self._load_avatar()
 
         client = app.get_client(account)
-        client.get_module("VCard4").request_vcard(callback=self._on_vcard_received)
+        own_jid = client.get_own_jid().new_as_bare()
+        client.get_module("VCard4").request_vcard(
+            own_jid, callback=self._on_vcard_received
+        )
 
         client.get_module("PubSub").get_access_model(
             Namespace.VCARD4_PUBSUB,
@@ -196,15 +199,8 @@ class ProfileWindow(GajimAppWindow):
             self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
     @ensure_not_destroyed
-    def _on_vcard_received(self, task: Task):
-        try:
-            self._current_vcard = cast(VCard | None, task.finish())
-        except StanzaError as error:
-            log.info("Error loading VCard: %s", error)
-            self._current_vcard = None
-
-        if self._current_vcard is None:
-            self._current_vcard = VCard()
+    def _on_vcard_received(self, jid: JID, vcard: VCard):
+        self._current_vcard = vcard
 
         self._load_avatar()
         self._vcard_grid.set_vcard(self._current_vcard.copy())
