@@ -142,7 +142,6 @@ exclude = [
   "gajim/gtk/settings.py",
   "gajim/gtk/start_chat.py",
   "gajim/gtk/types.py",
-  "gajim/gtk/vcard_grid.py",
   "scripts/update_flatpak_manifest.py",
   "test/common/test_uri_util.py",
   "test/gui/test_menus.py",

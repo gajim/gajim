@@ -53,6 +53,7 @@ MENU_DICT = {
     "url": _("URL"),
     "key": p_("Profile", "Public Encryption Key"),
     "note": p_("Profile", "Note"),
+    "tz": p_("Profile", "Timezone"),
 }
 
 

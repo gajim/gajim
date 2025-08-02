@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 
 import datetime as dt
+import zoneinfo
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -52,12 +53,15 @@ from nbxmpp.modules.vcard4 import VCard
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.iana import get_zone_data
+from gajim.common.iana import ZONE_DATA
 from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import parse_uri
 from gajim.common.util.uri import Uri
 
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_py_to_glib_datetime
 
@@ -96,6 +100,36 @@ PropertyT = (
     | UrlProperty
 )
 
+SupportedPropertiesT = (
+    AdrProperty
+    | BDayProperty
+    | EmailProperty
+    | FnProperty
+    | GenderProperty
+    | ImppProperty
+    | KeyProperty
+    | NicknameProperty
+    | NoteProperty
+    | NProperty
+    | OrgProperty
+    | RoleProperty
+    | TelProperty
+    | TitleProperty
+    | TzProperty
+    | UrlProperty
+)
+
+TextEntryPropertiesT = (
+    EmailProperty
+    | FnProperty
+    | ImppProperty
+    | OrgProperty
+    | RoleProperty
+    | TelProperty
+    | TitleProperty
+    | UrlProperty
+)
+
 LABEL_DICT = {
     "fn": _("Full Name"),
     "n": _("Name"),
@@ -111,6 +145,7 @@ LABEL_DICT = {
     "note": p_("Profile", "Note"),
     "url": _("URL"),
     "key": p_("Profile", "Public Encryption Key"),
+    "tz": p_("Profile", "Timezone"),
 }
 
 
@@ -145,6 +180,7 @@ DEFAULT_KWARGS: dict[str, dict[str, str | list[Any]]] = {
     "url": {"value": ""},
     "key": {"value": "", "value_type": "text"},
     "note": {"value": ""},
+    "tz": {"value": "", "value_type": "text"},
 }
 
 
@@ -168,6 +204,7 @@ ORDER = [
     "org",
     "title",
     "role",
+    "tz",
     "url",
     "key",
     "note",
@@ -210,6 +247,7 @@ class VCardGrid(Gtk.Grid):
             "url": TextEntryPropertyGui,
             "key": KeyPropertyGui,
             "note": MultiLinePropertyGui,
+            "tz": TzPropertyGui,
         }
 
         self._account = account
@@ -247,6 +285,7 @@ class VCardGrid(Gtk.Grid):
                 self.remove_property(prop)
 
     def add_new_property(self, name: str) -> None:
+        assert self._vcard is not None
         kwargs = DEFAULT_KWARGS[name]
         prop = cast(PropertyT, self._vcard.add_property(name, **kwargs))
         self.add_property(prop, editable=True)
@@ -255,7 +294,8 @@ class VCardGrid(Gtk.Grid):
         prop_class = self._callbacks.get(prop.name)
         if prop_class is None:
             return
-        prop_obj = prop_class(prop, self._account)
+
+        prop_obj = prop_class(prop, self._account)  # type: ignore
         prop_obj.set_editable(editable)
         prop_obj.add_to_grid(self, self._row_count)
 
@@ -265,6 +305,7 @@ class VCardGrid(Gtk.Grid):
     def remove_property(self, prop: VCardPropertyGui) -> None:
         self.remove_row(prop.row_number)
         self._props.remove(prop)
+        assert self._vcard is not None
         self._vcard.remove_property(prop.get_base_property())
 
     def clear(self) -> None:
@@ -277,13 +318,14 @@ class VCardGrid(Gtk.Grid):
         self._props = []
 
     def sort(self) -> None:
+        assert self._vcard is not None
         self.set_vcard(self._vcard)
 
 
 class DescriptionLabel(Gtk.Label):
     def __init__(self, value: str) -> None:
         Gtk.Label.__init__(self, label=LABEL_DICT[value])
-        if value == "adr":
+        if value in ("adr", "tz"):
             self.set_valign(Gtk.Align.START)
         else:
             self.set_valign(Gtk.Align.CENTER)
@@ -295,7 +337,7 @@ class DescriptionLabel(Gtk.Label):
 
 
 class ValueLabel(Gtk.Label, SignalManager):
-    def __init__(self, prop: PropertyT, account: str) -> None:
+    def __init__(self, prop: TextEntryPropertiesT | BDayProperty, account: str) -> None:
         Gtk.Label.__init__(
             self,
             selectable=True,
@@ -313,8 +355,7 @@ class ValueLabel(Gtk.Label, SignalManager):
         self._account = account
 
         self._connect(self, "activate-link", self._on_activate_link)
-        if prop.name == "org":
-            assert isinstance(prop, OrgProperty)
+        if isinstance(prop, OrgProperty):
             self.set_value(prop.values[0] if prop.values else "")
         else:
             self.set_value(prop.value)
@@ -352,7 +393,6 @@ class ValueLabel(Gtk.Label, SignalManager):
             "photo",
             "tel",
             "impp",
-            "tz",
             "geo",
             "logo",
             "member",
@@ -384,6 +424,7 @@ class ValueLabel(Gtk.Label, SignalManager):
         )
 
     def _on_activate_link(self, _label: Gtk.Label, _value: str) -> int:
+        assert self._uri is not None
         open_uri(self._uri)
         return Gdk.EVENT_STOP
 
@@ -399,7 +440,7 @@ class SexLabel(Gtk.Label):
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
 
-        self.set_text(prop.sex)
+        self.set_text(prop.sex or "")
 
     def set_text(self, value: str) -> None:  # type: ignore
         if not value or value == "-":
@@ -419,19 +460,18 @@ class IdentityLabel(Gtk.Label):
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
 
-        self.set_text(prop.identity)
+        self.set_text(prop.identity or "")
 
     def set_text(self, value: str) -> None:  # type: ignore
         super().set_text("" if not value else value)
 
 
 class ValueEntry(Gtk.Entry):
-    def __init__(self, prop: PropertyT) -> None:
+    def __init__(self, prop: TextEntryPropertiesT | BDayProperty) -> None:
         Gtk.Entry.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_max_width_chars(50)
-        if prop.name == "org":
-            assert isinstance(prop, OrgProperty)
+        if isinstance(prop, OrgProperty):
             self.set_text(prop.values[0] if prop.values else "")
         else:
             self.set_text(prop.value)
@@ -523,7 +563,7 @@ class AdrBoxReadOnly(Gtk.Box):
 
 
 class ValueTextView(Gtk.TextView, SignalManager):
-    def __init__(self, prop: PropertyT) -> None:
+    def __init__(self, prop: NoteProperty | KeyProperty) -> None:
         Gtk.TextView.__init__(self)
         SignalManager.__init__(self)
 
@@ -622,6 +662,38 @@ class GenderComboBox(Gtk.ComboBoxText):
             self.set_active_id(prop.sex)
 
 
+class TimezoneLabel(Gtk.Label):
+    def __init__(self, prop: TzProperty, show_time: bool = False) -> None:
+        Gtk.Label.__init__(self)
+        self._prop = prop
+        self._show_time = show_time
+
+        self.set_selectable(True)
+        self.set_xalign(0)
+        self.set_max_width_chars(50)
+        self.set_ellipsize(Pango.EllipsizeMode.END)
+        self.set_valign(Gtk.Align.CENTER)
+        self.set_halign(Gtk.Align.START)
+
+        self.update_text()
+
+    def update_text(self) -> None:
+        try:
+            tzinfo = zoneinfo.ZoneInfo(self._prop.value)
+        except Exception:
+            remote_dt_str = ""
+        else:
+            dt_format = app.settings.get("date_time_format")
+            remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(dt_format)
+
+        if self._show_time:
+            self.set_visible(bool(remote_dt_str))
+            super().set_text(remote_dt_str)
+        else:
+            data = get_zone_data(self._prop.value)
+            super().set_text(data.full_name)
+
+
 class RemoveButton(Gtk.Button):
     def __init__(self) -> None:
         Gtk.Button.__init__(self)
@@ -633,7 +705,7 @@ class RemoveButton(Gtk.Button):
 
 
 class VCardPropertyGui(SignalManager):
-    def __init__(self, prop: PropertyT) -> None:
+    def __init__(self, prop: SupportedPropertiesT) -> None:
         SignalManager.__init__(self)
 
         self._prop = prop
@@ -693,7 +765,7 @@ class VCardPropertyGui(SignalManager):
     @property
     def row_number(self) -> int:
         grid = cast(Gtk.Grid, self._desc_label.get_parent())
-        return grid.query_child(self._desc_label).row
+        return grid.query_child(self._desc_label).row  # type: ignore
 
     def get_base_property(self) -> PropertyT:
         return self._prop
@@ -719,7 +791,7 @@ class VCardPropertyGui(SignalManager):
 
 
 class TextEntryPropertyGui(VCardPropertyGui):
-    def __init__(self, prop: PropertyT, account: str) -> None:
+    def __init__(self, prop: TextEntryPropertiesT, account: str) -> None:
         VCardPropertyGui.__init__(self, prop)
 
         self._value_entry = ValueEntry(prop)
@@ -734,16 +806,16 @@ class TextEntryPropertyGui(VCardPropertyGui):
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
-        if self._prop.name == "org":
-            assert isinstance(self._prop, OrgProperty)
+        if isinstance(self._prop, OrgProperty):
             self._prop.values = [text]
         else:
+            assert isinstance(self._prop, TextEntryPropertiesT)
             self._prop.value = text
         self._value_label.set_value(text)
 
 
 class MultiLinePropertyGui(VCardPropertyGui):
-    def __init__(self, prop: PropertyT, _account: str) -> None:
+    def __init__(self, prop: NoteProperty, _account: str) -> None:
         VCardPropertyGui.__init__(self, prop)
 
         self._edit_text_view = ValueTextView(prop)
@@ -775,7 +847,7 @@ class MultiLinePropertyGui(VCardPropertyGui):
 
 
 class DatePropertyGui(VCardPropertyGui):
-    def __init__(self, prop: PropertyT, account: str) -> None:
+    def __init__(self, prop: BDayProperty, account: str) -> None:
         VCardPropertyGui.__init__(self, prop)
 
         self._box = Gtk.Box(spacing=6)
@@ -809,6 +881,7 @@ class DatePropertyGui(VCardPropertyGui):
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
+        assert self._prop is BDayProperty
         self._prop.value = text
         self._value_label.set_value(text)
 
@@ -920,3 +993,40 @@ class AdrPropertyGui(VCardPropertyGui):
     def _on_field_changed(self, _box: Gtk.Box, field: str, value: str) -> None:
         setattr(self._prop, field, [value])
         self._read_box.set_field(field, value)
+
+
+class TzPropertyGui(VCardPropertyGui):
+    def __init__(self, prop: TzProperty, account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
+
+        dropdown_data = {key: data[1] for key, data in ZONE_DATA.items()}
+
+        self._value_dropdown = GajimDropDown(data=dropdown_data)
+        self._value_dropdown.set_enable_search(True)
+        self._value_dropdown.select_key(prop.value)
+
+        self._connect(
+            self._value_dropdown,
+            "notify::selected",
+            self._on_zone_selected,
+        )
+
+        self._read_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self._value_label = TimezoneLabel(prop)
+        self._time_label = TimezoneLabel(prop, show_time=True)
+
+        self._read_box.append(self._value_label)
+        self._read_box.append(self._time_label)
+
+        self._edit_widgets.append(self._value_dropdown)
+        self._read_widgets.append(self._read_box)
+
+        self._third_column = [self._value_dropdown, self._read_box]
+
+    def _on_zone_selected(self, dropdown: GajimDropDown, *args: Any) -> None:
+        item = dropdown.get_selected_item()
+        assert item is not None
+        assert isinstance(self._prop, TzProperty)
+        self._prop.value = item.props.key
+        self._value_label.update_text()
+        self._time_label.update_text()
