@@ -38,7 +38,6 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import AvatarBox
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import MessageIcons
-from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import GajimMenu
 from gajim.gtk.menus import get_chat_row_menu
@@ -48,7 +47,6 @@ from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_avatar_for_message
 from gajim.gtk.util.misc import get_contact_name_for_message
-from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.conversation.rows.message")
 
@@ -281,11 +279,6 @@ class MessageRow(BaseRow):
             copy_text += "\n"
         copy_text += text
         return copy_text
-
-    def _on_more_menu_popover_closed(
-        self, _popover: GajimPopover, message_row_actions: MessageRowActions
-    ) -> None:
-        message_row_actions.hide_actions()
 
     def enable_selection_mode(self) -> None:
         if isinstance(self._message_widget, MessageWidget):
