@@ -488,16 +488,6 @@ class ChatControl(EventHelper):
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
 
-    def _get_our_nick(self) -> str:
-        if isinstance(self.contact, GroupchatParticipant):
-            muc_data = self.client.get_module("MUC").get_muc_data(
-                self.contact.jid.new_as_bare()
-            )
-            if muc_data is not None:
-                return muc_data.nick
-
-        return app.nicks[self.contact.account]
-
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
 
