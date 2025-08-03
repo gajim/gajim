@@ -33,7 +33,10 @@ iprivate       = r'\uE000-\uF8FF'\
     r'\U000F0000-\U000FFFFD\U00100000-\U0010FFFD'
 unreserved     = r'A-Za-z0-9\-._~'
 iunreserved    = fr'{unreserved}{ucschar}'
+urlchar = r"A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;="
+pct_loose = fr'%[{urlchar}]'
 pct_encoded    = fr'%{HEXDIG}{HEXDIG}'
+ipchar_loose   = fr'(?:[{iunreserved}{sub_delims}:@]|{pct_loose})'
 ipchar         = fr'(?:[{iunreserved}{sub_delims}:@]|{pct_encoded})'
 iuserinfo      = fr'(?:[{iunreserved}{sub_delims}:]|{pct_encoded})*'
 ireg_name      = fr'(?:[{iunreserved}{sub_delims}]|{pct_encoded})*'
@@ -75,7 +78,7 @@ ihier_part     = fr'(?://{iauthority}{ipath_abempty}'\
                  fr'|{ipath_absolute}'\
                  fr'|{ipath_rootless}'\
                  fr'|{ipath_empty})'
-iquery         = fr'(?:{ipchar}|[/?{iprivate}])*'
+iquery         = fr'(?:{ipchar_loose}|[/?{iprivate}])*'
 ifragment      = fr'(?:{ipchar}|[/?])*'
 scheme         = fr'(?P<scheme>{ALPHA}[a-zA-Z0-9+.-]*)'
 IRI            = fr'{scheme}:{ihier_part}(?:\?{iquery})?(?:#{ifragment})?'

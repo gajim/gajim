@@ -319,6 +319,7 @@ URIS = [
     'http://foo.com/blah_blah_(wikipedia)_(again)',
     'http://www.example.com/wpstyle/?p=364',
     'https://www.example.com/foo/?bar=baz&inga=42&quux',
+    'https://www.example.com?foo=%s',
     'http://✪df.ws/123',
     'http://userid:password@example.com:8080',
     'http://userid:password@example.com:8080/',
