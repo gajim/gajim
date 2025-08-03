@@ -325,7 +325,7 @@ class VCardGrid(Gtk.Grid):
 class DescriptionLabel(Gtk.Label):
     def __init__(self, value: str) -> None:
         Gtk.Label.__init__(self, label=LABEL_DICT[value])
-        if value in ("adr", "tz"):
+        if value == "adr":
             self.set_valign(Gtk.Align.START)
         else:
             self.set_valign(Gtk.Align.CENTER)
@@ -696,12 +696,12 @@ class TimezoneLabel(Gtk.Label):
 
 class RemoveButton(Gtk.Button):
     def __init__(self) -> None:
-        Gtk.Button.__init__(self)
-        self.set_valign(Gtk.Align.CENTER)
-        self.set_halign(Gtk.Align.START)
+        Gtk.Button.__init__(
+            self, halign=Gtk.Align.START, valign=Gtk.Align.CENTER, visible=False
+        )
+        self.add_css_class("image-button")
         image = Gtk.Image.new_from_icon_name("user-trash-symbolic")
         self.set_child(image)
-        self.set_visible(False)
 
 
 class VCardPropertyGui(SignalManager):
