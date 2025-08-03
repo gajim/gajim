@@ -180,7 +180,7 @@ DEFAULT_KWARGS: dict[str, dict[str, str | list[Any]]] = {
     "url": {"value": ""},
     "key": {"value": "", "value_type": "text"},
     "note": {"value": ""},
-    "tz": {"value": "", "value_type": "text"},
+    "tz": {"value": "Europe/Amsterdam", "value_type": "text"},
 }
 
 
