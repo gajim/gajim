@@ -35,6 +35,8 @@ class HighlightTest(unittest.TestCase):
         f_text2 = 'RomeoDoes this work?'
         f_text3 = 'nRomeo'
         f_text4 = 'nRomeoa'
+        f_text5 = "/Romeo"
+        f_text6 = "'Romeo"
         f_text_url_1 = 'https://romeo.tld'
         f_text_url_2 = 'https://romeo.tld message'
         f_text_url_3 = 'https://test.tld/where-is-romeo'
@@ -58,6 +60,8 @@ class HighlightTest(unittest.TestCase):
         self.assertFalse(message_needs_highlight(f_text2, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text3, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text4, NICK, JID))
+        self.assertFalse(message_needs_highlight(f_text5, NICK, JID))
+        self.assertFalse(message_needs_highlight(f_text6, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text_url_1, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text_url_2, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text_url_3, NICK, JID))

@@ -117,9 +117,17 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
                 # Text contains search_string only (exact match)
                 return True
 
+            # Exclude some characters preceding the match:
+            # - any alpha chars
+            # - / which may be commands
+            # - - which may connect multiple words
+            # - ' which may be part of a contraction, such as o'clock, 'tis
+            excluded_chars = ('/', '-', '\'')
+
+            char_before = text[match - 1]
             char_before_allowed = bool(
                 match == 0
-                or (not text[match - 1].isalpha() and text[match - 1] not in ('/', '-'))
+                or (not char_before.isalpha() and char_before not in excluded_chars)
             )
 
             if char_before_allowed and search_end == len(text):
