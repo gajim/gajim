@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -57,12 +59,12 @@ class MessageWidget(Gtk.Box, SignalManager):
                 widget.set_selectable(selectable)
 
     def add_with_styling(
-        self, text: str, nickname: str | None = None, force: bool = False
+        self, text: str, nickname: str | None = None, show_full_text: bool = False
     ) -> None:
         self._original_text = text
         self._nickname = nickname
 
-        text_over_max = len(text) > MAX_MESSAGE_LENGTH and not force
+        text_over_max = len(text) > MAX_MESSAGE_LENGTH and not show_full_text
 
         if text_over_max:
             text = text[:MAX_MESSAGE_LENGTH]
@@ -109,15 +111,15 @@ class MessageWidget(Gtk.Box, SignalManager):
                 continue
 
     def _add_read_more_button(self) -> None:
-        link_button = Gtk.LinkButton(
-            label=_("[read more]"), halign=Gtk.Align.START, can_focus=False
-        )
+        link_button = Gtk.LinkButton(label=_("[read more]"), halign=Gtk.Align.START)
         self._connect(link_button, "activate-link", self._on_read_more)
         self.append(link_button)
 
     def _on_read_more(self, _button: Gtk.LinkButton) -> bool:
-        self.add_with_styling(self._original_text, self._nickname, force=True)
-        return True
+        self.set_can_focus(False)
+        self.add_with_styling(self._original_text, self._nickname, True)
+        GLib.idle_add(self.set_can_focus, True)
+        return Gdk.EVENT_STOP
 
     def clear(self) -> None:
         container_remove_all(self)
