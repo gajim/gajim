@@ -458,6 +458,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         app.check_finalize(self)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
+        self.reset_unread()
         app.window.activate_action(
             "win.remove-chat", GLib.Variant("as", [self.account, str(self.jid)])
         )
