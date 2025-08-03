@@ -468,7 +468,12 @@ def _get_path_for_avatar_texture(texture: Gdk.Texture) -> Path:
 def get_notification_backend() -> NotificationBackend:
     if sys.platform == "win32":
         if int(platform.version().split(".")[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION:
-            return WindowsToastNotification()
+            try:
+                return WindowsToastNotification()
+            except OSError as e:
+                log.error(
+                    "Error while trying to initialize notification backend: %s", e
+                )
         return DummyBackend()
 
     if sys.platform == "darwin":
