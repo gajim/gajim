@@ -68,6 +68,7 @@ class FileTransferJingleRow(BaseRow, EventHelper):
         self.db_timestamp = timestamp.timestamp()
 
         self._contact = contact
+        self._file_props = None
 
         if message is not None and message.filetransfers:
             # TODO: Handle filetransfers and sources specifically
