@@ -14,7 +14,6 @@ from gi.repository import Gtk
 from nbxmpp.errors import ChangePasswordStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
-from nbxmpp.stringprep import saslprep
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -193,13 +192,6 @@ class EnterPassword(Page):
             self._set_complete(False)
             return
 
-        try:
-            saslprep(password1)
-        except Exception:
-            self._show_warning(_("Password contains prohibited characters"))
-            self._set_complete(False)
-            return
-
         self._hide_warning()
         self._set_complete(True)
 
@@ -208,7 +200,7 @@ class EnterPassword(Page):
         self.update_page_complete()
 
     def get_password(self) -> str:
-        return saslprep(self._password1_entry.get_text())
+        return self._password1_entry.get_text()
 
     def get_visible_buttons(self) -> list[str]:
         return ["apply"]
