@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -21,7 +23,6 @@ from gajim.gtk.conversation.quote_widget import QuoteWidget
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import iterate_children
-from gajim.gtk.widgets import GajimAppWindow
 
 ContentT = ParsingResult | QuoteBlock
 
@@ -35,6 +36,7 @@ class MessageWidget(Gtk.Box, SignalManager):
         self._selectable = selectable
 
         self._content: ContentT | None = None
+        self._nickname = None
         self._original_text = ""
         self._action_phrase_text = ""
 
@@ -56,22 +58,25 @@ class MessageWidget(Gtk.Box, SignalManager):
             if isinstance(widget, PlainWidget):
                 widget.set_selectable(selectable)
 
-    def add_with_styling(self, text: str, nickname: str | None = None) -> None:
-
+    def add_with_styling(
+        self, text: str, nickname: str | None = None, show_full_text: bool = False
+    ) -> None:
         self._original_text = text
-        if len(text) > MAX_MESSAGE_LENGTH:
+        self._nickname = nickname
+
+        text_over_max = len(text) > MAX_MESSAGE_LENGTH and not show_full_text
+
+        if text_over_max:
             text = text[:MAX_MESSAGE_LENGTH]
 
         if text.startswith("/me ") and nickname is not None:
             self._add_action_phrase(text, nickname)
-            if len(self._original_text) > MAX_MESSAGE_LENGTH:
-                self._add_read_more_button(self._original_text)
-            return
+        else:
+            result = process(text)
+            self.add_content(result)
 
-        result = process(text)
-        self.add_content(result)
-        if len(self._original_text) > MAX_MESSAGE_LENGTH:
-            self._add_read_more_button(self._original_text)
+        if text_over_max:
+            self._add_read_more_button()
 
     def _add_action_phrase(self, text: str, nickname: str):
         self.clear()
@@ -105,43 +110,16 @@ class MessageWidget(Gtk.Box, SignalManager):
                 self.append(widget)
                 continue
 
-    def _add_read_more_button(self, text: str) -> None:
-        link_button = Gtk.LinkButton(label=_("[read more]"))
-        link_button.set_halign(Gtk.Align.START)
-        self._connect(link_button, "activate-link", self._on_read_more, text)
+    def _add_read_more_button(self) -> None:
+        link_button = Gtk.LinkButton(label=_("[read more]"), halign=Gtk.Align.START)
+        self._connect(link_button, "activate-link", self._on_read_more)
         self.append(link_button)
 
-    def _on_read_more(self, _button: Gtk.LinkButton, text: str) -> bool:
-        FullMessageWindow(text)
-        return True
+    def _on_read_more(self, _button: Gtk.LinkButton) -> bool:
+        self.set_can_focus(False)
+        self.add_with_styling(self._original_text, self._nickname, True)
+        GLib.idle_add(self.set_can_focus, True)
+        return Gdk.EVENT_STOP
 
     def clear(self) -> None:
         container_remove_all(self)
-
-
-class FullMessageWindow(GajimAppWindow):
-    def __init__(self, text: str) -> None:
-        GajimAppWindow.__init__(
-            self,
-            name="FullMessageWindow",
-            title=_("Full Message View"),
-            default_width=800,
-            default_height=800,
-        )
-
-        textview = Gtk.TextView(
-            editable=False,
-            wrap_mode=Gtk.WrapMode.WORD_CHAR,
-        )
-        textview.get_buffer().set_text(text)
-
-        scrolled = Gtk.ScrolledWindow(child=textview, hexpand=True)
-
-        box = Gtk.Box()
-        box.append(scrolled)
-
-        self.set_child(box)
-        self.show()
-
-    def _cleanup(self) -> None:
-        pass
