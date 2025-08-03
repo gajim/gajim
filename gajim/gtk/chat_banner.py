@@ -28,12 +28,12 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.text import make_href_markup
 
+from gajim.gtk.contact_popover import ContactPopover
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
 from gajim.gtk.menus import get_groupchat_menu
 from gajim.gtk.menus import get_private_chat_menu
 from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
-from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import AccountBadge
@@ -48,6 +48,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     _qr_code_image: Gtk.Image = Gtk.Template.Child()
     _jid_label: Gtk.Label = Gtk.Template.Child()
     _copy_jid_button: Gtk.Button = Gtk.Template.Child()
+    _avatar_button: Gtk.MenuButton = Gtk.Template.Child()
     _avatar_image: Gtk.Image = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
     _phone_image: Gtk.Image = Gtk.Template.Child()
@@ -77,11 +78,12 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._additional_items_box.append(self._voice_requests_button)
         self._additional_items_box.append(self._account_badge)
 
+        self._avatar_button.set_create_popup_func(self._on_avatar_clicked)
+
         hide_roster = app.settings.get("hide_groupchat_occupants_list")
         self._set_toggle_roster_button_icon(hide_roster)
 
         self._connect(self._copy_jid_button, "clicked", self._on_copy_jid_clicked)
-        self._connect(self._avatar_image, "query-tooltip", self._on_query_tooltip)
         self._connect(
             self._toggle_roster_button, "clicked", self._on_toggle_roster_clicked
         )
@@ -296,21 +298,12 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._avatar_image.set_pixel_size(AvatarSize.CHAT)
         self._avatar_image.set_from_paintable(texture)
 
-        self._avatar_image_tooltip = ContactTooltip()
-
-    def _on_query_tooltip(
-        self,
-        _img: Gtk.Image,
-        _x_coord: int,
-        _y_coord: int,
-        _keyboard_mode: bool,
-        tooltip: Gtk.Tooltip,
-    ) -> bool:
+    def _on_avatar_clicked(self, button: Gtk.MenuButton) -> None:
         if not isinstance(self._contact, BareContact):
-            return False
-        res, widget = self._avatar_image_tooltip.get_tooltip(self._contact)
-        tooltip.set_custom(widget)
-        return res
+            button.set_popover(None)
+            return
+
+        button.set_popover(ContactPopover(self._contact))
 
     def _update_name_label(self) -> None:
         assert self._contact is not None
