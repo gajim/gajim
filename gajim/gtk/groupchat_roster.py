@@ -194,8 +194,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         assert disco is not None
 
         muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
-        if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
-            assert participant_contact.real_jid is not None
+        if (
+            disco.muc_is_nonanonymous
+            and muc_prefer_direct_msg
+            and participant_contact.real_jid is not None
+        ):
             dm_params = AddChatActionParams(
                 account=self._contact.account,
                 jid=participant_contact.real_jid,
