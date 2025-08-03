@@ -64,8 +64,10 @@
       <object class="GtkBox">
         <property name="spacing">12</property>
         <child>
-          <object class="GtkImage" id="_avatar_image">
-            <property name="has-tooltip">1</property>
+          <object class="GtkMenuButton" id="_avatar_button">
+            <child>
+              <object class="GtkImage" id="_avatar_image" />
+            </child>
           </object>
         </child>
         <child>
