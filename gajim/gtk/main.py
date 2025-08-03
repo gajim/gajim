@@ -526,7 +526,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 )
                 return None
 
-        if action_name == "escape":
+        if action_name in ("escape", "close-chat"):
+            # Attempt to close Gajim window if no chat has been selected
             self.close()
 
         elif action_name == "restore-chat":
