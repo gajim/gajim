@@ -499,7 +499,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return None
 
         control = self.get_control()
-        if control.has_active_chat():
+        if control.contact is not None:
             if action_name == "change-nickname":
                 app.window.activate_action("win.muc-change-nickname", None)
                 return None
@@ -924,7 +924,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         _y: float,
     ) -> None:
         control = self.get_control()
-        if not control.has_active_chat():
+        if control.contact is None:
             return
 
         if self.is_active():
@@ -1243,7 +1243,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self.set_urgency_hint(False)
         control = self.get_control()
-        if control.has_active_chat():
+        if control.contact is not None:
             # Reset jump to bottom button unread counter
             control.mark_as_read()
 
@@ -1284,7 +1284,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self.set_urgency_hint(False)
         control = self.get_control()
-        if not control.has_active_chat():
+        if control.contact is None:
             return
 
         if control.view_is_at_bottom():

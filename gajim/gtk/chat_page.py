@@ -133,6 +133,7 @@ class ChatPage(Gtk.Paned):
         self._list_stack.set_visible_child_name("chat-list-stack")
         self._chat_stack.show_chat(account, jid)
 
+        assert self._chat_control.contact is not None
         if (
             not self._search_revealer.get_reveal_child()
             and self._restore_occupants_list
@@ -158,7 +159,7 @@ class ChatPage(Gtk.Paned):
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:
 
-        if self._chat_control.has_active_chat():
+        if self._chat_control.contact is not None:
             self._search_view.set_context(
                 self._chat_control.contact.account, self._chat_control.contact.jid
             )
@@ -342,7 +343,7 @@ class ChatPage(Gtk.Paned):
             chat_list.unselect_all()
 
         self._chat_list_stack.remove_chats_for_account(account)
-        if self._chat_control.has_active_chat():
+        if self._chat_control.contact is not None:
             if self._chat_control.contact.account == account:
                 self._chat_control.clear()
 
@@ -355,7 +356,7 @@ class ChatPage(Gtk.Paned):
 
             if (
                 self._restore_occupants_list
-                and self._chat_control.has_active_chat()
+                and self._chat_control.contact is not None
                 and self._chat_control.contact.is_groupchat
             ):
                 # Restore GroupchatRoster only if a group chat is selected

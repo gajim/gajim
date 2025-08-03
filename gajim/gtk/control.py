@@ -102,8 +102,7 @@ class ChatControl(EventHelper):
         )
 
     @property
-    def contact(self) -> types.ChatContactT:
-        assert self._contact is not None
+    def contact(self) -> types.ChatContactT | None:
         return self._contact
 
     @property
@@ -125,23 +124,20 @@ class ChatControl(EventHelper):
 
     @property
     def is_chat(self) -> bool:
-        return isinstance(self.contact, BareContact)
+        return isinstance(self._contact, BareContact)
 
     @property
     def is_privatechat(self) -> bool:
-        return isinstance(self.contact, GroupchatParticipant)
+        return isinstance(self._contact, GroupchatParticipant)
 
     @property
     def is_groupchat(self) -> bool:
-        return isinstance(self.contact, GroupchatContact)
+        return isinstance(self._contact, GroupchatContact)
 
     def is_loaded(self, account: str, jid: JID) -> bool:
         if self._contact is None:
             return False
-        return self.contact.account == account and self.contact.jid == jid
-
-    def has_active_chat(self) -> bool:
-        return self._contact is not None
+        return self._contact.account == account and self._contact.jid == jid
 
     def get_group_chat_roster(self) -> GroupchatRoster:
         return self._roster
@@ -187,8 +183,9 @@ class ChatControl(EventHelper):
             # Clear view and reload conversation around timestamp
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
+            assert self._contact is not None
             messages = app.storage.archive.get_conversation_around_timestamp(
-                self.contact.account, self.contact.jid, timestamp
+                self._contact.account, self._contact.jid, timestamp
             )
             self._add_messages(messages)
             self._scrolled_view.set_history_complete(False, False)
@@ -330,8 +327,9 @@ class ChatControl(EventHelper):
         if isinstance(contact, BareContact | GroupchatContact):
             return
 
+        assert self._contact is not None
         self._scrolled_view.add_user_status(
-            self.contact.name, contact.show.value, contact.status
+            self._contact.name, contact.show.value, contact.status
         )
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
@@ -458,12 +456,12 @@ class ChatControl(EventHelper):
 
         self._jump_to_end_button.toggle(False)
 
-        if not self.has_active_chat():
+        if self._contact is None:
             # This signal can be toggled without an active chat, see #12226
             return
 
-        if app.window.is_chat_active(self.contact.account, self.contact.jid):
-            app.window.mark_as_read(self.contact.account, self.contact.jid)
+        if app.window.is_chat_active(self._contact.account, self._contact.jid):
+            app.window.mark_as_read(self._contact.account, self._contact.jid)
 
     def _on_activate_message_selection(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -555,9 +553,10 @@ class ChatControl(EventHelper):
         else:
             timestamp = dt.datetime.fromtimestamp(row.db_timestamp, dt.UTC)
 
+        assert self._contact is not None
         return app.storage.archive.get_conversation_before_after(
-            self.contact.account,
-            self.contact.jid,
+            self._contact.account,
+            self._contact.jid,
             before,
             timestamp,
             REQUEST_LINES_COUNT,
@@ -580,6 +579,9 @@ class ChatControl(EventHelper):
         )
 
     def _request_history(self, _widget: Any, before: bool) -> None:
+        if self._contact is None:
+            # This signal can be toggled without an active chat
+            return
 
         self._scrolled_view.block_signals(True)
 
@@ -587,7 +589,6 @@ class ChatControl(EventHelper):
         event_rows = self._request_events(before)
         rows = self._sort_request_rows(messages, event_rows, before)
 
-        assert self._contact is not None
         for row in rows:
             if not isinstance(row, events.ApplicationEvent):
                 self._add_messages([row])
@@ -977,7 +978,8 @@ class ChatControl(EventHelper):
 
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
             changes.append(_("A setting not related to privacy has been changed"))
-            self.client.get_module("Discovery").disco_muc(self.contact.jid)
+            assert self._contact is not None
+            self.client.get_module("Discovery").disco_muc(self._contact.jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             # Can be a presence
@@ -1077,17 +1079,17 @@ class ChatControl(EventHelper):
         self._process_muc_user_joined(event)
 
     def _process_muc_user_joined(self, event: events.MUCUserJoined) -> None:
-        assert isinstance(self.contact, GroupchatContact)
+        assert isinstance(self._contact, GroupchatContact)
 
         if not event.is_self:
-            if self.contact.is_joined:
+            if self._contact.is_joined:
                 self._scrolled_view.add_muc_user_joined(event)
             return
 
         status_codes = event.status_codes or []
 
         message = None
-        if not self.contact.is_joined:
+        if not self._contact.is_joined:
             # We just joined the room
             message = _("You (%s) joined the group chat") % event.nick
 

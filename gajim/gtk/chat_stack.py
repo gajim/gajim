@@ -761,7 +761,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             log.debug("Drop received, but value is None")
             return False
 
-        if not self._chat_control.has_active_chat():
+        if self._chat_control.contact is None:
             return False
 
         files: list[str] = []

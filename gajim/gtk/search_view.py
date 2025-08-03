@@ -375,8 +375,9 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
     def _scroll_to_date(self, date: dt.datetime) -> None:
         control = app.window.get_control()
-        if not control.has_active_chat():
+        if control.contact is None:
             return
+
         if control.contact.jid == self._jid:
 
             assert self._jid is not None
@@ -393,7 +394,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
         control = app.window.get_control()
-        if control.has_active_chat():
+        if control.contact is not None:
             if control.contact.jid == row.remote_jid:
                 control.scroll_to_message(row.pk, row.timestamp)
                 return
@@ -407,7 +408,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
             chat_type = "pm"
         app.window.add_chat(row.account, jid, chat_type, select=True)
         control = app.window.get_control()
-        if control.has_active_chat():
+        if control.contact is not None:
             control.scroll_to_message(row.pk, row.timestamp)
 
     def set_focus(self) -> None:
