@@ -628,8 +628,11 @@ def get_groupchat_participant_menu(
     disco = group_chat.get_disco()
     assert disco is not None
     muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
-    if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
-        assert contact.real_jid is not None
+    if (
+        disco.muc_is_nonanonymous
+        and muc_prefer_direct_msg
+        and contact.real_jid is not None
+    ):
         dm_params = AddChatActionParams(
             account=account, jid=contact.real_jid, type="chat", select=True
         )
