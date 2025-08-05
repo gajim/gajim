@@ -87,7 +87,7 @@ class ChatControl(EventHelper):
         # Used with encryption plugins
         self.sendmessage = False
 
-        self.widget = self._ui.control_box
+        self._widget = self._ui.control_box
 
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
@@ -102,43 +102,35 @@ class ChatControl(EventHelper):
         )
 
     @property
-    def contact(self) -> types.ChatContactT:
-        assert self._contact is not None
+    def contact(self) -> types.ChatContactT | None:
+        # Compatibility with Plugins for Gajim < 2.3.3
         return self._contact
 
     @property
     def account(self) -> str:
-        # Compatibility with Plugins for Gajim < 1.5
+        # Compatibility with Plugins for Gajim < 2.3.3
         assert self._contact is not None
         return self._contact.account
 
-    @property
-    def room_jid(self) -> str:
-        # Compatibility with Plugins for Gajim < 1.5
-        assert self._contact is not None
-        return str(self._contact.jid)
+    def get_widget(self) -> Gtk.Box:
+        return self._widget
 
-    @property
-    def client(self) -> types.Client:
-        assert self._client is not None
-        return self._client
+    def get_contact(self) -> types.ChatContactT | None:
+        return self._contact
 
-    @property
-    def is_chat(self) -> bool:
-        return isinstance(self.contact, BareContact)
-
-    @property
-    def is_privatechat(self) -> bool:
-        return isinstance(self.contact, GroupchatParticipant)
-
-    @property
     def is_groupchat(self) -> bool:
-        return isinstance(self.contact, GroupchatContact)
+        return isinstance(self._contact, GroupchatContact)
 
-    def is_loaded(self, account: str, jid: JID) -> bool:
+    def is_chat_active(self, account: str, jid: JID | None) -> bool:
         if self._contact is None:
             return False
-        return self.contact.account == account and self.contact.jid == jid
+
+        if self._contact.account != account:
+            return False
+
+        if jid is None:
+            return True
+        return self._contact.jid == jid
 
     def has_active_chat(self) -> bool:
         return self._contact is not None
@@ -181,14 +173,31 @@ class ChatControl(EventHelper):
     def view_is_at_bottom(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
+    def scroll_to_date(self, date: dt.datetime) -> None:
+        if self._contact is None:
+            log.warning("scroll_to_date() called without active contact")
+            return
+
+        meta = app.storage.archive.get_first_message_meta_for_date(
+            self._contact.account, self._contact.jid, date
+        )
+        if meta is None:
+            return
+
+        self.scroll_to_message(*meta)
+
     def scroll_to_message(self, pk: int, timestamp: dt.datetime) -> None:
+        if self._contact is None:
+            log.warning("scroll_to_message() called without active contact")
+            return
+
         row = self._scrolled_view.get_row_by_pk(pk)
         if row is None:
             # Clear view and reload conversation around timestamp
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
             messages = app.storage.archive.get_conversation_around_timestamp(
-                self.contact.account, self.contact.jid, timestamp
+                self._contact.account, self._contact.jid, timestamp
             )
             self._add_messages(messages)
             self._scrolled_view.set_history_complete(False, False)
@@ -275,7 +284,7 @@ class ChatControl(EventHelper):
                     muc_data.subject, muc_data.last_subject_timestamp
                 )
 
-        self.widget.set_visible(True)
+        self._widget.set_visible(True)
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -326,12 +335,14 @@ class ChatControl(EventHelper):
         if not app.settings.get("print_status_in_chats"):
             return
 
-        contact = self.client.get_module("Contacts").get_contact(event.fjid)
+        assert self._client is not None
+        contact = self._client.get_module("Contacts").get_contact(event.fjid)
         if isinstance(contact, BareContact | GroupchatContact):
             return
 
+        assert self._contact is not None
         self._scrolled_view.add_user_status(
-            self.contact.name, contact.show.value, contact.status
+            self._contact.name, contact.show.value, contact.status
         )
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
@@ -458,12 +469,12 @@ class ChatControl(EventHelper):
 
         self._jump_to_end_button.toggle(False)
 
-        if not self.has_active_chat():
+        if self._contact is None:
             # This signal can be toggled without an active chat, see #12226
             return
 
-        if app.window.is_chat_active(self.contact.account, self.contact.jid):
-            app.window.mark_as_read(self.contact.account, self.contact.jid)
+        if app.window.is_chat_active(self._contact.account, self._contact.jid):
+            app.window.mark_as_read(self._contact.account, self._contact.jid)
 
     def _on_activate_message_selection(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -489,16 +500,6 @@ class ChatControl(EventHelper):
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
-
-    def _get_our_nick(self) -> str:
-        if isinstance(self.contact, GroupchatParticipant):
-            muc_data = self.client.get_module("MUC").get_muc_data(
-                self.contact.jid.new_as_bare()
-            )
-            if muc_data is not None:
-                return muc_data.nick
-
-        return app.nicks[self.contact.account]
 
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
@@ -555,9 +556,10 @@ class ChatControl(EventHelper):
         else:
             timestamp = dt.datetime.fromtimestamp(row.db_timestamp, dt.UTC)
 
+        assert self._contact is not None
         return app.storage.archive.get_conversation_before_after(
-            self.contact.account,
-            self.contact.jid,
+            self._contact.account,
+            self._contact.jid,
             before,
             timestamp,
             REQUEST_LINES_COUNT,
@@ -580,6 +582,9 @@ class ChatControl(EventHelper):
         )
 
     def _request_history(self, _widget: Any, before: bool) -> None:
+        if self._contact is None:
+            log.warning("_request_history() called without active contact")
+            return
 
         self._scrolled_view.block_signals(True)
 
@@ -977,7 +982,9 @@ class ChatControl(EventHelper):
 
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
             changes.append(_("A setting not related to privacy has been changed"))
-            self.client.get_module("Discovery").disco_muc(self.contact.jid)
+            assert self._contact is not None
+            assert self._client is not None
+            self._client.get_module("Discovery").disco_muc(self._contact.jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             # Can be a presence
@@ -1077,17 +1084,17 @@ class ChatControl(EventHelper):
         self._process_muc_user_joined(event)
 
     def _process_muc_user_joined(self, event: events.MUCUserJoined) -> None:
-        assert isinstance(self.contact, GroupchatContact)
+        assert isinstance(self._contact, GroupchatContact)
 
         if not event.is_self:
-            if self.contact.is_joined:
+            if self._contact.is_joined:
                 self._scrolled_view.add_muc_user_joined(event)
             return
 
         status_codes = event.status_codes or []
 
         message = None
-        if not self.contact.is_joined:
+        if not self._contact.is_joined:
             # We just joined the room
             message = _("You (%s) joined the group chat") % event.nick
 

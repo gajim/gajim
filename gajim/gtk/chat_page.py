@@ -136,7 +136,7 @@ class ChatPage(Gtk.Paned):
         if (
             not self._search_revealer.get_reveal_child()
             and self._restore_occupants_list
-            and self._chat_control.contact.is_groupchat
+            and self._chat_control.is_groupchat()
         ):
             # GroupchatRoster was hidden by Search initially, but Search was
             # afterwards closed in a 1:1 chat. Only restore GroupchatRoster if
@@ -158,10 +158,9 @@ class ChatPage(Gtk.Paned):
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:
 
-        if self._chat_control.has_active_chat():
-            self._search_view.set_context(
-                self._chat_control.contact.account, self._chat_control.contact.jid
-            )
+        contact = self._chat_control.get_contact()
+        if contact is not None:
+            self._search_view.set_context(contact.account, contact.jid)
 
         if not app.settings.get("hide_groupchat_occupants_list"):
             # Hide group chat roster in order to make some space horizontally.
@@ -329,7 +328,7 @@ class ChatPage(Gtk.Paned):
         unregister: bool,
     ) -> None:
 
-        if self._chat_control.is_loaded(account, jid):
+        if self._chat_control.is_chat_active(account, jid):
             self._chat_control.clear()
 
         if type_ == "groupchat" and app.account_is_connected(account):
@@ -342,9 +341,8 @@ class ChatPage(Gtk.Paned):
             chat_list.unselect_all()
 
         self._chat_list_stack.remove_chats_for_account(account)
-        if self._chat_control.has_active_chat():
-            if self._chat_control.contact.account == account:
-                self._chat_control.clear()
+        if self._chat_control.is_chat_active(account, None):
+            self._chat_control.clear()
 
     def get_control(self) -> ChatControl:
         return self._chat_control
@@ -353,11 +351,7 @@ class ChatPage(Gtk.Paned):
         if self._search_revealer.get_reveal_child():
             self._search_revealer.set_reveal_child(False)
 
-            if (
-                self._restore_occupants_list
-                and self._chat_control.has_active_chat()
-                and self._chat_control.contact.is_groupchat
-            ):
+            if self._restore_occupants_list and self._chat_control.is_groupchat():
                 # Restore GroupchatRoster only if a group chat is selected
                 # currently. If this condition isn' satisfied, it is checked
                 # again as soon as a chat is selected in _on_chat_selected.

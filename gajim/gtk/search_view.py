@@ -325,7 +325,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
         date_time = calendar.get_date()
         date = dt.datetime(*date_time.get_ymd())
-        self._scroll_to_date(date)
+        app.window.get_control().scroll_to_date(date)
 
     def _on_first_date_selected(self, _button: Gtk.Button) -> None:
         assert self._first_date is not None
@@ -373,42 +373,20 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
         self._ui.calendar.select_day(convert_py_to_glib_datetime(date))
 
-    def _scroll_to_date(self, date: dt.datetime) -> None:
-        control = app.window.get_control()
-        if not control.has_active_chat():
-            return
-        if control.contact.jid == self._jid:
-
-            assert self._jid is not None
-            assert self._account is not None
-
-            meta = app.storage.archive.get_first_message_meta_for_date(
-                self._account, self._jid, date
-            )
-            if meta is None:
-                return
-
-            control.scroll_to_message(*meta)
-
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
         control = app.window.get_control()
-        if control.has_active_chat():
-            if control.contact.jid == row.remote_jid:
-                control.scroll_to_message(row.pk, row.timestamp)
-                return
+        if not control.is_chat_active(row.account, row.remote_jid):
 
-        # Other chat or no control opened
-        jid = row.remote_jid
-        chat_type = "chat"
-        if row.type == MessageType.GROUPCHAT:
-            chat_type = "groupchat"
-        elif row.type == MessageType.PM:
-            chat_type = "pm"
-        app.window.add_chat(row.account, jid, chat_type, select=True)
-        control = app.window.get_control()
-        if control.has_active_chat():
-            control.scroll_to_message(row.pk, row.timestamp)
+            chat_type = "chat"
+            if row.type == MessageType.GROUPCHAT:
+                chat_type = "groupchat"
+            elif row.type == MessageType.PM:
+                chat_type = "pm"
+
+            app.window.add_chat(row.account, row.remote_jid, chat_type, select=True)
+
+        control.scroll_to_message(row.pk, row.timestamp)
 
     def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()

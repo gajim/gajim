@@ -500,19 +500,20 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         control = self.get_control()
         if control.has_active_chat():
+            contact = control.get_contact()
+            assert contact is not None
+
             if action_name == "change-nickname":
                 app.window.activate_action("win.muc-change-nickname", None)
                 return None
 
             if action_name == "change-subject":
-                open_window("GroupchatDetails", contact=control.contact, page="manage")
+                open_window("GroupchatDetails", contact=contact, page="manage")
                 return None
 
             if action_name == "escape":
                 if app.settings.get("escape_key_closes"):
-                    self._chat_page.remove_chat(
-                        control.contact.account, control.contact.jid
-                    )
+                    self._chat_page.remove_chat(contact.account, contact.jid)
                 else:
                     workspace_id = self.get_active_workspace()
                     if workspace_id is not None:
@@ -521,9 +522,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 return None
 
             elif action_name == "close-chat":
-                self._chat_page.remove_chat(
-                    control.contact.account, control.contact.jid
-                )
+                self._chat_page.remove_chat(contact.account, contact.jid)
                 return None
 
         if action_name in ("escape", "close-chat"):
@@ -929,11 +928,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return
 
         if self.is_active():
-            client = app.get_client(control.contact.account)
+            contact = control.get_contact()
+            assert contact is not None
+            client = app.get_client(contact.account)
             chat_stack = self._chat_page.get_chat_stack()
             msg_action_box = chat_stack.get_message_action_box()
             client.get_module("Chatstate").set_mouse_activity(
-                control.contact, msg_action_box.msg_textview.has_text
+                contact, msg_action_box.msg_textview.has_text
             )
 
     def _on_chat_selected(self, *args: Any) -> None:
@@ -1288,8 +1289,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if not control.has_active_chat():
             return
 
+        contact = control.get_contact()
+        assert contact is not None
+
         if control.view_is_at_bottom():
-            self.mark_as_read(control.contact.account, control.contact.jid)
+            self.mark_as_read(contact.account, contact.jid)
 
     def get_preferred_ft_method(self, contact: types.ChatContactT) -> str | None:
 

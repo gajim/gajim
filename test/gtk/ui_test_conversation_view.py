@@ -56,7 +56,7 @@ class TestConversationView(GajimAppWindow):
         button_box.append(jump_to_button)
 
         box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
-        box.append(self._chat_control.widget)
+        box.append(self._chat_control.get_widget())
         box.append(button_box)
         self.set_child(box)
 

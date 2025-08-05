@@ -867,7 +867,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
             app.window.clear_chat_list_row(params.account, params.jid)
             control = app.window.get_control()
-            if not control.is_loaded(params.account, params.jid):
+            if not control.is_chat_active(params.account, params.jid):
                 return
 
             control.reset_view()
