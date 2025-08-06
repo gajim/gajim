@@ -300,7 +300,7 @@ class ProfileWindow(GajimAppWindow):
 
         self._avatar_nick_public = public
 
-        nick = GLib.markup_escape_text(self._ui.nickname_entry.get_text())
+        nick = self._ui.nickname_entry.get_text()
         client.get_module("UserNickname").set_nickname(nick, public=public)
 
         if not nick:
