@@ -68,6 +68,8 @@ def get_group_from_contact(contact: types.GroupchatParticipant) -> tuple[str, st
 
 
 class GroupchatRoster(Gtk.Revealer, EventHelper):
+    __gtype_name__ = "GroupchatRoster"
+
     def __init__(self) -> None:
         Gtk.Revealer.__init__(self)
         EventHelper.__init__(self)
@@ -93,6 +95,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             "stop-search",
             lambda *args: self._ui.search_entry.set_text(""),
         )
+
+    @GObject.Property(type=int)
+    def total_count(self) -> int:
+        return self._contact_view.get_count()
 
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
@@ -167,11 +173,13 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             self._add_contact(participant)
 
         self._contact_view.bind_model()
+        self.notify("total-count")
 
     def _unload_roster(self) -> None:
         log.info("Unload Roster")
         self._contact_view.unbind_model()
         self._contact_view.remove_all()
+        self.notify("total-count")
 
         assert self._contact is not None
         self._contact.multi_disconnect(self, CONTACT_SIGNALS)
@@ -232,12 +240,20 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self._scroll_id = GLib.timeout_add(100, _scroll_to)
 
-    def _add_contact(self, contact: types.GroupchatParticipant) -> None:
+    def _add_contact(
+        self, contact: types.GroupchatParticipant, notify: bool = False
+    ) -> None:
         item = GroupchatContactListItem(contact=contact)
         self._contact_view.add(item)
+        if notify:
+            self.notify("total-count")
 
-    def _remove_contact(self, contact: types.GroupchatParticipant) -> None:
+    def _remove_contact(
+        self, contact: types.GroupchatParticipant, notify: bool = False
+    ) -> None:
         self._contact_view.remove(contact)
+        if notify:
+            self.notify("total-count")
 
     def _on_contact_changed(
         self,
@@ -248,10 +264,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
     ) -> None:
 
         if signal_name == "user-joined":
-            self._add_contact(user_contact)
+            self._add_contact(user_contact, notify=True)
 
         elif signal_name == "user-left":
-            self._remove_contact(user_contact)
+            self._remove_contact(user_contact, notify=True)
 
         else:
             self._remove_contact(user_contact)
@@ -334,6 +350,9 @@ class GroupchatContactListView(Gtk.ListView):
 
     def unbind_model(self) -> None:
         self._sort_model.set_model(None)
+
+    def get_count(self) -> int:
+        return self._model.get_n_items()
 
     @staticmethod
     def _on_factory_setup(
