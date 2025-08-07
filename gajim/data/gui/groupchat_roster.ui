@@ -10,36 +10,20 @@
         <property name="margin-end">18</property>
         <property name="margin-top">12</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkButton">
-            <property name="focusable">1</property>
-            <property name="receives-default">1</property>
-            <property name="halign">center</property>
-            <property name="action-name">win.muc-invite</property>
-            <child>
-              <object class="GtkBox">
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">contact-new-symbolic</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="tooltip-text" translatable="yes">Invite to this chat</property>
-                    <property name="label" translatable="yes">Invite to this chat</property>
-                    <property name="ellipsize">end</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
+        <property name="spacing">6</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="focusable">1</property>
             <property name="placeholder-text" translatable="yes">Search Participants…</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="participants_count_label">
+            <style>
+              <class name="caption"/>
+              <class name="bold"/>
+              <class name="dimmed"/>
+            </style>
           </object>
         </child>
       </object>

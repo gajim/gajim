@@ -10,9 +10,7 @@
         <property name="ellipsize">3</property>
         <style>
           <class name="bold"/>
-          <class name="pt-6"/>
           <class name="pb-3"/>
-          <class name="px-6"/>
         </style>
       </object>
     </child>

@@ -181,6 +181,20 @@
               </object>
             </child>
             <child>
+              <object class="GtkButton" id="_muc_invite_button">
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="action-name">win.muc-invite</property>
+                <property name="tooltip-text" translatable="yes">Invite to this chat…</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">contact-new-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkButton" id="_toggle_roster_button">
                 <property name="visible">0</property>
                 <property name="focusable">1</property>

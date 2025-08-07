@@ -492,6 +492,7 @@ class GroupchatOutcastBuilder(Builder):
 
 class GroupchatRosterBuilder(Builder):
     box: Gtk.Box
+    participants_count_label: Gtk.Label
     search_entry: Gtk.SearchEntry
     scrolled: Gtk.ScrolledWindow
 
