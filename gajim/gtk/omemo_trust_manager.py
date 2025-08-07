@@ -70,6 +70,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._connect(
             self._ui.clear_devices_button, "clicked", self._on_clear_devices_clicked
         )
+        self._connect(self._ui.copy_button, "clicked", self._on_copy_button_clicked)
 
         self._ui.list.set_filter_func(self._filter_func, None)
         self._ui.list.set_sort_func(self._sort_func, None)
@@ -128,11 +129,11 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list_heading.set_text(header_text)
         self._ui.comparing_instructions.set_text(popover_qr_text)
 
-        our_fpr_formatted = client.get_module("OMEMO").backend.get_our_fingerprint(
-            formatted=True
-        )
-        self._ui.our_fingerprint_row.set_subtitle(our_fpr_formatted)
-        self._ui.our_fingerprint_2.set_text(our_fpr_formatted)
+        self._our_fpr_formatted = client.get_module(
+            "OMEMO"
+        ).backend.get_our_fingerprint(formatted=True)
+        self._ui.our_fingerprint_row.set_subtitle(self._our_fpr_formatted)
+        self._ui.our_fingerprint_2.set_text(self._our_fpr_formatted)
 
         self.update()
         self._load_qrcode()
@@ -224,13 +225,19 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         window = open_window("AccountsWindow")
         window.select_account(self._contact.account, "encryption-omemo")
 
+    def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
+        app.window.get_clipboard().set(self._our_fpr_formatted)
 
-class KeyRow(Adw.ActionRow):
+
+class KeyRow(Adw.ActionRow, SignalManager):
     def __init__(
         self, contact: types.ChatContactT, identity_info: IdentityInfo
     ) -> None:
         Adw.ActionRow.__init__(self)
+        SignalManager.__init__(self)
         self.add_css_class("property")
+        self.add_css_class("monospace")
+        self.add_css_class("omemo-fingerprint")
 
         self._contact = contact
         self._client = app.get_client(contact.account)
@@ -238,6 +245,14 @@ class KeyRow(Adw.ActionRow):
         self._address = identity_info.address
         self._identity_info = identity_info
         self._trust = identity_info.trust
+
+        self._copy_button = Gtk.Button(
+            icon_name="edit-copy-symbolic",
+            tooltip_text=_("Copy to Clipboard"),
+            valign=Gtk.Align.CENTER,
+        )
+        self.add_suffix(self._copy_button)
+        self._connect(self._copy_button, "clicked", self._on_copy_button_clicked)
 
         self._trust_button = TrustButton(self)
         self.add_suffix(self._trust_button)
@@ -248,7 +263,7 @@ class KeyRow(Adw.ActionRow):
 
         self.set_title(title)
 
-        formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
+        self._formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
             formatted=True
         )
 
@@ -261,11 +276,11 @@ class KeyRow(Adw.ActionRow):
             last_seen_data = _("Never")
         last_seen = "\n" + _("Last seen: %s") % last_seen_data
 
-        self.set_subtitle(formatted_fingerprint + last_seen)
+        self.set_subtitle(self._formatted_fingerprint + last_seen)
 
     def do_unroot(self) -> None:
         del self._trust_button
-
+        self._disconnect_all()
         Gtk.ListBoxRow.do_unroot(self)
         app.check_finalize(self)
 
@@ -306,6 +321,9 @@ class KeyRow(Adw.ActionRow):
     @property
     def address(self) -> str:
         return self._address
+
+    def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
+        app.window.get_clipboard().set(self._formatted_fingerprint)
 
 
 class TrustButton(Gtk.MenuButton):

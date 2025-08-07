@@ -34,8 +34,6 @@
         </child>
         <child>
           <object class="GtkLabel" id="our_fingerprint_2">
-            <property name="focusable">1</property>
-            <property name="selectable">1</property>
             <style>
               <class name="monospace"/>
               <class name="small-label"/>
@@ -89,10 +87,22 @@
                         <property name="title" translatable="yes">Fingerprint for this Device</property>
                         <style>
                           <class name="property"/>
+                          <class name="monospace"/>
+                          <class name="omemo-fingerprint"/>
                         </style>
                         <child type="suffix">
                           <object class="GtkBox">
                             <property name="spacing">12</property>
+                            <property name="hexpand-set">true</property>
+                            <child>
+                              <object class="GtkButton" id="copy_button">
+                                <property name="focusable">1</property>
+                                <property name="halign">end</property>
+                                <property name="valign">center</property>
+                                <property name="tooltip-text" translatable="yes">Copy to Clipboard</property>
+                                <property name="icon-name">edit-copy-symbolic</property>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkMenuButton" id="qr_menu_button">
                                 <property name="focusable">1</property>

@@ -602,6 +602,7 @@ class OmemoTrustManagerBuilder(Builder):
     qr_code_image: Gtk.Image
     stack: Gtk.Stack
     our_fingerprint_row: Adw.ActionRow
+    copy_button: Gtk.Button
     qr_menu_button: Gtk.MenuButton
     manage_trust_button: Gtk.Button
     list_heading: Gtk.Label
