@@ -388,17 +388,28 @@ class Message(BaseModule):
 
         if message.reaction_data is not None:
             reactions_id, reactions = message.reaction_data
-            reaction = mod.Reaction(
-                account_=self._account,
-                remote_jid_=remote_jid,
-                occupant_=occupant,
-                id=reactions_id,
-                direction=direction,
-                emojis=';'.join(reactions),
-                timestamp=message.timestamp,
-            )
+            if not reactions:
+                app.storage.archive.delete_reaction(
+                    account=self._account,
+                    jid=remote_jid,
+                    occupant_id=occupant.id if occupant is not None else None,
+                    reaction_id=reactions_id,
+                    direction=direction,
+                )
+                self._log.info('Delete own reactions for: %s', reactions_id)
 
-            app.storage.archive.upsert_row2(reaction)
+            else:
+                reaction = mod.Reaction(
+                    account_=self._account,
+                    remote_jid_=remote_jid,
+                    occupant_=occupant,
+                    id=reactions_id,
+                    direction=direction,
+                    emojis=';'.join(reactions),
+                    timestamp=message.timestamp,
+                )
+
+                app.storage.archive.upsert_row2(reaction)
 
             app.ged.raise_event(
                 ReactionUpdated(

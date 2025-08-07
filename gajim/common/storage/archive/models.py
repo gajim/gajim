@@ -932,7 +932,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         else:
             for message in itertools.chain([self], self.corrections):
                 for reaction in message.reactions:
-                    reactions[message.direction] = reaction
+                    reactions[reaction.direction] = reaction
 
         return list(reactions.values())
 
