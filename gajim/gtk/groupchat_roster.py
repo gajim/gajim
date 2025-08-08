@@ -36,6 +36,7 @@ from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.groupchat_roster")
@@ -74,6 +75,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
     def __init__(self) -> None:
         Gtk.Revealer.__init__(self)
         EventHelper.__init__(self)
+        self.set_name("GroupchatRoster")
 
         self._contact = None
         self._scroll_id = None
@@ -97,9 +99,23 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             lambda *args: self._ui.search_entry.set_text(""),
         )
 
+        self.bind_property(
+            "total-count",
+            self._ui.participants_count_label,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+            transform_to=self._transform_count_to_label,
+        )
+
     @GObject.Property(type=int)
     def total_count(self) -> int:
         return self._contact_view.get_count()
+
+    @staticmethod
+    def _transform_count_to_label(binding: GObject.Binding, count: int) -> str:
+        return i18n.ngettext(
+            "%(count)s Participant", "%(count)s Participants", count
+        ) % {"count": count}
 
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
@@ -175,25 +191,18 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self._contact_view.bind_model()
         self.notify("total-count")
-        self._update_participants_count_label()
+
+        # GTK Bug: ListView does not fully scroll to top when headers are used
+        GLib.idle_add(scroll_to, self._ui.scrolled, "top")
 
     def _unload_roster(self) -> None:
         log.info("Unload Roster")
         self._contact_view.unbind_model()
         self._contact_view.remove_all()
         self.notify("total-count")
-        self._update_participants_count_label()
 
         assert self._contact is not None
         self._contact.multi_disconnect(self, CONTACT_SIGNALS)
-
-    def _update_participants_count_label(self) -> None:
-        self._ui.participants_count_label.set_text(
-            i18n.ngettext(
-                "%(count)s participant", "%(count)s participants", self.total_count
-            )
-            % {"count": self.total_count}
-        )
 
     def _on_contact_item_activated(
         self,
@@ -258,7 +267,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._contact_view.add(item)
         if notify:
             self.notify("total-count")
-            self._update_participants_count_label()
 
     def _remove_contact(
         self, contact: types.GroupchatParticipant, notify: bool = False
@@ -266,7 +274,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._contact_view.remove(contact)
         if notify:
             self.notify("total-count")
-            self._update_participants_count_label()
 
     def _on_contact_changed(
         self,
@@ -315,7 +322,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 class GroupchatContactListView(Gtk.ListView):
     def __init__(self) -> None:
         Gtk.ListView.__init__(self)
-        self.add_css_class("px-12")
 
         self._model = Gio.ListStore(item_type=GroupchatContactListItem)
 

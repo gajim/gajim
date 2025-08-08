@@ -549,6 +549,26 @@ button.flat.link { padding: 0; border: 0; }
 
 .emoji-completion > row button { padding: 0px 12px 0px 12px; }
 
+/* GroupchatRoster */
+
+#GroupchatRoster > box { 
+    border-spacing: 6px;
+}
+
+#GroupchatRoster > box > box { 
+    margin: 12px 18px 6px 18px;
+    border-spacing: 12px;
+}
+
+#GroupchatRoster listview { 
+    padding-left: 12px; padding-right: 12px;
+}
+
+#GroupchatRoster header:first-child { 
+    padding-top: 6px;
+}
+
+
 /* ConversationView ======================================================== */
 
 /* BaseRow */
