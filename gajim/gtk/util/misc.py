@@ -56,28 +56,6 @@ def get_adw_version() -> str:
     )
 
 
-def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
-    """Scrolls to the end of a GtkScrolledWindow.
-
-    Args:
-        widget (GtkScrolledWindow)
-
-    Returns:
-        bool: The return value is False so it can be used with GLib.idle_add.
-    """
-    adj_v = widget.get_vadjustment()
-    if adj_v is None:  # pyright: ignore
-        # This can happen when the Widget is already destroyed when called
-        # from GLib.idle_add
-        return False
-    max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
-    adj_v.set_value(max_scroll_pos)
-
-    adj_h = widget.get_hadjustment()
-    adj_h.set_value(0)
-    return False
-
-
 def scroll_to(widget: Gtk.ScrolledWindow, pos: Literal["top", "bottom"]) -> bool:
     """Scrolls to `pos` of a GtkScrolledWindow.
 

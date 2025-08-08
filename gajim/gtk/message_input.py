@@ -37,7 +37,7 @@ from gajim.gtk.completion.nickname import NicknameCompletionProvider
 from gajim.gtk.completion.popover import CompletionPopover
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_message_input_extra_context_menu
-from gajim.gtk.util.misc import scroll_to_end
+from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.widgets import GdkRectangle
 
 if app.is_installed("SPELLING") or typing.TYPE_CHECKING:
@@ -283,7 +283,7 @@ class MessageInputTextView(GtkSource.View):
         mark = buf.get_insert()
         iter_ = buf.get_iter_at_mark(mark)
         if buf.get_end_iter().equal(iter_):
-            GLib.idle_add(scroll_to_end, self.get_parent())
+            GLib.idle_add(scroll_to, self.get_parent(), "bottom")
 
     @property
     def has_text(self) -> bool:
@@ -303,7 +303,7 @@ class MessageInputTextView(GtkSource.View):
         mark = buf.get_insert()
         iter_ = buf.get_iter_at_mark(mark)
         if iter_.get_offset() == buf.get_end_iter().get_offset():
-            GLib.idle_add(scroll_to_end, textview.get_parent())
+            GLib.idle_add(scroll_to, textview.get_parent(), "bottom")
 
     def _get_active_iters(self) -> tuple[Gtk.TextIter, Gtk.TextIter]:
         buf = self.get_buffer()

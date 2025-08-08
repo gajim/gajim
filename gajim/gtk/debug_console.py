@@ -34,7 +34,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util.misc import at_the_end
-from gajim.gtk.util.misc import scroll_to_end
+from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.util.styling import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -653,7 +653,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         buffer_.insert_with_tags_by_name(end_iter, text, type_, kind, event.account)
 
         if is_at_the_end:
-            GLib.idle_add(scroll_to_end, self._ui.scrolled)
+            GLib.idle_add(scroll_to, self._ui.scrolled, "bottom")
 
 
 class SentSzanzas:

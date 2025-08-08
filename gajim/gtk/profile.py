@@ -33,7 +33,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.util.misc import ensure_not_destroyed
-from gajim.gtk.util.misc import scroll_to_end
+from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.vcard_grid import VCardGrid
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -227,7 +227,7 @@ class ProfileWindow(GajimAppWindow):
         name = action.get_name()
         key = name.split("-")[1]
         self._vcard_grid.add_new_property(key)
-        GLib.idle_add(scroll_to_end, self._ui.scrolled)
+        GLib.idle_add(scroll_to, self._ui.scrolled, "bottom")
 
     def _on_edit_clicked(self, *args: Any) -> None:
         self._vcard_grid.set_editable(True)
