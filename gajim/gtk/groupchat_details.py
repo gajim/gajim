@@ -117,7 +117,10 @@ class GroupchatDetails(GajimAppWindow):
 
     def _add_groupchat_info(self) -> None:
         self._groupchat_info = GroupChatInfoScrolled(
-            self._contact.account, width=600, edit_mode=True
+            self._contact.account,
+            width=600,
+            edit_mode=True,
+            show_users=False,
         )
         self._connect(
             self._groupchat_info, "name-updated", self._on_contact_name_updated

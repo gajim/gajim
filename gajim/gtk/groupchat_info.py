@@ -117,6 +117,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         width: int = 300,
         minimal: bool = False,
         edit_mode: bool = False,
+        show_users: bool = True,
     ) -> None:
         SignalManager.__init__(self)
         Gtk.ScrolledWindow.__init__(self)
@@ -124,6 +125,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self.set_halign(Gtk.Align.CENTER)
 
         self._minimal = minimal
+        self._show_users = show_users
 
         if minimal:
             self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
@@ -240,8 +242,8 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         # Set user
         has_users = info.muc_users is not None
         self._ui.users.set_text(info.muc_users or "")
-        self._ui.users.set_visible(has_users)
-        self._ui.users_image.set_visible(has_users)
+        self._ui.users.set_visible(has_users and self._show_users)
+        self._ui.users_image.set_visible(has_users and self._show_users)
 
         # Set contacts
         container_remove_all(self._ui.contact_box)
