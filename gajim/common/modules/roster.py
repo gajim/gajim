@@ -145,6 +145,12 @@ class Roster(BaseModule):
         app.ged.raise_event(RosterPush(account=self._account,
                                        item=item))
 
+        contact = self._con.get_module('Contacts').get_contact(item.jid)
+        if contact is None:
+            return
+
+        contact.notify('nickname-update')
+
         raise nbxmpp.NodeProcessed
 
     def get_item(self, jid: JID) -> RosterItem | None:
