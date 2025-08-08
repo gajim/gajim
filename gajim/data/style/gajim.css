@@ -891,7 +891,7 @@ list.sidebar-switcher .sidebar-row-header {
 
 /* OMEMO */
 .omemo-inactive-color { color: var(--light-5); }
-.omemo-fingerprint label.subtitle { font-size: 1em }
+.omemo-fingerprint label.subtitle { font-size: 1em; }
 
 /* StartChatDialog */
 .start-chat-treeview { padding: 5px; }
