@@ -28,8 +28,8 @@ finish-args:
   # GnuPG
   - --filesystem=~/.gnupg
   - --filesystem=xdg-run/gnupg
-  # camera access
-  - --device=all
+  # gpu acceleration
+  - --device=dri
   # extensions
   - --env=PYTHONPATH=/app/plugins/site-packages
   - --env=GI_TYPELIB_PATH=/app/lib/girepository-1.0:/app/plugins/lib/girepository-1.0
