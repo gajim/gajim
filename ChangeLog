@@ -1,3 +1,56 @@
+Gajim 2.3.4 (11 Aug 2025)
+
+  New
+
+  * VCard4: Support timezone field
+
+  Improvements
+
+  * Start Chat: Improve label readability
+  * Chat function page: Improve group chat error descriptions (#12392)
+  * GroupchatRoster: Display participants count
+  * OMEMOTrustManager: Add copy button and make some design improvements (#12421)
+  * Loosen matching rules for URL query strings
+  * Profile: Improve 'Remove' button style and center TZ description
+  * Shortcuts: Bind Ctrl+W to close Gajim if no chat is selected (#11960)
+  * Update unread count when closing chat
+  * Chat rows: Add CSS classes for identifying message direction (#12374)
+  * Chat: Handle images drag&drop from browsers
+  * Emoji completion: Sort emojis
+  * Main: Make Escape close the window independent of chat setting
+  * Main: Hide chat on escape (#12381)
+  * AdHoc: Improve displayed errors (#12376)
+  * Set stream language (#11767)
+
+  Change
+
+  * Raise nbxmpp version
+  * Flatpak: Reduce required device access to GPU acceleration only
+  * Chat: Display content inline when clicking [read more]
+  * Preview audio visualizer: Use Adw accent color (#12373)
+
+  Bug Fixes
+
+  * Preview: Update widget in the main thread
+  * Message row actions: Don't scroll when hovering actions bar (#12001)
+  * GroupchatDetails: Hide user count (#12417)
+  * ChatList: Update contact nicknames on change (#12423)
+  * Reactions: Correctly count when reacting to own messages
+  * Profile: Don’t escape nickname (#12420)
+  * JingleFileTransferRow: Fix missing attribute
+  * Accounts: Don’t apply SASLPrep to passwords (#12312)
+  * Improve nickname matching for preceding apostrophes (#11918)
+  * Group chats: Fix starting chat when real JID is unknown (#11761)
+  * Group chat: Fix showing participant menu when real JID is unknown (#12410)
+  * Notifications: Catch errors when trying to initialize Windows backend (#12409)
+  * File transfer: Fix warning message when invoking send-file action
+  * Chat function page: Set contact name correctly for 'Note to myself'
+  * Messages: Align LTR/RTL messages correctly if the global direction differs (#12383)
+  * StartChat: Make sure entry always has focus (#12396)
+  * Plugins: Don't fail when trying to check for plugin errors; improve logging
+  * Message input: Grab focus after selecting emoji (#12378)
+  * Message actions box: Support pasting image/bmp (#12367)
+
 Gajim 2.3.3 (13 Jul 2025)
 
   Improvements
