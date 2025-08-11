@@ -368,14 +368,16 @@ class PreviewManager:
                 preview.size,
                 preview.mime_type,
             )
-            future.add_done_callback(partial(self._write_thumbnail, preview))
+            future.add_done_callback(
+                partial(GLib.idle_add, self._write_thumbnail, preview)
+            )
         except Exception as error:
             preview.info_message = _('Creating thumbnail failed')
             preview.update_widget()
             log.warning('Creating thumbnail failed for: %s %s',
                         preview.orig_path, error)
 
-    def _write_thumbnail(self, preview: Preview, future: Future[bytes | None]) -> None:
+    def _write_thumbnail(self, preview: Preview, future: Future[bytes | None]) -> bool:
         try:
             result = future.result()
             if result is None:
@@ -385,7 +387,7 @@ class PreviewManager:
             preview.update_widget()
             log.warning('Creating thumbnail failed for: %s %s',
                         preview.orig_path, error)
-            return
+            return GLib.SOURCE_REMOVE
 
         preview.thumbnail = result
 
@@ -394,6 +396,8 @@ class PreviewManager:
                          preview.thumbnail,
                          self._on_thumb_write_finished,
                          preview)
+
+        return GLib.SOURCE_REMOVE
 
     def _process_web_uri(self,
                          uri: str,
