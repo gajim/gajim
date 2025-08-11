@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -33,6 +33,13 @@ msgstr ""
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Účastník"
+msgstr[1] "Účastník"
+msgstr[2] "Účastník"
 
 #, python-format
 msgid ""
@@ -1571,6 +1578,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopírovať umiestnenie odkazu"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopírovať umiestnenie odkazu"
 
@@ -2383,10 +2394,6 @@ msgid "From"
 msgstr "Od"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Správa odoslaná"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Celé meno</b>"
 
@@ -2798,6 +2805,10 @@ msgid "Invalid domain name"
 msgstr "Nesprávny názov účtu"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Neplatný názov servera"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Umiestnenie:"
 
@@ -2814,7 +2825,7 @@ msgid "Invite Contacts"
 msgstr "Pozvať _kontakty"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Pozvať _kontakty"
 
 #, fuzzy
@@ -3692,9 +3703,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Heslo je požadované"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Heslá sa nezhodujú"
 
@@ -3826,6 +3834,10 @@ msgstr "Registrácia zlyhala"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Tento súbor už existuje"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Služba nebola nájdená"
 
 msgid "Plugins"
 msgstr ""
@@ -5376,6 +5388,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5489,6 +5506,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Neprítomný"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Čas"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7205,6 +7227,10 @@ msgstr ""
 #~ msgstr "Súkromné rozhovory"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Správa odoslaná"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
 
@@ -7521,9 +7547,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet nie je pripojený k serveru"
-
-#~ msgid "Time"
-#~ msgstr "Čas"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

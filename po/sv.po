@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -34,6 +34,12 @@ msgstr "%(contact)s avböjde din inbjudan till %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s bjöd in dig till %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Deltagare"
+msgstr[1] "Deltagare"
 
 #, python-format
 msgid ""
@@ -1475,6 +1481,10 @@ msgstr "Kopiera kodsnutt"
 msgid "Copy info to clipboard"
 msgstr "Kopiera information till urklipp"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Kopiera till urklipp"
+
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
 
@@ -2222,9 +2232,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Från"
 
-msgid "Full Message View"
-msgstr "Fullständig meddelandevy"
-
 msgid "Full Name"
 msgstr "Fullständigt namn"
 
@@ -2629,6 +2636,10 @@ msgid "Invalid domain name"
 msgstr "Ogiltigt kontonamn"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Ogiltigt servernamn"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Notifiering"
 
@@ -2645,7 +2656,7 @@ msgid "Invite Contacts"
 msgstr "Bjud in _kontakter"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Bjud in _kontakter"
 
 #, fuzzy
@@ -3466,9 +3477,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Lösenord krävs"
 
-msgid "Password contains prohibited characters"
-msgstr "Lösenordet innehåller förbjudna tecken"
-
 msgid "Passwords do not match"
 msgstr "Lösenorden stämmer inte överens"
 
@@ -3589,6 +3597,10 @@ msgstr "Uppdateringar för tillägg"
 
 msgid "Plugin already exists"
 msgstr "Tillägget existerar redan"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Denna tjänst kunde inte hittas"
 
 msgid "Plugins"
 msgstr ""
@@ -5115,6 +5127,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5228,6 +5245,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Inte tillgänglig"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tid"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6976,6 +6998,9 @@ msgstr ""
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrera chattar…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Fullständig meddelandevy"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
@@ -7113,6 +7138,9 @@ msgstr ""
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Lösenordet innehåller förbjudna tecken"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pausa eller återuppta filöverföringen"
@@ -7320,9 +7348,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Detta konto är inte anslutet till servern"
-
-#~ msgid "Time"
-#~ msgstr "Tid"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

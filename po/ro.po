@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -33,6 +33,13 @@ msgstr "%(contact)s a refuzat invitația dumneavoastră la %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s v-a invitat la %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participantul"
+msgstr[1] "Participantul"
+msgstr[2] "Participantul"
 
 #, python-format
 msgid ""
@@ -1421,6 +1428,10 @@ msgstr "Copiați fragmentul de cod"
 msgid "Copy info to clipboard"
 msgstr "Copierea informațiilor în clipboard"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copiați în clipboard"
+
 msgid "Copy to clipboard"
 msgstr "Copiați în clipboard"
 
@@ -2161,9 +2172,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De la"
 
-msgid "Full Message View"
-msgstr "Vizualizare completă a mesajului"
-
 msgid "Full Name"
 msgstr "Nume și prenume"
 
@@ -2550,6 +2558,10 @@ msgid "Invalid domain name"
 msgstr "Nume de domeniu invalid"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Nume server invalid"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Invitație la spectacol"
 
@@ -2563,7 +2575,8 @@ msgstr "Invitați"
 msgid "Invite Contacts"
 msgstr "Invitați contacte"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Invitați la acest chat"
 
 msgid "Invitees"
@@ -3358,9 +3371,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Parolă Necesară"
 
-msgid "Password contains prohibited characters"
-msgstr "Parola conține caractere interzise"
-
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
 
@@ -3481,6 +3491,10 @@ msgstr "Actualizări Plugin"
 
 msgid "Plugin already exists"
 msgstr "Plugin-ul există deja"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Imaginea selectată nu a putut fi încărcată."
 
 msgid "Plugins"
 msgstr "Plugin-uri"
@@ -4857,6 +4871,11 @@ msgstr "Acest grup de chat nu necesită o parolă la intrare"
 msgid "This group chat does require a password upon entry"
 msgstr "Acest grup de chat necesită o parolă la intrare"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Acest grup de chat este restricționat doar pentru membri"
 
@@ -4974,6 +4993,11 @@ msgstr "Timp până la distanță"
 
 msgid "Time Until Not Available"
 msgstr "Timp până când nu este disponibil"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Timp"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6643,6 +6667,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrați chat-urile…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Vizualizare completă a mesajului"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Echipa Gajim"
 
@@ -6818,6 +6845,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_use/Rezumat"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Parola conține caractere interzise"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Întrerupeți sau reluați transferul de fișiere"
@@ -7080,9 +7110,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Acest cont nu este conectat la server"
-
-#~ msgid "Time"
-#~ msgstr "Timp"
 
 #~ msgid "Topic"
 #~ msgstr "Subiect"

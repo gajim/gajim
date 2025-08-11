@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-03 02:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -35,6 +35,11 @@ msgstr "%(contact)s は %(chat)s への招待を断りました"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s はあなたを %(chat)s に招待しました"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "参加者"
 
 #, python-format
 msgid ""
@@ -1393,6 +1398,10 @@ msgstr "コードスニペットをコピー"
 msgid "Copy info to clipboard"
 msgstr "情報をクリップボードにコピー"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "クリップボードにコピー"
+
 msgid "Copy to clipboard"
 msgstr "クリップボードにコピー"
 
@@ -2104,9 +2113,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "こちらが承認"
 
-msgid "Full Message View"
-msgstr "全メッセージ表示"
-
 msgid "Full Name"
 msgstr "名前(フルネーム)"
 
@@ -2473,6 +2479,10 @@ msgstr "アドレスが正しくありません: %s"
 msgid "Invalid domain name"
 msgstr "ドメイン名が正しくありません"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "サーバー名が正しくありません"
+
 msgid "Invitation"
 msgstr "招待"
 
@@ -2485,7 +2495,8 @@ msgstr "招待"
 msgid "Invite Contacts"
 msgstr "相手先を招待"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "この談話室に招待"
 
 msgid "Invitees"
@@ -3264,9 +3275,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "要パスワード"
 
-msgid "Password contains prohibited characters"
-msgstr "パスワードに禁止文字が含まれています"
-
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
 
@@ -3383,6 +3391,10 @@ msgstr "プラグインの更新"
 
 msgid "Plugin already exists"
 msgstr "プラグインは既に存在しています"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "選択された画像を読み込めませんでした。"
 
 msgid "Plugins"
 msgstr "プラグイン"
@@ -4707,6 +4719,11 @@ msgstr "この談話室に入るにはパスワードは不要です"
 msgid "This group chat does require a password upon entry"
 msgstr "この談話室に入るにはパスワードが必要です"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "この談話室はメンバーのみ入室できます"
 
@@ -4822,6 +4839,11 @@ msgstr "「離席」までの時間"
 
 msgid "Time Until Not Available"
 msgstr "「不在」までの時間"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "時間"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6455,6 +6477,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Filter Chats…"
 #~ msgstr "チャットを絞り込む…"
 
+#~ msgid "Full Message View"
+#~ msgstr "全メッセージ表示"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim チーム"
 
@@ -6630,6 +6655,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "一時中断/再開 (_U)"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "パスワードに禁止文字が含まれています"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "ファイルの転送を一時中断または再開します"
@@ -6885,9 +6913,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "このアカウントはサーバーに接続していません"
-
-#~ msgid "Time"
-#~ msgstr "時間"
 
 #~ msgid "Topic"
 #~ msgstr "話題"

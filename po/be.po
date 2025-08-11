@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -32,6 +32,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact запрасіў Вас у групавую размову %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Удзельнік"
+msgstr[1] "Удзельнік"
+msgstr[2] "Удзельнік"
 
 #, python-format
 msgid ""
@@ -1561,6 +1568,10 @@ msgid "Copy info to clipboard"
 msgstr "_Скапіяваць адрас спасылкі"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Скапіяваць адрас спасылкі"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Скапіяваць адрас спасылкі"
 
@@ -2374,10 +2385,6 @@ msgid "From"
 msgstr "Ад"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Паведамленне адпраўленае"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Адмысловы</b>"
 
@@ -2791,6 +2798,10 @@ msgid "Invalid domain name"
 msgstr "Няправільная назва рахунка"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Няправільнае імя карыстальніка"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Змяненне рахунка"
 
@@ -2807,7 +2818,7 @@ msgid "Invite Contacts"
 msgstr "Людзі"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Людзі"
 
 #, fuzzy
@@ -3692,9 +3703,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Патрабуецца пароль"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Паролі розняцца"
 
@@ -3825,6 +3833,10 @@ msgstr "Памылка злучэння"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Такі файл ужо ёсць"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Немагчыма знайсці сервіс"
 
 msgid "Plugins"
 msgstr ""
@@ -5364,6 +5376,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5477,6 +5494,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Мяне няма"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Час"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7183,6 +7205,10 @@ msgstr ""
 #~ msgstr "Прыватныя размовы"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Паведамленне адпраўленае"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7495,9 +7521,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Рахунак \"%s\" злучаны з серверам"
-
-#~ msgid "Time"
-#~ msgstr "Час"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

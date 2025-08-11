@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -32,6 +32,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "Pedet oc'h bet gant %(contact_jid)s er sal-flapiñ %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Perzhiad-ez"
+msgstr[1] "Perzhiad-ez"
 
 #, python-format
 msgid ""
@@ -1558,6 +1564,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopiañ chomlec'h an ere"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopiañ chomlec'h an ere"
 
@@ -2367,10 +2377,6 @@ msgid "From"
 msgstr "Digant"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Kemennadenn gaset"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Personelaet</b>"
 
@@ -2776,6 +2782,10 @@ msgid "Invalid domain name"
 msgstr "Anv-kont direizh"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Anv-arveriad-ez direizh"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Kemmañ ar gont"
 
@@ -2792,7 +2802,7 @@ msgid "Invite Contacts"
 msgstr "Darempredoù"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Darempredoù"
 
 #, fuzzy
@@ -3676,9 +3686,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Ger-kuzh ret"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Ne glot ket ar gerioù-kuzh"
 
@@ -3809,6 +3816,10 @@ msgstr "échec lors de la publication de votre vCard"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Bez ez eus eus ar restr-mañ dija"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "N'eo ket bet kavet ar servij"
 
 msgid "Plugins"
 msgstr ""
@@ -5335,6 +5346,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5449,6 +5465,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Dihegerz"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Mare"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7141,6 +7162,10 @@ msgstr ""
 #~ msgstr "Flapoù prevez"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Kemennadenn gaset"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7443,9 +7468,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
-
-#~ msgid "Time"
-#~ msgstr "Mare"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

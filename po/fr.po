@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-09 05:12+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
-"\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,6 +39,12 @@ msgstr "%(contact)s a décliné votre invitation sur %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s vous a invité dans le salon %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participant·e"
+msgstr[1] "Participant·e"
 
 #, python-format
 msgid ""
@@ -1412,6 +1418,10 @@ msgstr "Copier le bout de code"
 msgid "Copy info to clipboard"
 msgstr "Copier l'information dans le presse-papier"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copier dans le presse-papier"
+
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse-papier"
 
@@ -2131,9 +2141,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
-msgid "Full Message View"
-msgstr "Message complet"
-
 msgid "Full Name"
 msgstr "Nom complet"
 
@@ -2507,6 +2514,10 @@ msgstr "Adresse non valide : %s"
 msgid "Invalid domain name"
 msgstr "Nom de domaine invalide"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Nom de serveur invalide"
+
 msgid "Invitation"
 msgstr "Invitation"
 
@@ -2519,7 +2530,8 @@ msgstr "Inviter"
 msgid "Invite Contacts"
 msgstr "Inviter des contacts"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Inviter à cette discussion"
 
 msgid "Invitees"
@@ -3294,9 +3306,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Mot de passe requis"
 
-msgid "Password contains prohibited characters"
-msgstr "Le mot de passe contient des caractères interdits"
-
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
 
@@ -3413,6 +3422,10 @@ msgstr "Mises à jour des extensions"
 
 msgid "Plugin already exists"
 msgstr "L'extension existe déjà"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "L'image sélectionnée n'a pas pu être chargée."
 
 msgid "Plugins"
 msgstr "Extensions"
@@ -4753,6 +4766,11 @@ msgstr "L'accès à ce salon ne nécessite pas de mot de passe"
 msgid "This group chat does require a password upon entry"
 msgstr "L'accès à ce salon nécessite un mot de passe"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Ce salon est réservé aux membres uniquement"
 
@@ -4867,6 +4885,11 @@ msgstr "Délai avant absence"
 
 msgid "Time Until Not Available"
 msgstr "Délai avant Non disponible"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Durée"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6561,6 +6584,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrer les discussions…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Message complet"
+
 #~ msgid "Gajim Team"
 #~ msgstr "L'équipe Gajim"
 
@@ -6743,6 +6769,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "S_uspendre/Reprendre"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Le mot de passe contient des caractères interdits"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Mettre en pause ou reprendre le transfert de fichier"
@@ -7015,9 +7044,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ce compte n'est pas connecté au serveur"
-
-#~ msgid "Time"
-#~ msgstr "Durée"
 
 #~ msgid "Topic"
 #~ msgstr "Sujet"

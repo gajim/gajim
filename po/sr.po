@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact Вас је позвао на групни разговор у собу %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Учесник"
+msgstr[1] "Учесник"
 
 #, python-format
 msgid ""
@@ -1576,6 +1582,10 @@ msgid "Copy info to clipboard"
 msgstr "_Копирај локацију везе"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Копирај локацију везе"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Копирај локацију везе"
 
@@ -2390,10 +2400,6 @@ msgid "From"
 msgstr "Од"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Порука Послата"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Пуно име</b>"
 
@@ -2805,6 +2811,10 @@ msgid "Invalid domain name"
 msgstr "Неисправно име налога"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Неисправано име сервера"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Обавештење"
 
@@ -2821,7 +2831,7 @@ msgid "Invite Contacts"
 msgstr "Позови контакте"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Позови контакте"
 
 #, fuzzy
@@ -3703,9 +3713,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Лозинка захтевана"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Лозинке се не поклапају"
 
@@ -3837,6 +3844,10 @@ msgstr "Регистрација неуспела"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Ова датотека већ постоји"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Услуга не може бити нађена"
 
 msgid "Plugins"
 msgstr ""
@@ -5387,6 +5398,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5500,6 +5516,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Недоступан"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Време"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7220,6 +7241,10 @@ msgstr ""
 #~ msgstr "Приватни Разговори"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Порука Послата"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Гајим - %s"
 
@@ -7538,9 +7563,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Овај налог није повезан на сервер"
-
-#~ msgid "Time"
-#~ msgstr "Време"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

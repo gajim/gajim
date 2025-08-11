@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -33,6 +33,12 @@ msgstr "%(contact)s recusou seu convite para %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s convidou você para %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participante"
 
 #, python-format
 msgid ""
@@ -1446,6 +1452,10 @@ msgid "Copy info to clipboard"
 msgstr "Copiar informações para a área de transferência"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copiar informações para a área de transferência"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Copiar informações para a área de transferência"
 
@@ -2207,10 +2217,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
-#, fuzzy
-msgid "Full Message View"
-msgstr "Mensagem Enviada"
-
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -2596,6 +2602,10 @@ msgid "Invalid domain name"
 msgstr "Nome de Domínio inválido"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Servidor de Nome Inválido"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Mostrar Localização"
 
@@ -2611,7 +2621,7 @@ msgid "Invite Contacts"
 msgstr "Convidar Contatos"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Mudar para a aba anterior"
 
 msgid "Invitees"
@@ -3439,9 +3449,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Senha Necessária"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "As senhas não conferem"
 
@@ -3566,6 +3573,10 @@ msgstr "Atualizações dos Plugins"
 
 msgid "Plugin already exists"
 msgstr "O plugin já existe"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "A imagem selecionada não pôde ser carregada."
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -4986,6 +4997,11 @@ msgstr "Este bate-papo em grupo não requer uma senha na entrada"
 msgid "This group chat does require a password upon entry"
 msgstr "Este bate-papo em grupo requer uma senha na entrada"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Este bate-papo em grupo é restrito apenas a membros"
 
@@ -5108,6 +5124,11 @@ msgstr "Tempo Até Ficar Ausente"
 
 msgid "Time Until Not Available"
 msgstr "Tempo Até Ficar Não Disponível"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tempo"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6801,6 +6822,10 @@ msgstr "…ou solte aqui"
 #~ msgstr "Filtrar Bate-papos…"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Mensagem Enviada"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim Temas"
 
@@ -7230,9 +7255,6 @@ msgstr "…ou solte aqui"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta conta não está conectada ao servidor"
-
-#~ msgid "Time"
-#~ msgstr "Tempo"
 
 #~ msgid "Topic"
 #~ msgstr "Tópico"

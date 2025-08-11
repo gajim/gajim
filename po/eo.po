@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -34,6 +34,12 @@ msgstr "%(contact)s malakceptis vian inviton %(chat)s"
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Partoprenanto"
+msgstr[1] "Partoprenanto"
 
 #, python-format
 msgid ""
@@ -1560,6 +1566,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopii ligilan lokon"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopii ligilan lokon"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopii ligilan lokon"
 
@@ -2371,10 +2381,6 @@ msgid "From"
 msgstr "De"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Mesaĝo sendita"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Propraj</b>"
 
@@ -2788,6 +2794,10 @@ msgid "Invalid domain name"
 msgstr "Malkorekta kontnomo"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Malkorekta salutnomo"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Konta korektado"
 
@@ -2804,7 +2814,7 @@ msgid "Invite Contacts"
 msgstr "Kontaktoj"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Kontaktoj"
 
 #, fuzzy
@@ -3689,9 +3699,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasvorto necesas"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Pasvortoj diversas"
 
@@ -3822,6 +3829,10 @@ msgstr "Konektado malsukcesis"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Tiu dosiero jam ekzistas"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Neniu servo estas trovita"
 
 msgid "Plugins"
 msgstr "Kromaĵoj"
@@ -5359,6 +5370,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5473,6 +5489,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Nedisponebla"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tempo"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7190,6 +7211,10 @@ msgstr ""
 #~ msgstr "Privataj interparoloj"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Mesaĝo sendita"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7522,9 +7547,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Konto \"%s\" estas konektita al la servilo"
-
-#~ msgid "Time"
-#~ msgstr "Tempo"
 
 #~ msgid "Topic"
 #~ msgstr "Temo"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -40,6 +40,12 @@ msgstr "%(contact)s recusou o convite para %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s convidou você para %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participante"
 
 #, python-format
 msgid ""
@@ -1413,6 +1419,10 @@ msgstr "Copiar código snippet"
 msgid "Copy info to clipboard"
 msgstr "Copiar informações para a área de transferência (clipboard)"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copiar para a área de transferência"
+
 msgid "Copy to clipboard"
 msgstr "Copiar para a área de transferência"
 
@@ -2124,9 +2134,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
-msgid "Full Message View"
-msgstr "Visualização Completa de Mensagem"
-
 msgid "Full Name"
 msgstr "Nome completo"
 
@@ -2495,6 +2502,10 @@ msgstr "Endereço inválido: %s"
 msgid "Invalid domain name"
 msgstr "Nome de domínio inválido"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Nome do servidor inválido"
+
 msgid "Invitation"
 msgstr "Convite"
 
@@ -2507,7 +2518,8 @@ msgstr "Convidar"
 msgid "Invite Contacts"
 msgstr "Convidar Contatos"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Convidar para esta conversa"
 
 msgid "Invitees"
@@ -3281,9 +3293,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Senha é Obrigatória"
 
-msgid "Password contains prohibited characters"
-msgstr "A senha possui caracteres proibidos"
-
 msgid "Passwords do not match"
 msgstr "Senhas não conferem"
 
@@ -3400,6 +3409,10 @@ msgstr "Atualização de Plugin"
 
 msgid "Plugin already exists"
 msgstr "O plugin já existe"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "A imagem selecionada não pôde ser carregada."
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -4731,6 +4744,11 @@ msgstr "Este bate-papo em grupo não requer uma senha na entrada"
 msgid "This group chat does require a password upon entry"
 msgstr "Este bate-papo em grupo requer uma senha após a entrada"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Este bate-papo em grupo é restrito apenas aos membros"
 
@@ -4851,6 +4869,11 @@ msgstr "Tempo até Ausente"
 
 msgid "Time Until Not Available"
 msgstr "Tempo até Não Disponível"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tempo"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6519,6 +6542,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Filter Chats…"
 #~ msgstr "Conversas privadas"
 
+#~ msgid "Full Message View"
+#~ msgstr "Visualização Completa de Mensagem"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
@@ -6700,6 +6726,9 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_use/Currículo"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "A senha possui caracteres proibidos"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -6966,9 +6995,6 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta conta não está conectada ao servidor"
-
-#~ msgid "Time"
-#~ msgstr "Tempo"
 
 #~ msgid "Topic"
 #~ msgstr "Tópico"

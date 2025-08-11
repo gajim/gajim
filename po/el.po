@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -40,6 +40,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "Ο/Η %(contact_jid)s σας προσκάλεσε στο %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Συμμετέχων"
+msgstr[1] "Συμμετέχων"
 
 #, python-format
 msgid ""
@@ -1568,6 +1574,10 @@ msgid "Copy info to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Αντιγραφή τοποθεσίας δεσμού"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
@@ -2383,10 +2393,6 @@ msgid "From"
 msgstr "Από"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Το μήνυμα στάλθηκε"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Ιστορικό</b>"
 
@@ -2796,6 +2802,10 @@ msgid "Invalid domain name"
 msgstr "Μη έγκυρο όνομα λογαριασμού"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Μη έγκυρο όνομα χρήστη"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Τροποποίηση λογαριασμού"
 
@@ -2812,7 +2822,7 @@ msgid "Invite Contacts"
 msgstr "Επαφές"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Επαφές"
 
 #, fuzzy
@@ -3696,9 +3706,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Απαιτείται κωδικός"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Οι κωδικοί δεν ταιριάζουν"
 
@@ -3829,6 +3836,10 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Αυτό το αρχείο υπάρχει ήδη"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
 msgid "Plugins"
 msgstr ""
@@ -5363,6 +5374,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5477,6 +5493,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Μη διαθέσιμος"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Χρόνος"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7202,6 +7223,10 @@ msgstr ""
 #~ msgstr "Προσωπικές συζητήσεις"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Το μήνυμα στάλθηκε"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7515,9 +7540,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
-
-#~ msgid "Time"
-#~ msgstr "Χρόνος"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

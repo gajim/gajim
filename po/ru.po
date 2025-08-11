@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-12 15:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -42,6 +42,13 @@ msgstr "%(contact)s отклонил Ваше приглашение в %(chat)s
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s пригласил Вас в %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Участник"
+msgstr[1] "Участник"
+msgstr[2] "Участник"
 
 #, python-format
 msgid ""
@@ -1404,6 +1411,10 @@ msgstr "Копировать фрагмент кода"
 msgid "Copy info to clipboard"
 msgstr "Копировать информацию в буфер обмена"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Копировать в буфер обмена"
+
 msgid "Copy to clipboard"
 msgstr "Копировать в буфер обмена"
 
@@ -2114,9 +2125,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "От"
 
-msgid "Full Message View"
-msgstr "Полный просмотр сообщения"
-
 msgid "Full Name"
 msgstr "Полное имя"
 
@@ -2488,6 +2496,10 @@ msgstr "Недопустимый адрес: %s"
 msgid "Invalid domain name"
 msgstr "Недопустимое доменное имя"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Недопустимое имя сервера"
+
 msgid "Invitation"
 msgstr "Приглашение"
 
@@ -2500,7 +2512,8 @@ msgstr "Пригласить"
 msgid "Invite Contacts"
 msgstr "Пригласить контакты"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Пригласить в этот чат"
 
 msgid "Invitees"
@@ -3268,9 +3281,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Требуется пароль"
 
-msgid "Password contains prohibited characters"
-msgstr "Пароль содержит запрещённые символы"
-
 msgid "Passwords do not match"
 msgstr "Пароли не совпадают"
 
@@ -3388,6 +3398,10 @@ msgstr "Обновления подключаемых модулей"
 
 msgid "Plugin already exists"
 msgstr "Подключаемый модуль уже существует"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Выбранное изображение не может быть загружено."
 
 msgid "Plugins"
 msgstr "Модули"
@@ -4717,6 +4731,11 @@ msgstr "Этот групповой чат не требует пароля пр
 msgid "This group chat does require a password upon entry"
 msgstr "Этот групповой чат требует пароль при входе"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Этот групповой чат доступен только для участников"
 
@@ -4832,6 +4851,11 @@ msgstr "Время до установки статуса «Отошёл»"
 
 msgid "Time Until Not Available"
 msgstr "Время до установки статуса «Недоступен»"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Время"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6478,6 +6502,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Filter Chats…"
 #~ msgstr "Фильтр чатов…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Полный просмотр сообщения"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Темы Gajim"
@@ -6661,6 +6688,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Па_уза/Продолжить"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Пароль содержит запрещённые символы"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Приостановить или возобновить передачу файлов"
@@ -6924,9 +6954,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Учётная запись не подключена к серверу"
-
-#~ msgid "Time"
-#~ msgstr "Время"
 
 #~ msgid "Topic"
 #~ msgstr "Тема"

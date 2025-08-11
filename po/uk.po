@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -36,6 +36,13 @@ msgstr "%(contact)s відхилив запрошення до %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s запрошує вас до %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Учасник"
+msgstr[1] "Учасник"
+msgstr[2] "Учасник"
 
 #, python-format
 msgid ""
@@ -1438,6 +1445,10 @@ msgid "Copy info to clipboard"
 msgstr "Копіювати інформацію до буфера обміну"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Копіювати інформацію до буфера обміну"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Копіювати інформацію до буфера обміну"
 
@@ -2195,10 +2206,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Від"
 
-#, fuzzy
-msgid "Full Message View"
-msgstr "Повідомлення надіслано"
-
 msgid "Full Name"
 msgstr "Повне ім'я"
 
@@ -2617,6 +2624,10 @@ msgid "Invalid domain name"
 msgstr "Некоректна назва облікового запису"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Некоректна назва сервера"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Положення:"
 
@@ -2633,7 +2644,7 @@ msgid "Invite Contacts"
 msgstr "Запросити _контакти"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Запросити _контакти"
 
 #, fuzzy
@@ -3517,9 +3528,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Слід ввести пароль"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Паролі не збігаються"
 
@@ -3650,6 +3658,10 @@ msgstr "Активація додатка невдалаДодаток"
 
 msgid "Plugin already exists"
 msgstr "Додаток вже встановлено"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Не вдалося знайти службу"
 
 msgid "Plugins"
 msgstr "Додатки"
@@ -5196,6 +5208,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5310,6 +5327,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Дуже далеко"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Час"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7081,6 +7103,10 @@ msgstr ""
 #~ msgstr "Конфіденційні балачки"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Повідомлення надіслано"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Теми Gajim"
 
@@ -7435,9 +7461,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Цей обліковий запис не з’єднано з сервером"
-
-#~ msgid "Time"
-#~ msgstr "Час"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

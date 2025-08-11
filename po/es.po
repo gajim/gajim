@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
-"PO-Revision-Date: 2025-07-09 13:12+0000\n"
-"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"PO-Revision-Date: 2025-08-11 18:46+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -33,7 +33,13 @@ msgstr "%(contact)s ha rechazado tu invitación a %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
-msgstr "%(contact)s te ha sido invitado a %(chat)s"
+msgstr "%(contact)s te ha invitado a %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participante"
 
 #, python-format
 msgid ""
@@ -105,7 +111,7 @@ msgstr[1] "hace %(number)s minutos"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr "%(owner_or_admin_or_member)s de este grupo de conversación"
+msgstr "%(owner_or_admin_or_member)s de este grupo de chat"
 
 #, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
@@ -142,11 +148,11 @@ msgstr "%s solo puede unirse con invitación."
 
 #, python-format
 msgid "%s has been banned"
-msgstr "%s ha sido silenciado"
+msgstr "%s ha sido vetado"
 
 #, python-format
 msgid "%s has been invited to this group chat"
-msgstr "%s ha sido invitado a esta sala"
+msgstr "%s ha sido invitado a este grupo"
 
 #, python-format
 msgid "%s has been kicked"
@@ -335,11 +341,11 @@ msgid ""
 "resource)\n"
 msgstr ""
 "<b>Dirección XMPP</b>\n"
-"&lt;usuario@dominio/recurso&gt; (sólo ese recurso coincide)\n"
-"&lt;usuario@dominio&gt; (cualquier recurso coincide)\n"
-"&lt;dominio/recurso&gt; (sólo lo que coincida el recurso)\n"
-"&lt;dominio&gt; (el dominio en sí coincide, tal como hace cualquier "
-"usuario@dominio o dominio/recurso)\n"
+"&lt;usuario@dominio/recurso&gt; (únicamente ese recurso)\n"
+"&lt;usuario@dominio&gt; (cualquier recurso)\n"
+"&lt;dominio/recurso&gt; (sólo lo que coincida con ese recurso)\n"
+"&lt;dominio&gt; (el dominio en sí mismo: incluye cualquier usuario@dominio o "
+"dominio/recurso)\n"
 
 msgid "<error>"
 msgstr "<error>"
@@ -348,7 +354,7 @@ msgid "@APP_NAME@"
 msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
-msgstr "Un grupo necesita al menos un propietario"
+msgstr "Un Grupo necesita al menos un Propietario"
 
 msgid "A feature comparison of various providers"
 msgstr "Comparativa de características de varios proveedores"
@@ -361,10 +367,10 @@ msgid ""
 "chats."
 msgstr ""
 "Una lista de palabras separadas por ';' que serán resaltadas en los grupos "
-"de charla."
+"de chat."
 
 msgid "A new group chat has been created"
-msgstr "Se ha creado un nuevo salón"
+msgstr "Se ha creado un nuevo grupo de chat"
 
 msgid "A restart may be required for some settings to take effect"
 msgstr ""
@@ -568,7 +574,7 @@ msgid "Address"
 msgstr "Dirección"
 
 msgid "Address does not belong to a group chat server"
-msgstr "La dirección no pertenece a un servidor de grupo de conversación"
+msgstr "La dirección no pertenece a un servidor de grupo de chat"
 
 msgid "Adjust to Status"
 msgstr "Ajustar al estado"
@@ -617,7 +623,7 @@ msgstr "Afiliaciones"
 
 #, python-format
 msgid "Affiliations of %(nick)s to this group chat have been removed"
-msgstr "Se ha eliminado la afiliación %(nick)s de este grupo"
+msgstr "Se ha eliminado la afiliación de %(nick)s de este grupo"
 
 msgid "After"
 msgstr "Después"
@@ -713,7 +719,7 @@ msgid "Anyone can join"
 msgstr "Cualquiera se puede unir"
 
 msgid "Anyone can join this group chat"
-msgstr "Cualquiera se puede unir a este grupo de charla"
+msgstr "Cualquiera se puede unir a este grupo de chat"
 
 msgid "Application verification failure"
 msgstr "Falló la verificación de la aplicación"
@@ -760,7 +766,7 @@ msgid "Ask For Status Message on…"
 msgstr "Solicitar mensaje de estado al…"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr "Preguntar antes de cerrar una ventana/petaña de salón de charla."
+msgstr "Preguntar antes de cerrar una ventana/pestaña del grupo de chat."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Preguntar antes de salir cuando se cierre la ventana de Gajim"
@@ -873,14 +879,14 @@ msgid "Back soon"
 msgstr "Vuelvo pronto"
 
 msgid "Ban"
-msgstr "Prohibir"
+msgstr "Vetar"
 
 #, python-format
 msgid "Ban %s"
-msgstr "Prohibido %s"
+msgstr "Vetar a %s"
 
 msgid "Ban…"
-msgstr "Prohibir…"
+msgstr "Vetar…"
 
 msgid "Before"
 msgstr "Antes"
@@ -1058,25 +1064,25 @@ msgid ""
 "group chat."
 msgstr ""
 "Carácter a añadir después del apodo cuando se usa el completado de apodos "
-"(tab) en salas de chat."
+"(tab) en grupos de chat."
 
 msgid "Chat"
 msgstr "Chat"
 
 msgid "Chat Banner: Background Color"
-msgstr "Chat Banner: Color de fondo"
+msgstr "Cabecera de Chat: Color de fondo"
 
 msgid "Chat Banner: Foreground Color"
-msgstr "Chat Banner: Color de primer plano"
+msgstr "Cabecera de Chat: Color de primer plano"
 
 msgid "Chat Banner: Text Font"
-msgstr "Chat Banner: Tipografía de texto"
+msgstr "Cabecera de Chat: Tipografía de texto"
 
 msgid "Chat Details and Settings"
 msgstr "Detalles y ajustes del chat"
 
 msgid "Chat List"
-msgstr "Lista de conversaciones"
+msgstr "Lista de Chats"
 
 msgid "Chat Type"
 msgstr "Tipo de chat"
@@ -1094,7 +1100,7 @@ msgid "Chat window"
 msgstr "Ventana de chat"
 
 msgid "Chats"
-msgstr "Charlas"
+msgstr "Chats"
 
 msgid "Chats from this account will use this workspace by default"
 msgstr "Los chats de esta cuenta usarán por defecto este espacio de trabajo"
@@ -1164,7 +1170,7 @@ msgstr ""
 "(Ctrl + doble click para deseleccionarlos)"
 
 msgid "Click on contacts you would like to invite to this group chat."
-msgstr "Pincha en lo contactos que te gustaría invitar a este grupo."
+msgstr "Selecciona los contactos que te gustaría invitar a este grupo."
 
 msgid "Click to change time display"
 msgstr "Click para cambiar la visualización de la hora"
@@ -1189,7 +1195,7 @@ msgid "Close a chat by pressing the Escape key"
 msgstr "Cerrar un chat pulsando la tecla Escape"
 
 msgid "Close chat"
-msgstr "Cerrar conversación"
+msgstr "Cerrar chat"
 
 msgid "Close with Escape"
 msgstr "Cerrar con Escape"
@@ -1296,7 +1302,7 @@ msgid "Contact"
 msgstr "Contacto"
 
 msgid "Contact Addresses"
-msgstr "Direcciones de contactos"
+msgstr "Direcciones de contacto"
 
 msgid "Contact Connected"
 msgstr "Contacto conectado"
@@ -1317,22 +1323,22 @@ msgid "Contact List Exchange"
 msgstr "Intercambiar lista de contactos"
 
 msgid "Contact List: Contact Background Color"
-msgstr "Contact List: Color de fondo de contacto"
+msgstr "Lista de contactos: Color de fondo de contacto"
 
 msgid "Contact List: Contact Font"
-msgstr "Contact List: Tipografía de contacto"
+msgstr "Lista de contactos: Tipografía de contacto"
 
 msgid "Contact List: Contact Foreground Color"
-msgstr "Contact List: Color de primer plano de contacto"
+msgstr "Lista de contactos: Color de primer plano de contacto"
 
 msgid "Contact List: Group Background Color"
-msgstr "Contact List: Color de fondo de grupo"
+msgstr "Lista de contactos: Color de fondo de grupo"
 
 msgid "Contact List: Group Font"
-msgstr "Contact List: Tipografía de grupo"
+msgstr "Lista de contactos: Tipografía de grupo"
 
 msgid "Contact List: Group Foreground Color"
-msgstr "Contact List: Color de primer plano de grupo"
+msgstr "Lista de contactos: Color de primer plano de grupo"
 
 msgid "Contact Removed"
 msgstr "Contacto eliminada"
@@ -1347,16 +1353,16 @@ msgid "Contacts"
 msgstr "Contactos"
 
 msgid "Conversation: Nickname Color (Incoming)"
-msgstr "Conversation: Color de alias (Entrante)"
+msgstr "Conversación: Color de alias (Entrante)"
 
 msgid "Conversation: Nickname Color (Outgoing)"
-msgstr "Conversation: Color de alias (Saliente)"
+msgstr "Conversación: Color de alias (Saliente)"
 
 msgid "Conversation: Text Color"
-msgstr "Conversation: Color de texto"
+msgstr "Conversación: Color de texto"
 
 msgid "Conversation: Text Font"
-msgstr "Conversation: Tipografía de texto"
+msgstr "Conversación: Tipografía de texto"
 
 msgid "Conversations"
 msgstr "Conversaciones"
@@ -1394,6 +1400,10 @@ msgstr "Copiar fragmento de código"
 
 msgid "Copy info to clipboard"
 msgstr "Copiar información al portapapeles"
+
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copiar al portapapeles"
 
 msgid "Copy to clipboard"
 msgstr "Copiar al portapapeles"
@@ -1434,10 +1444,10 @@ msgid "Create Account"
 msgstr "Crear cuenta"
 
 msgid "Create Group Chat"
-msgstr "Crear grupo de charla"
+msgstr "Crear grupo de chat"
 
 msgid "Create Group Chat…"
-msgstr "Crear grupo de conversación…"
+msgstr "Crear grupo de chat…"
 
 msgid "Create New Account"
 msgstr "Crear nueva cuenta"
@@ -2021,7 +2031,7 @@ msgid "Filter"
 msgstr "Filtro"
 
 msgid "Filter Chats"
-msgstr "Filtrar conversaciones"
+msgstr "Filtrar Chats"
 
 msgid "Filters"
 msgstr "Filtros"
@@ -2103,9 +2113,6 @@ msgstr "De"
 msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
-
-msgid "Full Message View"
-msgstr "Vista de mensaje completo"
 
 msgid "Full Name"
 msgstr "Nombre completo"
@@ -2211,19 +2218,19 @@ msgid "Group Chat Details"
 msgstr "Detalles de grupo"
 
 msgid "Group Chat Invitation"
-msgstr "Invitación a grupo de charla"
+msgstr "Invitación a Grupo de Chat"
 
 msgid "Group Chat Language"
 msgstr "Idioma del grupo"
 
 msgid "Group Chat Message Highlight"
-msgstr "Resaltado de mensaje de grupo de charla"
+msgstr "Resaltado de mensaje de grupo de chat"
 
 msgid "Group Chat Message Received"
-msgstr "Mensaje de grupo de charla recibido"
+msgstr "Mensaje de grupo de chat recibido"
 
 msgid "Group Chats"
-msgstr "Grupos de charla"
+msgstr "Grupos de Chat"
 
 msgid "Group chat already exists"
 msgstr "El grupo ya existe"
@@ -2232,7 +2239,7 @@ msgid "Group chat can be found via search"
 msgstr "El grupo puede ser encontrado vía búsqueda"
 
 msgid "Group chat does not exist"
-msgstr "El grupo de charla no existe"
+msgstr "El grupo de chat no existe"
 
 msgid "Group chat has been destroyed"
 msgstr "El grupo ha sido destruido"
@@ -2241,19 +2248,19 @@ msgid "Group chat is closed"
 msgstr "El grupo está cerrado"
 
 msgid "Group chat is now fully anonymous"
-msgstr "El salón es ahora completamente anónimo"
+msgstr "El grupo es ahora completamente anónimo"
 
 msgid "Group chat is now non-anonymous"
-msgstr "El salón es ahora no anónimo"
+msgstr "El grupo es ahora no anónimo"
 
 msgid "Group chat is now semi-anonymous"
-msgstr "El salón es ahora semi-anónimo"
+msgstr "El grupo es ahora semi-anónimo"
 
 msgid "Group chat now does not show unavailable members"
-msgstr "El salón ahora no muestra miembros no disponibles"
+msgstr "El grupo ahora no muestra miembros no disponibles"
 
 msgid "Group chat now shows unavailable members"
-msgstr "El salón ahora muestra miembros no disponibles"
+msgstr "El grupo ahora muestra miembros no disponibles"
 
 msgid "Groups"
 msgstr "Grupos"
@@ -2298,7 +2305,7 @@ msgid "How to install plugins with Flatpak"
 msgstr "Como instalar plugins con Flatpak"
 
 msgid "I can see contact's online status"
-msgstr "Puedo ver el estado de los contactos"
+msgstr "Puedo ver el estado del contacto"
 
 msgid "I would like to add you to my contact list."
 msgstr "Me gustaría añadirte a mi lista de contactos."
@@ -2474,6 +2481,10 @@ msgstr "Dirección no válida: %s"
 msgid "Invalid domain name"
 msgstr "Nombre de dominio no válido"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Nombre de servidor no válido"
+
 msgid "Invitation"
 msgstr "Invitación"
 
@@ -2486,7 +2497,8 @@ msgstr "Invitar"
 msgid "Invite Contacts"
 msgstr "Invitar Contactos"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Invitar a este chat"
 
 msgid "Invitees"
@@ -2538,7 +2550,7 @@ msgid "Join"
 msgstr "Unirse"
 
 msgid "Join Group Chat"
-msgstr "Entrar a un salón de chat"
+msgstr "Entrar a un grupo de chat"
 
 msgid "Join Group Chat as…"
 msgstr "Unirse al grupo como…"
@@ -2547,7 +2559,7 @@ msgid "Join Group Chat?"
 msgstr "¿Unirse al grupo?"
 
 msgid "Join Groupchat…"
-msgstr "Unirse al grupo de charla…"
+msgstr "Unirse al grupo de chat…"
 
 msgid "Joining Group Chat…"
 msgstr "Unirse al grupo de chat…"
@@ -2744,7 +2756,7 @@ msgid "Members Only"
 msgstr "Solo miembros"
 
 msgid "Mention: Message Background Color"
-msgstr "Mention: Color de fondo de mensaje"
+msgstr "Mención: Color de fondo de mensaje"
 
 msgid "Message"
 msgstr "Mensaje"
@@ -2809,7 +2821,7 @@ msgstr "Moderado"
 
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr "Moderado…"
+msgstr "Moderar…"
 
 msgid "Moderation"
 msgstr "Moderación"
@@ -2939,7 +2951,7 @@ msgid "No commands available"
 msgstr "No hay comandos disponibles"
 
 msgid "No contact addresses published for this server."
-msgstr "No hay direcciones de contactos publicadas en este servidor."
+msgstr "No hay direcciones de contacto publicadas para este servidor."
 
 msgid ""
 "No contacts found\n"
@@ -3098,7 +3110,7 @@ msgid "Only Admins and Owners can modify the affiliation"
 msgstr "Solo los Administradores y Propietarios pueden modificar la afiliación"
 
 msgid "Only moderators can see your XMPP address"
-msgstr "Solo los moderadores puede ver tu dirección XMPP"
+msgstr "Solo los moderadores pueden ver tu dirección XMPP"
 
 msgid "Open"
 msgstr "Abrir"
@@ -3234,7 +3246,7 @@ msgid ""
 "Participants entering this group chat need to request permission to send "
 "messages"
 msgstr ""
-"Los participantes que entren en este chat grupal deben solicitar permiso "
+"Los participantes que entren en este grupo de chat deben solicitar permiso "
 "para enviar mensajes"
 
 msgid "Pass_word"
@@ -3255,9 +3267,6 @@ msgstr "Contraseña requerida"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Contraseña requerida"
-
-msgid "Password contains prohibited characters"
-msgstr "La contraseña contiene caracteres prohibidos"
 
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
@@ -3306,7 +3315,7 @@ msgid "Picture and Name"
 msgstr "Foto y nombre"
 
 msgid "Pin Chat"
-msgstr "Anclar Charla"
+msgstr "Anclar chat"
 
 msgid "Pinned"
 msgstr "Anclado"
@@ -3375,6 +3384,10 @@ msgstr "Actualizar complementos"
 
 msgid "Plugin already exists"
 msgstr "La extensión ya existe"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "No se ha podido cargar la imagen seleccionada."
 
 msgid "Plugins"
 msgstr "Extensiones"
@@ -3782,7 +3795,7 @@ msgid "Restart Pending"
 msgstr "Reinicio pendiente"
 
 msgid "Restore chat"
-msgstr "Restaurar conversación"
+msgstr "Restaurar chat"
 
 msgid "Restore last state"
 msgstr "Restaurar último estado"
@@ -4226,7 +4239,7 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Mostrar notificaciones incluso si estás Ausente, Ocupado, etc."
 
 msgid "Show on Startup"
-msgstr "Mostrar al iniciar el sistema"
+msgstr "Mostrar al inicio"
 
 msgid "Show only critical errors"
 msgstr "Mostrar solo errores críticos"
@@ -4336,7 +4349,7 @@ msgid "Start / Join Chat"
 msgstr "Iniciar / unirse a un chat"
 
 msgid "Start Chat"
-msgstr "Iniciar conversación"
+msgstr "Iniciar Chat"
 
 msgid "Start Chatting…"
 msgstr "Iniciar conversación…"
@@ -4379,7 +4392,7 @@ msgid "Status Message: Text Color"
 msgstr "Mensaje de estado: Color de texto"
 
 msgid "Status Message: Text Font"
-msgstr "Status Message: Tipografía de texto"
+msgstr "Mensaje de estado: Tipografía de texto"
 
 msgid "Status Messages in Participants List"
 msgstr "Mensajes de Estado en la Lista de Participantes"
@@ -4394,16 +4407,16 @@ msgid "Status message…"
 msgstr "Mensaje de estado…"
 
 msgid "Status: Away Color"
-msgstr "Status: Color para ausente"
+msgstr "Estado: Color para Ausente"
 
 msgid "Status: DND Color"
-msgstr "Status: Color de estado No molestar"
+msgstr "Estado: Color para No molestar"
 
 msgid "Status: Offline Color"
-msgstr "Status: Color para estado desconectado"
+msgstr "Estado: Color para Desconectado"
 
 msgid "Status: Online Color"
-msgstr "Status: Color para conectado"
+msgstr "Estado: Color para Conectado"
 
 msgid ""
 "Stay in contact: Chats and groups help you keep in touch with your friends "
@@ -4587,7 +4600,7 @@ msgid "The referenced message is not available."
 msgstr "El mensaje referenciado no está disponible."
 
 msgid "The server has assigned or modified your nickname in this group chat"
-msgstr "El servidor ha asignado o modificado tu alias en este salón"
+msgstr "El servidor ha asignado o modificado tu alias en este grupo"
 
 msgid "The server rejected the registration without an error message"
 msgstr "El servidor rechazó el registro sin mensaje de error"
@@ -4693,13 +4706,18 @@ msgid "This gateway does not support direct registering."
 msgstr "Esta pasarela no soporta registro directo."
 
 msgid "This group chat can not be found via search"
-msgstr "Este grupo de charla no puede ser encontrado vía búsqueda"
+msgstr "Este grupo de chat no puede ser encontrado vía búsqueda"
 
 msgid "This group chat does not require a password upon entry"
 msgstr "Este grupo no requiere de una contraseña para entrar"
 
 msgid "This group chat does require a password upon entry"
 msgstr "Este grupo requiere de una contraseña para entrar"
+
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
 
 msgid "This group chat is restricted to members only"
 msgstr "Este grupo es solo para miembros"
@@ -4813,6 +4831,11 @@ msgstr "Tiempo hasta Ausente"
 
 msgid "Time Until Not Available"
 msgstr "Tiempo hasta no disponible"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Hora"
 
 msgctxt "Profile"
 msgid "Title"
@@ -4984,7 +5007,7 @@ msgid "Unmute Chat"
 msgstr "Activar chat"
 
 msgid "Unpin Chat"
-msgstr "Desanclar charla"
+msgstr "Desanclar chat"
 
 msgid "Unsupported certificate purpose"
 msgstr "Propósito de certificado no soportado"
@@ -5164,7 +5187,7 @@ msgid "Website"
 msgstr "Página web"
 
 msgid "Welcome"
-msgstr "Bienvenido"
+msgstr "Te damos la bienvenida"
 
 msgid "What does this mean?"
 msgstr "¿Qué significa esto?"
@@ -5239,7 +5262,7 @@ msgstr "Tú"
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr "%s te has unido al grupo de charla"
+msgstr "%s te has unido al grupo de chat"
 
 msgid "You are a visitor"
 msgstr "Eres un visitante"
@@ -5285,7 +5308,7 @@ msgstr "Ahora eres %(affiliation)s en este grupo"
 
 #, python-format
 msgid "You are now %(role)s of this group chat"
-msgstr "Tu eres ahora %(role)s de este grupo"
+msgstr "Ahora eres %(role)s de este grupo"
 
 #, python-format
 msgid "You are now known as %s"
@@ -5303,10 +5326,10 @@ msgstr "Estás desconectado. Conecta para enviar mensajes…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
-msgstr "Puedes unirte a este salón en su lugar: %s"
+msgstr "Puedes unirte a este grupo en su lugar: %s"
 
 msgid "You can not join a group chat unless you are connected."
-msgstr "No puedes entrar a un salón de chat hasta que no estés conectado."
+msgstr "No puedes entrar a un grupo de chat hasta que no estés conectado."
 
 msgid "You can see the contact's online status"
 msgstr "Puedes ver el estado del contacto"
@@ -5318,7 +5341,7 @@ msgid "You cannot add yourself to your contact list."
 msgstr "No puedes añadirte a ti mismo a tu roster."
 
 msgid "You cannot see this contact's online status"
-msgstr "No puedo ver el estado de los contactos"
+msgstr "No puedes ver el estado de este contacto"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
@@ -5328,7 +5351,7 @@ msgid "You don't share your status with this contact"
 msgstr "No compartes tu estado con este contacto"
 
 msgid "You have been banned"
-msgstr "Has sido censurado"
+msgstr "Has sido vetado"
 
 #, python-format
 msgid "You have been banned by %s"
@@ -5400,7 +5423,7 @@ msgid "Your account has has been removed successfully."
 msgstr "Tu cuenta ha sido eliminada con éxito."
 
 msgid "Your affiliations to this group chat have been removed"
-msgstr "Se han quitado tus afiliaciones en este grupo de charla"
+msgstr "Se han quitado tus afiliaciones en este grupo de chat"
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Tus preferencias de archivado han sido guardadas con éxito."
@@ -5434,7 +5457,7 @@ msgid "Your public key or authentication certificate"
 msgstr "Tu clave pública o certificado de autenticación"
 
 msgid "Your roles in this group chat have been removed"
-msgstr "Se han quitado tus roles en este grupo de charla"
+msgstr "Se han quitado tus roles en este grupo de chat"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
@@ -6489,6 +6512,9 @@ msgstr "…o soltarla aqui"
 #~ "Para la verificación a través de QR-Code, debes instalar <tt>python-"
 #~ "qrcode</tt>."
 
+#~ msgid "Full Message View"
+#~ msgstr "Vista de mensaje completo"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Equipo Gajim"
 
@@ -6670,6 +6696,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usar/Reanudar"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "La contraseña contiene caracteres prohibidos"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pausar o reanudar la transferencia de fichero"
@@ -6937,9 +6966,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta cuentano está conectada al servidor"
-
-#~ msgid "Time"
-#~ msgstr "Hora"
 
 #~ msgid "Topic"
 #~ msgstr "Tema"

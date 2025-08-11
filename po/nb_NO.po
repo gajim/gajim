@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -36,6 +36,12 @@ msgstr "%(jid)s avslo invitasjonen: %(reason)s"
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact har invitert deg til gruppesamtalen %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Deltaker"
+msgstr[1] "Deltaker"
 
 #, python-format
 msgid ""
@@ -1553,6 +1559,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopier lenke-plassering"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopier lenke-plassering"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopier lenke-plassering"
 
@@ -2360,10 +2370,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Fra"
 
-#, fuzzy
-msgid "Full Message View"
-msgstr "Melding sendt"
-
 msgid "Full Name"
 msgstr "Fullt navn"
 
@@ -2785,6 +2791,10 @@ msgid "Invalid domain name"
 msgstr "Ugyldig kontonavn"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Ugyldig tjenernavn"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Plassering:"
 
@@ -2801,7 +2811,7 @@ msgid "Invite Contacts"
 msgstr "Inviter _kontakter"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Bytt til forrige fane"
 
 #, fuzzy
@@ -3676,9 +3686,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Passord påkrevd"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Passordene samsvarer ikke"
 
@@ -3809,6 +3816,10 @@ msgstr "Programtilleggsoppgraderinger"
 
 msgid "Plugin already exists"
 msgstr "Programtillegget finnes allerede"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Tjenesten ble ikke funnet"
 
 msgid "Plugins"
 msgstr "Tillegg"
@@ -5344,6 +5355,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5467,6 +5483,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Ikke tilgjengelig"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tid"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7204,6 +7225,10 @@ msgstr ""
 #~ msgstr "Private samtaler"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Melding sendt"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
 
@@ -7570,9 +7595,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Denne kontoen er ikke tilkoblet tjeneren"
-
-#~ msgid "Time"
-#~ msgstr "Tid"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

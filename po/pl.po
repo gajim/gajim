@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-09 07:12+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
-"\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
+">\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,6 +34,13 @@ msgstr "%(contact)s odrzucił Twoje zaproszenie do %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s zaprosił Cię do %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Uczestnik"
+msgstr[1] "Uczestnik"
+msgstr[2] "Uczestnik"
 
 #, python-format
 msgid ""
@@ -1393,6 +1400,10 @@ msgstr "Kopiuj wycinek kodu"
 msgid "Copy info to clipboard"
 msgstr "Kopiuj informacje do schowka"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Kopiuj do schowka"
+
 msgid "Copy to clipboard"
 msgstr "Kopiuj do schowka"
 
@@ -2102,9 +2113,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Od"
 
-msgid "Full Message View"
-msgstr "Widok pełnej wiadomości"
-
 msgid "Full Name"
 msgstr "Pełna nazwa (imię i nazwisko)"
 
@@ -2473,6 +2481,10 @@ msgstr "Nieprawidłowy adres: %s"
 msgid "Invalid domain name"
 msgstr "Nieprawidłowa nazwa domeny"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Niepoprawna nazwa serwera"
+
 msgid "Invitation"
 msgstr "Zaproszenie"
 
@@ -2485,7 +2497,8 @@ msgstr "Zaproś"
 msgid "Invite Contacts"
 msgstr "Zaproś kontakty"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Zaproś do tej rozmowy"
 
 msgid "Invitees"
@@ -3256,9 +3269,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Hasło jest wymagane"
 
-msgid "Password contains prohibited characters"
-msgstr "Hasło zawiera niedozwolone znaki"
-
 msgid "Passwords do not match"
 msgstr "Hasła nie zgadzają się"
 
@@ -3375,6 +3385,10 @@ msgstr "Aktualizacja wtyczki"
 
 msgid "Plugin already exists"
 msgstr "Wtyczka już istnieje"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Wybrany obraz nie mógł być załadowany."
 
 msgid "Plugins"
 msgstr "Wtyczki"
@@ -4705,6 +4719,11 @@ msgstr "Ta rozmowa grupowa nie wymaga hasła przy dołączeniu"
 msgid "This group chat does require a password upon entry"
 msgstr "Ta rozmowa grupowa wymaga hasła przy dołączeniu"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Ta rozmowa grupowa jest ograniczona tylko do członków"
 
@@ -4825,6 +4844,11 @@ msgstr "Czas zanim zaraz wracam"
 
 msgid "Time Until Not Available"
 msgstr "Czas zanim nieobecny"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Czas"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6495,6 +6519,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtruj rozmowy…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Widok pełnej wiadomości"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Zespół Gajima"
 
@@ -6675,6 +6702,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "W_strzymaj/Wznów"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Hasło zawiera niedozwolone znaki"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Wstrzymaj lub wznów transfer pliku"
@@ -6938,9 +6968,6 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "To konto nie jest połączone z serwerem"
-
-#~ msgid "Time"
-#~ msgstr "Czas"
 
 #~ msgid "Topic"
 #~ msgstr "Temat"

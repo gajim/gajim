@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -38,6 +38,13 @@ msgstr "%(contact)s odmítnuli vaši pozvánku do konverzace %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s vás pozval/a do %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Účastník"
+msgstr[1] "Účastník"
+msgstr[2] "Účastník"
 
 #, python-format
 msgid ""
@@ -1415,6 +1422,10 @@ msgid "Copy info to clipboard"
 msgstr "Kopírovat informace do schránky"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Kopírovat informace do schránky"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Kopírovat informace do schránky"
 
@@ -2150,9 +2161,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Od"
 
-msgid "Full Message View"
-msgstr "Zobrazit celou zprávu"
-
 msgid "Full Name"
 msgstr "Celé jméno"
 
@@ -2535,6 +2543,10 @@ msgid "Invalid domain name"
 msgstr "Neplatná doména"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Neplatné jméno serveru"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Zobrazit pozvánku"
 
@@ -2549,7 +2561,7 @@ msgid "Invite Contacts"
 msgstr "Pozvat kontakty"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Přepnout na předchozí konverzaci"
 
 msgid "Invitees"
@@ -3347,9 +3359,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Je požadováno heslo"
 
-msgid "Password contains prohibited characters"
-msgstr "Heslo obsahuje nepovolené znaky"
-
 msgid "Passwords do not match"
 msgstr "Hesla se neshodují"
 
@@ -3470,6 +3479,10 @@ msgstr "Aktualizace zásuvných modulů"
 
 msgid "Plugin already exists"
 msgstr "Zásuvný modul je již nainstalován"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Vybraný soubor nebylo možné načíst."
 
 msgid "Plugins"
 msgstr "Zásuvné moduly"
@@ -4847,6 +4860,11 @@ msgstr "Tato skupinová konverzace nevyžaduje při vstupu heslo"
 msgid "This group chat does require a password upon entry"
 msgstr "Tato skupinová konverzace vyžaduje při vstupu heslo"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Tato skupinová konverzace je omezena: pouze pro členy"
 
@@ -4965,6 +4983,11 @@ msgstr "Čas do odchodu"
 
 msgid "Time Until Not Available"
 msgstr "Doba do nedostupnosti"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Čas"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6659,6 +6682,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrovat konverzace…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Zobrazit celou zprávu"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Motivy vzhledu"
@@ -6832,6 +6858,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pozastavit/Pokračovat"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Heslo obsahuje nepovolené znaky"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pozastavit nebo pokračovat v přenosu souboru"
@@ -7084,9 +7113,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet není připojen k serveru"
-
-#~ msgid "Time"
-#~ msgstr "Čas"
 
 #~ msgid "Topic"
 #~ msgstr "Téma"

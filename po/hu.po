@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-09 09:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -32,6 +32,12 @@ msgstr "%(contact)s elutasította a társalgóba (%(chat)s) szóló meghívást"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s egy %(chat)s nevű társalgóba szóló meghívót küldött"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Résztvevő"
+msgstr[1] "Résztvevő"
 
 #, python-format
 msgid ""
@@ -1384,6 +1390,10 @@ msgstr "Kódrészlet másolása"
 msgid "Copy info to clipboard"
 msgstr "Másolás a vágólapra"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Másolás a vágólapra"
+
 msgid "Copy to clipboard"
 msgstr "Másolás a vágólapra"
 
@@ -2089,9 +2099,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Tőle"
 
-msgid "Full Message View"
-msgstr "Teljes üzenet"
-
 msgid "Full Name"
 msgstr "Teljes név"
 
@@ -2456,6 +2463,10 @@ msgstr "Érvénytelen cím: %s"
 msgid "Invalid domain name"
 msgstr "Érvénytelen kiszolgálónév"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Érvénytelen kiszolgálónév"
+
 msgid "Invitation"
 msgstr "Meghívás"
 
@@ -2468,7 +2479,8 @@ msgstr "Meghívás"
 msgid "Invite Contacts"
 msgstr "Ismerősök meghívása"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Meghívás a társalgóba"
 
 msgid "Invitees"
@@ -3233,9 +3245,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Jelszó szükséges"
 
-msgid "Password contains prohibited characters"
-msgstr "A jelszó tiltott karaktereket tartalmaz"
-
 msgid "Passwords do not match"
 msgstr "A jelszavak nem egyeznek"
 
@@ -3351,6 +3360,10 @@ msgstr "Bővítmények frissítése"
 
 msgid "Plugin already exists"
 msgstr "A bővítmény már létezik"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "A kiválasztott kép nem tölthető be."
 
 msgid "Plugins"
 msgstr "Bővítmények"
@@ -4676,6 +4689,11 @@ msgstr "A társalgóba jelszó nélkül lehet belépni"
 msgid "This group chat does require a password upon entry"
 msgstr "A társalgóba csak jelszóval lehet belépni"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "A társalgóba csak tagok léphetnek be"
 
@@ -4788,6 +4806,11 @@ msgstr "Távollét időküszöbe"
 
 msgid "Time Until Not Available"
 msgstr "Tartós távollét időküszöbe"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Idő"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6462,6 +6485,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "A QR-kóddal történő ellenőrzéshez telepíteni kell a <tt>python-qrcode</"
 #~ "tt> csomagot."
 
+#~ msgid "Full Message View"
+#~ msgstr "Teljes üzenet"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim Team"
 
@@ -6639,6 +6665,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Szü_net/folytatás"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "A jelszó tiltott karaktereket tartalmaz"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "A fájlátvitel szüneteltetése vagy folytatása"
@@ -6898,9 +6927,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ez a fiók nem kapcsolódik a kiszolgálóhoz"
-
-#~ msgid "Time"
-#~ msgstr "Idő"
 
 #~ msgid "Topic"
 #~ msgstr "Téma"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -33,6 +33,12 @@ msgstr "%(contact)s сіздің %(chat)s чатына шақыруыңызды 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s сізді %(chat)s ішіне қосылуға шақырды"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Қатысушы"
+msgstr[1] "Қатысушы"
 
 #, python-format
 msgid ""
@@ -1406,6 +1412,10 @@ msgstr "Код үзіндісін көшіріп алу"
 msgid "Copy info to clipboard"
 msgstr "Ақпаратты алмасу буферіне көшіріп алу"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Алмасу буферіне көшіріп алу"
+
 msgid "Copy to clipboard"
 msgstr "Алмасу буферіне көшіріп алу"
 
@@ -2140,9 +2150,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Бастап"
 
-msgid "Full Message View"
-msgstr "Толық хабарлама көрінісі"
-
 msgid "Full Name"
 msgstr "Аты-жөні"
 
@@ -2525,6 +2532,10 @@ msgid "Invalid domain name"
 msgstr "Жарамсыз домен атауы"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Сервердің аты қате"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Шақыруды көрсету"
 
@@ -2539,7 +2550,7 @@ msgid "Invite Contacts"
 msgstr "Контакттарды шақыру"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Алдыңғы чатқа ауысу"
 
 msgid "Invitees"
@@ -3332,9 +3343,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Пароль керек"
 
-msgid "Password contains prohibited characters"
-msgstr "Парольде рұқсат етілмеген таңбалар бар"
-
 msgid "Passwords do not match"
 msgstr "Парольдер өзара сәйкес келмейді"
 
@@ -3457,6 +3465,10 @@ msgstr "Плагиндер жаңартулары"
 
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Таңдалған суретті жүктеу мүмкін емес."
 
 msgid "Plugins"
 msgstr "Плагиндер"
@@ -4827,6 +4839,11 @@ msgstr "Бұл топтық чатқа кіру кезінде пароль ке
 msgid "This group chat does require a password upon entry"
 msgstr "Бұл топтық чатқа кіру кезінде пароль керек"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Бұл топтық чат тек мүшелерге ғана қолжетімді"
 
@@ -4944,6 +4961,11 @@ msgstr "\"Кетіп қалған\" қалып-күйді орнатуға де�
 
 msgid "Time Until Not Available"
 msgstr "\"Қолжетімсіз\" қалып-күйді орнатуға дейінгі уақыт"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Уақыт"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6585,6 +6607,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Filter Chats…"
 #~ msgstr "Чаттарды сүзгілеу…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Толық хабарлама көрінісі"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim темалары"
@@ -6756,6 +6781,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "А_ялдату/Жалғастыру"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Парольде рұқсат етілмеген таңбалар бар"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Файлдармен алмасуды аялдату немесе жалғастыру"
@@ -7009,9 +7037,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
-
-#~ msgid "Time"
-#~ msgstr "Уақыт"
 
 #~ msgid "Topic"
 #~ msgstr "Тақырып"

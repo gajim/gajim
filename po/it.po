@@ -17,13 +17,14 @@
 # Roberto Resoli <roberto@resolutions.it>, 2025.
 # lorenzo sintoni <lorenzo@mail.bobadin.icu>, 2025.
 # ? <scompo@gmail.com>, 2025.
+# Mauro Scomparin <scompo@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
-"PO-Revision-Date: 2025-07-05 12:12+0000\n"
-"Last-Translator: Roberto Resoli <roberto@resolutions.it>\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"PO-Revision-Date: 2025-07-17 14:29+0000\n"
+"Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
 ">\n"
 "Language: it\n"
@@ -46,6 +47,12 @@ msgstr "%(contact)s ha rifiutato il tuo invito a %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s ti ha invitato a %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participante"
 
 #, python-format
 msgid ""
@@ -426,13 +433,11 @@ msgstr ""
 msgid "Account Added"
 msgstr "Account Aggiunto"
 
-#, fuzzy
 msgid "Account Address"
-msgstr "Indirizzo account: "
+msgstr "Indirizzo Account"
 
-#, fuzzy
 msgid "Account Label"
-msgstr "Account disabilitato"
+msgstr "Etichetta Account"
 
 msgid "Account Name..."
 msgstr "Nome account..."
@@ -1417,6 +1422,10 @@ msgstr "Copia parte di codice"
 msgid "Copy info to clipboard"
 msgstr "Copia informazioni negli appunti"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Copia negli appunti"
+
 msgid "Copy to clipboard"
 msgstr "Copia negli appunti"
 
@@ -1567,16 +1576,14 @@ msgstr "Rifiuta tutte le richieste di contatto"
 msgid "Description"
 msgstr "Descrizione"
 
-#, fuzzy
 msgid "Destroy Group Chat"
-msgstr "Distruggi chat di gruppo…"
+msgstr "Distruggi Chat di Gruppo"
 
 msgid "Destroy This Chat"
 msgstr "Distruggi Questa Conversazione"
 
-#, fuzzy
 msgid "Destroy…"
-msgstr "_Distruggi"
+msgstr "Distruggi…"
 
 msgid "Details"
 msgstr "Dettagli"
@@ -2132,9 +2139,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Da"
 
-msgid "Full Message View"
-msgstr "Messaggio completo"
-
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -2503,6 +2507,10 @@ msgstr "Indirizzo non valido: %s"
 msgid "Invalid domain name"
 msgstr "Nome dominio non valido"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Nome Server Non Valido"
+
 msgid "Invitation"
 msgstr "Invito"
 
@@ -2515,7 +2523,8 @@ msgstr "Invita"
 msgid "Invite Contacts"
 msgstr "Invita contatti"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Invita a questa chat"
 
 msgid "Invitees"
@@ -3286,9 +3295,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Richiesta"
 
-msgid "Password contains prohibited characters"
-msgstr "La password contiene caratteri non consentiti"
-
 msgid "Passwords do not match"
 msgstr "Le password non coincidono"
 
@@ -3317,7 +3323,7 @@ msgid "Permanently"
 msgstr "Permanentemente"
 
 msgid "Permanently remove this group chat from the server"
-msgstr ""
+msgstr "Rimuovi permanentemente questo gruppo dal server"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3405,6 +3411,10 @@ msgstr "Aggiorna plugin"
 
 msgid "Plugin already exists"
 msgstr "L'estensione esiste già"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "L'immagine selezionata non può essere caricata."
 
 msgid "Plugins"
 msgstr "Estensioni"
@@ -4131,9 +4141,8 @@ msgstr "Server remoto non trovato"
 msgid "Set Trust"
 msgstr "Gestione fiducia"
 
-#, fuzzy
 msgid "Set a subject for this chat"
-msgstr "Invita a questa chat"
+msgstr "Imposta un argomento per questa chat"
 
 msgid "Set configuration directory"
 msgstr "Imposta la cartella di configurazione"
@@ -4219,7 +4228,7 @@ msgid "Show Transfers"
 msgstr "Mostra Transport"
 
 msgid "Show Voice Message Button"
-msgstr "Mostra Pulsante Invio Messaggio"
+msgstr "Mostra Pulsante Messaggio Vocale"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -4422,7 +4431,7 @@ msgid "Status Message: Text Font"
 msgstr "Messaggio di Stato - Carattere"
 
 msgid "Status Messages in Participants List"
-msgstr "Messaggio di Stato - Carattere"
+msgstr "Messaggio di Stato nella Lista Partcipanti"
 
 msgid "Status is not shared"
 msgstr "Lo stato non è condiviso"
@@ -4465,7 +4474,7 @@ msgid "Style"
 msgstr "Stile"
 
 msgid "Subject"
-msgstr "Soggetto"
+msgstr "Argomento"
 
 msgid "Subject Alt Names: "
 msgstr "Nomi alternativi del soggetto: "
@@ -4547,10 +4556,10 @@ msgid "Synchronize History…"
 msgstr "Sincronizzazione Cronologia…"
 
 msgid "Synchronize joined group chats"
-msgstr "Chiunque si può unire a questa conversazione di gruppo"
+msgstr "Sincronizza chat di gruppo a cui si partecipa"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr "Sincronizza le chat di gruppo unite con altri dispositivi."
+msgstr "Sincronizza le chat di gruppo cui hai aderito con altri dispositivi."
 
 msgid "Synchronize the status of all accounts"
 msgstr "Sincronizza lo stato di tutti gli account"
@@ -4696,12 +4705,13 @@ msgstr ""
 "Si è verificato un errore durante il tentativo di verifica del certificato "
 "SSL del tuo server XMPP (%s)."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "There was an error while trying to save the file.\n"
 "Error: %s."
 msgstr ""
-"Si è verificato un errore durante il tentativo di recuperare i messaggi: %s"
+"Si è verificato un errore cercando di salvare il file.\n"
+"Errore: %s."
 
 msgid "This Device"
 msgstr "Seleziona dispositivo"
@@ -4748,6 +4758,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr "La conversazione di gruppo richiede una password per poter accedere"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Solo i membri possono partecipare a questa conversazione"
 
@@ -4760,7 +4775,7 @@ msgstr ""
 "La conversazione di gruppo sarà distrutta quando sarà senza partecipanti"
 
 msgid "This information will be publicly visible."
-msgstr ""
+msgstr "Questa informazione sarà visibile pubblicamente."
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr ""
@@ -4790,7 +4805,7 @@ msgstr "Questo messaggio è stato ritirato il {date}"
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
-"Questo messaggio è stato cifrato tramite %s e potrebbe non essere decifrato."
+"Questo messaggio è stato cifrato con %s e potrebbe non essere decifrato."
 
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
@@ -4802,11 +4817,10 @@ msgstr ""
 
 msgid "This message was encrypted with OMEMO, but not for your device."
 msgstr ""
-"Questo messaggio è stato cifrato tramite OTR e non può essere decifrato."
+"Questo messaggio è stato cifrato con OMEMO, ma non per il tuo dispositivo."
 
 msgid "This message was encrypted with OTR and could not be decrypted."
-msgstr ""
-"Questo messaggio è stato cifrato tramite OTR e non può essere decifrato."
+msgstr "Questo messaggio è stato cifrato con OTR e non può essere decifrato."
 
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
@@ -4868,6 +4882,11 @@ msgstr "Tempo di Attesa per Assente"
 
 msgid "Time Until Not Available"
 msgstr "Fino a Quando sarai Non Disponibile"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tempo"
 
 msgctxt "Profile"
 msgid "Title"
@@ -5479,7 +5498,7 @@ msgid "Your message can not be sent until you are connected."
 msgstr "Impossibile inviare il messaggio finché non si è connessi."
 
 msgid "Your messages have been exported successfully"
-msgstr "Il nuovo account è stato creato con successo"
+msgstr "I tuoi messaggi sono stati esportati correttamente"
 
 msgid "Your password"
 msgstr "Password"
@@ -6515,6 +6534,9 @@ msgstr "…o trascinalo qui"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtra conversazioni…"
 
+#~ msgid "Full Message View"
+#~ msgstr "Messaggio completo"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Temi di Gajim"
@@ -6695,6 +6717,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Riprendi"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "La password contiene caratteri non consentiti"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Metti in pausa o riprendi il trasferimento file selezionato"
@@ -6979,9 +7004,6 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Questo account non è connesso al server"
-
-#~ msgid "Time"
-#~ msgstr "Tempo"
 
 #~ msgid "Topic"
 #~ msgstr "Argomento"

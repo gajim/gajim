@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -36,6 +36,12 @@ msgstr "%(jid)s סרב/ה את ההזמנה: %(reason)s"
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact הזמינך לשיחת קבוצה %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "משתתף"
+msgstr[1] "משתתף"
 
 #, python-format
 msgid ""
@@ -1615,6 +1621,10 @@ msgid "Copy info to clipboard"
 msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "ה_עתק מיקום קישור"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "ה_עתק מיקום קישור"
 
@@ -2449,10 +2459,6 @@ msgid "From"
 msgstr "מן"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "הודעה נשלחה"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>שם מלא</b>"
 
@@ -2881,6 +2887,10 @@ msgid "Invalid domain name"
 msgstr "שם חשבון שגוי"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "שם שרת שגוי"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "מיקום: "
 
@@ -2897,7 +2907,7 @@ msgid "Invite Contacts"
 msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
@@ -3786,9 +3796,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "סיסמאות לא תואמות"
 
@@ -3919,6 +3926,11 @@ msgstr "כשל תוסף"
 
 msgid "Plugin already exists"
 msgstr "תוסף כבר ישנו"
+
+# BUG: general title without "the"
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "השירות לא היה יכול להימצא"
 
 msgid "Plugins"
 msgstr "תוספים"
@@ -5499,6 +5511,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5614,6 +5631,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "לא זמין"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "זמן"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7395,6 +7417,10 @@ msgstr ""
 #~ msgstr "שיחות פרטיות"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "הודעה נשלחה"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "‏Gajim מרחוק"
 
@@ -7759,9 +7785,6 @@ msgstr ""
 # Should this be "to its server" OR "to a server"?
 #~ msgid "This account is not connected to the server"
 #~ msgstr "חשבון זה אינו מחובר כעת לשרת"
-
-#~ msgid "Time"
-#~ msgstr "זמן"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

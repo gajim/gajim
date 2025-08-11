@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -32,6 +32,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact_jid)s -ek %(room_jid)s gelara gonbidatu zaitu"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Partaidea"
+msgstr[1] "Partaidea"
 
 #, python-format
 msgid ""
@@ -1563,6 +1569,10 @@ msgid "Copy info to clipboard"
 msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Lotura kokapena kopiatu"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Lotura kokapena kopiatu"
 
@@ -2373,10 +2383,6 @@ msgid "From"
 msgstr "-etik"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Mezua Bidaltzean"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Bezeroak</b>"
 
@@ -2790,6 +2796,10 @@ msgid "Invalid domain name"
 msgstr "Kontu izen baliogabea"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Baliogabeko izena"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Kontu Eraldaketa"
 
@@ -2806,7 +2816,7 @@ msgid "Invite Contacts"
 msgstr "Kontaktua"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Kontaktua"
 
 #, fuzzy
@@ -3691,9 +3701,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasahitza behar da"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Pasahitzak desberdinak dira"
 
@@ -3824,6 +3831,10 @@ msgstr "Konexioak huts egin du"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Fitxero hau jadanik badago"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Zerbitzua ezin izan da aurkitu"
 
 msgid "Plugins"
 msgstr ""
@@ -5363,6 +5374,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5478,6 +5494,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Ez Erabilgarri"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Denbora"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7188,6 +7209,10 @@ msgstr ""
 #~ msgstr "Txat Pribatuak"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Mezua Bidaltzean"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7499,9 +7524,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
-
-#~ msgid "Time"
-#~ msgstr "Denbora"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

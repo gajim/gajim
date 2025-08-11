@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -33,6 +33,12 @@ msgstr "%(contact)s rexeitou o seu convite para %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s convidouno a %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participante"
+msgstr[1] "Participante"
 
 #, python-format
 msgid ""
@@ -1573,6 +1579,10 @@ msgid "Copy info to clipboard"
 msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Copiar o enderezo da ligazón"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Copiar o enderezo da ligazón"
 
@@ -2383,10 +2393,6 @@ msgid "From"
 msgstr "De"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Enviouse a mensaxe"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Personalizado</b>"
 
@@ -2800,6 +2806,10 @@ msgid "Invalid domain name"
 msgstr "O nome da conta non é válido"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "O nome de usuario non é válido"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Modificar a conta"
 
@@ -2816,7 +2826,7 @@ msgid "Invite Contacts"
 msgstr "Contactos"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Contactos"
 
 #, fuzzy
@@ -3701,9 +3711,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "É necesario o contrasinal"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Os contrasinais non coinciden"
 
@@ -3834,6 +3841,10 @@ msgstr "Fallou a conexión"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Este ficheiro xa existe"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "O servizo non se achou"
 
 msgid "Plugins"
 msgstr ""
@@ -5372,6 +5383,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5487,6 +5503,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Non dispoñíbel"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Hora"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7208,6 +7229,10 @@ msgstr ""
 #~ msgstr "Charlas privadas"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Enviouse a mensaxe"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7520,9 +7545,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "A conta \"%s\" está conectada ao servidor"
-
-#~ msgid "Time"
-#~ msgstr "Hora"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

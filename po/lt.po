@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -31,6 +31,12 @@ msgstr ""
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participant"
+msgstr[1] "Participant"
 
 #, python-format
 msgid ""
@@ -1548,6 +1554,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopijuoti nuorodos adresą"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopijuoti nuorodos adresą"
 
@@ -2352,10 +2362,6 @@ msgid "From"
 msgstr "Nuo"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Message Sent"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Pilnas Vardas</b>"
 
@@ -2765,6 +2771,10 @@ msgid "Invalid domain name"
 msgstr "Invalid account name"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Invalid File"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Padėtis:"
 
@@ -2781,7 +2791,7 @@ msgid "Invite Contacts"
 msgstr "Kviesti Kontaktus"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Kviesti Kontaktus"
 
 #, fuzzy
@@ -3661,9 +3671,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Required"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
@@ -3793,6 +3800,10 @@ msgstr "Registracija nesėkminga"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "The service could not be found"
 
 msgid "Plugins"
 msgstr ""
@@ -5325,6 +5336,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5434,6 +5450,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Esu išėjęs"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Time"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7103,6 +7124,10 @@ msgstr ""
 #~ msgstr "Private Chats"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Message Sent"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7390,9 +7415,6 @@ msgstr ""
 
 #~ msgid "The service could not be found"
 #~ msgstr "The service could not be found"
-
-#~ msgid "Time"
-#~ msgstr "Time"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

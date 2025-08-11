@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -33,6 +33,12 @@ msgstr ""
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
 "$Contact har inviteret dig til at deltage i en gruppe samtale %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Deltager"
+msgstr[1] "Deltager"
 
 #, python-format
 msgid ""
@@ -1579,6 +1585,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopier Henvisning"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Kopier Henvisning"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopier Henvisning"
 
@@ -2390,10 +2400,6 @@ msgid "From"
 msgstr "Fra"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Besked er Sendt"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Fuldt Navn</b>"
 
@@ -2805,6 +2811,10 @@ msgid "Invalid domain name"
 msgstr "Ugyldigt kontonavn"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Ikke gyldigt server navn"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Påmindelse"
 
@@ -2821,7 +2831,7 @@ msgid "Invite Contacts"
 msgstr "Inviter _Kontakter"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Inviter _Kontakter"
 
 #, fuzzy
@@ -3704,9 +3714,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Adgangskode er Påkrævet"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Adgangskoderne er ikke ens"
 
@@ -3838,6 +3845,10 @@ msgstr "Tilslutning fejlede"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Denne fil eksisterer allerede"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Tjenesten findes ikke"
 
 msgid "Plugins"
 msgstr ""
@@ -5386,6 +5397,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5499,6 +5515,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Ikke Tilgængelig"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Tid"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7233,6 +7254,10 @@ msgstr ""
 #~ msgstr "Private Samtaler"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Besked er Sendt"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7553,9 +7578,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Denne konto er ikke tilsluttet til serveren"
-
-#~ msgid "Time"
-#~ msgstr "Tid"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
-"PO-Revision-Date: 2025-07-10 14:12+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"PO-Revision-Date: 2025-08-11 18:46+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,6 +41,12 @@ msgstr "%(contact)s hat die Einladung zu %(chat)s abgelehnt"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s hat dich zu %(chat)s eingeladen"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Teilnehmer"
+msgstr[1] "Teilnehmer"
 
 #, python-format
 msgid ""
@@ -1408,6 +1414,10 @@ msgstr "Code-Schnipsel kopieren"
 msgid "Copy info to clipboard"
 msgstr "Infos in die Zwischenablage kopieren"
 
+#, fuzzy
+msgid "Copy to Clipboard"
+msgstr "In die Zwischenablage kopieren"
+
 msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
 
@@ -2124,9 +2134,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Von"
 
-msgid "Full Message View"
-msgstr "Vollständige Nachricht"
-
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
@@ -2501,6 +2508,10 @@ msgstr "Ungültige Adresse: %s"
 msgid "Invalid domain name"
 msgstr "Ungültige Domain"
 
+#, fuzzy
+msgid "Invalid server response"
+msgstr "Ungültiger Servername"
+
 msgid "Invitation"
 msgstr "Einladung"
 
@@ -2513,7 +2524,8 @@ msgstr "Einladen"
 msgid "Invite Contacts"
 msgstr "Kontakte einladen"
 
-msgid "Invite to this chat"
+#, fuzzy
+msgid "Invite to this chat…"
 msgstr "Einladen zu diesem Chat"
 
 msgid "Invitees"
@@ -2830,7 +2842,7 @@ msgstr "Nachrichten moderieren?"
 
 msgctxt "Message row action"
 msgid "Moderate all messages…"
-msgstr "Alle Nachricht moderieren…"
+msgstr "Alle Nachrichten des Teilnehmers moderieren…"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
@@ -3285,9 +3297,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Passwort benötigt"
 
-msgid "Password contains prohibited characters"
-msgstr "Password enthält unerlaubte Zeichen"
-
 msgid "Passwords do not match"
 msgstr "Die Passwörter stimmen nicht überein"
 
@@ -3404,6 +3413,10 @@ msgstr "Plugin-Update"
 
 msgid "Plugin already exists"
 msgstr "Plugin existiert bereits"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Das gewählte Bild konnte nicht geladen werden."
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -4739,6 +4752,11 @@ msgstr "Kein Passwort wird benötigt, um beizutreten"
 msgid "This group chat does require a password upon entry"
 msgstr "Ein Passwort wird benötigt, um beizutreten"
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr "Gruppenchat ist nur für Mitglieder"
 
@@ -4863,6 +4881,11 @@ msgstr "Zeit bis abwesend"
 
 msgid "Time Until Not Available"
 msgstr "Zeit bis abwesend nicht verfügbar"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Zeit"
 
 msgctxt "Profile"
 msgid "Title"
@@ -6554,6 +6577,9 @@ msgstr "… oder hierher ziehen"
 #~ "Für die Verifikation mittels QR-Code muss <tt>python-qrcode</tt> "
 #~ "installiert sein."
 
+#~ msgid "Full Message View"
+#~ msgstr "Vollständige Nachricht"
+
 # TODO mark as do not translate?
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim Team"
@@ -6734,6 +6760,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pause/Fo_rtsetzen"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "Password enthält unerlaubte Zeichen"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Dateiübertragung pausieren oder fortsetzen"
@@ -7001,9 +7030,6 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Dieses Konto ist nicht mit dem Server verbunden"
-
-#~ msgid "Time"
-#~ msgstr "Zeit"
 
 #~ msgid "Topic"
 #~ msgstr "Thema"

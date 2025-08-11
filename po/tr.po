@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -35,6 +35,11 @@ msgstr ""
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Katılan"
 
 #, python-format
 msgid ""
@@ -1568,6 +1573,10 @@ msgid "Copy info to clipboard"
 msgstr "Yer:"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Yer:"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Yer:"
 
@@ -2371,10 +2380,6 @@ msgid "From"
 msgstr "Gönderen"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Ileti alınıyor"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Bütün isim</b>"
 
@@ -2780,6 +2785,10 @@ msgid "Invalid domain name"
 msgstr "Geçersiz Liste İsmi"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Geçersiz Sunucu Adı"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Yer:"
 
@@ -2796,7 +2805,7 @@ msgid "Invite Contacts"
 msgstr "Kişi Davet _Et"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Kişi Davet _Et"
 
 #, fuzzy
@@ -3676,9 +3685,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Şifre gerekli"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Parolalar uyuşmuyor"
 
@@ -3811,6 +3817,10 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Dosyası zaten var"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "Hizmet bulunamadı"
 
 msgid "Plugins"
 msgstr ""
@@ -5344,6 +5354,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5453,6 +5468,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Mevcut Değil"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Süre"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7161,6 +7181,10 @@ msgstr ""
 #~ msgstr "Kişisel Sohbetler"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Ileti alınıyor"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7463,9 +7487,6 @@ msgstr ""
 
 #~ msgid "The service could not be found"
 #~ msgstr "Hizmet bulunamadı"
-
-#~ msgid "Time"
-#~ msgstr "Süre"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

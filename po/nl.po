@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -36,6 +36,12 @@ msgstr "%(jid)s heeft de uitnodiging geweigerd: %(reason)s"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
 "<b>%(contact)s</b> heeft u uitgenodigd in groepsgesprek <b>%(room_jid)s</b>"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Deelnemer"
+msgstr[1] "Deelnemer"
 
 #, python-format
 msgid ""
@@ -1541,6 +1547,10 @@ msgid "Copy info to clipboard"
 msgstr "Info kopiëren naar klembord"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "Info kopiëren naar klembord"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Info kopiëren naar klembord"
 
@@ -2357,10 +2367,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Van"
 
-#, fuzzy
-msgid "Full Message View"
-msgstr "Bericht verzonden"
-
 msgid "Full Name"
 msgstr "Volledige naam"
 
@@ -2780,6 +2786,10 @@ msgid "Invalid domain name"
 msgstr "Ongeldige accountnaam"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Ongeldige servernaam"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Locatie:"
 
@@ -2796,7 +2806,7 @@ msgid "Invite Contacts"
 msgstr "_Contacten uitnodigen"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Wisselen naar het vorig tabblad"
 
 #, fuzzy
@@ -3673,9 +3683,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Wachtwoord vereist"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
 
@@ -3804,6 +3811,10 @@ msgstr "Updates voor plug-ins"
 
 msgid "Plugin already exists"
 msgstr "Plug-in bestaat al"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "De dienst kon niet gevonden worden"
 
 msgid "Plugins"
 msgstr "Plug-ins"
@@ -5329,6 +5340,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 #, fuzzy
 msgid "This group chat is restricted to members only"
 msgstr ""
@@ -5452,6 +5468,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Niet beschikbaar"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Duur"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7232,6 +7253,10 @@ msgstr ""
 #~ msgstr "Privégesprekken"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Bericht verzonden"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim-thema’s"
 
@@ -7650,9 +7675,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Deze account is niet verbonden met de server"
-
-#~ msgid "Time"
-#~ msgstr "Duur"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

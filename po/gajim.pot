@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,12 @@ msgstr ""
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
+
+#, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid ""
@@ -1346,6 +1352,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
+msgid "Copy to Clipboard"
+msgstr ""
+
 msgid "Copy to clipboard"
 msgstr ""
 
@@ -2033,9 +2042,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr ""
 
-msgid "Full Message View"
-msgstr ""
-
 msgid "Full Name"
 msgstr ""
 
@@ -2382,6 +2388,9 @@ msgstr ""
 msgid "Invalid domain name"
 msgstr ""
 
+msgid "Invalid server response"
+msgstr ""
+
 msgid "Invitation"
 msgstr ""
 
@@ -2394,7 +2403,7 @@ msgstr ""
 msgid "Invite Contacts"
 msgstr ""
 
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr ""
 
 msgid "Invitees"
@@ -3147,9 +3156,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr ""
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr ""
 
@@ -3259,6 +3265,9 @@ msgid "Plugin Update"
 msgstr ""
 
 msgid "Plugin already exists"
+msgstr ""
+
+msgid "Plugin could not be loaded"
 msgstr ""
 
 msgid "Plugins"
@@ -4537,6 +4546,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -4638,6 +4652,10 @@ msgid "Time Until Away"
 msgstr ""
 
 msgid "Time Until Not Available"
+msgstr ""
+
+msgctxt "Profile"
+msgid "Timezone"
 msgstr ""
 
 msgctxt "Profile"

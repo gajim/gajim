@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -34,6 +34,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact has invited you to group chat %(room_jid)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "Participant"
+msgstr[1] "Participant"
 
 #, python-format
 msgid ""
@@ -1574,6 +1580,10 @@ msgid "Copy info to clipboard"
 msgstr "_Copy Link Location"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "_Copy Link Location"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Copy Link Location"
 
@@ -2385,10 +2395,6 @@ msgid "From"
 msgstr "From"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "Message Sent"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>Full Name</b>"
 
@@ -2799,6 +2805,10 @@ msgid "Invalid domain name"
 msgstr "Invalid account name"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "Invalid Server Name"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "Notification"
 
@@ -2815,7 +2825,7 @@ msgid "Invite Contacts"
 msgstr "Invite _Contacts"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "Invite _Contacts"
 
 #, fuzzy
@@ -3698,9 +3708,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Required"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
@@ -3832,6 +3839,10 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "The service could not be found"
 
 msgid "Plugins"
 msgstr ""
@@ -5380,6 +5391,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5494,6 +5510,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Not Available"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "Time"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7213,6 +7234,10 @@ msgstr ""
 #~ msgstr "Private Chats"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Message Sent"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
 
@@ -7531,9 +7556,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "This account is not connected to the server"
-
-#~ msgid "Time"
-#~ msgstr "Time"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

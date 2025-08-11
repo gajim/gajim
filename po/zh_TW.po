@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-08 21:21+0000\n"
+"POT-Creation-Date: 2025-08-11 18:46+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -36,6 +36,11 @@ msgstr "%(contact)s拒絕了您對 %(chat)s的邀請"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s 邀請您參加聊天室 %(chat)s"
+
+#, fuzzy, python-format
+msgid "%(count)s Participant"
+msgid_plural "%(count)s Participants"
+msgstr[0] "參與者"
 
 #, python-format
 msgid ""
@@ -1423,6 +1428,10 @@ msgid "Copy info to clipboard"
 msgstr "複製連結位置(_C)"
 
 #, fuzzy
+msgid "Copy to Clipboard"
+msgstr "複製連結位置(_C)"
+
+#, fuzzy
 msgid "Copy to clipboard"
 msgstr "複製連結位置(_C)"
 
@@ -2233,10 +2242,6 @@ msgid "From"
 msgstr "From"
 
 #, fuzzy
-msgid "Full Message View"
-msgstr "訊息已傳送"
-
-#, fuzzy
 msgid "Full Name"
 msgstr "<b>全名稱</b>"
 
@@ -2652,6 +2657,10 @@ msgid "Invalid domain name"
 msgstr "無效的帳號名稱"
 
 #, fuzzy
+msgid "Invalid server response"
+msgstr "無效的伺服器名稱"
+
+#, fuzzy
 msgid "Invitation"
 msgstr "位置: %s"
 
@@ -2668,7 +2677,7 @@ msgid "Invite Contacts"
 msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
-msgid "Invite to this chat"
+msgid "Invite to this chat…"
 msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
@@ -3548,9 +3557,6 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "需要密碼"
 
-msgid "Password contains prohibited characters"
-msgstr ""
-
 msgid "Passwords do not match"
 msgstr "密碼不符"
 
@@ -3681,6 +3687,10 @@ msgstr "外掛程式失敗"
 
 msgid "Plugin already exists"
 msgstr "外掛程式已經存在"
+
+#, fuzzy
+msgid "Plugin could not be loaded"
+msgstr "找不到該服務"
 
 msgid "Plugins"
 msgstr "外掛程式"
@@ -5220,6 +5230,11 @@ msgstr ""
 msgid "This group chat does require a password upon entry"
 msgstr ""
 
+msgid ""
+"This group chat is members-only, but you are not on the members list. An "
+"authorized person needs to invite you."
+msgstr ""
+
 msgid "This group chat is restricted to members only"
 msgstr ""
 
@@ -5333,6 +5348,11 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "離開很久了"
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Timezone"
+msgstr "時間"
 
 msgctxt "Profile"
 msgid "Title"
@@ -7092,6 +7112,10 @@ msgstr ""
 #~ msgstr "私人聊天"
 
 #, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "訊息已傳送"
+
+#, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
 
@@ -7435,9 +7459,6 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "這個帳號已經連線到伺服器"
-
-#~ msgid "Time"
-#~ msgstr "時間"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
