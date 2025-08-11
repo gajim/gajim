@@ -28,7 +28,7 @@ dependencies = [
   "css-parser",
   "emoji>=2.6.0",
   "keyring",
-  "nbxmpp>=6.2.0,<7.0.0",
+  "nbxmpp>=6.3.0,<7.0.0",
   "omemo-dr>=1.0.0,<2.0.0",
   "packaging",
   "pillow>=9.1.0",
