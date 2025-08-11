@@ -105,12 +105,6 @@ class MessageRowActions(Gtk.Box):
         hover_controller.connect("leave", self._on_cursor_leave)
         self.add_controller(hover_controller)
 
-        scroll_controller = Gtk.EventControllerScroll(
-            flags=Gtk.EventControllerScrollFlags.VERTICAL
-        )
-        scroll_controller.connect("scroll", self._on_scroll)
-        self.add_controller(scroll_controller)
-
     def hide_actions(self) -> None:
         if self._is_menu_open:
             return
@@ -208,18 +202,6 @@ class MessageRowActions(Gtk.Box):
 
         if self._message_row is not None:
             self._message_row.remove_css_class("conversation-row-hover")
-
-    def _on_scroll(
-        self,
-        scroll_controller: Gtk.EventControllerScroll,
-        _dx: float,
-        dy: float,
-    ) -> bool:
-        if dy < 0:
-            app.window.activate_action("win.scroll-view-up")
-        else:
-            app.window.activate_action("win.scroll-view-down")
-        return Gdk.EVENT_PROPAGATE
 
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
         if self._message_row is None:
