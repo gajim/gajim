@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 18:46+0000\n"
-"PO-Revision-Date: 2025-08-11 18:46+0000\n"
+"PO-Revision-Date: 2025-08-11 18:55+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,11 +42,11 @@ msgstr "%(contact)s hat die Einladung zu %(chat)s abgelehnt"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s hat dich zu %(chat)s eingeladen"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "Teilnehmer"
-msgstr[1] "Teilnehmer"
+msgstr[0] "%(count)s Teilnehmer"
+msgstr[1] "%(count)s Teilnehmer"
 
 #, python-format
 msgid ""
@@ -1414,7 +1414,6 @@ msgstr "Code-Schnipsel kopieren"
 msgid "Copy info to clipboard"
 msgstr "Infos in die Zwischenablage kopieren"
 
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "In die Zwischenablage kopieren"
 
@@ -2508,9 +2507,8 @@ msgstr "Ungültige Adresse: %s"
 msgid "Invalid domain name"
 msgstr "Ungültige Domain"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "Ungültiger Servername"
+msgstr "Ungültige Server-Antwort"
 
 msgid "Invitation"
 msgstr "Einladung"
@@ -2524,9 +2522,8 @@ msgstr "Einladen"
 msgid "Invite Contacts"
 msgstr "Kontakte einladen"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "Einladen zu diesem Chat"
+msgstr "Zu diesem Chat einladen…"
 
 msgid "Invitees"
 msgstr "Eingeladene"
@@ -3414,9 +3411,8 @@ msgstr "Plugin-Update"
 msgid "Plugin already exists"
 msgstr "Plugin existiert bereits"
 
-#, fuzzy
 msgid "Plugin could not be loaded"
-msgstr "Das gewählte Bild konnte nicht geladen werden."
+msgstr "Plugin konnte nicht geladen werden"
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -4756,6 +4752,8 @@ msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"Dieser Gruppenchat ist nur für Mitglieder, aber bist du nicht auf der "
+"Mitgliederliste. Eine berechtigte Persion muss dich einladen."
 
 msgid "This group chat is restricted to members only"
 msgstr "Gruppenchat ist nur für Mitglieder"
@@ -4882,10 +4880,9 @@ msgstr "Zeit bis abwesend"
 msgid "Time Until Not Available"
 msgstr "Zeit bis abwesend nicht verfügbar"
 
-#, fuzzy
 msgctxt "Profile"
 msgid "Timezone"
-msgstr "Zeit"
+msgstr "Zeitzone"
 
 msgctxt "Profile"
 msgid "Title"
