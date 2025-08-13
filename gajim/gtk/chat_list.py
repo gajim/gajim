@@ -476,20 +476,19 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             log.debug("Delay sorting because it is inhibited")
             return 0
 
-        # Sort pinned rows according to stored order
         if row1.is_pinned and row2.is_pinned:
-            if row1.position > row2.position:
-                return 1
-            return -1
+            return -1 if row1.position < row2.position else 1
 
-        # Sort pinned rows to top
-        if row1.is_pinned > row2.is_pinned:
-            return -1
-        if row2.is_pinned > row1.is_pinned:
-            return 1
+        if row1.is_pinned != row2.is_pinned:
+            return -1 if row1.is_pinned else 1
 
-        # Sort by timestamp
-        return -1 if row1.timestamp > row2.timestamp else 1
+        if row1.has_draft != row2.has_draft:
+            return -1 if row1.has_draft else 1
+
+        if row1.timestamp != row2.timestamp:
+            return -1 if row1.timestamp > row2.timestamp else 1
+
+        return 0
 
     def invalidate_sort(self, *, force: bool = False) -> bool:  # pyright: ignore
         log.debug("Try sorting chatlist")

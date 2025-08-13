@@ -73,6 +73,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.workspace_id = workspace_id
         self.type = type_
         self.position = position
+        self._has_draft = False
 
         self._conversations_header = RowHeader(RowHeaderType.CONVERSATIONS)
         self._pinned_header = RowHeader(RowHeaderType.PINNED)
@@ -141,7 +142,9 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if isinstance(self.contact, GroupchatContact) and not self.contact.can_notify():
             self._ui.unread_label.add_css_class("unread-counter-silent")
 
-        self._display_last_conversation_row()
+        draft = app.storage.drafts.get(self.contact)
+        if not self._set_draft_mode(draft):
+            self._display_last_conversation_row()
 
     def _display_last_conversation_row(self) -> None:
         message = app.storage.archive.get_last_conversation_row(
@@ -206,6 +209,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         return self._pinned
 
     @property
+    def has_draft(self) -> bool:
+        return self._has_draft
+
+    @property
     def unread_count(self) -> int:
         if (
             isinstance(self.contact, GroupchatContact)
@@ -259,16 +266,12 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         oob: list[mod.OOB] | None = None,
     ) -> None:
 
+        if self._has_draft:
+            return
+
         assert isinstance(
             self.contact, BareContact | GroupchatContact | GroupchatParticipant
         )
-
-        draft = app.storage.drafts.get(self.contact)
-        if draft is not None:
-            self._show_draft(draft)
-            return
-
-        self._ui.message_label.remove_css_class("draft")
 
         icon = None
         if icon_name is not None:
@@ -421,17 +424,22 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if contact != self.contact:
             return
 
-        self._show_draft(draft)
+        if not self._set_draft_mode(draft):
+            self._display_last_conversation_row()
+        self.changed()
 
-    def _show_draft(self, draft: Draft | None) -> None:
+    def _set_draft_mode(self, draft: Draft | None) -> bool:
+        self._has_draft = draft is not None
+
         if draft is None:
             self._ui.message_label.remove_css_class("draft")
-            self._display_last_conversation_row()
-            return
 
-        self.set_nick("")
-        self._ui.message_label.set_text(_("Draft: %s") % draft.text)
-        self._ui.message_label.add_css_class("draft")
+        else:
+            self.set_nick("")
+            self._ui.message_label.set_text(_("Draft: %s") % draft.text)
+            self._ui.message_label.add_css_class("draft")
+
+        return self._has_draft
 
     def _on_state_flags_changed(
         self, _row: ChatListRow, _flags: Gtk.StateFlags
