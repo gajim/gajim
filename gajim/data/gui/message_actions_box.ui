@@ -63,7 +63,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage" id="edit_box_image">
-            <property name="icon-name">document-edit-symbolic</property>
+            <property name="icon-name">lucide-square-pen-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>

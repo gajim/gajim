@@ -416,7 +416,7 @@ class PageMenuItem(MenuItem):
         elif name == "privacy":
             icon = "feather-eye-symbolic"
         elif name == "encryption-omemo":
-            icon = "channel-secure-symbolic"
+            icon = "feather-lock-symbolic"
         elif name == "connection":
             icon = "feather-globe-symbolic"
         elif name == "advanced":

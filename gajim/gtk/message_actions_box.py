@@ -611,7 +611,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             tooltip = _("Choose encryption")
 
             if encryption in ("OMEMO", "OpenPGP", "PGP"):
-                icon_name = "channel-secure-symbolic"
+                icon_name = "feather-lock-symbolic"
             else:
                 icon_name = "channel-insecure-symbolic"
 

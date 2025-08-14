@@ -51,7 +51,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
         button_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
         self.append(button_box)
 
-        self._edit_button = Gtk.Button.new_from_icon_name("document-edit-symbolic")
+        self._edit_button = Gtk.Button.new_from_icon_name("lucide-square-pen-symbolic")
         self._edit_button.set_tooltip_text(_("Edit display name…"))
         self._connect(self._edit_button, "clicked", self._on_edit_clicked)
 
@@ -126,7 +126,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
         self._entry.set_sensitive(False)
 
         self._edit_button.set_tooltip_text(_("Edit display name…"))
-        self._edit_button.set_icon_name("document-edit-symbolic")
+        self._edit_button.set_icon_name("lucide-square-pen-symbolic")
         self._clear_button.set_visible(False)
 
     def set_contact(

@@ -321,7 +321,9 @@ class MessageIcons(Gtk.Box):
         self._security_label.set_ellipsize(Pango.EllipsizeMode.END)
         self._security_label.set_max_width_chars(20)
 
-        self._correction_image = Gtk.Image.new_from_icon_name("document-edit-symbolic")
+        self._correction_image = Gtk.Image.new_from_icon_name(
+            "lucide-square-pen-symbolic"
+        )
         self._correction_image.set_visible(False)
         self._correction_image.add_css_class("dimmed")
 

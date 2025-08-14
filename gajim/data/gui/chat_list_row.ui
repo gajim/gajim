@@ -63,7 +63,7 @@
                       <object class="GtkImage" id="chatstate_image">
                         <property name="visible">0</property>
                         <property name="valign">end</property>
-                        <property name="icon-name">content-loading-symbolic</property>
+                        <property name="icon-name">feather-more-horizontal-symbolic</property>
                         <style>
                           <class name="chat-state-icon"/>
                         </style>

@@ -29,7 +29,7 @@ class EncryptionInfoRow(BaseRow):
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
 
-        icon = Gtk.Image.new_from_icon_name("channel-secure-symbolic")
+        icon = Gtk.Image.new_from_icon_name("feather-lock-symbolic")
         icon.set_pixel_size(AvatarSize.ROSTER)
         icon.add_css_class("dimmed")
         avatar_placeholder.append(icon)

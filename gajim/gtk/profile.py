@@ -102,7 +102,7 @@ class ProfileWindow(GajimAppWindow):
 
         self._avatar_edit_button = AvatarFileChooserButton(
             tooltip=_("Change your profile picture"),
-            icon_name="document-edit-symbolic",
+            icon_name="lucide-square-pen-symbolic",
         )
         self._connect(self._avatar_edit_button, "path-picked", self._on_edit_avatar)
 

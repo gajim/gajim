@@ -24,7 +24,9 @@ class ChatStateIndicator(Gtk.Box):
 
         self._contact: types.ChatContactT | None = None
 
-        self._composing_icon = Gtk.Image.new_from_icon_name("content-loading-symbolic")
+        self._composing_icon = Gtk.Image.new_from_icon_name(
+            "feather-more-horizontal-symbolic"
+        )
         self._composing_icon.set_visible(False)
         self._composing_icon.add_css_class("chat-state-icon")
         self.append(self._composing_icon)

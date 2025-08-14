@@ -140,7 +140,7 @@ class Preferences(GajimAppWindow):
             PreferencesPageData(
                 name="status",
                 title=_("Status"),
-                icon_name="user-status-pending-symbolic",
+                icon_name="lucide-megaphone-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="status_message",

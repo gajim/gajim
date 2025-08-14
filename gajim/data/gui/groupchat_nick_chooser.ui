@@ -11,7 +11,7 @@
     </child>
     <child>
       <object class="GtkImage">
-        <property name="icon_name">document-edit-symbolic</property>
+        <property name="icon_name">lucide-square-pen-symbolic</property>
       </object>
     </child>
   </object>
