@@ -657,23 +657,25 @@ button.flat.link { padding: 0; border: 0; }
 .code-widget {
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin: 6px 0;
+    padding: 12px;
+    background: alpha(var(--shade-color), 0.3);
 }
 .code-widget-header {
-    background-color: var(--headerbar-shade-color);
-    padding: 0 6px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-bottom: 12px;
 }
 .code-widget-header label {
-    font-size: 90%;
+    font-weight: bold;
+    color: alpha(var(--window-fg-color), 0.7);
 }
-.code-widget-header button {
-    padding: 0;
-}
+
 .code-widget .view {
-    font-size: 100%;
+    font-size: 90%;
+    padding: 6px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
 }
 
 /* ReferencedMessageWidget */
