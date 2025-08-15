@@ -118,6 +118,8 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         self._connect(reset_button, "clicked", self._on_reset_button_clicked)
         popover_content.attach(reset_button, 0, 4, 2, 1)
 
+        self._populate_dropdowns()
+
     def do_unroot(self) -> None:
         Gtk.Overlay.do_unroot(self)
         self._disconnect_all()
@@ -135,6 +137,14 @@ class ChatFilter(Gtk.Overlay, SignalManager):
             account=account,
         )
 
+    def set_filters(self, filters: ChatFilters) -> None:
+        self._block_signal = True
+        self._chat_type_drop_down.select_key(filters.type)
+        self._roster_groups_drop_down.select_key(filters.group)
+        self._account_drop_down.select_key(filters.account)
+        self._block_signal = False
+        self.emit("filter-changed")
+
     def reset(self) -> None:
         self._chat_type_drop_down.set_selected(0)
         self._roster_groups_drop_down.set_selected(0)
@@ -146,6 +156,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         if not menu_button.get_active():
             return
 
+        self._populate_dropdowns()
+
+    def _populate_dropdowns(self) -> None:
         roster_group_key = self._roster_groups_drop_down.get_selected_key()
         account_key = self._account_drop_down.get_selected_key()
 

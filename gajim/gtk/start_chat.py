@@ -77,6 +77,9 @@ log = logging.getLogger("gajim.gtk.start_chat")
 
 
 class StartChatDialog(GajimAppWindow):
+
+    last_chat_filters = ChatFilters()
+
     def __init__(
         self, initial_jid: str | None = None, initial_message: str | None = None
     ) -> None:
@@ -205,6 +208,9 @@ class StartChatDialog(GajimAppWindow):
 
         self._ui.search_entry.grab_focus()
         log.debug("Loading dialog finished")
+
+        self._chat_filter.set_filters(StartChatDialog.last_chat_filters)
+
         self.show()
 
     def _cleanup(self, *args: Any) -> None:
@@ -476,6 +482,8 @@ class StartChatDialog(GajimAppWindow):
         app.settings.set("show_help_start_chat", False)
 
     def _on_chat_filter_changed(self, chat_filter: ChatFilter) -> None:
+        filters = chat_filter.get_filters()
+        StartChatDialog.last_chat_filters = filters
         self._contact_view.set_chat_filter(chat_filter.get_filters())
 
     def _prepare_new_chat(self, item: ContactListItem) -> None:
