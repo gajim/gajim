@@ -31,12 +31,6 @@ def get_default_lang() -> str:
     return _trans.get_default_lang()
 
 
-def get_rfc5646_lang(lang: str | None = None) -> str:
-    if lang is None:
-        lang = _trans.get_default_lang()
-    return lang.replace('_', '-')
-
-
 def get_short_lang_code(lang: str | None = None) -> str:
     if lang is None:
         lang = _trans.get_default_lang()

@@ -41,13 +41,13 @@ from gajim.common.helpers import get_resource
 from gajim.common.helpers import Observable
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.i18n import _
-from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
+from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import get_idle_status_message
 from gajim.common.util.text import to_one_line
 

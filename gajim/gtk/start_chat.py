@@ -38,12 +38,12 @@ from gajim.common.const import PresenceShowExt
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
-from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_group_chat_nick
+from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import compare_show
 from gajim.common.util.text import to_one_line
 from gajim.common.util.uri import parse_uri

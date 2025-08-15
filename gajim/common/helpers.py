@@ -54,7 +54,7 @@ from qrcode.image.pil import PilImage as QrcPilImage
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
-from gajim.common.i18n import get_rfc5646_lang
+from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
 if TYPE_CHECKING:

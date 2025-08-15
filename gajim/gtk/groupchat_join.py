@@ -17,8 +17,8 @@ from gajim.common import app
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
-from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.util.muc import get_group_chat_nick
+from gajim.common.util.standards import get_rfc5646_lang
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
