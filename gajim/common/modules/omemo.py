@@ -212,7 +212,9 @@ class OMEMO(BaseModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+                type=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS,
+                message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS.value,
+            ))
             return False
 
         self._log.debug('Sending message to %s', jid)
@@ -229,7 +231,9 @@ class OMEMO(BaseModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                message=EncryptionInfoMsg.BAD_OMEMO_CONFIG))
+                type=EncryptionInfoMsg.BAD_OMEMO_CONFIG,
+                message=EncryptionInfoMsg.BAD_OMEMO_CONFIG.value,
+            ))
             return False
 
         has_trusted_keys = False
@@ -243,7 +247,9 @@ class OMEMO(BaseModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                message=EncryptionInfoMsg.NO_FINGERPRINTS))
+                type=EncryptionInfoMsg.NO_FINGERPRINTS,
+                message=EncryptionInfoMsg.NO_FINGERPRINTS.value,
+            ))
             return False
         return True
 
@@ -258,7 +264,9 @@ class OMEMO(BaseModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                message=EncryptionInfoMsg.QUERY_DEVICES))
+                type=EncryptionInfoMsg.QUERY_DEVICES,
+                message=EncryptionInfoMsg.QUERY_DEVICES.value,
+            ))
             return False
 
         if not self._has_trusted_keys(jid):
@@ -266,7 +274,9 @@ class OMEMO(BaseModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                message=EncryptionInfoMsg.NO_FINGERPRINTS))
+                type=EncryptionInfoMsg.NO_FINGERPRINTS,
+                message=EncryptionInfoMsg.NO_FINGERPRINTS.value,
+            ))
             return False
         return True
 
@@ -578,7 +588,9 @@ class OMEMO(BaseModule):
         app.ged.raise_event(EncryptionInfo(
             account=self._account,
             jid=JID.from_string(jid),
-            message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+            type=EncryptionInfoMsg.SESSION_BUILD,
+            message=EncryptionInfoMsg.SESSION_BUILD.value.format(device_id=device_id),
+        ))
 
     def set_devicelist(self, devicelist: list[int] | None = None) -> None:
         devicelist_: set[int] = {self.backend.get_our_device()}

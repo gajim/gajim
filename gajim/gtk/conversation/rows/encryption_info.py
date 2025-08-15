@@ -41,10 +41,10 @@ class EncryptionInfoRow(BaseRow):
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)
 
         self._label = SimpleLabel()
-        self._label.set_text(event.message.value)
+        self._label.set_text(event.message)
         self.grid.attach(self._label, 1, 1, 1, 1)
 
-        if event.message in (
+        if event.type in (
             EncryptionInfoMsg.NO_FINGERPRINTS,
             EncryptionInfoMsg.UNDECIDED_FINGERPRINTS,
         ):

@@ -856,7 +856,8 @@ class EncryptionInfo(ApplicationEvent):
     name: str = field(init=False, default='encryption-check')
     account: str
     jid: JID
-    message: EncryptionInfoMsg
+    type: EncryptionInfoMsg
+    message: str
 
 
 @dataclass
