@@ -585,6 +585,13 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if message.text is None:
             return
 
+        if message.type == MessageType.GROUPCHAT and message.occupant is not None:
+            client = app.get_client(event.account)
+            if client.get_module("MucBlocking").is_blocked(
+                message.remote.jid, message.occupant.id
+            ):
+                return
+
         assert message.id is not None
 
         nick = self._get_nick_for_received_message(event.account, message)

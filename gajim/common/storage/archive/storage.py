@@ -29,6 +29,7 @@ from sqlalchemy import update
 from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import Session
 
@@ -645,7 +646,10 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
                 Message.correction_id.is_(None),
+                sa.or_(Occupant.blocked == sa.false(), Occupant.blocked.is_(None))
             )
+            .outerjoin(Occupant)
+            .options(contains_eager(Message.occupant))
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .limit(1)
         )
