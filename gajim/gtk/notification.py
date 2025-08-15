@@ -99,6 +99,12 @@ class NotificationBackend(EventHelper):
                 log.debug("Notifications muted for %s", contact)
                 return
 
+            if isinstance(contact, GroupchatContact) and event.resource is not None:
+                participant = contact.get_resource(event.resource)
+                if participant.is_blocked:
+                    log.debug("Notifications blocked for %s", participant)
+                    return
+
         if event.sound is not None:
             play_sound(event.sound, event.account)
 
