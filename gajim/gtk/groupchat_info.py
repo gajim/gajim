@@ -280,7 +280,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
                 image.set_pixel_size(24)
                 image.add_css_class("dimmed")
                 row.add_prefix(image)
-                row.add_css_class("property")
 
                 self._ui.features_listbox.append(row)
 
