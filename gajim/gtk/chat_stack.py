@@ -23,6 +23,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
+from gajim.common.const import Display
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -122,6 +123,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         drop_target = Gtk.DropTarget(
             actions=Gdk.DragAction.COPY, formats=format_builder.to_formats()
         )
+        self._connect(drop_target, "accept", self._on_drop_accept)
         self._connect(drop_target, "drop", self._on_file_drop)
         self._connect(drop_target, "enter", self._on_drag_enter)
         self._connect(drop_target, "leave", self._on_drag_leave)
@@ -748,6 +750,11 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
     def _on_drag_leave(self, _drop_target: Gtk.DropTarget) -> None:
         self._drop_area.set_visible(False)
+
+    def _on_drop_accept(self, _target: Gtk.DropTarget, _drop: Gdk.Drop) -> bool:
+        # DND on X11 freezes due to a GTK bug:
+        # https://dev.gajim.org/gajim/gajim/-/issues/12313
+        return not app.is_display(Display.X11)
 
     def _on_file_drop(
         self,

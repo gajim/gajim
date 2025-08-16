@@ -18,6 +18,7 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import Display
 from gajim.common.helpers import load_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -197,6 +198,11 @@ class FileTransferSelector(Gtk.Box, SignalManager):
         return paths
 
     def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        if app.is_display(Display.X11):
+            # DND on X11 freezes due to a GTK bug:
+            # https://dev.gajim.org/gajim/gajim/-/issues/12313
+            return False
+
         formats = drop.get_formats()
         return bool(formats.contain_gtype(Gdk.FileList))
 

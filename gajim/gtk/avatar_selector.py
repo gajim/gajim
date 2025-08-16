@@ -23,6 +23,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.const import Display
 from gajim.common.i18n import _
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.uri import get_file_path_from_uri
@@ -117,6 +118,11 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self.prepare_crop_area(str(paths[0]))
 
     def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        if app.is_display(Display.X11):
+            # DND on X11 freezes due to a GTK bug:
+            # https://dev.gajim.org/gajim/gajim/-/issues/12313
+            return False
+
         formats = drop.get_formats()
         return bool(formats.contain_gtype(Gdk.FileList))
 
