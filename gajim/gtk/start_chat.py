@@ -1029,7 +1029,7 @@ class ContactListItem(GObject.Object):
         groupchat: bool = False,
     ) -> None:
 
-        name = name or _("Start New Chat")
+        name = name or _("Start / Join Chat")
 
         idle = None
         status = ""
