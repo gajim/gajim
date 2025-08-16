@@ -114,9 +114,20 @@ class AppSideBar(Gtk.Box, EventHelper):
             account = None
 
         texture = app.app.avatar_storage.get_account_button_texture(
-            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+            account,
+            AvatarSize.ACCOUNT_SIDE_BAR,
+            self.get_scale_factor(),
+            self._has_connectivity_issues(),
         )
         self._account_row.set_from_paintable(texture)
+
+    @staticmethod
+    def _has_connectivity_issues() -> bool:
+        for account in app.settings.get_active_accounts():
+            client = app.get_client(account)
+            if client.state.is_disconnected or client.state.is_reconnect_scheduled:
+                return True
+        return False
 
     def _on_account_clicked(
         self,
@@ -297,10 +308,21 @@ class AccountPopoverRow(Gtk.ListBoxRow):
         label = app.settings.get_account_setting(account, "account_label")
         self._label.set_text(label)
 
+        client = app.get_client(account)
+        connectivity_issues = bool(
+            client.state.is_disconnected or client.state.is_reconnect_scheduled
+        )
         texture = app.app.avatar_storage.get_account_button_texture(
-            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+            account,
+            AvatarSize.ACCOUNT_SIDE_BAR,
+            self.get_scale_factor(),
+            connectivity_issues,
         )
         self._avatar.set_from_paintable(texture)
+        if connectivity_issues:
+            self._avatar.set_tooltip_text(_("There are connectivity issues"))
+        else:
+            self._avatar.set_tooltip_text("")
 
     def do_unroot(self) -> None:
         Gtk.ListBoxRow.do_unroot(self)

@@ -569,10 +569,28 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def get_account_button_texture(
-        account: str | None,
-        size: int,
-        scale: int,
+        account: str | None, size: int, scale: int, connectivity_issues: bool
     ) -> Gdk.Texture:
+        width = size * scale
+        height = width
+
+        if connectivity_issues:
+            surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+            context = cairo.Context(surface)
+
+            context.set_source_rgb(0.75, 0.75, 0.75)
+            context.rectangle(0, 0, width, height)
+            context.fill()
+            icon_surface = load_icon_surface("dialog-warning", int(size * 0.7), scale)
+            if icon_surface is not None:
+                pos = (width - width * 0.7) / 2
+                context.set_source_surface(icon_surface, pos, pos)
+                context.paint_with_alpha(0.6)
+
+            surface.set_device_scale(scale, scale)
+            surface = clip_circle(context.get_target())
+            return convert_surface_to_texture(surface)
+
         if account is not None:
             jid = app.get_jid_from_account(account)
             client = app.get_client(account)
@@ -583,9 +601,6 @@ class AvatarStorage(metaclass=Singleton):
             )
 
         # Paint default avatar on grey background (incl. show)
-        width = size * scale
-        height = width
-
         surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
         context = cairo.Context(surface)
 
