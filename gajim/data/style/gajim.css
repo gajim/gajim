@@ -740,6 +740,12 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 
+/* Message row actions */
+.row-actions-button-box {
+    background: var(--window-bg-color);
+    border-radius: 8px;
+}
+
 /* ReactionsBar */
 .reaction {
     border: 1px solid var(--border-color);

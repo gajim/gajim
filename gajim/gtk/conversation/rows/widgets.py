@@ -50,7 +50,6 @@ class MessageRowActions(Gtk.Box):
             margin_end=40,
             visible=False,
         )
-        self.add_css_class("background")
 
         self._message_row: MessageRow | None = None
         self._contact: ChatContactT | None = None
@@ -91,6 +90,7 @@ class MessageRowActions(Gtk.Box):
 
         box = Gtk.Box()
         box.add_css_class("linked")
+        box.add_css_class("row-actions-button-box")
 
         for button in self._reaction_buttons:
             box.append(button)
