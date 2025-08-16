@@ -128,7 +128,7 @@ class GroupchatDetails(GajimAppWindow):
         self._groupchat_info.set_halign(Gtk.Align.FILL)
         self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
-        self._ui.info_box.append(self._groupchat_info)
+        self._ui.info_container.set_child(self._groupchat_info)
         self._switcher.set_row_visible("information", True)
 
     def _add_groupchat_settings(self) -> None:

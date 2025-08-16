@@ -1,238 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkGrid" id="info_grid">
-    <property name="halign">center</property>
-    <property name="row-spacing">6</property>
-    <property name="column-spacing">12</property>
-    <child>
-      <object class="GtkLabel" id="address_label">
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Address</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">2</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="description_label">
-        <property name="visible">0</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Description</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">3</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="subject_label">
-        <property name="visible">0</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Subject</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">4</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="author_label">
-        <property name="visible">0</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Author</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">5</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="description">
-        <property name="visible">0</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="use-markup">1</property>
-        <property name="wrap">1</property>
-        <property name="wrap-mode">word-char</property>
-        <property name="selectable">1</property>
-        <property name="max-width-chars">40</property>
-        <property name="xalign">0</property>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">3</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="author">
-        <property name="visible">0</property>
-        <property name="focusable">1</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="wrap">1</property>
-        <property name="wrap-mode">word-char</property>
-        <property name="selectable">1</property>
-        <property name="max-width-chars">40</property>
-        <property name="xalign">0</property>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">5</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="users">
-        <property name="visible">0</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">9</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="contact_label">
-        <property name="visible">0</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Contact</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">7</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="logs_label">
-        <property name="visible">0</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Discussion Logs</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">6</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="lang">
-        <property name="visible">0</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="wrap">1</property>
-        <property name="max-width-chars">40</property>
-        <property name="xalign">0</property>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">8</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLinkButton" id="logs">
-        <property name="visible">0</property>
-        <property name="focusable">1</property>
-        <property name="receives-default">1</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <style>
-          <class name="link-button"/>
-        </style>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">6</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImage" id="users_image">
-        <property name="visible">0</property>
-        <property name="tooltip-text" translatable="yes">Participants</property>
-        <property name="halign">end</property>
-        <property name="valign">center</property>
-        <property name="icon-name">system-users-symbolic</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">9</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImage" id="lang_image">
-        <property name="visible">0</property>
-        <property name="tooltip-text" translatable="yes">Group Chat Language</property>
-        <property name="halign">end</property>
-        <property name="valign">center</property>
-        <property name="icon-name">lucide-languages-symbolic</property>
-        <style>
-          <class name="dimmed"/>
-        </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">8</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox" id="contact_box">
-        <property name="visible">0</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
-        <child>
-          <placeholder/>
-        </child>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">7</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="subject">
-        <property name="visible">0</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="use-markup">1</property>
-        <property name="wrap">1</property>
-        <property name="wrap-mode">word-char</property>
-        <property name="selectable">1</property>
-        <property name="max-width-chars">40</property>
-        <property name="xalign">0</property>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">4</property>
-        </layout>
-      </object>
-    </child>
+  <object class="GtkBox" id="info_box">
+    <property name="spacing">6</property>
+    <property name="orientation">vertical</property>
+    <style>
+      <class name="p-6"/>
+    </style>
     <child>
       <object class="GtkImage" id="avatar_image">
         <property name="margin-bottom">12</property>
@@ -240,40 +14,6 @@
           <property name="column">0</property>
           <property name="row">0</property>
           <property name="column-span">2</property>
-        </layout>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel" id="address">
-            <property name="width-request">200</property>
-            <property name="halign">start</property>
-            <property name="selectable">1</property>
-            <property name="ellipsize">middle</property>
-            <property name="single-line-mode">1</property>
-            <property name="max-width-chars">40</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="address_copy_button">
-            <property name="sensitive">0</property>
-            <property name="focusable">1</property>
-            <property name="tooltip-text" translatable="yes">Copy Address</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">edit-copy-symbolic</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <layout>
-          <property name="column">1</property>
-          <property name="row">2</property>
         </layout>
       </object>
     </child>
@@ -289,6 +29,165 @@
           <property name="row">1</property>
           <property name="column-span">2</property>
         </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox" id="info_listbox">
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="boxed-list"/>
+          <class name="mt-12"/>
+        </style>
+        <child>
+          <object class="AdwActionRow" id="address_row">
+            <property name="title" translatable="yes">Address</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+            <child type="suffix">
+              <object class="GtkButton" id="address_copy_button">
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="valign">center</property>
+                <property name="sensitive">False</property>
+                <property name="tooltip-text" translatable="yes">Copy Address</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="description_row">
+            <property name="title" translatable="yes">Description</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="use-markup">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="subject_row">
+            <property name="title" translatable="yes">Subject</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="use-markup">True</property>
+            <property name="visible">False</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="author_row">
+            <property name="title" translatable="yes">Subject last changed by</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="visible">False</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="users_row">
+            <property name="title" translatable="yes">Participants</property>
+            <property name="visible">False</property>
+            <style>
+              <class name="property"/>
+            </style>
+            <child type="prefix">
+              <object class="GtkImage">
+                <property name="icon-name">system-users-symbolic</property>
+                <property name="pixel-size">24</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="contact_row">
+            <property name="title" translatable="yes">Contact</property>
+            <property name="visible">False</property>
+            <child type="prefix">
+              <object class="GtkImage">
+                <property name="icon-name">feather-user-symbolic</property>
+                <property name="pixel-size">24</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="contact_box">
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="logs_row">
+            <property name="title" translatable="yes">Message History</property>
+            <property name="use-markup">True</property>
+            <property name="visible">False</property>
+            <child type="prefix">
+              <object class="GtkImage">
+                <property name="icon-name">lucide-calendar-symbolic</property>
+                <property name="pixel-size">24</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+            <child type="suffix">
+              <object class="GtkLinkButton" id="logs">
+                <property name="label" translatable="yes">Website</property>
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="link-button"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="lang_row">
+            <property name="title" translatable="yes">Group Chat Language</property>
+            <property name="visible">False</property>
+            <style>
+              <class name="property"/>
+            </style>
+            <child type="prefix">
+              <object class="GtkImage">
+                <property name="icon-name">lucide-languages-symbolic</property>
+                <property name="pixel-size">24</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Information</property>
+        <style>
+          <class name="my-18"/>
+        </style>
+        <child>
+          <object class="GtkListBox" id="features_listbox">
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="boxed-list"/>
+            </style>
+          </object>
+        </child>
       </object>
     </child>
   </object>

@@ -407,7 +407,7 @@ class GroupchatCreationBuilder(Builder):
 
 class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
-    info_box: Gtk.Box
+    info_container: Adw.Clamp
     settings_box: Gtk.Box
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Gtk.Box
@@ -418,26 +418,22 @@ class GroupchatDetailsBuilder(Builder):
     configuration_box: Gtk.Box
 
 class GroupchatInfoScrolledBuilder(Builder):
-    info_grid: Gtk.Grid
-    address_label: Gtk.Label
-    description_label: Gtk.Label
-    subject_label: Gtk.Label
-    author_label: Gtk.Label
-    description: Gtk.Label
-    author: Gtk.Label
-    users: Gtk.Label
-    contact_label: Gtk.Label
-    logs_label: Gtk.Label
-    lang: Gtk.Label
-    logs: Gtk.LinkButton
-    users_image: Gtk.Image
-    lang_image: Gtk.Image
-    contact_box: Gtk.Box
-    subject: Gtk.Label
+    info_box: Gtk.Box
     avatar_image: Gtk.Image
-    address: Gtk.Label
-    address_copy_button: Gtk.Button
     name_box: Gtk.Box
+    info_listbox: Gtk.ListBox
+    address_row: Adw.ActionRow
+    address_copy_button: Gtk.Button
+    description_row: Adw.ActionRow
+    subject_row: Adw.ActionRow
+    author_row: Adw.ActionRow
+    users_row: Adw.ActionRow
+    contact_row: Adw.ActionRow
+    contact_box: Gtk.Box
+    logs_row: Adw.ActionRow
+    logs: Gtk.LinkButton
+    lang_row: Adw.ActionRow
+    features_listbox: Gtk.ListBox
 
 class GroupchatInviterBuilder(Builder):
     account_store: Gtk.ListStore

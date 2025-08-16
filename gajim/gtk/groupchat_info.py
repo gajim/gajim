@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 import time
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -120,9 +121,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         show_users: bool = True,
     ) -> None:
         SignalManager.__init__(self)
-        Gtk.ScrolledWindow.__init__(self)
-        self.set_size_request(width, -1)
-        self.set_halign(Gtk.Align.CENTER)
+        Gtk.ScrolledWindow.__init__(self, width_request=width, halign=Gtk.Align.CENTER)
 
         self._minimal = minimal
         self._show_users = show_users
@@ -141,10 +140,8 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self._info: DiscoInfo | None = None
 
         self._ui = get_builder("groupchat_info_scrolled.ui")
-        self.set_child(self._ui.info_grid)
+        self.set_child(self._ui.info_box)
 
-        self._connect(self._ui.logs, "activate-link", self._on_activate_log_link)
-        self._connect(self._ui.subject, "activate-link", self._on_activate_subject_link)
         self._connect(self._ui.address_copy_button, "clicked", self._on_copy_address)
 
         self._contact_name_widget = ContactNameWidget(edit_mode=edit_mode)
@@ -177,20 +174,17 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         if muc_subject is None:
             return
 
+        self._ui.subject_row.set_subtitle(make_href_markup(muc_subject.text))
+        self._ui.subject_row.set_visible(bool(muc_subject.text))
+
         author = muc_subject.author
         has_author = bool(author)
         if has_author and muc_subject.timestamp is not None:
             time_ = time.strftime("%c", time.localtime(muc_subject.timestamp))
             author = f"{muc_subject.author} - {time_}"
 
-        self._ui.author.set_text(author or "")
-        self._ui.author.set_visible(has_author)
-        self._ui.author_label.set_visible(has_author)
-
-        has_subject = bool(muc_subject.text)
-        self._ui.subject.set_markup(make_href_markup(muc_subject.text))
-        self._ui.subject.set_visible(has_subject)
-        self._ui.subject_label.set_visible(has_subject)
+        self._ui.author_row.set_subtitle(author or "")
+        self._ui.author_row.set_visible(has_author)
 
     def set_info_from_contact(self, contact: GroupchatContact) -> None:
         self._contact = contact
@@ -202,8 +196,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
             self.set_from_disco_info(disco_info)
             return
 
-        self._ui.address.set_text(str(contact.jid))
-        self._ui.address.set_tooltip_text(str(contact.jid))
+        self._ui.address_row.set_subtitle(str(contact.jid))
         self._ui.address_copy_button.set_sensitive(True)
 
     def set_from_disco_info(self, info: DiscoInfo) -> None:
@@ -225,29 +218,20 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
 
         self._contact_name_widget.update_displayed_name(name or "")
 
-        # Set description
-        has_desc = bool(info.muc_description)
-        self._ui.description.set_markup(make_href_markup(info.muc_description))
-        self._ui.description.set_visible(has_desc)
-        self._ui.description_label.set_visible(has_desc)
-
-        # Set address
-        self._ui.address.set_text(str(info.jid))
-        self._ui.address.set_tooltip_text(str(info.jid))
+        self._ui.address_row.set_subtitle(str(info.jid))
         self._ui.address_copy_button.set_sensitive(True)
+
+        self._ui.description_row.set_subtitle(make_href_markup(info.muc_description))
+        self._ui.description_row.set_visible(bool(info.muc_description))
 
         if self._minimal:
             return
 
-        # Set user
-        has_users = info.muc_users is not None
-        self._ui.users.set_text(info.muc_users or "")
-        self._ui.users.set_visible(has_users and self._show_users)
-        self._ui.users_image.set_visible(has_users and self._show_users)
+        self._ui.users_row.set_subtitle(info.muc_users or "")
+        self._ui.users_row.set_visible(info.muc_users is not None and self._show_users)
 
         # Set contacts
         container_remove_all(self._ui.contact_box)
-
         if info.muc_contacts:
             for contact in info.muc_contacts:
                 try:
@@ -257,23 +241,18 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
                 else:
                     self._ui.contact_box.append(self._get_contact_button(jid))
 
-        self._ui.contact_box.set_visible(bool(info.muc_contacts))
-        self._ui.contact_label.set_visible(bool(info.muc_contacts))
+        self._ui.contact_row.set_visible(bool(info.muc_contacts))
 
-        # Set discussion logs
-        has_log_uri = bool(info.muc_log_uri)
+        # Message history
+        self._ui.logs_row.set_visible(bool(info.muc_log_uri))
         self._ui.logs.set_uri(info.muc_log_uri or "")
-        self._ui.logs.set_label(_("Website"))
-        self._ui.logs.set_visible(has_log_uri)
-        self._ui.logs_label.set_visible(has_log_uri)
 
         # Set room language
         lang = ""
         if info.muc_lang:
             lang = RFC5646_LANGUAGE_TAGS.get(info.muc_lang, info.muc_lang)
-        self._ui.lang.set_text(lang)
-        self._ui.lang.set_visible(bool(info.muc_lang))
-        self._ui.lang_image.set_visible(bool(info.muc_lang))
+        self._ui.lang_row.set_subtitle(lang or "")
+        self._ui.lang_row.set_visible(bool(info.muc_lang))
 
         self._add_features(info.features)
 
@@ -284,27 +263,26 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self.emit("name-updated", name)
 
     def _add_features(self, features: list[str]) -> None:
-        grid = self._ui.info_grid
-        for row in range(30, 9, -1):
-            # Remove everything from row 30 to 10
-            # We probably will never have 30 rows and
-            # there is no method to count grid rows
-            grid.remove_row(row)
         features = list(features)
 
         if Namespace.MAM_2 in features:
             features.append("mam")
 
-        row = 10
-
         for feature in MUC_FEATURES:
             if feature in features:
-                icon, name, tooltip = MUC_FEATURES.get(feature, (None, None, None))
-                if icon is None or name is None or tooltip is None:
+                icon, title, subtitle = MUC_FEATURES.get(feature, (None, None, None))
+                if icon is None or title is None or subtitle is None:
+                    log.debug("No user strings for feature %s", feature)
                     continue
-                grid.attach(self._get_feature_icon(icon, tooltip), 0, row, 1, 1)
-                grid.attach(self._get_feature_label(name), 1, row, 1, 1)
-                row += 1
+
+                row = Adw.ActionRow(title=title, subtitle=subtitle)
+                image = Gtk.Image.new_from_icon_name(icon)
+                image.set_pixel_size(24)
+                image.add_css_class("dimmed")
+                row.add_prefix(image)
+                row.add_css_class("property")
+
+                self._ui.features_listbox.append(row)
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
         jid = None
@@ -319,42 +297,14 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
 
         self.get_clipboard().set(jid.to_iri(XmppUriQuery.JOIN.value))
 
-    @staticmethod
-    def _on_activate_log_link(button: Gtk.LinkButton) -> int:
-        open_uri(button.get_uri())
-        return Gdk.EVENT_STOP
-
     def _on_activate_contact_link(self, button: Gtk.LinkButton) -> int:
         open_uri(button.get_uri())
         return Gdk.EVENT_STOP
-
-    @staticmethod
-    def _on_activate_subject_link(_label: Gtk.Label, uri: str) -> int:
-        # We have to use this, because the default GTK handler
-        # is not cross-platform compatible
-        open_uri(uri)
-        return Gdk.EVENT_STOP
-
-    @staticmethod
-    def _get_feature_icon(icon: str, tooltip: str) -> Gtk.Image:
-        image = Gtk.Image.new_from_icon_name(icon)
-        image.set_valign(Gtk.Align.CENTER)
-        image.set_halign(Gtk.Align.END)
-        image.set_tooltip_text(tooltip)
-        return image
-
-    @staticmethod
-    def _get_feature_label(text: str) -> Gtk.Label:
-        label = Gtk.Label(label=text, use_markup=True)
-        label.set_halign(Gtk.Align.START)
-        label.set_valign(Gtk.Align.START)
-        return label
 
     def _get_contact_button(self, contact: JID) -> Gtk.Button:
         button = Gtk.LinkButton(
             uri=contact.to_iri(XmppUriQuery.MESSAGE.value), label=str(contact)
         )
-        button.set_halign(Gtk.Align.START)
         button.add_css_class("link-button")
         self._connect(button, "activate-link", self._on_activate_contact_link)
         return button
