@@ -170,6 +170,13 @@ class Presence(BaseModule):
             self.subscribed(jid)
             return
 
+        ignore_unknown_contacts = app.settings.get_account_setting(
+            self._account, 'ignore_unknown_contacts'
+        )
+        if ignore_unknown_contacts:
+            self._log.info('Contact request ignored due to ignore_unknown_contacts')
+            return
+
         status = (properties.status or
                   _('I would like to add you to my roster.'))
 
