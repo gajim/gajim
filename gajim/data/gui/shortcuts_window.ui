@@ -35,12 +35,6 @@
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="accelerator">&lt;primary&gt;t</property>
-                <property name="title" translatable="yes">File transfers</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;x</property>
                 <property name="title" translatable="yes">Show debug console</property>
               </object>
@@ -72,12 +66,6 @@
               <object class="GtkShortcutsShortcut">
                 <property name="accelerator">&lt;primary&gt;0</property>
                 <property name="title" translatable="yes">Reset User Interface Font Size</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="accelerator">&lt;primary&gt;M</property>
-                <property name="title" translatable="yes">Toggle Menu Bar</property>
               </object>
             </child>
           </object>
