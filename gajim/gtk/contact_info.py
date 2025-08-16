@@ -77,10 +77,21 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         EventHelper.__init__(self)
 
-        # Set account and jid for window management
+        # Window management needs both account and contact attributes set
         self.account = account
-        self.contact = contact
+
         self._client = app.get_client(account)
+
+        if isinstance(contact, GroupchatParticipant) and contact.real_jid is not None:
+            # Display full contact dialog if we know contact's real JID
+            bare_contact = self._client.get_module("Contacts").get_contact(
+                contact.real_jid
+            )
+            assert isinstance(bare_contact, BareContact)
+            self.contact = bare_contact
+        else:
+            self.contact = contact
+
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._ui = get_builder("contact_info.ui")
