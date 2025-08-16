@@ -242,11 +242,6 @@ def get_optional_features(account: str) -> list[str]:
     return features
 
 
-def jid_is_blocked(account: str, jid: str) -> bool:
-    client = app.get_client(account)
-    return jid in client.get_module('Blocking').blocked
-
-
 def get_global_proxy() -> ProxyData | None:
     proxy_name = app.settings.get('global_proxy')
     if not proxy_name:
