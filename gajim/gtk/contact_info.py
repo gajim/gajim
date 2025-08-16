@@ -12,6 +12,8 @@ from enum import IntEnum
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gtk
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -77,10 +79,27 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         EventHelper.__init__(self)
 
-        # Set account and jid for window management
+        # Window management needs both account and contact attributes set
         self.account = account
         self.contact = contact
+
         self._client = app.get_client(account)
+
+        affiliation = None
+        role = None
+        if isinstance(contact, GroupchatParticipant):
+            # Display full contact dialog if we know contact's real JID
+            # (but keep affiliation/role infos)
+            affiliation = contact.affiliation
+            role = contact.role
+
+            if contact.real_jid is not None:
+                bare_contact = self._client.get_module("Contacts").get_contact(
+                    contact.real_jid
+                )
+                assert isinstance(bare_contact, BareContact)
+                self.contact = bare_contact
+
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._ui = get_builder("contact_info.ui")
@@ -119,7 +138,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         )
         self._ui.contact_name_controls_box.append(self._contact_name_widget)
 
-        self._fill_information_page(self.contact)
+        self._fill_information_page(self.contact, affiliation, role)
 
         if isinstance(self.contact, BareContact):
             self._fill_settings_page(self.contact)
@@ -205,7 +224,12 @@ class ContactInfo(GajimAppWindow, EventHelper):
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._sidebar_page.set_title(name)
 
-    def _fill_information_page(self, contact: ContactT) -> None:
+    def _fill_information_page(
+        self,
+        contact: ContactT,
+        affiliation: Affiliation | None = None,
+        role: Role | None = None,
+    ) -> None:
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.append(self._vcard_grid)
         if self._client.state.is_available:
@@ -218,9 +242,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.contact_jid_label.set_text(jid)
         self._ui.contact_jid_label.set_tooltip_text(jid)
 
-        if isinstance(contact, GroupchatParticipant):
-            self._ui.role_label.set_text(get_uf_role(contact.role))
-            self._ui.affiliation_label.set_text(get_uf_affiliation(contact.affiliation))
+        if affiliation is not None and role is not None:
+            self._ui.affiliation_label.set_text(get_uf_affiliation(affiliation))
+            self._ui.role_label.set_text(get_uf_role(role))
             self._ui.group_chat_grid.set_visible(True)
 
         self._switcher.set_item_visible("information", True)
