@@ -21,8 +21,7 @@ from gajim.gtk.groupchat_manage import GroupchatManage
 from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 from gajim.gtk.groupchat_settings import GroupChatSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
-from gajim.gtk.sidebar_switcher import Row
-from gajim.gtk.sidebar_switcher import RowHeader
+from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.widgets import GajimAppWindow
@@ -49,7 +48,52 @@ class GroupchatDetails(GajimAppWindow):
         self._ui = get_builder("groupchat_details.ui")
 
         self._switcher = SideBarSwitcher(width=250)
-        self._switcher.set_header_func(self._sidebar_header_func)
+        self._switcher.set_with_menu(
+            self._ui.main_stack,
+            [
+                SideBarMenuItem(
+                    "information", _("Information"), icon_name="feather-user-symbolic"
+                ),
+                SideBarMenuItem(
+                    "settings", _("Settings"), icon_name="document-properties-symbolic"
+                ),
+                SideBarMenuItem(
+                    "encryption-omemo",
+                    _("Encryption (OMEMO)"),
+                    icon_name="feather-lock-symbolic",
+                ),
+                SideBarMenuItem(
+                    "blocks",
+                    _("Blocked Participants"),
+                    icon_name="system-users-symbolic",
+                ),
+                SideBarMenuItem(
+                    "manage",
+                    _("Manage"),
+                    group=_("Administration"),
+                    icon_name="lucide-square-pen-symbolic",
+                ),
+                SideBarMenuItem(
+                    "affiliations",
+                    _("Affiliations"),
+                    group=_("Administration"),
+                    icon_name="system-users-symbolic",
+                ),
+                SideBarMenuItem(
+                    "outcasts",
+                    _("Outcasts"),
+                    group=_("Administration"),
+                    icon_name="system-users-symbolic",
+                ),
+                SideBarMenuItem(
+                    "config",
+                    _("Configuration"),
+                    group=_("Administration"),
+                    icon_name="document-properties-symbolic",
+                ),
+            ],
+            visible=False,
+        )
 
         toolbar = Adw.ToolbarView(content=self._switcher)
         toolbar.add_top_bar(Adw.HeaderBar())
@@ -67,8 +111,6 @@ class GroupchatDetails(GajimAppWindow):
 
         self.set_child(nav)
 
-        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
-
         self._groupchat_manage: GroupchatManage | None = None
 
         self._add_groupchat_info()
@@ -83,22 +125,12 @@ class GroupchatDetails(GajimAppWindow):
             self._add_configuration()
 
         if page is not None:
-            self._switcher.set_row(page)
+            self._switcher.activate_item(page)
 
     def _cleanup(self) -> None:
         del self._switcher
         del self._groupchat_manage
         del self._groupchat_info
-
-    @staticmethod
-    def _sidebar_header_func(row: Row, before: Row | None) -> None:
-        if before is None:
-            row.set_header(None)
-        else:
-            if row.name == "manage":
-                row.set_header(RowHeader(label_text=_("Administration")))
-            else:
-                row.set_header(None)
 
     def _on_disco_info_update(
         self, _contact: GroupchatContact, _signal_name: str
@@ -113,7 +145,7 @@ class GroupchatDetails(GajimAppWindow):
     def _add_groupchat_manage(self) -> None:
         self._groupchat_manage = GroupchatManage(self.account, self._contact)
         self._ui.manage_box.append(self._groupchat_manage)
-        self._switcher.set_row_visible("manage", True)
+        self._switcher.set_item_visible("manage", True)
 
     def _add_groupchat_info(self) -> None:
         self._groupchat_info = GroupChatInfoScrolled(
@@ -129,7 +161,7 @@ class GroupchatDetails(GajimAppWindow):
         self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
         self._ui.info_container.append(self._groupchat_info)
-        self._switcher.set_row_visible("information", True)
+        self._switcher.set_item_visible("information", True)
 
     def _add_groupchat_settings(self) -> None:
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
@@ -152,38 +184,38 @@ class GroupchatDetails(GajimAppWindow):
         scrolled_window.set_child(main_box)
 
         self._ui.settings_box.append(scrolled_window)
-        self._switcher.set_row_visible("settings", True)
+        self._switcher.set_item_visible("settings", True)
 
     def _add_groupchat_encryption(self) -> None:
         if self._contact.is_groupchat and self._contact.muc_context == "public":
             # OMEMO is not available for public group chats
-            self._switcher.set_row_visible("encryption-omemo", False)
+            self._switcher.set_item_visible("encryption-omemo", False)
             return
 
         self._ui.encryption_box.append(
             OMEMOTrustManager(self._contact.account, self._contact)
         )
-        self._switcher.set_row_visible("encryption-omemo", True)
+        self._switcher.set_item_visible("encryption-omemo", True)
 
     def _add_blocks(self) -> None:
         blocks = GroupchatBlocks(self._client, self._contact)
         self._ui.blocks_box.append(blocks)
-        self._switcher.set_row_visible("blocks", True)
+        self._switcher.set_item_visible("blocks", True)
 
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)
         self._ui.affiliation_box.append(affiliations)
-        self._switcher.set_row_visible("affiliations", True)
+        self._switcher.set_item_visible("affiliations", True)
 
     def _add_outcasts(self) -> None:
         affiliations = GroupchatOutcasts(self._client, self._contact)
         self._ui.outcasts_box.append(affiliations)
-        self._switcher.set_row_visible("outcasts", True)
+        self._switcher.set_item_visible("outcasts", True)
 
     def _add_configuration(self) -> None:
         config = GroupchatConfig(self._client, self._contact)
         self._ui.configuration_box.append(config)
-        self._switcher.set_row_visible("config", True)
+        self._switcher.set_item_visible("config", True)
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._sidebar_page.set_title(name)

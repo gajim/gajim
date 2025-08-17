@@ -106,7 +106,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self.set_child(nav)
 
-        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
+        self._switcher.set_with_stack(self._ui.main_stack, visible=False)
 
         self._load_avatar()
 
@@ -129,7 +129,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._fill_note_page(self.contact)
 
         if page is not None:
-            self._switcher.set_row(page)
+            self._switcher.activate_item(page)
 
         self._connect(
             self._ui.tree_selection, "changed", self._on_group_selection_changed
@@ -223,13 +223,13 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._ui.affiliation_label.set_text(get_uf_affiliation(contact.affiliation))
             self._ui.group_chat_grid.set_visible(True)
 
-        self._switcher.set_row_visible("information", True)
+        self._switcher.set_item_visible("information", True)
 
     def _fill_encryption_page(self, contact: ContactT) -> None:
         self._ui.encryption_box.append(
             OMEMOTrustManager(self.contact.account, self.contact)
         )
-        self._switcher.set_row_visible("encryption-omemo", True)
+        self._switcher.set_item_visible("encryption-omemo", True)
 
     def _fill_note_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:
@@ -245,7 +245,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             # roster notes cannot be stored without.
             # Since there is no disco mechanism for private storage, we rely on
             # Delimiter as a "proxy" for the availability of private storage.
-            self._switcher.set_row_visible("notes", True)
+            self._switcher.set_item_visible("notes", True)
 
     def _fill_settings_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:
@@ -265,7 +265,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._ui.to_subscription_stack.set_visible_child_name("request")
             self._ui.request_stack.set_visible_child_name("cross")
 
-        self._switcher.set_row_visible("settings", True)
+        self._switcher.set_item_visible("settings", True)
         contact_settings = ContactSettings(self.account, contact.jid)
         self._ui.contact_settings_box.add(contact_settings)
 
@@ -285,7 +285,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             is_in_group = group in contact.groups
             model.append([is_in_group, group])
 
-        self._switcher.set_row_visible("groups", True)
+        self._switcher.set_item_visible("groups", True)
 
     def _fill_device_info(self, contact: BareContact) -> None:
         contacts = list(contact.iter_resources())
@@ -299,7 +299,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._query_device(resource_contact)
 
         self._ui.devices_stack.set_visible_child_name("devices")
-        self._switcher.set_row_visible("devices", True)
+        self._switcher.set_item_visible("devices", True)
 
     def _query_device(self, contact: ResourceContact) -> None:
         software_module = self._client.get_module("SoftwareVersion")

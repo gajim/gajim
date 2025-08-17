@@ -7,39 +7,102 @@ from __future__ import annotations
 from typing import cast
 
 from gi.repository import Adw
+from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 from gajim.gtk.util.classes import SignalManager
 
 
-class SideBarSwitcher(Gtk.ListBox, SignalManager):
-    def __init__(self, width: int | None = None) -> None:
-        Gtk.ListBox.__init__(self)
+class SideBarSwitcher(Gtk.Stack, SignalManager):
+    __gtype_name__ = "SideBarSwitcher"
+
+    width = GObject.Property(type=int, default=-1)
+
+    def __init__(self, width: int = -1) -> None:
+        Gtk.Stack.__init__(self)
         SignalManager.__init__(self)
 
-        self.set_vexpand(True)
-        self.add_css_class("sidebar-switcher")
-        self.add_css_class("navigation-sidebar")
-        if width is not None:
-            self.set_size_request(width, -1)
+        self.set_property("width", width)
 
-        self._connect(self, "row-activated", self._on_row_activated)
-        self._stack = cast(Gtk.Stack, None)
-        self._rows: dict[str, Row] = {}
+        self._stack: Gtk.Stack | None = None
+        self._menu: list[SideBarMenuItem] = []
+        self._last_visible_child_name = ""
+        self._current_visible_child_name = ""
+
+        self._connect(self, "notify::visible-child-name", self._on_child_name_changed)
 
     def do_unroot(self) -> None:
-        self.set_header_func(None)
-        Gtk.ListBox.do_unroot(self)
+        Gtk.Stack.do_unroot(self)
         self._disconnect_all()
         del self._stack
-        self._rows.clear()
+        self._menu.clear()
         app.check_finalize(self)
 
-    def set_stack(self, stack: Gtk.Stack, rows_visible: bool = True) -> None:
+    def set_with_menu(
+        self, stack: Gtk.Stack, menu: list[SideBarMenuItem], *, visible: bool = True
+    ) -> None:
+        self._menu = menu
         self._stack = stack
-        for page in self._stack.get_pages():  # pyright: ignore
+
+        def _append_menus(menu: list[SideBarMenuItem], key: str) -> None:
+            listbox = self._append_page(key)
+            if key != "__main":
+                menu_item = SideBarMenuItem(
+                    "__back", _("Back"), icon_name="lucide-chevron-left-symbolic"
+                )
+                listbox.append(menu_item)
+
+            for m in menu:
+                if not visible:
+                    m.set_visible(False)
+                listbox.append(m)
+                if m.children:
+                    _append_menus(m.children, m.key)
+
+        _append_menus(menu, "__main")
+        self._current_visible_child_name = "__main"
+
+        self._select_first_menu_item()
+
+    def set_with_stack(self, stack: Gtk.Stack, visible: bool = True) -> None:
+        if self._menu:
+            raise ValueError("Menu already was set for SideBarSwitcher")
+
+        menu = self._build_from_stack(stack)
+        self.set_with_menu(stack, menu, visible=visible)
+
+    def _append_page(self, name: str) -> Gtk.ListBox:
+        listbox = Gtk.ListBox(vexpand=True)
+        listbox.add_css_class("sidebar-switcher")
+        listbox.add_css_class("navigation-sidebar")
+        listbox.set_size_request(self.width, -1)
+        listbox.set_header_func(self._sidebar_header_func)
+        self._connect(listbox, "row-activated", self._on_item_activated)
+        self.add_named(listbox, name)
+        return listbox
+
+    def _select_first_menu_item(self) -> None:
+        self.set_visible_child_name("__main")
+        listbox = cast(Gtk.ListBox, self.get_child_by_name("__main"))
+
+        index = 0
+        while row := listbox.get_row_at_index(index):
+            index += 1
+            if not row.get_visible():
+                continue
+
+            assert isinstance(row, SideBarMenuItem)
+            GLib.idle_add(self._activate_item, row)
+            break
+
+    @staticmethod
+    def _build_from_stack(stack: Gtk.Stack) -> list[SideBarMenuItem]:
+        menu: list[SideBarMenuItem] = []
+        for page in stack.get_pages():  # pyright: ignore
             page = cast(Gtk.StackPage, page)
             name = page.get_name()
             if name is None:
@@ -49,28 +112,76 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
                 raise ValueError("no title on child")
             icon_name = page.get_icon_name()
 
-            row = Row(name, title, icon_name, rows_visible)
+            menu.append(SideBarMenuItem(name, title, icon_name=icon_name))
+        return menu
 
-            self.append(row)
-            self._rows[name] = row
+    def _find_menu_item_by_key(self, key: str) -> SideBarMenuItem | None:
+        def _find(menu: list[SideBarMenuItem]) -> SideBarMenuItem | None:
+            for m in menu:
+                if m.key == key:
+                    return m
+                if m.children:
+                    return _find(m.children)
 
-        self._select_first_row()
+        return _find(self._menu)
 
-    def set_row_visible(self, name: str, state: bool) -> None:
-        row = self._rows.get(name)
-        if row is None:
+    def set_item_visible(self, key: str, state: bool) -> None:
+        menu_item = self._find_menu_item_by_key(key)
+        if menu_item is None:
             raise ValueError
-        row.set_visible(state)
+        menu_item.set_visible(state)
 
-    def set_row(self, name: str) -> None:
-        row = self._rows.get(name)
-        if row is None:
+    def activate_item(self, key: str) -> None:
+        menu_item = self._find_menu_item_by_key(key)
+        if menu_item is None:
             raise ValueError
-        self.select_row(row)
-        self._stack.set_visible_child_name(name)
 
-    def _on_row_activated(self, _listbox: SideBarSwitcher, row: Row):
-        self._stack.set_visible_child_name(row.name)
+        GLib.idle_add(self._activate_item, menu_item)
+
+    def _activate_item(self, item: SideBarMenuItem) -> int:
+        item.emit("activate")
+        return GLib.SOURCE_REMOVE
+
+    @staticmethod
+    def _sidebar_header_func(
+        item: SideBarMenuItem, before: SideBarMenuItem | None
+    ) -> None:
+        if before is None:
+            if item.group:
+                item.set_header(ItemHeader(label_text=item.group))
+            else:
+                item.set_header(None)
+
+        else:
+            if before.group == item.group:
+                item.set_header(None)
+            else:
+                item.set_header(ItemHeader(label_text=item.group or "Unknown"))
+
+    def _on_child_name_changed(
+        self, stack: Gtk.Stack, _param: GObject.ParamSpec
+    ) -> None:
+        self._last_visible_child_name = self._current_visible_child_name
+        name = stack.get_visible_child_name()
+        assert name is not None
+        self._current_visible_child_name = name
+
+    def _on_item_activated(
+        self, _listbox: SideBarSwitcher, item: SideBarMenuItem
+    ) -> None:
+        if item.children:
+            self.set_visible_child_full(item.key, Gtk.StackTransitionType.SLIDE_LEFT)
+            return
+
+        if item.key == "__back":
+            self.set_visible_child_full(
+                self._last_visible_child_name, Gtk.StackTransitionType.SLIDE_RIGHT
+            )
+            return
+
+        assert self._stack is not None
+        self._stack.set_visible_child_name(item.key)
+
         toolbar_view = self._stack.get_parent()
         if not isinstance(toolbar_view, Adw.ToolbarView):
             return
@@ -79,37 +190,49 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
         if not isinstance(navigation_page, Adw.NavigationPage):
             return
 
-        navigation_page.set_title(row.title)
-
-    def _select_first_row(self):
-        row = self.get_row_at_index(0)
-        assert isinstance(row, Row)
-        self._on_row_activated(self, row)
+        navigation_page.set_title(item.title)
 
 
-class Row(Gtk.ListBoxRow):
+class SideBarMenuItem(Gtk.ListBoxRow):
     def __init__(
-        self, name: str, title: str, icon_name: str | None, visible: bool
+        self,
+        key: str,
+        title: str,
+        group: str | None = None,
+        icon_name: str | None = None,
+        children: list[SideBarMenuItem] | None = None,
+        visible: bool = True,
     ) -> None:
-
         Gtk.ListBoxRow.__init__(self)
 
-        self.name = name
+        self.key = key
         self.title = title
+        self.children = children
+        self.group = group
 
         box = Gtk.Box(spacing=12)
         if icon_name is not None:
             image = Gtk.Image.new_from_icon_name(icon_name)
             box.append(image)
 
-        label = Gtk.Label(label=title)
-        label.set_xalign(0)
+        label = Gtk.Label(label=title, xalign=0, hexpand=True)
         box.append(label)
+
+        if self.children:
+            image = Gtk.Image.new_from_icon_name("lucide-chevron-right-symbolic")
+            box.append(image)
+
         self.set_child(box)
         self.set_visible(visible)
 
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        if self.children is not None:
+            self.children.clear()
+        app.check_finalize(self)
 
-class RowHeader(Gtk.Box):
+
+class ItemHeader(Gtk.Box):
     def __init__(self, label_text: str) -> None:
         Gtk.Box.__init__(self, hexpand=True)
         self.add_css_class("sidebar-row-header")

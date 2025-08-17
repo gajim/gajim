@@ -267,7 +267,7 @@ class Preferences(GajimAppWindow):
 
         self.set_child(nav)
 
-        self._side_bar_switcher.set_stack(stack)
+        self._side_bar_switcher.set_with_stack(stack)
 
         # self._add_video_preview()
 
@@ -287,7 +287,7 @@ class Preferences(GajimAppWindow):
         self._prefs.clear()
 
     def show_page(self, name: str) -> None:
-        self._side_bar_switcher.set_row("plugins")
+        self._side_bar_switcher.activate_item(name)
 
 
 class PreferenceBox(SettingsBox):
