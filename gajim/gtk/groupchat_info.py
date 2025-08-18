@@ -140,7 +140,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self._info: DiscoInfo | None = None
 
         self._ui = get_builder("groupchat_info_scrolled.ui")
-        self.set_child(self._ui.info_box)
+        self.set_child(self._ui.info_clamp)
 
         self._connect(self._ui.address_copy_button, "clicked", self._on_copy_address)
 

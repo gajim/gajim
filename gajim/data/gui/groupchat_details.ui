@@ -10,7 +10,7 @@
         <property name="title" translatable="yes">Information</property>
         <property name="icon-name">feather-user-symbolic</property>
         <property name="child">
-          <object class="AdwClamp" id="info_container">
+          <object class="GtkBox" id="info_container">
           </object>
         </property>
       </object>

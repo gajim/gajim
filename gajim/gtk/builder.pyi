@@ -407,7 +407,7 @@ class GroupchatCreationBuilder(Builder):
 
 class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
-    info_container: Adw.Clamp
+    info_container: Gtk.Box
     settings_box: Gtk.Box
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Gtk.Box
@@ -418,7 +418,7 @@ class GroupchatDetailsBuilder(Builder):
     configuration_box: Gtk.Box
 
 class GroupchatInfoScrolledBuilder(Builder):
-    info_box: Gtk.Box
+    info_clamp: Adw.Clamp
     avatar_image: Gtk.Image
     name_box: Gtk.Box
     info_listbox: Gtk.ListBox
