@@ -12,6 +12,7 @@ from typing import NamedTuple
 import sys
 from collections.abc import Callable
 from collections.abc import Iterator
+from dataclasses import dataclass
 from enum import Enum
 from enum import IntEnum
 from enum import unique
@@ -340,4 +341,193 @@ FEATURE_ACCOUNT_ACTIONS = {
     "archive",
     "blocking",
     "block-contact",
+}
+
+
+@dataclass
+class ShortcutData:
+    label: str
+    category: str
+    accelerators: list[str]
+
+
+SHORTCUT_CATEGORIES = {
+    "general": _("General"),
+    "chats": _("Chats"),
+    "messages": _("Messages"),
+}
+SHORTCUTS = {
+    # general
+    "app.start-chat(['', ''])": ShortcutData(
+        label=_("Start / Join Chat"), category="general", accelerators=["<Primary>N"]
+    ),
+    "app.create-groupchat::": ShortcutData(
+        label=_("Create New Group Chat"),
+        category="general",
+        accelerators=["<Primary>G"],
+    ),
+    "app.preferences": ShortcutData(
+        label=_("Preferences"), category="general", accelerators=["<Primary>P"]
+    ),
+    "app.plugins": ShortcutData(
+        label=_("Plugins"), category="general", accelerators=["<Primary>E"]
+    ),
+    "app.shortcuts": ShortcutData(
+        label=_("Manage Shortcuts"),
+        category="general",
+        accelerators=["<Primary>question"],
+    ),
+    "app.xml-console": ShortcutData(
+        label=_("Debug Console"),
+        category="general",
+        accelerators=["<Primary><Shift>X"],
+    ),
+    "app.quit": ShortcutData(
+        label=_("Quit Gajim"), category="general", accelerators=["<Primary>Q"]
+    ),
+    "win.increase-app-font-size": ShortcutData(
+        label=_("Increase Font Size"),
+        category="general",
+        accelerators=["<Primary>plus"],
+    ),
+    "win.decrease-app-font-size": ShortcutData(
+        label=_("Decrease Font Size"),
+        category="general",
+        accelerators=["<Primary>minus"],
+    ),
+    "win.reset-app-font-size": ShortcutData(
+        label=_("Reset Font Size"), category="general", accelerators=["<Primary>0"]
+    ),
+    # chats
+    "win.search-history": ShortcutData(
+        label=_("Search"), category="chats", accelerators=["<Primary>F"]
+    ),
+    "win.show-contact-info": ShortcutData(
+        label=_("Contact Details"), category="chats", accelerators=["<Primary>I"]
+    ),
+    "win.change-nickname": ShortcutData(
+        label=_("Change Nickname"),
+        category="chats",
+        accelerators=["<Primary><Shift>N"],
+    ),
+    "win.change-subject": ShortcutData(
+        label=_("Change Subject"),
+        category="chats",
+        accelerators=["<Primary><Shift>S"],
+    ),
+    "win.escape": ShortcutData(
+        label=_("Unselect Chat"), category="chats", accelerators=["Escape"]
+    ),
+    "win.close-chat": ShortcutData(
+        label=_("Close Chat"), category="chats", accelerators=["<Primary>W"]
+    ),
+    "win.restore-chat": ShortcutData(
+        label=_("Restore Closed Chat"),
+        category="chats",
+        accelerators=["<Primary><Shift>W"],
+    ),
+    "win.chat-list-visible": ShortcutData(
+        label=_("Toggle Chat List"), category="chats", accelerators=["<Primary>R"]
+    ),
+    "win.switch-next-chat": ShortcutData(
+        label=_("Switch to Next Chat"),
+        category="chats",
+        accelerators=["<Primary>Page_Down"],
+    ),
+    "win.switch-prev-chat": ShortcutData(
+        label=_("Switch to Previous Chat"),
+        category="chats",
+        accelerators=["<Primary>Page_Up"],
+    ),
+    "win.switch-next-unread-chat": ShortcutData(
+        label=_("Switch to Next Unread Chat"),
+        category="chats",
+        accelerators=["<Primary>Tab"],
+    ),
+    "win.switch-prev-unread-chat": ShortcutData(
+        label=_("Switch to Previous Unread Chat"),
+        category="chats",
+        accelerators=["<Primary>ISO_Left_Tab"],
+    ),
+    "win.switch-chat-1": ShortcutData(
+        label=_("Switch to Chat 1"), category="chats", accelerators=["<Alt>1"]
+    ),
+    "win.switch-chat-2": ShortcutData(
+        label=_("Switch to Chat 2"), category="chats", accelerators=["<Alt>2"]
+    ),
+    "win.switch-chat-3": ShortcutData(
+        label=_("Switch to Chat 3"), category="chats", accelerators=["<Alt>3"]
+    ),
+    "win.switch-chat-4": ShortcutData(
+        label=_("Switch to Chat 4"), category="chats", accelerators=["<Alt>4"]
+    ),
+    "win.switch-chat-5": ShortcutData(
+        label=_("Switch to Chat 5"), category="chats", accelerators=["<Alt>5"]
+    ),
+    "win.switch-chat-6": ShortcutData(
+        label=_("Switch to Chat 6"), category="chats", accelerators=["<Alt>6"]
+    ),
+    "win.switch-chat-7": ShortcutData(
+        label=_("Switch to Chat 7"), category="chats", accelerators=["<Alt>7"]
+    ),
+    "win.switch-chat-8": ShortcutData(
+        label=_("Switch to Chat 8"), category="chats", accelerators=["<Alt>8"]
+    ),
+    "win.switch-chat-9": ShortcutData(
+        label=_("Switch to Chat 9"), category="chats", accelerators=["<Alt>9"]
+    ),
+    "win.switch-workspace-1": ShortcutData(
+        label=_("Switch to Workspace 1"), category="chats", accelerators=["<Primary>1"]
+    ),
+    "win.switch-workspace-2": ShortcutData(
+        label=_("Switch to Workspace 2"), category="chats", accelerators=["<Primary>2"]
+    ),
+    "win.switch-workspace-3": ShortcutData(
+        label=_("Switch to Workspace 3"), category="chats", accelerators=["<Primary>3"]
+    ),
+    "win.switch-workspace-4": ShortcutData(
+        label=_("Switch to Workspace 4"), category="chats", accelerators=["<Primary>4"]
+    ),
+    "win.switch-workspace-5": ShortcutData(
+        label=_("Switch to Workspace 5"), category="chats", accelerators=["<Primary>5"]
+    ),
+    "win.switch-workspace-6": ShortcutData(
+        label=_("Switch to Workspace 6"), category="chats", accelerators=["<Primary>6"]
+    ),
+    "win.switch-workspace-7": ShortcutData(
+        label=_("Switch to Workspace 7"), category="chats", accelerators=["<Primary>7"]
+    ),
+    "win.switch-workspace-8": ShortcutData(
+        label=_("Switch to Workspace 8"), category="chats", accelerators=["<Primary>8"]
+    ),
+    "win.switch-workspace-9": ShortcutData(
+        label=_("Switch to Workspace 9"), category="chats", accelerators=["<Primary>9"]
+    ),
+    # messages
+    "win.show-emoji-chooser": ShortcutData(
+        label=_("Choose Emoji"),
+        category="messages",
+        accelerators=["<Primary><Shift>M"],
+    ),
+    "win.input-clear": ShortcutData(
+        label=_("Clear Input"), category="messages", accelerators=["<Primary>U"]
+    ),
+    "win.scroll-view-up": ShortcutData(
+        label=_("Scroll Up"), category="messages", accelerators=["<Shift>Page_Up"]
+    ),
+    "win.scroll-view-down": ShortcutData(
+        label=_("Scroll Down"),
+        category="messages",
+        accelerators=["<Shift>Page_Down"],
+    ),
+    "win.quote-prev": ShortcutData(
+        label=_("Quote Previous Message"),
+        category="messages",
+        accelerators=["<Primary><Shift>Up"],
+    ),
+    "win.quote-next": ShortcutData(
+        label=_("Quote Next Message"),
+        category="messages",
+        accelerators=["<Primary><Shift>Down"],
+    ),
 }

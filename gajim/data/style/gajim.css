@@ -227,6 +227,11 @@ button.flat.link { padding: 0; border: 0; }
     color: var(--light-1);
     background-color: var(--light-5);
 }
+.badge-accent {
+    color: var(--accent-blue);
+    border: 1px solid alpha(var(--accent-blue), 0.1);
+    background-color: alpha(var(--accent-blue), 0.1);
+}
 
 .link-button { min-height: 0px; }
 

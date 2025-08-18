@@ -794,9 +794,6 @@ class ServiceDiscoveryWindowBuilder(Builder):
     treeview_selection1: Gtk.TreeSelection
     action_buttonbox: Gtk.Box
 
-class ShortcutsWindowBuilder(Builder):
-    shortcuts_window: Gtk.ShortcutsWindow
-
 class SslErrorDialogBuilder(Builder):
     ssl_error_box: Gtk.Box
     intro_text: Gtk.Label
@@ -1167,12 +1164,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ServiceDiscoveryWindowBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["shortcuts_window.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ShortcutsWindowBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["ssl_error_dialog.ui"],

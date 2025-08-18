@@ -316,6 +316,15 @@ def load_json(path: Path,
     return json_dict.get(key, default)
 
 
+def dump_json(path: Path, data: dict[Any, Any]) -> None:
+    """Save a JSON-serializable object to a .json file."""
+    try:
+        with path.open('w', encoding='utf8') as file:
+            json.dump(data, file)
+    except Exception:
+        log.exception('Error while trying to dump JSON')
+
+
 def file_is_locked(path_to_file: str) -> bool:
     '''
     Return True if file is locked

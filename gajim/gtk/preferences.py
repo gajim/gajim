@@ -39,6 +39,7 @@ from gajim.gtk.preview import PREVIEW_ACTIONS
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.shortcuts_manager import ShortcutsManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -71,6 +72,7 @@ class PreferencesGroupData:
     name: str
     title: str
     widget: Any
+    description: str | None = None
 
 
 class Preferences(GajimAppWindow):
@@ -189,6 +191,21 @@ class Preferences(GajimAppWindow):
                 ],
             ),
             PreferencesPageData(
+                name="shortcuts",
+                title=_("Shortcuts"),
+                icon_name="preferences-desktop-keyboard-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="shortcut-manager",
+                        title=_("Manage Shortcuts"),
+                        widget=ShortcutsManager,
+                        description=_(
+                            "Here you can customize Gajim's shortcuts. You can leave a shortcut empty to disable it."  # noqa: E501
+                        ),
+                    )
+                ],
+            ),
+            PreferencesPageData(
                 name="plugins",
                 title=_("Plugins"),
                 icon_name="lucide-package-symbolic",
@@ -240,7 +257,9 @@ class Preferences(GajimAppWindow):
             for group in page.groups:
                 if isinstance(group, PreferencesGroupData):
                     preferences_group = Adw.PreferencesGroup(
-                        name=group.name, title=group.title
+                        name=group.name,
+                        title=group.title,
+                        description=group.description,
                     )
                     pref = group.widget(self)
                     self._prefs[group.name] = pref

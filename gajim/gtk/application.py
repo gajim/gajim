@@ -53,6 +53,7 @@ from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
+from gajim.common.helpers import dump_json
 from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -69,8 +70,9 @@ from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
 from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
-from gajim.gtk.shortcuts import ShortcutsWindow
+from gajim.gtk.const import SHORTCUTS
 from gajim.gtk.util.icons import get_icon_theme
+from gajim.gtk.util.misc import add_alternative_accelerator
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
 from gajim.gtk.util.window import open_window
@@ -498,21 +500,33 @@ class GajimApplication(Adw.Application, CoreApplication):
         enabled_accounts = bool(app.settings.get_active_accounts())
         self.set_action_state("start-chat", enabled_accounts)
 
-    def _load_shortcuts(self) -> None:
-        default_path = configpaths.get("DATA") / "other" / "shortcuts.json"
-        shortcuts = load_json(default_path)
-        assert shortcuts is not None
-
+    @staticmethod
+    def get_user_shortcuts() -> dict[str, list[str]]:
         user_path = configpaths.get("MY_SHORTCUTS")
-        user_shortcuts = {}
+        user_shortcuts: dict[str, list[str]] = {}
         if user_path.exists():
             app.log("app").info("Load user shortcuts")
             user_shortcuts = load_json(user_path, default={})
 
+        return user_shortcuts
+
+    def set_user_shortcuts(self, user_shortcuts: dict[str, list[str]]) -> None:
+        user_path = configpaths.get("MY_SHORTCUTS")
+        dump_json(user_path, user_shortcuts)
+        self._load_shortcuts()
+
+    def _load_shortcuts(self) -> None:
+        shortcuts = {
+            action_name: shortcut_data.accelerators
+            for action_name, shortcut_data in SHORTCUTS.items()
+        }
+        user_shortcuts = self.get_user_shortcuts()
         shortcuts.update(user_shortcuts)
 
-        for action, accels in shortcuts.items():
-            self.set_accels_for_action(action, accels)
+        for action, accelerators in shortcuts.items():
+            self.set_accels_for_action(
+                action, add_alternative_accelerator(accelerators)
+            )
 
     def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
         self.update_feature_actions_state(event.account)
@@ -764,7 +778,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_shortcuts_action(
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        ShortcutsWindow()
+        open_window("Preferences").show_page("shortcuts")
 
     @staticmethod
     def _on_features_action(

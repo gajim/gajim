@@ -325,3 +325,47 @@ def get_ui_string(filename: str) -> bytes:
         node.text = _(node.text) if node.text else ""
         del node.attrib["translatable"]
     return ET.tostring(tree.getroot(), method="xml")
+
+
+ACCELERATOR_ALTERNATIVES = {
+    Gdk.KEY_0: Gdk.KEY_KP_0,
+    Gdk.KEY_1: Gdk.KEY_KP_1,
+    Gdk.KEY_2: Gdk.KEY_KP_2,
+    Gdk.KEY_3: Gdk.KEY_KP_3,
+    Gdk.KEY_4: Gdk.KEY_KP_4,
+    Gdk.KEY_5: Gdk.KEY_KP_5,
+    Gdk.KEY_6: Gdk.KEY_KP_6,
+    Gdk.KEY_7: Gdk.KEY_KP_7,
+    Gdk.KEY_8: Gdk.KEY_KP_8,
+    Gdk.KEY_9: Gdk.KEY_KP_9,
+    Gdk.KEY_plus: Gdk.KEY_KP_Add,
+    Gdk.KEY_minus: Gdk.KEY_KP_Subtract,
+    Gdk.KEY_Return: Gdk.KEY_KP_Enter,
+}
+ACCELERATOR_ALTERNATIVES_REVERSED = {v: k for k, v in ACCELERATOR_ALTERNATIVES.items()}
+
+
+def add_alternative_accelerator(accelerators: list[str]) -> list[str]:
+    """Add alternatives for accelerators, e.g. keypad numbers:
+
+    6 -> KP_6
+    """
+    if len(accelerators) != 1:
+        # 0 or >1; don't add anything
+        return accelerators
+
+    success, keyval, state = Gtk.accelerator_parse(accelerators[0])
+    if not success:
+        return accelerators
+
+    if keyval in ACCELERATOR_ALTERNATIVES:
+        alternative = Gtk.accelerator_name(ACCELERATOR_ALTERNATIVES[keyval], state)
+        return [accelerators[0], alternative]
+
+    if keyval in ACCELERATOR_ALTERNATIVES_REVERSED:
+        alternative = Gtk.accelerator_name(
+            ACCELERATOR_ALTERNATIVES_REVERSED[keyval], state
+        )
+        return [accelerators[0], alternative]
+
+    return accelerators
