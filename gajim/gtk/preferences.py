@@ -199,9 +199,7 @@ class Preferences(GajimAppWindow):
                         name="shortcut-manager",
                         title=_("Manage Shortcuts"),
                         widget=ShortcutsManager,
-                        description=_(
-                            "Here you can customize Gajim's shortcuts. You can leave a shortcut empty to disable it."  # noqa: E501
-                        ),
+                        description=_("Here you can customize Gajim's shortcuts."),
                     )
                 ],
             ),
