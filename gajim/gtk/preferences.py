@@ -40,6 +40,7 @@ from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.shortcuts_manager import ShortcutsManager
+from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -53,8 +54,6 @@ log = logging.getLogger("gajim.gtk.preferences")
 @dataclass
 class PreferencesPageData:
     name: str
-    title: str
-    icon_name: str
     groups: list[PreferencesGroupData | type[Adw.PreferencesGroup]]
     banner: PreferencesPageBannerData | None = None
 
@@ -93,8 +92,6 @@ class Preferences(GajimAppWindow):
         preferences = [
             PreferencesPageData(
                 name="general",
-                title=_("General"),
-                icon_name="computer-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="window_behaviour",
@@ -105,8 +102,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="chats",
-                title=_("Chats"),
-                icon_name="user-available-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="general", title=_("General"), widget=General
@@ -126,8 +121,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="notifications",
-                title=_("Notifications"),
-                icon_name="mail-unread-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="visual_notifications",
@@ -141,8 +134,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="status",
-                title=_("Status"),
-                icon_name="lucide-megaphone-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="status_message",
@@ -158,8 +149,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="style",
-                title=_("Style"),
-                icon_name="applications-graphics-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="themes", title=_("Themes"), widget=Themes
@@ -168,8 +157,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="audio_video",
-                title=_("Audio"),
-                icon_name="audio-input-microphone-symbolic",
                 banner=PreferencesPageBannerData(
                     revealed=bool(not app.is_installed("GST")),
                     title=_("Missing dependencies for audio support"),
@@ -192,8 +179,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="shortcuts",
-                title=_("Shortcuts"),
-                icon_name="preferences-desktop-keyboard-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="shortcut-manager",
@@ -205,8 +190,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="plugins",
-                title=_("Plugins"),
-                icon_name="lucide-package-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="plugin-settings",
@@ -218,8 +201,6 @@ class Preferences(GajimAppWindow):
             ),
             PreferencesPageData(
                 name="advanced",
-                title=_("Advanced"),
-                icon_name="lucide-wrench-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="miscellaneous",
@@ -248,9 +229,7 @@ class Preferences(GajimAppWindow):
                 )
                 preferences_page.set_banner(page_banner)
 
-            stack_page = stack.add_named(preferences_page, page.name)
-            stack_page.set_title(page.title)
-            stack_page.set_icon_name(page.icon_name)
+            stack.add_named(preferences_page, page.name)
 
             for group in page.groups:
                 if isinstance(group, PreferencesGroupData):
@@ -266,7 +245,32 @@ class Preferences(GajimAppWindow):
                 else:
                     preferences_page.add(group())
 
+        menu = [
+            SideBarMenuItem("general", _("General"), icon_name="computer-symbolic"),
+            SideBarMenuItem("chats", _("Chats"), icon_name="user-available-symbolic"),
+            SideBarMenuItem(
+                "notifications", _("Notifications"), icon_name="mail-unread-symbolic"
+            ),
+            SideBarMenuItem("style", _("Style"), icon_name="lucide-megaphone-symbolic"),
+            SideBarMenuItem(
+                "general", _("General"), icon_name="applications-graphics-symbolic"
+            ),
+            SideBarMenuItem(
+                "audio_video", _("Audio"), icon_name="audio-input-microphone-symbolic"
+            ),
+            SideBarMenuItem(
+                "shortcuts", _("Shortcuts"), icon_name="audio-input-microphone-symbolic"
+            ),
+            SideBarMenuItem(
+                "plugins", _("Plugins"), icon_name="lucide-package-symbolic"
+            ),
+            SideBarMenuItem(
+                "advanced", _("Advanced"), icon_name="lucide-wrench-symbolic"
+            ),
+        ]
+
         self._side_bar_switcher = SideBarSwitcher()
+        self._side_bar_switcher.set_with_menu(stack, menu)
 
         toolbar = Adw.ToolbarView(content=self._side_bar_switcher)
         toolbar.add_top_bar(Adw.HeaderBar())
@@ -283,8 +287,6 @@ class Preferences(GajimAppWindow):
         nav = Adw.NavigationSplitView(sidebar=sidebar_page, content=content_page)
 
         self.set_child(nav)
-
-        self._side_bar_switcher.set_with_stack(stack)
 
         # self._add_video_preview()
 
