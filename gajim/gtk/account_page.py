@@ -17,7 +17,6 @@ from gajim.gtk.menus import get_account_menu
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
 from gajim.gtk.util.misc import get_ui_string
-from gajim.gtk.util.window import open_window
 
 
 @Gtk.Template(string=get_ui_string("account_page.ui"))
@@ -27,7 +26,6 @@ class AccountPage(Gtk.Box):
     _avatar_image: Gtk.Image = Gtk.Template.Child()
     _account_label: Gtk.Label = Gtk.Template.Child()
     _our_jid_label: Gtk.Label = Gtk.Template.Child()
-    _settings_button: Gtk.Button = Gtk.Template.Child()
     _menu_button: Gtk.MenuButton = Gtk.Template.Child()
     _status_selector: StatusSelector = Gtk.Template.Child()
     _status_message_selector: StatusMessageSelector = Gtk.Template.Child()
@@ -101,12 +99,6 @@ class AccountPage(Gtk.Box):
     def _on_avatar_update(self, *args: Any) -> None:
         self._update_avatar()
 
-    @Gtk.Template.Callback()
-    def _on_account_settings(self, _button: Gtk.Button) -> None:
-        assert self._account is not None
-        window = open_window("AccountsWindow")
-        window.select_account(self._account)
-
     def _update_account_label(self, label: str) -> None:
         self._account_label.set_text(label)
 
@@ -119,7 +111,6 @@ class AccountPage(Gtk.Box):
 
     def _update_page(self) -> None:
         self._menu_button.set_sensitive(self._account is not None)
-        self._settings_button.set_sensitive(self._account is not None)
 
         if self._account is None:
             self._our_jid_label.set_text("")

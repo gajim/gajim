@@ -33,6 +33,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
+from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import open_window
@@ -83,6 +84,102 @@ class SettingsDialog(GajimAppWindow):
 
     def get_setting(self, name: str):
         return self.listbox.get_setting(name)
+
+
+class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager):
+    def __init__(
+        self,
+        key: str,
+        *,
+        account: str | None = None,
+        jid: str | None = None,
+        description: str = "",
+        title: str = "",
+        header_suffix: Gtk.Widget | None = None,
+    ) -> None:
+
+        Adw.PreferencesGroup.__init__(
+            self, description=description, title=title, header_suffix=header_suffix
+        )
+        SignalManager.__init__(self)
+
+        self.key = key
+        self.account = account
+        self.jid = jid
+        self.named_settings: dict[str, GenericSetting] = {}
+
+        self.settings_type_map: dict[SettingKind, GenericSetting] = {
+            SettingKind.SWITCH: SwitchSetting,
+            SettingKind.SPIN: SpinSetting,
+            SettingKind.DIALOG: DialogSetting,
+            SettingKind.ENTRY: EntrySetting,
+            SettingKind.COLOR: ColorSetting,
+            SettingKind.ACTION: ActionSetting,
+            SettingKind.LOGIN: LoginSetting,
+            SettingKind.FILECHOOSER: FileChooserSetting,
+            SettingKind.CALLBACK: CallbackSetting,
+            SettingKind.PRIORITY: PrioritySetting,
+            SettingKind.HOSTNAME: CutstomHostnameSetting,
+            SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
+            SettingKind.AUTO_AWAY: CutstomAutoAwaySetting,
+            SettingKind.AUTO_EXTENDED_AWAY: CutstomAutoExtendedAwaySetting,
+            SettingKind.USE_STUN_SERVER: CustomStunServerSetting,
+            SettingKind.NOTIFICATIONS: NotificationsSetting,
+            SettingKind.DROPDOWN: DropDownSetting,
+            SettingKind.GENERIC: GenericSetting,
+        }
+
+        # self._connect(self, "row-activated", self.on_row_activated)
+
+    def do_unroot(self) -> None:
+        Adw.PreferencesGroup.do_unroot(self)
+        self.named_settings.clear()
+        self._disconnect_all()
+        app.check_finalize(self)
+        # while row := self.get_first_child():
+        #     app.check_finalize(row)
+        #     self.remove(row)
+
+    @staticmethod
+    def on_row_activated(_listbox: SettingsBox, row: GenericSetting) -> None:
+        raise NotImplementedError
+        # row.on_row_activated()
+
+    def add_setting(self, setting: Setting) -> None:
+        if setting.props is not None:
+            row = self.settings_type_map[setting.kind](
+                self.account, self.jid, *setting[1:-1], **setting.props
+            )
+        else:
+            row = self.settings_type_map[setting.kind](
+                self.account, self.jid, *setting[1:-1]
+            )
+
+        if setting.name is not None:
+            self.named_settings[setting.name] = row
+        self.add(row)
+
+    def get_setting(self, name: str) -> GenericSetting:
+        raise NotImplementedError
+        # return self.named_settings[name]
+
+    def update_states(self) -> None:
+        raise NotImplementedError
+        # for row in cast(list[GenericSetting], iterate_listbox_children(self)):
+        #     row.update_activatable()
+
+
+class GajimPreferencePage(Adw.PreferencesPage):
+    def __init__(
+        self, key: str, groups: list[Any], menu: SideBarMenuItem | None = None
+    ) -> None:
+        Adw.PreferencesPage.__init__(self)
+
+        self.key = key
+        self.menu = menu
+
+        for group in groups:
+            self.add(group())
 
 
 class SettingsBox(Gtk.ListBox, SignalManager):

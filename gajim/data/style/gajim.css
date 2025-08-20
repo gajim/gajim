@@ -875,21 +875,6 @@ list.sidebar-switcher .sidebar-row-header {
     background: alpha(var(--border-color), 0.3);
 }
 
-/* AccountsWindow */
-.accounts-menu {
-    border-right: 1px solid var(--border-color);
-}
-.accounts-menu-listbox > row {
-    border-bottom: 1px solid var(--view-bg-color);
-    padding: 10px 20px 10px 10px;
-}
-.accounts-label-row {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 1.6rem;
-    font-weight: bold;
-}
-
 /* AccountWizard */
 .tls-error-list {
     border: 1px solid var(--border-color);

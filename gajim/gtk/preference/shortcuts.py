@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import Literal
 
 from collections.abc import Callable
@@ -21,6 +20,8 @@ from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.const import SHORTCUT_CATEGORIES
 from gajim.gtk.const import SHORTCUTS
+from gajim.gtk.settings import GajimPreferencePage
+from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -28,12 +29,22 @@ from gajim.gtk.util.misc import get_ui_string
 # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h
 
 
-class ShortcutsManager(Gtk.Box, SignalManager):
-    def __init__(self, preferences: Any) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=18)
+class ShortcutsPage(GajimPreferencePage, SignalManager):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="shortcuts",
+            groups=[],
+            menu=SideBarMenuItem(
+                "shortcuts",
+                _("Shortcuts"),
+                icon_name="preferences-desktop-keyboard-symbolic",
+            ),
+        )
         SignalManager.__init__(self)
 
-        self._preferences = preferences
+        self.set_title(("Manage Shortcuts"))
+        self.set_description(_("Here you can customize Gajim's shortcuts."))
 
         self._shortcut_rows: dict[str, ShortcutsManagerRow] = {}
 
@@ -43,16 +54,15 @@ class ShortcutsManager(Gtk.Box, SignalManager):
 
     def do_unroot(self) -> None:
         self._disconnect_all()
-        del self._preferences
         del self._shortcut_rows
-        Gtk.Box.do_unroot(self)
+        GajimPreferencePage.do_unroot(self)
 
     def _load_shortcuts(self) -> None:
         preferences_groups: dict[str, Adw.PreferencesGroup] = {}
         for category, title in SHORTCUT_CATEGORIES.items():
             preferences_group = Adw.PreferencesGroup(title=title)
             preferences_groups[category] = preferences_group
-            self.append(preferences_group)
+            self.add(preferences_group)
 
         for action_name, shortcut_data in SHORTCUTS.items():
             row = ShortcutsManagerRow(action_name)
@@ -71,9 +81,7 @@ class ShortcutsManager(Gtk.Box, SignalManager):
             self._shortcut_rows[action_name] = row
 
     def _on_edit_clicked(self, _row: ShortcutsManagerRow, action_name: str) -> None:
-        KeyEntryDialog(
-            self._on_shortcut_edited, action_name, parent=self._preferences.window
-        )
+        KeyEntryDialog(self._on_shortcut_edited, action_name, parent=self.get_root())
 
     def _on_shortcut_edited(
         self,

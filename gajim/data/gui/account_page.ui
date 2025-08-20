@@ -59,20 +59,6 @@
                             <property name="hexpand">true</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="GtkButton" id="_settings_button">
-                                <property name="focusable">true</property>
-                                <property name="sensitive">false</property>
-                                <property name="tooltip-text" translatable="yes">Account Settings…</property>
-                                <property name="valign">3</property>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="icon-name">lucide-settings-symbolic</property>
-                                  </object>
-                                </child>
-                                <signal name="clicked" handler="_on_account_settings" />
-                              </object>
-                            </child>
-                            <child>
                               <object class="GtkMenuButton" id="_menu_button">
                                 <property name="focusable">true</property>
                                 <property name="focus-on-click">false</property>

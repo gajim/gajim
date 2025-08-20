@@ -222,8 +222,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
-        window = open_window("AccountsWindow")
-        window.select_account(self._contact.account, "encryption-omemo")
+        window = open_window("Preferences")
+        window.show_page(f"{self._contact.account}-encryption-omemo")
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
         app.window.get_clipboard().set(self._our_fpr_formatted)

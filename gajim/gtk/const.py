@@ -135,7 +135,6 @@ class ControlType(Enum):
 
 
 WINDOW_MODULES = {
-    "AccountsWindow": "gajim.gtk.accounts",
     "AccountWizard": "gajim.gtk.account_wizard",
     "AddContact": "gajim.gtk.add_contact",
     "AdHocCommands": "gajim.gtk.adhoc",
@@ -159,7 +158,7 @@ WINDOW_MODULES = {
     "ManageSounds": "gajim.gtk.manage_sounds",
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",
-    "Preferences": "gajim.gtk.preferences",
+    "Preferences": "gajim.gtk.preference.dialog",
     "ProfileWindow": "gajim.gtk.profile",
     "QuitDialog": "gajim.gtk.quit",
     "RemoveAccount": "gajim.gtk.remove_account",

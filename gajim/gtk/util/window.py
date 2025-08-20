@@ -22,7 +22,6 @@ from gajim.gtk.const import WINDOW_MODULES
 
 if TYPE_CHECKING:
     from gajim.gtk.account_wizard import AccountWizard
-    from gajim.gtk.accounts import AccountsWindow
     from gajim.gtk.add_contact import AddContact
     from gajim.gtk.adhoc import AdHocCommands
     from gajim.gtk.advanced_config import AdvancedConfig
@@ -46,7 +45,7 @@ if TYPE_CHECKING:
     from gajim.gtk.manage_sounds import ManageSounds
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
-    from gajim.gtk.preferences import Preferences
+    from gajim.gtk.preference.dialog import Preferences
     from gajim.gtk.profile import ProfileWindow
     from gajim.gtk.proxies import ManageProxies
     from gajim.gtk.quit import QuitDialog
@@ -60,8 +59,7 @@ if TYPE_CHECKING:
     from gajim.gtk.workspace_dialog import WorkspaceDialog
 
     GajimWindowT = (
-        AccountsWindow
-        | AccountWizard
+        AccountWizard
         | AddContact
         | AdHocCommands
         | AdvancedConfig
@@ -99,8 +97,7 @@ if TYPE_CHECKING:
         | WorkspaceDialog
     )
     GajimWindowNameT = (
-        Literal["AccountsWindow"]
-        | Literal["AccountWizard"]
+        Literal["AccountWizard"]
         | Literal["AddContact"]
         | Literal["AdHocCommands"]
         | Literal["AdvancedConfig"]
@@ -177,14 +174,6 @@ def get_app_windows(account: str) -> list[Gtk.Window]:
             if win.account == account:  # pyright: ignore
                 windows.append(win)
     return windows
-
-
-@overload
-def get_app_window(
-    name: Literal["AccountsWindow"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> AccountsWindow | None: ...
 
 
 @overload
@@ -487,8 +476,6 @@ def get_app_window(
     return None
 
 
-@overload
-def open_window(name: Literal["AccountsWindow"], **kwargs: Any) -> AccountsWindow: ...
 @overload
 def open_window(name: Literal["AccountWizard"], **kwargs: Any) -> AccountWizard: ...
 @overload
