@@ -304,6 +304,18 @@ class AccountDisabled(ApplicationEvent):
 
 
 @dataclass
+class AccountCreated(ApplicationEvent):
+    name: str = field(init=False, default='account-created')
+    account: str
+
+
+@dataclass
+class AccountRemoved(ApplicationEvent):
+    name: str = field(init=False, default='account-removed')
+    account: str
+
+
+@dataclass
 class FeatureDiscovered(ApplicationEvent):
     name: str = field(init=False, default='feature-discovered')
     account: str

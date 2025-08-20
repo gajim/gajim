@@ -550,16 +550,9 @@ class GajimApplication(Adw.Application, CoreApplication):
         # Action must be added before account window is updated
         self.add_account_actions(account)
 
-        window = get_app_window("AccountsWindow")
-        if window is not None:
-            window.add_account(account)
-
     def enable_account(self, account: str) -> None:
         CoreApplication.enable_account(self, account)
         self.update_app_actions_state()
-        window = get_app_window("AccountsWindow")
-        if window is not None:
-            window.enable_account(account, True)
 
     def disable_account(self, account: str) -> None:
         for win in get_app_windows(account):
@@ -577,10 +570,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         CoreApplication.remove_account(self, account)
 
         self.remove_account_actions(account)
-
-        window = get_app_window("AccountsWindow")
-        if window is not None:
-            window.remove_account(account)
 
     def _on_db_migration(self, _event: events.DBMigration) -> None:
         open_window("DBMigration")
@@ -612,11 +601,11 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     @staticmethod
     def _on_accounts_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        window = open_window("AccountsWindow")
+        window = open_window("Preferences")
 
         account = param.get_string()
         if account:
-            window.select_account(account)
+            window.show_page(account)
 
     @staticmethod
     def _on_quit_action(_action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:

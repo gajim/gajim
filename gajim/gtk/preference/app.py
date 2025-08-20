@@ -7,9 +7,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
-import logging
 import sys
-from dataclasses import dataclass
 
 from gi.repository import Adw
 from gi.repository import Gtk
@@ -37,293 +35,22 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.plugins import Plugins
 from gajim.gtk.preview import PREVIEW_ACTIONS
 from gajim.gtk.settings import DropDownSetting
-from gajim.gtk.settings import SettingsBox
-from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.shortcuts_manager import ShortcutsManager
+from gajim.gtk.settings import GajimPreferencePage
+from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
-from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 
 # from gajim.gtk.video_preview import VideoPreview
-from gajim.gtk.widgets import GajimAppWindow
-
-log = logging.getLogger("gajim.gtk.preferences")
 
 
-@dataclass
-class PreferencesPageData:
-    name: str
-    groups: list[PreferencesGroupData | type[Adw.PreferencesGroup]]
-    banner: PreferencesPageBannerData | None = None
-
-
-@dataclass
-class PreferencesPageBannerData:
-    revealed: bool
-    title: str
-    button_label: str | None
-    action_name: str | None
-
-
-@dataclass
-class PreferencesGroupData:
-    name: str
-    title: str
-    widget: Any
-    description: str | None = None
-
-
-class Preferences(GajimAppWindow):
+class WindowBehaviourGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
-        GajimAppWindow.__init__(
+        GajimPreferencesGroup.__init__(
             self,
-            name="Preferences",
-            title=_("Preferences"),
-            default_width=900,
-            default_height=650,
-            add_window_padding=False,
-            header_bar=False,
+            key="window-behaviour",
+            title=_("Behaviour of Application Window"),
         )
-
-        # self._video_preview: VideoPreview | None = None
-        self._prefs: dict[str, PreferenceBox] = {}
-
-        preferences = [
-            PreferencesPageData(
-                name="general",
-                groups=[
-                    PreferencesGroupData(
-                        name="window_behaviour",
-                        title=_("Behaviour of Application Window"),
-                        widget=WindowBehaviour,
-                    ),
-                ],
-            ),
-            PreferencesPageData(
-                name="chats",
-                groups=[
-                    PreferencesGroupData(
-                        name="general", title=_("General"), widget=General
-                    ),
-                    PreferencesGroupData(name="chats", title=_("Chats"), widget=Chats),
-                    PreferencesGroupData(
-                        name="group_chats",
-                        title=_("Group Chats"),
-                        widget=GroupChats,
-                    ),
-                    PreferencesGroupData(
-                        name="file_preview",
-                        title=_("File Preview"),
-                        widget=FilePreview,
-                    ),
-                ],
-            ),
-            PreferencesPageData(
-                name="notifications",
-                groups=[
-                    PreferencesGroupData(
-                        name="visual_notifications",
-                        title=_("Visual Notifications"),
-                        widget=VisualNotifications,
-                    ),
-                    PreferencesGroupData(
-                        name="sounds", title=_("Sounds"), widget=Sounds
-                    ),
-                ],
-            ),
-            PreferencesPageData(
-                name="status",
-                groups=[
-                    PreferencesGroupData(
-                        name="status_message",
-                        title=_("Ask For Status Message on…"),
-                        widget=StatusMessage,
-                    ),
-                    PreferencesGroupData(
-                        name="automatic_status",
-                        title=_("Automatic Status Change"),
-                        widget=AutomaticStatus,
-                    ),
-                ],
-            ),
-            PreferencesPageData(
-                name="style",
-                groups=[
-                    PreferencesGroupData(
-                        name="themes", title=_("Themes"), widget=Themes
-                    ),
-                ],
-            ),
-            PreferencesPageData(
-                name="audio_video",
-                banner=PreferencesPageBannerData(
-                    revealed=bool(not app.is_installed("GST")),
-                    title=_("Missing dependencies for audio support"),
-                    button_label=_("Features"),
-                    action_name="app.features",
-                ),
-                groups=[
-                    # PreferencesGroupData(
-                    #     name="server",
-                    #     title=_("Server"),
-                    #     widget=Server
-                    # ),
-                    PreferencesGroupData(name="audio", title=_("Audio"), widget=Audio),
-                    # PreferencesGroupData(
-                    #     name="video",
-                    #     title=_("Video"),
-                    #     widget=Video
-                    # ),
-                ],
-            ),
-            PreferencesPageData(
-                name="shortcuts",
-                groups=[
-                    PreferencesGroupData(
-                        name="shortcut-manager",
-                        title=_("Manage Shortcuts"),
-                        widget=ShortcutsManager,
-                        description=_("Here you can customize Gajim's shortcuts."),
-                    )
-                ],
-            ),
-            PreferencesPageData(
-                name="plugins",
-                groups=[
-                    PreferencesGroupData(
-                        name="plugin-settings",
-                        title=_("Plugin Settings"),
-                        widget=PluginSettings,
-                    ),
-                    Plugins,
-                ],
-            ),
-            PreferencesPageData(
-                name="advanced",
-                groups=[
-                    PreferencesGroupData(
-                        name="miscellaneous",
-                        title=_("Miscellaneous"),
-                        widget=Miscellaneous,
-                    ),
-                    PreferencesGroupData(
-                        name="advanced",
-                        title=_("Advanced Settings"),
-                        widget=Advanced,
-                    ),
-                ],
-            ),
-        ]
-
-        stack = Gtk.Stack()
-
-        for page in preferences:
-            preferences_page = Adw.PreferencesPage()
-            if page.banner is not None:
-                page_banner = Adw.Banner(
-                    revealed=page.banner.revealed,
-                    title=page.banner.title,
-                    button_label=page.banner.button_label,
-                    action_name=page.banner.action_name,
-                )
-                preferences_page.set_banner(page_banner)
-
-            stack.add_named(preferences_page, page.name)
-
-            for group in page.groups:
-                if isinstance(group, PreferencesGroupData):
-                    preferences_group = Adw.PreferencesGroup(
-                        name=group.name,
-                        title=group.title,
-                        description=group.description,
-                    )
-                    pref = group.widget(self)
-                    self._prefs[group.name] = pref
-                    preferences_group.add(pref)
-                    preferences_page.add(preferences_group)
-                else:
-                    preferences_page.add(group())
-
-        menu = [
-            SideBarMenuItem("general", _("General"), icon_name="computer-symbolic"),
-            SideBarMenuItem("chats", _("Chats"), icon_name="user-available-symbolic"),
-            SideBarMenuItem(
-                "notifications", _("Notifications"), icon_name="mail-unread-symbolic"
-            ),
-            SideBarMenuItem("style", _("Style"), icon_name="lucide-megaphone-symbolic"),
-            SideBarMenuItem(
-                "general", _("General"), icon_name="applications-graphics-symbolic"
-            ),
-            SideBarMenuItem(
-                "audio_video", _("Audio"), icon_name="audio-input-microphone-symbolic"
-            ),
-            SideBarMenuItem(
-                "shortcuts", _("Shortcuts"), icon_name="audio-input-microphone-symbolic"
-            ),
-            SideBarMenuItem(
-                "plugins", _("Plugins"), icon_name="lucide-package-symbolic"
-            ),
-            SideBarMenuItem(
-                "advanced", _("Advanced"), icon_name="lucide-wrench-symbolic"
-            ),
-        ]
-
-        self._side_bar_switcher = SideBarSwitcher()
-        self._side_bar_switcher.set_with_menu(stack, menu)
-
-        toolbar = Adw.ToolbarView(content=self._side_bar_switcher)
-        toolbar.add_top_bar(Adw.HeaderBar())
-
-        sidebar_page = Adw.NavigationPage(
-            title=_("Preferences"), tag="sidebar", child=toolbar
-        )
-
-        toolbar = Adw.ToolbarView(content=stack)
-        toolbar.add_top_bar(Adw.HeaderBar())
-
-        content_page = Adw.NavigationPage(title=" ", tag="content", child=toolbar)
-
-        nav = Adw.NavigationSplitView(sidebar=sidebar_page, content=content_page)
-
-        self.set_child(nav)
-
-        # self._add_video_preview()
-
-    # def _add_video_preview(self) -> None:
-    #     self._video_preview = VideoPreview()
-    #     self._ui.video.attach(self._video_preview, 0, 1, 1, 1)
-
-    # def get_video_preview(self) -> VideoPreview | None:
-    #     return self._video_preview
-
-    def update_proxy_list(self) -> None:
-        miscellaneous = cast(Miscellaneous, self._prefs["miscellaneous"])
-        miscellaneous.update_proxy_list()
-
-    def _cleanup(self) -> None:
-        # del self._video_preview
-        self._prefs.clear()
-
-    def show_page(self, name: str) -> None:
-        self._side_bar_switcher.activate_item(name)
-
-
-class PreferenceBox(SettingsBox):
-    def __init__(self, settings: list[Setting]) -> None:
-        SettingsBox.__init__(self, None)
-        self.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.set_hexpand(True)
-        self.set_vexpand(False)
-        self.set_valign(Gtk.Align.END)
-
-        for setting in settings:
-            self.add_setting(setting)
-        self.update_states()
-
-
-class WindowBehaviour(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
 
         main_window_on_startup_items = {
             "always": _("Always"),
@@ -371,15 +98,21 @@ class WindowBehaviour(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _on_show_in_taskbar(value: bool, *args: Any) -> None:
         app.window.set_skip_taskbar_hint(not value)
 
 
-class PluginSettings(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class PluginSettingsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="plugin-settings",
+            title=_("Plugin Settings"),
+        )
 
         settings = [
             Setting(
@@ -407,11 +140,17 @@ class PluginSettings(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class General(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class GeneralGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="general",
+            title=_("General"),
+        )
 
         speller_desc = None
         if not app.is_installed("SPELLING"):
@@ -460,15 +199,21 @@ class General(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _speller_available() -> bool:
         return app.is_installed("SPELLING")
 
 
-class Chats(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class ChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="chats",
+            title=_("Chats"),
+        )
 
         settings = [
             Setting(
@@ -487,11 +232,17 @@ class Chats(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class GroupChats(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class GroupChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="group-chats",
+            title=_("Group Chats"),
+        )
 
         settings = [
             Setting(
@@ -561,7 +312,8 @@ class GroupChats(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
@@ -584,8 +336,14 @@ class GroupChats(PreferenceBox):
         app.settings.set_group_chat_settings("print_status", None)
 
 
-class FilePreview(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class FilePreviewGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="file-preview",
+            title=_("File Preview"),
+        )
+
         sizes = {
             0: _("No automatic preview"),
             262144: "256 KiB",
@@ -669,11 +427,17 @@ class FilePreview(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class VisualNotifications(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class VisualNotificationsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="visual-notifications",
+            title=_("Visual Notifications"),
+        )
 
         settings = [
             Setting(
@@ -683,18 +447,24 @@ class VisualNotifications(PreferenceBox):
                 "show_trayicon",
             ),
             Setting(
-                SettingKind.NOTIFICATIONS,
+                SettingKind.SUBPAGE,
                 _("Show Notifications"),
-                SettingType.DIALOG,
-                props={"dialog": NotificationsDialog},
+                SettingType.CONFIG,
+                "show_notifications",
+                props={"subpage": "notifications"},
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class NotificationsDialog(SettingsDialog):
-    def __init__(self, account: str, parent: Gtk.Window) -> None:
+class NotificationsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="notifications",
+        )
 
         settings = [
             Setting(
@@ -713,13 +483,17 @@ class NotificationsDialog(SettingsDialog):
             ),
         ]
 
-        SettingsDialog.__init__(
-            self, parent, _("Notifications"), Gtk.DialogFlags.MODAL, settings, account
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class SoundsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="sounds",
+            title=_("Sounds"),
         )
-
-
-class Sounds(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
 
         settings = [
             Setting(
@@ -743,7 +517,8 @@ class Sounds(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _on_manage_sounds(_button: Gtk.Button) -> None:
@@ -752,8 +527,13 @@ class Sounds(PreferenceBox):
         open_window("ManageSounds", transient_for=window.window)
 
 
-class StatusMessage(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class StatusMessageGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="status-message",
+            title=_("Ask For Status Message on…"),
+        )
 
         settings = [
             Setting(
@@ -764,35 +544,44 @@ class StatusMessage(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class AutomaticStatus(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class AutomaticStatusGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="automatic-status",
+            title=_("Automatic Status Change"),
+        )
 
         settings = [
             Setting(
-                SettingKind.AUTO_AWAY,
+                SettingKind.SUBPAGE,
                 _("Auto Away"),
-                SettingType.DIALOG,
+                SettingType.CONFIG,
+                "autoaway",
                 desc=_(
                     'Change your status to "Away" after a certain ' "amount of time"
                 ),
-                props={"dialog": AutoAwayDialog},
+                props={"subpage": "auto-away"},
             ),
             Setting(
-                SettingKind.AUTO_EXTENDED_AWAY,
+                SettingKind.SUBPAGE,
                 _("Auto Not Available"),
-                SettingType.DIALOG,
+                SettingType.CONFIG,
+                "autoxa",
                 desc=_(
                     'Change your status to "Not Available" after a '
                     "certain amount of time"
                 ),
-                props={"dialog": AutoExtendedAwayDialog},
+                props={"subpage": "auto-extended-away"},
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _get_auto_away() -> bool:
@@ -803,8 +592,9 @@ class AutomaticStatus(PreferenceBox):
         return app.settings.get("autoxa")
 
 
-class AutoAwayDialog(SettingsDialog):
-    def __init__(self, account: str, parent: Gtk.Window) -> None:
+class AutoAwayGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(self, key="auto-away")
 
         settings = [
             Setting(SettingKind.SWITCH, _("Auto Away"), SettingType.CONFIG, "autoaway"),
@@ -826,18 +616,13 @@ class AutoAwayDialog(SettingsDialog):
             ),
         ]
 
-        SettingsDialog.__init__(
-            self,
-            parent,
-            _("Auto Away Settings"),
-            Gtk.DialogFlags.MODAL,
-            settings,
-            account,
-        )
+        for setting in settings:
+            self.add_setting(setting)
 
 
-class AutoExtendedAwayDialog(SettingsDialog):
-    def __init__(self, account: str, parent: Gtk.Window) -> None:
+class AutoExtendedAwayGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(self, key="auto-extended-away")
 
         settings = [
             Setting(
@@ -864,18 +649,17 @@ class AutoExtendedAwayDialog(SettingsDialog):
             ),
         ]
 
-        SettingsDialog.__init__(
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class ThemesGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
             self,
-            parent,
-            _("Auto Extended Away Settings"),
-            Gtk.DialogFlags.MODAL,
-            settings,
-            account,
+            key="themes",
+            title=_("Themes"),
         )
-
-
-class Themes(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
 
         theme_items = self._get_theme_items()
 
@@ -917,13 +701,14 @@ class Themes(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
         app.ged.register_event_handler("theme-update", ged.GUI1, self._on_theme_update)
 
     def do_unroot(self) -> None:
         app.ged.remove_event_handler("theme-update", ged.GUI1, self._on_theme_update)
-        PreferenceBox.do_unroot(self)
+        GajimPreferencesGroup.do_unroot(self)
 
     @staticmethod
     def _on_app_font_size_changed(_value: float, *args: Any) -> None:
@@ -958,26 +743,28 @@ class Themes(PreferenceBox):
         app.ged.raise_event(StyleChanged())
 
 
-# class Server(PreferenceBox):
-#     def __init__(self, *args: Any) -> None:
+# class ServerGroup(GajimPreferencesGroup):
+#     def __init__(self) -> None:
+#         GajimPreferencesGroup.__init__(self, key="server")
 
 #         settings = [
 #             Setting(
-#                 SettingKind.USE_STUN_SERVER,
+#                 SettingKind.SUBPAGE,
 #                 _("Use STUN Server"),
 #                 SettingType.DIALOG,
 #                 desc=_("Helps to establish calls through firewalls"),
-#                 props={"dialog": StunServerDialog},
+#                 props={"subpage": "stun"},
 #             ),
 #         ]
 
-#         PreferenceBox.__init__(self, settings)
+#         for setting in settings:
+#             self.add_setting(setting)
 
 #         self.set_sensitive(app.is_installed("AV"))
 
-
-# class StunServerDialog(SettingsDialog):
-#     def __init__(self, account: str, parent: Gtk.Window) -> None:
+# class StunServerGroup(GajimPreferencesGroup):
+#     def __init__(self) -> None:
+#         GajimPreferencesGroup.__init__(self, key="stun")
 
 #         settings = [
 #             Setting(
@@ -995,18 +782,17 @@ class Themes(PreferenceBox):
 #             ),
 #         ]
 
-#         SettingsDialog.__init__(
-#             self,
-#             parent,
-#             _("STUN Server Settings"),
-#             Gtk.DialogFlags.MODAL,
-#             settings,
-#             account,
-#         )
+#         for setting in settings:
+#             self.add_setting(setting)
 
 
-class Audio(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+class AudioGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="audio",
+            title=_("Audio"),
+        )
 
         deps_installed = app.is_installed("GST")
 
@@ -1038,7 +824,8 @@ class Audio(PreferenceBox):
             # ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
         self.set_sensitive(deps_installed)
 
@@ -1056,8 +843,9 @@ class Audio(PreferenceBox):
         return combo_items
 
 
-# class Video(PreferenceBox):
-#     def __init__(self, *args: Any) -> None:
+# class VideoGroup(GajimPreferencesGroup):
+#     def __init__(self) -> None:
+#         GajimPreferencesGroup.__init__(self)
 
 #         deps_installed = app.is_installed("AV")
 
@@ -1122,7 +910,8 @@ class Audio(PreferenceBox):
 #             ),
 #         ]
 
-#         PreferenceBox.__init__(self, settings)
+#         for setting in settings:
+#             self.add_setting(setting)
 
 #         self.set_sensitive(deps_installed)
 
@@ -1158,8 +947,14 @@ class Audio(PreferenceBox):
 #         return combo_items
 
 
-class Miscellaneous(PreferenceBox):
-    def __init__(self, pref_window: Preferences) -> None:
+class MiscellaneousGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="miscellaneous",
+            title=_("Miscellaneous"),
+        )
+
         self._hints_list: list[BoolSettings] = [
             "show_help_start_chat",
         ]
@@ -1240,7 +1035,8 @@ class Miscellaneous(PreferenceBox):
             ),
         )
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _get_proxies() -> dict[str, str]:
@@ -1287,8 +1083,13 @@ class Miscellaneous(PreferenceBox):
         )
 
 
-class Advanced(PreferenceBox):
-    def __init__(self, pref_window: Preferences) -> None:
+class AdvancedGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="advanced",
+            title=_("Advanced Settings"),
+        )
 
         settings = [
             Setting(
@@ -1336,7 +1137,8 @@ class Advanced(PreferenceBox):
             ),
         ]
 
-        PreferenceBox.__init__(self, settings)
+        for setting in settings:
+            self.add_setting(setting)
 
     @staticmethod
     def _on_debug_logging(value: bool, *args: Any) -> None:
@@ -1355,3 +1157,168 @@ class Advanced(PreferenceBox):
     @staticmethod
     def _on_debug(*args: Any) -> None:
         open_window("DebugConsoleWindow")
+
+
+class GeneralPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="general",
+            title=_("General"),
+            groups=[WindowBehaviourGroup],
+            menu=SideBarMenuItem(
+                "general", _("General"), icon_name="computer-symbolic"
+            ),
+        )
+
+
+class ChatsPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="chats",
+            title=_("Chats"),
+            groups=[
+                GeneralGroup,
+                ChatsGroup,
+                GroupChatsGroup,
+                FilePreviewGroup,
+            ],
+            menu=SideBarMenuItem(
+                "chats", _("Chats"), icon_name="user-available-symbolic"
+            ),
+        )
+
+
+class VisualNotificationsPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="visual-notifications",
+            title=_("Visual Notifications"),
+            groups=[
+                VisualNotificationsGroup,
+                SoundsGroup,
+            ],
+            menu=SideBarMenuItem(
+                "visual-notifications",
+                _("Notifications"),
+                icon_name="mail-unread-symbolic",
+            ),
+        )
+
+
+class StatusPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="status",
+            title=_("Status"),
+            groups=[
+                StatusMessageGroup,
+                AutomaticStatusGroup,
+            ],
+            menu=SideBarMenuItem(
+                "status", _("Status"), icon_name="lucide-megaphone-symbolic"
+            ),
+        )
+
+
+class StylePage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="style",
+            title=_("Style"),
+            groups=[ThemesGroup],
+            menu=SideBarMenuItem(
+                "style", _("Style"), icon_name="applications-graphics-symbolic"
+            ),
+        )
+
+
+class AudioVideoPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="audio-video",
+            title=_("Audio"),
+            groups=[
+                # ServerGroup,
+                AudioGroup,
+                # VideoGroup,
+            ],
+            menu=SideBarMenuItem(
+                "audio-video", _("Audio"), icon_name="audio-input-microphone-symbolic"
+            ),
+        )
+
+        banner = Adw.Banner(
+            revealed=bool(not app.is_installed("GST")),
+            title=_("Missing dependencies for audio support"),
+            button_label=_("Features"),
+            action_name="app.features",
+        )
+        self._pref_page.set_banner(banner)
+
+
+class PluginsPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="plugins",
+            title=_("Plugins"),
+            groups=[
+                PluginSettingsGroup,
+                Plugins,
+            ],
+            menu=SideBarMenuItem(
+                "plugins", _("Plugins"), icon_name="lucide-package-symbolic"
+            ),
+        )
+
+
+class AdvancedPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="advanced",
+            title=_("Advanced"),
+            groups=[
+                MiscellaneousGroup,
+                AdvancedGroup,
+            ],
+            menu=SideBarMenuItem(
+                "advanced", _("Advanced"), icon_name="lucide-wrench-symbolic"
+            ),
+        )
+
+
+class AutoAwayPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="auto-away",
+            title=_("Auto Away"),
+            groups=[AutoAwayGroup],
+        )
+
+
+class AutoExtendedAwayPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="auto-extended-away",
+            title=_("Auto Not Available"),
+            groups=[AutoExtendedAwayGroup],
+        )
+
+
+class NotificationsPage(GajimPreferencePage):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="notifications",
+            title=_("Notifications"),
+            groups=[NotificationsGroup],
+        )

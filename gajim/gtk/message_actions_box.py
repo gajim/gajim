@@ -687,8 +687,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 return
 
             if isinstance(contact, BareContact) and contact.is_self:
-                window = open_window("AccountsWindow")
-                window.select_account(contact.account, page="encryption-omemo")
+                window = open_window("Preferences")
+                window.show_page(f"{contact.account}-encryption-omemo")
                 return
 
             open_window(

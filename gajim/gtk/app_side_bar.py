@@ -134,9 +134,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         _popover: AccountPopover,
         account: str,
     ) -> None:
-        if not account:
-            app.app.activate_action("accounts", GLib.Variant("s", ""))
-            return
 
         app.window.show_account_page(account)
         self._bottom_listbox.select_row(self._account_row)
@@ -154,6 +151,12 @@ class AppSideBar(Gtk.Box, EventHelper):
         x: float,
         y: float,
     ) -> int:
+
+        accounts = app.settings.get_active_accounts()
+        if len(accounts) == 1:
+            app.window.show_account_page(accounts[0])
+            self._bottom_listbox.select_row(self._account_row)
+            return Gdk.EVENT_PROPAGATE
 
         current_button = gesture_click.get_current_button()
         if current_button == Gdk.BUTTON_PRIMARY:
@@ -278,12 +281,8 @@ class AccountPopover(Gtk.Popover):
         self._rows.clear()
 
     @Gtk.Template.Callback()
-    def _on_row_activated(
-        self, _listbox: Gtk.ListBox, row: AccountPopoverRow | Gtk.ListBoxRow
-    ) -> None:
-        account = ""
-        if isinstance(row, AccountPopoverRow):
-            account = row.get_account()
+    def _on_row_activated(self, _listbox: Gtk.ListBox, row: AccountPopoverRow) -> None:
+        account = row.get_account()
 
         self.emit("clicked", account)
         self.popdown()

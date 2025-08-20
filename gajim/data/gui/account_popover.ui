@@ -3,7 +3,6 @@
   <requires lib="gtk" version="4.0"/>
   <template class="AccountPopover" parent="GtkPopover">
     <property name="position">top</property>
-    <property name="default-widget">manage-accounts</property>
     <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
@@ -12,16 +11,6 @@
         <property name="child">
           <object class="GtkListBox" id="_listbox">
             <signal name="row-activated" handler="_on_row_activated" />
-            <child>
-              <object class="GtkListBoxRow" id="manage-accounts">
-                <property name="child">
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Manage Accounts…</property>
-                    <property name="height-request">38</property>
-                  </object>
-                </property>
-              </object>
-            </child>
           </object>
         </property>
       </object>

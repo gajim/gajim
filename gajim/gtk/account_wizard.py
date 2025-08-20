@@ -1208,9 +1208,6 @@ class Success(SuccessPage):
                 self._account, "account_label", self._label
             )
         app.css_config.refresh()
-        window = get_app_window("AccountsWindow")
-        if window is not None:
-            window.update_account_label(self._account)
 
     def get_visible_buttons(self) -> list[str]:
         return ["connect"]

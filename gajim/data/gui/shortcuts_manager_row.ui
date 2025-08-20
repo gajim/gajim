@@ -25,13 +25,8 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkImage">
             <property name="icon-name">lucide-square-pen-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Edit Shortcut…</property>
-            <signal name="clicked" handler="_on_edit_clicked"/>
-            <style>
-              <class name="flat"/>
-            </style>
           </object>
         </child>
       </object>

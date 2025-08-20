@@ -372,7 +372,7 @@ class Client(Observable, ClientModules):
 
     def get_own_contact(self) -> BareContact:
         jid = self.get_own_jid()
-        contact = self.get_module("Contacts").get_contact(jid)
+        contact = self.get_module("Contacts").get_contact(jid.bare)
         assert isinstance(contact, BareContact)
         return contact
 

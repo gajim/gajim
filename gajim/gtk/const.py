@@ -85,21 +85,15 @@ class SettingKind(IntEnum):
     SWITCH = 1
     SPIN = 2
     ACTION = 3
-    LOGIN = 4
     DIALOG = 5
     CALLBACK = 6
-    HOSTNAME = 8
-    PRIORITY = 9
     FILECHOOSER = 10
     CHANGEPASSWORD = 11
     COMBO = 12
     COLOR = 13
-    AUTO_AWAY = 15
-    AUTO_EXTENDED_AWAY = 16
-    USE_STUN_SERVER = 17
-    NOTIFICATIONS = 18
     DROPDOWN = 19
     GENERIC = 20
+    SUBPAGE = 21
 
 
 @unique
@@ -135,7 +129,6 @@ class ControlType(Enum):
 
 
 WINDOW_MODULES = {
-    "AccountsWindow": "gajim.gtk.accounts",
     "AccountWizard": "gajim.gtk.account_wizard",
     "AddContact": "gajim.gtk.add_contact",
     "AdHocCommands": "gajim.gtk.adhoc",
@@ -159,7 +152,7 @@ WINDOW_MODULES = {
     "ManageSounds": "gajim.gtk.manage_sounds",
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",
-    "Preferences": "gajim.gtk.preferences",
+    "Preferences": "gajim.gtk.preference.dialog",
     "ProfileWindow": "gajim.gtk.profile",
     "QuitDialog": "gajim.gtk.quit",
     "RemoveAccount": "gajim.gtk.remove_account",

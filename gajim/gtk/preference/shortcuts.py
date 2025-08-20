@@ -4,14 +4,13 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import cast
 from typing import Literal
 
 from collections.abc import Callable
 
 from gi.repository import Adw
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -21,6 +20,9 @@ from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.const import SHORTCUT_CATEGORIES
 from gajim.gtk.const import SHORTCUTS
+from gajim.gtk.settings import GajimPreferencePage
+from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -28,12 +30,20 @@ from gajim.gtk.util.misc import get_ui_string
 # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h
 
 
-class ShortcutsManager(Gtk.Box, SignalManager):
-    def __init__(self, preferences: Any) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=18)
+class ShortcutsPage(GajimPreferencePage, SignalManager):
+    def __init__(self) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key="shortcuts",
+            title=_("Shortcuts"),
+            groups=[],
+            menu=SideBarMenuItem(
+                "shortcuts",
+                _("Shortcuts"),
+                icon_name="preferences-desktop-keyboard-symbolic",
+            ),
+        )
         SignalManager.__init__(self)
-
-        self._preferences = preferences
 
         self._shortcut_rows: dict[str, ShortcutsManagerRow] = {}
 
@@ -43,20 +53,19 @@ class ShortcutsManager(Gtk.Box, SignalManager):
 
     def do_unroot(self) -> None:
         self._disconnect_all()
-        del self._preferences
         del self._shortcut_rows
-        Gtk.Box.do_unroot(self)
+        GajimPreferencePage.do_unroot(self)
 
     def _load_shortcuts(self) -> None:
-        preferences_groups: dict[str, Adw.PreferencesGroup] = {}
+        preferences_groups: dict[str, GajimPreferencesGroup] = {}
         for category, title in SHORTCUT_CATEGORIES.items():
-            preferences_group = Adw.PreferencesGroup(title=title)
+            preferences_group = GajimPreferencesGroup(key=category, title=title)
             preferences_groups[category] = preferences_group
-            self.append(preferences_group)
+            self.add(preferences_group)
 
         for action_name, shortcut_data in SHORTCUTS.items():
             row = ShortcutsManagerRow(action_name)
-            self._connect(row, "edit", self._on_edit_clicked)
+            self._connect(row, "activated", self._on_activated)
 
             custom_accelerators = self._user_shortcuts.get(action_name)
             if (
@@ -70,10 +79,9 @@ class ShortcutsManager(Gtk.Box, SignalManager):
             preferences_groups[shortcut_data.category].add(row)
             self._shortcut_rows[action_name] = row
 
-    def _on_edit_clicked(self, _row: ShortcutsManagerRow, action_name: str) -> None:
-        KeyEntryDialog(
-            self._on_shortcut_edited, action_name, parent=self._preferences.window
-        )
+    def _on_activated(self, row: ShortcutsManagerRow) -> None:
+        parent = cast(Adw.ApplicationWindow, self.get_root())
+        KeyEntryDialog(self._on_shortcut_edited, row.action_name, parent=parent)
 
     def _on_shortcut_edited(
         self,
@@ -99,9 +107,6 @@ class ShortcutsManager(Gtk.Box, SignalManager):
 @Gtk.Template(string=get_ui_string("shortcuts_manager_row.ui"))
 class ShortcutsManagerRow(Adw.ActionRow):
     __gtype_name__ = "ShortcutsManagerRow"
-    __gsignals__ = {
-        "edit": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-    }
 
     _accelerator_badge: Gtk.Label = Gtk.Template.Child()
     _accelerator_label: Gtk.Label = Gtk.Template.Child()
@@ -110,6 +115,7 @@ class ShortcutsManagerRow(Adw.ActionRow):
         Adw.ActionRow.__init__(self)
 
         self._action_name = action_name
+        self.set_activatable(True)
         self.set_title(SHORTCUTS[self._action_name].label)
 
     @property
@@ -126,10 +132,6 @@ class ShortcutsManagerRow(Adw.ActionRow):
 
         self._accelerator_label.set_label(accelerator_label)
         self._accelerator_badge.set_visible(is_custom)
-
-    @Gtk.Template.Callback()
-    def _on_edit_clicked(self, _button: Gtk.Button) -> None:
-        self.emit("edit", self._action_name)
 
 
 class KeyEntryDialog(AlertDialog):

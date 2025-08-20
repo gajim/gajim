@@ -32,9 +32,11 @@ from gajim.common.client import Client
 from gajim.common.commands import ChatCommands
 from gajim.common.dbus import file_manager
 from gajim.common.dbus import logind
+from gajim.common.events import AccountCreated
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountEnabled
+from gajim.common.events import AccountRemoved
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
@@ -387,6 +389,8 @@ class CoreApplication(ged.EventHelper):
             # Password module depends on existing config
             passwords.save_password(account, password)
 
+        app.ged.raise_event(AccountCreated(account=account))
+
     def enable_account(self, account: str) -> None:
         app.connections[account] = Client(account)
 
@@ -424,6 +428,8 @@ class CoreApplication(ged.EventHelper):
         app.storage.archive.remove_account(account)
         app.settings.remove_account(account)
         app.app.remove_account_actions(account)
+
+        app.ged.raise_event(AccountRemoved(account=account))
 
     def _on_signed_in(self, event: SignedIn) -> None:
         client = app.get_client(event.account)
