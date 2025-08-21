@@ -30,6 +30,7 @@ from gajim.common.util.uri import open_uri
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import container_remove_all
 
 log = logging.getLogger("gajim.gtk.groupchat_info")
@@ -268,6 +269,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         if Namespace.MAM_2 in features:
             features.append("mam")
 
+        clear_listbox(self._ui.features_listbox)
         for feature in MUC_FEATURES:
             if feature in features:
                 icon, title, subtitle = MUC_FEATURES.get(feature, (None, None, None))
