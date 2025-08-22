@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
-"PO-Revision-Date: 2025-07-12 15:12+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"PO-Revision-Date: 2025-08-22 13:18+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -43,12 +43,12 @@ msgstr "%(contact)s отклонил Ваше приглашение в %(chat)s
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s пригласил Вас в %(chat)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "Участник"
-msgstr[1] "Участник"
-msgstr[2] "Участник"
+msgstr[0] "%(count)s Участник"
+msgstr[1] "%(count)s Участника"
+msgstr[2] "%(count)s Участников"
 
 #, python-format
 msgid ""
@@ -816,9 +816,6 @@ msgstr "Механизм аутентификации не поддержива�
 msgid "Authentication mechanism too weak"
 msgstr "Слишком слабый механизм аутентификации"
 
-msgid "Author"
-msgstr "Автор"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Идентификаторы ключа центра сертификации и поставщика не совпадают"
 
@@ -1213,10 +1210,6 @@ msgstr "Закрывать по клавише Escape"
 msgid "Code snippet"
 msgstr "Фрагмент кода"
 
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Фрагмента кода (%s)"
-
 msgid "Color"
 msgstr "Цвет"
 
@@ -1411,7 +1404,6 @@ msgstr "Копировать фрагмент кода"
 msgid "Copy info to clipboard"
 msgstr "Копировать информацию в буфер обмена"
 
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "Копировать в буфер обмена"
 
@@ -1639,9 +1631,6 @@ msgstr "Сообщать время Вашей последней активно
 
 msgid "Discover Services…"
 msgstr "Обзор сервисов…"
-
-msgid "Discussion Logs"
-msgstr "Журналы обсуждений"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2030,9 +2019,6 @@ msgstr "Размер файла неизвестен"
 
 msgid "File too big"
 msgstr "Слишком большой размер файла"
-
-msgid "File transfers"
-msgstr "Передача файлов"
 
 #, python-format
 msgid "File: %s"
@@ -2496,9 +2482,8 @@ msgstr "Недопустимый адрес: %s"
 msgid "Invalid domain name"
 msgstr "Недопустимое доменное имя"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "Недопустимое имя сервера"
+msgstr "Неправильный ответ сервера"
 
 msgid "Invitation"
 msgstr "Приглашение"
@@ -2512,9 +2497,8 @@ msgstr "Пригласить"
 msgid "Invite Contacts"
 msgstr "Пригласить контакты"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "Пригласить в этот чат"
+msgstr "Пригласить в этот чат…"
 
 msgid "Invitees"
 msgstr "Приглашённые"
@@ -2775,6 +2759,9 @@ msgstr "Упоминание: Фоновый цвет сообщения"
 
 msgid "Message"
 msgstr "Сообщение"
+
+msgid "Message History"
+msgstr "История сообщений"
 
 msgid "Message Receipts (✔)"
 msgstr "Сообщения о доставке (✔)"
@@ -3399,9 +3386,8 @@ msgstr "Обновления подключаемых модулей"
 msgid "Plugin already exists"
 msgstr "Подключаемый модуль уже существует"
 
-#, fuzzy
 msgid "Plugin could not be loaded"
-msgstr "Выбранное изображение не может быть загружено."
+msgstr "Не удалось загрузить плагин"
 
 msgid "Plugins"
 msgstr "Модули"
@@ -4374,9 +4360,6 @@ msgstr "Начать чат…"
 msgid "Start Chat…"
 msgstr "Начать чат…"
 
-msgid "Start New Chat"
-msgstr "Начать новый чат"
-
 msgid "Start Search..."
 msgstr "Начать поиск..."
 
@@ -4463,6 +4446,9 @@ msgstr "Альтернативные имена субъекта: "
 msgid "Subject issuer mismatch"
 msgstr "Несоответствие поставщика и субъекта"
 
+msgid "Subject last changed by"
+msgstr "Тема последнего раза менялась пользователем"
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Подписаться"
@@ -4481,6 +4467,10 @@ msgstr "Контакты добавлены"
 
 msgid "Successfully Removed Contacts"
 msgstr "Контакты удалены"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr "Успешно создана новая сессия с {device_id}."
 
 msgid "Support"
 msgstr "Поддержка"
@@ -4636,6 +4626,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Темы"
 
+msgid "There are connectivity issues"
+msgstr "Имеются проблемы с подключением"
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 "Имеются устройства, в отношении которых ещё не было принято решение о "
@@ -4735,6 +4728,8 @@ msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"Этот групповой чат только для участников, но вы не в этом списке. Вас должен "
+"пригласить кто-то из авторизованных в этом чате."
 
 msgid "This group chat is restricted to members only"
 msgstr "Этот групповой чат доступен только для участников"
@@ -4852,10 +4847,9 @@ msgstr "Время до установки статуса «Отошёл»"
 msgid "Time Until Not Available"
 msgstr "Время до установки статуса «Недоступен»"
 
-#, fuzzy
 msgctxt "Profile"
 msgid "Timezone"
-msgstr "Время"
+msgstr "Часовой пояс"
 
 msgctxt "Profile"
 msgid "Title"
@@ -4877,9 +4871,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Переключить список чатов"
-
-msgid "Toggle Menu Bar"
-msgstr "Показать панель меню"
 
 msgid "Toggle participants list"
 msgstr "Переключение вида списка участников"
@@ -6253,6 +6244,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Audio/Video"
 #~ msgstr "Аудио/Видео"
 
+#~ msgid "Author"
+#~ msgstr "Автор"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Запрос на авторизацию"
 
@@ -6325,6 +6319,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Close Search"
 #~ msgstr "Закрыть поиск"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Фрагмента кода (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Общее имя (CN)"
@@ -6400,6 +6398,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Прямая передача (без шифрования)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Журналы обсуждений"
 
 #~ msgid "Dismiss"
 #~ msgstr "Отклонить"
@@ -6491,6 +6492,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Передача файла остановлена"
+
+#~ msgid "File transfers"
+#~ msgstr "Передача файлов"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6890,6 +6894,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Stalled"
 #~ msgstr "Остановлено"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Начать новый чат"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Начать видеозвонок…"
 
@@ -6949,11 +6956,11 @@ msgstr "…или перетащите его сюда"
 #~ msgid "The service could not be found"
 #~ msgstr "Не удалось найти сервис"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "Имеются проблемы с подключением"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Учётная запись не подключена к серверу"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Показать панель меню"
 
 #~ msgid "Topic"
 #~ msgstr "Тема"

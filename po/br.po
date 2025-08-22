@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -885,10 +885,6 @@ msgstr "C'hwitet an diskleriadenn gant \"%s\""
 msgid "Authentication mechanism too weak"
 msgstr "C'hwitet an diskleriadenn gant \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "_Aotren"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1324,10 +1320,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1835,9 +1827,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Dizoleiñ ar servijoù"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Degemer a rit ar goulenn-mañ?"
@@ -2269,10 +2258,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "L'image est trop grande"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Treuzkasoù"
 
 #, python-format
 msgid "File: %s"
@@ -3106,6 +3091,10 @@ msgstr "_Distreiñ gant al livioù dre-ziouer"
 
 msgid "Message"
 msgstr "Kemennadenn"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Kemennadenn gaset"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4959,10 +4948,6 @@ msgid "Start Chat…"
 msgstr "Kregiñ da flapiñ"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Kregiñ da flapiñ"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Kregiñ da flapiñ"
 
@@ -5057,6 +5042,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5081,6 +5069,10 @@ msgstr "Darempredoù"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Darempredoù"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5251,6 +5243,9 @@ msgstr "Gwiskadur"
 #, fuzzy
 msgid "Themes"
 msgstr "Gwiskadur"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5492,10 +5487,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Perzhiad-ez"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Dorioù"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6949,6 +6940,10 @@ msgstr ""
 #~ msgstr "Titour-stad"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Aotren"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Kaset eo bet an aotre"
 
@@ -7148,6 +7143,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Sac'het an treuzkas"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Treuzkasoù"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7431,6 +7430,10 @@ msgstr ""
 #~ msgstr "S_tad"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Kregiñ da flapiñ"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Kregiñ da flapiñ"
 
@@ -7468,6 +7471,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Dorioù"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

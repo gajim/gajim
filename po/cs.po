@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -823,9 +823,6 @@ msgstr "Mechanismus autentizace není podporován"
 msgid "Authentication mechanism too weak"
 msgstr "Mechanismus autentizace je příliš slabý"
 
-msgid "Author"
-msgstr "Autor"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Vydavatelovo sériové číslo se neshoduje s Autoritou"
 
@@ -1224,10 +1221,6 @@ msgstr "Zavřete stisknutím klávesy Escape"
 
 msgid "Code snippet"
 msgstr "Útržek kódu"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Útržek kódu (%s)"
 
 msgid "Color"
 msgstr "Barva"
@@ -1667,9 +1660,6 @@ msgstr "Zveřejnit čas Vaší poslední aktivity"
 msgid "Discover Services…"
 msgstr "Objevit služby…"
 
-msgid "Discussion Logs"
-msgstr "Záznamy konverzací"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Chcete přijmout tuto žádost (účet: %s)?"
@@ -2060,9 +2050,6 @@ msgstr "Neznámá velikost souboru"
 #, fuzzy
 msgid "File too big"
 msgstr "Profilový obrázek je příliš velký"
-
-msgid "File transfers"
-msgstr "Přenos souborů"
 
 #, python-format
 msgid "File: %s"
@@ -2832,6 +2819,10 @@ msgstr "Zmínka: barva pozadí zprávy"
 
 msgid "Message"
 msgstr "Zpráva"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Zpráva odeslána"
 
 msgid "Message Receipts (✔)"
 msgstr "Potvrzení zpráv (✔)"
@@ -4499,9 +4490,6 @@ msgstr "Začít konverzaci…"
 msgid "Start Chat…"
 msgstr "Začít konverzaci…"
 
-msgid "Start New Chat"
-msgstr "Začít novou konverzaci"
-
 msgid "Start Search..."
 msgstr "Hledat..."
 
@@ -4587,6 +4575,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Neshoduje se název vydavatele"
 
+msgid "Subject last changed by"
+msgstr ""
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Připojit se"
@@ -4609,6 +4600,10 @@ msgstr "Vybrat kontakty"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Odstranit kontakt"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "Podpora"
@@ -4766,6 +4761,9 @@ msgstr "Motiv vzhledu"
 
 msgid "Themes"
 msgstr "Motivy vzhledu"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5007,10 +5005,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Přepnout seznam konverzací"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Zobrazit na hlavním panelu"
 
 msgid "Toggle participants list"
 msgstr "Přepnout seznam účastníků"
@@ -6438,6 +6432,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
 
+#~ msgid "Author"
+#~ msgstr "Autor"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Žádost o autorizaci"
 
@@ -6504,6 +6501,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Close Search"
 #~ msgstr "Zavřít hledání"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Útržek kódu (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Common Name (CN)"
@@ -6580,6 +6581,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Přímý přenos souborů (nešifrováno)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Záznamy konverzací"
 
 #~ msgid "Dismiss"
 #~ msgstr "Zrušit"
@@ -6671,6 +6675,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Přenos souboru zastaven"
+
+#~ msgid "File transfers"
+#~ msgstr "Přenos souborů"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7055,6 +7062,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Stalled"
 #~ msgstr "Zastaveno"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Začít novou konverzaci"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Začít video hovor…"
 
@@ -7113,6 +7123,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet není připojen k serveru"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Zobrazit na hlavním panelu"
 
 #~ msgid "Topic"
 #~ msgstr "Téma"

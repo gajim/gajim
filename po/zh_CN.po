@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
-"PO-Revision-Date: 2025-07-09 05:12+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"PO-Revision-Date: 2025-08-20 05:18+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -43,10 +43,10 @@ msgstr "%(contact)s 拒绝了您的 %(chat)s 邀请"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s 邀请您加入 %(chat)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "参与者"
+msgstr[0] "%(count)s 位参与者"
 
 #, python-format
 msgid ""
@@ -794,9 +794,6 @@ msgstr "身份验证机制不支持"
 msgid "Authentication mechanism too weak"
 msgstr "身份验证机制太弱"
 
-msgid "Author"
-msgstr "作者"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "颁发机构与颁发者序列号不匹配"
 
@@ -1182,10 +1179,6 @@ msgstr "Esc 键关闭"
 msgid "Code snippet"
 msgstr "代码片段"
 
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "代码片段 (%s)"
-
 msgid "Color"
 msgstr "颜色"
 
@@ -1379,7 +1372,6 @@ msgstr "复制代码片段"
 msgid "Copy info to clipboard"
 msgstr "复制信息到剪贴板"
 
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "复制到剪贴板"
 
@@ -1603,9 +1595,6 @@ msgstr "公开您最后活动的时间"
 
 msgid "Discover Services…"
 msgstr "发现服务…"
-
-msgid "Discussion Logs"
-msgstr "讨论日志"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -1986,9 +1975,6 @@ msgstr "文件大小未知"
 
 msgid "File too big"
 msgstr "文件太大"
-
-msgid "File transfers"
-msgstr "文件传输"
 
 #, python-format
 msgid "File: %s"
@@ -2438,9 +2424,8 @@ msgstr "无效的地址：%s"
 msgid "Invalid domain name"
 msgstr "域名无效"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "服务器名无效"
+msgstr "服务器响应无效"
 
 msgid "Invitation"
 msgstr "邀请"
@@ -2454,9 +2439,8 @@ msgstr "邀请"
 msgid "Invite Contacts"
 msgstr "邀请联系人"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "邀请加入此聊天"
+msgstr "邀请加入此聊天…"
 
 msgid "Invitees"
 msgstr "受邀者"
@@ -2716,6 +2700,9 @@ msgstr "提及：消息背景颜色"
 
 msgid "Message"
 msgstr "消息"
+
+msgid "Message History"
+msgstr "消息历史"
 
 msgid "Message Receipts (✔)"
 msgstr "消息回执 (✔)"
@@ -3334,9 +3321,8 @@ msgstr "插件更新"
 msgid "Plugin already exists"
 msgstr "插件已存在"
 
-#, fuzzy
 msgid "Plugin could not be loaded"
-msgstr "无法加载所选图片。"
+msgstr "无法加载插件"
 
 msgid "Plugins"
 msgstr "插件"
@@ -4291,9 +4277,6 @@ msgstr "开始聊天…"
 msgid "Start Chat…"
 msgstr "开始聊天…"
 
-msgid "Start New Chat"
-msgstr "开始新聊天"
-
 msgid "Start Search..."
 msgstr "开始搜索…"
 
@@ -4376,6 +4359,9 @@ msgstr "主题备用名称： "
 msgid "Subject issuer mismatch"
 msgstr "主题颁发者不匹配"
 
+msgid "Subject last changed by"
+msgstr "主题最后修改者"
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "订阅"
@@ -4394,6 +4380,10 @@ msgstr "已成功添加联系人"
 
 msgid "Successfully Removed Contacts"
 msgstr "已成功移除联系人"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr "‌已成功与 {device_id} 建立新会话。"
 
 msgid "Support"
 msgstr "支持"
@@ -4545,6 +4535,9 @@ msgstr "主题"
 msgid "Themes"
 msgstr "主题"
 
+msgid "There are connectivity issues"
+msgstr "存在连接问题"
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "存在您尚未做出信任决定的设备。"
 
@@ -4637,7 +4630,7 @@ msgstr "需要密码才能进入此群聊"
 msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
-msgstr ""
+msgstr "此群聊仅限成员进入，但您不在成员列表中。需要授权人员邀请您加入。"
 
 msgid "This group chat is restricted to members only"
 msgstr "只有成员才能进入此群聊"
@@ -4749,10 +4742,9 @@ msgstr "离开倒计时"
 msgid "Time Until Not Available"
 msgstr "没空倒计时"
 
-#, fuzzy
 msgctxt "Profile"
 msgid "Timezone"
-msgstr "时间"
+msgstr "时区"
 
 msgctxt "Profile"
 msgid "Title"
@@ -4772,9 +4764,6 @@ msgstr "要发送加密消息，您必须决定是否信任对方的设备。"
 
 msgid "Toggle Chat List"
 msgstr "切换聊天列表"
-
-msgid "Toggle Menu Bar"
-msgstr "切换菜单栏"
 
 msgid "Toggle participants list"
 msgstr "切换参与者列表"
@@ -6149,6 +6138,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Audio/Video"
 #~ msgstr "音频/视频"
 
+#~ msgid "Author"
+#~ msgstr "作者"
+
 #~ msgid "Authorization Request"
 #~ msgstr "授权请求"
 
@@ -6216,6 +6208,10 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Close Search"
 #~ msgstr "关闭搜索"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "代码片段 (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "通用名称 (CN)"
@@ -6289,6 +6285,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "直接传输（未加密）"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "讨论日志"
 
 #~ msgid "Dismiss"
 #~ msgstr "关闭"
@@ -6379,6 +6378,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "文件传输已停止"
+
+#~ msgid "File transfers"
+#~ msgstr "文件传输"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6759,6 +6761,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Stalled"
 #~ msgstr "已停滞"
 
+#~ msgid "Start New Chat"
+#~ msgstr "开始新聊天"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "开始视频通话…"
 
@@ -6818,11 +6823,11 @@ msgstr "…或将其拖放到此处"
 #~ msgid "The service could not be found"
 #~ msgstr "未找到此服务"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "存在连接问题"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "此账号没有连接到服务器"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "切换菜单栏"
 
 #~ msgid "Topic"
 #~ msgstr "话题"

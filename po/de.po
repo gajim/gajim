@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
-"PO-Revision-Date: 2025-08-11 18:55+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"PO-Revision-Date: 2025-08-18 21:41+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -821,9 +821,6 @@ msgstr "Authentifizierungsmechanismus nicht unterstützt"
 msgid "Authentication mechanism too weak"
 msgstr "Authentifizierungsmechanismus zu schwach"
 
-msgid "Author"
-msgstr "Autor"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Zertifizierungsstelle und Aussteller-Seriennummer unpassend"
 
@@ -1213,10 +1210,6 @@ msgstr "Schließen mit Escape"
 
 msgid "Code snippet"
 msgstr "Code-Schnipsel"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Code-Schnipsel (%s)"
 
 msgid "Color"
 msgstr "Farbe"
@@ -1643,9 +1636,6 @@ msgstr "Anderen Clients den Zeitpunkt deiner letzten Aktivität mitteilen"
 msgid "Discover Services…"
 msgstr "Dienste durchsuchen…"
 
-msgid "Discussion Logs"
-msgstr "Nachrichtenverlauf"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Akzeptierst du diese Anfrage (Konto: %s)?"
@@ -2038,9 +2028,6 @@ msgstr "Dateigröße unbekannt"
 
 msgid "File too big"
 msgstr "Datei ist zu groß"
-
-msgid "File transfers"
-msgstr "Dateiübertragungen"
 
 #, python-format
 msgid "File: %s"
@@ -2786,6 +2773,9 @@ msgstr "Erwähnungen: Hintergrundfarbe der Nachricht"
 
 msgid "Message"
 msgstr "Nachricht"
+
+msgid "Message History"
+msgstr "Nachrichtenverlauf"
 
 msgid "Message Receipts (✔)"
 msgstr "Empfangsbestätigungen (✔)"
@@ -4383,9 +4373,6 @@ msgstr "Chat starten…"
 msgid "Start Chat…"
 msgstr "Chat starten…"
 
-msgid "Start New Chat"
-msgstr "Neuen Chat starten"
-
 msgid "Start Search..."
 msgstr "Suche starten…"
 
@@ -4472,6 +4459,9 @@ msgstr "Alternative Namen: "
 msgid "Subject issuer mismatch"
 msgstr "Themenaussteller unpassend"
 
+msgid "Subject last changed by"
+msgstr "Thema zuletzt geändert von"
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Kontaktanfrage"
@@ -4490,6 +4480,10 @@ msgstr "Kontakte hinzugefügt"
 
 msgid "Successfully Removed Contacts"
 msgstr "Kontakte entfernt"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr "Neue Sitzung mit {device_id} erfolgreich eingerichtet."
 
 msgid "Support"
 msgstr "Hilfe"
@@ -4651,6 +4645,9 @@ msgstr "Design"
 
 msgid "Themes"
 msgstr "Designs"
+
+msgid "There are connectivity issues"
+msgstr "Es gibt Verbindungsprobleme"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "Es gibt Geräte, für die du noch kein Vertrauen festgelegt hast."
@@ -4906,9 +4903,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Chatliste ein-/ausblenden"
-
-msgid "Toggle Menu Bar"
-msgstr "Menüleiste zeigen/verstecken"
 
 msgid "Toggle participants list"
 msgstr "Teilnehmerliste zeigen/verstecken"
@@ -6313,6 +6307,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
 
+#~ msgid "Author"
+#~ msgstr "Autor"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Autorisierungsanfrage"
 
@@ -6387,6 +6384,10 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Close Search"
 #~ msgstr "Suche schließen"
 
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Code-Schnipsel (%s)"
+
 #~ msgid "Common Name (CN)"
 #~ msgstr "Allgemeiner Name (CN)"
 
@@ -6460,6 +6461,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Direkte Dateiübertragung (nicht verschlüsselt)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Nachrichtenverlauf"
 
 #~ msgid "Dismiss"
 #~ msgstr "Verwerfen"
@@ -6557,6 +6561,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Dateiübertragung gestoppt"
+
+#~ msgid "File transfers"
+#~ msgstr "Dateiübertragungen"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6962,6 +6969,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Stalled"
 #~ msgstr "Verzögert"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Neuen Chat starten"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Videoanruf starten…"
 
@@ -7022,11 +7032,11 @@ msgstr "… oder hierher ziehen"
 #~ msgid "The service could not be found"
 #~ msgstr "Der Dienst konnte nicht gefunden werden"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "Es gibt Verbindungsprobleme"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Dieses Konto ist nicht mit dem Server verbunden"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Menüleiste zeigen/verstecken"
 
 #~ msgid "Topic"
 #~ msgstr "Thema"

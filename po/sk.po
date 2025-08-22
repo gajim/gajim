@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -895,10 +895,6 @@ msgstr "Rozšírenie nie je podporované"
 msgid "Authentication mechanism too weak"
 msgstr "Overenie zlyhalo s \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "Au_torizovať"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1338,10 +1334,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1853,9 +1845,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Preskúmať služby"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prijať túto požiadavku?"
@@ -2286,10 +2275,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Obrázok je príliš veľký"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Prenos súborov"
 
 #, python-format
 msgid "File: %s"
@@ -3127,6 +3112,10 @@ msgstr "Náv_rat k pôvodnému nastaveniu farieb"
 
 msgid "Message"
 msgstr "Správa"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Správa odoslaná"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4989,10 +4978,6 @@ msgid "Start Chat…"
 msgstr "Začať rozhovor"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Začať rozhovor"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Začať rozhovor..."
 
@@ -5087,6 +5072,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5110,6 +5098,10 @@ msgstr "Poslať kontakty:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Premenovať kontakt"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5282,6 +5274,9 @@ msgstr "Téma"
 #, fuzzy
 msgid "Themes"
 msgstr "Téma"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5534,10 +5529,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Prepnúť video reláciu"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Zobraziť trans_porty"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -7002,6 +6993,10 @@ msgstr ""
 #~ msgstr "Zvuk / Video"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_torizovať"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Autorizácia bola odoslaná"
 
@@ -7213,6 +7208,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Prenos súboru bol zastavený"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Prenos súborov"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7504,6 +7503,10 @@ msgstr ""
 #~ msgstr "S_tav"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Začať rozhovor"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Začať rozhovor"
 
@@ -7547,6 +7550,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet nie je pripojený k serveru"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Zobraziť trans_porty"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

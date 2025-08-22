@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -899,10 +899,6 @@ msgstr "Разширението не се поддържа"
 msgid "Authentication mechanism too weak"
 msgstr "Неуспех при удостоверяването с „%s“"
 
-#, fuzzy
-msgid "Author"
-msgstr "_Упълномощаване"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Несъответствие на серийния номер на издателя и сертифициращия орган"
 
@@ -1343,10 +1339,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1858,9 +1850,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Откриване на услуги"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Приемате ли това запитване за акаунт %s?"
@@ -2295,10 +2284,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Изображението е твърде голямо"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Файлови трансфери"
 
 #, python-format
 msgid "File: %s"
@@ -3147,6 +3132,10 @@ msgstr "Възстановяване на стандартните _цветов
 
 msgid "Message"
 msgstr "Съобщение"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Изпратено съобщение"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -5012,10 +5001,6 @@ msgid "Start Chat…"
 msgstr "Започване на разговор"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Започване на разговор"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Започване на разговор…"
 
@@ -5110,6 +5095,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Несъответствие на издателя на сертификата"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5133,6 +5121,10 @@ msgstr "Покана на _контакти"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Преименуване на контакт"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5307,6 +5299,9 @@ msgstr "Тема"
 #, fuzzy
 msgid "Themes"
 msgstr "Тема"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5558,10 +5553,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Участник"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Показване на т_ранспорти"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -7034,6 +7025,10 @@ msgstr ""
 #~ msgstr "Стандартно съобщение"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Упълномощаване"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Упълномощаването беше изпратено"
 
@@ -7246,6 +7241,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Файловият трансфер е преустановен"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Файлови трансфери"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7544,6 +7543,10 @@ msgstr ""
 #~ msgstr "Блокирал"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Започване на разговор"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Започване на разговор"
 
@@ -7583,6 +7586,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Този акаунт не е свързан към сървъра"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Показване на т_ранспорти"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

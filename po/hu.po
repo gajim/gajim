@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2025-07-09 09:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -795,9 +795,6 @@ msgstr "Nem támogatott hitelesítési mód"
 msgid "Authentication mechanism too weak"
 msgstr "Túl gyenge hitelesítési mód"
 
-msgid "Author"
-msgstr "Szerző"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "A hitelesítő és a kibocsátó sorozatszáma eltérő"
 
@@ -1191,10 +1188,6 @@ msgstr "Bezárás ESC billentyűvel"
 
 msgid "Code snippet"
 msgstr "Kódrészlet"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Kódrészlet (%s)"
 
 msgid "Color"
 msgstr "Szín"
@@ -1618,9 +1611,6 @@ msgstr "A legutóbbi tevékenység óta eltelt idő közzététele"
 msgid "Discover Services…"
 msgstr "Szolgáltatások felderítése…"
 
-msgid "Discussion Logs"
-msgstr "Vitanapló"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "El legyen fogadva a kérés (fiók: %s)?"
@@ -2004,9 +1994,6 @@ msgstr "Ismeretlen fájlméret"
 
 msgid "File too big"
 msgstr "A fájl túl nagy"
-
-msgid "File transfers"
-msgstr "Fájlátvitelek"
 
 #, python-format
 msgid "File: %s"
@@ -2741,6 +2728,10 @@ msgstr "Említés: üzenet háttérszíne"
 
 msgid "Message"
 msgstr "Üzenet"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Üzenet elküldve"
 
 msgid "Message Receipts (✔)"
 msgstr "Üzenetnyugták (✔)"
@@ -4332,9 +4323,6 @@ msgstr "Beszélgetés kezdeményezése…"
 msgid "Start Chat…"
 msgstr "Beszélgetés kezdeményezése…"
 
-msgid "Start New Chat"
-msgstr "Beszélgetés kezdeményezése"
-
 msgid "Start Search..."
 msgstr "Keresés…"
 
@@ -4421,6 +4409,10 @@ msgstr "Tárgy alternatív nevei: "
 msgid "Subject issuer mismatch"
 msgstr "A tárgy és a kibocsátó eltérő"
 
+#, fuzzy
+msgid "Subject last changed by"
+msgstr "Tárgy alternatív nevei: "
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Feliratkozás"
@@ -4439,6 +4431,10 @@ msgstr "Sikeres névjegyfelvétel"
 
 msgid "Successfully Removed Contacts"
 msgstr "Sikeres névjegytörlés"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "Támogatás"
@@ -4594,6 +4590,9 @@ msgstr "Téma"
 
 msgid "Themes"
 msgstr "Témák"
+
+msgid "There are connectivity issues"
+msgstr "Csatlakozási probléma"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "Néhány eszközzel kapcsolatban még hiányzik a bizalmi döntés."
@@ -4833,9 +4832,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Az oldalsáv mutatása/elrejtése"
-
-msgid "Toggle Menu Bar"
-msgstr "A menüsáv mutatása/elrejtése"
 
 msgid "Toggle participants list"
 msgstr "Résztvevők megjelenítése/elrejtése"
@@ -6224,6 +6220,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Audio/Video"
 #~ msgstr "Hang/Videó"
 
+#~ msgid "Author"
+#~ msgstr "Szerző"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Engedélykérelem"
 
@@ -6299,6 +6298,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Close Search"
 #~ msgstr "A keresés bezárása"
 
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Kódrészlet (%s)"
+
 #~ msgid "Common Name (CN)"
 #~ msgstr "Általános név (CN)"
 
@@ -6373,6 +6376,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Közvetlen fájlátvitel (titkosítás nélkül)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Vitanapló"
 
 #~ msgid "Dismiss"
 #~ msgstr "Elutasítás"
@@ -6468,6 +6474,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Befejezett fájlátvitel"
+
+#~ msgid "File transfers"
+#~ msgstr "Fájlátvitelek"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6862,6 +6871,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Stalled"
 #~ msgstr "Megszakadt"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Beszélgetés kezdeményezése"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Videóhívás…"
 
@@ -6922,11 +6934,11 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "The service could not be found"
 #~ msgstr "A szolgáltatás nem található"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "Csatlakozási probléma"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ez a fiók nem kapcsolódik a kiszolgálóhoz"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "A menüsáv mutatása/elrejtése"
 
 #~ msgid "Topic"
 #~ msgstr "Téma"

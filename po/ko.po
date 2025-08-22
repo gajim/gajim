@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -770,9 +770,6 @@ msgstr ""
 msgid "Authentication mechanism too weak"
 msgstr ""
 
-msgid "Author"
-msgstr ""
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1151,10 +1148,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1571,9 +1564,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr ""
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1943,9 +1933,6 @@ msgid "File size unknown"
 msgstr ""
 
 msgid "File too big"
-msgstr ""
-
-msgid "File transfers"
 msgstr ""
 
 #, python-format
@@ -2656,6 +2643,9 @@ msgid "Mention: Message Background Color"
 msgstr ""
 
 msgid "Message"
+msgstr ""
+
+msgid "Message History"
 msgstr ""
 
 msgid "Message Receipts (✔)"
@@ -4210,9 +4200,6 @@ msgstr ""
 msgid "Start Chat…"
 msgstr ""
 
-msgid "Start New Chat"
-msgstr ""
-
 msgid "Start Search..."
 msgstr ""
 
@@ -4293,6 +4280,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr ""
@@ -4310,6 +4300,10 @@ msgid "Successfully Added Contacts"
 msgstr ""
 
 msgid "Successfully Removed Contacts"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
 msgstr ""
 
 msgid "Support"
@@ -4455,6 +4449,9 @@ msgid "Theme"
 msgstr ""
 
 msgid "Themes"
+msgstr ""
+
+msgid "There are connectivity issues"
 msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
@@ -4669,9 +4666,6 @@ msgid ""
 msgstr ""
 
 msgid "Toggle Chat List"
-msgstr ""
-
-msgid "Toggle Menu Bar"
 msgstr ""
 
 msgid "Toggle participants list"

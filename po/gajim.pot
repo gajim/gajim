@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-19 22:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -515,9 +515,6 @@ msgstr ""
 msgid "Add new Theme"
 msgstr ""
 
-msgid "Add new line"
-msgstr ""
-
 msgid "Add some details…"
 msgstr ""
 
@@ -773,9 +770,6 @@ msgid "Authentication mechanism not supported"
 msgstr ""
 
 msgid "Authentication mechanism too weak"
-msgstr ""
-
-msgid "Author"
 msgstr ""
 
 msgid "Authority and issuer serial number mismatch"
@@ -1043,9 +1037,6 @@ msgstr ""
 msgid "Chat Details and Settings"
 msgstr ""
 
-msgid "Chat List"
-msgstr ""
-
 msgid "Chat Type"
 msgstr ""
 
@@ -1082,6 +1073,9 @@ msgstr ""
 msgid "Choose Device"
 msgstr ""
 
+msgid "Choose Emoji"
+msgstr ""
+
 msgid "Choose History Export Directory"
 msgstr ""
 
@@ -1115,10 +1109,10 @@ msgstr ""
 msgid "Clear File"
 msgstr ""
 
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr ""
 
-msgid "Clear message entry"
+msgid "Clear Sound"
 msgstr ""
 
 msgid ""
@@ -1146,20 +1140,16 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Close a chat by pressing the Escape key"
+msgid "Close Chat"
 msgstr ""
 
-msgid "Close chat"
+msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
 msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1189,9 +1179,6 @@ msgid ""
 msgstr ""
 
 msgid "Complete"
-msgstr ""
-
-msgid "Complete a command or a nickname"
 msgstr ""
 
 msgid "Completed"
@@ -1258,6 +1245,9 @@ msgstr ""
 msgid "Contact Connected"
 msgstr ""
 
+msgid "Contact Details"
+msgstr ""
+
 msgid "Contact Disconnected"
 msgstr ""
 
@@ -1295,9 +1285,6 @@ msgid "Contact Removed"
 msgstr ""
 
 msgid "Contact Request"
-msgstr ""
-
-msgid "Contact information"
 msgstr ""
 
 msgid "Contacts"
@@ -1358,9 +1345,6 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-msgid "Correct the last message"
-msgstr ""
-
 msgctxt "Message row action"
 msgid "Correct…"
 msgstr ""
@@ -1402,7 +1386,7 @@ msgstr ""
 msgid "Create New Account"
 msgstr ""
 
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr ""
 
 msgid "Creating Account..."
@@ -1412,6 +1396,9 @@ msgid "Creating thumbnail failed"
 msgstr ""
 
 msgid "Credentials expired"
+msgstr ""
+
+msgid "Custom"
 msgstr ""
 
 msgid "D-Bus Interface"
@@ -1441,7 +1428,7 @@ msgstr ""
 msgid "Decline"
 msgstr ""
 
-msgid "Decrease User Interface Font Size"
+msgid "Decrease Font Size"
 msgstr ""
 
 msgid "Decrease playback speed"
@@ -1576,9 +1563,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr ""
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1663,6 +1647,12 @@ msgid "Drop files here"
 msgstr ""
 
 msgid "Eating"
+msgstr ""
+
+msgid "Edit Shortcut"
+msgstr ""
+
+msgid "Edit Shortcut…"
 msgstr ""
 
 msgid "Edit display name…"
@@ -1950,9 +1940,6 @@ msgstr ""
 msgid "File too big"
 msgstr ""
 
-msgid "File transfers"
-msgstr ""
-
 #, python-format
 msgid "File: %s"
 msgstr ""
@@ -2058,9 +2045,6 @@ msgstr ""
 
 #, python-format
 msgid "GTK Version: %s"
-msgstr ""
-
-msgid "Gajim"
 msgstr ""
 
 #, python-format
@@ -2200,6 +2184,9 @@ msgstr ""
 msgid "Hello, I am $name. %s"
 msgstr ""
 
+msgid "Here you can customize Gajim's shortcuts."
+msgstr ""
+
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2323,7 +2310,7 @@ msgstr ""
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
+msgid "Increase Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -2612,6 +2599,9 @@ msgstr ""
 msgid "Manage Proxies..."
 msgstr ""
 
+msgid "Manage Shortcuts"
+msgstr ""
+
 msgid "Manage Sounds"
 msgstr ""
 
@@ -2663,6 +2653,9 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
+msgid "Message History"
+msgstr ""
+
 msgid "Message Receipts (✔)"
 msgstr ""
 
@@ -2672,9 +2665,6 @@ msgstr ""
 msgid "Message Sent"
 msgstr ""
 
-msgid "Message composition"
-msgstr ""
-
 msgid "Message content unknown"
 msgstr ""
 
@@ -2682,6 +2672,9 @@ msgstr ""
 msgid ""
 "Message corrected. Original message:\n"
 "%s"
+msgstr ""
+
+msgid "Messages"
 msgstr ""
 
 msgid "Messages are archived on the server"
@@ -2878,6 +2871,9 @@ msgstr ""
 msgid "No info available"
 msgstr ""
 
+msgid "No keys pressed"
+msgstr ""
+
 msgid "No results"
 msgstr ""
 
@@ -3032,9 +3028,6 @@ msgid "Open as _Link"
 msgstr ""
 
 msgid "Open folder"
-msgstr ""
-
-msgid "Open search bar"
 msgstr ""
 
 msgid "OpenGL accelerated"
@@ -3301,6 +3294,11 @@ msgstr ""
 msgid "Presets"
 msgstr ""
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3415,10 +3413,10 @@ msgstr ""
 msgid "Quit Gajim"
 msgstr ""
 
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr ""
 
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr ""
 
 msgid "Re-Login Now?"
@@ -3454,9 +3452,6 @@ msgstr ""
 
 msgctxt "Message state"
 msgid "Received"
-msgstr ""
-
-msgid "Recent history"
 msgstr ""
 
 msgid "Recognize your account by color"
@@ -3647,10 +3642,10 @@ msgstr ""
 msgid "Reset Filters"
 msgstr ""
 
-msgid "Reset Hints"
+msgid "Reset Font Size"
 msgstr ""
 
-msgid "Reset User Interface Font Size"
+msgid "Reset Hints"
 msgstr ""
 
 msgid "Reset all chats to the current default value"
@@ -3674,7 +3669,7 @@ msgstr ""
 msgid "Restart Pending"
 msgstr ""
 
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr ""
 
 msgid "Restore last state"
@@ -3770,13 +3765,13 @@ msgstr ""
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 msgid "Scroll to this message"
-msgstr ""
-
-msgid "Scroll up"
 msgstr ""
 
 msgid "Scroll up to load more chat history…"
@@ -3860,9 +3855,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -3923,9 +3915,6 @@ msgid "Send _Report"
 msgstr ""
 
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-
-msgid "Send the message"
 msgstr ""
 
 #, python-format
@@ -4018,6 +4007,9 @@ msgstr ""
 msgid "Share my online status"
 msgstr ""
 
+msgid "Shortcuts"
+msgstr ""
+
 msgid "Show Chat List"
 msgstr ""
 
@@ -4081,9 +4073,6 @@ msgid "Show all reactions"
 msgstr ""
 
 msgid "Show all warnings"
-msgstr ""
-
-msgid "Show debug console"
 msgstr ""
 
 msgid "Show in Taskbar"
@@ -4216,9 +4205,6 @@ msgstr ""
 msgid "Start Chat…"
 msgstr ""
 
-msgid "Start New Chat"
-msgstr ""
-
 msgid "Start Search..."
 msgstr ""
 
@@ -4299,6 +4285,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr ""
@@ -4318,6 +4307,10 @@ msgstr ""
 msgid "Successfully Removed Contacts"
 msgstr ""
 
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
+
 msgid "Support"
 msgstr ""
 
@@ -4329,22 +4322,70 @@ msgid ""
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
 msgstr ""
 
-msgid "Switch to the first - ninth chat"
+msgid "Switch to Chat 2"
 msgstr ""
 
-msgid "Switch to the next chat"
+msgid "Switch to Chat 3"
 msgstr ""
 
-msgid "Switch to the next unread chat"
+msgid "Switch to Chat 4"
 msgstr ""
 
-msgid "Switch to the previous chat"
+msgid "Switch to Chat 5"
 msgstr ""
 
-msgid "Switch to the previous unread chat"
+msgid "Switch to Chat 6"
+msgstr ""
+
+msgid "Switch to Chat 7"
+msgstr ""
+
+msgid "Switch to Chat 8"
+msgstr ""
+
+msgid "Switch to Chat 9"
+msgstr ""
+
+msgid "Switch to Next Chat"
+msgstr ""
+
+msgid "Switch to Next Unread Chat"
+msgstr ""
+
+msgid "Switch to Previous Chat"
+msgstr ""
+
+msgid "Switch to Previous Unread Chat"
+msgstr ""
+
+msgid "Switch to Workspace 1"
+msgstr ""
+
+msgid "Switch to Workspace 2"
+msgstr ""
+
+msgid "Switch to Workspace 3"
+msgstr ""
+
+msgid "Switch to Workspace 4"
+msgstr ""
+
+msgid "Switch to Workspace 5"
+msgstr ""
+
+msgid "Switch to Workspace 6"
+msgstr ""
+
+msgid "Switch to Workspace 7"
+msgstr ""
+
+msgid "Switch to Workspace 8"
+msgstr ""
+
+msgid "Switch to Workspace 9"
 msgstr ""
 
 msgid "Sync Group Chat Blocklist"
@@ -4461,6 +4502,9 @@ msgid "Theme"
 msgstr ""
 
 msgid "Themes"
+msgstr ""
+
+msgid "There are connectivity issues"
 msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
@@ -4677,9 +4721,6 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr ""
 
-msgid "Toggle Menu Bar"
-msgstr ""
-
 msgid "Toggle participants list"
 msgstr ""
 
@@ -4827,6 +4868,9 @@ msgstr ""
 msgid "Unpin Chat"
 msgstr ""
 
+msgid "Unselect Chat"
+msgstr ""
+
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -4915,9 +4959,6 @@ msgstr ""
 
 #, python-format
 msgid "User %s not found"
-msgstr ""
-
-msgid "User Interface"
 msgstr ""
 
 msgid "User Interface Font Size"
@@ -5043,9 +5084,6 @@ msgid "Workspace Settings"
 msgstr ""
 
 msgid "Workspace settings…"
-msgstr ""
-
-msgid "Workspaces"
 msgstr ""
 
 msgid "X11"

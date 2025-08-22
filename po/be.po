@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -888,10 +888,6 @@ msgstr "Пашырэнне не падтрымліваецца"
 msgid "Authentication mechanism too weak"
 msgstr "Памылка аўтарызацыі з \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "А_ўтарызаваць"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1328,10 +1324,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1843,9 +1835,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Пошук сервісаў"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Хочаце задаволіць гэты запыт?"
@@ -2277,10 +2266,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Перадача файлаў"
 
 #, python-format
 msgid "File: %s"
@@ -3124,6 +3109,10 @@ msgstr "_Вярнуць звычайныя колеры"
 
 msgid "Message"
 msgstr "Паведамленне"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Паведамленне адпраўленае"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4987,10 +4976,6 @@ msgid "Start Chat…"
 msgstr "Пачаць размову"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Пачаць размову"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Пачаць размову"
 
@@ -5086,6 +5071,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5109,6 +5097,10 @@ msgstr "Людзі"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Змяніць імя чалавека"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5281,6 +5273,9 @@ msgstr "Тэма"
 #, fuzzy
 msgid "Themes"
 msgstr "Тэма"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5521,10 +5516,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Удзельнік"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Паказаць _транспарты"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6982,6 +6973,10 @@ msgstr ""
 #~ msgstr "Стандартныя паведамленні стану"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "А_ўтарызаваць"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Адпраўленая аўтарызацыя"
 
@@ -7191,6 +7186,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Перадача файла спыненая"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Перадача файлаў"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7484,6 +7483,10 @@ msgstr ""
 #~ msgstr "Марнаванне часу"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Пачаць размову"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Пачаць размову"
 
@@ -7521,6 +7524,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Рахунак \"%s\" злучаны з серверам"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Паказаць _транспарты"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

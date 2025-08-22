@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -888,10 +888,6 @@ msgstr "Gehigarriak ez eskuragarri"
 msgid "Authentication mechanism too weak"
 msgstr "\"%s\" -rekin autentifikazioak huts egin du"
 
-#, fuzzy
-msgid "Author"
-msgstr "_Autorizatu"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1329,10 +1325,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1841,9 +1833,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Zerbitzuak Aurkitu"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Baimen hau onartzen al duzu?"
@@ -2275,10 +2264,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Fitxero Transferentzia"
 
 #, python-format
 msgid "File: %s"
@@ -3122,6 +3107,10 @@ msgstr "Be_rezko Koloreak Ezarri"
 
 msgid "Message"
 msgstr "Mezua"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Mezua Bidaltzean"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4985,10 +4974,6 @@ msgid "Start Chat…"
 msgstr "Elkarrizketa Hasi"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Elkarrizketa Hasi"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "Elkarrizketa  _Hasi"
 
@@ -5084,6 +5069,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5107,6 +5095,10 @@ msgstr "Kontaktua"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Berridatzi Kontaktua"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5279,6 +5271,9 @@ msgstr "Gaia"
 #, fuzzy
 msgid "Themes"
 msgstr "Gaia"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5522,10 +5517,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Partaidea"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Trans_porteak Erakutsi"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6984,6 +6975,10 @@ msgstr ""
 #~ msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Autorizatu"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Autorizazioa bidalia izan da"
 
@@ -7195,6 +7190,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Fitxero Transferentzia Gelditua"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Fitxero Transferentzia"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7487,6 +7486,10 @@ msgstr ""
 #~ msgstr "Stalled"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Elkarrizketa Hasi"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Elkarrizketa Hasi"
 
@@ -7524,6 +7527,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Trans_porteak Erakutsi"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

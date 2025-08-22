@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -851,10 +851,6 @@ msgstr ""
 msgid "Authentication mechanism too weak"
 msgstr ""
 
-#, fuzzy
-msgid "Author"
-msgstr "Autors:"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1279,10 +1275,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1769,9 +1761,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Descobreix Serveis"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -2176,10 +2165,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Transferències de fitxers"
 
 #, python-format
 msgid "File: %s"
@@ -2988,6 +2973,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Message"
+msgstr "Envia missatge"
+
+#, fuzzy
+msgid "Message History"
 msgstr "Envia missatge"
 
 msgid "Message Receipts (✔)"
@@ -4785,10 +4774,6 @@ msgid "Start Chat…"
 msgstr "Comença Xat"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Comença Xat"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "Inicia Xat..."
 
@@ -4880,6 +4865,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr ""
@@ -4902,6 +4890,10 @@ msgstr "Contactes blocats"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Afegeix un contacte nou"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5063,6 +5055,9 @@ msgstr "Personalització Temes Gajim"
 #, fuzzy
 msgid "Themes"
 msgstr "Personalització Temes Gajim"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5286,10 +5281,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Accions Ocupant"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Mostra Transports"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6594,6 +6585,10 @@ msgstr ""
 #~ msgstr "Disponible per parlar"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Autors:"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Autors:"
 
@@ -6701,6 +6696,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File Offered"
 #~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Transferències de fitxers"
 
 #, fuzzy
 #~ msgid "Filetransfer Preference"
@@ -6901,6 +6900,10 @@ msgstr ""
 #~ msgstr "Instal·lat"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Comença Xat"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Comença Xat"
 
@@ -6924,6 +6927,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Sinc_ronitza l'estat del compte amb l'estat global"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Mostra Transports"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -882,10 +882,6 @@ msgstr "Kromaĵo ne subtenatas"
 msgid "Authentication mechanism too weak"
 msgstr "Aŭtentokontrolo malsukcesis ĉe \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "_Permesi"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1326,10 +1322,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1838,9 +1830,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Serĉi servojn"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ĉu vi akceptas tiun peton?"
@@ -2271,10 +2260,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Dosieraj transmetoj"
 
 #, python-format
 msgid "File: %s"
@@ -3120,6 +3105,10 @@ msgstr "_Reŝargi kolorojn per defaŭlto"
 
 msgid "Message"
 msgstr "Mesaĝo"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Mesaĝo sendita"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4983,10 +4972,6 @@ msgid "Start Chat…"
 msgstr "Babili"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Babili"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Ekparoli"
 
@@ -5082,6 +5067,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5105,6 +5093,10 @@ msgstr "Kontaktoj"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Renomigado de kontakto"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5275,6 +5267,9 @@ msgstr "Etoso"
 #, fuzzy
 msgid "Themes"
 msgstr "Etoso"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5516,10 +5511,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Partoprenanto"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Montri Trans_portilojn"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6988,6 +6979,10 @@ msgstr ""
 #~ msgstr "Aŭdo/Video"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Permesi"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Permeso estas sendita"
 
@@ -7197,6 +7192,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Dosiera transmeto haltitas"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Dosieraj transmetoj"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7503,6 +7502,10 @@ msgstr ""
 #~ msgstr "Malrapidas"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Babili"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Babili"
 
@@ -7547,6 +7550,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Konto \"%s\" estas konektita al la servilo"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Montri Trans_portilojn"
 
 #~ msgid "Topic"
 #~ msgstr "Temo"

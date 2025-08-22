@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -898,10 +898,6 @@ msgstr "Extensión non admitida"
 msgid "Authentication mechanism too weak"
 msgstr "Fallou a autenticación con \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "Au_torizar"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1339,10 +1335,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1851,9 +1843,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Descubrir os servizos"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Acepta esta solicitude?"
@@ -2285,10 +2274,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Transferencias"
 
 #, python-format
 msgid "File: %s"
@@ -3132,6 +3117,10 @@ msgstr "_Restabelecer as cores predeterminadas"
 
 msgid "Message"
 msgstr "Mensaxe"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Enviouse a mensaxe"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4994,10 +4983,6 @@ msgid "Start Chat…"
 msgstr "Iniciar a charla"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Iniciar a charla"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Iniciar a charla"
 
@@ -5093,6 +5078,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5116,6 +5104,10 @@ msgstr "Contactos"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Renomear o contacto"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5288,6 +5280,9 @@ msgstr "Tema"
 #, fuzzy
 msgid "Themes"
 msgstr "Tema"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5532,10 +5527,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participante"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Amosar os trans_portes"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -7004,6 +6995,10 @@ msgstr ""
 #~ msgstr "Mensaxes de estado por defecto"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_torizar"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Enviouse a autorización"
 
@@ -7215,6 +7210,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Detívose a transferencia do ficheiro"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Transferencias"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7508,6 +7507,10 @@ msgstr ""
 #~ msgstr "Atascado"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Iniciar a charla"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Iniciar a charla"
 
@@ -7545,6 +7548,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "A conta \"%s\" está conectada ao servidor"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Amosar os trans_portes"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

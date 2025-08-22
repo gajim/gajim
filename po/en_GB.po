@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -895,10 +895,6 @@ msgstr "Extension not supported"
 msgid "Authentication mechanism too weak"
 msgstr "Authentication failed with \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "Au_thorise"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Authority and issuer serial number mismatch"
 
@@ -1340,10 +1336,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1855,9 +1847,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Discover Services"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request on account %s?"
@@ -2287,10 +2276,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Image is too big"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "File Transfers"
 
 #, python-format
 msgid "File: %s"
@@ -3131,6 +3116,10 @@ msgstr "_Reset to Default Colours"
 
 msgid "Message"
 msgstr "Message"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Message Sent"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4995,10 +4984,6 @@ msgid "Start Chat…"
 msgstr "Start Chat"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Start Chat"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Start Chat..."
 
@@ -5093,6 +5078,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Subject issuer mismatch"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5116,6 +5104,10 @@ msgstr "Sent contacts:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Rename Contact"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5289,6 +5281,9 @@ msgstr "Theme"
 #, fuzzy
 msgid "Themes"
 msgstr "Theme"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5537,10 +5532,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participant"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Show Trans_ports"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -7009,6 +7000,10 @@ msgstr ""
 #~ msgstr "Default Message"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_thorise"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Authorisation has been sent"
 
@@ -7220,6 +7215,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "File transfer stopped"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "File Transfers"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7517,6 +7516,10 @@ msgstr ""
 #~ msgstr "Stalled"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Start Chat"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Start Chat"
 
@@ -7556,6 +7559,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "This account is not connected to the server"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Show Trans_ports"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

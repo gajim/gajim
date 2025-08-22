@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -881,10 +881,6 @@ msgstr "Rahatsız etmeyin"
 msgid "Authentication mechanism too weak"
 msgstr "Kimliksiz kimlik doğrulaması"
 
-#, fuzzy
-msgid "Author"
-msgstr "AU ayırıcı"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1332,10 +1328,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1841,9 +1833,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "Çevrimiçi Servisler"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ricayı kabul ediyor musunuz?"
@@ -2272,10 +2261,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Resim çok büyük"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Dosya Aktarımları"
 
 #, python-format
 msgid "File: %s"
@@ -3106,6 +3091,10 @@ msgstr "Öntanımlı değerlerine geri al"
 
 msgid "Message"
 msgstr "İleti"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Ileti alınıyor"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4967,10 +4956,6 @@ msgid "Start Chat…"
 msgstr "Sohbet _Başla"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Sohbet _Başla"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "Sohbet _Başla"
 
@@ -5067,6 +5052,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "ifade yığıtı uyumsuzluğu"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5090,6 +5078,10 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Kişiyi yeniden adlandır"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5261,6 +5253,9 @@ msgstr "Temalar"
 #, fuzzy
 msgid "Themes"
 msgstr "Temalar"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5494,10 +5489,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Katılan"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6966,6 +6957,10 @@ msgstr ""
 #~ msgstr "Ses / Video"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "AU ayırıcı"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Yeni bir oda yaratılmıştır"
 
@@ -7167,6 +7162,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Dosya Gönderme Tamamlandı"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Dosya Aktarımları"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7450,6 +7449,10 @@ msgstr ""
 #~ msgstr " [ %i%% ] (askıda)"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Sohbet _Başla"
 
@@ -7487,6 +7490,10 @@ msgstr ""
 
 #~ msgid "The service could not be found"
 #~ msgstr "Hizmet bulunamadı"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

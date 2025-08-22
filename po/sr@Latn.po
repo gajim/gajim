@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -904,10 +904,6 @@ msgstr "Ekstenzija nije podržana"
 msgid "Authentication mechanism too weak"
 msgstr "Prijavljivanje sa \"%s\" neuspešno"
 
-#, fuzzy
-msgid "Author"
-msgstr "_Odobri autorizaciju"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Serijski broj autorizatora i izdavača se ne poklapaju"
 
@@ -1349,10 +1345,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1864,9 +1856,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Otkrivanje servisa"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prihvatate li ovaj zahtev na nalogu %s?"
@@ -2298,10 +2287,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Slika je prevelika"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Prenosi datoteka"
 
 #, python-format
 msgid "File: %s"
@@ -3142,6 +3127,10 @@ msgstr "_Ponovo učitaj podrazumevane boje"
 
 msgid "Message"
 msgstr "Poruka"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Poruka Poslata"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -5009,10 +4998,6 @@ msgid "Start Chat…"
 msgstr "Započni razgovor"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Započni razgovor"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Započni razgovor"
 
@@ -5107,6 +5092,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Pogrešna tema izdavača sertifikata"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5130,6 +5118,10 @@ msgstr "Poslati kontakti:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Preimenuj kontakt"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5304,6 +5296,9 @@ msgstr "Tema"
 #, fuzzy
 msgid "Themes"
 msgstr "Tema"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5552,10 +5547,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Učesnik"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Prikaži trans_porte"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -7023,6 +7014,10 @@ msgstr ""
 #~ msgstr "Podrazumevana poruka"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Odobri autorizaciju"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Autorizacija poslata"
 
@@ -7234,6 +7229,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Prenos datoteke zaustavljen"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Prenosi datoteka"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7530,6 +7529,10 @@ msgstr ""
 #~ msgstr "Zastoj"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Započni razgovor"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Započni razgovor"
 
@@ -7569,6 +7572,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ovaj nalog nije povezan na server"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Prikaži trans_porte"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

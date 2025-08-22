@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -888,10 +888,6 @@ msgstr "Pašyreńnie nie padtrymvajecca"
 msgid "Authentication mechanism too weak"
 msgstr "Pamyłka aŭtaryzacyi z \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "_Aŭtaryzuj"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1329,10 +1325,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1844,9 +1836,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Šukaj servisy"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prymaješ hety zapyt?"
@@ -2278,10 +2267,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Pieradačy fajłaŭ"
 
 #, python-format
 msgid "File: %s"
@@ -3125,6 +3110,10 @@ msgstr "_Viarni zvyčajnyja kolery"
 
 msgid "Message"
 msgstr "Paviedamleńnie"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Paviedamleńnie dasłanaje"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4988,10 +4977,6 @@ msgid "Start Chat…"
 msgstr "Pačni razmovu"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Pačni razmovu"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Pačni razmovu"
 
@@ -5087,6 +5072,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5110,6 +5098,10 @@ msgstr "Kantakty"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Źmiani nazvu kantaktu"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5280,6 +5272,9 @@ msgstr "Tema"
 #, fuzzy
 msgid "Themes"
 msgstr "Tema"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5520,10 +5515,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Udzielnik"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Pakažy _transparty"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6981,6 +6972,10 @@ msgstr ""
 #~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "_Aŭtaryzuj"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Aŭtaryzacyja dasłanaja"
 
@@ -7190,6 +7185,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Pieradača fajłu spyniena"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Pieradačy fajłaŭ"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7482,6 +7481,10 @@ msgstr ""
 #~ msgstr "Zatrymana"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Pačni razmovu"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Pačni razmovu"
 
@@ -7519,6 +7522,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Pakažy _transparty"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

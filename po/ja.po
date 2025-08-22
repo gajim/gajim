@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2025-07-03 02:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -806,9 +806,6 @@ msgstr "この認証メカニズムに対応していません"
 msgid "Authentication mechanism too weak"
 msgstr "認証メカニズムが弱すぎます"
 
-msgid "Author"
-msgstr "作者"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "機関と発行者シリアル番号が合致しません"
 
@@ -1197,10 +1194,6 @@ msgstr "エスケープで閉じる"
 
 msgid "Code snippet"
 msgstr "コードスニペット"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "コードスニペット (%s)"
 
 msgid "Color"
 msgstr "色"
@@ -1627,9 +1620,6 @@ msgstr "最後に操作してからの時間を公表します"
 msgid "Discover Services…"
 msgstr "サービスを探索…"
 
-msgid "Discussion Logs"
-msgstr "議論の記録"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "この申し込み(アカウント %s)を承諾しますか ?"
@@ -2011,9 +2001,6 @@ msgstr "ファイルサイズは不明です"
 
 msgid "File too big"
 msgstr "ファイルが大きすぎます"
-
-msgid "File transfers"
-msgstr "ファイル転送"
 
 #, python-format
 msgid "File: %s"
@@ -2763,6 +2750,10 @@ msgstr "言及: メッセージの背景色"
 
 msgid "Message"
 msgstr "メッセージ"
+
+#, fuzzy
+msgid "Message History"
+msgstr "メッセージを送信した"
 
 msgid "Message Receipts (✔)"
 msgstr "メッセージ受領 (✔)"
@@ -4365,9 +4356,6 @@ msgstr "チャットを開始…"
 msgid "Start Chat…"
 msgstr "チャットを開始…"
 
-msgid "Start New Chat"
-msgstr "新しいチャットを開始"
-
 msgid "Start Search..."
 msgstr "検索を開始..."
 
@@ -4454,6 +4442,10 @@ msgstr "サブジェクト代替名: "
 msgid "Subject issuer mismatch"
 msgstr "サブジェクトの発行者が合致しません"
 
+#, fuzzy
+msgid "Subject last changed by"
+msgstr "サブジェクト代替名: "
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "申し込み"
@@ -4474,6 +4466,10 @@ msgstr "相手先は正常に追加されました"
 
 msgid "Successfully Removed Contacts"
 msgstr "相手先は正常に除去されました"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "サポート"
@@ -4628,6 +4624,9 @@ msgstr "テーマ"
 
 msgid "Themes"
 msgstr "テーマ"
+
+msgid "There are connectivity issues"
+msgstr "接続性の問題があります"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "まだ信頼を決定していないデバイスがあります。"
@@ -4866,9 +4865,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
-
-msgid "Toggle Menu Bar"
-msgstr "メニューバーを表示/非表示"
 
 msgid "Toggle participants list"
 msgstr "参加者一覧を表示/非表示"
@@ -6239,6 +6235,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Audio/Video"
 #~ msgstr "音声/ビデオ"
 
+#~ msgid "Author"
+#~ msgstr "作者"
+
 #~ msgid "Authorization Request"
 #~ msgstr "承認の要求"
 
@@ -6308,6 +6307,10 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Close Search"
 #~ msgstr "検索を閉じる"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "コードスニペット (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "一般名 (CN)"
@@ -6382,6 +6385,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "直接転送 (暗号化なし)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "議論の記録"
 
 #~ msgid "Don’t show this again"
 #~ msgstr "次回からこのメッセージを表示しない"
@@ -6466,6 +6472,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "ファイルの転送が中断しました"
+
+#~ msgid "File transfers"
+#~ msgstr "ファイル転送"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6849,6 +6858,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Stalled"
 #~ msgstr "失速しました"
 
+#~ msgid "Start New Chat"
+#~ msgstr "新しいチャットを開始"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "ビデオ通話を開始…"
 
@@ -6908,11 +6920,11 @@ msgstr "…またはここにドロップ"
 #~ msgid "The service could not be found"
 #~ msgstr "サービスが見つかりませんでした"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "接続性の問題があります"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "このアカウントはサーバーに接続していません"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "メニューバーを表示/非表示"
 
 #~ msgid "Topic"
 #~ msgstr "話題"

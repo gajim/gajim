@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-19 22:32+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -587,10 +587,6 @@ msgid "Add new Theme"
 msgstr "Lav en ny post"
 
 #, fuzzy
-msgid "Add new line"
-msgstr "Lav en ny post"
-
-#, fuzzy
 msgid "Add some details…"
 msgstr "_Tilføj Kontakt..."
 
@@ -899,10 +895,6 @@ msgstr "Udvidelse er ikke understøttet"
 #, fuzzy
 msgid "Authentication mechanism too weak"
 msgstr "Godkendelse fejlede med \"%s\""
-
-#, fuzzy
-msgid "Author"
-msgstr "Au_torisere"
 
 msgid "Authority and issuer serial number mismatch"
 msgstr "Autoritet og udstedelses serie nummer uoverensstemmelse"
@@ -1214,10 +1206,6 @@ msgid "Chat Details and Settings"
 msgstr "Tilslutning"
 
 #, fuzzy
-msgid "Chat List"
-msgstr "Kontakter"
-
-#, fuzzy
 msgid "Chat Type"
 msgstr "Type"
 
@@ -1257,6 +1245,10 @@ msgstr "Tilslutning er ikke tilgængelig"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Vælg Billede"
+
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "Vælg Lyd"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1298,12 +1290,12 @@ msgid "Clear File"
 msgstr "Gør Rent"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "Vælg Lyd"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "Besked er Sendt"
+msgid "Clear Sound"
+msgstr "Vælg Lyd"
 
 msgid ""
 "Click messages to select them\n"
@@ -1334,21 +1326,17 @@ msgstr "Selvsigneret certifikat"
 msgid "Close"
 msgstr "_Send & Luk"
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "Søg"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "Søg"
 
 msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1383,10 +1371,6 @@ msgstr ""
 #, fuzzy
 msgid "Complete"
 msgstr "Fuldført"
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "Opret et nyt tema med dit ønskede navn."
 
 msgid "Completed"
 msgstr "Fuldført"
@@ -1466,6 +1450,10 @@ msgstr "Samtale besked:"
 msgid "Contact Connected"
 msgstr "Kontakt er Tilsluttet"
 
+#, fuzzy
+msgid "Contact Details"
+msgstr "Kontakter"
+
 msgid "Contact Disconnected"
 msgstr "Kontakt er ikke Tilsluttet"
 
@@ -1514,10 +1502,6 @@ msgstr "Konto"
 #, fuzzy
 msgid "Contact Request"
 msgstr "Kontakter"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "Kontakt Information"
 
 msgid "Contacts"
 msgstr "Kontakter"
@@ -1592,10 +1576,6 @@ msgstr "_Kopier Henvisning"
 msgid "Copy to clipboard"
 msgstr "_Kopier Henvisning"
 
-#, fuzzy
-msgid "Correct the last message"
-msgstr "status besked"
-
 msgctxt "Message row action"
 msgid "Correct…"
 msgstr ""
@@ -1648,7 +1628,7 @@ msgid "Create New Account"
 msgstr "Lav en ny post"
 
 #, fuzzy
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr "Forlad Gruppesamtaler"
 
 #, fuzzy
@@ -1661,6 +1641,9 @@ msgstr ""
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certifikatet er udløbet"
+
+msgid "Custom"
+msgstr ""
 
 msgid "D-Bus Interface"
 msgstr ""
@@ -1694,8 +1677,9 @@ msgstr "Jogger"
 msgid "Decline"
 msgstr "_Afkoblet"
 
-msgid "Decrease User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Decrease Font Size"
+msgstr "_Brugernavn:"
 
 msgid "Decrease playback speed"
 msgstr ""
@@ -1858,9 +1842,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "Op_dag Tjenester"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterer du denne forespørgsel for konto %s?"
@@ -1956,6 +1937,13 @@ msgstr "Send en fil til en kontakt"
 
 msgid "Eating"
 msgstr "Spiser"
+
+msgid "Edit Shortcut"
+msgstr ""
+
+#, fuzzy
+msgid "Edit Shortcut…"
+msgstr "Ændre _Grupper"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2293,10 +2281,6 @@ msgstr ""
 msgid "File too big"
 msgstr "Billede er for stort"
 
-#, fuzzy
-msgid "File transfers"
-msgstr "Filoverførsler"
-
 #, python-format
 msgid "File: %s"
 msgstr "Fil: %s"
@@ -2418,9 +2402,6 @@ msgstr "GTK+ Version:"
 #, fuzzy, python-format
 msgid "GTK Version: %s"
 msgstr "GTK+ Version:"
-
-msgid "Gajim"
-msgstr "Gajim"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2586,6 +2567,9 @@ msgstr "Påmindelse"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
+msgid "Here you can customize Gajim's shortcuts."
+msgstr ""
+
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2735,8 +2719,9 @@ msgstr "_Indkommende besked:"
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Increase Font Size"
+msgstr "_Brugernavn:"
 
 msgid "Increase playback speed"
 msgstr ""
@@ -3080,6 +3065,10 @@ msgid "Manage Proxies..."
 msgstr "Håndter Proxy Profiler"
 
 #, fuzzy
+msgid "Manage Shortcuts"
+msgstr "Håndter lyde"
+
+#, fuzzy
 msgid "Manage Sounds"
 msgstr "Håndter lyde"
 
@@ -3139,6 +3128,10 @@ msgid "Message"
 msgstr "Besked"
 
 #, fuzzy
+msgid "Message History"
+msgstr "Besked er Sendt"
+
+#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "besked indhold"
 
@@ -3150,10 +3143,6 @@ msgid "Message Sent"
 msgstr "Besked er Sendt"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "Besked indhold"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "Besked er Sendt"
 
@@ -3162,6 +3151,10 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+
+#, fuzzy
+msgid "Messages"
+msgstr "Besked"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3392,6 +3385,9 @@ msgstr ""
 msgid "No info available"
 msgstr "Ingen konto tilgængelig"
 
+msgid "No keys pressed"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Intet resultat"
@@ -3574,9 +3570,6 @@ msgstr "Åbn som et _Link"
 #, fuzzy
 msgid "Open folder"
 msgstr "_Åbn folderen med filen"
-
-msgid "Open search bar"
-msgstr ""
 
 msgid "OpenGL accelerated"
 msgstr ""
@@ -3887,6 +3880,11 @@ msgstr "Indstillinger"
 msgid "Presets"
 msgstr "_Tilstedeværelse"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -4024,11 +4022,11 @@ msgid "Quit Gajim"
 msgstr "Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "Send besked"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "Videresend ulæste beskeder"
 
 #, fuzzy
@@ -4071,10 +4069,6 @@ msgstr "Første Besked er Modtaget"
 msgctxt "Message state"
 msgid "Received"
 msgstr "Første Besked er Modtaget"
-
-#, fuzzy
-msgid "Recent history"
-msgstr "For nylig:"
 
 msgid "Recognize your account by color"
 msgstr ""
@@ -4308,12 +4302,12 @@ msgid "Reset Filters"
 msgstr "Besked er Sendt"
 
 #, fuzzy
-msgid "Reset Hints"
-msgstr "Besked er Sendt"
+msgid "Reset Font Size"
+msgstr "_Brugernavn:"
 
 #, fuzzy
-msgid "Reset User Interface Font Size"
-msgstr "_Brugernavn:"
+msgid "Reset Hints"
+msgstr "Besked er Sendt"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4343,7 +4337,7 @@ msgid "Restart Pending"
 msgstr "Kræver Gspell"
 
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "Sidste status: %s"
 
 #, fuzzy
@@ -4455,15 +4449,15 @@ msgstr "Du kan ikke tilføje dig selv til kontaktvinduet."
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanner %(current)d / %(total)d.."
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 #, fuzzy
 msgid "Scroll to this message"
 msgstr "status besked"
-
-msgid "Scroll up"
-msgstr ""
 
 msgid "Scroll up to load more chat history…"
 msgstr ""
@@ -4561,9 +4555,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -4641,10 +4632,6 @@ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "Send besked med Ctrl+Enter og lave en ny linie med Enter (standard Mirabilis "
 "ICQ klient adfærd)."
-
-#, fuzzy
-msgid "Send the message"
-msgstr "Send besked"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4756,6 +4743,9 @@ msgstr "Lyd / Billede"
 msgid "Share my online status"
 msgstr "Ændre status"
 
+msgid "Shortcuts"
+msgstr ""
+
 #, fuzzy
 msgid "Show Chat List"
 msgstr "Påmindelse"
@@ -4843,10 +4833,6 @@ msgstr "Vis Alle Ventende Hænd_elser"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Vis Alle Ventende Hænd_elser"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "Vis _XML Konsol"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5002,10 +4988,6 @@ msgid "Start Chat…"
 msgstr "Start Samtale"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Start Samtale"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Start Samtale..."
 
@@ -5100,6 +5082,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Emne udsteder uoverensstemmelse"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5124,6 +5109,10 @@ msgstr "Sendte kontakter:"
 msgid "Successfully Removed Contacts"
 msgstr "Omdøb Kontakt"
 
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
+
 msgid "Support"
 msgstr ""
 
@@ -5136,28 +5125,92 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "Start Samtale"
+msgid "Switch to Workspace 2"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "Start Samtale"
+msgid "Switch to Workspace 3"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "Start Samtale"
+msgid "Switch to Workspace 4"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "Start Samtale"
+msgid "Switch to Workspace 5"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "Start Samtale"
+msgid "Switch to Workspace 6"
+msgstr "Omdøb Kontakt"
+
+#, fuzzy
+msgid "Switch to Workspace 7"
+msgstr "Omdøb Kontakt"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "Omdøb Kontakt"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
 msgid "Sync Group Chat Blocklist"
@@ -5295,6 +5348,9 @@ msgstr "Tema"
 #, fuzzy
 msgid "Themes"
 msgstr "Tema"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5545,10 +5601,6 @@ msgid "Toggle Chat List"
 msgstr "Deltager"
 
 #, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Vis Trans_porter"
-
-#, fuzzy
 msgid "Toggle participants list"
 msgstr "Deltager"
 
@@ -5714,6 +5766,10 @@ msgstr "Filoverførsel Forespørgsel"
 msgid "Unpin Chat"
 msgstr "Filoverførsel Forespørgsel"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "Filoverførsel Forespørgsel"
+
 msgid "Unsupported certificate purpose"
 msgstr "Ikke understøttet formål for certifikatet"
 
@@ -5817,10 +5873,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s ikke fundet"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "_Brugernavn:"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -5965,10 +6017,6 @@ msgstr "Avancerede Handlinger"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "Avancerede Handlinger"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "Omdøb Kontakt"
 
 msgid "X11"
 msgstr ""
@@ -6985,6 +7033,10 @@ msgstr ""
 #~ msgstr "_Tilføj Kontakt..."
 
 #, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Lav en ny post"
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Tilslutning fejlede"
 
@@ -7021,6 +7073,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio/Video"
 #~ msgstr "Lyd / Billede"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_torisere"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7061,6 +7117,10 @@ msgstr ""
 #~ msgid "Ch_ange Subject"
 #~ msgstr "Ændre _Emne..."
 
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "Kontakter"
+
 #~ msgid "Checking file…"
 #~ msgstr "Tjekker fil..."
 
@@ -7080,8 +7140,16 @@ msgstr ""
 #~ msgstr "Vis kontaktens profil (Ctrl+I)"
 
 #, fuzzy
+#~ msgid "Clear message entry"
+#~ msgstr "Besked er Sendt"
+
+#, fuzzy
 #~ msgid "Close Search"
 #~ msgstr "Søg"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Opret et nyt tema med dit ønskede navn."
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7094,6 +7162,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Frameldt abonnement"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Kontakt Information"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -7124,7 +7196,15 @@ msgstr ""
 #~ msgstr "Rum JID"
 
 #, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "status besked"
+
+#, fuzzy
 #~ msgid "Create _Group Chat…"
+#~ msgstr "Forlad Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "Create new group chat"
 #~ msgstr "Forlad Gruppesamtaler"
 
 #~ msgid "Create new post"
@@ -7190,10 +7270,6 @@ msgstr ""
 #~ msgstr "Sender profil..."
 
 #, fuzzy
-#~ msgid "Edit workspace…"
-#~ msgstr "Ændre _Grupper"
-
-#, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Understøtter start af lyd og billede chat."
 
@@ -7241,6 +7317,10 @@ msgstr ""
 #~ msgid "File transfer stopped"
 #~ msgstr "Filoverførsel stoppede"
 
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Filoverførsler"
+
 #, python-format
 #~ msgid "Filename: %s"
 #~ msgstr "Filnavn: %s"
@@ -7256,6 +7336,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Besked er Sendt"
+
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "Gajim Team"
@@ -7319,6 +7402,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Beskeder"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "Besked indhold"
 
 #, fuzzy
 #~ msgid ""
@@ -7407,6 +7494,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "Er OpenPGP aktiveret for denne kontakt?"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "For nylig:"
 
 #~ msgid "Recipient: "
 #~ msgstr "Modtager: "
@@ -7499,6 +7590,10 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "Gem Fil som..."
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Send besked"
+
 #~ msgid "Sender: "
 #~ msgstr "Afsender: "
 
@@ -7523,6 +7618,10 @@ msgstr ""
 #~ msgstr "Egenskaber"
 
 #, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "Vis _XML Konsol"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Viser en liste over filoverførsler mellem dig og andre"
 
@@ -7533,6 +7632,10 @@ msgstr ""
 #~ msgctxt "File transfer state"
 #~ msgid "Stalled"
 #~ msgstr "Hænger"
+
+#, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Start Samtale"
 
 #, fuzzy
 #~ msgid "Start Video Call…"
@@ -7566,6 +7669,10 @@ msgstr ""
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Opdag Tjenester med kontoen %s"
 
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Start Samtale"
+
 #~ msgid "Synchronise"
 #~ msgstr "Synkroniser"
 
@@ -7578,6 +7685,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Denne konto er ikke tilsluttet til serveren"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Vis Trans_porter"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7620,6 +7731,10 @@ msgstr ""
 #~ msgstr "Server:"
 
 #, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Brugernavn:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Brugernavn:"
 
@@ -7642,6 +7757,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Vil du virkelig slette den valgte besked?"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Omdøb Kontakt"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"

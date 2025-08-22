@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
-"PO-Revision-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"PO-Revision-Date: 2025-08-18 20:14+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
 ">\n"
@@ -36,15 +36,15 @@ msgstr "رفض %(contact)s دعوتك إلى %(chat)s"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "دعاك %(contact)s إلى %(chat)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "مشارك"
-msgstr[1] "مشارك"
-msgstr[2] "مشارك"
-msgstr[3] "مشارك"
-msgstr[4] "مشارك"
-msgstr[5] "مشارك"
+msgstr[0] "لا مشاركين"
+msgstr[1] "مشارك واحد"
+msgstr[2] "مشاركان"
+msgstr[3] "%(count)s مشاركين"
+msgstr[4] "%(count)s مشاركًا"
+msgstr[5] "%(count)s مشارك"
 
 #, python-format
 msgid ""
@@ -554,7 +554,7 @@ msgstr "أضِف إلى المجموعة"
 msgid "Added %(count)s contact"
 msgid_plural "Added %(count)s contacts"
 msgstr[0] "لم يُضف متراسلون"
-msgstr[1] "أُضيف مُتراسل"
+msgstr[1] "أُضيف مُتراسل واحد"
 msgstr[2] "أُضيف مُتراسلان"
 msgstr[3] "أُضيف %(count)s مُتراسلين"
 msgstr[4] "أُضيف %(count)s مُتراسلًا"
@@ -805,9 +805,6 @@ msgstr "آلية الاستيثاق غير مدعومة"
 
 msgid "Authentication mechanism too weak"
 msgstr "آلية الاستيثاق ضعيفة جدًا"
-
-msgid "Author"
-msgstr "المؤلف"
 
 msgid "Authority and issuer serial number mismatch"
 msgstr "السُّلطة ورقم المُصَدِّر التسلسلي غير متطابقين"
@@ -1197,10 +1194,6 @@ msgstr "الإغلاق بمفتاح ESC"
 msgid "Code snippet"
 msgstr "قصاصة ترميز"
 
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "قصاصة ترميز (%s)"
-
 msgid "Color"
 msgstr "اللون"
 
@@ -1395,7 +1388,6 @@ msgstr "انسخ قصاصة الترميز"
 msgid "Copy info to clipboard"
 msgstr "انسخ المعلومات إلى الحافظة"
 
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "انسخ إلى الحافظة"
 
@@ -1621,9 +1613,6 @@ msgstr "يكشف وقت آخر نشاط لك"
 
 msgid "Discover Services…"
 msgstr "اكتشف الخدمات…"
-
-msgid "Discussion Logs"
-msgstr "سجلات النقاش"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2004,9 +1993,6 @@ msgstr "حجم الملف مجهول"
 
 msgid "File too big"
 msgstr "الملف كبير جدًا"
-
-msgid "File transfers"
-msgstr "عمليات نقل الملفات"
 
 #, python-format
 msgid "File: %s"
@@ -2459,9 +2445,8 @@ msgstr "عنوان غير صالح: %s"
 msgid "Invalid domain name"
 msgstr "اسم نطاق غير صالح"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "اسم خادوم غير صالح"
+msgstr "رد الخادوم غير صالح"
 
 msgid "Invitation"
 msgstr "دعوة"
@@ -2475,9 +2460,8 @@ msgstr "ادعُ"
 msgid "Invite Contacts"
 msgstr "ادعُ متراسلين"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "ادعُ إلى هذه الدردشة"
+msgstr "ادعُ إلى هذه الدردشة…"
 
 msgid "Invitees"
 msgstr "المدعوون"
@@ -2737,6 +2721,10 @@ msgstr "الإشارة: لون خلفية الرسالة"
 
 msgid "Message"
 msgstr "رسالة"
+
+#, fuzzy
+msgid "Message History"
+msgstr "أُرسلت الرسالة"
 
 msgid "Message Receipts (✔)"
 msgstr "إيصالات استلام الرسائل (✔)"
@@ -3356,9 +3344,8 @@ msgstr "تحديث الملحق"
 msgid "Plugin already exists"
 msgstr "الملحق موجود بالفعل"
 
-#, fuzzy
 msgid "Plugin could not be loaded"
-msgstr "تعذَّر تحميل الصورة المحدَّدة."
+msgstr "تعذَّر تحميل الملحق"
 
 msgid "Plugins"
 msgstr "الملحقات"
@@ -3656,7 +3643,7 @@ msgstr "أزِل صورتك الشخصية"
 msgid "Removed %(count)s contact"
 msgid_plural "Removed %(count)s contacts"
 msgstr[0] "لم يزل متراسلون"
-msgstr[1] "أزيل متراسل"
+msgstr[1] "أزيل متراسل واحد"
 msgstr[2] "أزيل متراسلان"
 msgstr[3] "أزيل %(count)s متراسلين"
 msgstr[4] "أزيل %(count)s متراسلًا"
@@ -4319,9 +4306,6 @@ msgstr "ابدأ الدردشة…"
 msgid "Start Chat…"
 msgstr "ابدأ دردشة…"
 
-msgid "Start New Chat"
-msgstr "ابدأ دردشة جديدة"
-
 msgid "Start Search..."
 msgstr "ابدأ البحث..."
 
@@ -4407,6 +4391,10 @@ msgstr "أسماء الموضوع البديلة: "
 msgid "Subject issuer mismatch"
 msgstr "عدم تطابق مُصدر الموضوع"
 
+#, fuzzy
+msgid "Subject last changed by"
+msgstr "أسماء الموضوع البديلة: "
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "اشترك"
@@ -4425,6 +4413,10 @@ msgstr "أُضيف متراسلون بنجاح"
 
 msgid "Successfully Removed Contacts"
 msgstr "أُزيل متراسلون بنجاح"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "الدعم"
@@ -4578,6 +4570,9 @@ msgstr "السمة"
 msgid "Themes"
 msgstr "السمات"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "هناك أجهزة لم تتخذ قرار ثقة بشأنها بعد."
 
@@ -4674,6 +4669,7 @@ msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"مجموعة الدردشة هذه للأعضاء فقط، وأنت لست منهم. ستحتاج شخصًا مخوَّلًا لدعوتك."
 
 msgid "This group chat is restricted to members only"
 msgstr "مجموعة الدردشة هذه مقتصرة على الأعضاء فقط"
@@ -4790,7 +4786,7 @@ msgstr "الوقت حتى تغيَّر الحالة"
 
 msgctxt "Profile"
 msgid "Timezone"
-msgstr ""
+msgstr "المنطقة الزمنية"
 
 msgctxt "Profile"
 msgid "Title"
@@ -4810,9 +4806,6 @@ msgstr "لإرسال رسالة معمَّاة، عليك أن تقرر ما إ�
 
 msgid "Toggle Chat List"
 msgstr "بدِّل عرض قائمة الدردشات"
-
-msgid "Toggle Menu Bar"
-msgstr "بدِّل عرض شريط القوائم"
 
 msgid "Toggle participants list"
 msgstr "بدِّل عرض قائمة المشاركين"
@@ -5963,6 +5956,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Audio/Video"
 #~ msgstr "الصوت/المرئية"
 
+#~ msgid "Author"
+#~ msgstr "المؤلف"
+
 #~ msgid "Authorization Request"
 #~ msgstr "الاستيثاق مطلوب"
 
@@ -6028,6 +6024,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Close Search"
 #~ msgstr "أغلِق البحث"
 
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "قصاصة ترميز (%s)"
+
 #~ msgid "Common Name (CN)"
 #~ msgstr "الاسم الشائع (CN)"
 
@@ -6069,9 +6069,15 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Developers"
 #~ msgstr "المطورون الحاليون"
 
+#~ msgid "Discussion Logs"
+#~ msgstr "سجلات النقاش"
+
 #, fuzzy
 #~ msgid "Don’t show this again"
 #~ msgstr "لا تسألني مج_ددًا"
+
+#~ msgid "File transfers"
+#~ msgstr "عمليات نقل الملفات"
 
 #~ msgid "Full Message View"
 #~ msgstr "عرض الرسالة بالكامل"
@@ -6082,6 +6088,12 @@ msgstr "…أو أفلِت هنا"
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "الم_زايا"
+
+#~ msgid "Start New Chat"
+#~ msgstr "ابدأ دردشة جديدة"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "بدِّل عرض شريط القوائم"
 
 #, fuzzy
 #~ msgid "User name…"

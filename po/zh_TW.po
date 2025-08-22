@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -791,9 +791,6 @@ msgstr "不支援身份驗證機制"
 msgid "Authentication mechanism too weak"
 msgstr "身份驗證機制太弱"
 
-msgid "Author"
-msgstr "作者"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Authority 與 發行者序號 不匹配"
 
@@ -1189,10 +1186,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1699,9 +1692,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "探索服務(_D)"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受這個對帳號 %s 的請求?"
@@ -2134,10 +2124,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "圖片太大"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "檔案傳輸"
 
 #, python-format
 msgid "File: %s"
@@ -2983,6 +2969,10 @@ msgstr "恢復為預設顏色設定(_R)"
 
 msgid "Message"
 msgstr "訊息"
+
+#, fuzzy
+msgid "Message History"
+msgstr "訊息已傳送"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4837,10 +4827,6 @@ msgid "Start Chat…"
 msgstr "開始聊天"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "開始聊天"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "開始聊天(_S)…"
 
@@ -4935,6 +4921,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Subject 與 發行者 不匹配"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -4958,6 +4947,10 @@ msgstr "已傳送聯絡人:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "重新命名聯絡人"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5130,6 +5123,9 @@ msgstr "主題"
 #, fuzzy
 msgid "Themes"
 msgstr "主題"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5375,10 +5371,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "切換視訊作業階段"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "顯示代理(_P)"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6872,6 +6864,9 @@ msgstr ""
 #~ msgid "Audio/Video"
 #~ msgstr "音訊/視訊"
 
+#~ msgid "Author"
+#~ msgstr "作者"
+
 #~ msgid "Authorization Request"
 #~ msgstr "授權請求"
 
@@ -7098,6 +7093,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "檔案傳輸已停止"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "檔案傳輸"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7416,6 +7415,10 @@ msgstr ""
 #~ msgstr "已安裝"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "開始聊天"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "開始聊天"
 
@@ -7459,6 +7462,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "這個帳號已經連線到伺服器"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "顯示代理(_P)"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

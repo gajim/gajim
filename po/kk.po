@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -810,9 +810,6 @@ msgstr "Аутентификация механизміне қолдау көр�
 msgid "Authentication mechanism too weak"
 msgstr "Аутентификация механизмі тым әлсіз"
 
-msgid "Author"
-msgstr "Авторы"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 "Сертификаттау орталығы мен ұсынушы кілттерінің идентификаторлары өзара "
@@ -1215,10 +1212,6 @@ msgstr "Escape арқылы жабу"
 
 msgid "Code snippet"
 msgstr "Код сниппеті"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Код сниппеті (%s)"
 
 msgid "Color"
 msgstr "Түс"
@@ -1651,9 +1644,6 @@ msgstr "Соңғы әрекетіңіздің уақытын ашу"
 msgid "Discover Services…"
 msgstr "Қызметтерді қарап шығу…"
 
-msgid "Discussion Logs"
-msgstr "Талқылау журналдары"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Бұл сұранымды қабылдайсыз ба (тіркелгі: %s)?"
@@ -2049,9 +2039,6 @@ msgstr "Файл өлшемі белгісіз"
 #, fuzzy
 msgid "File too big"
 msgstr "Аватар файлының өлшемі тым үлкен"
-
-msgid "File transfers"
-msgstr "Файлдармен алмасулар"
 
 #, python-format
 msgid "File: %s"
@@ -2818,6 +2805,10 @@ msgstr "Атап өту: Хабарлама фонының түсі"
 
 msgid "Message"
 msgstr "Хабарлама"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Хабарлама жіберілді"
 
 msgid "Message Receipts (✔)"
 msgstr "Жеткізу туралы хабарландырулар (✔)"
@@ -4481,9 +4472,6 @@ msgstr "Чатты бастау…"
 msgid "Start Chat…"
 msgstr "Чатты бастау…"
 
-msgid "Start New Chat"
-msgstr "Жаңа чатты бастау"
-
 msgid "Start Search..."
 msgstr "Іздеуді бастау..."
 
@@ -4569,6 +4557,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
+msgid "Subject last changed by"
+msgstr ""
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Жазылу"
@@ -4591,6 +4582,10 @@ msgstr "Контакттарды таңдау"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Контактты өшіру"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "Қолдау"
@@ -4745,6 +4740,9 @@ msgstr "Тема"
 
 msgid "Themes"
 msgstr "Темалар"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -4985,10 +4983,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Чаттар тізімін көрсету/жасыру"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Тапсырмалар панелінде көрсету"
 
 msgid "Toggle participants list"
 msgstr "Қатысушылар тізімін көрсету/жасыру"
@@ -6360,6 +6354,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Audio/Video"
 #~ msgstr "Аудио/Видео"
 
+#~ msgid "Author"
+#~ msgstr "Авторы"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Авторизация сұранымы"
 
@@ -6429,6 +6426,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Close Search"
 #~ msgstr "Іздеуді жабу"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Код сниппеті (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Ортақ аты (CN)"
@@ -6503,6 +6504,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Тікелей тасымалдау (шифрленбеген)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Талқылау журналдары"
 
 #~ msgid "Dismiss"
 #~ msgstr "Тайдыру"
@@ -6596,6 +6600,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Файлдармен алмасу тоқтатылды"
+
+#~ msgid "File transfers"
+#~ msgstr "Файлдармен алмасулар"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6976,6 +6983,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Stalled"
 #~ msgstr "Тұрып қалған"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Жаңа чатты бастау"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Видео қоңырауын бастау…"
 
@@ -7037,6 +7047,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Тапсырмалар панелінде көрсету"
 
 #~ msgid "Topic"
 #~ msgstr "Тақырып"

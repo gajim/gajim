@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -829,9 +829,6 @@ msgstr "Механізм автентифікації не підтримуєт�
 msgid "Authentication mechanism too weak"
 msgstr "Механізм автентифікації ненадійний"
 
-msgid "Author"
-msgstr "Автор"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Серійні номери служби сертифікації і видавця не збігаються"
 
@@ -1241,10 +1238,6 @@ msgstr "Дзвінок з %s"
 
 msgid "Code snippet"
 msgstr "Фрагмент коду"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Фрагмент коду (%s)"
 
 msgid "Color"
 msgstr "Колір"
@@ -1694,9 +1687,6 @@ msgstr "Показувати час вашої останньої активно
 msgid "Discover Services…"
 msgstr "Переглянути служби…"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Чи приймаєте ви запит (обліковий запис: %s)?"
@@ -2099,10 +2089,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Файл аватари завеликий"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Перенесення файлів"
 
 #, python-format
 msgid "File: %s"
@@ -2951,6 +2937,10 @@ msgstr "В_ідновити типові кольори"
 
 msgid "Message"
 msgstr "Повідомлення"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Повідомлення надіслано"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4812,10 +4802,6 @@ msgid "Start Chat…"
 msgstr "Почати балачку"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Почати балачку"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Почати балачку..."
 
@@ -4910,6 +4896,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Видано для іншого призначення"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -4933,6 +4922,10 @@ msgstr "Надіслати контакти:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Перейменувати контакт"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5106,6 +5099,9 @@ msgstr "Тема"
 #, fuzzy
 msgid "Themes"
 msgstr "Тема"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5356,10 +5352,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Перемкнути відео сессію"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Показувати транс_порти"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6864,6 +6856,9 @@ msgstr ""
 #~ msgid "Audio/Video"
 #~ msgstr "Аудіо/Відео"
 
+#~ msgid "Author"
+#~ msgstr "Автор"
+
 #, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Було надіслано уповноваження"
@@ -6930,6 +6925,10 @@ msgstr ""
 
 #~ msgid "Close Search"
 #~ msgstr "Закрити пошук"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Фрагмент коду (%s)"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7089,6 +7088,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Зупинка передавання файла"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Перенесення файлів"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7410,6 +7413,10 @@ msgstr ""
 #~ msgstr "Встановлено"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Почати балачку"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Почати балачку"
 
@@ -7461,6 +7468,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Цей обліковий запис не з’єднано з сервером"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Показувати транс_порти"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

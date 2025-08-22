@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -885,10 +885,6 @@ msgstr "Tillegget støttes ikke"
 msgid "Authentication mechanism too weak"
 msgstr "Identitetsbekreftelse feilet med følgende, \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "Utviklere:"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Autoritet og utsteders seriernummer samsvarer ikke"
 
@@ -1324,10 +1320,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1829,9 +1821,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "Oppdag tjenester"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Godtar du denne forespørselen på %s-kontoen?"
@@ -2261,9 +2250,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Bildet er for stort"
-
-msgid "File transfers"
-msgstr "Filoverføringer"
 
 #, python-format
 msgid "File: %s"
@@ -3115,6 +3101,10 @@ msgstr "_Tilbakestill til forvalgte farger"
 
 msgid "Message"
 msgstr "Melding"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Melding sendt"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4962,10 +4952,6 @@ msgid "Start Chat…"
 msgstr "Start samtale"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Start samtale"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Start Samtale..."
 
@@ -5059,6 +5045,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Emne-utsteder samsvarer ikke"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5082,6 +5071,10 @@ msgstr "Sendte kontakter:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Gi kontakt nytt navn"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5253,6 +5246,9 @@ msgstr "Drakt"
 #, fuzzy
 msgid "Themes"
 msgstr "Drakt"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5512,10 +5508,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Veksle videoøkt"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Vis transporter"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6989,6 +6981,10 @@ msgstr ""
 #~ msgstr "Lyd / Video"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Utviklere:"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Godkjenning sendt"
 
@@ -7211,6 +7207,9 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Filoverføring stoppet"
+
+#~ msgid "File transfers"
+#~ msgstr "Filoverføringer"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7538,6 +7537,10 @@ msgstr ""
 #~ msgstr "Innstallert"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Start samtale"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Start samtale"
 
@@ -7595,6 +7598,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Denne kontoen er ikke tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Vis transporter"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

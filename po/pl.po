@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2025-07-09 07:12+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
@@ -808,9 +808,6 @@ msgstr "Mechanizm uwierzytelniania nie jest obsługiwany"
 msgid "Authentication mechanism too weak"
 msgstr "Mechanizm uwierzytelniania jest za słaby"
 
-msgid "Author"
-msgstr "Autor"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Numery seryjne urzędu certyfikacji i wydawcy nie pasują"
 
@@ -1201,10 +1198,6 @@ msgstr "Zamknij używając Escape"
 
 msgid "Code snippet"
 msgstr "Wycinek kodu"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Wycinek kodu (%s)"
 
 msgid "Color"
 msgstr "Kolor"
@@ -1628,9 +1621,6 @@ msgstr "Ujawniaj czas Twojej ostatniej aktywności"
 msgid "Discover Services…"
 msgstr "Wyszukaj usługi…"
 
-msgid "Discussion Logs"
-msgstr "Logi dyskusji"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Akceptujesz tę prośbę (konto: %s)?"
@@ -2018,9 +2008,6 @@ msgstr "Rozmiar pliku nieznany"
 
 msgid "File too big"
 msgstr "Plik jest za duży"
-
-msgid "File transfers"
-msgstr "Przesyłane pliki"
 
 #, python-format
 msgid "File: %s"
@@ -2761,6 +2748,10 @@ msgstr "Wzmianka: kolor tła wiadomości"
 
 msgid "Message"
 msgstr "Wiadomość"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Wiadomość została wysłana"
 
 msgid "Message Receipts (✔)"
 msgstr "Potwierdzenie otrzymania (✔)"
@@ -4359,9 +4350,6 @@ msgstr "Rozpocznij rozmowę…"
 msgid "Start Chat…"
 msgstr "Rozpocznij rozmowę…"
 
-msgid "Start New Chat"
-msgstr "Rozpocznij nową rozmowę"
-
 msgid "Start Search..."
 msgstr "Rozpocznij szukanie…"
 
@@ -4448,6 +4436,10 @@ msgstr "Alternatywne nazwy podmiotu: "
 msgid "Subject issuer mismatch"
 msgstr "Niezgodność podmiotu i wystawcy"
 
+#, fuzzy
+msgid "Subject last changed by"
+msgstr "Alternatywne nazwy podmiotu: "
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Subskrybuj"
@@ -4466,6 +4458,10 @@ msgstr "Pomyślnie dodano kontakty"
 
 msgid "Successfully Removed Contacts"
 msgstr "Pomyślnie usunięto kontakty"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "Wsparcie"
@@ -4623,6 +4619,9 @@ msgstr "Motyw"
 
 msgid "Themes"
 msgstr "Motywy"
+
+msgid "There are connectivity issues"
+msgstr "Są problemy z połączeniem"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -4871,9 +4870,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Przełącz listę rozmów"
-
-msgid "Toggle Menu Bar"
-msgstr "Przełącz pasek menu"
 
 msgid "Toggle participants list"
 msgstr "Przełącz listę uczestników"
@@ -6266,6 +6262,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Audio/Video"
 #~ msgstr "Dźwięk/Wideo"
 
+#~ msgid "Author"
+#~ msgstr "Autor"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Prośba o autoryzację"
 
@@ -6339,6 +6338,10 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Close Search"
 #~ msgstr "Zamknij wyszukiwanie"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Wycinek kodu (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Powszechna Nazwa (CN)"
@@ -6414,6 +6417,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Przesyłanie bezpośrednie (niezaszyfrowane)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Logi dyskusji"
 
 #~ msgid "Dismiss"
 #~ msgstr "Odrzuć"
@@ -6508,6 +6514,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Przesyłanie pliku zatrzymane"
+
+#~ msgid "File transfers"
+#~ msgstr "Przesyłane pliki"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -6902,6 +6911,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Stalled"
 #~ msgstr "Zawieszony"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Rozpocznij nową rozmowę"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Rozpocznij rozmowę wideo…"
 
@@ -6963,11 +6975,11 @@ msgstr "…lub upuść tutaj"
 #~ msgid "The service could not be found"
 #~ msgstr "Nie można odnaleźć usługi"
 
-#~ msgid "There are connectivity issues"
-#~ msgstr "Są problemy z połączeniem"
-
 #~ msgid "This account is not connected to the server"
 #~ msgstr "To konto nie jest połączone z serwerem"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Przełącz pasek menu"
 
 #~ msgid "Topic"
 #~ msgstr "Temat"

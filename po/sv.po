@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -830,10 +830,6 @@ msgstr "Utökning stöds inte"
 msgid "Authentication mechanism too weak"
 msgstr "Autentisering mot \"%s\" misslyckades"
 
-#, fuzzy
-msgid "Author"
-msgstr "Au_ktorisera"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1246,10 +1242,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1732,9 +1724,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Upptäck tjänster"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterar du den här begäran på kontot %s?"
@@ -2130,9 +2119,6 @@ msgstr "Filstorlek okänd"
 #, fuzzy
 msgid "File too big"
 msgstr "Bildfilen är för stor"
-
-msgid "File transfers"
-msgstr "Filöverföringar"
 
 #, python-format
 msgid "File: %s"
@@ -2926,6 +2912,10 @@ msgstr "Omnämning: Meddelandes bakgrundsfärg"
 
 msgid "Message"
 msgstr "Meddelande"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Meddelande skickat"
 
 msgid "Message Receipts (✔)"
 msgstr "Meddelandekvitton (✔)"
@@ -4732,10 +4722,6 @@ msgid "Start Chat…"
 msgstr "Starta Chatt"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Starta Chatt"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Starta chatt..."
 
@@ -4830,6 +4816,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -4853,6 +4842,10 @@ msgstr "Bjud in _kontakter"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Byt namn på kontakt"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5025,6 +5018,9 @@ msgstr "Tema"
 #, fuzzy
 msgid "Themes"
 msgstr "Tema"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5272,10 +5268,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Deltagare"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Visa _transporter"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6772,6 +6764,10 @@ msgstr ""
 #~ msgstr "Standardmeddelande"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_ktorisera"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Auktorisering har sänts"
 
@@ -6987,6 +6983,9 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Filöverföringen stoppad"
+
+#~ msgid "File transfers"
+#~ msgstr "Filöverföringar"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7309,6 +7308,10 @@ msgstr ""
 #~ msgstr "Avstannad"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Starta Chatt"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Starta Chatt"
 
@@ -7348,6 +7351,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Detta konto är inte anslutet till servern"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Visa _transporter"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

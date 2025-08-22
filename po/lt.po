@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -875,10 +875,6 @@ msgstr "Authentication failed with \"%s\""
 msgid "Authentication mechanism too weak"
 msgstr "Authentication failed with \"%s\""
 
-#, fuzzy
-msgid "Author"
-msgstr "Au_torizuoti"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1315,10 +1311,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1825,9 +1817,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "_Ieškoti Paslaugų"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request?"
@@ -2254,10 +2243,6 @@ msgstr ""
 
 msgid "File too big"
 msgstr ""
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Failų siuntimai"
 
 #, python-format
 msgid "File: %s"
@@ -3094,6 +3079,10 @@ msgstr "_Grąžinti buvusias spalvas pagal nutylėjimą"
 
 #, fuzzy
 msgid "Message"
+msgstr "Message Sent"
+
+#, fuzzy
+msgid "Message History"
 msgstr "Message Sent"
 
 #, fuzzy
@@ -4949,10 +4938,6 @@ msgid "Start Chat…"
 msgstr "Start Chat"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Start Chat"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Pradėti pokalbį..."
 
@@ -5047,6 +5032,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5070,6 +5058,10 @@ msgstr "Siųsti kontaktus:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Removes contact from roster"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5241,6 +5233,9 @@ msgstr "Theme"
 #, fuzzy
 msgid "Themes"
 msgstr "Theme"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5477,10 +5472,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participant"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Rodyti _Pernašas"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6912,6 +6903,10 @@ msgstr ""
 #~ msgstr "Žinutė pagal nutylėjimą"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Au_torizuoti"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Authorisation has been sent"
 
@@ -7110,6 +7105,10 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Failo siuntimas sustabdytas"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Failų siuntimai"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7382,6 +7381,10 @@ msgstr ""
 #~ msgstr "_Būklė"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Start Chat"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Start Chat"
 
@@ -7415,6 +7418,10 @@ msgstr ""
 
 #~ msgid "The service could not be found"
 #~ msgstr "The service could not be found"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Rodyti _Pernašas"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

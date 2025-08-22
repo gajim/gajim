@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -893,10 +893,6 @@ msgstr "Η επέκταση δεν υποστηρίζεται"
 msgid "Authentication mechanism too weak"
 msgstr "Η πιστοποίηση ταυτότητας με \"%s\" απέτυχε"
 
-#, fuzzy
-msgid "Author"
-msgstr "Αμερική/Πορτ-Ο-Πρενς"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
@@ -1334,10 +1330,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1849,9 +1841,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "Εύρεση _υπηρεσιών"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Δέχεστε αυτό το αίτημα;"
@@ -2285,10 +2274,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Η εικόνα είναι πολύ μεγάλη"
-
-#, fuzzy
-msgid "File transfers"
-msgstr "Μεταφορές αρχείων"
 
 #, python-format
 msgid "File: %s"
@@ -3128,6 +3113,10 @@ msgstr "Επανα_φορά προεπιλεγμένων χρωμάτων"
 
 msgid "Message"
 msgstr "Μήνυμα"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Το μήνυμα στάλθηκε"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4987,10 +4976,6 @@ msgid "Start Chat…"
 msgstr "Έναρξη κουβέντας"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Έναρξη κουβέντας"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "_Έναρξη συζήτησης"
 
@@ -5086,6 +5071,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr ""
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5109,6 +5097,10 @@ msgstr "Επαφές"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "_Μετονομασία αρχείων"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5279,6 +5271,9 @@ msgstr "Θέμα"
 #, fuzzy
 msgid "Themes"
 msgstr "Θέμα"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5522,10 +5517,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Συμμετέχων"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6998,6 +6989,10 @@ msgstr ""
 #~ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Αμερική/Πορτ-Ο-Πρενς"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Η εξουσιοδότηση έχει σταλεί"
 
@@ -7209,6 +7204,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "File transfer stopped"
 #~ msgstr "Η μεταφορά αρχείου διακόπηκε"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Μεταφορές αρχείων"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7503,6 +7502,10 @@ msgstr ""
 #~ msgstr "Πάγωσε"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Έναρξη κουβέντας"
+
+#, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Έναρξη κουβέντας"
 
@@ -7540,6 +7543,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

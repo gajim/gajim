@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -822,9 +822,6 @@ msgstr "Mecanismul de autentificare nu este acceptat"
 msgid "Authentication mechanism too weak"
 msgstr "Mecanism de autentificare prea slab"
 
-msgid "Author"
-msgstr "Autor"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Necorelări între numărul de serie al autorității și cel al emitentului"
 
@@ -1226,10 +1223,6 @@ msgstr "Închideți cu Escape"
 
 msgid "Code snippet"
 msgstr "Fragment de cod"
-
-#, python-format
-msgid "Code snippet (%s)"
-msgstr "Fragment de cod (%s)"
 
 msgid "Color"
 msgstr "Culoare"
@@ -1672,9 +1665,6 @@ msgstr "Dezvăluiți ora la care ați avut ultima activitate"
 msgid "Discover Services…"
 msgstr "Descoperă serviciile…"
 
-msgid "Discussion Logs"
-msgstr "Jurnalele de discuții"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Acceptați această cerere (cont: %s)?"
@@ -2072,9 +2062,6 @@ msgstr "Dimensiunea fișierului necunoscută"
 #, fuzzy
 msgid "File too big"
 msgstr "Dimensiunea fișierului Avatar prea mare"
-
-msgid "File transfers"
-msgstr "Transferuri de fișiere"
 
 #, python-format
 msgid "File: %s"
@@ -2846,6 +2833,10 @@ msgstr "Mențiune: Culoarea de fundal a mesajului"
 
 msgid "Message"
 msgstr "Mesaj"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Mesaj trimis"
 
 msgid "Message Receipts (✔)"
 msgstr "Mesaje de primire (✔)"
@@ -4504,9 +4495,6 @@ msgstr "Începeți să discutați…"
 msgid "Start Chat…"
 msgstr "Începeți chat-ul…"
 
-msgid "Start New Chat"
-msgstr "Începeți un nou chat"
-
 msgid "Start Search..."
 msgstr "Începeți căutarea..."
 
@@ -4592,6 +4580,10 @@ msgstr "Subiect Nume Alternativ "
 msgid "Subject issuer mismatch"
 msgstr "Necorelări între emitentul subiectului"
 
+#, fuzzy
+msgid "Subject last changed by"
+msgstr "Subiect Nume Alternativ "
+
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Abonează-te"
@@ -4614,6 +4606,10 @@ msgstr "Selectați Contacte"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Eliminați contactul"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr "Suport"
@@ -4773,6 +4769,9 @@ msgstr "Tema"
 
 msgid "Themes"
 msgstr "Teme"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5021,10 +5020,6 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "_Afișează bara de meniu"
 
 msgid "Toggle participants list"
 msgstr "Comutați lista participanților"
@@ -6414,6 +6409,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
 
+#~ msgid "Author"
+#~ msgstr "Autor"
+
 #~ msgid "Authorization Request"
 #~ msgstr "Cerere de autorizare"
 
@@ -6487,6 +6485,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Close Search"
 #~ msgstr "Închideți căutarea"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "Fragment de cod (%s)"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Denumire comună (NC)"
@@ -6563,6 +6565,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Transfer direct (necriptat)"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "Jurnalele de discuții"
 
 #~ msgid "Dismiss"
 #~ msgstr "Respingeți"
@@ -6656,6 +6661,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Transfer de fișiere oprit"
+
+#~ msgid "File transfers"
+#~ msgstr "Transferuri de fișiere"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7047,6 +7055,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Stalled"
 #~ msgstr "Înțepenit"
 
+#~ msgid "Start New Chat"
+#~ msgstr "Începeți un nou chat"
+
 #~ msgid "Start Video Call…"
 #~ msgstr "Începeți apelul video…"
 
@@ -7110,6 +7121,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Acest cont nu este conectat la server"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "_Afișează bara de meniu"
 
 #~ msgid "Topic"
 #~ msgstr "Subiect"

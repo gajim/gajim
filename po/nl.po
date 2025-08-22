@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 18:46+0000\n"
+"POT-Creation-Date: 2025-08-18 20:14+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -881,10 +881,6 @@ msgstr "Extensie wordt niet ondersteund"
 msgid "Authentication mechanism too weak"
 msgstr "Authenticatie met ‘%s’ mislukt"
 
-#, fuzzy
-msgid "Author"
-msgstr "Auteurs"
-
 msgid "Authority and issuer serial number mismatch"
 msgstr "Autoriteit en uitgeverserienummer komen niet overeen"
 
@@ -1313,10 +1309,6 @@ msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
-msgstr ""
-
-#, python-format
-msgid "Code snippet (%s)"
 msgstr ""
 
 msgid "Color"
@@ -1821,9 +1813,6 @@ msgstr ""
 msgid "Discover Services…"
 msgstr "Diensten ontdekken"
 
-msgid "Discussion Logs"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepteer je dit verzoek op account %s?"
@@ -2255,9 +2244,6 @@ msgstr ""
 #, fuzzy
 msgid "File too big"
 msgstr "Afbeelding is te groot"
-
-msgid "File transfers"
-msgstr "Bestandsoverdrachten"
 
 #, python-format
 msgid "File: %s"
@@ -3113,6 +3099,10 @@ msgstr "Banier achtergrondkleur"
 
 msgid "Message"
 msgstr "Bericht"
+
+#, fuzzy
+msgid "Message History"
+msgstr "Bericht verzonden"
 
 #, fuzzy
 msgid "Message Receipts (✔)"
@@ -4950,10 +4940,6 @@ msgid "Start Chat…"
 msgstr "Gesprek beginnen"
 
 #, fuzzy
-msgid "Start New Chat"
-msgstr "Gesprek beginnen"
-
-#, fuzzy
 msgid "Start Search..."
 msgstr "Gesprek beginnen…"
 
@@ -5045,6 +5031,9 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Subjectuitgever komt niet overeen"
 
+msgid "Subject last changed by"
+msgstr ""
+
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5069,6 +5058,10 @@ msgstr "Verzonden contacten:"
 #, fuzzy
 msgid "Successfully Removed Contacts"
 msgstr "Contact hernoemen"
+
+#, python-brace-format
+msgid "Successfully build new session with {device_id}."
+msgstr ""
 
 msgid "Support"
 msgstr ""
@@ -5238,6 +5231,9 @@ msgstr "Thema’s"
 
 msgid "Themes"
 msgstr "Thema’s"
+
+msgid "There are connectivity issues"
+msgstr ""
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -5496,10 +5492,6 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Videosessie in-/uitschakelen"
-
-#, fuzzy
-msgid "Toggle Menu Bar"
-msgstr "Transporten weergeven"
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6991,6 +6983,10 @@ msgstr ""
 #~ msgstr "Audio/video"
 
 #, fuzzy
+#~ msgid "Author"
+#~ msgstr "Auteurs"
+
+#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Machtiging verzonden"
 
@@ -7239,6 +7235,9 @@ msgstr ""
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Bestandsoverdracht gestopt"
+
+#~ msgid "File transfers"
+#~ msgstr "Bestandsoverdrachten"
 
 #, python-format
 #~ msgid "Filename: %s"
@@ -7614,6 +7613,10 @@ msgstr ""
 #~ msgstr "Geïnstalleerd"
 
 #, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Gesprek beginnen"
+
+#, fuzzy
 #~ msgid "Start Video Call…"
 #~ msgstr "Gesprek beginnen"
 
@@ -7675,6 +7678,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Deze account is niet verbonden met de server"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Transporten weergeven"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
