@@ -17,7 +17,7 @@ class QuitDialog(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
-            name="GuitDialog",
+            name="QuitDialog",
             title=_("Quit Gajim"),
             transient_for=app.window,
             modal=True,
