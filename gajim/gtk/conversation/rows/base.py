@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -15,6 +16,11 @@ from gajim.gtk.util.classes import SignalManager
 
 
 class BaseRow(Gtk.ListBoxRow, SignalManager):
+
+    __gsignals__ = {
+        "remove": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
     def __init__(self, account: str, widget: str | None = None) -> None:
         Gtk.ListBoxRow.__init__(self, selectable=False)
         SignalManager.__init__(self)

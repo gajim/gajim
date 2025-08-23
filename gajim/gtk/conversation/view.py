@@ -466,6 +466,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer_row = FileTransferRow(self.contact.account, transfer)
+        transfer_row.connect("remove", self._on_remove_row)
         self._insert_message(transfer_row)
 
     def add_jingle_file_transfer(
@@ -602,6 +603,9 @@ class ConversationView(Gtk.ScrolledWindow):
             merge = message.is_mergeable(row)
             row.set_merged(merge)
             return
+
+    def _on_remove_row(self, row: BaseRow) -> None:
+        self._list_box.remove(row)
 
     def _on_message_row_state_flags_changed(
         self, row: MessageRow, previous_flags: Gtk.StateFlags

@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import cast
-
 import time
 
 from gi.repository import GLib
@@ -77,7 +75,7 @@ class FileTransferRow(BaseRow):
         if self._transfer.state.is_active:
             self._transfer.cancel()
 
-        cast(Gtk.ListBox, self.get_parent()).remove(self)
+        self.emit("remove")
 
     def _on_transfer_state_change(
         self, transfer: HTTPFileTransfer, _signal_name: str, state: FTState
@@ -87,10 +85,11 @@ class FileTransferRow(BaseRow):
 
         if state.is_error:
             InformationAlertDialog(_("Error"), transfer.error_text)
-            cast(Gtk.ListBox, self.get_parent()).remove(self)
+            self.emit("remove")
+            return
 
         if state.is_finished or state.is_cancelled:
-            cast(Gtk.ListBox, self.get_parent()).remove(self)
+            self.emit("remove")
             return
 
         description = transfer.get_state_description()
