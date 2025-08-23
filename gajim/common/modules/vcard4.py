@@ -16,6 +16,7 @@ from collections.abc import Callable
 
 from gi.repository import GLib
 from nbxmpp.errors import StanzaError
+from nbxmpp.errors import TimeoutStanzaError
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.protocol import JID
 from nbxmpp.task import Task
@@ -77,7 +78,7 @@ class VCard4(BaseModule):
     def _on_vcard_received(self, task: Task) -> None:
         try:
             vcard = cast(VCard | None, task.finish())
-        except StanzaError as err:
+        except (StanzaError, TimeoutStanzaError) as err:
             self._log.info('Error loading VCard: %s', err)
             vcard = None
 
