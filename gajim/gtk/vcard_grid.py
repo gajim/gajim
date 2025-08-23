@@ -881,7 +881,7 @@ class DatePropertyGui(VCardPropertyGui):
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
-        assert self._prop is BDayProperty
+        assert isinstance(self._prop, BDayProperty)
         self._prop.value = text
         self._value_label.set_value(text)
 
