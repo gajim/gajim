@@ -2,9 +2,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from typing import Any
+
 import os
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.gtk.widgets import GajimAppWindow
@@ -29,8 +32,26 @@ class TestCustomIcons(GajimAppWindow):
             default_height=600,
         )
 
-        scrolled_window = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
-        self.set_child(scrolled_window)
+        box = Gtk.Box(spacing=18, orientation=Gtk.Orientation.VERTICAL)
+        self.set_child(box)
+
+        switch = Gtk.Switch()
+        switch.connect("notify::active", self._on_theme_switched)
+
+        theme_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
+        theme_box.append(Gtk.Label(label="Light"))
+        theme_box.append(switch)
+        theme_box.append(Gtk.Label(label="dark"))
+        box.append(theme_box)
+
+        self._adw_style_manager = Adw.StyleManager.get_default()
+        color_scheme = self._adw_style_manager.get_color_scheme()
+        switch.set_active(color_scheme == Adw.ColorScheme.FORCE_DARK)
+
+        scrolled_window = Gtk.ScrolledWindow(
+            hscrollbar_policy=Gtk.PolicyType.NEVER, vexpand=True
+        )
+        box.append(scrolled_window)
         flow_box = Gtk.FlowBox(
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
@@ -51,6 +72,12 @@ class TestCustomIcons(GajimAppWindow):
                 image.set_tooltip_text(file)
                 image.set_pixel_size(48)
                 flow_box.append(image)
+
+    def _on_theme_switched(self, switch: Gtk.Switch, args: Any) -> None:
+        if switch.get_active():
+            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        else:
+            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
 
 
 util.init_settings()
