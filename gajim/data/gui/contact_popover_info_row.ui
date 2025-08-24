@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ContactPopoverInfoRow" parent="GtkListBoxRow">
+    <property name="activatable">0</property>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="_icon"/>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_label">
+            <property name="halign">start</property>
+            <property name="ellipsize">end</property>
+            <property name="single-line-mode">1</property>
+            <property name="max-width-chars">30</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
