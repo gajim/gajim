@@ -903,7 +903,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         def _on_response() -> None:
             window = get_app_window("StartChatDialog")
             if window is not None:
-                window.remove_row(params.account, str(params.jid))
+                window.remove_row(params.account, params.jid)
 
             client = app.get_client(params.account)
             client.get_module("MUC").leave(params.jid)

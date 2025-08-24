@@ -150,7 +150,7 @@ class StartChatDialog(GajimAppWindow):
         self._connect(
             self._ui.search_entry,
             "stop-search",
-            lambda *args: self._ui.search_entry.set_text(""),
+            lambda *args: self._ui.search_entry.set_text(""),  # type: ignore
         )
         self._connect(
             self._ui.stack, "notify::visible-child-name", self._on_page_changed
@@ -223,7 +223,7 @@ class StartChatDialog(GajimAppWindow):
         self._destroyed = True
         app.cancel_tasks(self)
 
-    def remove_row(self, account: str, jid: str) -> None:
+    def remove_row(self, account: str, jid: JID) -> None:
         # Used by forget-groupchat action
         self._contact_view.remove(account, jid)
 
@@ -251,6 +251,8 @@ class StartChatDialog(GajimAppWindow):
                     # Workaround if groupchats are in the roster
                     continue
 
+                assert isinstance(contact, BareContact)
+
                 item = ContactListItem(
                     account,
                     contact,
@@ -265,6 +267,7 @@ class StartChatDialog(GajimAppWindow):
             self_contact = client.get_module("Contacts").get_contact(
                 client.get_own_jid().bare
             )
+            assert isinstance(self_contact, BareContact)
             item = ContactListItem(
                 account,
                 self_contact,
@@ -289,6 +292,7 @@ class StartChatDialog(GajimAppWindow):
                 contact = client.get_module("Contacts").get_contact(
                     bookmark.jid, groupchat=True
                 )
+                assert isinstance(contact, GroupchatContact)
 
                 item = ContactListItem(
                     account,
@@ -955,8 +959,8 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
 
     @staticmethod
     def _sort_func(
-        obj1: Any,
-        obj2: Any,
+        obj1: ContactListItem,
+        obj2: ContactListItem,
         _user_data: object | None,
     ) -> int:
 
@@ -980,7 +984,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._model.append(item)
 
     def remove(self, account: str, jid: JID) -> None:
-        for item in self._model:
+        for item in cast(list[ContactListItem], self._model):
             if item.account != account or item.jid != jid:
                 continue
             success, pos = self._model.find(item)
@@ -1037,6 +1041,7 @@ class ContactListItem(GObject.Object):
         show = PresenceShowExt.OFFLINE
         is_self = False
         if contact is not None and not groupchat:
+            assert isinstance(contact, BareContact)
             groups = sorted(contact.groups)
             status = to_one_line(contact.status)
             idle = contact.idle_datetime
@@ -1056,10 +1061,11 @@ class ContactListItem(GObject.Object):
                 AvatarSize.START_CHAT,
                 scale,
                 Gtk.TextDirection.NONE,
-                0,
+                0,  # type: ignore
             )
 
         else:
+            assert isinstance(contact, BareContact | GroupchatContact)
             avatar_paintable = contact.get_avatar(AvatarSize.START_CHAT, scale)
 
         search_string = "|".join((name, str(jid))).lower()
@@ -1090,7 +1096,7 @@ class ContactListItem(GObject.Object):
 class ContactViewItem(Gtk.Grid, SignalManager):
     __gtype_name__ = "ContactViewItem"
 
-    _avatar: Gtk.Label = Gtk.Template.Child()
+    _avatar: Gtk.Image = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
     _address_label: Gtk.Label = Gtk.Template.Child()
     _status_label: Gtk.Label = Gtk.Template.Child()
@@ -1116,7 +1122,7 @@ class ContactViewItem(Gtk.Grid, SignalManager):
         self._connect(gesture_secondary_click, "pressed", self._popup_menu)
         self.add_controller(gesture_secondary_click)
 
-    def bind(self, obj: GlobalListItem) -> None:
+    def bind(self, obj: ContactListItem) -> None:
         bind_spec = [
             ("name", self._name_label, "label"),
             ("jid", self._address_label, "label"),
