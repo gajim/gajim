@@ -279,7 +279,11 @@ class ChatControl(EventHelper):
                 return
 
             muc_data = self._client.get_module("MUC").get_muc_data(contact.jid)
-            if muc_data is not None and muc_data.subject is not None:
+            if (
+                muc_data is not None
+                and muc_data.subject is not None
+                and muc_data.subject.text
+            ):
                 self._scrolled_view.add_muc_subject(
                     muc_data.subject, muc_data.last_subject_timestamp
                 )
@@ -1176,6 +1180,8 @@ class ChatControl(EventHelper):
     def _on_room_subject(
         self, contact: GroupchatContact, _signal_name: str, subject: MucSubject
     ) -> None:
+        if not subject.text:
+            return
 
         if app.settings.get("show_subject_on_join") or not contact.is_joining:
             self._scrolled_view.add_muc_subject(subject)
