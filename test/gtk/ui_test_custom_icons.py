@@ -62,7 +62,7 @@ class TestCustomIcons(GajimAppWindow):
         scrolled_window.set_child(flow_box)
 
         for _root, _dirs, files in os.walk(CUSTOM_ICONS_PATH):
-            for file in files:
+            for file in sorted(files):
                 file_path = Path(file)
 
                 if not file_path.suffix == ".svg":
