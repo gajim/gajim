@@ -275,7 +275,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if not contact.is_in_roster:
             return
 
-        self._ui.from_subscription_switch.set_state(contact.is_subscribed)
+        self._ui.from_subscription_switch.set_active(contact.is_subscribed)
 
         self._ui.subscription_listbox.set_sensitive(self._client.state.is_available)
 
@@ -416,7 +416,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
     def _on_to_subscription_button_clicked(self, _widget: Gtk.Button) -> None:
         # Save auto_auth if switch for disclosing presence is active
         self._client.get_module("Presence").subscribe(
-            self.contact.jid, auto_auth=self._ui.from_subscription_switch.get_state()
+            self.contact.jid, auto_auth=self._ui.from_subscription_switch.get_active()
         )
         self._ui.request_stack.set_visible_child_name("requested")
 
