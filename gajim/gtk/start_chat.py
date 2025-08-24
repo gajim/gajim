@@ -1136,6 +1136,9 @@ class ContactViewItem(Gtk.Grid, SignalManager):
             )
             self.__bindings.append(bind)
 
+        if obj.is_new:
+            self._avatar.add_css_class("dimmed")
+
     def unbind(self) -> None:
         for bind in self.__bindings:
             bind.unbind()
