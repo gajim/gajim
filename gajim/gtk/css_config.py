@@ -85,7 +85,9 @@ class CSSConfig:
         self._css_path: Path | None = None
 
         # User Theme CSS Provider
-        self._provider = Gtk.CssProvider()
+        self._user_theme_provider = Gtk.CssProvider()
+
+        self._default_providers: list[Gtk.CssProvider] = []
 
         # Used for dynamic classes like account colors
         self._dynamic_provider = Gtk.CssProvider()
@@ -120,7 +122,7 @@ class CSSConfig:
         self._activate_theme()
 
         Gtk.StyleContext.add_provider_for_display(
-            display, self._provider, CSSPriority.USER_THEME
+            display, self._user_theme_provider, CSSPriority.USER_THEME
         )
 
         self.apply_app_font_size()
@@ -160,6 +162,12 @@ class CSSConfig:
             adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
 
     def reload_css(self) -> None:
+        display = Gdk.Display.get_default()
+        assert display is not None
+
+        for provider in self._default_providers:
+            Gtk.StyleContext.remove_provider_for_display(display, provider)
+
         self._load_css()
 
     def _load_css(self) -> None:
@@ -185,6 +193,8 @@ class CSSConfig:
         try:
             provider = Gtk.CssProvider()
             provider.load_from_bytes(GLib.Bytes.new(css.encode("utf-8")))
+            self._default_providers.append(provider)
+
             display = Gdk.Display.get_default()
             assert display is not None
             Gtk.StyleContext.add_provider_for_display(display, provider, priority)
@@ -597,7 +607,7 @@ class CSSConfig:
         log.info("Activate theme")
         self._invalidate_cache()
         assert self._css is not None
-        self._provider.load_from_bytes(GLib.Bytes.new(self._css.cssText))
+        self._user_theme_provider.load_from_bytes(GLib.Bytes.new(self._css.cssText))
 
     def add_new_theme(self, theme: str) -> bool:
         theme_path = self.get_theme_path(theme)
