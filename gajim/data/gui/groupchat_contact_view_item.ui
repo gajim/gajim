@@ -48,7 +48,7 @@
       <object class="GtkImage" id="_hat_image">
         <property name="halign">1</property>
         <property name="pixel-size">16</property>
-        <property name="icon-name">feather-tag-symbolic</property>
+        <property name="icon-name">lucide-tag-symbolic</property>
         <layout>
           <property name="column">2</property>
           <property name="row">0</property>

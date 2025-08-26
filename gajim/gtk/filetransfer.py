@@ -140,10 +140,10 @@
 #             'upload': 'go-up-symbolic',
 #             'download': 'go-down-symbolic',
 #             'stop': 'process-stop-symbolic',
-#             'waiting': 'feather-refresh-cw-symbolic',
+#             'waiting': 'lucide-refresh-cw-symbolic',
 #             'pause': 'media-playback-pause-symbolic',
 #             'continue': 'media-playback-start-symbolic',
-#             'ok': 'feather-check-symbolic',
+#             'ok': 'lucide-check-symbolic',
 #             'computing': 'system-run-symbolic',
 #             'hash_error': 'network-error-symbolic',
 #         }

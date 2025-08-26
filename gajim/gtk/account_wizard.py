@@ -730,7 +730,7 @@ class Signup(Page):
             log.warning("Provider list download failed: %s", request.get_error_string())
             return
 
-        self._ui.update_provider_list_icon.set_from_icon_name("feather-check-symbolic")
+        self._ui.update_provider_list_icon.set_from_icon_name("lucide-check-symbolic")
         self._ui.update_provider_list_icon.set_tooltip_text(
             _("Providers list is up to date")
         )
@@ -786,7 +786,7 @@ class Signup(Page):
         self._ui.sign_up_info_grid.attach(heading, 0, 0, 2, 1)
 
         provider_category = server_data["category"]
-        image = Gtk.Image.new_from_icon_name("feather-check-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-check-symbolic")
         label = Gtk.Label(
             label=_("Provider Category: %s") % provider_category,
             halign=Gtk.Align.START,

@@ -58,13 +58,13 @@
         <child>
           <object class="GtkButton" id="add_button">
             <property name="use_underline">1</property>
-            <property name="icon_name">feather-plus-symbolic</property>
+            <property name="icon_name">lucide-plus-symbolic</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="remove_button">
             <property name="use_underline">1</property>
-            <property name="icon_name">feather-trash-symbolic</property>
+            <property name="icon_name">lucide-trash-symbolic</property>
           </object>
         </child>
         <style>

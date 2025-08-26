@@ -37,27 +37,27 @@ log = logging.getLogger("gajim.gtk.groupchat_info")
 
 MUC_FEATURES = {
     "muc_open": (
-        "feather-globe-symbolic",
+        "lucide-globe-symbolic",
         p_("Group chat feature", "Open"),
         _("Anyone can join this group chat"),
     ),
     "muc_membersonly": (
-        "feather-user-check-symbolic",
+        "lucide-user-check-symbolic",
         p_("Group chat feature", "Members Only"),
         _("This group chat is restricted to members only"),
     ),
     "muc_nonanonymous": (
-        "feather-eye-symbolic",
+        "lucide-eye-symbolic",
         p_("Group chat feature", "Not Anonymous"),
         _("All other group chat participants can see your XMPP address"),
     ),
     "muc_semianonymous": (
-        "feather-eye-off-symbolic",
+        "lucide-eye-off-symbolic",
         p_("Group chat feature", "Semi-Anonymous"),
         _("Only moderators can see your XMPP address"),
     ),
     "muc_moderated": (
-        "feather-mic-off-symbolic",
+        "lucide-mic-off-symbolic",
         p_("Group chat feature", "Moderated"),
         _(
             "Participants entering this group chat need "
@@ -65,7 +65,7 @@ MUC_FEATURES = {
         ),
     ),
     "muc_unmoderated": (
-        "feather-mic-symbolic",
+        "lucide-mic-symbolic",
         p_("Group chat feature", "Not Moderated"),
         _("Participants entering this group chat are allowed to send messages"),
     ),
@@ -80,27 +80,27 @@ MUC_FEATURES = {
         _("This group chat can not be found via search"),
     ),
     "muc_passwordprotected": (
-        "feather-lock-symbolic",
+        "lucide-lock-symbolic",
         p_("Group chat feature", "Password Required"),
         _("This group chat does require a password upon entry"),
     ),
     "muc_unsecured": (
-        "feather-unlock-symbolic",
+        "lucide-lock-open-symbolic",
         p_("Group chat feature", "No Password Required"),
         _("This group chat does not require a password upon entry"),
     ),
     "muc_persistent": (
-        "feather-hard-drive-symbolic",
+        "lucide-hard-drive-symbolic",
         p_("Group chat feature", "Persistent"),
         _("This group chat persists even if there are no participants"),
     ),
     "muc_temporary": (
-        "feather-clock-symbolic",
+        "lucide-clock-symbolic",
         p_("Group chat feature", "Temporary"),
         _("This group chat will be destroyed once the last participant left"),
     ),
     "mam": (
-        "feather-server-symbolic",
+        "lucide-server-symbolic",
         p_("Group chat feature", "Archiving"),
         _("Messages are archived on the server"),
     ),

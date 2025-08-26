@@ -113,7 +113,7 @@
                 <property name="visible">False</property>
                 <child type="prefix">
                   <object class="GtkImage">
-                    <property name="icon-name">feather-user-symbolic</property>
+                    <property name="icon-name">lucide-user-symbolic</property>
                     <property name="pixel-size">24</property>
                     <style>
                       <class name="dimmed"/>

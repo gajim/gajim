@@ -1056,7 +1056,7 @@ class ContactListItem(GObject.Object):
         if is_new:
             theme = get_icon_theme()
             avatar_paintable = theme.lookup_icon(
-                "feather-user-plus-symbolic",
+                "lucide-user-plus-symbolic",
                 None,
                 AvatarSize.START_CHAT,
                 scale,

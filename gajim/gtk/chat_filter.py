@@ -47,7 +47,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
 
         menu_button = Gtk.MenuButton()
         self._connect(menu_button, "notify::active", self._on_menu_button_activated)
-        icon = Gtk.Image.new_from_icon_name("feather-filter-symbolic")
+        icon = Gtk.Image.new_from_icon_name("lucide-list-filter-symbolic")
         menu_button.set_child(icon)
         self.set_child(menu_button)
 

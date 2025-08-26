@@ -14,7 +14,7 @@
       <object class="GtkStackPage">
         <property name="name">information</property>
         <property name="title" translatable="yes">Information</property>
-        <property name="icon-name">feather-user-symbolic</property>
+        <property name="icon-name">lucide-user-symbolic</property>
         <property name="child">
           <object class="GtkScrolledWindow" id="vcard_scrolled">
             <property name="focusable">1</property>
@@ -277,7 +277,7 @@
       <object class="GtkStackPage">
         <property name="name">encryption-omemo</property>
         <property name="title" translatable="yes">Encryption (OMEMO)</property>
-        <property name="icon-name">feather-lock-symbolic</property>
+        <property name="icon-name">lucide-lock-symbolic</property>
         <property name="child">
           <object class="GtkScrolledWindow" id="encryption_scrolled">
             <property name="focusable">1</property>
@@ -393,7 +393,7 @@
                                 <property name="can-focus">0</property>
                                 <property name="tooltip-text" translatable="yes">Add Group…</property>
                                 <property name="use-underline">1</property>
-                                <property name="icon-name">feather-plus-symbolic</property>
+                                <property name="icon-name">lucide-plus-symbolic</property>
                               </object>
                             </child>
                             <child>
@@ -402,7 +402,7 @@
                                 <property name="can-focus">0</property>
                                 <property name="tooltip-text" translatable="yes">Remove Group…</property>
                                 <property name="use-underline">1</property>
-                                <property name="icon-name">feather-trash-symbolic</property>
+                                <property name="icon-name">lucide-trash-symbolic</property>
                               </object>
                             </child>
                             <style>

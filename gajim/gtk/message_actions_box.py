@@ -550,7 +550,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                     self._ui.visitor_menu_button.set_visible(True)
                     self._ui.state_box_label.set_text(_("You are a visitor."))
                     self._ui.state_box_image.set_from_icon_name(
-                        "feather-mic-off-symbolic"
+                        "lucide-mic-off-symbolic"
                     )
 
         if isinstance(self._contact, GroupchatParticipant):
@@ -611,7 +611,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             tooltip = _("Choose encryption")
 
             if encryption in ("OMEMO", "OpenPGP", "PGP"):
-                icon_name = "feather-lock-symbolic"
+                icon_name = "lucide-lock-symbolic"
             else:
                 icon_name = "channel-insecure-symbolic"
 

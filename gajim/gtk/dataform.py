@@ -696,10 +696,10 @@ class JidMultiField(Field):
 
         self._treeview = JidMutliTreeView(field, self)
 
-        self._add_button = Gtk.Button(icon_name="feather-plus-symbolic")
+        self._add_button = Gtk.Button(icon_name="lucide-plus-symbolic")
         self._connect(self._add_button, "clicked", self._add_clicked)
 
-        self._remove_button = Gtk.Button(icon_name="feather-trash-symbolic")
+        self._remove_button = Gtk.Button(icon_name="lucide-trash-symbolic")
         self._connect(self._remove_button, "clicked", self._remove_clicked)
 
         self._toolbar = Gtk.Box()

@@ -60,7 +60,7 @@
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">feather-trash-symbolic</property>
+            <property name="icon-name">lucide-trash-symbolic</property>
           </object>
         </child>
       </object>

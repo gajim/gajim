@@ -52,7 +52,7 @@ class GroupchatDetails(GajimAppWindow):
             self._ui.main_stack,
             [
                 SideBarMenuItem(
-                    "information", _("Information"), icon_name="feather-user-symbolic"
+                    "information", _("Information"), icon_name="lucide-user-symbolic"
                 ),
                 SideBarMenuItem(
                     "settings", _("Settings"), icon_name="document-properties-symbolic"
@@ -60,7 +60,7 @@ class GroupchatDetails(GajimAppWindow):
                 SideBarMenuItem(
                     "encryption-omemo",
                     _("Encryption (OMEMO)"),
-                    icon_name="feather-lock-symbolic",
+                    icon_name="lucide-lock-symbolic",
                 ),
                 SideBarMenuItem(
                     "blocks",

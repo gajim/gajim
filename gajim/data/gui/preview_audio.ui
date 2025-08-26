@@ -143,7 +143,7 @@
                   <object class="GtkImage">
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="icon-name">feather-minus-symbolic</property>
+                    <property name="icon-name">lucide-minus-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -193,7 +193,7 @@
                   <object class="GtkImage">
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="icon-name">feather-plus-symbolic</property>
+                    <property name="icon-name">lucide-plus-symbolic</property>
                   </object>
                 </child>
               </object>

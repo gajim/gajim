@@ -124,7 +124,7 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             )
             request_box.append(decline_button)
 
-            approve_button = Gtk.Button.new_from_icon_name("feather-check-symbolic")
+            approve_button = Gtk.Button.new_from_icon_name("lucide-check-symbolic")
             approve_button.set_tooltip_text(_("Approve"))
             self._connect(
                 approve_button, "clicked", self._on_approve, request, self._contact

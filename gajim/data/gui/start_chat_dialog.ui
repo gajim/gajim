@@ -72,7 +72,7 @@
                         <property name="halign">end</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">feather-globe-symbolic</property>
+                            <property name="icon-name">lucide-globe-symbolic</property>
                           </object>
                         </child>
                       </object>

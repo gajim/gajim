@@ -44,7 +44,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">feather-eye-off-symbolic</property>
+            <property name="icon-name">lucide-eye-off-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>
@@ -56,7 +56,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         </child>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">feather-minimize-2-symbolic</property>
+            <property name="icon-name">lucide-minimize-2-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>
@@ -110,7 +110,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         </child>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">feather-log-out-symbolic</property>
+            <property name="icon-name">lucide-log-out-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>

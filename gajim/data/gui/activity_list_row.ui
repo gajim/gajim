@@ -52,7 +52,7 @@
                       <object class="GtkImage" id="_activity_type_image">
                         <property name="visible">1</property>
                         <property name="can-focus">False</property>
-                        <property name="icon-name">feather-users-symbolic</property>
+                        <property name="icon-name">lucide-users-symbolic</property>
                         <property name="icon_size">1</property>
                         <style>
                           <class name="dimmed"/>

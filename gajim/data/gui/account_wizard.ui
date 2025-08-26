@@ -326,7 +326,7 @@
     <child>
       <object class="GtkImage">
         <property name="halign">center</property>
-        <property name="icon-name">feather-lock-symbolic</property>
+        <property name="icon-name">lucide-lock-symbolic</property>
       </object>
     </child>
     <child>

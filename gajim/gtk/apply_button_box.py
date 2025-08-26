@@ -62,7 +62,7 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         self._status_image.remove_css_class("success")
         self._status_image.remove_css_class("warning")
 
-        icon_name = "feather-check-symbolic"
+        icon_name = "lucide-check-symbolic"
         css_class = "success"
 
         if state == "error":

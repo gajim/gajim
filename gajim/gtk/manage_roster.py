@@ -591,7 +591,7 @@ class RosterListItem(GObject.Object):
             case None:
                 return (None, None, None)
             case "subscribe":
-                return ("feather-clock-symbolic", None, _("Request pending"))
+                return ("lucide-clock-symbolic", None, _("Request pending"))
             case _:
                 raise ValueError("Invalid value: %s" % ask)
 

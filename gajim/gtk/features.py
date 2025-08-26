@@ -190,5 +190,5 @@ class FeatureItem(Adw.ActionRow):
             self._icon.add_css_class("warning")
             self.set_subtitle(_("Disabled in Preferences"))
         else:
-            self._icon.set_from_icon_name("feather-check-symbolic")
+            self._icon.set_from_icon_name("lucide-check-symbolic")
             self._icon.add_css_class("success")

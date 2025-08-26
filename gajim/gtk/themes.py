@@ -318,7 +318,7 @@ class Option(Gtk.ListBoxRow, SignalManager):
             assert not isinstance(value, str)
             self._init_font(value)
 
-        remove_button = Gtk.Button.new_from_icon_name("feather-trash-symbolic")
+        remove_button = Gtk.Button.new_from_icon_name("lucide-trash-symbolic")
         remove_button.set_tooltip_text(_("Remove Setting"))
         self._connect(remove_button, "clicked", self._on_remove)
         self._box.append(remove_button)

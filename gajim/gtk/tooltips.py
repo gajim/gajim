@@ -108,7 +108,7 @@ class GCTooltip:
                 hat_badge.add_css_class("badge")
                 hat_badge.add_css_class("badge-hat")
 
-                hat_badge_icon = Gtk.Image.new_from_icon_name("feather-tag-symbolic")
+                hat_badge_icon = Gtk.Image.new_from_icon_name("lucide-tag-symbolic")
                 hat_badge.append(hat_badge_icon)
 
                 hat_badge_label = Gtk.Label(

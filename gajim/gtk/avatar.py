@@ -608,7 +608,7 @@ class AvatarStorage(metaclass=Singleton):
         context.rectangle(0, 0, width, height)
         context.fill()
 
-        icon_surface = load_icon_surface("feather-user", int(size * 0.7), scale)
+        icon_surface = load_icon_surface("lucide-user", int(size * 0.7), scale)
         if icon_surface is not None:
             pos = (width - width * 0.7) / 2
             context.set_source_surface(icon_surface, pos, pos)

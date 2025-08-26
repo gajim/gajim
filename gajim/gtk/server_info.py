@@ -365,7 +365,7 @@ class FeatureItem(Adw.ActionRow):
         self._icon.remove_css_class("success")
 
         if self._feature.available:
-            self._icon.set_from_icon_name("feather-check-symbolic")
+            self._icon.set_from_icon_name("lucide-check-symbolic")
             self._icon.add_css_class("success")
         else:
             self._icon.set_from_icon_name("window-close-symbolic")

@@ -33,7 +33,7 @@ class InfoMessage(BaseRow):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        icon = Gtk.Image.new_from_icon_name("feather-info-symbolic")
+        icon = Gtk.Image.new_from_icon_name("lucide-info-symbolic")
         icon.add_css_class("gajim-status-message")
         self.grid.attach(icon, 1, 0, 1, 1)
 

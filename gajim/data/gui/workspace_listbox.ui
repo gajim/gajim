@@ -8,7 +8,7 @@
       <object class="SideBarListBoxRow">
         <property name="item-id">add-workspace</property>
         <property name="index">999</property>
-        <property name="icon-name">feather-plus-symbolic</property>
+        <property name="icon-name">lucide-plus-symbolic</property>
         <property name="tooltip-text" translatable="yes">Add Workspace</property>
         <property name="selectable">false</property>
       </object>

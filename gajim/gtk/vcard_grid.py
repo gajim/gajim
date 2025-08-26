@@ -746,9 +746,9 @@ class VCardPropertyGui(SignalManager):
     @staticmethod
     def _get_icon_name(type_: str) -> str | None:
         if type_ == "home":
-            return "feather-home"
+            return "lucide-house"
         if type_ == "work":
-            return "feather-briefcase"
+            return "lucide-briefcase"
         return None
 
     def _on_type_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:

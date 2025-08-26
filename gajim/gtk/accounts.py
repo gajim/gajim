@@ -414,11 +414,11 @@ class PageMenuItem(MenuItem):
         if name == "general":
             icon = "avatar-default-symbolic"
         elif name == "privacy":
-            icon = "feather-eye-symbolic"
+            icon = "lucide-eye-symbolic"
         elif name == "encryption-omemo":
-            icon = "feather-lock-symbolic"
+            icon = "lucide-lock-symbolic"
         elif name == "connection":
-            icon = "feather-globe-symbolic"
+            icon = "lucide-globe-symbolic"
         elif name == "advanced":
             icon = "lucide-settings-symbolic"
         else:

@@ -313,7 +313,7 @@
                 <property name="tooltip-text" translatable="yes">Turn Camera on</property>
                 <child>
                   <object class="GtkImage" id="av_cam_image">
-                    <property name="icon-name">feather-camera-symbolic</property>
+                    <property name="icon-name">lucide-camera-symbolic</property>
                   </object>
                 </child>
               </object>

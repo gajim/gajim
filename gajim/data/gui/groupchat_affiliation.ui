@@ -136,7 +136,7 @@
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">feather-plus-symbolic</property>
+                    <property name="icon-name">lucide-plus-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -150,7 +150,7 @@
                 <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">feather-trash-symbolic</property>
+                    <property name="icon-name">lucide-trash-symbolic</property>
                   </object>
                 </child>
               </object>

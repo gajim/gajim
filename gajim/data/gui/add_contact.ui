@@ -156,7 +156,7 @@
         <property name="margin-bottom">6</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">feather-user-symbolic</property>
+            <property name="icon-name">lucide-user-symbolic</property>
           </object>
         </child>
         <layout>

@@ -238,7 +238,7 @@ class CallWindow(GajimAppWindow, EventHelper):
             self._ui.jingle_connection_spinner.set_visible(False)
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera on"))
-            self._ui.av_cam_image.set_from_icon_name("feather-camera-symbolic")
+            self._ui.av_cam_image.set_from_icon_name("lucide-camera-symbolic")
             if event.audio_state == JingleState.NULL:
                 self._ui.jingle_connection_state.set_text(_("Call ended"))
                 self._close_with_timeout()
@@ -249,14 +249,14 @@ class CallWindow(GajimAppWindow, EventHelper):
             self._ui.jingle_connection_state.set_text(_("Calling (Video)…"))
             self._ui.av_cam_button.set_sensitive(False)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera off"))
-            self._ui.av_cam_image.set_from_icon_name("feather-camera-off-symbolic")
+            self._ui.av_cam_image.set_from_icon_name("lucide-camera-off-symbolic")
 
         elif event.video_state == JingleState.CONNECTION_RECEIVED:
             self._ui.jingle_connection_state.set_text(_("Incoming Call (Video)"))
             self._ui.answer_video_button.set_visible(True)
             self._ui.av_cam_button.set_sensitive(False)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera off"))
-            self._ui.av_cam_image.set_from_icon_name("feather-camera-off-symbolic")
+            self._ui.av_cam_image.set_from_icon_name("lucide-camera-off-symbolic")
 
         elif event.video_state == JingleState.CONNECTED:
             self._ui.avatar_image.set_visible(False)
@@ -293,7 +293,7 @@ class CallWindow(GajimAppWindow, EventHelper):
 
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera off"))
-            self._ui.av_cam_image.set_from_icon_name("feather-camera-off-symbolic")
+            self._ui.av_cam_image.set_from_icon_name("lucide-camera-off-symbolic")
 
         elif event.video_state == JingleState.ERROR:
             self._ui.jingle_connection_state.set_text(_("Connection Error"))

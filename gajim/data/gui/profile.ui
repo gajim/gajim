@@ -191,7 +191,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">feather-plus-symbolic</property>
+                            <property name="icon-name">lucide-plus-symbolic</property>
                           </object>
                         </child>
                         <child>
@@ -214,7 +214,7 @@
                         <property name="popover">privacy_popover</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">feather-eye-symbolic</property>
+                            <property name="icon-name">lucide-eye-symbolic</property>
                           </object>
                         </child>
                       </object>

@@ -198,7 +198,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         self.setting_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
 
         self._locked_icon = Gtk.Image.new_from_icon_name(
-            "feather-lock-symbolic",
+            "lucide-lock-symbolic",
         )
         self._locked_icon.set_visible(False)
         self._locked_icon.set_tooltip_text(_("Setting is locked by the system"))

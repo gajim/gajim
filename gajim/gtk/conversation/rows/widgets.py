@@ -84,7 +84,7 @@ class MessageRowActions(Gtk.Box):
         self._more_popover.connect("closed", self._on_popover_closed)
 
         self._more_button = Gtk.MenuButton(
-            icon_name="feather-more-horizontal-symbolic", popover=self._more_popover
+            icon_name="lucide-ellipsis-symbolic", popover=self._more_popover
         )
         self._more_button.set_create_popup_func(self._on_create_more_popover)
 
@@ -331,7 +331,7 @@ class MessageIcons(Gtk.Box):
         self._message_state_image.set_visible(False)
         self._message_state_image.add_css_class("dimmed")
 
-        self._marker_image = Gtk.Image.new_from_icon_name("feather-check-symbolic")
+        self._marker_image = Gtk.Image.new_from_icon_name("lucide-check-symbolic")
         self._marker_image.set_visible(False)
         self._marker_image.add_css_class("dimmed")
         self._marker_image.set_tooltip_text(p_("Message state", "Received"))
@@ -372,10 +372,10 @@ class MessageIcons(Gtk.Box):
 
     def set_message_state_icon(self, state: MessageState) -> None:
         if state == MessageState.PENDING:
-            icon_name = "feather-clock-symbolic"
+            icon_name = "lucide-clock-symbolic"
             tooltip_text = _("Pending")
         else:
-            icon_name = "feather-check-symbolic"
+            icon_name = "lucide-check-symbolic"
             tooltip_text = _("Received")
         self._message_state_image.set_from_icon_name(icon_name)
         self._message_state_image.set_tooltip_text(tooltip_text)

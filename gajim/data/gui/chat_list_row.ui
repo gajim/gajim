@@ -45,7 +45,7 @@
                     <child>
                       <object class="GtkImage" id="group_chat_indicator">
                         <property name="visible">0</property>
-                        <property name="icon-name">feather-users-symbolic</property>
+                        <property name="icon-name">lucide-users-symbolic</property>
                         <style>
                           <class name="dimmed"/>
                         </style>
@@ -63,7 +63,7 @@
                       <object class="GtkImage" id="chatstate_image">
                         <property name="visible">0</property>
                         <property name="valign">end</property>
-                        <property name="icon-name">feather-more-horizontal-symbolic</property>
+                        <property name="icon-name">lucide-ellipsis-symbolic</property>
                         <style>
                           <class name="chat-state-icon"/>
                         </style>

@@ -23,7 +23,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">feather-trash-symbolic</property>
+                    <property name="icon-name">lucide-trash-symbolic</property>
                   </object>
                 </child>
                 <child>

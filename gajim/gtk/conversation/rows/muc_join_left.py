@@ -41,11 +41,11 @@ class MUCJoinLeft(BaseRow):
 
         if type_ == "muc-user-joined":
             text = self._make_join_message(nick)
-            icon_name = "feather-log-in-symbolic"
+            icon_name = "lucide-log-in-symbolic"
             icon_class = "gajim-user-connected"
         else:
             text = self._make_left_message(nick, reason, error)
-            icon_name = "feather-log-out-symbolic"
+            icon_name = "lucide-log-out-symbolic"
             icon_class = "gajim-user-disconnected"
 
         icon = Gtk.Image.new_from_icon_name(icon_name)

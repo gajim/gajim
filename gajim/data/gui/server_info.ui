@@ -18,7 +18,7 @@
           <object class="AdwViewStackPage">
             <property name="name">server</property>
             <property name="title" translatable="yes">Server</property>
-            <property name="icon-name">feather-server-symbolic</property>
+            <property name="icon-name">lucide-server-symbolic</property>
             <property name="child">
               <object class="AdwClamp">
                 <child>
@@ -196,7 +196,7 @@
           <object class="AdwViewStackPage">
             <property name="name">certificate</property>
             <property name="title" translatable="yes">Certificate</property>
-            <property name="icon-name">feather-lock-symbolic</property>
+            <property name="icon-name">lucide-lock-symbolic</property>
             <property name="child">
               <object class="GtkBox" id="cert_box">
                 <property name="orientation">vertical</property>
@@ -220,7 +220,7 @@
           <object class="AdwViewStackPage">
             <property name="name">features</property>
             <property name="title" translatable="yes">Features</property>
-            <property name="icon-name">feather-check-symbolic</property>
+            <property name="icon-name">lucide-check-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
                 <property name="vexpand">1</property>
