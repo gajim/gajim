@@ -53,7 +53,7 @@
             <property name="tooltip_text" translatable="yes">Clear Sound</property>
             <child>
               <object class="GtkImage">
-                <property name="icon_name">edit-clear-all-symbolic</property>
+                <property name="icon_name">lucide-brush-cleaning-symbolic</property>
               </object>
             </child>
           </object>
@@ -65,7 +65,7 @@
             <property name="tooltip_text" translatable="yes">Play Sound</property>
             <child>
               <object class="GtkImage">
-                <property name="icon_name">media-playback-start-symbolic</property>
+                <property name="icon_name">lucide-play-symbolic</property>
                 <property name="use_fallback">1</property>
               </object>
             </child>

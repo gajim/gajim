@@ -482,7 +482,7 @@ class ErrorWidget(Gtk.Box):
     ) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
 
-        image = Gtk.Image.new_from_icon_name("dialog-error-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-circle-x-symbolic")
         image.set_pixel_size(32)
         image.add_css_class("error")
         self.append(image)

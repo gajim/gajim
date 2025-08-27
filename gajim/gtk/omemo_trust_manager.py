@@ -41,10 +41,18 @@ log = logging.getLogger("gajim.gtk.omemo_trust_manager")
 
 
 TRUST_DATA = {
-    OMEMOTrust.UNTRUSTED: ("dialog-error-symbolic", _("Untrusted"), "error"),
-    OMEMOTrust.UNDECIDED: ("security-low-symbolic", _("Not Decided"), "warning"),
-    OMEMOTrust.VERIFIED: ("security-high-symbolic", _("Verified"), "encrypted-color"),
-    OMEMOTrust.BLIND: ("security-medium-symbolic", _("Blind Trust"), "encrypted-color"),
+    OMEMOTrust.UNTRUSTED: ("lucide-shield-x-symbolic", _("Untrusted"), "error"),
+    OMEMOTrust.UNDECIDED: ("lucide-shield-alert-symbolic", _("Not Decided"), "warning"),
+    OMEMOTrust.VERIFIED: (
+        "lucide-shield-check-symbolic",
+        _("Verified"),
+        "encrypted-color",
+    ),
+    OMEMOTrust.BLIND: (
+        "lucide-shield-question-mark-symbolic",
+        _("Blind Trust"),
+        "encrypted-color",
+    ),
 }
 
 
@@ -247,7 +255,7 @@ class KeyRow(Adw.ActionRow, SignalManager):
         self._trust = identity_info.trust
 
         self._copy_button = Gtk.Button(
-            icon_name="edit-copy-symbolic",
+            icon_name="lucide-copy-symbolic",
             tooltip_text=_("Copy to Clipboard"),
             valign=Gtk.Align.CENTER,
         )
@@ -436,7 +444,7 @@ class BlindOption(MenuOption):
     def __init__(self) -> None:
         MenuOption.__init__(
             self,
-            "security-medium-symbolic",
+            "lucide-shield-question-mark-symbolic",
             _("Blind Trust"),
             "encrypted-color",
             OMEMOTrust.BLIND,
@@ -447,7 +455,7 @@ class VerifiedOption(MenuOption):
     def __init__(self) -> None:
         MenuOption.__init__(
             self,
-            "security-high-symbolic",
+            "lucide-shield-check-symbolic",
             _("Verified"),
             "encrypted-color",
             OMEMOTrust.VERIFIED,
@@ -458,7 +466,7 @@ class NotTrustedOption(MenuOption):
     def __init__(self) -> None:
         MenuOption.__init__(
             self,
-            "dialog-error-symbolic",
+            "lucide-circle-x-symbolic",
             _("Untrusted"),
             "error",
             OMEMOTrust.UNTRUSTED,
@@ -467,4 +475,4 @@ class NotTrustedOption(MenuOption):
 
 class DeleteOption(MenuOption):
     def __init__(self) -> None:
-        MenuOption.__init__(self, "user-trash-symbolic", _("Delete"), "")
+        MenuOption.__init__(self, "lucide-trash-symbolic", _("Delete"), "")

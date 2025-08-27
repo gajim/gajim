@@ -57,7 +57,7 @@ class GroupchatConfig(Gtk.Box, SignalManager):
             self._ui.error_label.set_text(
                 _("You need Owner permission to change the configuration")
             )
-            self._ui.error_image.set_from_icon_name("dialog-error")
+            self._ui.error_image.set_from_icon_name("lucide-circle-x-symbolic")
             self._ui.stack.set_visible_child_name("error")
 
     def do_unroot(self) -> None:
@@ -88,7 +88,7 @@ class GroupchatConfig(Gtk.Box, SignalManager):
             result = task.finish()
         except StanzaError as error:
             self._ui.error_label.set_text(str(error))
-            self._ui.error_image.set_from_icon_name("dialog-error")
+            self._ui.error_image.set_from_icon_name("lucide-circle-x-symbolic")
             self._ui.stack.set_visible_child_name("error")
             return
 

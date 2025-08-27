@@ -28,7 +28,7 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
         inner_box = Gtk.Box()
         self.set_child(inner_box)
 
-        image = Gtk.Image.new_from_icon_name("dialog-question-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-circle-question-mark-symbolic")
         inner_box.append(image)
 
         self.add_css_class("pulse-opacity")
@@ -117,7 +117,7 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             )
             request_box.append(name_label)
 
-            decline_button = Gtk.Button.new_from_icon_name("process-stop-symbolic")
+            decline_button = Gtk.Button.new_from_icon_name("lucide-circle-x-symbolic")
             decline_button.set_tooltip_text(_("Decline"))
             self._connect(
                 decline_button, "clicked", self._on_decline, request, self._contact

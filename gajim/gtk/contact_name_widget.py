@@ -67,7 +67,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
 
         button_box.append(self._edit_button)
 
-        self._clear_button = Gtk.Button.new_from_icon_name("edit-clear-symbolic")
+        self._clear_button = Gtk.Button.new_from_icon_name("lucide-rotate-ccw-symbolic")
         self._clear_button.set_tooltip_text(_("Reset to original name"))
         self._clear_button.set_visible(False)
         self._connect(self._clear_button, "clicked", self._on_clear_button_clicked)
@@ -148,7 +148,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
         self._entry.grab_focus()
 
         self._edit_button.set_tooltip_text(_("Save display name"))
-        self._edit_button.set_icon_name("document-save-symbolic")
+        self._edit_button.set_icon_name("lucide-save-symbolic")
         self._clear_button.set_visible(True)
 
     def update_displayed_name(self, name: str) -> None:

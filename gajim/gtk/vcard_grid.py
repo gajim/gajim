@@ -700,7 +700,7 @@ class RemoveButton(Gtk.Button):
             self, halign=Gtk.Align.START, valign=Gtk.Align.CENTER, visible=False
         )
         self.add_css_class("image-button")
-        image = Gtk.Image.new_from_icon_name("user-trash-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-trash-symbolic")
         self.set_child(image)
 
 
@@ -916,7 +916,7 @@ class KeyPropertyGui(VCardPropertyGui):
         self._scrolled_window.set_size_request(350, 200)
         self._scrolled_window.set_has_frame(True)
 
-        self._copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
+        self._copy_button = Gtk.Button.new_from_icon_name("lucide-copy-symbolic")
         self._connect(self._copy_button, "clicked", self._on_copy_clicked)
         self._copy_button.set_halign(Gtk.Align.START)
         self._copy_button.set_valign(Gtk.Align.CENTER)

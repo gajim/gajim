@@ -19,7 +19,7 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">camera-web-symbolic</property>
+            <property name="icon-name">lucide-webcam-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>

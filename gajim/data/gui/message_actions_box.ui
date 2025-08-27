@@ -47,7 +47,7 @@
             <property name="popover">visitor_popover</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">dialog-information-symbolic</property>
+                <property name="icon-name">lucide-info-symbolic</property>
               </object>
             </child>
             <style>
@@ -84,7 +84,7 @@
             <property name="tooltip-text" translatable="yes">Cancel</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">window-close-symbolic</property>
+                <property name="icon-name">lucide-x-symbolic</property>
               </object>
             </child>
           </object>
@@ -103,7 +103,7 @@
             <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">face-smile-symbolic</property>
+                <property name="icon-name">lucide-smile-symbolic</property>
               </object>
             </child>
           </object>
@@ -118,7 +118,7 @@
             <property name="direction">up</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">format-text-bold-symbolic</property>
+                <property name="icon-name">lucide-italic-symbolic</property>
               </object>
             </child>
           </object>
@@ -196,7 +196,7 @@
             <property name="action-target">[&apos;&apos;]</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">mail-attachment-symbolic</property>
+                <property name="icon-name">lucide-paperclip-symbolic</property>
               </object>
             </child>
           </object>
@@ -208,7 +208,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkImage" id="encryption_image">
-                <property name="icon-name">channel-insecure-symbolic</property>
+                <property name="icon-name">lucide-lock-open-symbolic</property>
               </object>
             </child>
           </object>

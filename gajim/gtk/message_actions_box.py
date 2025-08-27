@@ -537,7 +537,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._ui.state_box_label.set_text(
                 _("You are offline. Go online to send messages…")
             )
-            self._ui.state_box_image.set_from_icon_name("network-offline-symbolic")
+            self._ui.state_box_image.set_from_icon_name("lucide-cloud-off-symbolic")
 
         if isinstance(self._contact, GroupchatContact):
             state = self._contact.is_joined
@@ -558,7 +558,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._ui.state_box_label.set_text(
                 _("You can’t send private messages to contacts if they are offline.")
             )
-            self._ui.state_box_image.set_from_icon_name("network-offline-symbolic")
+            self._ui.state_box_image.set_from_icon_name("lucide-cloud-off-symbolic")
 
         self._ui.state_box.set_visible(not state)
 
@@ -613,10 +613,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             if encryption in ("OMEMO", "OpenPGP", "PGP"):
                 icon_name = "lucide-lock-symbolic"
             else:
-                icon_name = "channel-insecure-symbolic"
+                icon_name = "lucide-lock-open-symbolic"
 
         else:
-            icon_name = "channel-insecure-symbolic"
+            icon_name = "lucide-lock-open-symbolic"
             if isinstance(contact, GroupchatContact):
                 tooltip = _("This is a public group chat. Encryption is not available.")
             elif isinstance(contact, GroupchatParticipant):
@@ -659,10 +659,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         if authenticated:
             authenticated_string = _("and authenticated")
-            icon_name = "security-high-symbolic"
+            icon_name = "lucide-shield-check-symbolic"
         else:
             authenticated_string = _("and NOT authenticated")
-            icon_name = "security-low-symbolic"
+            icon_name = "lucide-shield-alert-symbolic"
 
         tooltip = _("%(type)s encryption is active %(authenticated)s.") % {
             "type": enc_type,

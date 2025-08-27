@@ -1417,7 +1417,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         AgentBrowser._add_actions(self)
         self.execute_button = Gtk.Button(label=_("_Command"), use_underline=True)
         self.execute_button.connect("clicked", self._on_execute_button_clicked)
-        image = Gtk.Image.new_from_icon_name("utilities-terminal-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-terminal-symbolic")
         self.execute_button.set_child(image)
         self.window.action_buttonbox.append(self.execute_button)
         self.execute_button.set_visible(True)
@@ -1434,7 +1434,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         self.search_button = Gtk.Button(label=_("_Search"), use_underline=True)
         self.search_button.connect("clicked", self.on_search_button_clicked)
-        image = Gtk.Image.new_from_icon_name("edit-find-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-search-symbolic")
         self.search_button.set_child(image)
         self.window.action_buttonbox.append(self.search_button)
         self.search_button.set_visible(True)

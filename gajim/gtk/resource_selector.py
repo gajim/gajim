@@ -72,7 +72,7 @@ class ResourceSelector(Gtk.ScrolledWindow, SignalManager):
         self.emit("selection-changed", state)
 
     def _set_placeholder(self) -> None:
-        image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-circle-alert-symbolic")
         label = Gtk.Label(label=_("No devices online"))
         box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=6, valign=Gtk.Align.CENTER
@@ -103,7 +103,7 @@ class ResourceRow(Gtk.ListBoxRow):
 
         self.jid = resource_contact.jid
 
-        icon_name = "computer-symbolic"
+        icon_name = "lucide-laptop-symbolic"
         tooltip_text = _("Computer")
         self.device_text = resource_contact.jid.resource or ""
 
@@ -114,7 +114,7 @@ class ResourceRow(Gtk.ListBoxRow):
                 self.device_text = f"{name} ({resource_contact.jid.resource})"
             if type_ is not None:
                 if type_ == "phone":
-                    icon_name = "phone-symbolic"
+                    icon_name = "lucide-smartphone-symbolic"
                     tooltip_text = _("Phone")
 
         image = Gtk.Image(icon_name=icon_name, tooltip_text=tooltip_text, pixel_size=32)

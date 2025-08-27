@@ -13,7 +13,7 @@
     </child>
     <child>
       <object class="GtkButton" id="_button">
-        <property name="icon-name">object-select-symbolic</property>
+        <property name="icon-name">lucide-check-symbolic</property>
         <property name="tooltip-text" translatable="yes">Set status message</property>
         <signal name="clicked" handler="_set_status_message" />
       </object>

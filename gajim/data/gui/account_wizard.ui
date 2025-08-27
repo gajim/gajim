@@ -37,7 +37,7 @@
     </child>
     <child>
       <object class="GtkImage">
-        <property name="icon-name">go-down-symbolic</property>
+        <property name="icon-name">lucide-chevron-down-symbolic</property>
       </object>
     </child>
     <child>
@@ -297,7 +297,7 @@
       <object class="GtkImage">
         <property name="halign">center</property>
         <property name="pixel-size">48</property>
-        <property name="icon-name">applications-internet-symbolic</property>
+        <property name="icon-name">lucide-globe-symbolic</property>
       </object>
     </child>
     <child>
@@ -554,7 +554,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <child>
           <object class="GtkImage" id="update_provider_list_icon">
             <property name="tooltip-text" translatable="yes">Updating provider list…</property>
-            <property name="icon-name">view-refresh-symbolic</property>
+            <property name="icon-name">lucide-refresh-cw-symbolic</property>
           </object>
         </child>
         <child>
@@ -565,7 +565,7 @@ Creating an account with one provider allows you to communicate with contacts fr
             <property name="popover">server_recommendations</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">dialog-information-symbolic</property>
+                <property name="icon-name">lucide-info-symbolic</property>
               </object>
             </child>
           </object>

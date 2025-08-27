@@ -99,7 +99,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">dialog-error-symbolic</property>
+                <property name="icon-name">lucide-circle-x-symbolic</property>
                 <style>
                   <class name="error"/>
                 </style>
@@ -120,7 +120,7 @@
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">window-close-symbolic</property>
+                    <property name="icon-name">lucide-x-symbolic</property>
                   </object>
                 </child>
               </object>

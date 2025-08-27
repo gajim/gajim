@@ -368,7 +368,7 @@ class FeatureItem(Adw.ActionRow):
             self._icon.set_from_icon_name("lucide-check-symbolic")
             self._icon.add_css_class("success")
         else:
-            self._icon.set_from_icon_name("window-close-symbolic")
+            self._icon.set_from_icon_name("lucide-x-symbolic")
             self._icon.add_css_class("error")
 
     def update(self, feature: Feature) -> None:

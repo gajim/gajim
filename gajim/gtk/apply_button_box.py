@@ -66,7 +66,7 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         css_class = "success"
 
         if state == "error":
-            icon_name = "dialog-warning-symbolic"
+            icon_name = "lucide-circle-alert-symbolic"
             css_class = "warning"
 
         self._status_image.set_from_icon_name(icon_name)

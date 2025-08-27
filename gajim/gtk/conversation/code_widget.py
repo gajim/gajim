@@ -35,7 +35,7 @@ class CodeWidget(Gtk.Box, SignalManager):
         self._lang_label = Gtk.Label()
         header.append(self._lang_label)
 
-        copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
+        copy_button = Gtk.Button.new_from_icon_name("lucide-copy-symbolic")
         copy_button.set_tooltip_text(_("Copy code snippet"))
         copy_button.set_halign(Gtk.Align.END)
         copy_button.set_hexpand(True)

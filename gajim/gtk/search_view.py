@@ -224,7 +224,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
             text = _("Search")
             description = _("Search in chats…")
 
-        self._ui.status_page.set_icon_name("system-search-symbolic")
+        self._ui.status_page.set_icon_name("lucide-search-symbolic")
         self._ui.status_page.set_title(text)
         self._ui.status_page.set_description(description)
 

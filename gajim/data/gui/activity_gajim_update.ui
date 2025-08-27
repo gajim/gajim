@@ -29,7 +29,7 @@
             <property name="can-focus">False</property>
             <property name="margin-bottom">18</property>
             <property name="pixel-size">36</property>
-            <property name="icon-name">dialog-question-symbolic</property>
+            <property name="icon-name">lucide-circle-question-mark-symbolic</property>
           </object>
         </child>
         <child>

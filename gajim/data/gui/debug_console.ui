@@ -76,13 +76,13 @@
                             <child>
                               <object class="GtkButton" id="search_forward">
                                 <property name="use-underline">1</property>
-                                <property name="icon-name">go-down-symbolic</property>
+                                <property name="icon-name">lucide-chevron-down-symbolic</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="search_backward">
                                 <property name="use-underline">1</property>
-                                <property name="icon-name">go-up-symbolic</property>
+                                <property name="icon-name">lucide-chevron-up-symbolic</property>
                               </object>
                             </child>
                             <child>
@@ -136,7 +136,7 @@
                               <object class="GtkImage">
                                 <property name="margin-start">4</property>
                                 <property name="margin-end">4</property>
-                                <property name="icon-name">go-bottom-symbolic</property>
+                                <property name="icon-name">lucide-chevrons-down-symbolic</property>
                               </object>
                             </child>
                             <style>
@@ -180,7 +180,7 @@
                     <property name="tooltip-text" translatable="yes">Filter</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">applications-system-symbolic</property>
+                        <property name="icon-name">lucide-list-filter-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -193,7 +193,7 @@
                     <property name="tooltip-text" translatable="yes">Clear</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">edit-clear-all-symbolic</property>
+                        <property name="icon-name">lucide-brush-cleaning-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -217,7 +217,7 @@
                     <child>
                       <object class="GtkImage">
                         <property name="tooltip-text" translatable="yes">Paste Last Input</property>
-                        <property name="icon-name">insert-text-symbolic</property>
+                        <property name="icon-name">lucide-clipboard-paste-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -277,7 +277,7 @@
         <property name="margin-start">6</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">system-search-symbolic</property>
+            <property name="icon-name">lucide-search-symbolic</property>
           </object>
         </child>
       </object>

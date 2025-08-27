@@ -72,7 +72,7 @@
         <object class="GtkMenuButton" id="subscribe_menu_button">
           <child>
             <object class="GtkImage">
-              <property name="icon-name">view-more-symbolic</property>
+              <property name="icon-name">lucide-ellipsis-vertical-symbolic</property>
             </object>
           </child>
         </object>

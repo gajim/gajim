@@ -27,7 +27,7 @@ class CommandOutputRow(BaseRow):
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
-        icon = Gtk.Image.new_from_icon_name("utilities-terminal-symbolic")
+        icon = Gtk.Image.new_from_icon_name("lucide-terminal-symbolic")
         icon.set_pixel_size(32)
         icon.add_css_class("dimmed")
         avatar_placeholder.append(icon)

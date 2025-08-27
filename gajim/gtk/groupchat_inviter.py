@@ -97,7 +97,7 @@ class ContactRow(Gtk.ListBoxRow):
 
     def _get_avatar_image(self, contact: types.BareContact | None) -> Gtk.Image:
         if contact is None:
-            icon_name = "avatar-default"
+            icon_name = "lucide-user-symbolic"
             return Gtk.Image.new_from_icon_name(icon_name)
 
         scale = self.get_scale_factor()

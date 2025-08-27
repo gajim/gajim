@@ -1098,7 +1098,7 @@ class AdvancedGroup(GajimPreferencesGroup):
                 SettingType.VALUE,
                 app.get_debug_mode(),
                 props={
-                    "button-icon-name": "folder-symbolic",
+                    "button-icon-name": "lucide-folder-symbolic",
                     "button-callback": self._on_open_debug_logs,
                 },
                 callback=self._on_debug_logging,
@@ -1167,7 +1167,7 @@ class GeneralPage(GajimPreferencePage):
             title=_("General"),
             groups=[WindowBehaviourGroup],
             menu=SideBarMenuItem(
-                "general", _("General"), icon_name="computer-symbolic"
+                "general", _("General"), icon_name="lucide-app-window-symbolic"
             ),
         )
 
@@ -1185,7 +1185,7 @@ class ChatsPage(GajimPreferencePage):
                 FilePreviewGroup,
             ],
             menu=SideBarMenuItem(
-                "chats", _("Chats"), icon_name="user-available-symbolic"
+                "chats", _("Chats"), icon_name="lucide-message-circle-symbolic"
             ),
         )
 
@@ -1203,7 +1203,7 @@ class VisualNotificationsPage(GajimPreferencePage):
             menu=SideBarMenuItem(
                 "visual-notifications",
                 _("Notifications"),
-                icon_name="mail-unread-symbolic",
+                icon_name="lucide-bell-symbolic",
             ),
         )
 
@@ -1232,7 +1232,7 @@ class StylePage(GajimPreferencePage):
             title=_("Style"),
             groups=[ThemesGroup],
             menu=SideBarMenuItem(
-                "style", _("Style"), icon_name="applications-graphics-symbolic"
+                "style", _("Style"), icon_name="lucide-palette-symbolic"
             ),
         )
 
@@ -1249,7 +1249,7 @@ class AudioVideoPage(GajimPreferencePage):
                 # VideoGroup,
             ],
             menu=SideBarMenuItem(
-                "audio-video", _("Audio"), icon_name="audio-input-microphone-symbolic"
+                "audio-video", _("Audio"), icon_name="lucide-mic-symbolic"
             ),
         )
 

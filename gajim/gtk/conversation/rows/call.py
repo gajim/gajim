@@ -147,7 +147,7 @@ class CallRow(BaseRow):
         meta_box.append(timestamp_widget)
         self.grid.attach(meta_box, 1, 0, 1, 1)
 
-        icon = Gtk.Image.new_from_icon_name("call-start-symbolic")
+        icon = Gtk.Image.new_from_icon_name("lucide-phone-symbolic")
 
         label = SimpleLabel()
         label.add_css_class("dimmed")
@@ -199,7 +199,7 @@ class CallRow(BaseRow):
             self._decline_button.set_sensitive(not self._session.accepted)
         self._decline_button.add_css_class("destructive-action")
         self._connect(self._decline_button, "clicked", self._on_decline)
-        decline_icon = Gtk.Image.new_from_icon_name("call-stop-symbolic")
+        decline_icon = Gtk.Image.new_from_icon_name("lucide-phone-off-symbolic")
         self._decline_button.set_child(decline_icon)
         decline_label = Gtk.Label(label=_("Decline"))
         decline_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
@@ -211,7 +211,7 @@ class CallRow(BaseRow):
             self._accept_button.set_sensitive(not self._session.accepted)
         self._accept_button.add_css_class("suggested-action")
         self._connect(self._accept_button, "clicked", self._on_accept)
-        accept_icon = Gtk.Image.new_from_icon_name("call-start-symbolic")
+        accept_icon = Gtk.Image.new_from_icon_name("lucide-phone-symbolic")
         self._accept_button.set_child(accept_icon)
         accept_label = Gtk.Label(label=_("Accept"))
         accept_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)

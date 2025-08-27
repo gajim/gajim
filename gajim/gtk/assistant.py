@@ -283,14 +283,14 @@ class DefaultPage(Page):
 class ErrorPage(DefaultPage):
     def __init__(self) -> None:
         DefaultPage.__init__(
-            self, icon_name="dialog-error-symbolic", icon_css_class="error"
+            self, icon_name="lucide-circle-x-symbolic", icon_css_class="error"
         )
 
 
 class SuccessPage(DefaultPage):
     def __init__(self) -> None:
         DefaultPage.__init__(
-            self, icon_name="object-select-symbolic", icon_css_class="success"
+            self, icon_name="lucide-check-symbolic", icon_css_class="success"
         )
 
 

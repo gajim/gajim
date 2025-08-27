@@ -60,7 +60,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">avatar-default-symbolic</property>
+                        <property name="icon-name">lucide-user-symbolic</property>
                         <property name="pixel-size">48</property>
                         <style>
                           <class name="dimmed"/>

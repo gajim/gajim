@@ -15,7 +15,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">dialog-information-symbolic</property>
+                <property name="icon-name">lucide-info-symbolic</property>
               </object>
             </child>
             <child>
@@ -47,7 +47,7 @@
               <object class="GtkImage">
                 <property name="valign">start</property>
                 <property name="pixel-size">48</property>
-                <property name="icon-name">face-embarrassed</property>
+                <property name="icon-name">lucide-frown-symbolic</property>
               </object>
             </child>
             <child>

@@ -36,7 +36,7 @@
         </child>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">avatar-default-symbolic</property>
+            <property name="icon-name">lucide-user-symbolic</property>
             <property name="pixel-size">64</property>
             <layout>
               <property name="column">0</property>

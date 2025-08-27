@@ -20,7 +20,7 @@
                         <property name="margin-end">6</property>
                         <property name="margin-bottom">6</property>
                         <property name="pixel-size">100</property>
-                        <property name="icon-name">missing-image</property>
+                        <property name="icon-name">lucide-image-off-symbolic</property>
                       </object>
                     </property>
                     <child type="overlay">
@@ -32,7 +32,7 @@
                         <property name="valign">end</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">user-trash-symbolic</property>
+                            <property name="icon-name">lucide-trash-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -239,9 +239,6 @@
                     <property name="focusable">1</property>
                     <property name="margin-bottom">6</property>
                     <property name="activates-default">1</property>
-                    <property name="secondary-icon-name">face-smile-symbolic</property>
-                    <property name="secondary-icon-tooltip-text" translatable="yes">Insert Emoji</property>
-                    <property name="secondary-icon-tooltip-markup" translatable="yes">Insert Emoji</property>
                     <property name="placeholder-text" translatable="yes">Reason (optional)...</property>
                     <property name="show-emoji-icon">1</property>
                   </object>

@@ -144,7 +144,7 @@ class ErrorPage(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=18)
         self.set_vexpand(True)
         self.set_homogeneous(True)
-        error_icon = Gtk.Image.new_from_icon_name("dialog-error")
+        error_icon = Gtk.Image.new_from_icon_name("lucide-circle-x-symbolic")
         error_icon.set_valign(Gtk.Align.END)
 
         self._error_label = Gtk.Label(

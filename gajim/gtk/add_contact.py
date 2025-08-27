@@ -272,7 +272,7 @@ class Address(Page):
         self._set_complete()
 
     def _show_icon(self, show: bool) -> None:
-        icon = "dialog-warning-symbolic" if show else None
+        icon = "lucide-circle-alert-symbolic" if show else None
         self._ui.address_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )

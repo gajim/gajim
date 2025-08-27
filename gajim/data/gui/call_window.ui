@@ -265,7 +265,7 @@
           <object class="GtkImage" id="jingle_audio_state">
             <property name="visible">0</property>
             <property name="pixel-size">50</property>
-            <property name="icon-name">audio-input-microphone-symbolic</property>
+            <property name="icon-name">lucide-mic-symbolic</property>
             <style>
               <class name="dimmed"/>
               <class name="pulse-transform"/>
@@ -327,7 +327,7 @@
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">call-stop</property>
+                    <property name="icon-name">lucide-phone-off-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -368,7 +368,7 @@ microphone-sensitivity-high-symbolic</property>
                 <property name="has-tooltip">1</property>
                 <property name="orientation">vertical</property>
                 <property name="adjustment">adjustment2</property>
-                <property name="icons">audio-volume-muted-symbolic
+                <property name="icons">lucide-volume-off-symbolic
 audio-volume-low-symbolic
 audio-volume-medium-symbolic
 audio-volume-high-symbolic</property>
@@ -393,7 +393,7 @@ audio-volume-high-symbolic</property>
                 <property name="popover">dtmf_popover</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">input-dialpad-symbolic</property>
+                    <property name="icon-name">lucide-hash-symbolic</property>
                   </object>
                 </child>
               </object>

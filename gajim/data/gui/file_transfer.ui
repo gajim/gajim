@@ -9,7 +9,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">document-send-symbolic</property>
+            <property name="icon-name">lucide-send-symbolic</property>
             <style>
               <class name="dimmed"/>
             </style>

@@ -56,7 +56,7 @@ This may take a while…</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">dialog-error-symbolic</property>
+                    <property name="icon-name">lucide-circle-x-symbolic</property>
                     <property name="pixel-size">32</property>
                     <style>
                       <class name="error"/>

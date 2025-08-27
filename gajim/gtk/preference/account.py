@@ -703,7 +703,7 @@ class AccountGeneralPage(GajimPreferencePage):
             menu=SideBarMenuItem(
                 f"{account}-general",
                 _("General"),
-                icon_name="avatar-default-symbolic",
+                icon_name="lucide-user-symbolic",
             ),
         )
 

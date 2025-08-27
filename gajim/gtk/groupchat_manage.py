@@ -302,7 +302,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
             try:
                 jid = validate_jid(jid)
             except Exception:
-                icon = "dialog-warning-symbolic"
+                icon = "lucide-circle-alert-symbolic"
                 text = _("Invalid XMPP Address")
                 self._ui.destroy_alternate_entry.set_icon_from_icon_name(
                     Gtk.EntryIconPosition.SECONDARY, icon

@@ -134,7 +134,7 @@
                             <property name="halign">center</property>
                             <property name="child">
                               <object class="GtkImage" id="avatar_image">
-                                <property name="icon-name">avatar-default-symbolic</property>
+                                <property name="icon-name">lucide-user-symbolic</property>
                               </object>
                             </property>
                             <child type="overlay">
@@ -146,7 +146,7 @@
                                 <property name="valign">end</property>
                                 <child>
                                   <object class="GtkImage">
-                                    <property name="icon-name">user-trash-symbolic</property>
+                                    <property name="icon-name">lucide-trash-symbolic</property>
                                   </object>
                                 </child>
                               </object>
@@ -297,7 +297,7 @@
                 <property name="column-homogeneous">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">dialog-error</property>
+                    <property name="icon-name">lucide-circle-x-symbolic</property>
                     <layout>
                       <property name="column">0</property>
                       <property name="row">0</property>

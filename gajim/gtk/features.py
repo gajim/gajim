@@ -181,12 +181,12 @@ class FeatureItem(Adw.ActionRow):
         self._icon.remove_css_class("success")
 
         if not available:
-            self._icon.set_from_icon_name("window-close-symbolic")
+            self._icon.set_from_icon_name("lucide-x-symbolic")
             self._icon.add_css_class("error")
             return
 
         if enabled is not None and not enabled:
-            self._icon.set_from_icon_name("dialog-warning-symbolic")
+            self._icon.set_from_icon_name("lucide-circle-alert-symbolic")
             self._icon.add_css_class("warning")
             self.set_subtitle(_("Disabled in Preferences"))
         else:

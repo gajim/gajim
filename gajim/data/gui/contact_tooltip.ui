@@ -84,7 +84,7 @@
       <object class="GtkImage" id="avatar">
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="icon-name">image-missing</property>
+        <property name="icon-name">lucide-image-off-symbolic</property>
         <layout>
           <property name="column">0</property>
           <property name="row">0</property>

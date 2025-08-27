@@ -91,7 +91,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkImage" id="record_toggle_button_image">
-                            <property name="icon-name">media-record-symbolic</property>
+                            <property name="icon-name">lucide-mic-symbolic</property>
                           </object>
                         </child>
                         <child>

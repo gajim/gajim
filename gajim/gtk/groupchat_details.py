@@ -55,7 +55,7 @@ class GroupchatDetails(GajimAppWindow):
                     "information", _("Information"), icon_name="lucide-user-symbolic"
                 ),
                 SideBarMenuItem(
-                    "settings", _("Settings"), icon_name="document-properties-symbolic"
+                    "settings", _("Settings"), icon_name="lucide-settings-symbolic"
                 ),
                 SideBarMenuItem(
                     "encryption-omemo",
@@ -65,7 +65,7 @@ class GroupchatDetails(GajimAppWindow):
                 SideBarMenuItem(
                     "blocks",
                     _("Blocked Participants"),
-                    icon_name="system-users-symbolic",
+                    icon_name="lucide-users-symbolic",
                 ),
                 SideBarMenuItem(
                     "manage",
@@ -77,19 +77,19 @@ class GroupchatDetails(GajimAppWindow):
                     "affiliations",
                     _("Affiliations"),
                     group=_("Administration"),
-                    icon_name="system-users-symbolic",
+                    icon_name="lucide-users-symbolic",
                 ),
                 SideBarMenuItem(
                     "outcasts",
                     _("Outcasts"),
                     group=_("Administration"),
-                    icon_name="system-users-symbolic",
+                    icon_name="lucide-users-symbolic",
                 ),
                 SideBarMenuItem(
                     "config",
                     _("Configuration"),
                     group=_("Administration"),
-                    icon_name="document-properties-symbolic",
+                    icon_name="lucide-settings-symbolic",
                 ),
             ],
             visible=False,

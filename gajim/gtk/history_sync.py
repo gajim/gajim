@@ -255,7 +255,7 @@ class Progress(Page):
         self._count = 0
         self._received = 0
 
-        image = Gtk.Image.new_from_icon_name("folder-download-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-file-down-symbolic")
         image.set_pixel_size(64)
 
         self._progress_bar = Gtk.ProgressBar()

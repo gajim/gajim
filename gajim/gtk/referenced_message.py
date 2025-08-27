@@ -235,7 +235,7 @@ class ReplyBox(Gtk.Box, SignalManager):
         reply_image.add_css_class("dimmed")
         self.append(reply_image)
 
-        self._close_button = Gtk.Button.new_from_icon_name("window-close-symbolic")
+        self._close_button = Gtk.Button.new_from_icon_name("lucide-x-symbolic")
         self._close_button.set_valign(Gtk.Align.CENTER)
         self._close_button.set_tooltip_text(_("Cancel"))
         self._connect(self._close_button, "clicked", self.disable_reply_mode)

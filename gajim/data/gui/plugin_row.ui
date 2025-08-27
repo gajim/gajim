@@ -7,7 +7,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage" id="_warning_icon">
-            <property name="icon-name">dialog-warning-symbolic</property>
+            <property name="icon-name">lucide-circle-alert-symbolic</property>
             <property name="valign">3</property>
             <style>
               <class name="warning"/>
@@ -98,7 +98,7 @@
         </style>
         <child type="suffix">
           <object class="GtkImage">
-            <property name="icon-name">dialog-warning-symbolic</property>
+            <property name="icon-name">lucide-circle-alert-symbolic</property>
             <style>
               <class name="warning"/>
             </style>

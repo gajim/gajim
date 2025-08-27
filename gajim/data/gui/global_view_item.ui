@@ -58,7 +58,7 @@
         <property name="tooltip-text" translatable="yes">Participants Count</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">system-users-symbolic</property>
+            <property name="icon-name">lucide-users-symbolic</property>
           </object>
         </child>
         <child>

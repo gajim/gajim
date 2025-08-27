@@ -338,7 +338,9 @@ class Field(GObject.GObject, SignalManager):
             xalign=bool(options.get("right-align")),
         )
 
-        self._warning_image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
+        self._warning_image = Gtk.Image.new_from_icon_name(
+            "lucide-circle-alert-symbolic"
+        )
         self._warning_image.add_css_class("warning")
         self._warning_image.set_visible(False)
         self._warning_image.set_valign(Gtk.Align.CENTER)

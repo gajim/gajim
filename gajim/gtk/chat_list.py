@@ -669,7 +669,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
                 return
             row.set_timestamp(datetime.now().astimezone())
             row.set_nick("")
-            row.set_message_text(_("Call"), icon_name="call-start-symbolic")
+            row.set_message_text(_("Call"), icon_name="lucide-phone-symbolic")
 
     def _on_file_request_received(self, event: events.FileRequestReceivedEvent) -> None:
         row = self._chats.get((event.account, event.jid))
@@ -677,7 +677,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return
         row.set_timestamp(datetime.now().astimezone())
         row.set_nick("")
-        row.set_message_text(_("File"), icon_name="text-x-generic-symbolic")
+        row.set_message_text(_("File"), icon_name="lucide-paperclip-symbolic")
 
     def _on_account_changed(self, *args: Any) -> None:
         for row in self._iterate_rows():

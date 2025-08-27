@@ -98,7 +98,7 @@
                 <property name="tooltip-text" translatable="yes">Rewind 10 seconds</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">media-seek-backward-symbolic</property>
+                    <property name="icon-name">lucide-rewind-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -110,7 +110,7 @@
                 <child>
                   <object class="GtkImage" id="play_icon">
                     <property name="tooltip-text" translatable="yes">Start/stop playback</property>
-                    <property name="icon-name">media-playback-start-symbolic</property>
+                    <property name="icon-name">lucide-play-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -122,7 +122,7 @@
                 <child>
                   <object class="GtkImage">
                     <property name="tooltip-text" translatable="yes">Forward 10 seconds</property>
-                    <property name="icon-name">media-seek-forward-symbolic</property>
+                    <property name="icon-name">lucide-fast-forward-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -174,7 +174,7 @@
                         <property name="halign">center</property>
                         <property name="valign">center</property>
                         <property name="margin-start">2</property>
-                        <property name="icon-name">go-down-symbolic</property>
+                        <property name="icon-name">lucide-chevron-down-symbolic</property>
                       </object>
                     </child>
                     <style>

@@ -92,7 +92,7 @@
                             <property name="tooltip-text" translatable="yes">Cancel Download</property>
                             <child>
                               <object class="GtkImage">
-                                <property name="icon-name">process-stop-symbolic</property>
+                                <property name="icon-name">lucide-circle-x-symbolic</property>
                               </object>
                             </child>
                           </object>
@@ -199,7 +199,7 @@
                         <property name="tooltip-text" translatable="yes">Open folder</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">folder-symbolic</property>
+                            <property name="icon-name">lucide-folder-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -212,7 +212,7 @@
                         <property name="tooltip-text" translatable="yes">Save as...</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">document-save-as-symbolic</property>
+                            <property name="icon-name">lucide-save-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -225,7 +225,7 @@
                         <property name="tooltip-text" translatable="yes">Download</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">folder-download-symbolic</property>
+                            <property name="icon-name">lucide-file-down-symbolic</property>
                           </object>
                         </child>
                       </object>

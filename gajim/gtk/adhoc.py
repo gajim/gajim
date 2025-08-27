@@ -529,11 +529,11 @@ class SeverityIcon(Gtk.Image):
         self.remove_css_class("warning")
         self.remove_css_class("error")
         if severity == AdHocNoteType.INFO:
-            self.set_from_icon_name("object-select-symbolic")
+            self.set_from_icon_name("lucide-check-symbolic")
             self.add_css_class("success")
         elif severity == AdHocNoteType.WARN:
-            self.set_from_icon_name("dialog-warning-symbolic")
+            self.set_from_icon_name("lucide-circle-alert-symbolic")
             self.add_css_class("warning")
         elif severity == AdHocNoteType.ERROR:
-            self.set_from_icon_name("dialog-error-symbolic")
+            self.set_from_icon_name("lucide-circle-x-symbolic")
             self.add_css_class("error")

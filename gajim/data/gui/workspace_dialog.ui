@@ -26,7 +26,7 @@
             <property name="tooltip-text" translatable="yes">Remove this workspace</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">edit-delete-symbolic</property>
+                <property name="icon-name">lucide-trash-symbolic</property>
               </object>
             </child>
           </object>

@@ -100,7 +100,7 @@
                                 <property name="halign">end</property>
                                 <property name="valign">center</property>
                                 <property name="tooltip-text" translatable="yes">Copy to Clipboard</property>
-                                <property name="icon-name">edit-copy-symbolic</property>
+                                <property name="icon-name">lucide-copy-symbolic</property>
                               </object>
                             </child>
                             <child>
@@ -115,7 +115,7 @@
                                 <property name="popover">qr_code_popover</property>
                                 <child>
                                   <object class="GtkImage">
-                                    <property name="icon-name">qr-code-scan-symbolic</property>
+                                    <property name="icon-name">lucide-scan-qr-code-symbolic</property>
                                   </object>
                                 </child>
                                 <style>
@@ -182,7 +182,7 @@
                         <property name="popover">search_popover</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">edit-find-symbolic</property>
+                            <property name="icon-name">lucide-search-symbolic</property>
                           </object>
                         </child>
                       </object>

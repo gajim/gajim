@@ -653,7 +653,7 @@ class FileChooserSetting(GenericSetting):
         self._connect(button, "path-picked", self._on_select)
 
         clear_button = Gtk.Button(
-            icon_name="edit-clear-all-symbolic", tooltip_text=_("Clear File")
+            icon_name="lucide-brush-cleaning-symbolic", tooltip_text=_("Clear File")
         )
         self._connect(clear_button, "clicked", lambda *args: button.reset())  # type: ignore
         self.setting_box.prepend(clear_button)

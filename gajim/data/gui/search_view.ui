@@ -23,7 +23,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">go-first-symbolic</property>
+                    <property name="icon-name">lucide-chevron-first-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -56,7 +56,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">go-last-symbolic</property>
+                    <property name="icon-name">lucide-chevron-last-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -105,7 +105,7 @@
             <property name="tooltip-text" translatable="yes">Close</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">window-close-symbolic</property>
+                <property name="icon-name">lucide-x-symbolic</property>
               </object>
             </child>
           </object>
@@ -142,7 +142,7 @@
                 <property name="selection-mode">none</property>
                 <child type="placeholder">
                   <object class="AdwStatusPage" id="status_page">
-                    <property name="icon-name">system-search-symbolic</property>
+                    <property name="icon-name">lucide-search-symbolic</property>
                     <property name="title" translatable="yes"></property>
                     <style>
                       <class name="compact"/>

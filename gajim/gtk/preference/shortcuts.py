@@ -40,7 +40,7 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
             menu=SideBarMenuItem(
                 "shortcuts",
                 _("Shortcuts"),
-                icon_name="preferences-desktop-keyboard-symbolic",
+                icon_name="lucide-keyboard-symbolic",
             ),
         )
         SignalManager.__init__(self)

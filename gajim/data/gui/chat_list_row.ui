@@ -75,7 +75,7 @@
                   <object class="GtkImage" id="mute_image">
                     <property name="halign">center</property>
                     <property name="visible">0</property>
-                    <property name="icon-name">audio-volume-muted-symbolic</property>
+                    <property name="icon-name">lucide-volume-off-symbolic</property>
                   </object>
                 </child>
                 <child>
@@ -147,7 +147,7 @@
                 <property name="margin-end">6</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">window-close-symbolic</property>
+                    <property name="icon-name">lucide-x-symbolic</property>
                   </object>
                 </child>
               </object>

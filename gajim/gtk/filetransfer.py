@@ -137,9 +137,9 @@
 #         self._ui.transfers_list.append_column(col)
 
 #         self.icons = {
-#             'upload': 'go-up-symbolic',
-#             'download': 'go-down-symbolic',
-#             'stop': 'process-stop-symbolic',
+#             'upload': 'lucide-chevron-up-symbolic',
+#             'download': 'lucide-chevron-down-symbolic',
+#             'stop': 'lucide-circle-x-symbolic',
 #             'waiting': 'lucide-refresh-cw-symbolic',
 #             'pause': 'media-playback-pause-symbolic',
 #             'continue': 'media-playback-start-symbolic',

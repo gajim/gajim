@@ -1034,16 +1034,16 @@ MIME_TYPES = (
 
 
 TRUST_SYMBOL_DATA = {
-    Trust.UNTRUSTED: ('dialog-error-symbolic',
+    Trust.UNTRUSTED: ('lucide-circle-x-symbolic',
                       _('Untrusted'),
                       'error-color'),
-    Trust.UNDECIDED: ('security-low-symbolic',
+    Trust.UNDECIDED: ('lucide-shield-alert-symbolic',
                       _('Trust Not Decided'),
                       'warning-color'),
-    Trust.BLIND: ('security-medium-symbolic',
+    Trust.BLIND: ('lucide-shield-question-mark-symbolic',
                   _('Blind Trust'),
                   'encrypted-color'),
-    Trust.VERIFIED: ('security-high-symbolic',
+    Trust.VERIFIED: ('lucide-shield-check-symbolic',
                      _('Verified'),
                      'encrypted-color')
 }

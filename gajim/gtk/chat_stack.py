@@ -91,7 +91,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         box.append(self._chat_control.get_widget())
         box.append(self._message_action_box)
 
-        dnd_icon = Gtk.Image.new_from_icon_name("mail-attachment-symbolic")
+        dnd_icon = Gtk.Image.new_from_icon_name("lucide-paperclip-symbolic")
         dnd_icon.set_vexpand(True)
         dnd_icon.set_valign(Gtk.Align.END)
         dnd_icon.set_pixel_size(64)

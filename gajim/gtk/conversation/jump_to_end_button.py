@@ -27,7 +27,7 @@ class JumpToEndButton(Gtk.Overlay):
         self.set_margin_end(6)
         self.set_margin_bottom(12)
 
-        icon = Gtk.Image.new_from_icon_name("go-bottom-symbolic")
+        icon = Gtk.Image.new_from_icon_name("lucide-chevrons-down-symbolic")
         icon.set_margin_start(4)
         icon.set_margin_end(4)
 

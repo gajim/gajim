@@ -595,7 +595,7 @@ class Login(Page):
         self._set_complete()
 
     def _show_icon(self, show: bool) -> None:
-        icon = "dialog-warning-symbolic" if show else None
+        icon = "lucide-circle-alert-symbolic" if show else None
         self._ui.log_in_address_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
@@ -722,7 +722,7 @@ class Signup(Page):
 
         if not request.is_complete():
             self._ui.update_provider_list_icon.set_from_icon_name(
-                "dialog-error-symbolic"
+                "lucide-circle-x-symbolic"
             )
             self._ui.update_provider_list_icon.set_tooltip_text(
                 _("Could not update providers list")
@@ -894,13 +894,13 @@ class AdvancedSettings(Page):
         return (f"{host}:{port}", protocol, ConnectionType(con_type))
 
     def _show_host_icon(self, show: bool) -> None:
-        icon = "dialog-warning-symbolic" if show else None
+        icon = "lucide-circle-alert-symbolic" if show else None
         self._ui.custom_host_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
 
     def _show_port_icon(self, show: bool) -> None:
-        icon = "dialog-warning-symbolic" if show else None
+        icon = "lucide-circle-alert-symbolic" if show else None
         self._ui.custom_port_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
@@ -1011,7 +1011,7 @@ class SecurityWarning(Page):
         for error in errors:
             error_text = GIO_TLS_ERRORS.get(error, unknown_error % error)
             box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
+            image = Gtk.Image.new_from_icon_name("lucide-circle-alert-symbolic")
             image.add_css_class("warning")
             label = Gtk.Label(
                 label=error_text,

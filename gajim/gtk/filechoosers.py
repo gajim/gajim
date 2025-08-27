@@ -67,7 +67,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
 
         self.set_tooltip_text(tooltip)
 
-        icon = Gtk.Image.new_from_icon_name(icon_name or "system-file-manager-symbolic")
+        icon = Gtk.Image.new_from_icon_name(icon_name or "lucide-folder-symbolic")
 
         self._label = Gtk.Label(
             label=label,

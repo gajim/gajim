@@ -35,7 +35,7 @@ class ContactItem(Gtk.FlowBoxChild, SignalManager):
         name_label.add_css_class("bold")
 
         if is_new:
-            avatar_image = Gtk.Image.new_from_icon_name("avatar-default")
+            avatar_image = Gtk.Image.new_from_icon_name("lucide-user-symbolic")
             name_label.set_text(jid)
             name_label.set_tooltip_text(jid)
         else:
@@ -50,7 +50,7 @@ class ContactItem(Gtk.FlowBoxChild, SignalManager):
             name_label.set_text(contact.name)
             name_label.set_tooltip_text(contact.name)
 
-        remove_button = Gtk.Button.new_from_icon_name("window-close")
+        remove_button = Gtk.Button.new_from_icon_name("lucide-trash-symbolic")
         remove_button.set_valign(Gtk.Align.CENTER)
         remove_button.set_halign(Gtk.Align.END)
         remove_button.set_hexpand(True)

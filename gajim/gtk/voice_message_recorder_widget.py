@@ -49,9 +49,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         if not app.is_installed("GST"):
             self.set_sensitive(False)
             self.set_tooltip_text(_("Voice Messages are not available"))
-            self.set_child(
-                Gtk.Image.new_from_icon_name("audio-input-microphone-symbolic")
-            )
+            self.set_child(Gtk.Image.new_from_icon_name("lucide-mic-symbolic"))
             return
 
         app.settings.connect_signal(
@@ -148,11 +146,11 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
     def _update_icons(self) -> None:
         if self._voice_message_recorder.recording_in_progress:
-            button_image_name = "media-record-symbolic"
-            toggle_image_name = "media-playback-pause-symbolic"
+            button_image_name = "lucide-mic-symbolic"
+            toggle_image_name = "lucide-pause-symbolic"
         else:
-            button_image_name = "audio-input-microphone-symbolic"
-            toggle_image_name = "media-record-symbolic"
+            button_image_name = "lucide-mic-symbolic"
+            toggle_image_name = "lucide-mic-symbolic"
 
         button_image = Gtk.Image.new_from_icon_name(button_image_name)
         self.set_child(button_image)

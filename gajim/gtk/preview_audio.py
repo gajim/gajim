@@ -215,11 +215,11 @@ class AudioWidget(Gtk.Box, SignalManager):
         if paused:
             self._playbin.set_state(Gst.State.PAUSED)
             self._remove_seek_bar_update_idle()
-            self._ui.play_icon.set_from_icon_name("media-playback-start-symbolic")
+            self._ui.play_icon.set_from_icon_name("lucide-play-symbolic")
         else:
             self._playbin.set_state(Gst.State.PLAYING)
             self._add_seek_bar_update_idle()
-            self._ui.play_icon.set_from_icon_name("media-playback-pause-symbolic")
+            self._ui.play_icon.set_from_icon_name("lucide-pause-symbolic")
 
     def _show_init_error(self) -> None:
         self.append(Gtk.Label(label=_("Audio preview is not available")))
@@ -446,7 +446,7 @@ class AudioWidget(Gtk.Box, SignalManager):
 
     def _pause_on_eos(self) -> bool:
         assert self._playbin is not None
-        self._ui.play_icon.set_from_icon_name("media-playback-start-symbolic")
+        self._ui.play_icon.set_from_icon_name("lucide-play-symbolic")
 
         self._state.position = self._state.duration
         self._playbin.set_state(Gst.State.PAUSED)
@@ -479,7 +479,7 @@ class AudioWidget(Gtk.Box, SignalManager):
         # go a state further
         self._next_state_is_playing = True
 
-        self._ui.play_icon.set_from_icon_name("media-playback-start-symbolic")
+        self._ui.play_icon.set_from_icon_name("lucide-play-symbolic")
 
     def _seek(self, position: float) -> None:
         """

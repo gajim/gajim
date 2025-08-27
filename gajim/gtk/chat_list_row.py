@@ -197,11 +197,11 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self.message_id = message.id
 
         if message.filetransfers:
-            self.set_message_text(_("File"), icon_name="text-x-generic-symbolic")
+            self.set_message_text(_("File"), icon_name="lucide-paperclip-symbolic")
             self.set_timestamp(message.timestamp)
 
         if message.call is not None:
-            self.set_message_text(_("Call"), icon_name="call-start-symbolic")
+            self.set_message_text(_("Call"), icon_name="lucide-phone-symbolic")
             self.set_timestamp(message.timestamp)
 
     @property
@@ -281,7 +281,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             scheme = urlparse(text).scheme
             if scheme == "geo":
                 location = split_geo_uri(text)
-                icon = Gio.Icon.new_for_string("mark-location")
+                icon = Gio.Icon.new_for_string("lucide-map-pin-symbolic")
                 text = format_geo_coords(float(location.lat), float(location.lon))
             else:
                 file_name = filename_from_uri(text)

@@ -50,7 +50,7 @@
                 </style>
                 <child type="suffix">
                   <object class="GtkButton" id="address_copy_button">
-                    <property name="icon-name">edit-copy-symbolic</property>
+                    <property name="icon-name">lucide-copy-symbolic</property>
                     <property name="valign">center</property>
                     <property name="sensitive">False</property>
                     <property name="tooltip-text" translatable="yes">Copy Address</property>
@@ -98,7 +98,7 @@
                 </style>
                 <child type="prefix">
                   <object class="GtkImage">
-                    <property name="icon-name">system-users-symbolic</property>
+                    <property name="icon-name">lucide-users-symbolic</property>
                     <property name="pixel-size">24</property>
                     <style>
                       <class name="dimmed"/>

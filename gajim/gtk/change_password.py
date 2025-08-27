@@ -173,7 +173,7 @@ class EnterPassword(Page):
 
     def _show_warning(self, text: str) -> None:
         self._password1_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, "dialog-warning-symbolic"
+            Gtk.EntryIconPosition.SECONDARY, "lucide-circle-alert-symbolic"
         )
         self._password1_entry.set_icon_tooltip_text(
             Gtk.EntryIconPosition.SECONDARY, text

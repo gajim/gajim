@@ -65,10 +65,10 @@ def get_status_icon_name(name: str) -> str:
 def get_account_tune_icon_name(account: str) -> str | None:
     client = app.get_client(account)
     tune = client.get_module("UserTune").get_current_tune()
-    return None if tune is None else "audio-x-generic"
+    return None if tune is None else "lucide-music-symbolic"
 
 
 def get_account_location_icon_name(account: str) -> str | None:
     client = app.get_client(account)
     location = client.get_module("UserLocation").get_current_location()
-    return None if location is None else "applications-internet"
+    return None if location is None else "lucide-map-pin-symbolic"

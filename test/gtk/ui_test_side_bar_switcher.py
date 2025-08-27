@@ -34,25 +34,28 @@ class TestSideBarSwitcher(GajimAppWindow):
         side_bar_switcher.set_with_menu(
             stack,
             [
-                SideBarMenuItem("A", "A", icon_name="computer-symbolic"),
+                SideBarMenuItem("A", "A", icon_name="lucide-laptop-symbolic"),
                 SideBarMenuItem(
                     "B",
                     "B",
                     icon_name="user-available-symbolic",
                     children=[
-                        SideBarMenuItem("B1", "B1", icon_name="computer-symbolic"),
-                        SideBarMenuItem("B2", "B2", icon_name="computer-symbolic"),
-                        SideBarMenuItem("B3", "B3", icon_name="computer-symbolic"),
+                        SideBarMenuItem("B1", "B1", icon_name="lucide-laptop-symbolic"),
+                        SideBarMenuItem("B2", "B2", icon_name="lucide-laptop-symbolic"),
+                        SideBarMenuItem("B3", "B3", icon_name="lucide-laptop-symbolic"),
                     ],
                 ),
                 SideBarMenuItem(
-                    "C", "C", group="Group 1", icon_name="mail-unread-symbolic"
+                    "C",
+                    "C",
+                    group="Group 1",
+                    icon_name="lucide-message-circle-symbolic",
                 ),
                 SideBarMenuItem(
                     "D",
                     "D",
                     group="Group 1",
-                    icon_name="audio-input-microphone-symbolic",
+                    icon_name="lucide-mic-symbolic",
                 ),
                 SideBarMenuItem(
                     "E",
@@ -60,12 +63,12 @@ class TestSideBarSwitcher(GajimAppWindow):
                     group="Group 2",
                     icon_name="lucide-megaphone-symbolic",
                     children=[
-                        SideBarMenuItem("E1", "E1", icon_name="computer-symbolic"),
-                        SideBarMenuItem("E2", "E2", icon_name="computer-symbolic"),
-                        SideBarMenuItem("E3", "E3", icon_name="computer-symbolic"),
+                        SideBarMenuItem("E1", "E1", icon_name="lucide-laptop-symbolic"),
+                        SideBarMenuItem("E2", "E2", icon_name="lucide-laptop-symbolic"),
+                        SideBarMenuItem("E3", "E3", icon_name="lucide-laptop-symbolic"),
                     ],
                 ),
-                SideBarMenuItem("F", "F", icon_name="applications-graphics-symbolic"),
+                SideBarMenuItem("F", "F", icon_name="lucide-palette-symbolic"),
             ],
         )
 

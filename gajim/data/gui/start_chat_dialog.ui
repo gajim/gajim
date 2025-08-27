@@ -20,7 +20,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">dialog-information-symbolic</property>
+                        <property name="icon-name">lucide-info-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -37,7 +37,7 @@
                         <property name="valign">center</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">window-close-symbolic</property>
+                            <property name="icon-name">lucide-x-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -84,7 +84,7 @@
                         <property name="halign">end</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="icon-name">view-more-symbolic</property>
+                            <property name="icon-name">lucide-ellipsis-vertical-symbolic</property>
                           </object>
                         </child>
                       </object>
@@ -97,7 +97,7 @@
                     <property name="visible">0</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">dialog-warning-symbolic</property>
+                        <property name="icon-name">lucide-circle-alert-symbolic</property>
                       </object>
                     </child>
                     <child>
@@ -134,7 +134,7 @@
                                 <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkImage">
-                                    <property name="icon-name">avatar-default-symbolic</property>
+                                    <property name="icon-name">lucide-user-symbolic</property>
                                     <property name="pixel-size">44</property>
                                     <style>
                                       <class name="dimmed"/>
@@ -186,7 +186,7 @@ You can also type an XMPP address</property>
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="icon-name">system-search-symbolic</property>
+                                            <property name="icon-name">lucide-search-symbolic</property>
                                             <property name="pixel-size">44</property>
                                             <style>
                                               <class name="dimmed"/>
@@ -220,7 +220,7 @@ You can also type an XMPP address</property>
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkImage">
-                                            <property name="icon-name">system-search-symbolic</property>
+                                            <property name="icon-name">lucide-search-symbolic</property>
                                             <property name="pixel-size">44</property>
                                             <style>
                                               <class name="dimmed"/>
@@ -313,7 +313,7 @@ You can also type an XMPP address</property>
                 <child>
                   <object class="GtkImage">
                     <property name="valign">end</property>
-                    <property name="icon-name">dialog-error</property>
+                    <property name="icon-name">lucide-circle-x-symbolic</property>
                     <property name="pixel-size">48</property>
                   </object>
                 </child>
