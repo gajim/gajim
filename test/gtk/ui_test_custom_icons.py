@@ -35,14 +35,18 @@ class TestCustomIcons(GajimAppWindow):
         box = Gtk.Box(spacing=18, orientation=Gtk.Orientation.VERTICAL)
         self.set_child(box)
 
-        switch = Gtk.Switch()
+        switch = Gtk.Switch(valign=Gtk.Align.CENTER)
         switch.connect("notify::active", self._on_theme_switched)
 
-        theme_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
-        theme_box.append(Gtk.Label(label="Light"))
-        theme_box.append(switch)
-        theme_box.append(Gtk.Label(label="dark"))
-        box.append(theme_box)
+        reload_button = Gtk.Button(label="Reload")
+        reload_button.connect("clicked", self._on_reload_clicked)
+
+        controls_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
+        controls_box.append(Gtk.Label(label="Light"))
+        controls_box.append(switch)
+        controls_box.append(Gtk.Label(label="dark"))
+        controls_box.append(reload_button)
+        box.append(controls_box)
 
         self._adw_style_manager = Adw.StyleManager.get_default()
         color_scheme = self._adw_style_manager.get_color_scheme()
@@ -52,14 +56,31 @@ class TestCustomIcons(GajimAppWindow):
             hscrollbar_policy=Gtk.PolicyType.NEVER, vexpand=True
         )
         box.append(scrolled_window)
-        flow_box = Gtk.FlowBox(
+        self._flow_box = Gtk.FlowBox(
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
             row_spacing=6,
             column_spacing=12,
             min_children_per_line=10,
         )
-        scrolled_window.set_child(flow_box)
+        scrolled_window.set_child(self._flow_box)
+
+        self._load_images()
+
+    def _cleanup(self):
+        pass
+
+    def _on_theme_switched(self, switch: Gtk.Switch, args: Any) -> None:
+        if switch.get_active():
+            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        else:
+            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+
+    def _on_reload_clicked(self, _button: Gtk.Button) -> None:
+        self._load_images()
+
+    def _load_images(self) -> None:
+        self._flow_box.remove_all()
 
         for _root, _dirs, files in os.walk(CUSTOM_ICONS_PATH):
             for file in sorted(files):
@@ -71,13 +92,7 @@ class TestCustomIcons(GajimAppWindow):
                 image = Gtk.Image.new_from_icon_name(file_path.stem)
                 image.set_tooltip_text(file)
                 image.set_pixel_size(48)
-                flow_box.append(image)
-
-    def _on_theme_switched(self, switch: Gtk.Switch, args: Any) -> None:
-        if switch.get_active():
-            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
-        else:
-            self._adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+                self._flow_box.append(image)
 
 
 util.init_settings()
