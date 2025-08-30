@@ -4,6 +4,9 @@
   <template class="ContactPopoverInfoRow" parent="GtkListBoxRow">
     <property name="activatable">false</property>
     <property name="visible">false</property>
+    <style>
+      <class name="py-3" />
+    </style>
     <child>
       <object class="GtkBox">
         <property name="spacing">12</property>
