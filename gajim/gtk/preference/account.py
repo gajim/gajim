@@ -446,13 +446,6 @@ class AccountConnectionGroup(GajimPreferencesGroup):
                 SettingKind.ENTRY, _("Resource"), SettingType.ACCOUNT_CONFIG, "resource"
             ),
             Setting(
-                SettingKind.SUBPAGE,
-                _("Priority"),
-                SettingType.ACCOUNT_CONFIG,
-                "priority",
-                props={"subpage": f"{self.account}-connection-priority"},
-            ),
-            Setting(
                 SettingKind.SWITCH,
                 _("Use Unencrypted Connection"),
                 SettingType.ACCOUNT_CONFIG,
@@ -532,38 +525,6 @@ class AccountAdvancedGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "autojoin_sync",
                 desc=_("Synchronize joined group chats with other devices."),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-
-class PriorityGroup(GajimPreferencesGroup):
-    def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="priority", account=account)
-
-        neg_priority = app.settings.get("enable_negative_priority")
-        if neg_priority:
-            range_ = (-128, 127, 1)
-        else:
-            range_ = (0, 127, 1)
-
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Adjust to status"),
-                SettingType.ACCOUNT_CONFIG,
-                "adjust_priority_with_status",
-            ),
-            Setting(
-                SettingKind.SPIN,
-                _("Priority"),
-                SettingType.ACCOUNT_CONFIG,
-                "priority",
-                bind="account::adjust_priority_with_status",
-                inverted=True,
-                props={"range_": range_},
             ),
         ]
 
@@ -773,18 +734,6 @@ class LoginPage(GajimPreferencePage):
         )
 
         self.add(LoginGroup(account))
-
-
-class PriorityPage(GajimPreferencePage):
-    def __init__(self, account: str) -> None:
-        GajimPreferencePage.__init__(
-            self,
-            title=_("Priority | %(account)s") % {"account": account},
-            key=f"{account}-connection-priority",
-            groups=[],
-        )
-
-        self.add(PriorityGroup(account))
 
 
 class HostnamePage(GajimPreferencePage):

@@ -79,7 +79,6 @@ class Client(Observable, ClientModules):
         address = app.settings.get_account_setting(self._account, 'address')
         self._address = JID.from_string(address)
 
-        self._priority = 0
         self._connect_machine_calls = 0
         self.addressing_supported = False
 
@@ -133,10 +132,6 @@ class Client(Observable, ClientModules):
         if self._idle_status_active():
             return self._idle_status_message
         return self._status_message
-
-    @property
-    def priority(self) -> int:
-        return self._priority
 
     @property
     def certificate(self):
@@ -459,9 +454,7 @@ class Client(Observable, ClientModules):
 
     def update_presence(self, include_muc: bool = True) -> None:
         status, message, idle = self.get_presence_state()
-        self._priority = app.get_priority(self._account, status)
         self.get_module('Presence').send_presence(
-            priority=self._priority,
             show=status,
             status=message,
             idle_time=idle)

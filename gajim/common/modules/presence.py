@@ -259,7 +259,6 @@ class Presence(BaseModule):
     def get_presence(self,
                      to: str | None = None,
                      typ: str | None = None,
-                     priority: int | None = None,
                      show: str | None = None,
                      status: str | None = None,
                      nick: str | None = None,
@@ -270,7 +269,7 @@ class Presence(BaseModule):
             # Gajim sometimes passes invalid show values here
             # until this is fixed this is a workaround
             show = None
-        presence = nbxmpp.Presence(to, typ, priority, show, status)
+        presence = nbxmpp.Presence(to=to, typ=typ, show=show, status=status)
         if nick is not None:
             nick_tag = presence.setTag('nick', namespace=Namespace.NICK)
             nick_tag.setData(nick)

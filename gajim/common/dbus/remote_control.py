@@ -328,7 +328,7 @@ class GajimRemote(Server):
     @staticmethod
     def account_info(account: str) -> dict[str, str]:
         '''
-        Show info on account: resource, jid, nick, prio, message
+        Show info on account: resource, jid, nick, message
         '''
         result: dict[str, str] = {}
         if account in app.settings.get_active_accounts():
@@ -338,7 +338,6 @@ class GajimRemote(Server):
             result['name'] = client.name
             result['jid'] = app.get_jid_from_account(client.name)
             result['message'] = client.status_message
-            result['priority'] = str(client.priority)
             result['resource'] = app.settings.get_account_setting(client.name,
                                                                   'resource')
         return result

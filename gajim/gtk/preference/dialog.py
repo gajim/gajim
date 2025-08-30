@@ -30,7 +30,6 @@ from gajim.gtk.preference.account import AccountOmemoPage
 from gajim.gtk.preference.account import AccountPrivacyPage
 from gajim.gtk.preference.account import HostnamePage
 from gajim.gtk.preference.account import LoginPage
-from gajim.gtk.preference.account import PriorityPage
 from gajim.gtk.preference.app import AdvancedPage
 from gajim.gtk.preference.app import AudioVideoPage
 from gajim.gtk.preference.app import AutoAwayPage
@@ -165,7 +164,6 @@ class Preferences(GajimAppWindow, EventHelper):
             AccountConnectionPage(account),
             AccountAdvancedPage(account),
             # Subpages
-            PriorityPage(account),
             LoginPage(account),
             HostnamePage(account),
         ]

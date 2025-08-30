@@ -492,29 +492,6 @@ def get_hostname_from_account(
     return jid.domain
 
 
-def get_priority(account: str, show: str) -> int:
-    '''
-    Return the priority an account must have
-    '''
-    if not show:
-        show = 'online'
-
-    if show in ('online', 'chat', 'away', 'xa', 'dnd') and \
-            settings.get_account_setting(account,
-                                         'adjust_priority_with_status'):
-        prio = settings.get_account_setting(account, 'autopriority_' + show)
-    else:
-        prio = settings.get_account_setting(account, 'priority')
-
-    if prio < -128:
-        return -128
-
-    if prio > 127:
-        return 127
-
-    return prio
-
-
 def log(domain: str) -> logging.Logger:
     if domain != 'gajim':
         domain = 'gajim.%s' % domain

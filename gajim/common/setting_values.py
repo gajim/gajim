@@ -40,7 +40,6 @@ BoolSettings = Literal[
     'developer_modus',
     'enable_emoji_shortcodes',
     'enable_keepassxc_integration',
-    'enable_negative_priority',
     'enable_file_preview',
     'escape_key_closes',
     'gc_notify_on_all_messages_private_default',
@@ -179,7 +178,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'dictionary_url': 'WIKTIONARY',
     'enable_emoji_shortcodes': True,
     'enable_keepassxc_integration': False,
-    'enable_negative_priority': False,
     'enable_file_preview': True,
     'escape_key_closes': False,
     'file_transfers_port': 28011,
@@ -263,7 +261,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
 
 BoolAccountSettings = Literal[
     'active',
-    'adjust_priority_with_status',
     'anonymous_auth',
     'answer_receipts',
     'autoauth',
@@ -323,14 +320,8 @@ StringAccountSettings = Literal[
 ]
 
 IntAccountSettings = Literal[
-    'autopriority_away',
-    'autopriority_chat',
-    'autopriority_dnd',
-    'autopriority_online',
-    'autopriority_xa',
     'chat_history_max_age',
     'custom_port',
-    'priority',
 ]
 
 
@@ -389,7 +380,6 @@ ACCOUNT_SETTINGS = {
         'account_color': 'rgb(85, 85, 85)',
         'account_label': '',
         'active': False,
-        'adjust_priority_with_status': False,
         'address': '',
         'anonymous_auth': False,
         'answer_receipts': True,
@@ -397,11 +387,6 @@ ACCOUNT_SETTINGS = {
         'autoauth': False,
         'autoconnect': True,
         'autojoin_sync': True,
-        'autopriority_away': 40,
-        'autopriority_chat': 50,
-        'autopriority_dnd': 20,
-        'autopriority_online': 50,
-        'autopriority_xa': 30,
         'avatar_sha': '',
         'chat_history_max_age': -1,
         'client_cert': '',
@@ -427,7 +412,6 @@ ACCOUNT_SETTINGS = {
         'last_status': 'online',
         'last_status_msg': '',
         'password': '',
-        'priority': 0,
         'proxy': '',
         'publish_location': False,
         'publish_tune': False,
@@ -635,11 +619,6 @@ ADVANCED_SETTINGS = {
         'dictionary_url': _(
             'Either a custom URL with %%s in it (where %%s is the word/phrase)'
             ' or "WIKTIONARY" (which means use Wikitionary).'),
-        'enable_negative_priority': _(
-            'If enabled, you will be able to set a negative priority to your '
-            'account in the Accounts window. BE CAREFUL, when you are logged '
-            'in with a negative priority, you will NOT receive any message '
-            'from your server.'),
         'file_transfers_port': '',
         'ft_add_hosts_to_send': _(
             'List of send hosts (comma separated) in '
