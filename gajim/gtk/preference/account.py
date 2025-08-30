@@ -214,14 +214,6 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Local System Time"),
-                SettingType.ACCOUNT_CONFIG,
-                "send_time_info",
-                callback=self._send_time_info,
-                desc=_("Disclose the local system time of the device Gajim runs on"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
                 _("Operating System"),
                 SettingType.ACCOUNT_CONFIG,
                 "send_os_info",
@@ -343,10 +335,6 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
     def _send_idle_time(self, state: bool, _data: Any) -> None:
         if self._client is not None:
             self._client.get_module("LastActivity").set_enabled(state)
-
-    def _send_time_info(self, state: bool, _data: Any) -> None:
-        if self._client is not None:
-            self._client.get_module("EntityTime").set_enabled(state)
 
     def _send_os_info(self, state: bool, _data: Any) -> None:
         if self._client is not None:
