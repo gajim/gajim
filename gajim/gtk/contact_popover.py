@@ -142,8 +142,8 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
         except Exception:
             return ""
 
-        dt_format = app.settings.get("date_time_format")
-        remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(dt_format)
+        t_format = app.settings.get("time_format")
+        remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(t_format)
         data = get_zone_data(prop.value)
 
         return f"{remote_dt_str} ({data.full_name})"
