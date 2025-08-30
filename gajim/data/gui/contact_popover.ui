@@ -37,7 +37,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="_role">
-                    <property name="visible">0</property>
+                    <property name="visible">false</property>
                     <property name="halign">start</property>
                     <property name="ellipsize">end</property>
                     <property name="single-line-mode">1</property>
@@ -51,7 +51,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="_org">
-                    <property name="visible">0</property>
+                    <property name="visible">false</property>
                     <property name="halign">start</property>
                     <property name="ellipsize">end</property>
                     <property name="single-line-mode">1</property>
@@ -70,6 +70,39 @@
         <child>
           <object class="GtkListBox" id="_info_listbox">
             <property name="selection-mode">none</property>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_subscription">
+                <property name="icon-name">dialog-warning-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_status"/>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_status_message">
+                <property name="icon-name">lucide-info-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_xmpp_address">
+                <property name="icon-name">lucide-message-circle-more-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_email">
+                <property name="icon-name">mail-unread-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_tel">
+                <property name="icon-name">call-start-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_timezone">
+                <property name="icon-name">lucide-clock-symbolic</property>
+              </object>
+            </child>
             <style>
               <class name="small-label"/>
             </style>
