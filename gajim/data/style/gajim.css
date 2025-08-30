@@ -510,6 +510,7 @@ button.flat.link { padding: 0; border: 0; }
 /* Banner */
 .avatar-button * {
     filter: none;
+    -gtk-icon-filter: none;
 }
 
 /* MessageActionsBox */
