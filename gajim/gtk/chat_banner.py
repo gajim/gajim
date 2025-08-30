@@ -123,6 +123,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._update_roster_button()
         self._update_invite_button()
         self._update_avatar()
+        self._update_avatar_button_sensitivity()
         self._update_name_label()
         self._update_description_label()
         self._update_account_badge()
@@ -297,6 +298,9 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         texture = self._contact.get_avatar(AvatarSize.CHAT, scale)
         self._avatar_image.set_pixel_size(AvatarSize.CHAT)
         self._avatar_image.set_from_paintable(texture)
+
+    def _update_avatar_button_sensitivity(self) -> None:
+        self._avatar_button.set_sensitive(isinstance(self._contact, BareContact))
 
     def _on_avatar_clicked(self, button: Gtk.MenuButton) -> None:
         if not isinstance(self._contact, BareContact):

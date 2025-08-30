@@ -507,6 +507,11 @@ button.flat.link { padding: 0; border: 0; }
     color: alpha(var(--view-fg-color), 0.7);
 }
 
+/* Banner */
+.avatar-button * {
+    filter: none;
+}
+
 /* MessageActionsBox */
 .message-actions-box { margin: 2px 13px 8px 8px; }
 .message-actions-box > box > box > button:not(:hover),

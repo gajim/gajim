@@ -63,7 +63,10 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
         self._avatar.set_pixel_size(AvatarSize.TOOLTIP)
         self._avatar.set_from_paintable(texture)
 
-        self._name.set_label(contact.name)
+        if contact.is_self:
+            self._name.set_label(_("Note to myself"))
+        else:
+            self._name.set_label(contact.name)
 
         if not contact.is_self:
             if contact.subscription in ("none", "to"):
