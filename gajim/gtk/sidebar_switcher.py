@@ -10,6 +10,7 @@ from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -275,7 +276,13 @@ class SideBarMenuItem(Gtk.ListBoxRow):
             image = Gtk.Image.new_from_icon_name(icon_name)
             box.append(image)
 
-        self._label = Gtk.Label(label=title, xalign=0, hexpand=True)
+        self._label = Gtk.Label(
+            label=title,
+            xalign=0,
+            hexpand=True,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=20,
+        )
         box.append(self._label)
 
         self._suffix_image = Gtk.Image.new_from_icon_name(
