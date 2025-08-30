@@ -9,6 +9,7 @@ from unittest.mock import MagicMock
 
 from gi.repository import Gtk
 from nbxmpp.const import PresenceShow
+from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -48,7 +49,13 @@ class TestContactPopover(GajimAppWindow):
         button.add_css_class("flat")
         self.set_child(button)
 
-        button.set_popover(ContactPopover(contact))
+        popover = ContactPopover(contact)
+
+        button.set_popover(popover)
+
+        popover._on_vcard_received(
+            JID.from_string("test@test.com"), self._get_vcard()
+        )  # pyright: ignore
 
     def _get_contact(self) -> BareContact:
         contact = MagicMock(spec="BareContact")
@@ -77,6 +84,15 @@ class TestContactPopover(GajimAppWindow):
         contact.subscription = "from"
 
         return contact
+
+    def _get_vcard(self) -> VCard:
+        vcard = VCard()
+        vcard.add_property("org", values=["Gajim"])
+        vcard.add_property("role", value="Admin")
+        vcard.add_property("tel", value="+1454545544", value_type="text")
+        vcard.add_property("email", value="mail@mail.com")
+        vcard.add_property("tz", value="Europe/London", value_type="text")
+        return vcard
 
 
 def get_color(selector: str, *args: Any) -> str:

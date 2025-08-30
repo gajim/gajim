@@ -2,12 +2,13 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="ContactPopoverInfoRow" parent="GtkListBoxRow">
-    <property name="activatable">0</property>
+    <property name="activatable">false</property>
+    <property name="visible">false</property>
     <child>
       <object class="GtkBox">
         <property name="spacing">12</property>
         <child>
-          <object class="GtkImage" id="_icon"/>
+          <object class="GtkImage" id="_image"/>
         </child>
         <child>
           <object class="GtkLabel" id="_label">
