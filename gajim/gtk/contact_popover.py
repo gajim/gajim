@@ -94,13 +94,18 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
         self._xmpp_address.set_label(str(self._contact.jid), link_scheme="xmpp")
 
         client = app.get_client(contact.account)
-        client.get_module("VCard4").request_vcard(
-            jid=self._contact.jid, callback=self._on_vcard_received
+        vcard = client.get_module("VCard4").request_vcard(
+            jid=self._contact.jid, callback=self._on_vcard_received, use_cache=True
         )
+        if vcard is not None:
+            self._set_vcard_rows(vcard)
 
         app.plugin_manager.extension_point("contact_tooltip_populate", self, contact)
 
     def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
+        self._set_vcard_rows(vcard)
+
+    def _set_vcard_rows(self, vcard: VCard) -> None:
         for prop in vcard.get_properties():
             match prop:
                 case RoleProperty():

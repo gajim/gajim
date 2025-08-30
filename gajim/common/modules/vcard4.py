@@ -12,9 +12,7 @@ from typing import cast
 import inspect
 import time
 import weakref
-from collections.abc import Callable
 
-from gi.repository import GLib
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
 from nbxmpp.modules.vcard4 import VCard
@@ -46,8 +44,7 @@ class VCard4(BaseModule):
             cached_result = self._vcard_cache.get(jid)
             if cached_result is not None:
                 _, vcard = cached_result
-                GLib.idle_add(self._on_vcard_from_cache, jid, vcard, callback)
-                return
+                return vcard
 
         if inspect.ismethod(callback):
             weak_callable = weakref.WeakMethod(callback)
@@ -68,12 +65,6 @@ class VCard4(BaseModule):
             cache_time, _ = data
             if time.time() - MAX_CACHE_SECONDS > cache_time:
                 self._vcard_cache.pop(jid)
-
-    def _on_vcard_from_cache(
-        self, jid: JID, vcard: VCard, callback: Callable[[JID, VCard], Any]
-    ) -> int:
-        callback(jid, vcard)
-        return GLib.SOURCE_REMOVE
 
     def _on_vcard_received(self, task: Task) -> None:
         try:
