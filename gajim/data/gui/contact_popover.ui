@@ -87,11 +87,22 @@
               </object>
             </child>
             <child>
+              <object class="GtkListBoxRow">
+                <property name="activatable">false</property>
+                <child>
+                  <object class="GtkSeparator">
+                    <style>
+                      <class name="px-12" />
+                      <class name="my-6" />
+                      <class name="dimmed" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="ContactPopoverInfoRow" id="_xmpp_address">
                 <property name="icon-name">lucide-message-circle-more-symbolic</property>
-                <style>
-                  <class name="mt-9" />
-                </style>
               </object>
             </child>
             <child>
