@@ -53,9 +53,9 @@ class TestContactPopover(GajimAppWindow):
 
         button.set_popover(popover)
 
-        popover._on_vcard_received(
+        popover._on_vcard_received(  # pyright: ignore
             JID.from_string("test@test.com"), self._get_vcard()
-        )  # pyright: ignore
+        )
 
     def _get_contact(self) -> BareContact:
         contact = MagicMock(spec="BareContact")
