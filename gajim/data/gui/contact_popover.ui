@@ -72,7 +72,10 @@
             <property name="selection-mode">none</property>
             <child>
               <object class="ContactPopoverInfoRow" id="_subscription">
-                <property name="icon-name">dialog-warning-symbolic</property>
+                <property name="icon-name">lucide-circle-alert-symbolic</property>
+                <style>
+                  <class name="warning" />
+                </style>
               </object>
             </child>
             <child>
@@ -93,12 +96,12 @@
             </child>
             <child>
               <object class="ContactPopoverInfoRow" id="_email">
-                <property name="icon-name">mail-unread-symbolic</property>
+                <property name="icon-name">lucide-mail-symbolic</property>
               </object>
             </child>
             <child>
               <object class="ContactPopoverInfoRow" id="_tel">
-                <property name="icon-name">call-start-symbolic</property>
+                <property name="icon-name">lucide-phone-symbolic</property>
               </object>
             </child>
             <child>
