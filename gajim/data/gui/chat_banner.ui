@@ -67,6 +67,7 @@
           <object class="GtkMenuButton" id="_avatar_button">
             <style>
               <class name="flat"/>
+              <class name="avatar-button"/>
             </style>
             <child>
               <object class="GtkImage" id="_avatar_image" />
