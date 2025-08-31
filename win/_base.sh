@@ -313,13 +313,8 @@ function cleanup_install {
     find "${MINGW_ROOT}" -name "*.sh" -exec rm -f {} \;
     find "${MINGW_ROOT}" -name "*.whl" -exec rm -f {} \;
 
-    # Byte-compile Python files and clean up afterwards
-    echo "Byte-compile Python files"
-    build_compileall -q "${MINGW_ROOT}"
-
     find "${MINGW_ROOT}" -type d -name "__pycache__" -prune -exec rm -rf {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
-    find "${MINGW_ROOT}" -name "*.py" ! -name "*theme.py" -exec rm -f {} \;
 
     echo "Run depcheck.py"
     build_python "${MISC}/depcheck.py"
