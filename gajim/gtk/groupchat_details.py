@@ -153,6 +153,7 @@ class GroupchatDetails(GajimAppWindow):
             width=600,
             edit_mode=True,
             show_users=False,
+            add_padding=False,
         )
         self._connect(
             self._groupchat_info, "name-updated", self._on_contact_name_updated
@@ -164,11 +165,7 @@ class GroupchatDetails(GajimAppWindow):
         self._switcher.set_item_visible("information", True)
 
     def _add_groupchat_settings(self) -> None:
-        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
-        main_box.add_css_class("p-18")
-
-        settings_box = GroupChatSettings(self.account, self._contact.jid)
-        main_box.append(settings_box)
+        self._ui.settings_box.append(GroupChatSettings(self.account, self._contact.jid))
 
         remove_history_button = Gtk.Button(label=_("Remove History…"))
         remove_history_button.set_halign(Gtk.Align.START)
@@ -176,14 +173,7 @@ class GroupchatDetails(GajimAppWindow):
         params = AccountJidParam(account=self.account, jid=self._contact.jid)
         remove_history_button.set_action_target_value(params.to_variant())
         remove_history_button.set_action_name("app.remove-history")
-        main_box.append(remove_history_button)
-
-        scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.set_vexpand(True)
-        scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled_window.set_child(main_box)
-
-        self._ui.settings_box.append(scrolled_window)
+        self._ui.settings_box.append(remove_history_button)
         self._switcher.set_item_visible("settings", True)
 
     def _add_groupchat_encryption(self) -> None:
@@ -192,7 +182,7 @@ class GroupchatDetails(GajimAppWindow):
             self._switcher.set_item_visible("encryption-omemo", False)
             return
 
-        self._ui.encryption_box.append(
+        self._ui.encryption_box.set_child(
             OMEMOTrustManager(self._contact.account, self._contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)

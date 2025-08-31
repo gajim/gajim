@@ -106,7 +106,7 @@
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="vexpand">1</property>
+                        <property name="valign">start</property>
                         <property name="height-request">100</property>
                         <property name="focusable">1</property>
                         <property name="hscrollbar-policy">never</property>

@@ -250,7 +250,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._switcher.set_item_visible("information", True)
 
     def _fill_encryption_page(self, contact: ContactT) -> None:
-        self._ui.encryption_box.append(
+        self._ui.encryption_box.set_child(
             OMEMOTrustManager(self.contact.account, self.contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)

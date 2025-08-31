@@ -6,10 +6,6 @@
       <object class="GtkBox">
         <property name="spacing">6</property>
         <property name="orientation">vertical</property>
-        <style>
-          <class name="px-3"/>
-          <class name="py-12"/>
-        </style>
         <child>
           <object class="GtkImage" id="avatar_image">
             <property name="margin-bottom">12</property>

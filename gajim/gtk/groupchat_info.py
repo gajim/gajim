@@ -120,6 +120,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         minimal: bool = False,
         edit_mode: bool = False,
         show_users: bool = True,
+        add_padding: bool = True,
     ) -> None:
         SignalManager.__init__(self)
         Gtk.ScrolledWindow.__init__(self, width_request=width, halign=Gtk.Align.CENTER)
@@ -142,6 +143,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
 
         self._ui = get_builder("groupchat_info_scrolled.ui")
         self.set_child(self._ui.info_clamp)
+
+        if add_padding:
+            self._ui.info_clamp.add_css_class("p-3")
 
         self._connect(self._ui.address_copy_button, "clicked", self._on_copy_address)
 

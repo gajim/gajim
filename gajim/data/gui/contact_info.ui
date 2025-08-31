@@ -10,6 +10,10 @@
   <object class="GtkStack" id="main_stack">
     <property name="vexpand">1</property>
     <property name="transition-type">crossfade</property>
+    <property name="width-request">650</property>
+    <style>
+      <class name="mt-12"/>
+    </style>
     <child>
       <object class="GtkStackPage">
         <property name="name">information</property>
@@ -111,9 +115,6 @@
                 </property>
               </object>
             </property>
-            <style>
-              <class name="p-18"/>
-            </style>
           </object>
         </property>
       </object>
@@ -130,145 +131,142 @@
             <property name="child">
               <object class="GtkViewport">
                 <property name="child">
-                  <object class="GtkBox" id="settings_box">
-                    <property name="halign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">24</property>
+                  <object class="AdwClamp">
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="settings_box">
                         <property name="orientation">vertical</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">24</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkBox">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Status</property>
+                                <style>
+                                  <class name="bold"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox" id="subscription_listbox">
+                                <property name="width-request">400</property>
+                                <property name="selection-mode">none</property>
+                                <style>
+                                  <class name="boxed-list"/>
+                                </style>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="activatable">0</property>
+                                    <property name="title" translatable="yes">Share my online status</property>
+                                    <child type="suffix">
+                                      <object class="GtkSwitch" id="from_subscription_switch">
+                                        <property name="focusable">1</property>
+                                        <property name="valign">center</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow">
+                                    <property name="activatable">0</property>
+                                    <property name="title" translatable="yes">I can see contact&apos;s online status</property>
+                                    <child type="suffix">
+                                      <object class="GtkStack" id="to_subscription_stack">
+                                        <property name="halign">end</property>
+                                        <property name="valign">center</property>
+                                        <property name="transition-type">crossfade</property>
+                                        <child>
+                                          <object class="GtkStackPage">
+                                            <property name="name">request</property>
+                                            <property name="child">
+                                              <object class="GtkBox">
+                                                <property name="halign">end</property>
+                                                <property name="spacing">12</property>
+                                                <child>
+                                                  <object class="GtkStack" id="request_stack">
+                                                    <property name="transition-type">crossfade</property>
+                                                    <child>
+                                                      <object class="GtkStackPage">
+                                                        <property name="name">cross</property>
+                                                        <property name="child">
+                                                          <object class="GtkImage">
+                                                            <property name="tooltip-text" translatable="yes">You cannot see this contact&apos;s online status</property>
+                                                            <property name="halign">center</property>
+                                                            <property name="icon-name">lucide-x-symbolic</property>
+                                                          </object>
+                                                        </property>
+                                                      </object>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkStackPage">
+                                                        <property name="name">requested</property>
+                                                        <property name="child">
+                                                          <object class="GtkImage">
+                                                            <property name="tooltip-text" translatable="yes">You requested to see this contact&apos;s online status</property>
+                                                            <property name="icon-name">lucide-circle-dashed-symbolic</property>
+                                                          </object>
+                                                        </property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="to_subscription_button">
+                                                    <property name="label" translatable="yes">_Request</property>
+                                                    <property name="focusable">1</property>
+                                                    <property name="receives-default">1</property>
+                                                    <property name="tooltip-text" translatable="yes">Request to see this contact&apos;s online status</property>
+                                                    <property name="valign">center</property>
+                                                    <property name="use-underline">1</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkStackPage">
+                                            <property name="name">checkmark</property>
+                                            <property name="child">
+                                              <object class="GtkImage">
+                                                <property name="tooltip-text" translatable="yes">You can see the contact&apos;s online status</property>
+                                                <property name="halign">end</property>
+                                                <property name="icon-name">lucide-check-symbolic</property>
+                                              </object>
+                                            </property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="contact_settings_box">
+                            <property name="title" translatable="yes">Privacy</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="remove_history_button">
+                            <property name="label" translatable="yes">Remove History…</property>
+                            <property name="focusable">1</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">Status</property>
                             <style>
-                              <class name="bold"/>
+                              <class name="destructive-action"/>
                             </style>
                           </object>
                         </child>
-                        <child>
-                          <object class="GtkListBox" id="subscription_listbox">
-                            <property name="width-request">400</property>
-                            <property name="selection-mode">none</property>
-                            <style>
-                              <class name="boxed-list"/>
-                            </style>
-                            <child>
-                              <object class="AdwActionRow">
-                                <property name="activatable">0</property>
-                                <property name="title" translatable="yes">Share my online status</property>
-                                <child type="suffix">
-                                  <object class="GtkSwitch" id="from_subscription_switch">
-                                    <property name="focusable">1</property>
-                                    <property name="valign">center</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow">
-                                <property name="activatable">0</property>
-                                <property name="title" translatable="yes">I can see contact&apos;s online status</property>
-                                <child type="suffix">
-                                  <object class="GtkStack" id="to_subscription_stack">
-                                    <property name="halign">end</property>
-                                    <property name="valign">center</property>
-                                    <property name="transition-type">crossfade</property>
-                                    <child>
-                                      <object class="GtkStackPage">
-                                        <property name="name">request</property>
-                                        <property name="child">
-                                          <object class="GtkBox">
-                                            <property name="halign">end</property>
-                                            <property name="spacing">12</property>
-                                            <child>
-                                              <object class="GtkStack" id="request_stack">
-                                                <property name="transition-type">crossfade</property>
-                                                <child>
-                                                  <object class="GtkStackPage">
-                                                    <property name="name">cross</property>
-                                                    <property name="child">
-                                                      <object class="GtkImage">
-                                                        <property name="tooltip-text" translatable="yes">You cannot see this contact&apos;s online status</property>
-                                                        <property name="halign">center</property>
-                                                        <property name="icon-name">lucide-x-symbolic</property>
-                                                      </object>
-                                                    </property>
-                                                  </object>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkStackPage">
-                                                    <property name="name">requested</property>
-                                                    <property name="child">
-                                                      <object class="GtkImage">
-                                                        <property name="tooltip-text" translatable="yes">You requested to see this contact&apos;s online status</property>
-                                                        <property name="icon-name">lucide-circle-dashed-symbolic</property>
-                                                      </object>
-                                                    </property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="to_subscription_button">
-                                                <property name="label" translatable="yes">_Request</property>
-                                                <property name="focusable">1</property>
-                                                <property name="receives-default">1</property>
-                                                <property name="tooltip-text" translatable="yes">Request to see this contact&apos;s online status</property>
-                                                <property name="valign">center</property>
-                                                <property name="use-underline">1</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkStackPage">
-                                        <property name="name">checkmark</property>
-                                        <property name="child">
-                                          <object class="GtkImage">
-                                            <property name="tooltip-text" translatable="yes">You can see the contact&apos;s online status</property>
-                                            <property name="halign">end</property>
-                                            <property name="icon-name">lucide-check-symbolic</property>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="AdwPreferencesGroup" id="contact_settings_box">
-                        <property name="title" translatable="yes">Privacy</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="remove_history_button">
-                        <property name="label" translatable="yes">Remove History…</property>
-                        <property name="focusable">1</property>
-                        <property name="halign">start</property>
-                        <style>
-                          <class name="destructive-action"/>
-                        </style>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="p-18"/>
-                    </style>
                   </object>
                 </property>
               </object>
             </property>
-            <style>
-              <class name="p-18"/>
-            </style>
           </object>
         </property>
       </object>
@@ -285,15 +283,7 @@
             <property name="child">
               <object class="GtkViewport">
                 <property name="child">
-                  <object class="GtkBox" id="encryption_box">
-                    <property name="margin-start">36</property>
-                    <property name="margin-end">36</property>
-                    <property name="margin-top">36</property>
-                    <property name="margin-bottom">36</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <placeholder/>
-                    </child>
+                  <object class="AdwClamp" id="encryption_box">
                   </object>
                 </property>
               </object>
@@ -517,10 +507,6 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="vexpand">1</property>
-                        <property name="margin-start">18</property>
-                        <property name="margin-end">18</property>
-                        <property name="margin-top">18</property>
-                        <property name="margin-bottom">36</property>
                         <property name="label" translatable="yes">No devices online</property>
                         <style>
                           <class name="dimmed"/>
@@ -540,9 +526,6 @@
                 </property>
               </object>
             </child>
-            <style>
-              <class name="p-18"/>
-            </style>
           </object>
         </property>
       </object>
