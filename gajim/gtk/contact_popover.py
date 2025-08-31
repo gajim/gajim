@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import datetime as dt
 from zoneinfo import ZoneInfo
 
@@ -25,6 +27,7 @@ from gajim.common.i18n import _
 from gajim.common.iana import get_zone_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.uri import open_uri
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.structs import AccountJidParam
@@ -228,3 +231,8 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
 
         if len(text) > 30:
             self._label.set_tooltip_text(text)
+
+    @Gtk.Template.Callback()
+    def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
+        open_uri(label.get_current_uri() or label.get_text())
+        return Gdk.EVENT_STOP

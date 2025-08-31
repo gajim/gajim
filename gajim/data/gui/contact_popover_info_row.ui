@@ -16,9 +16,11 @@
         <child>
           <object class="GtkLabel" id="_label">
             <property name="halign">start</property>
+            <property name="valign">center</property>
             <property name="ellipsize">end</property>
             <property name="single-line-mode">1</property>
             <property name="max-width-chars">30</property>
+            <signal name="activate-link" handler="_on_activate_link"/>
           </object>
         </child>
       </object>
