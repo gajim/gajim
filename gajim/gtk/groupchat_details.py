@@ -126,6 +126,8 @@ class GroupchatDetails(GajimAppWindow):
 
         if page is not None:
             self._switcher.activate_item(page)
+        else:
+            self._switcher.activate_item("information")
 
     def _cleanup(self) -> None:
         del self._switcher

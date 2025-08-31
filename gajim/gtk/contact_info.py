@@ -149,6 +149,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         if page is not None:
             self._switcher.activate_item(page)
+        else:
+            self._switcher.activate_item("information")
 
         self._connect(
             self._ui.tree_selection, "changed", self._on_group_selection_changed
