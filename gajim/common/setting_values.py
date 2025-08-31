@@ -28,7 +28,6 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNTDEFAULT()
 BoolSettings = Literal[
     'always_english_wikipedia',
     'always_english_wiktionary',
-    'ascii_formatting',
     'ask_online_status',
     'autoaway',
     'autoxa',
@@ -68,7 +67,6 @@ BoolSettings = Literal[
     'show_in_taskbar',
     'show_notifications',
     'show_notifications_away',
-    'show_only_chat_and_online',
     'show_send_message_button',
     'show_voice_message_button',
     'show_status_msgs_in_roster',
@@ -152,7 +150,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
     'app_font_size': 1.0,
-    'ascii_formatting': True,
     'ask_online_status': False,
     'audio_input_device': 'autoaudiosrc ! volume name=gajim_vol',
     'audio_input_volume': 50,
@@ -233,7 +230,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'show_main_window_on_startup': 'always',
     'show_notifications': True,
     'show_notifications_away': False,
-    'show_only_chat_and_online': False,
     'show_send_message_button': False,
     'show_voice_message_button': True,
     'show_status_msgs_in_roster': True,
@@ -282,7 +278,6 @@ BoolAccountSettings = Literal[
     'send_idle_time',
     'send_marker_default',
     'send_os_info',
-    'send_time_info',
     'sync_muc_blocks',
     'sync_with_global_status',
     'test_ft_proxies_on_startup',
@@ -424,7 +419,6 @@ ACCOUNT_SETTINGS = {
         'send_idle_time': True,
         'send_marker_default': True,
         'send_os_info': True,
-        'send_time_info': True,
         'subscription_request_msg': '',
         'sync_muc_blocks': True,
         'sync_with_global_status': True,
@@ -600,8 +594,6 @@ ADVANCED_SETTINGS = {
             'IANA-registered ones. Space-separated, lower-case, no colons.'),
         'always_english_wikipedia': '',
         'always_english_wiktionary': '',
-        'ascii_formatting': _(
-            'Treat * / _ pairs as possible formatting characters.'),
         'chat_merge_consecutive_nickname': _(
             'Show message meta data (avatar, nickname, timestamp) only once, '
             'if there are multiple messages from the same sender within a '
