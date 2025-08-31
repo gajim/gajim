@@ -645,7 +645,7 @@ class AccountGeneralPage(GajimPreferencePage):
         GajimPreferencePage.__init__(
             self,
             key=f"{account}-general",
-            title=_("General | %(account)s") % {"account": account},
+            title=_("General – %(account)s") % {"account": account},
             groups=[],
             menu=SideBarMenuItem(
                 f"{account}-general",
@@ -663,7 +663,7 @@ class AccountPrivacyPage(GajimPreferencePage):
         GajimPreferencePage.__init__(
             self,
             key=f"{account}-privacy",
-            title=_("Privacy | %(account)s") % {"account": account},
+            title=_("Privacy – %(account)s") % {"account": account},
             groups=[],
             menu=SideBarMenuItem(
                 f"{account}-privacy",
@@ -680,7 +680,7 @@ class AccountOmemoPage(GajimPreferencePage):
         GajimPreferencePage.__init__(
             self,
             key=f"{account}-encryption-omemo",
-            title=_("Encryption (OMEMO) | %(account)s") % {"account": account},
+            title=_("Encryption (OMEMO) – %(account)s") % {"account": account},
             groups=[],
             menu=SideBarMenuItem(
                 f"{account}-encryption-omemo",
@@ -698,7 +698,7 @@ class AccountConnectionPage(GajimPreferencePage):
         GajimPreferencePage.__init__(
             self,
             key=f"{account}-connection",
-            title=_("Connection | %(account)s") % {"account": account},
+            title=_("Connection – %(account)s") % {"account": account},
             groups=[],
             menu=SideBarMenuItem(
                 f"{account}-connection",
@@ -714,7 +714,7 @@ class LoginPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Login | %(account)s") % {"account": account},
+            title=_("Login – %(account)s") % {"account": account},
             key=f"{account}-general-login",
             groups=[],
         )
@@ -726,7 +726,7 @@ class HostnamePage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Hostname | %(account)s") % {"account": account},
+            title=_("Hostname – %(account)s") % {"account": account},
             key=f"{account}-connection-hostname",
             groups=[],
         )
@@ -738,7 +738,7 @@ class AccountAdvancedPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Advanced | %(account)s") % {"account": account},
+            title=_("Advanced – %(account)s") % {"account": account},
             key=f"{account}-advanced",
             groups=[],
             menu=SideBarMenuItem(
