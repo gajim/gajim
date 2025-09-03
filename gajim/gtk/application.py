@@ -443,7 +443,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("add-contact", self._on_add_contact_account_action),
             ("services", self._on_services_action),
             ("profile", self._on_profile_action),
-            ("server-info", self._on_server_info_action),
             ("archive", self._on_archive_action),
             ("pep-config", self._on_pep_config_action),
             ("sync-history", self._on_sync_history_action),
@@ -719,11 +718,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_sync_history_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
         open_window("HistorySyncAssistant", account=account)
-
-    @staticmethod
-    def _on_server_info_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window("ServerInfo", account=account)
 
     @staticmethod
     def _on_xml_console_action(

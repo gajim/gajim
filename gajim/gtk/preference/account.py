@@ -15,6 +15,7 @@ from gajim.common import ged
 from gajim.common import passwords
 from gajim.common import types
 from gajim.common.const import ClientState
+from gajim.common.const import TLS_VERSION_STRINGS
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
 from gajim.common.ged import EventHelper
@@ -24,21 +25,26 @@ from gajim.common.i18n import p_
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import CancelDialogResponse
 from gajim.gtk.alert import DialogResponse
+from gajim.gtk.certificate_dialog import CertificatePage
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.settings import SignalManager
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.structs import ExportHistoryParam
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
 
 
 class AccountGeneralGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="account-general", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="account-general", account=account, title=_("General")
+        )
 
         workspaces = self._get_workspaces()
 
@@ -153,7 +159,9 @@ class AccountGeneralAdvancedGroup(GajimPreferencesGroup):
 
 class AccountPrivacyGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="account-privacy", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="account-privacy", account=account, title=_("Privacy")
+        )
 
         self._client: types.Client | None = None
         if app.account_is_connected(account):
@@ -398,9 +406,32 @@ class AccountOmemoTrustGroup(GajimPreferencesGroup):
 
 class AccountConnectionGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="account-connection", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="account-connection", account=account, title=_("Connection")
+        )
 
         settings = [
+            Setting(
+                SettingKind.SUBPAGE,
+                _("Details"),
+                SettingType.DIALOG,
+                props={"subpage": f"{self.account}-connection-details"},
+            ),
+            Setting(
+                SettingKind.SUBPAGE,
+                _("Certificate"),
+                SettingType.DIALOG,
+                desc=_("Details about the certificate used by this connection"),
+                props={"subpage": f"{self.account}-connection-certificate"},
+            ),
+            Setting(
+                SettingKind.SUBPAGE,
+                _("Hostname"),
+                SettingType.ACCOUNT_CONFIG,
+                "use_custom_host",
+                desc=_("Manually set the hostname for the server"),
+                props={"subpage": f"{self.account}-connection-hostname"},
+            ),
             Setting(
                 SettingKind.DROPDOWN,
                 _("Proxy"),
@@ -412,14 +443,6 @@ class AccountConnectionGroup(GajimPreferencesGroup):
                     "button-icon-name": "lucide-settings-symbolic",
                     "button-callback": self._on_proxy_edit,
                 },
-            ),
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Hostname"),
-                SettingType.ACCOUNT_CONFIG,
-                "use_custom_host",
-                desc=_("Manually set the hostname for the server"),
-                props={"subpage": f"{self.account}-connection-hostname"},
             ),
             Setting(
                 SettingKind.ENTRY, _("Resource"), SettingType.ACCOUNT_CONFIG, "resource"
@@ -454,15 +477,95 @@ class AccountConnectionGroup(GajimPreferencesGroup):
     def _on_proxy_edit(*args: Any) -> None:
         open_window("ManageProxies")
 
-    def update_proxy_entries(self) -> None:
-        raise NotImplementedError
-        # dropdown_row = cast(DropDownSetting, self.listbox.get_setting("proxy"))
-        # dropdown_row.update_entries(self._get_proxies())
+
+@Gtk.Template(string=get_ui_string("preferences/connection-details.ui"))
+class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
+    __gtype_name__ = "AccountConnectionDetailsGroup"
+
+    _clipboard_button: Gtk.Button = Gtk.Template.Child()
+    _domain: Adw.ActionRow = Gtk.Template.Child()
+    _dns: Adw.ActionRow = Gtk.Template.Child()
+    _ip_port: Adw.ActionRow = Gtk.Template.Child()
+    _websocket: Adw.ActionRow = Gtk.Template.Child()
+    _connection_type: Adw.ActionRow = Gtk.Template.Child()
+    _tls_version: Adw.ActionRow = Gtk.Template.Child()
+    _cipher_suite: Adw.ActionRow = Gtk.Template.Child()
+    _proxy_type: Adw.ActionRow = Gtk.Template.Child()
+    _proxy_host: Adw.ActionRow = Gtk.Template.Child()
+
+    def __init__(self, account: str) -> None:
+        Adw.PreferencesGroup.__init__(self)
+        SignalManager.__init__(self)
+
+        client = app.get_client(account)
+        nbxmpp_client = client.connection
+        address = nbxmpp_client.current_address
+
+        assert address is not None
+        assert address.domain is not None
+        self._domain.set_subtitle(address.domain)
+
+        visible = address.service is not None
+        self._dns.set_visible(visible)
+        self._dns.set_subtitle(address.service or "")
+
+        visible = nbxmpp_client.remote_address is not None
+        self._ip_port.set_visible(visible)
+        self._ip_port.set_subtitle(nbxmpp_client.remote_address or "")
+
+        visible = address.uri is not None
+        self._websocket.set_visible(visible)
+        self._websocket.set_subtitle(address.uri or "")
+
+        self._connection_type.set_subtitle(address.type.value)
+        if address.type.is_plain:
+            self._connection_type.add_css_class("error")
+
+        assert nbxmpp_client is not None
+        assert nbxmpp_client.tls_version is not None
+        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
+        self._tls_version.set_subtitle(tls_version or _("Not available"))
+
+        self._cipher_suite.set_subtitle(nbxmpp_client.ciphersuite or _("Not available"))
+
+        # Connection proxy
+        proxy = address.proxy
+        if proxy is not None:
+            self._proxy_type.set_subtitle(proxy.type)
+            self._proxy_host.set_subtitle(proxy.host or "-")
+
+        self._connect(
+            self._clipboard_button, "clicked", self._on_clipboard_button_clicked
+        )
+
+    def _on_clipboard_button_clicked(self, _widget: Gtk.Button) -> None:
+        string = f"Domain: {self._domain.get_subtitle()}\n"
+        if self._dns.is_visible():
+            string += f"DNS: {self._dns.get_subtitle()}\n"
+        if self._ip_port.is_visible():
+            string += f"IP/Port: {self._ip_port.get_subtitle()}\n"
+        if self._websocket.is_visible():
+            string += f"WebSocket URL: {self._websocket.get_subtitle()}\n"
+
+        string += (
+            f"Type: {self._connection_type.get_subtitle()}\n"
+            f"TLS Version: {self._tls_version.get_subtitle()}\n"
+            f"Cipher Suite: {self._cipher_suite.get_subtitle()}\n"
+            f"Proxy Type: {self._proxy_type.get_subtitle()}\n"
+            f"Proxy Host: {self._proxy_host.get_subtitle()}\n"
+        )
+        app.window.get_clipboard().set(string)
+
+    def do_unroot(self) -> None:
+        Adw.PreferencesGroup.do_unroot(self)
+        self._disconnect_all()
 
 
 class AccountAdvancedGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="account-advanced", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="account-advanced", account=account, title=_("Advanced")
+        )
 
         settings = [
             Setting(
@@ -513,7 +616,9 @@ class AccountAdvancedGroup(GajimPreferencesGroup):
 
 class LoginGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="login", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="login", account=account, title=_("Login")
+        )
 
         settings = [
             Setting(
@@ -564,7 +669,9 @@ class LoginGroup(GajimPreferencesGroup):
 
 class HostnameGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="hostname", account=account)
+        GajimPreferencesGroup.__init__(
+            self, key="hostname", account=account, title=_("Hostname")
+        )
 
         type_values = ["START TLS", "DIRECT TLS", "PLAIN"]
 
@@ -655,6 +762,45 @@ class AccountOmemoPage(GajimPreferencePage):
 
         self.add(AccountOmemoSettingsGroup(account))
         self.add(AccountOmemoTrustGroup(account))
+
+
+class AccountConnectionDetailsPage(GajimPreferencePage):
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key=f"{account}-connection-details",
+            title=_("Details - %(account)s") % {"account": account},
+            groups=[],
+        )
+
+        if not app.account_is_available(account):
+            self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
+            return
+
+        self.add(AccountConnectionDetailsGroup(account))
+
+
+class AccountConnectionCertificatePage(GajimPreferencePage):
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key=f"{account}-connection-certificate",
+            title=_("Certificate - %(account)s") % {"account": account},
+            groups=[],
+        )
+
+        if not app.account_is_available(account):
+            self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
+            return
+
+        client = app.get_client(account)
+        if client.certificate is None:
+            self.set_content(
+                Gtk.Label(label=_("No certificate available"), valign=Gtk.Align.CENTER)
+            )
+            return
+
+        self.set_content(CertificatePage(account, client.certificate))
 
 
 class AccountConnectionPage(GajimPreferencePage):

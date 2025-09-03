@@ -24,6 +24,8 @@ from gajim.common.setting_values import AllSettingsT
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.preference.account import AccountAdvancedPage
+from gajim.gtk.preference.account import AccountConnectionCertificatePage
+from gajim.gtk.preference.account import AccountConnectionDetailsPage
 from gajim.gtk.preference.account import AccountConnectionPage
 from gajim.gtk.preference.account import AccountGeneralPage
 from gajim.gtk.preference.account import AccountOmemoPage
@@ -42,6 +44,8 @@ from gajim.gtk.preference.app import PluginsPage
 from gajim.gtk.preference.app import StatusPage
 from gajim.gtk.preference.app import StylePage
 from gajim.gtk.preference.app import VisualNotificationsPage
+from gajim.gtk.preference.server_info import AccountProviderContactsPage
+from gajim.gtk.preference.server_info import AccountProviderPage
 from gajim.gtk.preference.shortcuts import ShortcutsPage
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
@@ -162,10 +166,14 @@ class Preferences(GajimAppWindow, EventHelper):
             AccountPrivacyPage(account),
             AccountOmemoPage(account),
             AccountConnectionPage(account),
+            AccountProviderPage(account),
             AccountAdvancedPage(account),
             # Subpages
             LoginPage(account),
             HostnamePage(account),
+            AccountConnectionDetailsPage(account),
+            AccountConnectionCertificatePage(account),
+            AccountProviderContactsPage(account),
         ]
 
         for page in pages:

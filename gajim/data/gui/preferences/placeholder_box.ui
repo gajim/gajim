@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="PlaceholderBox" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
+    <child>
+      <object class="GtkImage">
+        <property name="icon-name">lucide-cloud-off-symbolic</property>
+        <property name="pixel-size">48</property>
+        <style>
+          <class name="dimmed"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">Account is not connected</property>
+        <style>
+          <class name="dimmed"/>
+        </style>
+      </object>
+    </child>
+    <style>
+      <class name="py-18"/>
+    </style>
+  </template>
+</interface>

@@ -114,6 +114,9 @@ builder_names: list[tuple[str, str]] = []
 with out_path.open(mode="w", encoding="utf8") as file:
     file.write(IMPORTS)
     for path in paths:
+        if path.is_dir():
+            continue
+
         if path.name.endswith("~"):
             continue
 

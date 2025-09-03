@@ -174,24 +174,6 @@ class CallWindowBuilder(Builder):
     volumebutton_minus_button1: Gtk.Button
     dtmf_button: Gtk.MenuButton
 
-class CertificateBuilder(Builder):
-    certificate_scrolled: Gtk.ScrolledWindow
-    clipboard_button: Gtk.Button
-    account_label_row: Adw.ActionRow
-    account_address_row: Adw.ActionRow
-    issued_to_common_name_row: Adw.ActionRow
-    issued_to_organization_row: Adw.ActionRow
-    issued_to_subject_alt_names_row: Adw.ActionRow
-    issued_to_serial_number_row: Adw.ActionRow
-    issued_by_common_name_row: Adw.ActionRow
-    issued_by_organization_row: Adw.ActionRow
-    issue_date_row: Adw.ActionRow
-    expiry_date_row: Adw.ActionRow
-    fingerprint_sha1_row: Adw.ActionRow
-    fingerprint_sha256_row: Adw.ActionRow
-    algorithm_row: Adw.ActionRow
-    key_size_row: Adw.ActionRow
-
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
     conv_view_paned: Gtk.Paned
@@ -758,28 +740,6 @@ class SearchViewBuilder(Builder):
     row_time_label: Gtk.Label
     row_name_label: Gtk.Label
 
-class ServerInfoBuilder(Builder):
-    box: Gtk.Box
-    server_info_stack: Adw.ViewStack
-    server_hostname_row: Adw.ActionRow
-    server_software_row: Adw.ActionRow
-    server_uptime_row: Adw.ActionRow
-    contact_addresses_listbox: Gtk.ListBox
-    domain_row: Adw.ActionRow
-    dns_row: Adw.ActionRow
-    ip_port_row: Adw.ActionRow
-    websocket_row: Adw.ActionRow
-    connection_type_row: Adw.ActionRow
-    tls_version_row: Adw.ActionRow
-    cipher_suite_row: Adw.ActionRow
-    proxy_type_row: Adw.ActionRow
-    proxy_host_row: Adw.ActionRow
-    cert_box: Gtk.Box
-    no_certificate_label: Gtk.Label
-    features_group: Adw.PreferencesGroup
-    clipboard_button: Gtk.Button
-    features_listbox: Gtk.ListBox
-
 class ServiceDiscoveryWindowBuilder(Builder):
     service_discovery: Gtk.Box
     banner_agent_icon: Gtk.Image
@@ -932,10 +892,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["call_window.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> CallWindowBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["certificate.ui"], instance: Any = None, widgets: list[str] = ...
-) -> CertificateBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["chat_control.ui"],
@@ -1154,10 +1110,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["search_view.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> SearchViewBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["server_info.ui"], instance: Any = None, widgets: list[str] = ...
-) -> ServerInfoBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["service_discovery_window.ui"],

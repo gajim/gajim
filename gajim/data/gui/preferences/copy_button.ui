@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="CopyButton" parent="GtkButton">
+    <property name="valign">center</property>
+    <child>
+      <object class="AdwButtonContent">
+        <property name="icon-name">lucide-copy-symbolic</property>
+        <property name="label" translatable="yes">Copy</property>
+        <property name="tooltip-text" translatable="yes">Copy to Clipboard</property>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AccountProviderInfoGroup" parent="AdwPreferencesGroup">
+    <property name="title" translatable="yes">Service Provider</property>
+    <child type="header-suffix">
+      <object class="CopyButton" id="_clipboard_button"/>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_hostname_row">
+        <property name="title">Hostname</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_software_row">
+        <property name="title">Software</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_uptime_row">
+        <property name="title">Uptime</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

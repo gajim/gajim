@@ -1030,7 +1030,7 @@ class SecurityWarning(Page):
     def _on_view_cert(self, _button: Gtk.Button) -> None:
         open_window(
             "CertificateDialog",
-            account=self._domain,
+            account=None,
             transient_for=self.get_root(),
             cert=self._cert,
         )

@@ -19,7 +19,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common.exceptions import PluginsystemError
-from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.types import PluginRepositoryT
 from gajim.plugins.events import PluginAdded
@@ -40,11 +39,9 @@ from gajim.gtk.util.window import get_app_window
 log = logging.getLogger("gajim.gtk.plugins")
 
 
-class Plugins(GajimPreferencesGroup, EventHelper, SignalManager):
+class Plugins(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(self, key="plugins", title=_("Plugins"))
-        EventHelper.__init__(self)
-        SignalManager.__init__(self)
 
         self._plugin_rows: dict[str, PluginRow] = {}
 
@@ -93,10 +90,8 @@ class Plugins(GajimPreferencesGroup, EventHelper, SignalManager):
         GLib.idle_add(self._load_repository_manifests)
 
     def do_unroot(self) -> None:
-        self._disconnect_all()
         app.plugin_repository.disconnect(self)
-        self.unregister_events()
-        Adw.PreferencesGroup.do_unroot(self)
+        GajimPreferencesGroup.do_unroot(self)
 
     @staticmethod
     def _sort_func(row1: PluginRow, row2: PluginRow) -> int:

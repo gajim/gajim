@@ -88,8 +88,20 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         self._menu.append(menu)
 
     def remove_menu(self, key: str) -> None:
-        # This currently only removes a menu item at top level which has
-        # at max has one sublevel
+        # This currently only removes a menu item at top level
+
+        def _remove_sub_pages(menu: SideBarMenuItem) -> None:
+            listbox = cast(Gtk.ListBox | None, self.get_child_by_name(menu.key))
+            if listbox is not None:
+                self.remove(listbox)
+
+            if menu.children is None:
+                return
+
+            for c_m in menu.children:
+                if c_m.children:
+                    _remove_sub_pages(c_m)
+
         for m in self._menu:
             if m.key != key:
                 continue
@@ -99,9 +111,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
             listbox = cast(Gtk.ListBox, self.get_child_by_name("__main"))
             listbox.remove(m)
 
-            listbox = cast(Gtk.ListBox | None, self.get_child_by_name(m.key))
-            if listbox is not None:
-                self.remove(listbox)
+            _remove_sub_pages(m)
 
             self.set_visible_child_name("__main")
             return

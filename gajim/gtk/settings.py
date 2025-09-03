@@ -22,6 +22,7 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import passwords
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
@@ -33,6 +34,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
+from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
@@ -87,7 +89,9 @@ class SettingsDialog(GajimAppWindow):
         return self.listbox.get_setting(name)
 
 
-class GajimPreferencesGroup(Adw.PreferencesGroup):
+class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
+    __gtype_name__ = "GajimPreferencesGroup"
+
     def __init__(
         self,
         key: str,
@@ -99,6 +103,8 @@ class GajimPreferencesGroup(Adw.PreferencesGroup):
         header_suffix: Gtk.Widget | None = None,
     ) -> None:
 
+        EventHelper.__init__(self)
+        SignalManager.__init__(self)
         Adw.PreferencesGroup.__init__(
             self, description=description, title=title, header_suffix=header_suffix
         )
@@ -124,6 +130,8 @@ class GajimPreferencesGroup(Adw.PreferencesGroup):
         }
 
     def do_unroot(self) -> None:
+        self._disconnect_all()
+        self.unregister_events()
         Adw.PreferencesGroup.do_unroot(self)
         self.named_settings.clear()
         app.check_finalize(self)
@@ -149,6 +157,17 @@ class GajimPreferencesGroup(Adw.PreferencesGroup):
 
     def get_setting(self, name: str) -> GenericSetting:
         return self.named_settings[name]
+
+    def add_copy_button(self) -> None:
+        button = CopyButton()
+        self._connect(button, "clicked", self._on_clipboard_button_clicked)
+        self.set_header_suffix(button)
+
+    def _on_clipboard_button_clicked(self, _widget: Gtk.Button) -> None:
+        app.window.get_clipboard().set(self._get_clipboard_text())
+
+    def _get_clipboard_text(self) -> str:
+        raise NotImplementedError
 
 
 class GajimPreferencePage(Adw.NavigationPage):
@@ -177,14 +196,19 @@ class GajimPreferencePage(Adw.NavigationPage):
         Adw.NavigationPage.do_unroot(self)
         app.check_finalize(self)
 
-    def add(self, group: GajimPreferencesGroup) -> None:
-        self._groups.append(group)
+    def add(self, group: GajimPreferencesGroup | Adw.PreferencesGroup) -> None:
+        if isinstance(group, GajimPreferencesGroup):
+            self._groups.append(group)
         self._pref_page.add(group)
 
     def get_group(self, key: str) -> GajimPreferencesGroup | None:
         for group in self._groups:
             if group.key == key:
                 return group
+
+    def set_content(self, widget: Gtk.Widget) -> None:
+        toolbar = cast(Adw.ToolbarView, self.get_child())
+        toolbar.set_content(widget)
 
 
 class SettingsBox(Gtk.ListBox):

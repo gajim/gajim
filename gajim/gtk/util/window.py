@@ -51,7 +51,6 @@ if TYPE_CHECKING:
     from gajim.gtk.quit import QuitDialog
     from gajim.gtk.remove_account import RemoveAccount
     from gajim.gtk.roster_item_exchange import RosterItemExchange
-    from gajim.gtk.server_info import ServerInfo
     from gajim.gtk.service_registration import ServiceRegistration
     from gajim.gtk.ssl_error_dialog import SSLErrorDialog
     from gajim.gtk.start_chat import StartChatDialog
@@ -88,7 +87,6 @@ if TYPE_CHECKING:
         | QuitDialog
         | RemoveAccount
         | RosterItemExchange
-        | ServerInfo
         | ServiceDiscoveryWindow
         | ServiceRegistration
         | SSLErrorDialog
@@ -126,7 +124,6 @@ if TYPE_CHECKING:
         | Literal["QuitDialog"]
         | Literal["RemoveAccount"]
         | Literal["RosterItemExchange"]
-        | Literal["ServerInfo"]
         | Literal["ServiceDiscoveryWindow"]
         | Literal["ServiceRegistration"]
         | Literal["SSLErrorDialog"]
@@ -406,14 +403,6 @@ def get_app_window(
 
 @overload
 def get_app_window(
-    name: Literal["ServerInfo"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> ServerInfo | None: ...
-
-
-@overload
-def get_app_window(
     name: Literal["ServiceDiscoveryWindow"],
     account: str | None = None,
     jid: str | JID | None = None,
@@ -548,8 +537,6 @@ def open_window(name: Literal["RemoveAccount"], **kwargs: Any) -> RemoveAccount:
 def open_window(
     name: Literal["RosterItemExchange"], **kwargs: Any
 ) -> RosterItemExchange: ...
-@overload
-def open_window(name: Literal["ServerInfo"], **kwargs: Any) -> ServerInfo: ...
 @overload
 def open_window(
     name: Literal["ServiceDiscoveryWindow"], **kwargs: Any

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AccountConnectionDetailsGroup" parent="AdwPreferencesGroup">
+    <property name="title" translatable="yes">Details</property>
+    <child type="header-suffix">
+      <object class="CopyButton" id="_clipboard_button"/>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_domain">
+        <property name="title">Domain</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_dns">
+        <property name="title">DNS</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_ip_port">
+        <property name="title">IP / Port</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_websocket">
+        <property name="title">WebSocket URL</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_connection_type">
+        <property name="title">Type</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_tls_version">
+        <property name="title">TLS Version</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_cipher_suite">
+        <property name="title">Cipher Suite</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_proxy_type">
+        <property name="title">Proxy Type</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_proxy_host">
+        <property name="title">Proxy Host</property>
+        <property name="subtitle-selectable">True</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

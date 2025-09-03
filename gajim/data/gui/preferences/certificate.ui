@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="CertificatePage" parent="AdwPreferencesPage">
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Certificate</property>
+        <property name="description" translatable="yes">Your connection to the server is secured by this certificate</property>
+        <child type="header-suffix">
+          <object class="CopyButton" id="_clipboard_button"/>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_account_label_row">
+            <property name="title" translatable="yes">Account Label</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_account_address_row">
+            <property name="title" translatable="yes">Account Address</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Issued to</property>
+            <child>
+              <object class="AdwActionRow" id="_issued_to_common_name_row">
+                <property name="title">Common Name (CN)</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_issued_to_organization_row">
+                <property name="title">Organization (O)</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_issued_to_subject_alt_names_row">
+                <property name="title">Subject Alt Names</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_issued_to_serial_number_row">
+                <property name="title">Serial Number</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Issued by</property>
+            <child>
+              <object class="AdwActionRow" id="_issued_by_common_name_row">
+                <property name="title">Common Name (CN)</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_issued_by_organization_row">
+                <property name="title">Organization (O)</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Validity</property>
+            <child>
+              <object class="AdwActionRow" id="_issue_date_row">
+                <property name="title" translatable="yes">Issue date</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_expiry_date_row">
+                <property name="title" translatable="yes">Expiry date</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Fingerprints</property>
+            <child>
+              <object class="AdwActionRow" id="_fingerprint_sha1_row">
+                <property name="title">SHA-1</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_fingerprint_sha256_row">
+                <property name="title">SHA-256</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Public Key Information</property>
+            <child>
+              <object class="AdwActionRow" id="_algorithm_row">
+                <property name="title">Algorithm</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_key_size_row">
+                <property name="title">Key Size</property>
+                <property name="subtitle-selectable">True</property>
+                <style>
+                  <class name="property"/>
+                </style>
+              </object>
+            </child>
+      </object>
+    </child>
+  </template>
+</interface>

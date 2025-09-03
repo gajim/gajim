@@ -226,7 +226,6 @@ def get_account_menu(account: str) -> GajimMenu:
         (_("Profile"), f"app.{account}-profile", account),
         (_("Discover Services…"), f"app.{account}-services", account),
         (_("Execute Command…"), f"app.{account}-execute-command", params),
-        (_("Server Info"), f"app.{account}-server-info", account),
     ]
 
     menu = GajimMenu.from_list(menuitems)
