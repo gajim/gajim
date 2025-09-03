@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from typing import cast
 
-import mimetypes
 import os
 from collections import defaultdict
 from collections.abc import Callable
@@ -41,6 +40,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_request
+from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.text import get_random_string
 from gajim.common.util.user_strings import get_tls_error_phrases
 
@@ -144,7 +144,7 @@ class HTTPUpload(BaseModule):
         if invalid_file:
             raise FileError(msg)
 
-        mime = mimetypes.MimeTypes().guess_type(path)[0]
+        mime = guess_mime_type(path)
         if not mime:
             mime = 'application/octet-stream'  # fallback mime type
         self._log.info('Detected MIME type of file: %s', mime)
