@@ -102,7 +102,7 @@ class Discovery(BaseModule):
         except nbxmpp.NodeProcessed:
             pass
 
-        app.ged.raise_event(ServerDiscoReceived())
+        app.ged.raise_event(ServerDiscoReceived(account=self._account))
 
     def discover_account_info(self) -> None:
         own_jid = self._con.get_own_jid().bare

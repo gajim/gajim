@@ -394,6 +394,7 @@ class GatewayPromptReceived(ApplicationEvent):
 @dataclass
 class ServerDiscoReceived(ApplicationEvent):
     name: str = field(init=False, default='server-disco-received')
+    account: str
 
 
 @dataclass
