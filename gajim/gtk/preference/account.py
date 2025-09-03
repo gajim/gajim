@@ -27,7 +27,6 @@ from gajim.gtk.alert import DialogResponse
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.filechoosers import Filter
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
@@ -74,12 +73,6 @@ class AccountGeneralGroup(GajimPreferencesGroup):
                 inverted=True,
                 props={"subpage": f"{self.account}-general-login"},
             ),
-            # Currently not supported by nbxmpp
-            #
-            # Setting(SettingKind.DIALOG,
-            #         _('Client Certificate'),
-            #         SettingType.SUBPAGE,
-            #         props={'subpage': f"{self.account}-general-certificate"}),
             Setting(
                 SettingKind.SWITCH,
                 _("Connect on startup"),
@@ -604,35 +597,6 @@ class HostnameGroup(GajimPreferencesGroup):
                 "custom_type",
                 bind="account::use_custom_host",
                 props={"data": type_values},
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-
-class CertificateGroup(GajimPreferencesGroup):
-    def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(self, key="certificate", account=account)
-
-        settings = [
-            Setting(
-                SettingKind.FILECHOOSER,
-                _("Client Certificate"),
-                SettingType.ACCOUNT_CONFIG,
-                "client_cert",
-                props={
-                    "filefilter": [
-                        Filter(name=_("All files"), patterns=["*"]),
-                        Filter(name=_("PKCS12 Files"), patterns=["*.p12"]),
-                    ]
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Encrypted Certificate"),
-                SettingType.ACCOUNT_CONFIG,
-                "client_cert_encrypted",
             ),
         ]
 
