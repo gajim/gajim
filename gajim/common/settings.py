@@ -851,7 +851,7 @@ class Settings:
             context = 'public'
             if app.account_is_connected(account):
                 client = app.get_client(account)
-                contact = client.get_module('Contacts').get_contact(jid)
+                contact = client.get_module('Contacts').get_contact(jid, groupchat=True)
                 context = contact.muc_context
                 if context is None:
                     # If there is no disco info available
@@ -911,7 +911,9 @@ class Settings:
             for jid in acc_settings['group_chat']:
                 if context is not None:
                     client = app.get_client(account)
-                    contact = client.get_module('Contacts').get_contact(jid)
+                    contact = client.get_module('Contacts').get_contact(
+                        jid, groupchat=True
+                    )
                     if contact.muc_context != context:
                         continue
                 self.set_group_chat_setting(account, jid, setting, value)
