@@ -606,6 +606,7 @@ class PepConfigBuilder(Builder):
     overview_box: Gtk.Box
     services_treeview: Gtk.TreeView
     delete_button: Gtk.Button
+    reload_button: Gtk.Button
     configure_button: Gtk.Button
     show_content_button: Gtk.Button
     items_box: Gtk.Box

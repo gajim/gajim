@@ -32,6 +32,18 @@
               <object class="GtkBox">
                 <property name="spacing">12</property>
                 <child>
+                  <object class="GtkButton" id="reload_button">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="tooltip-text" translatable="yes">Reload</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">lucide-refresh-cw-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkButton" id="delete_button">
                     <property name="label" translatable="yes">_Delete</property>
                     <property name="sensitive">0</property>
@@ -154,7 +166,7 @@
                 </child>
               </object>
             </child>
-                        <child>
+            <child>
               <object class="GtkBox">
                 <child>
                   <object class="GtkButton" id="config_back_button">

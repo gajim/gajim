@@ -65,6 +65,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
         selection = self._ui.services_treeview.get_selection()
         self._connect(selection, "changed", self._on_services_selection_changed)
 
+        self._connect(self._ui.reload_button, "clicked", self._reload_pep_entries)
         self._connect(
             self._ui.show_content_button, "clicked", self._on_show_content_clicked
         )
@@ -88,7 +89,6 @@ class PEPConfig(GajimAppWindow, EventHelper):
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
     def _on_services_selection_changed(self, _selection: Gtk.TreeSelection) -> None:
-
         self._ui.configure_button.set_sensitive(True)
         self._ui.show_content_button.set_sensitive(True)
         self._ui.delete_button.set_sensitive(True)
@@ -106,6 +106,15 @@ class PEPConfig(GajimAppWindow, EventHelper):
         cellrenderer_text = Gtk.CellRendererText()
         col.pack_start(cellrenderer_text, True)
         col.add_attribute(cellrenderer_text, "text", 0)
+
+        self._reload_pep_entries()
+
+    def _reload_pep_entries(self, *args: Any) -> None:
+        self.treestore.clear()
+
+        self._ui.configure_button.set_sensitive(False)
+        self._ui.show_content_button.set_sensitive(False)
+        self._ui.delete_button.set_sensitive(False)
 
         jid = self._client.get_own_jid().bare
         self._client.get_module("Discovery").disco_items(
