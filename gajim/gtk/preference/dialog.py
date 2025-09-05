@@ -28,6 +28,7 @@ from gajim.gtk.preference.account import AccountConnectionCertificatePage
 from gajim.gtk.preference.account import AccountConnectionDetailsPage
 from gajim.gtk.preference.account import AccountConnectionPage
 from gajim.gtk.preference.account import AccountGeneralPage
+from gajim.gtk.preference.account import AccountManageRosterPage
 from gajim.gtk.preference.account import AccountOmemoPage
 from gajim.gtk.preference.account import AccountPrivacyPage
 from gajim.gtk.preference.account import HostnamePage
@@ -167,6 +168,7 @@ class Preferences(GajimAppWindow, EventHelper):
             AccountOmemoPage(account),
             AccountConnectionPage(account),
             AccountProviderPage(account),
+            AccountManageRosterPage(account),
             AccountAdvancedPage(account),
             # Subpages
             LoginPage(account),

@@ -449,7 +449,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("blocking", self._on_blocking_action),
             ("open-event", self._on_open_event_action),
             ("mark-as-read", self._on_mark_as_read_action),
-            ("manage-roster", self._on_manage_roster_action),
             ("block-contact", self._on_block_contact),
             ("remove-contact", self._on_remove_contact),
             ("execute-command", self._on_execute_command),
@@ -648,13 +647,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
         open_window("AccountWizard")
-
-    @staticmethod
-    def _on_manage_roster_action(
-        _action: Gio.SimpleAction, param: GLib.Variant
-    ) -> None:
-        account = param.get_string()
-        open_window("ManageRoster", account=account)
 
     @structs.actionmethod
     def _on_block_contact(

@@ -808,6 +808,10 @@ button.flat.link { padding: 0; border: 0; }
     padding: 18px;
 }
 
+.preference-page {
+    margin: 24px;
+}
+
 /* DataFormWidget */
 .field-fixed { font-size: 1.33rem; font-weight: bold; padding-top:5px;}
 .data-form-widget grid { margin: 0px 18px 18px 18px; }

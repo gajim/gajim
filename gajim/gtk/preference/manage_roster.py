@@ -14,6 +14,7 @@ import enum
 import logging
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -35,10 +36,10 @@ from gajim.common.util.decorators import event_filter
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import DialogEntry
 from gajim.gtk.alert import InformationAlertDialog
-from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_manage_roster_import_menu
 from gajim.gtk.menus import get_manage_roster_menu
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.manage_roster")
@@ -56,22 +57,30 @@ class ImportedItem(NamedTuple):
     groups: set[str]
 
 
-class ManageRoster(GajimAppWindow, EventHelper):
+@Gtk.Template.from_string(string=get_ui_string("preferences/manage_roster.ui"))
+class ManageRoster(Gtk.Box, SignalManager, EventHelper):
+    __gtype_name__ = "ManageRoster"
+
+    _top_box: Gtk.Box = Gtk.Template.Child()
+    _search_entry: Gtk.SearchEntry = Gtk.Template.Child()
+    _import_button: Gtk.MenuButton = Gtk.Template.Child()
+    _export_button: Gtk.Button = Gtk.Template.Child()
+    _scrolled_box: Gtk.Box = Gtk.Template.Child()
+    _scrolled: Gtk.ScrolledWindow = Gtk.Template.Child()
+    _column_view: Gtk.ColumnView = Gtk.Template.Child()
+    _jid_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
+    _name_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
+    _subscription_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
+    _ask_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
+
     def __init__(self, account: str) -> None:
-        GajimAppWindow.__init__(
-            self,
-            name="ManageRoster",
-            title=_("Manage Contact List"),
-            default_height=600,
-            default_width=700,
-        )
+        Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self.account = account
         self._client = app.get_client(account)
         self._actions: list[tuple[str, Any, Any]] = []
-        self._ui = get_builder("manage_roster.ui")
-        self.set_child(self._ui.main)
 
         self._model = Gio.ListStore(item_type=RosterListItem)
 
@@ -79,7 +88,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._connect(h_factory, "setup", self._on_h_factory_setup)
         self._connect(h_factory, "bind", self._on_h_factory_bind)
         self._connect(h_factory, "unbind", self._on_factory_unbind)
-        self._ui.column_view.set_header_factory(h_factory)
+        self._column_view.set_header_factory(h_factory)
 
         for _jid, item in self._client.get_module("Roster").iter():
             groups = item.groups or {""}
@@ -87,10 +96,10 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 self._model.append(RosterListItem(item, group))
 
         columns = [
-            (self._ui.jid_col, RosterViewItemLabel, "jid"),
-            (self._ui.name_col, RosterViewItemLabel, "name"),
-            (self._ui.subscription_col, RosterViewItemImage, "subscription"),
-            (self._ui.ask_col, RosterViewItemImage, "ask"),
+            (self._jid_col, RosterViewItemLabel, "jid"),
+            (self._name_col, RosterViewItemLabel, "name"),
+            (self._subscription_col, RosterViewItemImage, "subscription"),
+            (self._ask_col, RosterViewItemImage, "ask"),
         ]
 
         for col, widget, attr in columns:
@@ -129,30 +138,31 @@ class ManageRoster(GajimAppWindow, EventHelper):
         filter_model = Gtk.FilterListModel(model=sort_model, filter=self._string_filter)
 
         self._selection_model = Gtk.MultiSelection(model=filter_model)
-        self._ui.column_view.set_model(self._selection_model)
+        self._column_view.set_model(self._selection_model)
 
         self._popover_menu = GajimPopover(None)
-        self._ui.scrolled_box.append(self._popover_menu)
+        self._scrolled_box.append(self._popover_menu)
 
         gesture_secondary_click = Gtk.GestureClick(
             button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE
         )
         self._connect(gesture_secondary_click, "pressed", self._popup_menu)
-        self._ui.scrolled_box.add_controller(gesture_secondary_click)
+        self._scrolled_box.add_controller(gesture_secondary_click)
 
         accounts = app.get_enabled_accounts_with_labels()
         accounts = [(acc, label) for acc, label in accounts if acc != self.account]
 
-        self._ui.import_button.set_menu_model(get_manage_roster_import_menu(accounts))
+        self._import_button.set_menu_model(
+            get_manage_roster_import_menu(account, accounts)
+        )
+        self._export_button.set_action_name(f"win.{account}-export-to-csv")
 
-        self._connect(self._ui.search_entry, "search-changed", self._on_search_changed)
+        self._connect(self._search_entry, "search-changed", self._on_search_changed)
 
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
-        self._add_actions()
-
-    def _cleanup(self, *args: Any) -> None:
+    def do_unroot(self) -> None:
         del self._selection_model
         del self._popover_menu
         del self._model
@@ -160,27 +170,36 @@ class ManageRoster(GajimAppWindow, EventHelper):
         del self._string_filter
         self._client.disconnect_all_from_obj(self)
         self.unregister_events()
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
 
-    def _add_actions(self) -> None:
+    def do_root(self) -> None:
+        Gtk.Box.do_root(self)
+        self._add_actions(self.account)
+
+    def _add_actions(self, account: str) -> None:
         self._actions = [
-            ("add-to-group", "s", self._on_add_to_group),
-            ("add-to-new-group", None, self._on_add_to_new_group),
-            ("move-to-group", "s", self._on_move_to_group),
-            ("move-to-new-group", None, self._on_move_to_new_group),
-            ("remove-from-group", None, self._remove_from_group),
-            ("remove-from-roster", None, self._on_remove_from_roster),
-            ("change-name", None, self._on_change_name),
-            ("import-from-account", "s", self._on_import_from_account),
-            ("import-from-file", None, self._on_import_from_file),
-            ("export-to-csv", None, self._on_export_to_csv),
+            (f"{account}-add-to-group", "s", self._on_add_to_group),
+            (f"{account}-add-to-new-group", None, self._on_add_to_new_group),
+            (f"{account}-move-to-group", "s", self._on_move_to_group),
+            (f"{account}-move-to-new-group", None, self._on_move_to_new_group),
+            (f"{account}-remove-from-group", None, self._remove_from_group),
+            (f"{account}-remove-from-roster", None, self._on_remove_from_roster),
+            (f"{account}-change-name", None, self._on_change_name),
+            (f"{account}-import-from-account", "s", self._on_import_from_account),
+            (f"{account}-import-from-file", None, self._on_import_from_file),
+            (f"{account}-export-to-csv", None, self._on_export_to_csv),
         ]
+
+        parent = self.get_ancestor(Adw.ApplicationWindow)
+        assert parent is not None
 
         for action, variant_type, callback in self._actions:
             if variant_type is not None:
                 variant_type = GLib.VariantType(variant_type)
             act = Gio.SimpleAction.new(action, variant_type)
             self._connect(act, "activate", callback)
-            self.window.add_action(act)
+            parent.add_action(act)
 
     @staticmethod
     def _on_factory_setup(
@@ -248,8 +267,11 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self, _client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
 
+        parent = self.get_ancestor(Adw.ApplicationWindow)
+        assert parent is not None
+
         for actions in self._actions:
-            action = self.window.lookup_action(actions[0])
+            action = parent.lookup_action(actions[0])
             assert isinstance(action, Gio.SimpleAction)
             action.set_enabled(state.is_connected)
 
@@ -266,7 +288,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("Add"),
             extra_widget=DialogEntry(text=_("New Group")),
             callback=self._add_to_group,
-            parent=self.window,
         )
 
     def _add_to_group(self, group: str) -> None:
@@ -287,7 +308,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("Move"),
             extra_widget=DialogEntry(text=_("New Group")),
             callback=self._move_to_group,
-            parent=self.window,
         )
 
     def _move_to_group(self, group: str) -> None:
@@ -322,7 +342,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("_Remove"),
             appearance="destructive",
             callback=_on_response,
-            parent=self.window,
         )
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
@@ -342,7 +361,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("Rename"),
             extra_widget=DialogEntry(text=item.name),
             callback=_on_response,
-            parent=self.window,
         )
 
     def _on_import_from_account(
@@ -373,7 +391,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("_Import"),
             appearance="suggested",
             callback=_on_response,
-            parent=self.window,
         )
 
     def _on_import_from_file(self, _action: Gio.SimpleAction, param: None) -> None:
@@ -401,7 +418,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
             modal=True,
         )
 
-        dialog.open(self.window, None, _on_file_picked)
+        parent = app.app.get_active_window()
+        dialog.open(parent, None, _on_file_picked)
 
     def _on_export_to_csv(self, _action: Gio.SimpleAction, param: None) -> None:
 
@@ -432,7 +450,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
             modal=True,
         )
 
-        dialog.save(self.window, None, _on_file_picked)
+        parent = app.app.get_active_window()
+        dialog.save(parent, None, _on_file_picked)
 
     def _export(self, path: Path) -> None:
         with path.open(mode="w", encoding="utf-8") as csvfile:
@@ -473,7 +492,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             confirm_label=_("_Import"),
             appearance="suggested",
             callback=_on_response,
-            parent=self.window,
         )
 
     def _validate_imported_item(self, row: list[str]) -> ImportedItem | None:
@@ -527,7 +545,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         groups = self._client.get_module("Roster").get_groups()
         groups = sorted(groups)
 
-        menu = get_manage_roster_menu(groups, single_selection)
+        menu = get_manage_roster_menu(self.account, groups, single_selection)
         self._popover_menu.set_menu_model(menu)
         self._popover_menu.set_pointing_to_coord(x, y)
         self._popover_menu.popup()

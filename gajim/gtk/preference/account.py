@@ -30,6 +30,7 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.preference.manage_roster import ManageRoster
 from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
@@ -818,6 +819,27 @@ class AccountConnectionPage(GajimPreferencePage):
         )
 
         self.add(AccountConnectionGroup(account))
+
+
+class AccountManageRosterPage(GajimPreferencePage):
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key=f"{account}-manage-roster",
+            title=_("Contact List – %(account)s") % {"account": account},
+            groups=[],
+            menu=SideBarMenuItem(
+                f"{account}-manage-roster",
+                _("Contact List"),
+                icon_name="lucide-users-symbolic",
+            ),
+        )
+
+        if not app.account_is_available(account):
+            self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
+            return
+
+        self.set_content(ManageRoster(account))
 
 
 class LoginPage(GajimPreferencePage):
