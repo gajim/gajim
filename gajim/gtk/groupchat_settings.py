@@ -54,7 +54,7 @@ class GroupChatSettings(SettingsBox):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Send Chat Markers"),
+                _("Send Read Markers"),
                 SettingType.GROUP_CHAT,
                 "send_marker",
                 desc=_("Let others know if you read up to this point"),

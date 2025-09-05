@@ -34,7 +34,7 @@ class ContactSettings(SettingsBox):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Send Chat Markers"),
+                _("Send Read Markers"),
                 SettingType.CONTACT,
                 "send_marker",
                 desc=_("Let others know if you read up to this point"),
