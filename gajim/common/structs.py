@@ -315,6 +315,7 @@ class ReplyData:
     pk: int
     to: JID
     id: str
+    thread_id: str | None
     fallback_start: int
     fallback_end: int
     fallback_text: str

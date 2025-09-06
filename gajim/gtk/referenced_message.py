@@ -183,11 +183,16 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
         if reply_to_id is None:
             return None
 
+        thread_id = None
+        if self._original_message.thread is not None:
+            thread_id = self._original_message.thread.id
+
         quoted_text = quote_text(self._message.text)
         return ReplyData(
             pk=self._original_message.pk,
             to=jid,
             id=reply_to_id,
+            thread_id=thread_id,
             fallback_start=0,
             fallback_end=len(quoted_text),
             fallback_text=quoted_text,

@@ -448,6 +448,10 @@ class Message(BaseModule):
             self._account, remote_jid, message.timestamp, message.sec_label)
         reply = get_reply(message.reply_data)
 
+        thread_id = None
+        if message.reply_data is not None:
+            thread_id = message.reply_data.thread_id
+
         oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
             oob_data.append(mod.OOB(url=message.oob_url, description=None))
@@ -464,6 +468,7 @@ class Message(BaseModule):
             id=message.message_id,
             stanza_id=None,
             user_delay_ts=None,
+            thread_id_=thread_id,
             correction_id=message.correct_id,
             encryption_=encryption_data,
             oob=oob_data,
@@ -504,6 +509,8 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     stanza.setID(message.message_id)
     stanza.setOriginID(message.message_id)
 
+    thread_id = None
+
     # Mark Message as MUC PM
     if message.is_pm:
         stanza.setTag('x', namespace=Namespace.MUC_USER)
@@ -520,6 +527,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # XEP-0461
     if message.reply_data is not None:
+        thread_id = message.reply_data.thread_id
         stanza.setReply(str(message.reply_data.to),
                         message.reply_data.id,
                         message.reply_data.fallback_start,
@@ -560,5 +568,10 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     # XEP-0490
     if message.mds_id is not None:
         stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
+
+    # Thread
+    # Currently only supported for replies
+    if thread_id is not None:
+        stanza.setThread(thread_id)
 
     return stanza
