@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 22:32+0000\n"
+"POT-Creation-Date: 2025-09-06 09:44+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -453,10 +453,6 @@ msgid "Account Removed"
 msgstr "Konto"
 
 #, fuzzy
-msgid "Account Settings…"
-msgstr "Tilslutning fejlede"
-
-#, fuzzy
 msgid "Account Wizard"
 msgstr "Følelsesikoner er ikke aktiveret"
 
@@ -481,6 +477,10 @@ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
 #, fuzzy
 msgid "Account is being created"
+msgstr "Kontoen \"%s\" er tilsluttet til serveren"
+
+#, fuzzy
+msgid "Account is not connected"
 msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
 #, fuzzy
@@ -532,6 +532,10 @@ msgstr "Tilføj"
 
 #, fuzzy
 msgid "Add Account"
+msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
+msgid "Add Account…"
 msgstr "_Tilføj Kontakt..."
 
 #, fuzzy
@@ -626,14 +630,6 @@ msgid "Address does not belong to a group chat server"
 msgstr "Dette er ikke en gruppe samtale"
 
 #, fuzzy
-msgid "Adjust to Status"
-msgstr "_Tilpas til status"
-
-#, fuzzy
-msgid "Adjust to status"
-msgstr "_Tilpas til status"
-
-#, fuzzy
 msgid "Admin"
 msgstr "_Administrator"
 
@@ -669,6 +665,10 @@ msgstr "Avancerede Handlinger"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Avancerede Handlinger"
+
+#, fuzzy, python-format
+msgid "Advanced – %(account)s"
+msgstr "Tilføj Kont_akt"
 
 #, fuzzy, python-format
 msgid "Adw Version: %s"
@@ -911,14 +911,6 @@ msgid "Auto Away"
 msgstr "Borte"
 
 #, fuzzy
-msgid "Auto Away Settings"
-msgstr "Tilslutning fejlede"
-
-#, fuzzy
-msgid "Auto Extended Away Settings"
-msgstr "Udvidet borte"
-
-#, fuzzy
 msgid "Auto Not Available"
 msgstr "Ikke Tilgængelig"
 
@@ -1110,9 +1102,9 @@ msgstr "Hent"
 msgid "Certificate"
 msgstr "Selvsigneret certifikat"
 
-#, fuzzy
-msgid "Certificate Settings"
-msgstr "Selvsigneret certifikat"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr "for konto %s"
 
 #, fuzzy
 msgid "Certificate Verification Failed"
@@ -1267,9 +1259,6 @@ msgstr "Vælg Billede"
 msgid "Choose encryption"
 msgstr "Vælg en Fil at Sende..."
 
-msgid "Cipher Suite"
-msgstr ""
-
 msgid "City"
 msgstr ""
 
@@ -1317,10 +1306,6 @@ msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
 msgstr ""
-
-#, fuzzy
-msgid "Client Certificate"
-msgstr "Selvsigneret certifikat"
 
 #, fuzzy
 msgid "Close"
@@ -1429,10 +1414,6 @@ msgid "Connection Error"
 msgstr "Tilslutning"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "Tilslutning"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "Tilslutning Fejlede"
 
@@ -1440,12 +1421,12 @@ msgstr "Tilslutning Fejlede"
 msgid "Connection with %s could not be established."
 msgstr "Tilslutning til ligeværdige kan ikke oprettes."
 
+#, fuzzy, python-format
+msgid "Connection – %(account)s"
+msgstr "Tilslutning"
+
 msgid "Contact"
 msgstr "Kontakt"
-
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "Samtale besked:"
 
 msgid "Contact Connected"
 msgstr "Kontakt er Tilsluttet"
@@ -1471,6 +1452,10 @@ msgstr "Kontakter"
 #, fuzzy
 msgid "Contact List Exchange"
 msgstr "Bytte af punkt i kontaktvinduet"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
+msgstr "Tilslutning"
 
 #, fuzzy
 msgid "Contact List: Contact Background Color"
@@ -1565,10 +1550,6 @@ msgid "Copy code snippet"
 msgstr ""
 
 #, fuzzy
-msgid "Copy info to clipboard"
-msgstr "_Kopier Henvisning"
-
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "_Kopier Henvisning"
 
@@ -1648,7 +1629,7 @@ msgstr ""
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 #, fuzzy
@@ -1771,6 +1752,13 @@ msgstr "Fjern %s"
 msgid "Details"
 msgstr "Detaljer"
 
+#, fuzzy, python-format
+msgid "Details - %(account)s"
+msgstr "Tilføj Kont_akt"
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
+
 #, python-format
 msgid "Device \"%s\""
 msgstr ""
@@ -1831,9 +1819,6 @@ msgstr ""
 msgid "Disclose information about the operating system you currently use"
 msgstr ""
 "Hvis valgt vil Gajim tillade andre at kunne se det operativ system du bruger"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1904,9 +1889,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 #, fuzzy
 msgid "Download"
 msgstr "Hent"
@@ -1942,10 +1924,6 @@ msgid "Edit Shortcut"
 msgstr ""
 
 #, fuzzy
-msgid "Edit Shortcut…"
-msgstr "Ændre _Grupper"
-
-#, fuzzy
 msgid "Edit display name…"
 msgstr "Fornavn:"
 
@@ -1976,6 +1954,10 @@ msgstr ""
 
 msgid "Enable"
 msgstr "Aktiver"
+
+#, fuzzy
+msgid "Enable Account"
+msgstr "Ugyldig Konto"
 
 msgid "Enable KeepassXC Integration"
 msgstr ""
@@ -2011,15 +1993,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "Selvsigneret certifikat"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "E2E kryptering ikke aktiveret"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Abonnement forespørgsel"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Abonnement forespørgsel"
 
 #, fuzzy
@@ -2461,6 +2443,10 @@ msgstr "Afsender: "
 msgid "General"
 msgstr "General"
 
+#, fuzzy, python-format
+msgid "General – %(account)s"
+msgstr "Tilføj Kont_akt"
+
 #, fuzzy
 msgid "Global Group Chat Search"
 msgstr "Bliv med i en Gruppe Samtale"
@@ -2567,9 +2553,6 @@ msgstr "Påmindelse"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Here you can customize Gajim's shortcuts."
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2588,6 +2571,17 @@ msgstr "<b>Hjemmeside:</b>"
 #, fuzzy
 msgid "Hostname"
 msgstr "_Værtsnavn:"
+
+#, fuzzy, python-format
+msgid "Hostname – %(account)s"
+msgstr "Tilslutning"
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
 
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
@@ -2621,10 +2615,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adresse:"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "_Port:"
-
 msgid "Id"
 msgstr "Id"
 
@@ -2634,10 +2624,6 @@ msgstr "SSL certifikat fejl"
 
 #, fuzzy
 msgid "Idle Time"
-msgstr " siden %s"
-
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr " siden %s"
 
 #, fuzzy
@@ -2659,16 +2645,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"Hvis Sandt vil du være i stand til at sætte en negativ prioritet til din "
-"konto i kontoændrings vinduet. VÆR FORSIGTIG, når du er logget med en "
-"negativ prioritet vil du IKKE modtage nogen beskeder fra din server."
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -2733,9 +2709,6 @@ msgstr "_Information"
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Ikke sikker forbindelse"
-
-msgid "Insert Emoji"
-msgstr ""
 
 #, fuzzy
 msgid "Install"
@@ -2982,9 +2955,6 @@ msgstr "Sending af privat besked fejlede"
 msgid "Loading…"
 msgstr "Koder"
 
-msgid "Local System Time"
-msgstr ""
-
 #, fuzzy
 msgid "Local Time"
 msgstr "Lokal jid:"
@@ -3003,10 +2973,6 @@ msgid "Location at %s"
 msgstr "Påmindelse"
 
 #, fuzzy
-msgid "Location:"
-msgstr "Påmindelse"
-
-#, fuzzy
 msgid "Log"
 msgstr "Log ind igen nu?"
 
@@ -3019,9 +2985,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#, fuzzy
-msgid "Login Settings"
-msgstr "Tilslutning fejlede"
+#, fuzzy, python-format
+msgid "Login – %(account)s"
+msgstr "Tilslutning"
 
 msgid "Look it up in _Dictionary"
 msgstr "Slå dette op i Or_dbogen"
@@ -3047,14 +3013,6 @@ msgstr ""
 #, fuzzy
 msgid "Manage"
 msgstr "Håndter..."
-
-#, fuzzy
-msgid "Manage Accounts…"
-msgstr "_Ændre Konto"
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "Kontakter"
 
 #, fuzzy
 msgid "Manage Proxies"
@@ -3349,7 +3307,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "Selvsigneret certifikat"
 
 #, fuzzy
@@ -3641,9 +3599,6 @@ msgid ""
 "%(message)s"
 msgstr "PEP knude %(node)s blev ikke fjernet: %(message)s"
 
-msgid "PKCS12 Files"
-msgstr ""
-
 #, fuzzy
 msgid "PNG files"
 msgstr "Alle filer"
@@ -3912,6 +3867,10 @@ msgstr "Priori_tet:"
 msgid "Privacy"
 msgstr "Privatliv"
 
+#, fuzzy, python-format
+msgid "Privacy – %(account)s"
+msgstr "Tilføj Kont_akt"
+
 #, fuzzy
 msgid "Private"
 msgstr "Privatliv"
@@ -3934,9 +3893,17 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "Tilføj Kont_akt"
+
 #, python-format
 msgid "Provider Category: %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Provider Contacts - %(account)s"
+msgstr "Tilføj Kont_akt"
 
 #, fuzzy
 msgid "Provider Infos"
@@ -3955,14 +3922,6 @@ msgstr "Håndter Proxy Profiler"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "Proxy:"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "Proxy _vært:"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "Proxy:"
 
 #, fuzzy
@@ -4105,6 +4064,10 @@ msgstr "Tilslutning lykkedes"
 msgid "Reject file transfer"
 msgstr "Filoverførsler"
 
+#, fuzzy
+msgid "Reload"
+msgstr "Gem Fil som..."
+
 msgid "Remember Last Status"
 msgstr ""
 
@@ -4205,8 +4168,17 @@ msgstr[0] "Fjerner kontakt fra kontaktvinduet"
 msgstr[1] "Fjerner kontakt fra kontaktvinduet"
 
 #, fuzzy
+msgid "Remove…"
+msgstr "_Kan fjernes"
+
+#, fuzzy
 msgid "Removing Account..."
 msgstr "Fjerne kontoen med navnet %s"
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4576,10 +4548,6 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
-msgid "Send Chat Markers"
-msgstr "Sidste status: %s"
-
-#, fuzzy
 msgid "Send Chat State"
 msgstr "Sidste status: %s"
 
@@ -4647,28 +4615,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "GG Nummer:"
 
-msgid "Server"
-msgstr "Server"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "Server"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "Server"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "Server svarede: %s"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "Server svarede: %s"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "Server svarede: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4692,6 +4641,10 @@ msgstr "Det er ikke mulig at gennemse denne tjeneste"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "Tjenesten findes ikke"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "Opdag Tjenester"
 
 #, fuzzy
 msgid "Set Trust"
@@ -5098,10 +5051,6 @@ msgid "Subscription"
 msgstr "Abonnering: "
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "Abonnering: "
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "Sendte kontakter:"
 
@@ -5252,10 +5201,6 @@ msgstr "Synkroniser"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5551,6 +5496,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "Fjern kun k_ontoen fra Gajim"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Fjern kun k_ontoen fra Gajim"
 
@@ -5611,9 +5560,6 @@ msgstr "Overfører"
 msgid "Transports"
 msgstr "Transporter"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "Behandle * / _ par som mulige formaterings tegn."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5644,10 +5590,6 @@ msgstr ""
 
 msgid "Trying to remove account..."
 msgstr ""
-
-#, fuzzy
-msgid "Tune:"
-msgstr "Melodi:"
 
 msgid "Turn Camera off"
 msgstr ""
@@ -5965,9 +5907,6 @@ msgstr "Web søge URL'en mangler en \"%s\""
 msgid "Web _Search for it"
 msgstr "Søg på nettet efter det"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -6267,7 +6206,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6661,6 +6600,10 @@ msgstr "gør noget andet"
 msgid "italic"
 msgstr "Kursiv"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "Grund"
+
 msgid "lat"
 msgstr ""
 
@@ -7025,6 +6968,10 @@ msgstr ""
 #~ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
 #, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Tilslutning fejlede"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktiveret"
 
@@ -7047,6 +6994,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "Ændre _Grupper"
+
+#, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "_Tilpas til status"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "_Tilpas til status"
 
 #, fuzzy
 #~ msgid "All Groups"
@@ -7083,6 +7038,14 @@ msgstr ""
 #~ msgstr "Godkendelse er blevet sendt"
 
 #, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Tilslutning fejlede"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Udvidet borte"
+
+#, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "Bliv automatisk med"
 
@@ -7107,11 +7070,9 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Kan ikke overskrive den eksisterende fil \"%s\""
 
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr "for konto %s"
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "Selvsigneret certifikat"
 
 #, fuzzy
 #~ msgid "Ch_ange Subject"
@@ -7144,6 +7105,10 @@ msgstr ""
 #~ msgstr "Besked er Sendt"
 
 #, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "Selvsigneret certifikat"
+
+#, fuzzy
 #~ msgid "Close Search"
 #~ msgstr "Søg"
 
@@ -7158,6 +7123,10 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Tilslutning er ikke tilgængelig"
+
+#, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "Samtale besked:"
 
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
@@ -7194,6 +7163,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Path"
 #~ msgstr "Rum JID"
+
+#, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "_Kopier Henvisning"
 
 #, fuzzy
 #~ msgid "Correct the last message"
@@ -7270,12 +7243,20 @@ msgstr ""
 #~ msgstr "Sender profil..."
 
 #, fuzzy
+#~ msgid "Edit Shortcut…"
+#~ msgstr "Ændre _Grupper"
+
+#, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Understøtter start af lyd og billede chat."
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Understøtter start af lyd og billede chat."
+
+#, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Selvsigneret certifikat"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7374,6 +7355,24 @@ msgstr ""
 #~ msgid "Homepage"
 #~ msgstr "<b>Hjemmeside:</b>"
 
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Port:"
+
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr " siden %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "Hvis Sandt vil du være i stand til at sætte en negativ prioritet til din "
+#~ "konto i kontoændrings vinduet. VÆR FORSIGTIG, når du er logget med en "
+#~ "negativ prioritet vil du IKKE modtage nogen beskeder fra din server."
+
 #~ msgid "Images"
 #~ msgstr "Billeder"
 
@@ -7398,6 +7397,22 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Grund"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Påmindelse"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Tilslutning fejlede"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "_Ændre Konto"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Kontakter"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7488,6 +7503,14 @@ msgstr ""
 #~ msgstr "Fremgang"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Proxy _vært:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Proxy:"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "Log ind igen nu?"
 
@@ -7536,10 +7559,6 @@ msgstr ""
 #~ msgstr "Fjerner kontakt fra kontaktvinduet"
 
 #, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "_Kan fjernes"
-
-#, fuzzy
 #~ msgid "Report"
 #~ msgstr "_Rapporter Fejl"
 
@@ -7583,6 +7602,10 @@ msgstr ""
 #~ msgstr "_Send"
 
 #, fuzzy
+#~ msgid "Send Chat Markers"
+#~ msgstr "Sidste status: %s"
+
+#, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "Gem Fil som..."
 
@@ -7600,6 +7623,25 @@ msgstr ""
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "GG Nummer:"
+
+#~ msgid "Server"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "Server svarede: %s"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Server svarede: %s"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "Server svarede: %s"
 
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7666,6 +7708,10 @@ msgstr ""
 #~ msgstr "Abonnement Forespørgsel"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Abonnering: "
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Opdag Tjenester med kontoen %s"
 
@@ -7679,6 +7725,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Synkroniser kontakter"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "GTK+ Version:"
 
 #~ msgid "The service could not be found"
 #~ msgstr "Tjenesten findes ikke"
@@ -7704,6 +7754,13 @@ msgstr ""
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "Transport \"%s\" vil blive fjernet"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Behandle * / _ par som mulige formaterings tegn."
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "Melodi:"
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7716,11 +7773,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Stavekontrol"
-
-#, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "Gem Fil som..."
 
 #, fuzzy
 #~ msgid "Upload Files"
@@ -7801,10 +7853,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Konti"
-
-#, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "_Tilføj Kontakt..."
 
 #~ msgid "_Clear"
 #~ msgstr "_Ryd"

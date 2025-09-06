@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-18 20:14+0000\n"
-"PO-Revision-Date: 2025-08-18 20:14+0000\n"
+"PO-Revision-Date: 2025-08-27 22:18+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
-"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
-">\n"
+"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/>"
+"\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2722,9 +2722,8 @@ msgstr "الإشارة: لون خلفية الرسالة"
 msgid "Message"
 msgstr "رسالة"
 
-#, fuzzy
 msgid "Message History"
-msgstr "أُرسلت الرسالة"
+msgstr "تأريخ الرسائل"
 
 msgid "Message Receipts (✔)"
 msgstr "إيصالات استلام الرسائل (✔)"
@@ -4391,9 +4390,8 @@ msgstr "أسماء الموضوع البديلة: "
 msgid "Subject issuer mismatch"
 msgstr "عدم تطابق مُصدر الموضوع"
 
-#, fuzzy
 msgid "Subject last changed by"
-msgstr "أسماء الموضوع البديلة: "
+msgstr "غُيِّر الموضوع آخر مرة بواسطة"
 
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -4416,7 +4414,7 @@ msgstr "أُزيل متراسلون بنجاح"
 
 #, python-brace-format
 msgid "Successfully build new session with {device_id}."
-msgstr ""
+msgstr "بُنيَّت جلسة جديدة تحت المعرَّف {device_id}."
 
 msgid "Support"
 msgstr "الدعم"
@@ -4571,7 +4569,7 @@ msgid "Themes"
 msgstr "السمات"
 
 msgid "There are connectivity issues"
-msgstr ""
+msgstr "هناك مشاكل في الاتصال"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "هناك أجهزة لم تتخذ قرار ثقة بشأنها بعد."

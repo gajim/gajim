@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 22:32+0000\n"
+"POT-Creation-Date: 2025-09-06 09:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -405,9 +405,6 @@ msgstr ""
 msgid "Account Removed"
 msgstr ""
 
-msgid "Account Settings…"
-msgstr ""
-
 msgid "Account Wizard"
 msgstr ""
 
@@ -427,6 +424,9 @@ msgid "Account has to be connected"
 msgstr ""
 
 msgid "Account is being created"
+msgstr ""
+
+msgid "Account is not connected"
 msgstr ""
 
 msgid "Account is not connected."
@@ -471,6 +471,9 @@ msgid "Add"
 msgstr ""
 
 msgid "Add Account"
+msgstr ""
+
+msgid "Add Account…"
 msgstr ""
 
 msgid "Add Contact"
@@ -546,12 +549,6 @@ msgstr ""
 msgid "Address does not belong to a group chat server"
 msgstr ""
 
-msgid "Adjust to Status"
-msgstr ""
-
-msgid "Adjust to status"
-msgstr ""
-
 msgid "Admin"
 msgstr ""
 
@@ -579,6 +576,10 @@ msgid "Advanced Settings"
 msgstr ""
 
 msgid "Advanced settings"
+msgstr ""
+
+#, python-format
+msgid "Advanced – %(account)s"
 msgstr ""
 
 #, python-format
@@ -784,12 +785,6 @@ msgstr ""
 msgid "Auto Away"
 msgstr ""
 
-msgid "Auto Away Settings"
-msgstr ""
-
-msgid "Auto Extended Away Settings"
-msgstr ""
-
 msgid "Auto Not Available"
 msgstr ""
 
@@ -956,7 +951,8 @@ msgstr ""
 msgid "Certificate"
 msgstr ""
 
-msgid "Certificate Settings"
+#, python-format
+msgid "Certificate - %(account)s"
 msgstr ""
 
 msgid "Certificate Verification Failed"
@@ -1091,9 +1087,6 @@ msgstr ""
 msgid "Choose encryption"
 msgstr ""
 
-msgid "Cipher Suite"
-msgstr ""
-
 msgid "City"
 msgstr ""
 
@@ -1132,9 +1125,6 @@ msgstr ""
 msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
-msgstr ""
-
-msgid "Client Certificate"
 msgstr ""
 
 msgid "Close"
@@ -1226,9 +1216,6 @@ msgstr ""
 msgid "Connection Error"
 msgstr ""
 
-msgid "Connection Settings"
-msgstr ""
-
 msgid "Connection failed"
 msgstr ""
 
@@ -1236,10 +1223,11 @@ msgstr ""
 msgid "Connection with %s could not be established."
 msgstr ""
 
-msgid "Contact"
+#, python-format
+msgid "Connection – %(account)s"
 msgstr ""
 
-msgid "Contact Addresses"
+msgid "Contact"
 msgstr ""
 
 msgid "Contact Connected"
@@ -1261,6 +1249,10 @@ msgid "Contact List"
 msgstr ""
 
 msgid "Contact List Exchange"
+msgstr ""
+
+#, python-format
+msgid "Contact List – %(account)s"
 msgstr ""
 
 msgid "Contact List: Contact Background Color"
@@ -1336,9 +1328,6 @@ msgstr ""
 msgid "Copy code snippet"
 msgstr ""
 
-msgid "Copy info to clipboard"
-msgstr ""
-
 msgid "Copy to Clipboard"
 msgstr ""
 
@@ -1404,7 +1393,7 @@ msgstr ""
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 msgid "Dark Theme"
@@ -1505,6 +1494,13 @@ msgid "Details"
 msgstr ""
 
 #, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
+
+#, python-format
 msgid "Device \"%s\""
 msgstr ""
 
@@ -1552,9 +1548,6 @@ msgid ""
 msgstr ""
 
 msgid "Disclose information about the operating system you currently use"
-msgstr ""
-
-msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
 
 msgid "Disclose the time of your last activity"
@@ -1619,9 +1612,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 msgid "Download"
 msgstr ""
 
@@ -1652,9 +1642,6 @@ msgstr ""
 msgid "Edit Shortcut"
 msgstr ""
 
-msgid "Edit Shortcut…"
-msgstr ""
-
 msgid "Edit display name…"
 msgstr ""
 
@@ -1680,6 +1667,9 @@ msgid "Emojis"
 msgstr ""
 
 msgid "Enable"
+msgstr ""
+
+msgid "Enable Account"
 msgstr ""
 
 msgid "Enable KeepassXC Integration"
@@ -1711,13 +1701,14 @@ msgstr ""
 msgid "Encrypted (%s)"
 msgstr ""
 
-msgid "Encrypted Certificate"
-msgstr ""
-
 msgid "Encrypting file…"
 msgstr ""
 
 msgid "Encryption (OMEMO)"
+msgstr ""
+
+#, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr ""
 
 msgid "Encryption Error"
@@ -2098,6 +2089,10 @@ msgstr ""
 msgid "General"
 msgstr ""
 
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
+
 msgid "Global Group Chat Search"
 msgstr ""
 
@@ -2184,9 +2179,6 @@ msgstr ""
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Here you can customize Gajim's shortcuts."
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2201,6 +2193,17 @@ msgid "Home"
 msgstr ""
 
 msgid "Hostname"
+msgstr ""
+
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
 msgstr ""
 
 msgid "How far back should the chat history be synchronized?"
@@ -2231,9 +2234,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr ""
 
-msgid "IP / Port"
-msgstr ""
-
 msgid "Id"
 msgstr ""
 
@@ -2241,10 +2241,6 @@ msgid "Identified Error"
 msgstr ""
 
 msgid "Idle Time"
-msgstr ""
-
-#, python-format
-msgid "Idle since: %s"
 msgstr ""
 
 msgid ""
@@ -2261,12 +2257,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
 msgstr ""
 
 msgid "Ignore Unknown Contacts"
@@ -2320,9 +2310,6 @@ msgid "Information"
 msgstr ""
 
 msgid "Insecure Connection"
-msgstr ""
-
-msgid "Insert Emoji"
 msgstr ""
 
 msgid "Install"
@@ -2530,9 +2517,6 @@ msgstr ""
 msgid "Loading…"
 msgstr ""
 
-msgid "Local System Time"
-msgstr ""
-
 msgid "Local Time"
 msgstr ""
 
@@ -2548,9 +2532,6 @@ msgstr ""
 msgid "Location at %s"
 msgstr ""
 
-msgid "Location:"
-msgstr ""
-
 msgid "Log"
 msgstr ""
 
@@ -2563,7 +2544,8 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-msgid "Login Settings"
+#, python-format
+msgid "Login – %(account)s"
 msgstr ""
 
 msgid "Look it up in _Dictionary"
@@ -2585,12 +2567,6 @@ msgid "Male"
 msgstr ""
 
 msgid "Manage"
-msgstr ""
-
-msgid "Manage Accounts…"
-msgstr ""
-
-msgid "Manage Contact List"
 msgstr ""
 
 msgid "Manage Proxies"
@@ -2837,7 +2813,7 @@ msgstr ""
 msgid "No automatic preview"
 msgstr ""
 
-msgid "No certificate"
+msgid "No certificate available"
 msgstr ""
 
 msgid "No commands available"
@@ -3092,9 +3068,6 @@ msgid ""
 "%(message)s"
 msgstr ""
 
-msgid "PKCS12 Files"
-msgstr ""
-
 msgid "PNG files"
 msgstr ""
 
@@ -3323,6 +3296,10 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 msgid "Private"
 msgstr ""
 
@@ -3343,7 +3320,15 @@ msgid "Protocol"
 msgstr ""
 
 #, python-format
+msgid "Provider - %(account)s"
+msgstr ""
+
+#, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 msgid "Provider Infos"
@@ -3359,12 +3344,6 @@ msgid "Proxies"
 msgstr ""
 
 msgid "Proxy"
-msgstr ""
-
-msgid "Proxy Host"
-msgstr ""
-
-msgid "Proxy Type"
 msgstr ""
 
 msgid "Proxy, custom hostname and port"
@@ -3484,6 +3463,9 @@ msgstr ""
 msgid "Reject file transfer"
 msgstr ""
 
+msgid "Reload"
+msgstr ""
+
 msgid "Remember Last Status"
 msgstr ""
 
@@ -3563,7 +3545,15 @@ msgid_plural "Removed %(count)s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Remove…"
+msgstr ""
+
 msgid "Removing Account..."
+msgstr ""
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
 msgstr ""
 
 msgid "Rename"
@@ -3874,9 +3864,6 @@ msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
 msgstr ""
 
-msgid "Send Chat Markers"
-msgstr ""
-
 msgid "Send Chat State"
 msgstr ""
 
@@ -3930,23 +3917,7 @@ msgstr ""
 msgid "Serial Number: "
 msgstr ""
 
-msgid "Server"
-msgstr ""
-
-msgid "Server Info"
-msgstr ""
-
 msgid "Server Shutdown"
-msgstr ""
-
-msgid "Server Software"
-msgstr ""
-
-#, python-format
-msgid "Server Software: %s\n"
-msgstr ""
-
-msgid "Server Uptime"
 msgstr ""
 
 msgid "Service"
@@ -3966,6 +3937,9 @@ msgid "Service Not Browsable"
 msgstr ""
 
 msgid "Service Not Found"
+msgstr ""
+
+msgid "Service Provider"
 msgstr ""
 
 msgid "Set Trust"
@@ -4298,9 +4272,6 @@ msgstr ""
 msgid "Subscription"
 msgstr ""
 
-msgid "Subscription:"
-msgstr ""
-
 msgid "Successfully Added Contacts"
 msgstr ""
 
@@ -4419,9 +4390,6 @@ msgid "Synchronizing Chat History…"
 msgstr ""
 
 msgid "System"
-msgstr ""
-
-msgid "TLS Version"
 msgstr ""
 
 #, python-format
@@ -4678,6 +4646,9 @@ msgstr ""
 msgid "This will purge all locally stored chat history"
 msgstr ""
 
+msgid "This will remove the account and delete all data"
+msgstr ""
+
 msgid "This will remove your account from Gajim."
 msgstr ""
 
@@ -4730,9 +4701,6 @@ msgstr ""
 msgid "Transports"
 msgstr ""
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr ""
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -4759,9 +4727,6 @@ msgid "Trying to gather information on this address…"
 msgstr ""
 
 msgid "Trying to remove account..."
-msgstr ""
-
-msgid "Tune:"
 msgstr ""
 
 msgid "Turn Camera off"
@@ -5039,9 +5004,6 @@ msgstr ""
 msgid "Web _Search for it"
 msgstr ""
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -5305,7 +5267,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 msgid "ZIP files"
@@ -5634,6 +5596,10 @@ msgid "is doing something else"
 msgstr ""
 
 msgid "italic"
+msgstr ""
+
+#, python-format
+msgid "last seen: %s"
 msgstr ""
 
 msgid "lat"
