@@ -152,17 +152,18 @@ class AppSideBar(Gtk.Box, EventHelper):
         y: float,
     ) -> int:
 
-        accounts = app.settings.get_active_accounts()
-        if len(accounts) == 1:
-            app.window.show_account_page(accounts[0])
-            self._bottom_listbox.select_row(self._account_row)
-            return Gdk.EVENT_PROPAGATE
-
         current_button = gesture_click.get_current_button()
         if current_button == Gdk.BUTTON_PRIMARY:
             # Left click
+
             self._status_popover.popdown()
-            self._account_popover.popup()
+
+            accounts = app.settings.get_active_accounts()
+            if len(accounts) == 1:
+                app.window.show_account_page(accounts[0])
+                self._bottom_listbox.select_row(self._account_row)
+            else:
+                self._account_popover.popup()
             return Gdk.EVENT_PROPAGATE
 
         if current_button == Gdk.BUTTON_SECONDARY:
