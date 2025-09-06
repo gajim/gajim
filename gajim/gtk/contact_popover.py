@@ -22,7 +22,6 @@ from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.iana import get_zone_data
 from gajim.common.modules.contacts import BareContact
@@ -37,7 +36,7 @@ from gajim.gtk.util.misc import get_ui_string
 
 
 @Gtk.Template(string=get_ui_string("contact_popover.ui"))
-class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
+class ContactPopover(Gtk.Popover, SignalManager):
     __gtype_name__ = "ContactPopover"
 
     _avatar: Gtk.Image = Gtk.Template.Child()
@@ -52,10 +51,10 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
     _email: ContactPopoverInfoRow = Gtk.Template.Child()
     _tel: ContactPopoverInfoRow = Gtk.Template.Child()
     _timezone: ContactPopoverInfoRow = Gtk.Template.Child()
+    _contact_details_button: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self, contact: BareContact) -> None:
         Gtk.Popover.__init__(self)
-        EventHelper.__init__(self)
         SignalManager.__init__(self)
 
         self._contact = contact
@@ -98,6 +97,10 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
             self._status_message.set_label(self._contact.status)
 
         self._xmpp_address.set_label(str(self._contact.jid), link_scheme="xmpp")
+
+        self._connect(
+            self._contact_details_button, "clicked", self._on_contact_details_clicked
+        )
 
         client = app.get_client(contact.account)
         vcard = client.get_module("VCard4").request_vcard(
@@ -154,7 +157,6 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
 
         return f"{remote_dt_str} ({data.full_name})"
 
-    @Gtk.Template.Callback()
     def _on_contact_details_clicked(self, _button: Gtk.Button) -> None:
         self.popdown()
         account_jid_params = AccountJidParam(
@@ -163,6 +165,11 @@ class ContactPopover(Gtk.Popover, EventHelper, SignalManager):
         app.window.activate_action(
             "win.chat-contact-info", account_jid_params.to_variant()
         )
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        app.check_finalize(self)
+        Gtk.Popover.do_unroot(self)
 
 
 @Gtk.Template(string=get_ui_string("contact_popover_info_row.ui"))
@@ -233,6 +240,11 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
             self._label.set_tooltip_text(text)
 
     @Gtk.Template.Callback()
-    def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
+    @staticmethod
+    def _on_activate_link(label: Gtk.Label, *args: Any) -> int:
         open_uri(label.get_current_uri() or label.get_text())
         return Gdk.EVENT_STOP
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)

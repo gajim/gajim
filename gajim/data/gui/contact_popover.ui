@@ -127,10 +127,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="_contact_details_button">
             <property name="label" translatable="yes">Contact Details</property>
             <property name="halign">center</property>
-            <signal name="clicked" handler="_on_contact_details_clicked"/>
           </object>
         </child>
       </object>
