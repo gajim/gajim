@@ -111,6 +111,10 @@ button.flat.link { padding: 0; border: 0; }
 .encrypted-color { color: var(--success-color); }
 .unencrypted-color { color: var(--error-color); }
 
+.bg-transparent {
+    background-color: transparent;
+}
+
 /* Generic animations */
 @keyframes pulse-opacity {
     0%  { opacity: 1.0; }
@@ -501,6 +505,12 @@ button.flat.link { padding: 0; border: 0; }
 .search-view-header label {
     font-size: 90%;
     color: alpha(var(--view-fg-color), 0.7);
+}
+
+/* Banner */
+.avatar-button * {
+    filter: none;
+    -gtk-icon-filter: none;
 }
 
 /* MessageActionsBox */

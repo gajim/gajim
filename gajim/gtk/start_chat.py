@@ -60,8 +60,6 @@ from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import get_ui_string
-
-# from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.widgets import AccountBadge
 from gajim.gtk.widgets import GajimAppWindow
 from gajim.gtk.widgets import GajimPopover
@@ -1111,11 +1109,6 @@ class ContactViewItem(Gtk.Grid, SignalManager):
 
         self.__bindings: list[GObject.Binding] = []
 
-        # TODO: add back tooltip
-        # self._tooltip = ContactTooltip()
-        # image.set_has_tooltip(True)
-        # self._connect(image, 'query-tooltip', self._on_query_tooltip)
-
         gesture_secondary_click = Gtk.GestureClick(
             button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE
         )
@@ -1154,18 +1147,6 @@ class ContactViewItem(Gtk.Grid, SignalManager):
         self._disconnect_all()
         Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
-
-    # def _on_query_tooltip(self,
-    #                       _img: Gtk.Image,
-    #                       _x_coord: int,
-    #                       _y_coord: int,
-    #                       _keyboard_mode: bool,
-    #                       tooltip: Gtk.Tooltip) -> bool:
-    #     if not isinstance(self.contact, BareContact):
-    #         return False
-    #     v, widget = self._tooltip.get_tooltip(self.contact)
-    #     tooltip.set_custom(widget)
-    #     return v
 
     def _popup_menu(
         self,

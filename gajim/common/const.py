@@ -70,7 +70,7 @@ class AvatarSize(IntEnum):
     CALL = 100
     CALL_BIG = 200
     GROUP_INFO = 100
-    TOOLTIP = 100
+    TOOLTIP = 72
     ACCOUNT_PAGE = 150
     ACTIVITY_PAGE = 100
     VCARD = 200

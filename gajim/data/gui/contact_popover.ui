@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ContactPopover" parent="GtkPopover">
+    <property name="position">top</property>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">18</property>
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="p-6"/>
+        </style>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkImage" id="_avatar">
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkLabel" id="_name">
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">1</property>
+                    <property name="max-width-chars">25</property>
+                    <style>
+                      <class name="title-4"/>
+                      <class name="mb-3"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="_role">
+                    <property name="visible">false</property>
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">1</property>
+                    <property name="max-width-chars">25</property>
+                    <style>
+                      <class name="bold"/>
+                      <class name="small-label"/>
+                      <class name="dimmed"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="_org">
+                    <property name="visible">false</property>
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">1</property>
+                    <property name="max-width-chars">25</property>
+                    <style>
+                      <class name="bold"/>
+                      <class name="small-label"/>
+                      <class name="dimmed"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="_info_listbox">
+            <property name="selection-mode">none</property>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_subscription">
+                <property name="icon-name">lucide-circle-alert-symbolic</property>
+                <style>
+                  <class name="warning" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_status"/>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_status_message">
+                <property name="icon-name">lucide-info-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow">
+                <property name="activatable">false</property>
+                <child>
+                  <object class="GtkSeparator">
+                    <style>
+                      <class name="px-12" />
+                      <class name="my-6" />
+                      <class name="dimmed" />
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_xmpp_address">
+                <property name="icon-name">lucide-message-circle-more-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_email">
+                <property name="icon-name">lucide-mail-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_tel">
+                <property name="icon-name">lucide-phone-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="ContactPopoverInfoRow" id="_timezone">
+                <property name="icon-name">lucide-clock-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="small-label"/>
+              <class name="bg-transparent"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_contact_details_button">
+            <property name="label" translatable="yes">Contact Details</property>
+            <property name="halign">center</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

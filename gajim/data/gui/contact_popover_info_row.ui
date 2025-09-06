@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ContactPopoverInfoRow" parent="GtkListBoxRow">
+    <property name="activatable">false</property>
+    <property name="visible">false</property>
+    <style>
+      <class name="py-3" />
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="_image"/>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_label">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="ellipsize">end</property>
+            <property name="single-line-mode">1</property>
+            <property name="max-width-chars">30</property>
+            <signal name="activate-link" handler="_on_activate_link"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

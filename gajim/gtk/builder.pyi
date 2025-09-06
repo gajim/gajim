@@ -231,19 +231,6 @@ class ContactInfoBuilder(Builder):
     devices_stack: Gtk.Stack
     devices_page: Adw.PreferencesPage
 
-class ContactTooltipBuilder(Builder):
-    tooltip_grid: Gtk.Grid
-    jid: Gtk.Label
-    tune_label: Gtk.Label
-    location_label: Gtk.Label
-    tune: Gtk.Label
-    location: Gtk.Label
-    name: Gtk.Label
-    avatar: Gtk.Image
-    sub_label: Gtk.Label
-    sub: Gtk.Label
-    resources_box: Gtk.Box
-
 class DbMigrationBuilder(Builder):
     box: Gtk.Box
     stack: Gtk.Stack
@@ -897,12 +884,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ContactInfoBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["contact_tooltip.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ContactTooltipBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["db_migration.ui"],
