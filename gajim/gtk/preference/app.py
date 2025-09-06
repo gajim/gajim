@@ -328,12 +328,12 @@ class GroupChatsGroup(GajimPreferencesGroup):
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("print_join_left", None)
+        app.settings.set_group_chat_settings("print_join_left", None, None)
 
     @staticmethod
     def _reset_print_status(button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("print_status", None)
+        app.settings.set_group_chat_settings("print_status", None, None)
 
 
 class FilePreviewGroup(GajimPreferencesGroup):

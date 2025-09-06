@@ -324,15 +324,13 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
         for setting in settings:
             self.add_setting(setting)
 
-    @staticmethod
-    def _reset_send_chatstate(button: Gtk.Button) -> None:
+    def _reset_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_contact_settings("send_chatstate", None)
+        app.settings.set_contact_settings("send_chatstate", self.account, None)
 
-    @staticmethod
-    def _reset_gc_send_chatstate(button: Gtk.Button) -> None:
+    def _reset_gc_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("send_chatstate", None)
+        app.settings.set_group_chat_settings("send_chatstate", self.account, None)
 
     def _send_idle_time(self, state: bool, _data: Any) -> None:
         if self._client is not None:
@@ -355,8 +353,10 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
 
     def _reset_send_read_marker(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_contact_settings("send_marker", None)
-        app.settings.set_group_chat_settings("send_marker", None, context="private")
+        app.settings.set_contact_settings("send_marker", self.account, None)
+        app.settings.set_group_chat_settings(
+            "send_marker", self.account, None, context="private"
+        )
 
     def _get_sync_blocks_enabled(self) -> bool:
         if self._client is None:

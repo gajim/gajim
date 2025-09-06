@@ -903,20 +903,26 @@ class Settings:
 
     def set_group_chat_settings(self,
                                 setting: str,
+                                account: str | None,
                                 value: SETTING_TYPE,
                                 context: str | None = None
                                 ) -> None:
 
-        for account, acc_settings in self._account_settings.items():
+        if account is None:
+            settings = self._account_settings.items()
+        else:
+            settings = [(account, self._account_settings[account])]
+
+        for acc, acc_settings in settings:
             for jid in acc_settings['group_chat']:
                 if context is not None:
-                    client = app.get_client(account)
+                    client = app.get_client(acc)
                     contact = client.get_module('Contacts').get_contact(
                         jid, groupchat=True
                     )
                     if contact.muc_context != context:
                         continue
-                self.set_group_chat_setting(account, jid, setting, value)
+                self.set_group_chat_setting(acc, jid, setting, value)
 
     @overload
     def get_contact_setting(self,
@@ -1020,11 +1026,17 @@ class Settings:
 
     def set_contact_settings(self,
                              setting: str,
+                             account: str | None,
                              value: SETTING_TYPE) -> None:
 
-        for account, acc_settings in self._account_settings.items():
+        if account is None:
+            settings = self._account_settings.items()
+        else:
+            settings = [(account, self._account_settings[account])]
+
+        for acc, acc_settings in settings:
             for jid in acc_settings['contact']:
-                self.set_contact_setting(account, jid, setting, value)
+                self.set_contact_setting(acc, jid, setting, value)
 
     def set_soundevent_setting(self,
                                event_name: str,
