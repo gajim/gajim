@@ -56,6 +56,7 @@ class AccountGeneralGroup(GajimPreferencesGroup):
                 _("Label"),
                 SettingType.ACCOUNT_CONFIG,
                 "account_label",
+                desc=_("Add a label to distinguish accounts in Gajim"),
             ),
             Setting(
                 SettingKind.DROPDOWN,
@@ -182,8 +183,8 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
 
         chatstate_entries = {
             "disabled": _("Disabled"),
-            "composing_only": _("Composing Only"),
-            "all": _("All Chat States"),
+            "composing_only": _("Typing Only"),
+            "all": _("All"),
         }
 
         encryption_entries = {
@@ -253,10 +254,10 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.DROPDOWN,
-                _("Send Chatstate"),
+                _("Send Chat Indicators"),
                 SettingType.ACCOUNT_CONFIG,
                 "send_chatstate_default",
-                desc=_("Default for chats"),
+                desc=_("Default for chats (e.g. Contact is typing)"),
                 props={
                     "data": chatstate_entries,
                     "button-text": _("Reset"),
@@ -267,10 +268,10 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.DROPDOWN,
-                _("Send Chatstate in Group Chats"),
+                _("Send Chat Indicators in Group Chats"),
                 SettingType.ACCOUNT_CONFIG,
                 "gc_send_chatstate_default",
-                desc=_("Default for group chats"),
+                desc=_("Default for group chats (e.g. Contact is typing)"),
                 props={
                     "data": chatstate_entries,
                     "button-text": _("Reset"),
@@ -297,12 +298,12 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Sync Group Chat Blocklist"),
+                _("Sync Group Chat Block List"),
                 SettingType.ACCOUNT_CONFIG,
                 "sync_muc_blocks",
                 callback=self._sync_blocks,
                 enabled_func=self._get_sync_blocks_enabled,
-                desc=_("Sync group chat blocklist with other devices"),
+                desc=_("Synchronize group chat block list with other devices"),
             ),
             Setting(
                 SettingKind.DROPDOWN,
@@ -447,7 +448,14 @@ class AccountConnectionGroup(GajimPreferencesGroup):
                 },
             ),
             Setting(
-                SettingKind.ENTRY, _("Resource"), SettingType.ACCOUNT_CONFIG, "resource"
+                SettingKind.ENTRY,
+                _("Resource"),
+                SettingType.ACCOUNT_CONFIG,
+                "resource",
+                desc=_(
+                    "Identifier for this device. "
+                    "Don’t change this unless you know what you are doing."
+                ),
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -461,7 +469,7 @@ class AccountConnectionGroup(GajimPreferencesGroup):
                 _("Confirm Unencrypted Connection"),
                 SettingType.ACCOUNT_CONFIG,
                 "confirm_unencrypted_connection",
-                desc=_("Show a confirmation dialog before connecting unencrypted"),
+                desc=_("Ask before connecting unencrypted"),
             ),
         ]
 
