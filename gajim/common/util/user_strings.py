@@ -4,11 +4,13 @@
 
 import datetime as dt
 from string import Template
+from zoneinfo import ZoneInfo
 
 from gi.repository import Gio
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
+from nbxmpp.modules.vcard4 import TzProperty
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -16,6 +18,7 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
+from gajim.common.iana import get_zone_data
 
 
 def format_idle_time(idle_time: dt.datetime) -> str:
@@ -174,6 +177,19 @@ def get_uf_relative_time(date_time: dt.datetime, now: dt.datetime | None = None)
     if timespan < dt.timedelta(days=365):  # this year
         return date_time.strftime('%b %d')
     return str(date_time.year)
+
+
+def get_time_zone_string(prop: TzProperty) -> str:
+    try:
+        tzinfo = ZoneInfo(prop.value)
+    except Exception:
+        return ""
+
+    t_format = app.settings.get("time_format")
+    remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(t_format)
+    data = get_zone_data(prop.value)
+
+    return f"{remote_dt_str} ({data.full_name})"
 
 
 def chatstate_to_string(chatstate: Chatstate | None) -> str:
