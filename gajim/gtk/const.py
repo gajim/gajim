@@ -386,8 +386,11 @@ SHORTCUTS = {
         label=_("Reset Font Size"), category="general", accelerators=["<Primary>0"]
     ),
     # chats
+    "win.focus-search": ShortcutData(
+        label=_("Focus Search"), category="chats", accelerators=["<Primary>K"]
+    ),
     "win.search-history": ShortcutData(
-        label=_("Search"), category="chats", accelerators=["<Primary>F"]
+        label=_("Search Chat History"), category="chats", accelerators=["<Primary>F"]
     ),
     "win.show-contact-info": ShortcutData(
         label=_("Contact Details"), category="chats", accelerators=["<Primary>I"]

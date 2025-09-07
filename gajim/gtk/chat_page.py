@@ -92,6 +92,7 @@ class ChatPage(Gtk.Paned):
 
     def _add_actions(self):
         actions = [
+            ("focus-search", None, self._on_focus_search),
             ("remove-chat", "as", self._remove_chat),
             ("search-history", None, self._on_search_history),
         ]
@@ -153,6 +154,12 @@ class ChatPage(Gtk.Paned):
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
         self._chat_stack.clear()
         self._search_view.set_context(None, None)
+
+    def _on_focus_search(
+        self, _action: Gio.SimpleAction, _param: Literal[None]
+    ) -> None:
+        search_entry = self._chat_list_header.get_search_entry()
+        search_entry.grab_focus()
 
     def _on_search_history(
         self, _action: Gio.SimpleAction, _param: Literal[None]
