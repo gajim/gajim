@@ -39,7 +39,7 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preference.server_info")
 
 
-@Gtk.Template.from_string(string=get_ui_string("preferences/provider_info.ui"))
+@Gtk.Template.from_string(string=get_ui_string("preference/provider_info.ui"))
 class AccountProviderInfoGroup(Adw.PreferencesGroup, SignalManager):
     __gtype_name__ = "AccountProviderInfoGroup"
 

@@ -57,7 +57,7 @@ class ImportedItem(NamedTuple):
     groups: set[str]
 
 
-@Gtk.Template.from_string(string=get_ui_string("preferences/manage_roster.ui"))
+@Gtk.Template.from_string(string=get_ui_string("preference/manage_roster.ui"))
 class ManageRoster(Gtk.Box, SignalManager, EventHelper):
     __gtype_name__ = "ManageRoster"
 

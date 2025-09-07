@@ -32,7 +32,7 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preferences.certificate")
 
 
-@Gtk.Template.from_string(string=get_ui_string("preferences/certificate.ui"))
+@Gtk.Template.from_string(string=get_ui_string("preference/certificate.ui"))
 class CertificatePage(Adw.PreferencesPage, SignalManager):
 
     __gtype_name__ = "CertificatePage"

@@ -22,7 +22,7 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.mam_preferences")
 
 
-@Gtk.Template.from_string(string=get_ui_string("preferences/mam_preferences.ui"))
+@Gtk.Template.from_string(string=get_ui_string("preference/mam_preferences.ui"))
 class MamPreferences(Gtk.Box, SignalManager):
     __gtype_name__ = "ArchivingPreferences"
 

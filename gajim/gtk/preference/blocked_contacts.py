@@ -21,7 +21,7 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preference.blocked_contacts")
 
 
-@Gtk.Template.from_string(string=get_ui_string("preferences/blocked_contacts.ui"))
+@Gtk.Template.from_string(string=get_ui_string("preference/blocked_contacts.ui"))
 class BlockedContacts(Gtk.Grid, SignalManager):
     __gtype_name__ = "BlockedContacts"
 
