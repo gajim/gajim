@@ -65,7 +65,7 @@ class GroupchatDetails(GajimAppWindow):
                 SideBarMenuItem(
                     "blocks",
                     _("Blocked Participants"),
-                    icon_name="lucide-users-symbolic",
+                    icon_name="lucide-user-round-x-symbolic",
                 ),
                 SideBarMenuItem(
                     "manage",
