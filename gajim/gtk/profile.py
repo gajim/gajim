@@ -248,6 +248,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.cancel_button.set_visible(False)
         self._ui.save_button.set_visible(False)
         self._ui.remove_avatar_button.set_visible(False)
+        self._avatar_edit_button.set_visible(False)
         self._ui.privacy_button.set_visible(False)
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
@@ -264,6 +265,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.save_button.set_visible(False)
         self._ui.edit_button.set_visible(True)
         self._ui.remove_avatar_button.set_visible(False)
+        self._avatar_edit_button.set_visible(False)
         self._ui.privacy_button.set_visible(False)
         self._ui.nickname_entry.set_sensitive(False)
 
