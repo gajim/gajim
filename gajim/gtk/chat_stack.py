@@ -129,6 +129,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._connect(drop_target, "leave", self._on_drag_leave)
         overlay.add_controller(drop_target)
 
+        controller = Gtk.EventControllerKey()
+        self._connect(controller, "key-pressed", self._on_key_pressed)
+        self.add_controller(controller)
+
         self.add_named(overlay, "controls")
 
         self.register_events(
@@ -806,6 +810,19 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._chat_control.drag_data_file_transfer(files)
         self._drop_area.set_visible(False)
         return True
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType,
+    ) -> bool:
+        if state & Gdk.ModifierType.CONTROL_MASK:
+            if keyval == Gdk.KEY_c:
+                self._chat_control.copy_selected_messages()
+                return Gdk.EVENT_STOP
+        return Gdk.EVENT_PROPAGATE
 
     def _show_chat_function_page(
         self,

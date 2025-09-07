@@ -208,6 +208,11 @@ class ChatControl(EventHelper):
     def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
 
+    def copy_selected_messages(self) -> None:
+        # Message selection mode is active
+        self._scrolled_view.copy_selected_messages()
+        self._message_selection.set_visible(False)
+
     def process_escape(self) -> bool:
         message_selection_active = self._message_selection.get_visible()
         if message_selection_active:
@@ -493,7 +498,7 @@ class ChatControl(EventHelper):
         self._message_selection.set_visible(False)
 
     def _on_copy_selection(self, _widget: MessageSelection) -> None:
-        self._scrolled_view.copy_selected_messages()
+        self.copy_selected_messages()
 
     def _on_jump_to_message(
         self, _action: Gio.SimpleAction, param: GLib.Variant
