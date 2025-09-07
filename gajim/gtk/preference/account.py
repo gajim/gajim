@@ -30,8 +30,8 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.preference.archiving import ArchivingPreferences
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
-from gajim.gtk.preference.mam_preferences import MamPreferences
 from gajim.gtk.preference.manage_roster import ManageRoster
 from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
@@ -891,7 +891,7 @@ class AccountArchivingPage(GajimPreferencePage):
             self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
             return
 
-        self.set_content(MamPreferences(account))
+        self.set_content(ArchivingPreferences(account))
 
 
 class LoginPage(GajimPreferencePage):

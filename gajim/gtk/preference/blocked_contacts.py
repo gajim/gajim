@@ -18,7 +18,7 @@ from gajim.common import app
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
-log = logging.getLogger("gajim.gtk.preference.blocked_contacts")
+log = logging.getLogger("gajim.gtk.preferences.blocked_contacts")
 
 
 @Gtk.Template.from_string(string=get_ui_string("preference/blocked_contacts.ui"))

@@ -19,11 +19,11 @@ from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.util.misc import get_ui_string
 
-log = logging.getLogger("gajim.gtk.mam_preferences")
+log = logging.getLogger("gajim.gtk.preferences.archiving")
 
 
-@Gtk.Template.from_string(string=get_ui_string("preference/mam_preferences.ui"))
-class MamPreferences(Gtk.Box, SignalManager):
+@Gtk.Template.from_string(string=get_ui_string("preference/archiving.ui"))
+class ArchivingPreferences(Gtk.Box, SignalManager):
     __gtype_name__ = "ArchivingPreferences"
 
     _default_combo: Gtk.ComboBox = Gtk.Template.Child()
