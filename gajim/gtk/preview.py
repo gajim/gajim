@@ -209,9 +209,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 and not allow_in_public
                 and not preview.from_us
             ):
-                image = Gtk.Image.new_from_icon_name(
-                    "lucide-circle-question-mark-symbolic"
-                )
+                image = Gtk.Image.new_from_icon_name("lucide-file-symbolic")
                 image.set_pixel_size(64)
                 self._ui.icon_button.set_child(image)
                 self._ui.download_button.set_visible(True)
