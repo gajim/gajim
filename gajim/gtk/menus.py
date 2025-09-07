@@ -226,19 +226,12 @@ def get_account_menu(account: str) -> GajimMenu:
         (_("Profile"), f"app.{account}-profile", account),
         (_("Discover Services…"), f"app.{account}-services", account),
         (_("Execute Command…"), f"app.{account}-execute-command", params),
-    ]
-
-    menu = GajimMenu.from_list(menuitems)
-
-    advanced_menuitems: MenuItemListT = [
         (_("Archiving Preferences"), f"app.{account}-archive", account),
         (_("PEP Configuration"), f"app.{account}-pep-config", account),
         (_("Synchronize History…"), f"app.{account}-sync-history", account),
     ]
 
-    menu.append_submenu(_("Advanced"), GajimMenu.from_list(advanced_menuitems))
-
-    return menu
+    return GajimMenu.from_list(menuitems)
 
 
 def get_encryption_menu() -> GajimMenu:
