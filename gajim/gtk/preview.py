@@ -210,7 +210,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 and not preview.from_us
             ):
                 image = Gtk.Image.new_from_icon_name("lucide-file-symbolic")
-                image.set_pixel_size(64)
+                image.set_pixel_size(48)
                 self._ui.icon_button.set_child(image)
                 self._ui.download_button.set_visible(True)
                 file_size_string = _("Automatic preview disabled")
@@ -240,7 +240,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
     def _display_mime_type_icon(self, preview: Preview) -> None:
         icon = get_icon_for_mime_type(preview.mime_type)
         image = Gtk.Image.new_from_gicon(icon)
-        image.set_pixel_size(64)
+        image.set_pixel_size(48)
+        image.add_css_class("p-6")
         self._ui.icon_button.set_child(image)
 
     def _display_image_preview(self, preview: Preview, data: bytes) -> None:

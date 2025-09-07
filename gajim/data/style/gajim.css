@@ -731,9 +731,6 @@ button.flat.link { padding: 0; border: 0; }
 .preview-content-box {
     border-radius: 4px;
 }
-.preview-content-box:hover {
-    background: alpha(var(--window-fg-color), 0.1);
-}
 .preview-image-overlay {
     background: alpha(var(--window-bg-color), 0.9);
     padding: 4px 12px;
