@@ -101,12 +101,12 @@ class AccountGeneralGroup(GajimPreferencesGroup):
                 "restore_last_status",
                 desc=_("Restore status and status message of your last session"),
             ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Use file transfer proxies"),
-                SettingType.ACCOUNT_CONFIG,
-                "use_ft_proxies",
-            ),
+            # Setting(
+            #     SettingKind.SWITCH,
+            #     _("Use file transfer proxies"),
+            #     SettingType.ACCOUNT_CONFIG,
+            #     "use_ft_proxies",
+            # ),
         ]
 
         for setting in settings:
