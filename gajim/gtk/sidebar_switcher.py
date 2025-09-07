@@ -231,7 +231,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         self, _listbox: SideBarSwitcher, item: SideBarMenuItem
     ) -> None:
         if item.action is not None:
-            app.app.activate_action(item.action, None)
+            app.app.activate_action(item.action, item.action_param)
             return
 
         if item.children:
@@ -270,6 +270,7 @@ class SideBarMenuItem(Gtk.ListBoxRow):
         group: str | None = None,
         icon_name: str | None = None,
         action: str | None = None,
+        action_param: GLib.Variant | None = None,
         children: list[SideBarMenuItem] | None = None,
         visible: bool = True,
     ) -> None:
@@ -280,6 +281,7 @@ class SideBarMenuItem(Gtk.ListBoxRow):
         self.children = children
         self.group = group
         self.action = action
+        self.action_param = action_param
 
         box = Gtk.Box(spacing=12)
         if icon_name is not None:
