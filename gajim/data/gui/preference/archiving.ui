@@ -8,7 +8,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkBox">
-        <property name="halign">center</property>
+        <property name="halign">start</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
@@ -145,8 +145,5 @@
         </child>
       </object>
     </child>
-    <style>
-      <class name="preference-page"/>
-    </style>
   </template>
 </interface>

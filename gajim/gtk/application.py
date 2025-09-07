@@ -444,7 +444,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("services", self._on_services_action),
             ("profile", self._on_profile_action),
             ("pep-config", self._on_pep_config_action),
-            ("sync-history", self._on_sync_history_action),
             ("open-event", self._on_open_event_action),
             ("mark-as-read", self._on_mark_as_read_action),
             ("block-contact", self._on_block_contact),
@@ -690,11 +689,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_pep_config_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
         open_window("PEPConfig", account=account)
-
-    @staticmethod
-    def _on_sync_history_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window("HistorySyncAssistant", account=account)
 
     @staticmethod
     def _on_xml_console_action(

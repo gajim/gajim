@@ -572,6 +572,44 @@ class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
         self._disconnect_all()
 
 
+class AccountArchivingGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-archiving", account=account, title=_("Archiving")
+        )
+
+        settings = [
+            Setting(
+                SettingKind.GENERIC,
+                _("Synchronize History…"),
+                SettingType.VALUE,
+                None,
+                props={
+                    "button-text": _("Open"),
+                    "button-callback": self._on_snyc,
+                },
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+    def _on_snyc(self, _button: Gtk.Button) -> None:
+        open_window("HistorySyncAssistant", account=self.account)
+
+
+class AccountArchivingPreferencesGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="account-archiving-preferences",
+            account=account,
+            title=_("Preferences"),
+        )
+
+        self.add(ArchivingPreferences(account))
+
+
 class AccountAdvancedGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
@@ -891,7 +929,8 @@ class AccountArchivingPage(GajimPreferencePage):
             self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
             return
 
-        self.set_content(ArchivingPreferences(account))
+        self.add(AccountArchivingGroup(account))
+        self.add(AccountArchivingPreferencesGroup(account))
 
 
 class LoginPage(GajimPreferencePage):

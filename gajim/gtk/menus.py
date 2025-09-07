@@ -227,7 +227,6 @@ def get_account_menu(account: str) -> GajimMenu:
         (_("Discover Services…"), f"app.{account}-services", account),
         (_("Execute Command…"), f"app.{account}-execute-command", params),
         (_("PEP Configuration"), f"app.{account}-pep-config", account),
-        (_("Synchronize History…"), f"app.{account}-sync-history", account),
     ]
 
     return GajimMenu.from_list(menuitems)
