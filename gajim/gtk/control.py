@@ -213,6 +213,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.copy_selected_messages()
         self._message_selection.set_visible(False)
 
+    def message_selection_active(self) -> bool:
+        return self._message_selection.get_visible()
+
     def process_escape(self) -> bool:
         message_selection_active = self._message_selection.get_visible()
         if message_selection_active:

@@ -818,10 +818,14 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         _keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
+        if not self._chat_control.message_selection_active():
+            return Gdk.EVENT_PROPAGATE
+
         if state & Gdk.ModifierType.CONTROL_MASK:
             if keyval == Gdk.KEY_c:
                 self._chat_control.copy_selected_messages()
                 return Gdk.EVENT_STOP
+
         return Gdk.EVENT_PROPAGATE
 
     def _show_chat_function_page(
