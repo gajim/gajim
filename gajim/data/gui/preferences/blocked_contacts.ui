@@ -17,6 +17,9 @@
               <object class="GtkTreeView" id="_block_view">
                 <property name="focusable">1</property>
                 <property name="search_column">0</property>
+                <style>
+                  <class name="frame"/>
+                </style>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>

@@ -853,7 +853,7 @@ class AccountBlockedContactsPage(GajimPreferencePage):
             menu=SideBarMenuItem(
                 f"{account}-blocked-contacts",
                 _("Blocked Contacts"),
-                icon_name="lucide-users-symbolic",
+                icon_name="lucide-user-round-x-symbolic",
             ),
         )
 
