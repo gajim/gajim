@@ -122,7 +122,7 @@ class AdvancedConfigurationBuilder(Builder):
     reset_button: Gtk.Button
 
 class AssistantBuilder(Builder):
-    main_grid: Gtk.Grid
+    main_box: Gtk.Box
     content_area: Gtk.Box
     stack: Gtk.Stack
     action_area: Gtk.Box
@@ -558,8 +558,8 @@ class PepConfigBuilder(Builder):
     stack: Gtk.Stack
     overview_box: Gtk.Box
     services_treeview: Gtk.TreeView
-    delete_button: Gtk.Button
     reload_button: Gtk.Button
+    delete_button: Gtk.Button
     configure_button: Gtk.Button
     show_content_button: Gtk.Button
     items_box: Gtk.Box

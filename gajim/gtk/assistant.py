@@ -62,7 +62,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         self._button_visible_func = None
 
         self._ui = get_builder("assistant.ui")
-        self.set_child(self._ui.main_grid)
+        self.set_child(self._ui.main_box)
 
         self._ui.stack.set_transition_duration(transition_duration)
 
