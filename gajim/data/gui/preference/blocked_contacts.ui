@@ -99,8 +99,5 @@
         </layout>
       </object>
     </child>
-    <style>
-      <class name="preference-page"/>
-    </style>
   </template>
 </interface>

@@ -572,6 +572,18 @@ class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
         self._disconnect_all()
 
 
+class AccountBlockedContactsGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="account-blocked-contacts",
+            account=account,
+            title=_("Blocked Contacts"),
+        )
+
+        self.add(BlockedContacts(account))
+
+
 class AccountArchivingGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
@@ -908,7 +920,7 @@ class AccountBlockedContactsPage(GajimPreferencePage):
             self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
             return
 
-        self.set_content(BlockedContacts(account))
+        self.add(AccountBlockedContactsGroup(account))
 
 
 class AccountArchivingPage(GajimPreferencePage):
