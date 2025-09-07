@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -31,14 +30,14 @@ from gajim.common.util.decorators import event_filter
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
-from gajim.gtk.util.misc import iterate_listbox_children
+from gajim.gtk.dropdown import GajimDropDown
 
 log = logging.getLogger("gajim.gtk.history_sync")
 
 
 class HistorySyncAssistant(Assistant, EventHelper):
     def __init__(self, account: str) -> None:
-        Assistant.__init__(self, width=600, transient_for=app.window)
+        Assistant.__init__(self, width=600)
         EventHelper.__init__(self)
 
         self.account = account
@@ -214,34 +213,40 @@ class SelectTime(Page):
             max_width_chars=40,
         )
 
-        listbox = Gtk.ListBox()
-        listbox.set_hexpand(False)
-        listbox.set_halign(Gtk.Align.CENTER)
-        listbox.append(TimeOption(_("One Month"), timedelta(days=30)))
-        listbox.append(TimeOption(_("Three Months"), timedelta(days=90)))
-        listbox.append(TimeOption(_("One Year"), timedelta(days=365)))
-        listbox.append(TimeOption(_("Everything")))
-        self._connect(listbox, "row-selected", self._on_row_selected)
+        data = {
+            30: _("One Month"),
+            90: _("Three Months"),
+            365: _("One Year"),
+            -1: _("Everything"),
+        }
 
-        for row in cast(list[TimeOption], iterate_listbox_children(listbox)):
-            delta = row.get_timedelta()
-            if delta is None:
+        for days in list(data.keys()):
+            if days == -1:
                 continue
+
+            delta = timedelta(days)
             if now - delta > current_start:
-                row.set_activatable(False)
-                row.set_selectable(False)
+                data.pop(days)
+
+        self._dropdown = GajimDropDown(data, fixed_width=20)
+        self._dropdown.set_halign(Gtk.Align.CENTER)
 
         self.append(heading)
         self.append(label)
-        self.append(listbox)
+        self.append(self._dropdown)
 
-    def _on_row_selected(self, _listbox: Gtk.ListBox, row: TimeOption) -> None:
-        self._timedelta = row.get_timedelta()
         self.complete = True
         self.update_page_complete()
 
     def get_timedelta(self) -> timedelta | None:
-        return self._timedelta
+        key = self._dropdown.get_selected_key()
+        if key is None:
+            raise ValueError("No value selected")
+
+        if key == -1:
+            return None
+
+        return timedelta(key)
 
     def get_default_button(self) -> str:
         return "synchronize"
@@ -288,16 +293,3 @@ class Progress(Page):
 
     def get_received_count(self) -> int:
         return self._received
-
-
-class TimeOption(Gtk.ListBoxRow):
-    def __init__(self, text: str, months: timedelta | None = None) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        self.add_css_class("p-12")
-        label = Gtk.Label(label=text)
-        self.set_child(label)
-
-        self._timedelta = months
-
-    def get_timedelta(self) -> timedelta | None:
-        return self._timedelta
