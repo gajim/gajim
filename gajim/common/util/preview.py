@@ -224,5 +224,5 @@ def guess_simple_file_type(file_path: str,
 
 def get_icon_for_mime_type(mime_type: str) -> Gio.Icon:
     if mime_type == '':
-        return Gio.Icon.new_for_string('mail-attachment')
+        return Gio.Icon.new_for_string('lucide-file-symbolic')
     return Gio.content_type_get_icon(mime_type)

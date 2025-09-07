@@ -121,7 +121,7 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
                 scheme = urlparse(message.text).scheme
                 if scheme == "geo":
                     location = split_geo_uri(message.text)
-                    icon = Gio.Icon.new_for_string("mark-location")
+                    icon = Gio.Icon.new_for_string("lucide-map-pin-symbolic")
                     label_text = format_geo_coords(
                         float(location.lat), float(location.lon)
                     )
