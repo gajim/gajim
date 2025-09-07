@@ -145,7 +145,6 @@ WINDOW_MODULES = {
     "GroupchatJoin": "gajim.gtk.groupchat_join",
     "HistoryExport": "gajim.gtk.history_export",
     "HistorySyncAssistant": "gajim.gtk.history_sync",
-    "MamPreferences": "gajim.gtk.mam_preferences",
     "ManageProxies": "gajim.gtk.proxies",
     "ManageSounds": "gajim.gtk.manage_sounds",
     "PasswordDialog": "gajim.gtk.password_dialog",
@@ -289,7 +288,6 @@ ACCOUNT_ACTIONS = [
     ("block-contact", "a{sv}"),
     ("remove-contact", "as"),
     ("execute-command", "(sas)"),
-    ("archive", "s"),
     ("mark-as-read", "a{sv}"),
     ("open-event", "a{sv}"),
     ("pep-config", "s"),
@@ -323,7 +321,6 @@ ONLINE_ACCOUNT_ACTIONS = {
 
 
 FEATURE_ACCOUNT_ACTIONS = {
-    "archive",
     "block-contact",
 }
 

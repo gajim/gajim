@@ -24,6 +24,7 @@ from gajim.common.setting_values import AllSettingsT
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.preference.account import AccountAdvancedPage
+from gajim.gtk.preference.account import AccountArchivingPage
 from gajim.gtk.preference.account import AccountBlockedContactsPage
 from gajim.gtk.preference.account import AccountConnectionCertificatePage
 from gajim.gtk.preference.account import AccountConnectionDetailsPage
@@ -171,6 +172,7 @@ class Preferences(GajimAppWindow, EventHelper):
             AccountProviderPage(account),
             AccountManageRosterPage(account),
             AccountBlockedContactsPage(account),
+            AccountArchivingPage(account),
             AccountAdvancedPage(account),
             # Subpages
             LoginPage(account),

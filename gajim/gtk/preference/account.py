@@ -31,6 +31,7 @@ from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
+from gajim.gtk.preference.mam_preferences import MamPreferences
 from gajim.gtk.preference.manage_roster import ManageRoster
 from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
@@ -870,6 +871,27 @@ class AccountBlockedContactsPage(GajimPreferencePage):
             return
 
         self.set_content(BlockedContacts(account))
+
+
+class AccountArchivingPage(GajimPreferencePage):
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            key=f"{account}-archiving",
+            title=_("Archiving – %(account)s") % {"account": account},
+            groups=[],
+            menu=SideBarMenuItem(
+                f"{account}-archiving",
+                _("Archiving"),
+                icon_name="lucide-database-backup-symbolic",
+            ),
+        )
+
+        if not app.account_is_available(account):
+            self.set_content(PlaceholderBox(valign=Gtk.Align.CENTER))
+            return
+
+        self.set_content(MamPreferences(account))
 
 
 class LoginPage(GajimPreferencePage):

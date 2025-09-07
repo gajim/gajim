@@ -475,17 +475,6 @@ class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
 
-class MamPreferencesBuilder(Builder):
-    mam_box: Gtk.Box
-    default_combo: Gtk.ComboBox
-    overlay: Gtk.Overlay
-    pref_view: Gtk.TreeView
-    jid_cell_renderer: Gtk.CellRendererText
-    pref_toggle_cell_renderer: Gtk.CellRendererToggle
-    add: Gtk.Button
-    remove: Gtk.Button
-    save_button: Gtk.Button
-
 class ManageProxiesBuilder(Builder):
     box: Gtk.Box
     proxies_treeview: Gtk.TreeView
@@ -989,12 +978,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> HistoryExportBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["mam_preferences.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> MamPreferencesBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["manage_proxies.ui"],

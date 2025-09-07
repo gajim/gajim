@@ -443,7 +443,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("add-contact", self._on_add_contact_account_action),
             ("services", self._on_services_action),
             ("profile", self._on_profile_action),
-            ("archive", self._on_archive_action),
             ("pep-config", self._on_pep_config_action),
             ("sync-history", self._on_sync_history_action),
             ("open-event", self._on_open_event_action),
@@ -483,10 +482,8 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def update_feature_actions_state(self, account: str) -> None:
         client = app.get_client(account)
-        mam_available = client.get_module("MAM").available
         blocking_available = client.get_module("Blocking").supported
 
-        self.set_action_state(f"{account}-archive", mam_available)
         self.set_action_state(f"{account}-block-contact", blocking_available)
 
     def update_app_actions_state(self) -> None:
@@ -693,11 +690,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_pep_config_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
         open_window("PEPConfig", account=account)
-
-    @staticmethod
-    def _on_archive_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window("MamPreferences", account=account)
 
     @staticmethod
     def _on_sync_history_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

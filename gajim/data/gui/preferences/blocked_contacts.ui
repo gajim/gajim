@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="BlockedContacts" parent="GtkGrid">
-    <property name="column_spacing">10</property>
+    <property name="row-spacing">12</property>
     <child>
       <object class="GtkOverlay">
         <property name="hexpand">1</property>
