@@ -127,15 +127,6 @@ class AssistantBuilder(Builder):
     stack: Gtk.Stack
     action_area: Gtk.Box
 
-class BlockingListBuilder(Builder):
-    blocking_grid: Gtk.Grid
-    overlay: Gtk.Overlay
-    block_view: Gtk.TreeView
-    jid_cell_renderer: Gtk.CellRendererText
-    add_button: Gtk.Button
-    remove_button: Gtk.Button
-    save_button: Gtk.Button
-
 class CallWindowBuilder(Builder):
     adjustment1: Gtk.Adjustment
     adjustment2: Gtk.Adjustment
@@ -856,12 +847,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["assistant.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> AssistantBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["blocking_list.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> BlockingListBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["call_window.ui"], instance: Any = None, widgets: list[str] = ...

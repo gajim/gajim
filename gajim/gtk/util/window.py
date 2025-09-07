@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from gajim.gtk.add_contact import AddContact
     from gajim.gtk.adhoc import AdHocCommands
     from gajim.gtk.advanced_config import AdvancedConfig
-    from gajim.gtk.blocking import BlockingList
     from gajim.gtk.call_window import CallWindow
     from gajim.gtk.certificate_dialog import CertificateDialog
     from gajim.gtk.change_password import ChangePassword
@@ -63,7 +62,6 @@ if TYPE_CHECKING:
         | AdvancedConfig
         | DBMigration
         | DebugConsoleWindow
-        | BlockingList
         | CallWindow
         | CertificateDialog
         | ChangePassword
@@ -99,7 +97,6 @@ if TYPE_CHECKING:
         | Literal["AdvancedConfig"]
         | Literal["DBMigration"]
         | Literal["DebugConsoleWindow"]
-        | Literal["BlockingList"]
         | Literal["CallWindow"]
         | Literal["CertificateDialog"]
         | Literal["ChangePassword"]
@@ -216,14 +213,6 @@ def get_app_window(
     account: str | None = None,
     jid: str | JID | None = None,
 ) -> DebugConsoleWindow | None: ...
-
-
-@overload
-def get_app_window(
-    name: Literal["BlockingList"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> BlockingList | None: ...
 
 
 @overload
@@ -468,8 +457,6 @@ def open_window(name: Literal["DBMigration"], **kwargs: Any) -> DBMigration: ...
 def open_window(
     name: Literal["DebugConsoleWindow"], **kwargs: Any
 ) -> DebugConsoleWindow: ...
-@overload
-def open_window(name: Literal["BlockingList"], **kwargs: Any) -> BlockingList: ...
 @overload
 def open_window(name: Literal["CallWindow"], **kwargs: Any) -> CallWindow: ...
 @overload

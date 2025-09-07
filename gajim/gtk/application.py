@@ -446,7 +446,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("archive", self._on_archive_action),
             ("pep-config", self._on_pep_config_action),
             ("sync-history", self._on_sync_history_action),
-            ("blocking", self._on_blocking_action),
             ("open-event", self._on_open_event_action),
             ("mark-as-read", self._on_mark_as_read_action),
             ("block-contact", self._on_block_contact),
@@ -488,7 +487,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         blocking_available = client.get_module("Blocking").supported
 
         self.set_action_state(f"{account}-archive", mam_available)
-        self.set_action_state(f"{account}-blocking", blocking_available)
         self.set_action_state(f"{account}-block-contact", blocking_available)
 
     def update_app_actions_state(self) -> None:
@@ -700,11 +698,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_archive_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
         open_window("MamPreferences", account=account)
-
-    @staticmethod
-    def _on_blocking_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window("BlockingList", account=account)
 
     @staticmethod
     def _on_sync_history_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

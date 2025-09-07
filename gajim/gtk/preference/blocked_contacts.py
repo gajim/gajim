@@ -14,60 +14,55 @@ from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common.helpers import to_user_string
-from gajim.common.i18n import _
 
-from gajim.gtk.alert import InformationAlertDialog
-from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 
-log = logging.getLogger("gajim.gtk.blocking_list")
+log = logging.getLogger("gajim.gtk.preference.blocked_contacts")
 
 
-class BlockingList(GajimAppWindow):
+@Gtk.Template.from_string(string=get_ui_string("preferences/blocked_contacts.ui"))
+class BlockedContacts(Gtk.Grid, SignalManager):
+    __gtype_name__ = "BlockedContacts"
+
+    _spinner: Adw.Spinner = Gtk.Template.Child()
+    _block_view: Gtk.TreeView = Gtk.Template.Child()
+    _jid_cell_renderer: Gtk.CellRendererText = Gtk.Template.Child()
+    _add_button: Gtk.Button = Gtk.Template.Child()
+    _remove_button: Gtk.Button = Gtk.Template.Child()
+    _save_button: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self, account: str) -> None:
-        GajimAppWindow.__init__(
-            self,
-            name="BlockingList",
-            title=_("Blocking List for %s")
-            % app.settings.get_account_setting(account, "account_label"),
-        )
+        Gtk.Grid.__init__(self)
+        SignalManager.__init__(self)
 
-        self.account = account
+        self._account = account
         self._client = app.get_client(account)
         self._prev_blocked_jids: set[JID] = set()
 
-        self._ui = get_builder("blocking_list.ui")
-        self.set_child(self._ui.blocking_grid)
-
         self._blocking_store = Gtk.ListStore(str)
-        self._ui.block_view.set_model(self._blocking_store)
-
-        self._spinner = Adw.Spinner(valign=Gtk.Align.CENTER)
-        self._ui.overlay.add_overlay(self._spinner)
+        self._block_view.set_model(self._blocking_store)
 
         self._set_grid_state(False)
 
         self._activate_spinner()
 
-        self._connect(self._ui.jid_cell_renderer, "edited", self._jid_edited)
-        self._connect(self._ui.add_button, "clicked", self._on_add)
-        self._connect(self._ui.remove_button, "clicked", self._on_remove)
-        self._connect(self._ui.save_button, "clicked", self._on_save)
+        self._connect(self._jid_cell_renderer, "edited", self._jid_edited)
+        self._connect(self._add_button, "clicked", self._on_add)
+        self._connect(self._remove_button, "clicked", self._on_remove)
+        self._connect(self._save_button, "clicked", self._on_save)
 
         self._client.get_module("Blocking").request_blocking_list(
             callback=self._on_blocking_list_received
         )
 
-    def _show_error(self, error: str) -> None:
-        InformationAlertDialog(_("Error"), error)
-
     def _on_blocking_list_received(self, task: Task) -> None:
+        self._disable_spinner()
         try:
             blocking_list = cast(set[JID], task.finish())
         except StanzaError as error:
             self._set_grid_state(False)
-            self._show_error(to_user_string(error))
+            log.error("Failed to retrieve blocked contacts: %s", error)
             return
 
         self._prev_blocked_jids = blocking_list
@@ -77,21 +72,18 @@ class BlockingList(GajimAppWindow):
             self._blocking_store.append([str(jid)])
 
         self._set_grid_state(True)
-        self._disable_spinner()
 
     def _on_save_result(self, task: Task):
+        self._disable_spinner()
         try:
             task.finish()
         except StanzaError as error:
-            self._show_error(to_user_string(error))
-            self._disable_spinner()
+            log.error("Failed to store blocked contacts: %s", error)
+        finally:
             self._set_grid_state(True)
-            return
-
-        self.close()
 
     def _set_grid_state(self, state: bool) -> None:
-        self._ui.blocking_grid.set_sensitive(state)
+        self.set_sensitive(state)
 
     def _jid_edited(
         self, _renderer: Gtk.CellRendererText, path: str, new_text: str
@@ -103,7 +95,7 @@ class BlockingList(GajimAppWindow):
         self._blocking_store.append([""])
 
     def _on_remove(self, _button: Any) -> None:
-        selected_rows = self._ui.block_view.get_selection().get_selected_rows()
+        selected_rows = self._block_view.get_selection().get_selected_rows()
         if selected_rows is None:
             return
 
@@ -136,5 +128,9 @@ class BlockingList(GajimAppWindow):
     def _disable_spinner(self) -> None:
         self._spinner.set_visible(False)
 
-    def _cleanup(self) -> None:
-        pass
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        del self._client
+        del self._blocking_store
+        Gtk.Grid.do_unroot(self)
+        app.check_finalize(self)

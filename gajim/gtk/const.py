@@ -135,7 +135,6 @@ WINDOW_MODULES = {
     "AdvancedConfig": "gajim.gtk.advanced_config",
     "DBMigration": "gajim.gtk.db_migration",
     "DebugConsoleWindow": "gajim.gtk.debug_console",
-    "BlockingList": "gajim.gtk.blocking",
     "CertificateDialog": "gajim.gtk.certificate_dialog",
     "ChangePassword": "gajim.gtk.change_password",
     "ContactInfo": "gajim.gtk.contact_info",
@@ -291,7 +290,6 @@ ACCOUNT_ACTIONS = [
     ("remove-contact", "as"),
     ("execute-command", "(sas)"),
     ("archive", "s"),
-    ("blocking", "s"),
     ("mark-as-read", "a{sv}"),
     ("open-event", "a{sv}"),
     ("pep-config", "s"),
@@ -326,7 +324,6 @@ ONLINE_ACCOUNT_ACTIONS = {
 
 FEATURE_ACCOUNT_ACTIONS = {
     "archive",
-    "blocking",
     "block-contact",
 }
 

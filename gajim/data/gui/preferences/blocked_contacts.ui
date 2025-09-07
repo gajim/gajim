@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkGrid" id="blocking_grid">
-    <property name="width_request">400</property>
-    <property name="height_request">300</property>
+  <template class="BlockedContacts" parent="GtkGrid">
     <property name="column_spacing">10</property>
     <child>
-      <object class="GtkOverlay" id="overlay">
+      <object class="GtkOverlay">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <property name="child">
@@ -16,7 +14,7 @@
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
             <property name="child">
-              <object class="GtkTreeView" id="block_view">
+              <object class="GtkTreeView" id="_block_view">
                 <property name="focusable">1</property>
                 <property name="search_column">0</property>
                 <child internal-child="selection">
@@ -30,7 +28,7 @@
                     <property name="sort_indicator">1</property>
                     <property name="sort_column_id">0</property>
                     <child>
-                      <object class="GtkCellRendererText" id="jid_cell_renderer">
+                      <object class="GtkCellRendererText" id="_jid_cell_renderer">
                         <property name="editable">1</property>
                         <property name="placeholder_text">user@example.org</property>
                       </object>
@@ -44,6 +42,11 @@
             </property>
           </object>
         </property>
+        <child type="overlay">
+          <object class="AdwSpinner" id="_spinner">
+            <property name="valign">center</property>
+          </object>
+        </child>
         <layout>
           <property name="column">0</property>
           <property name="row">0</property>
@@ -56,13 +59,13 @@
         <property name="css-classes">toolbar</property>
         <property name="halign">start</property>
         <child>
-          <object class="GtkButton" id="add_button">
+          <object class="GtkButton" id="_add_button">
             <property name="use_underline">1</property>
             <property name="icon_name">lucide-plus-symbolic</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="remove_button">
+          <object class="GtkButton" id="_remove_button">
             <property name="use_underline">1</property>
             <property name="icon_name">lucide-trash-symbolic</property>
           </object>
@@ -77,7 +80,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton" id="save_button">
+      <object class="GtkButton" id="_save_button">
         <property name="label">_Save</property>
         <property name="focusable">1</property>
         <property name="receives_default">1</property>
@@ -93,5 +96,8 @@
         </layout>
       </object>
     </child>
-  </object>
+    <style>
+      <class name="preference-page"/>
+    </style>
+  </template>
 </interface>
