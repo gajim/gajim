@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 09:44+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -580,6 +580,9 @@ msgstr ""
 msgid "Add a checkmark to received messages"
 msgstr ""
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr ""
 
@@ -817,25 +820,17 @@ msgid "Archive is malformed"
 msgstr "Tjeneste sendte malformeret data"
 
 #, fuzzy
-msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Filen er tom"
 
 #, fuzzy
-msgid "Archiving Preferences"
-msgstr "_Indstillinger"
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Filen er tom"
 
-#, fuzzy
-msgid "Archiving Preferences Error"
-msgstr "_Indstillinger"
-
-#, fuzzy
-msgid "Archiving Preferences Saved"
-msgstr "_Indstillinger"
-
-#, python-format
-msgid "Archiving Preferences for %s"
-msgstr ""
+#, fuzzy, python-format
+msgid "Archiving – %(account)s"
+msgstr "Tilføj Kont_akt"
 
 #, fuzzy
 msgid "Ask For Status Message on…"
@@ -843,6 +838,12 @@ msgstr "Spørg om status besked når jeg:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
+
+#, fuzzy
+msgid "Ask before connecting unencrypted"
+msgstr ""
+"Skal vi vise bekræftelses vinduet for blokering af kontakter? Tom streng "
+"betyder at vi aldrig viser vinduet."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1010,16 +1011,16 @@ msgid "Block Participant?"
 msgstr "Deltager"
 
 #, fuzzy
-msgid "Blocked Participants"
-msgstr "Deltagere"
-
-#, fuzzy
-msgid "Blocking List"
-msgstr "Liste over bandlyste"
+msgid "Blocked Contacts"
+msgstr "Blokerede Kontakter"
 
 #, fuzzy, python-format
-msgid "Blocking List for %s"
-msgstr "Privatlivs Liste for %s"
+msgid "Blocked Contacts – %(account)s"
+msgstr "Tilslutning"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Deltagere"
 
 #, fuzzy
 msgid "Block…"
@@ -1684,16 +1685,15 @@ msgstr "Omdøb Kontakt"
 msgid "Default device"
 msgstr "Standard Besked"
 
-#, fuzzy
-msgid "Default for chats"
-msgstr "Åben for samtaler"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 #, fuzzy
 msgid "Default for chats and private group chats"
 msgstr "%s deltager nu i gruppe samtalen"
 
 #, fuzzy
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Ny Gruppe Samtale"
 
 #, fuzzy
@@ -2065,10 +2065,6 @@ msgid "Error opening file"
 msgstr "Fejl ved åbning af fil"
 
 #, fuzzy
-msgid "Error received: {}"
-msgstr "Fejl i modtaget dataform"
-
-#, fuzzy
 msgid "Error while Exporting"
 msgstr "Fejl ved tilføjelse af tjeneste. %s"
 
@@ -2301,6 +2297,10 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
+
+#, fuzzy
+msgid "Focus Search"
+msgstr "Søg"
 
 #, fuzzy, python-format
 msgid "Folder: %s"
@@ -2621,6 +2621,11 @@ msgstr "Id"
 #, fuzzy
 msgid "Identified Error"
 msgstr "SSL certifikat fejl"
+
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
 
 #, fuzzy
 msgid "Idle Time"
@@ -4438,6 +4443,10 @@ msgid "Search"
 msgstr "Søg"
 
 #, fuzzy
+msgid "Search Chat History"
+msgstr "For nylig:"
+
+#, fuzzy
 msgid "Search Filters"
 msgstr "Besked er Sendt"
 
@@ -4548,16 +4557,16 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
+msgid "Send Chat Indicators"
+msgstr "Sidste status: %s"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "Ikke i stand til at deltage i gruppesamtale."
+
+#, fuzzy
 msgid "Send Chat State"
 msgstr "Sidste status: %s"
-
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "Sidste status: %s"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "Ikke i stand til at deltage i gruppesamtale."
 
 #, fuzzy
 msgid "Send File"
@@ -4760,12 +4769,6 @@ msgstr "Vis Trans_porter"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Send besked"
-
-#, fuzzy
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-"Skal vi vise bekræftelses vinduet for blokering af kontakter? Tom streng "
-"betyder at vi aldrig viser vinduet."
 
 #, fuzzy
 msgid ""
@@ -5162,13 +5165,10 @@ msgid "Switch to Workspace 9"
 msgstr "Omdøb Kontakt"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Sync Group Chat Block List"
 msgstr "Synkroniser"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5182,6 +5182,9 @@ msgstr "Synkroniser"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "Synkroniser"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize joined group chats"
@@ -5608,6 +5611,10 @@ msgstr "Type"
 msgid "Type to search for values..."
 msgstr ""
 
+#, fuzzy
+msgid "Typing Only"
+msgstr "Komponere"
+
 msgid "URI"
 msgstr ""
 
@@ -5802,9 +5809,6 @@ msgstr "Du er ikke tilsluttet til serveren"
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "Avanceret Konfigurations Behandler"
-
-msgid "Use file transfer proxies"
-msgstr "Brug fil transport proxy"
 
 msgid "Use proxy auth_entication"
 msgstr "Brug proxy godkendelse"
@@ -6162,10 +6166,6 @@ msgstr "Din nye konto er blevet oprettet med succes"
 
 msgid "Your affiliations to this group chat have been removed"
 msgstr ""
-
-#, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "_Indstillinger"
 
 #, fuzzy
 msgid "Your chat history database has been migrated successfully."
@@ -7011,6 +7011,18 @@ msgstr ""
 #~ msgstr "En anden process bruger denne fil."
 
 #, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "_Indstillinger"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "_Indstillinger"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "_Indstillinger"
+
+#, fuzzy
 #~ msgid "Are you sure you want to leave this group chat?"
 #~ msgstr "Er du sikker på du vil forlade gruppe samtalen \"%s\"?"
 
@@ -7052,6 +7064,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Stavekontrol af forfattede beskeder."
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "Liste over bandlyste"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Privatlivs Liste for %s"
 
 #, fuzzy
 #~ msgid "Bookmarks"
@@ -7107,10 +7127,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Client Certificate"
 #~ msgstr "Selvsigneret certifikat"
-
-#, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "Søg"
 
 #, fuzzy
 #~ msgid "Complete a command or a nickname"
@@ -7191,6 +7207,10 @@ msgstr ""
 #~ msgstr "Standard"
 
 #, fuzzy
+#~ msgid "Default for chats"
+#~ msgstr "Åben for samtaler"
+
+#, fuzzy
 #~ msgid "Delete Message"
 #~ msgstr "Standard Besked"
 
@@ -7257,6 +7277,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Selvsigneret certifikat"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "Fejl i modtaget dataform"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7602,7 +7626,7 @@ msgstr ""
 #~ msgstr "_Send"
 
 #, fuzzy
-#~ msgid "Send Chat Markers"
+#~ msgid "Send Chatstate"
 #~ msgstr "Sidste status: %s"
 
 #, fuzzy
@@ -7782,6 +7806,9 @@ msgstr ""
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
 
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Brug fil transport proxy"
+
 #, fuzzy
 #~ msgid "User Interface"
 #~ msgstr "_Brugernavn:"
@@ -7849,6 +7876,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Du vil ikke længere være i stand til at sende og modtage beskeder fra "
 #~ "kontakter som bruger denne transport."
+
+#, fuzzy
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "_Indstillinger"
 
 #, fuzzy
 #~ msgid "_Accounts"

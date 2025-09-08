@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 09:44+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -509,6 +509,9 @@ msgstr ""
 msgid "Add a checkmark to received messages"
 msgstr ""
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr ""
 
@@ -708,27 +711,24 @@ msgstr ""
 msgid "Archive is malformed"
 msgstr ""
 
+msgid "Archiving"
+msgstr ""
+
 msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr ""
 
-msgid "Archiving Preferences"
-msgstr ""
-
-msgid "Archiving Preferences Error"
-msgstr ""
-
-msgid "Archiving Preferences Saved"
-msgstr ""
-
 #, python-format
-msgid "Archiving Preferences for %s"
+msgid "Archiving – %(account)s"
 msgstr ""
 
 msgid "Ask For Status Message on…"
 msgstr ""
 
 msgid "Ask before closing a group chat tab/window."
+msgstr ""
+
+msgid "Ask before connecting unencrypted"
 msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
@@ -869,14 +869,14 @@ msgstr ""
 msgid "Block Participant?"
 msgstr ""
 
-msgid "Blocked Participants"
-msgstr ""
-
-msgid "Blocking List"
+msgid "Blocked Contacts"
 msgstr ""
 
 #, python-format
-msgid "Blocking List for %s"
+msgid "Blocked Contacts – %(account)s"
+msgstr ""
+
+msgid "Blocked Participants"
 msgstr ""
 
 msgid "Block…"
@@ -1438,13 +1438,13 @@ msgstr ""
 msgid "Default device"
 msgstr ""
 
-msgid "Default for chats"
+msgid "Default for chats (e.g. Contact is typing)"
 msgstr ""
 
 msgid "Default for chats and private group chats"
 msgstr ""
 
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr ""
 
 msgid "Default for new group chats"
@@ -1763,9 +1763,6 @@ msgstr ""
 msgid "Error opening file"
 msgstr ""
 
-msgid "Error received: {}"
-msgstr ""
-
 msgid "Error while Exporting"
 msgstr ""
 
@@ -1963,6 +1960,9 @@ msgstr ""
 msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
+msgstr ""
+
+msgid "Focus Search"
 msgstr ""
 
 #, python-format
@@ -2238,6 +2238,11 @@ msgid "Id"
 msgstr ""
 
 msgid "Identified Error"
+msgstr ""
+
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
 msgstr ""
 
 msgid "Idle Time"
@@ -3770,6 +3775,9 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Search Chat History"
+msgstr ""
+
 msgid "Search Filters"
 msgstr ""
 
@@ -3864,13 +3872,13 @@ msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
 msgstr ""
 
+msgid "Send Chat Indicators"
+msgstr ""
+
+msgid "Send Chat Indicators in Group Chats"
+msgstr ""
+
 msgid "Send Chat State"
-msgstr ""
-
-msgid "Send Chatstate"
-msgstr ""
-
-msgid "Send Chatstate in Group Chats"
 msgstr ""
 
 msgid "Send File"
@@ -4030,9 +4038,6 @@ msgid "Show Transfers"
 msgstr ""
 
 msgid "Show Voice Message Button"
-msgstr ""
-
-msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 
 msgid ""
@@ -4359,13 +4364,10 @@ msgstr ""
 msgid "Switch to Workspace 9"
 msgstr ""
 
-msgid "Sync Group Chat Blocklist"
+msgid "Sync Group Chat Block List"
 msgstr ""
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 msgid "Synchronize"
@@ -4375,6 +4377,9 @@ msgid "Synchronize Chat History"
 msgstr ""
 
 msgid "Synchronize History…"
+msgstr ""
+
+msgid "Synchronize group chat block list with other devices"
 msgstr ""
 
 msgid "Synchronize joined group chats"
@@ -4745,6 +4750,9 @@ msgstr ""
 msgid "Type to search for values..."
 msgstr ""
 
+msgid "Typing Only"
+msgstr ""
+
 msgid "URI"
 msgstr ""
 
@@ -4911,9 +4919,6 @@ msgid "Use an unencrypted connection to the server"
 msgstr ""
 
 msgid "Use defined profile in configuration directory"
-msgstr ""
-
-msgid "Use file transfer proxies"
 msgstr ""
 
 msgid "Use proxy auth_entication"
@@ -5228,9 +5233,6 @@ msgid "Your account has has been removed successfully."
 msgstr ""
 
 msgid "Your affiliations to this group chat have been removed"
-msgstr ""
-
-msgid "Your archiving preferences have successfully been saved."
 msgstr ""
 
 msgid "Your chat history database has been migrated successfully."
