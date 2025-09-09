@@ -134,7 +134,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         _popover: AccountPopover,
         account: str,
     ) -> None:
-
         app.window.show_account_page(account)
         self._bottom_listbox.select_row(self._account_row)
 
@@ -159,6 +158,9 @@ class AppSideBar(Gtk.Box, EventHelper):
             self._status_popover.popdown()
 
             accounts = app.settings.get_active_accounts()
+            if len(accounts) == 0:
+                return Gdk.EVENT_PROPAGATE
+
             if len(accounts) == 1:
                 app.window.show_account_page(accounts[0])
                 self._bottom_listbox.select_row(self._account_row)
