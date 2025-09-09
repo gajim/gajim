@@ -581,7 +581,7 @@ class AvatarStorage(metaclass=Singleton):
             context.set_source_rgb(0.75, 0.75, 0.75)
             context.rectangle(0, 0, width, height)
             context.fill()
-            icon_surface = load_icon_surface("dialog-warning", int(size * 0.7), scale)
+            icon_surface = load_icon_surface("lucide-cloud-off", int(size * 0.7), scale)
             if icon_surface is not None:
                 pos = (width - width * 0.7) / 2
                 context.set_source_surface(icon_surface, pos, pos)
