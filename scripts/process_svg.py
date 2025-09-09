@@ -78,7 +78,9 @@ if __name__ == "__main__":
                 if not file_path.suffix == ".svg":
                     continue
 
-                if file_path.stem.startswith("lucide"):
+                if file_path.stem.startswith("lucide") or file_path.stem.endswith(
+                    "symbolic"
+                ):
                     continue
 
                 process_file(file)
