@@ -4,57 +4,58 @@
 
 from __future__ import annotations
 
-import logging
 import math
 from io import BytesIO
+from pathlib import Path
 
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from PIL import Image
 
-log = logging.getLogger('gajim.c.multiprocess.thumbnail')
 
+def create_thumbnail(data: bytes | Path, size: int, mime_type: str) -> bytes:
+    # Create thumbnail from bytes or Path and return bytes in PNG format
 
-def create_thumbnail(data: bytes, size: int, mime_type: str) -> bytes | None:
-    # Create thumbnail from bytes and return bytes in PNG format
+    if isinstance(data, Path):
+        data = data.read_bytes()
+
+    exceptions: list[Exception] = []
 
     try:
-        thumbnail = _create_thumbnail_with_pil(data, size)
+        return _create_thumbnail_with_pil(data, size)
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):
         # Don't try to process image further
-        return None
+        raise
 
-    if thumbnail is not None:
-        return thumbnail
-    return _create_thumbnail_with_pixbuf(data, size, mime_type)
+    except Exception as exc1:
+        exceptions.append(exc1)
+
+    try:
+        return _create_thumbnail_with_pixbuf(data, size, mime_type)
+    except Exception as exc2:
+        exceptions.append(exc2)
+
+    raise ExceptionGroup('Failed to generate thumbnail', exceptions)
 
 
 def _create_thumbnail_with_pixbuf(
     data: bytes, size: int, mime_type: str
-) -> bytes | None:
+) -> bytes:
     # Reads data and returns thumbnail bytes in PNG format
 
     try:
         # Try to create GdKPixbuf loader with fixed mime-type to
         # fix mime-type detection for HEIF images on some systems
         loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime_type)
-    except GLib.Error as error:
-        log.warning(
-            'Creating pixbuf loader with mime ' 'type %s failed: %s', mime_type, error
-        )
+    except GLib.Error:
         loader = GdkPixbuf.PixbufLoader()
 
-    try:
-        loader.write(data)
-        loader.close()
-    except GLib.Error as error:
-        log.warning('Loading pixbuf failed: %s', error)
-        return None
+    loader.write(data)
+    loader.close()
 
     pixbuf = loader.get_pixbuf()
     if pixbuf is None:
-        log.warning('Loading pixbuf failed')
-        return None
+        raise ValueError('Loading pixbuf failed')
 
     if size > pixbuf.get_width() and size > pixbuf.get_height():
         return data
@@ -62,55 +63,42 @@ def _create_thumbnail_with_pixbuf(
     width, height = get_thumbnail_size(pixbuf, size)
     thumbnail = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
     if thumbnail is None:
-        log.warning('scale_simple() returned None')
-        return None
+        raise ValueError('scale_simple() failed')
 
-    try:
-        _error, bytes_ = thumbnail.save_to_bufferv('png', [], [])
-    except GLib.Error as err:
-        log.warning('Saving pixbuf to buffer failed: %s', err)
-        return None
+    _error, bytes_ = thumbnail.save_to_bufferv('png', [], [])
+
     return bytes_
 
 
-def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
+def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes:
     # Reads data and returns thumbnail bytes in PNG format
 
     input_file = BytesIO(data)
-    output_file = BytesIO()
     try:
         image = Image.open(input_file)
-    except (Image.DecompressionBombError, Image.DecompressionBombWarning) as error:
-        log.warning('Decompression bomb detected: %s', error)
-        raise
-    except Exception as error:
-        log.warning('making pil thumbnail failed: %s', error)
+    except Exception:
         input_file.close()
-        output_file.close()
-        return None
+        raise
+
+    input_file.close()
 
     image_width, image_height = image.size
     if size > image_width and size > image_height:
         image.close()
-        input_file.close()
-        output_file.close()
         return data
 
-    try:
-        image.thumbnail((size, size))
-        image.save(
-            output_file,
-            format='png',
-            optimize=True,
-        )
-    except Exception as error:
-        log.warning('saving pil thumbnail failed: %s', error)
-        return None
+    output_file = BytesIO()
+
+    image.thumbnail((size, size))
+    image.save(
+        output_file,
+        format='png',
+        optimize=True,
+    )
 
     bytes_ = output_file.getvalue()
 
     image.close()
-    input_file.close()
     output_file.close()
 
     return bytes_

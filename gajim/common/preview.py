@@ -377,11 +377,9 @@ class PreviewManager:
             log.warning('Creating thumbnail failed for: %s %s',
                         preview.orig_path, error)
 
-    def _write_thumbnail(self, preview: Preview, future: Future[bytes | None]) -> bool:
+    def _write_thumbnail(self, preview: Preview, future: Future[bytes]) -> bool:
         try:
             result = future.result()
-            if result is None:
-                raise ValueError("result is None")
         except Exception as error:
             preview.info_message = _('Creating thumbnail failed')
             preview.update_widget()

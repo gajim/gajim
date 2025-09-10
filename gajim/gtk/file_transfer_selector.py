@@ -314,8 +314,10 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
             self._set_icon_for_mime_type(mime_type)
             return
 
-        thumbnail_bytes = create_thumbnail(data, PREVIEW_SIZE, mime_type)
-        if thumbnail_bytes is None:
+        try:
+            thumbnail_bytes = create_thumbnail(data, PREVIEW_SIZE, mime_type)
+        except Exception as error:
+            log.error("Failed to create thumbnail: %s", error)
             self._set_icon_for_mime_type(mime_type)
             return
 
