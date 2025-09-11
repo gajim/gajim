@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -445,10 +445,6 @@ msgid "Account Removed"
 msgstr "Kont"
 
 #, fuzzy
-msgid "Account Settings…"
-msgstr "Niemahvyma dałučycca"
-
-#, fuzzy
 msgid "Account Wizard"
 msgstr "Šyfravańnie adklučanaje"
 
@@ -473,6 +469,10 @@ msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
 msgid "Account is being created"
+msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
+msgid "Account is not connected"
 msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
@@ -527,6 +527,10 @@ msgid "Add Account"
 msgstr "_Dadaj kantakt..."
 
 #, fuzzy
+msgid "Add Account…"
+msgstr "_Dadaj kantakt..."
+
+#, fuzzy
 msgid "Add Contact"
 msgstr "_Dadaj kantakt..."
 
@@ -568,6 +572,9 @@ msgstr ""
 msgid "Add a checkmark to received messages"
 msgstr ""
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr ""
 
@@ -576,10 +583,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Add new Theme"
-msgstr "Stvary novy zapis"
-
-#, fuzzy
-msgid "Add new line"
 msgstr "Stvary novy zapis"
 
 #, fuzzy
@@ -620,14 +623,6 @@ msgid "Address does not belong to a group chat server"
 msgstr "Heta nie pakoj"
 
 #, fuzzy
-msgid "Adjust to Status"
-msgstr "_Dastasuj da statusu"
-
-#, fuzzy
-msgid "Adjust to status"
-msgstr "_Dastasuj da statusu"
-
-#, fuzzy
 msgid "Admin"
 msgstr "_Administratar"
 
@@ -663,6 +658,10 @@ msgstr "Admysłovyja dziejańni"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Admysłovyja dziejańni"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Adw Version: %s"
@@ -809,24 +808,16 @@ msgid "Archive is malformed"
 msgstr ""
 
 #, fuzzy
-msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Ściežka da fajłu"
 
 #, fuzzy
-msgid "Archiving Preferences"
-msgstr "_Nałady"
-
-#, fuzzy
-msgid "Archiving Preferences Error"
-msgstr "_Nałady"
-
-#, fuzzy
-msgid "Archiving Preferences Saved"
-msgstr "_Nałady"
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Ściežka da fajłu"
 
 #, python-format
-msgid "Archiving Preferences for %s"
+msgid "Archiving – %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -835,6 +826,12 @@ msgstr "Spytaj paviedamleńnia statusu, kali ja:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
+
+#, fuzzy
+msgid "Ask before connecting unencrypted"
+msgstr ""
+"Ci treba pakazvać akno paćvierdžańnia pry stvareńni metakantaktu? Pusty "
+"radok aznačaje, što hetaje akno nikoli nia budzie pakazvacca."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -900,14 +897,6 @@ msgstr "_Aŭtaryzuj"
 
 #, fuzzy
 msgid "Auto Away"
-msgstr "Adyjšoŭ"
-
-#, fuzzy
-msgid "Auto Away Settings"
-msgstr "Niemahvyma dałučycca"
-
-#, fuzzy
-msgid "Auto Extended Away Settings"
 msgstr "Adyjšoŭ"
 
 #, fuzzy
@@ -1008,16 +997,16 @@ msgid "Block Participant?"
 msgstr "Udzielnik"
 
 #, fuzzy
-msgid "Blocked Participants"
-msgstr "Udzielniki"
-
-#, fuzzy
-msgid "Blocking List"
-msgstr "Śpis zablakavanych kantaktaŭ"
+msgid "Blocked Contacts"
+msgstr "Kantakty"
 
 #, fuzzy, python-format
-msgid "Blocking List for %s"
-msgstr "Śpis pryvatnaści dla %s"
+msgid "Blocked Contacts – %(account)s"
+msgstr "Kantakty"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Udzielniki"
 
 #, fuzzy
 msgid "Block…"
@@ -1099,9 +1088,9 @@ msgstr "Ściahni"
 msgid "Certificate"
 msgstr "Niapravilnaje imia karystalnika"
 
-#, fuzzy
-msgid "Certificate Settings"
-msgstr "Niapravilnaje imia karystalnika"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr "dla kontu %s"
 
 #, fuzzy
 msgid "Certificate Verification Failed"
@@ -1194,10 +1183,6 @@ msgid "Chat Details and Settings"
 msgstr "Złučeńnie"
 
 #, fuzzy
-msgid "Chat List"
-msgstr "Kantakty"
-
-#, fuzzy
 msgid "Chat Type"
 msgstr "Typ"
 
@@ -1237,6 +1222,10 @@ msgstr "Złučeńnia niama"
 msgid "Choose Device"
 msgstr "Abiary vyjavu"
 
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "Abiary hukavy fajł"
+
 msgid "Choose History Export Directory"
 msgstr ""
 
@@ -1253,9 +1242,6 @@ msgstr "Abiary vyjavu"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Abiary fajł dla adsyłańnia..."
-
-msgid "Cipher Suite"
-msgstr ""
 
 #, fuzzy
 msgid "City"
@@ -1278,12 +1264,12 @@ msgid "Clear File"
 msgstr "Viečar"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "Abiary hukavy fajł"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "Paviedamleńnie dasłanaje"
+msgid "Clear Sound"
+msgstr "Abiary hukavy fajł"
 
 msgid ""
 "Click messages to select them\n"
@@ -1307,19 +1293,15 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Client Certificate"
-msgstr "Niapravilnaje imia karystalnika"
-
-#, fuzzy
 msgid "Close"
 msgstr "_Dašli i začyni"
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "Šukaj"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "Šukaj"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1359,10 +1341,6 @@ msgstr ""
 #, fuzzy
 msgid "Complete"
 msgstr "Zavieršana"
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "Stvary novy zapis"
 
 msgid "Completed"
 msgstr "Zavieršana"
@@ -1421,10 +1399,6 @@ msgid "Connection Error"
 msgstr "Złučeńnie"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "Złučeńnie"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "Niemahvyma dałučycca"
 
@@ -1432,15 +1406,19 @@ msgstr "Niemahvyma dałučycca"
 msgid "Connection with %s could not be established."
 msgstr "NIemahčyma złučycca ź inšym bokam."
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "Kantakt"
 
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "Pa_viedamleńnie statusu:"
-
 msgid "Contact Connected"
 msgstr "Kantakt dałučyŭsia"
+
+#, fuzzy
+msgid "Contact Details"
+msgstr "Kantakty"
 
 msgid "Contact Disconnected"
 msgstr "Kantakt adłučyŭsia"
@@ -1458,6 +1436,10 @@ msgstr "Kantakty"
 
 #, fuzzy
 msgid "Contact List Exchange"
+msgstr "Kantakt adłučyŭsia"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
 msgstr "Kantakt adłučyŭsia"
 
 #, fuzzy
@@ -1490,10 +1472,6 @@ msgstr "Kont"
 #, fuzzy
 msgid "Contact Request"
 msgstr "Kantakty"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "Źviestki ab kantakcie"
 
 msgid "Contacts"
 msgstr "Kantakty"
@@ -1557,20 +1535,12 @@ msgid "Copy code snippet"
 msgstr ""
 
 #, fuzzy
-msgid "Copy info to clipboard"
-msgstr "S_kapijuj adras spasyłki"
-
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "S_kapijuj adras spasyłki"
 
 #, fuzzy
 msgid "Copy to clipboard"
 msgstr "S_kapijuj adras spasyłki"
-
-#, fuzzy
-msgid "Correct the last message"
-msgstr "paviedamlennie statusu"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1624,7 +1594,7 @@ msgid "Create New Account"
 msgstr "Stvary novy zapis"
 
 #, fuzzy
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
@@ -1638,10 +1608,13 @@ msgstr ""
 msgid "Credentials expired"
 msgstr "Musiš vyznačyć parol"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 #, fuzzy
@@ -1670,8 +1643,9 @@ msgstr "_Dałučysia"
 msgid "Decline"
 msgstr "Adł_učany"
 
-msgid "Decrease User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Decrease Font Size"
+msgstr "_Imia karystalnika:"
 
 msgid "Decrease playback speed"
 msgstr ""
@@ -1695,16 +1669,15 @@ msgstr "Źmiani nazvu kantaktu"
 msgid "Default device"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
-#, fuzzy
-msgid "Default for chats"
-msgstr "Achvotna parazmaŭlaju"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 #, fuzzy
 msgid "Default for chats and private group chats"
 msgstr "%s dałučyŭsia da pakoju"
 
 #, fuzzy
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Novaja hrupavaja razmova"
 
 #, fuzzy
@@ -1762,6 +1735,13 @@ msgstr "Apisańnie: %s"
 
 msgid "Details"
 msgstr "Padrabiaznaści"
+
+#, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
 
 #, python-format
 msgid "Device \"%s\""
@@ -1825,9 +1805,6 @@ msgid "Disclose information about the operating system you currently use"
 msgstr ""
 "Kali ŭklučanaja hetaja opcyja, Gajim budzie dałučacca da hetaha pakoju pry "
 "starcie"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1898,9 +1875,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 #, fuzzy
 msgid "Download"
 msgstr "Ściahni"
@@ -1931,6 +1905,9 @@ msgstr "Dasyłaje kantaktu fajł"
 
 msgid "Eating"
 msgstr "Jem"
+
+msgid "Edit Shortcut"
+msgstr ""
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1964,6 +1941,10 @@ msgstr ""
 msgid "Enable"
 msgstr "Ukluč"
 
+#, fuzzy
+msgid "Enable Account"
+msgstr "Niapravilnaja nazva kontu"
+
 msgid "Enable KeepassXC Integration"
 msgstr ""
 
@@ -1995,15 +1976,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "Niapravilnaje imia karystalnika"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "Šyfravańnie adklučanaje"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Šyfravańnie ŭklučanaje"
 
 #, fuzzy
@@ -2066,10 +2047,6 @@ msgstr ""
 #, fuzzy
 msgid "Error opening file"
 msgstr "Pamyłka adčytańnia fajłu:"
-
-#, fuzzy
-msgid "Error received: {}"
-msgstr "Atrymaŭ novy zapis:"
 
 #, fuzzy
 msgid "Error while Exporting"
@@ -2307,6 +2284,10 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+#, fuzzy
+msgid "Focus Search"
+msgstr "Šukaj"
+
 #, fuzzy, python-format
 msgid "Folder: %s"
 msgstr "Fajł: %s"
@@ -2390,9 +2371,6 @@ msgstr "Versija GTK+:"
 msgid "GTK Version: %s"
 msgstr "Versija GTK+:"
 
-msgid "Gajim"
-msgstr "Gajim"
-
 #, fuzzy, python-format
 msgid "Gajim %s is available"
 msgstr "Złučeńnie niemahčymaje"
@@ -2450,6 +2428,10 @@ msgstr "Adpraŭnik:"
 
 msgid "General"
 msgstr "Ahulnaja"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2576,6 +2558,17 @@ msgstr "Chatniaja staronka:"
 msgid "Hostname"
 msgstr "Nazva hosta: "
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "Što chočaš zrabić?"
@@ -2608,10 +2601,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adras:"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "_Port:"
-
 msgid "Id"
 msgstr "Identyfikatar"
 
@@ -2619,12 +2608,13 @@ msgstr "Identyfikatar"
 msgid "Identified Error"
 msgstr "Niapravilnaje imia karystalnika"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+
 #, fuzzy
 msgid "Idle Time"
-msgstr " ad %s"
-
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr " ad %s"
 
 #, fuzzy
@@ -2646,16 +2636,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"Kali opcyja maje vartaść True, ty zmožaš akreślić admoŭny pryjarytet ŭ aknie "
-"madyfikacyi kontu. UHAVA: kali ty dałučajeśsia z admoŭnym pryjarytetam, to "
-"nia budzieš atrymvać paviedamleńniaŭ z servera."
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -2706,8 +2686,9 @@ msgstr "Niapravilnaje imia karystalnika"
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Increase Font Size"
+msgstr "_Imia karystalnika:"
 
 msgid "Increase playback speed"
 msgstr ""
@@ -2719,9 +2700,6 @@ msgstr "Źviestki ab kantakcie"
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Złučeńnie"
-
-msgid "Insert Emoji"
-msgstr ""
 
 #, fuzzy
 msgid "Install"
@@ -2969,9 +2947,6 @@ msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 msgid "Loading…"
 msgstr "Uvod paviedamleńnia"
 
-msgid "Local System Time"
-msgstr ""
-
 #, fuzzy
 msgid "Local Time"
 msgstr "Lakalny JID:"
@@ -2990,10 +2965,6 @@ msgid "Location at %s"
 msgstr "Madyfikacyja kontu"
 
 #, fuzzy
-msgid "Location:"
-msgstr "Madyfikacyja kontu"
-
-#, fuzzy
 msgid "Log"
 msgstr "_Dałučysia"
 
@@ -3007,9 +2978,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#, fuzzy
-msgid "Login Settings"
-msgstr "Niemahvyma dałučycca"
+#, python-format
+msgid "Login – %(account)s"
+msgstr ""
 
 msgid "Look it up in _Dictionary"
 msgstr "Šukaj u _słoŭniku"
@@ -3037,20 +3008,16 @@ msgid "Manage"
 msgstr "Kiruj..."
 
 #, fuzzy
-msgid "Manage Accounts…"
-msgstr "Madyfikuj kont"
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "Kantakty"
-
-#, fuzzy
 msgid "Manage Proxies"
 msgstr "Kiruj profilami proxy"
 
 #, fuzzy
 msgid "Manage Proxies..."
 msgstr "Kiruj profilami proxy"
+
+#, fuzzy
+msgid "Manage Shortcuts"
+msgstr "Kiruj kontami"
 
 #, fuzzy
 msgid "Manage Sounds"
@@ -3127,10 +3094,6 @@ msgid "Message Sent"
 msgstr "Paviedamleńnie dasłanaje"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "źmiest paviedamleńnia"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "Paviedamleńnie dasłanaje"
 
@@ -3139,6 +3102,10 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+
+#, fuzzy
+msgid "Messages"
+msgstr "Paviedamleńnie"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3334,7 +3301,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "Niapravilnaje imia karystalnika"
 
 #, fuzzy
@@ -3369,6 +3336,9 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Konty niedastupnyja"
+
+msgid "No keys pressed"
+msgstr ""
 
 #, fuzzy
 msgid "No results"
@@ -3555,9 +3525,6 @@ msgstr "Adčyni jak _spasyłku"
 msgid "Open folder"
 msgstr "_Adčyni kataloh z fajłam"
 
-msgid "Open search bar"
-msgstr ""
-
 msgid "OpenGL accelerated"
 msgstr ""
 
@@ -3625,9 +3592,6 @@ msgstr "Kanfihuracyja pakoju"
 msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
-msgstr ""
-
-msgid "PKCS12 Files"
 msgstr ""
 
 #, fuzzy
@@ -3865,6 +3829,11 @@ msgstr "Nałady"
 msgid "Presets"
 msgstr "P_rysutnaść"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3893,6 +3862,10 @@ msgstr "Pryjary_tet:"
 msgid "Privacy"
 msgstr "Śpis pryvatnaści"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 #, fuzzy
 msgid "Private"
 msgstr "Śpis pryvatnaści"
@@ -3915,8 +3888,16 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "Server"
+
 #, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -3936,14 +3917,6 @@ msgstr "Kiruj profilami proxy"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "Proxy:"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "Proxy:"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "Proxy:"
 
 #, fuzzy
@@ -4003,11 +3976,11 @@ msgid "Quit Gajim"
 msgstr "Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "Dašli paviedamleńnie"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "%d niečytanaje paviedamleńnie"
 
 #, fuzzy
@@ -4049,10 +4022,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
-#, fuzzy
-msgid "Recent history"
-msgstr "Niadaŭna:"
-
 msgid "Recognize your account by color"
 msgstr ""
 
@@ -4088,6 +4057,10 @@ msgstr "Zarehistrujsia na %s"
 #, fuzzy
 msgid "Reject file transfer"
 msgstr "Pieradačy fajłaŭ"
+
+#, fuzzy
+msgid "Reload"
+msgstr "Zapišy fajł jak..."
 
 msgid "Remember Last Status"
 msgstr ""
@@ -4190,8 +4163,17 @@ msgstr[1] "Vydalaje kantakt sa śpisu"
 msgstr[2] "Vydalaje kantakt sa śpisu"
 
 #, fuzzy
+msgid "Remove…"
+msgstr "_Vydal"
+
+#, fuzzy
 msgid "Removing Account..."
 msgstr "Vydalajecca kont %s"
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4286,12 +4268,12 @@ msgid "Reset Filters"
 msgstr "Paviedamleńnie dasłanaje"
 
 #, fuzzy
-msgid "Reset Hints"
-msgstr "Paviedamleńnie dasłanaje"
+msgid "Reset Font Size"
+msgstr "_Imia karystalnika:"
 
 #, fuzzy
-msgid "Reset User Interface Font Size"
-msgstr "_Imia karystalnika:"
+msgid "Reset Hints"
+msgstr "Paviedamleńnie dasłanaje"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4319,7 +4301,7 @@ msgid "Restart Pending"
 msgstr "Vymahaje parolu"
 
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "Apošni status: %s"
 
 #, fuzzy
@@ -4431,21 +4413,25 @@ msgstr "Ja chaču dadać ciabie ŭ svoj śpis kantaktaŭ."
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanavańnie %d / %d.."
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 #, fuzzy
 msgid "Scroll to this message"
 msgstr "paviedamlennie statusu"
 
-msgid "Scroll up"
-msgstr ""
-
 msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
 msgstr "Šukaj"
+
+#, fuzzy
+msgid "Search Chat History"
+msgstr "Niadaŭna:"
 
 #, fuzzy
 msgid "Search Filters"
@@ -4537,9 +4523,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -4561,20 +4544,16 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "Apošni status: %s"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "Niemahčyma dałučycca da pakoju"
 
 #, fuzzy
 msgid "Send Chat State"
 msgstr "Apošni status: %s"
-
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "Apošni status: %s"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "Niemahčyma dałučycca da pakoju"
 
 #, fuzzy
 msgid "Send File"
@@ -4618,10 +4597,6 @@ msgstr ""
 "Dasyłaj paviedamleńnie praz Ctrl+Enter, a Enteram stvaraj novy radok "
 "(zmoŭčanyja pavodziny Mirabilis ICQ)."
 
-#, fuzzy
-msgid "Send the message"
-msgstr "Dašli paviedamleńnie"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4637,28 +4612,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "Numer GG:"
 
-msgid "Server"
-msgstr "Server"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "Server"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "Zdolnaści serveraŭ"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "Zdolnaści serveraŭ"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "Zdolnaści serveraŭ"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "Zapisany ŭ: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4682,6 +4638,10 @@ msgstr "Niemahčyma ahladać hety servis"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "Niemahčyma znajści servis"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "Prahlad servisaŭ"
 
 #, fuzzy
 msgid "Set Trust"
@@ -4732,6 +4692,9 @@ msgstr "Pačni razmovu"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Źmiani status"
+
+msgid "Shortcuts"
+msgstr ""
 
 #, fuzzy
 msgid "Show Chat List"
@@ -4796,12 +4759,6 @@ msgid "Show Voice Message Button"
 msgstr "Dašli paviedamleńnie"
 
 #, fuzzy
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-"Ci treba pakazvać akno paćvierdžańnia pry stvareńni metakantaktu? Pusty "
-"radok aznačaje, što hetaje akno nikoli nia budzie pakazvacca."
-
-#, fuzzy
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4820,10 +4777,6 @@ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "Pakažy _kansol XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5088,10 +5041,6 @@ msgid "Subscription"
 msgstr "Aŭtaryzacyja:"
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "Aŭtaryzacyja:"
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "Kantakty"
 
@@ -5115,37 +5064,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "Pačni razmovu"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "Pačni razmovu"
+msgid "Switch to Workspace 2"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "Pačni razmovu"
+msgid "Switch to Workspace 3"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "Pačni razmovu"
+msgid "Switch to Workspace 4"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "Pačni razmovu"
+msgid "Switch to Workspace 5"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "Pačni razmovu"
+msgid "Switch to Workspace 6"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 7"
+msgstr "Źmiani nazvu kantaktu"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "Źmiani nazvu kantaktu"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "Źmiani nazvu kantaktu"
+
+#, fuzzy
+msgid "Sync Group Chat Block List"
 msgstr "Pakažy _adłučanyja kantakty"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5159,6 +5169,9 @@ msgstr "Pakažy _adłučanyja kantakty"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "Pakažy _adłučanyja kantakty"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize joined group chats"
@@ -5178,10 +5191,6 @@ msgstr "Pakažy _adłučanyja kantakty"
 #, fuzzy
 msgid "System"
 msgstr "<b>Asablivy</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "Versija GTK+:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5468,6 +5477,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "Vydal kont _tolki dla Gajim"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Vydal kont _tolki dla Gajim"
 
@@ -5527,9 +5540,6 @@ msgstr "Pieradajecca"
 msgid "Transports"
 msgstr "Transparty"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "Traktuj pary znakaŭ * / _  jak znaki farmatavańnia."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5560,10 +5570,6 @@ msgstr ""
 msgid "Trying to remove account..."
 msgstr ""
 
-#, fuzzy
-msgid "Tune:"
-msgstr "Typ:"
-
 msgid "Turn Camera off"
 msgstr ""
 
@@ -5580,6 +5586,10 @@ msgstr "Typ"
 
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgid "Typing Only"
+msgstr "Uvod paviedamleńnia"
 
 msgid "URI"
 msgstr ""
@@ -5681,6 +5691,10 @@ msgstr "Zapyt na pieradaču fajłu"
 msgid "Unpin Chat"
 msgstr "Zapyt na pieradaču fajłu"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "Zapyt na pieradaču fajłu"
+
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -5772,9 +5786,6 @@ msgstr "Niama złučeńnia z serveram"
 msgid "Use defined profile in configuration directory"
 msgstr "Redaktar dadatkovych naładaŭ"
 
-msgid "Use file transfer proxies"
-msgstr "Skarystaj proxy dla pieradačy fajłaŭ"
-
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Užyvaj aŭtaryzacyju"
@@ -5785,10 +5796,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s nia znojdzieny"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "_Imia karystalnika:"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -5879,9 +5886,6 @@ msgstr "U adrasie dla web-pošuku nie staje \"%s\""
 msgid "Web _Search for it"
 msgstr "_Šukaj u Web"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -5930,10 +5934,6 @@ msgstr "Admysłovyja dziejańni"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "Admysłovyja dziejańni"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "Źmiani nazvu kantaktu"
 
 msgid "X11"
 msgstr ""
@@ -6141,10 +6141,6 @@ msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
 #, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "_Nałady"
-
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
 msgstr "Novy kont paśpiachova stvorany"
 
@@ -6183,7 +6179,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6579,6 +6575,10 @@ msgstr "robić štości inšaje"
 msgid "italic"
 msgstr "Nachileny"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "Pryčyna"
+
 msgid "lat"
 msgstr ""
 
@@ -6932,12 +6932,20 @@ msgstr ""
 #~ msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Dziejny"
 
 #, fuzzy
 #~ msgid "Add _Contact…"
 #~ msgstr "_Dadaj kantakt..."
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Stvary novy zapis"
 
 #, fuzzy
 #~ msgid "Add reaction"
@@ -6952,8 +6960,28 @@ msgstr ""
 #~ msgstr "Źmiani _hrupy"
 
 #, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "_Dastasuj da statusu"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "_Dastasuj da statusu"
+
+#, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Hrupa"
+
+#, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "_Nałady"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "_Nałady"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "_Nałady"
 
 #, fuzzy
 #~ msgid "Are you sure you want to leave this group chat?"
@@ -6980,8 +7008,24 @@ msgstr ""
 #~ msgstr "Aŭtaryzacyja dasłanaja"
 
 #, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Adyjšoŭ"
+
+#, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "Aŭtamatyčna dałučajsia"
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "Śpis zablakavanych kantaktaŭ"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Śpis pryvatnaści dla %s"
 
 #, fuzzy
 #~ msgid "Bookmarks"
@@ -6999,15 +7043,17 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Niemahčyma nadpisać fajł \"%s\""
 
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr "dla kontu %s"
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "Niapravilnaje imia karystalnika"
 
 #, fuzzy
 #~ msgid "Ch_ange Subject"
 #~ msgstr "Źmiani _temu"
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "Kantakty"
 
 #, fuzzy
 #~ msgid "Checking file…"
@@ -7030,20 +7076,40 @@ msgstr ""
 #~ msgstr "Dadaje kantakt u śpis kantaktaŭ"
 
 #, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "Šukaj"
+#~ msgid "Clear message entry"
+#~ msgstr "Paviedamleńnie dasłanaje"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "Niapravilnaje imia karystalnika"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Stvary novy zapis"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
 #~ msgstr "Zavieršana"
 
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Złučeńnie"
+
 #~ msgid "Connection not available"
 #~ msgstr "Złučeńnia niama"
 
 #, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "Pa_viedamleńnie statusu:"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Anuluj aŭtaryzacyju"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Źviestki ab kantakcie"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -7074,7 +7140,19 @@ msgstr ""
 #~ msgstr "Pakoj:"
 
 #, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "S_kapijuj adras spasyłki"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "paviedamlennie statusu"
+
+#, fuzzy
 #~ msgid "Create _Group Chat…"
+#~ msgstr "Pakiń pakoji"
+
+#, fuzzy
+#~ msgid "Create new group chat"
 #~ msgstr "Pakiń pakoji"
 
 #~ msgid "Create new post"
@@ -7086,6 +7164,10 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Zmoŭčany"
+
+#, fuzzy
+#~ msgid "Default for chats"
+#~ msgstr "Achvotna parazmaŭlaju"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7143,6 +7225,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Źmiani _hrupy"
+
+#, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Niapravilnaje imia karystalnika"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "Atrymaŭ novy zapis:"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7206,6 +7296,9 @@ msgstr ""
 #~ msgid "Full Message View"
 #~ msgstr "Paviedamleńnie dasłanaje"
 
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
@@ -7241,6 +7334,24 @@ msgstr ""
 #~ msgid "Homepage"
 #~ msgstr "Chatniaja staronka:"
 
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Port:"
+
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr " ad %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "Kali opcyja maje vartaść True, ty zmožaš akreślić admoŭny pryjarytet ŭ "
+#~ "aknie madyfikacyi kontu. UHAVA: kali ty dałučajeśsia z admoŭnym "
+#~ "pryjarytetam, to nia budzieš atrymvać paviedamleńniaŭ z servera."
+
 #~ msgid "Images"
 #~ msgstr "Vyjavy"
 
@@ -7267,8 +7378,28 @@ msgstr ""
 #~ msgstr "Pryčyna"
 
 #, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Madyfikacyja kontu"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "Madyfikuj kont"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Kantakty"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Paviedamleńni"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "źmiest paviedamleńnia"
 
 #, fuzzy
 #~ msgid ""
@@ -7351,12 +7482,24 @@ msgstr ""
 #~ msgstr "Prahres"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Proxy:"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "Pieradałučycca?"
 
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "Ci vykarystoŭvajecca šyfravańnie OpenPGP dla hetaha kantaktu?"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "Niadaŭna:"
 
 #~ msgid "Recipient: "
 #~ msgstr "Atrymaŭ: "
@@ -7392,10 +7535,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove from contact list"
 #~ msgstr "Vydalaje kantakt sa śpisu"
-
-#, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "_Vydal"
 
 #, fuzzy
 #~ msgid "Report"
@@ -7438,6 +7577,10 @@ msgstr ""
 #~ msgstr "_Vyšli"
 
 #, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Apošni status: %s"
+
+#, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "Zapišy fajł jak..."
 
@@ -7445,12 +7588,35 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "Zapišy fajł jak..."
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Dašli paviedamleńnie"
+
 #~ msgid "Sender: "
 #~ msgstr "Adpraŭnik:"
 
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "Numer GG:"
+
+#~ msgid "Server"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "Zdolnaści serveraŭ"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Zdolnaści serveraŭ"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "Zapisany ŭ: %s"
 
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7467,6 +7633,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "Zdolnaści serveraŭ"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "Pakažy _kansol XML"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7509,12 +7679,24 @@ msgstr ""
 #~ msgstr "Zapyt aŭtaryzacyi"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Aŭtaryzacyja:"
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Prahlad servisaŭ dla kontu %s"
 
 #, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Pačni razmovu"
+
+#, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Pakažy _adłučanyja kantakty"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "Versija GTK+:"
 
 #~ msgid "The service could not be found"
 #~ msgstr "Niemahčyma znajści servis"
@@ -7541,6 +7723,13 @@ msgstr ""
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "Transpart \"%s\" budzie vydaleny"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Traktuj pary znakaŭ * / _  jak znaki farmatavańnia."
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "Typ:"
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7555,17 +7744,19 @@ msgstr ""
 #~ msgstr "Aktualizuj MOTD"
 
 #, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "Zapišy fajł jak..."
-
-#, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Zapišy fajł jak..."
 
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Skarystaj proxy dla pieradačy fajłaŭ"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Imia karystalnika:"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7590,6 +7781,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"
@@ -7630,12 +7825,12 @@ msgstr ""
 #~ "transpartam."
 
 #, fuzzy
-#~ msgid "_Accounts"
-#~ msgstr "Konty"
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "_Nałady"
 
 #, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "_Dadaj kantakt..."
+#~ msgid "_Accounts"
+#~ msgstr "Konty"
 
 #, fuzzy
 #~ msgid "_Debug Console"

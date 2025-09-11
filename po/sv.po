@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -424,9 +424,6 @@ msgstr "Det gick inte att ta bort kontot"
 msgid "Account Removed"
 msgstr "Konto borttaget"
 
-msgid "Account Settings…"
-msgstr "Kontoinställningar…"
-
 msgid "Account Wizard"
 msgstr "Kontoguiden"
 
@@ -448,6 +445,10 @@ msgstr "Kontot måste vara anslutet"
 
 msgid "Account is being created"
 msgstr "Kontot skapas"
+
+#, fuzzy
+msgid "Account is not connected"
+msgstr "Kontot är inte anslutet."
 
 msgid "Account is not connected."
 msgstr "Kontot är inte anslutet."
@@ -495,6 +496,10 @@ msgstr "Lägg till"
 msgid "Add Account"
 msgstr "Lägg till konto"
 
+#, fuzzy
+msgid "Add Account…"
+msgstr "_Lägg till kontakt..."
+
 msgid "Add Contact"
 msgstr "Lägg till kontakt"
 
@@ -530,6 +535,9 @@ msgstr "Lägg till arbetsyta"
 msgid "Add a checkmark to received messages"
 msgstr "Lägg till en bock för mottagna meddelanden"
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr "Lägg till ett namn och en färg för ditt konto"
 
@@ -538,9 +546,6 @@ msgstr "Lägg till en inställning som du vill ändra"
 
 msgid "Add new Theme"
 msgstr "Lägg till nytt tema"
-
-msgid "Add new line"
-msgstr "Lägg till en ny rad"
 
 msgid "Add some details…"
 msgstr "Lägg till några detaljer…"
@@ -574,12 +579,6 @@ msgstr "Adress"
 msgid "Address does not belong to a group chat server"
 msgstr "Adressen tillhör inte en gruppchattserver"
 
-msgid "Adjust to Status"
-msgstr "Justera till Status"
-
-msgid "Adjust to status"
-msgstr "Justera till status"
-
 msgid "Admin"
 msgstr "Admin"
 
@@ -609,6 +608,10 @@ msgstr "Avancerade inställningar"
 
 msgid "Advanced settings"
 msgstr "Avancerade inställningar"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Adw Version: %s"
@@ -751,24 +754,16 @@ msgid "Archive is malformed"
 msgstr ""
 
 #, fuzzy
-msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Filen är tom"
 
 #, fuzzy
-msgid "Archiving Preferences"
-msgstr "_Inställningar"
-
-#, fuzzy
-msgid "Archiving Preferences Error"
-msgstr "_Inställningar"
-
-#, fuzzy
-msgid "Archiving Preferences Saved"
-msgstr "_Inställningar"
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Filen är tom"
 
 #, python-format
-msgid "Archiving Preferences for %s"
+msgid "Archiving – %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -777,6 +772,9 @@ msgstr "Fråga efter statusmeddelande när jag:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Fråga innan gruppchattflik eller -fönster stängs."
+
+msgid "Ask before connecting unencrypted"
+msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -843,14 +841,6 @@ msgstr "Au_ktorisera"
 #, fuzzy
 msgid "Auto Away"
 msgstr "Frånvarande"
-
-#, fuzzy
-msgid "Auto Away Settings"
-msgstr "Registreringen misslyckades"
-
-#, fuzzy
-msgid "Auto Extended Away Settings"
-msgstr "Utökad frånvaro"
 
 #, fuzzy
 msgid "Auto Not Available"
@@ -946,15 +936,16 @@ msgid "Block Participant?"
 msgstr "Deltagare"
 
 #, fuzzy
+msgid "Blocked Contacts"
+msgstr "Blockera kontakt"
+
+#, fuzzy, python-format
+msgid "Blocked Contacts – %(account)s"
+msgstr "Blockera kontakt…"
+
+#, fuzzy
 msgid "Blocked Participants"
 msgstr "Deltagare"
-
-msgid "Blocking List"
-msgstr "Blockeringslista"
-
-#, python-format
-msgid "Blocking List for %s"
-msgstr "Blockeringslista för %s"
 
 msgid "Block…"
 msgstr "Blockera…"
@@ -1029,8 +1020,11 @@ msgstr "Avbryt nedladdning"
 msgid "Certificate"
 msgstr "Certifikat"
 
-msgid "Certificate Settings"
-msgstr "Certifikatinställningar"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr ""
+"Certifikat för \n"
+"%s"
 
 msgid "Certificate Verification Failed"
 msgstr "Certifikatverifiering misslyckades"
@@ -1113,9 +1107,6 @@ msgstr "Chattbanner: Typsnitt för text"
 msgid "Chat Details and Settings"
 msgstr "Chattdetaljer och inställningar"
 
-msgid "Chat List"
-msgstr "Chattlista"
-
 #, fuzzy
 msgid "Chat Type"
 msgstr "Typ"
@@ -1155,6 +1146,10 @@ msgstr "Sessionsbus inte tillgänglig"
 msgid "Choose Device"
 msgstr "Välj enhet"
 
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "Välj ljud"
+
 msgid "Choose History Export Directory"
 msgstr "Välj katalog för exporterad historik"
 
@@ -1170,9 +1165,6 @@ msgstr "Välj en grupp…"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Välj fil att skicka..."
-
-msgid "Cipher Suite"
-msgstr ""
 
 #, fuzzy
 msgid "City"
@@ -1195,12 +1187,12 @@ msgid "Clear File"
 msgstr "Städar"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "Välj ljud"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "Meddelande skickat"
+msgid "Clear Sound"
+msgstr "Välj ljud"
 
 msgid ""
 "Click messages to select them\n"
@@ -1224,19 +1216,15 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Client Certificate"
-msgstr "Självsignerat certifikat"
-
-#, fuzzy
 msgid "Close"
 msgstr "_Skicka och stäng"
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "Sök"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "Sök"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1276,10 +1264,6 @@ msgstr ""
 #, fuzzy
 msgid "Complete"
 msgstr "Färdigställd"
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "Skapa ett nytt, tomt tema med ditt önskade namn."
 
 msgid "Completed"
 msgstr "Färdigställd"
@@ -1338,10 +1322,6 @@ msgid "Connection Error"
 msgstr "Anslutning"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "Anslutning"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "Anslutningsfel"
 
@@ -1349,15 +1329,19 @@ msgstr "Anslutningsfel"
 msgid "Connection with %s could not be established."
 msgstr "Anslutning med motpart kan inte etableras."
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "Kontakt"
 
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "Chattmeddelande:"
-
 msgid "Contact Connected"
 msgstr "Kontakt loggade in"
+
+#, fuzzy
+msgid "Contact Details"
+msgstr "Kontakter"
 
 msgid "Contact Disconnected"
 msgstr "Kontakt loggade ut"
@@ -1375,6 +1359,10 @@ msgstr "Kontakter"
 
 #, fuzzy
 msgid "Contact List Exchange"
+msgstr "Kontakt loggade ut"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
 msgstr "Kontakt loggade ut"
 
 #, fuzzy
@@ -1407,10 +1395,6 @@ msgstr "Konto borttaget"
 #, fuzzy
 msgid "Contact Request"
 msgstr "Kontakter"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "Kontaktinformation"
 
 msgid "Contacts"
 msgstr "Kontakter"
@@ -1470,18 +1454,12 @@ msgstr "_Kopiera JID/e-postadress"
 msgid "Copy code snippet"
 msgstr "Kopiera kodsnutt"
 
-msgid "Copy info to clipboard"
-msgstr "Kopiera information till urklipp"
-
 #, fuzzy
 msgid "Copy to Clipboard"
 msgstr "Kopiera till urklipp"
 
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
-
-msgid "Correct the last message"
-msgstr "Korrigera det sista meddelandet"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1527,8 +1505,9 @@ msgstr "Skapa gruppchatt…"
 msgid "Create New Account"
 msgstr "Skapa nytt konto"
 
-msgid "Create new group chat"
-msgstr "Skapa ny gruppchatt"
+#, fuzzy
+msgid "Create New Group Chat"
+msgstr "Skapa gruppchatt"
 
 msgid "Creating Account..."
 msgstr "Skapar konto..."
@@ -1539,10 +1518,13 @@ msgstr "Det gick inte att skapa miniatyrbild"
 msgid "Credentials expired"
 msgstr "Autentiseringsuppgifterna har löpt ut"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr "D-Bus-gränssnitt"
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 msgid "Dark Theme"
@@ -1566,7 +1548,8 @@ msgstr "Felsökningsloggning"
 msgid "Decline"
 msgstr "Avvisa"
 
-msgid "Decrease User Interface Font Size"
+#, fuzzy
+msgid "Decrease Font Size"
 msgstr "Minska teckensnittsstorleken för användargränssnittet"
 
 msgid "Decrease playback speed"
@@ -1587,13 +1570,14 @@ msgstr "Standardarbetsyta"
 msgid "Default device"
 msgstr "Standardenhet"
 
-msgid "Default for chats"
-msgstr "Standardinställningar för chattar"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 msgid "Default for chats and private group chats"
 msgstr "Standardinställningar för enskilda chattar och privata gruppchattar"
 
-msgid "Default for group chats"
+#, fuzzy
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Standardinställningar för gruppchattar"
 
 msgid "Default for new group chats"
@@ -1650,6 +1634,13 @@ msgstr "Förstör %s"
 
 msgid "Details"
 msgstr "Detaljer"
+
+#, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
 
 #, python-format
 msgid "Device \"%s\""
@@ -1713,9 +1704,6 @@ msgid "Disclose information about the operating system you currently use"
 msgstr ""
 "Om kryssad kommer Gajim att tillåta andra att detektera operativsystemet som "
 "du använder"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1786,9 +1774,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 msgid "Download"
 msgstr "Hämta hem"
 
@@ -1815,6 +1800,10 @@ msgstr "Släpp filer här"
 
 msgid "Eating"
 msgstr "Äter"
+
+#, fuzzy
+msgid "Edit Shortcut"
+msgstr "Kortkoder för Emojis"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1845,6 +1834,10 @@ msgstr ""
 
 msgid "Enable"
 msgstr "Aktivera"
+
+#, fuzzy
+msgid "Enable Account"
+msgstr "Ogiltigt kontonamn"
 
 msgid "Enable KeepassXC Integration"
 msgstr "Aktivera integration för KeepassXC"
@@ -1877,15 +1870,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "Självsignerat certifikat"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "Kryptering deaktiverad"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Kryptering aktiverad"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Kryptering aktiverad"
 
 #, fuzzy
@@ -1944,9 +1937,6 @@ msgstr "Fel i ljuddataström."
 
 msgid "Error opening file"
 msgstr "Fel vid öppnande av filen"
-
-msgid "Error received: {}"
-msgstr "Fel mottaget: {}"
 
 msgid "Error while Exporting"
 msgstr "Fel vid export"
@@ -2161,6 +2151,10 @@ msgstr ""
 "Synkroniseringen av chatthistoriken har slutförts:\n"
 "%s meddelanden hämtades"
 
+#, fuzzy
+msgid "Focus Search"
+msgstr "Sök"
+
 #, fuzzy, python-format
 msgid "Folder: %s"
 msgstr "Fil: %s"
@@ -2236,9 +2230,6 @@ msgstr "GTK+ version:"
 msgid "GTK Version: %s"
 msgstr "GTK+ version:"
 
-msgid "Gajim"
-msgstr "Gajim"
-
 #, fuzzy, python-format
 msgid "Gajim %s is available"
 msgstr "Ny version av Gajim släppt"
@@ -2296,6 +2287,10 @@ msgstr "Sändare: "
 
 msgid "General"
 msgstr "Allmänt"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2422,6 +2417,17 @@ msgstr "<b>Webbplats:</b>"
 msgid "Hostname"
 msgstr "_Värdnamn:"
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "Vad vill du göra?"
@@ -2454,10 +2460,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "Adress"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "_Port:"
-
 msgid "Id"
 msgstr "ID"
 
@@ -2465,12 +2467,13 @@ msgstr "ID"
 msgid "Identified Error"
 msgstr "SSL-certifikatfel"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+
 #, fuzzy
 msgid "Idle Time"
-msgstr " sedan %s"
-
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr " sedan %s"
 
 #, fuzzy
@@ -2491,12 +2494,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
 msgstr ""
 
 #, fuzzy
@@ -2549,7 +2546,7 @@ msgid "Incoming Call (Video)"
 msgstr ""
 
 #, fuzzy
-msgid "Increase User Interface Font Size"
+msgid "Increase Font Size"
 msgstr "Minska teckensnittsstorleken för användargränssnittet"
 
 #, fuzzy
@@ -2562,9 +2559,6 @@ msgstr "Information"
 
 msgid "Insecure Connection"
 msgstr "Osäker anslutning"
-
-msgid "Insert Emoji"
-msgstr "Infoga emoji"
 
 #, fuzzy
 msgid "Install"
@@ -2791,9 +2785,6 @@ msgstr "Det gick inte att läsa in visningsbilden"
 msgid "Loading…"
 msgstr "Laddar…"
 
-msgid "Local System Time"
-msgstr "Lokal systemtid"
-
 msgid "Local Time"
 msgstr "Lokal tid"
 
@@ -2809,9 +2800,6 @@ msgstr "Lokala nyheter och rapporter"
 msgid "Location at %s"
 msgstr "Plats vid %s"
 
-msgid "Location:"
-msgstr "Plats:"
-
 msgid "Log"
 msgstr "Logg"
 
@@ -2824,8 +2812,9 @@ msgstr "Logga in med dina uppgifter"
 msgid "Login"
 msgstr "Inloggning"
 
-msgid "Login Settings"
-msgstr "Inloggningsinställningar"
+#, python-format
+msgid "Login – %(account)s"
+msgstr ""
 
 msgid "Look it up in _Dictionary"
 msgstr "Kolla upp det i _Uppslagsbok"
@@ -2848,19 +2837,15 @@ msgstr "Man"
 msgid "Manage"
 msgstr "Hantera"
 
-#, fuzzy
-msgid "Manage Accounts…"
-msgstr "_Redigera konto"
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "Kontakter"
-
 msgid "Manage Proxies"
 msgstr "Hantera proxies"
 
 msgid "Manage Proxies..."
 msgstr "Hantera proxies..."
+
+#, fuzzy
+msgid "Manage Shortcuts"
+msgstr "Hantera ljud"
 
 msgid "Manage Sounds"
 msgstr "Hantera ljud"
@@ -2927,10 +2912,6 @@ msgid "Message Sent"
 msgstr "Meddelande skickat"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "Meddelandeinnehåll"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "Meddelande skickat"
 
@@ -2939,6 +2920,10 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+
+#, fuzzy
+msgid "Messages"
+msgstr "Meddelande"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3134,7 +3119,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "Självsignerat certifikat"
 
 #, fuzzy
@@ -3169,6 +3154,9 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Inget konto tillgängligt"
+
+msgid "No keys pressed"
+msgstr ""
 
 #, fuzzy
 msgid "No results"
@@ -3339,9 +3327,6 @@ msgstr "Öppna som _länk"
 msgid "Open folder"
 msgstr "Öppna mapp"
 
-msgid "Open search bar"
-msgstr "Öppna sökfältet"
-
 msgid "OpenGL accelerated"
 msgstr "OpenGL accelererade"
 
@@ -3406,9 +3391,6 @@ msgid ""
 msgstr ""
 "PEP-noden %(node)s togs inte bort:\n"
 "%(meddelande)s"
-
-msgid "PKCS12 Files"
-msgstr "PKCS12-filer"
 
 msgid "PNG files"
 msgstr "PNG-filer"
@@ -3629,6 +3611,11 @@ msgstr "Inställningar"
 msgid "Presets"
 msgstr "_Närvaro"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3658,6 +3645,10 @@ msgstr "Priori_tet:"
 msgid "Privacy"
 msgstr "Integritetslista"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 #, fuzzy
 msgid "Private"
 msgstr "Integritetslista"
@@ -3680,8 +3671,16 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "Server"
+
 #, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -3701,14 +3700,6 @@ msgstr "Hantera proxies"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "Proxyserver:"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "Proxyser_ver:"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "Proxyserver:"
 
 #, fuzzy
@@ -3768,11 +3759,11 @@ msgid "Quit Gajim"
 msgstr "Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "Skicka meddelande"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "Vidarebefordra olästa meddelanden"
 
 #, fuzzy
@@ -3814,10 +3805,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "Första meddelandet mottaget"
 
-#, fuzzy
-msgid "Recent history"
-msgstr "Logghistorik"
-
 msgid "Recognize your account by color"
 msgstr ""
 
@@ -3852,6 +3839,10 @@ msgstr "Kontoregistrering lyckades"
 #, fuzzy
 msgid "Reject file transfer"
 msgstr "Tar bort vald filöverföring"
+
+#, fuzzy
+msgid "Reload"
+msgstr "Spara fil som..."
 
 msgid "Remember Last Status"
 msgstr ""
@@ -3948,8 +3939,17 @@ msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Ta bort en kontakt från kontaktlista"
 msgstr[1] "Ta bort en kontakt från kontaktlista"
 
+#, fuzzy
+msgid "Remove…"
+msgstr "Ta bort…"
+
 msgid "Removing Account..."
 msgstr "Tar bort konto..."
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4035,11 +4035,12 @@ msgid "Reset Filters"
 msgstr "Återställ ledtråd"
 
 #, fuzzy
+msgid "Reset Font Size"
+msgstr "Återställ teckensnittsstorlek för användargränssnitt"
+
+#, fuzzy
 msgid "Reset Hints"
 msgstr "Återställ ledtråd"
-
-msgid "Reset User Interface Font Size"
-msgstr "Återställ teckensnittsstorlek för användargränssnitt"
 
 msgid "Reset all chats to the current default value"
 msgstr "Återställ alla chattar till det aktuella standardvärdet"
@@ -4065,7 +4066,7 @@ msgid "Restart Pending"
 msgstr "Kräver: Gspell"
 
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "Senaste status: %s"
 
 #, fuzzy
@@ -4178,20 +4179,26 @@ msgstr "Du kan inte lägga till dig själv i din kontaktlista."
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Söker av %(current)d / %(total)d.."
 
-msgid "Scroll down"
+#, fuzzy
+msgid "Scroll Down"
 msgstr "Bläddra ner"
+
+#, fuzzy
+msgid "Scroll Up"
+msgstr "Bläddra upp"
 
 msgid "Scroll to this message"
 msgstr "Bläddra till det här meddelandet"
-
-msgid "Scroll up"
-msgstr "Bläddra upp"
 
 msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
 msgstr "Sök"
+
+#, fuzzy
+msgid "Search Chat History"
+msgstr "Behåll chatthistorik"
 
 #, fuzzy
 msgid "Search Filters"
@@ -4285,10 +4292,6 @@ msgid "Select an activity to see details."
 msgstr ""
 
 #, fuzzy
-msgid "Select an emoji"
-msgstr "Använd _känsloikoner"
-
-#, fuzzy
 msgid "Select playback speed"
 msgstr "Minska uppspelningshastigheten"
 
@@ -4310,20 +4313,16 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "Senaste status: %s"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "Kunde inte gå in i gruppchatt"
 
 #, fuzzy
 msgid "Send Chat State"
 msgstr "Senaste status: %s"
-
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "Senaste status: %s"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "Kunde inte gå in i gruppchatt"
 
 #, fuzzy
 msgid "Send File"
@@ -4367,10 +4366,6 @@ msgstr ""
 "Skicka meddelande med Ctrl+Enter och gör radbrytning med Enter (ICQ-klienten "
 "Mirabilis standardbeteende)."
 
-#, fuzzy
-msgid "Send the message"
-msgstr "Skicka meddelande"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Skickade kontakt: \"%s\" (%s)"
@@ -4386,28 +4381,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "GG-nummer:"
 
-msgid "Server"
-msgstr "Server"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "Server"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "Serverfunktioner"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "Serverfunktioner"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "Serverfunktioner"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "Servern svarade: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4431,6 +4407,10 @@ msgstr "Tjänst är inte bläddringsbar"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "Denna tjänst kunde inte hittas"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "Tjänstefinnare"
 
 #, fuzzy
 msgid "Set Trust"
@@ -4481,6 +4461,9 @@ msgstr "Starta Chatt"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Ändra status"
+
+msgid "Shortcuts"
+msgstr ""
 
 #, fuzzy
 msgid "Show Chat List"
@@ -4544,9 +4527,6 @@ msgstr "Visa _transporter"
 msgid "Show Voice Message Button"
 msgstr "Skicka meddelande"
 
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4563,10 +4543,6 @@ msgstr "Visa alla väntande _händelser"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Visa alla väntande _händelser"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "Visa _XML-konsoll"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4832,10 +4808,6 @@ msgid "Subscription"
 msgstr "Prenumeration:"
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "Prenumeration:"
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "Bjud in _kontakter"
 
@@ -4859,37 +4831,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "Starta Chatt"
+msgid "Switch to Workspace 2"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "Starta Chatt"
+msgid "Switch to Workspace 3"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "Starta Chatt"
+msgid "Switch to Workspace 4"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "Starta Chatt"
+msgid "Switch to Workspace 5"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "Starta Chatt"
+msgid "Switch to Workspace 6"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 7"
+msgstr "Byt namn på kontakt"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "Byt namn på kontakt"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "Byt namn på kontakt"
+
+#, fuzzy
+msgid "Sync Group Chat Block List"
 msgstr "Synkronisera"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -4903,6 +4936,9 @@ msgstr "Synkronisera"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "Synkronisera"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize joined group chats"
@@ -4922,10 +4958,6 @@ msgstr "Synkronisera"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "GTK+ version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5221,6 +5253,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "Ta bort kontot _endast från Gajim"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Ta bort kontot _endast från Gajim"
 
@@ -5280,9 +5316,6 @@ msgstr "Överför"
 msgid "Transports"
 msgstr "Transporter"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "Behandla par av * / _ som möjliga formateringstecken."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5314,10 +5347,6 @@ msgstr ""
 msgid "Trying to remove account..."
 msgstr ""
 
-#, fuzzy
-msgid "Tune:"
-msgstr "Låt:"
-
 msgid "Turn Camera off"
 msgstr ""
 
@@ -5334,6 +5363,10 @@ msgstr "Typ"
 
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgid "Typing Only"
+msgstr "Skriver"
 
 msgid "URI"
 msgstr ""
@@ -5435,6 +5468,10 @@ msgstr "Förfrågan om Filöverföring"
 msgid "Unpin Chat"
 msgstr "Förfrågan om Filöverföring"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "Förfrågan om Filöverföring"
+
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -5526,9 +5563,6 @@ msgstr "Du är inte ansluten till servern"
 msgid "Use defined profile in configuration directory"
 msgstr "Avancerad konfigurationsredigerare"
 
-msgid "Use file transfer proxies"
-msgstr "Använd proxyservrar för filöverföringar"
-
 msgid "Use proxy auth_entication"
 msgstr "Använd autentiser_ing för proxyserver"
 
@@ -5538,10 +5572,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s kunde inte hittas"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "_Användarnamn:"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -5633,9 +5663,6 @@ msgstr "URL för webbsökning saknar ett \"%s\""
 msgid "Web _Search for it"
 msgstr "_Sök på webben efter det"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -5685,10 +5712,6 @@ msgstr "Avancerade åtgärder"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "Avancerade åtgärder"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "Byt namn på kontakt"
 
 msgid "X11"
 msgstr ""
@@ -5899,10 +5922,6 @@ msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
 #, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "_Inställningar"
-
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
 msgstr "Ditt nya konto har skapats"
 
@@ -5941,7 +5960,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6338,6 +6357,10 @@ msgstr "gör något annat"
 msgid "italic"
 msgstr "Kursiv"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "Senast sedd: %s"
+
 msgid "lat"
 msgstr ""
 
@@ -6724,12 +6747,18 @@ msgstr ""
 #~ msgid "Account %s is still connected"
 #~ msgstr "Kontot %s är fortfarande anslutet"
 
+#~ msgid "Account Settings…"
+#~ msgstr "Kontoinställningar…"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktivera"
 
 #~ msgid "Add _Contact…"
 #~ msgstr "Lägg till _Kontakt…"
+
+#~ msgid "Add new line"
+#~ msgstr "Lägg till en ny rad"
 
 #~ msgid "Add reaction"
 #~ msgstr "Lägg till reaktion"
@@ -6741,12 +6770,30 @@ msgstr ""
 #~ msgid "Add to new Group"
 #~ msgstr "Lägg till grupp…"
 
+#~ msgid "Adjust to Status"
+#~ msgstr "Justera till Status"
+
+#~ msgid "Adjust to status"
+#~ msgstr "Justera till status"
+
 #~ msgid "Algorithm"
 #~ msgstr "Algoritm"
 
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Grupper"
+
+#, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "_Inställningar"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "_Inställningar"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "_Inställningar"
 
 #, fuzzy
 #~ msgid "Are you sure you want to leave this group chat?"
@@ -6772,12 +6819,27 @@ msgstr ""
 #~ msgstr "Auktorisering har sänts"
 
 #, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Registreringen misslyckades"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Utökad frånvaro"
+
+#, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "Anslut automatiskt"
 
 #, fuzzy
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Stavningskontrollerar meddelanden."
+
+#~ msgid "Blocking List"
+#~ msgstr "Blockeringslista"
+
+#, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Blockeringslista för %s"
 
 #~ msgid "Bookmarks"
 #~ msgstr "Bokmärken"
@@ -6793,16 +6855,14 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Kan inte skriva över befintlig fil \"%s\""
 
-#, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr ""
-#~ "Certifikat för \n"
-#~ "%s"
+#~ msgid "Certificate Settings"
+#~ msgstr "Certifikatinställningar"
 
 #~ msgid "Ch_ange Subject"
 #~ msgstr "By_t ämne"
+
+#~ msgid "Chat List"
+#~ msgstr "Chattlista"
 
 #~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
 #~ msgstr ""
@@ -6829,20 +6889,40 @@ msgstr ""
 #~ msgstr "Visa kontaktens profil (Ctrl+I)"
 
 #, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "Sök"
+#~ msgid "Clear message entry"
+#~ msgstr "Meddelande skickat"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "Självsignerat certifikat"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Skapa ett nytt, tomt tema med ditt önskade namn."
 
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
 #~ msgstr "Färdigställd"
 
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Anslutning"
+
 #~ msgid "Connection not available"
 #~ msgstr "Anslutningen är inte tillgänglig"
 
 #, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "Chattmeddelande:"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Säg _upp prenumeration"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Kontaktinformation"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -6870,8 +6950,17 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "Kopiera sökväg"
 
+#~ msgid "Copy info to clipboard"
+#~ msgstr "Kopiera information till urklipp"
+
+#~ msgid "Correct the last message"
+#~ msgstr "Korrigera det sista meddelandet"
+
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Skapa _gruppchatt…"
+
+#~ msgid "Create new group chat"
+#~ msgstr "Skapa ny gruppchatt"
 
 #~ msgid "Create new post"
 #~ msgstr "Skapa ny post"
@@ -6884,6 +6973,9 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Standard"
+
+#~ msgid "Default for chats"
+#~ msgstr "Standardinställningar för chattar"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -6938,6 +7030,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Redigera _grupper"
+
+#, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Självsignerat certifikat"
+
+#~ msgid "Error received: {}"
+#~ msgstr "Fel mottaget: {}"
 
 #~ msgid "Error!"
 #~ msgstr "Fel!"
@@ -7000,6 +7099,9 @@ msgstr ""
 #~ msgid "Full Message View"
 #~ msgstr "Fullständig meddelandevy"
 
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
@@ -7035,12 +7137,23 @@ msgstr ""
 #~ msgid "Homepage"
 #~ msgstr "<b>Webbplats:</b>"
 
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Port:"
+
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr " sedan %s"
+
 #~ msgid "Images"
 #~ msgstr "Bilder"
 
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktiv"
+
+#~ msgid "Insert Emoji"
+#~ msgstr "Infoga emoji"
 
 #~ msgid "Invalid File"
 #~ msgstr "Ogiltig Fil"
@@ -7073,6 +7186,15 @@ msgstr ""
 #~ msgid "Last seen %s"
 #~ msgstr "Anledning"
 
+#~ msgid "Local System Time"
+#~ msgstr "Lokal systemtid"
+
+#~ msgid "Location:"
+#~ msgstr "Plats:"
+
+#~ msgid "Login Settings"
+#~ msgstr "Inloggningsinställningar"
+
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -7081,8 +7203,20 @@ msgstr ""
 #~ "från chattfönstret"
 
 #, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "_Redigera konto"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Kontakter"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Meddelanden"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "Meddelandeinnehåll"
 
 #, fuzzy
 #~ msgid ""
@@ -7129,11 +7263,17 @@ msgstr ""
 #~ msgid "Open Path"
 #~ msgstr "Öppna sökvägen"
 
+#~ msgid "Open search bar"
+#~ msgstr "Öppna sökfältet"
+
 #~ msgid "Organization (O)"
 #~ msgstr "Organisation (O)"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organisera dina chattar med arbetsytor"
+
+#~ msgid "PKCS12 Files"
+#~ msgstr "PKCS12-filer"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
@@ -7170,12 +7310,24 @@ msgstr ""
 #~ msgstr "Förlopp"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Proxyser_ver:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Proxyserver:"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "Återanslut nu?"
 
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "Är OpenPGP aktiverat för denna kontakt?"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "Logghistorik"
 
 #~ msgid "Recipient: "
 #~ msgstr "Mottagare: "
@@ -7211,10 +7363,6 @@ msgstr ""
 #~ msgid "Remove from contact list"
 #~ msgstr "Ta bort en kontakt från kontaktlista"
 
-#, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "Ta bort…"
-
 #~ msgid "Report"
 #~ msgstr "Rapportera"
 
@@ -7249,6 +7397,10 @@ msgstr ""
 #~ msgstr "Skicka _fil"
 
 #, fuzzy
+#~ msgid "Select an emoji"
+#~ msgstr "Använd _känsloikoner"
+
+#, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Välj kontot med vilket du vill synkronisera"
 
@@ -7265,6 +7417,10 @@ msgstr ""
 #~ msgstr "_Skicka"
 
 #, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Senaste status: %s"
+
+#, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "Spara fil som..."
 
@@ -7272,12 +7428,35 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "Spara fil som..."
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Skicka meddelande"
+
 #~ msgid "Sender: "
 #~ msgstr "Sändare: "
 
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "GG-nummer:"
+
+#~ msgid "Server"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "Serverfunktioner"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Serverfunktioner"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "Servern svarade: %s"
 
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7294,6 +7473,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "Funktioner"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "Visa _XML-konsoll"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7336,8 +7519,16 @@ msgstr ""
 #~ msgstr "Prenumerationsbegäran"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Prenumeration:"
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Söker tjänster med konto %s"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Starta Chatt"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synkronisera"
@@ -7345,6 +7536,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Synkronisera kontakter"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "GTK+ version:"
 
 #~ msgid "The service could not be found"
 #~ msgstr "Denna tjänst kunde inte hittas"
@@ -7370,6 +7565,13 @@ msgstr ""
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "Transporten \"%s\" kommer tas bort"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Behandla par av * / _ som möjliga formateringstecken."
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "Låt:"
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7384,17 +7586,19 @@ msgstr ""
 #~ msgstr "Stavningskontroll"
 
 #, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "Spara fil som..."
-
-#, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Spara fil som..."
 
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Använd proxyservrar för filöverföringar"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Användarnamn:"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7419,6 +7623,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Vill du verkligen ta bort det valda meddelandet?"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Byt namn på kontakt"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"
@@ -7457,12 +7665,12 @@ msgstr ""
 #~ "kontakter med denna transport."
 
 #, fuzzy
-#~ msgid "_Accounts"
-#~ msgstr "Konton"
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "_Inställningar"
 
 #, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "_Lägg till kontakt..."
+#~ msgid "_Accounts"
+#~ msgstr "Konton"
 
 #, fuzzy
 #~ msgid "_Debug Console"

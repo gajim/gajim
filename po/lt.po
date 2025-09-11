@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -436,10 +436,6 @@ msgid "Account Removed"
 msgstr "Prieiga"
 
 #, fuzzy
-msgid "Account Settings…"
-msgstr "Registracija nesėkminga"
-
-#, fuzzy
 msgid "Account Wizard"
 msgstr "Account name is in use"
 
@@ -464,6 +460,10 @@ msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
 msgid "Account is being created"
+msgstr "Account \"%s\" is connected to the server"
+
+#, fuzzy
+msgid "Account is not connected"
 msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
@@ -517,6 +517,10 @@ msgid "Add Account"
 msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
+msgid "Add Account…"
+msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
 msgid "Add Contact"
 msgstr "_Įtraukti asmenį..."
 
@@ -558,6 +562,9 @@ msgstr ""
 msgid "Add a checkmark to received messages"
 msgstr ""
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr ""
 
@@ -566,10 +573,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Add new Theme"
-msgstr "Kurti naują pranešimą"
-
-#, fuzzy
-msgid "Add new line"
 msgstr "Kurti naują pranešimą"
 
 #, fuzzy
@@ -609,14 +612,6 @@ msgid "Address does not belong to a group chat server"
 msgstr "This is not a group chat"
 
 #, fuzzy
-msgid "Adjust to Status"
-msgstr "_Nustatyti būklei"
-
-#, fuzzy
-msgid "Adjust to status"
-msgstr "_Nustatyti būklei"
-
-#, fuzzy
 msgid "Admin"
 msgstr "_Adminas"
 
@@ -652,6 +647,10 @@ msgstr "Išplėstiniai veiksmai"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Išplėstiniai veiksmai"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Adw Version: %s"
@@ -796,24 +795,16 @@ msgid "Archive is malformed"
 msgstr ""
 
 #, fuzzy
-msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Choose Image"
 
 #, fuzzy
-msgid "Archiving Preferences"
-msgstr "_Nustatymai"
-
-#, fuzzy
-msgid "Archiving Preferences Error"
-msgstr "_Nustatymai"
-
-#, fuzzy
-msgid "Archiving Preferences Saved"
-msgstr "_Nustatymai"
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Choose Image"
 
 #, python-format
-msgid "Archiving Preferences for %s"
+msgid "Archiving – %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -822,6 +813,12 @@ msgstr "Prašyti įvesti būklės žinutę, kai aš:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Ask before closing a group chat tab/window."
+
+#, fuzzy
+msgid "Ask before connecting unencrypted"
+msgstr ""
+"Should we show the confirm metacontacts creation dialogue or not? Empty "
+"string means we never show the dialogue."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -888,14 +885,6 @@ msgstr "Au_torizuoti"
 #, fuzzy
 msgid "Auto Away"
 msgstr "Manęs nėra"
-
-#, fuzzy
-msgid "Auto Away Settings"
-msgstr "Registracija nesėkminga"
-
-#, fuzzy
-msgid "Auto Extended Away Settings"
-msgstr "Extended away"
 
 #, fuzzy
 msgid "Auto Not Available"
@@ -995,16 +984,16 @@ msgid "Block Participant?"
 msgstr "Participant"
 
 #, fuzzy
-msgid "Blocked Participants"
-msgstr "Participants"
-
-#, fuzzy
-msgid "Blocking List"
-msgstr "Ban List"
+msgid "Blocked Contacts"
+msgstr "Užblokuoti Kontaktai"
 
 #, fuzzy, python-format
-msgid "Blocking List for %s"
-msgstr "Privacy List for %s"
+msgid "Blocked Contacts – %(account)s"
+msgstr "Užblokuoti Kontaktai"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Participants"
 
 #, fuzzy
 msgid "Block…"
@@ -1086,9 +1075,9 @@ msgstr "Do _not ask me again"
 msgid "Certificate"
 msgstr "Blogas CA sertifikatas"
 
-#, fuzzy
-msgid "Certificate Settings"
-msgstr "Blogas CA sertifikatas"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr "Įveskite naują prieigos %s pavadinimą"
 
 #, fuzzy
 msgid "Certificate Verification Failed"
@@ -1181,10 +1170,6 @@ msgid "Chat Details and Settings"
 msgstr "Prisijungimas"
 
 #, fuzzy
-msgid "Chat List"
-msgstr "Asmuo"
-
-#, fuzzy
 msgid "Chat Type"
 msgstr "Type"
 
@@ -1224,6 +1209,10 @@ msgstr "Connection not available"
 msgid "Choose Device"
 msgstr "Choose Image"
 
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "Choose Sound"
+
 msgid "Choose History Export Directory"
 msgstr ""
 
@@ -1240,9 +1229,6 @@ msgstr "Choose Image"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Choose File to Send..."
-
-msgid "Cipher Suite"
-msgstr ""
 
 #, fuzzy
 msgid "City"
@@ -1264,12 +1250,12 @@ msgid "Clear File"
 msgstr "Failų siuntimai"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "Choose Sound"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "Message Sent"
+msgid "Clear Sound"
+msgstr "Choose Sound"
 
 msgid ""
 "Click messages to select them\n"
@@ -1293,19 +1279,15 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Client Certificate"
-msgstr "Blogas CA sertifikatas"
-
-#, fuzzy
 msgid "Close"
 msgstr "_Išsiųsti "
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "Ieškoti"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "Ieškoti"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1344,10 +1326,6 @@ msgstr ""
 
 msgid "Complete"
 msgstr ""
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "Kurti naują pranešimą"
 
 msgid "Completed"
 msgstr ""
@@ -1405,10 +1383,6 @@ msgid "Connection Error"
 msgstr "Prisijungimas"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "Prisijungimas"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "Nepavyko prisijungti prie proksi"
 
@@ -1416,15 +1390,19 @@ msgstr "Nepavyko prisijungti prie proksi"
 msgid "Connection with %s could not be established."
 msgstr "Connection with peer cannot be established."
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "Asmuo"
 
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "Būklės pranešimas:"
-
 msgid "Contact Connected"
 msgstr "Contact Connected"
+
+#, fuzzy
+msgid "Contact Details"
+msgstr "Asmuo"
 
 msgid "Contact Disconnected"
 msgstr "Contact Disconnected"
@@ -1442,6 +1420,10 @@ msgstr "Asmuo"
 
 #, fuzzy
 msgid "Contact List Exchange"
+msgstr "Contact Disconnected"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
 msgstr "Contact Disconnected"
 
 #, fuzzy
@@ -1474,10 +1456,6 @@ msgstr "Prieiga"
 #, fuzzy
 msgid "Contact Request"
 msgstr "Asmuo"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "Asmens Informacija"
 
 #, fuzzy
 msgid "Contacts"
@@ -1542,20 +1520,12 @@ msgid "Copy code snippet"
 msgstr ""
 
 #, fuzzy
-msgid "Copy info to clipboard"
-msgstr "_Kopijuoti nuorodos adresą"
-
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
 msgid "Copy to clipboard"
 msgstr "_Kopijuoti nuorodos adresą"
-
-#, fuzzy
-msgid "Correct the last message"
-msgstr "status message"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1609,7 +1579,7 @@ msgid "Create New Account"
 msgstr "Kurti naują pranešimą"
 
 #, fuzzy
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr "Leave Groupchats"
 
 #, fuzzy
@@ -1623,10 +1593,13 @@ msgstr ""
 msgid "Credentials expired"
 msgstr "Passphrase Required"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 #, fuzzy
@@ -1654,8 +1627,9 @@ msgstr ""
 msgid "Decline"
 msgstr "A_tsijungęs"
 
-msgid "Decrease User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Decrease Font Size"
+msgstr "_Naudotojo vardas:"
 
 msgid "Decrease playback speed"
 msgstr ""
@@ -1679,15 +1653,14 @@ msgstr "Removes contact from roster"
 msgid "Default device"
 msgstr "Žinutė pagal nutylėjimą"
 
-#, fuzzy
-msgid "Default for chats"
-msgstr "Free for chat"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 msgid "Default for chats and private group chats"
 msgstr ""
 
 #, fuzzy
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "New Group Chat"
 
 #, fuzzy
@@ -1744,6 +1717,13 @@ msgid "Destroy…"
 msgstr "Description"
 
 msgid "Details"
+msgstr ""
+
+#, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
 msgstr ""
 
 #, python-format
@@ -1806,9 +1786,6 @@ msgstr ""
 msgid "Disclose information about the operating system you currently use"
 msgstr ""
 "Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1878,9 +1855,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 #, fuzzy
 msgid "Download"
 msgstr "Do _not ask me again"
@@ -1911,6 +1885,9 @@ msgstr "Sends file to a contact"
 
 msgid "Eating"
 msgstr "Eating"
+
+msgid "Edit Shortcut"
+msgstr ""
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1944,6 +1921,10 @@ msgstr ""
 msgid "Enable"
 msgstr "Įjungti"
 
+#, fuzzy
+msgid "Enable Account"
+msgstr "Prieiga"
+
 msgid "Enable KeepassXC Integration"
 msgstr ""
 
@@ -1974,15 +1955,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "Blogas CA sertifikatas"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "Encryption disabled"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Encryption enabled"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Encryption enabled"
 
 #, fuzzy
@@ -2044,10 +2025,6 @@ msgstr ""
 
 msgid "Error opening file"
 msgstr ""
-
-#, fuzzy
-msgid "Error received: {}"
-msgstr "Jūs gavote naują įrašą:"
 
 #, fuzzy
 msgid "Error while Exporting"
@@ -2283,6 +2260,10 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+#, fuzzy
+msgid "Focus Search"
+msgstr "Ieškoti"
+
 #, fuzzy, python-format
 msgid "Folder: %s"
 msgstr "File: %s"
@@ -2366,9 +2347,6 @@ msgstr "GTK+ Version:"
 msgid "GTK Version: %s"
 msgstr "GTK+ Version:"
 
-msgid "Gajim"
-msgstr "Gajim"
-
 #, fuzzy, python-format
 msgid "Gajim %s is available"
 msgstr "Connection not available"
@@ -2426,6 +2404,10 @@ msgstr "Sender: "
 
 msgid "General"
 msgstr "Bendros parinktys"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2550,6 +2532,17 @@ msgstr "<b>Asmeninė svetainė:</b>"
 msgid "Hostname"
 msgstr "_Serverio adresas: "
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "What do you want to do?"
@@ -2582,10 +2575,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adresas:"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "_Portas:"
-
 msgid "Id"
 msgstr "Id"
 
@@ -2593,12 +2582,13 @@ msgstr "Id"
 msgid "Identified Error"
 msgstr "Blogas CA sertifikatas"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+
 #, fuzzy
 msgid "Idle Time"
-msgstr " since %s"
-
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr " since %s"
 
 #, fuzzy
@@ -2620,16 +2610,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"If True, you will be able to set a negative priority to your account in "
-"account modification window. BE CAREFUL, when you are logged in with a "
-"negative priority, you will NOT receive any message from your server."
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -2680,8 +2660,9 @@ msgstr "Įeinančio slapyvardžio spalva."
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Increase Font Size"
+msgstr "_Naudotojo vardas:"
 
 msgid "Increase playback speed"
 msgstr ""
@@ -2693,9 +2674,6 @@ msgstr "_Informacija"
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "Nesaugus ryšys"
-
-msgid "Insert Emoji"
-msgstr ""
 
 #, fuzzy
 msgid "Install"
@@ -2938,9 +2916,6 @@ msgstr "Sending private message failed"
 msgid "Loading…"
 msgstr "Banning..."
 
-msgid "Local System Time"
-msgstr ""
-
 #, fuzzy
 msgid "Local Time"
 msgstr "Vietinis jid:"
@@ -2959,10 +2934,6 @@ msgid "Location at %s"
 msgstr "Padėtis:"
 
 #, fuzzy
-msgid "Location:"
-msgstr "Padėtis:"
-
-#, fuzzy
 msgid "Log"
 msgstr "_Prisijungti"
 
@@ -2976,9 +2947,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#, fuzzy
-msgid "Login Settings"
-msgstr "Registracija nesėkminga"
+#, python-format
+msgid "Login – %(account)s"
+msgstr ""
 
 msgid "Look it up in _Dictionary"
 msgstr "Look it up in _Dictionary"
@@ -3006,20 +2977,16 @@ msgid "Manage"
 msgstr "Valdyti..."
 
 #, fuzzy
-msgid "Manage Accounts…"
-msgstr "_Keisti Prieigą"
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "Asmuo"
-
-#, fuzzy
 msgid "Manage Proxies"
 msgstr "Proxi profilių valdymas"
 
 #, fuzzy
 msgid "Manage Proxies..."
 msgstr "Proxi profilių valdymas"
+
+#, fuzzy
+msgid "Manage Shortcuts"
+msgstr "Prieigų valdymas"
 
 #, fuzzy
 msgid "Manage Sounds"
@@ -3097,10 +3064,6 @@ msgid "Message Sent"
 msgstr "Message Sent"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "message contents"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "Message Sent"
 
@@ -3109,6 +3072,10 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+
+#, fuzzy
+msgid "Messages"
+msgstr "Message Sent"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3304,7 +3271,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "Blogas CA sertifikatas"
 
 #, fuzzy
@@ -3339,6 +3306,9 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Failų siuntimai"
+
+msgid "No keys pressed"
+msgstr ""
 
 #, fuzzy
 msgid "No results"
@@ -3523,9 +3493,6 @@ msgstr "Open as _Link"
 msgid "Open folder"
 msgstr "_Atidaryti katalogą, kuriame yra failas"
 
-msgid "Open search bar"
-msgstr ""
-
 msgid "OpenGL accelerated"
 msgstr ""
 
@@ -3592,9 +3559,6 @@ msgstr "PEP Paslaugos Konfigūracija"
 msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
-msgstr ""
-
-msgid "PKCS12 Files"
 msgstr ""
 
 #, fuzzy
@@ -3831,6 +3795,11 @@ msgstr "Parinktys"
 msgid "Presets"
 msgstr "_Buvimas"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3858,6 +3827,10 @@ msgstr "_Prioritetas:"
 msgid "Privacy"
 msgstr "Privatus sąrašas"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 #, fuzzy
 msgid "Private"
 msgstr "Privatus sąrašas"
@@ -3880,8 +3853,16 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "Server"
+
 #, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -3901,14 +3882,6 @@ msgstr "Proxi profilių valdymas"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "Proksis:"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "Proksi _Serveris:"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "Proksis:"
 
 #, fuzzy
@@ -3968,11 +3941,11 @@ msgid "Quit Gajim"
 msgstr "Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "Siųsti žinutę"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "Persiųsti neskaitytas žinutes"
 
 #, fuzzy
@@ -4014,10 +3987,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "First Message Received"
 
-#, fuzzy
-msgid "Recent history"
-msgstr "Nesenai:"
-
 msgid "Recognize your account by color"
 msgstr ""
 
@@ -4052,6 +4021,10 @@ msgstr "Registracija sėkminga"
 #, fuzzy
 msgid "Reject file transfer"
 msgstr "Failų siuntimai"
+
+#, fuzzy
+msgid "Reload"
+msgstr "Save File as..."
 
 msgid "Remember Last Status"
 msgstr ""
@@ -4152,8 +4125,17 @@ msgstr[0] "Removes contact from roster"
 msgstr[1] "Removes contact from roster"
 
 #, fuzzy
+msgid "Remove…"
+msgstr "_Trinti"
+
+#, fuzzy
 msgid "Removing Account..."
 msgstr "Gajim account %s"
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4247,12 +4229,12 @@ msgid "Reset Filters"
 msgstr "Message Sent"
 
 #, fuzzy
-msgid "Reset Hints"
-msgstr "Message Sent"
+msgid "Reset Font Size"
+msgstr "_Naudotojo vardas:"
 
 #, fuzzy
-msgid "Reset User Interface Font Size"
-msgstr "_Naudotojo vardas:"
+msgid "Reset Hints"
+msgstr "Message Sent"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4281,7 +4263,7 @@ msgid "Restart Pending"
 msgstr "Password Required"
 
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "Last status: %s"
 
 #, fuzzy
@@ -4393,21 +4375,25 @@ msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 #, fuzzy
 msgid "Scroll to this message"
 msgstr "status message"
 
-msgid "Scroll up"
-msgstr ""
-
 msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
 msgstr "Ieškoti"
+
+#, fuzzy
+msgid "Search Chat History"
+msgstr "Nesenai:"
 
 #, fuzzy
 msgid "Search Filters"
@@ -4499,9 +4485,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -4523,20 +4506,16 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "Last status: %s"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "Unable to join group chat"
 
 #, fuzzy
 msgid "Send Chat State"
 msgstr "Last status: %s"
-
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "Last status: %s"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "Unable to join group chat"
 
 #, fuzzy
 msgid "Send File"
@@ -4580,10 +4559,6 @@ msgstr ""
 "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
 "Client default behaviour)."
 
-#, fuzzy
-msgid "Send the message"
-msgstr "Siųsti žinutę"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4598,28 +4573,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "GG Number:"
 
-msgid "Server"
-msgstr "Server"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "Server"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "Serverio teikiamos paslaugos"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "Serverio teikiamos paslaugos"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "Serverio teikiamos paslaugos"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "Serveris atsakė: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4643,6 +4599,10 @@ msgstr "The service is not browsable"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "The service could not be found"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "Service Discovery"
 
 #, fuzzy
 msgid "Set Trust"
@@ -4693,6 +4653,9 @@ msgstr "Start Chat"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Change status"
+
+msgid "Shortcuts"
+msgstr ""
 
 #, fuzzy
 msgid "Show Chat List"
@@ -4757,12 +4720,6 @@ msgid "Show Voice Message Button"
 msgstr "Siųsti žinutę"
 
 #, fuzzy
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-"Should we show the confirm metacontacts creation dialogue or not? Empty "
-"string means we never show the dialogue."
-
-#, fuzzy
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4781,10 +4738,6 @@ msgstr "Rodyti Visus Laukiančius Į_vykius"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Rodyti Visus Laukiančius Į_vykius"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "Rodyti _XML konsolę"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5048,10 +5001,6 @@ msgid "Subscription"
 msgstr "Sutikimas:"
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "Sutikimas:"
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "Siųsti kontaktus:"
 
@@ -5075,37 +5024,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "Start Chat"
+msgid "Switch to Workspace 2"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "Start Chat"
+msgid "Switch to Workspace 3"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "Start Chat"
+msgid "Switch to Workspace 4"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "Start Chat"
+msgid "Switch to Workspace 5"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "Start Chat"
+msgid "Switch to Workspace 6"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 7"
+msgstr "Removes contact from roster"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "Removes contact from roster"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "Removes contact from roster"
+
+#, fuzzy
+msgid "Sync Group Chat Block List"
 msgstr "Sinchronizuoti kontaktus"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5119,6 +5129,9 @@ msgstr "Sinchronizuoti kontaktus"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "Sinchronizuoti kontaktus"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize joined group chats"
@@ -5138,10 +5151,6 @@ msgstr "Sinchronizuoti kontaktus"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistema:</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5425,6 +5434,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "Pašalinti prieigą, _tik iš Gajim"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Pašalinti prieigą, _tik iš Gajim"
 
@@ -5484,9 +5497,6 @@ msgstr "Failų siuntimai"
 msgid "Transports"
 msgstr "Transports"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "Treat * / _ pairs as possible formatting characters."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5517,10 +5527,6 @@ msgstr ""
 msgid "Trying to remove account..."
 msgstr ""
 
-#, fuzzy
-msgid "Tune:"
-msgstr "Type: %s"
-
 msgid "Turn Camera off"
 msgstr ""
 
@@ -5537,6 +5543,10 @@ msgstr "Type"
 
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgid "Typing Only"
+msgstr "Kuriama"
 
 msgid "URI"
 msgstr ""
@@ -5637,6 +5647,10 @@ msgstr "File Transfer Request"
 msgid "Unpin Chat"
 msgstr "File Transfer Request"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "File Transfer Request"
+
 msgid "Unsupported certificate purpose"
 msgstr ""
 
@@ -5728,9 +5742,6 @@ msgstr "You are not connected to the server"
 msgid "Use defined profile in configuration directory"
 msgstr "Išplėstinis konfigūracijos redaktorius"
 
-msgid "Use file transfer proxies"
-msgstr "Naudoti failų siuntimo proksius"
-
 msgid "Use proxy auth_entication"
 msgstr "Naudoti proksi _autentikaciją"
 
@@ -5740,10 +5751,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s not found"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "_Naudotojo vardas:"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -5834,9 +5841,6 @@ msgstr "Web Search URL is missing an \"%s\""
 msgid "Web _Search for it"
 msgstr "Web _Search for it"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -5885,10 +5889,6 @@ msgstr "Išplėstiniai veiksmai"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "Išplėstiniai veiksmai"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "Removes contact from roster"
 
 msgid "X11"
 msgstr ""
@@ -6095,10 +6095,6 @@ msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
 #, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "_Nustatymai"
-
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
 msgstr "Your new account has been successfully created"
 
@@ -6138,7 +6134,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6529,6 +6525,10 @@ msgstr "is doing something else"
 msgid "italic"
 msgstr "Pasviręs"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "Reason"
+
 msgid "lat"
 msgstr ""
 
@@ -6871,12 +6871,20 @@ msgstr ""
 #~ msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Activated"
 
 #, fuzzy
 #~ msgid "Add _Contact…"
 #~ msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Kurti naują pranešimą"
 
 #, fuzzy
 #~ msgid "Add reaction"
@@ -6891,8 +6899,28 @@ msgstr ""
 #~ msgstr "Redaguoti _Grupes"
 
 #, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "_Nustatyti būklei"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "_Nustatyti būklei"
+
+#, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Grupės"
+
+#, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "_Nustatymai"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "_Nustatymai"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "_Nustatymai"
 
 #, fuzzy
 #~ msgid "Audio / Video Calls"
@@ -6911,8 +6939,24 @@ msgstr ""
 #~ msgstr "Authorisation has been sent"
 
 #, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Extended away"
+
+#, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "Automatinis prsijungimas"
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "Ban List"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Privacy List for %s"
 
 #, fuzzy
 #~ msgid "Bookmarks"
@@ -6930,15 +6974,17 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Cannot overwrite existing file \"%s\""
 
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr "Įveskite naują prieigos %s pavadinimą"
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "Blogas CA sertifikatas"
 
 #, fuzzy
 #~ msgid "Ch_ange Subject"
 #~ msgstr "Keisti _Temą..."
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "Asmuo"
 
 #, fuzzy
 #~ msgid "Checking file…"
@@ -6961,15 +7007,35 @@ msgstr ""
 #~ msgstr "Įtraukti šį kontaktą į sąrašą (Ctrl+D)"
 
 #, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "Ieškoti"
+#~ msgid "Clear message entry"
+#~ msgstr "Message Sent"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "Blogas CA sertifikatas"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Kurti naują pranešimą"
+
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Prisijungimas"
 
 #~ msgid "Connection not available"
 #~ msgstr "Connection not available"
 
 #, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "Būklės pranešimas:"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Contact Connected"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Asmens Informacija"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -7000,7 +7066,19 @@ msgstr ""
 #~ msgstr "Kambario JID"
 
 #, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "_Kopijuoti nuorodos adresą"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "status message"
+
+#, fuzzy
 #~ msgid "Create _Group Chat…"
+#~ msgstr "Leave Groupchats"
+
+#, fuzzy
+#~ msgid "Create new group chat"
 #~ msgstr "Leave Groupchats"
 
 #~ msgid "Create new post"
@@ -7012,6 +7090,10 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Default"
+
+#, fuzzy
+#~ msgid "Default for chats"
+#~ msgstr "Free for chat"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7070,6 +7152,14 @@ msgstr ""
 #~ msgstr "Redaguoti _Grupes"
 
 #, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Blogas CA sertifikatas"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "Jūs gavote naują įrašą:"
+
+#, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Avahi error"
 
@@ -7126,6 +7216,9 @@ msgstr ""
 #~ msgid "Full Message View"
 #~ msgstr "Message Sent"
 
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
@@ -7161,6 +7254,24 @@ msgstr ""
 #~ msgid "Homepage"
 #~ msgstr "<b>Asmeninė svetainė:</b>"
 
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Portas:"
+
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr " since %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "If True, you will be able to set a negative priority to your account in "
+#~ "account modification window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+
 #~ msgid "Images"
 #~ msgstr "Images"
 
@@ -7187,8 +7298,28 @@ msgstr ""
 #~ msgstr "Reason"
 
 #, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Padėtis:"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "_Keisti Prieigą"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Asmuo"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "message contents"
 
 #, fuzzy
 #~ msgid "Moderate message?"
@@ -7263,12 +7394,24 @@ msgstr ""
 #~ msgstr "Progress"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Proksi _Serveris:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Proksis:"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "Relogin now?"
 
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "Is OpenPGP enabled for this contact?"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "Nesenai:"
 
 #~ msgid "Recipient: "
 #~ msgstr "Recipient: "
@@ -7301,10 +7444,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove from contact list"
 #~ msgstr "Removes contact from roster"
-
-#, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "_Trinti"
 
 #, fuzzy
 #~ msgid "Report"
@@ -7347,6 +7486,10 @@ msgstr ""
 #~ msgstr "_Siųsti"
 
 #, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Last status: %s"
+
+#, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "Save File as..."
 
@@ -7354,12 +7497,35 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "Save File as..."
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Siųsti žinutę"
+
 #~ msgid "Sender: "
 #~ msgstr "Sender: "
 
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "GG Number:"
+
+#~ msgid "Server"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "Serverio teikiamos paslaugos"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Serverio teikiamos paslaugos"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "Serveris atsakė: %s"
 
 #, fuzzy
 #~ msgid "Show Location"
@@ -7372,6 +7538,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "Savybės"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "Rodyti _XML konsolę"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7409,12 +7579,24 @@ msgstr ""
 #~ msgstr "Sutikimo užklausimas"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Sutikimas:"
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Service Discovery using account %s"
 
 #, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Start Chat"
+
+#, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Sinchronizuoti kontaktus"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "GTK+ Version:"
 
 #~ msgid "The service could not be found"
 #~ msgstr "The service could not be found"
@@ -7433,6 +7615,13 @@ msgstr ""
 #~ msgid "Transferring"
 #~ msgstr "Failų siuntimai"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Treat * / _ pairs as possible formatting characters."
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "Type: %s"
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7447,17 +7636,19 @@ msgstr ""
 #~ msgstr "Atnaujinti MOTD..."
 
 #, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "Save File as..."
-
-#, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Save File as..."
 
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Serveris:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Naudoti failų siuntimo proksius"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Naudotojo vardas:"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7484,6 +7675,10 @@ msgstr ""
 #~ msgstr "Do you accept this request?"
 
 #, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Removes contact from roster"
+
+#, fuzzy
 #~ msgid "You Have Unread Messages"
 #~ msgstr "You have unread messages"
 
@@ -7505,12 +7700,12 @@ msgstr ""
 #~ msgstr "Atšaukti failo siuntimą"
 
 #, fuzzy
-#~ msgid "_Accounts"
-#~ msgstr "Prieiga"
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "_Nustatymai"
 
 #, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "_Įtraukti asmenį..."
+#~ msgid "_Accounts"
+#~ msgstr "Prieiga"
 
 #, fuzzy
 #~ msgid "_Debug Console"

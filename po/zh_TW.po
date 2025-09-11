@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -421,9 +421,6 @@ msgstr "帳戶刪除失敗"
 msgid "Account Removed"
 msgstr "帳戶已刪除"
 
-msgid "Account Settings…"
-msgstr "賬戶設定…"
-
 msgid "Account Wizard"
 msgstr "帳戶精靈"
 
@@ -444,6 +441,10 @@ msgstr "必須連接帳戶"
 
 msgid "Account is being created"
 msgstr "正在創建帳戶"
+
+#, fuzzy
+msgid "Account is not connected"
+msgstr "帳戶未連接。"
 
 msgid "Account is not connected."
 msgstr "帳戶未連接。"
@@ -489,6 +490,10 @@ msgstr "加入"
 msgid "Add Account"
 msgstr "添加帳戶"
 
+#, fuzzy
+msgid "Add Account…"
+msgstr "加入聯絡人(_A)…"
+
 msgid "Add Contact"
 msgstr "添加聯絡人"
 
@@ -522,6 +527,9 @@ msgstr "添加工作區"
 msgid "Add a checkmark to received messages"
 msgstr "為收到的郵件添加複選標記"
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr "為您的帳戶添加名稱和顏色"
 
@@ -530,9 +538,6 @@ msgstr "添加要更改的設定"
 
 msgid "Add new Theme"
 msgstr "添加新主題"
-
-msgid "Add new line"
-msgstr "添加新行"
 
 msgid "Add some details…"
 msgstr "新增一些詳情…"
@@ -564,12 +569,6 @@ msgstr "位址"
 msgid "Address does not belong to a group chat server"
 msgstr "位址不屬於群聊伺服器"
 
-msgid "Adjust to Status"
-msgstr "調整到狀態"
-
-msgid "Adjust to status"
-msgstr "調整到狀態"
-
 msgid "Admin"
 msgstr "管理"
 
@@ -598,6 +597,10 @@ msgstr "進階設定"
 
 msgid "Advanced settings"
 msgstr "進階設定"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, python-format
 msgid "Adw Version: %s"
@@ -726,28 +729,27 @@ msgstr "存檔為空"
 msgid "Archive is malformed"
 msgstr "存檔異常"
 
+#, fuzzy
+msgid "Archiving"
+msgstr "存檔中"
+
 msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "存檔中"
 
-msgid "Archiving Preferences"
-msgstr "存檔首選項"
-
-msgid "Archiving Preferences Error"
-msgstr "存檔首選項錯誤"
-
-msgid "Archiving Preferences Saved"
-msgstr "存檔保存的首選項"
-
 #, python-format
-msgid "Archiving Preferences for %s"
-msgstr "%s 的存檔偏好設定"
+msgid "Archiving – %(account)s"
+msgstr ""
 
 msgid "Ask For Status Message on…"
 msgstr "要求狀態訊息…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "關閉多人聊天標籤/視窗前詢問。"
+
+#, fuzzy
+msgid "Ask before connecting unencrypted"
+msgstr "是否顯示確認阻斷聯絡人對話方塊?空字串意味著永遠不顯示對話方塊。"
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "當 Gajim 的窗口關閉時退出前詢問"
@@ -802,12 +804,6 @@ msgstr "作者"
 
 msgid "Auto Away"
 msgstr "自動離開"
-
-msgid "Auto Away Settings"
-msgstr "自動離開設置"
-
-msgid "Auto Extended Away Settings"
-msgstr "自動擴展離開設置"
 
 msgid "Auto Not Available"
 msgstr "自動不可用"
@@ -893,15 +889,16 @@ msgstr "封鎖聯絡人…"
 msgid "Block Participant?"
 msgstr "封鎖參與者？"
 
+#, fuzzy
+msgid "Blocked Contacts"
+msgstr "封鎖聯絡人？"
+
+#, fuzzy, python-format
+msgid "Blocked Contacts – %(account)s"
+msgstr "封鎖聯絡人…"
+
 msgid "Blocked Participants"
 msgstr "已封鎖的參與者"
-
-msgid "Blocking List"
-msgstr "封鎖名單"
-
-#, python-format
-msgid "Blocking List for %s"
-msgstr "%s的封鎖名單"
 
 msgid "Block…"
 msgstr "封鎖…"
@@ -975,8 +972,11 @@ msgstr "取消下載"
 msgid "Certificate"
 msgstr "證書"
 
-msgid "Certificate Settings"
-msgstr "證書設定"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr ""
+"%s \n"
+"的證書"
 
 msgid "Certificate Verification Failed"
 msgstr "證書驗證失敗"
@@ -1056,9 +1056,6 @@ msgstr "聊天橫幅：文本字體"
 msgid "Chat Details and Settings"
 msgstr "聊天詳情和設定"
 
-msgid "Chat List"
-msgstr "聊天清單"
-
 msgid "Chat Type"
 msgstr "聊天類型"
 
@@ -1099,6 +1096,10 @@ msgstr "連線無法使用"
 msgid "Choose Device"
 msgstr "選擇歸檔檔案"
 
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "選擇聲音"
+
 msgid "Choose History Export Directory"
 msgstr ""
 
@@ -1115,9 +1116,6 @@ msgstr "選擇歸檔檔案"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "密碼加密"
-
-msgid "Cipher Suite"
-msgstr ""
 
 msgid "City"
 msgstr ""
@@ -1139,12 +1137,12 @@ msgid "Clear File"
 msgstr "清潔"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "選擇聲音"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "訊息已傳送"
+msgid "Clear Sound"
+msgstr "選擇聲音"
 
 msgid ""
 "Click messages to select them\n"
@@ -1168,19 +1166,15 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Client Certificate"
-msgstr "客戶端證書"
-
-#, fuzzy
 msgid "Close"
 msgstr "傳送並關閉(_S)"
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "搜尋"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "搜尋"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1220,10 +1214,6 @@ msgstr ""
 #, fuzzy
 msgid "Complete"
 msgstr "已完成"
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "請用您想要的名稱新增一個主題。"
 
 msgid "Completed"
 msgstr "已完成"
@@ -1281,10 +1271,6 @@ msgid "Connection Error"
 msgstr "連線"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "連線"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "連線失敗"
 
@@ -1292,15 +1278,19 @@ msgstr "連線失敗"
 msgid "Connection with %s could not be established."
 msgstr "無法與對方建立連線。"
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "聯絡人"
 
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "聯絡人訊息:"
-
 msgid "Contact Connected"
 msgstr "已連線的聯絡人"
+
+#, fuzzy
+msgid "Contact Details"
+msgstr "聯絡人"
 
 msgid "Contact Disconnected"
 msgstr "聯絡人已中斷連線"
@@ -1318,6 +1308,10 @@ msgstr "聯絡人"
 
 #, fuzzy
 msgid "Contact List Exchange"
+msgstr "聯絡人清單項交換"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
 msgstr "聯絡人清單項交換"
 
 #, fuzzy
@@ -1350,10 +1344,6 @@ msgstr "帳戶已刪除"
 #, fuzzy
 msgid "Contact Request"
 msgstr "聯絡人"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "聯絡人資訊"
 
 msgid "Contacts"
 msgstr "聯絡人"
@@ -1417,20 +1407,12 @@ msgid "Copy code snippet"
 msgstr ""
 
 #, fuzzy
-msgid "Copy info to clipboard"
-msgstr "複製連結位置(_C)"
-
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "複製連結位置(_C)"
 
 #, fuzzy
 msgid "Copy to clipboard"
 msgstr "複製連結位置(_C)"
-
-#, fuzzy
-msgid "Correct the last message"
-msgstr "狀態訊息"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1484,7 +1466,7 @@ msgid "Create New Account"
 msgstr "建立新訊息"
 
 #, fuzzy
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr "離開聊天室"
 
 #, fuzzy
@@ -1498,10 +1480,13 @@ msgstr ""
 msgid "Credentials expired"
 msgstr "證書已過期"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 #, fuzzy
@@ -1530,8 +1515,9 @@ msgstr "慢跑"
 msgid "Decline"
 msgstr "離線(_O)"
 
-msgid "Decrease User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Decrease Font Size"
+msgstr "使用者名稱(_U):"
 
 msgid "Decrease playback speed"
 msgstr ""
@@ -1555,16 +1541,15 @@ msgstr "重新命名聯絡人"
 msgid "Default device"
 msgstr "預設裝置"
 
-#, fuzzy
-msgid "Default for chats"
-msgstr "和我聊天吧"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 #, fuzzy
 msgid "Default for chats and private group chats"
 msgstr "%s 加入聊天室"
 
 #, fuzzy
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "新聊天室"
 
 #, fuzzy
@@ -1624,6 +1609,13 @@ msgid "Details"
 msgstr "細節"
 
 #, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
+
+#, python-format
 msgid "Device \"%s\""
 msgstr ""
 
@@ -1681,9 +1673,6 @@ msgstr "允許 Gajim 發送您正在執行的作業系統相關資訊。"
 #, fuzzy
 msgid "Disclose information about the operating system you currently use"
 msgstr "允許 Gajim 發送您正在執行的作業系統相關資訊。"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1754,9 +1743,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 #, fuzzy
 msgid "Download"
 msgstr "下載"
@@ -1787,6 +1773,9 @@ msgstr "向聯絡人傳送檔案"
 
 msgid "Eating"
 msgstr "吃東西"
+
+msgid "Edit Shortcut"
+msgstr ""
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1819,6 +1808,10 @@ msgstr ""
 #, fuzzy
 msgid "Enable"
 msgstr "啟用"
+
+#, fuzzy
+msgid "Enable Account"
+msgstr "無效的帳號"
 
 msgid "Enable KeepassXC Integration"
 msgstr ""
@@ -1854,15 +1847,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "客戶端證書"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "E2E 加密被停用"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "認證請求"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "認證請求"
 
 #, fuzzy
@@ -1924,10 +1917,6 @@ msgstr ""
 
 msgid "Error opening file"
 msgstr "開啟檔案錯誤"
-
-#, fuzzy
-msgid "Error received: {}"
-msgstr "在收到的資料表中有錯誤"
 
 #, fuzzy
 msgid "Error while Exporting"
@@ -2164,6 +2153,10 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+#, fuzzy
+msgid "Focus Search"
+msgstr "搜尋"
+
 #, fuzzy, python-format
 msgid "Folder: %s"
 msgstr "檔案:  %s"
@@ -2247,9 +2240,6 @@ msgstr "GTK+ 版本:"
 msgid "GTK Version: %s"
 msgstr "GTK+ 版本:"
 
-msgid "Gajim"
-msgstr "Gajim"
-
 #, fuzzy, python-format
 msgid "Gajim %s is available"
 msgstr "一個連線無法使用"
@@ -2307,6 +2297,10 @@ msgstr "傳送者: "
 
 msgid "General"
 msgstr "一般"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2433,6 +2427,17 @@ msgstr "首頁:"
 msgid "Hostname"
 msgstr "主機名稱(_H):"
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "想做什麼?"
@@ -2465,10 +2470,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "位址(_A):"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "連接埠(_P):"
-
 msgid "Id"
 msgstr "Id"
 
@@ -2476,12 +2477,13 @@ msgstr "Id"
 msgid "Identified Error"
 msgstr "SSL證書錯誤"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+
 #, fuzzy
 msgid "Idle Time"
-msgstr "閒置，自從 %s"
-
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr "閒置，自從 %s"
 
 #, fuzzy
@@ -2505,15 +2507,6 @@ msgid ""
 msgstr ""
 "如果為真，Gajim 在使用 jingle 時會嘗試使用 STUN 伺服器。伺服器可以由"
 "\"stun_server\"選項給出，或由 jabber 伺服器給出。"
-
-#, fuzzy
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"如果為真，您將可以在修改帳號視窗中為您的帳號可以設定一個負的優先等級。注意!當"
-"您使用負的優先等級登入時您將不能從伺服器收到任何訊息。"
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -2565,8 +2558,9 @@ msgstr "收到訊息的暱稱顏色。"
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Increase Font Size"
+msgstr "使用者名稱(_U):"
 
 msgid "Increase playback speed"
 msgstr ""
@@ -2578,9 +2572,6 @@ msgstr "資訊(_I)"
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "不安全的連線"
-
-msgid "Insert Emoji"
-msgstr ""
 
 #, fuzzy
 msgid "Install"
@@ -2829,9 +2820,6 @@ msgstr "傳送私有訊息失敗"
 msgid "Loading…"
 msgstr "載入"
 
-msgid "Local System Time"
-msgstr ""
-
 #, fuzzy
 msgid "Local Time"
 msgstr "本地 JID:"
@@ -2850,10 +2838,6 @@ msgid "Location at %s"
 msgstr "位置: %s"
 
 #, fuzzy
-msgid "Location:"
-msgstr "位置: %s"
-
-#, fuzzy
 msgid "Log"
 msgstr "現在重新登入?"
 
@@ -2866,9 +2850,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#, fuzzy
-msgid "Login Settings"
-msgstr "外掛程式"
+#, python-format
+msgid "Login – %(account)s"
+msgstr ""
 
 msgid "Look it up in _Dictionary"
 msgstr "從字典中搜尋(_D)"
@@ -2896,20 +2880,16 @@ msgid "Manage"
 msgstr "管理…"
 
 #, fuzzy
-msgid "Manage Accounts…"
-msgstr "修改帳號資訊(_M)"
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "聯絡人"
-
-#, fuzzy
 msgid "Manage Proxies"
 msgstr "管理代理伺服器設定"
 
 #, fuzzy
 msgid "Manage Proxies..."
 msgstr "管理代理伺服器設定"
+
+#, fuzzy
+msgid "Manage Shortcuts"
+msgstr "管理聯絡人(_M)"
 
 #, fuzzy
 msgid "Manage Sounds"
@@ -2986,10 +2966,6 @@ msgid "Message Sent"
 msgstr "訊息已傳送"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "訊息內容"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "訊息已傳送"
 
@@ -2998,6 +2974,10 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+
+#, fuzzy
+msgid "Messages"
+msgstr "訊息"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3190,7 +3170,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "客戶端證書"
 
 #, fuzzy
@@ -3225,6 +3205,9 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "沒有有效帳號"
+
+msgid "No keys pressed"
+msgstr ""
 
 #, fuzzy
 msgid "No results"
@@ -3408,9 +3391,6 @@ msgstr "做為連結開啟(_L)"
 msgid "Open folder"
 msgstr "開啟資料夾(_O)"
 
-msgid "Open search bar"
-msgstr ""
-
 msgid "OpenGL accelerated"
 msgstr ""
 
@@ -3480,9 +3460,6 @@ msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
 msgstr "PEP 節點 %(node)s 沒有被移除: %(message)s"
-
-msgid "PKCS12 Files"
-msgstr "PKCS12 檔案"
 
 #, fuzzy
 msgid "PNG files"
@@ -3720,6 +3697,11 @@ msgstr "參數"
 msgid "Presets"
 msgstr "_Presence"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3748,6 +3730,10 @@ msgstr "優先等級(_T):"
 msgid "Privacy"
 msgstr "隱私策略清單"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 #, fuzzy
 msgid "Private"
 msgstr "隱私策略清單"
@@ -3770,8 +3756,16 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "伺服器"
+
 #, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -3791,14 +3785,6 @@ msgstr "管理代理伺服器設定"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "代理伺服器(_Y):"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "代理伺服器位址(_H):"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "代理伺服器(_Y):"
 
 #, fuzzy
@@ -3857,11 +3843,11 @@ msgid "Quit Gajim"
 msgstr "Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "傳送訊息"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "轉發未讀訊息"
 
 #, fuzzy
@@ -3905,10 +3891,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "最初收到的訊息"
 
-#, fuzzy
-msgid "Recent history"
-msgstr "最近:"
-
 msgid "Recognize your account by color"
 msgstr ""
 
@@ -3943,6 +3925,10 @@ msgstr "註冊成功"
 #, fuzzy
 msgid "Reject file transfer"
 msgstr "檔案傳輸"
+
+#, fuzzy
+msgid "Reload"
+msgstr "另存為…"
 
 msgid "Remember Last Status"
 msgstr ""
@@ -4043,8 +4029,17 @@ msgid_plural "Removed %(count)s contacts"
 msgstr[0] "移除了 %s 聯絡人"
 
 #, fuzzy
+msgid "Remove…"
+msgstr "移除(_R)"
+
+#, fuzzy
 msgid "Removing Account..."
 msgstr "移除帳號 %s"
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4140,12 +4135,12 @@ msgid "Reset Filters"
 msgstr "訊息已傳送"
 
 #, fuzzy
-msgid "Reset Hints"
-msgstr "訊息已傳送"
+msgid "Reset Font Size"
+msgstr "使用者名稱(_U):"
 
 #, fuzzy
-msgid "Reset User Interface Font Size"
-msgstr "使用者名稱(_U):"
+msgid "Reset Hints"
+msgstr "訊息已傳送"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4173,7 +4168,7 @@ msgid "Restart Pending"
 msgstr "需要 libgtkspell。"
 
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "最後狀態"
 
 #, fuzzy
@@ -4286,21 +4281,25 @@ msgstr "您不能將您自己加入到您的聯絡人清單中。"
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "已掃描 %(current)d / %(total)d.."
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 #, fuzzy
 msgid "Scroll to this message"
 msgstr "狀態訊息"
 
-msgid "Scroll up"
-msgstr ""
-
 msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
 msgstr "搜尋"
+
+#, fuzzy
+msgid "Search Chat History"
+msgstr "最近:"
 
 #, fuzzy
 msgid "Search Filters"
@@ -4392,9 +4391,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -4416,20 +4412,16 @@ msgid "Semi-Anonymous"
 msgstr ""
 
 #, fuzzy
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "最後狀態"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "無法加入聊天室"
 
 #, fuzzy
 msgid "Send Chat State"
 msgstr "最後狀態"
-
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "最後狀態"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "無法加入聊天室"
 
 #, fuzzy
 msgid "Send File"
@@ -4471,10 +4463,6 @@ msgstr "報告錯誤(_R)"
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr "用 Ctrl+Enter 傳送訊息，Enter 開始新列(紫茉莉 ICQ 客戶端預設作業)。"
 
-#, fuzzy
-msgid "Send the message"
-msgstr "傳送訊息"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "已傳送聯絡人: \"%s\" (%s)"
@@ -4489,28 +4477,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "GG 號碼:"
 
-msgid "Server"
-msgstr "伺服器"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "伺服器"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "伺服器"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "伺服器回應: %s"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "伺服器回應: %s"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "伺服器回應: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4534,6 +4503,10 @@ msgstr "該服務無法瀏覽"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "找不到該服務"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "搜尋服務"
 
 #, fuzzy
 msgid "Set Trust"
@@ -4584,6 +4557,9 @@ msgstr "一個視訊"
 #, fuzzy
 msgid "Share my online status"
 msgstr "變更狀態"
+
+msgid "Shortcuts"
+msgstr ""
 
 #, fuzzy
 msgid "Show Chat List"
@@ -4648,10 +4624,6 @@ msgid "Show Voice Message Button"
 msgstr "傳送訊息"
 
 #, fuzzy
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr "是否顯示確認阻斷聯絡人對話方塊?空字串意味著永遠不顯示對話方塊。"
-
-#, fuzzy
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4668,10 +4640,6 @@ msgstr "顯示所有未處理事件(_E)"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "顯示所有未處理事件(_E)"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "顯示 XML 主控臺(_X)"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4937,10 +4905,6 @@ msgid "Subscription"
 msgstr "認證: "
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "認證: "
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "已傳送聯絡人:"
 
@@ -4964,37 +4928,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "開始聊天"
+msgid "Switch to Workspace 2"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "開始聊天"
+msgid "Switch to Workspace 3"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "開始聊天"
+msgid "Switch to Workspace 4"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "開始聊天"
+msgid "Switch to Workspace 5"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "開始聊天"
+msgid "Switch to Workspace 6"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 7"
+msgstr "重新命名聯絡人"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "重新命名聯絡人"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "重新命名聯絡人"
+
+#, fuzzy
+msgid "Sync Group Chat Block List"
 msgstr "同步"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5008,6 +5033,9 @@ msgstr "同步"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "同步"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize joined group chats"
@@ -5027,10 +5055,6 @@ msgstr "同步"
 #, fuzzy
 msgid "System"
 msgstr "<b>系統:</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "版本:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5324,6 +5348,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "僅從 Gajim 移除帳號(_O)"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "僅從 Gajim 移除帳號(_O)"
 
@@ -5383,9 +5411,6 @@ msgstr "傳輸中"
 msgid "Transports"
 msgstr "服務代理"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "將成對出現的 * / _ 視為可能的格式控制字元。"
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5417,10 +5442,6 @@ msgstr ""
 msgid "Trying to remove account..."
 msgstr ""
 
-#, fuzzy
-msgid "Tune:"
-msgstr "音樂: %s"
-
 msgid "Turn Camera off"
 msgstr ""
 
@@ -5437,6 +5458,10 @@ msgstr "類型"
 
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgid "Typing Only"
+msgstr "僅正在編輯"
 
 msgid "URI"
 msgstr ""
@@ -5538,6 +5563,10 @@ msgstr "語音聊天請求"
 msgid "Unpin Chat"
 msgstr "語音聊天請求"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "語音聊天請求"
+
 msgid "Unsupported certificate purpose"
 msgstr "不支援的證書用途"
 
@@ -5629,9 +5658,6 @@ msgstr "尚未連線到伺服器"
 msgid "Use defined profile in configuration directory"
 msgstr "進階設定編輯器"
 
-msgid "Use file transfer proxies"
-msgstr "使用檔案傳輸代理伺服器"
-
 msgid "Use proxy auth_entication"
 msgstr "代理伺服器需要認證"
 
@@ -5641,10 +5667,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr " %s 找不到"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "使用者名稱(_U):"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -5737,9 +5759,6 @@ msgstr "網路搜尋位址缺少 \"%s\""
 msgid "Web _Search for it"
 msgstr "在網際網路上搜尋(_S)"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -5789,10 +5808,6 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "外掛程式"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "重新命名聯絡人"
 
 msgid "X11"
 msgstr ""
@@ -6000,10 +6015,6 @@ msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
 #, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "%s 的存檔偏好設定"
-
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
 msgstr "註冊新帳號成功"
 
@@ -6042,7 +6053,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6436,6 +6447,10 @@ msgstr "在做其他事情"
 msgid "italic"
 msgstr "斜體"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "原因"
+
 msgid "lat"
 msgstr ""
 
@@ -6820,12 +6835,18 @@ msgstr ""
 #~ msgid "Account %s is still connected"
 #~ msgstr "帳戶 %s 仍處於連接狀態"
 
+#~ msgid "Account Settings…"
+#~ msgstr "賬戶設定…"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "啟用的"
 
 #~ msgid "Add _Contact…"
 #~ msgstr "新增 _聯絡人…"
+
+#~ msgid "Add new line"
+#~ msgstr "添加新行"
 
 #, fuzzy
 #~ msgid "Add reaction"
@@ -6838,12 +6859,31 @@ msgstr ""
 #~ msgid "Add to new Group"
 #~ msgstr "編輯群組(_G)"
 
+#~ msgid "Adjust to Status"
+#~ msgstr "調整到狀態"
+
+#~ msgid "Adjust to status"
+#~ msgstr "調整到狀態"
+
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "群組"
 
 #~ msgid "Allows opening file:/ URIs when clicked."
 #~ msgstr "允許在單擊時打開 file：/ URI。"
+
+#~ msgid "Archiving Preferences"
+#~ msgstr "存檔首選項"
+
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "存檔首選項錯誤"
+
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "存檔保存的首選項"
+
+#, python-format
+#~ msgid "Archiving Preferences for %s"
+#~ msgstr "%s 的存檔偏好設定"
 
 #~ msgid "Are you sure you want to leave this group chat?"
 #~ msgstr "您確定要離開此群聊嗎？"
@@ -6870,12 +6910,25 @@ msgstr ""
 #~ msgid "Authorization Request"
 #~ msgstr "授權請求"
 
+#~ msgid "Auto Away Settings"
+#~ msgstr "自動離開設置"
+
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "自動擴展離開設置"
+
 #, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "自動聯結(_U)"
 
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "自動檢查您的訊息的拼寫"
+
+#~ msgid "Blocking List"
+#~ msgstr "封鎖名單"
+
+#, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "%s的封鎖名單"
 
 #~ msgid "Bookmarks"
 #~ msgstr "書籤"
@@ -6892,16 +6945,14 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "無法覆寫現有檔案\"%s\""
 
-#, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr ""
-#~ "%s \n"
-#~ "的證書"
+#~ msgid "Certificate Settings"
+#~ msgstr "證書設定"
 
 #~ msgid "Ch_ange Subject"
 #~ msgstr "更改主題"
+
+#~ msgid "Chat List"
+#~ msgstr "聊天清單"
 
 #, fuzzy
 #~ msgid "Checking file…"
@@ -6923,20 +6974,40 @@ msgstr ""
 #~ msgstr "顯示聯絡人的側寫"
 
 #, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "搜尋"
+#~ msgid "Clear message entry"
+#~ msgstr "訊息已傳送"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "客戶端證書"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "請用您想要的名稱新增一個主題。"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
 #~ msgstr "已完成"
 
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "連線"
+
 #~ msgid "Connection not available"
 #~ msgstr "連線無法使用"
 
 #, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "聯絡人訊息:"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "已取消認證的"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "聯絡人資訊"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -6967,7 +7038,19 @@ msgstr ""
 #~ msgstr "聊天室 JID"
 
 #, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "複製連結位置(_C)"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "狀態訊息"
+
+#, fuzzy
 #~ msgid "Create _Group Chat…"
+#~ msgstr "離開聊天室"
+
+#, fuzzy
+#~ msgid "Create new group chat"
 #~ msgstr "離開聊天室"
 
 #~ msgid "Create new post"
@@ -6979,6 +7062,10 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "預設"
+
+#, fuzzy
+#~ msgid "Default for chats"
+#~ msgstr "和我聊天吧"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7050,6 +7137,14 @@ msgstr ""
 #~ msgstr "要求您的路由器於檔案傳送時轉用通訊埠的能力。"
 
 #, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "客戶端證書"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "在收到的資料表中有錯誤"
+
+#, fuzzy
 #~ msgid "Error!"
 #~ msgstr "錯誤"
 
@@ -7114,6 +7209,9 @@ msgstr ""
 #~ msgid "Full Message View"
 #~ msgstr "訊息已傳送"
 
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim - %s"
@@ -7150,10 +7248,27 @@ msgstr ""
 #~ msgstr "首頁:"
 
 #, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "連接埠(_P):"
+
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr "閒置，自從 %s"
+
+#, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
 #~ "restore it when showing the window again."
 #~ msgstr "如果為真，當隱藏名冊時 Gajim 將會儲存名冊位置，並於顯示名冊時還原。"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "如果為真，您將可以在修改帳號視窗中為您的帳號可以設定一個負的優先等級。注"
+#~ "意!當您使用負的優先等級登入時您將不能從伺服器收到任何訊息。"
 
 #, fuzzy
 #~ msgid ""
@@ -7187,8 +7302,28 @@ msgstr ""
 #~ msgstr "原因"
 
 #, fuzzy
+#~ msgid "Location:"
+#~ msgstr "位置: %s"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "外掛程式"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "修改帳號資訊(_M)"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "聯絡人"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "訊息"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "訊息內容"
 
 #, fuzzy
 #~ msgid ""
@@ -7244,6 +7379,9 @@ msgstr ""
 #~ msgid "Organization (O)"
 #~ msgstr "渡假"
 
+#~ msgid "PKCS12 Files"
+#~ msgstr "PKCS12 檔案"
+
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "再續(_R)"
@@ -7276,12 +7414,24 @@ msgstr ""
 #~ msgstr "處理序"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "代理伺服器位址(_H):"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "代理伺服器(_Y):"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "現在重新登入?"
 
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "是否為此聯絡人使用 OpenPGP?"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "最近:"
 
 #~ msgid "Recipient: "
 #~ msgstr "接收者: "
@@ -7317,10 +7467,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove from contact list"
 #~ msgstr "從聯絡人清單移除聯絡人"
-
-#, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "移除(_R)"
 
 #, fuzzy
 #~ msgid "Report"
@@ -7372,6 +7518,10 @@ msgstr ""
 #~ msgstr "傳送(_S)"
 
 #, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "最後狀態"
+
+#, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "另存為…"
 
@@ -7379,12 +7529,35 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "另存為…"
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "傳送訊息"
+
 #~ msgid "Sender: "
 #~ msgstr "傳送者: "
 
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "GG 號碼:"
+
+#~ msgid "Server"
+#~ msgstr "伺服器"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "伺服器"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "伺服器回應: %s"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "伺服器回應: %s"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "伺服器回應: %s"
 
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7401,6 +7574,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "特性"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "顯示 XML 主控臺(_X)"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7447,8 +7624,16 @@ msgstr ""
 #~ msgstr "認證請求"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "認證: "
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "正在使用帳號 %s 來發掘服務"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "開始聊天"
 
 #~ msgid "Synchronise"
 #~ msgstr "同步"
@@ -7456,6 +7641,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "同步聯絡人"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "版本:"
 
 #~ msgid "The service could not be found"
 #~ msgstr "找不到該服務"
@@ -7481,6 +7670,13 @@ msgstr ""
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "代理\"%s\"將被移除"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "將成對出現的 * / _ 視為可能的格式控制字元。"
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "音樂: %s"
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7495,17 +7691,19 @@ msgstr ""
 #~ msgstr "拼寫檢查工具"
 
 #, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "另存為…"
-
-#, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "另存為…"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN 伺服器:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "使用檔案傳輸代理伺服器"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "使用者名稱(_U):"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7530,6 +7728,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "您確定要刪除所選取的訊息?"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "重新命名聯絡人"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"
@@ -7566,12 +7768,12 @@ msgstr ""
 #~ msgstr "您將無法再和使用這個代理的聯絡人收發訊息。"
 
 #, fuzzy
-#~ msgid "_Accounts"
-#~ msgstr "帳號"
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "%s 的存檔偏好設定"
 
 #, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "加入聯絡人(_A)…"
+#~ msgid "_Accounts"
+#~ msgstr "帳號"
 
 #, fuzzy
 #~ msgid "_Debug Console"

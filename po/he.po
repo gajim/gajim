@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -473,10 +473,6 @@ msgid "Account Removed"
 msgstr "שורת חשבון"
 
 #, fuzzy
-msgid "Account Settings…"
-msgstr "תוספים"
-
-#, fuzzy
 msgid "Account Wizard"
 msgstr "חשבון מנוטרל"
 
@@ -501,6 +497,10 @@ msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 #, fuzzy
 msgid "Account is being created"
+msgstr "חשבון \"%s\" מחובר כעת לשרת"
+
+#, fuzzy
+msgid "Account is not connected"
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 #, fuzzy
@@ -556,6 +556,10 @@ msgid "Add Account"
 msgstr "הוסף _איש קשר..."
 
 #, fuzzy
+msgid "Add Account…"
+msgstr "הוסף _איש קשר..."
+
+#, fuzzy
 msgid "Add Contact"
 msgstr "הוסף _איש קשר..."
 
@@ -597,6 +601,9 @@ msgstr ""
 msgid "Add a checkmark to received messages"
 msgstr ""
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr ""
+
 msgid "Add a name and color for your account"
 msgstr ""
 
@@ -605,10 +612,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Add new Theme"
-msgstr "יצירת פוסט חדש"
-
-#, fuzzy
-msgid "Add new line"
 msgstr "יצירת פוסט חדש"
 
 #, fuzzy
@@ -652,14 +655,6 @@ msgid "Address does not belong to a group chat server"
 msgstr "‏%s אינו שרת שיחת קבוצה"
 
 #, fuzzy
-msgid "Adjust to Status"
-msgstr "_התאם למצב"
-
-#, fuzzy
-msgid "Adjust to status"
-msgstr "_התאם למצב"
-
-#, fuzzy
 msgid "Admin"
 msgstr "_מנהל"
 
@@ -695,6 +690,10 @@ msgstr "קיצורי מקש"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "קיצורי מקש"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Adw Version: %s"
@@ -845,26 +844,17 @@ msgid "Archive is malformed"
 msgstr "ארכיון הינו פגום"
 
 #, fuzzy
-msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "ארכיון ריק"
 
 #, fuzzy
-msgid "Archiving Preferences"
-msgstr "ערוך העדפות _ארכיונאות"
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "ארכיון ריק"
 
-#, fuzzy
-msgid "Archiving Preferences Error"
-msgstr "ערוך העדפות _ארכיונאות"
-
-#, fuzzy
-msgid "Archiving Preferences Saved"
-msgstr "ערוך העדפות _ארכיונאות"
-
-# ארכיונאות
 #, python-format
-msgid "Archiving Preferences for %s"
-msgstr "העדפות גנזך עבור ‫%s"
+msgid "Archiving – %(account)s"
+msgstr ""
 
 # Sign in
 # Sign out
@@ -874,6 +864,12 @@ msgstr "שאל אותי עבור הודעת מצב בעת:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "שאל בטרם סגירת חלון/כרטיסייה של שיחת קבוצה."
+
+#, fuzzy
+msgid "Ask before connecting unencrypted"
+msgstr ""
+"האם עלינו להציג דו שיח וידוא חסימת איש קשר? המשמעות של מחרוזת ריקה תהיה "
+"שאנחנו לא נציג את הדו שיח בכלל."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -940,14 +936,6 @@ msgstr "מחברים:"
 #, fuzzy
 msgid "Auto Away"
 msgstr "נעדר"
-
-#, fuzzy
-msgid "Auto Away Settings"
-msgstr "קיצורי מקש"
-
-#, fuzzy
-msgid "Auto Extended Away Settings"
-msgstr "נעדר לזמן ארוך"
 
 #, fuzzy
 msgid "Auto Not Available"
@@ -1049,16 +1037,16 @@ msgid "Block Participant?"
 msgstr "משתתף"
 
 #, fuzzy
-msgid "Blocked Participants"
-msgstr "משתתפים"
-
-#, fuzzy
-msgid "Blocking List"
-msgstr "רשימת אסירה"
+msgid "Blocked Contacts"
+msgstr "אנשי קשר חסומים"
 
 #, fuzzy, python-format
-msgid "Blocking List for %s"
-msgstr "רשימת פרטיות עבור ‫%s"
+msgid "Blocked Contacts – %(account)s"
+msgstr "אנשי קשר חסומים"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "משתתפים"
 
 #, fuzzy
 msgid "Block…"
@@ -1142,9 +1130,9 @@ msgstr "הורדה"
 msgid "Certificate"
 msgstr "תעודת לקוח"
 
-#, fuzzy
-msgid "Certificate Settings"
-msgstr "התראות"
+#, fuzzy, python-format
+msgid "Certificate - %(account)s"
+msgstr "תעודה עבור חשבון ‫%s"
 
 #, fuzzy
 msgid "Certificate Verification Failed"
@@ -1238,10 +1226,6 @@ msgid "Chat Details and Settings"
 msgstr "חיבור"
 
 #, fuzzy
-msgid "Chat List"
-msgstr "איש קשר"
-
-#, fuzzy
 msgid "Chat Type"
 msgstr "טיפוס"
 
@@ -1285,6 +1269,10 @@ msgstr "סשנים חזותיים אינם זמינים"
 msgid "Choose Device"
 msgstr "בחירת ארכיון"
 
+#, fuzzy
+msgid "Choose Emoji"
+msgstr "בחירת צליל"
+
 msgid "Choose History Export Directory"
 msgstr ""
 
@@ -1301,9 +1289,6 @@ msgstr "בחירת ארכיון"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "הצפנת סיסמה"
-
-msgid "Cipher Suite"
-msgstr ""
 
 msgid "City"
 msgstr ""
@@ -1326,12 +1311,12 @@ msgid "Clear File"
 msgstr "מנקה"
 
 #, fuzzy
-msgid "Clear Sound"
+msgid "Clear Input"
 msgstr "בחירת צליל"
 
 #, fuzzy
-msgid "Clear message entry"
-msgstr "הודעה נשלחה"
+msgid "Clear Sound"
+msgstr "בחירת צליל"
 
 msgid ""
 "Click messages to select them\n"
@@ -1356,19 +1341,15 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Client Certificate"
-msgstr "תעודת לקוח"
-
-#, fuzzy
 msgid "Close"
 msgstr "_שלח וסגור"
 
+#, fuzzy
+msgid "Close Chat"
+msgstr "חיפוש"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
-
-#, fuzzy
-msgid "Close chat"
-msgstr "חיפוש"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1408,10 +1389,6 @@ msgstr ""
 #, fuzzy
 msgid "Complete"
 msgstr "הושלמה"
-
-#, fuzzy
-msgid "Complete a command or a nickname"
-msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
 msgid "Completed"
 msgstr "הושלמה"
@@ -1469,10 +1446,6 @@ msgid "Connection Error"
 msgstr "חיבור"
 
 #, fuzzy
-msgid "Connection Settings"
-msgstr "חיבור"
-
-#, fuzzy
 msgid "Connection failed"
 msgstr "התחברות נכשלה"
 
@@ -1480,15 +1453,19 @@ msgstr "התחברות נכשלה"
 msgid "Connection with %s could not be established."
 msgstr "חיבור עם עמית לא היה אפשרי לביסוס."
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "איש קשר"
 
-#, fuzzy
-msgid "Contact Addresses"
-msgstr "הודעת איש קשר:"
-
 msgid "Contact Connected"
 msgstr "איש קשר מחובר"
+
+#, fuzzy
+msgid "Contact Details"
+msgstr "איש קשר"
 
 msgid "Contact Disconnected"
 msgstr "איש קשר מנותק"
@@ -1507,6 +1484,10 @@ msgstr "איש קשר"
 #, fuzzy
 msgid "Contact List Exchange"
 msgstr "המרת פריט רשימה"
+
+#, fuzzy, python-format
+msgid "Contact List – %(account)s"
+msgstr "קיצורי מקש"
 
 #, fuzzy
 msgid "Contact List: Contact Background Color"
@@ -1539,10 +1520,6 @@ msgstr "שורת חשבון"
 #, fuzzy
 msgid "Contact Request"
 msgstr "איש קשר"
-
-#, fuzzy
-msgid "Contact information"
-msgstr "מידע איש קשר"
 
 #, fuzzy
 msgid "Contacts"
@@ -1609,20 +1586,12 @@ msgid "Copy code snippet"
 msgstr ""
 
 #, fuzzy
-msgid "Copy info to clipboard"
-msgstr "ה_עתק מיקום קישור"
-
-#, fuzzy
 msgid "Copy to Clipboard"
 msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
 msgid "Copy to clipboard"
 msgstr "ה_עתק מיקום קישור"
-
-#, fuzzy
-msgid "Correct the last message"
-msgstr "cli"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1676,7 +1645,7 @@ msgid "Create New Account"
 msgstr "יצירת פוסט חדש"
 
 #, fuzzy
-msgid "Create new group chat"
+msgid "Create New Group Chat"
 msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
@@ -1690,10 +1659,13 @@ msgstr ""
 msgid "Credentials expired"
 msgstr "אישורי Oauth2"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr ""
 
-msgid "DNS"
+msgid "Danger Zone"
 msgstr ""
 
 #, fuzzy
@@ -1722,8 +1694,9 @@ msgstr "ג׳וגינג"
 msgid "Decline"
 msgstr "לא מ_קוון"
 
-msgid "Decrease User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Decrease Font Size"
+msgstr "שם _משתמש:"
 
 msgid "Decrease playback speed"
 msgstr ""
@@ -1747,11 +1720,8 @@ msgstr "שינוי שם איש קשר"
 msgid "Default device"
 msgstr "התקן שגרתי"
 
-# BUG: Free for Chat
-# BUG: x2
-#, fuzzy
-msgid "Default for chats"
-msgstr "חופשי לשיחה"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr ""
 
 # הצטרף
 #, fuzzy
@@ -1759,7 +1729,7 @@ msgid "Default for chats and private group chats"
 msgstr "%s נכנס/ה לשיחת קבוצה"
 
 #, fuzzy
-msgid "Default for group chats"
+msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "שיחת קבוצה חדשה"
 
 #, fuzzy
@@ -1820,6 +1790,13 @@ msgid "Details"
 msgstr "פרטים"
 
 #, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr ""
+
+#, python-format
 msgid "Device \"%s\""
 msgstr ""
 
@@ -1878,9 +1855,6 @@ msgstr "התר ל־Gajim לשלוח מידע אודות מערכת ההפעלה 
 #, fuzzy
 msgid "Disclose information about the operating system you currently use"
 msgstr "התר ל־Gajim לשלוח מידע אודות מערכת ההפעלה אשר בשימושך."
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
 
 msgid "Disclose the time of your last activity"
 msgstr ""
@@ -1952,9 +1926,6 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
-msgid "Domain"
-msgstr ""
-
 #, fuzzy
 msgid "Download"
 msgstr "הורדה"
@@ -1985,6 +1956,10 @@ msgstr "cli"
 
 msgid "Eating"
 msgstr "אוכל"
+
+#, fuzzy
+msgid "Edit Shortcut"
+msgstr "קיצורי מקש"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2018,6 +1993,10 @@ msgstr ""
 #, fuzzy
 msgid "Enable"
 msgstr "מאופשר"
+
+#, fuzzy
+msgid "Enable Account"
+msgstr "חשבון שגוי"
 
 msgid "Enable KeepassXC Integration"
 msgstr ""
@@ -2058,15 +2037,15 @@ msgid "Encrypted (%s)"
 msgstr ""
 
 #, fuzzy
-msgid "Encrypted Certificate"
-msgstr "תעודת לקוח"
-
-#, fuzzy
 msgid "Encrypting file…"
 msgstr "הצפנת E2E מנוטרלת כעת"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "בקשת הרשמה"
+
+#, fuzzy, python-format
+msgid "Encryption (OMEMO) – %(account)s"
 msgstr "בקשת הרשמה"
 
 #, fuzzy
@@ -2131,10 +2110,6 @@ msgstr ""
 
 msgid "Error opening file"
 msgstr "שגיאה בפתיחת קובץ"
-
-#, fuzzy
-msgid "Error received: {}"
-msgstr "שגיאה בקבלת dataform"
 
 #, fuzzy
 msgid "Error while Exporting"
@@ -2379,6 +2354,10 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+#, fuzzy
+msgid "Focus Search"
+msgstr "חיפוש"
+
 #, fuzzy, python-format
 msgid "Folder: %s"
 msgstr "קובץ: %s"
@@ -2463,10 +2442,6 @@ msgstr "גרסא:"
 msgid "GTK Version: %s"
 msgstr "גרסא:"
 
-# In Hebrew: גאג'ים
-msgid "Gajim"
-msgstr "‫Gajim"
-
 #, fuzzy, python-format
 msgid "Gajim %s is available"
 msgstr "חיבור אינו זמין"
@@ -2526,6 +2501,10 @@ msgstr "ממען: "
 # (קבוצה כללית)
 msgid "General"
 msgstr "כללית"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2654,6 +2633,17 @@ msgstr "עמוד בית:"
 msgid "Hostname"
 msgstr "שם מ_ארח:"
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+
 #, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "מה ברצונך לעשות?"
@@ -2687,10 +2677,6 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "_כתובת:"
 
-#, fuzzy
-msgid "IP / Port"
-msgstr "_פורט:"
-
 msgid "Id"
 msgstr "מזהה"
 
@@ -2698,14 +2684,14 @@ msgstr "מזהה"
 msgid "Identified Error"
 msgstr "שגיאת תעודת SSL"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+
 # מצוי/ה בחוסר פעילות
 #, fuzzy
 msgid "Idle Time"
-msgstr "בחוסר פעילות מאז %s"
-
-# מצוי/ה בחוסר פעילות
-#, fuzzy, python-format
-msgid "Idle since: %s"
 msgstr "בחוסר פעילות מאז %s"
 
 # להבהב
@@ -2733,16 +2719,6 @@ msgstr ""
 "כאשר מופעלת, Gajim ינסה לעשות שימש בשרת STUN כאשר jingle הינו מצוי בשימוש. "
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
-
-#, fuzzy
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"כאשר מופעלת, תהיה באפשרותך להגדיר עדיפות שלילית עבור חשבונך בתוך חלון התאמת "
-"חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה שום הודעה "
-"מתוך השרת שלך."
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -2794,8 +2770,9 @@ msgstr "צבע שם כינוי נכנס."
 msgid "Incoming Call (Video)"
 msgstr ""
 
-msgid "Increase User Interface Font Size"
-msgstr ""
+#, fuzzy
+msgid "Increase Font Size"
+msgstr "שם _משתמש:"
 
 msgid "Increase playback speed"
 msgstr ""
@@ -2807,9 +2784,6 @@ msgstr "_מידע"
 #, fuzzy
 msgid "Insecure Connection"
 msgstr "חיבור לא מאובטח"
-
-msgid "Insert Emoji"
-msgstr ""
 
 #, fuzzy
 msgid "Install"
@@ -3061,9 +3035,6 @@ msgstr "מסירת הודעה פרטית נכשלה"
 msgid "Loading…"
 msgstr "כעת טוען"
 
-msgid "Local System Time"
-msgstr ""
-
 #, fuzzy
 msgid "Local Time"
 msgstr "‏JID מקומית:"
@@ -3082,10 +3053,6 @@ msgid "Location at %s"
 msgstr "מיקום: "
 
 #, fuzzy
-msgid "Location:"
-msgstr "מיקום: "
-
-#, fuzzy
 msgid "Log"
 msgstr "להתחבר מחדש עכשיו?"
 
@@ -3098,9 +3065,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#, fuzzy
-msgid "Login Settings"
-msgstr "תוספים"
+#, python-format
+msgid "Login – %(account)s"
+msgstr ""
 
 msgid "Look it up in _Dictionary"
 msgstr "חפש בתוך _מילון"
@@ -3129,20 +3096,16 @@ msgid "Manage"
 msgstr "  נהל... "
 
 #, fuzzy
-msgid "Manage Accounts…"
-msgstr "ה_תאם חשבון..."
-
-#, fuzzy
-msgid "Manage Contact List"
-msgstr "איש קשר"
-
-#, fuzzy
 msgid "Manage Proxies"
 msgstr "ניהול דיוקני Proxy"
 
 #, fuzzy
 msgid "Manage Proxies..."
 msgstr "ניהול דיוקני Proxy"
+
+#, fuzzy
+msgid "Manage Shortcuts"
+msgstr "ניהול צלילים"
 
 #, fuzzy
 msgid "Manage Sounds"
@@ -3219,10 +3182,6 @@ msgid "Message Sent"
 msgstr "הודעה נשלחה"
 
 #, fuzzy
-msgid "Message composition"
-msgstr "cli"
-
-#, fuzzy
 msgid "Message content unknown"
 msgstr "הודעה נשלחה"
 
@@ -3233,6 +3192,10 @@ msgid ""
 msgstr ""
 "<b>הודעה תוקנה. הודעה אחרונה היתה:</b>\n"
 "  %s"
+
+#, fuzzy
+msgid "Messages"
+msgstr "הודעה"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3427,7 +3390,7 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
-msgid "No certificate"
+msgid "No certificate available"
 msgstr "תעודת לקוח"
 
 #, fuzzy
@@ -3462,6 +3425,9 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "אין חשבון זמין"
+
+msgid "No keys pressed"
+msgstr ""
 
 #, fuzzy
 msgid "No results"
@@ -3645,9 +3611,6 @@ msgstr "פתח בתור _קישור"
 msgid "Open folder"
 msgstr "_פתח תיקיה מכילה"
 
-msgid "Open search bar"
-msgstr ""
-
 msgid "OpenGL accelerated"
 msgstr ""
 
@@ -3718,9 +3681,6 @@ msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
 msgstr "צומת PEP ‏%(node)s לא הוסר: %(message)s"
-
-msgid "PKCS12 Files"
-msgstr "קבצי PKCS12"
 
 #, fuzzy
 msgid "PNG files"
@@ -3959,6 +3919,11 @@ msgstr "העדפות"
 msgid "Presets"
 msgstr "_נוכחות"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+
 msgid "Preview Size"
 msgstr ""
 
@@ -3988,6 +3953,10 @@ msgstr "_עדיפות:"
 msgid "Privacy"
 msgstr "רשימת פרטיות"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 #, fuzzy
 msgid "Private"
 msgstr "רשימת פרטיות"
@@ -4010,8 +3979,16 @@ msgstr ""
 msgid "Protocol"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Provider - %(account)s"
+msgstr "שרת"
+
 #, python-format
 msgid "Provider Category: %s"
+msgstr ""
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
 msgstr ""
 
 #, fuzzy
@@ -4031,14 +4008,6 @@ msgstr "ניהול דיוקני Proxy"
 
 #, fuzzy
 msgid "Proxy"
-msgstr "_פרוקסי:"
-
-#, fuzzy
-msgid "Proxy Host"
-msgstr "מ_ארח proxy:"
-
-#, fuzzy
-msgid "Proxy Type"
 msgstr "_פרוקסי:"
 
 # BUG: _underline
@@ -4102,11 +4071,11 @@ msgid "Quit Gajim"
 msgstr "‫Gajim"
 
 #, fuzzy
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "מסירת הודעה"
 
 #, fuzzy
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "קדם הודעות אשר לא נקראו"
 
 #, fuzzy
@@ -4152,13 +4121,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "הודעה ראשונה אשר התקבלה"
 
-# (שנפתחו) לאחרונה
-# (חדרים/ערוצים) אחרונים
-# (כתובות) אחרונות
-#, fuzzy
-msgid "Recent history"
-msgstr "אחרונים:"
-
 msgid "Recognize your account by color"
 msgstr ""
 
@@ -4194,6 +4156,10 @@ msgstr "רישום בוצע בהצלחה"
 #, fuzzy
 msgid "Reject file transfer"
 msgstr "העברת קובץ"
+
+#, fuzzy
+msgid "Reload"
+msgstr "שמור קובץ בשם..."
 
 msgid "Remember Last Status"
 msgstr ""
@@ -4299,8 +4265,17 @@ msgstr[0] "הוסר איש קשר %d"
 msgstr[1] "הוסרו %d אנשי קשר"
 
 #, fuzzy
+msgid "Remove…"
+msgstr "הס_ר"
+
+#, fuzzy
 msgid "Removing Account..."
 msgstr "הסרת חשבון ‫%s"
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
 
 #, fuzzy
 msgid "Rename"
@@ -4396,12 +4371,12 @@ msgid "Reset Filters"
 msgstr "הודעה נשלחה"
 
 #, fuzzy
-msgid "Reset Hints"
-msgstr "הודעה נשלחה"
+msgid "Reset Font Size"
+msgstr "שם _משתמש:"
 
 #, fuzzy
-msgid "Reset User Interface Font Size"
-msgstr "שם _משתמש:"
+msgid "Reset Hints"
+msgstr "הודעה נשלחה"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4430,7 +4405,7 @@ msgstr "יש צורך בהתקנת libgtkspell."
 
 # By last state
 #, fuzzy
-msgid "Restore chat"
+msgid "Restore Closed Chat"
 msgstr "לפי מצב אחרון"
 
 # By last state
@@ -4547,21 +4522,28 @@ msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "נסרקו %(current)d שירותים מתוך %(total)d.."
 
-msgid "Scroll down"
+msgid "Scroll Down"
+msgstr ""
+
+msgid "Scroll Up"
 msgstr ""
 
 #, fuzzy
 msgid "Scroll to this message"
 msgstr "cli"
 
-msgid "Scroll up"
-msgstr ""
-
 msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
 msgstr "חיפוש"
+
+# (שנפתחו) לאחרונה
+# (חדרים/ערוצים) אחרונים
+# (כתובות) אחרונות
+#, fuzzy
+msgid "Search Chat History"
+msgstr "אחרונים:"
 
 #, fuzzy
 msgid "Search Filters"
@@ -4653,9 +4635,6 @@ msgstr ""
 msgid "Select an activity to see details."
 msgstr ""
 
-msgid "Select an emoji"
-msgstr ""
-
 msgid "Select playback speed"
 msgstr ""
 
@@ -4679,22 +4658,17 @@ msgstr ""
 
 # By last state
 #, fuzzy
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "לפי מצב אחרון"
+
+#, fuzzy
+msgid "Send Chat Indicators in Group Chats"
+msgstr "אין אפשרות להצטרף לשיחת קבוצה"
 
 # By last state
 #, fuzzy
 msgid "Send Chat State"
 msgstr "לפי מצב אחרון"
-
-# By last state
-#, fuzzy
-msgid "Send Chatstate"
-msgstr "לפי מצב אחרון"
-
-#, fuzzy
-msgid "Send Chatstate in Group Chats"
-msgstr "אין אפשרות להצטרף לשיחת קבוצה"
 
 #, fuzzy
 msgid "Send File"
@@ -4738,10 +4712,6 @@ msgstr ""
 "מסירת הודעה בלחיצת Ctrl+Enter ויצירת שורה חדשה באמצעות המקש Enter (התנהגות "
 "שגרתית של Mirabilis לקוח ICQ)."
 
-#, fuzzy
-msgid "Send the message"
-msgstr "מסירת הודעה"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
@@ -4756,28 +4726,9 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "מספר GG:"
 
-msgid "Server"
-msgstr "שרת"
-
-#, fuzzy
-msgid "Server Info"
-msgstr "שרת"
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "שרת"
-
-#, fuzzy
-msgid "Server Software"
-msgstr "תגובת שרת: %s"
-
-#, fuzzy, python-format
-msgid "Server Software: %s\n"
-msgstr "תגובת שרת: %s"
-
-#, fuzzy
-msgid "Server Uptime"
-msgstr "תגובת שרת: %s"
 
 #, fuzzy
 msgid "Service"
@@ -4802,6 +4753,10 @@ msgstr "השירות אינו בר עיון"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "השירות לא היה יכול להימצא"
+
+#, fuzzy
+msgid "Service Provider"
+msgstr "מציאת שירות"
 
 #, fuzzy
 msgid "Set Trust"
@@ -4852,6 +4807,10 @@ msgstr "וידאו"
 #, fuzzy
 msgid "Share my online status"
 msgstr "שנה מצב"
+
+#, fuzzy
+msgid "Shortcuts"
+msgstr "קיצורי מקש"
 
 #, fuzzy
 msgid "Show Chat List"
@@ -4916,12 +4875,6 @@ msgid "Show Voice Message Button"
 msgstr "מסירת הודעה"
 
 #, fuzzy
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-"האם עלינו להציג דו שיח וידוא חסימת איש קשר? המשמעות של מחרוזת ריקה תהיה "
-"שאנחנו לא נציג את הדו שיח בכלל."
-
-#, fuzzy
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4940,10 +4893,6 @@ msgstr "הצג _אירועים ממתינים"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "הצג _אירועים ממתינים"
-
-#, fuzzy
-msgid "Show debug console"
-msgstr "הצג _מסוף XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5214,10 +5163,6 @@ msgid "Subscription"
 msgstr "הרשמה: "
 
 #, fuzzy
-msgid "Subscription:"
-msgstr "הרשמה: "
-
-#, fuzzy
 msgid "Successfully Added Contacts"
 msgstr "אנשי קשר אשר נשלחו:"
 
@@ -5241,37 +5186,98 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Switch Workspace"
+msgid "Switch to Chat 1"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 2"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 3"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 4"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 5"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 6"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 7"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 8"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Chat 9"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Next Chat"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Next Unread Chat"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Previous Chat"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Previous Unread Chat"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Switch to Workspace 1"
 msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Switch to the first - ninth chat"
-msgstr "התחלת שיחה"
+msgid "Switch to Workspace 2"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Switch to the next chat"
-msgstr "התחלת שיחה"
+msgid "Switch to Workspace 3"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Switch to the next unread chat"
-msgstr "התחלת שיחה"
+msgid "Switch to Workspace 4"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Switch to the previous chat"
-msgstr "התחלת שיחה"
+msgid "Switch to Workspace 5"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Switch to the previous unread chat"
-msgstr "התחלת שיחה"
+msgid "Switch to Workspace 6"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 7"
+msgstr "שינוי שם איש קשר"
+
+#, fuzzy
+msgid "Switch to Workspace 8"
+msgstr "שינוי שם איש קשר"
+
+#, fuzzy
+msgid "Switch to Workspace 9"
+msgstr "שינוי שם איש קשר"
+
+#, fuzzy
+msgid "Sync Group Chat Block List"
 msgstr "סנכרון"
 
 msgid "Sync Threshold"
-msgstr ""
-
-msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5285,6 +5291,9 @@ msgstr "סנכרון"
 #, fuzzy
 msgid "Synchronize History…"
 msgstr "סנכרון"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr ""
 
 # הצטרף
 #, fuzzy
@@ -5305,10 +5314,6 @@ msgstr "סנכרון"
 #, fuzzy
 msgid "System"
 msgstr "<b>מערכת:</b>"
-
-#, fuzzy
-msgid "TLS Version"
-msgstr "גרסא:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5606,6 +5611,10 @@ msgid "This will purge all locally stored chat history"
 msgstr ""
 
 #, fuzzy
+msgid "This will remove the account and delete all data"
+msgstr "להסיר חשבון מתוך _Gajim בלבד"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "להסיר חשבון מתוך _Gajim בלבד"
 
@@ -5665,9 +5674,6 @@ msgstr "כעת מעביר"
 msgid "Transports"
 msgstr "מובילים"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "התייחסות לצמדים של * / _  בתור תווי עיצוב אפשריים."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr ""
@@ -5700,10 +5706,6 @@ msgstr ""
 msgid "Trying to remove account..."
 msgstr ""
 
-#, fuzzy
-msgid "Tune:"
-msgstr "לחן: "
-
 msgid "Turn Camera off"
 msgstr ""
 
@@ -5720,6 +5722,10 @@ msgstr "טיפוס"
 
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgid "Typing Only"
+msgstr "הלחנה בלבד"
 
 msgid "URI"
 msgstr ""
@@ -5822,6 +5828,10 @@ msgstr "בקשה לשיחה קולית"
 msgid "Unpin Chat"
 msgstr "בקשה לשיחה קולית"
 
+#, fuzzy
+msgid "Unselect Chat"
+msgstr "בקשה לשיחה קולית"
+
 msgid "Unsupported certificate purpose"
 msgstr "תכלית תעודה לא נתמכת"
 
@@ -5916,10 +5926,6 @@ msgstr "אינך מחובר לשרת"
 msgid "Use defined profile in configuration directory"
 msgstr "cli"
 
-# BUG: _underline
-msgid "Use file transfer proxies"
-msgstr "השתמש בצירי (proxy) העברת קובץ"
-
 msgid "Use proxy auth_entication"
 msgstr "השתמש באימות _proxy"
 
@@ -5929,10 +5935,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "cli"
-
-#, fuzzy
-msgid "User Interface"
-msgstr "שם _משתמש:"
 
 msgid "User Interface Font Size"
 msgstr ""
@@ -6026,9 +6028,6 @@ msgstr "לכתובת URL של חיפוש ברשת חסר \"%s\""
 msgid "Web _Search for it"
 msgstr "_חפש ברשת"
 
-msgid "WebSocket URL"
-msgstr ""
-
 msgid "Website"
 msgstr ""
 
@@ -6078,10 +6077,6 @@ msgstr "קיצורי מקש"
 #, fuzzy
 msgid "Workspace settings…"
 msgstr "קיצורי מקש"
-
-#, fuzzy
-msgid "Workspaces"
-msgstr "שינוי שם איש קשר"
 
 msgid "X11"
 msgstr ""
@@ -6308,11 +6303,6 @@ msgstr "חשבונך החדש נוצר בהצלחה"
 msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
-# ארכיונאות
-#, fuzzy
-msgid "Your archiving preferences have successfully been saved."
-msgstr "העדפות גנזך עבור ‫%s"
-
 #, fuzzy
 msgid "Your chat history database has been migrated successfully."
 msgstr "חשבונך החדש נוצר בהצלחה"
@@ -6353,7 +6343,7 @@ msgid ""
 "of a different server."
 msgstr ""
 
-msgid "Your server offers the following features"
+msgid "Your service offers the following features"
 msgstr ""
 
 #, fuzzy
@@ -6748,6 +6738,10 @@ msgstr "עושה כעת משהו אחר"
 msgid "italic"
 msgstr "נטוי"
 
+#, fuzzy, python-format
+msgid "last seen: %s"
+msgstr "סיבה"
+
 msgid "lat"
 msgstr "קו רוחב"
 
@@ -7119,12 +7113,20 @@ msgstr ""
 #~ msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 #, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "תוספים"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "מופעלת"
 
 #, fuzzy
 #~ msgid "Add _Contact…"
 #~ msgstr "הוסף _איש קשר..."
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "יצירת פוסט חדש"
 
 #, fuzzy
 #~ msgid "Add reaction"
@@ -7139,8 +7141,33 @@ msgstr ""
 #~ msgstr "ערוך _קבוצות"
 
 #, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "_התאם למצב"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "_התאם למצב"
+
+#, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "קבוצות"
+
+#, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "ערוך העדפות _ארכיונאות"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "ערוך העדפות _ארכיונאות"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "ערוך העדפות _ארכיונאות"
+
+# ארכיונאות
+#, python-format
+#~ msgid "Archiving Preferences for %s"
+#~ msgstr "העדפות גנזך עבור ‫%s"
 
 #, fuzzy
 #~ msgid "Are you sure you want to leave this group chat?"
@@ -7170,6 +7197,14 @@ msgstr ""
 #~ msgstr "הרשאה נשלחה"
 
 #, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "קיצורי מקש"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "נעדר לזמן ארוך"
+
+#, fuzzy
 #~ msgid "Autojoin"
 #~ msgstr "ה_צטרף אוטומטית"
 
@@ -7177,6 +7212,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "בדיקת איות בעת הלחנת הודעות."
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "רשימת אסירה"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "רשימת פרטיות עבור ‫%s"
 
 #, fuzzy
 #~ msgid "Bookmarks"
@@ -7195,15 +7238,17 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "אין אפשרות לכתוב על קובץ קיים \"%s\""
 
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr "תעודה עבור חשבון ‫%s"
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "התראות"
 
 #, fuzzy
 #~ msgid "Ch_ange Subject"
 #~ msgstr "שנה _נושא..."
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "איש קשר"
 
 #, fuzzy
 #~ msgid "Checking file…"
@@ -7225,20 +7270,40 @@ msgstr ""
 #~ msgstr "הוספת איש קשר זה לרשימה (Ctrl+D)"
 
 #, fuzzy
-#~ msgid "Close Search"
-#~ msgstr "חיפוש"
+#~ msgid "Clear message entry"
+#~ msgstr "הודעה נשלחה"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "תעודת לקוח"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
 #~ msgstr "הושלמה"
 
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "חיבור"
+
 #~ msgid "Connection not available"
 #~ msgstr "חיבור לא זמין"
 
 #, fuzzy
+#~ msgid "Contact Addresses"
+#~ msgstr "הודעת איש קשר:"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "הרשמה בוטלה"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "מידע איש קשר"
 
 #, fuzzy
 #~ msgid "Contact list"
@@ -7270,7 +7335,19 @@ msgstr ""
 #~ msgstr "cli"
 
 #, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "ה_עתק מיקום קישור"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "cli"
+
+#, fuzzy
 #~ msgid "Create _Group Chat…"
+#~ msgstr "עזוב שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "Create new group chat"
 #~ msgstr "עזוב שיחות קבוצה"
 
 #~ msgid "Create new post"
@@ -7282,6 +7359,12 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "ברירת מחדל"
+
+# BUG: Free for Chat
+# BUG: x2
+#, fuzzy
+#~ msgid "Default for chats"
+#~ msgstr "חופשי לשיחה"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7356,6 +7439,14 @@ msgstr ""
 #~ "forwarding) לשם העברת קובץ."
 
 #, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "תעודת לקוח"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "שגיאה בקבלת dataform"
+
+#, fuzzy
 #~ msgid "Error!"
 #~ msgstr "שגיאה"
 
@@ -7419,6 +7510,10 @@ msgstr ""
 #~ msgid "Full Message View"
 #~ msgstr "הודעה נשלחה"
 
+# In Hebrew: גאג'ים
+#~ msgid "Gajim"
+#~ msgstr "‫Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "‏Gajim מרחוק"
@@ -7456,12 +7551,31 @@ msgstr ""
 #~ msgstr "עמוד בית:"
 
 #, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_פורט:"
+
+# מצוי/ה בחוסר פעילות
+#, fuzzy, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr "בחוסר פעילות מאז %s"
+
+#, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
 #~ "restore it when showing the window again."
 #~ msgstr ""
 #~ "כאשר מופעלת, Gajim ישמור את מיקום הרשימה כאשר הרשימה מוסתרת, וישחזרה כאשר "
 #~ "הרשימה מוצגת."
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "כאשר מופעלת, תהיה באפשרותך להגדיר עדיפות שלילית עבור חשבונך בתוך חלון "
+#~ "התאמת חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה שום "
+#~ "הודעה מתוך השרת שלך."
 
 #, fuzzy
 #~ msgid ""
@@ -7497,8 +7611,28 @@ msgstr ""
 #~ msgstr "סיבה"
 
 #, fuzzy
+#~ msgid "Location:"
+#~ msgstr "מיקום: "
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "תוספים"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "ה_תאם חשבון..."
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "איש קשר"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "הודעות"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "cli"
 
 # BUG: and (A or THE) contact
 # קיימת לרשותך
@@ -7556,6 +7690,9 @@ msgstr ""
 #~ msgid "Organization (O)"
 #~ msgstr "בחופשה"
 
+#~ msgid "PKCS12 Files"
+#~ msgstr "קבצי PKCS12"
+
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "_חזור"
@@ -7588,12 +7725,27 @@ msgstr ""
 #~ msgstr "התקדמות"
 
 #, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "מ_ארח proxy:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "_פרוקסי:"
+
+#, fuzzy
 #~ msgid "Re-Login"
 #~ msgstr "להתחבר מחדש עכשיו?"
 
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "האם OpenPGP מאופשרת עבור איש קשר זה?"
+
+# (שנפתחו) לאחרונה
+# (חדרים/ערוצים) אחרונים
+# (כתובות) אחרונות
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "אחרונים:"
 
 #~ msgid "Recipient: "
 #~ msgstr "נמען: "
@@ -7632,10 +7784,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove from contact list"
 #~ msgstr "cli"
-
-#, fuzzy
-#~ msgid "Remove…"
-#~ msgstr "הס_ר"
 
 #, fuzzy
 #~ msgid "Report"
@@ -7681,6 +7829,11 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_שלח"
 
+# By last state
+#, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "לפי מצב אחרון"
+
 #, fuzzy
 #~ msgid "Send File Directly…"
 #~ msgstr "שמור קובץ בשם..."
@@ -7689,12 +7842,35 @@ msgstr ""
 #~ msgid "Send Files Directly"
 #~ msgstr "שמור קובץ בשם..."
 
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "מסירת הודעה"
+
 #~ msgid "Sender: "
 #~ msgstr "ממען: "
 
 #, fuzzy
 #~ msgid "Serial Number"
 #~ msgstr "מספר GG:"
+
+#~ msgid "Server"
+#~ msgstr "שרת"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "שרת"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "תגובת שרת: %s"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "תגובת שרת: %s"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "תגובת שרת: %s"
 
 # In Hebrew: גאג'ים
 #, fuzzy
@@ -7712,6 +7888,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show _Features"
 #~ msgstr "תכונות"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "הצג _מסוף XML"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7758,8 +7938,16 @@ msgstr ""
 #~ msgstr "בקשת הרשמה"
 
 #, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "הרשמה: "
+
+#, fuzzy
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "מציאת שירות באמצעות חשבון ‫%s"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "התחלת שיחה"
 
 #~ msgid "Synchronise"
 #~ msgstr "סנכרון"
@@ -7769,6 +7957,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "סנכרן אנשי קשר"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "גרסא:"
 
 # אופן מסולף
 #, fuzzy, python-format
@@ -7807,6 +7999,13 @@ msgstr ""
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "מוביל \"%s\" יוסר"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "התייחסות לצמדים של * / _  בתור תווי עיצוב אפשריים."
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "לחן: "
+
 #, fuzzy
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
@@ -7821,17 +8020,20 @@ msgstr ""
 #~ msgstr "בדיקת איות"
 
 #, fuzzy
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "שמור קובץ בשם..."
-
-#, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "שמור קובץ בשם..."
 
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "שרת STUN:"
+
+# BUG: _underline
+#~ msgid "Use file transfer proxies"
+#~ msgstr "השתמש בצירי (proxy) העברת קובץ"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "שם _משתמש:"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7856,6 +8058,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "שינוי שם איש קשר"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"
@@ -7895,13 +8101,14 @@ msgstr ""
 #~ "לא תעמוד עוד לרשותך האפשרות לקבל וגם לשלוח הודעות מאנשי קשר באמצעות מוביל "
 #~ "זה."
 
+# ארכיונאות
+#, fuzzy
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "העדפות גנזך עבור ‫%s"
+
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "חשבונות"
-
-#, fuzzy
-#~ msgid "_Add Account…"
-#~ msgstr "הוסף _איש קשר..."
 
 #, fuzzy
 #~ msgid "_Debug Console"

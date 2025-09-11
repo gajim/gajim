@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:14+0000\n"
-"PO-Revision-Date: 2025-09-03 11:18+0000\n"
+"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"PO-Revision-Date: 2025-09-10 20:28+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -438,9 +438,6 @@ msgstr "Ошибка удаления учётной записи"
 msgid "Account Removed"
 msgstr "Учётная запись удалена"
 
-msgid "Account Settings…"
-msgstr "Параметры учётной записи…"
-
 msgid "Account Wizard"
 msgstr "Мастер учётной записи"
 
@@ -461,6 +458,9 @@ msgstr "Учётная запись должна быть подключена"
 
 msgid "Account is being created"
 msgstr "Создаётся учётная запись"
+
+msgid "Account is not connected"
+msgstr "Учётная запись не подключена"
 
 msgid "Account is not connected."
 msgstr "Учётная запись не подключена."
@@ -506,6 +506,9 @@ msgstr "Добавить"
 msgid "Add Account"
 msgstr "Добавление учётной записи"
 
+msgid "Add Account…"
+msgstr "Добавить аккаунт…"
+
 msgid "Add Contact"
 msgstr "Добавление контакта"
 
@@ -539,6 +542,9 @@ msgstr "Добавить вкладку"
 msgid "Add a checkmark to received messages"
 msgstr "Поставьте галочку для полученных сообщений"
 
+msgid "Add a label to distinguish accounts in Gajim"
+msgstr "Добавьте метку, чтобы различать аккаунты в Gajim"
+
 msgid "Add a name and color for your account"
 msgstr "Добавьте имя и цвет для вашей учетной записи"
 
@@ -547,9 +553,6 @@ msgstr "Добавьте параметр, который Вы хотите из
 
 msgid "Add new Theme"
 msgstr "Добавить новую тему"
-
-msgid "Add new line"
-msgstr "Добавить новую строку"
 
 msgid "Add some details…"
 msgstr "Добавить некоторые детали…"
@@ -583,12 +586,6 @@ msgstr "Адрес"
 msgid "Address does not belong to a group chat server"
 msgstr "Адрес не принадлежит серверу группового чата"
 
-msgid "Adjust to Status"
-msgstr "В зависимости от статуса"
-
-msgid "Adjust to status"
-msgstr "Настроить статус"
-
 msgid "Admin"
 msgstr "Админ"
 
@@ -617,6 +614,10 @@ msgstr "Расширенные параметры"
 
 msgid "Advanced settings"
 msgstr "Расширенные параметры"
+
+#, python-format
+msgid "Advanced – %(account)s"
+msgstr ""
 
 #, python-format
 msgid "Adw Version: %s"
@@ -750,28 +751,25 @@ msgstr "Архив пуст"
 msgid "Archive is malformed"
 msgstr "Формат архива не поддерживается"
 
+msgid "Archiving"
+msgstr "Архивирование"
+
 msgctxt "Group chat feature"
 msgid "Archiving"
 msgstr "Архивирование"
 
-msgid "Archiving Preferences"
-msgstr "Параметры архивирования"
-
-msgid "Archiving Preferences Error"
-msgstr "Ошибка настройки параметров архивирования"
-
-msgid "Archiving Preferences Saved"
-msgstr "Параметры архивирования сохранены"
-
 #, python-format
-msgid "Archiving Preferences for %s"
-msgstr "Параметры архивирования для %s"
+msgid "Archiving – %(account)s"
+msgstr ""
 
 msgid "Ask For Status Message on…"
 msgstr "Запрашивать сообщение о статусе…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Спрашивать перед закрытием окна/вкладки группового чата."
+
+msgid "Ask before connecting unencrypted"
+msgstr "Спрашивать перед установкой незашифрованного подключения"
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Спрашивать перед выходом, когда окно приложения закрыто"
@@ -827,12 +825,6 @@ msgstr "Авторы"
 
 msgid "Auto Away"
 msgstr "Автоматически устанавливать статус «Отошёл»"
-
-msgid "Auto Away Settings"
-msgstr "Параметры автоматической установки статуса «Отошёл»"
-
-msgid "Auto Extended Away Settings"
-msgstr "«Отошёл» (расширенные параметры)"
 
 msgid "Auto Not Available"
 msgstr "Автоматически устанавливать статус «Недоступен»"
@@ -919,15 +911,15 @@ msgstr "Заблокировать контакт…"
 msgid "Block Participant?"
 msgstr "Заблокировать участника?"
 
-msgid "Blocked Participants"
-msgstr "Заблокированные участники"
-
-msgid "Blocking List"
-msgstr "Чёрный список"
+msgid "Blocked Contacts"
+msgstr "Заблокированные контакты"
 
 #, python-format
-msgid "Blocking List for %s"
-msgstr "Список блокировки для %s"
+msgid "Blocked Contacts – %(account)s"
+msgstr "Заблокированные контакты - %(account)s"
+
+msgid "Blocked Participants"
+msgstr "Заблокированные участники"
 
 msgid "Block…"
 msgstr "Заблокировать…"
@@ -1001,8 +993,9 @@ msgstr "Отменить скачивание"
 msgid "Certificate"
 msgstr "Сертификат"
 
-msgid "Certificate Settings"
-msgstr "Параметры сертификата"
+#, python-format
+msgid "Certificate - %(account)s"
+msgstr "Сертификат - %(account)s"
 
 msgid "Certificate Verification Failed"
 msgstr "Проверка сертификата не удалась"
@@ -1044,7 +1037,7 @@ msgid "Change Subject"
 msgstr "Изменить тему"
 
 msgid "Change your account’s password, etc."
-msgstr "Смена пароля и тому подобное"
+msgstr "Смена пароля и т.п."
 
 msgid "Change your profile picture"
 msgstr "Изменить аватар"
@@ -1083,9 +1076,6 @@ msgstr "Заголовок чата: Шрифт текста"
 
 msgid "Chat Details and Settings"
 msgstr "Подробная информация и параметры чата"
-
-msgid "Chat List"
-msgstr "Список контактов"
 
 msgid "Chat Type"
 msgstr "Тип чата"
@@ -1128,6 +1118,9 @@ msgstr "Проверьте, какие функции доступны"
 msgid "Choose Device"
 msgstr "Выберите устройство"
 
+msgid "Choose Emoji"
+msgstr "Выберите эмоджи"
+
 msgid "Choose History Export Directory"
 msgstr "Выберите каталог для экспорта истории"
 
@@ -1142,9 +1135,6 @@ msgstr "Выберите группу…"
 
 msgid "Choose encryption"
 msgstr "Выберите шифрование"
-
-msgid "Cipher Suite"
-msgstr "Набор шифров"
 
 msgid "City"
 msgstr "Город"
@@ -1161,11 +1151,11 @@ msgstr "Удалить устройства…"
 msgid "Clear File"
 msgstr "Очистить файл"
 
+msgid "Clear Input"
+msgstr "Очистить поле ввода"
+
 msgid "Clear Sound"
 msgstr "Удалить звук"
-
-msgid "Clear message entry"
-msgstr "Очистить поле ввода сообщения"
 
 msgid ""
 "Click messages to select them\n"
@@ -1192,17 +1182,14 @@ msgstr ""
 "зарегистрированных в IANA. Разделены пробелами, в нижнем регистре, без "
 "двоеточий."
 
-msgid "Client Certificate"
-msgstr "Клиентский сертификат"
-
 msgid "Close"
 msgstr "Закрыть"
 
+msgid "Close Chat"
+msgstr "Закрыть чат"
+
 msgid "Close a chat by pressing the Escape key"
 msgstr "Закрывать чат при нажатии клавиши Escape"
-
-msgid "Close chat"
-msgstr "Закрыть чат"
 
 msgid "Close with Escape"
 msgstr "Закрывать по клавише Escape"
@@ -1242,9 +1229,6 @@ msgstr ""
 
 msgid "Complete"
 msgstr "Завершить"
-
-msgid "Complete a command or a nickname"
-msgstr "Завершите ввод команды или псевдонима"
 
 msgid "Completed"
 msgstr "Завершено"
@@ -1291,9 +1275,6 @@ msgstr "Соединение"
 msgid "Connection Error"
 msgstr "Ошибка соединения"
 
-msgid "Connection Settings"
-msgstr "Параметры подключения"
-
 msgid "Connection failed"
 msgstr "Ошибка подключения"
 
@@ -1301,14 +1282,18 @@ msgstr "Ошибка подключения"
 msgid "Connection with %s could not be established."
 msgstr "Соединение с %s не может быть установлено."
 
+#, python-format
+msgid "Connection – %(account)s"
+msgstr ""
+
 msgid "Contact"
 msgstr "Контакт"
 
-msgid "Contact Addresses"
-msgstr "Контактные адреса"
-
 msgid "Contact Connected"
 msgstr "Контакт подключился"
+
+msgid "Contact Details"
+msgstr "Сведения о контакте"
 
 msgid "Contact Disconnected"
 msgstr "Контакт отключился"
@@ -1324,6 +1309,10 @@ msgstr "Список контактов"
 
 msgid "Contact List Exchange"
 msgstr "Обмен списками контактов"
+
+#, python-format
+msgid "Contact List – %(account)s"
+msgstr "Список контактов - %(account)s"
 
 msgid "Contact List: Contact Background Color"
 msgstr "Список контактов: Цвет фона контакта"
@@ -1348,9 +1337,6 @@ msgstr "Контакт удален"
 
 msgid "Contact Request"
 msgstr "Запрос на добавление в контакты"
-
-msgid "Contact information"
-msgstr "Информация о контакте"
 
 msgid "Contacts"
 msgstr "Контакты"
@@ -1401,17 +1387,11 @@ msgstr "Копировать XMPP-адрес/почтовый адрес"
 msgid "Copy code snippet"
 msgstr "Копировать фрагмент кода"
 
-msgid "Copy info to clipboard"
-msgstr "Копировать информацию в буфер обмена"
-
 msgid "Copy to Clipboard"
 msgstr "Копировать в буфер обмена"
 
 msgid "Copy to clipboard"
 msgstr "Копировать в буфер обмена"
-
-msgid "Correct the last message"
-msgstr "Изменить последнее сообщение"
 
 msgctxt "Message row action"
 msgid "Correct…"
@@ -1454,8 +1434,8 @@ msgstr "Создать групповой чат…"
 msgid "Create New Account"
 msgstr "Создать новую учетную запись"
 
-msgid "Create new group chat"
-msgstr "Создать новый групповой чат"
+msgid "Create New Group Chat"
+msgstr "Создание группового чата"
 
 msgid "Creating Account..."
 msgstr "Создание учетной записи..."
@@ -1466,11 +1446,14 @@ msgstr "Не удалось создать миниатюру"
 msgid "Credentials expired"
 msgstr "Срок действия учетных данных истек"
 
+msgid "Custom"
+msgstr ""
+
 msgid "D-Bus Interface"
 msgstr "Интерфейс D-Bus"
 
-msgid "DNS"
-msgstr "DNS"
+msgid "Danger Zone"
+msgstr "Опасная зона"
 
 msgid "Dark Theme"
 msgstr "Тёмная тема"
@@ -1493,8 +1476,8 @@ msgstr "Журнал отладки"
 msgid "Decline"
 msgstr "Отклонить"
 
-msgid "Decrease User Interface Font Size"
-msgstr "Уменьшить размер шрифта пользовательского интерфейса"
+msgid "Decrease Font Size"
+msgstr "Уменьшить размер шрифта"
 
 msgid "Decrease playback speed"
 msgstr "Уменьшить скорость проигрывания"
@@ -1514,14 +1497,14 @@ msgstr "Вкладка по умолчанию"
 msgid "Default device"
 msgstr "Устройство по умолчанию"
 
-msgid "Default for chats"
-msgstr "По умолчанию для чатов"
+msgid "Default for chats (e.g. Contact is typing)"
+msgstr "По умолчанию для чатов (например, контакт набирает текст)"
 
 msgid "Default for chats and private group chats"
 msgstr "По умолчанию для чатов и приватных групповых чатов"
 
-msgid "Default for group chats"
-msgstr "По умолчанию для групповых чатов"
+msgid "Default for group chats (e.g. Contact is typing)"
+msgstr "По умолчанию для групповых чатов (например, контакт печатает)"
 
 msgid "Default for new group chats"
 msgstr "По умолчанию для новых групповых чатов"
@@ -1569,6 +1552,13 @@ msgstr "_Удалить…"
 
 msgid "Details"
 msgstr "Детали"
+
+#, python-format
+msgid "Details - %(account)s"
+msgstr ""
+
+msgid "Details about the certificate used by this connection"
+msgstr "Подробности о сертификате, используемом в этом соединении"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1621,10 +1611,6 @@ msgstr "Раскрыть информацию о воспроизводимых 
 
 msgid "Disclose information about the operating system you currently use"
 msgstr "Раскрыть информацию об используемой операционной системе"
-
-msgid "Disclose the local system time of the device Gajim runs on"
-msgstr ""
-"Раскрыть локальное системное время устройства, на котором работает Gajim"
 
 msgid "Disclose the time of your last activity"
 msgstr "Сообщать время Вашей последней активности"
@@ -1696,9 +1682,6 @@ msgstr ""
 "В результате этого действия отпечаток будет удалён без возможности "
 "восстановления"
 
-msgid "Domain"
-msgstr "Домен"
-
 msgid "Download"
 msgstr "Скачать"
 
@@ -1725,6 +1708,9 @@ msgstr "Перетащите файлы сюда"
 
 msgid "Eating"
 msgstr "Принимаю пищу"
+
+msgid "Edit Shortcut"
+msgstr "Настроить сочетание клавиш"
 
 msgid "Edit display name…"
 msgstr "Изменить отображаемое имя…"
@@ -1754,6 +1740,9 @@ msgstr "Эмоджи"
 
 msgid "Enable"
 msgstr "Включить"
+
+msgid "Enable Account"
+msgstr "Включить аккаунт"
 
 msgid "Enable KeepassXC Integration"
 msgstr "Включить интеграцию с KeepassXC"
@@ -1785,14 +1774,15 @@ msgstr "Безопасное хранение паролей вместо хра
 msgid "Encrypted (%s)"
 msgstr "Зашифровано (%s)"
 
-msgid "Encrypted Certificate"
-msgstr "Шифрованный сертификат"
-
 msgid "Encrypting file…"
 msgstr "Шифрование файла…"
 
 msgid "Encryption (OMEMO)"
 msgstr "Шифрование (OMEMO)"
+
+#, python-format
+msgid "Encryption (OMEMO) – %(account)s"
+msgstr "Шифрование (OMEMO) - %(account)s"
 
 msgid "Encryption Error"
 msgstr "Ошибка шифрования"
@@ -1848,9 +1838,6 @@ msgstr "Ошибка в потоке аудиоданных."
 
 msgid "Error opening file"
 msgstr "Ошибка открытия файла"
-
-msgid "Error received: {}"
-msgstr "Получена ошибка: {}"
 
 msgid "Error while Exporting"
 msgstr "Ошибка при экспорте"
@@ -2056,6 +2043,9 @@ msgstr ""
 "Завершена синхронизация истории чата:\n"
 "%s сообщений загружено"
 
+msgid "Focus Search"
+msgstr "Фокус поиска"
+
 #, python-format
 msgid "Folder: %s"
 msgstr "Папка: %s"
@@ -2129,9 +2119,6 @@ msgstr "Версия GLib: %s"
 msgid "GTK Version: %s"
 msgstr "Версия GTK: %s"
 
-msgid "Gajim"
-msgstr "Gajim"
-
 #, python-format
 msgid "Gajim %s is available"
 msgstr "Доступен Gajim %s"
@@ -2190,6 +2177,10 @@ msgstr "Пол"
 
 msgid "General"
 msgstr "Общие"
+
+#, python-format
+msgid "General – %(account)s"
+msgstr "Основной - %(account)s"
 
 msgid "Global Group Chat Search"
 msgstr "Поиск глобальных групповых чатов"
@@ -2293,6 +2284,20 @@ msgstr "Дом"
 msgid "Hostname"
 msgstr "Имя хоста"
 
+#, python-format
+msgid "Hostname – %(account)s"
+msgstr "Имя хоста - %(account)s"
+
+#, python-format
+msgid ""
+"Hostname: %(hostname)s\n"
+"Software: %(software)s\n"
+"Uptime: %(uptime)s\n"
+msgstr ""
+"Имя хоста: %(hostname)s\n"
+"Приложение: %(software)s\n"
+"Время работы: %(uptime)s\n"
+
 msgid "How far back should the chat history be synchronized?"
 msgstr "За какой период времени должна быть синхронизирована история чата?"
 
@@ -2321,21 +2326,21 @@ msgctxt "Profile"
 msgid "IM Address"
 msgstr "IM-адрес"
 
-msgid "IP / Port"
-msgstr "IP / Порт"
-
 msgid "Id"
 msgstr "ID"
 
 msgid "Identified Error"
 msgstr "Обнаружена ошибка"
 
+msgid ""
+"Identifier for this device. Don’t change this unless you know what you are "
+"doing."
+msgstr ""
+"Идентификатор устройства. Не меняйте его, если не уверены в том, что вы "
+"делаете."
+
 msgid "Idle Time"
 msgstr "Время бездействия"
-
-#, python-format
-msgid "Idle since: %s"
-msgstr "Бездействует с: %s"
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2361,16 +2366,6 @@ msgstr ""
 "При включении параметра Gajim попытается использовать STUN-сервер при "
 "использовании Jingle, который указан опцией 'stun_server', либо "
 "предоставленный XMPP-сервером."
-
-msgid ""
-"If enabled, you will be able to set a negative priority to your account in "
-"the Accounts window. BE CAREFUL, when you are logged in with a negative "
-"priority, you will NOT receive any message from your server."
-msgstr ""
-"При включении параметра появляется возможность назначить отрицательный "
-"приоритет для учётной записи в окне настройки учётных записей. БУДЬТЕ "
-"ОСТОРОЖНЫ, при подключении с отрицательным приоритетом, Вы НЕ получите "
-"никаких сообщений от сервера."
 
 msgid "Ignore Unknown Contacts"
 msgstr "Игнорировать неизвестные контакты"
@@ -2416,8 +2411,8 @@ msgstr "Входящий звонок"
 msgid "Incoming Call (Video)"
 msgstr "Входящий звонок (Видео)"
 
-msgid "Increase User Interface Font Size"
-msgstr "Увеличить размер шрифта пользовательского интерфейса"
+msgid "Increase Font Size"
+msgstr "Увеличить размер шрифта"
 
 msgid "Increase playback speed"
 msgstr "Увеличить скорость проигрывания"
@@ -2427,9 +2422,6 @@ msgstr "Информация"
 
 msgid "Insecure Connection"
 msgstr "Небезопасное соединение"
-
-msgid "Insert Emoji"
-msgstr "Вставить смайлик"
 
 msgid "Install"
 msgstr "Установить"
@@ -2640,9 +2632,6 @@ msgstr "Не удалось загрузить изображение авата
 msgid "Loading…"
 msgstr "Загрузка…"
 
-msgid "Local System Time"
-msgstr "Местное системное время"
-
 msgid "Local Time"
 msgstr "Местное время"
 
@@ -2658,9 +2647,6 @@ msgstr "Местные новостные сообщения"
 msgid "Location at %s"
 msgstr "Местоположение на %s"
 
-msgid "Location:"
-msgstr "Местоположение:"
-
 msgid "Log"
 msgstr "Журнал"
 
@@ -2673,8 +2659,9 @@ msgstr "Войти в систему со своими учётными данн
 msgid "Login"
 msgstr "Авторизация"
 
-msgid "Login Settings"
-msgstr "Настройки входа"
+#, python-format
+msgid "Login – %(account)s"
+msgstr "Логин - %(account)s"
 
 msgid "Look it up in _Dictionary"
 msgstr "Искать в _словаре"
@@ -2697,17 +2684,14 @@ msgstr "Мужской"
 msgid "Manage"
 msgstr "Управление"
 
-msgid "Manage Accounts…"
-msgstr "Управление учётными записями…"
-
-msgid "Manage Contact List"
-msgstr "Управление списком контактов"
-
 msgid "Manage Proxies"
 msgstr "Управление профилями прокси"
 
 msgid "Manage Proxies..."
 msgstr "Управление прокси..."
+
+msgid "Manage Shortcuts"
+msgstr "Управление сочетаниями клавиш"
 
 msgid "Manage Sounds"
 msgstr "Управление звуками"
@@ -2772,9 +2756,6 @@ msgstr "Получено сообщение"
 msgid "Message Sent"
 msgstr "Сообщение отправлено"
 
-msgid "Message composition"
-msgstr "Содержимое сообщения"
-
 msgid "Message content unknown"
 msgstr "Содержимое сообщения неизвестно"
 
@@ -2785,6 +2766,9 @@ msgid ""
 msgstr ""
 "Сообщение было отредактировано. Исходное сообщение:\n"
 "%s"
+
+msgid "Messages"
+msgstr "Сообщения"
 
 msgid "Messages are archived on the server"
 msgstr "Сообщения архивируются на сервере"
@@ -2946,8 +2930,8 @@ msgstr "Никаких дополнительных требований"
 msgid "No automatic preview"
 msgstr "Автоматический предпросмотр отключён"
 
-msgid "No certificate"
-msgstr "Сертификат отсутствует"
+msgid "No certificate available"
+msgstr "Сертификат недоступен"
 
 msgid "No commands available"
 msgstr "Нет доступных команд"
@@ -2985,6 +2969,9 @@ msgstr "Группа не назначена"
 
 msgid "No info available"
 msgstr "Информация недоступна"
+
+msgid "No keys pressed"
+msgstr "Ни одна клавиша не нажата"
 
 msgid "No results"
 msgstr "Ничего не найдено"
@@ -3142,9 +3129,6 @@ msgstr "Открыть как _ссылку"
 msgid "Open folder"
 msgstr "Открыть папку"
 
-msgid "Open search bar"
-msgstr "Открыть панель поиска"
-
 msgid "OpenGL accelerated"
 msgstr "Ускорение OpenGL"
 
@@ -3208,9 +3192,6 @@ msgid ""
 msgstr ""
 "PEP-узел %(node)s не был удалён:\n"
 "%(message)s"
-
-msgid "PKCS12 Files"
-msgstr "Файлы PKCS12"
 
 msgid "PNG files"
 msgstr "PNG файлы"
@@ -3330,8 +3311,7 @@ msgid "Play Sounds"
 msgstr "Воспроизводить звуки"
 
 msgid "Play sounds even when you are Away, Busy, etc."
-msgstr ""
-"Воспроизводить звуки, даже при статусе «Отошёл», «Занят» и тому подобных"
+msgstr "Воспроизводить звуки, даже при статусе «Отошёл», «Занят» и т.д."
 
 msgid "Play sounds to notify about events"
 msgstr "Воспроизводить звуки для оповещения о событиях"
@@ -3420,6 +3400,13 @@ msgstr "Параметры"
 msgid "Presets"
 msgstr "Предустановки"
 
+msgid ""
+"Press the keys you want to associate with this action. To disable this "
+"shortcut, click apply."
+msgstr ""
+"Нажмите клавиши, которые вы хотите связать с этим действием. Чтобы отключить "
+"это сочетание клавиш, нажмите «Применить»."
+
 msgid "Preview Size"
 msgstr "Размер предпросмотра"
 
@@ -3445,6 +3432,10 @@ msgstr "Приоритет"
 msgid "Privacy"
 msgstr "Конфиденциальность"
 
+#, python-format
+msgid "Privacy – %(account)s"
+msgstr ""
+
 msgid "Private"
 msgstr "Частный"
 
@@ -3465,8 +3456,16 @@ msgid "Protocol"
 msgstr "Протокол"
 
 #, python-format
+msgid "Provider - %(account)s"
+msgstr "Провайдер - %(account)s"
+
+#, python-format
 msgid "Provider Category: %s"
 msgstr "Категория сервера: %s"
+
+#, python-format
+msgid "Provider Contacts - %(account)s"
+msgstr "Контакты провайдера - %(account)s"
 
 msgid "Provider Infos"
 msgstr "Информация о сервере"
@@ -3482,12 +3481,6 @@ msgstr "Прокси"
 
 msgid "Proxy"
 msgstr "Прокси"
-
-msgid "Proxy Host"
-msgstr "Хост прокси"
-
-msgid "Proxy Type"
-msgstr "Тип прокси"
 
 msgid "Proxy, custom hostname and port"
 msgstr "Прокси, настраиваемое имя хоста и порт"
@@ -3535,10 +3528,10 @@ msgstr "Выйти"
 msgid "Quit Gajim"
 msgstr "Выход из Gajim"
 
-msgid "Quote next message"
+msgid "Quote Next Message"
 msgstr "Цитировать следующее сообщение"
 
-msgid "Quote previous message"
+msgid "Quote Previous Message"
 msgstr "Цитировать предыдущее сообщение"
 
 msgid "Re-Login Now?"
@@ -3576,9 +3569,6 @@ msgctxt "Message state"
 msgid "Received"
 msgstr "Получено"
 
-msgid "Recent history"
-msgstr "Недавняя история"
-
 msgid "Recognize your account by color"
 msgstr "Подсвечивать учётную запись цветом"
 
@@ -3608,6 +3598,9 @@ msgstr "Регистрация выполнена успешно"
 
 msgid "Reject file transfer"
 msgstr "Отменить передачу файла"
+
+msgid "Reload"
+msgstr "Перезагрузить"
 
 msgid "Remember Last Status"
 msgstr "Запомнить последний статус"
@@ -3689,8 +3682,19 @@ msgstr[0] "Удалён %(count)s контакт"
 msgstr[1] "Удалено %(count)s контакта"
 msgstr[2] "Удалено %(count)s контактов"
 
+msgid "Remove…"
+msgstr "Удалить…"
+
 msgid "Removing Account..."
 msgstr "Удаление учётной записи..."
+
+msgid ""
+"Removing the account will delete most related data. If you want to "
+"disconnect the account for a short time, use the status selector."
+msgstr ""
+"Удаление учётной записи приведёт к удалению большинства связанных с ней "
+"данных. Если вы хотите кратковременно отключить учётную запись, "
+"воспользуйтесь переключением статусов."
 
 msgid "Rename"
 msgstr "Переименовать"
@@ -3768,11 +3772,11 @@ msgstr "Сброс параметров"
 msgid "Reset Filters"
 msgstr "Сбросить фильтры"
 
+msgid "Reset Font Size"
+msgstr "Сбросить размер шрифта"
+
 msgid "Reset Hints"
 msgstr "Сбросить подсказки"
-
-msgid "Reset User Interface Font Size"
-msgstr "Сбросить размер шрифта пользовательского интерфейса"
 
 msgid "Reset all chats to the current default value"
 msgstr "Сбросить все чаты до текущего значения по умолчанию"
@@ -3795,8 +3799,8 @@ msgstr "Перезапустите Gajim для завершения обнов�
 msgid "Restart Pending"
 msgstr "Ожидание перезапуска"
 
-msgid "Restore chat"
-msgstr "Восстановить чат"
+msgid "Restore Closed Chat"
+msgstr "Восстановить закрытый чат"
 
 msgid "Restore last state"
 msgstr "Восстановить последнее состояние"
@@ -3891,20 +3895,23 @@ msgstr "Просканируйте этот QR-код для входа в ча�
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканирование %(current)d / %(total)d …"
 
-msgid "Scroll down"
+msgid "Scroll Down"
 msgstr "Прокрутить вниз"
+
+msgid "Scroll Up"
+msgstr "Прокрутить вверх"
 
 msgid "Scroll to this message"
 msgstr "Прокрутить до этого сообщения"
-
-msgid "Scroll up"
-msgstr "Прокрутить вверх"
 
 msgid "Scroll up to load more chat history…"
 msgstr "Прокрутите вверх, чтобы подгрузить остальную историю чата…"
 
 msgid "Search"
 msgstr "Поиск"
+
+msgid "Search Chat History"
+msgstr "Поиск в истории чата"
 
 msgid "Search Filters"
 msgstr "Поисковые фильтры"
@@ -3988,9 +3995,6 @@ msgstr "Выберите метку конфиденциальности для 
 msgid "Select an activity to see details."
 msgstr "Выберите действие, чтобы просмотреть подробности."
 
-msgid "Select an emoji"
-msgstr "Выберите эмодзи"
-
 msgid "Select playback speed"
 msgstr "Выберите скорость проигрывания"
 
@@ -4010,17 +4014,14 @@ msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
 msgstr "Полуанонимный"
 
-msgid "Send Chat Markers"
+msgid "Send Chat Indicators"
 msgstr "Отправлять маркеры чата"
+
+msgid "Send Chat Indicators in Group Chats"
+msgstr "Отправлять состояние чата в групповые чаты"
 
 msgid "Send Chat State"
 msgstr "Отправлять состояние чата"
-
-msgid "Send Chatstate"
-msgstr "Отправлять состояние чата"
-
-msgid "Send Chatstate in Group Chats"
-msgstr "Отправлять состояние чата в групповые чаты"
 
 msgid "Send File"
 msgstr "Отправить файл"
@@ -4053,9 +4054,6 @@ msgstr "_Сообщить об ошибке"
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr "Оправлять сообщения по Ctrl+Enter и создавать новую строку по Enter."
 
-msgid "Send the message"
-msgstr "Отправить сообщение"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Отправляемый контакт: «%(jid)s» (%(name)s)"
@@ -4071,24 +4069,8 @@ msgstr ""
 msgid "Serial Number: "
 msgstr "Серийный номер: "
 
-msgid "Server"
-msgstr "Сервер"
-
-msgid "Server Info"
-msgstr "Информация о сервере"
-
 msgid "Server Shutdown"
 msgstr "Выключение сервера"
-
-msgid "Server Software"
-msgstr "Серверное ПО"
-
-#, python-format
-msgid "Server Software: %s\n"
-msgstr "Серверное ПО: %s\n"
-
-msgid "Server Uptime"
-msgstr "Время бесперебойной работы сервера"
 
 msgid "Service"
 msgstr "Сервис"
@@ -4108,6 +4090,9 @@ msgstr "Сервис недоступен для просмотра"
 
 msgid "Service Not Found"
 msgstr "Сервис не найден"
+
+msgid "Service Provider"
+msgstr "Поставщик услуг"
 
 msgid "Set Trust"
 msgstr "Установить доверие"
@@ -4148,6 +4133,9 @@ msgstr "Поделиться видео"
 
 msgid "Share my online status"
 msgstr "Показывать мой сетевой статус"
+
+msgid "Shortcuts"
+msgstr "Сочетания клавиш"
 
 msgid "Show Chat List"
 msgstr "Показать список чатов"
@@ -4197,11 +4185,6 @@ msgstr "Показать передачу файлов"
 msgid "Show Voice Message Button"
 msgstr "Отображать кнопку отправки голосового сообщения"
 
-msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr ""
-"Показывать диалоговое окно подтверждения перед установкой незашифрованного "
-"подключения"
-
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
@@ -4217,9 +4200,6 @@ msgstr "Показать все реакции"
 
 msgid "Show all warnings"
 msgstr "Показать все предупреждения"
-
-msgid "Show debug console"
-msgstr "Показать консоль отладки"
 
 msgid "Show in Taskbar"
 msgstr "Показывать на панели задач"
@@ -4459,9 +4439,6 @@ msgstr "Подписан"
 msgid "Subscription"
 msgstr "Подписка"
 
-msgid "Subscription:"
-msgstr "Подписка:"
-
 msgid "Successfully Added Contacts"
 msgstr "Контакты добавлены"
 
@@ -4488,32 +4465,77 @@ msgstr ""
 "Вместо этого, вы можете свернуть окно Gajim, либо полностью его скрыть. "
 "Используйте значок Gajim в системном трее, чтобы восстановить окно."
 
-msgid "Switch Workspace"
-msgstr "Переключить вкладку"
+msgid "Switch to Chat 1"
+msgstr "Перейти к Чату 1"
 
-msgid "Switch to the first - ninth chat"
-msgstr "Перейти на первую — девятую вкладку чата"
+msgid "Switch to Chat 2"
+msgstr "Перейти к Чату 2"
 
-msgid "Switch to the next chat"
+msgid "Switch to Chat 3"
+msgstr "Перейти к Чату 3"
+
+msgid "Switch to Chat 4"
+msgstr "Перейти к Чату 4"
+
+msgid "Switch to Chat 5"
+msgstr "Перейти к Чату 5"
+
+msgid "Switch to Chat 6"
+msgstr "Перейти к Чату 6"
+
+msgid "Switch to Chat 7"
+msgstr "Перейти к Чату 7"
+
+msgid "Switch to Chat 8"
+msgstr "Перейти к Чату 8"
+
+msgid "Switch to Chat 9"
+msgstr "Перейти к Чату 9"
+
+msgid "Switch to Next Chat"
 msgstr "Перейти к следующему чату"
 
-msgid "Switch to the next unread chat"
+msgid "Switch to Next Unread Chat"
 msgstr "Перейти к следующему непрочитанному чату"
 
-msgid "Switch to the previous chat"
+msgid "Switch to Previous Chat"
 msgstr "Перейти к предыдущему чату"
 
-msgid "Switch to the previous unread chat"
+msgid "Switch to Previous Unread Chat"
 msgstr "Перейти к предыдущему непрочитанному чату"
 
-msgid "Sync Group Chat Blocklist"
+msgid "Switch to Workspace 1"
+msgstr "Переключить вкладку 1"
+
+msgid "Switch to Workspace 2"
+msgstr "Переключить вкладку 2"
+
+msgid "Switch to Workspace 3"
+msgstr "Переключить вкладку 3"
+
+msgid "Switch to Workspace 4"
+msgstr "Переключить вкладку 4"
+
+msgid "Switch to Workspace 5"
+msgstr "Переключить вкладку 5"
+
+msgid "Switch to Workspace 6"
+msgstr "Переключить вкладку 6"
+
+msgid "Switch to Workspace 7"
+msgstr "Переключить вкладку 7"
+
+msgid "Switch to Workspace 8"
+msgstr "Переключить вкладку 8"
+
+msgid "Switch to Workspace 9"
+msgstr "Переключить вкладку 9"
+
+msgid "Sync Group Chat Block List"
 msgstr "Синхронизировать черный список группового чата"
 
 msgid "Sync Threshold"
 msgstr "Порог синхронизации"
-
-msgid "Sync group chat blocklist with other devices"
-msgstr "Синхронизировать с другими устройствами черный список группового чата"
 
 msgid "Synchronize"
 msgstr "Синхронизировать"
@@ -4523,6 +4545,9 @@ msgstr "Синхронизировать историю чата"
 
 msgid "Synchronize History…"
 msgstr "Синхронизировать историю…"
+
+msgid "Synchronize group chat block list with other devices"
+msgstr "Синхронизировать с другими устройствами черный список группового чата"
 
 msgid "Synchronize joined group chats"
 msgstr "Синхронизировать присоединённые групповые чаты"
@@ -4538,9 +4563,6 @@ msgstr "Синхронизация истории чата…"
 
 msgid "System"
 msgstr "Система"
-
-msgid "TLS Version"
-msgstr "Версия TLS"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4825,6 +4847,9 @@ msgstr "Это приведет к удалению списка устройс�
 msgid "This will purge all locally stored chat history"
 msgstr "Это приведёт к удалению всей локальной истории чата"
 
+msgid "This will remove the account and delete all data"
+msgstr "Это приведет к удалению учётной записи и всех данных"
+
 msgid "This will remove your account from Gajim."
 msgstr "Это приведёт к удалению вашей учётной записи из Gajim."
 
@@ -4881,9 +4906,6 @@ msgstr "Передача файла…"
 msgid "Transports"
 msgstr "Транспорты"
 
-msgid "Treat * / _ pairs as possible formatting characters."
-msgstr "Использовать пары * / _ как возможные символы форматирования."
-
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr "Планирование поездки"
@@ -4912,9 +4934,6 @@ msgstr "Попытка получения информации по этому �
 msgid "Trying to remove account..."
 msgstr "Попытка удаления учётной записи…"
 
-msgid "Tune:"
-msgstr "Мелодия:"
-
 msgid "Turn Camera off"
 msgstr "Выключить камеру"
 
@@ -4930,6 +4949,9 @@ msgstr "Тип"
 
 msgid "Type to search for values..."
 msgstr "Введите текст для поиска значений…"
+
+msgid "Typing Only"
+msgstr "Только печатает"
 
 msgid "URI"
 msgstr "URI-адрес"
@@ -5019,6 +5041,9 @@ msgstr "Включить уведомления"
 msgid "Unpin Chat"
 msgstr "Открепить чат"
 
+msgid "Unselect Chat"
+msgstr "Отменить выбор чата"
+
 msgid "Unsupported certificate purpose"
 msgstr "Неподдерживаемое назначение сертификата"
 
@@ -5096,9 +5121,6 @@ msgstr "Использовать незашифрованное соединен
 msgid "Use defined profile in configuration directory"
 msgstr "Использовать определенный профиль из каталога с настройками"
 
-msgid "Use file transfer proxies"
-msgstr "Использовать прокси для передачи файла"
-
 msgid "Use proxy auth_entication"
 msgstr "Использовать аут_ентификацию прокси"
 
@@ -5108,9 +5130,6 @@ msgstr "Использовать системное хранилище ключ�
 #, python-format
 msgid "User %s not found"
 msgstr "Пользователь %s не найден"
-
-msgid "User Interface"
-msgstr "Пользовательский интерфейс"
 
 msgid "User Interface Font Size"
 msgstr "Размер шрифта пользовательского интерфейса"
@@ -5190,14 +5209,11 @@ msgstr "В URL-адресе веб-поиска отсутствует стро�
 msgid "Web _Search for it"
 msgstr "_Искать в поисковых системах"
 
-msgid "WebSocket URL"
-msgstr "WebSocket URL"
-
 msgid "Website"
 msgstr "Веб-сайт"
 
 msgid "Welcome"
-msgstr "Добро пожаловать!"
+msgstr "Добро пожаловать"
 
 msgid "What does this mean?"
 msgstr "Что это значит?"
@@ -5237,9 +5253,6 @@ msgstr "Настройки вкладки"
 
 msgid "Workspace settings…"
 msgstr "Настройки вкладки…"
-
-msgid "Workspaces"
-msgstr "Вкладки"
 
 msgid "X11"
 msgstr "X11"
@@ -5433,9 +5446,6 @@ msgstr "Ваша учётная запись успешно удалена."
 msgid "Your affiliations to this group chat have been removed"
 msgstr "Ваше приглашение в этом групповом чате было удалено"
 
-msgid "Your archiving preferences have successfully been saved."
-msgstr "Ваши параметры архивирования успешно сохранены."
-
 msgid "Your chat history database has been migrated successfully."
 msgstr "Миграция базы данных истории чата успешно выполнена."
 
@@ -5474,8 +5484,8 @@ msgstr ""
 "Данный сервер не предоставляет услуги группового чата. Укажите адрес другого "
 "сервера."
 
-msgid "Your server offers the following features"
-msgstr "Ваш сервер предлагает следующие функции"
+msgid "Your service offers the following features"
+msgstr "Ваш сервер предоставляет следующие функции"
 
 msgid "ZIP files"
 msgstr "ZIP-файлы"
@@ -5807,6 +5817,10 @@ msgstr "занят чем-то другим"
 
 msgid "italic"
 msgstr "курсив"
+
+#, python-format
+msgid "last seen: %s"
+msgstr "Был(а): %s"
 
 msgid "lat"
 msgstr "широта"
@@ -6196,12 +6210,18 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Account %s is still connected"
 #~ msgstr "Учётная запись %s всё ещё подключена"
 
+#~ msgid "Account Settings…"
+#~ msgstr "Параметры учётной записи…"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Включить"
 
 #~ msgid "Add _Contact…"
 #~ msgstr "Добавить _контакт…"
+
+#~ msgid "Add new line"
+#~ msgstr "Добавить новую строку"
 
 #~ msgid "Add reaction"
 #~ msgstr "Добавить реакцию"
@@ -6212,6 +6232,12 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "Добавить группу…"
+
+#~ msgid "Adjust to Status"
+#~ msgstr "В зависимости от статуса"
+
+#~ msgid "Adjust to status"
+#~ msgstr "Настроить статус"
 
 #~ msgid "Algorithm"
 #~ msgstr "Алгоритм"
@@ -6225,6 +6251,19 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Another process is using this file."
 #~ msgstr "Файл занят другим процессом."
+
+#~ msgid "Archiving Preferences"
+#~ msgstr "Параметры архивирования"
+
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "Ошибка настройки параметров архивирования"
+
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "Параметры архивирования сохранены"
+
+#, python-format
+#~ msgid "Archiving Preferences for %s"
+#~ msgstr "Параметры архивирования для %s"
 
 #~ msgid "Are you sure you want to leave this group chat?"
 #~ msgstr "Выйти из этого группового чата?"
@@ -6250,11 +6289,24 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Authorization Request"
 #~ msgstr "Запрос на авторизацию"
 
+#~ msgid "Auto Away Settings"
+#~ msgstr "Параметры автоматической установки статуса «Отошёл»"
+
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "«Отошёл» (расширенные параметры)"
+
 #~ msgid "Autojoin"
 #~ msgstr "Автоприсоединение"
 
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Автоматическая проверка орфографии сообщений"
+
+#~ msgid "Blocking List"
+#~ msgstr "Чёрный список"
+
+#, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Список блокировки для %s"
 
 #~ msgid "Bookmarks"
 #~ msgstr "Закладки"
@@ -6270,16 +6322,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Невозможно перезаписать существующий файл «%s»"
 
-#, python-format
-#~ msgid ""
-#~ "Certificate for \n"
-#~ "%s"
-#~ msgstr ""
-#~ "Сертификат для\n"
-#~ "%s"
+#~ msgid "Certificate Settings"
+#~ msgstr "Параметры сертификата"
 
 #~ msgid "Ch_ange Subject"
 #~ msgstr "И_зменить тему"
+
+#~ msgid "Chat List"
+#~ msgstr "Список контактов"
 
 #~ msgid "Chat history"
 #~ msgstr "История чата"
@@ -6309,16 +6359,22 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Выберите группы для контакта"
 
+#~ msgid "Cipher Suite"
+#~ msgstr "Набор шифров"
+
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Очистить список устройств сейчас?"
+
+#~ msgid "Clear message entry"
+#~ msgstr "Очистить поле ввода сообщения"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 #~ msgstr ""
 #~ "Щёлкните для получения информации по установке плагинов для Flatpak."
 
-#~ msgid "Close Search"
-#~ msgstr "Закрыть поиск"
+#~ msgid "Client Certificate"
+#~ msgstr "Клиентский сертификат"
 
 #, python-format
 #~ msgid "Code snippet (%s)"
@@ -6326,6 +6382,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Общее имя (CN)"
+
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Завершите ввод команды или псевдонима"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
@@ -6335,11 +6394,20 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Подключение к другим мессенджерам через транспорты (Facebook, IRC, ...)"
 
+#~ msgid "Connection Settings"
+#~ msgstr "Параметры подключения"
+
 #~ msgid "Connection not available"
 #~ msgstr "Соединение недоступно"
 
+#~ msgid "Contact Addresses"
+#~ msgstr "Контактные адреса"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Контакт отменил подписку"
+
+#~ msgid "Contact information"
+#~ msgstr "Информация о контакте"
 
 #~ msgid "Contact list"
 #~ msgstr "Список контактов"
@@ -6362,8 +6430,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Copy Path"
 #~ msgstr "Копировать путь"
 
+#~ msgid "Copy info to clipboard"
+#~ msgstr "Копировать информацию в буфер обмена"
+
+#~ msgid "Correct the last message"
+#~ msgstr "Изменить последнее сообщение"
+
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Создать _групповой чат…"
+
+#~ msgid "Create new group chat"
+#~ msgstr "Создать новый групповой чат"
 
 #~ msgid "Create new post"
 #~ msgstr "Создать новое сообщение"
@@ -6371,11 +6448,20 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Current Developers"
 #~ msgstr "Разработчики"
 
+#~ msgid "DNS"
+#~ msgstr "DNS"
+
 #~ msgid "Decline Invitation"
 #~ msgstr "Отклонить приглашение"
 
+#~ msgid "Decrease User Interface Font Size"
+#~ msgstr "Уменьшить размер шрифта пользовательского интерфейса"
+
 #~ msgid "Default"
 #~ msgstr "По умолчанию"
+
+#~ msgid "Default for chats"
+#~ msgstr "По умолчанию для чатов"
 
 #~ msgid "Delete Message"
 #~ msgstr "Удалить сообщение"
@@ -6399,11 +6485,18 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Прямая передача (без шифрования)"
 
+#~ msgid "Disclose the local system time of the device Gajim runs on"
+#~ msgstr ""
+#~ "Раскрыть локальное системное время устройства, на котором работает Gajim"
+
 #~ msgid "Discussion Logs"
 #~ msgstr "Журналы обсуждений"
 
 #~ msgid "Dismiss"
 #~ msgstr "Отклонить"
+
+#~ msgid "Domain"
+#~ msgstr "Домен"
 
 #~ msgid "Don’t show this again"
 #~ msgstr "Не показывать снова"
@@ -6448,6 +6541,12 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Включает libappindicator — альтернативную библиотеку отображения значков "
 #~ "в системном лотке"
+
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Шифрованный сертификат"
+
+#~ msgid "Error received: {}"
+#~ msgstr "Получена ошибка: {}"
 
 #~ msgid "Error!"
 #~ msgstr "Ошибка!"
@@ -6509,6 +6608,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Full Message View"
 #~ msgstr "Полный просмотр сообщения"
 
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Темы Gajim"
@@ -6555,6 +6657,13 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Homepage"
 #~ msgstr "Домашняя страница"
 
+#~ msgid "IP / Port"
+#~ msgstr "IP / Порт"
+
+#, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr "Бездействует с: %s"
+
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
 #~ "restore it when showing the window again."
@@ -6562,6 +6671,16 @@ msgstr "…или перетащите его сюда"
 #~ "При включении параметра Gajim сохранит положение окна списка контактов "
 #~ "при его скрытии и восстановит его при повторном отображении окна списка "
 #~ "контактов."
+
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "При включении параметра появляется возможность назначить отрицательный "
+#~ "приоритет для учётной записи в окне настройки учётных записей. БУДЬТЕ "
+#~ "ОСТОРОЖНЫ, при подключении с отрицательным приоритетом, Вы НЕ получите "
+#~ "никаких сообщений от сервера."
 
 #~ msgid ""
 #~ "If you quit now, the file(s) being transferred will be lost.\n"
@@ -6576,6 +6695,12 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Активен"
+
+#~ msgid "Increase User Interface Font Size"
+#~ msgstr "Увеличить размер шрифта пользовательского интерфейса"
+
+#~ msgid "Insert Emoji"
+#~ msgstr "Вставить смайлик"
 
 #~ msgid "Invalid File"
 #~ msgstr "Недопустимый файл"
@@ -6618,6 +6743,15 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Last seen %s"
 #~ msgstr "Причина: %s"
 
+#~ msgid "Local System Time"
+#~ msgstr "Местное системное время"
+
+#~ msgid "Location:"
+#~ msgstr "Местоположение:"
+
+#~ msgid "Login Settings"
+#~ msgstr "Настройки входа"
+
 #~ msgid ""
 #~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
 #~ "from the chat window"
@@ -6628,8 +6762,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Maintainers"
 #~ msgstr "Сопровождающие"
 
+#~ msgid "Manage Accounts…"
+#~ msgstr "Управление учётными записями…"
+
+#~ msgid "Manage Contact List"
+#~ msgstr "Управление списком контактов"
+
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Измененное сообщение: Цвет фона"
+
+#~ msgid "Message composition"
+#~ msgstr "Содержимое сообщения"
 
 #~ msgid ""
 #~ "Messages will only be available for reading them later if storing chat "
@@ -6678,6 +6821,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Open Path"
 #~ msgstr "Открыть путь"
 
+#~ msgid "Open search bar"
+#~ msgstr "Открыть панель поиска"
+
 #~ msgid "Organization (O)"
 #~ msgstr "Организация"
 
@@ -6689,6 +6835,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Организация чатов в виде вкладок"
+
+#~ msgid "PKCS12 Files"
+#~ msgstr "Файлы PKCS12"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Па_уза/Продолжить"
@@ -6730,6 +6879,12 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Progress"
 #~ msgstr "Прогресс"
 
+#~ msgid "Proxy Host"
+#~ msgstr "Хост прокси"
+
+#~ msgid "Proxy Type"
+#~ msgstr "Тип прокси"
+
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
 #~ msgstr "Цитировать…"
@@ -6739,6 +6894,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Заблокировать этот контакт?"
+
+#~ msgid "Recent history"
+#~ msgstr "Недавняя история"
 
 #~ msgid "Recipient: "
 #~ msgstr "Получатель: "
@@ -6768,9 +6926,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Удалить из списка контактов"
-
-#~ msgid "Remove…"
-#~ msgstr "Удалить…"
 
 #~ msgid "Report"
 #~ msgstr "Сообщить о проблеме"
@@ -6817,6 +6972,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Select an audio output (e.g. speakers, headphones)"
 #~ msgstr "Выберите аудиовыход (динамики, наушники)"
 
+#~ msgid "Select an emoji"
+#~ msgstr "Выберите эмодзи"
+
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Выберите учётную запись для объединения"
@@ -6836,17 +6994,39 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Send"
 #~ msgstr "_Отправить"
 
+#~ msgid "Send Chatstate"
+#~ msgstr "Отправлять состояние чата"
+
 #~ msgid "Send File Directly…"
 #~ msgstr "Отправить файл напрямую…"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Отправлять файлы напрямую"
 
+#~ msgid "Send the message"
+#~ msgstr "Отправить сообщение"
+
 #~ msgid "Sender: "
 #~ msgstr "Отправитель: "
 
 #~ msgid "Serial Number"
 #~ msgstr "Серийный номер"
+
+#~ msgid "Server"
+#~ msgstr "Сервер"
+
+#~ msgid "Server Info"
+#~ msgstr "Информация о сервере"
+
+#~ msgid "Server Software"
+#~ msgstr "Серверное ПО"
+
+#, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Серверное ПО: %s\n"
+
+#~ msgid "Server Uptime"
+#~ msgstr "Время бесперебойной работы сервера"
 
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
@@ -6880,6 +7060,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""
 #~ "Показывать состояние чата (например, «печатает…») рядом с вашим именем"
+
+#~ msgid "Show debug console"
+#~ msgstr "Показать консоль отладки"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Транслировать собственный видеопоток при звонках"
@@ -6929,11 +7112,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Subscription Request"
 #~ msgstr "Запрос подписки"
 
+#~ msgid "Subscription:"
+#~ msgstr "Подписка:"
+
 #~ msgid "Support for multiple accounts"
 #~ msgstr "Поддержка нескольких учётных записей"
 
 #~ msgid "Support for service discovery including nodes and search for users"
 #~ msgstr "Поддержка обнаружения сервисов, включая узлы и поиск пользователей"
+
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Перейти на первую — девятую вкладку чата"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Переключиться на первую-девятую вкладку"
@@ -6943,6 +7132,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Синхронизация учётных записей"
+
+#~ msgid "TLS Version"
+#~ msgstr "Версия TLS"
 
 #, python-format
 #~ msgid ""
@@ -6977,6 +7169,12 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Transport \"%s\" will be removed"
 #~ msgstr "Транспорт «%s» будет удален"
 
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Использовать пары * / _ как возможные символы форматирования."
+
+#~ msgid "Tune:"
+#~ msgstr "Мелодия:"
+
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Тип: "
@@ -6993,15 +7191,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Update Check"
 #~ msgstr "Проверка обновлений"
 
-#~ msgctxt "Noun"
-#~ msgid "Upload"
-#~ msgstr "Загрузить"
-
 #~ msgid "Upload Files"
 #~ msgstr "Передать файлы"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Использовать STUN-сервер"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Использовать прокси для передачи файла"
 
 #, fuzzy
 #~ msgid ""
@@ -7018,6 +7215,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Use your favorite emoticons, set your own profile picture"
 #~ msgstr ""
 #~ "Использование любимых смайлов и установка собственного изображения профиля"
+
+#~ msgid "User Interface"
+#~ msgstr "Пользовательский интерфейс"
 
 #, fuzzy
 #~ msgid "User name…"
@@ -7036,9 +7236,15 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Video calls are not supported"
 #~ msgstr "Видеочаты недоступны в ОС Windows"
 
+#~ msgid "WebSocket URL"
+#~ msgstr "WebSocket URL"
+
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Зачем модерировать это сообщение?"
+
+#~ msgid "Workspaces"
+#~ msgstr "Вкладки"
 
 #~ msgid "XML console to see what's happening on the protocol layer"
 #~ msgstr "XML-консоль для просмотра информации на уровне протокола"
@@ -7075,11 +7281,11 @@ msgstr "…или перетащите его сюда"
 #~ "Обмен сообщениями с контактами при помощи этого транспорта больше "
 #~ "невозможен."
 
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "Ваши параметры архивирования успешно сохранены."
+
 #~ msgid "_Accounts"
 #~ msgstr "_Учётные записи"
-
-#~ msgid "_Add Account…"
-#~ msgstr "_Добавить контакт…"
 
 #~ msgid "_Clear"
 #~ msgstr "_Очистить"
