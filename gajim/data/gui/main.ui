@@ -60,28 +60,32 @@
           </object>
         </child>
         <property name="content">
-          <object class="GtkGrid">
-            <property name="hexpand">true</property>
-            <property name="vexpand">true</property>
+          <object class="AdwToastOverlay" id="_toast_overlay">
             <child>
-              <object class="AppSideBar" id="_app_side_bar">
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">0</property>
-                </layout>
+              <object class="GtkGrid">
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
+                <child>
+                  <object class="AppSideBar" id="_app_side_bar">
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="MainStack" id="_main_stack">
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <style>
+                  <class name="mainwindow-grid"/>
+                </style>
               </object>
             </child>
-            <child>
-              <object class="MainStack" id="_main_stack">
-                <layout>
-                  <property name="column">1</property>
-                  <property name="row">0</property>
-                </layout>
-              </object>
-            </child>
-            <style>
-              <class name="mainwindow-grid"/>
-            </style>
           </object>
         </property>
       </object>

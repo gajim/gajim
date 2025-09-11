@@ -94,6 +94,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     _header_bar: Adw.HeaderBar = Gtk.Template.Child()
     _app_side_bar: AppSideBar = Gtk.Template.Child()
     _main_stack: MainStack = Gtk.Template.Child()
+    _toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
 
     def __init__(self) -> None:
         app.window = self
@@ -203,6 +204,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             parent.set_popover(None)
 
         return self._emoji_chooser
+
+    def show_toast(self, toast: Adw.Toast) -> None:
+        self._toast_overlay.add_toast(toast)
 
     def show(self) -> None:
         self.present()
@@ -1480,6 +1484,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.add_chat(event.account, event.jid, "chat")
 
     def quit(self) -> None:
+        self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
+
         if self.is_visible():
             window_width, window_height = self.get_width(), self.get_height()
             app.settings.set("mainwin_width", window_width)
