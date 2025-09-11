@@ -1,3 +1,72 @@
+Gajim 2.3.5 (11 Sep 2025)
+
+  New
+
+  * Add Toast overlay for feedback
+  * Add thumbnails for videos
+  * Chats: Add shortcut to focus chat search (#12452)
+  * Rework contact popover
+  * Add Shortcuts Manager
+
+  Improvements
+
+  * HistorySync: Use dropdown instead of ListBox for time selection
+  * Accounts: Improve strings for settings
+  * Message selection: Allow copying messages using Ctrl+C (#12194)
+  * Preview: Improve displaying mime-type icons
+  * Replies: Add thread id when replying
+  * HTTP File Upload: Improve mime type detection when sending files (#12450)
+  * Contact/Group chat details: Improve layout
+  * Start chat: Dim 'Start / Join chat' icon
+  * StartChat: Remember last filter settings (#12412)
+  * OMEMO: Improve info messages on first contact (#12431)
+  * Chat: Improve code widget style
+  * ChatList: Sort messages with drafts to the top (#12428)
+
+  Change
+
+  * Preferences: Move sync history action to archiving page
+  * Preferences: Integrate archiving preferences dialog
+  * AccountMenu: Simplify menu
+  * Preferences: Integrate blocked contacts dialog
+  * Preferences: Integrate Manage Contact List
+  * PEP dialog: Add reload button (#12448)
+  * Preferences: Integrate ServerInfo dialog
+  * Remove support for answering entity time queries
+  * Settings: Remove options to change priority
+  * Icons: Use Lucide icons
+  * Move Account settings into Preferences dialog
+  * Icons: Replace all Feather icons with Lucide icons
+  * Contact info: Show full contact dialog if we know a contact's real JID (#12433)
+  * Group chat info: Use Adw widgets
+
+  Performance
+
+  * Windows: Don't byte-compile Python files
+
+  Bug Fixes
+
+  * Assistant: Fix layout warnings
+  * Settings: Don’t reset setting for all accounts
+  * Settings: Correct setting description for read markers
+  * Group chats: Fix resetting settings to default (#11377)
+  * MUC: Don’t fail to rejoin after service shutdown (#12447)
+  * Contact info: Fix initial subscription switch state (#12414)
+  * Dark mode: Fix switching dark/light mode for some elements (#12426)
+  * Group chats: Display subject only if it has text (#12437)
+  * File transfers: Fix cancelling file transfers (#12442)
+  * VCard: Catch timeout error while receiving VCard (#12441)
+  * VCard grid: Fix setting birthday (#12440)
+  * MessageInput: Don’t remove selection on right click
+  * Handle contact requests with 'ignore_unknown_contacts' setting (#11933)
+  * Account side bar: Display hint for connectivity issues (#12262)
+  * Start chat: Rename entry for starting / joining chat
+  * Disable drag and drop for files on X11
+  * Stream: Don’t set invalid xml:lang attribute (#12432)
+  * ChatList: Don’t show messages from blocked users (#12386)
+  * Notifications: Don’t raise notification for messages from blocked users (#12315)
+  * Replace missing theme icons
+
 Gajim 2.3.4 (11 Aug 2025)
 
   New
