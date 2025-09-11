@@ -16,6 +16,7 @@ from concurrent.futures import Future
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
+from multiprocessing.context import BaseContext
 from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
@@ -34,12 +35,17 @@ from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
 from gajim.common.multiprocess.thumbnail import create_thumbnail
+from gajim.common.multiprocess.video_thumbnail import (
+    extract_video_thumbnail_and_properties,
+)
 from gajim.common.storage.archive import models as mod
 from gajim.common.util.http import create_http_request
 from gajim.common.util.preview import aes_decrypt
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths
+from gajim.common.util.preview import get_previewable_image_mime_types
 from gajim.common.util.preview import get_previewable_mime_types
+from gajim.common.util.preview import get_previewable_video_mime_types
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.preview import parse_fragment
 from gajim.common.util.preview import split_geo_uri
@@ -49,10 +55,13 @@ log = logging.getLogger('gajim.c.preview')
 
 IRI_RX = re.compile(regex.IRI)
 
+PREVIEWABLE_IMAGE_MIME_TYPES = get_previewable_image_mime_types()
+PREVIEWABLE_VIDEO_MIME_TYPES = get_previewable_video_mime_types()
 PREVIEWABLE_MIME_TYPES = get_previewable_mime_types()
 mime_types = set(MIME_TYPES)
 # Merge both: if it’s a previewable image, it should be allowed
 ALLOWED_MIME_TYPES = mime_types.union(PREVIEWABLE_MIME_TYPES)
+
 
 AudioSampleT = list[tuple[float, float]]
 
@@ -127,6 +136,16 @@ class Preview:
     def is_audio(self) -> bool:
         is_allowed = bool(self.mime_type in ALLOWED_MIME_TYPES)
         return is_allowed and self.mime_type.startswith('audio/')
+
+    @property
+    def is_image(self) -> bool:
+        is_allowed = bool(self.mime_type in ALLOWED_MIME_TYPES)
+        return is_allowed and self.mime_type.startswith('image/')
+
+    @property
+    def is_video(self) -> bool:
+        is_allowed = bool(self.mime_type in ALLOWED_MIME_TYPES)
+        return is_allowed and self.mime_type.startswith('video/')
 
     @property
     def uri(self) -> str:
@@ -350,10 +369,17 @@ class PreviewManager:
 
         elif not preview.thumb_exists:
             assert preview.orig_path is not None
-            load_file_async(preview.orig_path,
-                            self._on_orig_load_finished,
-                            preview)
-
+            preview.mime_type = guess_mime_type(preview.orig_path)
+            preview.file_size = os.path.getsize(preview.orig_path)
+            if preview.is_image:
+                load_file_async(preview.orig_path,
+                                self._on_orig_load_finished,
+                                preview)
+            elif preview.is_video:
+                preview.update_widget()
+                self.create_video_thumbnail(preview)
+            else:
+                preview.update_widget()
         else:
             assert preview.thumb_path is not None
             load_file_async(preview.thumb_path,
@@ -397,6 +423,58 @@ class PreviewManager:
 
         return GLib.SOURCE_REMOVE
 
+    def create_video_thumbnail(self, preview: Preview) -> None:
+        if preview.thumb_path is None:
+            log.warning("Creating thumbnail failed, thumbnail path is None")
+            return
+
+        assert preview.orig_path is not None
+
+        try:
+            future = app.process_pool.submit(
+                extract_video_thumbnail_and_properties,
+                preview.orig_path,
+                preview.size
+            )
+            future.add_done_callback(
+                partial(GLib.idle_add,
+                        self._write_video_thumbnail,
+                        preview,
+                        future)
+            )
+        except Exception as error:
+            preview.info_message = _("Creating thumbnail failed")
+            preview.update_widget()
+            log.warning("Creating thumbnail failed for: %s %s",
+                        preview.orig_path, error)
+
+    def _write_video_thumbnail(
+            self,
+            preview: Preview,
+            future: Future[
+                tuple[int | None, dict[int, int] | None, bytes | None]],
+            _context: BaseContext | None =None) -> bool:
+        try:
+            # Make use of duration and dimension properties later
+            _duration, _dimension, data = future.result()
+            if data is None:
+                raise ValueError("No thumbnail data")
+            preview.thumbnail = data
+        except Exception as error:
+            preview.info_message = _("Creating thumbnail failed")
+            preview.update_widget()
+            log.warning("Creating thumbnail failed for: %s %s",
+                preview.orig_path, error)
+        else:
+            assert preview.thumb_path is not None
+            write_file_async(preview.thumb_path,
+                             preview.thumbnail,
+                             self._on_thumb_write_finished,
+                             preview)
+
+        return GLib.SOURCE_REMOVE
+
+
     def _process_web_uri(self,
                          uri: str,
                          widget: Any,
@@ -430,10 +508,11 @@ class PreviewManager:
             log.error('%s: %s', preview.orig_path.name, error)
             return
 
+        assert preview.orig_path is not None
         preview.mime_type = guess_mime_type(preview.orig_path, data)
         preview.file_size = os.path.getsize(preview.orig_path)
 
-        if preview.is_previewable:
+        if preview.is_previewable and preview.is_image:
             self.create_thumbnail(preview, data)
         else:
             preview.update_widget()
@@ -453,6 +532,7 @@ class PreviewManager:
         preview.thumbnail = data
         # Thumbnails are stored always as PNG, we don’t know the
         # mime-type of the original picture
+        assert preview.orig_path is not None
         preview.mime_type = guess_mime_type(preview.orig_path)
         preview.file_size = os.path.getsize(preview.orig_path)
 
@@ -574,11 +654,9 @@ class PreviewManager:
                     preview.update_widget()
                     return
 
-        if preview.mime_type == 'application/octet-stream':
-            if preview.orig_path is not None:
-                preview.mime_type = guess_mime_type(preview.orig_path, data)
-
         assert preview.orig_path is not None
+        preview.mime_type = guess_mime_type(preview.orig_path, data)
+
         write_file_async(preview.orig_path,
                          data,
                          self._on_orig_write_finished,
@@ -588,11 +666,12 @@ class PreviewManager:
             preview.update_widget()
             return
 
-        if preview.is_previewable:
+        if preview.is_previewable and preview.is_image:
             self.create_thumbnail(preview, data)
 
-    @staticmethod
-    def _on_orig_write_finished(_result: bool,
+
+    def _on_orig_write_finished(self,
+                                _result: bool,
                                 error: GLib.Error | None,
                                 preview: Preview) -> None:
         if preview.orig_path is None:
@@ -604,7 +683,12 @@ class PreviewManager:
 
         log.info('File stored: %s', preview.orig_path.name)
         preview.file_size = os.path.getsize(preview.orig_path)
-        if not preview.is_previewable:
+        if preview.is_previewable:
+            if preview.is_video:
+                self.create_video_thumbnail(preview)
+            else:
+                preview.update_widget()
+        else:
             # Don’t update preview if thumb is already displayed,
             # but update preview for audio files
             preview.update_widget()

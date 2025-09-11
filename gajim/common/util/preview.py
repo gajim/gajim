@@ -168,7 +168,7 @@ def contains_audio_streams(file_path: Path) -> bool:
     return has_audio
 
 
-def get_previewable_mime_types() -> set[str]:
+def get_previewable_image_mime_types() -> set[str]:
     previewable_mime_types: set[str] = set()
     for fmt in GdkPixbuf.Pixbuf.get_formats():
         mime_types = fmt.get_mime_types()
@@ -185,6 +185,28 @@ def get_previewable_mime_types() -> set[str]:
         lambda mime_type: mime_type.startswith('image'),
         previewable_mime_types
     ))
+
+
+def get_previewable_video_mime_types() -> set[str]:
+    return {
+        'video/H264',
+        'video/H265',
+        'video/mp4',
+        'video/mpeg4-generic',
+        'video/ogg',
+        'video/quicktime',
+        'video/vc1',
+        'video/VP8',
+        'video/webm',
+        'video/x-matroska',
+        'video/x-msvideo'
+    }
+
+
+def get_previewable_mime_types() -> set[str]:
+    result = get_previewable_image_mime_types().union(
+            get_previewable_video_mime_types())
+    return result
 
 
 def guess_mime_type(file_path: Path | str,

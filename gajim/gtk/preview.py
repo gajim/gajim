@@ -146,11 +146,27 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
         preview_enabled = app.settings.get("enable_file_preview")
 
-        if preview_enabled and preview.is_previewable and preview.orig_exists:
+        if (
+            preview_enabled
+            and preview.is_previewable
+            and preview.orig_exists
+            and preview.thumb_exists
+        ):
             self._ui.icon_event_box.set_visible(False)
             self._ui.image_button.set_visible(True)
             self._ui.save_as_button.set_visible(True)
             self._ui.open_folder_button.set_visible(True)
+
+            if preview.is_video:
+                self._ui.image_button.add_css_class("preview-video-overlay")
+                play_button_img = Gtk.Image.new_from_icon_name("lucide-video-play")
+                play_button_img.set_hexpand(True)
+                play_button_img.set_vexpand(True)
+                play_button_img.set_can_target(False)
+                width, height = self._ui.content_overlay.get_size_request()
+                size = min(width, height)
+                play_button_img.set_pixel_size(size // 3)
+                self._ui.content_overlay.add_overlay(play_button_img)
         else:
             self._ui.image_button.set_visible(False)
             self._ui.icon_event_box.set_visible(True)
@@ -340,7 +356,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
         _y: int,
     ) -> None:
         assert self._preview is not None
-        if self._preview.mime_type.startswith("image/"):
+        if (
+            self._preview.is_image or self._preview.is_video
+        ) and self._preview.thumb_exists:
             self._ui.button_box.set_visible(True)
 
     def _on_content_cursor_leave(
@@ -348,7 +366,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
         _controller: Gtk.EventControllerMotion,
     ) -> None:
         assert self._preview is not None
-        if self._preview.mime_type.startswith("image/") and self._preview.orig_exists:
+        if (
+            self._preview.is_image or self._preview.is_video
+        ) and self._preview.thumb_exists:
             self._ui.button_box.set_visible(False)
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:

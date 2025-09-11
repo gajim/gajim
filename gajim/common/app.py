@@ -134,7 +134,9 @@ def init_process_pool() -> None:
         max_workers=4,
         mp_context=mp_context,
         # https://github.com/python/cpython/issues/115634
-        # max_tasks_per_child=5,
+        # Start a new process per task to ensure memory is released,
+        # when generating video thumbnails using Gstreamer
+        max_tasks_per_child=1,
         initializer=init_process,
     )
 
