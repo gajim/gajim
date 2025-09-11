@@ -16,7 +16,6 @@ from concurrent.futures import Future
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
-from multiprocessing.context import BaseContext
 from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
@@ -371,31 +370,52 @@ class PreviewManager:
             assert preview.orig_path is not None
             preview.mime_type = guess_mime_type(preview.orig_path)
             preview.file_size = os.path.getsize(preview.orig_path)
+            preview.update_widget()
             if preview.is_image:
-                load_file_async(preview.orig_path,
-                                self._on_orig_load_finished,
-                                preview)
+                self._create_thumbnail(preview)
             elif preview.is_video:
-                preview.update_widget()
-                self.create_video_thumbnail(preview)
-            else:
-                preview.update_widget()
+                self._create_video_thumbnail(preview)
+
         else:
             assert preview.thumb_path is not None
             load_file_async(preview.thumb_path,
                             self._on_thumb_load_finished,
                             preview)
 
-    def create_thumbnail(self, preview: Preview, data: bytes) -> None:
+    @staticmethod
+    def _on_thumb_load_finished(data: bytes | None,
+                                error: GLib.Error | None,
+                                preview: Preview) -> None:
+
+        if preview.thumb_path is None or preview.orig_path is None:
+            return
+
+        if data is None:
+            log.error('%s: %s', preview.thumb_path.name, error)
+            return
+
+        preview.thumbnail = data
+        # Thumbnails are stored always as PNG, we don’t know the
+        # mime-type of the original picture
+        assert preview.orig_path is not None
+        preview.mime_type = guess_mime_type(preview.orig_path)
+        preview.file_size = os.path.getsize(preview.orig_path)
+
+        preview.update_widget(data=data)
+
+    def _create_thumbnail(self, preview: Preview) -> None:
+        assert preview.thumb_path is not None
+        assert preview.orig_path is not None
         try:
             future = app.process_pool.submit(
                 create_thumbnail,
-                data,
+                preview.orig_path,
+                preview.thumb_path,
                 preview.size,
                 preview.mime_type,
             )
             future.add_done_callback(
-                partial(GLib.idle_add, self._write_thumbnail, preview)
+                partial(GLib.idle_add, self._create_thumbnail_finished, preview)
             )
         except Exception as error:
             preview.info_message = _('Creating thumbnail failed')
@@ -403,27 +423,7 @@ class PreviewManager:
             log.warning('Creating thumbnail failed for: %s %s',
                         preview.orig_path, error)
 
-    def _write_thumbnail(self, preview: Preview, future: Future[bytes]) -> bool:
-        try:
-            result = future.result()
-        except Exception as error:
-            preview.info_message = _('Creating thumbnail failed')
-            preview.update_widget()
-            log.warning('Creating thumbnail failed for: %s %s',
-                        preview.orig_path, error)
-            return GLib.SOURCE_REMOVE
-
-        preview.thumbnail = result
-
-        assert preview.thumb_path is not None
-        write_file_async(preview.thumb_path,
-                         preview.thumbnail,
-                         self._on_thumb_write_finished,
-                         preview)
-
-        return GLib.SOURCE_REMOVE
-
-    def create_video_thumbnail(self, preview: Preview) -> None:
+    def _create_video_thumbnail(self, preview: Preview) -> None:
         if preview.thumb_path is None:
             log.warning("Creating thumbnail failed, thumbnail path is None")
             return
@@ -434,13 +434,13 @@ class PreviewManager:
             future = app.process_pool.submit(
                 extract_video_thumbnail_and_properties,
                 preview.orig_path,
+                preview.thumb_path,
                 preview.size
             )
             future.add_done_callback(
                 partial(GLib.idle_add,
-                        self._write_video_thumbnail,
-                        preview,
-                        future)
+                        self._create_thumbnail_finished,
+                        preview)
             )
         except Exception as error:
             preview.info_message = _("Creating thumbnail failed")
@@ -448,32 +448,23 @@ class PreviewManager:
             log.warning("Creating thumbnail failed for: %s %s",
                         preview.orig_path, error)
 
-    def _write_video_thumbnail(
-            self,
-            preview: Preview,
-            future: Future[
-                tuple[int | None, dict[int, int] | None, bytes | None]],
-            _context: BaseContext | None =None) -> bool:
+    def _create_thumbnail_finished(
+        self,
+        preview: Preview,
+        future: Future[tuple[bytes, dict[str, Any]]]
+    ) -> bool:
         try:
-            # Make use of duration and dimension properties later
-            _duration, _dimension, data = future.result()
-            if data is None:
-                raise ValueError("No thumbnail data")
-            preview.thumbnail = data
+            thumbnail_bytes, _metadata = future.result()
         except Exception as error:
-            preview.info_message = _("Creating thumbnail failed")
-            preview.update_widget()
-            log.warning("Creating thumbnail failed for: %s %s",
-                preview.orig_path, error)
+            preview.info_message = _('Creating thumbnail failed')
+            log.exception('Creating thumbnail failed for: %s %s',
+                          preview.orig_path, error)
         else:
-            assert preview.thumb_path is not None
-            write_file_async(preview.thumb_path,
-                             preview.thumbnail,
-                             self._on_thumb_write_finished,
-                             preview)
+            preview.thumbnail = thumbnail_bytes
+
+        preview.update_widget(data=preview.thumbnail)
 
         return GLib.SOURCE_REMOVE
-
 
     def _process_web_uri(self,
                          uri: str,
@@ -496,47 +487,6 @@ class PreviewManager:
                        widget,
                        from_us,
                        context=context)
-
-    def _on_orig_load_finished(self,
-                               data: bytes | None,
-                               error: GLib.Error | None,
-                               preview: Preview) -> None:
-        if preview.thumb_path is None or preview.orig_path is None:
-            return
-
-        if data is None:
-            log.error('%s: %s', preview.orig_path.name, error)
-            return
-
-        assert preview.orig_path is not None
-        preview.mime_type = guess_mime_type(preview.orig_path, data)
-        preview.file_size = os.path.getsize(preview.orig_path)
-
-        if preview.is_previewable and preview.is_image:
-            self.create_thumbnail(preview, data)
-        else:
-            preview.update_widget()
-
-    @staticmethod
-    def _on_thumb_load_finished(data: bytes | None,
-                                error: GLib.Error | None,
-                                preview: Preview) -> None:
-
-        if preview.thumb_path is None or preview.orig_path is None:
-            return
-
-        if data is None:
-            log.error('%s: %s', preview.thumb_path.name, error)
-            return
-
-        preview.thumbnail = data
-        # Thumbnails are stored always as PNG, we don’t know the
-        # mime-type of the original picture
-        assert preview.orig_path is not None
-        preview.mime_type = guess_mime_type(preview.orig_path)
-        preview.file_size = os.path.getsize(preview.orig_path)
-
-        preview.update_widget(data=data)
 
     def download_content(self,
                          preview: Preview,
@@ -562,6 +512,11 @@ class PreviewManager:
         request.connect('response-progress', self._on_response_progress)
 
         request.send('GET', preview.request_uri, callback=self._on_finished)
+
+    def cancel_download(self, preview: Preview) -> None:
+        assert preview.request is not None
+        preview.request.cancel()
+        preview.download_in_progress = False
 
     def _accept_certificate(self,
                             request: HTTPRequest,
@@ -662,59 +617,30 @@ class PreviewManager:
                          self._on_orig_write_finished,
                          preview)
 
-        if not app.settings.get('enable_file_preview'):
-            preview.update_widget()
-            return
-
-        if preview.is_previewable and preview.is_image:
-            self.create_thumbnail(preview, data)
-
-
     def _on_orig_write_finished(self,
                                 _result: bool,
                                 error: GLib.Error | None,
                                 preview: Preview) -> None:
-        if preview.orig_path is None:
-            return
 
+        assert preview.orig_path is not None
         if error is not None:
             log.error('%s: %s', preview.orig_path.name, error)
             return
 
         log.info('File stored: %s', preview.orig_path.name)
         preview.file_size = os.path.getsize(preview.orig_path)
-        if preview.is_previewable:
-            if preview.is_video:
-                self.create_video_thumbnail(preview)
-            else:
-                preview.update_widget()
-        else:
-            # Don’t update preview if thumb is already displayed,
-            # but update preview for audio files
+
+        if not app.settings.get('enable_file_preview'):
             preview.update_widget()
-
-    @staticmethod
-    def _on_thumb_write_finished(_result: bool,
-                                 error: GLib.Error | None,
-                                 preview: Preview) -> None:
-        if preview.thumb_path is None:
             return
 
-        if error is not None:
-            log.error('%s: %s', preview.thumb_path.name, error)
-            if not preview.thumb_exists:
-                # Generating a preview can fail if the file already exists
-                # Only abort if thumbnail has not been stored in preview
-                return
-
-        log.info('Thumbnail stored: %s ', preview.thumb_path.name)
-
-        if preview.thumbnail is None:
+        if not preview.is_previewable:
             return
 
-        preview.update_widget(data=preview.thumbnail)
+        if preview.is_image:
+            self._create_thumbnail(preview)
 
-    def cancel_download(self, preview: Preview) -> None:
-        assert preview.request is not None
-        preview.request.cancel()
-        preview.download_in_progress = False
+        elif preview.is_video:
+            self._create_video_thumbnail(preview)
+
+        preview.update_widget()

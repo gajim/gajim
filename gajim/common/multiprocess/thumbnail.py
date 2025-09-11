@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import math
 from io import BytesIO
 from pathlib import Path
@@ -13,16 +15,23 @@ from gi.repository import GLib
 from PIL import Image
 
 
-def create_thumbnail(data: bytes | Path, size: int, mime_type: str) -> bytes:
-    # Create thumbnail from bytes or Path and return bytes in PNG format
+def create_thumbnail(input_: bytes | Path,
+    output: Path | None,
+    size: int,
+    mime_type: str
+) -> tuple[bytes, dict[str, Any]]:
 
-    if isinstance(data, Path):
-        data = data.read_bytes()
+    if isinstance(input_, Path):
+        data = input_.read_bytes()
+    else:
+        data = input_
 
     exceptions: list[Exception] = []
+    thumbnail_bytes = None
+    metadata = {}
 
     try:
-        return _create_thumbnail_with_pil(data, size)
+        thumbnail_bytes, metadata = _create_thumbnail_with_pil(data, size)
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):
         # Don't try to process image further
         raise
@@ -31,17 +40,25 @@ def create_thumbnail(data: bytes | Path, size: int, mime_type: str) -> bytes:
         exceptions.append(exc1)
 
     try:
-        return _create_thumbnail_with_pixbuf(data, size, mime_type)
+        thumbnail_bytes, metadata = _create_thumbnail_with_pixbuf(data, size, mime_type)
     except Exception as exc2:
         exceptions.append(exc2)
 
-    raise ExceptionGroup('Failed to generate thumbnail', exceptions)
+    if exceptions:
+        raise ExceptionGroup('Failed to generate thumbnail', exceptions)
+
+    assert thumbnail_bytes is not None
+    if output is not None:
+        output.write_bytes(thumbnail_bytes)
+    return thumbnail_bytes, metadata
 
 
 def _create_thumbnail_with_pixbuf(
     data: bytes, size: int, mime_type: str
-) -> bytes:
+) -> tuple[bytes, dict[str, Any]]:
     # Reads data and returns thumbnail bytes in PNG format
+
+    metadata: dict[str, Any] = {}
 
     try:
         # Try to create GdKPixbuf loader with fixed mime-type to
@@ -58,7 +75,7 @@ def _create_thumbnail_with_pixbuf(
         raise ValueError('Loading pixbuf failed')
 
     if size > pixbuf.get_width() and size > pixbuf.get_height():
-        return data
+        return data, metadata
 
     width, height = get_thumbnail_size(pixbuf, size)
     thumbnail = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
@@ -67,12 +84,13 @@ def _create_thumbnail_with_pixbuf(
 
     _error, bytes_ = thumbnail.save_to_bufferv('png', [], [])
 
-    return bytes_
+    return bytes_, metadata
 
 
-def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes:
+def _create_thumbnail_with_pil(data: bytes, size: int) -> tuple[bytes, dict[str, Any]]:
     # Reads data and returns thumbnail bytes in PNG format
 
+    metadata: dict[str, Any] = {}
     input_file = BytesIO(data)
     try:
         image = Image.open(input_file)
@@ -80,12 +98,11 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes:
         input_file.close()
         raise
 
-    input_file.close()
-
     image_width, image_height = image.size
     if size > image_width and size > image_height:
         image.close()
-        return data
+        input_file.close()
+        return data, metadata
 
     output_file = BytesIO()
 
@@ -99,9 +116,10 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes:
     bytes_ = output_file.getvalue()
 
     image.close()
+    input_file.close()
     output_file.close()
 
-    return bytes_
+    return bytes_, metadata
 
 
 def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:

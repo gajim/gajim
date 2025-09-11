@@ -19,9 +19,10 @@ except Exception:
 Gst.init(None)
 
 def extract_video_thumbnail_and_properties(
-        video_path: Path,
+        input_: Path,
+        output: Path | None,
         preview_size: int
-    ) -> tuple[int, dict[str, int], bytes]:
+    ) -> tuple[bytes, dict[str, typing.Any]]:
     pipeline = Gst.Pipeline.new()
 
     uridecodebin = Gst.ElementFactory.make("uridecodebin3")
@@ -53,7 +54,7 @@ def extract_video_thumbnail_and_properties(
     appsink.set_property("sync", False)
     appsink.set_property("max-buffers", 1)
     appsink.set_property("drop", True)
-    uridecodebin.set_property("uri", video_path.as_uri())
+    uridecodebin.set_property("uri", input_.as_uri())
 
     pipeline.add(uridecodebin)
     pipeline.add(videoconvert)
@@ -62,7 +63,7 @@ def extract_video_thumbnail_and_properties(
     pipeline.add(pngenc)
     pipeline.add(appsink)
 
-    dimensions = {'width': 0, 'height': 0}
+    metadata: dict[str, typing.Any] = {'width': 0, 'height': 0}
 
     def probe_original_size(
             pad: Gst.Pad, _info: Gst.PadProbeInfo) -> Gst.PadProbeReturn:
@@ -72,8 +73,8 @@ def extract_video_thumbnail_and_properties(
 
         structure = caps.get_structure(0)
         if structure.has_field("width") and structure.has_field("height"):
-            dimensions['width'] = structure.get_int("width")[1]
-            dimensions['height'] = structure.get_int("height")[1]
+            metadata['width'] = structure.get_int("width")[1]
+            metadata['height'] = structure.get_int("height")[1]
             return Gst.PadProbeReturn.REMOVE
 
         return Gst.PadProbeReturn.OK
@@ -127,6 +128,7 @@ def extract_video_thumbnail_and_properties(
 
     # Take timestamp after 2 seconds or earlier, if duration is shorter
     duration_ms = duration_ns / 1e6
+    metadata["duration"] = duration_ms
     timestamp_ms = 2000
     if timestamp_ms >= duration_ms:
         timestamp_ms = duration_ms * 0.5
@@ -154,6 +156,8 @@ def extract_video_thumbnail_and_properties(
     bytes_ = bytes(mapinfo.data)
     buffer.unmap(mapinfo)
 
-
     cleanup()
-    return duration_ns, dimensions, bytes_
+
+    if output is not None:
+        output.write_bytes(bytes_)
+    return bytes_, metadata
