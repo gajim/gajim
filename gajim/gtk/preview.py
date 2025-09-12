@@ -373,4 +373,4 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
         assert self._preview is not None
-        app.preview_manager.cancel_download(self._preview)
+        self._preview.cancel()

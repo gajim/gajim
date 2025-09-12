@@ -41,6 +41,7 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
+from gajim.common.http_manager import HTTPManager
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
@@ -92,6 +93,8 @@ class CoreApplication(ged.EventHelper):
 
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
+
+        app.http_manager = HTTPManager()
 
         # from gajim.common.call_manager import CallManager
         # app.call_manager = CallManager()

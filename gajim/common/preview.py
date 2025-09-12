@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 import logging
 import os
@@ -20,26 +19,28 @@ from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
 
-from gi.repository import Gio
 from gi.repository import GLib
-from nbxmpp.const import HTTPRequestError
-from nbxmpp.http import HTTPRequest
-from nbxmpp.util import convert_tls_error_flags
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import regex
+from gajim.common.aes import AESKeyData
 from gajim.common.const import MIME_TYPES
+from gajim.common.enum import FTState
+from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import load_file_async
-from gajim.common.helpers import write_file_async
+from gajim.common.http_manager import HTTPTransferObject
 from gajim.common.i18n import _
+from gajim.common.multiprocess.http import CancelledError
+from gajim.common.multiprocess.http import ContentTypeNotAllowed
+from gajim.common.multiprocess.http import HTTPStatusError
+from gajim.common.multiprocess.http import MaxContentLengthExceeded
 from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.multiprocess.video_thumbnail import (
     extract_video_thumbnail_and_properties,
 )
 from gajim.common.storage.archive import models as mod
-from gajim.common.util.http import create_http_request
-from gajim.common.util.preview import aes_decrypt
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths
 from gajim.common.util.preview import get_previewable_image_mime_types
@@ -48,7 +49,6 @@ from gajim.common.util.preview import get_previewable_video_mime_types
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.preview import parse_fragment
 from gajim.common.util.preview import split_geo_uri
-from gajim.common.util.user_strings import get_tls_error_phrases
 
 log = logging.getLogger('gajim.c.preview')
 
@@ -108,7 +108,7 @@ class Preview:
 
         self.info_message: str | None = None
 
-        self._request = None
+        self._http_obj = None
 
         self.key: bytes | None = None
         self.iv: bytes | None = None
@@ -163,10 +163,6 @@ class Preview:
         return self._filename
 
     @property
-    def request(self) -> HTTPRequest | None:
-        return self._request
-
-    @property
     def request_uri(self) -> str:
         if self._urlparts is None:
             return ''
@@ -204,12 +200,32 @@ class Preview:
             log.error("Could not check if original file exists: %s", error)
             return False
 
+    def get_decryption_data(self) -> AESKeyData | None:
+        if not self.is_aes_encrypted:
+            return None
+        if self.key is None or self.iv is None:
+            return None
+        return AESKeyData(self.key, self.iv)
+
     def update_widget(self, data: bytes | None = None) -> None:
         self._widget.update(self, data)
 
-    def update_progress(self, progress: float, request: HTTPRequest) -> None:
-        self._request = request
-        self._widget.update_progress(self, progress)
+    def cancel(self) -> None:
+        if self._http_obj is None:
+            return
+        self._http_obj.cancel()
+
+    def set_filetransfer_object(self, obj: HTTPTransferObject) -> None:
+        self._http_obj = obj
+        obj.connect("notify::progress", self._on_download_progress)
+
+    def _on_download_progress(
+        self,
+        obj: HTTPTransferObject,
+        _param: GObject.ParamSpec,
+    ) -> None:
+
+        self._widget.update_progress(self, obj.progress)
 
 
 class PreviewManager:
@@ -504,133 +520,78 @@ class PreviewManager:
         log.info('Start downloading: %s', preview.request_uri)
         preview.download_in_progress = True
 
-        request = create_http_request(preview.account)
-        request.set_user_data(preview)
-        request.connect('accept-certificate', self._accept_certificate)
-        request.connect('content-sniffed', self._on_content_sniffed, force)
-        request.connect('response-progress', self._on_response_progress)
+        max_content_length = None if force else app.settings.get('preview_max_file_size')  # noqa: E501
+        allowed_content_types = None if force else ALLOWED_MIME_TYPES
 
-        request.send('GET', preview.request_uri, callback=self._on_finished)
-
-    def cancel_download(self, preview: Preview) -> None:
-        assert preview.request is not None
-        preview.request.cancel()
-        preview.download_in_progress = False
-
-    def _accept_certificate(self,
-                            request: HTTPRequest,
-                            _certificate: Gio.TlsCertificate,
-                            certificate_errors: Gio.TlsCertificateFlags,
-                            ) -> bool:
-
-        if not app.settings.get('preview_verify_https'):
-            return True
-
-        phrases = get_tls_error_phrases(
-            convert_tls_error_flags(certificate_errors))
-        log.warning(
-            'TLS verification failed: %s (0x%02x)', phrases, certificate_errors)
-
-        preview = cast(Preview, request.get_user_data())
-        preview.info_message = _('TLS verification failed: %s') % phrases[0]
-        preview.download_in_progress = False
-        preview.update_widget()
-        return False
-
-    def _on_content_sniffed(self,
-                            request: HTTPRequest,
-                            content_length: int,
-                            content_type: str,
-                            force: bool
-                            ) -> None:
-
-        uri = request.get_uri()
-        assert uri is not None
-        uri = uri.to_string()
-        preview = cast(Preview, request.get_user_data())
-        preview.mime_type = content_type
-        preview.file_size = content_length
-
-        if content_type not in ALLOWED_MIME_TYPES and not force:
-            log.info('Not an allowed content type: %s, %s', content_type, uri)
-            request.cancel()
-            preview.download_in_progress = False
+        obj = app.http_manager.download(
+            preview.request_uri,
+            preview.id,
+            output=preview.orig_path,
+            with_progress=force,
+            max_content_length=max_content_length,
+            allowed_content_types=allowed_content_types,
+            decryption_data=preview.get_decryption_data(),
+            proxy=determine_proxy(preview.account),
+        )
+        if obj is None:
             return
 
-        if content_length > int(app.settings.get('preview_max_file_size')):
-            log.info(
-                'File size (%s) too big for URL: "%s"',
-                content_length, uri)
-            if force:
-                preview.info_message = None
-            else:
-                request.cancel()
-                preview.download_in_progress = False
-                preview.info_message = _('Automatic preview disabled '
-                                         '(file too big)')
+        obj.connect("finished", self._on_download_finished, preview)
+        preview.set_filetransfer_object(obj)
 
-        preview.update_widget()
+    def _on_download_finished(
+        self,
+        ftobj: HTTPTransferObject,
+        preview: Preview
+    ) -> None:
 
-    def _on_response_progress(self,
-                              request: HTTPRequest,
-                              progress: float,
-                              ) -> None:
-
-        preview = cast(Preview, request.get_user_data())
-        preview.update_progress(progress, request)
-
-    def _on_finished(self, request: HTTPRequest) -> None:
-
-        preview = cast(Preview, request.get_user_data())
-        preview.download_in_progress = False
-
-        if not request.is_complete():
-            error = request.get_error_string()
-            log.warning('Download failed: %s - %s', preview.request_uri, error)
-            if request.get_error() != HTTPRequestError.CANCELLED:
-                preview.info_message = _('Download failed (%s)') % error
-            preview.update_widget()
-            return
-
+        assert preview.orig_path is not None
         preview.info_message = None
+        uri = preview.request_uri
 
-        data = request.get_data()
-        if not data:
-            return
+        try:
+            ftobj.raise_for_error()
+        except ContentTypeNotAllowed as error:
+            log.info('Not an allowed content type: %s, %s', error, uri)
 
-        if preview.is_aes_encrypted:
-            if preview.key is not None and preview.iv is not None:
-                try:
-                    data = aes_decrypt(preview.key, preview.iv, data)
-                except Exception as error:
-                    log.exception('Decryption failed')
-                    preview.info_message = _('Decryption failed')
-                    preview.update_widget()
-                    return
+        except MaxContentLengthExceeded as error:
+            log.info('File size (%s) too big for URL: "%s"', error, uri)
+            preview.info_message = _('Automatic preview disabled '
+                                     '(file too big)')
 
-        assert preview.orig_path is not None
-        preview.mime_type = guess_mime_type(preview.orig_path, data)
+        except HTTPStatusError as error:
+            log.info('Status error for %s: %s', uri, error)
+            preview.info_message = str(error)
 
-        write_file_async(preview.orig_path,
-                         data,
-                         self._on_orig_write_finished,
-                         preview)
+        except OverflowError as error:
+            log.info("Content-Length overflow for %s: %s", uri, error)
 
-    def _on_orig_write_finished(self,
-                                _result: bool,
-                                error: GLib.Error | None,
-                                preview: Preview) -> None:
+        except CancelledError:
+            log.info("Download cancelled for %s", uri)
 
-        assert preview.orig_path is not None
-        if error is not None:
-            log.error('%s: %s', preview.orig_path.name, error)
+        except Exception:
+            log.exception("Unknown error for: %s", uri)
+            preview.info_message = _('Unknown Error')
+
+        finally:
+            if metadata := ftobj.get_metadata():
+                if preview.orig_path.exists():
+                    preview.mime_type = guess_mime_type(preview.orig_path)
+                elif metadata.content_type is not None:
+                    preview.mime_type = metadata.content_type
+
+                preview.file_size = metadata.content_length
+
+            preview.download_in_progress = False
+            preview.update_widget()
+
+        if ftobj.state != FTState.FINISHED:
+            # Some error happened
             return
 
         log.info('File stored: %s', preview.orig_path.name)
-        preview.file_size = os.path.getsize(preview.orig_path)
 
         if not app.settings.get('enable_file_preview'):
-            preview.update_widget()
             return
 
         if not preview.is_previewable:
@@ -641,5 +602,3 @@ class PreviewManager:
 
         elif preview.is_video:
             self._create_video_thumbnail(preview)
-
-        preview.update_widget()
