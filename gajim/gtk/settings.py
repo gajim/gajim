@@ -189,7 +189,9 @@ class GajimPreferencePage(Adw.NavigationPage):
         self._groups: list[GajimPreferencesGroup] = []
 
         for group in groups:
-            self._pref_page.add(group())
+            preference_group = group()
+            self._groups.append(preference_group)
+            self._pref_page.add(preference_group)
 
     def do_unroot(self) -> None:
         Adw.NavigationPage.do_unroot(self)
