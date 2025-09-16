@@ -411,8 +411,7 @@ class PreviewManager:
                 create_thumbnail,
                 preview.orig_path,
                 preview.thumb_path,
-                preview.size,
-                preview.mime_type,
+                preview.size
             )
             future.add_done_callback(
                 partial(GLib.idle_add, self._create_thumbnail_finished, preview)
