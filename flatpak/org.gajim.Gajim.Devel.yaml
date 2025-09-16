@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 command: gajim
 tags:
@@ -90,22 +90,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-45.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
+      - pip3 install cryptography-45.0.7-cp311-abi3-manylinux_2_34_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
-        sha256: 9cc80ce69032ffa528b5e16d217fa4d8d4bb7d6ba8659c1b4d74a1b0f4235fca
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.7-cp311-abi3-manylinux_2_34_aarch64.whl
+        sha256: 8978132287a9d3ad6b54fcd1e08548033cc09dc6aacacb6c004c73c3eb5d3ac3
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-45.0.3-cp311-abi3-manylinux_2_34_x86_64.whl
+      - pip3 install cryptography-45.0.7-cp311-abi3-manylinux_2_34_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.3-cp311-abi3-manylinux_2_34_x86_64.whl
-        sha256: c824c9281cb628015bfc3c59335163d4ca0540d49de4582d6c2637312907e4b1
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.7-cp311-abi3-manylinux_2_34_x86_64.whl
+        sha256: b6a0e535baec27b528cb07a119f321ac024592388c5681a5ced167ae98e9fff3
 
   - name: python3-jeepney
     buildsystem: simple
@@ -210,8 +210,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.8.tar.xz
-        sha256: 277646285818da7b295ef007b2c5ebd815d0930b3ad097505b3ced96965af517
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.9.tar.xz
+        sha256: d093fd35ae0f1c98fb58876505287fc0a885e47da9d2411d6d7cd595f34d4ebf
 
   - name: farstream
     rm-configure: true
@@ -253,11 +253,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.37.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.38.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/f3/c3/cba447ab531331d165d9003c04473be944a308ad916ca2345b5ef1969ed9/sentry_sdk-2.37.1-py2.py3-none-any.whl
-        sha256: baaaea6608ed3a639766a69ded06b254b106d32ad9d180bdbe58f3db9364592b
+        url: https://files.pythonhosted.org/packages/7a/84/bde4c4bbb269b71bc09316af8eb00da91f67814d40337cc12ef9c8742541/sentry_sdk-2.38.0-py2.py3-none-any.whl
+        sha256: 2324aea8573a3fa1576df7fb4d65c4eb8d9929c8fa5939647397a07179eef8d0
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -328,11 +328,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.32.0-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.32.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9c/f2/80ffc4677aac1bc3519b26bc7f7f5de7fce0ee2f7e36e59e27d8beb32dd1/protobuf-6.32.0-py3-none-any.whl
-        sha256: ba377e5b67b908c8f3072a57b63e2c6a4cbd18aea4ed98d2584350dbf46f2783
+        url: https://files.pythonhosted.org/packages/97/b7/15cc7d93443d6c6a84626ae3258a91f4c6ac8c0edd5df35ea7658f71b79c/protobuf-6.32.1-py3-none-any.whl
+        sha256: 2601b779fc7d32a866c6b4404f9d42a3f67c5b9f3f15b4db3cccabe06b95c346
 
   - name: python3-omemo-dr
     buildsystem: simple
