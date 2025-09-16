@@ -48,7 +48,8 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> tuple[bytes, dict[str,
         raise
 
     image_width, image_height = image.size
-    if size > image_width and size > image_height:
+    n_frames = getattr(image, "n_frames", 1)
+    if size > image_width and size > image_height and n_frames == 1:
         image.close()
         input_file.close()
         return data, metadata
@@ -60,6 +61,7 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> tuple[bytes, dict[str,
         output_file,
         format='png',
         optimize=True,
+        save_all=False
     )
 
     bytes_ = output_file.getvalue()
