@@ -88,7 +88,6 @@ class SettingKind(IntEnum):
     DIALOG = 5
     CALLBACK = 6
     FILECHOOSER = 10
-    CHANGEPASSWORD = 11
     COMBO = 12
     COLOR = 13
     DROPDOWN = 19

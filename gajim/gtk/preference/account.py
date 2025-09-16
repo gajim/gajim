@@ -713,11 +713,10 @@ class LoginGroup(GajimPreferencesGroup):
                 callback=self._on_save_password,
             ),
             Setting(
-                SettingKind.CHANGEPASSWORD,
+                SettingKind.DIALOG,
                 _("Change Password"),
                 SettingType.DIALOG,
-                callback=self._on_password_change,
-                props={"dialog": None},
+                props={"dialog": "ChangePassword"},
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -729,10 +728,6 @@ class LoginGroup(GajimPreferencesGroup):
 
         for setting in settings:
             self.add_setting(setting)
-
-    def _on_password_change(self, new_password: str, _data: Any) -> None:
-        assert self.account is not None
-        passwords.save_password(self.account, new_password)
 
     def _on_save_password(self, state: bool, _data: Any) -> None:
         if not state:

@@ -124,7 +124,6 @@ class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
             SettingKind.ACTION: ActionSetting,
             SettingKind.FILECHOOSER: FileChooserSetting,
             SettingKind.CALLBACK: CallbackSetting,
-            SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.DROPDOWN: DropDownSetting,
             SettingKind.GENERIC: GenericSetting,
         }
@@ -233,7 +232,6 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.ACTION: ActionSetting,
             SettingKind.FILECHOOSER: FileChooserSetting,
             SettingKind.CALLBACK: CallbackSetting,
-            SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.DROPDOWN: DropDownSetting,
             SettingKind.GENERIC: GenericSetting,
         }
@@ -777,31 +775,16 @@ class DropDownSetting(GenericSetting):
 
 
 class DialogSetting(GenericSetting):
-    def __init__(self, *args: Any, dialog: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, dialog: str, **kwargs: Any) -> None:
         GenericSetting.__init__(self, *args, **kwargs)
-        self._dialog_cls = dialog
 
-        self.setting_value = Gtk.Label()
-        self.setting_value.set_text(self.get_setting_value())
-        self.setting_value.set_halign(Gtk.Align.END)
-        self.setting_value.set_hexpand(True)
-        self.setting_box.prepend(self.setting_value)
+        self._dialog = dialog
 
-    def show_dialog(self) -> None:
-        window = self.get_root()
-        assert isinstance(window, Gtk.Root)
-        dialog = self._dialog_cls(self.account, window)
-        dialog.window.connect("close-request", self._on_close)
-
-    def _on_close(self, *args: Any) -> None:
-        self.setting_value.set_text(self.get_setting_value())
-
-    def get_setting_value(self) -> str:
-        self.setting_value.set_visible(False)
-        return ""
+        image = Gtk.Image.new_from_icon_name("lucide-chevron-right-symbolic")
+        self.add_suffix(image)
 
     def _on_activated(self, row: Adw.ActionRow) -> None:
-        self.show_dialog()
+        open_window(self._dialog, account=self.account)  # pyright: ignore
 
 
 class SubPageSetting(GenericSetting):
@@ -837,25 +820,3 @@ class SubPageSetting(GenericSetting):
             return
 
         nav.activate_action("navigation.push", GLib.Variant("s", self._subpage))
-
-
-class ChangePasswordSetting(DialogSetting):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        DialogSetting.__init__(self, *args, **kwargs)
-
-    def show_dialog(self) -> None:
-        settings_box = self.get_parent()
-        assert isinstance(settings_box, SettingsBox)
-        settings_dialog = settings_box.get_root()
-        assert isinstance(settings_dialog, Gtk.ApplicationWindow)
-        settings_dialog.destroy()
-        open_window("ChangePassword", account=self.account)
-
-    def update_activatable(self) -> None:
-        activatable = False
-        if self.account in app.settings.get_active_accounts():
-            client = app.get_client(self.account)
-            activatable = (
-                client.state.is_available and client.get_module("Register").supported
-            )
-        self.set_activatable(activatable)
