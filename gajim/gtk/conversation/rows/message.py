@@ -178,10 +178,10 @@ class MessageRow(BaseRow):
         self.text = message.text
 
         if app.preview_manager.is_previewable(self.text, message.oob):
-            self._message_widget = PreviewWidget(self._contact.account)
-            app.preview_manager.create_preview(
-                self.text, self._message_widget, self._is_outgoing, self._muc_context
+            preview = app.preview_manager.create_preview(
+                self._contact.account, self.text, self._is_outgoing, self._muc_context
             )
+            self._message_widget = PreviewWidget(self._contact.account, preview)
         else:
             if message.reply is not None:
                 referenced_message = message.get_referenced_message()

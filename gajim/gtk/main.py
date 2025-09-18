@@ -592,8 +592,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return
 
         if action_name == "preview-download":
-            if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
+            preview.download()
 
         elif action_name == "preview-open":
             if preview.is_geo_uri:
@@ -601,7 +600,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 return
 
             if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
+                preview.download()
                 return
 
             assert preview.orig_path is not None
@@ -671,7 +670,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 app.settings.set("last_save_dir", str(target_path.parent))
 
             if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
+                preview.download()
                 return
 
             gfile = None
@@ -687,7 +686,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         elif action_name == "preview-open-folder":
             if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
+                preview.download()
                 return
 
             assert preview.orig_path is not None

@@ -41,12 +41,15 @@ PREVIEW_ACTIONS: dict[str, tuple[str, str]] = {
 
 
 class PreviewWidget(Gtk.Box, SignalManager):
-    def __init__(self, account: str) -> None:
+    def __init__(self, account: str, preview: Preview) -> None:
         Gtk.Box.__init__(self)
         SignalManager.__init__(self)
 
         self.account = account
-        self._preview: Preview | None = None
+        self._preview = preview
+
+        self._connect(preview, "update", self._update)
+        self._connect(preview, "progress", self._update_progress)
 
         self._destroyed = False
 
@@ -95,11 +98,12 @@ class PreviewWidget(Gtk.Box, SignalManager):
             "preview_leftclick_action", self._update_icon_button_tooltip
         )
 
+        self._update(preview, None)
+
     def do_unroot(self) -> None:
         self._destroyed = True
         self._disconnect_all()
         app.settings.disconnect_signals(self)
-        self._preview = None
         del self._preview
         Gtk.Box.do_unroot(self)
         app.check_finalize(self)
@@ -108,14 +112,10 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.icon_button.set_tooltip_text(PREVIEW_ACTIONS[setting][0])
 
     def get_text(self) -> str:
-        if self._preview is None:
-            return ""
         return self._preview.uri
 
     @ensure_not_destroyed
-    def update_progress(self, preview: Preview, progress: float) -> None:
-        self._preview = preview
-
+    def _update_progress(self, _preview: Preview, progress: float) -> None:
         self._ui.preview_stack.set_visible_child_name("preview")
         self._ui.download_button.set_visible(False)
 
@@ -126,38 +126,36 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.info_message.set_tooltip_text("")
 
     @ensure_not_destroyed
-    def update(self, preview: Preview, data: bytes | None) -> None:
-        self._preview = preview
-
+    def _update(self, _preview: Preview) -> None:
         self._ui.preview_stack.set_visible_child_name("preview")
         self._ui.progress_box.set_visible(False)
         self._ui.info_message.set_visible(False)
 
-        if preview.is_geo_uri:
-            self._display_geo_uri(preview)
+        if self._preview.is_geo_uri:
+            self._display_geo_uri(self._preview)
             return
 
-        self._ui.image_button.set_tooltip_text(preview.filename)
+        self._ui.image_button.set_tooltip_text(self._preview.filename)
 
-        if data is None:
-            self._display_mime_type_icon(preview)
+        if self._preview.thumbnail is None:
+            self._display_mime_type_icon(self._preview)
         else:
-            self._display_image_preview(preview, data)
+            self._display_image_preview()
 
         preview_enabled = app.settings.get("enable_file_preview")
 
         if (
             preview_enabled
-            and preview.is_previewable
-            and preview.orig_exists
-            and preview.thumb_exists
+            and self._preview.is_previewable
+            and self._preview.orig_exists
+            and self._preview.thumb_exists
         ):
             self._ui.icon_event_box.set_visible(False)
             self._ui.image_button.set_visible(True)
             self._ui.save_as_button.set_visible(True)
             self._ui.open_folder_button.set_visible(True)
 
-            if preview.is_video:
+            if self._preview.is_video:
                 self._ui.image_button.add_css_class("preview-video-overlay")
                 play_button_img = Gtk.Image.new_from_icon_name("lucide-video-play")
                 play_button_img.set_hexpand(True)
@@ -172,22 +170,24 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._ui.icon_event_box.set_visible(True)
 
         file_size_string = _("File size unknown")
-        if preview.file_size != 0:
-            file_size_string = GLib.format_size_full(preview.file_size, self._units)
+        if self._preview.file_size != 0:
+            file_size_string = GLib.format_size_full(
+                self._preview.file_size, self._units
+            )
 
-        self._ui.link_button.set_uri(preview.uri)
-        self._ui.link_button.set_tooltip_text(preview.uri)
-        self._ui.link_button.set_label(preview.uri)
+        self._ui.link_button.set_uri(self._preview.uri)
+        self._ui.link_button.set_tooltip_text(self._preview.uri)
+        self._ui.link_button.set_label(self._preview.uri)
         label = cast(Gtk.Label, self._ui.link_button.get_child())
         label.set_ellipsize(Pango.EllipsizeMode.END)
         label.set_max_width_chars(32)
 
-        if preview.info_message is not None:
-            self._ui.info_message.set_text(preview.info_message)
-            self._ui.info_message.set_tooltip_text(preview.info_message)
+        if self._preview.info_message is not None:
+            self._ui.info_message.set_text(self._preview.info_message)
+            self._ui.info_message.set_tooltip_text(self._preview.info_message)
             self._ui.info_message.set_visible(True)
 
-        if preview.orig_exists:
+        if self._preview.orig_exists:
             if preview_enabled:
                 self._ui.link_button.set_visible(False)
 
@@ -197,19 +197,19 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
             if (
                 preview_enabled
-                and preview.orig_path is not None
-                and preview.is_audio
+                and self._preview.orig_path is not None
+                and self._preview.is_audio
                 and app.is_installed("GST")
-                and contains_audio_streams(preview.orig_path)
+                and contains_audio_streams(self._preview.orig_path)
             ):
                 self._ui.image_button.set_visible(False)
-                audio_widget = AudioWidget(preview.orig_path)
+                audio_widget = AudioWidget(self._preview.orig_path)
                 self._ui.right_box.append(audio_widget)
                 self._ui.right_box.reorder_child_after(
                     audio_widget, self._ui.content_box
                 )
         else:
-            if preview.file_size == 0:
+            if self._preview.file_size == 0:
                 if preview_enabled:
                     self._ui.download_button.set_visible(False)
                 else:
@@ -221,9 +221,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._ui.open_folder_button.set_visible(False)
             allow_in_public = app.settings.get("preview_anonymous_muc")
             if (
-                preview.context == "public"
+                self._preview.context == "public"
                 and not allow_in_public
-                and not preview.from_us
+                and not self._preview.from_us
             ):
                 image = Gtk.Image.new_from_icon_name("lucide-file-symbolic")
                 image.set_pixel_size(48)
@@ -232,8 +232,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 file_size_string = _("Automatic preview disabled")
 
         self._ui.file_size.set_text(file_size_string)
-        self._ui.file_name.set_text(preview.filename)
-        self._ui.file_name.set_tooltip_text(preview.filename)
+        self._ui.file_name.set_text(self._preview.filename)
+        self._ui.file_name.set_tooltip_text(self._preview.filename)
 
     def _display_geo_uri(self, preview: Preview) -> None:
         image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
@@ -260,13 +260,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
         image.add_css_class("p-6")
         self._ui.icon_button.set_child(image)
 
-    def _display_image_preview(self, preview: Preview, data: bytes) -> None:
+    def _display_image_preview(self) -> None:
         try:
-            texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+            texture = Gdk.Texture.new_from_bytes(
+                GLib.Bytes.new(self._preview.thumbnail)
+            )
         except GLib.Error:
-            log.exception("Could not load image %s", preview.filename)
+            log.exception("Could not load image %s", self._preview.filename)
             # Fallback to simple mime type icon
-            self._display_mime_type_icon(preview)
+            self._display_mime_type_icon(self._preview)
             return
 
         max_preview_size = app.settings.get("preview_size")
@@ -309,9 +311,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.button_box.add_css_class("preview-image-overlay")
 
     def _on_download(self, _button: Gtk.Button) -> None:
-        if self._preview is None:
-            return
-
         variant = GLib.Variant("s", self._preview.id)
         app.window.activate_action("win.preview-download", variant)
 
@@ -326,9 +325,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         app.window.activate_action("win.preview-open-folder", variant)
 
     def _on_content_button_clicked(self, _button: Gtk.Button) -> None:
-        if self._preview is None:
-            return
-
         leftclick_action = app.settings.get("preview_leftclick_action")
         variant = GLib.Variant("s", self._preview.id)
         action = PREVIEW_ACTIONS[leftclick_action][1]
@@ -341,8 +337,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         x: float,
         y: float,
     ) -> None:
-        if self._preview is None:
-            return
 
         menu = get_preview_menu(self._preview)
         self._menu_popover.set_menu_model(menu)
@@ -355,7 +349,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         _x: int,
         _y: int,
     ) -> None:
-        assert self._preview is not None
+
         if (
             self._preview.is_image or self._preview.is_video
         ) and self._preview.thumb_exists:
@@ -365,12 +359,11 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self,
         _controller: Gtk.EventControllerMotion,
     ) -> None:
-        assert self._preview is not None
+
         if (
             self._preview.is_image or self._preview.is_video
         ) and self._preview.thumb_exists:
             self._ui.button_box.set_visible(False)
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
-        assert self._preview is not None
         self._preview.cancel()
