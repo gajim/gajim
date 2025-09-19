@@ -288,7 +288,7 @@ def convert_texture_to_surface(texture: Gdk.Texture) -> cairo.ImageSurface:
     array = bytearray(bytes_)
 
     surface = cairo.ImageSurface.create_for_data(
-        array,  # pyright: ignore
+        array,
         cairo.Format.ARGB32,
         texture.get_width(),
         texture.get_height(),

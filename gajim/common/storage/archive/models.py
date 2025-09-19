@@ -19,10 +19,12 @@ from sqlalchemy import Select
 from sqlalchemy import select
 from sqlalchemy import types
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import foreign
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import MappedAsDataclass
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import remote as sa_remote
 from sqlalchemy.sql import expression as expr
 from sqlalchemy.types import TypeEngine
 
@@ -711,18 +713,18 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         lazy='selectin',
         init=False,
         primaryjoin=sa.and_(
-            sa.orm.foreign(id) == sa.orm.remote(correction_id),
-            sa.orm.foreign(fk_remote_pk) == sa.orm.remote(fk_remote_pk),
-            sa.orm.foreign(fk_account_pk) == sa.orm.remote(fk_account_pk),
-            sa.orm.foreign(fk_occupant_pk).is_(sa.orm.remote(fk_occupant_pk)),
-            sa.orm.foreign(direction) == sa.orm.remote(direction),
+            foreign(id) == sa_remote(correction_id),
+            foreign(fk_remote_pk) == sa_remote(fk_remote_pk),
+            foreign(fk_account_pk) == sa_remote(fk_account_pk),
+            foreign(fk_occupant_pk).is_(sa_remote(fk_occupant_pk)),
+            foreign(direction) == sa_remote(direction),
             expr.case(
                 (
                     sa.and_(
-                        sa.orm.foreign(type) == 2,  # Groupchat
-                        sa.orm.foreign(fk_occupant_pk).is_(None),
+                        foreign(type) == 2,  # Groupchat
+                        foreign(fk_occupant_pk).is_(None),
                     ),
-                    sa.orm.foreign(resource) == sa.orm.remote(resource),
+                    foreign(resource) == sa_remote(resource),
                 ),
                 else_=1,
             ),
@@ -740,9 +742,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             expr.case(
                 (
                     type == 2,  # Groupchat
-                    sa.orm.foreign(stanza_id) == DisplayedMarker.id,
+                    foreign(stanza_id) == DisplayedMarker.id,
                 ),
-                else_=sa.orm.foreign(id) == DisplayedMarker.id,
+                else_=foreign(id) == DisplayedMarker.id,
             ),
             fk_remote_pk == DisplayedMarker.fk_remote_pk,
             fk_account_pk == DisplayedMarker.fk_account_pk,
@@ -755,7 +757,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         lazy='selectin',
         init=False,
         primaryjoin=sa.and_(
-            sa.orm.foreign(id) == Receipt.id,
+            foreign(id) == Receipt.id,
             fk_remote_pk == Receipt.fk_remote_pk,
             fk_account_pk == Receipt.fk_account_pk,
         ),
@@ -769,9 +771,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             expr.case(
                 (
                     type == 2,  # Groupchat
-                    sa.orm.foreign(stanza_id) == Reaction.id,
+                    foreign(stanza_id) == Reaction.id,
                 ),
-                else_=sa.orm.foreign(id) == Reaction.id,
+                else_=foreign(id) == Reaction.id,
             ),
             fk_remote_pk == Reaction.fk_remote_pk,
             fk_account_pk == Reaction.fk_account_pk,
@@ -788,9 +790,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             expr.case(
                 (
                     type == 2,  # Groupchat
-                    sa.orm.foreign(stanza_id) == Retraction.id,
+                    foreign(stanza_id) == Retraction.id,
                 ),
-                else_=sa.orm.foreign(id) == Retraction.id,
+                else_=foreign(id) == Retraction.id,
             ),
             fk_remote_pk == Retraction.fk_remote_pk,
             fk_account_pk == Retraction.fk_account_pk,
@@ -805,7 +807,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         default=None,
         init=False,
         primaryjoin=sa.and_(
-            sa.orm.foreign(stanza_id) == sa.orm.remote(Moderation.stanza_id),
+            foreign(stanza_id) == sa_remote(Moderation.stanza_id),
             fk_remote_pk == Moderation.fk_remote_pk,
             fk_account_pk == Moderation.fk_account_pk,
         ),
@@ -817,7 +819,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         default=None,
         init=False,
         primaryjoin=sa.and_(
-            sa.orm.foreign(id) == sa.orm.remote(MessageError.message_id),
+            foreign(id) == sa_remote(MessageError.message_id),
             fk_remote_pk == MessageError.fk_remote_pk,
             fk_account_pk == MessageError.fk_account_pk,
         ),

@@ -38,6 +38,7 @@ from nbxmpp.structs import CommonError
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import RosterItem
 from sqlalchemy import event
+from sqlalchemy.dialects.sqlite import dialect as sqlite_dialect
 from sqlalchemy.engine import Engine
 from sqlalchemy.engine.interfaces import DBAPIConnection
 from sqlalchemy.orm import ORMExecuteState
@@ -452,7 +453,7 @@ class AlchemyStorage:
             return
 
         stmt = stmt.compile(
-            compile_kwargs={'literal_binds': True}, dialect=sa.dialects.sqlite.dialect()
+            compile_kwargs={'literal_binds': True}, dialect=sqlite_dialect()
         )
 
         res = session.execute(sa.text(f'EXPLAIN QUERY PLAN {stmt}')).all()

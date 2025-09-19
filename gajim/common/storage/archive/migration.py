@@ -17,6 +17,7 @@ import sqlalchemy as sa
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -136,8 +137,9 @@ class Migration:
             for stmt, error_string in statements:
                 try:
                     conn.execute(sa.text(stmt))
-                except sa.exc.OperationalError as e:
+                except OperationalError as e:
                     if error_string is not None:
+                        assert e.orig is not None
                         sql_error = e.orig.args[0]
                         if error_string in sql_error:
                             log.warning('Ignore "%s" for %s', sql_error, e.statement)
