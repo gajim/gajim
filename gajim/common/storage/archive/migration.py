@@ -121,6 +121,8 @@ class Migration:
             self._v11_and_v12()
         if user_version < 13:
             self._v13()
+        if user_version < 14:
+            self._v14()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -296,6 +298,16 @@ class Migration:
             ('PRAGMA user_version=13', None)
         ]
         self._execute_multiple_with_error(statements)
+
+    def _v14(self) -> None:
+        statements = [
+            ('CREATE INDEX IF NOT EXISTS idx_displayed_marker_last ON displayed_marker '
+             '(fk_remote_pk, fk_account_pk, timestamp DESC)'),
+            ('CREATE INDEX IF NOT EXISTS idx_displayed_marker_last_gc ON displayed_marker '
+             '(fk_remote_pk, fk_account_pk, fk_occupant_pk, timestamp DESC)'),
+            'PRAGMA user_version=14',
+        ]
+        self._execute_multiple(statements)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

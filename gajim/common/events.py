@@ -17,7 +17,6 @@ from functools import cached_property
 
 from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
-from nbxmpp.const import MessageType as NBXMPPMessageType
 from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.security_labels import Catalog
@@ -356,10 +355,13 @@ class DisplayedReceived(ApplicationEvent):
     name: str = field(init=False, default='displayed-received')
     account: str
     jid: JID
-    properties: Any
-    type: NBXMPPMessageType
-    is_muc_pm: bool
-    marker_id: str
+    pk: int
+
+    @cached_property
+    def marker(self) -> mod.DisplayedMarker:
+        d = app.storage.archive.get_display_marker_with_pk(self.pk)
+        assert d is not None
+        return d
 
 
 @dataclass

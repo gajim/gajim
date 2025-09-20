@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from typing import Any
 
-import datetime as dt
+from dataclasses import dataclass
+from datetime import datetime
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -24,8 +25,14 @@ from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_message_timestamp
+from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import OutgoingMessage
 
 
@@ -69,6 +76,9 @@ class ChatMarkers(BaseModule):
             jid = properties.jid.new_as_bare()
 
         if properties.type.is_groupchat:
+            if properties.jid.resource is None:
+                return
+
             assert properties.muc_jid is not None
             contact = self._client.get_module('Contacts').get_contact(
                 properties.muc_jid,
@@ -79,6 +89,7 @@ class ChatMarkers(BaseModule):
                 return
 
             if properties.muc_nickname != contact.nickname:
+                self._raise_event('displayed-received', properties)
                 return
 
             self._raise_read_state_sync(jid, properties.marker.id)
@@ -100,37 +111,75 @@ class ChatMarkers(BaseModule):
 
     def _raise_event(self, name: str, properties: MessageProperties) -> None:
         assert properties.marker is not None
+        assert properties.jid is not None
         assert properties.remote_jid is not None
 
         self._log.info('%s: %s %s',
                        name,
-                       properties.jid,
+                       properties.remote_jid,
                        properties.marker.id)
 
-        if not properties.is_muc_pm and not properties.type.is_groupchat:
-            if properties.mam is not None:
-                timestamp = properties.mam.timestamp
-            else:
-                timestamp = properties.timestamp
+        remote_jid = properties.remote_jid
+        timestamp = get_message_timestamp(properties)
 
-            timestamp = dt.datetime.fromtimestamp(
-                timestamp, dt.UTC)
+        muc_data = None
+        if properties.type.is_groupchat:
+            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            if muc_data is None:
+                self._log.warning(
+                    'Groupchat message from unknown MUC: %s', remote_jid
+                )
+                return
 
-            marker_data = mod.DisplayedMarker(
-                account_=self._account,
-                remote_jid_=properties.remote_jid,
-                occupant_=None,
-                id=properties.marker.id,
-                timestamp=timestamp)
-            app.storage.archive.insert_object(marker_data)
+        m_type, direction = get_chat_type_and_direction(
+            muc_data, self._client.get_own_jid(), properties)
+
+        if direction == ChatDirection.OUTGOING:
+            return
+
+        occupant = None
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            if properties.jid.is_bare:
+                self._log.warning("Received marker from MUC bare jid")
+                return
+
+            contact = self._client.get_module('Contacts').get_contact(
+                    properties.jid, groupchat=True)
+
+            assert isinstance(contact, GroupchatParticipant)
+            occupant = get_occupant_info(
+                self._account,
+                remote_jid=remote_jid,
+                own_bare_jid=self._get_own_bare_jid(),
+                direction=ChatDirection.INCOMING,
+                timestamp=timestamp,
+                contact=contact,
+                properties=properties,
+            )
+
+            if occupant is None:
+                # Support chat markers in group chats only if occupant-id
+                # is available
+                return
+
+        marker_data = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=properties.remote_jid,
+            occupant_=occupant,
+            id=properties.marker.id,
+            timestamp=timestamp)
+
+        pk = app.storage.archive.insert_object(marker_data)
+        if pk == -1:
+            return
 
         app.ged.raise_event(
-            DisplayedReceived(account=self._account,
-                              jid=properties.remote_jid,
-                              properties=properties,
-                              type=properties.type,
-                              is_muc_pm=properties.is_muc_pm,
-                              marker_id=properties.marker.id))
+            DisplayedReceived(
+                account=self._account,
+                jid=properties.remote_jid,
+                pk=pk,
+            )
+        )
 
     def send_displayed_marker(self,
                               contact: types.ChatContactT,
@@ -186,3 +235,26 @@ class ChatMarkers(BaseModule):
 
         return app.settings.get_group_chat_setting(
             contact.account, contact.jid.new_as_bare(), 'send_marker')
+
+
+@dataclass
+class DisplayedMarkerData:
+    account: str
+    jid: JID
+    id: str
+    timestamp: datetime
+    occupant: mod.Occupant | None
+
+    @classmethod
+    def from_model(
+        cls,
+        account: str,
+        marker: mod.DisplayedMarker
+    ) -> DisplayedMarkerData:
+        return cls(
+            account=account,
+            jid=marker.remote.jid,
+            id=marker.id,
+            timestamp=marker.timestamp,
+            occupant=marker.occupant
+        )

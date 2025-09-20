@@ -410,7 +410,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.set_read_marker(event.marker_id)
+        self._scrolled_view.update_displayed_markers(event)
 
     def _on_reaction_updated(self, event: events.ReactionUpdated) -> None:
         if not self._is_event_processable(event):
@@ -532,7 +532,7 @@ class ChatControl(EventHelper):
 
     def _add_message(self, message: Message) -> None:
         if self._allow_add_message():
-            self._scrolled_view.add_message_from_db(message)
+            self._scrolled_view.add_message(message)
 
             if not self.view_is_at_bottom():
                 if message.direction == ChatDirection.OUTGOING:
@@ -551,7 +551,7 @@ class ChatControl(EventHelper):
             self._scrolled_view.add_call_message(message=message)
             return
 
-        self._scrolled_view.add_message_from_db(message)
+        self._scrolled_view.add_message(message)
 
     def _request_messages(self, before: bool) -> Sequence[Message]:
         if before:

@@ -20,6 +20,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.util.user_strings import format_idle_time
+from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.builder import GajimBuilder
 from gajim.gtk.util.classes import SignalManager
@@ -335,3 +336,27 @@ class GajimPopover(Gtk.PopoverMenu):
     def do_unroot(self) -> None:
         Gtk.PopoverMenu.do_unroot(self)
         app.check_finalize(self)
+
+
+class TimeLabel(Gtk.Label):
+    __gtype_name__ = "TimeLabel"
+
+    def __init__(self) -> None:
+        Gtk.Label.__init__(self)
+        self._timestamp = None
+        app.pulse_manager.add_callback(self.pulse)
+
+    def do_unroot(self) -> None:
+        Gtk.Label.do_unroot(self)
+        app.pulse_manager.remove_callback(self.pulse)
+        app.check_finalize(self)
+
+    def set_timestamp(self, timestamp: dt.datetime) -> None:
+        self._timestamp = timestamp
+        self.pulse()
+
+    def pulse(self) -> None:
+        if self._timestamp is None:
+            return
+        rel_string = get_uf_relative_time(self._timestamp)
+        self.set_text(rel_string)

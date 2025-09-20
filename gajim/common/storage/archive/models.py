@@ -346,6 +346,7 @@ class DisplayedMarker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     remote_jid_: JID = dataclasses.field(repr=False)
     fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    remote: Mapped[Remote] = relationship(lazy='raise', foreign_keys=fk_remote_pk, viewonly=True, init=False)
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
@@ -375,6 +376,19 @@ class DisplayedMarker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             'fk_account_pk',
             unique=True,
             sqlite_where=fk_occupant_pk.isnot(None),
+        ),
+        Index(
+            'idx_last_displayed_marker',
+            'fk_remote_pk',
+            'fk_account_pk',
+            sa.text('timestamp DESC'),
+        ),
+        Index(
+            'idx_last_displayed_marker_gc',
+            'fk_remote_pk',
+            'fk_account_pk',
+            'fk_occupant_pk',
+            sa.text('timestamp DESC'),
         ),
     )
 
@@ -736,7 +750,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     markers: Mapped[list[DisplayedMarker]] = relationship(
-        lazy='selectin',
+        lazy='raise',
         init=False,
         primaryjoin=sa.and_(
             expr.case(
@@ -751,6 +765,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ),
         viewonly=True,
         uselist=True,
+        repr=False,
     )
 
     receipt: Mapped[Receipt | None] = relationship(
@@ -922,6 +937,11 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
                     ids.append(message.id)
 
         return ids
+
+    def get_displayed_id(self) -> str | None:
+        if self.type == MessageType.GROUPCHAT:
+            return self.stanza_id
+        return self.id
 
     def get_reactions(self) -> list[Reaction]:
         # Search in all revisions for reactions but return only the latest

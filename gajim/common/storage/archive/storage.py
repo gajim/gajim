@@ -22,6 +22,7 @@ from pathlib import Path
 import sqlalchemy as sa
 from nbxmpp import JID
 from sqlalchemy import delete
+from sqlalchemy import func
 from sqlalchemy import Row
 from sqlalchemy import select
 from sqlalchemy import union_all
@@ -30,8 +31,10 @@ from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import aliased
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import selectinload
 from sqlalchemy.orm import Session
 
 from gajim.common import app
@@ -63,9 +66,10 @@ from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
 from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
+from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 13
+CURRENT_USER_VERSION = 14
 
 
 log = logging.getLogger('gajim.c.storage.archive')
@@ -412,7 +416,9 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def delete_message(self, session: Session, pk: int) -> None:
-        message = self._get_message_with_pk(session, pk)
+        message = self._get_message_with_pk(
+            session, pk, options=[selectinload(Message.markers)]
+        )
         if message is None:
             self._log.warning('Deletion failed, no message found with pk %s', pk)
             return
@@ -740,6 +746,79 @@ class MessageArchiveStorage(AlchemyStorage):
         return app.storage.archive.get_message_with_id(
             account, jid, reply_id)
 
+    @with_session
+    @timeit
+    def get_display_marker_with_pk(
+        self, session: Session, pk: int
+    ) -> DisplayedMarker | None:
+        stmt = (
+            select(DisplayedMarker)
+            .where(DisplayedMarker.pk == pk)
+            .options(joinedload(DisplayedMarker.remote))
+        )
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
+    def get_last_display_marker(
+        self,
+        session: Session,
+        account: str,
+        jid: JID
+    ) -> DisplayedMarker | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = (
+            select(DisplayedMarker)
+            .where(
+                DisplayedMarker.fk_remote_pk == fk_remote_pk,
+                DisplayedMarker.fk_account_pk == fk_account_pk,
+                DisplayedMarker.timestamp > utc_now() - timedelta(days=180)
+            )
+            .order_by(sa.desc(DisplayedMarker.timestamp))
+            .limit(1)
+            .options(joinedload(DisplayedMarker.remote))
+        )
+        self._explain(session, stmt)
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
+    def get_last_display_markers(
+        self,
+        session: Session,
+        account: str,
+        jid: JID
+    ) -> list[DisplayedMarker]:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        cte = (
+            select(
+                DisplayedMarker,
+                func.row_number().over(
+                    partition_by=DisplayedMarker.fk_occupant_pk,
+                    order_by=sa.desc(DisplayedMarker.timestamp)
+                ).label("rn"),
+            )
+            .where(
+                DisplayedMarker.fk_remote_pk == fk_remote_pk,
+                DisplayedMarker.fk_account_pk == fk_account_pk,
+                DisplayedMarker.timestamp > utc_now() - timedelta(days=90)
+            ).cte()
+        )
+
+        dm = aliased(DisplayedMarker, cte)
+        stmt = (
+            select(dm).where(cte.c.rn == 1)
+            .options(joinedload(dm.remote))
+        )
+
+        self._explain(session, stmt)
+        return list(session.scalars(stmt).all())
 
     @with_session
     @timeit
@@ -1154,7 +1233,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
             stmt = select(Message).where(
                 Message.fk_account_pk == fk_account_pk, Message.timestamp < threshold
-            )
+            ).options(selectinload(Message.markers))
 
             for message in session.scalars(stmt).unique().all():
                 self._delete_message(session, message)

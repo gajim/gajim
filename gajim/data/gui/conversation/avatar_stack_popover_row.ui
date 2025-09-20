@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AvatarStackPopoverRow" parent="GtkListBoxRow">
+    <property name="activatable">false</property>
+    <style>
+      <class name="py-9"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">9</property>
+        <child>
+          <object class="GtkImage" id="_avatar_image">
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkLabel" id="_contact_name_label">
+                <property name="halign">start</property>
+                <property name="ellipsize">end</property>
+                <property name="max-width-chars">52</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_timestamp_label">
+                <property name="halign">start</property>
+                <style>
+                  <class name="caption"/>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -763,10 +763,6 @@ button.flat.link { padding: 0; border: 0; }
     opacity: 0.6;
     font-size: 90%;
 }
-.conversation-read-marker {
-    font-size: 90%;
-    font-style: italic;
-}
 .conversation-nickname {
     font-size: 90%;
     font-weight: bold;
@@ -926,3 +922,11 @@ list.sidebar-switcher .sidebar-row-header {
 .start-chat-row.activatable:active { box-shadow: none; }
 .start-chat-row { padding: 5px 20px 5px 8px; }
 .start-chat-row:focus { outline: none; }
+
+/* AvatarStack */
+
+#AvatarStack button { border-radius: 18px; }
+#AvatarStack button:not(:hover) { background-color: transparent; }
+#AvatarStack button > box { padding-left: 6px; margin-right: -3px; }
+#AvatarStack button image { margin-left: -9px; }
+#AvatarStackPopover contents { padding: 0px; }

@@ -10,6 +10,7 @@ from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import selectinload
 
 from gajim.common import app
 from gajim.common.helpers import get_uuid
@@ -80,7 +81,9 @@ class DisplayedMarkersTest(unittest.TestCase):
 
         pk = self._archive.insert_object(message_data)
 
-        message = self._archive.get_message_with_pk(pk)
+        message = self._archive.get_message_with_pk(
+            pk, options=[selectinload(Message.markers)]
+        )
 
         assert message is not None
         assert message.markers
@@ -158,14 +161,16 @@ class DisplayedMarkersTest(unittest.TestCase):
 
         pk = self._archive.insert_object(message_data)
 
-        message = self._archive.get_message_with_pk(pk)
+        message = self._archive.get_message_with_pk(
+            pk, options=[selectinload(Message.markers)]
+        )
 
         assert message is not None
         assert message.markers
 
         self.assertTrue(len(message.markers), 2)
 
-        marker1, marker2 = message.markers
+        marker1, marker2 = sorted(message.markers, key=lambda x: x.pk)
         assert marker1.occupant is not None
         assert marker2.occupant is not None
 
