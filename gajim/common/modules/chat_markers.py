@@ -25,7 +25,10 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.modules.message_util import get_message_timestamp
+from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.structs import OutgoingMessage
 
 
@@ -79,6 +82,7 @@ class ChatMarkers(BaseModule):
                 return
 
             if properties.muc_nickname != contact.nickname:
+                self._raise_event('displayed-received', properties)
                 return
 
             self._raise_read_state_sync(jid, properties.marker.id)
@@ -107,7 +111,8 @@ class ChatMarkers(BaseModule):
                        properties.jid,
                        properties.marker.id)
 
-        if not properties.is_muc_pm and not properties.type.is_groupchat:
+        occupant = None
+        if not properties.is_muc_pm:
             if properties.mam is not None:
                 timestamp = properties.mam.timestamp
             else:
@@ -116,10 +121,28 @@ class ChatMarkers(BaseModule):
             timestamp = dt.datetime.fromtimestamp(
                 timestamp, dt.UTC)
 
+            if (properties.type.is_groupchat
+                    and properties.jid is not None
+                    and properties.jid.resource is not None):
+                assert properties.muc_jid is not None
+                room = self._client.get_module('Contacts').get_contact(
+                    properties.muc_jid,
+                    groupchat=True)
+                assert isinstance(room, GroupchatContact)
+                occupant = get_occupant_info(
+                    self._account,
+                    remote_jid=properties.remote_jid,
+                    own_bare_jid=self._client.get_own_jid().new_as_bare(),
+                    direction=ChatDirection.INCOMING,
+                    timestamp=get_message_timestamp(properties),
+                    contact=room.get_resource(properties.jid.resource),
+                    properties=properties,
+                )
+
             marker_data = mod.DisplayedMarker(
                 account_=self._account,
                 remote_jid_=properties.remote_jid,
-                occupant_=None,
+                occupant_=occupant,
                 id=properties.marker.id,
                 timestamp=timestamp)
             app.storage.archive.insert_object(marker_data)
@@ -130,7 +153,8 @@ class ChatMarkers(BaseModule):
                               properties=properties,
                               type=properties.type,
                               is_muc_pm=properties.is_muc_pm,
-                              marker_id=properties.marker.id))
+                              marker_id=properties.marker.id,
+                              occupant=occupant))
 
     def send_displayed_marker(self,
                               contact: types.ChatContactT,

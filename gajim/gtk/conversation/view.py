@@ -124,6 +124,8 @@ class ConversationView(Gtk.ScrolledWindow):
             "register-actions", ged.GUI1, self._on_register_actions
         )
 
+        self._displayed_markers: dict[str, tuple[str, datetime]] = {}
+
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
             "activate", self._on_scroll_view
@@ -518,10 +520,46 @@ class ConversationView(Gtk.ScrolledWindow):
             self._read_marker_row.set_last_incoming_timestamp(message_row.timestamp)
 
         if message.markers:
-            assert message.id is not None
-            self.set_read_marker(message.id)
+            assert self._contact is not None
+            if self._contact.is_groupchat:
+                for marker in message.markers:
+                    if (
+                        marker.occupant is None
+                        or marker.occupant.nickname is None
+                        or message.stanza_id is None
+                    ):
+                        continue
+                    self.add_displayed_marker(
+                        message.stanza_id, marker.occupant.nickname, marker.timestamp
+                    )
+            else:
+                assert message.id is not None
+                self.set_read_marker(message.id)
 
         self._insert_message(message_row)
+
+    def add_displayed_marker(
+        self, stanza_id: str, nickname: str, timestamp: datetime
+    ) -> None:
+        existing = self._displayed_markers.get(nickname)
+        if existing is None or existing[1] < timestamp:
+            self._displayed_markers[nickname] = (
+                stanza_id,
+                timestamp,
+            )
+
+    def update_displayed_markers(self) -> None:
+        for nickname, (stanza_id, ts) in self._displayed_markers.items():
+            row = self._get_row_by_stanza_id(stanza_id)
+            if row is None:
+                continue
+            row.add_displayed_by(nickname, ts)
+            if row.is_merged:
+                # we want the displayed marker to propagate to the "merged-with
+                # ancestor" to actually show the "displayed icon".
+                ancestor = self._find_ancestor(row)
+                if ancestor is not None:
+                    ancestor.add_displayed_by(nickname, ts)
 
     def _insert_message(self, message: BaseRow) -> None:
         self._list_box.append(message)

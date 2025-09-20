@@ -336,6 +336,10 @@ class MessageIcons(Gtk.Box):
         self._marker_image.add_css_class("dimmed")
         self._marker_image.set_tooltip_text(p_("Message state", "Received"))
 
+        self._displayed_image = Gtk.Image.new_from_icon_name("lucide-eye-symbolic")
+        self._displayed_image.set_visible(False)
+        self._displayed_image.add_css_class("dimmed")
+
         self._error_image = Gtk.Image.new_from_icon_name("lucide-circle-alert-symbolic")
         self._error_image.add_css_class("warning")
         self._error_image.set_visible(False)
@@ -345,6 +349,7 @@ class MessageIcons(Gtk.Box):
         self.append(self._correction_image)
         self.append(self._message_state_image)
         self.append(self._marker_image)
+        self.append(self._displayed_image)
         self.append(self._error_image)
 
     def set_encryption_icon_visible(self, visible: bool) -> None:
@@ -369,6 +374,22 @@ class MessageIcons(Gtk.Box):
         if not app.settings.get("positive_184_ack"):
             return
         self._marker_image.set_visible(visible)
+
+    def set_displayed_by(self, nicks_ts: dict[str, datetime]) -> None:
+        self._displayed_image.set_visible(True)
+        format_string = app.settings.get("date_time_format")
+
+        sorted_nicks = sorted(nicks_ts.items(), key=lambda x: x[1])
+        readers = "\n".join(
+            [
+                f"{nick} ({timestamp.astimezone().strftime(format_string)})"
+                for nick, timestamp in sorted_nicks
+            ]
+        )
+        self._displayed_image.set_tooltip_text(
+            p_("Participants who read up to this point", "Read up to this point: %s")
+            % f"\n{readers}"
+        )
 
     def set_message_state_icon(self, state: MessageState) -> None:
         if state == MessageState.PENDING:

@@ -352,6 +352,7 @@ class DisplayedReceived(ApplicationEvent):
     type: NBXMPPMessageType
     is_muc_pm: bool
     marker_id: str
+    occupant: mod.Occupant | None
 
 
 @dataclass
