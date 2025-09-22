@@ -276,6 +276,11 @@ MAIN_WIN_ACTIONS = [
     ("mark-workspace-as-read", "s", True),
     ("add-chat", "a{sv}", True),
     ("add-group-chat", "as", True),
+    ("thread-select", "s", True),
+    ("thread-select-none", None, True),
+    ("thread-deselect", None, True),
+    ("thread-start", None, True),
+    ("thread-toggle-list", None, True),
 ]
 
 

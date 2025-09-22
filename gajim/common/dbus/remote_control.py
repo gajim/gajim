@@ -259,7 +259,8 @@ class GajimRemote(Server):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         message_ = OutgoingMessage(account=account,
                                    contact=contact,
-                                   text=message)
+                                   text=message,
+                                   thread_id=contact.thread_id)
 
         app.get_client(account).send_message(message_)
         return True

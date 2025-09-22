@@ -210,6 +210,8 @@ def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
     params = AccountJidParam(account=contact.account, jid=contact.jid)
     menu.add_item(_("Remove History…"), "app.remove-history", params)
 
+    menu.add_item(_("Start a new thread…"), "win.thread-start")
+
     return menu
 
 

@@ -159,6 +159,14 @@ class MessageRow(BaseRow):
         self._meta_box.append(self._message_icons)
 
         self._is_blocked = False
+
+        if message.thread is None:
+            self._thread_id = None
+        else:
+            self._thread_id = message.thread.id
+            if not self._contact.threaded:
+                self._message_icons.set_thread(self._thread_id)
+
         if message.occupant is not None and message.occupant.blocked:
             self._set_blocked()
             return
@@ -380,6 +388,8 @@ class MessageRow(BaseRow):
         if not self.is_same_securitylabels(message):
             return False
         if not self.has_same_receipt_status(message):
+            return False
+        if message._thread_id != self._thread_id:
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 

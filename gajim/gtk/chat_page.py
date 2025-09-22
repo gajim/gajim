@@ -30,6 +30,7 @@ from gajim.gtk.chat_list_header import ChatListHeader
 from gajim.gtk.chat_list_stack import ChatListStack
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.search_view import SearchView
+from gajim.gtk.thread_info import ThreadList
 from gajim.gtk.util.misc import get_ui_string
 
 if TYPE_CHECKING:
@@ -48,6 +49,8 @@ class ChatPage(Gtk.Paned):
     _list_stack: Gtk.Stack = Gtk.Template.Child()
     _search_revealer: Gtk.Revealer = Gtk.Template.Child()
     _search_view: SearchView = Gtk.Template.Child()
+    # _thread_list_revealer: Gtk.Revealer = Gtk.Template.Child()
+    # _thread_list_view: ThreadList = Gtk.Template.Child()
     _chat_list_stack: ChatListStack = Gtk.Template.Child()
     _activity_list: ActivityListView = Gtk.Template.Child()
 

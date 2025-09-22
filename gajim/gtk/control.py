@@ -9,6 +9,7 @@ from typing import Any
 import datetime as dt
 import logging
 import time
+import uuid
 from collections.abc import Sequence
 
 from gi.repository import Gio
@@ -43,6 +44,7 @@ from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.view import ConversationView
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.groupchat_state import GroupchatState
+from gajim.gtk.thread_info import ThreadList
 
 HistoryRowT = events.ApplicationEvent | Message
 
@@ -84,6 +86,14 @@ class ChatControl(EventHelper):
         self._roster = GroupchatRoster()
         self._ui.conv_view_paned.set_end_child(self._roster)
 
+        self._thread_list_revealer = Gtk.Revealer()
+        self._thread_list_revealer.set_transition_type(
+            Gtk.RevealerTransitionType.SLIDE_LEFT
+        )
+        self.thread_list_view = ThreadList()
+        self._thread_list_revealer.set_child(self.thread_list_view)
+        self._ui.control_box.append(self._thread_list_revealer)
+
         # Used with encryption plugins
         self.sendmessage = False
 
@@ -93,6 +103,18 @@ class ChatControl(EventHelper):
             "register-actions", ged.GUI1, self._on_register_actions
         )
 
+    def _toggle_thread_list(self, *_args):
+        toggled = not self._thread_list_revealer.get_reveal_child()
+        self._thread_list_revealer.set_reveal_child(toggled)
+        if toggled:
+            icon = "lucide-chevron-right-symbolic"
+        else:
+            icon = "lucide-chevron-left-symbolic"
+        # FIXME: hierarchy of stuff
+        app.window.get_chat_stack().thread_info_box.toggle_chevron_image.set_from_icon_name(
+            icon
+        )
+
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("activate-message-selection").connect(
             "activate", self._on_activate_message_selection
@@ -100,6 +122,77 @@ class ChatControl(EventHelper):
         app.window.get_action("jump-to-message").connect(
             "activate", self._on_jump_to_message
         )
+        app.window.get_action("thread-start").connect("activate", self._thread_start)
+        app.window.get_action("thread-select").connect("activate", self._thread_select)
+        app.window.get_action("thread-select-none").connect(
+            "activate", self._thread_select_none
+        )
+        app.window.get_action("thread-deselect").connect(
+            "activate", self._thread_deselect
+        )
+
+        app.window.get_action("thread-toggle-list").connect(
+            "activate", self._toggle_thread_list
+        )
+
+    @property
+    def _thread_list(self) -> ThreadList:
+        return self.thread_list_view
+
+    def _request_threads(self):
+        self._thread_list.reset()
+        threads = app.storage.archive.get_threads(
+            self._contact.account,
+            self._contact.jid,
+            limit=10,  # TODO: fetch more when scrolling
+        )
+        for thread in threads:
+            self._thread_list.add_thread(thread)
+        if threads:
+            app.window.get_chat_stack().show_thread_banner()
+            # FIXME: this does not work and may not be the right place to do that
+            self._thread_list.scroll_to_bottom(force=True)
+        else:
+            app.window.get_chat_stack().hide_thread_banner()
+
+    def _thread_start(self, *args) -> None:
+        log.warning("Starting thread")
+        self._contact.thread = uuid.uuid4().hex
+        self._contact.threaded = True
+        self._thread_reset()
+
+    def _thread_deselect(self, *args) -> None:
+        if not self._contact.threaded and self._contact.thread is None:
+            return
+        log.warning("De-selecting thread")
+        self._contact.thread = None
+        self._contact.threaded = False
+        self._thread_reset()
+
+    def _thread_select(self, action, parameter) -> None:
+        thread_id = parameter.get_string()
+        if self._contact.thread == thread_id and self._contact.threaded:
+            return
+        log.warning("Selecting thread %s", thread_id)
+        if self._contact.threaded and self._contact.thread == thread_id:
+            app.window.get_action("thread-deselect").activate()
+            return
+        self._contact.thread = thread_id
+        self._contact.threaded = True
+        self._thread_reset()
+
+    def _thread_select_none(self, *args) -> None:
+        log.warning("Selecting thread <None>")
+        if self._contact.threaded and self._contact.thread is None:
+            app.window.get_action("thread-deselect").activate()
+            return
+        self._contact.thread = None
+        self._contact.threaded = True
+        self._thread_reset()
+
+    def _thread_reset(self) -> None:
+        self._scrolled_view.reset()
+        self._request_history(None, True)
 
     @property
     def contact(self) -> types.ChatContactT | None:
@@ -193,11 +286,34 @@ class ChatControl(EventHelper):
 
         row = self._scrolled_view.get_row_by_pk(pk)
         if row is None:
+            if self._contact.threaded:
+                msg = app.storage.archive.get_message_with_pk(pk)
+                if msg is None:
+                    app.window.get_action("thread-deselect").activate()
+                    app.window.get_action("jump-to-message").activate(
+                        GLib.Variant("au", [pk, timestamp.timestamp()])
+                    )
+                    return
+                elif msg.thread_id_ != self._contact.thread:
+                    if msg.thread_id_ is None:
+                        app.window.get_action("thread-select-none").activate()
+                    else:
+                        app.window.get_action("thread-select").activate(
+                            GLib.Variant("s", msg.thread_id_)
+                        )
+                    app.window.get_action("jump-to-message").activate(
+                        GLib.Variant("au", [pk, timestamp.timestamp()])
+                    )
+                    return
             # Clear view and reload conversation around timestamp
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
             messages = app.storage.archive.get_conversation_around_timestamp(
-                self._contact.account, self._contact.jid, timestamp
+                self._contact.account,
+                self._contact.jid,
+                timestamp,
+                use_thread=self._contact.threaded,
+                thread_id=self._contact.thread,
             )
             self._add_messages(messages)
             self._scrolled_view.set_history_complete(False, False)
@@ -242,6 +358,8 @@ class ChatControl(EventHelper):
         self._request_history(None, True)
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
+        app.window.get_action("thread-deselect").activate()
+        self._request_threads()
 
         self._reset_message_selection()
 
@@ -338,6 +456,10 @@ class ChatControl(EventHelper):
         if event.jid is None:
             return True
 
+        if self._contact.threaded:
+            if getattr(event, "thread_id", None) != self._contact.thread:
+                return False
+
         return event.jid == self._contact.jid
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
@@ -358,6 +480,8 @@ class ChatControl(EventHelper):
         )
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
+        self._update_thread(event)  # FIXME:
+
         if not self._is_event_processable(event):
             return
 
@@ -376,10 +500,22 @@ class ChatControl(EventHelper):
         self._scrolled_view.acknowledge_message(event)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
+        self._update_thread(event)  # FIXME:
+
         if not self._is_event_processable(event):
             return
 
         self._add_message(event.message)
+
+    def _update_thread(self, event: events.MessageReceived) -> None:
+        if self._contact is None:  # FIXME: merge with is_event_processable
+            return
+        if event.account != self._contact.account:
+            return
+        if event.jid is None:
+            return
+        if event.jid == self._contact.jid:
+            self._thread_list.add_message(event.message)
 
     def _on_message_corrected(self, event: events.MessageCorrected) -> None:
         if not self._is_event_processable(event):
@@ -575,6 +711,8 @@ class ChatControl(EventHelper):
             before,
             timestamp,
             REQUEST_LINES_COUNT,
+            use_thread=self._contact.threaded,
+            thread_id=self._contact.thread,
         )
 
     def _request_events(self, before: bool) -> list[events.ApplicationEvent]:
@@ -601,7 +739,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.block_signals(True)
 
         messages = self._request_messages(before)
-        event_rows = self._request_events(before)
+        event_rows = [] if self._contact.threaded else self._request_events(before)
         rows = self._sort_request_rows(messages, event_rows, before)
 
         assert self._contact is not None

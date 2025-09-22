@@ -14,13 +14,17 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import events
+from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
+from gajim.common.util.identicons import get_identicon_pixbuf
 
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_groupchat_participant_menu
@@ -181,7 +185,6 @@ class MessageRowActions(Gtk.Box):
         _x: int,
         _y: int,
     ) -> None:
-
         self._has_cursor = True
 
         if self._is_menu_open:
@@ -208,6 +211,12 @@ class MessageRowActions(Gtk.Box):
             return
 
         app.window.activate_action("win.reply", GLib.Variant("u", self._message_row.pk))
+        if self._message_row._thread_id is None:
+            app.window.get_action("thread-select-none").activate()
+        else:
+            app.window.get_action("thread-select").activate(
+                GLib.Variant("s", self._message_row._thread_id)
+            )
 
     def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
         self._send_reaction(button.emoji)
@@ -252,7 +261,6 @@ class MessageRowActions(Gtk.Box):
 
 class QuickReactionButton(Gtk.Button):
     def __init__(self, emoji: str) -> None:
-
         self.emoji = emoji
 
         # Add emoji presentation selector, otherwise depending on the font
@@ -310,6 +318,7 @@ class NicknameLabel(Gtk.Label):
 class MessageIcons(Gtk.Box):
     def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
+        EventHelper.__init__(self)
 
         self._encryption_image = Gtk.Image()
         self._encryption_image.set_visible(False)
@@ -340,12 +349,41 @@ class MessageIcons(Gtk.Box):
         self._error_image.add_css_class("warning")
         self._error_image.set_visible(False)
 
+        self._thread_image = Gtk.Image()
+        self._thread_image.set_visible(False)
+        self.thread_id = None
+
         self.append(self._encryption_image)
         self.append(self._security_label)
         self.append(self._correction_image)
         self.append(self._message_state_image)
         self.append(self._marker_image)
         self.append(self._error_image)
+        self.append(self._thread_image)
+
+        click_gesture = Gtk.GestureClick.new()
+        click_gesture.connect("pressed", self._on_thread_click)
+        self._thread_image.add_controller(click_gesture)
+
+    def set_thread(self, thread_id: str | None) -> None:
+        if thread_id is None:
+            return
+        self.thread_id = thread_id
+
+        pixbuf = get_identicon_pixbuf(thread_id, 10)
+        self._thread_image.set_from_pixbuf(pixbuf)
+        self._thread_image.set_visible(True)
+        self._thread_image.set_tooltip_text(
+            _("This message belongs to a specific thread")
+        )
+
+    def _on_thread_click(self, *args) -> None:
+        if self.thread_id is None:
+            app.window.activate_action("win.thread-select-none")
+        else:
+            app.window.activate_action(
+                "win.thread-select", GLib.Variant("s", self.thread_id)
+            )
 
     def set_encryption_icon_visible(self, visible: bool) -> None:
         self._encryption_image.set_visible(visible)

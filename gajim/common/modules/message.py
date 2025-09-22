@@ -179,7 +179,8 @@ class Message(BaseModule):
                     MessageAcknowledged(account=self._account,
                                         jid=remote_jid,
                                         pk=pk,
-                                        stanza_id=stanza_id))
+                                        stanza_id=stanza_id,
+                                        thread_id=properties.thread))
                 return
 
         occupant = None
@@ -264,7 +265,8 @@ class Message(BaseModule):
                                             jid=remote_jid,
                                             m_type=m_type,
                                             from_mam=properties.is_mam_message,
-                                            pk=pk))
+                                            pk=pk,
+                                            thread_id=properties.thread))
 
     def _message_error_received(self,
                                 _con: types.NBXMPPClient,
@@ -448,9 +450,9 @@ class Message(BaseModule):
             self._account, remote_jid, message.timestamp, message.sec_label)
         reply = get_reply(message.reply_data)
 
-        thread_id = None
-        if message.reply_data is not None:
-            thread_id = message.reply_data.thread_id
+        thread_id = message.thread_id
+        # if message.reply_data is not None:
+        #     thread_id = message.reply_data.thread_id
 
         oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
@@ -493,7 +495,8 @@ class Message(BaseModule):
             MessageSent(jid=remote_jid,
                         account=message.account,
                         pk=pk,
-                        play_sound=message.play_sound))
+                        play_sound=message.play_sound,
+                        thread_id=thread_id))
 
 
 def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Message:
@@ -509,7 +512,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     stanza.setID(message.message_id)
     stanza.setOriginID(message.message_id)
 
-    thread_id = None
+    thread_id = message.thread_id
 
     # Mark Message as MUC PM
     if message.is_pm:
@@ -527,7 +530,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # XEP-0461
     if message.reply_data is not None:
-        thread_id = message.reply_data.thread_id
+        # thread_id = message.reply_data.thread_id
         stanza.setReply(str(message.reply_data.to),
                         message.reply_data.id,
                         message.reply_data.fallback_start,

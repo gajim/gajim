@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Literal
+from typing import NamedTuple
 
 import calendar
 import datetime as dt
@@ -549,6 +550,8 @@ class MessageArchiveStorage(AlchemyStorage):
         before: bool,
         timestamp: datetime,
         n_lines: int,
+        use_thread: bool = False,
+        thread_id: str | None = None,
     ) -> Sequence[Message]:
         '''
         Load n messages from jid before or after timestamp
@@ -574,6 +577,12 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.correction_id.is_(None),
         )
 
+        if use_thread:
+            if thread_id is None:
+                stmt = stmt.where(Message.fk_thread_pk.is_(None))
+            else:
+                stmt = stmt.join(Message.thread).where(Thread.id == thread_id)
+
         if before:
             stmt = stmt.where(Message.timestamp < timestamp).order_by(
                 sa.desc(Message.timestamp), sa.desc(Message.pk)
@@ -595,7 +604,9 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         account: str,
         jid: JID,
-        timestamp: datetime
+        timestamp: datetime,
+        thread_id: str | None,
+        use_thread: bool = False,
     ) -> list[Message]:
         '''
         Loads messages around a primary key
@@ -616,6 +627,12 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.fk_account_pk == fk_account_pk,
             Message.correction_id.is_(None),
         )
+
+        if use_thread:
+            if thread_id is None:
+                base_stmt = base_stmt.where(Message.fk_thread_pk.is_(None))
+            else:
+                base_stmt = base_stmt.join(Message.thread).where(Thread.id == thread_id)
 
         preceding_query = base_stmt.where(
             Message.timestamp <= timestamp,
@@ -1233,3 +1250,106 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._explain(session, stmt)
         return session.execute(stmt).rowcount
+
+    @with_session
+    @timeit
+    def get_threads(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        limit: int | None = None,
+    ) -> list["ThreadDetails"]:
+        '''
+        Get threads with detailed information including message count,
+        first message, and last message (full Message objects).
+
+        Uses window functions for optimal performance.
+
+        :param account:
+            The account
+        :param jid:
+            The jid for which we request the conversation
+        :return:
+            List of dictionaries containing thread info with message details
+        '''
+        from sqlalchemy import func
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        # First get all threads for this account/jid
+        threads_stmt = select(Thread).where(
+            Thread.fk_remote_pk == fk_remote_pk,
+            Thread.fk_account_pk == fk_account_pk,
+        ).order_by(Thread.pk.desc()).limit(limit)
+
+        threads = list(session.scalars(threads_stmt).all())
+
+        if not threads:
+            return []
+
+        thread_pks = [t.pk for t in threads]
+
+        # Get message counts, first and last message PKs for all threads in one query
+        message_stats = (
+            select(
+                Message.fk_thread_pk,
+                func.count().over(partition_by=Message.fk_thread_pk).label('message_count'),
+                func.first_value(Message.pk).over(
+                    partition_by=Message.fk_thread_pk,
+                    order_by=Message.timestamp.asc(),
+                    range_=(None, None)
+                ).label('first_message_pk'),
+                func.first_value(Message.pk).over(
+                    partition_by=Message.fk_thread_pk,
+                    order_by=Message.timestamp.desc(),
+                    range_=(None, None)
+                ).label('last_message_pk'),
+            )
+            .where(Message.fk_thread_pk.in_(thread_pks))
+            .distinct()
+        )
+
+        # Execute and collect thread stats
+        thread_stats = {}
+        message_pks_to_fetch = set()
+
+        for row in session.execute(message_stats):
+            thread_pk = row.fk_thread_pk
+            thread_stats[thread_pk] = {
+                'message_count': row.message_count,
+                'first_message_pk': row.first_message_pk,
+                'last_message_pk': row.last_message_pk,
+            }
+            message_pks_to_fetch.add(row.first_message_pk)
+            message_pks_to_fetch.add(row.last_message_pk)
+
+        # Fetch all first and last messages in one query
+        messages = {}
+        if message_pks_to_fetch:
+            messages_stmt = select(Message).where(Message.pk.in_(message_pks_to_fetch))
+            for msg in session.scalars(messages_stmt):
+                messages[msg.pk] = msg
+
+        # Build results
+        results = []
+        for thread in threads:
+            stats = thread_stats.get(thread.pk, {'message_count': 0, 'first_message_pk': None, 'last_message_pk': None})
+
+            thread_data = ThreadDetails(
+                thread,
+                stats['message_count'],
+                messages.get(stats['first_message_pk']) if stats['first_message_pk'] else None,
+                messages.get(stats['last_message_pk']) if stats['last_message_pk'] else None,
+            )
+            results.append(thread_data)
+
+        return results
+
+
+class ThreadDetails(NamedTuple):
+    thread: Thread
+    msg_count: int
+    first_msg: Message | None
+    last_msg: Message | None

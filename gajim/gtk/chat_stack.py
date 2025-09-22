@@ -45,6 +45,8 @@ from gajim.gtk.chat_function_page import FunctionMode
 from gajim.gtk.control import ChatControl
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.thread_info import ThreadInfoBox
+from gajim.gtk.thread_info import ThreadList
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
 from gajim.gtk.util.window import open_window
@@ -74,6 +76,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self.add_named(self._chat_function_page, "function")
 
         self._chat_banner = ChatBanner()
+        self.thread_info_box = ThreadInfoBox()
         self._chat_control = ChatControl()
         self._message_action_box = MessageActionsBox()
 
@@ -83,6 +86,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.append(self._chat_banner)
+        box.append(self.thread_info_box)
         box.append(Gtk.Separator(margin_start=6, margin_end=6))
         box.append(self._chat_control.get_widget())
         box.append(self._message_action_box)
@@ -167,6 +171,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             "muc-request-voice",
             "quote-next",
             "quote-prev",
+            "thread-start",
         ]
 
         for action in actions:
@@ -304,6 +309,12 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if not context_id:
             self._activity_page.show_default_page()
         self.set_visible_child_name("activity")
+
+    def show_thread_banner(self) -> None:
+        self.thread_info_box.set_visible(True)
+
+    def hide_thread_banner(self) -> None:
+        self.thread_info_box.set_visible(False)
 
     def _on_room_password_required(
         self, _contact: GroupchatContact, _signal_name: str
@@ -696,6 +707,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 self._last_quoted_id = row.pk
                 self._message_action_box.insert_as_quote(row.get_text(), clear=True)
 
+        elif action_name == "thread-start":
+            self.thread_info_box.set_thread(self._current_contact.thread, new=True)
+
     def _on_affiliation_or_role_change(self, task: Task) -> None:
         muc, jid, affiliation_or_role = task.get_user_data()
 
@@ -896,6 +910,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             control=self._chat_control,
             correct_id=correct_id,
             reply_data=reply_data,
+            thread_id=self._current_contact.thread,
         )
 
         client.send_message(message_)

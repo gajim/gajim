@@ -264,6 +264,8 @@ class CommonContact(Observable):
         self._jid = jid
         self._account = account
         self._gateway_type: str | None = None
+        self.threaded = False
+        self.thread: str | None = None
 
     def __hash__(self) -> int:
         return hash(f'{self._account}-{self._jid}')
@@ -954,10 +956,10 @@ class GroupchatContact(CommonContact):
         return 'groupchat'
 
     def has_composing_participants(self) -> bool:
-        return bool(self.get_module('Chatstate').get_composers(self._jid))
+        return bool(self.get_module('Chatstate').get_composers(self._jid, self.thread))
 
     def get_composers(self) -> list['GroupchatParticipant']:
-        return self.get_module('Chatstate').get_composers(self._jid)
+        return self.get_module('Chatstate').get_composers(self._jid, self.thread)
 
     @property
     def reactions_per_user(self) -> int | None:

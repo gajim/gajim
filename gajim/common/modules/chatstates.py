@@ -87,7 +87,7 @@ class Chatstate(BaseModule):
         # Cache set of participants that are composing for group chats,
         # to avoid having to iterate over all their chat states to determine
         # who is typing a message.
-        self._muc_composers: dict[JID, set[GroupchatParticipant]] = defaultdict(set)
+        self._muc_composers: dict[JID, dict[str | None, set[GroupchatParticipant]]] = defaultdict(lambda: defaultdict(set))
 
         self._remote_composing_timeouts: dict[tuple[JID, str], int] = {}
 
@@ -178,7 +178,7 @@ class Chatstate(BaseModule):
         self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
 
         contact = self._get_contact(jid)
-        self._set_composing_timeout(contact, m_type, state)
+        self._set_composing_timeout(contact, m_type, state, properties.thread)
 
         contact.notify('chatstate-update')
 
@@ -205,21 +205,21 @@ class Chatstate(BaseModule):
         state = properties.chatstate
         self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
 
-        self._set_composing_timeout(contact, m_type, state)
+        self._set_composing_timeout(contact, m_type, state, properties.thread)
 
         muc = contact.room
 
         if state == State.COMPOSING:
-            self._muc_composers[muc.jid].add(contact)
+            self._muc_composers[muc.jid][properties.thread].add(contact)
         else:
-            self._muc_composers[muc.jid].discard(contact)
+            self._muc_composers[muc.jid][properties.thread].discard(contact)
 
         muc.notify('chatstate-update')
 
         self._raise_if_necessary(properties)
 
     def _set_composing_timeout(
-        self, contact: types.ContactT, m_type: str, state: State
+        self, contact: types.ContactT, m_type: str, state: State, thread_id: str | None
     ) -> None:
         self._remove_remote_composing_timeout(contact, m_type)
         if state != State.COMPOSING:
@@ -231,11 +231,12 @@ class Chatstate(BaseModule):
         self._remote_composing_timeouts[
             (contact.jid, m_type)
         ] = GLib.timeout_add_seconds(
-            REMOTE_PAUSED_AFTER, self._on_remote_composing_timeout, contact, m_type
+            REMOTE_PAUSED_AFTER, self._on_remote_composing_timeout,
+            contact, m_type, thread_id
         )
 
     def _on_remote_composing_timeout(
-        self, contact: types.ContactT, m_type: str
+        self, contact: types.ContactT, m_type: str, thread_id: str | None
     ) -> None:
         self._remote_composing_timeouts.pop((contact.jid, m_type), None)
         self._log.info(
@@ -244,17 +245,17 @@ class Chatstate(BaseModule):
 
         if m_type == 'groupchat':
             assert isinstance(contact, GroupchatParticipant)
-            self._muc_composers[contact.room.jid].discard(contact)
+            self._muc_composers[contact.room.jid][thread_id].discard(contact)
             contact.room.notify('chatstate-update')
         else:
             self._remote_chatstate[contact.jid] = State.ACTIVE
             contact.notify('chatstate-update')
 
-    def get_composers(self, jid: JID) -> list[GroupchatParticipant]:
+    def get_composers(self, jid: JID, thread_id: str | None) -> list[GroupchatParticipant]:
         '''
         List of group chat participants that are composing (=typing) for a MUC.
         '''
-        return list(self._muc_composers[jid])
+        return list(self._muc_composers[jid][thread_id])
 
     def _remove_remote_composing_timeout(self, contact: types.ContactT, m_type: str):
         source_id = self._remote_composing_timeouts.pop((contact.jid, m_type), None)
@@ -412,6 +413,7 @@ class Chatstate(BaseModule):
             contact=contact,
             chatstate=chatstate.value,
             play_sound=False,
+            thread_id=contact.thread,
         )
 
         self._client.send_message(message)

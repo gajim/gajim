@@ -92,6 +92,7 @@ class OutgoingMessage:
     retraction_id: str | None = None
     oob_url: str | None = None
     play_sound: bool = True
+    thread_id: str | None = None
 
     type: MessageType = dataclasses.field(init=False)
     message_id: str = dataclasses.field(init=False)

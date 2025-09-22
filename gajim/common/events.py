@@ -183,6 +183,7 @@ class MessageSent(ApplicationEvent):
     account: str
     jid: JID
     pk: int
+    thread_id: str | None
     play_sound: bool = False
 
     @cached_property
@@ -217,6 +218,7 @@ class MessageAcknowledged(ApplicationEvent):
     jid: JID
     pk: int
     stanza_id: str | None
+    thread_id: str | None
 
 
 @dataclass
@@ -466,6 +468,7 @@ class MessageReceived(ApplicationEvent):
     m_type: MessageType
     from_mam: bool
     pk: int
+    thread_id: str | None = None
 
     @cached_property
     def message(self) -> mod.Message:
