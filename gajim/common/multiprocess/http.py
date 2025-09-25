@@ -108,8 +108,6 @@ def http_download(
     proxy: str | None = None,
 ) -> DownloadResult:
 
-    print("Start downloading %s (%s) to %s", ft_id, url, output)
-
     trust_env = True
     if proxy == "direct://":
         proxy = None
@@ -161,8 +159,6 @@ def http_download(
         if content_type is None or content_type not in allowed_content_types:
             raise ContentTypeNotAllowed(content_type)
 
-    print("Received content-length for %s: %s", ft_id, content_length)
-
     received_length = 0
     chunk_size = math.ceil(content_length / 50)
     chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
@@ -202,8 +198,6 @@ def http_download(
     file.write(decryptor.finalize())
     if with_progress:
         queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
-
-    print("Finished downloading %s", ft_id)
 
     content = None
     if isinstance(file, BytesIO):

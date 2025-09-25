@@ -8,9 +8,15 @@ from unittest.mock import MagicMock
 
 import gi
 
+from gajim.common.file_transfer_manager import FileTransferManager
+from gajim.common.util.preview import GeoPreview
+from gajim.common.util.preview import get_preview_data
+from gajim.common.util.preview import UrlPreview
+
 gi.require_version("Gst", "1.0")
 gi.require_version("GstPbutils", "1.0")
 
+from gi.repository import Adw
 from gi.repository import Gst
 from gi.repository import Gtk
 
@@ -22,7 +28,8 @@ from gajim.common.preview import PreviewManager
 
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.dropdown import KeyValueItem
-from gajim.gtk.preview import PreviewWidget
+from gajim.gtk.preview.geo import GeoPreviewWidget
+from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
@@ -36,7 +43,6 @@ PREVIEW_TYPES = {
     "Image URL": "https://gajim.org/img/screenshots/server-info.png",
     "Audio URL": "https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg",
     "PDF URL": "https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf",
-    "Regular URL": "https://gajim.org",
 }
 
 
@@ -59,8 +65,7 @@ class TestPreview(GajimAppWindow):
         )
         self.set_child(self._box)
 
-        self._preview_widget = PreviewWidget(ACCOUNT)
-        self._box.append(self._preview_widget)
+        self._preview_widget = None
 
         drop_down = GajimDropDown(list(PREVIEW_TYPES.keys()))
         drop_down.connect("notify::selected", self._on_preview_type_selected)
@@ -75,20 +80,31 @@ class TestPreview(GajimAppWindow):
         is_outgoing = True
         muc_context = None
 
-        self._box.remove(self._preview_widget)
+        if self._preview_widget is not None:
+            self._box.remove(self._preview_widget)
 
-        self._preview_widget = PreviewWidget(ACCOUNT)
-        self._box.prepend(self._preview_widget)
+        match preview := get_preview_data(uri_data, []):
+            case GeoPreview():
+                print("geo")
+                self._preview_widget = GeoPreviewWidget(preview)
+            case UrlPreview():
+                print("url")
+                self._preview_widget = PreviewWidget(
+                    ACCOUNT, preview, is_outgoing, muc_context
+                )
+            case _:
+                print(None)
+                self._preview_widget = None
 
-        app.preview_manager.create_preview(
-            uri_data, self._preview_widget, is_outgoing, muc_context
-        )
+        if self._preview_widget is not None:
+            self._box.prepend(self._preview_widget)
 
     def _cleanup(self) -> None:
         pass
 
 
 Gst.init()
+Adw.init()
 
 app.init_process_pool()
 app.window = Gtk.Window()
@@ -99,13 +115,14 @@ logging_helpers.set_loglevels("gajim=DEBUG")
 util.init_settings()
 app.settings.add_account(ACCOUNT)
 app.settings.set("preview_size", 400)
+app.settings.set("preview_allow_all_images", True)
 
-configpaths.set_separation(True)
 configpaths.set_config_root(str(configpaths.get_temp_dir()))
 configpaths.init()
 configpaths.create_paths()
 
 app.preview_manager = PreviewManager()
+app.ftm = FileTransferManager()
 
 window = TestPreview()
 window.show()

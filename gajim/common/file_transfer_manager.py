@@ -40,6 +40,9 @@ class FileTransferManager:
         self._queue: QueueT = self._manager.Queue()
         GLib.timeout_add(500, self._poll_queue)
 
+    def get_transfer(self, id_: str) -> FileTransfer | None:
+        return self._transfers.get(id_)
+
     def _poll_queue(self) -> bool:
         messages: dict[str, list[TransferState | TransferMetadata]] = defaultdict(list)
         while not self._queue.empty():
@@ -77,6 +80,13 @@ class FileTransferManager:
         proxy: ProxyData | None = None,
     ) -> FileTransfer | None:
 
+        if id_ is None:
+            id_ = get_uuid()
+
+        obj = self._transfers.get(id_)
+        if obj is not None:
+            return obj
+
         urlparts = urlparse(url)
 
         decryption_data = None
@@ -84,9 +94,6 @@ class FileTransferManager:
             decryption_data = get_aes_key_data(urlparts.fragment)
             # Don’t send fragment to the server, it would leak the AES key
             urlparts = urlparts._replace(scheme='https', fragment='')
-
-        if id_ is None:
-            id_ = get_uuid()
 
         event = self._manager.Event()
 

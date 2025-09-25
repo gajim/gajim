@@ -28,11 +28,13 @@ from __future__ import annotations
 from typing import Any
 
 import os
+import shutil
 import sys
 from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
 from datetime import UTC
+from pathlib import Path
 
 from gi.repository import Adw
 from gi.repository import Gio
@@ -58,7 +60,9 @@ from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
+from gajim.common.util.uri import show_in_folder
 
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -414,6 +418,9 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("forget-groupchat", self._on_forget_groupchat_action),
             ("open-chat", self._on_open_chat_action),
             ("mute-chat", self._on_mute_chat_action),
+            ("save-file-as", self._on_save_file_as),
+            ("open-file", self._on_open_file),
+            ("open-folder", self._on_open_folder),
         ]
 
         for action in actions:
@@ -872,3 +879,78 @@ class GajimApplication(Adw.Application, CoreApplication):
             appearance="destructive",
             callback=_on_response,
         )
+
+    def _on_save_file_as(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+
+        orig_path = Path(param.get_string())
+
+        def _on_save_finished(
+            file_dialog: Gtk.FileDialog, result: Gio.AsyncResult
+        ) -> None:
+            try:
+                gfile = file_dialog.save_finish(result)
+            except GLib.Error as e:
+                if e.code == 2:
+                    # User dismissed dialog, do nothing
+                    return
+
+                InformationAlertDialog(
+                    _("Could Not Save File"),
+                    _("Could not save file to selected directory."),
+                )
+                return
+
+            path = gfile.get_path()
+            assert path is not None
+            target_path = Path(path)
+            orig_ext = orig_path.suffix
+            new_ext = target_path.suffix
+            if orig_ext != new_ext:
+                # Windows file chooser selects the full file name including
+                # extension. Starting to type will overwrite the extension
+                # as well. Restore the extension if it's lost.
+                target_path = target_path.with_suffix(orig_ext)
+            dirname = target_path.parent
+            if not os.access(dirname, os.W_OK):
+                InformationAlertDialog(
+                    _("Directory Not Writable"),
+                    _(
+                        'Directory "%s" is not writable. '
+                        "You do not have the proper permissions to "
+                        "create files in this directory."
+                    )
+                    % dirname,
+                )
+                return
+
+            try:
+                shutil.copyfile(orig_path, target_path)
+            except Exception as e:
+                InformationAlertDialog(
+                    _("Could Not Save File"),
+                    _(
+                        "There was an error while trying to save the file.\n"
+                        "Error: %s."
+                    )
+                    % e,
+                )
+                return
+
+            app.settings.set("last_save_dir", str(target_path.parent))
+
+        gfile = None
+        last_dir = app.settings.get("last_save_dir")
+        if last_dir:
+            gfile = Gio.File.new_for_path(last_dir)
+
+        dialog = Gtk.FileDialog(
+            initial_folder=gfile,
+            initial_name=orig_path.name,
+        )
+        dialog.save(app.window, None, _on_save_finished)
+
+    def _on_open_file(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        open_file(Path(param.get_string()))
+
+    def _on_open_folder(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        show_in_folder(Path(param.get_string()))

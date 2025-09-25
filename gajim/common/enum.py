@@ -17,3 +17,11 @@ class FTState(IntEnum):
     FINISHED = 6
     ERROR = 7
     CANCELLED = 8
+
+
+class PreviewState(IntEnum):
+    DOWNLOADING = 1
+    OFFER_DOWNLOAD = 2
+    DOWNLOADED = 3
+    DISPLAY = 4
+    ERROR = 5

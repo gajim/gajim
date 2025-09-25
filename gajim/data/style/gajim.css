@@ -707,7 +707,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* PreviewWidget */
-.preview-stack > box {
+.preview-box {
     border: 1px solid;
     border-color: var(--border-color);
     border-radius: 4px;
@@ -726,9 +726,6 @@ button.flat.link { padding: 0; border: 0; }
     box-shadow: none;
 }
 .preview-image-button > picture {
-    border-radius: 4px;
-}
-.preview-content-box {
     border-radius: 4px;
 }
 .preview-image-overlay {

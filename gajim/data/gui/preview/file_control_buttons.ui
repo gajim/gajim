@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="FileControlButtons" parent="GtkBox">
+    <property name="spacing">6</property>
+    <property name="valign">end</property>
+    <property name="halign">fill</property>
+    <child>
+      <object class="GtkBox">
+        <property name="hexpand">1</property>
+        <property name="halign">start</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="_file_name_label">
+            <property name="focusable">1</property>
+            <property name="selectable">1</property>
+            <property name="ellipsize">end</property>
+            <property name="single-line-mode">1</property>
+            <property name="max-width-chars">30</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dimmed"/>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_file_size_label">
+            <property name="focusable">1</property>
+            <property name="selectable">1</property>
+            <property name="single-line-mode">1</property>
+            <property name="max-width-chars">30</property>
+            <property name="xalign">0</property>
+            <property name="visible">false</property>
+            <style>
+              <class name="dimmed"/>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_open_folder_button">
+        <property name="valign">center</property>
+        <property name="focusable">1</property>
+        <property name="tooltip-text" translatable="yes">Open folder</property>
+        <property name="action-name" translatable="yes">app.open-folder</property>
+        <property name="action-target">&apos;&apos;</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">lucide-folder-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_save_as_button">
+        <property name="valign">center</property>
+        <property name="focusable">1</property>
+        <property name="tooltip-text" translatable="yes">Save as...</property>
+        <property name="action-name" translatable="yes">app.save-file-as</property>
+        <property name="action-target">&apos;&apos;</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">lucide-save-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

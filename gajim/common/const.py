@@ -18,10 +18,13 @@ from gi.repository import Gio
 from nbxmpp.const import PresenceShow
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
+from PIL import Image
+from PIL import ImageFile
 
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 STOP_EVENT = True
 PROPAGATE_EVENT = False
 
@@ -919,7 +922,7 @@ NONREGISTERED_URI_SCHEMES = {
 # This is an excerpt of Media Types from
 # https://www.iana.org/assignments/media-types/media-types.xhtml
 # plus some additions
-MIME_TYPES = (
+OTHER_MIME_TYPES = {
     # application/
     'application/calendar+json',
     'application/calendar+xml',
@@ -964,7 +967,23 @@ MIME_TYPES = (
     # End office
     'application/vnd.sqlite3',
     'application/zip',
-    # audio/*
+    # font/*
+    'font/ttf',
+    'font/woff',
+    'font/woff2',
+    # model/*
+    'model/mtl',
+    'model/obj',
+    'model/stl',
+    # text/*
+    'text/calendar',
+    'text/csv',
+    'text/markdown',
+    'text/rtf',
+    'text/vcard',
+}
+
+AUDIO_MIME_TYPES = {
     'audio/aac',
     'audio/ac3',
     'audio/flac',
@@ -984,41 +1003,9 @@ MIME_TYPES = (
     'audio/x-mpeg',
     'audio/x-ogg',
     'audio/x-wav',
-    # font/*
-    'font/ttf',
-    'font/woff',
-    'font/woff2',
-    # image/*
-    'image/webp',
-    'image/avif',
-    'image/jxl',
-    'image/bmp',
-    'image/x-bmp',
-    'image/x-ms-bmp',
-    'image/gif',
-    'image/heic',
-    'image/heif',
-    'image/jpeg',
-    'image/png',
-    'image/svg+xml',
-    'image/tiff',
-    'image/vnd.adobe.photoshop',
-    'image/vnd.dwg',
-    'image/vnd.dxf',
-    'image/vnd.microsoft.icon',
-    'image/x-icon',
-    'image/x-xcf',
-    # model/*
-    'model/mtl',
-    'model/obj',
-    'model/stl',
-    # text/*
-    'text/calendar',
-    'text/csv',
-    'text/markdown',
-    'text/rtf',
-    'text/vcard',
-    # video/*
+}
+
+VIDEO_MIME_TYPES = {
     'video/H264',
     'video/H265',
     'video/mp4',
@@ -1030,8 +1017,29 @@ MIME_TYPES = (
     'video/webm',
     'video/x-matroska',
     'video/x-msvideo',
-)
+}
 
+
+def get_image_mime_types() -> set[str]:
+    previewable_mime_types: set[str] = set()
+
+    Image.init()
+    for mime_type in Image.MIME.values():
+        previewable_mime_types.add(mime_type.lower())
+
+    return set(filter(
+        lambda mime_type: mime_type.startswith('image'),
+        previewable_mime_types
+    ))
+
+IMAGE_MIME_TYPES = get_image_mime_types()
+
+ALL_MIME_TYPES = (
+    OTHER_MIME_TYPES |
+    IMAGE_MIME_TYPES |
+    AUDIO_MIME_TYPES |
+    VIDEO_MIME_TYPES
+)
 
 TRUST_SYMBOL_DATA = {
     Trust.UNTRUSTED: ('lucide-circle-x-symbolic',

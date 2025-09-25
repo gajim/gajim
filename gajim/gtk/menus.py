@@ -24,7 +24,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.structs import VariantMixin
@@ -814,33 +813,13 @@ def _get_moderate_params(
     return single_param, multiple_param
 
 
-def get_preview_menu(preview: Preview) -> GajimMenu:
-    menu_items: MenuItemListT = []
+def get_preview_menu(uri: str, *, encrypted: bool = False) -> GajimMenu:
+    menu_items: MenuItemListT = [
+        (_("_Copy Link"), "app.copy-text", uri),
+    ]
 
-    download = (_("_Download"), "win.preview-download", preview.id)
-    open_file = (_("_Open"), "win.preview-open", preview.id)
-    save_as = (_("_Save as…"), "win.preview-save-as", preview.id)
-    open_folder = (_("Open _Folder"), "win.preview-open-folder", preview.id)
-    copy_link = (_("_Copy Link"), "win.preview-copy-link", preview.id)
-    open_link = (_("Open Link in _Browser"), "win.preview-open-link", preview.id)
-
-    if preview.is_geo_uri:
-        menu_items.append(open_file)
-        menu_items.append(copy_link)
-        return GajimMenu.from_list(menu_items)
-
-    if preview.orig_exists:
-        menu_items.append(open_file)
-        menu_items.append(save_as)
-        menu_items.append(open_folder)
-    else:
-        if not preview.download_in_progress:
-            menu_items.append(download)
-
-    menu_items.append(copy_link)
-
-    if not preview.is_aes_encrypted:
-        menu_items.append(open_link)
+    if not encrypted:
+        menu_items.append((_("Open Link in _Browser"), "app.open-link", uri))
 
     return GajimMenu.from_list(menu_items)
 

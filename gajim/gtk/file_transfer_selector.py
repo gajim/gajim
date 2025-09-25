@@ -19,11 +19,11 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import Display
+from gajim.common.const import IMAGE_MIME_TYPES
 from gajim.common.helpers import load_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.multiprocess.thumbnail import create_thumbnail
-from gajim.common.preview import PREVIEWABLE_IMAGE_MIME_TYPES
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.uri import get_file_path_from_uri
@@ -300,7 +300,7 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
 
     def _set_preview(self, path: Path) -> None:
         mime_type = guess_mime_type(path)
-        if mime_type not in PREVIEWABLE_IMAGE_MIME_TYPES:
+        if mime_type not in IMAGE_MIME_TYPES:
             self._set_icon_for_mime_type(mime_type)
             return
 
