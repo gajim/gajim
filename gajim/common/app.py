@@ -48,6 +48,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.call_manager import CallManager
     from gajim.common.cert_store import CertificateStore
     from gajim.common.commands import ChatCommands  # noqa: F401
+    from gajim.common.file_transfer_manager import FileTransferManager
     from gajim.common.preview import PreviewManager
     from gajim.common.storage.archive.storage import MessageArchiveStorage
     from gajim.common.storage.cache import CacheStorage
@@ -102,6 +103,7 @@ cert_store = cast('CertificateStore', None)
 call_manager = cast('CallManager', None)
 
 preview_manager = cast('PreviewManager', None)
+ftm = cast('FileTransferManager', None)
 
 task_manager = cast('TaskManager', None)
 

@@ -281,14 +281,17 @@ def get_proxy(proxy_name: str) -> ProxyData | None:
                      password=password)
 
 
-def determine_proxy() -> ProxyData | None:
-    # Use this method to find a proxy for non-account related http requests
-    # When there is no global proxy and at least one active account does
-    # not use a proxy, we assume no proxy is necessary.
+def determine_proxy(account: str | None = None) -> ProxyData | None:
+
+    if account is not None:
+        return get_account_proxy(account)
 
     global_proxy = get_global_proxy()
     if global_proxy is not None:
         return global_proxy
+
+    # When there is no global proxy and at least one active account does
+    # not use a proxy, we assume no proxy is necessary.
 
     proxies: list[ProxyData] = []
     for client in app.get_clients():

@@ -227,6 +227,52 @@ modules:
         url: https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238/pillow-11.3.0.tar.gz
         sha256: 3828ee7586cd0b2091b6209e5ad53e20d0649bbe87164a459d0676e035e8f523
 
+  - name: python3-truststore
+    buildsystem: simple
+    build-commands:
+      - pip3 install truststore-0.10.4-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
+        sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
+
+  # httpx dependencies
+  - name: python3-h2
+    buildsystem: simple
+    build-commands:
+      - pip3 install h2-4.3.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/69/b2/119f6e6dcbd96f9069ce9a2665e0146588dc9f88f29549711853645e736a/h2-4.3.0-py3-none-any.whl
+        sha256: c438f029a25f7945c69e0ccf0fb951dc3f73a5f6412981daee861431b70e2bdd
+
+  - name: python3-anyio
+    buildsystem: simple
+    build-commands:
+      - pip3 install anyio-4.10.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/6f/12/e5e0282d673bb9746bacfb6e2dba8719989d3660cdb2ea79aee9a9651afb/anyio-4.10.0-py3-none-any.whl
+        sha256: 60e474ac86736bbfd6f210f7a61218939c318f43f9972497381f1c5e930ed3d1
+
+  - name: python3-httpcore
+    buildsystem: simple
+    build-commands:
+      - pip3 install httpcore-1.0.9-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl
+        sha256: 2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55
+
+  - name: python3-httpx
+    buildsystem: simple
+    build-commands:
+      - pip3 install httpx-0.10.4-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
+        sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
+
   # sentry-sdk dependency
   - name: python3-urllib3
     buildsystem: simple
