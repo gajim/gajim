@@ -33,7 +33,6 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.plugins import Plugins
-from gajim.gtk.preview import PREVIEW_ACTIONS
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
@@ -355,19 +354,14 @@ class FilePreviewGroup(GajimPreferencesGroup):
             26214400: "25 MiB",
         }
 
-        preview_actions = {}
-        for action, data in PREVIEW_ACTIONS.items():
-            if action == "download":
-                continue
-            preview_actions[action] = data[0]
-
         settings = [
             Setting(
-                SettingKind.SWITCH,
-                _("File Preview"),
+                SettingKind.DROPDOWN,
+                _("File Size Limit"),
                 SettingType.CONFIG,
-                "enable_file_preview",
-                desc=_("Show previews for files"),
+                "preview_max_file_size",
+                desc=_("Maximum file size for preview downloads"),
+                props={"data": sizes},
             ),
             Setting(
                 SettingKind.SPIN,
@@ -375,17 +369,7 @@ class FilePreviewGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "preview_size",
                 desc=_("Size of preview images in pixels"),
-                bind="enable_file_preview",
                 props={"range_": (100, 1000, 1)},
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("File Size Limit"),
-                SettingType.CONFIG,
-                "preview_max_file_size",
-                desc=_("Maximum file size for preview downloads"),
-                bind="enable_file_preview",
-                props={"data": sizes},
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -396,7 +380,6 @@ class FilePreviewGroup(GajimPreferencesGroup):
                     "Show previews automatically in public "
                     "group chats (may disclose your data)"
                 ),
-                bind="enable_file_preview",
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -404,16 +387,6 @@ class FilePreviewGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "preview_allow_all_images",
                 desc=_("Show previews for any URLs containing images (may be unsafe)"),
-                bind="enable_file_preview",
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Left Click Action"),
-                SettingType.CONFIG,
-                "preview_leftclick_action",
-                desc=_("Action for left-clicking a preview"),
-                bind="enable_file_preview",
-                props={"data": preview_actions},
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -424,7 +397,6 @@ class FilePreviewGroup(GajimPreferencesGroup):
                     "Whether to check for a valid certificate before "
                     "downloading (not safe to disable)"
                 ),
-                bind="enable_file_preview",
             ),
         ]
 

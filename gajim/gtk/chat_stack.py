@@ -7,7 +7,6 @@ from __future__ import annotations
 import logging
 import sys
 import uuid
-from urllib.parse import urlparse
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -35,10 +34,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
 from gajim.common.util.muc import message_needs_highlight
-from gajim.common.util.preview import filename_from_uri
-from gajim.common.util.preview import format_geo_coords
-from gajim.common.util.preview import guess_simple_file_type
-from gajim.common.util.preview import split_geo_uri
+from gajim.common.util.preview import get_preview_data
 from gajim.common.util.text import remove_invalid_xml_chars
 
 from gajim.gtk.activity_page import ActivityPage
@@ -220,8 +216,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             contact, BareContact | GroupchatContact | GroupchatParticipant
         )
         self._current_contact = contact
-
-        app.preview_manager.clear_previews()
 
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
@@ -454,26 +448,19 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         self._issue_notification(event.account, message)
 
-    def _issue_notification(self, account: str, data: Message) -> None:
+    def _issue_notification(self, account: str, message: Message) -> None:
 
-        text = data.text
+        text = message.text
         assert text is not None
 
         client = app.get_client(account)
-        contact = client.get_module("Contacts").get_contact(data.remote.jid)
+        contact = client.get_module("Contacts").get_contact(message.remote.jid)
 
         title = _("New message from")
 
-        is_previewable = app.preview_manager.is_previewable(text, data.oob)
-        if is_previewable:
-            scheme = urlparse(text).scheme
-            if scheme == "geo":
-                location = split_geo_uri(text)
-                text = format_geo_coords(float(location.lat), float(location.lon))
-            else:
-                file_name = filename_from_uri(text)
-                _icon, file_type = guess_simple_file_type(text)
-                text = f"{file_type} ({file_name})"
+        preview = get_preview_data(text, message.oob)
+        if preview is not None:
+            text = preview.text
 
         sound: str | None = None
         msg_type = "chat-message"
@@ -485,7 +472,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         if isinstance(contact, GroupchatContact):
             msg_type = "group-chat-message"
-            title += f" {data.resource} ({contact.name})"
+            title += f" {message.resource} ({contact.name})"
             assert contact.nickname is not None
             needs_highlight = message_needs_highlight(
                 text, contact.nickname, client.get_own_jid().bare
@@ -512,13 +499,13 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             if text.startswith("/me "):
                 name = contact.name
                 if isinstance(contact, GroupchatContact):
-                    name = data.resource
+                    name = message.resource
                 text = f"* {name} {text[3:]}"
         else:
             text = ""
 
         if isinstance(contact, GroupchatContact):
-            resource = data.resource
+            resource = message.resource
         else:
             resource = None
 
@@ -932,8 +919,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def clear(self) -> None:
         if self._current_contact is not None:
             self._current_contact.disconnect_all_from_obj(self)
-
-        app.preview_manager.clear_previews()
 
         self._last_quoted_id = None
         self.set_visible_child_name("empty")

@@ -83,6 +83,7 @@ ifragment      = fr'(?:{ipchar}|[/?])*'
 scheme         = fr'(?P<scheme>{ALPHA}[a-zA-Z0-9+.-]*)'
 IRI            = fr'{scheme}:{ihier_part}(?:\?{iquery})?(?:#{ifragment})?'
 
+IRI_RX = re.compile(IRI)
 
 # <https://rfc-editor.org/rfc/rfc7564#section-4.2>
 class PRECIS:

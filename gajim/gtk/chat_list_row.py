@@ -8,7 +8,6 @@ from typing import Any
 from typing import Literal
 
 from datetime import datetime
-from urllib.parse import urlparse
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -34,10 +33,7 @@ from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.muc import message_needs_highlight
-from gajim.common.util.preview import filename_from_uri
-from gajim.common.util.preview import format_geo_coords
-from gajim.common.util.preview import guess_simple_file_type
-from gajim.common.util.preview import split_geo_uri
+from gajim.common.util.preview import get_preview_data
 from gajim.common.util.user_strings import get_moderation_text
 from gajim.common.util.user_strings import get_retraction_text
 from gajim.common.util.user_strings import get_uf_relative_time
@@ -277,16 +273,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
 
-        if app.preview_manager.is_previewable(text, oob or []):
-            scheme = urlparse(text).scheme
-            if scheme == "geo":
-                location = split_geo_uri(text)
-                icon = Gio.Icon.new_for_string("lucide-map-pin-symbolic")
-                text = format_geo_coords(float(location.lat), float(location.lon))
-            else:
-                file_name = filename_from_uri(text)
-                icon, file_type = guess_simple_file_type(text)
-                text = f"{file_type} ({file_name})"
+        preview = get_preview_data(text, oob or [])
+        if preview is not None:
+            text = preview.text
+            icon = preview.icon
 
         text = GLib.markup_escape_text(text)
         if text.startswith("/me ") and nickname is not None:

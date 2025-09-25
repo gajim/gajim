@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from typing import NamedTuple
+
 import logging
 import os
 import sys
@@ -22,6 +24,7 @@ from gajim.common import app
 from gajim.common import iana
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
 from gajim.common.dbus.file_manager import DBusFileManager
+from gajim.common.regex import IRI_RX
 from gajim.common.util.decorators import catch_exceptions
 
 log = logging.getLogger('gajim.c.util.uri')
@@ -301,3 +304,62 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
 
 def geo_provider_from_location(lat: str, lon: str) -> str:
     return f'https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16'
+
+
+class Coords(NamedTuple):
+    location: str
+    lat: str
+    lon: str
+
+
+def split_geo_uri(uri: str) -> Coords:
+    # Example:
+    # geo:37.786971,-122.399677,122.3;CRS=epsg:32718;U=20;mapcolors=abc
+    # Assumption is all coordinates are CRS=WGS-84
+
+    # Remove "geo:"
+    coords = uri[4:]
+
+    # Remove arguments
+    if ';' in coords:
+        coords, _ = coords.split(';', maxsplit=1)
+
+    # Split coords
+    coords = coords.split(',')
+    if len(coords) not in (2, 3):
+        raise ValueError('Invalid geo uri: invalid coord count')
+
+    # Remoove coord-c (altitude)
+    if len(coords) == 3:
+        coords.pop(2)
+
+    lat, lon = coords
+    if float(lat) < -90 or float(lat) > 90:
+        raise ValueError('Invalid geo_uri: invalid latitude %s' % lat)
+
+    if float(lon) < -180 or float(lon) > 180:
+        raise ValueError('Invalid geo_uri: invalid longitude %s' % lon)
+
+    location = ','.join(coords)
+    return Coords(location=location, lat=lat, lon=lon)
+
+
+def get_geo_choords(uri: str) -> Coords | None:
+    if not IRI_RX.fullmatch(uri):
+        # urlparse removes whitespace (and who knows what else) from URLs,
+        # so can't be used for validation.
+        return None
+
+    try:
+        urlparts = urlparse(uri)
+    except Exception:
+        return None
+
+    if urlparts.scheme != 'geo':
+        return None
+
+    try:
+        return split_geo_uri(uri)
+    except Exception as err:
+        log.info('Bad geo URI %s: %s', uri, err)
+        return None

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="PreviewWidget" parent="GtkBox">
+    <child>
+      <object class="GtkStack" id="_stack">
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="width-request">400</property>
+        <property name="height-request">100</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">loading</property>
+            <property name="child">
+              <object class="LoadingBox"/>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">preview</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="can-focus">0</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkButton" id="_icon_button">
+                        <property name="focusable">1</property>
+                        <property name="valign">center</property>
+                        <property name="tooltip-text" translatable="yes">Open</property>
+                        <property name="action-name" translatable="yes">app.open-file</property>
+                        <property name="action-target">''</property>
+                        <child>
+                          <object class="GtkImage" id="_mime_image">
+                            <property name="icon-name">lucide-file-symbolic</property>
+                            <property name="pixel-size">48</property>
+                            <style>
+                              <class name="p-6"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="preview-image-button"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="_right_box">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <property name="valign">start</property>
+                    <child>
+                      <object class="GtkBox" id="_content_box">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLinkButton" id="_link_button">
+                            <property name="visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">start</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="FileControlButtons" id="_file_control_buttons">
+                            <property name="valign">start</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_download_button">
+                            <property name="visible">false</property>
+                            <property name="valign">center</property>
+                            <property name="focusable">1</property>
+                            <property name="tooltip-text" translatable="yes">Download</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">lucide-file-down-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_cancel_download_button">
+                            <property name="focusable">1</property>
+                            <property name="visible">false</property>
+                            <property name="valign">center</property>
+                            <property name="tooltip-text" translatable="yes">Cancel Download</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">lucide-circle-x-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="_info_message_label">
+                        <property name="focusable">1</property>
+                        <property name="selectable">1</property>
+                        <property name="ellipsize">end</property>
+                        <property name="single-line-mode">1</property>
+                        <property name="max-width-chars">30</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="dimmed"/>
+                          <class name="small-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="_progress_box">
+                        <property name="visible">0</property>
+                        <property name="spacing">12</property>
+                        <property name="hexpand">true</property>
+                        <child>
+                          <object class="GtkProgressBar" id="_progressbar">
+                            <property name="valign">center</property>
+                            <property name="fraction">0</property>
+                            <property name="hexpand">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_progress_text">
+                            <property name="label">0 %</property>
+                            <property name="valign">center</property>
+                            <property name="width-chars">4</property>
+                            <property name="single-line-mode">1</property>
+                            <style>
+                              <class name="dimmed"/>
+                              <class name="small-label"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <style>
+                  <class name="preview-box"/>
+                </style>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

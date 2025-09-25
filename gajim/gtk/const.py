@@ -189,6 +189,9 @@ APP_ACTIONS = [
     ("mute-chat", "a{sv}"),
     ("xml-console", None),
     ("handle-uri", "as"),
+    ("save-file-as", "s"),
+    ("open-file", "s"),
+    ("open-folder", "s"),
 ]
 
 
@@ -273,12 +276,6 @@ MAIN_WIN_ACTIONS = [
     ("mark-workspace-as-read", "s", True),
     ("add-chat", "a{sv}", True),
     ("add-group-chat", "as", True),
-    ("preview-open", "s", True),
-    ("preview-save-as", "s", True),
-    ("preview-open-folder", "s", True),
-    ("preview-copy-link", "s", True),
-    ("preview-open-link", "s", True),
-    ("preview-download", "s", True),
 ]
 
 

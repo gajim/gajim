@@ -8,6 +8,8 @@ from unittest.mock import MagicMock
 
 import gi
 
+from gajim.common.file_transfer_manager import FileTransferManager
+
 gi.require_version("Gst", "1.0")
 gi.require_version("GstPbutils", "1.0")
 
@@ -59,8 +61,7 @@ class TestPreview(GajimAppWindow):
         )
         self.set_child(self._box)
 
-        self._preview_widget = PreviewWidget(ACCOUNT)
-        self._box.append(self._preview_widget)
+        self._preview_widget = None
 
         drop_down = GajimDropDown(list(PREVIEW_TYPES.keys()))
         drop_down.connect("notify::selected", self._on_preview_type_selected)
@@ -75,14 +76,15 @@ class TestPreview(GajimAppWindow):
         is_outgoing = True
         muc_context = None
 
-        self._box.remove(self._preview_widget)
+        if self._preview_widget is not None:
+            self._box.remove(self._preview_widget)
 
-        self._preview_widget = PreviewWidget(ACCOUNT)
-        self._box.prepend(self._preview_widget)
-
-        app.preview_manager.create_preview(
-            uri_data, self._preview_widget, is_outgoing, muc_context
+        preview = app.preview_manager.create_preview(
+            ACCOUNT, uri_data, is_outgoing, muc_context
         )
+
+        self._preview_widget = PreviewWidget(ACCOUNT, preview)
+        self._box.prepend(self._preview_widget)
 
     def _cleanup(self) -> None:
         pass
@@ -106,6 +108,7 @@ configpaths.init()
 configpaths.create_paths()
 
 app.preview_manager = PreviewManager()
+app.ftm = FileTransferManager()
 
 window = TestPreview()
 window.show()

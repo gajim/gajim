@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ImagePreviewWidget" parent="GtkBox">
+    <child>
+      <object class="GtkStack" id="_stack">
+        <property name="hhomogeneous">0</property>
+        <property name="vhomogeneous">0</property>
+        <property name="halign">start</property>
+        <property name="transition-duration">50</property>
+        <property name="transition-type">crossfade</property>
+        <property name="width-request">400</property>
+        <property name="height-request">100</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">loading</property>
+            <property name="child">
+              <object class="LoadingBox" />
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">preview</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="can-focus">0</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkOverlay" id="_content_overlay">
+                    <property name="can-focus">0</property>
+                    <child type="overlay">
+                      <object class="FileControlButtons" id="_file_control_buttons">
+                        <property name="visible">false</property>
+                        <style>
+                          <class name="preview-image-overlay"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child type="overlay">
+                      <object class="GtkImage" id="_play_image">
+                        <property name="can-target">false</property>
+                        <property name="vexpand">true</property>
+                        <property name="hexpand">true</property>
+                        <property name="icon-name">lucide-video-play</property>
+                        <property name="visible">false</property>
+                      </object>
+                    </child>
+                    <property name="child">
+                      <object class="GtkButton" id="_image_button">
+                        <property name="focusable">1</property>
+                        <property name="action-name" translatable="yes">app.open-file</property>
+                        <property name="action-target">''</property>
+                        <child>
+                          <object class="GtkPicture" id="_picture">
+                            <property name="can-target">false</property>
+                            <style>
+                              <class name="preview-image"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="preview-image-button"/>
+                        </style>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

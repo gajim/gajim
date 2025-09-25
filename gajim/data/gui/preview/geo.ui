@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GeoPreviewWidget" parent="GtkBox">
+    <property name="width-request">160</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkButton" id="_image_button">
+        <property name="focusable">yes</property>
+        <property name="halign">center</property>
+        <property name="action-name" translatable="yes">app.open-link</property>
+        <property name="action-target">''</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">map</property>
+            <property name="pixel-size">96</property>
+            <style>
+              <class name="preview-image"/>
+            </style>
+          </object>
+        </child>
+        <style>
+          <class name="preview-image-button"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="label" translatable="yes">Click to view location</property>
+        <property name="halign">center</property>
+        <style>
+          <class name="dimmed"/>
+          <class name="small-label"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="_location_label">
+        <property name="focusable">yes</property>
+        <property name="selectable">yes</property>
+        <property name="halign">center</property>
+        <style>
+          <class name="dimmed"/>
+          <class name="small-label"/>
+        </style>
+      </object>
+    </child>
+    <style>
+      <class name="preview-box"/>
+    </style>
+  </template>
+</interface>

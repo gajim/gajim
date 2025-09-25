@@ -8,10 +8,8 @@ from typing import Any
 
 import datetime as dt
 import logging
-from urllib.parse import urlparse
 
 from gi.repository import Gdk
-from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -23,10 +21,7 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
-from gajim.common.util.preview import filename_from_uri
-from gajim.common.util.preview import format_geo_coords
-from gajim.common.util.preview import guess_simple_file_type
-from gajim.common.util.preview import split_geo_uri
+from gajim.common.util.preview import get_preview_data
 from gajim.common.util.text import quote_text
 
 from gajim.gtk.util.classes import SignalManager
@@ -117,20 +112,13 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
         message_box = Gtk.Box(spacing=12)
         label_text = ""
         if message.text is not None:
-            if app.preview_manager.is_previewable(message.text, message.oob):
-                scheme = urlparse(message.text).scheme
-                if scheme == "geo":
-                    location = split_geo_uri(message.text)
-                    icon = Gio.Icon.new_for_string("lucide-map-pin-symbolic")
-                    label_text = format_geo_coords(
-                        float(location.lat), float(location.lon)
-                    )
-                else:
-                    file_name = filename_from_uri(message.text)
-                    icon, file_type = guess_simple_file_type(message.text)
-                    label_text = f"{file_type} ({file_name})"
-                image = Gtk.Image.new_from_gicon(icon)
+
+            preview = get_preview_data(message.text, message.oob)
+            if preview is not None:
+                label_text = preview.text
+                image = Gtk.Image.new_from_gicon(preview.icon)
                 message_box.append(image)
+
             else:
                 label_text = message.text
                 lines = message.text.split("\n")

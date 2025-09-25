@@ -10,9 +10,6 @@ from typing import Literal
 from typing import TYPE_CHECKING
 
 import logging
-import os
-import shutil
-from pathlib import Path
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -38,9 +35,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import InvalidUri
-from gajim.common.util.uri import open_file
-from gajim.common.util.uri import open_uri
-from gajim.common.util.uri import show_in_folder
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.about import AboutDialog
@@ -452,12 +446,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             ("increase-app-font-size", self._on_app_font_size_action),
             ("decrease-app-font-size", self._on_app_font_size_action),
             ("reset-app-font-size", self._on_app_font_size_action),
-            ("preview-download", self._on_preview_action),
-            ("preview-open", self._on_preview_action),
-            ("preview-save-as", self._on_preview_action),
-            ("preview-open-folder", self._on_preview_action),
-            ("preview-copy-link", self._on_preview_action),
-            ("preview-open-link", self._on_preview_action),
             ("copy-message", self._on_copy_message),
             ("retract-message", self._on_retract_message),
             ("moderate-message", self._on_moderate_message),
@@ -583,129 +571,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         app.settings.set_app_setting("app_font_size", new_app_font_size)
         app.css_config.apply_app_font_size()
-
-    def _on_preview_action(self, action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
-        action_name = action.get_name()
-        preview = app.preview_manager.get_preview(param.get_string())
-        if preview is None:
-            return
-
-        if action_name == "preview-download":
-            if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
-
-        elif action_name == "preview-open":
-            if preview.is_geo_uri:
-                open_uri(preview.uri)
-                return
-
-            if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
-                return
-
-            assert preview.orig_path is not None
-            open_file(preview.orig_path)
-
-        elif action_name == "preview-save-as":
-
-            def _on_save_finished(
-                file_dialog: Gtk.FileDialog, result: Gio.AsyncResult
-            ) -> None:
-                try:
-                    gfile = file_dialog.save_finish(result)
-                except GLib.Error as e:
-                    if e.code == 2:
-                        # User dismissed dialog, do nothing
-                        return
-
-                    log.exception(e)
-                    InformationAlertDialog(
-                        _("Could Not Save File"),
-                        _("Could not save file to selected directory."),
-                        parent=self,
-                    )
-                    return
-
-                assert preview is not None
-                assert preview.orig_path is not None
-
-                path = gfile.get_path()
-                assert path is not None
-                target_path = Path(path)
-                orig_ext = preview.orig_path.suffix
-                new_ext = target_path.suffix
-                if orig_ext != new_ext:
-                    # Windows file chooser selects the full file name including
-                    # extension. Starting to type will overwrite the extension
-                    # as well. Restore the extension if it's lost.
-                    target_path = target_path.with_suffix(orig_ext)
-                dirname = target_path.parent
-                if not os.access(dirname, os.W_OK):
-                    InformationAlertDialog(
-                        _("Directory Not Writable"),
-                        _(
-                            'Directory "%s" is not writable. '
-                            "You do not have the proper permissions to "
-                            "create files in this directory."
-                        )
-                        % dirname,
-                        parent=self,
-                    )
-                    return
-
-                try:
-                    shutil.copyfile(preview.orig_path, target_path)
-                except Exception as e:
-                    InformationAlertDialog(
-                        _("Could Not Save File"),
-                        _(
-                            "There was an error while trying to save the file.\n"
-                            "Error: %s."
-                        )
-                        % e,
-                        parent=self,
-                    )
-                    return
-
-                app.settings.set("last_save_dir", str(target_path.parent))
-
-            if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
-                return
-
-            gfile = None
-            last_dir = app.settings.get("last_save_dir")
-            if last_dir:
-                gfile = Gio.File.new_for_path(last_dir)
-
-            dialog = Gtk.FileDialog(
-                initial_folder=gfile,
-                initial_name=preview.filename,
-            )
-            dialog.save(self, None, _on_save_finished)
-
-        elif action_name == "preview-open-folder":
-            if not preview.orig_exists:
-                app.preview_manager.download_content(preview, force=True)
-                return
-
-            assert preview.orig_path is not None
-            show_in_folder(preview.orig_path)
-
-        elif action_name == "preview-copy-link":
-            self.get_clipboard().set(preview.uri)
-
-        elif action_name == "preview-open-link":
-            if preview.is_aes_encrypted:
-                if preview.is_geo_uri:
-                    open_uri(preview.uri)
-                    return
-
-                assert preview.orig_path
-                open_file(preview.orig_path)
-            else:
-                open_uri(preview.uri)
 
     def _on_copy_message(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
 
