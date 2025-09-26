@@ -643,6 +643,13 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         elif stanza.startswith(("<r", "<a")):
             type_ = "stream"
 
+        table = self._ui.protocol_view.get_buffer().get_tag_table()
+        for tag_name in type_, kind, event.account:
+            tag = table.lookup(tag_name)
+            if tag is not None:
+                if tag.get_property("invisible"):
+                    return
+
         text = "<!-- {kind} {time} ({account}) -->\n{stanza}\n\n".format(
             kind=kind.capitalize(),
             time=time.strftime("%c"),
