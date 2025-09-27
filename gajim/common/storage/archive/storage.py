@@ -43,14 +43,18 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
+from gajim.common.storage.archive.models import DisplayedMarker
+from gajim.common.storage.archive.models import Encryption
 from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
 from gajim.common.storage.archive.models import Occupant
 from gajim.common.storage.archive.models import Reaction
+from gajim.common.storage.archive.models import Receipt
 from gajim.common.storage.archive.models import Remote
 from gajim.common.storage.archive.models import Retraction
+from gajim.common.storage.archive.models import SecurityLabel
 from gajim.common.storage.archive.models import Thread
 from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
@@ -427,6 +431,15 @@ class MessageArchiveStorage(AlchemyStorage):
 
         if message.retraction is not None:
             session.delete(message.retraction)
+
+        if message.receipt is not None:
+            session.delete(message.receipt)
+
+        for marker in message.markers:
+            session.delete(marker)
+
+        for reaction in message.reactions:
+            session.delete(reaction)
 
         session.delete(message)
 
@@ -1068,40 +1081,12 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        # Errors
-
-        stmt = delete(MessageError).where(
-            MessageError.fk_account_pk == fk_account_pk,
-            MessageError.fk_remote_pk == fk_remote_pk,
-        )
-
-        session.execute(stmt)
-
-        # Moderation
-
-        stmt = delete(Moderation).where(
-            Moderation.fk_account_pk == fk_account_pk,
-            Moderation.fk_remote_pk == fk_remote_pk,
-        )
-
-        session.execute(stmt)
-
-        # Retraction
-
-        stmt = delete(Retraction).where(
-            Retraction.fk_account_pk == fk_account_pk,
-            Retraction.fk_remote_pk == fk_remote_pk,
-        )
-
-        session.execute(stmt)
-
-        # Messages
-
-        stmt = delete(Message).where(
+        stmt = select(Message).where(
             Message.fk_account_pk == fk_account_pk, Message.fk_remote_pk == fk_remote_pk
         )
 
-        session.execute(stmt)
+        for message in session.scalars(stmt).unique().all():
+            self._delete_message(session, message)
 
         log.info('Removed history for: %s', jid)
 
@@ -1109,13 +1094,20 @@ class MessageArchiveStorage(AlchemyStorage):
     @timeit
     def remove_all_history(self, session: Session) -> None:
         '''
-        Remove all messages for all accounts
+        Remove all message related data for all accounts
         '''
 
         session.execute(delete(MessageError))
         session.execute(delete(Moderation))
         session.execute(delete(Retraction))
+        session.execute(delete(Receipt))
+        session.execute(delete(DisplayedMarker))
+        session.execute(delete(Reaction))
         session.execute(delete(Message))
+
+        session.execute(delete(SecurityLabel))
+        session.execute(delete(Thread))
+        session.execute(delete(Encryption))
 
         log.info('Removed all chat history')
 
