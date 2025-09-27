@@ -937,3 +937,7 @@ list.sidebar-switcher .sidebar-row-header {
 #AvatarStack button > box { padding-left: 6px; margin-right: -3px; }
 #AvatarStack button image { margin-left: -9px; }
 #AvatarStackPopover contents { padding: 0px; }
+
+
+/* Debug Console */
+.debug-console-view { font-family: Monospace; }

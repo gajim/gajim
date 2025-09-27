@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 from typing import Any
+from typing import cast
 
 import time
 
@@ -120,7 +121,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             self._account_dropdown, self._ui.account_label
         )
 
-        self._create_tags()
+        # self._create_tags()
         self._add_stanza_presets()
 
         self._connect(
@@ -142,19 +143,16 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language("xml")
-        self._ui.protocol_view.get_buffer().set_language(lang)
         self._ui.input_entry.get_buffer().set_language(lang)
 
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
-            self._ui.protocol_view.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
             self._ui.log_view.get_buffer().set_style_scheme(style_scheme)
 
-        self._search_settings = GtkSource.SearchSettings(wrap_around=True)
-        self._search_context = GtkSource.SearchContext.new(
-            self._ui.protocol_view.get_buffer(), self._search_settings
-        )
+        self._stanza_model = Gio.ListStore(item_type=StanzaListItem)
+        self._stanza_list_view = StanzaListView(model=self._stanza_model)
+        self._ui.scrolled.set_child(self._stanza_list_view)
 
         for record in app.logging_records:
             self._add_log_record(record)
@@ -557,6 +555,8 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._ui.protocol_view.get_buffer().set_text("")
 
     def _apply_filters(self) -> None:
+        print("TODO")
+        return
         table = self._ui.protocol_view.get_buffer().get_tag_table()
 
         active_accounts = app.settings.get_active_accounts()
@@ -624,9 +624,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         is_at_the_end = at_the_end(self._ui.scrolled)
 
-        buffer_ = self._ui.protocol_view.get_buffer()
-        end_iter = buffer_.get_end_iter()
-
         type_ = kind
         if stanza.startswith("<presence"):
             type_ = "presence"
@@ -637,13 +634,16 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         elif stanza.startswith(("<r", "<a")):
             type_ = "stream"
 
-        text = "<!-- {kind} {time} ({account}) -->\n{stanza}\n\n".format(
+        text = "<!-- {kind} {time} ({account}) -->\n{stanza}".format(
             kind=kind.capitalize(),
             time=time.strftime("%c"),
             account=account_label,
             stanza=stanza,
         )
-        buffer_.insert_with_tags_by_name(end_iter, text, type_, kind, event.account)
+
+        self._stanza_model.append(
+            StanzaListItem(text=text, account=event.account, kind=type_)
+        )
 
         if is_at_the_end:
             GLib.idle_add(scroll_to, self._ui.scrolled, "bottom")
@@ -683,3 +683,91 @@ class SentSzanzas:
 
         self._last_selected_ts = list(self._sent_stanzas.keys())[-1]
         return self._sent_stanzas[self._last_selected_ts]
+
+
+class StanzaListItem(GObject.Object):
+    __gtype_name__ = "Stanza"
+
+    text = GObject.Property(type=str)
+    account = GObject.Property(type=str)
+    kind = GObject.Property(type=str)
+
+
+class StanzaListViewItem(Gtk.Box):
+    __gtype_name__ = "StanzaListViewItem"
+
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self)
+
+        self.__bindings: list[GObject.Binding] = []
+
+        self._source_view = GtkSource.View(
+            hexpand=True,
+            editable=False,
+            cursor_visible=True,
+        )
+        self._source_view.add_css_class("debug-console-view")
+        self._buffer = self._source_view.get_buffer()
+        self._buffer.set_highlight_matching_brackets(False)
+
+        source_manager = GtkSource.LanguageManager.get_default()
+        lang = source_manager.get_language("xml")
+        self._source_view.get_buffer().set_language(lang)
+
+        style_scheme = get_source_view_style_scheme()
+        if style_scheme is not None:
+            self._source_view.get_buffer().set_style_scheme(style_scheme)
+
+        self.append(self._source_view)
+
+    def bind(self, obj: StanzaListItem) -> None:
+        bind_spec = [
+            ("text", self._buffer, "text"),
+        ]
+
+        for source_prop, widget, target_prop in bind_spec:
+            bind = obj.bind_property(
+                source_prop, widget, target_prop, GObject.BindingFlags.SYNC_CREATE
+            )
+            self.__bindings.append(bind)
+
+    def unbind(self) -> None:
+        for bind in self.__bindings:
+            bind.unbind()
+        self.__bindings.clear()
+
+
+class StanzaListView(Gtk.ListView):
+    def __init__(self, model: Gio.ListModel) -> None:
+        Gtk.ListView.__init__(self)
+
+        factory = Gtk.SignalListItemFactory()
+        factory.connect("setup", self._on_factory_setup)
+        factory.connect("bind", self._on_factory_bind)
+        factory.connect("unbind", self._on_factory_unbind)
+
+        self.set_model(Gtk.MultiSelection(model=model))
+        self.set_factory(factory)
+        self.set_hexpand(True)
+        self.set_enable_rubberband(True)
+
+    @staticmethod
+    def _on_factory_setup(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
+    ) -> None:
+        list_item.set_child(StanzaListViewItem())
+
+    @staticmethod
+    def _on_factory_bind(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
+    ) -> None:
+        view_item = cast(StanzaListViewItem, list_item.get_child())
+        obj = cast(StanzaListItem, list_item.get_item())
+        view_item.bind(obj)
+
+    @staticmethod
+    def _on_factory_unbind(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
+    ) -> None:
+        view_item = cast(StanzaListViewItem, list_item.get_child())
+        view_item.unbind()

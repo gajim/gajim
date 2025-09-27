@@ -110,7 +110,7 @@
                           <object class="GtkScrolledWindow" id="scrolled">
                             <property name="height-request">400</property>
                             <property name="focusable">1</property>
-                            <child>
+<!--                             <child>
                               <object class="GtkSourceView" id="protocol_view">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
@@ -121,7 +121,7 @@
                                 <property name="bottom-margin">6</property>
                                 <property name="monospace">True</property>
                               </object>
-                            </child>
+                            </child> -->
                           </object>
                         </property>
                         <child type="overlay">
