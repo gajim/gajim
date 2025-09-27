@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import cast
-
 import logging
 
 import cairo
@@ -28,6 +26,23 @@ def get_icon_theme() -> Gtk.IconTheme:
     return Gtk.IconTheme.get_for_display(display)
 
 
+def find_texture_node(node: Gsk.RenderNode | None) -> Gsk.TextureNode | None:
+    if isinstance(node, Gsk.TextureNode):
+        return node
+
+    if isinstance(node, Gsk.TransformNode):
+        return find_texture_node(node.get_child())
+
+    if isinstance(node, Gsk.ContainerNode):
+        for i in range(node.get_n_children()):
+            child = node.get_child(i)
+            texture_node = find_texture_node(child)
+            if texture_node is not None:
+                return texture_node
+
+    return None
+
+
 def load_icon_surface(
     icon_name: str,
     size: int = 16,
@@ -48,10 +63,13 @@ def load_icon_surface(
 
     snapshot = Gtk.Snapshot()
     icon.snapshot(snapshot, size, size)
-    node = cast(Gsk.TextureNode, snapshot.to_node())
-    assert node is not None
 
-    texture = node.get_texture()
+    texture_node = find_texture_node(snapshot.to_node())
+    if texture_node is None:
+        log.error("Could not find texture node")
+        return None
+
+    texture = texture_node.get_texture()
     return convert_texture_to_surface(texture)
 
 
