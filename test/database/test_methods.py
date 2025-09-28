@@ -25,6 +25,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
 from gajim.common.storage.archive.models import Occupant
+from gajim.common.storage.archive.models import SecurityLabel
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.util.datetime import utc_now
 
@@ -340,11 +341,13 @@ class MethodsTest(unittest.TestCase):
         remote_jid = JID.from_string("remote1@jid.org")
         self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
+        # Moderation message should no match any message to
+        # test if orphan data are removed
         mod = Moderation(
             account_="testacc1",
             remote_jid_=remote_jid,
             occupant_=None,
-            stanza_id="stanzaid1",
+            stanza_id="DoNotMatchID",
             by=None,
             reason=None,
             timestamp=utc_now(),
@@ -364,6 +367,32 @@ class MethodsTest(unittest.TestCase):
         )
 
         self._archive.insert_object(error)
+
+        seclabel = SecurityLabel(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            label_hash="hash1",
+            displaymarking="dm",
+            bgcolor="red",
+            fgcolor="blue",
+            updated_at=utc_now(),
+        )
+
+        m = Message(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            resource="test",
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id="123",
+            stanza_id="stanzaid123",
+            text="testmessage",
+            security_label_=seclabel,
+            thread_id_="testthreadid",
+        )
+        self._archive.insert_object(m)
 
         with self._archive.get_session() as s:
             result = s.scalar(select(MessageError))

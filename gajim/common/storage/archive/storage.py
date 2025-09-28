@@ -1088,9 +1088,10 @@ class MessageArchiveStorage(AlchemyStorage):
             Receipt,
             DisplayedMarker,
             Reaction,
+            Message,
+            # Tables with fk constraints
             Thread,
             SecurityLabel,
-            Message,
         ]
 
         for table in tables:
@@ -1118,6 +1119,7 @@ class MessageArchiveStorage(AlchemyStorage):
         session.execute(delete(Reaction))
         session.execute(delete(Message))
 
+        # Tables with fk constraints
         session.execute(delete(SecurityLabel))
         session.execute(delete(Thread))
         session.execute(delete(Encryption))
