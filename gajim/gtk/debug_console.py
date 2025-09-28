@@ -79,7 +79,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         EventHelper.__init__(self)
 
-        self._selected_account = "AllAccounts"
         self._selected_send_account: str | None = None
         self._filter_dialog: SettingsDialog | None = None
         self._sent_stanzas = SentSzanzas()
@@ -88,7 +87,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._presence = True
         self._message = True
         self._iq = True
-        self._stream = True
+        self._stream = False
         self._incoming = True
         self._outgoing = True
 
@@ -96,7 +95,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         header_bar = self.get_header_bar()
         assert header_bar is not None
         header_bar.set_title_widget(self._ui.header_box)
-        self._set_title()
         self.set_child(self._ui.stack)
 
         self._ui.paned.set_position(self._ui.paned.get_property("max-position"))
@@ -187,6 +185,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
                 ("account-disabled", ged.GUI1, self._on_account_changed),
             ]
         )
+        self._set_account("AllAccounts", "")
 
     def _cleanup(self) -> None:
         self.unregister_events()
