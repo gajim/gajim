@@ -27,6 +27,9 @@ class EventsTest(unittest.TestCase):
         self._group_chat_contact.account = self._account
         self._group_chat_contact.jid = JID.from_string("groupchat@example.org")
 
+    def tearDown(self) -> None:
+        self._event_storage.shutdown()
+
     def test_insert_muc_room_destroyed(self) -> None:
         event_data = events.MUCRoomDestroyed(
             timestamp=utc_now(),

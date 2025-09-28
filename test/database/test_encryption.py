@@ -32,6 +32,9 @@ class EncryptionTest(unittest.TestCase):
         self._remote_jid = JID.from_string("remote@jid.org")
         self._init_settings()
 
+    def tearDown(self) -> None:
+        self._archive.shutdown()
+
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()

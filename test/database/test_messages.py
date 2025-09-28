@@ -30,6 +30,9 @@ class MessagesTest(unittest.TestCase):
         self._occupant_id = "occupantid1"
         self._init_settings()
 
+    def tearDown(self) -> None:
+        self._archive.shutdown()
+
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
