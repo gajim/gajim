@@ -1081,12 +1081,25 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        stmt = select(Message).where(
-            Message.fk_account_pk == fk_account_pk, Message.fk_remote_pk == fk_remote_pk
-        )
+        tables = [
+            MessageError,
+            Moderation,
+            Retraction,
+            Receipt,
+            DisplayedMarker,
+            Reaction,
+            Thread,
+            SecurityLabel,
+            Message,
+        ]
 
-        for message in session.scalars(stmt).unique().all():
-            self._delete_message(session, message)
+        for table in tables:
+            stmt = delete(table).where(
+                table.fk_account_pk == fk_account_pk,
+                table.fk_remote_pk == fk_remote_pk,
+            )
+
+            session.execute(stmt)
 
         log.info('Removed history for: %s', jid)
 
