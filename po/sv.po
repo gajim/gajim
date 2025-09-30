@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -2264,6 +2264,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s skriver…"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4059,6 +4063,10 @@ msgstr "Resurs"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "Starta om Gajim för att ändringar ska träda i kraft"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "Starta om Gajim för att ändringar ska träda i kraft"
 
 #, fuzzy

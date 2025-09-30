@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2025-09-10 20:28+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -2130,6 +2130,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "A Gajim teljes szinkronban van az archívummal."
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s éppen ír…"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -3756,6 +3760,10 @@ msgid "Resource"
 msgstr "Erőforrás"
 
 msgid "Restart Gajim to finish this update"
+msgstr "A frissítés befejezéséhez a Gajim újraindítása szükséges"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "A frissítés befejezéséhez a Gajim újraindítása szükséges"
 
 msgid "Restart Pending"

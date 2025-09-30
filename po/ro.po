@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -2221,6 +2221,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim este complet sincronizat cu arhiva."
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s tastează…"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -3934,6 +3938,10 @@ msgstr "Resurse"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
 
 #, fuzzy

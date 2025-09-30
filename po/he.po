@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -2476,6 +2476,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "כותב"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4397,6 +4401,10 @@ msgstr "משאב:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
 
 #, fuzzy

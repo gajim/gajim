@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -2249,6 +2249,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s телефонує"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4144,6 +4148,10 @@ msgstr "Ресурс:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "Ви маєте перезавантажити Gajim, щоб деякі з параметрів набули чинності"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "Ви маєте перезавантажити Gajim, щоб деякі з параметрів набули чинності"
 
 #, fuzzy

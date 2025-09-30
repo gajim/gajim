@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -2405,6 +2405,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "Pracuju"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4294,6 +4298,10 @@ msgstr "Krynica:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
 
 #, fuzzy

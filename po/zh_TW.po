@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -2274,6 +2274,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s 正在鍵入…"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4161,6 +4165,10 @@ msgstr "資源:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
 
 #, fuzzy

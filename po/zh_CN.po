@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
-"PO-Revision-Date: 2025-09-10 02:47+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"PO-Revision-Date: 2025-09-17 02:18+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -1307,7 +1307,7 @@ msgid "Contact Request"
 msgstr "联系人请求"
 
 msgid "Contacts"
-msgstr "联系方式"
+msgstr "联系人"
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr "对话：昵称颜色（呼入）"
@@ -2109,6 +2109,10 @@ msgstr ""
 
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim 与归档完全同步。"
+
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s 正在输入…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -3623,7 +3627,8 @@ msgstr "正在移除账号…"
 msgid ""
 "Removing the account will delete most related data. If you want to "
 "disconnect the account for a short time, use the status selector."
-msgstr "移除账号将删除大部分相关数据。如果要临时断开账号连接，请使用状态选择器。"
+msgstr ""
+"移除账号将删除大部分相关数据。如果要临时断开账号连接，请使用状态选择器。"
 
 msgid "Rename"
 msgstr "重命名"
@@ -3725,6 +3730,10 @@ msgstr "资源"
 msgid "Restart Gajim to finish this update"
 msgstr "‌重启 Gajim 以完成此更新"
 
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
+msgstr "‌重启 Gajim 以完成此更新"
+
 msgid "Restart Pending"
 msgstr "‌重启待处理"
 
@@ -3758,7 +3767,7 @@ msgstr "角色"
 
 msgctxt "Profile"
 msgid "Role"
-msgstr "职责"
+msgstr "角色"
 
 #, python-format
 msgid "Roles of %s have been removed in this group chat"

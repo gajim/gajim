@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -2211,6 +2211,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim je plně synchronizován s archivem."
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s volá"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -3924,6 +3928,10 @@ msgstr "Zdroj"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "Restartujte Gajim aby se projevily změny"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "Restartujte Gajim aby se projevily změny"
 
 #, fuzzy

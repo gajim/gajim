@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -2200,6 +2200,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim архивпен толығымен синхрондалған."
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "%s теруде…"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -3907,6 +3911,10 @@ msgstr "Ресурс"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr "Өзгерістер күшіне енуі үшін Gajim қайта іске қосу"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr "Өзгерістер күшіне енуі үшін Gajim қайта іске қосу"
 
 #, fuzzy

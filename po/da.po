@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 20:11+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -4309,6 +4309,12 @@ msgstr "Resource:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr ""
+"<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan træde i "
+"kraft"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr ""
 "<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan træde i "
 "kraft"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -2381,6 +2381,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "Banning..."
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4255,6 +4259,11 @@ msgstr "Šaltinis:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr ""
+"<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr ""
 "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -2410,6 +2410,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "Δουλειά"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4298,6 +4302,12 @@ msgstr "Πόρος:"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr ""
+"<b>ΣΗΜΕΙΩΣΗ:</b> Θα πρέπει να επανεκκινήσετε το gajim για να εφαρμοστούν "
+"μερικές ρυθμίσεις"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr ""
 "<b>ΣΗΜΕΙΩΣΗ:</b> Θα πρέπει να επανεκκινήσετε το gajim για να εφαρμοστούν "
 "μερικές ρυθμίσεις"

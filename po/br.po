@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 14:25+0000\n"
+"POT-Creation-Date: 2025-09-17 20:43+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -2396,6 +2396,10 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
+#, fuzzy
+msgid "Gajim is quitting…"
+msgstr "O labourat"
+
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
@@ -4276,6 +4280,11 @@ msgstr "Une erreur de protocole s'est produite :"
 
 #, fuzzy
 msgid "Restart Gajim to finish this update"
+msgstr ""
+"<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
+
+#, fuzzy
+msgid "Restart Gajim to start debug logging"
 msgstr ""
 "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
 
