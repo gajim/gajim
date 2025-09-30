@@ -1,3 +1,20 @@
+Gajim 2.3.6 (30 Sep 2025)
+
+  Improvements
+
+  * DebugConsole: Disable Stream Management by default
+  * Delete more metadata when purging history
+  * Preferences: Add restart hint for debug logging
+
+  Bug Fixes
+
+  * Video Thumbnails: Don't seek close to EOS
+  * Icons: Don’t fail when loading icons
+  * Preferences: Fix updating proxy list (#12465)
+  * Only use first frame for thumbnail
+  * Don't create thumbnails twice
+  * ChangePassword: Fix error while opening the dialog
+
 Gajim 2.3.5 (11 Sep 2025)
 
   New
