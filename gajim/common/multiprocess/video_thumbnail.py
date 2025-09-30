@@ -129,9 +129,7 @@ def extract_video_thumbnail_and_properties(
     # Take timestamp after 2 seconds or earlier, if duration is shorter
     duration_ms = duration_ns / 1e6
     metadata["duration"] = duration_ms
-    timestamp_ms = 2000
-    if timestamp_ms >= duration_ms:
-        timestamp_ms = duration_ms * 0.5
+    timestamp_ms = min(2000, int(0.5 * duration_ms))
 
     pipeline.seek_simple(
         Gst.Format.TIME,
