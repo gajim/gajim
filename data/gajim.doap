@@ -723,9 +723,10 @@
     <implements>
       <xmpp:SupportedXep>
         <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0444.html"/>
-        <xmpp:status>complete</xmpp:status>
-        <xmpp:version>0.1.0</xmpp:version>
+        <xmpp:status>partial</xmpp:status>
+        <xmpp:version>0.2.1</xmpp:version>
         <xmpp:since>1.9.0</xmpp:since>
+        <xmpp:note>Partial restriction support, when max_reactions_per_user = 1.</xmpp:note>
       </xmpp:SupportedXep>
     </implements>
     <implements>

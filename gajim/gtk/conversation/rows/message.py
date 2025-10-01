@@ -488,6 +488,8 @@ class MessageRow(BaseRow):
 
         if emoji in our_reactions:
             our_reactions.discard(emoji)
+        elif self._contact.reactions_per_user == 1:
+            our_reactions = {emoji}
         else:
             our_reactions.add(emoji)
 

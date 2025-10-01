@@ -661,6 +661,13 @@ class BareContact(CommonContact):
 
         return any(r.is_bot for r in self.iter_resources())
 
+    @property
+    def reactions_per_user(self) -> int | None:
+        disco = app.storage.cache.get_last_disco_info(self._jid.domain)
+        if disco is None:
+            return None
+        return disco.reactions_per_user
+
 
 class ResourceContact(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -952,6 +959,18 @@ class GroupchatContact(CommonContact):
     def get_composers(self) -> list['GroupchatParticipant']:
         return self.get_module('Chatstate').get_composers(self._jid)
 
+    @property
+    def reactions_per_user(self) -> int | None:
+        for entity in (self._jid, self._jid.domain):
+            disco = app.storage.cache.get_last_disco_info(entity)
+            if disco is None:
+                continue
+
+            if disco.reactions_per_user is not None:
+                return disco.reactions_per_user
+
+        return None
+
 
 class GroupchatParticipant(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -1098,6 +1117,10 @@ class GroupchatParticipant(CommonContact):
         client = app.get_client(self._account)
         return client.get_module('MucBlocking').is_blocked(
             self.room.jid, self.occupant_id)
+
+    @property
+    def reactions_per_user(self) -> int | None:
+        return self.room.reactions_per_user
 
 
 def can_add_to_roster(contact: BareContact) -> bool:
