@@ -533,8 +533,7 @@ class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
             self._connection_type.add_css_class("error")
 
         assert nbxmpp_client is not None
-        assert nbxmpp_client.tls_version is not None
-        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
+        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version or -1)
         self._tls_version.set_subtitle(tls_version or _("Not available"))
 
         self._cipher_suite.set_subtitle(nbxmpp_client.ciphersuite or _("Not available"))
