@@ -930,7 +930,6 @@ OTHER_MIME_TYPES = {
     'application/json',
     'application/mp4',
     'application/msword',
-    'application/octet-stream',
     'application/ogg',
     'application/pdf',
     'application/pgp-encrypted',
