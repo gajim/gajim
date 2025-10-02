@@ -27,7 +27,6 @@ from gajim.common.multiprocess.http import ContentTypeNotAllowed
 from gajim.common.multiprocess.http import HTTPStatusError
 from gajim.common.multiprocess.http import MaxContentLengthExceeded
 from gajim.common.util.preview import contains_audio_streams
-from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import get_image_paths
 from gajim.common.util.preview import get_size_and_mime_type
@@ -39,7 +38,6 @@ from gajim.common.util.preview import UrlPreview
 from gajim.gtk.menus import get_preview_menu
 from gajim.gtk.preview.file_control_buttons import FileControlButtons
 from gajim.gtk.preview.image import ImagePreviewWidget
-from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # pyright: ignore
 from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
@@ -136,10 +134,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._connect(gesture_secondary_click, "pressed", self._on_preview_clicked)
         self.add_controller(gesture_secondary_click)
 
-        self._filename = filename_from_uri(self._uri)
+        # Set initial file attributes, guessed based on the uri
+        self._filename = preview.file_name
+        self._mime_type = preview.mime_type
+
+        self._file_control_buttons.set_file_name(self._filename)
+        self._mime_image.set_from_gicon(get_icon_for_mime_type(self._mime_type))
+
         self._orig_dir = configpaths.get("DOWNLOADS")
         self._thumb_dir = configpaths.get("DOWNLOADS_THUMB")
-        self._mime_type = ""
 
         self._urlparts = urlparse(self._uri)
         thumbnail_size = app.settings.get("preview_size")
@@ -255,8 +258,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 GLib.Variant("s", str(self._orig_path))
             )
 
-        self._stack.set_visible_child_name("preview")
-
     def _on_download_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._download_content()
@@ -305,29 +306,20 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def _connect_to_ftobj(self, obj: FileTransfer) -> None:
         self._connect(obj, "finished", self._on_download_finished)
-        self._connect(obj, "notify::state", self._on_download_state)
         self._connect(obj, "notify::progress", self._on_download_progress)
         self._http_obj = obj
         self._info_message = None
 
-        if obj.state == FTState.IN_PROGRESS:
+        if obj.state <= FTState.IN_PROGRESS:
             self._set_widget_state(PreviewState.DOWNLOADING)
 
     def _on_download_progress(
         self, ftobj: FileTransfer, _param: GObject.ParamSpec
     ) -> None:
-        print(id(self), "progress")
-        progress = ftobj.get_property("progress")
 
+        progress = ftobj.get_property("progress")
         self._progress_text.set_label(f"{int(progress * 100)} %")
         self._progressbar.set_fraction(progress)
-
-    def _on_download_state(
-        self, ftobj: FileTransfer, _param: GObject.ParamSpec
-    ) -> None:
-        state = ftobj.get_property("state")
-        if state == FTState.IN_PROGRESS:
-            self._set_widget_state(PreviewState.DOWNLOADING)
 
     def _on_download_finished(
         self,

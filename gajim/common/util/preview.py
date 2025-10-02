@@ -123,20 +123,22 @@ def guess_mime_type(file_path: Path | str,
 
 def guess_simple_file_type(file_path: str,
                            data: bytes | None = None
-                           ) -> tuple[Gio.Icon, str]:
+                           ) -> tuple[Gio.Icon, str, str]:
+
     mime_type = guess_mime_type(file_path, data)
-    if mime_type == 'application/octet-stream':
-        mime_type = ''
     icon = get_icon_for_mime_type(mime_type)
+
+    file_type = _('File')
     if mime_type.startswith('audio/'):
-        return icon, _('Audio File')
+        file_type = _('Audio File')
     if mime_type.startswith('image/'):
-        return icon, _('Image')
+        file_type = _('Image')
     if mime_type.startswith('video/'):
-        return icon, _('Video')
+        file_type = _('Video')
     if mime_type.startswith('text/'):
-        return icon, _('Text File')
-    return icon, _('File')
+        file_type = _('Text File')
+
+    return icon, file_type, mime_type
 
 
 def get_size_and_mime_type(path: Path) -> tuple[str, int]:
@@ -164,6 +166,8 @@ def is_image(mime_type: str) -> bool:
 @dataclass
 class UrlPreview:
     uri: str
+    mime_type: str
+    file_name: str
     text: str
     icon: Gio.Icon
     encrypted: bool
@@ -172,9 +176,16 @@ class UrlPreview:
     def from_uri(cls, uri: str) -> UrlPreview:
         encrypted = uri.startswith("aesgcm://")
         file_name = filename_from_uri(uri)
-        icon, file_type = guess_simple_file_type(uri)
+        icon, file_type, mime_type = guess_simple_file_type(uri)
         text = f"{file_type} ({file_name})"
-        return cls(uri=uri, text=text, icon=icon, encrypted=encrypted)
+        return cls(
+            uri=uri,
+            mime_type=mime_type,
+            file_name=file_name,
+            text=text,
+            icon=icon,
+            encrypted=encrypted
+        )
 
 
 @dataclass
