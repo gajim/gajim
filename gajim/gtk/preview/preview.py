@@ -235,7 +235,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
         self._file_control_buttons.set_file_name(self._filename)
         self._file_control_buttons.set_file_size(self._file_size)
-        self._file_control_buttons.set_buttons_visible(state == PreviewState.DOWNLOADED)
 
         self._cancel_download_button.set_visible(state == PreviewState.DOWNLOADING)
         self._cancel_download_button.set_sensitive(state == PreviewState.DOWNLOADING)

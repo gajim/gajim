@@ -45,6 +45,7 @@ class FileControlButtons(Gtk.Box, SignalManager):
     def set_path(self, path: Path) -> None:
         self._open_folder_button.set_action_target_value(GLib.Variant("s", str(path)))
         self._save_as_button.set_action_target_value(GLib.Variant("s", str(path)))
+        self.set_buttons_visible(True)
 
     def set_file_name(self, file_name: str):
         self._file_name_label.set_text(file_name)
