@@ -42,6 +42,9 @@ class GeoPreviewWidget(Gtk.Box, SignalManager):
         self._connect(gesture_secondary_click, "pressed", self._on_preview_clicked)
         self.add_controller(gesture_secondary_click)
 
+    def get_text(self) -> str:
+        return self._uri
+
     def do_unroot(self) -> None:
         self._disconnect_all()
         del self._menu_popover
