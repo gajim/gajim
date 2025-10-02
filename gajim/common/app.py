@@ -133,7 +133,7 @@ def init_process_pool() -> None:
 
     mp_context = multiprocessing.get_context("spawn")
     process_pool = ProcessPoolExecutor(
-        max_workers=4,
+        max_workers=8,
         mp_context=mp_context,
         # https://github.com/python/cpython/issues/115634
         # Start a new process per task to ensure memory is released,
