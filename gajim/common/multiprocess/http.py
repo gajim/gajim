@@ -118,6 +118,7 @@ def http_download(
 
     ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     client = httpx.Client(
+        headers={"User-Agent": "Gajim 2.x"},
         timeout=10,
         verify=ctx,
         http2=True,
