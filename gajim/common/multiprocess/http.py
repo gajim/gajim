@@ -22,7 +22,7 @@ from gajim.common.aes import AESGCMDecryptor
 from gajim.common.aes import AESKeyData
 from gajim.common.enum import FTState
 
-MIN_CHUNK_SIZE = 1024 * 1024
+MIN_CHUNK_SIZE = 1024 * 200  # 200 KB
 
 log = logging.getLogger("gajim.http")
 

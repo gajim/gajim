@@ -44,7 +44,7 @@ class FileTransferManager:
         self._transfers: dict[str, FileTransfer] = {}
         self._manager = mp.Manager()
         self._queue: QueueT = self._manager.Queue()
-        GLib.timeout_add(500, self._poll_queue)
+        GLib.timeout_add(100, self._poll_queue)
 
     def get_transfer(self, id_: str) -> FileTransfer | None:
         return self._transfers.get(id_)
