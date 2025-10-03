@@ -315,7 +315,9 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
             return
 
         try:
-            thumbnail_bytes, _metadata = create_thumbnail(data, None, PREVIEW_SIZE)
+            thumbnail_bytes, _metadata = create_thumbnail(
+                data, None, PREVIEW_SIZE, mime_type
+            )
         except Exception as error:
             log.error("Failed to create thumbnail: %s", error)
             self._set_icon_for_mime_type(mime_type)

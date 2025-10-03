@@ -11,12 +11,18 @@ from io import BytesIO
 from pathlib import Path
 
 from gi.repository import GdkPixbuf
+from gi.repository import GLib
 from PIL import Image
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-def create_thumbnail(input_: bytes | Path,
+def create_thumbnail(
+    input_: bytes | Path,
     output: Path | None,
     size: int,
+    mime_type: str,
 ) -> tuple[bytes, dict[str, Any]]:
 
     if isinstance(input_, Path):
@@ -29,6 +35,11 @@ def create_thumbnail(input_: bytes | Path,
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):
         # Don't try to process image further
         raise
+
+    except Exception:
+        thumbnail_bytes, metadata = _create_thumbnail_with_pixbuf(
+            data, size, mime_type
+        )
 
     assert thumbnail_bytes is not None
     if output is not None:
@@ -57,18 +68,47 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> tuple[bytes, dict[str,
     output_file = BytesIO()
 
     image.thumbnail((size, size))
-    image.save(
-        output_file,
-        format='png',
-        optimize=True,
-        save_all=False
-    )
+    image.save(output_file, format="png", optimize=True, save_all=False)
 
     bytes_ = output_file.getvalue()
 
     image.close()
     input_file.close()
     output_file.close()
+
+    return bytes_, metadata
+
+
+def _create_thumbnail_with_pixbuf(
+    data: bytes, size: int, mime_type: str
+) -> tuple[bytes, dict[str, Any]]:
+    # Reads data and returns thumbnail bytes in PNG format
+
+    metadata: dict[str, Any] = {}
+
+    try:
+        # Try to create GdKPixbuf loader with fixed mime-type to
+        # fix mime-type detection for HEIF images on some systems
+        loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime_type)
+    except GLib.Error:
+        loader = GdkPixbuf.PixbufLoader()
+
+    loader.write(data)
+    loader.close()
+
+    pixbuf = loader.get_pixbuf()
+    if pixbuf is None:
+        raise ValueError("Loading pixbuf failed")
+
+    if size > pixbuf.get_width() and size > pixbuf.get_height():
+        return data, metadata
+
+    width, height = get_thumbnail_size(pixbuf, size)
+    thumbnail = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
+    if thumbnail is None:
+        raise ValueError("scale_simple() failed")
+
+    _error, bytes_ = thumbnail.save_to_bufferv("png", [], [])
 
     return bytes_, metadata
 

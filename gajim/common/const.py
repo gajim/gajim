@@ -14,17 +14,16 @@ from enum import IntEnum
 from enum import unique
 from functools import total_ordering
 
+from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from nbxmpp.const import PresenceShow
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from PIL import Image
-from PIL import ImageFile
 
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 STOP_EVENT = True
 PROPAGATE_EVENT = False
 
@@ -1019,19 +1018,35 @@ VIDEO_MIME_TYPES = {
 }
 
 
-def get_image_mime_types() -> set[str]:
-    previewable_mime_types: set[str] = set()
+def get_pixbuf_mime_types() -> set[str]:
+    pixbuf_mime_types: set[str] = set()
+
+    for fmt in GdkPixbuf.Pixbuf.get_formats():
+        mime_types = fmt.get_mime_types()
+        if mime_types is None:
+            continue
+        for mime_type in mime_types:
+            pixbuf_mime_types.add(mime_type.lower())
+
+    return pixbuf_mime_types
+
+
+def get_pil_mime_types() -> set[str]:
+    pil_mime_types: set[str] = set()
 
     Image.init()
     for mime_type in Image.MIME.values():
-        previewable_mime_types.add(mime_type.lower())
+        pil_mime_types.add(mime_type.lower())
 
     return set(filter(
         lambda mime_type: mime_type.startswith('image'),
-        previewable_mime_types
+        pil_mime_types
     ))
 
-IMAGE_MIME_TYPES = get_image_mime_types()
+
+PIL_IMAGE_MIME_TYPES = get_pil_mime_types()
+PIXBUF_IMAGE_MIME_TYPES = get_pixbuf_mime_types()
+IMAGE_MIME_TYPES = PIL_IMAGE_MIME_TYPES | PIXBUF_IMAGE_MIME_TYPES
 
 ALL_MIME_TYPES = (
     OTHER_MIME_TYPES |

@@ -67,6 +67,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         self._orig_path = orig_path
         self._thumb_path = thumb_path
         self._filename = filename
+        self._mime_type = mime_type
 
         if mime_type in IMAGE_MIME_TYPES:
             self._type = "image"
@@ -122,6 +123,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
                 self._orig_path,
                 self._thumb_path,
                 app.settings.get("preview_size"),
+                self._mime_type,
             )
             future.add_done_callback(
                 partial(GLib.idle_add, self._create_thumbnail_finished)
