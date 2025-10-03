@@ -12,6 +12,7 @@ from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 
 try:
@@ -37,6 +38,15 @@ SEEK_BAR_PADDING = 11
 
 
 class AudioWidget(Gtk.Box, SignalManager):
+
+    __gsignals__ = {
+        "display-error": (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (),
+        )
+    }
+
     def __init__(self, file_path: Path) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         SignalManager.__init__(self)

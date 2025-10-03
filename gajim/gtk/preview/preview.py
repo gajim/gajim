@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from typing import Any
 from typing import cast
 
 import hashlib
@@ -211,6 +212,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         # all other widget states remain as in PreviewState.DOWNLOADED
         if state == PreviewState.DISPLAY:
 
+            widget = None
             if is_image(self._mime_type) or is_video(self._mime_type):
                 assert self._mime_type is not None
                 widget = ImagePreviewWidget(
@@ -220,13 +222,14 @@ class PreviewWidget(Gtk.Box, SignalManager):
                     self._orig_path,
                     self._thumb_path,
                 )
-                self._set_display_widget(widget)
 
             elif is_audio(self._mime_type):
                 if app.is_installed("GST") and contains_audio_streams(self._orig_path):
-
                     widget = AudioWidget(self._orig_path)
-                    self._set_display_widget(widget)
+
+            if widget is not None:
+                self._connect(widget, "display-error", self._on_display_error)
+                self._set_display_widget(widget)
 
             return
 
@@ -256,6 +259,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._icon_button.set_action_target_value(
                 GLib.Variant("s", str(self._orig_path))
             )
+
+    def _on_display_error(self, _widget: Any) -> None:
+        self._stack.set_visible_child_name("preview")
 
     def _on_download_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)

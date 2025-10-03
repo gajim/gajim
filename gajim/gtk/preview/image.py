@@ -13,6 +13,7 @@ from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -36,6 +37,14 @@ log = logging.getLogger("gajim.gtk.preview.image")
 class ImagePreviewWidget(Gtk.Box, SignalManager):
 
     __gtype_name__ = "ImagePreviewWidget"
+
+    __gsignals__ = {
+        "display-error": (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (),
+        )
+    }
 
     _stack: Gtk.Stack = Gtk.Template.Child()
     _content_overlay: Gtk.Overlay = Gtk.Template.Child()
@@ -92,6 +101,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
 
         if data is None:
             log.error("%s: %s", self._thumb_path.name, error)
+            self.emit("display-error")
             return
 
         self._thumbnail = data
@@ -118,6 +128,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             )
         except Exception as error:
             log.warning("Creating thumbnail failed for: %s %s", self._orig_path, error)
+            self.emit("display-error")
 
     def _create_video_thumbnail(self) -> None:
         assert self._orig_path is not None
@@ -134,6 +145,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             )
         except Exception as error:
             log.warning("Creating thumbnail failed for: %s %s", self._orig_path, error)
+            self.emit("display-error")
 
     def _create_thumbnail_finished(
         self, future: Future[tuple[bytes, dict[str, typing.Any]]]
@@ -144,6 +156,8 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             log.exception(
                 "Creating thumbnail failed for: %s %s", self._orig_path, error
             )
+            self.emit("display-error")
+
         else:
             self._thumbnail = thumbnail_bytes
             self._display_image_preview()
@@ -155,6 +169,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(self._thumbnail))
         except GLib.Error:
             log.exception("Could not load image %s", self._filename)
+            self.emit("display-error")
             return
 
         max_preview_size = app.settings.get("preview_size")
