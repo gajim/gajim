@@ -4,11 +4,16 @@
 
 from __future__ import annotations
 
+from typing import Any
+from typing import Literal
+from typing import overload
+
 import logging
 import multiprocessing as mp
 import queue
 import threading
 from collections import defaultdict
+from collections.abc import Callable
 from collections.abc import Iterable
 from concurrent.futures import Future
 from functools import partial
@@ -21,6 +26,7 @@ from nbxmpp.structs import ProxyData
 
 from gajim.common import app
 from gajim.common.enum import FTState
+from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_uuid
 from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.multiprocess.http import http_download
@@ -78,6 +84,8 @@ class FileTransferManager:
         hash_algo: str | None = None,
         hash_value: str | None = None,
         proxy: ProxyData | None = None,
+        user_data: Any = None,
+        callback: Callable[[FileTransfer], Any] | None = None,
     ) -> FileTransfer | None:
 
         if id_ is None:
@@ -87,13 +95,16 @@ class FileTransferManager:
         if obj is not None:
             return obj
 
+        if proxy is None:
+            proxy = determine_proxy()
+
         urlparts = urlparse(url)
 
         decryption_data = None
-        if urlparts.scheme == 'aesgcm':
+        if urlparts.scheme == "aesgcm":
             decryption_data = get_aes_key_data(urlparts.fragment)
             # Don’t send fragment to the server, it would leak the AES key
-            urlparts = urlparts._replace(scheme='https', fragment='')
+            urlparts = urlparts._replace(scheme="https", fragment="")
 
         event = self._manager.Event()
 
@@ -125,7 +136,9 @@ class FileTransferManager:
             )
         )
 
-        obj = FileTransfer(self, id_, event, output=output)
+        obj = FileTransfer(self, id_, event, output=output, user_data=user_data)
+        if callback is not None:
+            obj.connect("finished", callback)
         self._transfers[id_] = obj
         return obj
 
@@ -165,6 +178,7 @@ class FileTransfer(GObject.Object):
         id_: str,
         event: threading.Event,
         output: Path | None = None,
+        user_data: Any = None,
     ) -> None:
         super().__init__()
 
@@ -178,6 +192,7 @@ class FileTransfer(GObject.Object):
         self._result = None
         self._exception = None
         self._metadata = None
+        self._user_data = user_data
 
     def cancel(self) -> None:
         self._event.set()
@@ -223,14 +238,41 @@ class FileTransfer(GObject.Object):
         self.emit("finished")
         self.run_dispose()
 
+    def is_finished(self) -> bool:
+        return self._state == FTState.FINISHED
+
+    def set_user_data(self, user_data: Any) -> None:
+        self._user_data = user_data
+
+    def get_user_data(self) -> Any:
+        return self._user_data
+
     def get_metadata(self) -> TransferMetadata | None:
         return self._metadata
 
     def set_result(self, result: DownloadResult) -> None:
         self._result = result
 
-    def get_result(self) -> DownloadResult | None:
+    @overload
+    def get_result(
+        self, *, raise_if_empty: Literal[False]
+    ) -> DownloadResult | None: ...
+
+    @overload
+    def get_result(self, *, raise_if_empty: Literal[True]) -> DownloadResult: ...
+
+    @overload
+    def get_result(self) -> DownloadResult: ...
+
+    def get_result(self, *, raise_if_empty: bool = True) -> DownloadResult | None:
         self.raise_for_error()
+        if raise_if_empty:
+            if self._result is None:
+                raise ValueError("No download result available")
+
+            if not self._result.content:
+                raise ValueError("No content received")
+
         return self._result
 
     def set_exception(self, exception: Exception | None) -> None:

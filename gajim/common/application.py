@@ -17,7 +17,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.http import HTTPRequest
 from nbxmpp.protocol import JID
 from packaging.version import Version as V
 
@@ -41,6 +40,7 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
+from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.file_transfer_manager import FileTransferManager
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
@@ -48,7 +48,6 @@ from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.events.storage import EventStorage
 from gajim.common.task_manager import TaskManager
-from gajim.common.util.http import create_http_request
 from gajim.common.util.text import from_one_line
 from gajim.common.util.text import get_random_string
 
@@ -319,25 +318,31 @@ class CoreApplication(ged.EventHelper):
     def check_for_gajim_updates(self) -> None:
         self._log.info('Checking for Gajim updates')
 
-        request = create_http_request()
-        request.send('GET', 'https://gajim.org/current-version.json',
-                     callback=self._on_update_response)
+        app.ftm.http_download(
+            'https://gajim.org/current-version.json',
+            callback=self._on_update_response,
+        )
 
-    def _on_update_response(self, request: HTTPRequest) -> None:
-        if not request.is_complete():
+    def _on_update_response(self, obj: FileTransfer) -> None:
+        try:
+            result = obj.get_result()
+        except Exception as error:
             self._log.warning(
-                'Error while performing gajim update check: %s (%s)',
-                request.get_error_string(), request.get_status())
+                'Error while performing gajim update check: %s', error)
             return
 
         now = datetime.now()
         app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
 
-        data = json.loads(request.get_data())
-        latest_version = data['current_version']
-        setup_url = data['current_win_setup']
-        if IS_PORTABLE:
-            setup_url = data['current_win_portable_setup']
+        try:
+            data = json.loads(result.content)
+            latest_version = data['current_version']
+            setup_url = data['current_win_setup']
+            if IS_PORTABLE:
+                setup_url = data['current_win_portable_setup']
+        except Exception:
+            self._log.exception("Unable to perform update check")
+            return
 
         if V(latest_version) > V(app.version):
             app.ged.raise_event(GajimUpdateAvailable(version=latest_version,

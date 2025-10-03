@@ -47,7 +47,7 @@ class DownloadResult:
     hash_value: str
     content_length: int
     content_type: str | None
-    content: bytes | None = None
+    content: bytes
 
 
 class InvalidHash(Exception):
@@ -199,7 +199,7 @@ def http_download(
     if with_progress:
         queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
 
-    content = None
+    content = b""
     if isinstance(file, BytesIO):
         content = file.getvalue()
 

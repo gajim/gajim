@@ -12,12 +12,11 @@ from io import BytesIO
 from zipfile import ZipFile
 
 from gi.repository import GLib
-from nbxmpp.http import HTTPRequest
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import Observable
-from gajim.common.util.http import create_http_request
 
 from .manifest import PluginManifest
 
@@ -50,23 +49,24 @@ class PluginRepository(Observable):
         self._download_queue: set[PluginManifest] = set()
 
         if app.settings.get('plugins_repository_enabled'):
-            request = create_http_request()
-            request.send('GET', 'https://gajim.org/updates.json',
-                         callback=self._on_repository_received)
+            app.ftm.http_download(
+                'https://gajim.org/updates.json',
+                callback=self._on_repository_received
+            )
 
     @property
     def available(self):
         return bool(self._repository_url)
 
-    def _on_repository_received(self, request: HTTPRequest) -> None:
-
-        if not request.is_complete():
-            log.warning('Repository retrieval failed: %s',
-                        request.get_error_string())
+    def _on_repository_received(self, obj: FileTransfer) -> None:
+        try:
+            result = obj.get_result()
+        except Exception as error:
+            log.warning('Repository retrieval failed: %s', error)
             return
 
         try:
-            updates = json.loads(request.get_data())
+            updates = json.loads(result.content)
         except Exception as error:
             log.warning('Unable to parse repository information: %s', error)
             return
@@ -137,21 +137,23 @@ class PluginRepository(Observable):
 
     def _refresh_plugin_index(self, callback: Any | None = None) -> None:
         log.info('Refresh index')
-        request = create_http_request()
-        request.set_user_data(callback)
-        request.send('GET', self._repository_index_url,
-                     callback=self._on_index_received)
+        app.ftm.http_download(
+            self._repository_index_url,
+            user_data=callback,
+            callback=self._on_index_received
+        )
 
-    def _on_index_received(self, request: HTTPRequest) -> None:
-
-        if not request.is_complete():
+    def _on_index_received(self, obj: FileTransfer) -> None:
+        try:
+            result = obj.get_result()
+        except Exception as error:
             log.warning('Refresh failed: %s %s',
                         self._repository_index_url,
-                        request.get_error_string())
+                        error)
             return
 
         try:
-            package_index = json.loads(request.get_data())
+            package_index = json.loads(result.content)
         except Exception as error:
             log.warning('Unable to parse repository index: %s', error)
             return
@@ -159,27 +161,29 @@ class PluginRepository(Observable):
         self._manifests = self._parse_package_json(package_index)
 
         image_path = package_index['metadata']['image_path']
-        callback = request.get_user_data()
+        callback = obj.get_user_data()
 
-        request = create_http_request()
-        request.send('GET', f'{self._repository_url}/{image_path}',
-                     callback=self._on_images_received)
+        app.ftm.http_download(
+            f'{self._repository_url}/{image_path}',
+            callback=self._on_images_received,
+        )
 
         log.info('Refresh successful')
 
         if callback is not None:
             callback()
 
-    def _on_images_received(self, request: HTTPRequest) -> None:
-
-        if not request.is_complete():
-            log.warning('Image download failed: %s', request.get_error_string())
+    def _on_images_received(self, obj: FileTransfer) -> None:
+        try:
+            result = obj.get_result()
+        except Exception as error:
+            log.warning('Image download failed: %s', error)
             return
 
         path = configpaths.get('PLUGINS_IMAGES')
 
         try:
-            zipfile = ZipFile(BytesIO(request.get_data()))
+            zipfile = ZipFile(BytesIO(result.content))
             zipfile.extractall(path)
         except Exception as error:
             log.warning('Failed to extract images: %s', error)
@@ -227,25 +231,27 @@ class PluginRepository(Observable):
     def _download_plugin(self, manifest: PluginManifest) -> None:
         log.info('Download plugin %s', manifest.short_name)
         url = manifest.get_remote_url(self._repository_url)
-        request = create_http_request()
-        request.set_user_data(manifest)
-        request.send('GET', url,
-                     callback=self._on_download_plugin_finished)
 
-    def _on_download_plugin_finished(self, request: HTTPRequest) -> None:
+        app.ftm.http_download(
+            url,
+            user_data=manifest,
+            callback=self._on_download_plugin_finished
+        )
 
-        manifest = cast(PluginManifest, request.get_user_data())
+    def _on_download_plugin_finished(self, obj: FileTransfer) -> None:
+        manifest = cast(PluginManifest, obj.get_user_data())
         self._download_queue.remove(manifest)
 
-        if not request.is_complete():
-            error = request.get_error_string()
+        try:
+            result = obj.get_result()
+        except Exception as error:
             log.error('Download failed: %s %s',
                       manifest.get_remote_url(self._repository_url),
                       error)
-            self.notify('download-failed', manifest, error)
+            self.notify('download-failed', manifest, str(error))
             return
 
-        with ZipFile(BytesIO(request.get_data())) as zip_file:
+        with ZipFile(BytesIO(result.content)) as zip_file:
             zip_file.extractall(self._download_path / manifest.short_name)
 
         log.info('Finished downloading %s', manifest.short_name)

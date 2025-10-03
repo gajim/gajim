@@ -37,10 +37,10 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SASL_ERRORS
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
-from gajim.common.util.http import create_http_request
 from gajim.common.util.http import create_http_session
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
@@ -708,26 +708,25 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up.set_sensitive(False)
         self._ui.update_provider_list_icon.add_css_class("spin")
 
-        self._provider_list_request = create_http_request()
-        self._provider_list_request.send(
-            "GET",
+        app.ftm.http_download(
             app.settings.get_app_setting("providers_list_url"),
-            timeout=15,
             callback=self._on_download_provider_list_finished,
         )
 
-    def _on_download_provider_list_finished(self, request: HTTPRequest) -> None:
+    def _on_download_provider_list_finished(self, obj: FileTransfer) -> None:
         self._ui.server_comboboxtext_sign_up.set_sensitive(True)
         self._ui.update_provider_list_icon.remove_css_class("spin")
 
-        if not request.is_complete():
+        try:
+            result = obj.get_result()
+        except Exception as error:
+            log.warning("Error while downloading provider list: %s", error)
             self._ui.update_provider_list_icon.set_from_icon_name(
                 "lucide-circle-x-symbolic"
             )
             self._ui.update_provider_list_icon.set_tooltip_text(
                 _("Could not update providers list")
             )
-            log.warning("Provider list download failed: %s", request.get_error_string())
             return
 
         self._ui.update_provider_list_icon.set_from_icon_name("lucide-check-symbolic")
@@ -735,7 +734,7 @@ class Signup(Page):
             _("Providers list is up to date")
         )
 
-        self._servers = json.loads(request.get_data())
+        self._servers = json.loads(result.content)
         self._create_server_completion()
 
     def _create_server_completion(self) -> None:

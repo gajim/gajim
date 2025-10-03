@@ -24,13 +24,12 @@ from urllib.parse import urlencode
 
 import nbxmpp
 from gi.repository import Gtk
-from nbxmpp.http import HTTPRequest
 
 import gajim
 from gajim.common import app
+from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
-from gajim.common.util.http import create_http_request
 from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_os_name
@@ -184,20 +183,14 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
         self._ui.close_button.set_sensitive(False)
         self._ui.report_spinner.set_visible(True)
 
-        request = create_http_request()
-        request.send(
-            "GET", "https://gajim.org/updates.json", callback=self._on_endpoint_received
+        app.ftm.http_download(
+            "https://gajim.org/updates.json",
+            callback=self._on_endpoint_received,
         )
 
-    def _parse_endpoint(self, request: HTTPRequest) -> str:
-        if not request.is_complete():
-            raise ValueError(
-                "Failed to retrieve sentry endpoint: "
-                f"{request.get_status()} {request.get_error()}"
-            )
-
+    def _parse_endpoint(self, content: bytes) -> str:
         try:
-            data = json.loads(request.get_data())
+            data = json.loads(content)
         except Exception as error:
             raise ValueError(f"Json parsing error: {error}")
 
@@ -207,11 +200,12 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
 
         return endpoint
 
-    def _on_endpoint_received(self, request: HTTPRequest) -> None:
+    def _on_endpoint_received(self, obj: FileTransfer) -> None:
         try:
-            endpoint = self._parse_endpoint(request)
-        except ValueError as error:
-            print(error)
+            result = obj.get_result()
+            endpoint = self._parse_endpoint(result.content)
+        except Exception as error:
+            print("Failed to retrieve sentry endpoint: %s" % error)
             self._report_with_browser()
 
         else:
