@@ -61,7 +61,7 @@ class MessageRowActions(Gtk.Box):
 
         self._reaction_buttons: list[Gtk.Button | Gtk.MenuButton] = []
 
-        for emoji in ["👍", "❤", "🤣"]:
+        for emoji in app.settings.get("quick_reaction_emojis").split(","):
             button = QuickReactionButton(emoji)
             button.connect("clicked", self._on_quick_reaction_button_clicked)
             self._reaction_buttons.append(button)

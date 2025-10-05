@@ -129,6 +129,7 @@ StringSettings = Literal[
     'muclumbus_api_jid',
     'muclumbus_api_pref',
     'providers_list_url',
+    'quick_reaction_emojis',
     'roster_theme',
     'search_engine',
     'show_main_window_on_startup',
@@ -216,6 +217,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'preview_verify_https': True,
     'providers_list_url': 'https://data.xmpp.net/providers/v2/providers-B.json',
     'print_status_in_chats': False,
+    'quick_reaction_emojis': '👍,❤,🤣',
     'remote_control': False,
     'roster_theme': 'default',
     'search_engine': 'https://duckduckgo.com/?q=%s',
@@ -635,6 +637,8 @@ ADVANCED_SETTINGS = {
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
         'providers_list_url': _(
             'Endpoint for retrieving a list of providers for sign up'),
+        'quick_reaction_emojis': _(
+            'Comma-separated list of emojis for quick reaction buttons'),
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),
