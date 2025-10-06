@@ -25,7 +25,6 @@ from nbxmpp.const import StreamError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
 from nbxmpp.errors import StanzaError
-from nbxmpp.http import HTTPRequest
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
 from nbxmpp.structs import ProxyData
@@ -661,7 +660,7 @@ class Signup(Page):
         self.title: str = _("Create New Account")
 
         self._servers: list[dict[str, Any]] = []
-        self._provider_list_request: HTTPRequest | None = None
+        self._provider_list_request: FileTransfer[DownloadResult] | None = None
 
         self._ui = get_builder("account_wizard.ui")
         entry = self._ui.server_comboboxtext_sign_up.get_child()
@@ -692,11 +691,9 @@ class Signup(Page):
 
     def do_unroot(self) -> None:
         Page.do_unroot(self)
-        if self._provider_list_request is None:
-            return
-
-        if not self._provider_list_request.is_finished():
+        if self._provider_list_request is not None:
             self._provider_list_request.cancel()
+            self._provider_list_request = None
 
     def focus(self) -> None:
         self._entry.grab_focus()
@@ -709,7 +706,7 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up.set_sensitive(False)
         self._ui.update_provider_list_icon.add_css_class("spin")
 
-        app.ftm.http_download(
+        self._provider_list_request = app.ftm.http_download(
             app.settings.get_app_setting("providers_list_url"),
             callback=self._on_download_provider_list_finished,
         )
@@ -717,6 +714,7 @@ class Signup(Page):
     def _on_download_provider_list_finished(
         self, obj: FileTransfer[DownloadResult]
     ) -> None:
+        self._provider_list_request = None
         self._ui.server_comboboxtext_sign_up.set_sensitive(True)
         self._ui.update_provider_list_icon.remove_css_class("spin")
 
