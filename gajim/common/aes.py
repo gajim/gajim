@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 
 from cryptography.hazmat.backends import default_backend
@@ -16,6 +17,12 @@ from cryptography.hazmat.primitives.ciphers.modes import GCM
 class AESKeyData:
     key: bytes
     iv: bytes
+
+    @classmethod
+    def init(cls, key_size: int = 32, iv_size: int = 12) -> AESKeyData:
+        key = os.urandom(key_size)
+        iv = os.urandom(iv_size)
+        return cls(key=key, iv=iv)
 
 
 class AESGCMDecryptor:
@@ -35,3 +42,17 @@ class AESGCMDecryptor:
 
     def finalize(self) -> bytes:
         return self._cipher.finalize_with_tag(self._cache)
+
+
+class AESGCMEncryptor:
+    def __init__(self, data: AESKeyData) -> None:
+
+        self._cipher = Cipher(
+            algorithms.AES(data.key), GCM(data.iv), backend=default_backend()
+        ).encryptor()
+
+    def encrypt(self, data: bytes) -> bytes:
+        return self._cipher.update(data)
+
+    def finalize(self) -> bytes:
+        return self._cipher.finalize() + self._cipher.tag

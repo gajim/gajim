@@ -41,6 +41,7 @@ from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.file_transfer_manager import FileTransferManager
+from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
@@ -322,7 +323,7 @@ class CoreApplication(ged.EventHelper):
             callback=self._on_update_response,
         )
 
-    def _on_update_response(self, obj: FileTransfer) -> None:
+    def _on_update_response(self, obj: FileTransfer[DownloadResult]) -> None:
         try:
             result = obj.get_result()
         except Exception as error:

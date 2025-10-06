@@ -17,6 +17,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import Observable
+from gajim.common.multiprocess.http import DownloadResult
 
 from .manifest import PluginManifest
 
@@ -58,7 +59,7 @@ class PluginRepository(Observable):
     def available(self):
         return bool(self._repository_url)
 
-    def _on_repository_received(self, obj: FileTransfer) -> None:
+    def _on_repository_received(self, obj: FileTransfer[DownloadResult]) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -145,7 +146,7 @@ class PluginRepository(Observable):
             callback=self._on_index_received,
         )
 
-    def _on_index_received(self, obj: FileTransfer) -> None:
+    def _on_index_received(self, obj: FileTransfer[DownloadResult]) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -173,7 +174,7 @@ class PluginRepository(Observable):
         if callback is not None:
             callback()
 
-    def _on_images_received(self, obj: FileTransfer) -> None:
+    def _on_images_received(self, obj: FileTransfer[DownloadResult]) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -236,7 +237,7 @@ class PluginRepository(Observable):
             url, user_data=manifest, callback=self._on_download_plugin_finished
         )
 
-    def _on_download_plugin_finished(self, obj: FileTransfer) -> None:
+    def _on_download_plugin_finished(self, obj: FileTransfer[DownloadResult]) -> None:
         manifest = cast(PluginManifest, obj.get_user_data())
         self._download_queue.remove(manifest)
 

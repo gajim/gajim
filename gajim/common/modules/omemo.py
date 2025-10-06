@@ -12,14 +12,10 @@ from typing import Any
 from typing import cast
 from typing import Literal
 
-import binascii
-import threading
-from collections.abc import Callable
 from collections.abc import Generator
 from pathlib import Path
 
 import nbxmpp
-from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import PresenceType
 from nbxmpp.errors import is_error
@@ -38,7 +34,6 @@ from nbxmpp.structs import OMEMOMessage
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task
-from omemo_dr.aes import aes_encrypt_file
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.exceptions import DecryptionFailed
 from omemo_dr.exceptions import DuplicateMessage
@@ -66,7 +61,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
@@ -316,31 +310,6 @@ class OMEMO(BaseModule):
 
         self._debug_print_stanza(message.get_stanza())
         return True
-
-    def encrypt_file(self,
-                     transfer: HTTPFileTransfer,
-                     callback: Callable[..., Any]
-                     ) -> None:
-
-        thread = threading.Thread(target=self._encrypt_file_thread,
-                                  args=(transfer, callback))
-        thread.daemon = True
-        thread.start()
-
-    @staticmethod
-    def _encrypt_file_thread(transfer: HTTPFileTransfer,
-                             callback: Callable[..., Any],
-                             *args: Any,
-                             **kwargs: Any
-                             ) -> None:
-
-        result = aes_encrypt_file(transfer.get_data())
-        transfer.size = len(result.payload)
-        fragment = binascii.hexlify(result.iv + result.key).decode()
-        transfer.set_uri_transform_func(
-            lambda uri: f'aesgcm{uri[5:]}#{fragment}')
-        transfer.set_encrypted_data(result.payload)
-        GLib.idle_add(callback, transfer)
 
     def _send_key_transport_message(self,
                                     typ: Literal['chat', 'groupchat'],

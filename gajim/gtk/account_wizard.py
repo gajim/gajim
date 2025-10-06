@@ -41,6 +41,7 @@ from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
+from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.util.http import create_http_session
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
@@ -713,7 +714,9 @@ class Signup(Page):
             callback=self._on_download_provider_list_finished,
         )
 
-    def _on_download_provider_list_finished(self, obj: FileTransfer) -> None:
+    def _on_download_provider_list_finished(
+        self, obj: FileTransfer[DownloadResult]
+    ) -> None:
         self._ui.server_comboboxtext_sign_up.set_sensitive(True)
         self._ui.update_provider_list_icon.remove_css_class("spin")
 

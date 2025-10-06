@@ -6,7 +6,6 @@
 import binascii
 import logging
 
-from nbxmpp.http import HTTPRequest
 from nbxmpp.http import HTTPSession
 from nbxmpp.structs import ProxyData
 
@@ -34,11 +33,6 @@ def create_http_session(account: str | None = None,
         session.set_proxy_resolver(proxy.get_resolver())
 
     return session
-
-
-def create_http_request(account: str | None = None) -> HTTPRequest:
-    session = create_http_session(account)
-    return session.create_request()
 
 
 def get_aes_key_data(fragment_string: str) -> AESKeyData:
