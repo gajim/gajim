@@ -8,41 +8,39 @@ from __future__ import annotations
 
 from typing import cast
 
+import binascii
 import os
 from collections import defaultdict
-from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urlparse
 
-from gi.repository import Gio
 from gi.repository import GLib
-from nbxmpp.const import HTTPRequestError
+from gi.repository import GObject
 from nbxmpp.errors import HTTPUploadStanzaError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
-from nbxmpp.http import HTTPRequest
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import HTTPUploadData
 from nbxmpp.task import Task
-from nbxmpp.util import convert_tls_error_flags
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common import types
+from gajim.common.aes import AESKeyData
 from gajim.common.const import FTState
 from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
 from gajim.common.exceptions import FileError
+from gajim.common.file_transfer_manager import FileTransfer as FileTransferM
 from gajim.common.filetransfer import FileTransfer
+from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
+from gajim.common.multiprocess.http import CancelledError
+from gajim.common.multiprocess.http import UploadResult
 from gajim.common.structs import OutgoingMessage
-from gajim.common.util.http import create_http_request
 from gajim.common.util.preview import guess_mime_type
-from gajim.common.util.text import get_random_string
-from gajim.common.util.user_strings import get_tls_error_phrases
 
 
 class HTTPUpload(BaseModule):
@@ -57,7 +55,7 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace: str | None = None
         self.max_file_size: float | None = None  # max file size in bytes
 
-        self._requests_in_progress: dict[int, HTTPRequest] = {}
+        self._requests_in_progress: dict[int, FileTransferM[UploadResult]] = {}
 
         self._running_transfers: dict[
             tuple[str, JID], set[HTTPFileTransfer]] = defaultdict(set)
@@ -110,7 +108,17 @@ class HTTPUpload(BaseModule):
             contact.jid,
             transfer)
         app.ged.raise_event(event)
-        self._start_transfer(transfer)
+
+        transfer.set_preparing()
+        self._log.info('Sending request for slot')
+        self._nbxmpp('HTTPUpload').request_slot(
+            jid=self.component,
+            filename=transfer.filename,
+            size=transfer.size,
+            content_type=transfer.mime,
+            callback=self._received_slot,
+            user_data=transfer
+        )
 
     def _make_transfer(self,
                        path: Path,
@@ -187,39 +195,11 @@ class HTTPUpload(BaseModule):
         key = (transfer.account, transfer.contact.jid)
         self._running_transfers[key].discard(transfer)
 
-        request = self._requests_in_progress.get(id(transfer))
-        if request is None:
+        obj = self._requests_in_progress.get(id(transfer))
+        if obj is None:
             return
 
-        request.cancel()
-
-    def _start_transfer(self, transfer: HTTPFileTransfer) -> None:
-        if transfer.encryption is not None and not transfer.is_encrypted:
-            transfer.set_encrypting()
-            if transfer.encryption == 'OMEMO':
-                self._client.get_module('OMEMO').encrypt_file(
-                    transfer, self._start_transfer)
-                return
-
-            plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
-            if hasattr(plugin, 'encrypt_file'):
-                plugin.encrypt_file(transfer,  # type: ignore
-                                    self._account,
-                                    self._start_transfer)
-            else:
-                transfer.set_error('encryption-not-available')
-
-            return
-
-        transfer.set_preparing()
-        self._log.info('Sending request for slot')
-        self._nbxmpp('HTTPUpload').request_slot(
-            jid=self.component,
-            filename=transfer.filename,
-            size=transfer.size,
-            content_type=transfer.mime,
-            callback=self._received_slot,  # type: ignore
-            user_data=transfer)  # type: ignore
+        obj.cancel()
 
     def _received_slot(self, task: Task) -> None:
         transfer = cast(HTTPFileTransfer, task.get_user_data())
@@ -260,63 +240,54 @@ class HTTPUpload(BaseModule):
         transfer.set_started()
 
         assert transfer.put_uri is not None
-        request = create_http_request(self._account)
-        request.set_user_data(transfer)
-        request.connect('accept-certificate', self._accept_certificate)
-        request.connect('request-progress', self._on_request_progress)
+        obj = app.ftm.http_upload(
+            transfer.put_uri,
+            transfer.mime,
+            transfer.path,
+            transfer.headers,
+            with_progress=True,
+            encryption_data=transfer.get_encryption_data(),
+            proxy=determine_proxy(self._account),
+            user_data=transfer,
+            callback=self._on_finish,
+        )
+        if obj is None:
+            return
 
-        request.set_request_body_from_path(transfer.mime, transfer.payload_path)
+        obj.connect('notify::progress', self._on_upload_progress)
 
-        for name, value in transfer.headers.items():
-            request.get_request_headers().append(name, value)
+        self._requests_in_progress[id(transfer)] = obj
 
-        request.send('PUT', transfer.put_uri, callback=self._on_finish)
+    def _on_finish(self, ftobj: FileTransferM[UploadResult]) -> None:
 
-        self._requests_in_progress[id(transfer)] = request
-
-    def _accept_certificate(self,
-                            request: HTTPRequest,
-                            _certificate: Gio.TlsCertificate,
-                            certificate_errors: Gio.TlsCertificateFlags,
-                            ) -> bool:
-
-        transfer = cast(HTTPFileTransfer, request.get_user_data())
-        phrases = get_tls_error_phrases(
-            convert_tls_error_flags(certificate_errors))
-        self._log.warning(
-            'TLS verification failed: %s (0x%02x)', phrases, certificate_errors)
-
-        transfer.set_error('tls-verification-failed', phrases[0])
-        return False
-
-    def _on_finish(self, request: HTTPRequest) -> None:
-        transfer = cast(HTTPFileTransfer, request.get_user_data())
+        transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
 
         self._requests_in_progress.pop(id(transfer), None)
 
         key = (transfer.account, transfer.contact.jid)
         self._running_transfers[key].discard(transfer)
 
-        if not request.is_complete():
-            error = request.get_error_string()
-            if request.get_error() == HTTPRequestError.CANCELLED:
-                self._log.info('Upload cancelled')
-            else:
-                if not error:
-                    error = _('Upload could not be completed.')
-                transfer.set_error('http-response', error)
-            return
+        try:
+            ftobj.raise_for_error()
+        except CancelledError:
+            self._log.info('Upload cancelled')
 
-        transfer.set_finished()
-        self._log.info('Upload completed successfully')
+        except Exception as error:
+            self._log.error(error)
+            transfer.set_error('http-response', str(error))
 
-    def _on_request_progress(self,
-                             request: HTTPRequest,
-                             progress: float
-                             ) -> None:
+        else:
+            transfer.set_finished()
+            self._log.info('Upload completed successfully')
 
-        transfer = cast(HTTPFileTransfer, request.get_user_data())
-        transfer.set_progress(progress)
+    def _on_upload_progress(
+        self,
+        ftobj: FileTransferM[UploadResult],
+        _param: GObject.ParamSpec
+    ) -> None:
+
+        transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
+        transfer.set_progress(ftobj.progress)
 
 
 class HTTPFileTransfer(FileTransfer):
@@ -353,19 +324,20 @@ class HTTPFileTransfer(FileTransfer):
 
         self.put_uri: str | None = None
         self.get_uri: str | None = None
-        self._uri_transform_func: Callable[[str], str] | None = None
 
         self._data: bytes | None = None
         self._headers: dict[str, str] = {}
 
-        self._is_encrypted = False
-        self._temp_path = self._get_temp_path()
+        self._aes_key_data = None
+        if encryption:
+            self._aes_key_data = AESKeyData.init()
 
     @property
     def size(self) -> int:
-        if self._encryption is not None and not self._is_encrypted:
-            raise ValueError('File size unknown at this point')
-        return self.payload_path.stat().st_size
+        size = self._path.stat().st_size
+        if self._encryption:
+            return size + 16
+        return size
 
     @size.setter
     def size(self, size: int) -> None:
@@ -396,56 +368,29 @@ class HTTPFileTransfer(FileTransfer):
     def path(self) -> Path:
         return self._path
 
-    @property
-    def payload_path(self) -> Path:
-        if self._encryption is not None:
-            return self._temp_path
-        return self._path
-
-    @property
-    def is_encrypted(self) -> bool:
-        return self._is_encrypted
+    def get_encryption_data(self) -> AESKeyData | None:
+        return self._aes_key_data
 
     def get_transformed_uri(self) -> str:
-        if self._uri_transform_func is not None:
-            return self._uri_transform_func(self.get_uri)
-        return self.get_uri
+        if self._aes_key_data is not None:
+            assert self.get_uri is not None
+            fragment = binascii.hexlify(
+                self._aes_key_data.iv + self._aes_key_data.key).decode()
+            return f'aesgcm{self.get_uri[5:]}#{fragment}'
 
-    def set_uri_transform_func(self, func: Callable[[str], str]) -> None:
-        self._uri_transform_func = func
+        return self.get_uri
 
     @property
     def filename(self) -> str:
         return self._path.name
-
-    @staticmethod
-    def _get_temp_path() -> Path:
-        tempdir = configpaths.get_temp_dir()
-        return tempdir / get_random_string(16)
 
     def set_error(self, domain: str, text: str = '') -> None:
         if not text:
             text = self._errors.get(domain) or self._errors['unknown']
 
         super().set_error(domain, text)
-        self._cleanup()
-
-    def set_finished(self) -> None:
-        super().set_finished()
-        self._cleanup()
-
-    def set_encrypted_data(self, data: bytes) -> None:
-        self._temp_path.write_bytes(data)
-        self._is_encrypted = True
-
-    def get_data(self) -> bytes:
-        return self._path.read_bytes()
 
     def process_result(self, result: HTTPUploadData) -> None:
         self.put_uri = result.put_uri
         self.get_uri = result.get_uri
         self._headers = result.headers
-
-    def _cleanup(self) -> None:
-        if self._temp_path.exists():
-            self._temp_path.unlink()

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import logging
 import math
 import queue
@@ -19,10 +20,12 @@ import httpx
 import truststore
 
 from gajim.common.aes import AESGCMDecryptor
+from gajim.common.aes import AESGCMEncryptor
 from gajim.common.aes import AESKeyData
 from gajim.common.enum import FTState
 
-MIN_CHUNK_SIZE = 1024 * 200  # 200 KB
+MIN_CHUNK_SIZE = 1024 * 100  # 100 KB
+USER_AGENT = "Gajim 2.x"
 
 log = logging.getLogger("gajim.http")
 
@@ -50,6 +53,12 @@ class DownloadResult:
     content: bytes
 
 
+@dataclass
+class UploadResult:
+    hash_algo: str
+    hash_value: str
+
+
 class InvalidHash(Exception):
     pass
 
@@ -73,6 +82,15 @@ class CancelledError(Exception):
 class NonDecryptor:
 
     def decrypt(self, data: bytes) -> bytes:
+        return data
+
+    def finalize(self) -> bytes:
+        return b""
+
+
+class NonEncryptor:
+
+    def encrypt(self, data: bytes) -> bytes:
         return data
 
     def finalize(self) -> bytes:
@@ -118,7 +136,7 @@ def http_download(
 
     ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     client = httpx.Client(
-        headers={"User-Agent": "Gajim 2.x"},
+        headers={"User-Agent": USER_AGENT},
         timeout=10,
         verify=ctx,
         http2=True,
@@ -161,7 +179,7 @@ def http_download(
             raise ContentTypeNotAllowed(content_type)
 
     received_length = 0
-    chunk_size = math.ceil(content_length / 50)
+    chunk_size = math.ceil(content_length / 100)
     chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
 
     match decryption_data:
@@ -175,9 +193,7 @@ def http_download(
     else:
         file = output.open(mode="wb")
 
-    queue.put(
-        TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0)
-    )
+    queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
 
     for data in resp.iter_bytes(chunk_size=chunk_size):
         if event.is_set():
@@ -219,3 +235,109 @@ def http_download(
     )
 
     return result
+
+
+def http_upload(
+    queue: queue.Queue[TransferState | TransferMetadata],
+    event: threading.Event,
+    ft_id: str,
+    url: str,
+    content_type: str,
+    input_: Path | bytes,
+    headers: dict[str, str] | None = None,
+    with_progress: bool = False,
+    encryption_data: AESKeyData | None = None,
+    proxy: str | None = None,
+) -> UploadResult:
+
+    trust_env = True
+    if proxy == "direct://":
+        proxy = None
+        trust_env = False
+
+    ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    client = httpx.Client(
+        timeout=10,
+        verify=ctx,
+        http2=True,
+        proxy=proxy,
+        trust_env=trust_env,
+    )
+
+    queue.put(TransferState(id=ft_id, state=FTState.STARTED))
+
+    if isinstance(input_, bytes):
+        content_size = len(input_)
+        file = io.BytesIO(input_)
+    else:
+        content_size = input_.stat().st_size
+        print("content-size", content_size)
+        file = input_.open(mode="rb")
+
+    match encryption_data:
+        case AESKeyData():
+            encryptor = AESGCMEncryptor(encryption_data)
+            content_size += 16
+        case _:
+            encryptor = NonEncryptor()
+
+    print("content-size-after", content_size)
+
+    default_headers = {
+        "User-Agent": USER_AGENT,
+        "Content-Type": content_type,
+        "Content-Length": str(content_size),
+    }
+
+    if headers is not None:
+        headers.update(default_headers)
+    else:
+        headers = default_headers
+
+    hash_obj = hashlib.new("sha256")
+
+    def _read_file_generator() -> Iterable[bytes]:
+        if with_progress:
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
+
+        chunk_size = math.ceil(content_size / 100)
+        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
+
+        uploaded = 0
+        while data := file.read(chunk_size):
+            if event.is_set():
+                file.close()
+                raise CancelledError
+
+            hash_obj.update(data)
+            data = encryptor.encrypt(data)
+            uploaded += len(data)
+            progress = round(uploaded / content_size, 2)
+            if with_progress:
+                queue.put(
+                    TransferState(
+                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
+                    )
+                )
+            yield data
+
+        yield encryptor.finalize()
+        if with_progress:
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
+        file.close()
+
+    req = client.build_request(
+        "PUT", url=url, content=_read_file_generator(), headers=headers
+    )
+    resp = client.send(req)
+
+    try:
+        resp.raise_for_status()
+    except httpx.HTTPStatusError:
+        # https://github.com/encode/httpx/issues/1990
+        raise HTTPStatusError(f"{resp.status_code} {resp.reason_phrase}")
+
+    return UploadResult(
+        hash_algo="sha256",
+        hash_value=hash_obj.hexdigest(),
+    )

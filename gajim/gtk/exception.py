@@ -30,6 +30,7 @@ from gajim.common import app
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
+from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_os_name
@@ -200,7 +201,7 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
 
         return endpoint
 
-    def _on_endpoint_received(self, obj: FileTransfer) -> None:
+    def _on_endpoint_received(self, obj: FileTransfer[DownloadResult]) -> None:
         try:
             result = obj.get_result()
             endpoint = self._parse_endpoint(result.content)
