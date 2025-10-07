@@ -287,6 +287,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         # Split by newline and display last line (or first, if last is newline)
         lines = text.split("\n")
         text = lines[-1] or lines[0]
+
+        if text.startswith("```"):
+            text = _("Code snippet")
+
         self._ui.message_label.set_markup(text)
 
         if icon is None:
