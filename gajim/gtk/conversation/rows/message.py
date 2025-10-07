@@ -45,6 +45,7 @@ from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import GajimMenu
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview.geo import GeoPreviewWidget
+from gajim.gtk.preview.open_graph import OpenGraphPreviewWidget
 from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
@@ -205,13 +206,17 @@ class MessageRow(BaseRow):
                 if self._contact.is_groupchat and not self._is_outgoing:
                     self._apply_highlight(self.text)
 
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+
         if self._ref_message_widget is not None:
-            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
             box.append(self._ref_message_widget)
-            box.append(self._message_widget)
-            self._bottom_box.append(box)
-        else:
-            self._bottom_box.append(self._message_widget)
+
+        box.append(self._message_widget)
+
+        for og in message.og:
+            box.append(OpenGraphPreviewWidget(og))
+
+        self._bottom_box.append(box)
 
         self._set_text_direction(self.text)
 

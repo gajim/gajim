@@ -33,6 +33,7 @@ from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
+from gajim.common.modules.message_util import get_open_graph_data
 from gajim.common.modules.message_util import get_reply
 from gajim.common.modules.message_util import get_security_label
 from gajim.common.modules.misc import parse_oob
@@ -224,6 +225,8 @@ class Message(BaseModule):
         if properties.correction is not None:
             correction_id = properties.correction.id
 
+        og_data = get_open_graph_data(properties.open_graph)
+
         message_data = mod.Message(
             account_=self._account,
             remote_jid_=remote_jid,
@@ -243,6 +246,7 @@ class Message(BaseModule):
             security_label_=securitylabel_data,
             reply=reply,
             thread_id_=properties.thread,
+            og=og_data,
         )
 
         try:
@@ -475,6 +479,7 @@ class Message(BaseModule):
             reply=reply,
             security_label_=securitylabel_data,
             occupant_=occupant,
+            # TODO: add open graph data if we ever add outgoing support
         )
 
         pk = app.storage.archive.insert_object(message_data)
