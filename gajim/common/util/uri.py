@@ -238,7 +238,8 @@ def open_file(path: Path) -> None:
         log.warning('Unable to open file, path %s does not exist', path)
         return
 
-    open_file_uri(path.as_uri())
+    path_absolute = path.resolve()
+    open_file_uri(path_absolute.as_uri())
 
 
 def open_directory(path: Path) -> None:
