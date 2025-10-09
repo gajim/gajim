@@ -489,7 +489,7 @@ class AccountConnectionGroup(GajimPreferencesGroup):
         open_window("ManageProxies")
 
 
-@Gtk.Template(string=get_ui_string("preference/connection-details.ui"))
+@Gtk.Template(string=get_ui_string("preference/connection_details.ui"))
 class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
     __gtype_name__ = "AccountConnectionDetailsGroup"
 
