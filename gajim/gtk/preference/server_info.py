@@ -28,6 +28,7 @@ from gajim.common.i18n import _
 from gajim.common.util.uri import open_uri
 
 from gajim.gtk.const import SettingType
+from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
@@ -43,7 +44,7 @@ log = logging.getLogger("gajim.gtk.preference.server_info")
 class AccountProviderInfoGroup(Adw.PreferencesGroup, SignalManager):
     __gtype_name__ = "AccountProviderInfoGroup"
 
-    _clipboard_button: Gtk.Button = Gtk.Template.Child()
+    _clipboard_button: CopyButton = Gtk.Template.Child()
     _hostname_row: Adw.ActionRow = Gtk.Template.Child()
     _software_row: Adw.ActionRow = Gtk.Template.Child()
     _uptime_row: Adw.ActionRow = Gtk.Template.Child()

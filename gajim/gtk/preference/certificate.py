@@ -26,6 +26,7 @@ from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
 from gajim.common.util.version import package_version
 
+from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -37,7 +38,7 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
 
     __gtype_name__ = "CertificatePage"
 
-    _clipboard_button: Gtk.Button = Gtk.Template.Child()
+    _clipboard_button: CopyButton = Gtk.Template.Child()
     _account_label_row: Adw.ActionRow = Gtk.Template.Child()
     _account_address_row: Adw.ActionRow = Gtk.Template.Child()
     _issued_to_common_name_row: Adw.ActionRow = Gtk.Template.Child()

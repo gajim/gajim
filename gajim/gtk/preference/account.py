@@ -33,6 +33,7 @@ from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.preference.archiving import ArchivingPreferences
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
 from gajim.gtk.preference.manage_roster import ManageRoster
+from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
@@ -493,7 +494,7 @@ class AccountConnectionGroup(GajimPreferencesGroup):
 class AccountConnectionDetailsGroup(Adw.PreferencesGroup, SignalManager):
     __gtype_name__ = "AccountConnectionDetailsGroup"
 
-    _clipboard_button: Gtk.Button = Gtk.Template.Child()
+    _clipboard_button: CopyButton = Gtk.Template.Child()
     _domain: Adw.ActionRow = Gtk.Template.Child()
     _dns: Adw.ActionRow = Gtk.Template.Child()
     _ip_port: Adw.ActionRow = Gtk.Template.Child()
