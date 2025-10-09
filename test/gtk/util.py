@@ -54,8 +54,6 @@ def init_settings() -> None:
 
 
 def run_app(load_default_styles: bool = True, load_custom_icons: bool = True) -> None:
-    Adw.init()
-
     if load_default_styles:
         load_style("gajim.css", CSSPriority.APPLICATION)
 
