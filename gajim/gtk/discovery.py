@@ -611,10 +611,10 @@ class ServiceDiscoveryWindow(GajimAppWindow):
             raise RuntimeError("You must be connected to browse services")
 
         # Get a ServicesCache object.
-        self.cache = cast(ServicesCache, app.services_cache)
-        if app.services_cache is None:
+        self.cache = cast(ServicesCache | None, app.services_cache.get(account))
+        if self.cache is None:
             self.cache = ServicesCache(account)
-            app.services_cache = self.cache
+            app.services_cache[account] = self.cache
 
         self._ui = get_builder("service_discovery_window.ui")
         self.set_child(self._ui.service_discovery)
@@ -676,13 +676,6 @@ class ServiceDiscoveryWindow(GajimAppWindow):
     @property
     def account(self) -> str:
         return self._account
-
-    @account.setter
-    def account(self, value: str) -> None:
-        self._account = value
-        self.cache.account = value
-        if self.browser:
-            self.browser.account = value
 
     def _initial_state(self):
         """
