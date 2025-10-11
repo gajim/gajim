@@ -46,7 +46,7 @@
         <property name="visible">false</property>
         <property name="focusable">1</property>
         <property name="tooltip-text" translatable="yes">Open folder</property>
-        <property name="action-name" translatable="yes">app.open-folder</property>
+        <property name="action-name">app.open-folder</property>
         <property name="action-target">&apos;&apos;</property>
         <child>
           <object class="GtkImage">
@@ -61,7 +61,7 @@
         <property name="visible">false</property>
         <property name="focusable">1</property>
         <property name="tooltip-text" translatable="yes">Save as...</property>
-        <property name="action-name" translatable="yes">app.save-file-as</property>
+        <property name="action-name">app.save-file-as</property>
         <property name="action-target">&apos;&apos;</property>
         <child>
           <object class="GtkImage">

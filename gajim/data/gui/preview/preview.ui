@@ -24,7 +24,7 @@
                         <property name="focusable">1</property>
                         <property name="valign">center</property>
                         <property name="tooltip-text" translatable="yes">Open</property>
-                        <property name="action-name" translatable="yes">app.open-file</property>
+                        <property name="action-name">app.open-file</property>
                         <property name="action-target">''</property>
                         <child>
                           <object class="GtkImage" id="_mime_image">

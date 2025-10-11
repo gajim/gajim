@@ -8,7 +8,7 @@
       <object class="GtkButton" id="_image_button">
         <property name="focusable">yes</property>
         <property name="halign">center</property>
-        <property name="action-name" translatable="yes">app.open-link</property>
+        <property name="action-name">app.open-link</property>
         <property name="action-target">''</property>
         <child>
           <object class="GtkImage">
