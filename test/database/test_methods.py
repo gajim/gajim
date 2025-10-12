@@ -19,6 +19,7 @@ from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import DisplayedMarker
 from gajim.common.storage.archive.models import Encryption
 from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
@@ -528,6 +529,57 @@ class MethodsTest(unittest.TestCase):
 
         occupants = self._archive.get_blocked_occupants("testacc2")
         self.assertEqual(len(occupants), 1)
+
+    def test_get_display_markers(self) -> None:
+        remote_jid1 = JID.from_string("remote1@jid.org")
+        remote_jid2 = JID.from_string("remote2@jid.org")
+
+        for i in range(3):
+            occupant = Occupant(
+                account_="testacc1",
+                remote_jid_=remote_jid1,
+                id=f"occupant{i}",
+                nickname=f"nickname{i}",
+                avatar_sha="sha1",
+                blocked=False,
+                updated_at=utc_now(),
+            )
+
+            for i in range(3):
+                marker = DisplayedMarker(
+                    account_="testacc1",
+                    remote_jid_=remote_jid1,
+                    occupant_=occupant,
+                    id=f"message{i}",
+                    timestamp=datetime.fromtimestamp(i, dt.UTC),
+                )
+                self._archive.insert_object(marker)
+
+            # Marker from different JID
+            marker = DisplayedMarker(
+                account_="testacc1",
+                remote_jid_=remote_jid2,
+                occupant_=None,
+                id="message99",
+                timestamp=datetime.fromtimestamp(i, dt.UTC),
+            )
+            self._archive.insert_object(marker)
+
+        result = self._archive.get_display_markers("testacc1", remote_jid1)
+
+        res0, res1, res2 = result
+        assert res0.occupant is not None
+        assert res1.occupant is not None
+        assert res2.occupant is not None
+
+        self.assertEqual(res0.occupant.id, "occupant0")
+        self.assertEqual(res0.id, "message2")
+
+        self.assertEqual(res1.occupant.id, "occupant1")
+        self.assertEqual(res1.id, "message2")
+
+        self.assertEqual(res2.occupant.id, "occupant2")
+        self.assertEqual(res2.id, "message2")
 
 
 if __name__ == "__main__":

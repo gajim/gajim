@@ -30,6 +30,7 @@ from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import aliased
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import Session
@@ -740,6 +741,38 @@ class MessageArchiveStorage(AlchemyStorage):
         return app.storage.archive.get_message_with_id(
             account, jid, reply_id)
 
+    @with_session
+    @timeit
+    def get_display_markers(
+        self,
+        session: Session,
+        account: str,
+        jid: JID
+    ) -> Sequence[DisplayedMarker]:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        dm1 = aliased(DisplayedMarker)
+        dm2 = aliased(DisplayedMarker)
+
+        stmt = (
+            select(dm1)
+            .join(
+                dm2,
+                sa.and_(
+                    dm1.fk_occupant_pk == dm2.fk_occupant_pk,
+                    dm1.timestamp < dm2.timestamp
+                ),
+                isouter=True)
+            .where(
+                dm1.fk_remote_pk == fk_remote_pk,
+                dm1.fk_account_pk == fk_account_pk,
+                dm2.fk_occupant_pk.is_(None)
+            )
+        )
+        self._explain(session, stmt)
+        return session.scalars(stmt).all()
 
     @with_session
     @timeit
