@@ -124,8 +124,6 @@ class ConversationView(Gtk.ScrolledWindow):
             "register-actions", ged.GUI1, self._on_register_actions
         )
 
-        self._displayed_markers: dict[str, tuple[str, datetime]] = {}
-
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
             "activate", self._on_scroll_view
@@ -519,47 +517,32 @@ class ConversationView(Gtk.ScrolledWindow):
             assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(message_row.timestamp)
 
-        if message.markers:
-            assert self._contact is not None
-            if self._contact.is_groupchat:
-                for marker in message.markers:
-                    if (
-                        marker.occupant is None
-                        or marker.occupant.nickname is None
-                        or message.stanza_id is None
-                    ):
-                        continue
-                    self.add_displayed_marker(
-                        message.stanza_id, marker.occupant.nickname, marker.timestamp
-                    )
-            else:
-                assert message.id is not None
-                self.set_read_marker(message.id)
+        if not isinstance(self._contact, GroupchatContact) and message.markers:
+            assert message.id is not None
+            self._set_read_marker_row(message.id)
 
         self._insert_message(message_row)
 
-    def add_displayed_marker(
-        self, stanza_id: str, nickname: str, timestamp: datetime
-    ) -> None:
-        existing = self._displayed_markers.get(nickname)
-        if existing is None or existing[1] < timestamp:
-            self._displayed_markers[nickname] = (
-                stanza_id,
-                timestamp,
-            )
+    def update_displayed_markers(self, marker_id: str) -> None:
+        if isinstance(self._contact, GroupchatContact):
+            message_row = self._get_row_by_stanza_id(marker_id)
+            if message_row is not None:
 
-    def update_displayed_markers(self) -> None:
-        for nickname, (stanza_id, ts) in self._displayed_markers.items():
-            row = self._get_row_by_stanza_id(stanza_id)
-            if row is None:
-                continue
-            row.add_displayed_by(nickname, ts)
-            if row.is_merged:
-                # we want the displayed marker to propagate to the "merged-with
-                # ancestor" to actually show the "displayed icon".
-                ancestor = self._find_ancestor(row)
-                if ancestor is not None:
-                    ancestor.add_displayed_by(nickname, ts)
+                message_row.update_displayed_markers()
+        else:
+            self._set_read_marker_row(marker_id)
+
+    def _set_read_marker_row(self, id_: str) -> None:
+        row = self._get_row_by_message_id(id_)
+        if row is None:
+            return
+
+        assert self._read_marker_row is not None
+        timestamp = row.timestamp + timedelta(microseconds=1)
+        if self._read_marker_row.timestamp > timestamp:
+            return
+
+        self._read_marker_row.set_timestamp(timestamp)
 
     def _insert_message(self, message: BaseRow) -> None:
         self._list_box.append(message)
@@ -801,18 +784,6 @@ class ConversationView(Gtk.ScrolledWindow):
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if isinstance(row, CallRow):
                 row.update()
-
-    def set_read_marker(self, id_: str) -> None:
-        row = self._get_row_by_message_id(id_)
-        if row is None:
-            return
-
-        assert self._read_marker_row is not None
-        timestamp = row.timestamp + timedelta(microseconds=1)
-        if self._read_marker_row.timestamp > timestamp:
-            return
-
-        self._read_marker_row.set_timestamp(timestamp)
 
     def correct_message(self, event: events.MessageCorrected) -> None:
         message_row = self._get_row_by_message_id(event.correction_id)

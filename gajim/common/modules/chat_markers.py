@@ -148,13 +148,15 @@ class ChatMarkers(BaseModule):
             app.storage.archive.insert_object(marker_data)
 
         app.ged.raise_event(
-            DisplayedReceived(account=self._account,
-                              jid=properties.remote_jid,
-                              properties=properties,
-                              type=properties.type,
-                              is_muc_pm=properties.is_muc_pm,
-                              marker_id=properties.marker.id,
-                              occupant=occupant))
+            DisplayedReceived(
+                account=self._account,
+                jid=properties.remote_jid,
+                properties=properties,
+                type=properties.type,
+                is_muc_pm=properties.is_muc_pm,
+                marker_id=properties.marker.id
+            )
+        )
 
     def send_displayed_marker(self,
                               contact: types.ChatContactT,

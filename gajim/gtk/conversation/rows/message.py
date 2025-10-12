@@ -108,7 +108,6 @@ class MessageRow(BaseRow):
         self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
         self._redraw_content()
-        self._displayed_by: dict[str, datetime] = {}
 
     def do_unroot(self) -> None:
         BaseRow.do_unroot(self)
@@ -222,6 +221,9 @@ class MessageRow(BaseRow):
         self._reactions_bar.update_from_reactions(
             self._original_message.get_reactions()
         )
+
+        if self._contact.is_groupchat:
+            self._message_icons.set_displayed_by(message.markers)
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
@@ -365,14 +367,11 @@ class MessageRow(BaseRow):
             return True
         return self._has_receipt == message.has_receipt
 
-    def has_compatible_marker_status(self, message: MessageRow) -> bool:
+    def has_same_marker_status(self, message: MessageRow) -> bool:
         if not self._contact.is_groupchat:
             return True
-        if not self._displayed_by and not message._displayed_by:
-            return True
-        if self._displayed_by and not message._displayed_by:
-            return False
-        return message._displayed_by.keys() == self._displayed_by.keys()
+
+        return message.get_displayed_by() == self.get_displayed_by()
 
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
@@ -391,7 +390,7 @@ class MessageRow(BaseRow):
             return False
         if not self.has_same_receipt_status(message):
             return False
-        if not self.has_compatible_marker_status(message):
+        if not self.has_same_marker_status(message):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
@@ -448,15 +447,6 @@ class MessageRow(BaseRow):
         self._has_receipt = value
         self._message_icons.set_receipt_icon_visible(value)
 
-    def add_displayed_by(self, nickname: str, timestamp: datetime) -> None:
-        old_timestamp = self._displayed_by.get(nickname)
-        if old_timestamp is not None and old_timestamp > timestamp:
-            # in case we receive several markers for an (occupant, msg_id) pair
-            # we want to show the oldest one.
-            return
-        self._displayed_by[nickname] = timestamp
-        self._message_icons.set_displayed_by(self._displayed_by)
-
     def set_receipt(self, receipt_id: str) -> None:
         if self._message.id == receipt_id:
             self._set_receipt(True)
@@ -473,6 +463,9 @@ class MessageRow(BaseRow):
         if self._message.id == error_id:
             self._set_error(text)
             self.set_merged(False)
+
+    def get_displayed_by(self) -> set[str]:
+        return self._message_icons.get_displayed_by()
 
     def update_reactions(self) -> None:
         app.storage.archive.refresh(
@@ -493,6 +486,10 @@ class MessageRow(BaseRow):
 
     def update_corrections(self) -> None:
         app.storage.archive.refresh(self._original_message, ["corrections"])
+        self._redraw_content()
+
+    def update_displayed_markers(self) -> None:
+        app.storage.archive.refresh(self._original_message, ["markers"])
         self._redraw_content()
 
     def send_reaction(self, emoji: str, toggle: bool = True) -> None:

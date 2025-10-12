@@ -32,7 +32,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
-from gajim.common.util.datetime import utc_now
 from gajim.common.util.status import get_uf_show
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
@@ -297,7 +296,6 @@ class ChatControl(EventHelper):
                 self._scrolled_view.add_muc_subject(
                     muc_data.subject, muc_data.last_subject_timestamp
                 )
-            self._scrolled_view.update_displayed_markers()
 
         self._widget.set_visible(True)
 
@@ -412,20 +410,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        assert self._contact is not None
-        if (
-            self._contact.is_groupchat
-            and event.occupant is not None
-            and event.occupant.nickname is not None
-        ):
-            self._scrolled_view.add_displayed_marker(
-                event.marker_id,
-                event.occupant.nickname,
-                utc_now(),
-            )
-            self._scrolled_view.update_displayed_markers()
-        else:
-            self._scrolled_view.set_read_marker(event.marker_id)
+        self._scrolled_view.update_displayed_markers(event.marker_id)
 
     def _on_reaction_updated(self, event: events.ReactionUpdated) -> None:
         if not self._is_event_processable(event):
