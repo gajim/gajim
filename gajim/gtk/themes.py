@@ -70,26 +70,6 @@ CSS_STYLE_OPTIONS: list[StyleOption] = [
         _("Chat Banner: Background Color"), ".gajim-banner", StyleAttr.BACKGROUND
     ),
     StyleOption(_("Chat Banner: Text Font"), ".gajim-banner", StyleAttr.FONT),
-    StyleOption(
-        _("Contact List: Group Foreground Color"), ".gajim-group-row", StyleAttr.COLOR
-    ),
-    StyleOption(
-        _("Contact List: Group Background Color"),
-        ".gajim-group-row",
-        StyleAttr.BACKGROUND,
-    ),
-    StyleOption(_("Contact List: Group Font"), ".gajim-group-row", StyleAttr.FONT),
-    StyleOption(
-        _("Contact List: Contact Foreground Color"),
-        ".gajim-contact-row",
-        StyleAttr.COLOR,
-    ),
-    StyleOption(
-        _("Contact List: Contact Background Color"),
-        ".gajim-contact-row",
-        StyleAttr.BACKGROUND,
-    ),
-    StyleOption(_("Contact List: Contact Font"), ".gajim-contact-row", StyleAttr.FONT),
     StyleOption(_("Status: Online Color"), ".gajim-status-online", StyleAttr.COLOR),
     StyleOption(_("Status: Away Color"), ".gajim-status-away", StyleAttr.COLOR),
     StyleOption(_("Status: DND Color"), ".gajim-status-dnd", StyleAttr.COLOR),

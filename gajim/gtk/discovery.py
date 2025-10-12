@@ -17,7 +17,6 @@
 # - def _create_treemodel(self) *
 # - def _add_actions(self)
 # - def _clean_actions(self)
-# - def update_theme(self) *
 # - def update_actions(self)
 # - def default_action(self)
 # - def _find_item(self, jid, node)
@@ -56,7 +55,6 @@ from nbxmpp.structs import DiscoItem
 from nbxmpp.structs import DiscoItems
 
 from gajim.common import app
-from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.util.jid import InvalidFormat
 from gajim.common.util.jid import parse_jid
@@ -1028,11 +1026,6 @@ class AgentBrowser:
 
         self.window._initial_state()  # pyright: ignore
 
-    def update_theme(self):
-        """
-        Called when the default theme is changed
-        """
-
     def on_browse_button_clicked(self, _button: Gtk.Button | None = None) -> None:
         """
         When we want to browse an agent: open a new services window with a
@@ -1273,7 +1266,6 @@ class ToplevelAgentBrowser(AgentBrowser):
     def __init__(self, *args: Any):
         AgentBrowser.__init__(self, *args)
         self._progressbar_sourceid = None
-        self._renderer = None
         self._progress = 0
         self.register_button = None
         self.join_button = None
@@ -1332,7 +1324,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         state = model.get_value(iter_, 4)
         cell.set_property("markup", markup)
         if jid:
-            cell.set_property("cell_background_set", False)
             if state is not None:
                 # fetching or error
                 cell.set_property("foreground_set", True)
@@ -1340,9 +1331,6 @@ class ToplevelAgentBrowser(AgentBrowser):
                 # Normal/success
                 cell.set_property("foreground_set", False)
         else:
-            bgcolor = app.css_config.get_value(".gajim-group-row", StyleAttr.BACKGROUND)
-            if bgcolor:
-                cell.set_property("cell_background_set", True)
             cell.set_property("foreground_set", False)
 
     def _treemodel_sort_func(
@@ -1392,9 +1380,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         col.pack_start(renderer, True)
         col.set_cell_data_func(renderer, self._text_renderer_data_func)
         renderer.set_property("foreground", "dark gray")
-        # Save this so we can go along with theme changes
-        self._renderer = renderer
-        self.update_theme()
 
         view.set_tooltip_column(4)
         view.insert_column(col, -1)
@@ -1461,13 +1446,6 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def cleanup(self) -> None:
         AgentBrowser.cleanup(self)
-
-    def update_theme(self) -> None:
-        bgcolor = app.css_config.get_value(".gajim-group-row", StyleAttr.BACKGROUND)
-        if bgcolor:
-            assert self._renderer is not None
-            self._renderer.set_property("cell-background", bgcolor)
-        self.window.services_treeview.queue_draw()
 
     def _on_execute_button_clicked(self, _button: Gtk.Button | None = None) -> None:
         """
