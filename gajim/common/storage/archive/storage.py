@@ -743,6 +743,14 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def get_display_marker_with_pk(
+        self, session: Session, pk: int
+    ) -> DisplayedMarker | None:
+        stmt = select(DisplayedMarker).where(DisplayedMarker.pk == pk)
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
     def get_display_markers(
         self,
         session: Session,

@@ -9,6 +9,7 @@ from typing import cast
 from typing import Literal
 
 import logging
+from collections import defaultdict
 from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
@@ -22,6 +23,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MucSubject
 
+import gajim.common.storage.archive.models as mod
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
@@ -40,6 +42,7 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.call import CallRow
 from gajim.gtk.conversation.rows.command_output import CommandOutputRow
 from gajim.gtk.conversation.rows.date import DateRow
+from gajim.gtk.conversation.rows.displayed import DisplayedRow
 from gajim.gtk.conversation.rows.encryption_info import EncryptionInfoRow
 from gajim.gtk.conversation.rows.file_transfer import FileTransferRow
 from gajim.gtk.conversation.rows.file_transfer_jingle import FileTransferJingleRow
@@ -117,6 +120,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._signal_handlers_enabled = False
         self._signal_handler_ids = (0, 0)
+        self._displayed_markers: dict[str, list[mod.DisplayedMarker]] = defaultdict(
+            list
+        )
+        self._displayed_rows: dict[str, DisplayedRow] = {}
 
         self.set_child(self._list_box)
 
@@ -210,6 +217,8 @@ class ConversationView(Gtk.ScrolledWindow):
         self._read_marker_row = ReadMarkerRow(self._contact)
         self._list_box.append(self._read_marker_row)
 
+        self._load_displayed_marker()
+
         self._scroll_hint_row = ScrollHintRow(self._contact.account)
         self._list_box.append(self._scroll_hint_row)
 
@@ -268,6 +277,9 @@ class ConversationView(Gtk.ScrolledWindow):
         self._stanza_id_row_map = {}
         self._read_marker_row = None
         self._scroll_hint_row = None
+
+        self._displayed_markers.clear()
+        self._displayed_rows.clear()
 
     def reset(self) -> None:
         assert self._contact is not None
@@ -421,6 +433,12 @@ class ConversationView(Gtk.ScrolledWindow):
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
+    def _load_displayed_marker(self) -> None:
+        for marker in app.storage.archive.get_display_markers(
+            self._contact.account, self._contact.jid
+        ):
+            self._displayed_markers[marker.id].append(marker)
+
     def add_muc_subject(
         self, subject: MucSubject, timestamp: float | None = None
     ) -> None:
@@ -500,7 +518,7 @@ class ConversationView(Gtk.ScrolledWindow):
         command_output_row = CommandOutputRow(self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
-    def add_message_from_db(self, message: Message) -> None:
+    def add_message_from_db(self, message: mod.Message) -> None:
         message_row = MessageRow.from_db_row(self.contact, message)
         message_row.connect(
             "state-flags-changed", self._on_message_row_state_flags_changed
@@ -522,15 +540,43 @@ class ConversationView(Gtk.ScrolledWindow):
             self._set_read_marker_row(message.id)
 
         self._insert_message(message_row)
+        self._add_displayed_marker_row(message)
 
-    def update_displayed_markers(self, marker_id: str) -> None:
+    def update_displayed_markers(self, event: events.DisplayedReceived) -> None:
         if isinstance(self._contact, GroupchatContact):
-            message_row = self._get_row_by_stanza_id(marker_id)
-            if message_row is not None:
+            marker = event.marker
+            self._remove_displayed_marker(marker.occupant)
 
-                message_row.update_displayed_markers()
+            self._displayed_markers[marker.id].append(marker)
+
+            message_row = self._stanza_id_row_map.get(event.marker.id)
+            if message_row is None:
+                return
+
+            row = self._displayed_rows.get(event.marker.id)
+            if row is None:
+                row = DisplayedRow(
+                    self._contact.account, message_row.timestamp, [event.marker]
+                )
+                self._displayed_rows[event.marker.id] = row
+                self._list_box.append(row)
+            else:
+                row.add_marker(event.marker)
         else:
-            self._set_read_marker_row(marker_id)
+            self._set_read_marker_row(event.marker.id)
+
+    def _remove_displayed_marker(self, occupant: mod.Occupant) -> None:
+        for displayed_id, markers in self._displayed_markers.items():
+            for marker in markers:
+                if marker.occupant.id == occupant.id:
+                    print("remove", marker.occupant.nickname)
+                    markers.remove(marker)
+
+                    if row := self._displayed_rows.get(displayed_id):
+                        print("remove row", marker.occupant.nickname)
+                        row.remove_marker(marker)
+
+                    return
 
     def _set_read_marker_row(self, id_: str) -> None:
         row = self._get_row_by_message_id(id_)
@@ -572,6 +618,16 @@ class ConversationView(Gtk.ScrolledWindow):
             return
 
         row.set_merged(False)
+
+    def _add_displayed_marker_row(self, message: mod.Message) -> None:
+        displayed_id = message.get_displayed_id()
+        if not displayed_id:
+            return
+
+        if markers := self._displayed_markers.get(displayed_id):
+            row = DisplayedRow(self._contact.account, message.timestamp, markers)
+            self._displayed_rows[displayed_id] = row
+            self._list_box.append(row)
 
     def _check_for_merge(self, message: BaseRow) -> None:
         if not isinstance(message, MessageRow):

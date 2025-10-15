@@ -352,6 +352,13 @@ class DisplayedReceived(ApplicationEvent):
     type: NBXMPPMessageType
     is_muc_pm: bool
     marker_id: str
+    pk: int
+
+    @cached_property
+    def marker(self) -> mod.DisplayedMarker:
+        d = app.storage.archive.get_display_marker_with_pk(self.pk)
+        assert d is not None
+        return d
 
 
 @dataclass

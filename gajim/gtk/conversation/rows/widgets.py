@@ -13,7 +13,6 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
-import gajim.common.storage.archive.models as mod
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import TRUST_SYMBOL_DATA
@@ -312,8 +311,6 @@ class MessageIcons(Gtk.Box):
     def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
 
-        self._displayed_by: set[str] = set()
-
         self._encryption_image = Gtk.Image()
         self._encryption_image.set_visible(False)
         self._encryption_image.set_margin_end(6)
@@ -339,10 +336,6 @@ class MessageIcons(Gtk.Box):
         self._marker_image.add_css_class("dimmed")
         self._marker_image.set_tooltip_text(p_("Message state", "Received"))
 
-        self._displayed_image = Gtk.Image.new_from_icon_name("lucide-eye-symbolic")
-        self._displayed_image.set_visible(False)
-        self._displayed_image.add_css_class("dimmed")
-
         self._error_image = Gtk.Image.new_from_icon_name("lucide-circle-alert-symbolic")
         self._error_image.add_css_class("warning")
         self._error_image.set_visible(False)
@@ -352,7 +345,6 @@ class MessageIcons(Gtk.Box):
         self.append(self._correction_image)
         self.append(self._message_state_image)
         self.append(self._marker_image)
-        self.append(self._displayed_image)
         self.append(self._error_image)
 
     def set_encryption_icon_visible(self, visible: bool) -> None:
@@ -377,35 +369,6 @@ class MessageIcons(Gtk.Box):
         if not app.settings.get("positive_184_ack"):
             return
         self._marker_image.set_visible(visible)
-
-    def set_displayed_by(self, markers: list[mod.DisplayedMarker]) -> None:
-        self._displayed_by.clear()
-
-        occupant_ts: list[tuple[mod.Occupant, datetime]] = []
-        for marker in markers:
-            assert marker.occupant is not None
-            self._displayed_by.add(marker.occupant.id)
-            occupant_ts.append((marker.occupant, marker.timestamp))
-
-        self._displayed_image.set_visible(bool(occupant_ts))
-
-        sorted_occupant_ts = sorted(occupant_ts, key=lambda x: x[1])
-
-        format_string = app.settings.get("date_time_format")
-
-        readers = "\n".join(
-            [
-                f"{occupant.nickname} ({timestamp.astimezone().strftime(format_string)})"
-                for occupant, timestamp in sorted_occupant_ts
-            ]
-        )
-        self._displayed_image.set_tooltip_text(
-            p_("Participants who read up to this point", "Read up to this point: %s")
-            % f"\n{readers}"
-        )
-
-    def get_displayed_by(self) -> set[str]:
-        return self._displayed_by
 
     def set_message_state_icon(self, state: MessageState) -> None:
         if state == MessageState.PENDING:

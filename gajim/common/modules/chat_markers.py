@@ -145,7 +145,10 @@ class ChatMarkers(BaseModule):
                 occupant_=occupant,
                 id=properties.marker.id,
                 timestamp=timestamp)
-            app.storage.archive.insert_object(marker_data)
+
+            pk = app.storage.archive.insert_object(marker_data)
+            if pk == -1:
+                return
 
         app.ged.raise_event(
             DisplayedReceived(
@@ -154,7 +157,8 @@ class ChatMarkers(BaseModule):
                 properties=properties,
                 type=properties.type,
                 is_muc_pm=properties.is_muc_pm,
-                marker_id=properties.marker.id
+                marker_id=properties.marker.id,
+                pk=pk,
             )
         )
 

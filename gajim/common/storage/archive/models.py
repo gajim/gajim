@@ -923,6 +923,11 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
         return ids
 
+    def get_displayed_id(self) -> str | None:
+        if self.type == MessageType.GROUPCHAT:
+            return self.stanza_id
+        return self.id
+
     def get_reactions(self) -> list[Reaction]:
         # Search in all revisions for reactions but return only the latest
         reactions: dict[int, Reaction] = {}

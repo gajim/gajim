@@ -222,9 +222,6 @@ class MessageRow(BaseRow):
             self._original_message.get_reactions()
         )
 
-        if self._contact.is_groupchat:
-            self._message_icons.set_displayed_by(message.markers)
-
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
             self._message_icons.set_encrytion_icon_data(*encryption_data)
@@ -367,12 +364,6 @@ class MessageRow(BaseRow):
             return True
         return self._has_receipt == message.has_receipt
 
-    def has_same_marker_status(self, message: MessageRow) -> bool:
-        if not self._contact.is_groupchat:
-            return True
-
-        return message.get_displayed_by() == self.get_displayed_by()
-
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
             return False
@@ -389,8 +380,6 @@ class MessageRow(BaseRow):
         if not self.is_same_securitylabels(message):
             return False
         if not self.has_same_receipt_status(message):
-            return False
-        if not self.has_same_marker_status(message):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
@@ -464,9 +453,6 @@ class MessageRow(BaseRow):
             self._set_error(text)
             self.set_merged(False)
 
-    def get_displayed_by(self) -> set[str]:
-        return self._message_icons.get_displayed_by()
-
     def update_reactions(self) -> None:
         app.storage.archive.refresh(
             self._original_message, ["corrections", "reactions"]
@@ -486,10 +472,6 @@ class MessageRow(BaseRow):
 
     def update_corrections(self) -> None:
         app.storage.archive.refresh(self._original_message, ["corrections"])
-        self._redraw_content()
-
-    def update_displayed_markers(self) -> None:
-        app.storage.archive.refresh(self._original_message, ["markers"])
         self._redraw_content()
 
     def send_reaction(self, emoji: str, toggle: bool = True) -> None:
