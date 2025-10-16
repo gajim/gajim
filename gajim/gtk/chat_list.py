@@ -431,20 +431,21 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if account is not None and account != row.account:
             return False
 
-        group = self._current_filter.group
-        if (
-            group is not None
-            and isinstance(row.contact, BareContact)
-            and group not in row.contact.groups
-        ):
-            return False
-
         is_groupchat = row.type == "groupchat"
         if self._current_filter.type == ChatTypeFilter.CHAT and is_groupchat:
             return False
 
         if self._current_filter.type == ChatTypeFilter.GROUPCHAT and not is_groupchat:
             return False
+
+        group = self._current_filter.group
+        if group is not None:
+            if is_groupchat:
+                return False
+
+            assert isinstance(row.contact, BareContact)
+            if group not in row.contact.groups:
+                return False
 
         if not self._current_filter_text:
             return True
