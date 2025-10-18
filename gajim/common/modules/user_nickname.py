@@ -97,7 +97,4 @@ class UserNickname(BaseModule):
         self._log.info('Nickname for %s: %s', properties.jid, nick)
 
         contact = self._con.get_module('Contacts').get_contact(properties.jid)
-        if contact is None:
-            return
-
         contact.notify('nickname-update')
