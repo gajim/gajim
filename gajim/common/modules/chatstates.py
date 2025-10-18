@@ -87,7 +87,7 @@ class Chatstate(BaseModule):
         # Cache set of participants that are composing for group chats,
         # to avoid having to iterate over all their chat states to determine
         # who is typing a message.
-        self._muc_composers: dict[JID, set[GroupchatParticipant]] = defaultdict(set)
+        self._muc_composers: dict[JID, set[JID]] = defaultdict(set)
 
         self._remote_composing_timeouts: dict[tuple[JID, str], int] = {}
 
@@ -144,8 +144,8 @@ class Chatstate(BaseModule):
 
         self._log.info('Reset chatstate for %s', jid)
 
-        contact = self._get_contact(jid)
-        if contact.is_groupchat:
+        contact = self._get_contact_if_exists(jid)
+        if contact is None:
             return
 
         contact.notify('chatstate-update')
@@ -177,10 +177,11 @@ class Chatstate(BaseModule):
 
         self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
 
-        contact = self._get_contact(jid)
-        self._set_composing_timeout(contact, m_type, state)
+        self._set_composing_timeout(jid, m_type, state)
 
-        contact.notify('chatstate-update')
+        contact = self._get_contact_if_exists(jid)
+        if contact is not None:
+            contact.notify('chatstate-update')
 
         return self._raise_if_necessary(properties)
 
@@ -196,32 +197,34 @@ class Chatstate(BaseModule):
         if properties.is_mam_message or jid.is_bare:
             return self._raise_if_necessary(properties)
 
-        contact = self._get_contact(jid)
-        assert isinstance(contact, GroupchatParticipant)
-        if contact.is_self:
+        muc_jid = jid.new_as_bare()
+
+        data = self.get_module('MUC').get_muc_data(muc_jid)
+        if data is None or data.nick == jid.resource:
+            # Chatstate from our own joined jid resource
             return self._raise_if_necessary(properties)
 
         m_type = 'groupchat'
         state = properties.chatstate
         self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
 
-        self._set_composing_timeout(contact, m_type, state)
-
-        muc = contact.room
+        self._set_composing_timeout(jid, m_type, state)
 
         if state == State.COMPOSING:
-            self._muc_composers[muc.jid].add(contact)
+            self._muc_composers[muc_jid].add(jid)
         else:
-            self._muc_composers[muc.jid].discard(contact)
+            self._muc_composers[muc_jid].discard(jid)
 
-        muc.notify('chatstate-update')
+        contact = self._get_contact_if_exists(muc_jid)
+        if contact is not None:
+            contact.notify('chatstate-update')
 
         self._raise_if_necessary(properties)
 
     def _set_composing_timeout(
-        self, contact: types.ContactT, m_type: str, state: State
+        self, jid: JID, m_type: str, state: State
     ) -> None:
-        self._remove_remote_composing_timeout(contact, m_type)
+        self._remove_remote_composing_timeout(jid, m_type)
         if state != State.COMPOSING:
             return
 
@@ -229,38 +232,51 @@ class Chatstate(BaseModule):
         # but if a contact's client does not send another chat state,
         # we don't want the GUI to show that they are "composing" forever
         self._remote_composing_timeouts[
-            (contact.jid, m_type)
+            (jid, m_type)
         ] = GLib.timeout_add_seconds(
-            REMOTE_PAUSED_AFTER, self._on_remote_composing_timeout, contact, m_type
+            REMOTE_PAUSED_AFTER, self._on_remote_composing_timeout, jid, m_type
         )
 
     def _on_remote_composing_timeout(
-        self, contact: types.ContactT, m_type: str
+        self, jid: JID, m_type: str
     ) -> None:
-        self._remote_composing_timeouts.pop((contact.jid, m_type), None)
+        self._remote_composing_timeouts.pop((jid, m_type), None)
         self._log.info(
-            'Set to ACTIVE after timeout has been reached - %s (%s)', contact, m_type
+            'Set to ACTIVE after timeout has been reached - %s (%s)', jid, m_type
         )
 
         if m_type == 'groupchat':
-            assert isinstance(contact, GroupchatParticipant)
-            self._muc_composers[contact.room.jid].discard(contact)
-            contact.room.notify('chatstate-update')
+            muc_jid = jid.new_as_bare()
+            self._muc_composers[muc_jid].discard(jid)
+            contact = self._get_contact_if_exists(muc_jid)
+
         else:
-            self._remote_chatstate[contact.jid] = State.ACTIVE
+            self._remote_chatstate[jid] = State.ACTIVE
+            contact = self._get_contact_if_exists(jid)
+
+        if contact is not None:
             contact.notify('chatstate-update')
 
-    def get_composers(self, jid: JID) -> list[GroupchatParticipant]:
+    def get_composers(self, muc_jid: JID) -> list[GroupchatParticipant]:
         '''
         List of group chat participants that are composing (=typing) for a MUC.
         '''
-        return list(self._muc_composers[jid])
+        composers: list[GroupchatParticipant] = []
+        for jid in self._muc_composers[muc_jid]:
+            contact = self._get_contact_if_exists(jid)
+            if not isinstance(contact, GroupchatParticipant):
+                self._log.warning(
+                    'Unexpected class returned for %s -> %s', jid, contact.__class__)
+                continue
+            composers.append(contact)
 
-    def _remove_remote_composing_timeout(self, contact: types.ContactT, m_type: str):
-        source_id = self._remote_composing_timeouts.pop((contact.jid, m_type), None)
+        return composers
+
+    def _remove_remote_composing_timeout(self, jid: JID, m_type: str):
+        source_id = self._remote_composing_timeouts.pop((jid, m_type), None)
         if source_id is not None:
             self._log.debug(
-                'Removing remote composing timeout of %s (%s)', contact, m_type
+                'Removing remote composing timeout of %s (%s)', jid, m_type
             )
             GLib.source_remove(source_id)
 
@@ -289,8 +305,9 @@ class Chatstate(BaseModule):
 
             if new_chatstate is not None:
                 if self._chatstates.get(jid) != new_chatstate:
-                    contact = self._get_contact(jid)
-                    self.set_chatstate(contact, new_chatstate)
+                    contact = self._get_contact_if_exists(jid)
+                    if contact is not None:
+                        self.set_chatstate(contact, new_chatstate)
 
         return GLib.SOURCE_CONTINUE
 
@@ -341,7 +358,7 @@ class Chatstate(BaseModule):
         if self._client.is_own_jid(contact.jid):
             return
 
-        self.remove_delay_timeout(contact)
+        self._remove_delay_timeout(contact)
         self._delay_timeout_ids[contact.jid] = GLib.timeout_add_seconds(
             2, self.set_chatstate, contact, state
         )
@@ -355,7 +372,7 @@ class Chatstate(BaseModule):
         if contact.jid in self._blocked:
             return
 
-        self.remove_delay_timeout(contact)
+        self._remove_delay_timeout(contact)
         current_state = self._chatstates.get(contact.jid)
         setting = contact.settings.get('send_chatstate')
         if setting == 'disabled':
@@ -431,13 +448,13 @@ class Chatstate(BaseModule):
     def set_keyboard_activity(self, contact: types.ChatContactT) -> None:
         self._last_keyboard_activity[contact.jid] = time.time()
 
-    def remove_delay_timeout(self, contact: types.ChatContactT) -> None:
+    def _remove_delay_timeout(self, contact: types.ChatContactT) -> None:
         timeout = self._delay_timeout_ids.get(contact.jid)
         if timeout is not None:
             GLib.source_remove(timeout)
             del self._delay_timeout_ids[contact.jid]
 
-    def remove_all_timeouts(self) -> None:
+    def _remove_all_timeouts(self) -> None:
         for timeout in chain(
             self._delay_timeout_ids.values(), self._remote_composing_timeouts.values()
         ):
@@ -447,7 +464,7 @@ class Chatstate(BaseModule):
 
     def cleanup(self) -> None:
         BaseModule.cleanup(self)
-        self.remove_all_timeouts()
+        self._remove_all_timeouts()
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
             self._timeout_id = None
