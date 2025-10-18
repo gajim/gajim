@@ -111,18 +111,6 @@ def sanitize_filename(filename: str) -> str:
     return f'{filename}{extension}'
 
 
-def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
-    '''
-    Creates a dict of jid -> contact with all contacts of account
-    Can be used for completion lists
-    '''
-    contacts_dict: dict[str, types.BareContact] = {}
-    client = app.get_client(account)
-    for contact in client.get_module('Roster').iter_contacts():
-        contacts_dict[str(contact.jid)] = contact
-    return contacts_dict
-
-
 def generate_qr_code(content: str) -> Gdk.Texture:
     qr = qrcode.QRCode(version=None,
                        error_correction=qrcode.constants.ERROR_CORRECT_L,
