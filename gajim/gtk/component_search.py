@@ -226,6 +226,7 @@ class Result(Page):
             return
 
         form = dataforms.extend_form(node=form)
+        assert isinstance(form, dataforms.MultipleDataForm)
 
         fieldtypes: list[type[bool] | type[str]] = []
         fieldvars: list[Any] = []
@@ -246,7 +247,6 @@ class Result(Page):
 
         liststore = Gtk.ListStore(*fieldtypes)
 
-        assert isinstance(form, dataforms.MultipleDataForm)
         for item in form.iter_records():
             iter_ = liststore.append()
             assert isinstance(item, dataforms.DataRecord)
