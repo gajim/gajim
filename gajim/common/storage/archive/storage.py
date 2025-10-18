@@ -27,6 +27,7 @@ from sqlalchemy import select
 from sqlalchemy import union_all
 from sqlalchemy import update
 from sqlalchemy.dialects.sqlite import insert
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
@@ -1232,4 +1233,6 @@ class MessageArchiveStorage(AlchemyStorage):
         ).values(blocked=value)
 
         self._explain(session, stmt)
-        return session.execute(stmt).rowcount
+
+        res = cast(CursorResult[Any], session.execute(stmt))
+        return res.rowcount
