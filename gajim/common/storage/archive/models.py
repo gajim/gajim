@@ -160,7 +160,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
     def validate(self) -> None:
-        if self.remote_jid_ is None:
+        if self.remote_jid_ is None:  # pyright: ignore
             return
         if not self.remote_jid_.is_bare:
             raise ValueError("Remote JID must be a bare jid")
