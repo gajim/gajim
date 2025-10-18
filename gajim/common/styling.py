@@ -100,8 +100,8 @@ class Block(StyleObject):
 @dataclass
 class PlainBlock(Block):
     name: str = field(default='plain', init=False)
-    spans: list[Span] = field(default_factory=list)
-    uris: list[BaseHyperlink] = field(default_factory=list)
+    spans: list[Span] = field(default_factory=list['Span'])
+    uris: list[BaseHyperlink] = field(default_factory=list['BaseHyperlink'])
 
     @classmethod
     def from_quote_match(cls, match: Match[str]) -> PlainBlock:
@@ -118,7 +118,7 @@ class PreBlock(Block):
 @dataclass
 class QuoteBlock(Block):
     name: str = field(default='quote', init=False)
-    blocks: list[Block] = field(default_factory=list)
+    blocks: list[Block] = field(default_factory=list['Block'])
 
     def unquote(self) -> str:
         return UNQUOTE_RX.sub('', self.text)

@@ -21,7 +21,7 @@ class AudioPreviewState:
     is_eos: bool = False
     speed: float = 1.0
     is_timestamp_positive: bool = True
-    samples: AudioSampleT = field(default_factory=list)
+    samples: AudioSampleT = field(default_factory=list[tuple[float, float]])
     is_audio_analyzed = False
 
 
