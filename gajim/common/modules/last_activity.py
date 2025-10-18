@@ -6,8 +6,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -46,5 +44,4 @@ class LastActivity(BaseModule):
         if item is None:
             return False
 
-        contact = cast(types.BareContact, self._get_contact(bare_jid))
-        return contact.is_subscribed
+        return item.subscription in ('from', 'both')
