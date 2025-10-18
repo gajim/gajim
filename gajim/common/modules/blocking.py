@@ -7,9 +7,9 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 from collections.abc import Generator
+from collections.abc import Iterator
 
 import nbxmpp
 from nbxmpp.modules.util import raise_if_error
@@ -140,25 +140,31 @@ class Blocking(BaseModule):
 
     def _get_contacts_from_jids(self,
                                 jids: set[JID]
-                                ) -> Generator[BareContact, BareContact, None]:
+                                ) -> Iterator[BareContact]:
+
+        module = self._con.get_module('Contacts')
+
         for jid in jids:
             if jid.resource is not None:
                 # Currently not supported by GUI
                 continue
 
             if jid.is_domain:
-                module = self._con.get_module('Contacts')
                 contacts = module.get_contacts_with_domain(jid.domain)
                 for contact in contacts:
-                    if contact.is_groupchat:
-                        # Currently not supported by GUI
+
+                    if not isinstance(contact, BareContact):
                         continue
 
-                    yield cast(BareContact, contact)
+                    yield contact
 
                 continue
 
-            yield cast(BareContact, self._get_contact(jid))
+            contact = module.get_contact_if_exists(jid)
+            if not isinstance(contact, BareContact):
+                continue
+
+            yield contact
 
     def _presence_probe(self, jid: JID) -> None:
         self._log.info('Presence probe: %s', jid)
