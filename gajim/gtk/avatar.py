@@ -25,6 +25,7 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.classes import Singleton
 from gajim.common.util.image import get_pixbuf_from_file
 from gajim.common.util.image import scale_with_ratio
@@ -526,7 +527,9 @@ class AvatarStorage(metaclass=Singleton):
                 app.storage.cache.set_muc(account, jid, "avatar", None)
 
         client = app.get_client(account)
-        contact = client.get_module("Contacts").get_bare_contact(jid)
+        contact = client.get_module("Contacts").get_contact_if_exists(jid)
+        assert contact is not None
+        assert not isinstance(contact, ResourceContact)
 
         name = get_groupchat_name(client, jid)
         color = get_contact_color(contact)

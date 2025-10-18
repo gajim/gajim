@@ -220,16 +220,17 @@ class Contacts(BaseModule):
         contact = contact.get_resource(resource)
         return contact
 
-    def get_bare_contact(self,
-                         jid: str | JID
-                         ) -> BareContact | GroupchatContact:
-        '''This method gives direct access to the contacts dict.
-           This is helpful when performance is essential. In difference to
-           get_contact() this method does not create contacts nor can it handle
-           JIDs which are not bare. Use this only if you know the contact
-           exists.
-        '''
-        return self._contacts[jid]
+    def get_contact_if_exists(
+        self,
+        jid: JID
+    ) -> BareContact | ResourceContact | GroupchatContact | GroupchatParticipant | None:
+        contact = self._contacts.get(jid)
+        if contact is None:
+            return None
+
+        if jid.resource:
+            return contact.get_resource_if_exists(jid.resource)
+        return contact
 
     def get_contacts_with_domain(self,
                                  domain: str
@@ -437,6 +438,9 @@ class BareContact(CommonContact):
         if contact is None:
             contact = self.add_resource(resource)
         return contact
+
+    def get_resource_if_exists(self, resource: str) -> ResourceContact | None:
+        return self._resources.get(resource)
 
     def get_active_resource(self) -> ResourceContact | None:
         if not self._resources:
@@ -826,6 +830,9 @@ class GroupchatContact(CommonContact):
             contact = self.add_resource(resource)
         return contact
 
+    def get_resource_if_exists(self, resource: str) -> GroupchatParticipant | None:
+        return self._resources.get(resource)
+
     def get_participants(self) -> Iterator[GroupchatParticipant]:
         for contact in self._resources.values():
             if contact.is_available:
@@ -1008,7 +1015,8 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def room(self) -> GroupchatContact:
-        contact = self.get_module('Contacts').get_bare_contact(self.jid.bare)
+        contact = self.get_module('Contacts').get_contact_if_exists(
+            self.jid.new_as_bare())
         assert isinstance(contact, GroupchatContact)
         return contact
 
