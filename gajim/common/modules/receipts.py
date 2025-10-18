@@ -19,7 +19,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import ReceiptReceived
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import models as mod
 
 
@@ -110,6 +109,10 @@ class Receipts(BaseModule):
             return True
 
         assert properties.jid is not None
-        contact = self._get_contact(properties.jid.new_as_bare())
-        assert isinstance(contact, BareContact)
-        return contact.is_subscribed
+
+        item = self._con.get_module('Roster').get_item(
+            properties.jid.new_as_bare())
+        if item is None:
+            return False
+
+        return item.subscription in ('from', 'both')
