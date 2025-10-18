@@ -17,7 +17,8 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
-from nbxmpp.modules.dataforms import DataForm
+from nbxmpp.modules.dataforms import MultipleDataForm
+from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import LastActivityData
 from nbxmpp.structs import SoftwareVersionResult
@@ -147,7 +148,9 @@ class AccountProviderContactsGroup(GajimPreferencesGroup):
 
         self._add_contact_addresses(server_info.dataforms)
 
-    def _add_contact_addresses(self, dataforms: list[DataForm]) -> None:
+    def _add_contact_addresses(
+        self, dataforms: list[SimpleDataForm | MultipleDataForm]
+    ) -> None:
         fields = {
             "admin-addresses": _("Admin"),
             "status-addresses": _("Status"),
@@ -187,12 +190,15 @@ class AccountProviderContactsGroup(GajimPreferencesGroup):
 
     @staticmethod
     def _get_addresses(
-        fields: dict[str, str], dataforms: list[DataForm]
+        fields: dict[str, str], dataforms: list[SimpleDataForm | MultipleDataForm]
     ) -> dict[str, list[str]] | None:
         addresses: dict[str, list[str]] = {}
         for form in dataforms:
+            if not isinstance(form, SimpleDataForm):
+                continue
+
             field = form.vars.get("FORM_TYPE")
-            if field.value != "http://jabber.org/network/serverinfo":
+            if field is None or field.value != "http://jabber.org/network/serverinfo":
                 continue
 
             for address_type in fields:
@@ -205,7 +211,7 @@ class AccountProviderContactsGroup(GajimPreferencesGroup):
 
                 if not field.values:
                     continue
-                addresses[address_type] = field.values
+                addresses[address_type] = cast(list[str], field.values)
 
             return addresses or None
         return None
