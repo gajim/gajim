@@ -13,6 +13,8 @@ import gajim.common.storage.archive.models as mod
 from gajim.common.i18n import _
 from gajim.common.util.text import process_non_spacing_marks
 
+from gajim.gtk.conversation.avatar_stack import AvatarStack
+from gajim.gtk.conversation.avatar_stack import AvatarStackData
 from gajim.gtk.conversation.rows.base import BaseRow
 
 
@@ -34,6 +36,9 @@ class DisplayedRow(BaseRow):
         self.label.add_css_class("conversation-read-marker")
         self.grid.attach(self.label, 0, 0, 1, 1)
 
+        self._avatar_stack = AvatarStack()
+        self.grid.attach(self._avatar_stack, 1, 0, 1, 1)
+
         self._update_state()
 
     def add_marker(self, marker: mod.DisplayedMarker) -> None:
@@ -53,4 +58,18 @@ class DisplayedRow(BaseRow):
         text = _("Row read by ")
         text += ", ".join([m.occupant.nickname for m in self._markers])
         self.label.set_text(process_non_spacing_marks(text))
+
+        avatar_stack_data: list[AvatarStackData] = []
+        for marker in self._markers:
+            if marker.occupant is None:
+                continue
+            avatar_stack_data.append(
+                AvatarStackData(
+                    nickname=marker.occupant.nickname,
+                    timestamp=marker.timestamp,
+                    avatar_sha=marker.occupant.avatar_sha,
+                )
+            )
+        self._avatar_stack.set_data(avatar_stack_data)
+
         self.set_visible(bool(self._markers))

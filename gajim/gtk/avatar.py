@@ -681,6 +681,14 @@ class AvatarStorage(metaclass=Singleton):
             return None
         return sha
 
+    def get_avatar_by_sha(self, sha: str, size: int, scale: int) -> Gdk.Texture | None:
+        path = configpaths.get("AVATAR") / sha
+        surface = self.surface_from_filename(str(path), size, scale)
+        if surface is None:
+            return None
+
+        return convert_surface_to_texture(surface)
+
     @staticmethod
     def get_avatar_path(filename: str) -> Path | None:
         path = configpaths.get("AVATAR") / filename

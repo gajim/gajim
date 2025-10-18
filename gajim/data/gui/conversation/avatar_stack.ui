@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AvatarStack" parent="GtkMenuButton">
+    <property name="name">AvatarStack</property>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkBox" id="_avatar_box">
+            <style>
+              <class name="avatar-box"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_more_label">
+            <style>
+              <class name="dimmed"/>
+              <class name="small-label"/>
+              <class name="bold"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

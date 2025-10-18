@@ -912,3 +912,10 @@ list.sidebar-switcher .sidebar-row-header {
 .start-chat-row.activatable:active { box-shadow: none; }
 .start-chat-row { padding: 5px 20px 5px 8px; }
 .start-chat-row:focus { outline: none; }
+
+#AvatarStack button {
+  background-color: transparent;
+}
+#AvatarStack button image {
+    margin-left: -9px;
+}

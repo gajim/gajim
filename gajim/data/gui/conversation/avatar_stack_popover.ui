@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AvatarStackPopover" parent="GtkPopover">
+    <property name="position">top</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="propagate-natural-width">true</property>
+        <property name="propagate-natural-height">true</property>
+        <property name="max-content-height">300</property>
+        <property name="hscrollbar-policy">never</property>
+        <child>
+          <object class="GtkListBox" id="_listbox">
+            <property name="selection-mode">none</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
