@@ -199,7 +199,7 @@ class Chatstate(BaseModule):
 
         muc_jid = jid.new_as_bare()
 
-        data = self.get_module('MUC').get_muc_data(muc_jid)
+        data = self._con.get_module('MUC').get_muc_data(muc_jid)
         if data is None or data.nick == jid.resource:
             # Chatstate from our own joined jid resource
             return self._raise_if_necessary(properties)
