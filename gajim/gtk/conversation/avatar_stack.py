@@ -59,7 +59,10 @@ class AvatarStack(Gtk.MenuButton):
     def _get_avatar_image(self, marker: mod.DisplayedMarker) -> Gtk.Image:
         assert marker.occupant is not None
         texture = app.app.avatar_storage.get_occupant_texture(
-            marker.remote.jid, marker.occupant, size=16, scale=self._scale_factor
+            marker.remote.jid,
+            marker.occupant,
+            size=AvatarSize.SMALL,
+            scale=self._scale_factor,
         )
 
         image = Gtk.Image.new_from_paintable(texture)
@@ -99,7 +102,10 @@ class AvatarStackPopoverRow(Gtk.ListBoxRow):
 
         assert marker.occupant is not None
         texture = app.app.avatar_storage.get_occupant_texture(
-            marker.remote.jid, marker.occupant, size=16, scale=self.get_scale_factor()
+            marker.remote.jid,
+            marker.occupant,
+            size=AvatarSize.SMALL,
+            scale=self.get_scale_factor(),
         )
 
         self._avatar_image.set_from_paintable(texture)
