@@ -2,9 +2,14 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="AvatarStackPopoverRow" parent="GtkListBoxRow">
+    <property name="activatable">false</property>
+    <style>
+      <class name="px-3"/>
+      <class name="py-6"/>
+    </style>
     <child>
       <object class="GtkBox">
-        <property name="spacing">12</property>
+        <property name="spacing">9</property>
         <child>
           <object class="GtkImage" id="_avatar_image">
           </object>
@@ -18,16 +23,15 @@
                 <property name="ellipsize">end</property>
                 <property name="max-width-chars">52</property>
                 <style>
-                  <class name="small-label" />
-                  <class name="bold" />
+                  <class name="small-label"/>
                 </style>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="_timestamp_label">
                 <style>
-                  <class name="small-label" />
-                  <class name="dimmed" />
+                  <class name="caption"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

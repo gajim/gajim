@@ -44,8 +44,10 @@ class AvatarStack(Gtk.MenuButton):
 
         entries_count = len(self._markers)
         if entries_count > MAX_AVATARS:
+            self._more_label.set_visible(True)
             self._more_label.set_label(f"+{entries_count - MAX_AVATARS}")
         else:
+            self._more_label.set_visible(False)
             self._more_label.set_label("")
 
         marker_count = len(self._markers)
@@ -103,12 +105,12 @@ class AvatarStackPopoverRow(Gtk.ListBoxRow):
         texture = app.app.avatar_storage.get_occupant_texture(
             marker.remote.jid,
             marker.occupant,
-            size=AvatarSize.SMALL,
+            size=AvatarSize.ROSTER,
             scale=self.get_scale_factor(),
         )
 
         self._avatar_image.set_from_paintable(texture)
-        self._avatar_image.set_pixel_size(AvatarSize.SMALL)
+        self._avatar_image.set_pixel_size(AvatarSize.ROSTER)
 
         self._contact_name_label.set_text(marker.occupant.nickname or "")
 

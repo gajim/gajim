@@ -8,9 +8,6 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox" id="_avatar_box">
-            <style>
-              <class name="avatar-box"/>
-            </style>
           </object>
         </child>
         <child>
@@ -19,6 +16,7 @@
               <class name="dimmed"/>
               <class name="small-label"/>
               <class name="bold"/>
+              <class name="pe-3"/>
             </style>
           </object>
         </child>
