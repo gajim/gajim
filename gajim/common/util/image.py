@@ -126,6 +126,20 @@ def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
     return size, int(size / ratio)
 
 
+def get_image_orientation(image: Image.Image) -> int:
+    exif = image.getexif()
+    exif_orientation_code = 274
+    orientation = exif.get(exif_orientation_code, 1)
+    degrees = {
+        1: 0,
+        3: 180,
+        6: 270,
+        8: 90
+    }.get(orientation, 0)
+
+    return degrees
+
+
 def resize_gif(
     image: ImageFile.ImageFile, output_file: BytesIO, resize_to: tuple[int, int]
 ) -> None:

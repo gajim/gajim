@@ -15,6 +15,8 @@ from gi.repository import GLib
 from PIL import Image
 from PIL import ImageFile
 
+from gajim.common.util.image import get_image_orientation
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
@@ -57,6 +59,10 @@ def _create_thumbnail_with_pil(data: bytes, size: int) -> tuple[bytes, dict[str,
     except Exception:
         input_file.close()
         raise
+
+    image_orientation = get_image_orientation(image)
+    if image_orientation != 0:
+        image = image.rotate(image_orientation, expand=True)
 
     image_width, image_height = image.size
     n_frames = getattr(image, "n_frames", 1)
