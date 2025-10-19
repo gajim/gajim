@@ -80,8 +80,7 @@ class AvatarStackPopover(Gtk.Popover):
     _listbox: Gtk.ListBox = Gtk.Template.Child()
 
     def __init__(self, data: list[mod.DisplayedMarker]) -> None:
-        Gtk.Popover.__init__(self, autohide=False)
-        self._scale_factor = self.get_scale_factor()
+        Gtk.Popover.__init__(self)
 
         for entry in data:
             self._listbox.append(AvatarStackPopoverRow(entry))
