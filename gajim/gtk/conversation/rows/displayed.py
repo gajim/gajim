@@ -20,6 +20,7 @@ class DisplayedRow(BaseRow):
         self, account: str, timestamp: datetime, markers: list[mod.DisplayedMarker]
     ) -> None:
         BaseRow.__init__(self, account)
+        self.remove_css_class("conversation-row")
         self.set_activatable(False)
         self.type = "read_marker"
         self.timestamp = timestamp + timedelta(microseconds=1)
