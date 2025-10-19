@@ -263,11 +263,8 @@ class Chatstate(BaseModule):
         '''
         composers: list[GroupchatParticipant] = []
         for jid in self._muc_composers[muc_jid]:
-            contact = self._get_contact_if_exists(jid)
-            if not isinstance(contact, GroupchatParticipant):
-                self._log.warning(
-                    'Unexpected class returned for %s -> %s', jid, contact.__class__)
-                continue
+            contact = self._get_contact(jid, groupchat=True)
+            assert isinstance(contact, GroupchatParticipant)
             composers.append(contact)
 
         return composers
