@@ -555,6 +555,16 @@ class MethodsTest(unittest.TestCase):
                 )
                 self._archive.insert_object(marker)
 
+                # Same markers but from different account received
+                marker = DisplayedMarker(
+                    account_="testacc2",
+                    remote_jid_=remote_jid1,
+                    occupant_=occupant,
+                    id=f"message{i}",
+                    timestamp=datetime.fromtimestamp(i, dt.UTC),
+                )
+                self._archive.insert_object(marker)
+
             # Marker from different JID
             marker = DisplayedMarker(
                 account_="testacc1",
@@ -566,6 +576,8 @@ class MethodsTest(unittest.TestCase):
             self._archive.insert_object(marker)
 
         result = self._archive.get_display_markers("testacc1", remote_jid1)
+
+        self.assertEqual(len(result), 3)
 
         res0, res1, res2 = result
         assert res0.occupant is not None
