@@ -108,7 +108,7 @@ def get_occupant_info(
     resource = properties.jid.resource
     assert resource is not None
 
-    return mod.Occupant(
+    occupant = mod.Occupant(
         account_=account,
         remote_jid_=remote_jid.new_as_bare(),
         id=str(occupant_id),
@@ -116,6 +116,13 @@ def get_occupant_info(
         nickname=resource,
         updated_at=timestamp,
     )
+
+    if contact.avatar_sha is not None:
+        # avatar_sha is only available if we have presence from this contact
+        # We don’t want to overwrite the previous avatar
+        occupant.avatar_sha = contact.avatar_sha
+
+    return occupant
 
 
 def get_occupant_id(
