@@ -39,6 +39,9 @@ class AvatarStack(Gtk.MenuButton):
         self._markers = markers.copy()
         container_remove_all(self._avatar_box)
 
+        if not markers:
+            return
+
         for entry in self._markers[:MAX_AVATARS]:
             self._avatar_box.append(self._get_avatar_image(entry))
 

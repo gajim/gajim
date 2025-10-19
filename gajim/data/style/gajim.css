@@ -927,13 +927,10 @@ list.sidebar-switcher .sidebar-row-header {
 .start-chat-row { padding: 5px 20px 5px 8px; }
 .start-chat-row:focus { outline: none; }
 
-#AvatarStack button {
-    border-radius: 18px;
-}
-#AvatarStack button > box {
-    padding-left: 6px;
-    margin-right: -3px;
-}
-#AvatarStack button image {
-    margin-left: -9px;
-}
+/* AvatarStack */
+
+#AvatarStack button { border-radius: 18px; }
+#AvatarStack button:not(:hover) { background-color: transparent; }
+#AvatarStack button > box { padding-left: 6px; margin-right: -3px; }
+#AvatarStack button image { margin-left: -9px; }
+#AvatarStackPopover contents { padding: 0px; }

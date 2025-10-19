@@ -2,6 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="AvatarStackPopover" parent="GtkPopover">
+    <property name="name">AvatarStackPopover</property>
     <property name="position">top</property>
     <child>
       <object class="GtkScrolledWindow">
@@ -12,6 +13,12 @@
         <child>
           <object class="GtkListBox" id="_listbox">
             <property name="selection-mode">none</property>
+            <style>
+              <class name="bg-transparent"/>
+              <class name="me-24" />
+              <class name="ms-12" />
+              <class name="my-3" />
+            </style>
           </object>
         </child>
       </object>
