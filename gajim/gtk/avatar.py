@@ -19,6 +19,7 @@ from gi.repository import Pango
 from gi.repository import PangoCairo
 from nbxmpp.protocol import JID
 
+import gajim.common.storage.archive.models as mod
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
@@ -43,6 +44,7 @@ from gajim.gtk.util.styling import get_contact_color
 from gajim.gtk.util.styling import get_css_show_class
 from gajim.gtk.util.styling import make_rgba
 from gajim.gtk.util.styling import rgba_to_float
+from gajim.gtk.util.styling import text_to_color
 
 log = logging.getLogger("gajim.gtk.avatar")
 
@@ -466,7 +468,9 @@ class AvatarStorage(metaclass=Singleton):
             if texture is not None:
                 return texture
 
-            surface = self._get_avatar_from_storage(contact, size, scale, style)
+            surface = self._get_avatar_from_storage(
+                contact.avatar_sha, size, scale, style
+            )
             if surface is not None:
                 if show is not None:
                     surface = add_status_to_avatar(surface, show)
@@ -540,6 +544,40 @@ class AvatarStorage(metaclass=Singleton):
 
         texture = convert_surface_to_texture(surface)
         self._cache[jid][(size, scale, None, transport_icon)] = texture
+        return texture
+
+    def get_occupant_texture(
+        self,
+        jid: JID,
+        occupant: mod.Occupant,
+        size: int,
+        scale: int,
+        default: bool = False,
+        style: str = "circle",
+    ) -> Gdk.Texture:
+
+        assert occupant.nickname is not None
+
+        texture = self._cache[jid].get((occupant.id, size, scale))
+        if texture is not None:
+            return texture
+
+        surface = self._get_avatar_from_storage(occupant.avatar_sha, size, scale, style)
+        if surface is not None:
+            texture = convert_surface_to_texture(surface)
+            self._cache[jid][(occupant.id, size, scale)] = texture
+            return texture
+
+        if occupant.real_remote is not None:
+            color = text_to_color(str(occupant.real_remote.jid))
+        else:
+            color = text_to_color(occupant.nickname)
+
+        letter = generate_avatar_letter(occupant.nickname)
+        surface = generate_default_avatar(letter, color, size, scale, style=style)
+
+        texture = convert_surface_to_texture(surface)
+        self._cache[jid][(occupant.id, size, scale)] = texture
         return texture
 
     def get_workspace_texture(
@@ -681,14 +719,6 @@ class AvatarStorage(metaclass=Singleton):
             return None
         return sha
 
-    def get_avatar_by_sha(self, sha: str, size: int, scale: int) -> Gdk.Texture | None:
-        path = configpaths.get("AVATAR") / sha
-        surface = self.surface_from_filename(str(path), size, scale)
-        if surface is None:
-            return None
-
-        return convert_surface_to_texture(surface)
-
     @staticmethod
     def get_avatar_path(filename: str) -> Path | None:
         path = configpaths.get("AVATAR") / filename
@@ -730,19 +760,16 @@ class AvatarStorage(metaclass=Singleton):
 
     def _get_avatar_from_storage(
         self,
-        contact: (
-            types.BareContact | types.GroupchatContact | types.GroupchatParticipant
-        ),
+        sha: str | None,
         size: int,
         scale: int,
         style: str,
     ) -> cairo.ImageSurface | None:
 
-        avatar_sha = contact.avatar_sha
-        if avatar_sha is None:
+        if sha is None:
             return None
 
-        surface = self.surface_from_filename(avatar_sha, size, scale)
+        surface = self.surface_from_filename(sha, size, scale)
         if surface is None:
             return None
         return clip(surface, style)

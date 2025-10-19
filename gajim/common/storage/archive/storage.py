@@ -746,7 +746,11 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_display_marker_with_pk(
         self, session: Session, pk: int
     ) -> DisplayedMarker | None:
-        stmt = select(DisplayedMarker).where(DisplayedMarker.pk == pk)
+        stmt = (
+            select(DisplayedMarker)
+            .where(DisplayedMarker.pk == pk)
+            .options(joinedload(DisplayedMarker.remote))
+        )
         return session.scalar(stmt)
 
     @with_session
@@ -778,6 +782,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 dm1.fk_account_pk == fk_account_pk,
                 dm2.fk_occupant_pk.is_(None)
             )
+            .options(joinedload(dm1.remote))
         )
         self._explain(session, stmt)
         return session.scalars(stmt).all()

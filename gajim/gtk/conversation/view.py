@@ -434,6 +434,7 @@ class ConversationView(Gtk.ScrolledWindow):
         return -1 if row1.timestamp < row2.timestamp else 1
 
     def _load_displayed_marker(self) -> None:
+        assert self._contact is not None
         for marker in app.storage.archive.get_display_markers(
             self._contact.account, self._contact.jid
         ):
@@ -545,6 +546,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def update_displayed_markers(self, event: events.DisplayedReceived) -> None:
         if isinstance(self._contact, GroupchatContact):
             marker = event.marker
+            assert marker.occupant is not None
             self._remove_displayed_marker(marker.occupant)
 
             self._displayed_markers[marker.id].append(marker)
@@ -568,12 +570,11 @@ class ConversationView(Gtk.ScrolledWindow):
     def _remove_displayed_marker(self, occupant: mod.Occupant) -> None:
         for displayed_id, markers in self._displayed_markers.items():
             for marker in markers:
+                assert marker.occupant is not None
                 if marker.occupant.id == occupant.id:
-                    print("remove", marker.occupant.nickname)
                     markers.remove(marker)
 
                     if row := self._displayed_rows.get(displayed_id):
-                        print("remove row", marker.occupant.nickname)
                         row.remove_marker(marker)
 
                     return
@@ -625,6 +626,7 @@ class ConversationView(Gtk.ScrolledWindow):
             return
 
         if markers := self._displayed_markers.get(displayed_id):
+            assert self._contact is not None
             row = DisplayedRow(self._contact.account, message.timestamp, markers)
             self._displayed_rows[displayed_id] = row
             self._list_box.append(row)

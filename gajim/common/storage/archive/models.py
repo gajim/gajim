@@ -346,6 +346,7 @@ class DisplayedMarker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     remote_jid_: JID = dataclasses.field(repr=False)
     fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    remote: Mapped[Remote] = relationship(lazy='raise', foreign_keys=fk_remote_pk, viewonly=True, init=False)
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
