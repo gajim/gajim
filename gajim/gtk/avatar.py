@@ -52,6 +52,7 @@ log = logging.getLogger("gajim.gtk.avatar")
 AvatarCacheT = dict[
     JID | str, dict[tuple[int, int, str | None, str | None], Gdk.Texture]
 ]
+OccupantAvatarCacheT = dict[JID, dict[tuple[str, int, int], Gdk.Texture]]
 
 CIRCLE_RATIO = 0.18
 CIRCLE_FILL_RATIO = 0.80
@@ -435,6 +436,7 @@ def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 class AvatarStorage(metaclass=Singleton):
     def __init__(self):
         self._cache: AvatarCacheT = defaultdict(dict)
+        self._occupant_cache: OccupantAvatarCacheT = defaultdict(dict)
 
     def invalidate_cache(self, jid: JID | str) -> None:
         self._cache.pop(jid, None)
@@ -558,14 +560,14 @@ class AvatarStorage(metaclass=Singleton):
 
         assert occupant.nickname is not None
 
-        texture = self._cache[jid].get((occupant.id, size, scale))
+        texture = self._occupant_cache[jid].get((occupant.id, size, scale))
         if texture is not None:
             return texture
 
         surface = self._get_avatar_from_storage(occupant.avatar_sha, size, scale, style)
         if surface is not None:
             texture = convert_surface_to_texture(surface)
-            self._cache[jid][(occupant.id, size, scale)] = texture
+            self._occupant_cache[jid][(occupant.id, size, scale)] = texture
             return texture
 
         if occupant.real_remote is not None:
@@ -577,7 +579,7 @@ class AvatarStorage(metaclass=Singleton):
         surface = generate_default_avatar(letter, color, size, scale, style=style)
 
         texture = convert_surface_to_texture(surface)
-        self._cache[jid][(occupant.id, size, scale)] = texture
+        self._occupant_cache[jid][(occupant.id, size, scale)] = texture
         return texture
 
     def get_workspace_texture(
