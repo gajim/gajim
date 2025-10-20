@@ -134,6 +134,11 @@ class ChatMarkers(BaseModule):
                 properties=properties,
             )
 
+            if occupant is None:
+                # Support Chat Markers in Group Chats only if occupant-id
+                # is available
+                return
+
         marker_data = mod.DisplayedMarker(
             account_=self._account,
             remote_jid_=properties.remote_jid,
