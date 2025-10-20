@@ -20,6 +20,7 @@ class FTState(IntEnum):
 
 
 class PreviewState(IntEnum):
+    INIT = 0
     DOWNLOADING = 1
     OFFER_DOWNLOAD = 2
     DOWNLOADED = 3

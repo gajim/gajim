@@ -117,11 +117,13 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._preview_id_short = self._preview_id[:10]
         self._info_message = None
         self._http_obj = None
+        self._state = PreviewState.INIT
 
         self._connect(
             self._cancel_download_button, "clicked", self._on_cancel_download_clicked
         )
         self._connect(self._download_button, "clicked", self._on_download_clicked)
+        self._connect(self._icon_button, "clicked", self._on_icon_clicked)
 
         pointer_cursor = Gdk.Cursor.new_from_name("pointer")
         self._icon_button.set_cursor(pointer_cursor)
@@ -256,9 +258,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
         elif state == PreviewState.DOWNLOADED:
             self._file_control_buttons.set_path(self._orig_path)
-            self._icon_button.set_action_target_value(
-                GLib.Variant("s", str(self._orig_path))
-            )
 
     def _on_display_error(self, _widget: Any) -> None:
         self._stack.set_visible_child_name("preview")
@@ -266,6 +265,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
     def _on_download_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._download_content()
+
+    def _on_icon_clicked(self, button: Gtk.Button) -> None:
+        if self._state == PreviewState.OFFER_DOWNLOAD:
+            self._download_button.emit("clicked")
+
+        elif self._state == PreviewState.DISPLAY:
+            app.app.activate_action(
+                "open-file", GLib.Variant("s", str(self._orig_path))
+            )
 
     def _on_cancel_download_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
