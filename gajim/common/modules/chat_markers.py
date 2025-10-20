@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import datetime as dt
-
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -72,6 +70,9 @@ class ChatMarkers(BaseModule):
             jid = properties.jid.new_as_bare()
 
         if properties.type.is_groupchat:
+            if properties.jid.resource is None:
+                return
+
             assert properties.muc_jid is not None
             contact = self._client.get_module('Contacts').get_contact(
                 properties.muc_jid,
@@ -111,44 +112,38 @@ class ChatMarkers(BaseModule):
                        properties.jid,
                        properties.marker.id)
 
+        timestamp = get_message_timestamp(properties)
+
         occupant = None
-        if not properties.is_muc_pm:
-            if properties.mam is not None:
-                timestamp = properties.mam.timestamp
-            else:
-                timestamp = properties.timestamp
+        if properties.type.is_groupchat:
+            assert properties.muc_jid is not None
+            assert properties.jid is not None
+            assert properties.jid.resource is not None
 
-            timestamp = dt.datetime.fromtimestamp(
-                timestamp, dt.UTC)
+            room = self._client.get_module('Contacts').get_contact(
+                properties.muc_jid,
+                groupchat=True)
+            assert isinstance(room, GroupchatContact)
+            occupant = get_occupant_info(
+                self._account,
+                remote_jid=properties.remote_jid,
+                own_bare_jid=self._client.get_own_jid().new_as_bare(),
+                direction=ChatDirection.INCOMING,
+                timestamp=timestamp,
+                contact=room.get_resource(properties.jid.resource),
+                properties=properties,
+            )
 
-            if (properties.type.is_groupchat
-                    and properties.jid is not None
-                    and properties.jid.resource is not None):
-                assert properties.muc_jid is not None
-                room = self._client.get_module('Contacts').get_contact(
-                    properties.muc_jid,
-                    groupchat=True)
-                assert isinstance(room, GroupchatContact)
-                occupant = get_occupant_info(
-                    self._account,
-                    remote_jid=properties.remote_jid,
-                    own_bare_jid=self._client.get_own_jid().new_as_bare(),
-                    direction=ChatDirection.INCOMING,
-                    timestamp=get_message_timestamp(properties),
-                    contact=room.get_resource(properties.jid.resource),
-                    properties=properties,
-                )
+        marker_data = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=properties.remote_jid,
+            occupant_=occupant,
+            id=properties.marker.id,
+            timestamp=timestamp)
 
-            marker_data = mod.DisplayedMarker(
-                account_=self._account,
-                remote_jid_=properties.remote_jid,
-                occupant_=occupant,
-                id=properties.marker.id,
-                timestamp=timestamp)
-
-            pk = app.storage.archive.insert_object(marker_data)
-            if pk == -1:
-                return
+        pk = app.storage.archive.insert_object(marker_data)
+        if pk == -1:
+            return
 
         app.ged.raise_event(
             DisplayedReceived(
@@ -156,7 +151,6 @@ class ChatMarkers(BaseModule):
                 jid=properties.remote_jid,
                 properties=properties,
                 type=properties.type,
-                is_muc_pm=properties.is_muc_pm,
                 marker_id=properties.marker.id,
                 pk=pk,
             )

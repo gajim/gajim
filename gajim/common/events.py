@@ -350,7 +350,6 @@ class DisplayedReceived(ApplicationEvent):
     jid: JID
     properties: Any
     type: NBXMPPMessageType
-    is_muc_pm: bool
     marker_id: str
     pk: int
 
