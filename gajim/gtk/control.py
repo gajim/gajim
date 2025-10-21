@@ -199,7 +199,8 @@ class ChatControl(EventHelper):
             messages = app.storage.archive.get_conversation_around_timestamp(
                 self._contact.account, self._contact.jid, timestamp
             )
-            self._add_messages(messages)
+            for message in messages:
+                self._add_message_from_storage(message)
             self._scrolled_view.set_history_complete(False, False)
 
         GLib.idle_add(self._scrolled_view.block_signals, False)
@@ -530,7 +531,6 @@ class ChatControl(EventHelper):
             self._scrolled_view.add_call_message(event=event)
 
     def _add_message(self, message: Message) -> None:
-        # TODO: Unify with _add_db_row()
         if self._allow_add_message():
             self._scrolled_view.add_message_from_db(message)
 
@@ -542,7 +542,7 @@ class ChatControl(EventHelper):
         else:
             self._jump_to_end_button.add_unread_count()
 
-    def _add_db_row(self, message: Message):
+    def _add_message_from_storage(self, message: Message):
         if message.filetransfers:
             self._scrolled_view.add_jingle_file_transfer(message=message)
             return
@@ -552,10 +552,6 @@ class ChatControl(EventHelper):
             return
 
         self._scrolled_view.add_message_from_db(message)
-
-    def _add_messages(self, messages: list[Message]):
-        for msg in messages:
-            self._add_db_row(msg)
 
     def _request_messages(self, before: bool) -> Sequence[Message]:
         if before:
@@ -607,7 +603,7 @@ class ChatControl(EventHelper):
         assert self._contact is not None
         for row in rows:
             if not isinstance(row, events.ApplicationEvent):
-                self._add_messages([row])
+                self._add_message_from_storage(row)
 
             elif isinstance(row, events.MUCUserJoined):
                 self._process_muc_user_joined(row)
