@@ -519,7 +519,7 @@ class ConversationView(Gtk.ScrolledWindow):
         command_output_row = CommandOutputRow(self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
-    def add_message_from_db(self, message: mod.Message) -> None:
+    def add_message(self, message: mod.Message) -> None:
         message_row = MessageRow.from_db_row(self.contact, message)
         message_row.connect(
             "state-flags-changed", self._on_message_row_state_flags_changed
@@ -541,29 +541,26 @@ class ConversationView(Gtk.ScrolledWindow):
             self._set_read_marker_row(message.id)
 
         self._insert_message(message_row)
-        self._add_displayed_marker_row(message)
+
+        if displayed_id := message.get_displayed_id():
+            markers = self._displayed_markers.get(displayed_id)
+            if markers:
+                self._add_or_update_displayed_marker_row(message.timestamp, markers)
 
     def update_displayed_markers(self, event: events.DisplayedReceived) -> None:
         if isinstance(self._contact, GroupchatContact):
-            marker = event.marker
-            assert marker.occupant is not None
-            self._remove_displayed_marker(marker.occupant)
+            assert event.marker.occupant is not None
+            self._remove_displayed_marker(event.marker.occupant)
 
-            self._displayed_markers[marker.id].append(marker)
+            self._displayed_markers[event.marker.id].append(event.marker)
 
             message_row = self._stanza_id_row_map.get(event.marker.id)
             if message_row is None:
                 return
 
-            row = self._displayed_rows.get(event.marker.id)
-            if row is None:
-                row = DisplayedRow(
-                    self._contact.account, message_row.timestamp, [event.marker]
-                )
-                self._displayed_rows[event.marker.id] = row
-                self._list_box.append(row)
-            else:
-                row.add_marker(event.marker)
+            self._add_or_update_displayed_marker_row(
+                message_row.timestamp, [event.marker]
+            )
         else:
             self._set_read_marker_row(event.marker.id)
 
@@ -571,13 +568,15 @@ class ConversationView(Gtk.ScrolledWindow):
         for displayed_id, markers in self._displayed_markers.items():
             for marker in markers:
                 assert marker.occupant is not None
-                if marker.occupant.id == occupant.id:
-                    markers.remove(marker)
+                if marker.occupant.id != occupant.id:
+                    continue
 
-                    if row := self._displayed_rows.get(displayed_id):
-                        row.remove_marker(marker)
+                markers.remove(marker)
 
-                    return
+                if row := self._displayed_rows.get(displayed_id):
+                    row.remove_marker(marker)
+
+                return
 
     def _set_read_marker_row(self, id_: str) -> None:
         row = self._get_row_by_message_id(id_)
@@ -620,16 +619,20 @@ class ConversationView(Gtk.ScrolledWindow):
 
         row.set_merged(False)
 
-    def _add_displayed_marker_row(self, message: mod.Message) -> None:
-        displayed_id = message.get_displayed_id()
-        if not displayed_id:
+    def _add_or_update_displayed_marker_row(
+        self, timestamp: datetime, markers: list[mod.DisplayedMarker]
+    ) -> DisplayedRow | None:
+        displayed_id = markers[0].id
+        row = self._displayed_rows.get(displayed_id)
+        if row is not None:
+            row.add_markers(markers)
             return
 
-        if markers := self._displayed_markers.get(displayed_id):
-            assert self._contact is not None
-            row = DisplayedRow(self._contact.account, message.timestamp, markers)
-            self._displayed_rows[displayed_id] = row
-            self._list_box.append(row)
+        assert self._contact is not None
+        row = DisplayedRow(self._contact.account, timestamp, markers)
+        self._displayed_rows[displayed_id] = row
+        self._list_box.append(row)
+        return
 
     def _check_for_merge(self, message: BaseRow) -> None:
         if not isinstance(message, MessageRow):

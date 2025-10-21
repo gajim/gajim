@@ -33,8 +33,9 @@ class DisplayedRow(BaseRow):
 
         self._update_state()
 
-    def add_marker(self, marker: mod.DisplayedMarker) -> None:
-        self._markers.append(marker)
+    def add_markers(self, markers: list[mod.DisplayedMarker]) -> None:
+        for marker in markers:
+            self._markers.append(marker)
         self._update_state()
 
     def remove_marker(self, marker: mod.DisplayedMarker) -> None:
