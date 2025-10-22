@@ -40,7 +40,7 @@ class TestAvatarStack(GajimAppWindow):
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
         self.set_child(box)
 
-        avatar_stack = AvatarStack()
+        avatar_stack = AvatarStack(ACCOUNT)
         box.append(avatar_stack)
 
         markers = app.storage.archive.get_display_markers(
@@ -84,6 +84,8 @@ app.storage.archive.init()
 insert_test_markers()
 
 app.css_config = CSSConfig()
+
+app.get_client = MagicMock()
 
 window = TestAvatarStack()
 window.show()
