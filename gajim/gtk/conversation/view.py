@@ -437,6 +437,7 @@ class ConversationView(Gtk.ScrolledWindow):
             markers = app.storage.archive.get_display_markers(
                 self._contact.account, self._contact.jid
             )
+            markers = list(markers.values())
         else:
             marker = app.storage.archive.get_last_display_marker(
                 self._contact.account, self._contact.jid

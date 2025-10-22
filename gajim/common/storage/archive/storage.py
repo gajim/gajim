@@ -785,7 +785,7 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         account: str,
         jid: JID
-    ) -> Sequence[DisplayedMarker]:
+    ) -> dict[str, DisplayedMarker]:
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -810,7 +810,16 @@ class MessageArchiveStorage(AlchemyStorage):
             .options(joinedload(dm1.remote))
         )
         self._explain(session, stmt)
-        return session.scalars(stmt).all()
+
+        # The above SQL results in multiple markers per occupant
+        # if the occupant sent multiple displayed markers with the
+        # same timestamp.
+        markers: dict[str, DisplayedMarker] = {}
+        for marker in session.scalars(stmt).all():
+            assert marker.occupant is not None
+            markers[marker.occupant.id] = marker
+
+        return markers
 
     @with_session
     @timeit

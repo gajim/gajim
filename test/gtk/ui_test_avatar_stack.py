@@ -46,7 +46,7 @@ class TestAvatarStack(GajimAppWindow):
         markers = app.storage.archive.get_display_markers(
             "testacc1", JID.from_string("user@domain.org")
         )
-        avatar_stack.set_data(list(markers))
+        avatar_stack.set_data(list(markers.values()))
 
 
 def insert_test_markers() -> None:

@@ -576,6 +576,7 @@ class MethodsTest(unittest.TestCase):
             self._archive.insert_object(marker)
 
         result = self._archive.get_display_markers("testacc1", remote_jid1)
+        result = list(result.values())
 
         self.assertEqual(len(result), 3)
 
