@@ -763,10 +763,6 @@ button.flat.link { padding: 0; border: 0; }
     opacity: 0.6;
     font-size: 90%;
 }
-.conversation-read-marker {
-    font-size: 90%;
-    font-style: italic;
-}
 .conversation-nickname {
     font-size: 90%;
     font-weight: bold;

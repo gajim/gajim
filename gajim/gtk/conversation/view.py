@@ -12,7 +12,6 @@ import logging
 from collections import defaultdict
 from collections.abc import Generator
 from datetime import datetime
-from datetime import timedelta
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -33,7 +32,6 @@ from gajim.common.helpers import to_user_string
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
-from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import get_start_of_day
@@ -50,7 +48,6 @@ from gajim.gtk.conversation.rows.info import InfoMessage
 from gajim.gtk.conversation.rows.message import MessageRow
 from gajim.gtk.conversation.rows.muc_join_left import MUCJoinLeft
 from gajim.gtk.conversation.rows.muc_subject import MUCSubject
-from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
@@ -107,7 +104,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self._message_id_row_map: dict[str, MessageRow] = {}
         self._stanza_id_row_map: dict[str, MessageRow] = {}
 
-        self._read_marker_row = None
         self._scroll_hint_row = None
 
         self._current_upper: float = 0
@@ -120,10 +116,14 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._signal_handlers_enabled = False
         self._signal_handler_ids = (0, 0)
-        self._displayed_markers: dict[str, list[mod.DisplayedMarker]] = defaultdict(
-            list
-        )
-        self._displayed_rows: dict[str, DisplayedRow] = {}
+        # Maps occupnat id -> markers
+        self._dm_occupant_markers: dict[str | None, mod.DisplayedMarker] = {}
+        # Maps message ids -> occupant id -> markers
+        self._dm_id_occupant_markers: dict[
+            str, dict[str | None, mod.DisplayedMarker]
+        ] = defaultdict(dict)
+        # Maps message ids -> DisplayedRows
+        self._dm_rows: dict[str, DisplayedRow] = {}
 
         self.set_child(self._list_box)
 
@@ -214,9 +214,6 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self.disable_row_selection()
 
-        self._read_marker_row = ReadMarkerRow(self._contact)
-        self._list_box.append(self._read_marker_row)
-
         self._load_displayed_marker()
 
         self._scroll_hint_row = ScrollHintRow(self._contact.account)
@@ -275,11 +272,11 @@ class ConversationView(Gtk.ScrolledWindow):
         self._active_date_rows = set()
         self._message_id_row_map = {}
         self._stanza_id_row_map = {}
-        self._read_marker_row = None
         self._scroll_hint_row = None
 
-        self._displayed_markers.clear()
-        self._displayed_rows.clear()
+        self._dm_id_occupant_markers.clear()
+        self._dm_occupant_markers.clear()
+        self._dm_rows.clear()
 
     def reset(self) -> None:
         assert self._contact is not None
@@ -435,10 +432,27 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _load_displayed_marker(self) -> None:
         assert self._contact is not None
-        for marker in app.storage.archive.get_display_markers(
-            self._contact.account, self._contact.jid
-        ):
-            self._displayed_markers[marker.id].append(marker)
+
+        if isinstance(self._contact, GroupchatContact):
+            markers = app.storage.archive.get_display_markers(
+                self._contact.account, self._contact.jid
+            )
+        else:
+            marker = app.storage.archive.get_last_display_marker(
+                self._contact.account, self._contact.jid
+            )
+            if marker is None:
+                return
+
+            markers = [marker]
+
+        for marker in markers:
+            occupant_id = None
+            if marker.occupant is not None:
+                occupant_id = marker.occupant.id
+
+            self._dm_occupant_markers[occupant_id] = marker
+            self._dm_id_occupant_markers[marker.id][occupant_id] = marker
 
     def add_muc_subject(
         self, subject: MucSubject, timestamp: float | None = None
@@ -532,74 +546,62 @@ class ConversationView(Gtk.ScrolledWindow):
         for message_id in message.iter_message_ids():
             self._message_id_row_map[message_id] = message_row
 
-        if message.direction == ChatDirection.INCOMING:
-            assert self._read_marker_row is not None
-            self._read_marker_row.set_last_incoming_timestamp(message_row.timestamp)
-
-        if not isinstance(self._contact, GroupchatContact) and message.markers:
-            assert message.id is not None
-            self._set_read_marker_row(message.id)
-
         self._insert_message(message_row)
 
         if displayed_id := message.get_displayed_id():
-            markers = self._displayed_markers.get(displayed_id)
-            if markers:
+            occupant_markers = self._dm_id_occupant_markers.get(displayed_id)
+            if occupant_markers:
+                markers = list(occupant_markers.values())
                 self._add_or_update_displayed_marker_row(message.timestamp, markers)
 
     def update_displayed_markers(self, event: events.DisplayedReceived) -> None:
+        occupant_id = None
+        if event.marker.occupant is not None:
+            occupant_id = event.marker.occupant.id
+
+        self._remove_displayed_marker(occupant_id)
+
+        self._dm_occupant_markers[occupant_id] = event.marker
+        self._dm_id_occupant_markers[event.marker.id][occupant_id] = event.marker
+
         if isinstance(self._contact, GroupchatContact):
-            assert event.marker.occupant is not None
-            self._remove_displayed_marker(event.marker.occupant)
-
-            self._displayed_markers[event.marker.id].append(event.marker)
-
             message_row = self._stanza_id_row_map.get(event.marker.id)
-            if message_row is None:
-                return
-
-            self._add_or_update_displayed_marker_row(
-                message_row.timestamp, [event.marker]
-            )
         else:
-            self._set_read_marker_row(event.marker.id)
+            message_row = self._message_id_row_map.get(event.marker.id)
 
-    def _remove_displayed_marker(self, occupant: mod.Occupant) -> None:
-        for displayed_id, markers in self._displayed_markers.items():
-            for marker in markers:
-                assert marker.occupant is not None
-                if marker.occupant.id != occupant.id:
-                    continue
+        if message_row is None:
+            return
 
-                markers.remove(marker)
+        self._add_or_update_displayed_marker_row(message_row.timestamp, [event.marker])
 
-                if row := self._displayed_rows.get(displayed_id):
-                    row.remove_marker(marker)
+    def _remove_displayed_marker(self, occupant_id: str | None) -> None:
+        current_marker = self._dm_occupant_markers.get(occupant_id)
+        if current_marker is None:
+            return
 
-                return
+        del self._dm_occupant_markers[occupant_id]
+        del self._dm_id_occupant_markers[current_marker.id][occupant_id]
 
-    def _set_read_marker_row(self, id_: str) -> None:
-        row = self._get_row_by_message_id(id_)
+        row = self._dm_rows.get(current_marker.id)
         if row is None:
             return
 
-        assert self._read_marker_row is not None
-        timestamp = row.timestamp + timedelta(microseconds=1)
-        if self._read_marker_row.timestamp > timestamp:
-            return
+        if occupant_id is None:
+            # Single Chat
+            del self._dm_rows[current_marker.id]
+            self._list_box.remove(row)
 
-        self._read_marker_row.set_timestamp(timestamp)
+        else:
+            row.remove_marker(current_marker)
+            if not row.has_markers():
+                del self._dm_rows[current_marker.id]
+                self._list_box.remove(row)
 
     def _insert_message(self, message: BaseRow) -> None:
         self._list_box.append(message)
 
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
-        assert self._read_marker_row is not None
-
-        if message.direction == ChatDirection.INCOMING:
-            if message.timestamp > self._read_marker_row.timestamp:
-                self._read_marker_row.set_visible(False)
 
     def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp.astimezone())
@@ -623,14 +625,14 @@ class ConversationView(Gtk.ScrolledWindow):
         self, timestamp: datetime, markers: list[mod.DisplayedMarker]
     ) -> DisplayedRow | None:
         displayed_id = markers[0].id
-        row = self._displayed_rows.get(displayed_id)
+        row = self._dm_rows.get(displayed_id)
         if row is not None:
             row.add_markers(markers)
             return
 
         assert self._contact is not None
         row = DisplayedRow(self._contact.account, timestamp, markers)
-        self._displayed_rows[displayed_id] = row
+        self._dm_rows[displayed_id] = row
         self._list_box.append(row)
         return
 
@@ -655,7 +657,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if row is None:
                 return None
 
-            if isinstance(row, ReadMarkerRow):
+            if isinstance(row, DisplayedRow):
                 continue
 
             if not isinstance(row, MessageRow):
@@ -676,7 +678,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if row is None:
                 return
 
-            if isinstance(row, ReadMarkerRow):
+            if isinstance(row, DisplayedRow):
                 continue
 
             if not isinstance(row, MessageRow):
@@ -858,15 +860,6 @@ class ConversationView(Gtk.ScrolledWindow):
             self._stanza_id_row_map[event.message.stanza_id] = message_row
 
         message_row.update_corrections()
-
-        assert self._read_marker_row is not None
-        timestamp = message_row.timestamp + timedelta(microseconds=1)
-        if self._read_marker_row.timestamp == timestamp:
-            # This exact message has been marked as read
-            # -> set read marker to before this message
-            self._read_marker_row.set_timestamp(
-                message_row.timestamp - timedelta(microseconds=1), force=True
-            )
 
     def update_retractions(self, retraction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):

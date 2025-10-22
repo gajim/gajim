@@ -755,6 +755,31 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def get_last_display_marker(
+        self,
+        session: Session,
+        account: str,
+        jid: JID
+    ) -> DisplayedMarker | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = (
+            select(DisplayedMarker)
+            .where(
+                DisplayedMarker.fk_remote_pk == fk_remote_pk,
+                DisplayedMarker.fk_account_pk == fk_account_pk,
+            )
+            .order_by(sa.desc(DisplayedMarker.timestamp), sa.desc(DisplayedMarker.pk))
+            .limit(1)
+            .options(joinedload(DisplayedMarker.remote))
+        )
+        self._explain(session, stmt)
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
     def get_display_markers(
         self,
         session: Session,

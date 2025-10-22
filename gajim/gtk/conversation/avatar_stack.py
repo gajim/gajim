@@ -9,8 +9,10 @@ from gi.repository import Gtk
 
 import gajim.common.storage.archive.models as mod
 from gajim.common import app
+from gajim.common.client import BareContact
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_ui_string
@@ -25,10 +27,13 @@ class AvatarStack(Gtk.MenuButton):
     _avatar_box: Gtk.Box = Gtk.Template.Child()
     _more_label: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self) -> None:
+    def __init__(self, account: str) -> None:
         Gtk.MenuButton.__init__(self)
-        self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
 
+        self._account = account
+        self._client = app.get_client(self._account)
+
+        self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
         self.set_create_popup_func(self._on_clicked)
 
         self._scale_factor = self.get_scale_factor()
@@ -61,26 +66,47 @@ class AvatarStack(Gtk.MenuButton):
         marker_count = len(self._markers)
         if marker_count == 1:
             marker = markers[0]
-            assert marker.occupant is not None
-            self.set_tooltip_text(_("Seen by %s") % marker.occupant.nickname)
+
+            if marker.occupant is None:
+                contact = self._client.get_module("Contacts").get_contact_if_exists(
+                    marker.remote.jid
+                )
+                assert contact is not None
+                assert not isinstance(contact, ResourceContact)
+                nickname = contact.name
+            else:
+                nickname = marker.occupant.nickname
+
+            self.set_tooltip_text(_("Seen by %s") % nickname)
         else:
             self.set_tooltip_text(_("Seen by %s participants") % marker_count)
 
     def _get_avatar_image(self, marker: mod.DisplayedMarker) -> Gtk.Image:
-        assert marker.occupant is not None
-        texture = app.app.avatar_storage.get_occupant_texture(
-            marker.remote.jid,
-            marker.occupant,
-            size=AvatarSize.SMALL,
-            scale=self._scale_factor,
-        )
+        texture = None
+        if marker.occupant is None:
+            contact = self._client.get_module("Contacts").get_contact_if_exists(
+                marker.remote.jid
+            )
+            assert contact is not None
+            if isinstance(contact, BareContact):
+                texture = contact.get_avatar(
+                    size=AvatarSize.SMALL, scale=self._scale_factor
+                )
+
+        else:
+            texture = app.app.avatar_storage.get_occupant_texture(
+                marker.remote.jid,
+                marker.occupant,
+                size=AvatarSize.SMALL,
+                scale=self._scale_factor,
+            )
 
         image = Gtk.Image.new_from_paintable(texture)
         image.set_pixel_size(AvatarSize.SMALL)
         return image
 
     def _on_clicked(self, _widget: AvatarStack) -> None:
-        self.set_popover(AvatarStackPopover(self._markers))
+        self.set_popover(AvatarStackPopover(self._account, self._markers))
 
 
 @Gtk.Template.from_string(string=get_ui_string("conversation/avatar_stack_popover.ui"))
@@ -89,11 +115,11 @@ class AvatarStackPopover(Gtk.Popover):
 
     _listbox: Gtk.ListBox = Gtk.Template.Child()
 
-    def __init__(self, data: list[mod.DisplayedMarker]) -> None:
+    def __init__(self, account: str, data: list[mod.DisplayedMarker]) -> None:
         Gtk.Popover.__init__(self)
 
         for entry in data:
-            self._listbox.append(AvatarStackPopoverRow(entry))
+            self._listbox.append(AvatarStackPopoverRow(account, entry))
 
 
 @Gtk.Template.from_string(
@@ -106,21 +132,37 @@ class AvatarStackPopoverRow(Gtk.ListBoxRow):
     _contact_name_label: Gtk.Label = Gtk.Template.Child()
     _timestamp_label: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, marker: mod.DisplayedMarker) -> None:
+    def __init__(self, account: str, marker: mod.DisplayedMarker) -> None:
         Gtk.ListBoxRow.__init__(self)
 
-        assert marker.occupant is not None
-        texture = app.app.avatar_storage.get_occupant_texture(
-            marker.remote.jid,
-            marker.occupant,
-            size=AvatarSize.ROSTER,
-            scale=self.get_scale_factor(),
-        )
+        nickname = ""
+        texture = None
+
+        if marker.occupant is None:
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact_if_exists(
+                marker.remote.jid
+            )
+            assert contact is not None
+            if isinstance(contact, BareContact):
+                texture = contact.get_avatar(
+                    size=AvatarSize.SMALL, scale=self.get_scale_factor()
+                )
+                nickname = contact.name
+
+        else:
+            texture = app.app.avatar_storage.get_occupant_texture(
+                marker.remote.jid,
+                marker.occupant,
+                size=AvatarSize.ROSTER,
+                scale=self.get_scale_factor(),
+            )
+            nickname = marker.occupant.nickname or ""
 
         self._avatar_image.set_from_paintable(texture)
         self._avatar_image.set_pixel_size(AvatarSize.ROSTER)
 
-        self._contact_name_label.set_text(marker.occupant.nickname or "")
+        self._contact_name_label.set_text(nickname)
 
         dt_format = app.settings.get("date_time_format")
         timestamp = marker.timestamp.astimezone()

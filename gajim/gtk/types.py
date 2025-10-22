@@ -23,7 +23,6 @@ if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow
     from gajim.gtk.conversation.rows.muc_join_left import MUCJoinLeft
     from gajim.gtk.conversation.rows.muc_subject import MUCSubject
-    from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
     from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
     from gajim.gtk.conversation.rows.user_status import UserStatus
     from gajim.gtk.conversation.view import ConversationView

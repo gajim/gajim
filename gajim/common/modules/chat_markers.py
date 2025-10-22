@@ -22,11 +22,14 @@ from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import OutgoingMessage
 
 
@@ -105,37 +108,54 @@ class ChatMarkers(BaseModule):
 
     def _raise_event(self, name: str, properties: MessageProperties) -> None:
         assert properties.marker is not None
+        assert properties.jid is not None
         assert properties.remote_jid is not None
 
         self._log.info('%s: %s %s',
                        name,
-                       properties.jid,
+                       properties.remote_jid,
                        properties.marker.id)
 
+        remote_jid = properties.remote_jid
         timestamp = get_message_timestamp(properties)
 
-        occupant = None
+        muc_data = None
         if properties.type.is_groupchat:
-            assert properties.muc_jid is not None
-            assert properties.jid is not None
-            assert properties.jid.resource is not None
+            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            if muc_data is None:
+                self._log.warning(
+                    'Groupchat message from unknown MUC: %s', remote_jid
+                )
+                return
 
-            room = self._client.get_module('Contacts').get_contact(
-                properties.muc_jid,
-                groupchat=True)
-            assert isinstance(room, GroupchatContact)
+        m_type, direction = get_chat_type_and_direction(
+            muc_data, self._client.get_own_jid(), properties)
+
+        if direction == ChatDirection.OUTGOING:
+            return
+
+        occupant = None
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            if properties.jid.is_bare:
+                self._log.warning("Received marker from MUC bare jid")
+                return
+
+            contact = self._client.get_module('Contacts').get_contact(
+                    properties.jid, groupchat=True)
+
+            assert isinstance(contact, GroupchatParticipant)
             occupant = get_occupant_info(
                 self._account,
-                remote_jid=properties.remote_jid,
-                own_bare_jid=self._client.get_own_jid().new_as_bare(),
+                remote_jid=remote_jid,
+                own_bare_jid=self._get_own_bare_jid(),
                 direction=ChatDirection.INCOMING,
                 timestamp=timestamp,
-                contact=room.get_resource(properties.jid.resource),
+                contact=contact,
                 properties=properties,
             )
 
             if occupant is None:
-                # Support Chat Markers in Group Chats only if occupant-id
+                # Support chat markers in group chats only if occupant-id
                 # is available
                 return
 

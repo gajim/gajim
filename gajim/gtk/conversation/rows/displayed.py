@@ -22,16 +22,19 @@ class DisplayedRow(BaseRow):
         BaseRow.__init__(self, account)
         self.remove_css_class("conversation-row")
         self.set_activatable(False)
-        self.type = "read_marker"
+        self.type = "displayed_marker"
         self.timestamp = timestamp + timedelta(microseconds=1)
 
         # Copy markers because we modify the list later
         self._markers = markers.copy()
-        self._avatar_stack = AvatarStack()
+        self._avatar_stack = AvatarStack(self._account)
         self.grid.attach(self._avatar_stack, 0, 0, 1, 1)
         self.grid.set_halign(Gtk.Align.END)
 
         self._update_state()
+
+    def has_markers(self) -> bool:
+        return bool(self._markers)
 
     def add_markers(self, markers: list[mod.DisplayedMarker]) -> None:
         for marker in markers:
