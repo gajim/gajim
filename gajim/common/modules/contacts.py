@@ -224,7 +224,7 @@ class Contacts(BaseModule):
         self,
         jid: JID
     ) -> BareContact | ResourceContact | GroupchatContact | GroupchatParticipant | None:
-        contact = self._contacts.get(jid)
+        contact = self._contacts.get(jid.new_as_bare())
         if contact is None:
             return None
 
@@ -425,7 +425,6 @@ class BareContact(CommonContact):
         contact = ResourceContact(self._log, jid, self._account)
         self._resources[resource] = contact
         contact.connect('presence-update', self._on_signal)
-        contact.connect('chatstate-update', self._on_signal)
         contact.connect('nickname-update', self._on_signal)
         contact.connect('caps-update', self._on_signal)
         return contact
@@ -499,15 +498,10 @@ class BareContact(CommonContact):
 
     @property
     def chatstate(self) -> Chatstate | None:
-        chatstates = {contact.chatstate for contact in self._resources.values()}
-        chatstates.discard(None)
-        if not chatstates:
-            return None
-        return min(chatstates)
+        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
 
     def force_chatstate_update(self) -> None:
-        for contact in self._resources.values():
-            contact.notify('chatstate-update')
+        self.notify('chatstate-update')
 
     @property
     def name(self) -> str:
@@ -737,10 +731,6 @@ class ResourceContact(CommonContact):
     @property
     def idle_datetime(self) -> datetime | None:
         return self._presence.idle_datetime
-
-    @property
-    def chatstate(self) -> Chatstate | None:
-        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
 
     def update_presence(self,
                         presence_data: PresenceData,

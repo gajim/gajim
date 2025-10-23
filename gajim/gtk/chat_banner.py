@@ -135,7 +135,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._contact.multi_connect(
             {
-                "chatstate-update": self._on_chatstate_update,
                 "nickname-update": self._on_nickname_update,
                 "avatar-update": self._on_avatar_update,
                 "presence-update": self._on_presence_update,
@@ -183,14 +182,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._update_avatar()
         self._update_description_label()
-
-    def _on_chatstate_update(
-        self, contact: types.BareContact, _signal_name: str
-    ) -> None:
-        if contact.is_groupchat:
-            self._update_description_label()
-        else:
-            self._update_name_label()
 
     def _on_nickname_update(
         self, _contact: types.BareContact, _signal_name: str

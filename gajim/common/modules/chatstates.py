@@ -168,7 +168,7 @@ class Chatstate(BaseModule):
         ):
             return self._raise_if_necessary(properties)
 
-        jid = properties.jid
+        jid = properties.remote_jid
         assert jid is not None
 
         m_type = 'chat'
@@ -225,7 +225,7 @@ class Chatstate(BaseModule):
         self, jid: JID, m_type: str, state: State
     ) -> None:
         self._remove_remote_composing_timeout(jid, m_type)
-        if state != State.COMPOSING:
+        if state not in (State.COMPOSING, State.PAUSED):
             return
 
         # the spec does not cover any timeout for the composing action,
