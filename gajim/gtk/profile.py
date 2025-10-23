@@ -43,6 +43,7 @@ MENU_DICT = {
     "fn": p_("Profile", "Full Name"),
     "bday": _("Birthday"),
     "gender": p_("Profile", "Gender"),
+    "pronouns": _("Pronouns"),
     "adr": p_("Profile", "Address"),
     "email": _("Email"),
     "impp": p_("Profile", "IM Address"),

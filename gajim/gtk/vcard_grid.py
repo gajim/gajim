@@ -38,6 +38,7 @@ from nbxmpp.modules.vcard4 import OrgProperty
 from nbxmpp.modules.vcard4 import Parameters
 from nbxmpp.modules.vcard4 import PhotoProperty
 from nbxmpp.modules.vcard4 import ProdidProperty
+from nbxmpp.modules.vcard4 import PronounsProperty
 from nbxmpp.modules.vcard4 import RelatedProperty
 from nbxmpp.modules.vcard4 import RevProperty
 from nbxmpp.modules.vcard4 import RoleProperty
@@ -88,6 +89,7 @@ PropertyT = (
     | OrgProperty
     | PhotoProperty
     | ProdidProperty
+    | PronounsProperty
     | RelatedProperty
     | RevProperty
     | RoleProperty
@@ -112,6 +114,7 @@ SupportedPropertiesT = (
     | NoteProperty
     | NProperty
     | OrgProperty
+    | PronounsProperty
     | RoleProperty
     | TelProperty
     | TitleProperty
@@ -124,6 +127,7 @@ TextEntryPropertiesT = (
     | FnProperty
     | ImppProperty
     | OrgProperty
+    | PronounsProperty
     | RoleProperty
     | TelProperty
     | TitleProperty
@@ -135,6 +139,7 @@ LABEL_DICT = {
     "n": _("Name"),
     "bday": _("Birthday"),
     "gender": _("Gender"),
+    "pronouns": _("Pronouns"),
     "adr": p_("Profile", "Address"),
     "tel": _("Phone No."),
     "email": _("Email"),
@@ -170,6 +175,7 @@ DEFAULT_KWARGS: dict[str, dict[str, str | list[Any]]] = {
     "fn": {"value": ""},
     "bday": {"value": "", "value_type": "date"},
     "gender": {"sex": "", "identity": ""},
+    "pronouns": {"value": ""},
     "adr": {},
     "email": {"value": ""},
     "impp": {"value": ""},
@@ -196,6 +202,7 @@ PROPERTIES_WITH_TYPE = [
 ORDER = [
     "fn",
     "gender",
+    "pronouns",
     "bday",
     "adr",
     "email",
@@ -237,6 +244,7 @@ class VCardGrid(Gtk.Grid):
             "fn": TextEntryPropertyGui,
             "bday": DatePropertyGui,
             "gender": GenderPropertyGui,
+            "pronouns": TextEntryPropertyGui,
             "adr": AdrPropertyGui,
             "tel": TextEntryPropertyGui,
             "email": TextEntryPropertyGui,
