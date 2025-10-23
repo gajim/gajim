@@ -27,6 +27,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.util.datetime import utc_now
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.user_strings import get_uf_relative_time
 from gajim.plugins.manifest import PluginManifest
@@ -179,7 +180,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self._model.remove(position)
 
     def _update_time(self) -> int:
-        now = dt.datetime.now()
+        now = utc_now()
         for item in self._model:
             item = cast(ActivityListItem[Any], item)
             delta = now - item.timestamp
@@ -463,7 +464,7 @@ class GajimUpdate(ActivityListItem[events.GajimUpdateAvailable]):
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
             title=_("Gajim Update"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=_("Gajim %s is available") % event.version,
             read=False,
             event=event,
@@ -485,7 +486,7 @@ class GajimUpdatePermission(ActivityListItem[events.AllowGajimUpdateCheck]):
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
             title=_("Gajim Update Check"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=_("Search for Gajim updates periodically?"),
             read=False,
             event=event,
@@ -507,7 +508,7 @@ class GajimPluginUpdate(ActivityListItem[events.PluginUpdatesAvailable]):
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
             title=_("Plugin Update"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=_("There are updates for Gajim’s plugins"),
             read=False,
             event=event,
@@ -529,7 +530,7 @@ class GajimPluginUpdateFinished(ActivityListItem[None]):
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
             title=_("Plugins Updated Successfully"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=_("Updates will be installed next time Gajim is started"),
             read=False,
             event=None,
@@ -564,7 +565,7 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
             title=_("Contact Request"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=subject,
             read=False,
             event=event,
@@ -592,7 +593,7 @@ class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
             title=_("Contact Removed"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=subject,
             read=False,
             event=event,
@@ -636,7 +637,7 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
             title=_("Invitation"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=subject,
             read=False,
             event=event,
@@ -671,7 +672,7 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
             title=_("Invitation Declined"),
-            timestamp=dt.datetime.now(),
+            timestamp=utc_now(),
             subject=subject,
             read=False,
             event=event,

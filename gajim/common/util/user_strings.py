@@ -138,8 +138,19 @@ def get_uf_affiliation(affiliation: Affiliation | str, plural: bool = False) -> 
 
 
 def get_uf_relative_time(date_time: dt.datetime, now: dt.datetime | None = None) -> str:
+    # `date_time` must be an aware datetime object with timezone UTC
+    # The parameter `now` is only used by unittests
+
+    if date_time.tzinfo != dt.UTC:
+        raise ValueError("param 'date_time' with timezone =! UTC")
+
     if now is None:  # used by unittest
-        now = dt.datetime.now()
+        now = dt.datetime.now(dt.UTC).astimezone()
+    else:
+        if now.tzinfo != dt.UTC:
+            raise ValueError("param 'now' with timezone =! UTC")
+
+    date_time = date_time.astimezone()
     timespan = now - date_time
 
     if timespan < dt.timedelta(minutes=1):

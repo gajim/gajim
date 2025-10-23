@@ -7,7 +7,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Literal
 
-from datetime import datetime
+import datetime as dt
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -309,7 +309,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def set_stanza_id(self, stanza_id: str | None) -> None:
         self.stanza_id = stanza_id
 
-    def set_timestamp(self, timestamp: datetime) -> None:
+    def set_timestamp(self, timestamp: dt.datetime) -> None:
         self.timestamp = timestamp.timestamp()
         self.update_time()
 
@@ -346,9 +346,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def update_time(self) -> None:
         if self.timestamp == 0:
             return
-        self._ui.timestamp_label.set_text(
-            get_uf_relative_time(datetime.fromtimestamp(self.timestamp))
-        )
+        utc_timestamp = dt.datetime.fromtimestamp(self.timestamp, dt.UTC)
+        self._ui.timestamp_label.set_text(get_uf_relative_time(utc_timestamp))
 
     def update_row_state(self) -> None:
         self.update_time()
