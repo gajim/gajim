@@ -44,7 +44,7 @@
                   <object class="GtkBox" id="_right_box">
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
-                    <property name="valign">start</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="_content_box">
                         <property name="orientation">vertical</property>
@@ -63,7 +63,7 @@
                         <property name="spacing">6</property>
                         <child>
                           <object class="FileControlButtons" id="_file_control_buttons">
-                            <property name="valign">start</property>
+                            <property name="valign">end</property>
                           </object>
                         </child>
                         <child>
