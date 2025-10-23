@@ -572,28 +572,6 @@ class PepConfigBuilder(Builder):
     config_back_button: Gtk.Button
     save_button: Gtk.Button
 
-class PreviewBuilder(Builder):
-    preview_stack: Gtk.Stack
-    preview_box: Gtk.Box
-    icon_event_box: Gtk.Box
-    icon_button: Gtk.Button
-    right_box: Gtk.Box
-    progress_box: Gtk.Box
-    progressbar: Gtk.ProgressBar
-    progress_text: Gtk.Label
-    cancel_download_button: Gtk.Button
-    content_box: Gtk.Box
-    content_overlay: Gtk.Overlay
-    image_button: Gtk.Button
-    link_button: Gtk.LinkButton
-    button_box: Gtk.Box
-    file_name: Gtk.Label
-    file_size: Gtk.Label
-    info_message: Gtk.Label
-    open_folder_button: Gtk.Button
-    save_as_button: Gtk.Button
-    download_button: Gtk.Button
-
 class PreviewAudioBuilder(Builder):
     seek_bar_adj: Gtk.Adjustment
     speed_bar_adj: Gtk.Adjustment
@@ -611,6 +589,8 @@ class PreviewAudioBuilder(Builder):
     speed_menubutton: Gtk.MenuButton
     speed_label: Gtk.Label
     speed_inc_button: Gtk.Button
+    open_folder_button: Gtk.Button
+    save_as_button: Gtk.Button
     speed_popover: Gtk.Popover
     speed_bar: Gtk.Scale
 
@@ -1012,10 +992,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> PepConfigBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["preview.ui"], instance: Any = None, widgets: list[str] = ...
-) -> PreviewBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["preview_audio.ui"],

@@ -86,8 +86,7 @@
     </child>
     <child>
       <object class="GtkBox" id="control_box">
-        <property name="margin-end">6</property>
-        <property name="spacing">10</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkBox">
             <property name="homogeneous">1</property>
@@ -201,6 +200,34 @@
             <style>
               <class name="linked"/>
             </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="open_folder_button">
+            <property name="valign">center</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="yes">Open folder</property>
+            <property name="action-name">app.open-folder</property>
+            <property name="action-target">&apos;&apos;</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-folder-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="save_as_button">
+            <property name="valign">center</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="yes">Save as...</property>
+            <property name="action-name">app.save-file-as</property>
+            <property name="action-target">&apos;&apos;</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-save-symbolic</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

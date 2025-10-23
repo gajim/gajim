@@ -199,6 +199,8 @@ class AudioWidget(Gtk.Box, SignalManager):
         app.check_finalize(self)
 
     def load_audio_file(self, file_path: Path) -> None:
+        self._file_path = file_path
+
         assert self._playbin is not None
 
         self._playbin.send_event(Gst.Event.new_eos())
@@ -251,6 +253,13 @@ class AudioWidget(Gtk.Box, SignalManager):
             return
 
         self._enable_controls(True)
+
+        self._ui.open_folder_button.set_action_target_value(
+            GLib.Variant("s", str(self._file_path))
+        )
+        self._ui.save_as_button.set_action_target_value(
+            GLib.Variant("s", str(self._file_path))
+        )
 
         self._audio_visualizer.render_static_graph(
             self._state.position / self._state.duration
