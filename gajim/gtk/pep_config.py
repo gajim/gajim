@@ -17,6 +17,8 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import types
+from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
@@ -48,6 +50,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
 
         self.account = account
         self._client = app.get_client(account)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._result_node: Node | None = None
         self._dataform_widget: DataFormWidget | None = None
@@ -83,12 +86,24 @@ class PEPConfig(GajimAppWindow, EventHelper):
         self.unregister_events()
         app.check_finalize(self)
 
+    def _on_client_state_changed(
+        self, _client: types.Client, _signal_name: str, state: SimpleClientState
+    ):
+        self._ui.reload_button.set_sensitive(state.is_connected)
+        if not state.is_connected:
+            self._ui.configure_button.set_sensitive(False)
+            self._ui.show_content_button.set_sensitive(False)
+            self._ui.delete_button.set_sensitive(False)
+
     def _on_style_changed(self, *args: Any) -> None:
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
     def _on_services_selection_changed(self, _selection: Gtk.TreeSelection) -> None:
+        if not self._client.state.is_available:
+            return
+
         self._ui.configure_button.set_sensitive(True)
         self._ui.show_content_button.set_sensitive(True)
         self._ui.delete_button.set_sensitive(True)
