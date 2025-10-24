@@ -99,6 +99,16 @@ class GCTooltip:
                 hat_badge = Gtk.Box(spacing=6, halign=Gtk.Align.START)
                 hat_badge.add_css_class("badge")
                 hat_badge.add_css_class("badge-hat")
+                if hat.hue is not None:
+                    css_provider = Gtk.CssProvider()
+                    css_provider.load_from_string(
+                        ".badge-hat "
+                        f"{{background-color: hsl({hat.hue * 360}, 100%, 25%);}}"
+                    )
+                    context = hat_badge.get_style_context()
+                    context.add_provider(
+                        css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+                    )
 
                 hat_badge_icon = Gtk.Image.new_from_icon_name("lucide-tag-symbolic")
                 hat_badge.append(hat_badge_icon)
