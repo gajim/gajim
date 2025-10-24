@@ -130,9 +130,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._load_avatar()
 
         self._contact_name_widget = ContactNameWidget(
-            contact=self.contact, edit_mode=True
+            contact=self.contact, edit_mode=self.contact.is_in_roster
         )
-
         self._connect(
             self._contact_name_widget, "name-updated", self._on_contact_name_updated
         )
