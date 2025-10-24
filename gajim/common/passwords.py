@@ -131,6 +131,8 @@ class SecretPasswordStorage:
             _interface.backend.delete_password('gajim', account_name)
         except keyring_errors:
             pass
+        except Exception:
+            pass
 
         try:
             return _interface.backend.delete_password('gajim', account_jid)
