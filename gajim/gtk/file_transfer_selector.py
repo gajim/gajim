@@ -207,8 +207,12 @@ class FileTransferSelector(Gtk.Box, SignalManager):
         return bool(formats.contain_gtype(Gdk.FileList))
 
     def _on_file_drop(
-        self, _target: Gtk.DropTarget, value: Gdk.FileList, _x: float, _y: float
+        self, _target: Gtk.DropTarget, value: Gdk.FileList | None, _x: float, _y: float
     ) -> bool:
+        if value is None:
+            log.debug("Drop received, but value is None")
+            return False
+
         files = value.get_files()
         if not files:
             return False
