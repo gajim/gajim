@@ -96,7 +96,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             ]
         )
 
-        self._timer_id = GLib.timeout_add_seconds(60, self._update_row_state)
+        app.pulse_manager.add_callback(self._update_row_state)
 
     def do_unroot(self) -> None:
         Gtk.ListBox.do_unroot(self)
@@ -106,7 +106,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self.set_filter_func(None)
         self.set_header_func(None)
         self.set_sort_func(None)
-        GLib.source_remove(self._timer_id)
+        app.pulse_manager.remove_callback(self._update_row_state)
         app.check_finalize(self)
 
     @property

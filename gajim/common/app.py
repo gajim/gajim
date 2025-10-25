@@ -54,6 +54,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.draft import DraftStorage
     from gajim.common.storage.events.storage import EventStorage
+    from gajim.common.task_manager import PulseManager
     from gajim.common.task_manager import TaskManager
 
     from gajim.gtk.application import GajimApplication  # noqa: F401
@@ -106,6 +107,7 @@ preview_manager = cast('PreviewManager', None)
 ftm = cast('FileTransferManager', None)
 
 task_manager = cast('TaskManager', None)
+pulse_manager = cast('PulseManager', None)
 
 gupnp_igd = None
 

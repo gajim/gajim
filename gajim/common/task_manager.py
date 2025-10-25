@@ -4,9 +4,12 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import functools
 import logging
 import queue
+from collections.abc import Callable
 
 from gi.repository import GLib
 
@@ -96,3 +99,25 @@ class Task:
 
     def preconditions_met(self) -> bool:
         raise NotImplementedError
+
+
+class PulseManager:
+    def __init__(self) -> None:
+        self._callbacks: list[Callable[[], Any]] = []
+        self._timeout_id = GLib.timeout_add_seconds(60, self._execute_pulse)
+
+    def add_callback(self, callback: Callable[[], Any]) -> None:
+        self._callbacks.append(callback)
+
+    def remove_callback(self, callback: Callable[[], Any]) -> None:
+        self._callbacks.remove(callback)
+
+    def _execute_pulse(self) -> bool:
+        log.info('Execute pulse for %s callbacks', len(self._callbacks))
+        for callback in self._callbacks:
+            try:
+                callback()
+            except Exception:
+                log.exception('Unable to execute pulse')
+
+        return GLib.SOURCE_CONTINUE
