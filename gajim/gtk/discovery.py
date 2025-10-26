@@ -37,6 +37,7 @@ from typing import Concatenate
 from typing import Generic
 from typing import TypeVar
 
+import logging
 import types
 import weakref
 from collections.abc import Callable
@@ -44,15 +45,15 @@ from collections.abc import Iterator
 
 from gi.repository import GLib
 from gi.repository import Gtk
-from nbxmpp import Node
-from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.pubsub import PubSubSubscription
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import DiscoItem
 from nbxmpp.structs import DiscoItems
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -69,6 +70,7 @@ from gajim.gtk.widgets import GajimAppWindow
 _T = TypeVar("_T")
 _InfoCacheT = tuple[list[DiscoIdentity], list[str], list[Any]]
 
+log = logging.getLogger("gajim.gtk.discovery")
 
 LABELS = {
     1: _("This service has not yet responded with detailed information"),
@@ -2012,8 +2014,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.unsubscribe_button = None
 
         client = app.get_client(account)
-        client.get_module("PubSub").send_pb_subscription_query(
-            jid, self._on_pep_subscriptions
+        client.get_module("PubSub").get_subscriptions(
+            jid, callback=self._on_subscriptions_received
         )
 
     def _create_treemodel(self):
@@ -2167,8 +2169,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         node = model.get_value(iter_, 1)  # 1 = groupnode
 
         client = app.get_client(self.account)
-        client.get_module("PubSub").send_pb_subscribe(
-            self.jid, node, self._on_pep_subscribe, groupnode=node
+        client.get_module("PubSub").subscribe(
+            node, self.jid, callback=self._on_subscribe_response, user_data=node
         )
 
     def _on_unsubscribe_button_clicked(self, _button: Gtk.Button) -> None:
@@ -2182,31 +2184,22 @@ class DiscussionGroupsBrowser(AgentBrowser):
         node = model.get_value(iter_, 1)  # 1 = groupnode
 
         client = app.get_client(self.account)
-        client.get_module("PubSub").send_pb_unsubscribe(
-            self.jid, node, self._on_pep_unsubscribe, groupnode=node
+        client.get_module("PubSub").unsubscribe(
+            node, self.jid, callback=self._on_unsubscribe_response, user_data=node
         )
 
-    def _on_pep_subscriptions(self, _nbxmpp_client: NBXMPPClient, stanza: Node) -> None:
-        """
-        We got the subscribed groups list stanza. Now, if we already have items
-        on the list, we should actualize them
-        """
-
-        pubsub = stanza.getTag("pubsub")
-        if pubsub is None:
+    def _on_subscriptions_received(self, task: Task) -> None:
+        try:
+            result = cast(list[PubSubSubscription], task.finish())
+        except Exception as error:
+            log.exception("Failed to retrieve subscriptions: %s", error)
             return
 
-        subscriptions = pubsub.getTag("subscriptions")
-        if subscriptions is None:
-            return
+        groups = {sub.node for sub in result}
+        if groups:
+            log.info("Received subscribed nodes: %s", ", ".join(groups))
 
-        groups_: set[str] = set()
-        for child in subscriptions.getTags("subscription"):
-            node = child["node"]
-            assert node is not None
-            groups_.add(node)
-
-        self.subscriptions = groups_
+        self.subscriptions = groups
 
         # Try to setup existing items in model
         model = self.window.services_treeview.get_model()
@@ -2217,17 +2210,23 @@ class DiscussionGroupsBrowser(AgentBrowser):
             # 4 = subscribed?
             groupnode = row[1]
             row[3] = False
-            row[4] = groupnode in groups_
+            row[4] = groupnode in groups
 
         # we now know subscriptions, update button states
         self.update_actions()
 
-    def _on_pep_subscribe(
-        self, _nbxmpp_client: NBXMPPClient, _stanza: Node, groupnode: str
-    ) -> None:
-        """
-        We have just subscribed to a node. Update UI
-        """
+    def _on_subscribe_response(self, task: Task) -> None:
+        groupnode = cast(str, task.get_user_data())
+        try:
+            result = cast(PubSubSubscription, task.finish())
+        except Exception as error:
+            log.exception("Failed to subscribe: %s, %s", groupnode, error)
+            return
+
+        if result.subscription != "subscribed":
+            log.warning("Unhandled subscription value: %s", result.subscription)
+            return
+
         assert self.subscriptions is not None
         self.subscriptions.add(groupnode)
 
@@ -2240,12 +2239,14 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.update_actions()
 
-    def _on_pep_unsubscribe(
-        self, _nbxmpp_client: NBXMPPClient, _stanza: Node, groupnode: str
-    ) -> None:
-        """
-        We have just unsubscribed from a node. Update UI
-        """
+    def _on_unsubscribe_response(self, task: Task) -> None:
+        groupnode = cast(str, task.get_user_data())
+        try:
+            task.finish()
+        except Exception as error:
+            log.exception("Failed to unsubscribe: %s, %s", groupnode, error)
+            return
+
         assert self.subscriptions is not None
         self.subscriptions.remove(groupnode)
 
