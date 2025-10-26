@@ -102,6 +102,7 @@ def _gen_agent_type_info():
         ("directory", "user"): (None, "jud"),
         ("pubsub", "generic"): (DiscussionGroupsBrowser, "pubsub"),
         ("pubsub", "service"): (DiscussionGroupsBrowser, "pubsub"),
+        ("pubsub", "pep"): (DiscussionGroupsBrowser, "pubsub"),
         ("proxy", "bytestreams"): (None, "bytestreams"),  # Socks5 FT proxy
         ("headline", "newmail"): (ToplevelAgentBrowser, "mail"),
         # Transports
