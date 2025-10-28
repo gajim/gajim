@@ -16,11 +16,17 @@ import weakref
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
 from nbxmpp.modules.vcard4 import VCard
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
+from nbxmpp.protocol import Message
+from nbxmpp.structs import MessageProperties
 from nbxmpp.task import Task
 
+from gajim.common import app
 from gajim.common import types
+from gajim.common.events import VCard4Received
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
 
 MAX_CACHE_SECONDS = 60
 
@@ -35,6 +41,41 @@ class VCard4(BaseModule):
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self._vcard_cache: dict[JID, tuple[float, VCard]] = {}
+        self._own_vcard: VCard = VCard()
+        self._register_pubsub_handler(self._vcard_event_received)
+
+    @event_node(Namespace.VCARD4_PUBSUB)
+    def _vcard_event_received(self,
+                                  _con: types.NBXMPPClient,
+                                  _stanza: Message,
+                                  properties: MessageProperties
+                                  ) -> None:
+
+        assert properties.jid is not None
+        if not properties.jid.bare_match(self._get_own_bare_jid()):
+            self._log.info(
+                "Ignore VCard4 event not from our account: %s", properties.jid)
+            return
+
+        assert properties.pubsub_event is not None
+        if (properties.pubsub_event.deleted
+                or properties.pubsub_event.purged
+                or properties.pubsub_event.retracted):
+            self._log.info('VCard4 node deleted/purged/retracted')
+            self._own_vcard = VCard()
+
+        else:
+            self._log.info("Received VCard4 event from %s", properties.jid)
+            self._own_vcard = cast(VCard, properties.pubsub_event.data)
+
+        app.ged.raise_event(VCard4Received(self._account, self._own_vcard))
+
+    def subscribe_to_node(self) -> None:
+        self._log.info("Subscribe to node")
+        self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB)
+
+    def get_own_vcard(self) -> VCard:
+        return self._own_vcard
 
     def request_vcard(
         self, jid: JID, callback: Any, use_cache: bool = False

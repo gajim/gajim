@@ -21,6 +21,7 @@ from nbxmpp.const import MessageType as NBXMPPMessageType
 from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.security_labels import Catalog
+from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import LocationData
@@ -326,6 +327,13 @@ class FeatureDiscovered(ApplicationEvent):
 class BookmarksReceived(ApplicationEvent):
     name: str = field(init=False, default='bookmarks-received')
     account: str
+
+
+@dataclass
+class VCard4Received(ApplicationEvent):
+    name: str = field(init=False, default='vcard4-received')
+    account: str
+    vcard: VCard
 
 
 @dataclass
