@@ -201,6 +201,22 @@ class HTTPUpload(BaseModule):
 
         obj.cancel()
 
+    @staticmethod
+    def _uri_is_acceptable(uri: str | None) -> bool:
+        if not uri:
+            return False
+
+        parts = urlparse(uri)
+        if parts.scheme not in ("http", "https"):
+            return False
+
+        # Remove port
+        domain = parts.netloc.split(":", maxsplit=1)[0]
+        if domain.endswith(".onion"):
+            return True
+
+        return parts.scheme != "http"
+
     def _received_slot(self, task: Task) -> None:
         transfer = cast(HTTPFileTransfer, task.get_user_data())
 
@@ -226,8 +242,8 @@ class HTTPUpload(BaseModule):
 
         transfer.process_result(result)
 
-        if (urlparse(transfer.put_uri).scheme != 'https' or
-                urlparse(transfer.get_uri).scheme != 'https'):
+        if (not self._uri_is_acceptable(transfer.put_uri) or
+                not self._uri_is_acceptable(transfer.get_uri)):
             transfer.set_error('unsecure')
             return
 
