@@ -10,16 +10,16 @@ from pathlib import Path
 
 from gajim.common import configpaths
 
-DOMAIN = 'gajim_plugins'
+DOMAIN = "gajim_plugins"
 try:
-    plugin_user_dir = configpaths.get('PLUGINS_USER')
+    plugin_user_dir = configpaths.get("PLUGINS_USER")
 except KeyError:
     # This allows to import the module for tests
-    print('No plugin translation path available')
+    print("No plugin translation path available")
     plugin_user_dir = Path.cwd()
 
 
-plugins_locale_dir = plugin_user_dir / 'locale'
+plugins_locale_dir = plugin_user_dir / "locale"
 
 try:
     t = gettext.translation(DOMAIN, plugins_locale_dir)
@@ -27,5 +27,5 @@ try:
 except OSError:
     _ = gettext.gettext
 
-if hasattr(locale, 'bindtextdomain'):
+if hasattr(locale, "bindtextdomain"):
     locale.bindtextdomain(DOMAIN, plugins_locale_dir)

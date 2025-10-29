@@ -19,21 +19,21 @@ from gajim.common.types import PluginExtensionPoints
 
 from .manifest import PluginManifest
 
-log = logging.getLogger('gajim.p.plugin')
+log = logging.getLogger("gajim.p.plugin")
 
 
 class GajimPlugin:
-    '''
+    """
     Base class for implementing Gajim plugins.
-    '''
+    """
 
-    __path__: str = ''
+    __path__: str = ""
 
-    encryption_name: str = ''
+    encryption_name: str = ""
     manifest: PluginManifest
 
     gui_extension_points: PluginExtensionPoints = {}
-    '''
+    """
     Extension points that plugin wants to connect with and handlers to be used.
 
     Keys of this string should be strings with name of GUI extension point
@@ -45,9 +45,9 @@ class GajimPlugin:
     Disconnecting takes place when plugin is deactivated and extpoint exists
     or when extpoint is destroyed and plugin is activate (eg. chat window
     closed).
-    '''
+    """
     config_default_values: dict[str, tuple[Any, str]] = {}
-    '''
+    """
     Default values for keys that should be stored in plug-in config.
 
     This dict is used when when someone calls for config option but it has not
@@ -57,27 +57,27 @@ class GajimPlugin:
     be anything (this is the advantage of using shelve/pickle instead of
     custom-made     config I/O handling); the second one should be str (gettext
     can be used if need and/or translation is planned).
-    '''
+    """
     events_handlers: dict[str, tuple[int, HandlerFuncT]] = {}
-    '''
+    """
     Dictionary with events handlers.
 
     Keys are event names. Values should be 2-element tuples with handler
     priority as first element and reference to handler function as second
     element. Priority is integer. See `ged` module for predefined priorities
     like `ged.PRECORE`, `ged.CORE` or `ged.POSTCORE`.
-    '''
+    """
     events: list[ApplicationEvent] = []
-    '''
+    """
     New network event classes to be registered in Network Events Controller.
-    '''
+    """
     modules: list[types.ModuleType] = []
 
     def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
         self.activatable = True
         self.active = False
-        self.available_text = ''
+        self.available_text = ""
         self.load_config()
         self.config_dialog = None
         self.init()
@@ -115,8 +115,9 @@ class GajimPlugin:
 class GajimPluginConfig:
     def __init__(self, plugin: GajimPlugin) -> None:
         self.plugin = plugin
-        self.FILE_PATH = (configpaths.get('PLUGINS_CONFIG_DIR') /
-                          self.plugin.manifest.short_name)
+        self.FILE_PATH = (
+            configpaths.get("PLUGINS_CONFIG_DIR") / self.plugin.manifest.short_name
+        )
         self.data: dict[str, Any] = {}
 
     def __getitem__(self, key: str) -> None:
@@ -147,7 +148,7 @@ class GajimPluginConfig:
         return self.data.items()
 
     def save(self) -> None:
-        with open(self.FILE_PATH, 'wb') as fd:
+        with open(self.FILE_PATH, "wb") as fd:
             pickle.dump(self.data, fd)
 
     def load(self) -> None:
@@ -155,29 +156,32 @@ class GajimPluginConfig:
             self.data = {}
             self.save()
             return
-        with open(self.FILE_PATH, 'rb') as fd:
+        with open(self.FILE_PATH, "rb") as fd:
             try:
                 self.data = pickle.load(fd)
             except Exception:
                 try:
                     import shelve
+
                     shelf = shelve.open(str(self.FILE_PATH))
-                    for (key, value) in shelf.items():
+                    for key, value in shelf.items():
                         self.data[key] = value
                     if not isinstance(self.data, dict):  # pyright: ignore
                         raise GajimPluginException
                     shelf.close()
                     self.save()
                 except Exception:
-                    filepath_bak = self.FILE_PATH.with_suffix('bak')
+                    filepath_bak = self.FILE_PATH.with_suffix("bak")
                     log.warning(
-                        '%s plugin config file not readable. Saving it as '
-                        '%s and creating a new one',
-                        self.plugin.manifest.short_name, filepath_bak)
+                        "%s plugin config file not readable. Saving it as "
+                        "%s and creating a new one",
+                        self.plugin.manifest.short_name,
+                        filepath_bak,
+                    )
                     if filepath_bak.exists():
                         filepath_bak.unlink()
 
-                    self.FILE_PATH.rename(f'{self.FILE_PATH}.bak')
+                    self.FILE_PATH.rename(f"{self.FILE_PATH}.bak")
                     self.data = {}
                     self.save()
 

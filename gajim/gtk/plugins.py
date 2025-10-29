@@ -150,7 +150,9 @@ class Plugins(GajimPreferencesGroup):
         def _on_response() -> None:
             plugin = app.plugin_manager.install_from_zip(zip_filename, overwrite=True)
             if not plugin:
-                InformationAlertDialog(_("Archive Malformed"), _("Archive is malformed"))
+                InformationAlertDialog(
+                    _("Archive Malformed"), _("Archive is malformed")
+                )
                 return
 
         try:

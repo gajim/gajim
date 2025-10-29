@@ -12,11 +12,11 @@ from .manifest import PluginManifest
 
 @dataclass
 class PluginAdded(ApplicationEvent):
-    name: str = field(init=False, default='plugin-added')
+    name: str = field(init=False, default="plugin-added")
     manifest: PluginManifest
 
 
 @dataclass
 class PluginRemoved(ApplicationEvent):
-    name: str = field(init=False, default='plugin-removed')
+    name: str = field(init=False, default="plugin-removed")
     manifest: PluginManifest

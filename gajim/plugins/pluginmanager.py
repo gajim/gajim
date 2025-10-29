@@ -36,71 +36,67 @@ from .helpers import GajimPluginActivateException
 from .helpers import is_shipped_plugin
 from .manifest import PluginManifest
 
-log = logging.getLogger('gajim.p.manager')
+log = logging.getLogger("gajim.p.manager")
 
 RmErrorT = tuple[type[BaseException], BaseException, TracebackType]
 
-FIELDS = ('name',
-          'short_name',
-          'version',
-          'description',
-          'authors',
-          'homepage')
+FIELDS = ("name", "short_name", "version", "description", "authors", "homepage")
 
 
 class PluginManager(metaclass=Singleton):
-    '''
+    """
     Main plug-in management class.
-    '''
+    """
 
     def __init__(self):
         self.plugins: list[GajimPlugin] = []
-        '''
+        """
         Detected plugin classes.
 
         Each class object in list is `GajimPlugin` subclass.
-        '''
+        """
         self.active_plugins: list[GajimPlugin] = []
-        '''
+        """
         Instance objects of active plugins.
 
         These are object instances of classes held `plugins`, but only those
         that were activated.
-        '''
+        """
         self.gui_extension_points: dict[str, Any] = {}
-        '''
+        """
         Registered GUI extension points.
-        '''
+        """
 
         self.gui_extension_points_handlers: dict[str, Any] = {}
-        '''
+        """
         Registered handlers of GUI extension points.
-        '''
+        """
 
         self.encryption_plugins: dict[str, GajimPlugin] = {}
-        '''
+        """
         Registered names with instances of encryption Plugins.
-        '''
+        """
 
         self.update_plugins()
         self._load_manifests()
 
-    def update_plugins(self,
-                       replace: bool = True,
-                       activate: bool = False,
-                       plugin_name: str | None = None
-                       ) -> list[str]:
-        '''
+    def update_plugins(
+        self,
+        replace: bool = True,
+        activate: bool = False,
+        plugin_name: str | None = None,
+    ) -> list[str]:
+        """
         Move plugins from the downloaded folder to the user plugin folder
 
         :param replace: replace plugin files if they already exist.
         :param activate: load and activate the plugin
         :param plugin_name: if provided, update only this plugin
         :return: list of updated plugins (files have been installed)
-        '''
+        """
         updated_plugins: list[str] = []
-        user_dir = configpaths.get('PLUGINS_USER')
-        dl_dir = configpaths.get('PLUGINS_DOWNLOAD')
+        user_dir = configpaths.get("PLUGINS_USER")
+        dl_dir = configpaths.get("PLUGINS_DOWNLOAD")
         to_update = [plugin_name] if plugin_name else next(os.walk(dl_dir))[1]
         for directory in to_update:
             src_dir = dl_dir / directory
@@ -112,15 +108,19 @@ class PluginManager(metaclass=Singleton):
                     self.delete_plugin_files(dst_dir)
                 move(src_dir, dst_dir)
             except Exception:
-                log.exception('Upgrade of plugin %s failed. '
-                              'Impossible to move files from "%s" to "%s"',
-                              directory, src_dir, dst_dir)
+                log.exception(
+                    "Upgrade of plugin %s failed. "
+                    'Impossible to move files from "%s" to "%s"',
+                    directory,
+                    src_dir,
+                    dst_dir,
+                )
                 continue
             updated_plugins.append(directory)
             if activate:
                 manifest = self._load_manifest(Path(dst_dir))
                 if manifest is None or not manifest.is_usable:
-                    log.warning('Error while updating plugin')
+                    log.warning("Error while updating plugin")
                     continue
 
                 self._add_plugin(manifest, activate=True)
@@ -128,8 +128,9 @@ class PluginManager(metaclass=Singleton):
 
     def init_plugins(self) -> None:
         for plugin in self.plugins:
-            if not app.settings.get_plugin_setting(plugin.manifest.short_name,
-                                                   'active'):
+            if not app.settings.get_plugin_setting(
+                plugin.manifest.short_name, "active"
+            ):
                 continue
             if not plugin.activatable:
                 continue
@@ -140,15 +141,13 @@ class PluginManager(metaclass=Singleton):
                 plugin.activatable = False
                 plugin.available_text = str(error)
 
-    def _load_plugin_module(self,
-                            manifest: PluginManifest
-                            ) -> type[GajimPlugin] | None:
+    def _load_plugin_module(self, manifest: PluginManifest) -> type[GajimPlugin] | None:
 
         assert manifest.path is not None
-        module_path = manifest.path / '__init__.py'
+        module_path = manifest.path / "__init__.py"
         if not module_path.exists():
             # On Windows we only ship compiled files
-            module_path = manifest.path / '__init__.pyc'
+            module_path = manifest.path / "__init__.pyc"
 
         module_name = manifest.path.stem
 
@@ -162,7 +161,7 @@ class PluginManager(metaclass=Singleton):
             spec.loader.exec_module(module)
         except Exception as error:
             log.warning(
-                '%s: Error while loading module: %s', manifest.short_name, error
+                "%s: Error while loading module: %s", manifest.short_name, error
             )
             return None
 
@@ -174,31 +173,32 @@ class PluginManager(metaclass=Singleton):
                 return module_attr
         return None
 
-    def _add_plugin(self,
-                    manifest: PluginManifest,
-                    activate: bool = False
-                    ) -> GajimPlugin | None:
+    def _add_plugin(
+        self, manifest: PluginManifest, activate: bool = False
+    ) -> GajimPlugin | None:
 
         plugin_class = self._load_plugin_module(manifest)
         if plugin_class is None:
             return None
 
         if manifest in [p.manifest for p in self.plugins]:
-            log.info('Not loading plugin %s v %s. Plugin already loaded.',
-                     manifest.short_name,
-                     manifest.version)
+            log.info(
+                "Not loading plugin %s v %s. Plugin already loaded.",
+                manifest.short_name,
+                manifest.version,
+            )
             return None
 
         try:
             plugin_obj = plugin_class()
         except Exception:
-            log.exception('Error while loading a plugin')
+            log.exception("Error while loading a plugin")
             return None
 
         if manifest.short_name not in app.settings.get_plugins():
-            app.settings.set_plugin_setting(manifest.short_name,
-                                            'active',
-                                            manifest.is_shipped)
+            app.settings.set_plugin_setting(
+                manifest.short_name, "active", manifest.is_shipped
+            )
 
         self.plugins.append(plugin_obj)
         plugin_obj.active = False
@@ -211,23 +211,24 @@ class PluginManager(metaclass=Singleton):
         return plugin_obj
 
     def _remove_plugin(self, plugin: GajimPlugin) -> None:
-        '''
+        """
         removes the plugin from the plugin list and deletes all loaded modules
         from sys. This way we will have a fresh start when the plugin gets added
         again.
-        '''
+        """
         if plugin.active:
             self.deactivate_plugin(plugin)
 
         self.plugins.remove(plugin)
 
         # remove modules from cache
-        base_package = plugin.__module__.split('.')[0]
+        base_package = plugin.__module__.split(".")[0]
         # get the subpackages/-modules of the base_package. Add a dot to the
         # name to avoid name problems (removing module_abc if base_package is
         # module_ab)
-        modules_to_remove = [module for module in sys.modules
-                             if module.startswith(f'{base_package}.')]
+        modules_to_remove = [
+            module for module in sys.modules if module.startswith(f"{base_package}.")
+        ]
         # remove the base_package itself
         if base_package in sys.modules:
             modules_to_remove.append(base_package)
@@ -248,7 +249,7 @@ class PluginManager(metaclass=Singleton):
         return None
 
     def extension_point(self, gui_extpoint_name: str, *args: Any) -> None:
-        '''
+        """
         Invokes all handlers (from plugins) for a particular extension point,
         but doesn't add it to collection for further processing.
         For example if you pass a message for encryption via extension point to
@@ -260,13 +261,12 @@ class PluginManager(metaclass=Singleton):
                 (typically and object that invokes `gui_extension_point`;
                 however, this can be practically anything)
         :type args: tuple
-        '''
+        """
 
-        self._execute_all_handlers_of_gui_extension_point(
-            gui_extpoint_name, *args)
+        self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name, *args)
 
     def gui_extension_point(self, gui_extpoint_name: str, *args: Any) -> None:
-        '''
+        """
         Invokes all handlers (from plugins) for particular GUI extension point
         and adds it to collection for further processing (eg. by plugins not
         active yet).
@@ -276,18 +276,13 @@ class PluginManager(metaclass=Singleton):
                 (typically and object that invokes `gui_extension_point`;
                 however, this can be practically anything)
         :type args: tuple
-        '''
+        """
 
         self._add_gui_extension_point_call_to_list(gui_extpoint_name, *args)
-        self._execute_all_handlers_of_gui_extension_point(
-            gui_extpoint_name,
-            *args)
+        self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name, *args)
 
-    def remove_gui_extension_point(self,
-                                   gui_extpoint_name: str,
-                                   *args: Any
-                                   ) -> None:
-        '''
+    def remove_gui_extension_point(self, gui_extpoint_name: str, *args: Any) -> None:
+        """
         Removes GUI extension point from collection held by `PluginManager`.
 
         From this point this particular extension point won't be visible
@@ -312,14 +307,12 @@ class PluginManager(metaclass=Singleton):
                 called with for this extension point. This is used (along with
                 extension point name) to identify element to be removed.
         :type args: tuple
-        '''
+        """
         if gui_extpoint_name in self.gui_extension_points:
-            extension_points = list(self.gui_extension_points[
-                gui_extpoint_name])
+            extension_points = list(self.gui_extension_points[gui_extpoint_name])
             for ext_point in extension_points:
                 if args[0] in ext_point:
-                    self.gui_extension_points[gui_extpoint_name].remove(
-                        ext_point)
+                    self.gui_extension_points[gui_extpoint_name].remove(ext_point)
 
         if gui_extpoint_name not in self.gui_extension_points_handlers:
             return
@@ -329,11 +322,10 @@ class PluginManager(metaclass=Singleton):
             if disconnect_handler is not None:
                 disconnect_handler(args[0])
 
-    def _add_gui_extension_point_call_to_list(self,
-                                              gui_extpoint_name: str,
-                                              *args: Any
-                                              ) -> None:
-        '''
+    def _add_gui_extension_point_call_to_list(
+        self, gui_extpoint_name: str, *args: Any
+    ) -> None:
+        """
         Adds GUI extension point call to list of calls.
 
         This is done only if such call hasn't been added already
@@ -349,47 +341,41 @@ class PluginManager(metaclass=Singleton):
                 however, this can be practically anything)
         :type args: tuple
 
-        '''
-        if (gui_extpoint_name not in self.gui_extension_points or
-                args not in self.gui_extension_points[gui_extpoint_name]):
-            self.gui_extension_points.setdefault(gui_extpoint_name, []).append(
-                args)
+        """
+        if (
+            gui_extpoint_name not in self.gui_extension_points
+            or args not in self.gui_extension_points[gui_extpoint_name]
+        ):
+            self.gui_extension_points.setdefault(gui_extpoint_name, []).append(args)
 
-    def _execute_all_handlers_of_gui_extension_point(self,
-                                                     gui_extpoint_name: str,
-                                                     *args: Any
-                                                     ) -> None:
+    def _execute_all_handlers_of_gui_extension_point(
+        self, gui_extpoint_name: str, *args: Any
+    ) -> None:
         if gui_extpoint_name in self.gui_extension_points_handlers:
-            for handlers in self.gui_extension_points_handlers[
-                    gui_extpoint_name]:
+            for handlers in self.gui_extension_points_handlers[gui_extpoint_name]:
                 try:
                     handlers[0](*args)
                 except Exception:
-                    log.warning('Error executing %s',
-                                handlers[0], exc_info=True)
+                    log.warning("Error executing %s", handlers[0], exc_info=True)
 
     def _register_events_handlers_in_ged(self, plugin: GajimPlugin) -> None:
         for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
-            app.ged.register_event_handler(
-                event_name, priority, handler_function)
+            app.ged.register_event_handler(event_name, priority, handler_function)
 
     def _remove_events_handler_from_ged(self, plugin: GajimPlugin) -> None:
         for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
-            app.ged.remove_event_handler(
-                event_name, priority, handler_function)
+            app.ged.remove_event_handler(event_name, priority, handler_function)
 
-    def _remove_name_from_encryption_plugins(self,
-                                             plugin: GajimPlugin
-                                             ) -> None:
+    def _remove_name_from_encryption_plugins(self, plugin: GajimPlugin) -> None:
         if plugin.encryption_name:
             del self.encryption_plugins[plugin.encryption_name]
 
     def _register_modules_with_handlers(self, plugin: GajimPlugin) -> None:
-        if not hasattr(plugin, 'modules'):
+        if not hasattr(plugin, "modules"):
             return
         for client in app.get_clients():
             for module in plugin.modules:
@@ -400,7 +386,7 @@ class PluginManager(metaclass=Singleton):
                     client.connection.register_handler(handler)
 
     def _unregister_modules_with_handlers(self, plugin: GajimPlugin) -> None:
-        if not hasattr(plugin, 'modules'):
+        if not hasattr(plugin, "modules"):
             return
         for client in app.get_clients():
             for module in plugin.modules:
@@ -411,10 +397,10 @@ class PluginManager(metaclass=Singleton):
                     client.connection.unregister_handler(handler)
 
     def activate_plugin(self, plugin: GajimPlugin, init: bool = False) -> None:
-        '''
+        """
         :param plugin: plugin to be activated
         :type plugin: class object of `GajimPlugin` subclass
-        '''
+        """
         if plugin.active or not plugin.activatable:
             return
 
@@ -430,9 +416,7 @@ class PluginManager(metaclass=Singleton):
         except GajimPluginException as e:
             self.deactivate_plugin(plugin)
             raise GajimPluginActivateException(str(e))
-        app.settings.set_plugin_setting(plugin.manifest.short_name,
-                                        'active',
-                                        True)
+        app.settings.set_plugin_setting(plugin.manifest.short_name, "active", True)
         plugin.active = True
 
         if not init:
@@ -441,26 +425,31 @@ class PluginManager(metaclass=Singleton):
     def deactivate_plugin(self, plugin: GajimPlugin) -> None:
         # remove GUI extension points handlers (provided by plug-in) from
         # handlers list
-        for gui_extpoint_name, gui_extpoint_handlers in \
-                plugin.gui_extension_points.items():
+        for (
+            gui_extpoint_name,
+            gui_extpoint_handlers,
+        ) in plugin.gui_extension_points.items():
             self.gui_extension_points_handlers[gui_extpoint_name].remove(
-                gui_extpoint_handlers)
+                gui_extpoint_handlers
+            )
 
         # detaching plug-in from handler GUI extension points (calling
         # cleaning up method that must be provided by plug-in developer
         # for each handled GUI extension point)
-        for gui_extpoint_name, gui_extpoint_handlers in \
-                plugin.gui_extension_points.items():
+        for (
+            gui_extpoint_name,
+            gui_extpoint_handlers,
+        ) in plugin.gui_extension_points.items():
             if gui_extpoint_name in self.gui_extension_points:
                 for gui_extension_point_args in self.gui_extension_points[
-                        gui_extpoint_name]:
+                    gui_extpoint_name
+                ]:
                     handler = gui_extpoint_handlers[1]
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
                         except Exception:
-                            log.warning('Error executing %s',
-                                        handler, exc_info=True)
+                            log.warning("Error executing %s", handler, exc_info=True)
 
         self._remove_events_handler_from_ged(plugin)
         self._remove_name_from_encryption_plugins(plugin)
@@ -471,50 +460,51 @@ class PluginManager(metaclass=Singleton):
 
         self._unregister_modules_with_handlers(plugin)
         self.active_plugins.remove(plugin)
-        app.settings.set_plugin_setting(plugin.manifest.short_name,
-                                        'active',
-                                        False)
+        app.settings.set_plugin_setting(plugin.manifest.short_name, "active", False)
         plugin.active = False
         app.commands.init()
 
-    def _add_gui_extension_points_handlers_from_plugin(self,
-                                                       plugin: GajimPlugin
-                                                       ) -> None:
-        for gui_extpoint_name, gui_extpoint_handlers in \
-                plugin.gui_extension_points.items():
-            self.gui_extension_points_handlers.setdefault(
-                gui_extpoint_name, []).append(gui_extpoint_handlers)
+    def _add_gui_extension_points_handlers_from_plugin(
+        self, plugin: GajimPlugin
+    ) -> None:
+        for (
+            gui_extpoint_name,
+            gui_extpoint_handlers,
+        ) in plugin.gui_extension_points.items():
+            self.gui_extension_points_handlers.setdefault(gui_extpoint_name, []).append(
+                gui_extpoint_handlers
+            )
 
     def _add_encryption_name_from_plugin(self, plugin: GajimPlugin) -> None:
         if plugin.encryption_name:
             self.encryption_plugins[plugin.encryption_name] = plugin
 
-    def _handle_all_gui_extension_points_with_plugin(self,
-                                                     plugin: GajimPlugin
-                                                     ) -> None:
-        for gui_extpoint_name, gui_extpoint_handlers in \
-                plugin.gui_extension_points.items():
+    def _handle_all_gui_extension_points_with_plugin(self, plugin: GajimPlugin) -> None:
+        for (
+            gui_extpoint_name,
+            gui_extpoint_handlers,
+        ) in plugin.gui_extension_points.items():
             if gui_extpoint_name in self.gui_extension_points:
                 for gui_extension_point_args in self.gui_extension_points[
-                        gui_extpoint_name]:
+                    gui_extpoint_name
+                ]:
                     handler = gui_extpoint_handlers[0]
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
                         except Exception:
-                            log.warning('Error executing %s',
-                                        handler, exc_info=True)
+                            log.warning("Error executing %s", handler, exc_info=True)
 
     def register_modules_for_account(self, client: Client) -> None:
-        '''
+        """
         A new account has been added, register modules
         of all active plugins
-        '''
+        """
         for plugin in self.plugins:
             if not plugin.active:
                 continue
 
-            if not hasattr(plugin, 'modules'):
+            if not hasattr(plugin, "modules"):
                 continue
 
             for module in plugin.modules:
@@ -529,7 +519,7 @@ class PluginManager(metaclass=Singleton):
         try:
             return PluginManifest.from_path(plugin_path)
         except Exception as error:
-            log.debug('Unable to load manifest: %s', error)
+            log.debug("Unable to load manifest: %s", error)
             return None
 
     def _load_manifests(self) -> None:
@@ -545,9 +535,9 @@ class PluginManager(metaclass=Singleton):
 
                 if not manifest.is_usable:
                     log.info(
-                        'Skipped plugin with not suitable requirements: %s %s',
+                        "Skipped plugin with not suitable requirements: %s %s",
                         manifest.short_name,
-                        manifest.requirements
+                        manifest.requirements,
                     )
                     continue
 
@@ -556,55 +546,53 @@ class PluginManager(metaclass=Singleton):
                     if same_plugin.version > manifest.version:
                         continue
 
-                log.info('Found plugin %s %s',
-                         manifest.short_name, manifest.version)
+                log.info("Found plugin %s %s", manifest.short_name, manifest.version)
                 manifests[manifest.short_name] = manifest
 
         for manifest in manifests.values():
             self._add_plugin(manifest)
 
-    def install_from_zip(self,
-                         zip_filename: str,
-                         overwrite: bool = False
-                         ) -> GajimPlugin | None:
-        '''
+    def install_from_zip(
+        self, zip_filename: str, overwrite: bool = False
+    ) -> GajimPlugin | None:
+        """
         Install plugin from zip and return plugin
-        '''
+        """
         try:
             zip_file = zipfile.ZipFile(zip_filename)
         except zipfile.BadZipfile:
             # it is not zip file
-            raise PluginsystemError(_('Archive corrupted'))
+            raise PluginsystemError(_("Archive corrupted"))
         except OSError:
-            raise PluginsystemError(_('Archive empty'))
+            raise PluginsystemError(_("Archive empty"))
 
         if zip_file.testzip():
             # CRC error
-            raise PluginsystemError(_('Archive corrupted'))
+            raise PluginsystemError(_("Archive corrupted"))
 
         dirs: list[str] = []
         manifest = None
         for filename in zip_file.namelist():
-            if (filename.startswith(('.', '/')) or ('/' not in filename)):
+            if filename.startswith((".", "/")) or ("/" not in filename):
                 # members not safe
-                raise PluginsystemError(_('Archive is malformed'))
-            if filename.endswith('/') and filename.find('/', 0, -1) < 0:
-                dirs.append(filename.strip('/'))
-            if 'plugin-manifest.json' in filename.split('/')[1]:
+                raise PluginsystemError(_("Archive is malformed"))
+            if filename.endswith("/") and filename.find("/", 0, -1) < 0:
+                dirs.append(filename.strip("/"))
+            if "plugin-manifest.json" in filename.split("/")[1]:
                 manifest = True
         if not manifest:
             return None
         if len(dirs) > 1:
-            raise PluginsystemError(_('Archive is malformed'))
+            raise PluginsystemError(_("Archive is malformed"))
 
         plugin_name = dirs[0]
-        user_dir = configpaths.get('PLUGINS_USER')
+        user_dir = configpaths.get("PLUGINS_USER")
         plugin_path = user_dir / plugin_name
 
         if plugin_path.exists():
             # Plugin dir already exists
             if not overwrite:
-                raise PluginsystemError(_('Plugin already exists'))
+                raise PluginsystemError(_("Plugin already exists"))
             plugin = self.get_plugin_by_path(str(plugin_path))
             assert isinstance(plugin, GajimPlugin)
             self.uninstall_plugin(plugin)
@@ -614,17 +602,14 @@ class PluginManager(metaclass=Singleton):
 
         manifest = self._load_manifest(plugin_path)
         if manifest is None or not manifest.is_usable:
-            log.warning('Error while installing from zip')
+            log.warning("Error while installing from zip")
             rmtree(plugin_path)
-            raise PluginsystemError(_('Installation failed'))
+            raise PluginsystemError(_("Installation failed"))
 
         return self._add_plugin(manifest)
 
     def delete_plugin_files(self, plugin_path: Path) -> None:
-        def _on_error(func: Callable[..., Any],
-                      path: Path,
-                      error: RmErrorT
-                      ) -> None:
+        def _on_error(func: Callable[..., Any], path: Path, error: RmErrorT) -> None:
 
             if func is os.path.islink:
                 # if symlink
@@ -636,20 +621,20 @@ class PluginManager(metaclass=Singleton):
         rmtree(plugin_path, False, _on_error)  # type: ignore
 
     def uninstall_plugin(self, plugin: GajimPlugin) -> None:
-        '''
+        """
         Deactivate and remove plugin from `plugins` list
-        '''
+        """
         if not plugin:
             return
 
         self._remove_plugin(plugin)
         self.delete_plugin_files(Path(plugin.__path__))
         if not is_shipped_plugin(Path(plugin.__path__)):
-            path = configpaths.get('PLUGINS_BASE') / plugin.manifest.short_name
+            path = configpaths.get("PLUGINS_BASE") / plugin.manifest.short_name
             if path.exists():
                 self.delete_plugin_files(path)
 
-        path = configpaths.get('PLUGINS_DOWNLOAD') / plugin.manifest.short_name
+        path = configpaths.get("PLUGINS_DOWNLOAD") / plugin.manifest.short_name
         if path.exists():
             self.delete_plugin_files(path)
 
