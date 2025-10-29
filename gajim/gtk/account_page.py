@@ -8,9 +8,7 @@ from typing import Any
 
 from gi.repository import Adw
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Gtk
-from nbxmpp import JID
 from nbxmpp.modules.vcard4 import EmailProperty
 from nbxmpp.modules.vcard4 import OrgProperty
 from nbxmpp.modules.vcard4 import RoleProperty
@@ -19,8 +17,11 @@ from nbxmpp.modules.vcard4 import TzProperty
 from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.events import VCard4Received
 from gajim.common.modules.contacts import BareContact
+from gajim.common.util.decorators import event_filter
 from gajim.common.util.user_strings import get_time_zone_string
 
 from gajim.gtk.menus import get_account_menu
@@ -80,12 +81,11 @@ class AccountPage(Gtk.Box, SignalManager):
             self._on_profile_tel_copy_clicked,
         )
 
-    @GObject.Property(type=str)
-    def account(self) -> str | None:  # pyright: ignore
-        return self._account
+        app.ged.register_event_handler(
+            "vcard4-received", ged.GUI2, self._on_vcard_received
+        )
 
-    @account.setter
-    def account(self, account: str | None) -> None:
+    def set_account(self, account: str | None) -> None:
         if self._account == account:
             return
 
@@ -105,15 +105,16 @@ class AccountPage(Gtk.Box, SignalManager):
             self._profile_button.set_action_target_value(GLib.Variant("s", account))
             self._profile_button.set_action_name(f"app.{account}-profile")
 
-            vcard = client.get_module("VCard4").request_vcard(
-                jid=self._contact.jid, callback=self._on_vcard_received, use_cache=True
-            )
-            if vcard is not None:
-                self._set_vcard_rows(vcard)
+            vcard = client.get_module("VCard4").get_own_vcard()
+            print("ID vcard", id(vcard))
+            self._set_vcard_rows(vcard)
 
         self._connect_signals()
 
         self._update_page()
+
+    def get_account(self) -> str | None:
+        return self._account
 
     def _connect_signals(self) -> None:
         if self._account is None:
@@ -141,12 +142,6 @@ class AccountPage(Gtk.Box, SignalManager):
     def _on_profile_tel_copy_clicked(self, _button: CopyButton) -> None:
         app.window.get_clipboard().set(self._profile_tel)
 
-    def set_account(self, account: str | None) -> None:
-        self.account = account
-
-    def get_account(self) -> str | None:
-        return self._account
-
     def _on_menu_popup(self, menu_button: Gtk.MenuButton) -> None:
         assert self._account is not None
         menu_button.set_menu_model(get_account_menu(self._account))
@@ -167,10 +162,17 @@ class AccountPage(Gtk.Box, SignalManager):
         )
         self._avatar_image.set_from_paintable(texture)
 
-    def _on_vcard_received(self, _jid: JID, vcard: VCard) -> None:
-        self._set_vcard_rows(vcard)
+    @event_filter(["account"])
+    def _on_vcard_received(self, event: VCard4Received) -> None:
+        self._set_vcard_rows(event.vcard)
 
     def _set_vcard_rows(self, vcard: VCard) -> None:
+        self._profile_org_row.set_visible(False)
+        self._profile_role_row.set_visible(False)
+        self._profile_email_row.set_visible(False)
+        self._profile_tel_row.set_visible(False)
+        self._profile_timezone_row.set_visible(False)
+
         for prop in vcard.get_properties():
             match prop:
                 case OrgProperty():
@@ -184,15 +186,15 @@ class AccountPage(Gtk.Box, SignalManager):
                     self._profile_email_row.set_action_target_value(
                         GLib.Variant("s", f"mailto:{prop.value}")
                     )
-                    self._profile_email_row.set_visible(True)
                     self._profile_email = prop.value
+                    self._profile_email_row.set_visible(True)
                 case TelProperty():
                     self._profile_tel_row.set_subtitle(prop.value)
                     self._profile_tel_row.set_action_target_value(
                         GLib.Variant("s", f"tel:{prop.value}")
                     )
-                    self._profile_tel_row.set_visible(True)
                     self._profile_tel = prop.value
+                    self._profile_tel_row.set_visible(True)
                 case TzProperty():
                     self._profile_timezone_row.set_subtitle(get_time_zone_string(prop))
                     self._profile_timezone_row.set_visible(True)

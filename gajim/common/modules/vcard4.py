@@ -45,11 +45,12 @@ class VCard4(BaseModule):
         self._register_pubsub_handler(self._vcard_event_received)
 
     @event_node(Namespace.VCARD4_PUBSUB)
-    def _vcard_event_received(self,
-                                  _con: types.NBXMPPClient,
-                                  _stanza: Message,
-                                  properties: MessageProperties
-                                  ) -> None:
+    def _vcard_event_received(
+        self,
+        _client: types.NBXMPPClient,
+        _stanza: Message,
+        properties: MessageProperties
+        ) -> None:
 
         assert properties.jid is not None
         if not properties.jid.bare_match(self._get_own_bare_jid()):
