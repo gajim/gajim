@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import Any
 
 import datetime as dt
-from zoneinfo import ZoneInfo
 
 from gi.repository import Gdk
 from gi.repository import GObject
@@ -23,10 +22,10 @@ from nbxmpp.modules.vcard4 import VCard
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.iana import get_zone_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
 from gajim.common.util.uri import open_uri
+from gajim.common.util.user_strings import get_time_zone_string
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.structs import AccountJidParam
@@ -128,7 +127,7 @@ class ContactPopover(Gtk.Popover, SignalManager):
                 case TelProperty():
                     self._tel.set_label(prop.value, link_scheme="tel")
                 case TzProperty():
-                    self._timezone.set_label(self._get_timezone_label(prop))
+                    self._timezone.set_label(get_time_zone_string(prop))
                 case _:
                     pass
 
@@ -144,18 +143,6 @@ class ContactPopover(Gtk.Popover, SignalManager):
             format_string = app.settings.get("date_time_format")
             formatted = self._contact.idle_datetime.strftime(format_string)
         return _("last seen: %s") % formatted
-
-    def _get_timezone_label(self, prop: TzProperty) -> str:
-        try:
-            tzinfo = ZoneInfo(prop.value)
-        except Exception:
-            return ""
-
-        t_format = app.settings.get("time_format")
-        remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(t_format)
-        data = get_zone_data(prop.value)
-
-        return f"{remote_dt_str} ({data.full_name})"
 
     def _on_contact_details_clicked(self, _button: Gtk.Button) -> None:
         self.popdown()
