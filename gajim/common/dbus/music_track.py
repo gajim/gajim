@@ -24,15 +24,14 @@ from nbxmpp.structs import TuneData
 from gajim.common import app
 from gajim.common.events import MusicTrackChanged
 
-log = logging.getLogger('gajim.c.dbus.music_track')
+log = logging.getLogger("gajim.c.dbus.music_track")
 
-MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
+MPRIS_PLAYER_PREFIX = "org.mpris.MediaPlayer2."
 
 
 class TrackProperties(TypedDict, total=False):
     Metadata: dict[str, str]
     PlaybackStatus: str
-
 
 
 class MusicTrackListener:
@@ -51,7 +50,7 @@ class MusicTrackListener:
         self._current_tune: TuneData | None = None
         self._running = False
 
-        if sys.platform not in ('win32', 'darwin'):
+        if sys.platform not in ("win32", "darwin"):
             self.start()
 
     def _emit(self, info: TuneData | None) -> None:
@@ -70,30 +69,29 @@ class MusicTrackListener:
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
             None,
-            'org.freedesktop.DBus',
-            '/org/freedesktop/DBus',
-            'org.freedesktop.DBus',
-            None)
+            "org.freedesktop.DBus",
+            "/org/freedesktop/DBus",
+            "org.freedesktop.DBus",
+            None,
+        )
 
         self.connection = proxy.get_connection()
         self.connection.signal_subscribe(
-            'org.freedesktop.DBus',
-            'org.freedesktop.DBus',
-            'NameOwnerChanged',
-            '/org/freedesktop/DBus',
+            "org.freedesktop.DBus",
+            "org.freedesktop.DBus",
+            "NameOwnerChanged",
+            "/org/freedesktop/DBus",
             None,
             Gio.DBusSignalFlags.NONE,
-            self._signal_name_owner_changed)
+            self._signal_name_owner_changed,
+        )
 
         try:
             result = proxy.call_sync(
-                'ListNames',
-                None,
-                Gio.DBusCallFlags.NONE,
-                -1,
-                None)
+                "ListNames", None, Gio.DBusCallFlags.NONE, -1, None
+            )
         except GLib.Error as error:
-            log.debug('Could not list names: %s', error.message)
+            log.debug("Could not list names: %s", error.message)
             return
 
         for name in result[0]:
@@ -110,14 +108,16 @@ class MusicTrackListener:
             if name.startswith(MPRIS_PLAYER_PREFIX):
                 self._remove_player(name)
 
-    def _signal_name_owner_changed(self,
-                                   _connection: Gio.DBusConnection,
-                                   _sender_name: str,
-                                   _object_path: str,
-                                   _interface_name: str,
-                                   _signal_name: str,
-                                   parameters: tuple[str, str, str],
-                                   *_user_data: Any):
+    def _signal_name_owner_changed(
+        self,
+        _connection: Gio.DBusConnection,
+        _sender_name: str,
+        _object_path: str,
+        _interface_name: str,
+        _signal_name: str,
+        parameters: tuple[str, str, str],
+        *_user_data: Any,
+    ):
         name, old_owner, new_owner = parameters
         if name.startswith(MPRIS_PLAYER_PREFIX):
             if new_owner and not old_owner:
@@ -126,8 +126,8 @@ class MusicTrackListener:
                 self._remove_player(name)
 
     def _add_player(self, name: str) -> None:
-        '''Set up a listener for music player signals'''
-        log.info('%s appeared', name)
+        """Set up a listener for music player signals"""
+        log.info("%s appeared", name)
 
         if name in self.players:
             return
@@ -135,81 +135,82 @@ class MusicTrackListener:
         assert self.connection is not None
         self.players[name] = self.connection.signal_subscribe(
             name,
-            'org.freedesktop.DBus.Properties',
-            'PropertiesChanged',
-            '/org/mpris/MediaPlayer2',
+            "org.freedesktop.DBus.Properties",
+            "PropertiesChanged",
+            "/org/mpris/MediaPlayer2",
             None,
             Gio.DBusSignalFlags.NONE,
             self._signal_received,
-            name)
+            name,
+        )
 
     def _remove_player(self, name: str) -> None:
-        log.info('%s vanished', name)
+        log.info("%s vanished", name)
         if name in self.players:
             if self.connection is None:
                 self._emit(None)
                 return
 
-            self.connection.signal_unsubscribe(
-                self.players[name])
+            self.connection.signal_unsubscribe(self.players[name])
             self.players.pop(name)
 
             self._emit(None)
 
-    def _signal_received(self,
-                         _connection: Gio.DBusConnection,
-                         _sender_name: str,
-                         _object_path: str,
-                         interface_name: str,
-                         _signal_name: str,
-                         parameters: tuple[str, str, str],
-                         *user_data: str):
-        '''Signal handler for PropertiesChanged event'''
+    def _signal_received(
+        self,
+        _connection: Gio.DBusConnection,
+        _sender_name: str,
+        _object_path: str,
+        interface_name: str,
+        _signal_name: str,
+        parameters: tuple[str, str, str],
+        *user_data: str,
+    ):
+        """Signal handler for PropertiesChanged event"""
 
-        log.info('Signal received: %s - %s', interface_name, parameters)
+        log.info("Signal received: %s - %s", interface_name, parameters)
         self._get_playing_track(user_data[0])
 
     @staticmethod
     def _get_music_info(properties: TrackProperties) -> TuneData | None:
-        meta = properties.get('Metadata')
+        meta = properties.get("Metadata")
         if meta is None or not meta:
             return None
 
-        status = properties.get('PlaybackStatus')
-        if status is None or status == 'Paused':
+        status = properties.get("PlaybackStatus")
+        if status is None or status == "Paused":
             return None
 
-        title = meta.get('xesam:title')
-        album = meta.get('xesam:album')
+        title = meta.get("xesam:title")
+        album = meta.get("xesam:album")
         # xesam:artist is always a list of strings if not None
-        artist = meta.get('xesam:artist')
+        artist = meta.get("xesam:artist")
         if artist is not None:
-            artist = ', '.join(artist)
+            artist = ", ".join(artist)
         return TuneData(artist=artist, title=title, source=album)
 
     def _get_playing_track(self, name: str) -> None:
-        '''Return a TuneData for the currently playing
-        song, or None if no song is playing'''
+        """Return a TuneData for the currently playing
+        song, or None if no song is playing"""
         try:
             proxy = Gio.DBusProxy.new_for_bus_sync(
                 Gio.BusType.SESSION,
                 Gio.DBusProxyFlags.NONE,
                 None,
                 name,
-                '/org/mpris/MediaPlayer2',
-                'org.freedesktop.DBus.Properties',
-                None)
+                "/org/mpris/MediaPlayer2",
+                "org.freedesktop.DBus.Properties",
+                None,
+            )
         except GLib.Error as error:
-            log.debug('Could not enable music listener: %s', error.message)
+            log.debug("Could not enable music listener: %s", error.message)
             return
 
-        def proxy_call_finished(proxy: Gio.DBusProxy,
-                                res: Gio.AsyncResult
-                                ) -> None:
+        def proxy_call_finished(proxy: Gio.DBusProxy, res: Gio.AsyncResult) -> None:
             try:
                 result = proxy.call_finish(res)
             except GLib.Error as error:
-                log.debug('Could not enable music listener: %s', error.message)
+                log.debug("Could not enable music listener: %s", error.message)
                 return
 
             assert result is not None
@@ -217,9 +218,11 @@ class MusicTrackListener:
             if info is not None:
                 self._emit(info)
 
-        proxy.call('GetAll',
-                   GLib.Variant('(s)', ('org.mpris.MediaPlayer2.Player',)),
-                   Gio.DBusCallFlags.NONE,
-                   -1,
-                   None,
-                   proxy_call_finished)
+        proxy.call(
+            "GetAll",
+            GLib.Variant("(s)", ("org.mpris.MediaPlayer2.Player",)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            proxy_call_finished,
+        )

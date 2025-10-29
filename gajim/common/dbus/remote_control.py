@@ -21,9 +21,9 @@ from gajim.common.util.status import get_client_status
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_global_status_message
 
-log = logging.getLogger('gajim.c.dbus.remote_control')
+log = logging.getLogger("gajim.c.dbus.remote_control")
 
-INTERFACE_DESC = '''
+INTERFACE_DESC = """
 <!DOCTYPE node PUBLIC '-//freedesktop//DTD D-BUS Object Introspection 1.0//EN'
 'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
 <node>
@@ -90,26 +90,25 @@ INTERFACE_DESC = '''
         </signal>
     </interface>
 </node>
-'''
+"""
 
 
 def get_dbus_struct(obj: Any) -> GLib.Variant:
-    '''
+    """
     Recursively go through all the items and replace them with their casted dbus
     equivalents
-    '''
+    """
     if isinstance(obj, str):
-        return GLib.Variant('s', obj)
+        return GLib.Variant("s", obj)
     if isinstance(obj, int):
-        return GLib.Variant('i', obj)
+        return GLib.Variant("i", obj)
     if isinstance(obj, float):
-        return GLib.Variant('d', obj)
+        return GLib.Variant("d", obj)
     if isinstance(obj, bool):
-        return GLib.Variant('b', obj)
+        return GLib.Variant("b", obj)
     if isinstance(obj, list | tuple):
-        lst = [get_dbus_struct(i) for i in obj  # pyright: ignore
-               if i is not None]
-        result = GLib.Variant('av', lst)
+        lst = [get_dbus_struct(i) for i in obj if i is not None]  # pyright: ignore
+        result = GLib.Variant("av", lst)
         return result
     if isinstance(obj, dict):
         obj = cast(dict[str, Any], obj)
@@ -118,7 +117,7 @@ def get_dbus_struct(obj: Any) -> GLib.Variant:
             result.insert_value(key, get_dbus_struct(value))
         return result.end()
     # unknown type
-    return GLib.Variant('s', str(obj))
+    return GLib.Variant("s", str(obj))
 
 
 class Server:
@@ -128,28 +127,33 @@ class Server:
         node_info = Gio.DBusNodeInfo.new_for_xml(INTERFACE_DESC)
         for interface in node_info.interfaces:
             for method in interface.methods:
-                self._method_outargs[method.name] = '(' + ''.join(
-                    [arg.signature for arg in method.out_args]) + ')'
+                self._method_outargs[method.name] = (
+                    "(" + "".join([arg.signature for arg in method.out_args]) + ")"
+                )
                 self._method_inargs[method.name] = tuple(
-                    arg.signature for arg in method.in_args)
+                    arg.signature for arg in method.in_args
+                )
 
             con.register_object(
                 object_path=path,
                 interface_info=interface,
-                method_call_closure=self._on_method_call)
+                method_call_closure=self._on_method_call,
+            )
 
-    def _on_method_call(self,
-                        _connection: Gio.DBusConnection,
-                        _sender: str,
-                        _object_path: str,
-                        _interface_name: str,
-                        method_name: str,
-                        parameters: GLib.Variant,
-                        invocation: Gio.DBusMethodInvocation) -> None:
+    def _on_method_call(
+        self,
+        _connection: Gio.DBusConnection,
+        _sender: str,
+        _object_path: str,
+        _interface_name: str,
+        method_name: str,
+        parameters: GLib.Variant,
+        invocation: Gio.DBusMethodInvocation,
+    ) -> None:
 
         args = list(parameters.unpack())
         for i, sig in enumerate(self._method_inargs[method_name]):
-            if sig == 'h':
+            if sig == "h":
                 msg = invocation.get_message()
                 fd_list = msg.get_unix_fd_list()
                 assert fd_list is not None
@@ -159,10 +163,10 @@ class Server:
 
         # out_args is at least (signature1). We therefore always wrap the result
         # as a tuple. Refer to https://bugzilla.gnome.org/show_bug.cgi?id=765603
-        result = (result, )
+        result = (result,)
 
         out_args = self._method_outargs[method_name]
-        if out_args != '()':
+        if out_args != "()":
             variant = GLib.Variant(out_args, result)
             invocation.return_value(variant)
         else:
@@ -174,57 +178,60 @@ class GajimRemote(Server):
         application_id = app.app.get_application_id()
         assert application_id is not None
         self._con = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-        Gio.bus_own_name_on_connection(self._con, application_id,
-                                       Gio.BusNameOwnerFlags.NONE, None, None)
-        super().__init__(self._con, '/org/gajim/dbus/RemoteObject')
+        Gio.bus_own_name_on_connection(
+            self._con, application_id, Gio.BusNameOwnerFlags.NONE, None, None
+        )
+        super().__init__(self._con, "/org/gajim/dbus/RemoteObject")
 
-        app.ged.register_event_handler('presence-received',
-                                       ged.POSTGUI,
-                                       self._on_presence_received)
-        app.ged.register_event_handler('message-received',
-                                       ged.POSTGUI,
-                                       self._on_message_received)
-        app.ged.register_event_handler('our-show',
-                                       ged.POSTGUI,
-                                       self._on_our_status)
-        app.ged.register_event_handler('message-sent',
-                                       ged.POSTGUI,
-                                       self._on_message_sent)
+        app.ged.register_event_handler(
+            "presence-received", ged.POSTGUI, self._on_presence_received
+        )
+        app.ged.register_event_handler(
+            "message-received", ged.POSTGUI, self._on_message_received
+        )
+        app.ged.register_event_handler("our-show", ged.POSTGUI, self._on_our_status)
+        app.ged.register_event_handler(
+            "message-sent", ged.POSTGUI, self._on_message_sent
+        )
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
         message = event.message
-        self.raise_signal('MessageSent', (
-            event.account, [event.jid,
-                            message.text]))
+        self.raise_signal("MessageSent", (event.account, [event.jid, message.text]))
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
-        self.raise_signal('ContactPresence', (event.account, [
-            event.jid,
-            event.resource,
-            event.show,
-            event.status]))
+        self.raise_signal(
+            "ContactPresence",
+            (event.account, [event.jid, event.resource, event.show, event.status]),
+        )
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         message = event.message
-        self.raise_signal('NewMessage', (
-            event.account, [
-                message.remote.jid,
-                message.resource,
-                message.type,
-                message.timestamp,
-                message.text,
-            ]))
+        self.raise_signal(
+            "NewMessage",
+            (
+                event.account,
+                [
+                    message.remote.jid,
+                    message.resource,
+                    message.type,
+                    message.timestamp,
+                    message.text,
+                ],
+            ),
+        )
 
     def _on_our_status(self, event: events.ShowChanged) -> None:
-        self.raise_signal('AccountPresence', (event.show, event.account))
+        self.raise_signal("AccountPresence", (event.show, event.account))
 
     def raise_signal(self, event_name: str, data: Any) -> None:
-        log.info('Send event %s', event_name)
-        self._con.emit_signal(None,
-                              '/org/gajim/dbus/RemoteObject',
-                              'org.gajim.dbus.RemoteInterface',
-                              event_name,
-                              GLib.Variant.new_tuple(get_dbus_struct(data)))
+        log.info("Send event %s", event_name)
+        self._con.emit_signal(
+            None,
+            "/org/gajim/dbus/RemoteObject",
+            "org.gajim.dbus.RemoteInterface",
+            event_name,
+            GLib.Variant.new_tuple(get_dbus_struct(data)),
+        )
 
     @staticmethod
     def get_status(account: str) -> str:
@@ -239,27 +246,24 @@ class GajimRemote(Server):
         return app.get_client(account).status_message
 
     @staticmethod
-    def _send_message(jid: str,
-                      message: str,
-                      account: str,
-                      type_: str) -> bool:
+    def _send_message(jid: str, message: str, account: str, type_: str) -> bool:
 
         if not app.account_is_available(account):
             return False
 
         client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(
-            jid, groupchat=type_ == 'groupchat')
+        contact = client.get_module("Contacts").get_contact(
+            jid, groupchat=type_ == "groupchat"
+        )
 
         if isinstance(contact, GroupchatContact):
             if not contact.is_joined:
                 return False
 
         assert isinstance(
-            contact, BareContact | GroupchatContact | GroupchatParticipant)
-        message_ = OutgoingMessage(account=account,
-                                   contact=contact,
-                                   text=message)
+            contact, BareContact | GroupchatContact | GroupchatParticipant
+        )
+        message_ = OutgoingMessage(account=account, contact=contact, text=message)
 
         app.get_client(account).send_message(message_)
         return True
@@ -268,26 +272,23 @@ class GajimRemote(Server):
         if not jid or not message or not account:
             return False
 
-        return self._send_message(jid, message, account, 'chat')
+        return self._send_message(jid, message, account, "chat")
 
-    def send_groupchat_message(self,
-                               jid: str,
-                               message: str,
-                               account: str) -> bool:
+    def send_groupchat_message(self, jid: str, message: str, account: str) -> bool:
 
         if not jid or not message or not account:
             return False
 
-        return self._send_message(jid, message, account, 'groupchat')
+        return self._send_message(jid, message, account, "groupchat")
 
     @staticmethod
     def change_status(status: str, message: str, account: str) -> bool:
-        '''
+        """
         change_status(status, message, account). Account is optional - if not
         specified status is changed for all accounts
-        '''
-        if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd'):
-            status = ''
+        """
+        if status not in ("offline", "online", "chat", "away", "xa", "dnd"):
+            status = ""
 
         if account:
             if not status:
@@ -295,29 +296,24 @@ class GajimRemote(Server):
                     return False
                 status = app.get_client(account).status
 
-            GLib.idle_add(app.get_client(account).change_status,
-                          status,
-                          message)
+            GLib.idle_add(app.get_client(account).change_status, status, message)
         else:
             # account not specified, so change the status of all accounts
             for acc in app.settings.get_active_accounts():
-                if not app.settings.get_account_setting(
-                        acc, 'sync_with_global_status'):
+                if not app.settings.get_account_setting(acc, "sync_with_global_status"):
                     continue
 
                 if not status:
                     status = app.get_client(acc).status
 
-                GLib.idle_add(app.get_client(acc).change_status,
-                              status,
-                              message)
+                GLib.idle_add(app.get_client(acc).change_status, status, message)
         return True
 
     @staticmethod
     def list_accounts() -> list[str]:
-        '''
+        """
         List register accounts
-        '''
+        """
         result = app.settings.get_active_accounts()
         result_array: list[str] = []
         if result:
@@ -327,19 +323,20 @@ class GajimRemote(Server):
 
     @staticmethod
     def account_info(account: str) -> dict[str, str]:
-        '''
+        """
         Show info on account: resource, jid, nick, message
-        '''
+        """
         result: dict[str, str] = {}
         if account in app.settings.get_active_accounts():
             # account is valid
             client = app.get_client(account)
-            result['status'] = client.status
-            result['name'] = client.name
-            result['jid'] = app.get_jid_from_account(client.name)
-            result['message'] = client.status_message
-            result['resource'] = app.settings.get_account_setting(client.name,
-                                                                  'resource')
+            result["status"] = client.status
+            result["name"] = client.name
+            result["jid"] = app.get_jid_from_account(client.name)
+            result["message"] = client.status_message
+            result["resource"] = app.settings.get_account_setting(
+                client.name, "resource"
+            )
         return result
 
     def list_contacts(self, account: str) -> list[dict[str, GLib.Variant]]:
@@ -354,36 +351,34 @@ class GajimRemote(Server):
         for acct in accounts_to_search:
             if acct in accounts:
                 client = app.get_client(acct)
-                for contact in client.get_module('Roster').iter_contacts():
+                for contact in client.get_module("Roster").iter_contacts():
                     item = self._contacts_as_dbus_structure(contact)
                     if item:
                         result.append(item)
         return result
 
     @staticmethod
-    def _contacts_as_dbus_structure(contact: BareContact
-                                    ) -> dict[str, GLib.Variant]:
-        '''
+    def _contacts_as_dbus_structure(contact: BareContact) -> dict[str, GLib.Variant]:
+        """
         Get info from list of Contact objects and create dbus dict
-        '''
+        """
 
         contact_dict: dict[str, GLib.Variant] = {}
 
-        contact_dict['name'] = GLib.Variant('s', contact.name)
-        contact_dict['show'] = GLib.Variant('s', contact.show.value)
-        contact_dict['jid'] = GLib.Variant('s', str(contact.jid))
+        contact_dict["name"] = GLib.Variant("s", contact.name)
+        contact_dict["show"] = GLib.Variant("s", contact.show.value)
+        contact_dict["jid"] = GLib.Variant("s", str(contact.jid))
 
-        resources = GLib.VariantBuilder(GLib.VariantType('a(ss)'))
+        resources = GLib.VariantBuilder(GLib.VariantType("a(ss)"))
         for res_contact in contact.iter_resources():
-            resource_props = (res_contact.resource,
-                              res_contact.status)
-            resources.add_value(GLib.Variant('(ss)', resource_props))
-        contact_dict['resources'] = resources.end()
+            resource_props = (res_contact.resource, res_contact.status)
+            resources.add_value(GLib.Variant("(ss)", resource_props))
+        contact_dict["resources"] = resources.end()
 
-        groups = GLib.VariantBuilder(GLib.VariantType('as'))
+        groups = GLib.VariantBuilder(GLib.VariantType("as"))
         for group in contact.groups:
-            groups.add_value(GLib.Variant('s', group))
-        contact_dict['groups'] = groups.end()
+            groups.add_value(GLib.Variant("s", group))
+        contact_dict["groups"] = groups.end()
         return contact_dict
 
     @staticmethod

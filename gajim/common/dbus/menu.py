@@ -18,7 +18,7 @@ from gajim.common.dbus.base import DBusService
 GetGroupPropertiesT = list[tuple[int, dict[str, GLib.Variant]]]
 
 MENU_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
-    '''
+    """
 <?xml version="1.0" encoding="UTF-8"?>
 <node>
     <interface name="com.canonical.dbusmenu">
@@ -71,24 +71,24 @@ MENU_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
             <arg type="a(ias)" name="removedProps" direction="out" />
         </signal>
     </interface>
-</node>'''
+</node>"""
 ).interfaces[0]
 
 
 PROPERTY_NAMES = [
-    'children-display',
-    'disposition',
-    'enabled',
-    'icon-name',
-    'label',
-    'toggle-state',
-    'toggle-type',
-    'type',
-    'visible',
+    "children-display",
+    "disposition",
+    "enabled",
+    "icon-name",
+    "label",
+    "toggle-state",
+    "toggle-type",
+    "type",
+    "visible",
 ]
 
 
-log = logging.getLogger('gajim.c.dbus.dbusmenu')
+log = logging.getLogger("gajim.c.dbus.dbusmenu")
 
 
 def get_children_from_parent(
@@ -132,16 +132,16 @@ class DBusMenu:
 @dataclasses.dataclass
 class DBusMenuItem:
     id: int
-    label: str = ''
+    label: str = ""
     callback: Any = None
-    type: str = 'standard'
-    disposition = 'normal'
+    type: str = "standard"
+    disposition = "normal"
     enabled: bool = True
     visible: bool = True
-    toggle_type: str = ''
+    toggle_type: str = ""
     toggle_state: int = -1
-    icon_name: str = ''
-    children_display: str = ''
+    icon_name: str = ""
+    children_display: str = ""
     children: list[DBusMenuItem] | None = None
 
     def flip_toggle_state(self) -> None:
@@ -151,16 +151,16 @@ class DBusMenuItem:
             self.toggle_state = 0
 
     def serialize_prop(self, name: str) -> GLib.Variant:
-        name = name.replace('-', '_')
+        name = name.replace("-", "_")
         value = getattr(self, name)
         if isinstance(value, str):
-            return GLib.Variant('s', value)
+            return GLib.Variant("s", value)
 
         if isinstance(value, bool):
-            return GLib.Variant('b', value)
+            return GLib.Variant("b", value)
 
         if isinstance(value, int):
-            return GLib.Variant('i', value)
+            return GLib.Variant("i", value)
 
         raise ValueError
 
@@ -172,7 +172,7 @@ class DBusMenuItem:
 
         for prop in property_names:
             variant = self.serialize_prop(prop)
-            result[prop.replace('_', '-')] = variant
+            result[prop.replace("_", "-")] = variant
 
         return result
 
@@ -189,15 +189,15 @@ class DBusMenuItem:
                     for item in self.children
                 ]
 
-        return GLib.Variant('(ia{sv}av)', (self.id, props, children))
+        return GLib.Variant("(ia{sv}av)", (self.id, props, children))
 
 
 class DBusMenuService(DBusService):
 
-    Status = 'normal'
-    IconThemePath = ''
+    Status = "normal"
+    IconThemePath = ""
     Version = 3
-    TextDirection = 'ltr'
+    TextDirection = "ltr"
 
     def __init__(
         self, object_path: str, session_bus: Gio.DBusConnection, menu: DBusMenu
@@ -244,7 +244,7 @@ class DBusMenuService(DBusService):
 
         ret = (
             self._revision,
-            (0, {'children-display': GLib.Variant('s', 'submenu')}, children),
+            (0, {"children-display": GLib.Variant("s", "submenu")}, children),
         )
 
         return ret
@@ -267,7 +267,7 @@ class DBusMenuService(DBusService):
 
             item = self._flat_items.get(item_id)
             if item is None:
-                log.warning('Unknown item id: %s', item_id)
+                log.warning("Unknown item id: %s", item_id)
                 continue
 
             ret.append((item.id, item.serialize_props(property_names)))
@@ -276,31 +276,31 @@ class DBusMenuService(DBusService):
 
     def GetProperty(self, item_id: int, name: str) -> GLib.Variant | None:
         if name not in PROPERTY_NAMES:
-            log.warning('Unsupported property: %s', name)
+            log.warning("Unsupported property: %s", name)
             return None
 
         item = self._flat_items.get(item_id)
         if item is None:
-            log.warning('Unknown item id: %s', item_id)
+            log.warning("Unknown item id: %s", item_id)
             return None
 
         return item.serialize_prop(name)
 
     def Event(self, item_id: int, event_id: str, _data: Any, _timestamp: Any) -> None:
-        if event_id != 'clicked':
+        if event_id != "clicked":
             return
 
         item = self._flat_items.get(item_id)
         if item is None:
-            log.warning('Unknown item id %s', item_id)
+            log.warning("Unknown item id %s", item_id)
             return
 
         if item.callback is not None:
             item.callback()
 
-        if item.toggle_type == 'checkmark':
+        if item.toggle_type == "checkmark":
             item.flip_toggle_state()
-            self.ItemsPropertiesUpdated(item, 'toggle-state')
+            self.ItemsPropertiesUpdated(item, "toggle-state")
 
     def EventGroup(
         self, events: list[tuple[int, str, GLib.Variant, int]]
@@ -308,7 +308,7 @@ class DBusMenuService(DBusService):
         not_found: list[int] = []
 
         for item_id, event_id, _data, _timestamp in events:
-            if event_id != 'clicked':
+            if event_id != "clicked":
                 continue
 
             item = self._flat_items.get(item_id)
@@ -319,9 +319,9 @@ class DBusMenuService(DBusService):
             if item.callback is not None:
                 item.callback()
 
-            if item.toggle_type == 'checkmark':
+            if item.toggle_type == "checkmark":
                 item.flip_toggle_state()
-                self.ItemsPropertiesUpdated(item, 'toggle-state')
+                self.ItemsPropertiesUpdated(item, "toggle-state")
 
         return (not_found,)
 
@@ -340,8 +340,8 @@ class DBusMenuService(DBusService):
 
     def LayoutUpdated(self, parent: int = 0) -> None:
         self._revision += 1
-        self.emit_signal('LayoutUpdated', (self._revision, parent))
+        self.emit_signal("LayoutUpdated", (self._revision, parent))
 
     def ItemsPropertiesUpdated(self, item: DBusMenuItem, property_name: str) -> None:
         updated = [(item.id, {property_name: item.serialize_prop(property_name)})]
-        self.emit_signal('ItemsPropertiesUpdated', (updated, []))
+        self.emit_signal("ItemsPropertiesUpdated", (updated, []))

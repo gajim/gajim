@@ -16,7 +16,7 @@ from gajim.common.dbus.menu import DBusMenu
 from gajim.common.dbus.menu import DBusMenuService
 
 SNI_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
-    '''
+    """
 <?xml version="1.0" encoding="UTF-8"?>
 <node>
     <interface name="org.kde.StatusNotifierItem">
@@ -49,25 +49,25 @@ SNI_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
         <signal name="NewOverlayIcon" />
         <signal name="NewMenu" />
     </interface>
-</node>'''
+</node>"""
 ).interfaces[0]
 
 
-log = logging.getLogger('gajim.c.tray.linux')
+log = logging.getLogger("gajim.c.tray.linux")
 
 
 class StatusNotifierItemService(DBusService):
 
-    Category = 'Communications'
-    Id = 'org.gajim.Gajim'
-    Title = 'Gajim'
-    Status = 'Active'
-    IconName = ''
-    IconThemePath = ''
-    AttentionIconName = ''
-    ToolTip: tuple[str, list[Any], str, str] = ('', [], 'Gajim', '')
+    Category = "Communications"
+    Id = "org.gajim.Gajim"
+    Title = "Gajim"
+    Status = "Active"
+    IconName = ""
+    IconThemePath = ""
+    AttentionIconName = ""
+    ToolTip: tuple[str, list[Any], str, str] = ("", [], "Gajim", "")
     ItemIsMenu = True
-    Menu = '/StatusNotifierItem/Menu'
+    Menu = "/StatusNotifierItem/Menu"
 
     def __init__(
         self,
@@ -78,7 +78,7 @@ class StatusNotifierItemService(DBusService):
     ):
         super().__init__(
             interface_info=SNI_NODE_INFO,
-            object_path='/StatusNotifierItem',
+            object_path="/StatusNotifierItem",
             bus=session_bus,
         )
 
@@ -89,8 +89,7 @@ class StatusNotifierItemService(DBusService):
         self._registered = False
         self._cancellable: Gio.Cancellable | None = None
         self._bus = session_bus
-        self._menu = DBusMenuService(
-            '/StatusNotifierItem/Menu', session_bus, menu)
+        self._menu = DBusMenuService("/StatusNotifierItem/Menu", session_bus, menu)
 
     def register(self):
         if self._registered:
@@ -105,7 +104,9 @@ class StatusNotifierItemService(DBusService):
             self._cancellable = None
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
-                proxy.RegisterStatusNotifierItem('(s)', '/StatusNotifierItem')  # pyright: ignore
+                proxy.RegisterStatusNotifierItem(
+                    "(s)", "/StatusNotifierItem"
+                )  # pyright: ignore
             except Exception as error:
                 log.error(error)
                 return
@@ -114,11 +115,11 @@ class StatusNotifierItemService(DBusService):
             connection=self._bus,
             flags=Gio.DBusProxyFlags.DO_NOT_LOAD_PROPERTIES,
             info=None,
-            name='org.kde.StatusNotifierWatcher',
-            object_path='/StatusNotifierWatcher',
-            interface_name='org.kde.StatusNotifierWatcher',
+            name="org.kde.StatusNotifierWatcher",
+            object_path="/StatusNotifierWatcher",
+            interface_name="org.kde.StatusNotifierWatcher",
             cancellable=self._cancellable,
-            callback=_on_finish
+            callback=_on_finish,
         )
 
     def unregister(self):
@@ -143,8 +144,8 @@ class StatusNotifierItemService(DBusService):
 
     def set_icon(self, icon: str) -> None:
         self.IconName = icon
-        self.emit_signal('NewIcon')
+        self.emit_signal("NewIcon")
 
     def set_tooltip(self, title: str, description: str) -> None:
-        self.ToolTip = ('', [], title, description)
-        self.emit_signal('NewTooltip')
+        self.ToolTip = ("", [], title, description)
+        self.emit_signal("NewTooltip")

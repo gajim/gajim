@@ -18,7 +18,7 @@ from winrt.windows.ui.viewmanagement import UISettings
 from gajim.common import app
 from gajim.common.events import StyleChanged
 
-log = logging.getLogger('gajim.c.winapi.system_style')
+log = logging.getLogger("gajim.c.winapi.system_style")
 
 
 class SystemStyleListener:
@@ -29,15 +29,15 @@ class SystemStyleListener:
         try:
             self._ui_settings = UISettings()
             self._ui_settings.add_color_values_changed(
-                self._signal_color_values_changed)
+                self._signal_color_values_changed
+            )
             self._prefer_dark = self._get_prefer_dark()
         except Exception as error:
-            log.warning('Failed to init winsdk.UISettings: %s', error)
+            log.warning("Failed to init winsdk.UISettings: %s", error)
             return
 
     def _get_prefer_dark(self) -> bool:
-        foreground_color = self._ui_settings.get_color_value(
-            UIColorType.FOREGROUND)
+        foreground_color = self._ui_settings.get_color_value(UIColorType.FOREGROUND)
         return self._is_color_light(foreground_color)
 
     @staticmethod
@@ -45,9 +45,7 @@ class SystemStyleListener:
         return ((5 * clr.g) + (2 * clr.r) + clr.b) > (8 * 128)
 
     def _signal_color_values_changed(
-        self,
-        _ui_settings: UISettings | None,
-        *args: Any
+        self, _ui_settings: UISettings | None, *args: Any
     ) -> None:
 
         prefer_dark = self._get_prefer_dark()

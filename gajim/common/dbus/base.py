@@ -9,7 +9,7 @@ import logging
 from gi.repository import Gio
 from gi.repository import GLib
 
-log = logging.getLogger('gajim.c.dbus')
+log = logging.getLogger("gajim.c.dbus")
 
 
 class DBusService:
@@ -64,19 +64,19 @@ class DBusService:
 
         method_info = self._interface_info.lookup_method(method_name)
         if method_info is None:
-            log.warning('Unknown method name called: %s', method_name)
+            log.warning("Unknown method name called: %s", method_name)
             return
 
         args = parameters.unpack()
-        log.info('Method %s called on %s, args: %s', method_name, self, args)
+        log.info("Method %s called on %s, args: %s", method_name, self, args)
 
         method = getattr(self, method_name)
         result = method(*args)
-        out_arg_types = ''.join([arg.signature for arg in method_info.out_args])
+        out_arg_types = "".join([arg.signature for arg in method_info.out_args])
         return_value = None
 
         if method_info.out_args:
-            return_value = GLib.Variant(f'({out_arg_types})', result)
+            return_value = GLib.Variant(f"({out_arg_types})", result)
 
         invocation.return_value(return_value)
 
@@ -91,12 +91,12 @@ class DBusService:
 
         property_info = self._interface_info.lookup_property(property_name)
         if property_info is None:
-            log.warning('Unknown property requested: %s', property_name)
+            log.warning("Unknown property requested: %s", property_name)
             return
 
         value = getattr(self, property_name)
         log.info(
-            'GetProperty %s called on %s, return value: %s', property_name, self, value
+            "GetProperty %s called on %s, return value: %s", property_name, self, value
         )
 
         return GLib.Variant(property_info.signature, value)
@@ -104,15 +104,15 @@ class DBusService:
     def emit_signal(self, signal_name: str, args: Any = None) -> None:
         signal_info = self._interface_info.lookup_signal(signal_name)
         if signal_info is None:
-            raise ValueError(f'Unknown signal: {signal_name}')
+            raise ValueError(f"Unknown signal: {signal_name}")
 
         if len(signal_info.args) == 0:
             parameters = None
         else:
-            arg_types = ''.join([arg.signature for arg in signal_info.args])
-            parameters = GLib.Variant(f'({arg_types})', args)
+            arg_types = "".join([arg.signature for arg in signal_info.args])
+            parameters = GLib.Variant(f"({arg_types})", args)
 
-        log.info('Emit Signal %s on %s, args: %s', signal_name, self, args)
+        log.info("Emit Signal %s on %s, args: %s", signal_name, self, args)
 
         try:
             self._bus.emit_signal(
