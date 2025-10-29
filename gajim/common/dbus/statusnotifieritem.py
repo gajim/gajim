@@ -104,9 +104,9 @@ class StatusNotifierItemService(DBusService):
             self._cancellable = None
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
-                proxy.RegisterStatusNotifierItem(
+                proxy.RegisterStatusNotifierItem(  # pyright: ignore
                     "(s)", "/StatusNotifierItem"
-                )  # pyright: ignore
+                )
             except Exception as error:
                 log.error(error)
                 return
