@@ -361,7 +361,18 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         GLib.set_application_name(application_name)
 
-        self.register()
+        try:
+            self.register()
+        except GLib.Error as error:
+            quark = GLib.quark_try_string("g-io-error-quark")
+            if error.matches(quark, Gio.IOErrorEnum.TIMED_OUT):
+                sys.exit(
+                    "Timeout reached for registering the application on DBus, "
+                    "check if there is another broken Gajim process"
+                )
+            else:
+                sys.exit(f"Unable to register application on DBus: {error}")
+
         if self.get_is_remote():
             print(
                 "Gajim is already running. "
