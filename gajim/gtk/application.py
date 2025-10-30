@@ -881,7 +881,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         )
 
     def _on_save_file_as(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         orig_path = Path(param.get_string())
 
         def _on_save_finished(
@@ -937,6 +936,16 @@ class GajimApplication(Adw.Application, CoreApplication):
                 return
 
             app.settings.set("last_save_dir", str(target_path.parent))
+
+            app.window.show_toast(
+                Adw.Toast(
+                    title=_("File saved"),
+                    timeout=5,
+                    button_label=_("Open Folder"),
+                    action_name="app.open-folder",
+                    action_target=GLib.Variant("s", str(target_path)),
+                )
+            )
 
         gfile = None
         last_dir = app.settings.get("last_save_dir")
