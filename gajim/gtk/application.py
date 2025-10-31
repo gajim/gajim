@@ -76,7 +76,6 @@ from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import add_alternative_accelerator
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.misc import open_uri
-from gajim.gtk.util.misc import show_in_folder
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
 from gajim.gtk.util.window import open_window
@@ -430,8 +429,8 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("open-chat", self._on_open_chat_action),
             ("mute-chat", self._on_mute_chat_action),
             ("save-file-as", self._on_save_file_as),
-            ("open-file", self._on_open_file),
-            ("open-folder", self._on_open_folder),
+            ("open-file", self._on_open_file_folder),
+            ("open-folder", self._on_open_file_folder),
         ]
 
         for action in actions:
@@ -969,8 +968,9 @@ class GajimApplication(Adw.Application, CoreApplication):
         )
         dialog.save(app.window, None, _on_save_finished)
 
-    def _on_open_file(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        open_file(Path(param.get_string()))
-
-    def _on_open_folder(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        show_in_folder(Path(param.get_string()))
+    def _on_open_file_folder(
+        self, action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        open_file(
+            Path(param.get_string()), show_in_folder=action.get_name() == "open-folder"
+        )

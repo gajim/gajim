@@ -35,7 +35,7 @@ from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
-from gajim.gtk.util.misc import open_directory
+from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 
@@ -1119,7 +1119,7 @@ class AdvancedGroup(GajimPreferencesGroup):
 
     @staticmethod
     def _on_open_debug_logs(*args: Any) -> None:
-        open_directory(configpaths.get("DEBUG"))
+        open_file(configpaths.get("DEBUG"))
 
     @staticmethod
     def _on_advanced_config_editor(*args: Any) -> None:

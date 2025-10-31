@@ -40,7 +40,6 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.util.misc import open_file
-from gajim.gtk.util.misc import show_in_folder
 
 TransferEventT = FileRequestReceivedEvent | FileRequestSent
 
@@ -367,7 +366,7 @@ class FileTransferJingleRow(BaseRow, EventHelper):
     def _on_open_folder(self, _button: Gtk.Button) -> None:
         assert self._file_props is not None
         assert self._file_props.file_name is not None
-        show_in_folder(Path(self._file_props.file_name))
+        open_file(Path(self._file_props.file_name), show_in_folder=True)
 
     def _on_bad_hash_retry(self, _button: Gtk.Button) -> None:
         pass

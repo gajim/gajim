@@ -10,7 +10,6 @@ from typing import Literal
 
 import datetime
 import logging
-import os
 import sys
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
@@ -29,7 +28,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
-from gajim.common.dbus.file_manager import DBusFileManager
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -415,31 +413,19 @@ def open_uri_externally(uri: str) -> None:
         )
 
 
-def open_file_uri(uri: str) -> None:
-    try:
-        if sys.platform != "win32":
-            Gio.AppInfo.launch_default_for_uri(uri)
-        else:
-            os.startfile(uri, "open")  # noqa: S606
-    except Exception as err:
-        log.info("Couldn't open file URI %s: %s", uri, err)
-
-
 @catch_exceptions
-def open_file(path: Path) -> None:
+def open_file(path: Path, *, show_in_folder: bool = False) -> None:
     if not path.exists():
         log.warning("Unable to open file, path %s does not exist", path)
         return
 
     path_absolute = path.resolve()
-    open_file_uri(path_absolute.as_uri())
 
-
-def open_directory(path: Path) -> None:
-    return open_file(path)
-
-
-def show_in_folder(path: Path) -> None:
-    if not DBusFileManager().show_items_sync([path.as_uri()]):
-        # Fall back to just opening the containing folder
-        open_directory(path.parent)
+    launcher = Gtk.FileLauncher(file=Gio.File.new_for_path(str(path_absolute)))
+    try:
+        if show_in_folder:
+            launcher.open_containing_folder(app.window)
+        else:
+            launcher.launch(app.window)
+    except Exception as error:
+        log.warning("Unable to open file: %s", error)

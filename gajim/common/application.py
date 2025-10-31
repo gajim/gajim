@@ -29,7 +29,6 @@ from gajim.common import passwords
 from gajim.common.cert_store import CertificateStore
 from gajim.common.client import Client
 from gajim.common.commands import ChatCommands
-from gajim.common.dbus import file_manager
 from gajim.common.dbus import logind
 from gajim.common.events import AccountCreated
 from gajim.common.events import AccountDisabled
@@ -112,8 +111,6 @@ class CoreApplication(ged.EventHelper):
             GLib.timeout_add_seconds(20, self._check_for_updates)
         else:
             logind.enable()
-
-        file_manager.init()
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)

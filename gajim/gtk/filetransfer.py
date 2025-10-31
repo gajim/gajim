@@ -45,7 +45,7 @@
 # from gajim.common.storage.archive.const import MessageType
 # from gajim.common.util.datetime import utc_now
 # from gajim.common.util.text import get_random_string
-# from gajim.gtk.util.misc import show_in_folder
+# from gajim.gtk.util.misc import open_file
 
 # from gajim.gtk.builder import get_builder
 # from gajim.gtk.alert import ConfirmationAlertDialog
@@ -1028,7 +1028,7 @@
 #         if not file_props.file_name:
 #             return
 
-#         show_in_folder(Path(file_props.file_name))
+#         open_file(Path(file_props.file_name), show_in_folder=True)
 
 #     def _on_cancel_menuitem_activate(self, widget):
 #         self._on_cancel_button_clicked(widget)
