@@ -43,7 +43,7 @@ from gajim.common.util.preview import guess_mime_type
 
 class HTTPUpload(BaseModule):
 
-    _nbxmpp_extends = 'HTTPUpload'
+    _nbxmpp_extends = "HTTPUpload"
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
@@ -55,8 +55,9 @@ class HTTPUpload(BaseModule):
 
         self._requests_in_progress: dict[int, FileTransferM[UploadResult]] = {}
 
-        self._running_transfers: dict[
-            tuple[str, JID], set[HTTPFileTransfer]] = defaultdict(set)
+        self._running_transfers: dict[tuple[str, JID], set[HTTPFileTransfer]] = (
+            defaultdict(set)
+        )
 
     def pass_disco(self, info: DiscoInfo) -> None:
         if not info.has_httpupload:
@@ -67,126 +68,114 @@ class HTTPUpload(BaseModule):
         self.component = info.jid
         self.max_file_size = info.httpupload_max_file_size
 
-        self._log.info('Discovered component: %s', info.jid)
+        self._log.info("Discovered component: %s", info.jid)
 
         if self.max_file_size is None:
-            self._log.warning('Component does not provide maximum file size')
+            self._log.warning("Component does not provide maximum file size")
         else:
-            size = GLib.format_size_full(int(self.max_file_size),
-                                         GLib.FormatSizeFlags.IEC_UNITS)
-            self._log.info('Component has a maximum file size of: %s', size)
+            size = GLib.format_size_full(
+                int(self.max_file_size), GLib.FormatSizeFlags.IEC_UNITS
+            )
+            self._log.info("Component has a maximum file size of: %s", size)
 
-    def get_running_transfers(self,
-                              contact: types.ChatContactT
-                              ) -> set[HTTPFileTransfer] | None:
+    def get_running_transfers(
+        self, contact: types.ChatContactT
+    ) -> set[HTTPFileTransfer] | None:
 
         return self._running_transfers.get((contact.account, contact.jid))
 
     def send_file(self, contact: types.ChatContactT, path: Path) -> None:
-        encryption = contact.settings.get('encryption') or None
+        encryption = contact.settings.get("encryption") or None
 
         try:
-            transfer = self._make_transfer(
-                path,
-                encryption,
-                contact)
+            transfer = self._make_transfer(path, encryption, contact)
         except FileError as error:
             event = HTTPUploadError(
-                contact.account,
-                contact.jid,
-                _('Could not open file (%s)') % str(error))
+                contact.account, contact.jid, _("Could not open file (%s)") % str(error)
+            )
             app.ged.raise_event(event)
             return
 
-        transfer.connect('cancel', self._on_cancel_upload)
-        transfer.connect('state-changed', self._on_http_upload_state_changed)
+        transfer.connect("cancel", self._on_cancel_upload)
+        transfer.connect("state-changed", self._on_http_upload_state_changed)
 
-        event = HTTPUploadStarted(
-            contact.account,
-            contact.jid,
-            transfer)
+        event = HTTPUploadStarted(contact.account, contact.jid, transfer)
         app.ged.raise_event(event)
 
         transfer.set_preparing()
-        self._log.info('Sending request for slot')
-        self._nbxmpp('HTTPUpload').request_slot(
+        self._log.info("Sending request for slot")
+        self._nbxmpp("HTTPUpload").request_slot(
             jid=self.component,
             filename=transfer.filename,
             size=transfer.size,
             content_type=transfer.mime,
             callback=self._received_slot,
-            user_data=transfer
+            user_data=transfer,
         )
 
-    def _make_transfer(self,
-                       path: Path,
-                       encryption: str | None,
-                       contact: types.ChatContactT,
-                       ) -> HTTPFileTransfer:
+    def _make_transfer(
+        self,
+        path: Path,
+        encryption: str | None,
+        contact: types.ChatContactT,
+    ) -> HTTPFileTransfer:
 
         if not path or not path.exists():
-            raise FileError(_('Could not access file'))
+            raise FileError(_("Could not access file"))
 
         invalid_file = False
-        msg = ''
+        msg = ""
         stat = path.stat()
 
         if os.path.isfile(path):
             if stat[6] == 0:
                 invalid_file = True
-                msg = _('File is empty')
+                msg = _("File is empty")
         else:
             invalid_file = True
-            msg = _('File does not exist')
+            msg = _("File does not exist")
 
-        if (self.max_file_size is not None and
-                stat.st_size > self.max_file_size):
+        if self.max_file_size is not None and stat.st_size > self.max_file_size:
             invalid_file = True
-            size = GLib.format_size_full(int(self.max_file_size),
-                                         GLib.FormatSizeFlags.IEC_UNITS)
-            msg = _('File is too large, '
-                    'maximum allowed file size is: %s') % size
+            size = GLib.format_size_full(
+                int(self.max_file_size), GLib.FormatSizeFlags.IEC_UNITS
+            )
+            msg = _("File is too large, " "maximum allowed file size is: %s") % size
 
         if invalid_file:
             raise FileError(msg)
 
         mime = guess_mime_type(path)
         if not mime:
-            mime = 'application/octet-stream'  # fallback mime type
-        self._log.info('Detected MIME type of file: %s', mime)
+            mime = "application/octet-stream"  # fallback mime type
+        self._log.info("Detected MIME type of file: %s", mime)
 
-        transfer = HTTPFileTransfer(self._account,
-                                    str(path),
-                                    contact,
-                                    mime,
-                                    encryption,
-                                    contact.is_groupchat)
+        transfer = HTTPFileTransfer(
+            self._account, str(path), contact, mime, encryption, contact.is_groupchat
+        )
 
         key = (contact.account, contact.jid)
         self._running_transfers[key].add(transfer)
 
         return transfer
 
-    def _on_http_upload_state_changed(self,
-                                      transfer: HTTPFileTransfer,
-                                      _signal_name: str,
-                                      state: FTState
-                                      ) -> None:
+    def _on_http_upload_state_changed(
+        self, transfer: HTTPFileTransfer, _signal_name: str, state: FTState
+    ) -> None:
 
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
-            message = OutgoingMessage(account=transfer.account,
-                                      contact=transfer.contact,
-                                      text=uri,
-                                      oob_url=uri)
+            message = OutgoingMessage(
+                account=transfer.account,
+                contact=transfer.contact,
+                text=uri,
+                oob_url=uri,
+            )
 
             self._client.send_message(message)
 
-    def _on_cancel_upload(self,
-                          transfer: HTTPFileTransfer,
-                          _signal_name: str
-                          ) -> None:
+    def _on_cancel_upload(self, transfer: HTTPFileTransfer, _signal_name: str) -> None:
 
         transfer.set_cancelled()
 
@@ -222,35 +211,38 @@ class HTTPUpload(BaseModule):
             result = cast(HTTPUploadData, task.finish())
         except HTTPUploadStanzaError as error:
 
-            if error.app_condition == 'file-too-large':
+            if error.app_condition == "file-too-large":
                 size = error.get_max_file_size()
                 if size is not None:
                     size_text = GLib.format_size_full(
                         int(size), GLib.FormatSizeFlags.IEC_UNITS
                     )
                 else:
-                    size_text = 'Unknown'
+                    size_text = "Unknown"
 
-                error_text = _('File is too large, '
-                               'maximum allowed file size is: %s') % size_text
-                transfer.set_error('file-too-large', error_text)
+                error_text = (
+                    _("File is too large, " "maximum allowed file size is: %s")
+                    % size_text
+                )
+                transfer.set_error("file-too-large", error_text)
             else:
-                transfer.set_error('misc', str(error))
+                transfer.set_error("misc", str(error))
             return
 
         except Exception as error:
-            transfer.set_error('misc', str(error))
+            transfer.set_error("misc", str(error))
             return
 
         transfer.process_result(result)
 
-        if (not self._uri_is_acceptable(transfer.put_uri) or
-                not self._uri_is_acceptable(transfer.get_uri)):
-            transfer.set_error('insecure')
+        if not self._uri_is_acceptable(transfer.put_uri) or not self._uri_is_acceptable(
+            transfer.get_uri
+        ):
+            transfer.set_error("insecure")
             return
 
-        self._log.info('Uploading file to %s', transfer.put_uri)
-        self._log.info('Please download from %s', transfer.get_uri)
+        self._log.info("Uploading file to %s", transfer.put_uri)
+        self._log.info("Please download from %s", transfer.get_uri)
 
         self._upload_file(transfer)
 
@@ -272,7 +264,7 @@ class HTTPUpload(BaseModule):
         if obj is None:
             return
 
-        obj.connect('notify::progress', self._on_upload_progress)
+        obj.connect("notify::progress", self._on_upload_progress)
 
         self._requests_in_progress[id(transfer)] = obj
 
@@ -288,20 +280,18 @@ class HTTPUpload(BaseModule):
         try:
             ftobj.raise_for_error()
         except CancelledError:
-            self._log.info('Upload cancelled')
+            self._log.info("Upload cancelled")
 
         except Exception as error:
             self._log.error(error)
-            transfer.set_error('http-response', str(error))
+            transfer.set_error("http-response", str(error))
 
         else:
             transfer.set_finished()
-            self._log.info('Upload completed successfully')
+            self._log.info("Upload completed successfully")
 
     def _on_upload_progress(
-        self,
-        ftobj: FileTransferM[UploadResult],
-        _param: GObject.ParamSpec
+        self, ftobj: FileTransferM[UploadResult], _param: GObject.ParamSpec
     ) -> None:
 
         transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
@@ -311,26 +301,28 @@ class HTTPUpload(BaseModule):
 class HTTPFileTransfer(FileTransfer):
 
     _state_descriptions = {
-        FTState.ENCRYPTING: _('Encrypting file…'),
-        FTState.PREPARING: _('Requesting HTTP File Upload Slot…'),
-        FTState.STARTED: _('Uploading via HTTP File Upload…'),
+        FTState.ENCRYPTING: _("Encrypting file…"),
+        FTState.PREPARING: _("Requesting HTTP File Upload Slot…"),
+        FTState.STARTED: _("Uploading via HTTP File Upload…"),
     }
 
     _errors = {
-        'insecure': _('The server returned an insecure transport (HTTP).'),
-        'encryption-not-available': _('There is no encryption method available '
-                                      'for the chosen encryption.'),
-        'unknown': _('Unknown error.')
+        "insecure": _("The server returned an insecure transport (HTTP)."),
+        "encryption-not-available": _(
+            "There is no encryption method available " "for the chosen encryption."
+        ),
+        "unknown": _("Unknown error."),
     }
 
-    def __init__(self,
-                 account: str,
-                 path: str,
-                 contact: types.ChatContactT,
-                 mime: str,
-                 encryption: str | None,
-                 groupchat: bool
-                 ) -> None:
+    def __init__(
+        self,
+        account: str,
+        path: str,
+        contact: types.ChatContactT,
+        mime: str,
+        encryption: str | None,
+        groupchat: bool,
+    ) -> None:
 
         FileTransfer.__init__(self, account)
 
@@ -393,8 +385,9 @@ class HTTPFileTransfer(FileTransfer):
         assert self.get_uri is not None
         if self._aes_key_data is not None:
             fragment = binascii.hexlify(
-                self._aes_key_data.iv + self._aes_key_data.key).decode()
-            return f'aesgcm{self.get_uri[5:]}#{fragment}'
+                self._aes_key_data.iv + self._aes_key_data.key
+            ).decode()
+            return f"aesgcm{self.get_uri[5:]}#{fragment}"
 
         return self.get_uri
 
@@ -402,9 +395,9 @@ class HTTPFileTransfer(FileTransfer):
     def filename(self) -> str:
         return self._path.name
 
-    def set_error(self, domain: str, text: str = '') -> None:
+    def set_error(self, domain: str, text: str = "") -> None:
         if not text:
-            text = self._errors.get(domain) or self._errors['unknown']
+            text = self._errors.get(domain) or self._errors["unknown"]
 
         super().set_error(domain, text)
 
