@@ -7,9 +7,7 @@ from __future__ import annotations
 from typing import NamedTuple
 
 import logging
-import os
 import sys
-import webbrowser
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import ParseResult
@@ -17,15 +15,12 @@ from urllib.parse import unquote
 from urllib.parse import urlparse
 
 from gi.repository import Gio
-from gi.repository import GLib
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import iana
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
-from gajim.common.dbus.file_manager import DBusFileManager
 from gajim.common.regex import IRI_RX
-from gajim.common.util.decorators import catch_exceptions
 
 log = logging.getLogger('gajim.c.util.uri')
 
@@ -186,70 +181,6 @@ def parse_uri(uri: str) -> UriT:
         return uri_class.from_urlparts(urlparts, uri)
     except Exception as error:
         return InvalidUri(scheme='', uri=uri, error=str(error))
-
-
-@catch_exceptions
-def open_uri(uri: UriT | str) -> None:
-    if isinstance(uri, str):
-        uri = parse_uri(uri)
-
-    match uri:
-        case InvalidUri():
-            log.warning('Failed to open uri: %s', uri.error)
-
-        case XmppIri():
-            app.window.open_xmpp_iri(uri)
-
-        case GeoUri():
-            if Gio.AppInfo.get_default_for_uri_scheme('geo'):
-                open_uri_externally(uri.uri)
-            else:
-                open_uri(geo_provider_from_location(uri.lat, uri.lon))
-
-        case Uri():
-            open_uri_externally(uri.uri)
-
-
-def open_uri_externally(uri: str) -> None:
-    if sys.platform == 'win32':
-        webbrowser.open(uri, new=2)
-    else:
-        try:
-            Gio.AppInfo.launch_default_for_uri(uri)
-        except GLib.Error as err:
-            log.info(
-                'open_uri_externally: ' "Couldn't launch default for %s: %s", uri, err
-            )
-
-
-def open_file_uri(uri: str) -> None:
-    try:
-        if sys.platform != 'win32':
-            Gio.AppInfo.launch_default_for_uri(uri)
-        else:
-            os.startfile(uri, 'open')  # noqa: S606
-    except Exception as err:
-        log.info("Couldn't open file URI %s: %s", uri, err)
-
-
-@catch_exceptions
-def open_file(path: Path) -> None:
-    if not path.exists():
-        log.warning('Unable to open file, path %s does not exist', path)
-        return
-
-    path_absolute = path.resolve()
-    open_file_uri(path_absolute.as_uri())
-
-
-def open_directory(path: Path) -> None:
-    return open_file(path)
-
-
-def show_in_folder(path: Path) -> None:
-    if not DBusFileManager().show_items_sync([path.as_uri()]):
-        # Fall back to just opening the containing folder
-        open_directory(path.parent)
 
 
 def filesystem_path_from_uri(uri: str) -> Path | None:

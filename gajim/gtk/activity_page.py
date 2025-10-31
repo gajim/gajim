@@ -14,7 +14,6 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
-from gajim.common.util.uri import open_uri
 
 from gajim.gtk import structs
 from gajim.gtk.activity_list import ActivityListItemT
@@ -30,6 +29,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import open_uri
 
 
 class ActivityPage(Gtk.Stack):

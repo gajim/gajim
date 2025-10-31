@@ -26,10 +26,10 @@ from gajim.common.i18n import _
 from gajim.common.util.image import get_texture_from_data
 from gajim.common.util.text import make_href_markup
 from gajim.common.util.text import process_non_spacing_marks
-from gajim.common.util.uri import open_uri
 
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import open_uri
 from gajim.gtk.widgets import MultiLineLabel
 
 # Options

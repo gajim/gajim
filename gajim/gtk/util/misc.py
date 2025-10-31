@@ -10,14 +10,18 @@ from typing import Literal
 
 import datetime
 import logging
+import os
 import sys
+import webbrowser
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from functools import wraps
+from pathlib import Path
 
 import cairo
 from gi.repository import Adw
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -26,6 +30,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
+from gajim.common.dbus.file_manager import DBusFileManager
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -34,6 +39,14 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.styling import PlainBlock
+from gajim.common.util.decorators import catch_exceptions
+from gajim.common.util.uri import geo_provider_from_location
+from gajim.common.util.uri import GeoUri
+from gajim.common.util.uri import InvalidUri
+from gajim.common.util.uri import parse_uri
+from gajim.common.util.uri import Uri
+from gajim.common.util.uri import UriT
+from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.const import GDK_MEMORY_DEFAULT
 
@@ -369,3 +382,67 @@ def add_alternative_accelerator(accelerators: list[str]) -> list[str]:
         return [accelerators[0], alternative]
 
     return accelerators
+
+
+@catch_exceptions
+def open_uri(uri: UriT | str) -> None:
+    if isinstance(uri, str):
+        uri = parse_uri(uri)
+
+    match uri:
+        case InvalidUri():
+            log.warning("Failed to open uri: %s", uri.error)
+
+        case XmppIri():
+            app.window.open_xmpp_iri(uri)
+
+        case GeoUri():
+            if Gio.AppInfo.get_default_for_uri_scheme("geo"):
+                open_uri_externally(uri.uri)
+            else:
+                open_uri(geo_provider_from_location(uri.lat, uri.lon))
+
+        case Uri():
+            open_uri_externally(uri.uri)
+
+
+def open_uri_externally(uri: str) -> None:
+    if sys.platform == "win32":
+        webbrowser.open(uri, new=2)
+    else:
+        try:
+            Gio.AppInfo.launch_default_for_uri(uri)
+        except GLib.Error as err:
+            log.info(
+                "open_uri_externally: " "Couldn't launch default for %s: %s", uri, err
+            )
+
+
+def open_file_uri(uri: str) -> None:
+    try:
+        if sys.platform != "win32":
+            Gio.AppInfo.launch_default_for_uri(uri)
+        else:
+            os.startfile(uri, "open")  # noqa: S606
+    except Exception as err:
+        log.info("Couldn't open file URI %s: %s", uri, err)
+
+
+@catch_exceptions
+def open_file(path: Path) -> None:
+    if not path.exists():
+        log.warning("Unable to open file, path %s does not exist", path)
+        return
+
+    path_absolute = path.resolve()
+    open_file_uri(path_absolute.as_uri())
+
+
+def open_directory(path: Path) -> None:
+    return open_file(path)
+
+
+def show_in_folder(path: Path) -> None:
+    if not DBusFileManager().show_items_sync([path.as_uri()]):
+        # Fall back to just opening the containing folder
+        open_directory(path.parent)

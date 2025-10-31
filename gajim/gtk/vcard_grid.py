@@ -58,13 +58,13 @@ from gajim.common.iana import get_zone_data
 from gajim.common.iana import ZONE_DATA
 from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.util.uri import InvalidUri
-from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import parse_uri
 from gajim.common.util.uri import Uri
 
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_py_to_glib_datetime
+from gajim.gtk.util.misc import open_uri
 
 PropertyT = (
     AdrProperty

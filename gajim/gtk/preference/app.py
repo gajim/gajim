@@ -22,10 +22,8 @@ from gajim.common.i18n import _
 from gajim.common.setting_values import BoolSettings
 
 # from gajim.common.util.av import AudioOutputManager
-from gajim.common.util.av import AudioInputManager
-
 # from gajim.common.util.av import VideoInputManager
-from gajim.common.util.uri import open_directory
+from gajim.common.util.av import AudioInputManager
 from gajim.common.util.version import package_version
 
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -37,6 +35,7 @@ from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
+from gajim.gtk.util.misc import open_directory
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 

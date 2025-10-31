@@ -24,7 +24,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
-from gajim.common.util.uri import open_uri
 from gajim.common.util.user_strings import get_time_zone_string
 
 from gajim.gtk.avatar import get_show_circle
@@ -32,6 +31,7 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.util.misc import open_uri
 
 
 @Gtk.Template(string=get_ui_string("contact_popover.ui"))

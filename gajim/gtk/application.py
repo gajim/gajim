@@ -60,9 +60,6 @@ from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
-from gajim.common.util.uri import open_file
-from gajim.common.util.uri import open_uri
-from gajim.common.util.uri import show_in_folder
 
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -77,6 +74,9 @@ from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.const import SHORTCUTS
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import add_alternative_accelerator
+from gajim.gtk.util.misc import open_file
+from gajim.gtk.util.misc import open_uri
+from gajim.gtk.util.misc import show_in_folder
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
 from gajim.gtk.util.window import open_window

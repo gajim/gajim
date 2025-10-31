@@ -34,13 +34,13 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import format_eta
-from gajim.common.util.uri import open_file
-from gajim.common.util.uri import show_in_folder
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
+from gajim.gtk.util.misc import open_file
+from gajim.gtk.util.misc import show_in_folder
 
 TransferEventT = FileRequestReceivedEvent | FileRequestSent
 

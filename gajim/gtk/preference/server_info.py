@@ -26,7 +26,6 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.util.uri import open_uri
 
 from gajim.gtk.const import SettingType
 from gajim.gtk.preference.widgets import CopyButton
@@ -37,6 +36,7 @@ from gajim.gtk.settings import SubPageSetting
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.util.misc import open_uri
 
 log = logging.getLogger("gajim.gtk.preference.server_info")
 

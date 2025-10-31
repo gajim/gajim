@@ -44,7 +44,6 @@ from gajim.common.i18n import _
 from gajim.common.util.http import create_http_session
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
-from gajim.common.util.uri import open_uri
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
@@ -55,6 +54,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import open_uri
 from gajim.gtk.util.styling import get_color_for_account
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
