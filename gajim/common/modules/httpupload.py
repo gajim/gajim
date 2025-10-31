@@ -17,8 +17,6 @@ from urllib.parse import urlparse
 from gi.repository import GLib
 from gi.repository import GObject
 from nbxmpp.errors import HTTPUploadStanzaError
-from nbxmpp.errors import MalformedStanzaError
-from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
@@ -221,23 +219,27 @@ class HTTPUpload(BaseModule):
         transfer = cast(HTTPFileTransfer, task.get_user_data())
 
         try:
-            result = task.finish()
-        except (StanzaError,
-                HTTPUploadStanzaError,
-                MalformedStanzaError) as error:
+            result = cast(HTTPUploadData, task.finish())
+        except HTTPUploadStanzaError as error:
 
             if error.app_condition == 'file-too-large':
-                size_text = GLib.format_size_full(
-                    error.get_max_file_size(),
-                    GLib.FormatSizeFlags.IEC_UNITS)
+                size = error.get_max_file_size()
+                if size is not None:
+                    size_text = GLib.format_size_full(
+                        int(size), GLib.FormatSizeFlags.IEC_UNITS
+                    )
+                else:
+                    size_text = 'Unknown'
 
                 error_text = _('File is too large, '
                                'maximum allowed file size is: %s') % size_text
                 transfer.set_error('file-too-large', error_text)
-
             else:
                 transfer.set_error('misc', str(error))
+            return
 
+        except Exception as error:
+            transfer.set_error('misc', str(error))
             return
 
         transfer.process_result(result)
@@ -324,7 +326,7 @@ class HTTPFileTransfer(FileTransfer):
     def __init__(self,
                  account: str,
                  path: str,
-                 contact: types.ContactT,
+                 contact: types.ChatContactT,
                  mime: str,
                  encryption: str | None,
                  groupchat: bool
@@ -365,7 +367,7 @@ class HTTPFileTransfer(FileTransfer):
         return self._mime
 
     @property
-    def contact(self) -> types.ContactT:
+    def contact(self) -> types.ChatContactT:
         return self._contact
 
     @property
@@ -388,8 +390,8 @@ class HTTPFileTransfer(FileTransfer):
         return self._aes_key_data
 
     def get_transformed_uri(self) -> str:
+        assert self.get_uri is not None
         if self._aes_key_data is not None:
-            assert self.get_uri is not None
             fragment = binascii.hexlify(
                 self._aes_key_data.iv + self._aes_key_data.key).decode()
             return f'aesgcm{self.get_uri[5:]}#{fragment}'

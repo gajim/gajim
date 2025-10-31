@@ -241,7 +241,6 @@ exclude = [
   "gajim/common/modules/contacts.py",
   "gajim/common/modules/discovery.py",
   "gajim/common/modules/gateway.py",
-  "gajim/common/modules/httpupload.py",
   "gajim/common/modules/ibb.py",
   "gajim/common/modules/jingle.py",
   "gajim/common/modules/muc.py",
