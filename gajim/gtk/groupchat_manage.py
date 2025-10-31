@@ -46,7 +46,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
         self._room_config_form = None
 
         self._ui = get_builder("groupchat_manage.ui")
-        self.append(self._ui.stack)
+        self.append(self._ui.scrolled)
 
         self._avatar_chooser_button = AvatarFileChooserButton(
             tooltip=_("Change your profile picture"),

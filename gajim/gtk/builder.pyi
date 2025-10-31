@@ -405,6 +405,7 @@ class GroupchatInviterBuilder(Builder):
     invitees_scrolled: Gtk.ScrolledWindow
 
 class GroupchatManageBuilder(Builder):
+    scrolled: Gtk.ScrolledWindow
     stack: Gtk.Stack
     avatar_overlay: Gtk.Overlay
     avatar_button_image: Gtk.Image
