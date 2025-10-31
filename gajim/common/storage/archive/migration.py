@@ -313,7 +313,7 @@ class Migration:
 
     def _v15(self) -> None:
         mod.Base.metadata.create_all(self._engine)
-        self._execute_multiple(['PRAGMA user_version=14'])
+        self._execute_multiple(['PRAGMA user_version=15'])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
