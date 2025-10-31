@@ -246,7 +246,7 @@ class HTTPUpload(BaseModule):
 
         if (not self._uri_is_acceptable(transfer.put_uri) or
                 not self._uri_is_acceptable(transfer.get_uri)):
-            transfer.set_error('unsecure')
+            transfer.set_error('insecure')
             return
 
         self._log.info('Uploading file to %s', transfer.put_uri)
@@ -317,7 +317,7 @@ class HTTPFileTransfer(FileTransfer):
     }
 
     _errors = {
-        'unsecure': _('The server returned an insecure transport (HTTP).'),
+        'insecure': _('The server returned an insecure transport (HTTP).'),
         'encryption-not-available': _('There is no encryption method available '
                                       'for the chosen encryption.'),
         'unknown': _('Unknown error.')
