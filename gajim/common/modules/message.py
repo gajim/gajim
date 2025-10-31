@@ -225,7 +225,8 @@ class Message(BaseModule):
         if properties.correction is not None:
             correction_id = properties.correction.id
 
-        og_data = get_open_graph_data(properties.open_graph)
+        # We don’t want to store more than 3
+        og_data = get_open_graph_data(properties.open_graph)[:3]
 
         message_data = mod.Message(
             account_=self._account,
