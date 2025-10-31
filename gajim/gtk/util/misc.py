@@ -12,7 +12,6 @@ import datetime
 import logging
 import os
 import sys
-import webbrowser
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from functools import wraps
@@ -407,15 +406,13 @@ def open_uri(uri: UriT | str) -> None:
 
 
 def open_uri_externally(uri: str) -> None:
-    if sys.platform == "win32":
-        webbrowser.open(uri, new=2)
-    else:
-        try:
-            Gio.AppInfo.launch_default_for_uri(uri)
-        except GLib.Error as err:
-            log.info(
-                "open_uri_externally: " "Couldn't launch default for %s: %s", uri, err
-            )
+    launcher = Gtk.UriLauncher(uri=uri)
+    try:
+        launcher.launch(app.window)
+    except Exception as error:
+        log.warning(
+            "open_uri_externally: Couldn't launch default for %s: %s", uri, error
+        )
 
 
 def open_file_uri(uri: str) -> None:
