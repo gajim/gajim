@@ -106,7 +106,6 @@ class AccountPage(Gtk.Box, SignalManager):
             self._profile_button.set_action_name(f"app.{account}-profile")
 
             vcard = client.get_module("VCard4").get_own_vcard()
-            print("ID vcard", id(vcard))
             self._set_vcard_rows(vcard)
 
         self._connect_signals()
