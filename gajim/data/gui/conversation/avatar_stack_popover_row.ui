@@ -21,7 +21,7 @@
               <object class="GtkLabel" id="_contact_name_label">
                 <property name="halign">start</property>
                 <property name="ellipsize">end</property>
-                <property name="max-width-chars">52</property>
+                <property name="max-width-chars">30</property>
               </object>
             </child>
             <child>
