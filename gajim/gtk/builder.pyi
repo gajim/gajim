@@ -393,6 +393,7 @@ class GroupchatInfoScrolledBuilder(Builder):
     logs_row: Adw.ActionRow
     logs: Gtk.LinkButton
     lang_row: Adw.ActionRow
+    features_group: Adw.PreferencesGroup
     features_listbox: Gtk.ListBox
 
 class GroupchatInviterBuilder(Builder):

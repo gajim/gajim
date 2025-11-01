@@ -232,6 +232,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         if self._minimal:
             return
 
+        self._ui.features_group.set_visible(True)
         self._ui.users_row.set_subtitle(info.muc_users or "")
         self._ui.users_row.set_visible(info.muc_users is not None and self._show_users)
 

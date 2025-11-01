@@ -174,7 +174,8 @@
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesGroup">
+          <object class="AdwPreferencesGroup" id="features_group">
+            <property name="visible">false</property>
             <property name="title" translatable="yes">Information</property>
             <style>
               <class name="my-18"/>
