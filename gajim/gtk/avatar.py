@@ -551,36 +551,55 @@ class AvatarStorage(metaclass=Singleton):
     def get_occupant_texture(
         self,
         jid: JID,
-        occupant: mod.Occupant,
+        occupant: mod.Occupant | str,
         size: int,
         scale: int,
-        default: bool = False,
         style: str = "circle",
     ) -> Gdk.Texture:
 
-        assert occupant.nickname is not None
+        if isinstance(occupant, str):
+            key = occupant
+            nickname = occupant
+            avatar_sha = None
+            real_remote = None
+        else:
+            key = occupant.id
+            assert occupant.nickname is not None
+            nickname = occupant.nickname
+            avatar_sha = occupant.avatar_sha
+            real_remote = occupant.real_remote
 
-        texture = self._occupant_cache[jid].get((occupant.id, size, scale))
+        texture = self._occupant_cache[jid].get((key, size, scale))
         if texture is not None:
             return texture
 
-        surface = self._get_avatar_from_storage(occupant.avatar_sha, size, scale, style)
+        surface = self._get_avatar_from_storage(avatar_sha, size, scale, style)
         if surface is not None:
             texture = convert_surface_to_texture(surface)
-            self._occupant_cache[jid][(occupant.id, size, scale)] = texture
+            self._occupant_cache[jid][(key, size, scale)] = texture
             return texture
 
-        if occupant.real_remote is not None:
-            color = text_to_color(str(occupant.real_remote.jid))
+        if real_remote is not None:
+            color = text_to_color(str(real_remote.jid))
         else:
-            color = text_to_color(occupant.nickname)
+            color = text_to_color(nickname)
 
-        letter = generate_avatar_letter(occupant.nickname)
+        letter = generate_avatar_letter(nickname)
         surface = generate_default_avatar(letter, color, size, scale, style=style)
 
         texture = convert_surface_to_texture(surface)
-        self._occupant_cache[jid][(occupant.id, size, scale)] = texture
+        self._occupant_cache[jid][(key, size, scale)] = texture
         return texture
+
+    def get_own_avatar_texture(
+        self, account: str, size: int, scale: int, add_show: bool = False
+    ) -> Gdk.Texture | None:
+        client = app.get_client(account)
+        self_contact = client.get_module("Contacts").get_contact(
+            client.get_own_jid().bare
+        )
+        assert isinstance(self_contact, BareContact)
+        return self_contact.get_avatar(size, scale, add_show=add_show)
 
     def get_workspace_texture(
         self, workspace_id: str, size: int, scale: int

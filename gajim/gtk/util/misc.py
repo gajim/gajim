@@ -148,20 +148,29 @@ def get_avatar_for_message(
     db_row: mod.Message, contact: types.ChatContactT, scale: int, size: AvatarSize
 ) -> Gdk.Texture | None:
 
-    if isinstance(contact, GroupchatContact):
-        name = get_contact_name_for_message(db_row, contact)
-        resource_contact = contact.get_resource(name)
-        return resource_contact.get_avatar(size, scale, add_show=False)
-
     if db_row.direction == ChatDirection.OUTGOING:
-        client = app.get_client(contact.account)
-        self_contact = client.get_module("Contacts").get_contact(
-            client.get_own_jid().bare
+        return app.app.avatar_storage.get_own_avatar_texture(
+            contact.account, size, scale
         )
-        assert isinstance(self_contact, BareContact)
-        return self_contact.get_avatar(size, scale, add_show=False)
 
-    return contact.get_avatar(size, scale, add_show=False)
+    match db_row.type:
+        case MessageType.GROUPCHAT | MessageType.PM:
+
+            if db_row.resource is None:
+                # Message from Groupchat itself
+                assert isinstance(contact, GroupchatContact)
+                return contact.get_avatar(size, scale)
+
+            return app.app.avatar_storage.get_occupant_texture(
+                db_row.remote.jid, db_row.occupant or db_row.resource, size, scale
+            )
+
+        case MessageType.CHAT:
+            assert isinstance(contact, BareContact)
+            return contact.get_avatar(size, scale, add_show=False)
+
+        case _:
+            raise ValueError(f"Unhandled type: {db_row.type}")
 
 
 def make_pango_attributes(block: PlainBlock) -> Pango.AttrList:
