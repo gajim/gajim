@@ -36,7 +36,6 @@ BoolSettings = Literal[
     'confirm_close_muc',
     'confirm_on_window_delete',
     'dev_force_bookmark_2',
-    'developer_modus',
     'enable_emoji_shortcodes',
     'enable_keepassxc_integration',
     'escape_key_closes',
@@ -170,7 +169,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'date_format': '%x',
     'date_time_format': '%c',
     'dev_force_bookmark_2': False,
-    'developer_modus': False,
     'dictionary_url': 'WIKTIONARY',
     'enable_emoji_shortcodes': True,
     'enable_keepassxc_integration': False,
@@ -605,7 +603,6 @@ ADVANCED_SETTINGS = {
         'date_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'date_time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
-        'developer_modus': '',
         'dictionary_url': _(
             'Either a custom URL with %%s in it (where %%s is the word/phrase)'
             ' or "WIKTIONARY" (which means use Wikitionary).'),
@@ -640,8 +637,6 @@ ADVANCED_SETTINGS = {
         'quick_reaction_emojis': _(
             'Comma-separated list of emojis for quick reaction buttons'),
         'search_engine': '',
-        'send_on_ctrl_enter': _(
-            'Send message on Ctrl+Enter and make a new line with Enter.'),
         'stun_server': _('STUN server to use when using Jingle'),
         'time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'use_kib_mib': _(
