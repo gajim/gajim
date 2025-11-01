@@ -75,6 +75,15 @@ class VCard4(BaseModule):
         self._log.info("Subscribe to node")
         self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB)
 
+        jid = self._get_own_bare_jid()
+
+        self._nbxmpp('VCard4').request_vcard(
+            jid,
+            timeout=10,
+            callback=self._on_vcard_received,
+            user_data=(jid, None),
+        )
+
     def get_own_vcard(self) -> VCard:
         return self._own_vcard
 
@@ -122,6 +131,13 @@ class VCard4(BaseModule):
         else:
             self._log.info('Received VCard for %s', jid)
             self._vcard_cache[jid] = (time.time(), vcard)
+
+        if jid.bare_match(self._get_own_bare_jid()):
+            self._own_vcard = vcard
+            app.ged.raise_event(VCard4Received(self._account, self._own_vcard))
+
+        if weak_callable is None:
+            return
 
         callback = weak_callable()
         if callback is None:
