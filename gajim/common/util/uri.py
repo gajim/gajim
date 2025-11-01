@@ -22,7 +22,7 @@ from gajim.common import iana
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
 from gajim.common.regex import IRI_RX
 
-log = logging.getLogger('gajim.c.util.uri')
+log = logging.getLogger("gajim.c.util.uri")
 
 
 @dataclass
@@ -32,9 +32,9 @@ class Uri:
 
     @classmethod
     def from_urlparts(cls, urlparts: ParseResult, uri: str) -> Uri:
-        if urlparts.scheme in ('http', 'https'):
+        if urlparts.scheme in ("http", "https"):
             if not urlparts.netloc:
-                raise ValueError(f'No host or empty host in an {urlparts.scheme} URI')
+                raise ValueError(f"No host or empty host in an {urlparts.scheme} URI")
         return cls(scheme=urlparts.scheme, uri=uri)
 
 
@@ -52,18 +52,18 @@ class XmppIri(Uri):
     @classmethod
     def from_urlparts(cls, urlparts: ParseResult, uri: str) -> XmppIri:
         urlparts = urlparse(uri)
-        if urlparts.scheme != 'xmpp':
-            raise ValueError('Invalid scheme: %s' % urlparts.scheme)
+        if urlparts.scheme != "xmpp":
+            raise ValueError("Invalid scheme: %s" % urlparts.scheme)
 
-        if urlparts.path.startswith('/'):
-            raise ValueError('Authority component not supported: %s' % uri)
+        if urlparts.path.startswith("/"):
+            raise ValueError("Authority component not supported: %s" % uri)
 
         if not urlparts.path:
-            raise ValueError('No path component found: %s' % uri)
+            raise ValueError("No path component found: %s" % uri)
 
-        jid = JID.from_iri(f'xmpp:{urlparts.path}')
+        jid = JID.from_iri(f"xmpp:{urlparts.path}")
         qtype, qparams = parse_xmpp_uri_query(urlparts.query)
-        return cls(scheme='xmpp', uri=uri, jid=jid, action=qtype, params=qparams)
+        return cls(scheme="xmpp", uri=uri, jid=jid, action=qtype, params=qparams)
 
     @classmethod
     def from_string(cls, uri: str) -> XmppIri:
@@ -77,11 +77,11 @@ class MailUri(Uri):
 
     @classmethod
     def from_urlparts(cls, urlparts: ParseResult, uri: str) -> MailUri:
-        if urlparts.path.startswith('/'):
-            raise ValueError('Authority component not supported: %s' % uri)
+        if urlparts.path.startswith("/"):
+            raise ValueError("Authority component not supported: %s" % uri)
 
         if not urlparts.path:
-            raise ValueError('No path component found: %s' % uri)
+            raise ValueError("No path component found: %s" % uri)
 
         return cls(scheme=urlparts.scheme, uri=uri, addr=urlparts.path)
 
@@ -94,13 +94,13 @@ class GeoUri(Uri):
 
     @classmethod
     def from_urlparts(cls, urlparts: ParseResult, uri: str) -> GeoUri:
-        lat, _, lon_alt = urlparts.path.partition(',')
+        lat, _, lon_alt = urlparts.path.partition(",")
         if not lat or not lon_alt:
-            raise ValueError('No latitude or longitude')
+            raise ValueError("No latitude or longitude")
 
-        lon, _, alt = lon_alt.partition(',')
+        lon, _, alt = lon_alt.partition(",")
         if not lon:
-            raise ValueError('No longitude')
+            raise ValueError("No longitude")
 
         return cls(scheme=urlparts.scheme, uri=uri, lat=lat, lon=lon, alt=alt)
 
@@ -120,48 +120,43 @@ class FileUri(Uri):
 UriT = Uri | InvalidUri | XmppIri | MailUri | GeoUri | FileUri
 
 
-SCHEME_CLASS_MAP = {
-    'xmpp': XmppIri,
-    'mailto': MailUri,
-    'geo': GeoUri,
-    'file': FileUri
-}
+SCHEME_CLASS_MAP = {"xmpp": XmppIri, "mailto": MailUri, "geo": GeoUri, "file": FileUri}
 
 
 def is_known_uri_scheme(scheme: str) -> bool:
-    '''
+    """
     `scheme` is lower-case
-    '''
+    """
     if not scheme:
         return False
     if scheme in iana.URI_SCHEMES:
         return True
     if scheme in NONREGISTERED_URI_SCHEMES:
         return True
-    return scheme in app.settings.get('additional_uri_schemes').split()
+    return scheme in app.settings.get("additional_uri_schemes").split()
 
 
 def parse_xmpp_uri_query(pct_iquerycomp: str) -> tuple[str, dict[str, str]]:
-    '''
+    """
     Parses 'mess%61ge;b%6Fdy=Hello%20%F0%9F%8C%90%EF%B8%8F' into
     ('message', {'body': 'Hello 🌐️'}), empty string into ('', {}).
-    '''
+    """
     # Syntax and terminology from
     # <https://rfc-editor.org/rfc/rfc5122#section-2.2>; the pct_ prefix means
     # percent encoding not being undone yet.
 
     if not pct_iquerycomp:
-        return '', {}
+        return "", {}
 
-    pct_iquerytype, _, pct_ipairs = pct_iquerycomp.partition(';')
-    iquerytype = unquote(pct_iquerytype, errors='strict')
+    pct_iquerytype, _, pct_ipairs = pct_iquerycomp.partition(";")
+    iquerytype = unquote(pct_iquerytype, errors="strict")
     if not pct_ipairs:
         return iquerytype, {}
 
     pairs: dict[str, str] = {}
-    for pct_ipair in pct_ipairs.split(';'):
-        pct_ikey, _, pct_ival = pct_ipair.partition('=')
-        pairs[unquote(pct_ikey, errors='strict')] = unquote(pct_ival, errors='replace')
+    for pct_ipair in pct_ipairs.split(";"):
+        pct_ikey, _, pct_ival = pct_ipair.partition("=")
+        pairs[unquote(pct_ikey, errors="strict")] = unquote(pct_ival, errors="replace")
     return iquerytype, pairs
 
 
@@ -169,18 +164,18 @@ def parse_uri(uri: str) -> UriT:
     try:
         urlparts = urlparse(uri)
     except Exception as error:
-        return InvalidUri(scheme='', uri=uri, error=str(error))
+        return InvalidUri(scheme="", uri=uri, error=str(error))
 
     scheme = urlparts.scheme
 
     if not is_known_uri_scheme(scheme):
-        return InvalidUri(scheme='', uri=uri, error='Unknown scheme')
+        return InvalidUri(scheme="", uri=uri, error="Unknown scheme")
 
     uri_class = SCHEME_CLASS_MAP.get(scheme, Uri)
     try:
         return uri_class.from_urlparts(urlparts, uri)
     except Exception as error:
-        return InvalidUri(scheme='', uri=uri, error=str(error))
+        return InvalidUri(scheme="", uri=uri, error=str(error))
 
 
 def filesystem_path_from_uri(uri: str) -> Path | None:
@@ -188,13 +183,13 @@ def filesystem_path_from_uri(uri: str) -> Path | None:
     if not isinstance(puri, FileUri):
         return None
 
-    if puri.netloc and puri.netloc.lower() != 'localhost' and sys.platform != 'win32':
+    if puri.netloc and puri.netloc.lower() != "localhost" and sys.platform != "win32":
         return None
     return Path(puri.path)
 
 
 def get_file_path_from_dnd_dropped_uri(text: str) -> Path | None:
-    uri = text.strip('\r\n\x00')  # remove \r\n and NULL
+    uri = text.strip("\r\n\x00")  # remove \r\n and NULL
     return filesystem_path_from_uri(uri)
 
 
@@ -235,7 +230,7 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
 
 
 def geo_provider_from_location(lat: str, lon: str) -> str:
-    return f'https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16'
+    return f"https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16"
 
 
 class Coords(NamedTuple):
@@ -253,13 +248,13 @@ def split_geo_uri(uri: str) -> Coords:
     coords = uri[4:]
 
     # Remove arguments
-    if ';' in coords:
-        coords, _ = coords.split(';', maxsplit=1)
+    if ";" in coords:
+        coords, _ = coords.split(";", maxsplit=1)
 
     # Split coords
-    coords = coords.split(',')
+    coords = coords.split(",")
     if len(coords) not in (2, 3):
-        raise ValueError('Invalid geo uri: invalid coord count')
+        raise ValueError("Invalid geo uri: invalid coord count")
 
     # Remoove coord-c (altitude)
     if len(coords) == 3:
@@ -267,12 +262,12 @@ def split_geo_uri(uri: str) -> Coords:
 
     lat, lon = coords
     if float(lat) < -90 or float(lat) > 90:
-        raise ValueError('Invalid geo_uri: invalid latitude %s' % lat)
+        raise ValueError("Invalid geo_uri: invalid latitude %s" % lat)
 
     if float(lon) < -180 or float(lon) > 180:
-        raise ValueError('Invalid geo_uri: invalid longitude %s' % lon)
+        raise ValueError("Invalid geo_uri: invalid longitude %s" % lon)
 
-    location = ','.join(coords)
+    location = ",".join(coords)
     return Coords(location=location, lat=lat, lon=lon)
 
 
@@ -287,11 +282,11 @@ def get_geo_choords(uri: str) -> Coords | None:
     except Exception:
         return None
 
-    if urlparts.scheme != 'geo':
+    if urlparts.scheme != "geo":
         return None
 
     try:
         return split_geo_uri(uri)
     except Exception as err:
-        log.info('Bad geo URI %s: %s', uri, err)
+        log.info("Bad geo URI %s: %s", uri, err)
         return None

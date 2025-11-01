@@ -10,5 +10,5 @@ from gajim.common.i18n import get_default_lang
 
 def get_rfc5646_lang() -> str:
     lang = get_default_lang()
-    lang = lang.replace('_', '-')
+    lang = lang.replace("_", "-")
     return lang if lang in RFC5646_LANGUAGE_TAGS else "en"

@@ -37,11 +37,11 @@ def package_version(requirement: str) -> bool:
 
 @functools.lru_cache(maxsize=1)
 def get_os_info() -> str:
-    info = 'N/A'
-    if sys.platform in ('win32', 'darwin'):
-        info = f'{platform.system()} {platform.release()}'
+    info = "N/A"
+    if sys.platform in ("win32", "darwin"):
+        info = f"{platform.system()} {platform.release()}"
 
-    elif sys.platform == 'linux':
+    elif sys.platform == "linux":
         try:
             import distro  # type: ignore
 
@@ -52,43 +52,43 @@ def get_os_info() -> str:
 
 
 def get_os_name() -> str:
-    if sys.platform in ('win32', 'darwin'):
+    if sys.platform in ("win32", "darwin"):
         return platform.system()
-    if os.name == 'posix':
+    if os.name == "posix":
         try:
             import distro  # type: ignore
 
             return distro.name(pretty=True)  # type: ignore
         except ImportError:
             return platform.system()
-    return ''
+    return ""
 
 
 def get_os_version() -> str:
-    if sys.platform in ('win32', 'darwin'):
+    if sys.platform in ("win32", "darwin"):
         return platform.version()
-    if os.name == 'posix':
+    if os.name == "posix":
         try:
             import distro  # type: ignore
 
             return distro.version(pretty=True)  # type: ignore
         except ImportError:
             return platform.release()
-    return ''
+    return ""
 
 
 def get_gobject_version() -> str:
-    return '.'.join(map(str, GObject.pygobject_version))
+    return ".".join(map(str, GObject.pygobject_version))
 
 
 def get_glib_version() -> str:
-    return '.'.join(
+    return ".".join(
         map(str, [GLib.MAJOR_VERSION, GLib.MINOR_VERSION, GLib.MICRO_VERSION])
     )
 
 
 def get_soup_version() -> str:
-    return '.'.join(
+    return ".".join(
         map(
             str,
             [

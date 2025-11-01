@@ -17,14 +17,13 @@ from PIL import Image
 from PIL import ImageFile
 from PIL import UnidentifiedImageError
 
-log = logging.getLogger('gajim.c.util.image')
+log = logging.getLogger("gajim.c.util.image")
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def get_texture_from_file(
-    path: str | Path,
-    size: int | None = None
+    path: str | Path, size: int | None = None
 ) -> Gdk.Texture | None:
     pixbuf = get_pixbuf_from_file(path, size)
     if pixbuf is None:
@@ -35,9 +34,9 @@ def get_texture_from_file(
 def get_pixbuf_from_file(
     path: str | Path, size: int | None = None
 ) -> GdkPixbuf.Pixbuf | None:
-    '''Tries to load Pixbuf from file to return it with size.
+    """Tries to load Pixbuf from file to return it with size.
     If Pixbuf fails, Pillow is used as fallback.
-    '''
+    """
     try:
         if size is None:
             return GdkPixbuf.Pixbuf.new_from_file(str(path))
@@ -45,12 +44,12 @@ def get_pixbuf_from_file(
 
     except GLib.Error:
         try:
-            with open(path, 'rb') as image_handle:
+            with open(path, "rb") as image_handle:
                 img = Image.open(image_handle)
-                converted_image = img.convert('RGBA')
+                converted_image = img.convert("RGBA")
         except (NameError, OSError, UnidentifiedImageError):
-            log.warning('Pillow convert failed: %s', path)
-            log.debug('Error', exc_info=True)
+            log.warning("Pillow convert failed: %s", path)
+            log.debug("Error", exc_info=True)
             return None
 
         array = GLib.Bytes.new(converted_image.tobytes())
@@ -64,15 +63,15 @@ def get_pixbuf_from_file(
         return pixbuf
 
     except RuntimeError as error:
-        log.warning('Loading pixbuf failed: %s', error)
+        log.warning("Loading pixbuf failed: %s", error)
         return None
 
 
 def get_texture_from_data(data: bytes, size: int | None = None) -> Gdk.Texture | None:
-    '''
+    """
     Load data into PixbufLoader and return GdkPixbuf.Pixbuf if possible.
     Pillow is used as fallback mechanism.
-    '''
+    """
     pixbufloader = GdkPixbuf.PixbufLoader()
     try:
         pixbufloader.write(data)
@@ -82,11 +81,11 @@ def get_texture_from_data(data: bytes, size: int | None = None) -> Gdk.Texture |
         pixbufloader.close()
 
         log.warning(
-            'Loading image data using PixbufLoader failed. '
-            'Trying to convert image data using Pillow.'
+            "Loading image data using PixbufLoader failed. "
+            "Trying to convert image data using Pillow."
         )
         try:
-            image = Image.open(BytesIO(data)).convert('RGBA')
+            image = Image.open(BytesIO(data)).convert("RGBA")
             array = GLib.Bytes.new(image.tobytes())
             width, height = image.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
@@ -95,8 +94,8 @@ def get_texture_from_data(data: bytes, size: int | None = None) -> Gdk.Texture |
             image.close()
         except Exception:
             log.warning(
-                'Could not use Pillow to convert image data. '
-                'Image cannot be displayed',
+                "Could not use Pillow to convert image data. "
+                "Image cannot be displayed",
                 exc_info=True,
             )
             return None
@@ -130,12 +129,7 @@ def get_image_orientation(image: Image.Image) -> int:
     exif = image.getexif()
     exif_orientation_code = 274
     orientation = exif.get(exif_orientation_code, 1)
-    degrees = {
-        1: 0,
-        3: 180,
-        6: 270,
-        8: 90
-    }.get(orientation, 0)
+    degrees = {1: 0, 3: 180, 6: 270, 8: 90}.get(orientation, 0)
 
     return degrees
 
@@ -147,11 +141,11 @@ def resize_gif(
 
     frames[0].save(
         output_file,
-        format='GIF',
+        format="GIF",
         optimize=True,
         save_all=True,
         append_images=frames[1:],
-        duration=result['duration'],
+        duration=result["duration"],
         loop=1000,
     )
 
@@ -164,7 +158,7 @@ def extract_and_resize_frames_from_gif(
 
     i = 0
     palette = image.getpalette()
-    last_frame = image.convert('RGBA')
+    last_frame = image.convert("RGBA")
 
     frames: list[Image.Image] = []
 
@@ -178,17 +172,17 @@ def extract_and_resize_frames_from_gif(
                 assert palette is not None
                 image.putpalette(palette)
 
-            new_frame = Image.new('RGBA', image.size)
+            new_frame = Image.new("RGBA", image.size)
 
             # Is this file a "partial"-mode GIF where frames update a region
             # of a different size to the entire image?
             # If so, we need to construct the new frame by
             # pasting it on top of the preceding frames.
 
-            if result['mode'] == 'partial':
+            if result["mode"] == "partial":
                 new_frame.paste(last_frame)
 
-            new_frame.paste(image, (0, 0), image.convert('RGBA'))
+            new_frame.paste(image, (0, 0), image.convert("RGBA"))
 
             # This method preservs aspect ratio
             new_frame.thumbnail(resize_to, Image.Resampling.LANCZOS)
@@ -206,17 +200,17 @@ def extract_and_resize_frames_from_gif(
 def analyse_gif_image(
     image: ImageFile.ImageFile,
 ) -> tuple[ImageFile.ImageFile, dict[str, str | int | tuple[int, int]]]:
-    '''
+    """
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
     before processing all frames.
-    '''
+    """
 
-    duration = cast(int, image.info.get('duration', 0))
+    duration = cast(int, image.info.get("duration", 0))
     result = {
-        'size': image.size,
-        'mode': 'full',
-        'duration': duration,
+        "size": image.size,
+        "mode": "full",
+        "duration": duration,
     }
 
     try:
@@ -226,7 +220,7 @@ def analyse_gif_image(
                 update_region = tile[1]
                 update_region_dimensions = update_region[2:]  # type: ignore
                 if update_region_dimensions != image.size:
-                    result['mode'] = 'partial'
+                    result["mode"] = "partial"
                     break
             image.seek(image.tell() + 1)
     except EOFError:

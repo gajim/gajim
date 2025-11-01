@@ -25,14 +25,14 @@ ShowSortOrder = {
 def get_client_status(account: str) -> str:
     client = app.get_client(account)
     if client.state.is_disconnected:
-        return 'offline'
+        return "offline"
 
     if (
         client.state.is_reconnect_scheduled
         or client.state.is_connecting
         or client.state.is_connected
     ):
-        return 'connecting'
+        return "connecting"
 
     return client.status
 
@@ -41,7 +41,7 @@ def get_global_show() -> str:
     maxi = 0
     for client in app.get_clients():
         if not app.settings.get_account_setting(
-            client.account, 'sync_with_global_status'
+            client.account, "sync_with_global_status"
         ):
             continue
         status = get_client_status(client.account)
@@ -53,10 +53,10 @@ def get_global_show() -> str:
 
 def get_global_status_message() -> str:
     maxi = 0
-    status_message = ''
+    status_message = ""
     for client in app.get_clients():
         if not app.settings.get_account_setting(
-            client.account, 'sync_with_global_status'
+            client.account, "sync_with_global_status"
         ):
             continue
         index = SHOW_LIST.index(client.status)
@@ -67,13 +67,13 @@ def get_global_status_message() -> str:
 
 
 def statuses_unified() -> bool:
-    '''
+    """
     Test if all statuses are the same
-    '''
+    """
     reference = None
     for client in app.get_clients():
         account = client.account
-        if not app.settings.get_account_setting(account, 'sync_with_global_status'):
+        if not app.settings.get_account_setting(account, "sync_with_global_status"):
             continue
 
         if reference is None:
@@ -91,26 +91,26 @@ def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
 
 
 def get_idle_status_message(
-    state: Literal['away'] | Literal['xa'], status_message: str
+    state: Literal["away"] | Literal["xa"], status_message: str
 ) -> str:
-    if state == 'away':
-        message = app.settings.get('autoaway_message')
-        idle_time = app.settings.get('autoawaytime')
+    if state == "away":
+        message = app.settings.get("autoaway_message")
+        idle_time = app.settings.get("autoawaytime")
     else:
-        message = app.settings.get('autoxa_message')
-        idle_time = app.settings.get('autoxatime')
+        message = app.settings.get("autoxa_message")
+        idle_time = app.settings.get("autoxatime")
 
     if not message:
         return status_message
 
-    message = message.replace('$S', '%(status)s')
-    message = message.replace('$T', '%(time)s')
+    message = message.replace("$S", "%(status)s")
+    message = message.replace("$T", "%(time)s")
 
-    return message % {'status': status_message, 'time': idle_time}
+    return message % {"status": status_message, "time": idle_time}
 
 
 def compare_show(
-    show1:  PresenceShow | PresenceShowExt,
+    show1: PresenceShow | PresenceShowExt,
     show2: PresenceShow | PresenceShowExt,
 ) -> int:
 

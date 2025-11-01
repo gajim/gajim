@@ -15,17 +15,17 @@ from time import monotonic
 
 from gi.repository import GLib
 
-P = ParamSpec('P')
-R = TypeVar('R')
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
-log = logging.getLogger('gajim.c.util.decorators')
+log = logging.getLogger("gajim.c.util.decorators")
 
 
 def cache_with_ttl(ttl: int = 2) -> Any:
 
     class Result:
-        __slots__ = ('timeout', 'value')
+        __slots__ = ("timeout", "value")
 
         def __init__(self, value: Any, timeout: float) -> None:
             self.value = value
@@ -76,15 +76,15 @@ def event_filter(filter_: Any):
         @wraps(func)
         def func_wrapper(self: Any, event: Any, *args: Any, **kwargs: Any) -> Any:
             for attr in filter_:
-                if '=' in attr:
-                    attr1, attr2 = attr.split('=')
+                if "=" in attr:
+                    attr1, attr2 = attr.split("=")
                 else:
                     attr1, attr2 = attr, attr
                 try:
                     if getattr(event, attr1) != getattr(self, attr2):
                         return None
                 except AttributeError:
-                    if getattr(event, attr1) != getattr(self, f'_{attr2}'):
+                    if getattr(event, attr1) != getattr(self, f"_{attr2}"):
                         return None
 
             return func(self, event, *args, **kwargs)
@@ -102,9 +102,9 @@ def delay_execution(milliseconds: int) -> Any:
         def func_wrapper(*args: Any, **kwargs: Any) -> Any:
             def timeout_wrapper():
                 func(*args, **kwargs)
-                delattr(func_wrapper, 'source_id')
+                delattr(func_wrapper, "source_id")
 
-            if hasattr(func_wrapper, 'source_id'):
+            if hasattr(func_wrapper, "source_id"):
                 return
             func_wrapper.source_id = GLib.timeout_add(  # type: ignore
                 milliseconds, timeout_wrapper

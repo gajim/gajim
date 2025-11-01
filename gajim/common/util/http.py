@@ -17,11 +17,11 @@ from gajim.common.helpers import get_account_proxy
 log = logging.getLogger("gajim.c.util.http")
 
 
-def create_http_session(account: str | None = None,
-                        proxy: ProxyData | None = None
-                        ) -> HTTPSession:
+def create_http_session(
+    account: str | None = None, proxy: ProxyData | None = None
+) -> HTTPSession:
 
-    session = HTTPSession(user_agent=f'Gajim {app.version}')
+    session = HTTPSession(user_agent=f"Gajim {app.version}")
 
     if proxy is None:
         if account is not None:
@@ -37,7 +37,7 @@ def create_http_session(account: str | None = None,
 
 def get_aes_key_data(fragment_string: str) -> AESKeyData:
     if not fragment_string:
-        raise ValueError('Invalid fragment')
+        raise ValueError("Invalid fragment")
 
     fragment = binascii.unhexlify(fragment_string)
     size = len(fragment)
@@ -51,6 +51,6 @@ def get_aes_key_data(fragment_string: str) -> AESKeyData:
         key = fragment[12:]
         iv = fragment[:12]
     else:
-        raise ValueError('Invalid fragment size: %s' % size)
+        raise ValueError("Invalid fragment size: %s" % size)
 
     return AESKeyData(key, iv)

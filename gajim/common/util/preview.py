@@ -30,14 +30,12 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.util.uri import Coords
 from gajim.common.util.uri import get_geo_choords
 
-log = logging.getLogger('gajim.c.util.preview')
+log = logging.getLogger("gajim.c.util.preview")
 
 
-def get_image_paths(uri: str,
-                    urlparts: ParseResult,
-                    size: int,
-                    orig_dir: Path,
-                    thumb_dir: Path) -> tuple[Path, Path]:
+def get_image_paths(
+    uri: str, urlparts: ParseResult, size: int, orig_dir: Path, thumb_dir: Path
+) -> tuple[Path, Path]:
 
     path = Path(unquote(urlparts.path))
     web_stem = path.stem
@@ -47,9 +45,9 @@ def get_image_paths(uri: str,
 
     name_hash = hashlib.sha1(str(uri).encode()).hexdigest()
 
-    orig_filename = f'{web_stem}_{name_hash}{extension}'
+    orig_filename = f"{web_stem}_{name_hash}{extension}"
 
-    thumb_filename = f'{web_stem}_{name_hash}_thumb_{size}.png'
+    thumb_filename = f"{web_stem}_{name_hash}_thumb_{size}.png"
 
     orig_path = orig_dir / orig_filename
     thumb_path = thumb_dir / thumb_filename
@@ -67,17 +65,17 @@ def format_geo_coords(coords: Coords) -> str:
         minutes = i % 60
         i //= 60
         degrees = i
-        return '%d°%02d′%02d′′' % (degrees, minutes, seconds)
+        return "%d°%02d′%02d′′" % (degrees, minutes, seconds)
 
     if lat >= 0:
-        slat = p_('positive latitude', '%sN') % fmt(lat)
+        slat = p_("positive latitude", "%sN") % fmt(lat)
     else:
-        slat = p_('negative latitude', '%sS') % fmt(-lat)
+        slat = p_("negative latitude", "%sS") % fmt(-lat)
     if lon >= 0:
-        slon = p_('positive longitude', '%sE') % fmt(lon)
+        slon = p_("positive longitude", "%sE") % fmt(lon)
     else:
-        slon = p_('negative longitude', '%sW') % fmt(-lon)
-    return f'{slat} {slon}'
+        slon = p_("negative longitude", "%sW") % fmt(-lon)
+    return f"{slat} {slon}"
 
 
 def filename_from_uri(uri: str) -> str:
@@ -97,16 +95,14 @@ def contains_audio_streams(file_path: Path) -> bool:
         info = discoverer.discover_uri(file_path.as_uri())
         has_audio = bool(info.get_audio_streams())
     except GLib.Error as err:
-        log.error('Error while reading %s: %s', str(file_path), err)
+        log.error("Error while reading %s: %s", str(file_path), err)
         return False
     if not has_audio:
-        log.warning('File does not contain audio stream: %s', str(file_path))
+        log.warning("File does not contain audio stream: %s", str(file_path))
     return has_audio
 
 
-def guess_mime_type(file_path: Path | str,
-                    data: bytes | None = None
-                    ) -> str:
+def guess_mime_type(file_path: Path | str, data: bytes | None = None) -> str:
     file_path = str(file_path)
 
     # The mimetypes module maps extensions to mime types
@@ -117,26 +113,26 @@ def guess_mime_type(file_path: Path | str,
         extension, _ = Gio.content_type_guess(file_path, data)
         mime_type = Gio.content_type_get_mime_type(extension)
 
-    log.debug('Guessed MIME type: %s', mime_type)
-    return mime_type or ''
+    log.debug("Guessed MIME type: %s", mime_type)
+    return mime_type or ""
 
 
-def guess_simple_file_type(file_path: str,
-                           data: bytes | None = None
-                           ) -> tuple[Gio.Icon, str, str]:
+def guess_simple_file_type(
+    file_path: str, data: bytes | None = None
+) -> tuple[Gio.Icon, str, str]:
 
     mime_type = guess_mime_type(file_path, data)
     icon = get_icon_for_mime_type(mime_type)
 
-    file_type = _('File')
-    if mime_type.startswith('audio/'):
-        file_type = _('Audio File')
-    if mime_type.startswith('image/'):
-        file_type = _('Image')
-    if mime_type.startswith('video/'):
-        file_type = _('Video')
-    if mime_type.startswith('text/'):
-        file_type = _('Text File')
+    file_type = _("File")
+    if mime_type.startswith("audio/"):
+        file_type = _("Audio File")
+    if mime_type.startswith("image/"):
+        file_type = _("Image")
+    if mime_type.startswith("video/"):
+        file_type = _("Video")
+    if mime_type.startswith("text/"):
+        file_type = _("Text File")
 
     return icon, file_type, mime_type
 
@@ -147,7 +143,7 @@ def get_size_and_mime_type(path: Path) -> tuple[str, int]:
 
 def get_icon_for_mime_type(mime_type: str | None) -> Gio.Icon:
     if not mime_type:
-        return Gio.Icon.new_for_string('lucide-file-symbolic')
+        return Gio.Icon.new_for_string("lucide-file-symbolic")
     return Gio.content_type_get_icon(mime_type)
 
 
@@ -184,7 +180,7 @@ class UrlPreview:
             file_name=file_name,
             text=text,
             icon=icon,
-            encrypted=encrypted
+            encrypted=encrypted,
         )
 
 
@@ -203,8 +199,7 @@ class GeoPreview:
 
 
 def get_preview_data(
-    uri: str,
-    oob_data: list[mod.OOB]
+    uri: str, oob_data: list[mod.OOB]
 ) -> GeoPreview | UrlPreview | None:
 
     if not IRI_RX.fullmatch(uri):
@@ -217,7 +212,7 @@ def get_preview_data(
     except Exception:
         return None
 
-    if urlparts.scheme == 'geo':
+    if urlparts.scheme == "geo":
         coords = get_geo_choords(uri)
         if coords is not None:
             return GeoPreview.from_coords(uri, coords)
@@ -228,20 +223,20 @@ def get_preview_data(
 
     oob_url = None if not oob_data else oob_data[0].url
 
-    if uri == oob_url or urlparts.scheme == 'aesgcm':
+    if uri == oob_url or urlparts.scheme == "aesgcm":
         return UrlPreview.from_uri(uri)
 
     # http/https
-    if urlparts.scheme not in ('https', 'http'):
-        log.info('Unsupported URI scheme: %s', uri)
+    if urlparts.scheme not in ("https", "http"):
+        log.info("Unsupported URI scheme: %s", uri)
         return None
 
-    if not app.settings.get('preview_allow_all_images'):
+    if not app.settings.get("preview_allow_all_images"):
         return None
 
     mime_type = guess_mime_type(uri)
     if mime_type not in ALL_MIME_TYPES:
-        log.info('%s not in allowed mime types', mime_type)
+        log.info("%s not in allowed mime types", mime_type)
         return None
 
     return UrlPreview.from_uri(uri)

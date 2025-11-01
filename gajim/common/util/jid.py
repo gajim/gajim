@@ -21,22 +21,22 @@ def parse_jid(jidstring: str) -> str:
 
 
 def parse_resource(resource: str) -> str | None:
-    '''
+    """
     Perform stringprep on resource and return it
-    '''
+    """
     if not resource:
         return None
 
     try:
-        return resource.encode('OpaqueString').decode('utf-8')
+        return resource.encode("OpaqueString").decode("utf-8")
     except UnicodeError:
-        raise InvalidFormat('Invalid character in resource.')
+        raise InvalidFormat("Invalid character in resource.")
 
 
 def get_full_jid_from_iq(iq_obj: Iq) -> str | None:
-    '''
+    """
     Return the full jid (with resource) from an iq
-    '''
+    """
     jid = iq_obj.getFrom()
     if jid is None:
         return None
@@ -44,9 +44,9 @@ def get_full_jid_from_iq(iq_obj: Iq) -> str | None:
 
 
 def get_jid_from_iq(iq_obj: Iq) -> str | None:
-    '''
+    """
     Return the jid (without resource) from an iq
-    '''
+    """
     jid = get_full_jid_from_iq(iq_obj)
     if jid is None:
         return None
@@ -61,11 +61,11 @@ def validate_jid(jid: str | JID, type_: str | None = None) -> JID:
 
     if type_ is None:
         return jid
-    if type_ == 'bare' and jid.is_bare:
+    if type_ == "bare" and jid.is_bare:
         return jid
-    if type_ == 'full' and jid.is_full:
+    if type_ == "full" and jid.is_full:
         return jid
-    if type_ == 'domain' and jid.is_domain:
+    if type_ == "domain" and jid.is_domain:
         return jid
 
-    raise ValueError(f'Not a {type_} JID')
+    raise ValueError(f"Not a {type_} JID")

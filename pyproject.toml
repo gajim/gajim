@@ -173,21 +173,6 @@ force-exclude = '''
     | ^/gajim/common/styling.py
     | ^/gajim/common/task_manager.py
     | ^/gajim/common/types.py
-    | ^/gajim/common/util/app.py
-    | ^/gajim/common/util/av.py
-    | ^/gajim/common/util/classes.py
-    | ^/gajim/common/util/decorators.py
-    | ^/gajim/common/util/http.py
-    | ^/gajim/common/util/image.py
-    | ^/gajim/common/util/jid.py
-    | ^/gajim/common/util/muc.py
-    | ^/gajim/common/util/preview.py
-    | ^/gajim/common/util/standards.py
-    | ^/gajim/common/util/status.py
-    | ^/gajim/common/util/text.py
-    | ^/gajim/common/util/uri.py
-    | ^/gajim/common/util/user_strings.py
-    | ^/gajim/common/util/version.py
 )
 '''
 required-version = "24.10.0"

@@ -50,9 +50,7 @@ def is_role_change_allowed(
     return self_contact.affiliation >= contact.affiliation
 
 
-def is_moderation_allowed(
-    self_contact: types.GroupchatParticipant
-) -> bool:
+def is_moderation_allowed(self_contact: types.GroupchatParticipant) -> bool:
 
     return self_contact.role >= Role.MODERATOR
 
@@ -61,46 +59,46 @@ def get_default_muc_config() -> dict[str, bool | str]:
     return {
         # XEP-0045 options
         # https://xmpp.org/registrar/formtypes.html
-        'muc#roomconfig_allowinvites': True,
-        'muc#roomconfig_allowpm': 'anyone',
-        'muc#roomconfig_changesubject': False,
-        'muc#roomconfig_enablelogging': False,
-        'muc#roomconfig_membersonly': True,
-        'muc#roomconfig_moderatedroom': False,
-        'muc#roomconfig_passwordprotectedroom': False,
-        'muc#roomconfig_persistentroom': True,
-        'muc#roomconfig_publicroom': False,
-        'muc#roomconfig_whois': 'moderators',
+        "muc#roomconfig_allowinvites": True,
+        "muc#roomconfig_allowpm": "anyone",
+        "muc#roomconfig_changesubject": False,
+        "muc#roomconfig_enablelogging": False,
+        "muc#roomconfig_membersonly": True,
+        "muc#roomconfig_moderatedroom": False,
+        "muc#roomconfig_passwordprotectedroom": False,
+        "muc#roomconfig_persistentroom": True,
+        "muc#roomconfig_publicroom": False,
+        "muc#roomconfig_whois": "moderators",
         # Ejabberd options
-        'allow_voice_requests': False,
-        'public_list': False,
-        'mam': True,
+        "allow_voice_requests": False,
+        "public_list": False,
+        "mam": True,
         # Prosody options
-        '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': False,
-        'muc#roomconfig_enablearchiving': True,
+        "{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites": False,
+        "muc#roomconfig_enablearchiving": True,
     }
 
 
 def get_random_muc_localpart() -> str:
     rand = random.randrange(4)
     is_vowel = bool(random.getrandbits(1))
-    result = ''
+    result = ""
     for _n in range(rand * 2 + (5 - rand)):
         if is_vowel:
-            result = f'{result}{VOWELS[random.randrange(len(VOWELS))]}'
+            result = f"{result}{VOWELS[random.randrange(len(VOWELS))]}"
         else:
-            result = f'{result}{CONSONANTS[random.randrange(len(CONSONANTS))]}'
+            result = f"{result}{CONSONANTS[random.randrange(len(CONSONANTS))]}"
         is_vowel = not is_vowel
     return result
 
 
 def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
-    '''
+    """
     Check whether 'text' contains 'nickname', 'own_jid', or any string of the
     'muc_highlight_words' setting.
-    '''
+    """
 
-    search_strings = app.settings.get('muc_highlight_words').split(';')
+    search_strings = app.settings.get("muc_highlight_words").split(";")
     search_strings.append(nickname)
     search_strings.append(own_jid)
 
@@ -122,7 +120,7 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
             # - / which may be commands
             # - - which may connect multiple words
             # - ' which may be part of a contraction, such as o'clock, 'tis
-            excluded_chars = ('/', '-', '\'')
+            excluded_chars = ("/", "-", "'")
 
             char_before = text[match - 1]
             char_before_allowed = bool(
@@ -147,7 +145,7 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
 
 
 def get_groupchat_name(client: types.Client, jid: JID) -> str:
-    name = client.get_module('Bookmarks').get_name_from_bookmark(jid)
+    name = client.get_module("Bookmarks").get_name_from_bookmark(jid)
     if name:
         return name
 
@@ -163,7 +161,7 @@ def get_groupchat_name(client: types.Client, jid: JID) -> str:
 def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
     client = app.get_client(account)
 
-    bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
+    bookmark = client.get_module("Bookmarks").get_bookmark(room_jid)
     if bookmark is not None:
         if bookmark.nick is not None:
             return bookmark.nick

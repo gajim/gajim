@@ -18,17 +18,14 @@ class Singleton(type):
 
     def __call__(cls, *args: Any, **kwargs: Any):
         if cls not in cls._instances:
-            cls._instances[cls] = super().__call__(
-                *args, **kwargs)
+            cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
 class SettingsAction(Gio.SimpleAction):
 
     def simple_bind_property(
-        self,
-        target: GObject.Object,
-        target_property: str
+        self, target: GObject.Object, target_property: str
     ) -> None:
 
         self.bind_property(
@@ -47,7 +44,5 @@ class SettingsAction(Gio.SimpleAction):
         super().change_state(value)
 
     @staticmethod
-    def _transform_to_ptype(
-        binding: GObject.Binding, variant: GLib.Variant
-    ) -> str:
+    def _transform_to_ptype(binding: GObject.Binding, variant: GLib.Variant) -> str:
         return variant.unpack()
