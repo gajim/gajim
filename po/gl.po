@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -161,10 +161,6 @@ msgstr "A %s invitárono a este chat de grupo"
 #, python-format
 msgid "%s has joined"
 msgstr "Uniuse %s"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s leu ata aquí"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -498,9 +494,6 @@ msgstr "Contas"
 
 msgid "Accounts"
 msgstr "Contas"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1323,6 +1316,9 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Comandos: %s"
@@ -1454,29 +1450,6 @@ msgid "Contact List – %(account)s"
 msgstr "Contacto desconectado"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Nome de contacto"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Contacto desconectado"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Nome de contacto"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Contacto desconectado"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Mostrar o evento na listaxe de contactos"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Conta"
 
@@ -1525,10 +1498,6 @@ msgstr "Sala:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Copiar o enderezo"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1612,9 +1581,6 @@ msgstr "Novo grupo de charla"
 msgid "Creating Account..."
 msgstr "A eliminar a conta %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "É necesario o contrasinal"
@@ -1661,10 +1627,6 @@ msgstr "_Nome de usuario:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Fallou a conexión"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1887,21 +1849,9 @@ msgstr ""
 msgid "Download"
 msgstr "Descarga"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Descarga"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Non me preguntar outra vez"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d mensaxe sen ler"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "A compor"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1913,6 +1863,10 @@ msgstr "Enviarlle un ficheiro a un contacto"
 
 msgid "Eating"
 msgstr "A comer"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Editar"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2247,8 +2201,9 @@ msgstr "Camiño do ficheiro"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Nome do ficheiro: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2919,9 +2874,6 @@ msgstr "Novo grupo de charla"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3519,16 +3471,8 @@ msgid "Open Folder"
 msgstr "_Abrir un cartafol de contido"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Abrir a ligazón no navegador"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Abrir a ligazón no navegador"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Abrir un cartafol de contido"
 
 msgid "Open as _Link"
 msgstr "_Abrir como ligazón"
@@ -3547,6 +3491,10 @@ msgstr "O nome de usuario non é válido"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Administrador"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Administrador"
 
 msgid "Organization (O): "
@@ -3894,6 +3842,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4395,10 +4346,6 @@ msgstr "Gardar o contrasinal"
 msgid "Save as..."
 msgstr "Ten "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Ten "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4523,6 +4470,14 @@ msgstr "A expulsar %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "A expulsar %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Cambiar o _alcume"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Participantes"
 
 #, fuzzy
 msgid "Select Account"
@@ -4675,10 +4630,6 @@ msgstr "Configuración da sala"
 msgid "Set date…"
 msgstr "Moderador"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "mensaxe de estado"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4826,10 +4777,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Non está dispoñíbel ningunha conexión"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4993,10 +4940,6 @@ msgstr "Mensaxe de estado"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Mensaxe de estado"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "Men_saxe de estado:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5208,12 +5151,11 @@ msgstr "Amosar os contactos desconectados"
 msgid "System"
 msgstr "<b>Personalizado</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Engadir unha notificación especial para %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5426,10 +5368,6 @@ msgstr ""
 "nome."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Copiar o enderezo"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Esta mensaxe está cifrada]"
 
@@ -5521,6 +5459,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Non dispoñíbel"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Hora"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5675,6 +5617,10 @@ msgstr "Descoñecido"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Configuración da sala"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Configuración da sala"
@@ -5764,10 +5710,6 @@ msgstr "Non foi posíbel cargar a imaxe"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Gardar o ficheiro como..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "O servizo non se achou"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6316,10 +6258,6 @@ msgstr "O nome da conta non é válido"
 msgid "_Do not ask me again"
 msgstr "_Non me preguntar outra vez"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Non me preguntar outra vez"
-
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -6394,10 +6332,6 @@ msgstr "_Aceptar"
 msgid "_Offline"
 msgstr "D_esconectado"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6446,10 +6380,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Ten "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Ten "
 
 msgid "_Search"
@@ -6704,10 +6634,6 @@ msgstr "%(nick)s está agora %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Cambiar o _alcume"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " por {actor}"
@@ -6723,6 +6649,10 @@ msgstr ""
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s chats de grupo atopados"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s leu ata aquí"
 
 #, fuzzy, python-format
 #~ msgid ""
@@ -7135,6 +7065,26 @@ msgstr ""
 #~ msgstr "Men_saxe de estado:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Nome de contacto"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Contacto desconectado"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Nome de contacto"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Contacto desconectado"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Mostrar o evento na listaxe de contactos"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Eliminar"
 
@@ -7157,6 +7107,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Copiar o enderezo"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7192,6 +7146,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Desenvolvedores actuais:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Fallou a conexión"
 
 #~ msgid "Default"
 #~ msgstr "Por defecto"
@@ -7234,12 +7192,24 @@ msgstr ""
 #~ msgstr "Descarga"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Descarga"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Descarga"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Non me preguntar outra vez"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Non me preguntar outra vez"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "A compor"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7280,10 +7250,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Características dos servidores"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Nome do ficheiro: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7478,8 +7444,16 @@ msgstr ""
 #~ msgstr "_Abrir como ligazón"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Abrir a ligazón no navegador"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Abrir un cartafol de contido"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7589,6 +7563,10 @@ msgstr ""
 #~ msgstr "Gardar o ficheiro como..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Ten "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Enviar ficheiro"
 
@@ -7651,6 +7629,10 @@ msgstr ""
 #~ msgstr "Gardouse en: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "mensaxe de estado"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7669,6 +7651,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Amosar a consola de _XML"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Non está dispoñíbel ningunha conexión"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7693,6 +7679,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Cambia o estado dunha ou de varias contas"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "Men_saxe de estado:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7730,12 +7720,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Versión de GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Engadir unha notificación especial para %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "O servizo non se achou"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "A conta \"%s\" está conectada ao servidor"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Copiar o enderezo"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7778,6 +7776,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Gardar o ficheiro como..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "O servizo non se achou"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7871,6 +7873,10 @@ msgstr ""
 #~ msgstr "_Non me preguntar outra vez"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Non me preguntar outra vez"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Non me preguntar outra vez"
 
@@ -7899,12 +7905,20 @@ msgstr ""
 #~ msgstr "Publicación nova"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Abrir un cartafol de contido"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Preferencias"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Ten "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7925,6 +7939,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Ver"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Abrir un cartafol de contido"
 
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferencias"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -154,10 +154,6 @@ msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "Aet eo kuit %s"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "%s is a file but it should be a directory"
@@ -486,9 +482,6 @@ msgstr "Kontoù"
 
 msgid "Accounts"
 msgstr "Kontoù"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1305,6 +1298,9 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Urzhioù: %s"
@@ -1437,29 +1433,6 @@ msgid "Contact List – %(account)s"
 msgstr "Darempred diluget"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Darempred luget"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Darempred diluget"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Darempred luget"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Darempred diluget"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Diskouez er _roll hepken"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Kont"
 
@@ -1508,10 +1481,6 @@ msgstr "Webgaoz:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopiañ ar JID/Chomlec'h postel"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1594,9 +1563,6 @@ msgstr "Flap a-stroll"
 msgid "Creating Account..."
 msgstr "Lemel ar gont %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Ger-kuzh ret"
@@ -1643,10 +1609,6 @@ msgstr "_Anv:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Kevreadenn"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1869,21 +1831,9 @@ msgstr ""
 msgid "Download"
 msgstr "Pellgargañ"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Pellgargañ"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Chom hep goulenn ket"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Gajim - %d gemennadenn nevez"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "O skrivañ"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1895,6 +1845,10 @@ msgstr "Kas ur restr d'un darempred"
 
 msgid "Eating"
 msgstr "O tebriñ"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Aozañ"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2229,8 +2183,9 @@ msgstr "Treug ar restr"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Anv ar restr: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2897,9 +2852,6 @@ msgstr "Flap a-stroll"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3495,16 +3447,8 @@ msgid "Open Folder"
 msgstr "_Digeriñ ar renkell pal"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Digerién an ere er furcher web"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Digerién an ere er furcher web"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Digeriñ ar renkell pal"
 
 msgid "Open as _Link"
 msgstr ""
@@ -3523,6 +3467,10 @@ msgstr "Anv-arveriad-ez direizh"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "_Merour-ez"
+
+#, fuzzy
+msgid "Organization"
 msgstr "_Merour-ez"
 
 msgid "Organization (O): "
@@ -3871,6 +3819,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4370,10 +4321,6 @@ msgstr "Enrollañ ar ger-kuzh"
 msgid "Save as..."
 msgstr "Enrollet e-barzh: %s"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Enrollet e-barzh: %s"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4498,6 +4445,14 @@ msgstr "Argas %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Argas %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Cheñch _lesanv"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Perzhidi"
 
 #, fuzzy
 msgid "Select Account"
@@ -4649,10 +4604,6 @@ msgstr "Kefluniañ ar webgaoz"
 msgid "Set date…"
 msgstr "Kasour-ez"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "titour stad"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4797,10 +4748,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "N'eus ket tu da gevreañ"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4962,10 +4909,6 @@ msgstr "Titour-stad"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Titour-stad"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Titour-stad:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5177,12 +5120,11 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 msgid "System"
 msgstr "<b>Personelaet</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5393,10 +5335,6 @@ msgstr ""
 "marplij."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopiañ ar JID/Chomlec'h postel"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Sifret eo ar gemennadenn-mañ]"
 
@@ -5487,6 +5425,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Dihegerz"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Mare"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5639,6 +5581,10 @@ msgstr "Dianav"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Aozadur D-Bus dianav: %s"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Aozadur D-Bus dianav: %s"
@@ -5728,10 +5674,6 @@ msgstr "Dibosupl eo kargañ ar skeudenn"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Enrollañ ar restr dindan..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "N'eo ket bet kavet ar servij"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6279,10 +6221,6 @@ msgstr "Anv-kont direizh"
 msgid "_Do not ask me again"
 msgstr "_Chom hep goulenn ket"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Chom hep goulenn ket"
-
 msgid "_Edit"
 msgstr "_Aozañ"
 
@@ -6357,10 +6295,6 @@ msgstr "_Mat eo"
 msgid "_Offline"
 msgstr "_Ezlinenn"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP : "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6409,10 +6343,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Enrollet e-barzh: %s"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Enrollet e-barzh: %s"
 
 msgid "_Search"
@@ -6668,10 +6598,6 @@ msgstr "%(nick)s a zo bremañ %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Cheñch _lesanv"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7070,6 +6996,26 @@ msgstr ""
 #~ msgstr "_Titour-stad:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Darempred luget"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Darempred diluget"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Darempred luget"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Darempred diluget"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Diskouez er _roll hepken"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Koumanantiñ"
 
@@ -7092,6 +7038,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopiañ ar JID/Chomlec'h postel"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7124,6 +7074,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Diorroerien kent:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Kevreadenn"
 
 #, fuzzy
 #~ msgid "Default"
@@ -7163,12 +7117,24 @@ msgstr ""
 #~ msgstr "Pellgargañ"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Pellgargañ"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Pellgargañ"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Chom hep goulenn ket"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Chom hep goulenn ket"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "O skrivañ"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7205,10 +7171,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Perzhioù ar servijerien"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Anv ar restr: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7397,8 +7359,16 @@ msgstr ""
 #~ msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Digerién an ere er furcher web"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP : "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Digeriñ ar renkell pal"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7507,6 +7477,10 @@ msgstr ""
 #~ msgstr "Enrollañ ar restr dindan..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Enrollet e-barzh: %s"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Kas ur _restr"
 
@@ -7569,6 +7543,10 @@ msgstr ""
 #~ msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "titour stad"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7589,6 +7567,10 @@ msgstr ""
 #~ msgstr "Diskouez ar gonsol _XML"
 
 #, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "N'eus ket tu da gevreañ"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A ziskouez ur roll eus an dreuzkasoù etrezoc'h hag ar re all"
 
@@ -7606,6 +7588,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "A cheñch stad ar gont pe ar c'hontoù"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Titour-stad:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7643,12 +7629,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Taolennadur: %s"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "N'eo ket bet kavet ar servij"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopiañ ar JID/Chomlec'h postel"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7691,6 +7685,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Enrollañ ar restr dindan..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "N'eo ket bet kavet ar servij"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7775,6 +7773,10 @@ msgstr ""
 #~ msgstr "_Chom hep goulenn ket"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Chom hep goulenn ket"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Chom hep goulenn ket"
 
@@ -7803,12 +7805,20 @@ msgstr ""
 #~ msgstr "Sal-flapiñ nevez"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP : "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Digeriñ ar renkell pal"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Penndibaboù"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7825,6 +7835,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Toggle Menu Bar"
 #~ msgstr "Dorioù"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Digeriñ ar renkell pal"
 
 #~ msgid "file transfers list"
 #~ msgstr "roll an treuzkasadoù"

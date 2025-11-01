@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -156,10 +156,6 @@ msgstr "%(who)s пакараў %(nick)s: %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s сышоў"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -489,9 +485,6 @@ msgstr "Рахункі"
 
 msgid "Accounts"
 msgstr "Рахункі"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1311,6 +1304,9 @@ msgstr ""
 msgid "Color"
 msgstr "Колер"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Загады: %s"
@@ -1442,29 +1438,6 @@ msgid "Contact List – %(account)s"
 msgstr "Чалавек адлучыўся"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Чалавек далучыўся"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Чалавек адлучыўся"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Чалавек далучыўся"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Чалавек адлучыўся"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Паказваць падзею ў галоўным вакне"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Рахунак"
 
@@ -1513,10 +1486,6 @@ msgstr "Пакой:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Скапіяваць JID / паштовы адрас"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Скапіяваць адрас спасылкі"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1600,9 +1569,6 @@ msgstr "Сысці з групавых размоў"
 msgid "Creating Account..."
 msgstr "Выдаленне рахунка %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Патрэбны пароль"
@@ -1648,10 +1614,6 @@ msgstr "_Імя карыстальніка:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Памылка злучэння"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1878,21 +1840,9 @@ msgstr ""
 msgid "Download"
 msgstr "Сцягнуць"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Сцягнуць"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Больш не пытацца"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d нечытанае паведамленне"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Піша"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1904,6 +1854,10 @@ msgstr "Адправіць файл чалавеку"
 
 msgid "Eating"
 msgstr "Ежа"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Змяніць"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2238,8 +2192,9 @@ msgstr "Месца файла"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Файл: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2910,9 +2865,6 @@ msgstr "Сысці з групавых размоў"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3510,16 +3462,8 @@ msgid "Open Folder"
 msgstr "_Адкрыць дырэкторыю з файлам"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Адкрыць у праглядальніку"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Адкрыць у праглядальніку"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Адкрыць дырэкторыю з файлам"
 
 msgid "Open as _Link"
 msgstr "Адкрыць _спасылку"
@@ -3538,6 +3482,10 @@ msgstr "Няправільнае імя карыстальніка"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Адміністратар"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Адміністратар"
 
 msgid "Organization (O): "
@@ -3886,6 +3834,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4386,10 +4337,6 @@ msgstr "Захаваць пароль"
 msgid "Save as..."
 msgstr "Мае "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Мае "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4514,6 +4461,14 @@ msgstr "Забарона казання для %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Забарона казання для %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Змяніць м_янушку"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Удзельнікі"
 
 #, fuzzy
 msgid "Select Account"
@@ -4666,10 +4621,6 @@ msgstr "Настаўленні пакоя"
 msgid "Set date…"
 msgstr "Мадэратар"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "паведамленне стану"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4817,10 +4768,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Няма злучэння"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4984,10 +4931,6 @@ msgstr "Паведамленне аб змене стану"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Паведамленне аб змене стану"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "П_аведамленне стану:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5199,12 +5142,11 @@ msgstr "Паказаць _адлучаных людзей"
 msgid "System"
 msgstr "<b>Адмысловы</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Дадаць асабістае нагадванне для %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5415,10 +5357,6 @@ msgid ""
 msgstr "Гэтая назва ўжо скарыстаная для іншага рахунка. Выберыце іншую назву."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Скапіяваць JID / паштовы адрас"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Стан змяніўся."
 
@@ -5510,6 +5448,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Мяне няма"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Час"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5662,6 +5604,10 @@ msgstr "?Сістэма:Невядомая"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Настаўленні пакоя"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Настаўленні пакоя"
@@ -5751,10 +5697,6 @@ msgstr "Немагчыма загрузіць малюнак"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Захаваць файл як..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Немагчыма знайсці сервіс"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6305,10 +6247,6 @@ msgstr "Няправільная назва рахунка"
 msgid "_Do not ask me again"
 msgstr "_Больш не пытацца"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Больш не пытацца"
-
 msgid "_Edit"
 msgstr "_Змяніць"
 
@@ -6383,10 +6321,6 @@ msgstr "_Добра"
 msgid "_Offline"
 msgstr "_Адключаны"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6435,10 +6369,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Мае "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Мае "
 
 msgid "_Search"
@@ -6691,10 +6621,6 @@ msgstr "%(nick)s цяпер %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Змяніць м_янушку"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7113,6 +7039,26 @@ msgstr ""
 #~ msgstr "П_аведамленне стану:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Чалавек далучыўся"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Чалавек адлучыўся"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Чалавек далучыўся"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Чалавек адлучыўся"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Паказваць падзею ў галоўным вакне"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Адпісацца"
 
@@ -7135,6 +7081,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Скапіяваць JID / паштовы адрас"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Скапіяваць адрас спасылкі"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7170,6 +7120,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Актыўныя распрацоўнікі:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Памылка злучэння"
 
 #~ msgid "Default"
 #~ msgstr "Прадвызначана"
@@ -7212,12 +7166,24 @@ msgstr ""
 #~ msgstr "Сцягнуць"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Сцягнуць"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Сцягнуць"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Больш не пытацца"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Больш не пытацца"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Піша"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7258,10 +7224,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Здольнасці сервера"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Файл: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7456,8 +7418,16 @@ msgstr ""
 #~ msgstr "Адкрыць _спасылку"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Адкрыць у праглядальніку"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Адкрыць дырэкторыю з файлам"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7567,6 +7537,10 @@ msgstr ""
 #~ msgstr "Захаваць файл як..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Мае "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Адправіць _файл"
 
@@ -7629,6 +7603,10 @@ msgstr ""
 #~ msgstr "Захаваць у: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "паведамленне стану"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7647,6 +7625,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Паказаць _кансоль XML"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Няма злучэння"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7671,6 +7653,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Змяніць стан рахунка(ў)"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "П_аведамленне стану:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7708,12 +7694,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Версія GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Дадаць асабістае нагадванне для %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Немагчыма знайсці сервіс"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Рахунак \"%s\" злучаны з серверам"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Скапіяваць JID / паштовы адрас"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7756,6 +7750,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Захаваць файл як..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Немагчыма знайсці сервіс"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7849,6 +7847,10 @@ msgstr ""
 #~ msgstr "_Больш не пытацца"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Больш не пытацца"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Больш не пытацца"
 
@@ -7877,12 +7879,20 @@ msgstr ""
 #~ msgstr "Новы допіс"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Адкрыць дырэкторыю з файлам"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Уласцівасці"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Мае "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7903,6 +7913,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Выгляд"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Адкрыць дырэкторыю з файлам"
 
 #~ msgid "file transfers list"
 #~ msgstr "спіс файлаў у чарзе на перадачу"

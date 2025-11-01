@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -163,10 +163,6 @@ msgstr "%s a fost invitat la acest grup de chat"
 #, python-format
 msgid "%s has joined"
 msgstr "%s s-a alăturat"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s a citit până în acest moment"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -472,9 +468,6 @@ msgstr "Cont: %s"
 
 msgid "Accounts"
 msgstr "Conturi"
-
-msgid "Action for left-clicking a preview"
-msgstr "Acțiune pentru a face clic stânga pe o previzualizare"
 
 msgid "Action on Close"
 msgstr "Acțiune la închidere"
@@ -1224,6 +1217,9 @@ msgstr "Fragment de cod"
 msgid "Color"
 msgstr "Culoare"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "Lista de comenzi"
 
@@ -1340,24 +1336,6 @@ msgstr "Schimb de liste de contacte"
 msgid "Contact List – %(account)s"
 msgstr "Lista de contacte: Font de contact"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Lista de contacte: Culoarea de fundal a contactelor"
-
-msgid "Contact List: Contact Font"
-msgstr "Lista de contacte: Font de contact"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Lista de contacte: Culoarea prim-planului contactelor"
-
-msgid "Contact List: Group Background Color"
-msgstr "Lista de contacte: Culoarea fundalului grupului"
-
-msgid "Contact List: Group Font"
-msgstr "Lista de contacte: Font de grup"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Lista de contacte: Culoare prim-plan grup"
-
 #, fuzzy
 msgid "Contact Removed"
 msgstr "Cont eliminat"
@@ -1399,9 +1377,6 @@ msgstr "Copie"
 
 msgid "Copy Address"
 msgstr "Copiați adresa"
-
-msgid "Copy Link"
-msgstr "Copiați link-ul"
 
 msgid "Copy Text"
 msgstr "Copiați Textul"
@@ -1473,9 +1448,6 @@ msgstr "Creați un chat de grup"
 msgid "Creating Account..."
 msgstr "Crearea contului..."
 
-msgid "Creating thumbnail failed"
-msgstr "Crearea miniaturii a eșuat"
-
 msgid "Credentials expired"
 msgstr "Credențiale expirate"
 
@@ -1515,9 +1487,6 @@ msgstr "Dimensiunea fontului interfeței utilizatorului"
 
 msgid "Decrease playback speed"
 msgstr "Reduceți viteza de redare"
-
-msgid "Decryption failed"
-msgstr "Decriptarea a eșuat"
 
 msgid "Default Encryption"
 msgstr "Criptare implicită"
@@ -1731,19 +1700,9 @@ msgstr "În acest fel, această amprentă digitală va fi ștearsă definitiv"
 msgid "Download"
 msgstr "Descărcați"
 
-msgid "Download File"
-msgstr "Descărcați fișierul"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Descărcarea a eșuat (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "Mesaje descărcate %s"
-
-msgid "Downloading…"
-msgstr "Descărcarea…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1754,6 +1713,10 @@ msgstr "Aruncați fișierele aici"
 
 msgid "Eating"
 msgstr "Mâncând"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Editați"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2059,8 +2022,9 @@ msgstr "Fișierul este gol"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Fișierul este prea mare, dimensiunea maximă permisă este: %s"
 
-msgid "File size unknown"
-msgstr "Dimensiunea fișierului necunoscută"
+#, fuzzy
+msgid "File saved"
+msgstr "Numele fișierului: "
 
 #, fuzzy
 msgid "File too big"
@@ -2683,9 +2647,6 @@ msgstr "Părăsiți grupul de chat"
 msgid "Leave _Permanently"
 msgstr "Permanent"
 
-msgid "Left Click Action"
-msgstr "Acțiunea clic stânga"
-
 msgid "Let others know if you read up to this point"
 msgstr "Anunță-i și pe alții dacă ai citit până la acest punct"
 
@@ -3222,14 +3183,8 @@ msgstr "Deschideți Email Composer"
 msgid "Open Folder"
 msgstr "Deschideți dosarul"
 
-msgid "Open Link in Browser"
-msgstr "Deschideți link-ul în browser"
-
 msgid "Open Link in _Browser"
 msgstr "Deschide link-ul în _Browser"
-
-msgid "Open _Folder"
-msgstr "Deschideți _Folder"
 
 msgid "Open as _Link"
 msgstr "Deschideți ca _Link"
@@ -3245,6 +3200,10 @@ msgstr "Sistem de operare"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Organizație"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Organizație"
 
 msgid "Organization (O): "
@@ -3566,6 +3525,9 @@ msgstr "Profilarea aplicației cu cprofile"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Discuția proiectului"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr "Protocolul"
@@ -4016,9 +3978,6 @@ msgstr "Salvați parola"
 msgid "Save as..."
 msgstr "Salvați ca..."
 
-msgid "Save as…"
-msgstr "Salvați ca…"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4133,6 +4092,14 @@ msgstr "Etichete de securitate"
 
 msgid "Security Warning"
 msgstr "Avertisment de securitate"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Schimbat de %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Participanți"
 
 msgid "Select Account"
 msgstr "Selectați contul"
@@ -4265,9 +4232,6 @@ msgstr "Setați directorul de configurare"
 #, fuzzy
 msgid "Set date…"
 msgstr "Moderat…"
-
-msgid "Set status message"
-msgstr "Setați mesajul de stare"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4403,9 +4367,6 @@ msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
 "Afișați previzualizări pentru orice URL-uri care conțin imagini (poate fi "
 "nesigur)"
-
-msgid "Show previews for files"
-msgstr "Afișați previzualizări pentru fișiere"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Afișați sugestii pentru shortcodes, de exemplu :+1:"
@@ -4551,9 +4512,6 @@ msgstr "Mesaj de stare"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Mesaj de stare"
-
-msgid "Status message…"
-msgstr "Mesaj de stare…"
 
 msgid "Status: Away Color"
 msgstr "Stare: Departe Culoare"
@@ -4755,13 +4713,12 @@ msgstr "Sincronizarea istoricului de chat…"
 msgid "System"
 msgstr "Sistem"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "Verificarea TLS a eșuat: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Echipă"
+
+msgid "Telephone"
+msgstr ""
 
 msgid "Tell your contacts if you received a message"
 msgstr "Spuneți contactelor dumneavoastră dacă ați primit un mesaj"
@@ -4972,9 +4929,6 @@ msgstr ""
 "Aceasta este tema pe care o utilizați în prezent.\n"
 "Doriți să ștergeți această temă?"
 
-msgid "This is your XMPP address"
-msgstr "Aceasta este adresa ta XMPP"
-
 #, fuzzy
 msgid "This message has been moderated"
 msgstr "Acest mesaj a fost moderat%s."
@@ -5071,6 +5025,10 @@ msgstr "Timp până la distanță"
 
 msgid "Time Until Not Available"
 msgstr "Timp până când nu este disponibil"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Timp"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5214,6 +5172,10 @@ msgstr "Necunoscut"
 msgid "Unknown Artist"
 msgstr "Artist necunoscut"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Eroare necunoscută."
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Eroare SSL necunoscută \"%s\""
@@ -5292,9 +5254,6 @@ msgstr "Datei konnte nicht geöffnet werden (%s)"
 
 msgid "Upload File…"
 msgstr "Încărcați fișierul…"
-
-msgid "Upload could not be completed."
-msgstr "Încărcarea nu a putut fi finalizată."
 
 msgid "Uploading Avatar Failed"
 msgstr "Încărcarea Avatarului a eșuat"
@@ -5795,9 +5754,6 @@ msgstr "_Dezactivați contul"
 msgid "_Do not ask me again"
 msgstr "Nu mă mai întreba din nou"
 
-msgid "_Download"
-msgstr "_Descărcare"
-
 msgid "_Edit"
 msgstr "_Editați"
 
@@ -5863,9 +5819,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_în offline"
 
-msgid "_Open"
-msgstr "_Deschideți"
-
 msgid "_Overwrite"
 msgstr "_Suprascrieți"
 
@@ -5909,9 +5862,6 @@ msgstr "_Retrageți"
 
 msgid "_Save"
 msgstr "_Salvați"
-
-msgid "_Save as…"
-msgstr "_Salvați ca…"
 
 msgid "_Search"
 msgstr "_Căutați"
@@ -6147,10 +6097,6 @@ msgstr "{nick} este acum {show}{status}"
 msgid "…or drop it here"
 msgstr "...sau lăsați-o aici"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Schimbat de %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " de {actor}"
@@ -6166,6 +6112,10 @@ msgstr "...sau lăsați-o aici"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s grupuri de chat găsite"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s a citit până în acest moment"
 
 #, python-format
 #~ msgid ""
@@ -6433,6 +6383,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Account Settings…"
 #~ msgstr "Setări cont…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Acțiune pentru a face clic stânga pe o previzualizare"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Activați"
@@ -6626,6 +6579,24 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Contact Addresses"
 #~ msgstr "Adrese de contact"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Lista de contacte: Culoarea de fundal a contactelor"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Lista de contacte: Font de contact"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Lista de contacte: Culoarea prim-planului contactelor"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Lista de contacte: Culoarea fundalului grupului"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Lista de contacte: Font de grup"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Lista de contacte: Culoare prim-plan grup"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Contact Dezabonat"
 
@@ -6643,6 +6614,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Copiați adresa de e-mail"
+
+#~ msgid "Copy Link"
+#~ msgstr "Copiați link-ul"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Copiați locația linkului"
@@ -6668,6 +6642,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Create new post"
 #~ msgstr "Creați un post nou"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Crearea miniaturii a eșuat"
+
 #~ msgid "Current Developers"
 #~ msgstr "Dezvoltatorii actuali"
 
@@ -6676,6 +6653,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Decrease User Interface Font Size"
 #~ msgstr "Reducerea Dimensiunii Fontului Interfeței Utilizatorului"
+
+#~ msgid "Decryption failed"
+#~ msgstr "Decriptarea a eșuat"
 
 #~ msgid "Default"
 #~ msgstr "Implicit"
@@ -6722,11 +6702,21 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Download"
 #~ msgstr "Descărcare"
 
+#~ msgid "Download File"
+#~ msgstr "Descărcați fișierul"
+
 #~ msgid "Download Update"
 #~ msgstr "Descărcare actualizare"
 
 #~ msgid "Download and Install"
 #~ msgstr "Descărcare și instalare"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Descărcarea a eșuat (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Descărcarea…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Aruncați fișiere sau contacte"
@@ -6787,9 +6777,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Features:"
 #~ msgstr "Funcții:"
 
-#~ msgid "File Name: "
-#~ msgstr "Numele fișierului: "
-
 #~ msgid "File Offered"
 #~ msgstr "Fișier oferit"
 
@@ -6804,6 +6791,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "File error"
 #~ msgstr "Eroare fișier"
+
+#~ msgid "File size unknown"
+#~ msgstr "Dimensiunea fișierului necunoscută"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr "Fișier prea mare, se va folosi transferul direct (necriptat)"
@@ -6960,6 +6950,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Last seen %s"
 #~ msgstr "Ultima vizualizare: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Acțiunea clic stânga"
+
 #~ msgid "Local System Time"
 #~ msgstr "Ora sistemului local"
 
@@ -7032,8 +7025,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Open Link"
 #~ msgstr "Deschideți ca Link"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Deschideți link-ul în browser"
+
 #~ msgid "Open Path"
 #~ msgstr "Deschideți"
+
+#~ msgid "Open _Folder"
+#~ msgstr "Deschideți _Folder"
 
 #~ msgid "Open search bar"
 #~ msgstr "Deschideți bara de căutare"
@@ -7178,6 +7177,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Save File as…"
 #~ msgstr "Salvați fișierul ca…"
 
+#~ msgid "Save as…"
+#~ msgstr "Salvați ca…"
+
 #~ msgid "Select File…"
 #~ msgstr "Selectați File…"
 
@@ -7242,6 +7244,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Server Uptime"
 #~ msgstr "Timp de funcționare a serverului"
 
+#~ msgid "Set status message"
+#~ msgstr "Setați mesajul de stare"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
 #~ "Setează-ți activitatea sau melodia pentru a le arăta prietenilor tăi cum "
@@ -7276,6 +7281,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Show debug console"
 #~ msgstr "Afișați consola de depanare"
 
+#~ msgid "Show previews for files"
+#~ msgstr "Afișați previzualizări pentru fișiere"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Afișați-vă propriul flux video în apeluri"
 
@@ -7302,6 +7310,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Stare și mesaj de stare pentru toate conturile"
+
+#~ msgid "Status message…"
+#~ msgstr "Mesaj de stare…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7354,6 +7365,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr "Versiunea TLS"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Verificarea TLS a eșuat: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7367,6 +7382,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Acest cont nu este conectat la server"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "Aceasta este adresa ta XMPP"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7411,6 +7429,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Upload Files"
 #~ msgstr "Încărcați fișiere"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "Încărcarea nu a putut fi finalizată."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Utilizați serverul STUN"
@@ -7516,6 +7537,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Nu mă mai întreba din nou"
 
+#~ msgid "_Download"
+#~ msgstr "_Descărcare"
+
 #~ msgid "_Download Again"
 #~ msgstr "_Descărcați din nou"
 
@@ -7537,11 +7561,17 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_New post"
 #~ msgstr "_Postare nouă"
 
+#~ msgid "_Open"
+#~ msgstr "_Deschideți"
+
 #~ msgid "_Open Folder"
 #~ msgstr "_Deschideți dosarul"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Preferințe"
+
+#~ msgid "_Save as…"
+#~ msgstr "_Salvați ca…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr ""
@@ -7562,6 +7592,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "_View"
 #~ msgstr "_Vezi"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Deschideți folderul"
 
 #~ msgid "dark skin tone"
 #~ msgstr "tonul închis al pielii"

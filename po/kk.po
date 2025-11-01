@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -160,10 +160,6 @@ msgstr "%s бұл топтық чатқа шақырылды"
 #, python-format
 msgid "%s has joined"
 msgstr "%s қосылды"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s осы уақытқа дейін оқыды"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -466,9 +462,6 @@ msgstr "Тіркелгі: %s"
 
 msgid "Accounts"
 msgstr "Тіркелгілер"
-
-msgid "Action for left-clicking a preview"
-msgstr "Алдын ала қарауды сол жақпен шерту әрекеті"
 
 msgid "Action on Close"
 msgstr "Жабу кезіндегі әрекет"
@@ -1213,6 +1206,9 @@ msgstr "Код сниппеті"
 msgid "Color"
 msgstr "Түс"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "Командалар"
 
@@ -1324,24 +1320,6 @@ msgstr "Контакт тізімдерімен алмасу"
 msgid "Contact List – %(account)s"
 msgstr "Контакттар тізімі: Контакт қарібі"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Контакттар тізімі: Контакт фонының түсі"
-
-msgid "Contact List: Contact Font"
-msgstr "Контакттар тізімі: Контакт қарібі"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Контакттар тізімі: Контакт алдыңғы көрінісінің түсі"
-
-msgid "Contact List: Group Background Color"
-msgstr "Контакттар тізімі: Топ фонының түсі"
-
-msgid "Contact List: Group Font"
-msgstr "Контакттар тізімі: Топ қарібі"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Контакттар тізімі: Топ алдыңғы көрінісінің түсі"
-
 #, fuzzy
 msgid "Contact Removed"
 msgstr "Тіркелгі өшірілді"
@@ -1383,9 +1361,6 @@ msgstr "Көшіріп алу"
 
 msgid "Copy Address"
 msgstr "Адресін көшіріп алу"
-
-msgid "Copy Link"
-msgstr "Сілтемені көшіріп алу"
 
 msgid "Copy Text"
 msgstr "Мәтінді көшіріп алу"
@@ -1457,9 +1432,6 @@ msgstr "Топтық чатты жасау"
 msgid "Creating Account..."
 msgstr "Тіркелгіні жасау..."
 
-msgid "Creating thumbnail failed"
-msgstr "Кіші көріністі жасау сәтсіз аяқталды"
-
 msgid "Credentials expired"
 msgstr "Тіркелгі деректерінің мерзімі аяқталды"
 
@@ -1499,9 +1471,6 @@ msgstr "D-Bus интерфейсі"
 
 msgid "Decrease playback speed"
 msgstr "Ойнату жылдамдығын азайту"
-
-msgid "Decryption failed"
-msgstr "Дешифрлеу сәтсіз аяқталды"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1711,19 +1680,9 @@ msgstr ""
 msgid "Download"
 msgstr "Жүктеп алу"
 
-msgid "Download File"
-msgstr "Файлды жүктеп алу"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Жүктеп алу сәтсіз аяқталды (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s хабарлама жүктеп алынды"
-
-msgid "Downloading…"
-msgstr "Жүктеп алу…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1734,6 +1693,10 @@ msgstr "Файлдарды осында тартып әкеліңіз"
 
 msgid "Eating"
 msgstr "Тамақ ішуде"
+
+#, fuzzy
+msgid "Edit"
+msgstr "Тү_зету"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2037,8 +2000,9 @@ msgstr "Файл бос"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Файл тым үлкен, максималды рұқсат етілген файл өлшемі: %s"
 
-msgid "File size unknown"
-msgstr "Файл өлшемі белгісіз"
+#, fuzzy
+msgid "File saved"
+msgstr "Файл аты: "
 
 #, fuzzy
 msgid "File too big"
@@ -2657,9 +2621,6 @@ msgstr "Топтық чаттан шығу"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr "Сол жақ шерту әрекеті"
-
 msgid "Let others know if you read up to this point"
 msgstr "Басқаларға сіз хабарламаны оқығанын білуге мүмкін етеді"
 
@@ -3196,14 +3157,8 @@ msgstr "Эл. пошта құрастырушысын ашу"
 msgid "Open Folder"
 msgstr "Буманы ашу"
 
-msgid "Open Link in Browser"
-msgstr "Сілтемені браузерде ашу"
-
 msgid "Open Link in _Browser"
 msgstr "Сілтемені _браузерде ашу"
-
-msgid "Open _Folder"
-msgstr "_Буманы ашу"
 
 msgid "Open as _Link"
 msgstr "Сіл_теме ретінде ашу"
@@ -3219,6 +3174,10 @@ msgstr "Операциялық жүйе"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Ұйым"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Ұйым"
 
 msgid "Organization (O): "
@@ -3540,6 +3499,9 @@ msgstr "Қолданбаны cprofile көмегімен профильдеу"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Жобаны талқылау"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr ""
@@ -3989,9 +3951,6 @@ msgstr "Парольді сақтау"
 msgid "Save as..."
 msgstr "Қалайша сақтау..."
 
-msgid "Save as…"
-msgstr "Қалайша сақтау…"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4108,6 +4067,14 @@ msgstr "Қауіпсіздік белгілері"
 
 msgid "Security Warning"
 msgstr "Қауіпсіздік ескертуі"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "%s өзгерткен"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Қатысушылар"
 
 msgid "Select Account"
 msgstr "Тіркелгіні таңдау"
@@ -4238,9 +4205,6 @@ msgstr "Баптау бумасын орнату"
 #, fuzzy
 msgid "Set date…"
 msgstr "Модерацияланады"
-
-msgid "Set status message"
-msgstr "Қалып-күй хабарламасын орнату"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4379,9 +4343,6 @@ msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
 "Суреттері бар кез келген URL адрестері үшін алдын ала қарауды көрсету "
 "(қауіпті болуы мүмкін)"
-
-msgid "Show previews for files"
-msgstr "Файлдар үшін алдын ала қарауды көрсету"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Қысқа кодтарға арналған ұсыныстарды көрсету, мысалы :+1:"
@@ -4527,9 +4488,6 @@ msgstr "Күй хабарламасы"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Күй хабарламасы"
-
-msgid "Status message…"
-msgstr "Қалып-күй хабарламасы…"
 
 msgid "Status: Away Color"
 msgstr "Қалып-күй: \"Кетіп қалған\" үшін түс"
@@ -4730,13 +4688,12 @@ msgstr "Чат тарихын синхрондау…"
 msgid "System"
 msgstr "Жүйе"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "TLS тексеруі сәтсіз аяқталды: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Топ"
+
+msgid "Telephone"
+msgstr ""
 
 msgid "Tell your contacts if you received a message"
 msgstr "Хабарлама алғаныңызды контактілерге білдірту"
@@ -4939,10 +4896,6 @@ msgstr ""
 "Бұл теманы өшіруді қалайсыз ба?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "Сіздің XMPP адресіңізді тек модераторлар көре алады"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Бұл хабарламаны %s кері қайтарып алды."
 
@@ -5037,6 +4990,10 @@ msgstr "\"Кетіп қалған\" қалып-күйді орнатуға де�
 
 msgid "Time Until Not Available"
 msgstr "\"Қолжетімсіз\" қалып-күйді орнатуға дейінгі уақыт"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Уақыт"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5178,6 +5135,10 @@ msgstr "Белгісіз"
 msgid "Unknown Artist"
 msgstr "Белгісіз орындаушы"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Белгісіз SSL қатесі \"%s\""
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Белгісіз SSL қатесі \"%s\""
@@ -5258,10 +5219,6 @@ msgstr "Файлды ашу мүмкін емес (%s)"
 
 msgid "Upload File…"
 msgstr "Файлды жүктеп жіберу…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Таңдалған суретті жүктеу мүмкін емес."
 
 msgid "Uploading Avatar Failed"
 msgstr "Аватарды жаңарту сәтсіз аяқталды"
@@ -5759,9 +5716,6 @@ msgstr "Тіркелгіні сөн_діру"
 msgid "_Do not ask me again"
 msgstr "М_ені қайта сұрамау"
 
-msgid "_Download"
-msgstr "Жү_ктеп алу"
-
 msgid "_Edit"
 msgstr "Тү_зету"
 
@@ -5828,9 +5782,6 @@ msgstr "_ОК"
 msgid "_Offline"
 msgstr "Желі_де емес"
 
-msgid "_Open"
-msgstr "_Ашу"
-
 msgid "_Overwrite"
 msgstr "Үстінен жа_зу"
 
@@ -5875,9 +5826,6 @@ msgstr "Ке_рі қайтарып алу"
 
 msgid "_Save"
 msgstr "_Сақтау"
-
-msgid "_Save as…"
-msgstr "Қал_айша сақтау…"
 
 msgid "_Search"
 msgstr "І_здеу"
@@ -6113,10 +6061,6 @@ msgstr "{nick} енді {show}{status}"
 msgid "…or drop it here"
 msgstr "…немесе оны осында тастаңыз"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "%s өзгерткен"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " {actor} шығарған"
@@ -6132,6 +6076,10 @@ msgstr "…немесе оны осында тастаңыз"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s топтық чат табылды"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s осы уақытқа дейін оқыды"
 
 #, python-format
 #~ msgid ""
@@ -6377,6 +6325,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Account Settings…"
 #~ msgstr "Тіркелгі баптаулары…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Алдын ала қарауды сол жақпен шерту әрекеті"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Белсендіру"
@@ -6563,6 +6514,24 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Contact Addresses"
 #~ msgstr "Контакт адрестері"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Контакттар тізімі: Контакт фонының түсі"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Контакттар тізімі: Контакт қарібі"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Контакттар тізімі: Контакт алдыңғы көрінісінің түсі"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Контакттар тізімі: Топ фонының түсі"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Контакттар тізімі: Топ қарібі"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Контакттар тізімі: Топ алдыңғы көрінісінің түсі"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Контакт жазылуды тоқтатты"
 
@@ -6580,6 +6549,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Эл. пошта адресін көшіру"
+
+#~ msgid "Copy Link"
+#~ msgstr "Сілтемені көшіріп алу"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Сілтеме адресін көшіру"
@@ -6605,11 +6577,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Create new post"
 #~ msgstr "Жаңа хабарламаны жасау"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Кіші көріністі жасау сәтсіз аяқталды"
+
 #~ msgid "Current Developers"
 #~ msgstr "Ағымдағы әзірлеушілер"
 
 #~ msgid "Decline Invitation"
 #~ msgstr "Шақыруды тайдыру"
+
+#~ msgid "Decryption failed"
+#~ msgstr "Дешифрлеу сәтсіз аяқталды"
 
 #~ msgid "Default"
 #~ msgstr "Бастапқысы"
@@ -6655,11 +6633,21 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Download"
 #~ msgstr "Жүктеп алу"
 
+#~ msgid "Download File"
+#~ msgstr "Файлды жүктеп алу"
+
 #~ msgid "Download Update"
 #~ msgstr "Жаңартуды жүктеп алу"
 
 #~ msgid "Download and Install"
 #~ msgstr "Жүктеп алу және орнату"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Жүктеп алу сәтсіз аяқталды (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Жүктеп алу…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Файлдар немесе контакттарды тартып әкеліңіз"
@@ -6720,9 +6708,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Features:"
 #~ msgstr "Мүмкіндіктері:"
 
-#~ msgid "File Name: "
-#~ msgstr "Файл аты: "
-
 #~ msgid "File Offered"
 #~ msgstr "Файл ұсынылды"
 
@@ -6737,6 +6722,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "File error"
 #~ msgstr "Файл қатесі"
+
+#~ msgid "File size unknown"
+#~ msgstr "Файл өлшемі белгісіз"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr "Файл тым үлкен, тікелей тасымалдау пайдаланылады (шифрленбеген)"
@@ -6886,6 +6874,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Last seen %s"
 #~ msgstr "Себебі: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Сол жақ шерту әрекеті"
+
 #~ msgid "Local System Time"
 #~ msgstr "Жергілікті жүйе уақыты"
 
@@ -6957,8 +6948,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Open Link"
 #~ msgstr "Сілтемені ашу"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Сілтемені браузерде ашу"
+
 #~ msgid "Open Path"
 #~ msgstr "Жолды ашу"
+
+#~ msgid "Open _Folder"
+#~ msgstr "_Буманы ашу"
 
 #~ msgid "Open search bar"
 #~ msgstr "Іздеу панелін ашу"
@@ -7102,6 +7099,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Save File as…"
 #~ msgstr "Файлды қалайша сақтау…"
 
+#~ msgid "Save as…"
+#~ msgstr "Қалайша сақтау…"
+
 #~ msgid "Select File…"
 #~ msgstr "Файлды таңдау…"
 
@@ -7165,6 +7165,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Server Uptime"
 #~ msgstr "Сервердің жұмыс уақыты"
 
+#~ msgid "Set status message"
+#~ msgstr "Қалып-күй хабарламасын орнату"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
 #~ "Достарыңызға көңіл-күйіңізді көрсету үшін әрекетті немесе әуенді орнату"
@@ -7196,6 +7199,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Show debug console"
 #~ msgstr "Жөндеу консолін көрсету"
 
+#~ msgid "Show previews for files"
+#~ msgstr "Файлдар үшін алдын ала қарауды көрсету"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Қоңырауларда өзіңіздің видео ағыныңызды көрсету"
 
@@ -7221,6 +7227,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Status and status message for all accounts"
 #~ msgstr ""
 #~ "Барлық тіркелгілеріңізге арналған қалып-күй және қалып-күй хабарламасы"
+
+#~ msgid "Status message…"
+#~ msgstr "Қалып-күй хабарламасы…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7270,6 +7279,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr "TLS нұсқасы"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "TLS тексеруі сәтсіз аяқталды: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7283,6 +7296,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "Сіздің XMPP адресіңізді тек модераторлар көре алады"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7327,6 +7344,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Upload Files"
 #~ msgstr "Файлдарды жүктеп салу"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Таңдалған суретті жүктеу мүмкін емес."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN серверін пайдалану"
@@ -7430,6 +7451,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "_Don’t ask again"
 #~ msgstr "Келесіде сұра_мау"
 
+#~ msgid "_Download"
+#~ msgstr "Жү_ктеп алу"
+
 #~ msgid "_Download Again"
 #~ msgstr "Қайта жү_ктеп алу"
 
@@ -7452,11 +7476,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "_New post"
 #~ msgstr "_Жаңа пост"
 
+#~ msgid "_Open"
+#~ msgstr "_Ашу"
+
 #~ msgid "_Open Folder"
 #~ msgstr "_Буманы ашу"
 
 #~ msgid "_Preferences"
 #~ msgstr "Ба_птаулар"
+
+#~ msgid "_Save as…"
+#~ msgstr "Қал_айша сақтау…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "Файлдармен алмасу аяқталғанда е_скерту"
@@ -7476,6 +7506,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "_View"
 #~ msgstr "_Түрі"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Буманы ашу"
 
 #~ msgid "dark skin tone"
 #~ msgstr "күңгірт тері"

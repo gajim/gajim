@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -156,10 +156,6 @@ msgstr "%(nick)s has been removed from the room (%(reason)s)"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s has left"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -492,9 +488,6 @@ msgstr "Accounts"
 
 msgid "Accounts"
 msgstr "Accounts"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1323,6 +1316,9 @@ msgstr ""
 msgid "Color"
 msgstr "Colour"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Commands: %s"
@@ -1454,29 +1450,6 @@ msgid "Contact List – %(account)s"
 msgstr "Roster Item Exchange"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Contact Connected"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Roster Item Exchange"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Contact Connected"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Contact Disconnected"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Show event in roster"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Account"
 
@@ -1525,10 +1498,6 @@ msgstr "Room JID"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Copy JID/E-mail Address"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Copy Link Location"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1612,9 +1581,6 @@ msgstr "Leave Groupchats"
 msgid "Creating Account..."
 msgstr "Removing %s account"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certificate has expired"
@@ -1660,10 +1626,6 @@ msgstr "_Username:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Connection Failed"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1890,21 +1852,9 @@ msgstr ""
 msgid "Download"
 msgstr "Download"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Download"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Do _not ask me again"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Forward unread messages"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Coding"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1916,6 +1866,10 @@ msgstr "Sends file to a contact"
 
 msgid "Eating"
 msgstr "Eating"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Edit"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2247,8 +2201,9 @@ msgstr "File is empty"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Filename: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2917,9 +2872,6 @@ msgstr "Leave Groupchats"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3514,16 +3466,8 @@ msgid "Open Folder"
 msgstr "_Open Containing Folder"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Open Link in Browser"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Open Link in Browser"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Open Containing Folder"
 
 msgid "Open as _Link"
 msgstr "Open as _Link"
@@ -3542,6 +3486,10 @@ msgstr "Self signed certificate"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "On Vacation"
+
+#, fuzzy
+msgid "Organization"
 msgstr "On Vacation"
 
 msgid "Organization (O): "
@@ -3892,6 +3840,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4393,10 +4344,6 @@ msgstr "Save password"
 msgid "Save as..."
 msgstr "Have "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Have "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4521,6 +4468,14 @@ msgstr "Banning %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Banning %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Change _Nickname..."
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Participants"
 
 #, fuzzy
 msgid "Select Account"
@@ -4672,10 +4627,6 @@ msgstr "Room Configuration"
 msgid "Set date…"
 msgstr "Moderator"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "status message"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4823,10 +4774,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "A connection is not available"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4992,10 +4939,6 @@ msgstr "Status Message"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Status Message"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Status message:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5206,12 +5149,11 @@ msgstr "Synchronise"
 msgid "System"
 msgstr "<b>System:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "SSL certificate error"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5431,10 +5373,6 @@ msgstr ""
 "This name is already used. Do you want to overwrite this status message?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Copy JID/E-mail Address"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[This message is encrypted]"
 
@@ -5526,6 +5464,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Not Available"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Time"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5679,6 +5621,10 @@ msgstr "Unknown"
 msgid "Unknown Artist"
 msgstr "Unknown Artist"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Unknown SSL error: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Unknown SSL error: %d"
@@ -5768,10 +5714,6 @@ msgstr "Could not load image"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Save File as..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "The service could not be found"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6323,10 +6265,6 @@ msgstr "Invalid Account"
 msgid "_Do not ask me again"
 msgstr "Do _not ask me again"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Do _not ask me again"
-
 msgid "_Edit"
 msgstr "_Edit"
 
@@ -6401,10 +6339,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Offline"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenGPG"
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6453,10 +6387,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Have "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Have "
 
 msgid "_Search"
@@ -6708,10 +6638,6 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Change _Nickname..."
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7144,6 +7070,26 @@ msgstr ""
 #~ msgstr "Chat message:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Contact Connected"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Roster Item Exchange"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Contact Connected"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Contact Disconnected"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Show event in roster"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Unsubscribed"
 
@@ -7166,6 +7112,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Copy JID/E-mail Address"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Copy Link Location"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7201,6 +7151,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Current Developers:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Connection Failed"
 
 #~ msgid "Default"
 #~ msgstr "Default"
@@ -7242,12 +7196,24 @@ msgstr ""
 #~ msgstr "Download"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Download"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Download"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Do _not ask me again"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Coding"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7288,10 +7254,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Features"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Filename: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7485,8 +7447,16 @@ msgstr ""
 #~ msgstr "Open as _Link"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Open Link in Browser"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenGPG"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Open Containing Folder"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7600,6 +7570,10 @@ msgstr ""
 #~ msgstr "Save File as..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Have "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Send _File"
 
@@ -7662,6 +7636,10 @@ msgstr ""
 #~ msgstr "Server replied: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "status message"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7680,6 +7658,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Show _XML Console"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "A connection is not available"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7704,6 +7686,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Changes the status of account or accounts"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Status message:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7744,11 +7730,19 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "GTK+ Version:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "SSL certificate error"
+
 #~ msgid "The service could not be found"
 #~ msgstr "The service could not be found"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "This account is not connected to the server"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Copy JID/E-mail Address"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7791,6 +7785,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "The service could not be found"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7884,6 +7882,10 @@ msgstr ""
 #~ msgstr "Do _not ask me again"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Do _not ask me again"
 
@@ -7912,12 +7914,20 @@ msgstr ""
 #~ msgstr "New post"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenGPG"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Open Containing Folder"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Preferences"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Have "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7937,6 +7947,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_View"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Open Containing Folder"
 
 #~ msgid "file transfers list"
 #~ msgstr "file transfers list"

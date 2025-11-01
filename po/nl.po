@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -158,10 +158,6 @@ msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 #, python-format
 msgid "%s has joined"
 msgstr "%s is toegetreden"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s heeft tot op dit punt gelezen"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -489,9 +485,6 @@ msgstr "Accounts"
 
 msgid "Accounts"
 msgstr "Accounts"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1306,6 +1299,9 @@ msgstr ""
 msgid "Color"
 msgstr "Kleur"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "Opdrachtlijst"
 
@@ -1432,30 +1428,6 @@ msgid "Contact List – %(account)s"
 msgstr "Gesprekssneltoetsen"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Contactrij achtergrondkleur"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Gesprekssneltoetsen"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Contactrij voorgrondkleur"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Contactrij achtergrondkleur"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Contactrijlettertype"
-
-#, fuzzy
-msgid "Contact List: Group Foreground Color"
-msgstr "Contactrij voorgrondkleur"
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Accountrijlettertype"
 
@@ -1504,10 +1476,6 @@ msgstr "JID kopiëren"
 #, fuzzy
 msgid "Copy Address"
 msgstr "E-mailadres kopiëren"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "Verwijzingslocatie kopiëren"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1590,9 +1558,6 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Creating Account..."
 msgstr "Account %s wordt verwijderd"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Gebruikersreferenties"
@@ -1638,10 +1603,6 @@ msgstr "Gebr_uikersnaam"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Verbinding mislukt"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1868,21 +1829,9 @@ msgstr ""
 msgid "Download"
 msgstr "?Znw:Download"
 
-#, fuzzy
-msgid "Download File"
-msgstr "?Znw:Download"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Vraag mij _dit niet nogmaals"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%s berichten gedownload"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Bezig met laden"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1894,6 +1843,10 @@ msgstr "Stuurt een bestand naar een contact"
 
 msgid "Eating"
 msgstr "Eten"
+
+#, fuzzy
+msgid "Edit"
+msgstr "B_ewerken"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2230,8 +2183,9 @@ msgstr "Bestand is leeg"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Bestand is te groot, maximale bestandsgrootte is: %s"
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Bestandsnaam: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2915,9 +2869,6 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3508,16 +3459,9 @@ msgstr "E-mailopsteller openen"
 msgid "Open Folder"
 msgstr "_Open bovenliggende map"
 
-msgid "Open Link in Browser"
-msgstr "Verwijzing openen in browser"
-
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "Verwijzing openen in browser"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Bovenliggende map openen"
 
 msgid "Open as _Link"
 msgstr "Openen a_ls verwijzing"
@@ -3536,6 +3480,10 @@ msgstr "Cliëntcertificaat"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Organisatie (O)"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Organisatie (O)"
 
 #, fuzzy
@@ -3875,6 +3823,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4376,10 +4327,6 @@ msgstr "Wachtwoord opslaan"
 msgid "Save as..."
 msgstr "Opslaan _als"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Opslaan _als"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4506,6 +4453,14 @@ msgstr "Waarschuwing"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Waarschuwing"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Bijnaam veranderen"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Deelnemers"
 
 #, fuzzy
 msgid "Select Account"
@@ -4657,10 +4612,6 @@ msgstr "Configuratiemap instellen"
 msgid "Set date…"
 msgstr "Beheerder"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "Statusbericht instellen"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4808,10 +4759,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Audiosessies zijn niet beschikbaar"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4972,10 +4919,6 @@ msgstr "Statusbericht"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Statusbericht"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Statusbericht"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5185,12 +5128,11 @@ msgstr "Geschiedenis synchroniseren"
 msgid "System"
 msgstr "Systeem"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "SSL-certificaatverificatie voor %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5408,12 +5350,6 @@ msgid ""
 msgstr "Deze naam is al in gebruik. Wil je dit statusbericht overschrijven?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr ""
-"Semi-anoniem\n"
-"<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Certificaat ingetrokken"
 
@@ -5511,6 +5447,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Niet beschikbaar"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Duur"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5665,6 +5605,10 @@ msgstr "Onbekend"
 msgid "Unknown Artist"
 msgstr "Onbekende artiest"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Onbekende SSL-fout: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Onbekende SSL-fout: %d"
@@ -5752,10 +5696,6 @@ msgstr "Kon bestand niet openen"
 
 msgid "Upload File…"
 msgstr "Bestand uploaden…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "De dienst kon niet gevonden worden"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6312,10 +6252,6 @@ msgstr "Account uitschakelen"
 msgid "_Do not ask me again"
 msgstr "Vraag mij _dit niet nogmaals"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Vraag mij _dit niet nogmaals"
-
 msgid "_Edit"
 msgstr "B_ewerken"
 
@@ -6391,10 +6327,6 @@ msgid "_Offline"
 msgstr "_Offline"
 
 #, fuzzy
-msgid "_Open"
-msgstr "Openen"
-
-#, fuzzy
 msgid "_Overwrite"
 msgstr "Overschrijven?"
 
@@ -6443,10 +6375,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Opslaan _als"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Opslaan _als"
 
 msgid "_Search"
@@ -6694,10 +6622,6 @@ msgstr "{nick} is nu {show}{status}"
 msgid "…or drop it here"
 msgstr ""
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Bijnaam veranderen"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " door {actor}"
@@ -6713,6 +6637,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s groepsgesprekken gevonden"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s heeft tot op dit punt gelezen"
 
 #, python-format
 #~ msgid ""
@@ -7169,6 +7097,30 @@ msgstr ""
 #~ msgstr "Bericht van contact"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Contactrij achtergrondkleur"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Gesprekssneltoetsen"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Contactrij voorgrondkleur"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Contactrij achtergrondkleur"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Contactrijlettertype"
+
+#, fuzzy
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Contactrij voorgrondkleur"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Abonnement opgezegd"
 
@@ -7189,6 +7141,10 @@ msgstr ""
 
 #~ msgid "Copy Email Address"
 #~ msgstr "E-mailadres kopiëren"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Verwijzingslocatie kopiëren"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Verwijzingslocatie kopiëren"
@@ -7221,6 +7177,10 @@ msgstr ""
 
 #~ msgid "Current Developers"
 #~ msgstr "Huidige ontwikkelaars"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Verbinding mislukt"
 
 #~ msgid "Default"
 #~ msgstr "Standaard"
@@ -7262,12 +7222,24 @@ msgstr ""
 #~ msgstr "?Znw:Download"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "?Znw:Download"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "?Znw:Download"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Bezig met laden"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7328,10 +7300,6 @@ msgstr ""
 
 #~ msgid "Features:"
 #~ msgstr "Functies:"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Bestandsnaam: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7566,9 +7534,16 @@ msgstr ""
 #~ msgid "Open Link"
 #~ msgstr "Openen a_ls verwijzing"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Verwijzing openen in browser"
+
 #, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "Openen"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Bovenliggende map openen"
 
 #~ msgid "Organization (O)"
 #~ msgstr "Organisatie (O)"
@@ -7715,6 +7690,10 @@ msgstr ""
 #~ msgstr "Bestand opslaan als…"
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Opslaan _als"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Bestand verzenden…"
 
@@ -7773,6 +7752,10 @@ msgstr ""
 #~ msgstr "Serveruptime"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "Statusbericht instellen"
+
+#, fuzzy
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
 #~ "Stel je activiteit, deuntje en humeur in om je vrienden te tonen hoe je "
@@ -7797,6 +7780,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "_XML-console weergeven"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Audiosessies zijn niet beschikbaar"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7825,6 +7812,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Status van alle accounts synchroniseren"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Statusbericht"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7874,6 +7865,10 @@ msgstr ""
 #~ msgstr "Versie"
 
 #, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "SSL-certificaatverificatie voor %s"
+
+#, fuzzy, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7888,6 +7883,12 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Deze account is niet verbonden met de server"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr ""
+#~ "Semi-anoniem\n"
+#~ "<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7935,6 +7936,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Bestand uploaden…"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "De dienst kon niet gevonden worden"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -8039,6 +8044,10 @@ msgstr ""
 #~ msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Vraag mij _dit niet nogmaals"
 
@@ -8067,11 +8076,19 @@ msgstr ""
 #~ msgstr "Nieuwe post"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Openen"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Open bovenliggende map"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Voorkeuren"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Opslaan _als"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -8094,6 +8111,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "Weergeven"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Bovenliggende map openen"
 
 #~ msgid "file transfers list"
 #~ msgstr "bestandsoverdrachtlijst"

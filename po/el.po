@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -162,10 +162,6 @@ msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "Ο %s έφυγε"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "%s is a file but it should be a directory"
@@ -496,9 +492,6 @@ msgstr "Λογαριασμοί"
 
 msgid "Accounts"
 msgstr "Λογαριασμοί"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1315,6 +1308,9 @@ msgstr ""
 msgid "Color"
 msgstr "Χρώμα"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Εντολές: %s"
@@ -1446,29 +1442,6 @@ msgid "Contact List – %(account)s"
 msgstr "Αποσύνδεση επαφής"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Σύνδεση επαφής"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Αποσύνδεση επαφής"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Σύνδεση επαφής"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Αποσύνδεση επαφής"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Προβολή τίτλου στο κουμπί"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Λογαριασμός"
 
@@ -1517,10 +1490,6 @@ msgstr "Δωμάτιο:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1604,9 +1573,6 @@ msgstr "Ομαδικές συζητήσεις"
 msgid "Creating Account..."
 msgstr "Aφαίρεση του λογαριασμού %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Απαιτείται φράση πρόσβασης"
@@ -1652,10 +1618,6 @@ msgstr "Όν_ομα χρήστη:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Η σύνδεση απέτυχε"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1882,21 +1844,9 @@ msgstr ""
 msgid "Download"
 msgstr "Λήψη"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Λήψη"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Μη_ν με ξαναρωτήσεις"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d μη αναγνωσμένο μήνυμα"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Σύνθεση"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1908,6 +1858,10 @@ msgstr "Αποστολή αρχείου σε μία επαφή"
 
 msgid "Eating"
 msgstr "Τρώω"
+
+#, fuzzy
+msgid "Edit"
+msgstr "Ε_πεξεργασία"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2243,8 +2197,9 @@ msgstr "Διαδρομή αρχείου"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Όνομα αρχείου: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2915,9 +2870,6 @@ msgstr "Ομαδικές συζητήσεις"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3513,16 +3465,8 @@ msgid "Open Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Άνοιγμα δεσμού στον περιηγητή"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Άνοιγμα δεσμού στον περιηγητή"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
 msgid "Open as _Link"
@@ -3542,6 +3486,10 @@ msgstr "Μη έγκυρο όνομα χρήστη"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Διαχειριστής"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Διαχειριστής"
 
 msgid "Organization (O): "
@@ -3891,6 +3839,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4395,10 +4346,6 @@ msgstr "Αποθήκευση κωδικού"
 msgid "Save as..."
 msgstr "Έχει"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Έχει"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4524,6 +4471,14 @@ msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Αλλαγή _ψευδώνυμου"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Συμμετέχοντες"
 
 #, fuzzy
 msgid "Select Account"
@@ -4676,10 +4631,6 @@ msgstr "Ρυθμίσεις δωματίου"
 msgid "Set date…"
 msgstr "Διαχειριστής"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "μήνυμα κατάστασης"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4824,10 +4775,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "To Session bus δεν είναι διαθέσιμο"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4989,10 +4936,6 @@ msgstr "Μήνυμα κατάστασης"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Μήνυμα κατάστασης"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "Μήνυμα κατά_στασης:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5204,12 +5147,11 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 msgid "System"
 msgstr "<b>Προσαρμοσμένες ρυθμίσεις</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5420,10 +5362,6 @@ msgstr ""
 "σας. Παρακαλώ, επιλέξτε άλλο όνομα."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Η κατάσταση άλλαξε."
 
@@ -5514,6 +5452,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Μη διαθέσιμος"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Χρόνος"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5668,6 +5610,10 @@ msgstr "?Λειτ. Σύστημα: Άγνωστο"
 msgid "Unknown Artist"
 msgstr "Άγνωστος τύπος %s "
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Άγνωστη έκδοση του D-Bus: %s"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
@@ -5759,10 +5705,6 @@ msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Αποθήκευση αρχείου ως..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6314,10 +6256,6 @@ msgstr "Μη έγκυρο όνομα λογαριασμού"
 msgid "_Do not ask me again"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Μη_ν με ξαναρωτήσεις"
-
 msgid "_Edit"
 msgstr "Ε_πεξεργασία"
 
@@ -6393,10 +6331,6 @@ msgstr "_Εντάξει"
 msgid "_Offline"
 msgstr "Απ_οσυνδεδεμένος"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6445,10 +6379,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Έχει"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Έχει"
 
 msgid "_Search"
@@ -6709,10 +6639,6 @@ msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Αλλαγή _ψευδώνυμου"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7131,6 +7057,26 @@ msgstr ""
 #~ msgstr "Μήνυμα κατά_στασης:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Σύνδεση επαφής"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Αποσύνδεση επαφής"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Σύνδεση επαφής"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Αποσύνδεση επαφής"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Προβολή τίτλου στο κουμπί"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Εγγραφή"
 
@@ -7153,6 +7099,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7189,6 +7139,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Δημιουργοί:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Η σύνδεση απέτυχε"
 
 #~ msgid "Default"
 #~ msgstr "Προεπιλογή"
@@ -7231,12 +7185,24 @@ msgstr ""
 #~ msgstr "Λήψη"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Λήψη"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Λήψη"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Μη_ν με ξαναρωτήσεις"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Μη_ν με ξαναρωτήσεις"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Σύνθεση"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7277,10 +7243,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Χαρακτηριστικά διακομιστή"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Όνομα αρχείου: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7469,8 +7431,16 @@ msgstr ""
 #~ msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Άνοιγμα δεσμού στον περιηγητή"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7581,6 +7551,10 @@ msgstr ""
 #~ msgstr "Αποθήκευση αρχείου ως..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Έχει"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Αποστολή _αρχείου"
 
@@ -7647,6 +7621,10 @@ msgstr ""
 #~ msgstr "Αποθηκεύτηκε στο: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "μήνυμα κατάστασης"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7665,6 +7643,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Κονσόλα _XML"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "To Session bus δεν είναι διαθέσιμο"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7689,6 +7671,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "Μήνυμα κατά_στασης:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7726,12 +7712,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Έκδοση GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7774,6 +7768,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Αποθήκευση αρχείου ως..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7870,6 +7868,10 @@ msgstr ""
 #~ msgstr "Μη_ν με ξαναρωτήσεις"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Μη_ν με ξαναρωτήσεις"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Μη_ν με ξαναρωτήσεις"
 
@@ -7898,12 +7900,20 @@ msgstr ""
 #~ msgstr "_Νέα λίστα..."
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Προτιμήσεις"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Έχει"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7924,6 +7934,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Προβολή"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #~ msgid "file transfers list"
 #~ msgstr "λίστα μεταφορών αρχείων"

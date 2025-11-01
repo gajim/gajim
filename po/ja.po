@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2025-09-17 00:18+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -164,10 +164,6 @@ msgstr "%s さんはこの談話室から除去されました"
 #, python-format
 msgid "%s has joined"
 msgstr "%s さんが参加しました"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s さんはここまで読みました"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -462,9 +458,6 @@ msgstr "アカウント: %s"
 
 msgid "Accounts"
 msgstr "アカウント"
-
-msgid "Action for left-clicking a preview"
-msgstr "プレビューを左クリックしたときの動作"
 
 msgid "Action on Close"
 msgstr "閉じるときの動作"
@@ -1184,6 +1177,9 @@ msgstr "コードスニペット"
 msgid "Color"
 msgstr "色"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "コマンド一覧"
 
@@ -1298,24 +1294,6 @@ msgstr "相手先一覧の交換"
 msgid "Contact List – %(account)s"
 msgstr "相手先一覧 – %(account)s"
 
-msgid "Contact List: Contact Background Color"
-msgstr "相手先一覧: 相手先の行の背景色"
-
-msgid "Contact List: Contact Font"
-msgstr "相手先一覧: 相手先のフォント"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "相手先一覧: 相手先の行の文字色"
-
-msgid "Contact List: Group Background Color"
-msgstr "相手先一覧: グループの背景色"
-
-msgid "Contact List: Group Font"
-msgstr "相手先一覧: グループのフォント"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "相手先一覧: グループの文字色"
-
 msgid "Contact Removed"
 msgstr "相手先を除去しました"
 
@@ -1357,9 +1335,6 @@ msgstr "コピー"
 
 msgid "Copy Address"
 msgstr "アドレスをコピー"
-
-msgid "Copy Link"
-msgstr "リンクをコピー"
 
 msgid "Copy Text"
 msgstr "テキストをコピー"
@@ -1426,9 +1401,6 @@ msgstr "新しい談話室を作成"
 msgid "Creating Account..."
 msgstr "アカウント作成中…"
 
-msgid "Creating thumbnail failed"
-msgstr "サムネイルの生成に失敗しました"
-
 msgid "Credentials expired"
 msgstr "認証情報は期限切れです"
 
@@ -1467,9 +1439,6 @@ msgstr "フォントサイズを小さくする"
 
 msgid "Decrease playback speed"
 msgstr "再生速度を落とす"
-
-msgid "Decryption failed"
-msgstr "復号に失敗しました"
 
 msgid "Default Encryption"
 msgstr "デフォルトの暗号化"
@@ -1669,19 +1638,9 @@ msgstr "この指紋を完全に削除します"
 msgid "Download"
 msgstr "ダウンロード"
 
-msgid "Download File"
-msgstr "ファイルをダウンロード"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "ダウンロードに失敗しました (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s件のメッセージをダウンロードしました"
-
-msgid "Downloading…"
-msgstr "ダウンロード中…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1692,6 +1651,10 @@ msgstr "ここにファイルをドロップ"
 
 msgid "Eating"
 msgstr "食事"
+
+#, fuzzy
+msgid "Edit"
+msgstr "編集 (_E)"
 
 msgid "Edit Shortcut"
 msgstr "ショートカットを編集"
@@ -1981,8 +1944,9 @@ msgstr "ファイルが空です"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "ファイルが大きすぎます。最大ファイルサイズ: %s"
 
-msgid "File size unknown"
-msgstr "ファイルサイズは不明です"
+#, fuzzy
+msgid "File saved"
+msgstr "ファイル名: "
 
 msgid "File too big"
 msgstr "ファイルが大きすぎます"
@@ -2585,9 +2549,6 @@ msgstr "談話室から退出しますか ?"
 msgid "Leave _Permanently"
 msgstr "永久に退出 (_P)"
 
-msgid "Left Click Action"
-msgstr "左クリック動作"
-
 msgid "Let others know if you read up to this point"
 msgstr "ここまで読んだことを他人に知らせます"
 
@@ -3112,15 +3073,8 @@ msgstr "メール作成画面を開く"
 msgid "Open Folder"
 msgstr "フォルダを開く"
 
-msgid "Open Link in Browser"
-msgstr "リンク先をブラウザで開く"
-
 msgid "Open Link in _Browser"
 msgstr "リンク先をブラウザで開く (_B)"
-
-# #(Mako)Containing をどうする
-msgid "Open _Folder"
-msgstr "フォルダを開く (_F)"
 
 msgid "Open as _Link"
 msgstr "リンクとして開く (_L)"
@@ -3137,6 +3091,10 @@ msgstr "オペレーティングシステム"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "組織"
+
+#, fuzzy
+msgid "Organization"
 msgstr "組織"
 
 msgid "Organization (O): "
@@ -3450,6 +3408,9 @@ msgstr "cprofile を使用したプロファイルアプリケーション"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "プロジェクトについての議論"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr "プロトコル"
@@ -3870,9 +3831,6 @@ msgstr "パスワードを保存"
 msgid "Save as..."
 msgstr "名前を付けて保存…"
 
-msgid "Save as…"
-msgstr "名前を付けて保存…"
-
 msgid "Save display name"
 msgstr "表示名を保存"
 
@@ -3985,6 +3943,14 @@ msgstr "安全性ラベル"
 
 msgid "Security Warning"
 msgstr "セキュリティ警告"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr " %s が変更"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "参加者"
 
 msgid "Select Account"
 msgstr "アカウントを選択"
@@ -4107,9 +4073,6 @@ msgstr "設定ファイルのディレクトリを指定"
 
 msgid "Set date…"
 msgstr "日付を設定…"
-
-msgid "Set status message"
-msgstr "状況メッセージを設定"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "GLib デバッグのメッセージが出力されるように環境変数を設定"
@@ -4236,9 +4199,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr "画像を含む URL のプレビューを表示します(安全でない可能性があります)"
-
-msgid "Show previews for files"
-msgstr "ファイルのプレビューを表示します"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "ショートコードのヒントを表示します。例 :+1:"
@@ -4383,9 +4343,6 @@ msgstr "状況は共有されていません"
 
 msgid "Status is shared"
 msgstr "状況は共有されています"
-
-msgid "Status message…"
-msgstr "状況メッセージ…"
 
 msgid "Status: Away Color"
 msgstr "在席状況: 「離席中」の色"
@@ -4568,13 +4525,12 @@ msgstr "会話履歴を同期…"
 msgid "System"
 msgstr "システム"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "TLS の検証に失敗しました: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "チーム"
+
+msgid "Telephone"
+msgstr ""
 
 msgid "Tell your contacts if you received a message"
 msgstr "メッセージを受領したことを相手先に伝えます"
@@ -4775,9 +4731,6 @@ msgstr ""
 "このテーマは現在使用中です。\n"
 "このテーマを削除しますか ?"
 
-msgid "This is your XMPP address"
-msgstr "これはあなたの XMPP アドレスです"
-
 msgid "This message has been moderated"
 msgstr "このメッセージは抑制されました"
 
@@ -4871,6 +4824,10 @@ msgstr "「離席」までの時間"
 
 msgid "Time Until Not Available"
 msgstr "「不在」までの時間"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "タイムゾーン"
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -5010,6 +4967,10 @@ msgstr "不明"
 msgid "Unknown Artist"
 msgstr "不明"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "未知のエラーです。"
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "未知の SSL エラー: \"%s\""
@@ -5086,9 +5047,6 @@ msgstr "プロバイダー一覧を更新中…"
 
 msgid "Upload File…"
 msgstr "ファイルをアップロード…"
-
-msgid "Upload could not be completed."
-msgstr "アップロードを完了できませんでした。"
 
 msgid "Uploading Avatar Failed"
 msgstr "アバターのアップロードに失敗しました"
@@ -5580,9 +5538,6 @@ msgstr "アカウントを無効化 (_A)"
 msgid "_Do not ask me again"
 msgstr "次回から質問しない (_D)"
 
-msgid "_Download"
-msgstr "ダウンロード (_D)"
-
 msgid "_Edit"
 msgstr "編集 (_E)"
 
@@ -5647,9 +5602,6 @@ msgstr "OK (_O)"
 msgid "_Offline"
 msgstr "オフライン (_O)"
 
-msgid "_Open"
-msgstr "開く (_O)"
-
 msgid "_Overwrite"
 msgstr "上書き (_O)"
 
@@ -5691,9 +5643,6 @@ msgstr "撤回 (_R)"
 
 msgid "_Save"
 msgstr "保存 (_S)"
-
-msgid "_Save as…"
-msgstr "名前を付けて保存…(_S)"
 
 msgid "_Search"
 msgstr "検索 (_S)"
@@ -5928,10 +5877,6 @@ msgstr "{nick} は現在 {show}{status}"
 msgid "…or drop it here"
 msgstr "…またはここにドロップ"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr " %s が変更"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " {actor} によって"
@@ -5947,6 +5892,10 @@ msgstr "…またはここにドロップ"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s の談話室が見つかりました"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s さんはここまで読みました"
 
 #, python-format
 #~ msgid ""
@@ -6214,6 +6163,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Account Settings…"
 #~ msgstr "アカウント設定…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "プレビューを左クリックしたときの動作"
+
 #~ msgid "Activity"
 #~ msgstr "動向"
 
@@ -6398,6 +6350,24 @@ msgstr "…またはここにドロップ"
 #~ msgid "Contact Addresses"
 #~ msgstr "連絡先アドレス"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "相手先一覧: 相手先の行の背景色"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "相手先一覧: 相手先のフォント"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "相手先一覧: 相手先の行の文字色"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "相手先一覧: グループの背景色"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "相手先一覧: グループのフォント"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "相手先一覧: グループの文字色"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "在席通知の取り消し"
 
@@ -6416,6 +6386,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Eメールアドレスをコピー"
+
+#~ msgid "Copy Link"
+#~ msgstr "リンクをコピー"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "リンクの場所をコピー"
@@ -6441,6 +6414,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Create new post"
 #~ msgstr "新しい投稿を作成"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "サムネイルの生成に失敗しました"
+
 #~ msgid "Current Developers"
 #~ msgstr "現在の開発者"
 
@@ -6452,6 +6428,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Decrease User Interface Font Size"
 #~ msgstr "ユーザーインターフェースのフォントサイズを小さく"
+
+#~ msgid "Decryption failed"
+#~ msgstr "復号に失敗しました"
 
 #~ msgid "Default"
 #~ msgstr "デフォルト"
@@ -6496,11 +6475,21 @@ msgstr "…またはここにドロップ"
 #~ msgid "Download"
 #~ msgstr "ダウンロード"
 
+#~ msgid "Download File"
+#~ msgstr "ファイルをダウンロード"
+
 #~ msgid "Download Update"
 #~ msgstr "更新をダウンロード"
 
 #~ msgid "Download and Install"
 #~ msgstr "ダウンロードしてインストール"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "ダウンロードに失敗しました (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "ダウンロード中…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "ファイルまたは相手先をドロップ"
@@ -6555,9 +6544,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "Features:"
 #~ msgstr "機能:"
 
-#~ msgid "File Name: "
-#~ msgstr "ファイル名: "
-
 #~ msgid "File Offered"
 #~ msgstr "提供されるファイル"
 
@@ -6572,6 +6558,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "File error"
 #~ msgstr "ファイルのエラー"
+
+#~ msgid "File size unknown"
+#~ msgstr "ファイルサイズは不明です"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr "ファイルが大きすぎます。直接転送 (暗号化なし) を利用してください"
@@ -6724,6 +6713,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Last seen %s"
 #~ msgstr "理由: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "左クリック動作"
+
 #~ msgid "Local System Time"
 #~ msgstr "ローカルのシステム時刻"
 
@@ -6796,8 +6788,15 @@ msgstr "…またはここにドロップ"
 #~ msgid "Open Link"
 #~ msgstr "リンクを開く"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "リンク先をブラウザで開く"
+
 #~ msgid "Open Path"
 #~ msgstr "パスを開く"
+
+# #(Mako)Containing をどうする
+#~ msgid "Open _Folder"
+#~ msgstr "フォルダを開く (_F)"
 
 #~ msgid "Open search bar"
 #~ msgstr "検索バーを開く"
@@ -6940,6 +6939,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Save File as…"
 #~ msgstr "名前を付けてファイルを保存…"
 
+#~ msgid "Save as…"
+#~ msgstr "名前を付けて保存…"
+
 #~ msgid "Search your conversation"
 #~ msgstr "会話を検索"
 
@@ -7004,6 +7006,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Server Uptime"
 #~ msgstr "サーバーの稼働時間"
 
+#~ msgid "Set status message"
+#~ msgstr "状況メッセージを設定"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr "どんな気持ちか友人に知らせるため、動向・聴いている楽曲を設定"
 
@@ -7034,6 +7039,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Show debug console"
 #~ msgstr "デバッグコンソールを表示"
 
+#~ msgid "Show previews for files"
+#~ msgstr "ファイルのプレビューを表示します"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "通話中、自分のビデオストリームを表示します"
 
@@ -7058,6 +7066,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "すべてのアカウントの在席状況と状況メッセージ"
+
+#~ msgid "Status message…"
+#~ msgstr "状況メッセージ…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7108,6 +7119,10 @@ msgstr "…またはここにドロップ"
 #~ msgstr "TLS バージョン"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "TLS の検証に失敗しました: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7121,6 +7136,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "このアカウントはサーバーに接続していません"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "これはあなたの XMPP アドレスです"
 
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "メニューバーを表示/非表示"
@@ -7164,6 +7182,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Upload Files"
 #~ msgstr "ファイルをアップロード"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "アップロードを完了できませんでした。"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN サーバーを使う"
@@ -7264,6 +7285,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "_Don’t ask again"
 #~ msgstr "次回から質問しない (_D)"
 
+#~ msgid "_Download"
+#~ msgstr "ダウンロード (_D)"
+
 #~ msgid "_Download Again"
 #~ msgstr "再ダウンロード (_D)"
 
@@ -7286,12 +7310,18 @@ msgstr "…またはここにドロップ"
 #~ msgid "_New post"
 #~ msgstr "新しい投稿 (_N)"
 
+#~ msgid "_Open"
+#~ msgstr "開く (_O)"
+
 # #(Mako)Containing をどうする
 #~ msgid "_Open Folder"
 #~ msgstr "フォルダを開く (_O)"
 
 #~ msgid "_Preferences"
 #~ msgstr "設定 (_P)"
+
+#~ msgid "_Save as…"
+#~ msgstr "名前を付けて保存…(_S)"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "ファイル転送が完了したら通知する (_S)"
@@ -7310,6 +7340,11 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "_View"
 #~ msgstr "表示 (_V)"
+
+# #(Mako)Containing をどうする
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "フォルダを開く"
 
 #~ msgid "dark skin tone"
 #~ msgstr "濃い肌色"

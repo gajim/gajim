@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -156,10 +156,6 @@ msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s vyjšaŭ"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -489,9 +485,6 @@ msgstr "Konty"
 
 msgid "Accounts"
 msgstr "Konty"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1312,6 +1305,9 @@ msgstr ""
 msgid "Color"
 msgstr "Koler"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Zahady: %s"
@@ -1443,29 +1439,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kantakt adłučyŭsia"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kantakt dałučyŭsia"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kantakt adłučyŭsia"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kantakt dałučyŭsia"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kantakt adłučyŭsia"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Pakazvaj padzieju ŭ śpisie kantaktaŭ"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Kont"
 
@@ -1514,10 +1487,6 @@ msgstr "Pakoj:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "S_kapijuj JID/Email"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "S_kapijuj adras spasyłki"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1601,9 +1570,6 @@ msgstr "Pakiń pakoji"
 msgid "Creating Account..."
 msgstr "Vydalajecca kont %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Musiš vyznačyć parol"
@@ -1649,10 +1615,6 @@ msgstr "_Imia karystalnika:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1879,21 +1841,9 @@ msgstr ""
 msgid "Download"
 msgstr "Ściahni"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Ściahni"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Bolš nie pytajsia"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d niečytanaje paviedamleńnie"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Uvod paviedamleńnia"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1905,6 +1855,10 @@ msgstr "Dasyłaje kantaktu fajł"
 
 msgid "Eating"
 msgstr "Jem"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Źmianić"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2239,8 +2193,9 @@ msgstr "Ściežka da fajłu"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Nazva fajłu: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2911,9 +2866,6 @@ msgstr "Pakiń pakoji"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3511,16 +3463,8 @@ msgid "Open Folder"
 msgstr "_Adčyni kataloh z fajłam"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Adčyni spasyłku ŭ hartačy"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Adčyni spasyłku ŭ hartačy"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Adčyni kataloh z fajłam"
 
 msgid "Open as _Link"
 msgstr "Adčyni jak _spasyłku"
@@ -3539,6 +3483,10 @@ msgstr "Niapravilnaje imia karystalnika"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Administratar"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Administratar"
 
 msgid "Organization (O): "
@@ -3887,6 +3835,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4387,10 +4338,6 @@ msgstr "Zachavaj parol"
 msgid "Save as..."
 msgstr "Nie razmaŭlaju "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Nie razmaŭlaju "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4515,6 +4462,14 @@ msgstr "Blakavańnie %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Blakavańnie %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Źmiani _mianušku"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Udzielniki"
 
 #, fuzzy
 msgid "Select Account"
@@ -4667,10 +4622,6 @@ msgstr "Kanfihuracyja pakoju"
 msgid "Set date…"
 msgstr "Maderatar"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "paviedamlennie statusu"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4818,10 +4769,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Złučeńnie niemahčymaje"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4985,10 +4932,6 @@ msgstr "Paviedamleńnie statusu"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Paviedamleńnie statusu"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "Pa_viedamleńnie statusu:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5200,12 +5143,11 @@ msgstr "Pakažy _adłučanyja kantakty"
 msgid "System"
 msgstr "<b>Asablivy</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5414,10 +5356,6 @@ msgid ""
 msgstr "Kont z takoj nazvaj užo zaniaty. Kali łaska, abiary inšuju nazvu."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "S_kapijuj JID/Email"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Status źmianiŭsia."
 
@@ -5509,6 +5447,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Niedastupny"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Čas"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5661,6 +5603,10 @@ msgstr "?AS:Nieviadomaja"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Kanfihuracyja pakoju"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Kanfihuracyja pakoju"
@@ -5750,10 +5696,6 @@ msgstr "Niemahčyma adčytać vyjavu"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Zapišy fajł jak..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Niemahčyma znajści servis"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6303,10 +6245,6 @@ msgstr "Niapravilnaja nazva kontu"
 msgid "_Do not ask me again"
 msgstr "_Bolš nie pytajsia"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Bolš nie pytajsia"
-
 msgid "_Edit"
 msgstr "_Źmianić"
 
@@ -6381,10 +6319,6 @@ msgstr "_Tak"
 msgid "_Offline"
 msgstr "Adł_učany"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6433,10 +6367,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Nie razmaŭlaju "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Nie razmaŭlaju "
 
 msgid "_Search"
@@ -6689,10 +6619,6 @@ msgstr "%(nick)s maje ciapier status %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Źmiani _mianušku"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7112,6 +7038,26 @@ msgstr ""
 #~ msgstr "Pa_viedamleńnie statusu:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kantakt dałučyŭsia"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kantakt adłučyŭsia"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kantakt dałučyŭsia"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kantakt adłučyŭsia"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Pakazvaj padzieju ŭ śpisie kantaktaŭ"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Anuluj aŭtaryzacyju"
 
@@ -7134,6 +7080,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "S_kapijuj JID/Email"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "S_kapijuj adras spasyłki"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7169,6 +7119,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Dziejnyja raspracoŭniki:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Niemahvyma dałučycca"
 
 #~ msgid "Default"
 #~ msgstr "Zmoŭčany"
@@ -7211,12 +7165,24 @@ msgstr ""
 #~ msgstr "Ściahni"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Ściahni"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Ściahni"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Bolš nie pytajsia"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Bolš nie pytajsia"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Uvod paviedamleńnia"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7257,10 +7223,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Zdolnaści serveraŭ"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Nazva fajłu: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7455,8 +7417,16 @@ msgstr ""
 #~ msgstr "Adčyni jak _spasyłku"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Adčyni spasyłku ŭ hartačy"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Adčyni kataloh z fajłam"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7565,6 +7535,10 @@ msgstr ""
 #~ msgstr "Zapišy fajł jak..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Nie razmaŭlaju "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Vyšli _fajł"
 
@@ -7627,6 +7601,10 @@ msgstr ""
 #~ msgstr "Zapisany ŭ: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "paviedamlennie statusu"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7645,6 +7623,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Pakažy _kansol XML"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Złučeńnie niemahčymaje"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7669,6 +7651,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Źmianiaje status kontu albo kontaŭ"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "Pa_viedamleńnie statusu:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7706,12 +7692,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Versija GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Niemahčyma znajści servis"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "S_kapijuj JID/Email"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7754,6 +7748,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Zapišy fajł jak..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Niemahčyma znajści servis"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7849,6 +7847,10 @@ msgstr ""
 #~ msgstr "_Bolš nie pytajsia"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Bolš nie pytajsia"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Bolš nie pytajsia"
 
@@ -7877,12 +7879,20 @@ msgstr ""
 #~ msgstr "Novy zapis"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Adčyni kataloh z fajłam"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Nałady"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Nie razmaŭlaju "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7903,6 +7913,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Vyhlad"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Adčyni kataloh z fajłam"
 
 #~ msgid "file transfers list"
 #~ msgstr "śpis pieradačaŭ fajłaŭ"

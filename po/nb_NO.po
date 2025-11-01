@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -162,10 +162,6 @@ msgstr "%(jid)s har blitt invitert til dette rommet"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s har dratt"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -491,9 +487,6 @@ msgstr "Kontoer"
 
 msgid "Accounts"
 msgstr "Kontoer"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1313,6 +1306,9 @@ msgstr ""
 msgid "Color"
 msgstr "Farge"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Kommandoer: %s"
@@ -1440,29 +1436,6 @@ msgid "Contact List – %(account)s"
 msgstr "Sludresnarveier"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kontakt tilkoblet"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Sludresnarveier"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kontakt tilkoblet"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kontakt Frakoblet"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Merknadsfarge for kontaktavlogging"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Konto-rad"
 
@@ -1511,10 +1484,6 @@ msgstr "Rom-JID"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopier JID/E-postadresse"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Kopier lenke-plassering"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1598,9 +1567,6 @@ msgstr "Forlat gruppesamtaler"
 msgid "Creating Account..."
 msgstr "Fjerner kontoen %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Sertifikatet har utløpt"
@@ -1646,10 +1612,6 @@ msgstr "_Brukernavn:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Tilkobling mislyktes"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1871,21 +1833,9 @@ msgstr ""
 msgid "Download"
 msgstr "?Noun:Nedlasting"
 
-#, fuzzy
-msgid "Download File"
-msgstr "?Noun:Nedlasting"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Ikke spør meg igjen"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Lastet ned %s meldinger"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Laster"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1897,6 +1847,10 @@ msgstr "Sender fil til en kontakt"
 
 msgid "Eating"
 msgstr "Spiser"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Rediger"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2231,8 +2185,9 @@ msgstr "Fila er tom"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Filen er for stor, maksimal tillatt filstørrelse er: %s"
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Filnavn: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2912,9 +2867,6 @@ msgstr "Forlat gruppesamtaler"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3505,16 +3457,8 @@ msgid "Open Folder"
 msgstr "_Åpne inneholdende katalog"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Åpne lenke i nettleser"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Åpne lenke i nettleser"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "Åpne _inneholdende mappe"
 
 msgid "Open as _Link"
 msgstr "Åpne som _lenke"
@@ -3533,6 +3477,10 @@ msgstr "Klientsertifikat"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "På ferie"
+
+#, fuzzy
+msgid "Organization"
 msgstr "På ferie"
 
 msgid "Organization (O): "
@@ -3878,6 +3826,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4381,10 +4332,6 @@ msgstr "Lagre passord"
 msgid "Save as..."
 msgstr "Lagre _som"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Lagre _som"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4511,6 +4458,14 @@ msgstr "Advarsel: %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Advarsel: %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Endre kallenavn"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Deltakere"
 
 #, fuzzy
 msgid "Select Account"
@@ -4662,10 +4617,6 @@ msgstr "Velg oppsettsmappe"
 msgid "Set date…"
 msgstr "Moderator"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "Sett statusmelding"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4812,10 +4763,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Lydøkter er ikke tilgjengelige"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4979,10 +4926,6 @@ msgstr "Statusmelding"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Statusmelding"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Statusmelding:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5192,12 +5135,11 @@ msgstr "Synkroniser historikk"
 msgid "System"
 msgstr "System"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Bekreftelse av SSL-sertifikat for %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5417,10 +5359,6 @@ msgstr ""
 "statusmeldingen?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopier JID/E-postadresse"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Denne meldingen er kryptert]"
 
@@ -5520,6 +5458,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Ikke tilgjengelig"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Tid"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5676,6 +5618,10 @@ msgstr "?OS:Ukjent"
 msgid "Unknown Artist"
 msgstr "Ukjent artist"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Ukjent SSL-feil: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Ukjent SSL-feil: %d"
@@ -5765,10 +5711,6 @@ msgstr "Kunne ikke åpne fil"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Lagre fil som…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Tjenesten ble ikke funnet"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6321,10 +6263,6 @@ msgstr "Ugyldig konto"
 msgid "_Do not ask me again"
 msgstr "_Ikke spør meg igjen"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Ikke spør meg igjen"
-
 msgid "_Edit"
 msgstr "_Rediger"
 
@@ -6401,10 +6339,6 @@ msgid "_Offline"
 msgstr "_Frakoblet"
 
 #, fuzzy
-msgid "_Open"
-msgstr "Åpne"
-
-#, fuzzy
 msgid "_Overwrite"
 msgstr "Overskriv?"
 
@@ -6453,10 +6387,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Lagre _som"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Lagre _som"
 
 msgid "_Search"
@@ -6703,10 +6633,6 @@ msgstr "%(nick)s er nå %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Endre kallenavn"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7143,6 +7069,26 @@ msgstr ""
 #~ msgstr "Kontaktens melding:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontakt tilkoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Sludresnarveier"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontakt tilkoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontakt Frakoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Merknadsfarge for kontaktavlogging"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Abonnement opphevet"
 
@@ -7164,6 +7110,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopier JID/E-postadresse"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopier lenke-plassering"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7198,6 +7148,10 @@ msgstr ""
 
 #~ msgid "Current Developers"
 #~ msgstr "Nåværende utviklere"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Tilkobling mislyktes"
 
 #~ msgid "Default"
 #~ msgstr "Forvalg"
@@ -7239,12 +7193,24 @@ msgstr ""
 #~ msgstr "?Noun:Nedlasting"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "?Noun:Nedlasting"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Laster"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7299,10 +7265,6 @@ msgstr ""
 
 #~ msgid "Features:"
 #~ msgstr "Funksjonalitet:"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Filnavn: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7512,8 +7474,16 @@ msgstr ""
 #~ msgstr "Åpne som _lenke"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Åpne lenke i nettleser"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "Åpne"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "Åpne _inneholdende mappe"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7642,6 +7612,10 @@ msgstr ""
 #~ msgstr "Lagre fil som…"
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Lagre _som"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Send _fil"
 
@@ -7704,6 +7678,10 @@ msgstr ""
 #~ msgstr "Tjeneroppetid"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "Sett statusmelding"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7722,6 +7700,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Vis _XML-konsoll"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Lydøkter er ikke tilgjengelige"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7750,6 +7732,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Synkroniser statusen for alle kontoer"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Statusmelding:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7795,6 +7781,10 @@ msgstr ""
 #~ msgstr "Versjon:"
 
 #, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Bekreftelse av SSL-sertifikat for %s"
+
+#, fuzzy, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7809,6 +7799,10 @@ msgstr ""
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Denne kontoen er ikke tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopier JID/E-postadresse"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7850,6 +7844,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Tjenesten ble ikke funnet"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7946,6 +7944,10 @@ msgstr ""
 #~ msgstr "_Ikke spør meg igjen"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Ikke spør meg igjen"
 
@@ -7974,11 +7976,19 @@ msgstr ""
 #~ msgstr "Ny post"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Åpne"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Åpne inneholdende katalog"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Innstillinger"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Lagre _som"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -8001,6 +8011,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "Vis"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Åpne _inneholdende mappe"
 
 #~ msgid "file transfers list"
 #~ msgstr "filoverføringsliste"

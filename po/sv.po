@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -157,10 +157,6 @@ msgstr "%s har blivit inbjuden till den här gruppchatten"
 #, python-format
 msgid "%s has joined"
 msgstr "%s har anslutit"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s har läst fram till den här punkten"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -463,9 +459,6 @@ msgstr "Konto: %s"
 
 msgid "Accounts"
 msgstr "Konton"
-
-msgid "Action for left-clicking a preview"
-msgstr "Åtgärd när du vänsterklickar på en förhandsgranskning"
 
 msgid "Action on Close"
 msgstr "Åtgärd vid stängning"
@@ -1235,6 +1228,9 @@ msgstr ""
 msgid "Color"
 msgstr "Färg"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Kommandon: %s"
@@ -1366,29 +1362,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kontakt loggade ut"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kontakt loggade in"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kontakt loggade ut"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kontakt loggade in"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kontakt loggade ut"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Visa händelse i kontaktlista"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Konto borttaget"
 
@@ -1435,9 +1408,6 @@ msgstr "Kopiera"
 
 msgid "Copy Address"
 msgstr "Kopiera adress"
-
-msgid "Copy Link"
-msgstr "Kopiera länk"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1512,9 +1482,6 @@ msgstr "Skapa gruppchatt"
 msgid "Creating Account..."
 msgstr "Skapar konto..."
 
-msgid "Creating thumbnail failed"
-msgstr "Det gick inte att skapa miniatyrbild"
-
 msgid "Credentials expired"
 msgstr "Autentiseringsuppgifterna har löpt ut"
 
@@ -1554,9 +1521,6 @@ msgstr "Minska teckensnittsstorleken för användargränssnittet"
 
 msgid "Decrease playback speed"
 msgstr "Minska uppspelningshastigheten"
-
-msgid "Decryption failed"
-msgstr "Dekrypteringen misslyckades"
 
 msgid "Default Encryption"
 msgstr "Standardkryptering"
@@ -1777,19 +1741,9 @@ msgstr ""
 msgid "Download"
 msgstr "Hämta hem"
 
-msgid "Download File"
-msgstr "Ladda hem fil"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Nedladdning misslyckades (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "Laddade ned %s meddelanden"
-
-msgid "Downloading…"
-msgstr "Laddar ner…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1800,6 +1754,10 @@ msgstr "Släpp filer här"
 
 msgid "Eating"
 msgstr "Äter"
+
+#, fuzzy
+msgid "Edit"
+msgstr "R_edigera"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2103,8 +2061,9 @@ msgstr "Filen är tom"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Filen är för stor, högsta tillåtna filstorlek är: %s"
 
-msgid "File size unknown"
-msgstr "Filstorlek okänd"
+#, fuzzy
+msgid "File saved"
+msgstr "Filnamn: "
 
 #, fuzzy
 msgid "File too big"
@@ -2755,9 +2714,6 @@ msgstr "Lämna gruppchatt"
 msgid "Leave _Permanently"
 msgstr "Lämna _Permanent"
 
-msgid "Left Click Action"
-msgstr "Händelse vid vänsterklick"
-
 msgid "Let others know if you read up to this point"
 msgstr "Låt andra veta om du läser fram till denna punkt"
 
@@ -3316,14 +3272,8 @@ msgstr "Öppna e-postkompositör"
 msgid "Open Folder"
 msgstr "Öppna mapp"
 
-msgid "Open Link in Browser"
-msgstr "Öppna länk i webbläsaren"
-
 msgid "Open Link in _Browser"
 msgstr "Öppna länk i _Webbläsaren"
-
-msgid "Open _Folder"
-msgstr "Öppna _Mapp"
 
 msgid "Open as _Link"
 msgstr "Öppna som _länk"
@@ -3339,6 +3289,10 @@ msgstr "Operativsystem"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Organisation"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Organisation"
 
 msgid "Organization (O): "
@@ -3670,6 +3624,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4153,10 +4110,6 @@ msgstr "Spara lösenord"
 msgid "Save as..."
 msgstr "Har "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Har "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4283,6 +4236,14 @@ msgstr "Bannlyser %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Bannlyser %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Ändrad av %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Deltagare"
 
 #, fuzzy
 msgid "Select Account"
@@ -4436,10 +4397,6 @@ msgstr "Rumkonfiguration"
 msgid "Set date…"
 msgstr "Moderator"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "statusmeddelande"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4584,10 +4541,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Sessionsbus inte tillgänglig"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4753,10 +4706,6 @@ msgstr "Statusmeddelande"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Statusmeddelande"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Statusmeddelande:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -4967,12 +4916,11 @@ msgstr "Synkronisera"
 msgid "System"
 msgstr "<b>System:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "SSL-certifikatfel"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5190,10 +5138,6 @@ msgid ""
 msgstr "Detta namn används redan. Vill du skriva över detta statusmeddelande?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopiera JID/e-postadress"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Det här meddelandet är krypterat]"
 
@@ -5285,6 +5229,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Inte tillgänglig"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Tid"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5438,6 +5386,10 @@ msgstr "?OS:Okänt"
 msgid "Unknown Artist"
 msgstr "Okänd artist"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Okänt SSL-fel: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Okänt SSL-fel: %d"
@@ -5527,10 +5479,6 @@ msgstr "Kunde inte öppna filen (%s)"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Spara fil som..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Denna tjänst kunde inte hittas"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6084,10 +6032,6 @@ msgstr "Ogiltigt kontonamn"
 msgid "_Do not ask me again"
 msgstr "Fråga mig i_nte igen"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Fråga mig i_nte igen"
-
 msgid "_Edit"
 msgstr "R_edigera"
 
@@ -6163,10 +6107,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Frånkopplad"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenGPG"
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6215,10 +6155,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Har "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Har "
 
 msgid "_Search"
@@ -6478,10 +6414,6 @@ msgstr "%(nick)s är nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Ändrad av %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " av {actor}"
@@ -6497,6 +6429,10 @@ msgstr ""
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s gruppchattar hittades"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s har läst fram till den här punkten"
 
 #, python-format
 #~ msgid ""
@@ -6758,6 +6694,9 @@ msgstr ""
 #~ msgid "Account Settings…"
 #~ msgstr "Kontoinställningar…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Åtgärd när du vänsterklickar på en förhandsgranskning"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktivera"
@@ -6925,6 +6864,26 @@ msgstr ""
 #~ msgstr "Chattmeddelande:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontakt loggade in"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kontakt loggade ut"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontakt loggade in"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontakt loggade ut"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Visa händelse i kontaktlista"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Säg _upp prenumeration"
 
@@ -6947,6 +6906,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopiera JID/e-postadress"
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopiera länk"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Kopiera länkadress"
@@ -6973,11 +6935,17 @@ msgstr ""
 #~ msgid "Create new post"
 #~ msgstr "Skapa ny post"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Det gick inte att skapa miniatyrbild"
+
 #~ msgid "Current Developers"
 #~ msgstr "Nuvarande utvecklare"
 
 #~ msgid "Decline Invitation"
 #~ msgstr "Avvisa inbjudan"
+
+#~ msgid "Decryption failed"
+#~ msgstr "Dekrypteringen misslyckades"
 
 #~ msgid "Default"
 #~ msgstr "Standard"
@@ -7015,11 +6983,21 @@ msgstr ""
 #~ msgid "Download"
 #~ msgstr "Ladda ned"
 
+#~ msgid "Download File"
+#~ msgstr "Ladda hem fil"
+
 #~ msgid "Download Update"
 #~ msgstr "Ladda ned uppdatering"
 
 #~ msgid "Download and Install"
 #~ msgstr "Ladda ned och installera"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Nedladdning misslyckades (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Laddar ner…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Släpp filer eller kontakter"
@@ -7065,9 +7043,6 @@ msgstr ""
 #~ msgid "Features:"
 #~ msgstr "Funktioner:"
 
-#~ msgid "File Name: "
-#~ msgstr "Filnamn: "
-
 #~ msgid "File Offered"
 #~ msgstr "Fil erbjuds"
 
@@ -7082,6 +7057,9 @@ msgstr ""
 
 #~ msgid "File error"
 #~ msgstr "Filfel"
+
+#~ msgid "File size unknown"
+#~ msgstr "Filstorlek okänd"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr ""
@@ -7194,6 +7172,9 @@ msgstr ""
 #~ msgid "Last seen %s"
 #~ msgstr "Anledning"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Händelse vid vänsterklick"
+
 #~ msgid "Local System Time"
 #~ msgstr "Lokal systemtid"
 
@@ -7268,8 +7249,14 @@ msgstr ""
 #~ msgid "Open Link"
 #~ msgstr "Öppna länk"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Öppna länk i webbläsaren"
+
 #~ msgid "Open Path"
 #~ msgstr "Öppna sökvägen"
+
+#~ msgid "Open _Folder"
+#~ msgstr "Öppna _Mapp"
 
 #~ msgid "Open search bar"
 #~ msgstr "Öppna sökfältet"
@@ -7401,6 +7388,10 @@ msgstr ""
 #~ msgstr "Spara fil som..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Har "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Skicka _fil"
 
@@ -7467,6 +7458,10 @@ msgstr ""
 #~ msgstr "Servern svarade: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "statusmeddelande"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7485,6 +7480,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Visa _XML-konsoll"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Sessionsbus inte tillgänglig"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7509,6 +7508,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Ändrar status för konto eller konton"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Statusmeddelande:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7549,11 +7552,19 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "GTK+ version:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "SSL-certifikatfel"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Denna tjänst kunde inte hittas"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Detta konto är inte anslutet till servern"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopiera JID/e-postadress"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7596,6 +7607,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Spara fil som..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Denna tjänst kunde inte hittas"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7689,6 +7704,10 @@ msgstr ""
 #~ msgstr "Fråga mig i_nte igen"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Fråga mig i_nte igen"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Fråga mig i_nte igen"
 
@@ -7717,12 +7736,20 @@ msgstr ""
 #~ msgstr "Ny post"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenGPG"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Öppna mapp"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Inställningar"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Har "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7742,6 +7769,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Visa"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Öppna mapp"
 
 #~ msgid "file transfers list"
 #~ msgstr "filöverföringslista"

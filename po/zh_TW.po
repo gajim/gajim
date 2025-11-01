@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -158,10 +158,6 @@ msgstr "%s 已被從此群聊中移除"
 #, python-format
 msgid "%s has joined"
 msgstr "%s 已加入"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s 已閱讀到此為止"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -458,9 +454,6 @@ msgstr "帳戶： %s"
 
 msgid "Accounts"
 msgstr "帳戶"
-
-msgid "Action for left-clicking a preview"
-msgstr "左鍵按下預覽的操作"
 
 msgid "Action on Close"
 msgstr "關閉時的操作"
@@ -1185,6 +1178,9 @@ msgstr ""
 msgid "Color"
 msgstr "Color"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "封禁名單"
@@ -1315,29 +1311,6 @@ msgid "Contact List – %(account)s"
 msgstr "聯絡人清單項交換"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "已連線的聯絡人"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "聯絡人清單項交換"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "已連線的聯絡人"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "聯絡人已中斷連線"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "聯絡人"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "帳戶已刪除"
 
@@ -1386,10 +1359,6 @@ msgstr "聊天室 JID"
 #, fuzzy
 msgid "Copy Address"
 msgstr "複製 JID/電子郵件位址(_C)"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "複製連結位置(_C)"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1473,9 +1442,6 @@ msgstr "離開聊天室"
 msgid "Creating Account..."
 msgstr "移除帳號 %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "證書已過期"
@@ -1521,10 +1487,6 @@ msgstr "使用者名稱(_U):"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "連線失敗"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1747,21 +1709,9 @@ msgstr ""
 msgid "Download"
 msgstr "下載"
 
-#, fuzzy
-msgid "Download File"
-msgstr "下載"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "不要再問我了(_D)"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "轉發未讀訊息"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "載入"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1773,6 +1723,10 @@ msgstr "向聯絡人傳送檔案"
 
 msgid "Eating"
 msgstr "吃東西"
+
+#, fuzzy
+msgid "Edit"
+msgstr "編輯(_E)"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2107,8 +2061,9 @@ msgstr "檔案為空"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "檔案名稱:  %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2784,9 +2739,6 @@ msgstr "離開聊天室"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3377,16 +3329,8 @@ msgid "Open Folder"
 msgstr "開啟資料夾(_O)"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "在瀏覽器中開啟連結(_O)"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "開啟資料夾(_O)"
 
 msgid "Open as _Link"
 msgstr "做為連結開啟(_L)"
@@ -3405,6 +3349,10 @@ msgstr "客戶端證書"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "渡假"
+
+#, fuzzy
+msgid "Organization"
 msgstr "渡假"
 
 msgid "Organization (O): "
@@ -3755,6 +3703,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4255,10 +4206,6 @@ msgstr "儲存密碼"
 msgid "Save as..."
 msgstr "儲存在: %s"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "儲存在: %s"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4383,6 +4330,14 @@ msgstr "將封禁 %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "將封禁 %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr " 由%s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "參與者"
 
 #, fuzzy
 msgid "Select Account"
@@ -4532,10 +4487,6 @@ msgstr "%s 設定錯誤"
 msgid "Set date…"
 msgstr "主持人"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "狀態訊息"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4681,10 +4632,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "一個連線無法使用"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4850,10 +4797,6 @@ msgstr "狀態訊息"
 #, fuzzy
 msgid "Status is shared"
 msgstr "狀態訊息"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "狀態訊息:(_S)"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5064,12 +5007,11 @@ msgstr "同步"
 msgid "System"
 msgstr "<b>系統:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "SSL 憑證驗證"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5285,10 +5227,6 @@ msgid ""
 msgstr "這個名稱已被使用。您想要覆寫這個狀態訊息嗎?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "複製 JID/電子郵件位址(_C)"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "證書已被吊銷"
 
@@ -5380,6 +5318,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "離開很久了"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "時間"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5533,6 +5475,10 @@ msgstr "不明"
 msgid "Unknown Artist"
 msgstr "不明演出者"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "不明的 SSL 錯誤: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "不明的 SSL 錯誤: %d"
@@ -5622,10 +5568,6 @@ msgstr "無法讀取圖片"
 #, fuzzy
 msgid "Upload File…"
 msgstr "另存為…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "找不到該服務"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6176,10 +6118,6 @@ msgstr "無效的帳號"
 msgid "_Do not ask me again"
 msgstr "不要再問我了(_D)"
 
-#, fuzzy
-msgid "_Download"
-msgstr "不要再問我了(_D)"
-
 msgid "_Edit"
 msgstr "編輯(_E)"
 
@@ -6255,10 +6193,6 @@ msgid "_Offline"
 msgstr "離線(_O)"
 
 #, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
-#, fuzzy
 msgid "_Overwrite"
 msgstr "覆寫？"
 
@@ -6306,10 +6240,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "儲存在: %s"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "儲存在: %s"
 
 msgid "_Search"
@@ -6568,10 +6498,6 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#, python-format
-#~ msgid " by %s"
-#~ msgstr " 由%s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " 由{actor}"
@@ -6587,6 +6513,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr " %s 找不到"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s 已閱讀到此為止"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6846,6 +6776,9 @@ msgstr ""
 #~ msgid "Account Settings…"
 #~ msgstr "賬戶設定…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "左鍵按下預覽的操作"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "啟用的"
@@ -7010,6 +6943,26 @@ msgstr ""
 #~ msgstr "聯絡人訊息:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "已連線的聯絡人"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "聯絡人清單項交換"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "已連線的聯絡人"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "聯絡人已中斷連線"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "聯絡人"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "已取消認證的"
 
@@ -7032,6 +6985,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "複製 JID/電子郵件位址(_C)"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "複製連結位置(_C)"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7067,6 +7024,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "目前的開發者:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "連線失敗"
 
 #~ msgid "Default"
 #~ msgstr "預設"
@@ -7108,12 +7069,24 @@ msgstr ""
 #~ msgstr "下載"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "下載"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "下載"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "不要再問我了(_D)"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "不要再問我了(_D)"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "載入"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7171,10 +7144,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "特性"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "檔案名稱:  %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7380,8 +7349,16 @@ msgstr ""
 #~ msgstr "做為連結開啟(_L)"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "在瀏覽器中開啟連結(_O)"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "開啟資料夾(_O)"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7506,6 +7483,10 @@ msgstr ""
 #~ msgstr "另存為…"
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "儲存在: %s"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "傳送檔案(_F)"
 
@@ -7568,6 +7549,10 @@ msgstr ""
 #~ msgstr "伺服器回應: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "狀態訊息"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7586,6 +7571,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "顯示 XML 主控臺(_X)"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "一個連線無法使用"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7614,6 +7603,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "變更一個或多個帳號狀態"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "狀態訊息:(_S)"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7654,11 +7647,19 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "版本:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "SSL 憑證驗證"
+
 #~ msgid "The service could not be found"
 #~ msgstr "找不到該服務"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "這個帳號已經連線到伺服器"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "複製 JID/電子郵件位址(_C)"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7701,6 +7702,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "另存為…"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "找不到該服務"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7792,6 +7797,10 @@ msgstr ""
 #~ msgstr "不要再問我了(_D)"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "不要再問我了(_D)"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "不要再問我了(_D)"
 
@@ -7816,12 +7825,20 @@ msgstr ""
 #~ msgstr "新發表"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "開啟資料夾(_O)"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "參數"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "儲存在: %s"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7841,6 +7858,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "檢視(_V)"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "開啟資料夾(_O)"
 
 #~ msgid "file transfers list"
 #~ msgstr "檔案傳輸清單"

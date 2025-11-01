@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -154,10 +154,6 @@ msgstr "Sobrenom:"
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
-
-#, python-format
-msgid "%s has read up to this point"
 msgstr ""
 
 #, python-format
@@ -462,9 +458,6 @@ msgstr "Comptes"
 
 msgid "Accounts"
 msgstr "Comptes"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1263,6 +1256,9 @@ msgstr ""
 msgid "Color"
 msgstr "Color"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr ""
 
@@ -1390,26 +1386,6 @@ msgstr "_Canvia Missatge d'Estat"
 msgid "Contact List – %(account)s"
 msgstr "_Canvia Missatge d'Estat"
 
-msgid "Contact List: Contact Background Color"
-msgstr ""
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "_Canvia Missatge d'Estat"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr ""
-
-msgid "Contact List: Group Background Color"
-msgstr ""
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Fila del contacte"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
 #, fuzzy
 msgid "Contact Removed"
 msgstr "Fila del compte "
@@ -1458,10 +1434,6 @@ msgstr "_Copia la ubicació de l'enllaç"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Copia adreça JID/Email"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Copy Text"
 msgstr ""
@@ -1539,9 +1511,6 @@ msgstr "Grups de xat"
 msgid "Creating Account..."
 msgstr "Fusiona comptes"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 msgid "Credentials expired"
 msgstr ""
 
@@ -1585,10 +1554,6 @@ msgstr "_Nom d'usuari:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "_No Disponible"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1800,20 +1765,9 @@ msgstr ""
 msgid "Download"
 msgstr "_Canvia Missatge d'Estat"
 
-#, fuzzy
-msgid "Download File"
-msgstr "_Canvia Missatge d'Estat"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Canvia Missatge d'Estat"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "_Canvia Missatge d'Estat"
-
-msgid "Downloading…"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1825,6 +1779,10 @@ msgstr "Mostra els contactes desconnectats"
 
 msgid "Eating"
 msgstr ""
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Edita"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2141,8 +2099,9 @@ msgstr ""
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Nom:"
 
 msgid "File too big"
 msgstr ""
@@ -2794,9 +2753,6 @@ msgstr "Grups de xat"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3370,16 +3326,8 @@ msgid "Open Folder"
 msgstr "_Obre Carpeta Contenidora"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Obri l'enllaç al navegador"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Obri l'enllaç al navegador"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Obre Carpeta Contenidora"
 
 msgid "Open as _Link"
 msgstr ""
@@ -3398,6 +3346,10 @@ msgstr "Certificat de client"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Operacions d'Administració"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Operacions d'Administració"
 
 msgid "Organization (O): "
@@ -3731,6 +3683,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4223,10 +4178,6 @@ msgstr "Desa la contrasenya"
 msgid "Save as..."
 msgstr "Desa la contrasenya"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Desa la contrasenya"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4347,6 +4298,14 @@ msgstr ""
 
 msgid "Security Warning"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Canvia _Nick..."
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Accions Ocupant"
 
 #, fuzzy
 msgid "Select Account"
@@ -4491,10 +4450,6 @@ msgstr ""
 msgid "Set date…"
 msgstr "Moderadors"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "_Canvia Missatge d'Estat"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4638,10 +4593,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Transferència de Fitxers"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4793,10 +4744,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Status is shared"
-msgstr "_Canvia Missatge d'Estat"
-
-#, fuzzy
-msgid "Status message…"
 msgstr "_Canvia Missatge d'Estat"
 
 #, fuzzy
@@ -5005,12 +4952,11 @@ msgstr "Sincronitza els contactes"
 msgid "System"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Certificat de client"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5206,10 +5152,6 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr ""
 
-#, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Copia adreça JID/Email"
-
 msgid "This message has been moderated"
 msgstr ""
 
@@ -5294,6 +5236,9 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "_No Disponible"
+
+msgid "Time Zone"
+msgstr ""
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -5442,6 +5387,10 @@ msgstr "Sobrenom:"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Sobrenom:"
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr ""
@@ -5526,9 +5475,6 @@ msgid "Updating provider list…"
 msgstr ""
 
 msgid "Upload File…"
-msgstr ""
-
-msgid "Upload could not be completed."
 msgstr ""
 
 msgid "Uploading Avatar Failed"
@@ -6053,9 +5999,6 @@ msgstr "Compte"
 msgid "_Do not ask me again"
 msgstr ""
 
-msgid "_Download"
-msgstr ""
-
 msgid "_Edit"
 msgstr "_Edita"
 
@@ -6130,9 +6073,6 @@ msgstr ""
 msgid "_Offline"
 msgstr "Desconnectat"
 
-msgid "_Open"
-msgstr ""
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6181,10 +6121,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Desa la contrasenya"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Desa la contrasenya"
 
 #, fuzzy
@@ -6425,10 +6361,6 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Canvia _Nick..."
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -6691,6 +6623,14 @@ msgstr ""
 #~ msgstr "_Copia adreça JID/Email"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Fila del contacte"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "El Contacte ha entrat"
 
@@ -6713,6 +6653,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Copia adreça JID/Email"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -6742,12 +6686,24 @@ msgstr ""
 #~ msgstr "Crea nou missatge"
 
 #, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "_No Disponible"
+
+#, fuzzy
 #~ msgid "Default for chats"
 #~ msgstr "Lliure per xatejar"
 
 #, fuzzy
 #~ msgid "Delete Message"
 #~ msgstr "Missatges preconfigurats:"
+
+#, fuzzy
+#~ msgid "Download File"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Canvia Missatge d'Estat"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -6776,10 +6732,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Característiques"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Nom:"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -6902,6 +6854,14 @@ msgstr ""
 #~ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Obri l'enllaç al navegador"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Obre Carpeta Contenidora"
+
+#, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Operacions d'Administració"
 
@@ -6985,6 +6945,10 @@ msgstr ""
 #~ msgstr "Connectors"
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Desa la contrasenya"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Envia _Fitxer"
 
@@ -7021,6 +6985,10 @@ msgstr ""
 #~ msgstr "Servidor:"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
 #~ msgid "Show Location"
 #~ msgstr "_Copia la ubicació de l'enllaç"
 
@@ -7035,6 +7003,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Transferència de Fitxers"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7057,6 +7029,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Sincronit_za l'estat del compte amb l'estat global"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Canvia Missatge d'Estat"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7082,6 +7058,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "TLS Version"
 #~ msgstr "Versió:"
+
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Certificat de client"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Copia adreça JID/Email"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7186,6 +7170,10 @@ msgstr ""
 #~ msgstr "Preferències"
 
 #, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Desa la contrasenya"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
@@ -7203,6 +7191,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "Veure"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Obre Carpeta Contenidora"
 
 #~ msgid "file transfers list"
 #~ msgstr "llista de trasferència de fitxers"

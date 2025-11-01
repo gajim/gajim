@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -155,10 +155,6 @@ msgstr "%s grup sohbete katıldı"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s ayrıldı"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -478,9 +474,6 @@ msgstr "Hesaplar"
 
 msgid "Accounts"
 msgstr "Hesaplar"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1312,6 +1305,9 @@ msgstr ""
 msgid "Color"
 msgstr "Renk"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Geçersiz Liste İsmi"
@@ -1445,29 +1441,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kişi listesindeki olayları göster"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kişinin bağlantısı kesildi"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kişi listesindeki olayları göster"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kişinin bağlantısı kesildi"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kişinin bağlantısı kesildi"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Kişi sırası"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Hesap sırası"
 
@@ -1516,10 +1489,6 @@ msgstr "Oda JID"
 #, fuzzy
 msgid "Copy Address"
 msgstr "AIM Adres:"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "Yer:"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1601,9 +1570,6 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Creating Account..."
 msgstr "XMPP hesabı %s@%s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
@@ -1649,10 +1615,6 @@ msgstr "_Kullanıcı ismi"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1873,21 +1835,9 @@ msgstr ""
 msgid "Download"
 msgstr "Yükleme"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Yükleme"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Bu iletişim kutusunu bir daha _gösterme"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Okunmamış iletler var"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Kodlamada"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1899,6 +1849,10 @@ msgstr "Dosyayı bir kişiye gönderir"
 
 msgid "Eating"
 msgstr "Yemelik"
+
+#, fuzzy
+msgid "Edit"
+msgstr "Düz_en"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2229,8 +2183,9 @@ msgstr "Dosya boş"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Dosya adı: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2897,9 +2852,6 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3490,15 +3442,7 @@ msgid "Open Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "Gmail Gelen Kutusunu _Aç"
-
-#, fuzzy
 msgid "Open Link in _Browser"
-msgstr "Gmail Gelen Kutusunu _Aç"
-
-#, fuzzy
-msgid "Open _Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
@@ -3519,6 +3463,10 @@ msgstr "%(nickname)s Girdi"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Telefondayım"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Telefondayım"
 
 msgid "Organization (O): "
@@ -3872,6 +3820,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4368,10 +4319,6 @@ msgstr "Parolayı Değiştir"
 msgid "Save as..."
 msgstr "Sahip"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Sahip"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4496,6 +4443,14 @@ msgstr "ben burdaysam"
 #, fuzzy
 msgid "Security Warning"
 msgstr "ben burdaysam"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Takma Ad Ayarla"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Katılanlar"
 
 #, fuzzy
 msgid "Select Account"
@@ -4647,10 +4602,6 @@ msgstr "Hata açıklaması…"
 msgid "Set date…"
 msgstr "Moderatör"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "durum ileti"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4795,10 +4746,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Klasör \"%s\" yazılabilir değil"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4967,10 +4914,6 @@ msgstr "durum ileti"
 #, fuzzy
 msgid "Status is shared"
 msgstr "durum ileti"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Durum ileti:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5182,12 +5125,11 @@ msgstr "Kişileri eşzamana getir"
 msgid "System"
 msgstr "<b>Sistem:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "<b>Bir hata oluştu:</b>"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5394,10 +5336,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "AIM Adres:"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "sertifika hükümsüz kılınmış"
 
@@ -5486,6 +5424,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Mevcut Değil"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Süre"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5643,6 +5585,10 @@ msgstr "?OS:Unknown?OS:Bilinmez"
 msgid "Unknown Artist"
 msgstr "Bilinmeyen Sanatçı"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "<b>Bir hata oluştu:</b>"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "<b>Bir hata oluştu:</b>"
@@ -5733,10 +5679,6 @@ msgstr "Resim acılamadı"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Dosya Farklı Kaydet..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Hizmet bulunamadı"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6286,10 +6228,6 @@ msgstr "XMPP hesabı %s@%s"
 msgid "_Do not ask me again"
 msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Bu iletişim kutusunu bir daha _gösterme"
-
 msgid "_Edit"
 msgstr "Düz_en"
 
@@ -6364,10 +6302,6 @@ msgstr "_Tamam"
 msgid "_Offline"
 msgstr "Bağlı _değil"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP:"
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6415,10 +6349,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Sahip"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Sahip"
 
 msgid "_Search"
@@ -6671,10 +6601,6 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Takma Ad Ayarla"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7105,6 +7031,26 @@ msgstr ""
 #~ msgstr "Kişinin İleti:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kişi listesindeki olayları göster"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Kişi sırası"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Üyelikten çıkarıldı"
 
@@ -7123,6 +7069,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Certificate Information"
 #~ msgstr "Kişisel Bilgisi"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Yer:"
 
 #, fuzzy
 #~ msgid "Copy Path"
@@ -7150,6 +7100,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Şu Anki Geliştiriciler"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Bağlantı Kurulamıyor"
 
 #~ msgid "Default"
 #~ msgstr "Öntanımlı"
@@ -7191,12 +7145,24 @@ msgstr ""
 #~ msgstr "Yükleme"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Yükleme"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Yükleme"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Kodlamada"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7237,10 +7203,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Özellikler:"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Dosya adı: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7410,8 +7372,16 @@ msgstr ""
 #~ msgstr "Dosya Farklı Kaydet..."
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP:"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7529,6 +7499,10 @@ msgstr ""
 #~ msgstr "Dosya Farklı Kaydet..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Sahip"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "_Dosya Gönder…"
 
@@ -7592,6 +7566,10 @@ msgstr ""
 #~ msgstr "MUC sunucusu"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "durum ileti"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7610,6 +7588,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "_XML Konsolu Göster"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Klasör \"%s\" yazılabilir değil"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7631,6 +7613,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Durum satırı okunamadı"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Durum ileti:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7668,8 +7654,16 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "GTK+ Runtime Sürümü"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "<b>Bir hata oluştu:</b>"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Hizmet bulunamadı"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "AIM Adres:"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7709,6 +7703,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Hizmet bulunamadı"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7781,6 +7779,10 @@ msgstr ""
 #~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
@@ -7805,12 +7807,20 @@ msgstr ""
 #~ msgstr "Yeni posta"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP:"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Sahip"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7834,6 +7844,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Görünüm"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
 
 #~ msgid "file transfers list"
 #~ msgstr "dosya aktarımların listesi"

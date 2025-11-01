@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -157,10 +157,6 @@ msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s напусна"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -497,9 +493,6 @@ msgstr "Акаунти"
 
 msgid "Accounts"
 msgstr "Акаунти"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1326,6 +1319,9 @@ msgstr ""
 msgid "Color"
 msgstr "Цвят"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Команди: %s"
@@ -1457,29 +1453,6 @@ msgid "Contact List – %(account)s"
 msgstr "Изключване на контакт"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Включване на контакт"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Изключване на контакт"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Включване на контакт"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Изключване на контакт"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Показване на събитието в спис_ъка"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Акаунт"
 
@@ -1528,10 +1501,6 @@ msgstr "JID на стая"
 #, fuzzy
 msgid "Copy Address"
 msgstr "Копиране на _JID/Е-поща"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Копиране на адреса на връзката"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1615,9 +1584,6 @@ msgstr "Излизане от стаите"
 msgid "Creating Account..."
 msgstr "Премахване на акаунт „%s“"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Валидността на сертификата е изтекла"
@@ -1663,10 +1629,6 @@ msgstr "И_ме на потребител:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Неуспех при свързването"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1893,21 +1855,9 @@ msgstr ""
 msgid "Download"
 msgstr "Изтегляне"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Изтегляне"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Да _не се задава този въпрос отново"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Препращане на непрочетени съобщения"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Програмирам"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1919,6 +1869,10 @@ msgstr "Изпращане на файл до контакт"
 
 msgid "Eating"
 msgstr "Хапвам"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Редактиране"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2255,8 +2209,9 @@ msgstr "Файлът не съдържа нищо"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Име на файл: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2933,9 +2888,6 @@ msgstr "Излизане от стаите"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3531,16 +3483,8 @@ msgid "Open Folder"
 msgstr "_Отваряне на папката"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Отваряне на връзката в браузър"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Отваряне на връзката в браузър"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Отваряне на папката"
 
 msgid "Open as _Link"
 msgstr "Отваряне като _връзка"
@@ -3559,6 +3503,10 @@ msgstr "Само-подписан сертификат"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "В отпуск"
+
+#, fuzzy
+msgid "Organization"
 msgstr "В отпуск"
 
 msgid "Organization (O): "
@@ -3908,6 +3856,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4414,10 +4365,6 @@ msgstr "Запазване на паролата"
 msgid "Save as..."
 msgstr "имам "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "имам "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4542,6 +4489,14 @@ msgstr "Отлъчване на %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Отлъчване на %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Смяна на псе_вдоним…"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Участници"
 
 #, fuzzy
 msgid "Select Account"
@@ -4692,10 +4647,6 @@ msgstr "Настройки на стаята"
 msgid "Set date…"
 msgstr "Председател"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "съобщение за състояние"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4843,10 +4794,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "В момента няма връзка"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -5011,10 +4958,6 @@ msgstr "Съобщение за състояние"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Съобщение за състояние"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "С_ъобщение за състояние:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5225,12 +5168,11 @@ msgstr "Синхронизиране"
 msgid "System"
 msgstr "<b>Система:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Грешка в сертификата на SSL"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5452,10 +5394,6 @@ msgstr ""
 "състояние?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "Копиране на _JID/Е-поща"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Това съобщение е шифрирано]"
 
@@ -5547,6 +5485,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Не съм на разположение"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Време"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5702,6 +5644,10 @@ msgstr "Неизвестна"
 msgid "Unknown Artist"
 msgstr "Неизвестен изпълнител"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Неизвестна грешка на SSL: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Неизвестна грешка на SSL: %d"
@@ -5791,10 +5737,6 @@ msgstr "Неуспех при зареждането на изображение
 #, fuzzy
 msgid "Upload File…"
 msgstr "Запазване на файла като…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Услугата не може да бъде намерена"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6347,10 +6289,6 @@ msgstr "Невалидно име на акаунт"
 msgid "_Do not ask me again"
 msgstr "Да _не се задава този въпрос отново"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Да _не се задава този въпрос отново"
-
 msgid "_Edit"
 msgstr "_Редактиране"
 
@@ -6425,10 +6363,6 @@ msgstr "_Да"
 msgid "_Offline"
 msgstr "_Изключен"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenGPG"
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6477,10 +6411,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "имам "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "имам "
 
 msgid "_Search"
@@ -6737,10 +6667,6 @@ msgstr "%(nick)s вече е %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Смяна на псе_вдоним…"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7171,6 +7097,26 @@ msgstr ""
 #~ msgstr "Съобщение от разговор:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Включване на контакт"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Изключване на контакт"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Включване на контакт"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Изключване на контакт"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Показване на събитието в спис_ъка"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Отписване"
 
@@ -7193,6 +7139,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "Копиране на _JID/Е-поща"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Копиране на адреса на връзката"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7228,6 +7178,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Текущи разработчици:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Неуспех при свързването"
 
 #~ msgid "Default"
 #~ msgstr "По подразбиране"
@@ -7269,12 +7223,24 @@ msgstr ""
 #~ msgstr "Изтегляне"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Изтегляне"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Изтегляне"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Да _не се задава този въпрос отново"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Да _не се задава този въпрос отново"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Програмирам"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7315,10 +7281,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Възможности"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Име на файл: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7513,8 +7475,16 @@ msgstr ""
 #~ msgstr "Отваряне като _връзка"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Отваряне на връзката в браузър"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenGPG"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Отваряне на папката"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7629,6 +7599,10 @@ msgstr ""
 #~ msgstr "Запазване на файла като…"
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "имам "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Изпращане на _файл"
 
@@ -7691,6 +7665,10 @@ msgstr ""
 #~ msgstr "Запазен в: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "съобщение за състояние"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7709,6 +7687,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Показване на _XML конзола"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "В момента няма връзка"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7733,6 +7715,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Промяна на състоянието на акаунта или акаунтите"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "С_ъобщение за състояние:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7773,11 +7759,19 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Версия на GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Грешка в сертификата на SSL"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Услугата не може да бъде намерена"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Този акаунт не е свързан към сървъра"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "Копиране на _JID/Е-поща"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7821,6 +7815,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Запазване на файла като…"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Услугата не може да бъде намерена"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7914,6 +7912,10 @@ msgstr ""
 #~ msgstr "Да _не се задава този въпрос отново"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Да _не се задава този въпрос отново"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Да _не се задава този въпрос отново"
 
@@ -7938,12 +7940,20 @@ msgstr ""
 #~ msgstr "Ново съобщение"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenGPG"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Отваряне на папката"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Настройки"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "имам "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7963,6 +7973,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Изглед"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Отваряне на папката"
 
 #~ msgid "file transfers list"
 #~ msgstr "списък с файлови трансфери"

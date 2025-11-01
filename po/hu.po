@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
-"PO-Revision-Date: 2025-09-10 20:28+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"PO-Revision-Date: 2025-11-01 07:52+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -156,10 +156,6 @@ msgstr "%s törölve lett ebből a társalgóból"
 #, python-format
 msgid "%s has joined"
 msgstr "%s belépett"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s eddig olvasta"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -455,9 +451,6 @@ msgstr "Fiók: %s"
 
 msgid "Accounts"
 msgstr "Fiókok"
-
-msgid "Action for left-clicking a preview"
-msgstr "Az előnézet bal egérgombos művelete"
 
 msgid "Action on Close"
 msgstr "Művelet bezáráskor"
@@ -1179,6 +1172,9 @@ msgstr "Kódrészlet"
 msgid "Color"
 msgstr "Szín"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr "Emodzsik vesszővel tagolt listája a gyors visszajelzésekhez"
+
 msgid "Command List"
 msgstr "Parancsok"
 
@@ -1293,24 +1289,6 @@ msgstr "Névjegyek cseréje"
 msgid "Contact List – %(account)s"
 msgstr "Névjegyek – %(account)s"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Névjegyek: névjegy háttérszíne"
-
-msgid "Contact List: Contact Font"
-msgstr "Névjegyek: névjegy betűkészlete"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Névjegyek: névjegy előtérszíne"
-
-msgid "Contact List: Group Background Color"
-msgstr "Névjegyek: csoport háttérszíne"
-
-msgid "Contact List: Group Font"
-msgstr "Névjegyek: csoport betűkészlete"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Névjegyek: csoport előtérszíne"
-
 msgid "Contact Removed"
 msgstr "Névjegy törlése"
 
@@ -1350,9 +1328,6 @@ msgstr "Másolás"
 
 msgid "Copy Address"
 msgstr "Cím másolása"
-
-msgid "Copy Link"
-msgstr "Hivatkozás másolása"
 
 msgid "Copy Text"
 msgstr "Szöveg másolása"
@@ -1419,9 +1394,6 @@ msgstr "Társalgó létrehozása"
 msgid "Creating Account..."
 msgstr "Fiók létrehozása…"
 
-msgid "Creating thumbnail failed"
-msgstr "Nem sikerült létrehozni a bélyegképet"
-
 msgid "Credentials expired"
 msgstr "Lejárt hitelesítő adatok"
 
@@ -1460,9 +1432,6 @@ msgstr "A betűméret csökkentése"
 
 msgid "Decrease playback speed"
 msgstr "A lejátszási sebesség csökkentése"
-
-msgid "Decryption failed"
-msgstr "A titkosítás visszafejtése sikertelen"
 
 msgid "Default Encryption"
 msgstr "Alapértelmezett titkosítás"
@@ -1662,19 +1631,9 @@ msgstr "Az ujjlenyomat végelegesen törlődni fog"
 msgid "Download"
 msgstr "Letöltés"
 
-msgid "Download File"
-msgstr "Letöltés"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Nem sikerült a letöltés (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s üzenet lett letöltve"
-
-msgid "Downloading…"
-msgstr "Letöltés…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1685,6 +1644,9 @@ msgstr "Ide ejthetők a fájlok"
 
 msgid "Eating"
 msgstr "Étkezés"
+
+msgid "Edit"
+msgstr "Szerkesztés"
 
 msgid "Edit Shortcut"
 msgstr "Billentyűparancsok szerkesztése"
@@ -1976,8 +1938,8 @@ msgstr "Üres fájl"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "A fájl túl nagy, a megengedett méret: %s"
 
-msgid "File size unknown"
-msgstr "Ismeretlen fájlméret"
+msgid "File saved"
+msgstr "A fájl mentése kész"
 
 msgid "File too big"
 msgstr "A fájl túl nagy"
@@ -2130,9 +2092,8 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "A Gajim teljes szinkronban van az archívummal."
 
-#, fuzzy
 msgid "Gajim is quitting…"
-msgstr "%s éppen ír…"
+msgstr "A Gajim leállítása…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2568,9 +2529,6 @@ msgstr "Távozás a társalgóból"
 
 msgid "Leave _Permanently"
 msgstr "_Végleges távozás"
-
-msgid "Left Click Action"
-msgstr "Bal egérgomb művelete"
 
 msgid "Let others know if you read up to this point"
 msgstr "Értesítés küldése az üzenet elolvasásáról"
@@ -3085,14 +3043,8 @@ msgstr "Levelező _megnyitása"
 msgid "Open Folder"
 msgstr "Mappa megnyitása"
 
-msgid "Open Link in Browser"
-msgstr "Hivatkozás megnyitása böngészőben"
-
 msgid "Open Link in _Browser"
 msgstr "_Hivatkozás megnyitása böngészőben"
-
-msgid "Open _Folder"
-msgstr "M_appa megnyitása"
 
 msgid "Open as _Link"
 msgstr "Megnyitás _hivatkozásként"
@@ -3108,6 +3060,9 @@ msgstr "Operációs rendszer"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Szervezet"
+
+msgid "Organization"
 msgstr "Szervezet"
 
 msgid "Organization (O): "
@@ -3419,6 +3374,9 @@ msgstr "Az alkalmazás profilozása cProfile-lal"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Projektmegbeszélés"
+
+msgid "Pronouns"
+msgstr "Személyes névmás"
 
 msgid "Protocol"
 msgstr "Protokoll"
@@ -3762,9 +3720,8 @@ msgstr "Erőforrás"
 msgid "Restart Gajim to finish this update"
 msgstr "A frissítés befejezéséhez a Gajim újraindítása szükséges"
 
-#, fuzzy
 msgid "Restart Gajim to start debug logging"
-msgstr "A frissítés befejezéséhez a Gajim újraindítása szükséges"
+msgstr "A hibakereső naplózásához újra kell indítani a programot"
 
 msgid "Restart Pending"
 msgstr "Újraindításra vár"
@@ -3835,9 +3792,6 @@ msgid "Save Password"
 msgstr "Jelszó megjegyzése"
 
 msgid "Save as..."
-msgstr "Mentés másként…"
-
-msgid "Save as…"
 msgstr "Mentés másként…"
 
 msgid "Save display name"
@@ -3953,6 +3907,14 @@ msgstr "Biztonsági címkék"
 
 msgid "Security Warning"
 msgstr "Biztonsági figyelmeztetés"
+
+#, python-format
+msgid "Seen by %s"
+msgstr "%s olvasta"
+
+#, python-format
+msgid "Seen by %s participants"
+msgstr "%s résztvevő olvasta"
 
 msgid "Select Account"
 msgstr "Fiókválasztás"
@@ -4077,9 +4039,6 @@ msgstr "A beállítási könyvtár megadása"
 
 msgid "Set date…"
 msgstr "Dátumválasztás…"
-
-msgid "Set status message"
-msgstr "Állapotüzenet beállítása"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "A GLib hibaüzenetek kiírását biztosító környezeti változó beállítása"
@@ -4207,9 +4166,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr "Előnézet minden URL-hez, amely képre hivatkozik (veszélyes lehet)"
-
-msgid "Show previews for files"
-msgstr "A fájlok előnézetének megjelenítése"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Javaslatok megjelenítése hangulatjelkódok (pl. :+1:) beírásakor"
@@ -4351,9 +4307,6 @@ msgstr "A jelenléti állapot nincs megosztva"
 
 msgid "Status is shared"
 msgstr "A jelenléti állapot meg van osztva"
-
-msgid "Status message…"
-msgstr "Állapotüzenet…"
 
 msgid "Status: Away Color"
 msgstr "Jelenléti állapot: „távol” színe"
@@ -4533,13 +4486,12 @@ msgstr "Beszélgetési előzmények szinkronizálása…"
 msgid "System"
 msgstr "Rendszer"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "A TLS-ellenőrzés sikertelen: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Csapat"
+
+msgid "Telephone"
+msgstr "Telefon"
 
 msgid "Tell your contacts if you received a message"
 msgstr "A küldő értesítése az üzenete beérkezéséről"
@@ -4744,9 +4696,6 @@ msgstr ""
 "Ez a téma van jelenleg használatban.\n"
 "Biztosan törölhető ?"
 
-msgid "This is your XMPP address"
-msgstr "A saját XMPP-címem"
-
 msgid "This message has been moderated"
 msgstr "Ez az üzenet moderálva lett"
 
@@ -4837,6 +4786,9 @@ msgstr "Távollét időküszöbe"
 
 msgid "Time Until Not Available"
 msgstr "Tartós távollét időküszöbe"
+
+msgid "Time Zone"
+msgstr "Időzóna"
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -4975,6 +4927,9 @@ msgstr "Ismeretlen"
 msgid "Unknown Artist"
 msgstr "Ismeretlen előadó"
 
+msgid "Unknown Error"
+msgstr "Ismeretlen hiba"
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Ismeretlen SSL-hiba: „%s”"
@@ -5050,9 +5005,6 @@ msgstr "A szolgáltatók jegyzékének frissítése…"
 
 msgid "Upload File…"
 msgstr "Fájlfeltöltés…"
-
-msgid "Upload could not be completed."
-msgstr "Nem sikerült a feltöltés."
 
 msgid "Uploading Avatar Failed"
 msgstr "A profilkép feltöltése nem sikerült"
@@ -5544,9 +5496,6 @@ msgstr "Fiók _tiltása"
 msgid "_Do not ask me again"
 msgstr "_Ne kérdezze újra"
 
-msgid "_Download"
-msgstr "_Letöltés"
-
 msgid "_Edit"
 msgstr "_Szerkesztés"
 
@@ -5609,9 +5558,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Kijelentkezett"
 
-msgid "_Open"
-msgstr "_Megnyitás"
-
 msgid "_Overwrite"
 msgstr "_Felülírás"
 
@@ -5653,9 +5599,6 @@ msgstr "_Visszavonás"
 
 msgid "_Save"
 msgstr "_Mentés"
-
-msgid "_Save as…"
-msgstr "Menté_s másként…"
 
 msgid "_Search"
 msgstr "_Keresés"
@@ -5900,10 +5843,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Végleges távozás esetén csak egy újabb meghívóval lehet ismét belépni a "
 #~ "társalgóba"
 
-#, python-format
-#~ msgid " by %s"
-#~ msgstr " %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " {actor} döntése alapján"
@@ -5919,6 +5858,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s társalgó található"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s eddig olvasta"
 
 #, python-format
 #~ msgid ""
@@ -6197,6 +6140,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Account Settings…"
 #~ msgstr "Fiókbeállítások…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Az előnézet bal egérgombos művelete"
+
 #~ msgid "Activity"
 #~ msgstr "Tevékenységek"
 
@@ -6388,6 +6334,24 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Contact Addresses"
 #~ msgstr "Kapcsolatfelvétel"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Névjegyek: névjegy háttérszíne"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Névjegyek: névjegy betűkészlete"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Névjegyek: névjegy előtérszíne"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Névjegyek: csoport háttérszíne"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Névjegyek: csoport betűkészlete"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Névjegyek: csoport előtérszíne"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Ismerős leiratkozott"
 
@@ -6405,6 +6369,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "E-mail-cím _másolása"
+
+#~ msgid "Copy Link"
+#~ msgstr "Hivatkozás másolása"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Hivatkozás címének másolása"
@@ -6430,6 +6397,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Create new post"
 #~ msgstr "Új üzenet küldése"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Nem sikerült létrehozni a bélyegképet"
+
 #~ msgid "Current Developers"
 #~ msgstr "Jelenlegi fejlesztők"
 
@@ -6441,6 +6411,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Decrease User Interface Font Size"
 #~ msgstr "A betűméret csökkentése"
+
+#~ msgid "Decryption failed"
+#~ msgstr "A titkosítás visszafejtése sikertelen"
 
 #~ msgid "Default"
 #~ msgstr "Alapértelmezett"
@@ -6488,11 +6461,21 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Download"
 #~ msgstr "Letöltés"
 
+#~ msgid "Download File"
+#~ msgstr "Letöltés"
+
 #~ msgid "Download Update"
 #~ msgstr "Frissítés letöltése"
 
 #~ msgid "Download and Install"
 #~ msgstr "Letöltés és telepítés"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Nem sikerült a letöltés (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Letöltés…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Ide ejthetők fájlok vagy névjegyek"
@@ -6554,9 +6537,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Features:"
 #~ msgstr "Funkciók:"
 
-#~ msgid "File Name: "
-#~ msgstr "Fájlnév: "
-
 #~ msgid "File Offered"
 #~ msgstr "Felkínálva átvitelre"
 
@@ -6571,6 +6551,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "File error"
 #~ msgstr "Fájlátviteli hiba"
+
+#~ msgid "File size unknown"
+#~ msgstr "Ismeretlen fájlméret"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr ""
@@ -6731,6 +6714,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Last seen %s"
 #~ msgstr "Legutóbb látva: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Bal egérgomb művelete"
+
 #~ msgid "Local System Time"
 #~ msgstr "Helyi rendszeridő"
 
@@ -6804,8 +6790,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Open Link"
 #~ msgstr "Hivatkozás megnyitása"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Hivatkozás megnyitása böngészőben"
+
 #~ msgid "Open Path"
 #~ msgstr "Elérési út megnyitása"
+
+#~ msgid "Open _Folder"
+#~ msgstr "M_appa megnyitása"
 
 #~ msgid "Open search bar"
 #~ msgstr "Keresőpanel megnyitása"
@@ -6947,6 +6939,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Save File as…"
 #~ msgstr "Fájl mentése másként…"
 
+#~ msgid "Save as…"
+#~ msgstr "Mentés másként…"
+
 #~ msgid "Search your conversation"
 #~ msgstr "Beszélgetés keresése"
 
@@ -7011,6 +7006,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Server Uptime"
 #~ msgstr "A kiszolgáló üzemideje"
 
+#~ msgid "Set status message"
+#~ msgstr "Állapotüzenet beállítása"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr "Tudatható a barátokkal az elfoglaltság, zenehallgatás vagy hangulat"
 
@@ -7042,6 +7040,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Show debug console"
 #~ msgstr "Hibakereső ablak megnyitása"
 
+#~ msgid "Show previews for files"
+#~ msgstr "A fájlok előnézetének megjelenítése"
+
 #~ msgid "Show the header bar"
 #~ msgstr "A fejlécsáv megjelenítése"
 
@@ -7069,6 +7070,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Jelenléti állapot és állapotüzenet az összes fiókhoz"
+
+#~ msgid "Status message…"
+#~ msgstr "Állapotüzenet…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7119,6 +7123,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr "TLS verzió"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "A TLS-ellenőrzés sikertelen: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7132,6 +7140,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ez a fiók nem kapcsolódik a kiszolgálóhoz"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "A saját XMPP-címem"
 
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "A menüsáv mutatása/elrejtése"
@@ -7175,6 +7186,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Upload Files"
 #~ msgstr "Fájlfeltöltés"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "Nem sikerült a feltöltés."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN-kiszolgáló használata"
@@ -7278,6 +7292,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Ne kérdezze újra"
 
+#~ msgid "_Download"
+#~ msgstr "_Letöltés"
+
 #~ msgid "_Download Again"
 #~ msgstr "_Letöltés újra"
 
@@ -7299,11 +7316,17 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "_New post"
 #~ msgstr "Új _bejegyzés"
 
+#~ msgid "_Open"
+#~ msgstr "_Megnyitás"
+
 #~ msgid "_Open Folder"
 #~ msgstr "M_appa megnyitása"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Beállítások"
+
+#~ msgid "_Save as…"
+#~ msgstr "Menté_s másként…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "Ér_tesítés a fájlátvitel befejezése után"

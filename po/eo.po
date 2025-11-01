@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -156,10 +156,6 @@ msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s foriris"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -489,9 +485,6 @@ msgstr "Konto: %s"
 
 msgid "Accounts"
 msgstr "Kontoj"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1310,6 +1303,9 @@ msgstr ""
 msgid "Color"
 msgstr "Koloro"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Komandoj: %s"
@@ -1441,29 +1437,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kontakto malkonektita"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kontakto konektita"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kontakto malkonektita"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kontakto konektita"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kontakto malkonektita"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "Montri eventon en _kontaktlisto"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Konto"
 
@@ -1512,10 +1485,6 @@ msgstr "Babilejo:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopii JID/retpoŝtan adreson"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Kopii ligilan lokon"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1599,9 +1568,6 @@ msgstr "Nova babilejo"
 msgid "Creating Account..."
 msgstr "Forigado de konto %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Pasfrazo necesas"
@@ -1647,10 +1613,6 @@ msgstr "_Salutnomo:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Konektado malsukcesis"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1874,21 +1836,9 @@ msgstr ""
 msgid "Download"
 msgstr "Elŝuti"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Elŝuti"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "_Ne plu demandi"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr " %d nelegita mesaĝo"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Tajpas mesaĝon"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1900,6 +1850,10 @@ msgstr "Sendi dosieron al kontakto"
 
 msgid "Eating"
 msgstr "Manĝas"
+
+#, fuzzy
+msgid "Edit"
+msgstr "A_dministri"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2234,8 +2188,9 @@ msgstr "Dosierindiko"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Dosiernomo: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2908,9 +2863,6 @@ msgstr "Nova babilejo"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3508,16 +3460,8 @@ msgid "Open Folder"
 msgstr "_Malfermi enhavantan dosierujon"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Malfermi ligilon per retrigardilo"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Malfermi ligilon per retrigardilo"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Malfermi enhavantan dosierujon"
 
 msgid "Open as _Link"
 msgstr "Malfermi kiel _ligilon"
@@ -3536,6 +3480,10 @@ msgstr "Malkorekta salutnomo"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Administristo"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Administristo"
 
 msgid "Organization (O): "
@@ -3884,6 +3832,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4385,10 +4336,6 @@ msgstr "Konservi pasvorton"
 msgid "Save as..."
 msgstr "Havas "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Havas "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4513,6 +4460,14 @@ msgstr "Malpermesas %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Malpermesas %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Ŝanĝi kaŝ_nomon"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Partoprenantoj"
 
 #, fuzzy
 msgid "Select Account"
@@ -4665,10 +4620,6 @@ msgstr "Agordo de babilejo"
 msgid "Set date…"
 msgstr "Moderiganto"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "statmesaĝo"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4816,10 +4767,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Konekto mankas"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4983,10 +4930,6 @@ msgstr "Statmesaĝo"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Statmesaĝo"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Statmesaĝo:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5198,12 +5141,11 @@ msgstr "Montri _senkonektajn kontaktojn"
 msgid "System"
 msgstr "<b>Propraj</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Aligado de speciala avizo por %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5413,10 +5355,6 @@ msgstr ""
 "Tiu nomo jam estas uzata de alia el viaj kontoj. Bonvolu elekti alian nomon."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopii JID/retpoŝtan adreson"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Tiu ĉi mesaĝo estas ĉifrita]"
 
@@ -5508,6 +5446,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Nedisponebla"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Tempo"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5661,6 +5603,10 @@ msgstr "Nekonata"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Nekonata versio de D-BUS: %s"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Nekonata versio de D-BUS: %s"
@@ -5750,10 +5696,6 @@ msgstr "Ne povas alŝuti bildon"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Konservi dosieron kiel..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Neniu servo estas trovita"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6302,10 +6244,6 @@ msgstr "Malkorekta kontnomo"
 msgid "_Do not ask me again"
 msgstr "_Ne plu demandi"
 
-#, fuzzy
-msgid "_Download"
-msgstr "_Ne plu demandi"
-
 msgid "_Edit"
 msgstr "A_dministri"
 
@@ -6380,10 +6318,6 @@ msgstr "_O kej"
 msgid "_Offline"
 msgstr "_Senkonekta"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr "_Superskribi"
 
@@ -6432,10 +6366,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Havas "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Havas "
 
 msgid "_Search"
@@ -6687,10 +6617,6 @@ msgstr "%(nick)s nun estas %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Ŝanĝi kaŝ_nomon"
 
 #, python-brace-format
 #~ msgid " by {actor}"
@@ -7118,6 +7044,26 @@ msgstr ""
 #~ msgstr "_Statmesaĝo:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontakto konektita"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kontakto malkonektita"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontakto konektita"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontakto malkonektita"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Montri eventon en _kontaktlisto"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "_Malaboni"
 
@@ -7140,6 +7086,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopii JID/retpoŝtan adreson"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopii ligilan lokon"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7176,6 +7126,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Nunaj programistoj:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Konektado malsukcesis"
 
 #~ msgid "Default"
 #~ msgstr "Defaŭlte"
@@ -7218,12 +7172,24 @@ msgstr ""
 #~ msgstr "Elŝuti"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Elŝuti"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Elŝuti"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "_Ne plu demandi"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Ne plu demandi"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Tajpas mesaĝon"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7259,10 +7225,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Servilaj trajtoj"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Dosiernomo: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7459,8 +7421,16 @@ msgstr ""
 #~ msgstr "Malfermi kiel _ligilon"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Malfermi ligilon per retrigardilo"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Malfermi enhavantan dosierujon"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7581,6 +7551,10 @@ msgstr ""
 #~ msgstr "Konservi dosieron kiel..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Havas "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Sendi _dosieron"
 
@@ -7643,6 +7617,10 @@ msgstr ""
 #~ msgstr "Konservita kiel: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "statmesaĝo"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7661,6 +7639,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Montri _XML-konzolon"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Konekto mankas"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7689,6 +7671,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Ŝanĝas staton de konto aŭ kontoj"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Statmesaĝo:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7729,12 +7715,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Versio de GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Aligado de speciala avizo por %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Neniu servo estas trovita"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Konto \"%s\" estas konektita al la servilo"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopii JID/retpoŝtan adreson"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7780,6 +7774,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Konservi dosieron kiel..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Neniu servo estas trovita"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7877,6 +7875,10 @@ msgstr ""
 #~ msgstr "_Ne plu demandi"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Ne plu demandi"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "_Ne plu demandi"
 
@@ -7905,12 +7907,20 @@ msgstr ""
 #~ msgstr "Nova mesaĝo"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Malfermi enhavantan dosierujon"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Agordo"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Havas "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7934,6 +7944,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Vido"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Malfermi enhavantan dosierujon"
 
 #~ msgid "file transfers list"
 #~ msgstr "dosiertransdonada listo"

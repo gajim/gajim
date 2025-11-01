@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -163,10 +163,6 @@ msgstr "%s foi convidado para este chat em grupo"
 #, python-format
 msgid "%s has joined"
 msgstr "%s entrou"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s lido até aqui"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -475,10 +471,6 @@ msgstr "Conta: %s"
 
 msgid "Accounts"
 msgstr "Contas"
-
-#, fuzzy
-msgid "Action for left-clicking a preview"
-msgstr "Ação ao clicar com o botão-esquerdo em uma visualização"
 
 msgid "Action on Close"
 msgstr "Ação ao Fechar"
@@ -1245,6 +1237,9 @@ msgstr "Fragmento de código"
 msgid "Color"
 msgstr "Cor"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "Lista de Comandos"
 
@@ -1361,24 +1356,6 @@ msgstr "Troca de Lista de Contatos"
 msgid "Contact List – %(account)s"
 msgstr "Lista de Contatos: Fonte do Contato"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Lista de Contatos: Cor de Fundo do Contato"
-
-msgid "Contact List: Contact Font"
-msgstr "Lista de Contatos: Fonte do Contato"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Lista de Contatos: Cor do Primeiro Plano do Contato"
-
-msgid "Contact List: Group Background Color"
-msgstr "Lista de Contatos: Cor de Fundo do Grupo"
-
-msgid "Contact List: Group Font"
-msgstr "Lista de Contatos: Fonte do Grupo"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Lista de Contatos: Cor do Primeiro Plano do Grupo"
-
 #, fuzzy
 msgid "Contact Removed"
 msgstr "Conta Removida"
@@ -1421,10 +1398,6 @@ msgstr "Copiar"
 
 msgid "Copy Address"
 msgstr "Copiar Endereço"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Copiar Link"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1500,9 +1473,6 @@ msgstr "Criar Grupo de Bate-papo"
 msgid "Creating Account..."
 msgstr "Criando Conta..."
 
-msgid "Creating thumbnail failed"
-msgstr "Criação de miniatura falhou"
-
 msgid "Credentials expired"
 msgstr "Credenciais expiradas"
 
@@ -1544,10 +1514,6 @@ msgstr "Diminuir tamanho de letra do Interface de Utilizador"
 
 msgid "Decrease playback speed"
 msgstr "Diminuir velocidade de playback"
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Conexão falhou"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1767,20 +1733,9 @@ msgstr "Fazer isso excluirá permanentemente esta Fingerprint"
 msgid "Download"
 msgstr "Baixar/Download"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Baixar/Download"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Falha no download (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s mensagens baixadas"
-
-msgid "Downloading…"
-msgstr "Baixando…"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1792,6 +1747,10 @@ msgstr "Solte arquivos ou contatos"
 
 msgid "Eating"
 msgstr "Comendo"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Editar"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2100,8 +2059,9 @@ msgstr "O arquivo está vazio"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "O arquivo é muito grande, o tamanho máximo permitido do arquivo é: %s"
 
-msgid "File size unknown"
-msgstr "Tamanho do arquivo desconhecido"
+#, fuzzy
+msgid "File saved"
+msgstr "Nome do Arquivo: "
 
 #, fuzzy
 msgid "File too big"
@@ -2730,9 +2690,6 @@ msgstr "Sair do Bate-papo em Grupo"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr "Ação de clique esquerdo"
-
 msgid "Let others know if you read up to this point"
 msgstr "Deixe os outros saberem se você leu até este ponto"
 
@@ -3292,14 +3249,8 @@ msgstr "Abrir Compositor de E-mail"
 msgid "Open Folder"
 msgstr "Abrir Pasta"
 
-msgid "Open Link in Browser"
-msgstr "Abrir link no Navegador"
-
 msgid "Open Link in _Browser"
 msgstr "Abrir Link no _Navegador"
-
-msgid "Open _Folder"
-msgstr "Abrir _Pasta"
 
 msgid "Open as _Link"
 msgstr "Abra com _Link"
@@ -3316,6 +3267,10 @@ msgstr "Sistema Operacional"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Organização"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Organização"
 
 msgid "Organization (O): "
@@ -3649,6 +3604,9 @@ msgstr "Aplicação de perfil com cprofile"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "?Group chat description:Discussão do projeto"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr ""
@@ -4108,10 +4066,6 @@ msgstr "Salvar Senha"
 msgid "Save as..."
 msgstr "Salvar como..."
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Salvar Como…"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4228,6 +4182,14 @@ msgstr "Rótulos de Segurança"
 
 msgid "Security Warning"
 msgstr "Avisos de Segurança"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Alterado por %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Participantes"
 
 msgid "Select Account"
 msgstr "Selecione a Conta"
@@ -4364,9 +4326,6 @@ msgstr "Definir diretório de configuração"
 #, fuzzy
 msgid "Set date…"
 msgstr "Moderador"
-
-msgid "Set status message"
-msgstr "Definir mensagem de status"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4511,10 +4470,6 @@ msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
 "Gerar visualização para qualquer URL que contenha imagens (pode não ser "
 "seguro)"
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "A visualização de áudio não está disponível"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Mostrar sugestões para códigos de acesso, por exemplo :+1:"
@@ -4662,9 +4617,6 @@ msgstr "Mensagem de Status"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Mensagem de Status"
-
-msgid "Status message…"
-msgstr "Mensagem de status…"
 
 msgid "Status: Away Color"
 msgstr "Status: Cor de Ausente"
@@ -4866,12 +4818,11 @@ msgstr "Sincronizando Histórico de Bate-papo…"
 msgid "System"
 msgstr "Sistema"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "Falha na verificação de TLS: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5084,10 +5035,6 @@ msgstr ""
 "Deseja excluir este tema?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "Apenas moderadores podem ver seu endereço XMPP"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Esta mensagem foi retirada por %s."
 
@@ -5186,6 +5133,10 @@ msgstr "Tempo Até Ficar Ausente"
 
 msgid "Time Until Not Available"
 msgstr "Tempo Até Ficar Não Disponível"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Tempo"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5332,6 +5283,10 @@ msgstr "Desconhecido"
 msgid "Unknown Artist"
 msgstr "Artista Desconhecido"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Erro de SSL desconhecido '%s'"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Erro de SSL desconhecido '%s'"
@@ -5413,10 +5368,6 @@ msgstr "Não posso Abrir Arquivo"
 
 msgid "Upload File…"
 msgstr "Enviar Arquivo…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "A imagem selecionada não pôde ser carregada."
 
 msgid "Uploading Avatar Failed"
 msgstr "Falha no Envio do Avatar"
@@ -5925,9 +5876,6 @@ msgstr "_Desativar Conta"
 msgid "_Do not ask me again"
 msgstr "_Não me pergunte novamente"
 
-msgid "_Download"
-msgstr "_Baixar"
-
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -5996,9 +5944,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Offline"
 
-msgid "_Open"
-msgstr "_Abrir"
-
 msgid "_Overwrite"
 msgstr "_Sobrescrever"
 
@@ -6043,10 +5988,6 @@ msgstr "_Retrair"
 
 msgid "_Save"
 msgstr "_Salvar"
-
-#, fuzzy
-msgid "_Save as…"
-msgstr "Salvar Como…"
 
 msgid "_Search"
 msgstr "_Pesquisar"
@@ -6285,10 +6226,6 @@ msgstr "{nick} agora é {show}{status}"
 msgid "…or drop it here"
 msgstr "…ou solte aqui"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Alterado por %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " por {actor}"
@@ -6304,6 +6241,10 @@ msgstr "…ou solte aqui"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s de chats em grupo encontrados"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s lido até aqui"
 
 #, fuzzy, python-format
 #~ msgid ""
@@ -6575,6 +6516,10 @@ msgstr "…ou solte aqui"
 #~ msgstr "Configurações da Conta…"
 
 #, fuzzy
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Ação ao clicar com o botão-esquerdo em uma visualização"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Ativar"
 
@@ -6765,6 +6710,24 @@ msgstr "…ou solte aqui"
 #~ msgid "Contact Addresses"
 #~ msgstr "Endereço do Contato"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Lista de Contatos: Cor de Fundo do Contato"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Lista de Contatos: Fonte do Contato"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Lista de Contatos: Cor do Primeiro Plano do Contato"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Lista de Contatos: Cor de Fundo do Grupo"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Lista de Contatos: Fonte do Grupo"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Lista de Contatos: Cor do Primeiro Plano do Grupo"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Contato Removido"
 
@@ -6782,6 +6745,10 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Copiar Endereço de Email"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Copiar Link"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Copiar Link de Localização"
@@ -6809,8 +6776,15 @@ msgstr "…ou solte aqui"
 #~ msgid "Create new post"
 #~ msgstr "Criar nova postagem"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Criação de miniatura falhou"
+
 #~ msgid "Current Developers"
 #~ msgstr "Desenvolvedores Atuais"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Conexão falhou"
 
 #~ msgid "Default"
 #~ msgstr "Padrão"
@@ -6859,11 +6833,22 @@ msgstr "…ou solte aqui"
 #~ msgid "Download"
 #~ msgstr "Baixar/Download"
 
+#, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Baixar/Download"
+
 #~ msgid "Download Update"
 #~ msgstr "Baixar Atualização"
 
 #~ msgid "Download and Install"
 #~ msgstr "Baixar e Instalar"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Falha no download (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Baixando…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Solte arquivos ou contatos"
@@ -6925,9 +6910,6 @@ msgstr "…ou solte aqui"
 #~ msgid "Features:"
 #~ msgstr "Recursos:"
 
-#~ msgid "File Name: "
-#~ msgstr "Nome do Arquivo: "
-
 #~ msgid "File Offered"
 #~ msgstr "Arquivo Ofertado"
 
@@ -6942,6 +6924,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "File error"
 #~ msgstr "Erro de arquivo"
+
+#~ msgid "File size unknown"
+#~ msgstr "Tamanho do arquivo desconhecido"
 
 #~ msgid "File transfer stopped"
 #~ msgstr "Transferência de arquivos interrompida"
@@ -7092,6 +7077,9 @@ msgstr "…ou solte aqui"
 #~ msgid "Last seen %s"
 #~ msgstr "Motivo: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Ação de clique esquerdo"
+
 #~ msgid "Local System Time"
 #~ msgstr "Hora de Sistema Local"
 
@@ -7167,9 +7155,15 @@ msgstr "…ou solte aqui"
 #~ msgid "Open Link"
 #~ msgstr "Abra com _Link"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Abrir link no Navegador"
+
 #, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "Abrir"
+
+#~ msgid "Open _Folder"
+#~ msgstr "Abrir _Pasta"
 
 #~ msgid "Open search bar"
 #~ msgstr "Abrir barra de pesquisa"
@@ -7299,6 +7293,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Save File as…"
 #~ msgstr "Salvar Arquivo como…"
 
+#, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Salvar Como…"
+
 #~ msgid "Select File…"
 #~ msgstr "Selecione o Arquivo…"
 
@@ -7364,6 +7362,9 @@ msgstr "…ou solte aqui"
 #~ msgid "Server Uptime"
 #~ msgstr "Tempo de Atividade do Servidor"
 
+#~ msgid "Set status message"
+#~ msgstr "Definir mensagem de status"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
 #~ "Defina sua atividade ou sintonize para mostrar aos seus amigos como você "
@@ -7400,6 +7401,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Show debug console"
 #~ msgstr "Mostrar console XML"
 
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "A visualização de áudio não está disponível"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Mostre seu próprio fluxo de vídeo em chamadas"
 
@@ -7426,6 +7431,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Status e mensagem de status para todas as contas"
+
+#~ msgid "Status message…"
+#~ msgstr "Mensagem de status…"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7478,6 +7486,10 @@ msgstr "…ou solte aqui"
 #~ msgstr "Versão"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Falha na verificação de TLS: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7492,6 +7504,10 @@ msgstr "…ou solte aqui"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta conta não está conectada ao servidor"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "Apenas moderadores podem ver seu endereço XMPP"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7539,6 +7555,10 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Upload Files"
 #~ msgstr "Fazer Envio de Arquivos"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "A imagem selecionada não pôde ser carregada."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Usar Servidor STUN"
@@ -7630,6 +7650,9 @@ msgstr "…ou solte aqui"
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Não pergunte novamente"
 
+#~ msgid "_Download"
+#~ msgstr "_Baixar"
+
 #~ msgid "_Download Again"
 #~ msgstr "_Baixar Novamente"
 
@@ -7652,11 +7675,18 @@ msgstr "…ou solte aqui"
 #~ msgid "_New post"
 #~ msgstr "_Nova postagem"
 
+#~ msgid "_Open"
+#~ msgstr "_Abrir"
+
 #~ msgid "_Open Folder"
 #~ msgstr "_Abrir Pasta"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Preferências"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Salvar Como…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr ""
@@ -7677,6 +7707,10 @@ msgstr "…ou solte aqui"
 
 #~ msgid "_View"
 #~ msgstr "_Visualizar"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Abrir pasta"
 
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferências de arquivos"

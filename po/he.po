@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -176,10 +176,6 @@ msgstr "%(jid)s הוזמן/ה לחדר זה"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s עזב/ה"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -517,9 +513,6 @@ msgstr "חשבונות"
 
 msgid "Accounts"
 msgstr "חשבונות"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 # In Hebrew: גאג'ים
 #, fuzzy
@@ -1360,6 +1353,9 @@ msgstr ""
 msgid "Color"
 msgstr "צבע"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "רשימת אסירה"
@@ -1490,30 +1486,6 @@ msgid "Contact List – %(account)s"
 msgstr "קיצורי מקש"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "איש קשר מחובר"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "קיצורי מקש"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "איש קשר מחובר"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "איש קשר מנותק"
-
-# BUG: no Dot
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "צבע התראה של התנתקות איש קשר"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "שורת חשבון"
 
@@ -1565,10 +1537,6 @@ msgstr "cli"
 #, fuzzy
 msgid "Copy Address"
 msgstr "ה_עתק כתובת JID/דוא״ל"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1652,9 +1620,6 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Creating Account..."
 msgstr "הסרת חשבון ‫%s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "אישורי Oauth2"
@@ -1700,10 +1665,6 @@ msgstr "שם _משתמש:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "התחברות נכשלה"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1930,21 +1891,9 @@ msgstr ""
 msgid "Download"
 msgstr "הורדה"
 
-#, fuzzy
-msgid "Download File"
-msgstr "הורדה"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "אל ת_שאל אותי שוב"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "קדם הודעות אשר לא נקראו"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "כעת טוען"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1956,6 +1905,10 @@ msgstr "cli"
 
 msgid "Eating"
 msgstr "אוכל"
+
+#, fuzzy
+msgid "Edit"
+msgstr "ע_ריכה"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2307,8 +2260,9 @@ msgstr "קובץ ריק"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "שם קובץ: %s"
 
 # BUG: File too big
 #, fuzzy
@@ -2998,9 +2952,6 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3597,16 +3548,8 @@ msgid "Open Folder"
 msgstr "_פתח תיקיה מכילה"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_פתח קישור בתוך דפדפן"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_פתח קישור בתוך דפדפן"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_פתח תיקיה מכילה"
 
 msgid "Open as _Link"
 msgstr "פתח בתור _קישור"
@@ -3625,6 +3568,10 @@ msgstr "תעודת לקוח"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "בחופשה"
+
+#, fuzzy
+msgid "Organization"
 msgstr "בחופשה"
 
 msgid "Organization (O): "
@@ -3978,6 +3925,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4494,10 +4444,6 @@ msgstr "שמור סיסמה"
 msgid "Save as..."
 msgstr "נשמר בתוך: ‎%s"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "נשמר בתוך: ‎%s"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4627,6 +4573,14 @@ msgstr "אזהרה: %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "אזהרה: %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "שנה שם _כינוי..."
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "משתתפים"
 
 #, fuzzy
 msgid "Select Account"
@@ -4782,10 +4736,6 @@ msgstr "cli"
 msgid "Set date…"
 msgstr "אחראי"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "cli"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4934,10 +4884,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "סשנים קוליים אינם זמינים"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -5105,10 +5051,6 @@ msgstr "הודעת מצב"
 #, fuzzy
 msgid "Status is shared"
 msgstr "הודעת מצב"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "הודעת _מצב:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5323,12 +5265,11 @@ msgstr "סנכרון"
 msgid "System"
 msgstr "<b>מערכת:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "אימות תעודת SSL עבור %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5546,10 +5487,6 @@ msgid ""
 msgstr "שם זה כבר מצוי בשימוש. האם ברצונך להחליף את הודעת המצב הקיימת?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "ה_עתק כתובת JID/דוא״ל"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "התעודה בוטלה"
 
@@ -5643,6 +5580,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "לא זמין"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "זמן"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5798,6 +5739,10 @@ msgstr "לא ידועה"
 msgid "Unknown Artist"
 msgstr "אמן לא ידוע"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "שגיאת SSL לא מוכרת: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "שגיאת SSL לא מוכרת: %d"
@@ -5889,11 +5834,6 @@ msgstr "לא היתה אפשרות להטעין תמונה"
 #, fuzzy
 msgid "Upload File…"
 msgstr "שמור קובץ בשם..."
-
-# BUG: general title without "the"
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "השירות לא היה יכול להימצא"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6467,10 +6407,6 @@ msgstr "חשבון שגוי"
 msgid "_Do not ask me again"
 msgstr "אל ת_שאל אותי שוב"
 
-#, fuzzy
-msgid "_Download"
-msgstr "אל ת_שאל אותי שוב"
-
 msgid "_Edit"
 msgstr "ע_ריכה"
 
@@ -6548,10 +6484,6 @@ msgid "_Offline"
 msgstr "לא מ_קוון"
 
 #, fuzzy
-msgid "_Open"
-msgstr "‏OpenPGP: "
-
-#, fuzzy
 msgid "_Overwrite"
 msgstr "להחליף?"
 
@@ -6599,10 +6531,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "נשמר בתוך: ‎%s"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "נשמר בתוך: ‎%s"
 
 msgid "_Search"
@@ -6861,10 +6789,6 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "שנה שם _כינוי..."
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7306,6 +7230,27 @@ msgstr ""
 #~ msgstr "הודעת איש קשר:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "איש קשר מחובר"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "קיצורי מקש"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "איש קשר מחובר"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "איש קשר מנותק"
+
+# BUG: no Dot
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "צבע התראה של התנתקות איש קשר"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "הרשמה בוטלה"
 
@@ -7329,6 +7274,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "ה_עתק כתובת JID/דוא״ל"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7364,6 +7313,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "‎מפתחים נוכחיים:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "התחברות נכשלה"
 
 #~ msgid "Default"
 #~ msgstr "ברירת מחדל"
@@ -7407,12 +7360,24 @@ msgstr ""
 #~ msgstr "הורדה"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "הורדה"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "הורדה"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "אל ת_שאל אותי שוב"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "אל ת_שאל אותי שוב"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "כעת טוען"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7474,10 +7439,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "תכונות"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "שם קובץ: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7691,8 +7652,16 @@ msgstr ""
 #~ msgstr "פתח בתור _קישור"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_פתח קישור בתוך דפדפן"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "‏OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_פתח תיקיה מכילה"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7818,6 +7787,10 @@ msgstr ""
 #~ msgstr "שמור קובץ בשם..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "נשמר בתוך: ‎%s"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "שלח _קובץ"
 
@@ -7880,6 +7853,10 @@ msgstr ""
 #~ msgid "Server Uptime"
 #~ msgstr "תגובת שרת: %s"
 
+#, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "cli"
+
 # In Hebrew: גאג'ים
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7900,6 +7877,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "הצג _מסוף XML"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "סשנים קוליים אינם זמינים"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7928,6 +7909,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "הודעת _מצב:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7970,6 +7955,10 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "גרסא:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "אימות תעודת SSL עבור %s"
+
 # אופן מסולף
 #, fuzzy, python-format
 #~ msgid ""
@@ -7988,6 +7977,10 @@ msgstr ""
 # Should this be "to its server" OR "to a server"?
 #~ msgid "This account is not connected to the server"
 #~ msgstr "חשבון זה אינו מחובר כעת לשרת"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "ה_עתק כתובת JID/דוא״ל"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -8030,6 +8023,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "שמור קובץ בשם..."
+
+# BUG: general title without "the"
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "השירות לא היה יכול להימצא"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -8127,6 +8125,10 @@ msgstr ""
 #~ msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "אל ת_שאל אותי שוב"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "אל ת_שאל אותי שוב"
 
@@ -8152,12 +8154,20 @@ msgstr ""
 #~ msgstr "פוסט חדש"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "‏OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_פתח תיקיה מכילה"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "העדפות"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "נשמר בתוך: ‎%s"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -8177,6 +8187,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_תצוגה"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_פתח תיקיה מכילה"
 
 #~ msgid "file transfers list"
 #~ msgstr "רשימת העברת קבצים"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
-"PO-Revision-Date: 2025-09-17 02:18+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"PO-Revision-Date: 2025-11-01 01:52+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -164,10 +164,6 @@ msgstr "%s 已被移出此群聊"
 #, python-format
 msgid "%s has joined"
 msgstr "%s 已加入"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s 已阅读至此"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -462,9 +458,6 @@ msgstr "账号：%s"
 msgid "Accounts"
 msgstr "账号"
 
-msgid "Action for left-clicking a preview"
-msgstr "左键单击预览时的操作"
-
 msgid "Action on Close"
 msgstr "关闭时的操作"
 
@@ -602,7 +595,7 @@ msgstr "高级设置"
 
 #, python-format
 msgid "Advanced – %(account)s"
-msgstr "高级 – %(account)s"
+msgstr "高级 - %(account)s"
 
 #, python-format
 msgid "Adw Version: %s"
@@ -739,7 +732,7 @@ msgstr "归档"
 
 #, python-format
 msgid "Archiving – %(account)s"
-msgstr "归档 – %(account)s"
+msgstr "归档 - %(account)s"
 
 msgid "Ask For Status Message on…"
 msgstr "在以下情况询问状态消息…"
@@ -893,7 +886,7 @@ msgstr "已屏蔽的联系人"
 
 #, python-format
 msgid "Blocked Contacts – %(account)s"
-msgstr "已屏蔽的联系人 – %(account)s"
+msgstr "已屏蔽的联系人 - %(account)s"
 
 msgid "Blocked Participants"
 msgstr "已屏蔽的参与者"
@@ -972,7 +965,7 @@ msgstr "证书"
 
 #, python-format
 msgid "Certificate - %(account)s"
-msgstr "证书 – %(account)s"
+msgstr "证书 - %(account)s"
 
 msgid "Certificate Verification Failed"
 msgstr "证书验证失败"
@@ -1169,6 +1162,9 @@ msgstr "代码片段"
 msgid "Color"
 msgstr "颜色"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr "用于快速回应按钮的以逗号分隔的表情符号列表"
+
 msgid "Command List"
 msgstr "命令列表"
 
@@ -1179,7 +1175,7 @@ msgid "Commands"
 msgstr "命令"
 
 msgid "Common Name (CN): "
-msgstr "通用名称 (CN)： "
+msgstr "通用名称（CN）： "
 
 #, python-format
 msgid ""
@@ -1252,7 +1248,7 @@ msgstr "无法与 %s 建立连接。"
 
 #, python-format
 msgid "Connection – %(account)s"
-msgstr "连接 – %(account)s"
+msgstr "连接 - %(account)s"
 
 msgid "Contact"
 msgstr "联系人"
@@ -1280,25 +1276,7 @@ msgstr "联系人列表交换"
 
 #, python-format
 msgid "Contact List – %(account)s"
-msgstr "联系人列表 – %(account)s"
-
-msgid "Contact List: Contact Background Color"
-msgstr "联系人列表：联系人背景颜色"
-
-msgid "Contact List: Contact Font"
-msgstr "联系人列表：联系人字体"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "联系人列表：联系人前景颜色"
-
-msgid "Contact List: Group Background Color"
-msgstr "联系人列表：分组背景颜色"
-
-msgid "Contact List: Group Font"
-msgstr "联系人列表：分组字体"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "联系人列表：分组前景颜色"
+msgstr "联系人列表 - %(account)s"
 
 msgid "Contact Removed"
 msgstr "联系人已移除"
@@ -1339,9 +1317,6 @@ msgstr "复制"
 
 msgid "Copy Address"
 msgstr "复制地址"
-
-msgid "Copy Link"
-msgstr "复制链接"
 
 msgid "Copy Text"
 msgstr "复制文本"
@@ -1408,9 +1383,6 @@ msgstr "创建新群聊"
 msgid "Creating Account..."
 msgstr "正在创建账号…"
 
-msgid "Creating thumbnail failed"
-msgstr "创建缩略图失败"
-
 msgid "Credentials expired"
 msgstr "凭据已过期"
 
@@ -1449,9 +1421,6 @@ msgstr "减小字体大小"
 
 msgid "Decrease playback speed"
 msgstr "减慢播放速度"
-
-msgid "Decryption failed"
-msgstr "解密失败"
 
 msgid "Default Encryption"
 msgstr "默认加密方式"
@@ -1522,7 +1491,7 @@ msgstr "详情"
 
 #, python-format
 msgid "Details - %(account)s"
-msgstr "详情 – %(account)s"
+msgstr "详情 - %(account)s"
 
 msgid "Details about the certificate used by this connection"
 msgstr "此连接使用的证书详情"
@@ -1647,19 +1616,9 @@ msgstr "执行操作后会永久删除此指纹"
 msgid "Download"
 msgstr "下载"
 
-msgid "Download File"
-msgstr "下载文件"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "下载失败（%s）"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "已下载 %s 条消息"
-
-msgid "Downloading…"
-msgstr "正在下载…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1670,6 +1629,9 @@ msgstr "将文件拖放到此处"
 
 msgid "Eating"
 msgstr "用餐中"
+
+msgid "Edit"
+msgstr "编辑"
 
 msgid "Edit Shortcut"
 msgstr "编辑快捷键"
@@ -1743,7 +1705,7 @@ msgstr "加密（OMEMO）"
 
 #, python-format
 msgid "Encryption (OMEMO) – %(account)s"
-msgstr "加密（OMEMO）– %(account)s"
+msgstr "加密（OMEMO）- %(account)s"
 
 msgid "Encryption Error"
 msgstr "加密错误"
@@ -1958,8 +1920,8 @@ msgstr "文件为空"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "文件太大，允许的最大文件大小为：%s"
 
-msgid "File size unknown"
-msgstr "文件大小未知"
+msgid "File saved"
+msgstr "文件已保存"
 
 msgid "File too big"
 msgstr "文件太大"
@@ -2081,7 +2043,7 @@ msgid "Gajim %s is available"
 msgstr "Gajim %s 可用"
 
 msgid "Gajim - Error"
-msgstr "Gajim – 错误"
+msgstr "Gajim - 错误"
 
 msgid "Gajim Themes"
 msgstr "Gajim 主题"
@@ -2110,9 +2072,8 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim 与归档完全同步。"
 
-#, fuzzy
 msgid "Gajim is quitting…"
-msgstr "%s 正在输入…"
+msgstr "Gajim 正在退出…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2137,7 +2098,7 @@ msgstr "常规"
 
 #, python-format
 msgid "General – %(account)s"
-msgstr "常规 – %(account)s"
+msgstr "常规 - %(account)s"
 
 msgid "Global Group Chat Search"
 msgstr "全局群聊搜索"
@@ -2243,7 +2204,7 @@ msgstr "主机名"
 
 #, python-format
 msgid "Hostname – %(account)s"
-msgstr "主机名 – %(account)s"
+msgstr "主机名 - %(account)s"
 
 #, python-format
 msgid ""
@@ -2544,9 +2505,6 @@ msgstr "离开群聊？"
 msgid "Leave _Permanently"
 msgstr "永久离开(_P)"
 
-msgid "Left Click Action"
-msgstr "左键单击操作"
-
 msgid "Let others know if you read up to this point"
 msgstr "让其他人知道您已阅读至此"
 
@@ -2607,7 +2565,7 @@ msgstr "登录"
 
 #, python-format
 msgid "Login – %(account)s"
-msgstr "登录 – %(account)s"
+msgstr "登录 - %(account)s"
 
 msgid "Look it up in _Dictionary"
 msgstr "在词典中查找内容(_D)"
@@ -3058,14 +3016,8 @@ msgstr "打开电子邮件编辑器"
 msgid "Open Folder"
 msgstr "打开文件夹"
 
-msgid "Open Link in Browser"
-msgstr "在浏览器中打开链接"
-
 msgid "Open Link in _Browser"
 msgstr "在浏览器中打开链接(_B)"
-
-msgid "Open _Folder"
-msgstr "打开文件夹(_F)"
 
 msgid "Open as _Link"
 msgstr "以链接形式打开(_L)"
@@ -3083,8 +3035,11 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "组织"
 
+msgid "Organization"
+msgstr "组织"
+
 msgid "Organization (O): "
-msgstr "组织 (O)： "
+msgstr "组织（O）： "
 
 msgctxt "Gender"
 msgid "Other"
@@ -3372,7 +3327,7 @@ msgstr "隐私"
 
 #, python-format
 msgid "Privacy – %(account)s"
-msgstr "隐私 – %(account)s"
+msgstr "隐私 - %(account)s"
 
 msgid "Private"
 msgstr "私人"
@@ -3390,12 +3345,15 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "项目讨论"
 
+msgid "Pronouns"
+msgstr "代词"
+
 msgid "Protocol"
 msgstr "协议"
 
 #, python-format
 msgid "Provider - %(account)s"
-msgstr "提供者 – %(account)s"
+msgstr "提供者 - %(account)s"
 
 #, python-format
 msgid "Provider Category: %s"
@@ -3403,7 +3361,7 @@ msgstr "提供者类别：%s"
 
 #, python-format
 msgid "Provider Contacts - %(account)s"
-msgstr "提供者联系方式 – %(account)s"
+msgstr "提供者联系方式 - %(account)s"
 
 msgid "Provider Infos"
 msgstr "提供者信息"
@@ -3730,9 +3688,8 @@ msgstr "资源"
 msgid "Restart Gajim to finish this update"
 msgstr "‌重启 Gajim 以完成此更新"
 
-#, fuzzy
 msgid "Restart Gajim to start debug logging"
-msgstr "‌重启 Gajim 以完成此更新"
+msgstr "重启 Gajim 以开始调试日志记录‌"
 
 msgid "Restart Pending"
 msgstr "‌重启待处理"
@@ -3801,9 +3758,6 @@ msgid "Save Password"
 msgstr "保存密码"
 
 msgid "Save as..."
-msgstr "另存为…"
-
-msgid "Save as…"
 msgstr "另存为…"
 
 msgid "Save display name"
@@ -3918,6 +3872,14 @@ msgstr "安全标签"
 
 msgid "Security Warning"
 msgstr "安全警告"
+
+#, python-format
+msgid "Seen by %s"
+msgstr "由 %s 看到"
+
+#, python-format
+msgid "Seen by %s participants"
+msgstr "由 %s 参与者看到"
 
 msgid "Select Account"
 msgstr "选择账号"
@@ -4041,9 +4003,6 @@ msgstr "设置配置目录"
 msgid "Set date…"
 msgstr "设置日期…"
 
-msgid "Set status message"
-msgstr "设置状态消息"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "设置环境变量以便打印 GLib 调试信息"
 
@@ -4163,9 +4122,6 @@ msgstr "在公开群聊中自动显示预览（可能会泄露您的数据）"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr "显示任何包含图片的 URL 的预览（可能存在安全风险）"
-
-msgid "Show previews for files"
-msgstr "显示文件预览"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "显示短代码建议，例如 :+1:"
@@ -4305,9 +4261,6 @@ msgstr "未共享状态"
 
 msgid "Status is shared"
 msgstr "已共享状态"
-
-msgid "Status message…"
-msgstr "状态消息…"
 
 msgid "Status: Away Color"
 msgstr "状态：离开颜色"
@@ -4485,13 +4438,12 @@ msgstr "正在同步聊天记录…"
 msgid "System"
 msgstr "系统"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "TLS 验证失败：%s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "团队"
+
+msgid "Telephone"
+msgstr "电话"
 
 msgid "Tell your contacts if you received a message"
 msgstr "让您的联系人知道您收到了消息"
@@ -4684,9 +4636,6 @@ msgstr ""
 "这是您当前使用的主题。\n"
 "是否要删除此主题？"
 
-msgid "This is your XMPP address"
-msgstr "这是您的 XMPP 地址"
-
 msgid "This message has been moderated"
 msgstr "此消息已审核撤回"
 
@@ -4709,7 +4658,7 @@ msgstr ""
 "此消息已使用传统 OpenPGP 加密且无法解密。您可以安装 PGP 插件来处理此类消息。"
 
 msgid "This message was encrypted with OMEMO, but not for your device."
-msgstr "此消息已使用 OMEMO 加密，但未对您的设备加密。"
+msgstr "此消息已使用 OMEMO 加密，但未针对您的设备进行加密。"
 
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "此消息已使用 OTR 加密且无法解密。"
@@ -4774,6 +4723,9 @@ msgstr "离开倒计时"
 
 msgid "Time Until Not Available"
 msgstr "没空倒计时"
+
+msgid "Time Zone"
+msgstr "时区"
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -4909,6 +4861,9 @@ msgstr "未知"
 msgid "Unknown Artist"
 msgstr "未知艺术家"
 
+msgid "Unknown Error"
+msgstr "未知错误"
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "未知 SSL 错误“%s”"
@@ -4984,9 +4939,6 @@ msgstr "正在更新提供者列表…"
 
 msgid "Upload File…"
 msgstr "上传文件…"
-
-msgid "Upload could not be completed."
-msgstr "无法完成上传。"
 
 msgid "Uploading Avatar Failed"
 msgstr "上传头像失败"
@@ -5466,9 +5418,6 @@ msgstr "禁用账号(_D)"
 msgid "_Do not ask me again"
 msgstr "不再询问(_D)"
 
-msgid "_Download"
-msgstr "下载(_D)"
-
 msgid "_Edit"
 msgstr "编辑(_E)"
 
@@ -5531,9 +5480,6 @@ msgstr "确定(_O)"
 msgid "_Offline"
 msgstr "离线(_O)"
 
-msgid "_Open"
-msgstr "打开(_O)"
-
 msgid "_Overwrite"
 msgstr "覆盖(_O)"
 
@@ -5575,9 +5521,6 @@ msgstr "撤回(_R)"
 
 msgid "_Save"
 msgstr "保存(_S)"
-
-msgid "_Save as…"
-msgstr "另存为(_S)…"
 
 msgid "_Search"
 msgstr "搜索(_S)"
@@ -5820,10 +5763,6 @@ msgstr "…或将其拖放到此处"
 #~ "\n"
 #~ "如果您选择永久离开，可能需要别人邀请您才能再次加入此群聊"
 
-#, python-format
-#~ msgid " by %s"
-#~ msgstr " 由 %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " {actor}"
@@ -5839,6 +5778,10 @@ msgstr "…或将其拖放到此处"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s 个群聊已找到"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s 已阅读至此"
 
 #, python-format
 #~ msgid ""
@@ -6117,6 +6060,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Account Settings…"
 #~ msgstr "账号设置…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "左键单击预览时的操作"
+
 #~ msgid "Activity"
 #~ msgstr "活动"
 
@@ -6299,6 +6245,24 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Contact Addresses"
 #~ msgstr "联系地址"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "联系人列表：联系人背景颜色"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "联系人列表：联系人字体"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "联系人列表：联系人前景颜色"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "联系人列表：分组背景颜色"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "联系人列表：分组字体"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "联系人列表：分组前景颜色"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "联系人已取消订阅"
 
@@ -6316,6 +6280,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "复制电子邮件地址"
+
+#~ msgid "Copy Link"
+#~ msgstr "复制链接"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "复制链接位置"
@@ -6341,6 +6308,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Create new post"
 #~ msgstr "创建新消息"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "创建缩略图失败"
+
 #~ msgid "Current Developers"
 #~ msgstr "当前开发人员"
 
@@ -6352,6 +6322,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Decrease User Interface Font Size"
 #~ msgstr "减小用户界面字体大小"
+
+#~ msgid "Decryption failed"
+#~ msgstr "解密失败"
 
 #~ msgid "Default"
 #~ msgstr "默认"
@@ -6399,11 +6372,21 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Download"
 #~ msgstr "下载"
 
+#~ msgid "Download File"
+#~ msgstr "下载文件"
+
 #~ msgid "Download Update"
 #~ msgstr "下载更新"
 
 #~ msgid "Download and Install"
 #~ msgstr "下载并安装"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "下载失败（%s）"
+
+#~ msgid "Downloading…"
+#~ msgstr "正在下载…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "拖放文件或联系人"
@@ -6461,9 +6444,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Features:"
 #~ msgstr "功能："
 
-#~ msgid "File Name: "
-#~ msgstr "文件名： "
-
 #~ msgid "File Offered"
 #~ msgstr "文件已提供"
 
@@ -6478,6 +6458,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "File error"
 #~ msgstr "文件错误"
+
+#~ msgid "File size unknown"
+#~ msgstr "文件大小未知"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr "文件太大，将使用直接传输（未加密）"
@@ -6629,6 +6612,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Last seen %s"
 #~ msgstr "最后上线 %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "左键单击操作"
+
 #~ msgid "Local System Time"
 #~ msgstr "本地系统时间"
 
@@ -6699,8 +6685,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Open Link"
 #~ msgstr "打开链接"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "在浏览器中打开链接"
+
 #~ msgid "Open Path"
 #~ msgstr "打开路径"
+
+#~ msgid "Open _Folder"
+#~ msgstr "打开文件夹(_F)"
 
 #~ msgid "Open search bar"
 #~ msgstr "打开搜索栏"
@@ -6840,6 +6832,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Save File as…"
 #~ msgstr "另存文件为…"
 
+#~ msgid "Save as…"
+#~ msgstr "另存为…"
+
 #~ msgid "Search your conversation"
 #~ msgstr "搜索您的对话"
 
@@ -6903,6 +6898,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Server Uptime"
 #~ msgstr "服务器运行时间"
 
+#~ msgid "Set status message"
+#~ msgstr "设置状态消息"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr "设置活动或音乐来向朋友展示您的感受"
 
@@ -6933,6 +6931,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Show debug console"
 #~ msgstr "显示调试控制台"
 
+#~ msgid "Show previews for files"
+#~ msgstr "显示文件预览"
+
 #~ msgid "Show the header bar"
 #~ msgstr "显示标题栏"
 
@@ -6960,6 +6961,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "所有账号的状态和状态消息"
+
+#~ msgid "Status message…"
+#~ msgstr "状态消息…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7009,6 +7013,10 @@ msgstr "…或将其拖放到此处"
 #~ msgstr "TLS 版本"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "TLS 验证失败：%s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7022,6 +7030,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "此账号没有连接到服务器"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "这是您的 XMPP 地址"
 
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "切换菜单栏"
@@ -7065,6 +7076,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Upload Files"
 #~ msgstr "上传文件"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "无法完成上传。"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "使用 STUN 服务器"
@@ -7166,6 +7180,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "_Don’t ask again"
 #~ msgstr "不再询问(_D)"
 
+#~ msgid "_Download"
+#~ msgstr "下载(_D)"
+
 #~ msgid "_Download Again"
 #~ msgstr "重新下载(_D)"
 
@@ -7187,11 +7204,17 @@ msgstr "…或将其拖放到此处"
 #~ msgid "_New post"
 #~ msgstr "新帖子(_N)"
 
+#~ msgid "_Open"
+#~ msgstr "打开(_O)"
+
 #~ msgid "_Open Folder"
 #~ msgstr "打开文件夹(_O)"
 
 #~ msgid "_Preferences"
 #~ msgstr "首选项(_P)"
+
+#~ msgid "_Save as…"
+#~ msgstr "另存为(_S)…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "文件传输完成时显示通知(_S)"
@@ -7210,6 +7233,10 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "_View"
 #~ msgstr "查看(_V)"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "打开文件夹"
 
 #~ msgid "dark skin tone"
 #~ msgstr "较深肤色"

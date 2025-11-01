@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -157,10 +157,6 @@ msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s odišiel"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -493,9 +489,6 @@ msgstr "Účty"
 
 msgid "Accounts"
 msgstr "Účty"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1322,6 +1315,9 @@ msgstr ""
 msgid "Color"
 msgstr "Farba"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Čierna listina"
@@ -1453,29 +1449,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kontakt odpojený"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kontakt pripojený"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kontakt odpojený"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kontakt pripojený"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kontakt odpojený"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Zobraziť udalosť v zozname"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Účet"
 
@@ -1524,10 +1497,6 @@ msgstr "JID miestnosti"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopírovať JID/e-mailovú adresu"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1611,9 +1580,6 @@ msgstr "Opustiť diskusnú skupinu"
 msgid "Creating Account..."
 msgstr "Odstraňuje sa účet %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certifikát vypršal"
@@ -1659,10 +1625,6 @@ msgstr "_Používateľské meno:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Spojenie zlyhalo"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1889,21 +1851,9 @@ msgstr ""
 msgid "Download"
 msgstr "Stiahnuť"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Stiahnuť"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Znovu sa už _nepýtať"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Preposlať neprečítané správy"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Kódim"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1915,6 +1865,10 @@ msgstr "Poslať súbor kontaktu"
 
 msgid "Eating"
 msgstr "Jem"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Upraviť"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2247,8 +2201,9 @@ msgstr "Súbor je prázdny"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Názov súboru: %s"
 
 #, fuzzy
 msgid "File too big"
@@ -2918,9 +2873,6 @@ msgstr "Opustiť diskusnú skupinu"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3511,16 +3463,8 @@ msgid "Open Folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Otvoriť odkaz v prehliadači"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Otvoriť odkaz v prehliadači"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Otvoriť priečinok s obsahom"
 
 msgid "Open as _Link"
 msgstr "Otvoriť ako _odkaz"
@@ -3539,6 +3483,10 @@ msgstr "Certifikát podpísaný sám sebou"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Na dovolenke"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Na dovolenke"
 
 msgid "Organization (O): "
@@ -3888,6 +3836,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4388,10 +4339,6 @@ msgstr "Uložiť heslo"
 msgid "Save as..."
 msgstr "Má"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Má"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4516,6 +4463,14 @@ msgstr "Zakazujem %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Zakazujem %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Zmeniť p_rezývku..."
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Účastníci"
 
 #, fuzzy
 msgid "Select Account"
@@ -4667,10 +4622,6 @@ msgstr "%s konfiguračná chyba"
 msgid "Set date…"
 msgstr "Moderátor"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "správa o stave"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4818,10 +4769,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Pripojenie nie je dostupné"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4987,10 +4934,6 @@ msgstr "Správa o stave"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Správa o stave"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Správa o stave:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5201,12 +5144,11 @@ msgstr "Synchronizovať"
 msgid "System"
 msgstr "<b>Systém:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Chyba SSL certifikátu"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5428,10 +5370,6 @@ msgid ""
 msgstr "Tento názov je už použitý. Chcete prepísať túto správu o stave?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopírovať JID/e-mailovú adresu"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Táto správa je šifrovaná]"
 
@@ -5523,6 +5461,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Neprítomný"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Čas"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5677,6 +5619,10 @@ msgstr "?OS:Neznámy"
 msgid "Unknown Artist"
 msgstr "Neznámy umelec"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Neznáma chyba SSL: %d"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Neznáma chyba SSL: %d"
@@ -5766,10 +5712,6 @@ msgstr "Nie je možné načítať obrázok"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Uložiť súbor ako..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Služba nebola nájdená"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6321,10 +6263,6 @@ msgstr "Neplatný účet"
 msgid "_Do not ask me again"
 msgstr "Znovu sa už _nepýtať"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Znovu sa už _nepýtať"
-
 msgid "_Edit"
 msgstr "_Upraviť"
 
@@ -6399,10 +6337,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Odhlásený"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenGPG"
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6451,10 +6385,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Má"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Má"
 
 msgid "_Search"
@@ -6708,10 +6638,6 @@ msgstr "%(nick)s je teraz %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Zmeniť p_rezývku..."
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7134,6 +7060,26 @@ msgstr ""
 #~ msgstr "Správa kontaktu:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontakt pripojený"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kontakt odpojený"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontakt pripojený"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontakt odpojený"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Zobraziť udalosť v zozname"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Nezapísaný"
 
@@ -7156,6 +7102,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopírovať JID/e-mailovú adresu"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7191,6 +7141,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Súčasní vývojári:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Spojenie zlyhalo"
 
 #~ msgid "Default"
 #~ msgstr "Predvolené"
@@ -7232,12 +7186,24 @@ msgstr ""
 #~ msgstr "Stiahnuť"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Stiahnuť"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Stiahnuť"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Znovu sa už _nepýtať"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Znovu sa už _nepýtať"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Kódim"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7278,10 +7244,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Funkcie"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Názov súboru: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7475,8 +7437,16 @@ msgstr ""
 #~ msgstr "Otvoriť ako _odkaz"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Otvoriť odkaz v prehliadači"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenGPG"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Otvoriť priečinok s obsahom"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7589,6 +7559,10 @@ msgstr ""
 #~ msgstr "Uložiť súbor ako..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Má"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Poslať _súbor"
 
@@ -7651,6 +7625,10 @@ msgstr ""
 #~ msgstr "Server odpovedal: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "správa o stave"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7669,6 +7647,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Zobraziť _XML konzolu"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Pripojenie nie je dostupné"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7692,6 +7674,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Zmeniť stav účtu alebo účtov"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Správa o stave:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7732,11 +7718,19 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "Verzia GTK+:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Chyba SSL certifikátu"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Služba nebola nájdená"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet nie je pripojený k serveru"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopírovať JID/e-mailovú adresu"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7779,6 +7773,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Uložiť súbor ako..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Služba nebola nájdená"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7872,6 +7870,10 @@ msgstr ""
 #~ msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Znovu sa už _nepýtať"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Znovu sa už _nepýtať"
 
@@ -7896,12 +7898,20 @@ msgstr ""
 #~ msgstr "Nová správa"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenGPG"
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Otvoriť priečinok s obsahom"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Predvoľby"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Má"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7921,6 +7931,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Zobraziť"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Otvoriť priečinok s obsahom"
 
 #~ msgid "file transfers list"
 #~ msgstr "zoznam prenosu súborov"

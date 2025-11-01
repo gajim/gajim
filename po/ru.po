@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
-"PO-Revision-Date: 2025-09-10 20:28+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"PO-Revision-Date: 2025-10-22 10:48+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -173,10 +173,6 @@ msgstr "%s был удален из этого группового чата"
 #, python-format
 msgid "%s has joined"
 msgstr "%s присоединился"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s прочитал до этого момента"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -474,9 +470,6 @@ msgstr "Учётная запись: %s"
 
 msgid "Accounts"
 msgstr "Учётные записи"
-
-msgid "Action for left-clicking a preview"
-msgstr "Действие при нажатии левой клавиши мыши по предпросмотру"
 
 msgid "Action on Close"
 msgstr "Событие при закрытии"
@@ -1200,6 +1193,9 @@ msgstr "Фрагмент кода"
 msgid "Color"
 msgstr "Цвет"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr "Список эмоджи, разделенных запятыми, для кнопок быстрых реакций"
+
 msgid "Command List"
 msgstr "Список команд"
 
@@ -1314,24 +1310,6 @@ msgstr "Обмен списками контактов"
 msgid "Contact List – %(account)s"
 msgstr "Список контактов - %(account)s"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Список контактов: Цвет фона контакта"
-
-msgid "Contact List: Contact Font"
-msgstr "Список контактов: Шрифт контакта"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Список контактов: Основной цвет контакта"
-
-msgid "Contact List: Group Background Color"
-msgstr "Список контактов: Цвет фона группы"
-
-msgid "Contact List: Group Font"
-msgstr "Список контактов: Шрифт группы"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Список контактов: Основной цвет группы"
-
 msgid "Contact Removed"
 msgstr "Контакт удален"
 
@@ -1371,9 +1349,6 @@ msgstr "Копировать"
 
 msgid "Copy Address"
 msgstr "Копировать адрес"
-
-msgid "Copy Link"
-msgstr "Копировать ссылку"
 
 msgid "Copy Text"
 msgstr "Копировать текст"
@@ -1440,14 +1415,11 @@ msgstr "Создание группового чата"
 msgid "Creating Account..."
 msgstr "Создание учетной записи..."
 
-msgid "Creating thumbnail failed"
-msgstr "Не удалось создать миниатюру"
-
 msgid "Credentials expired"
 msgstr "Срок действия учетных данных истек"
 
 msgid "Custom"
-msgstr ""
+msgstr "Пользовательский"
 
 msgid "D-Bus Interface"
 msgstr "Интерфейс D-Bus"
@@ -1481,9 +1453,6 @@ msgstr "Уменьшить размер шрифта"
 
 msgid "Decrease playback speed"
 msgstr "Уменьшить скорость проигрывания"
-
-msgid "Decryption failed"
-msgstr "Не удалось выполнить расшифровку"
 
 msgid "Default Encryption"
 msgstr "Шифрование по умолчанию"
@@ -1685,19 +1654,9 @@ msgstr ""
 msgid "Download"
 msgstr "Скачать"
 
-msgid "Download File"
-msgstr "Скачать файл"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Ошибка скачивания (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "Загружено %s сообщений"
-
-msgid "Downloading…"
-msgstr "Скачивание…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1708,6 +1667,10 @@ msgstr "Перетащите файлы сюда"
 
 msgid "Eating"
 msgstr "Принимаю пищу"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Правка"
 
 msgid "Edit Shortcut"
 msgstr "Настроить сочетание клавиш"
@@ -2001,8 +1964,9 @@ msgstr "Пустой файл"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Файл слишком большой, максимально допустимый размер файла: %s"
 
-msgid "File size unknown"
-msgstr "Размер файла неизвестен"
+#, fuzzy
+msgid "File saved"
+msgstr "Имя файла: "
 
 msgid "File too big"
 msgstr "Слишком большой размер файла"
@@ -2156,9 +2120,8 @@ msgstr ""
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim полностью синхронизирован с архивом."
 
-#, fuzzy
 msgid "Gajim is quitting…"
-msgstr "%s печатает…"
+msgstr "Gajim завершается…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2600,9 +2563,6 @@ msgstr "Покинуть групповой чат?"
 
 msgid "Leave _Permanently"
 msgstr "Покинуть навсегда"
-
-msgid "Left Click Action"
-msgstr "Действие при щелчке левой кнопкой мыши"
 
 msgid "Let others know if you read up to this point"
 msgstr "Позволяет другим знать, прочитали ли Вы сообщение"
@@ -3118,14 +3078,8 @@ msgstr "Открыть почтовый клиент"
 msgid "Open Folder"
 msgstr "Открыть папку"
 
-msgid "Open Link in Browser"
-msgstr "Открыть ссылку в браузере"
-
 msgid "Open Link in _Browser"
 msgstr "Открыть ссылку в _браузере"
-
-msgid "Open _Folder"
-msgstr "Открыть _папку"
 
 msgid "Open as _Link"
 msgstr "Открыть как _ссылку"
@@ -3141,6 +3095,10 @@ msgstr "Операционная система"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Организация"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Организация"
 
 msgid "Organization (O): "
@@ -3455,6 +3413,9 @@ msgstr "Профилирование приложения с помощью cpro
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Обсуждение проекта"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr "Протокол"
@@ -3800,9 +3761,8 @@ msgstr "Ресурс"
 msgid "Restart Gajim to finish this update"
 msgstr "Перезапустите Gajim для завершения обновления"
 
-#, fuzzy
 msgid "Restart Gajim to start debug logging"
-msgstr "Перезапустите Gajim для завершения обновления"
+msgstr "Перезапустите Gajim, чтобы начать запись отладочного лога"
 
 msgid "Restart Pending"
 msgstr "Ожидание перезапуска"
@@ -3872,9 +3832,6 @@ msgstr "Сохранить пароль"
 
 msgid "Save as..."
 msgstr "Сохранить как..."
-
-msgid "Save as…"
-msgstr "Сохранить как…"
 
 msgid "Save display name"
 msgstr "Сохранить отображаемое имя"
@@ -3989,6 +3946,14 @@ msgstr "Метки конфиденциальности"
 
 msgid "Security Warning"
 msgstr "Предупреждение безопасности"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Изменено %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Участники"
 
 msgid "Select Account"
 msgstr "Выбрать учётную запись"
@@ -4113,9 +4078,6 @@ msgstr "Установить каталог конфигурации"
 
 msgid "Set date…"
 msgstr "Установить дату…"
-
-msgid "Set status message"
-msgstr "Установить сообщение о статусе"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4246,9 +4208,6 @@ msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
 "Показывать предпросмотр для любых ссылок на изображения (может быть "
 "небезопасно)"
-
-msgid "Show previews for files"
-msgstr "Показывать предпросмотр для файлов"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Показывать предложения для шорткодов, например, :+1:"
@@ -4390,9 +4349,6 @@ msgstr "Сетевой статус не отправляется"
 
 msgid "Status is shared"
 msgstr "Сетевой статус отправляется"
-
-msgid "Status message…"
-msgstr "Сообщение о статусе…"
 
 msgid "Status: Away Color"
 msgstr "Статус: Цвет для статуса «Отошёл»"
@@ -4572,13 +4528,12 @@ msgstr "Синхронизация истории чата…"
 msgid "System"
 msgstr "Система"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "Сбой проверки TLS: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Группа"
+
+msgid "Telephone"
+msgstr ""
 
 msgid "Tell your contacts if you received a message"
 msgstr "Сообщать контактам о получении сообщений"
@@ -4783,9 +4738,6 @@ msgstr ""
 "Эта тема используется в данный момент.\n"
 "Удалить тему?"
 
-msgid "This is your XMPP address"
-msgstr "Это ваш адрес XMPP"
-
 msgid "This message has been moderated"
 msgstr "Это сообщение было отмодерировано"
 
@@ -4879,6 +4831,10 @@ msgstr "Время до установки статуса «Отошёл»"
 
 msgid "Time Until Not Available"
 msgstr "Время до установки статуса «Недоступен»"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Часовой пояс"
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -5016,6 +4972,9 @@ msgstr "Неизвестно"
 msgid "Unknown Artist"
 msgstr "Неизвестный исполнитель"
 
+msgid "Unknown Error"
+msgstr "Неизвестная ошибка"
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Неизвестная ошибка SSL «%s»"
@@ -5091,9 +5050,6 @@ msgstr "Обновление списка серверов…"
 
 msgid "Upload File…"
 msgstr "Передать файл…"
-
-msgid "Upload could not be completed."
-msgstr "Отправка файла не может быть завершена."
 
 msgid "Uploading Avatar Failed"
 msgstr "Не удалось отправить аватар"
@@ -5585,9 +5541,6 @@ msgstr "_Отключить учётную запись"
 msgid "_Do not ask me again"
 msgstr "_Больше не спрашивать"
 
-msgid "_Download"
-msgstr "_Скачать"
-
 msgid "_Edit"
 msgstr "_Правка"
 
@@ -5650,9 +5603,6 @@ msgstr "_ОК"
 msgid "_Offline"
 msgstr "_Отключён"
 
-msgid "_Open"
-msgstr "_Открыть"
-
 msgid "_Overwrite"
 msgstr "_Перезаписать"
 
@@ -5694,9 +5644,6 @@ msgstr "_Отозвать"
 
 msgid "_Save"
 msgstr "_Сохранить"
-
-msgid "_Save as…"
-msgstr "Сохранить _как…"
 
 msgid "_Search"
 msgstr "_Поиск"
@@ -5936,10 +5883,6 @@ msgstr "{nick} теперь {show} {status}"
 msgid "…or drop it here"
 msgstr "…или перетащите его сюда"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Изменено %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " от {actor}"
@@ -5955,6 +5898,10 @@ msgstr "…или перетащите его сюда"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "Найдено %s групповых чатов"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s прочитал до этого момента"
 
 #, python-format
 #~ msgid ""
@@ -6221,6 +6168,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Account Settings…"
 #~ msgstr "Параметры учётной записи…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Действие при нажатии левой клавиши мыши по предпросмотру"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Включить"
@@ -6411,6 +6361,24 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Contact Addresses"
 #~ msgstr "Контактные адреса"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Список контактов: Цвет фона контакта"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Список контактов: Шрифт контакта"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Список контактов: Основной цвет контакта"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Список контактов: Цвет фона группы"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Список контактов: Шрифт группы"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Список контактов: Основной цвет группы"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Контакт отменил подписку"
 
@@ -6428,6 +6396,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Копировать почтовый адрес"
+
+#~ msgid "Copy Link"
+#~ msgstr "Копировать ссылку"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Копировать адрес ссылки"
@@ -6453,6 +6424,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Create new post"
 #~ msgstr "Создать новое сообщение"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Не удалось создать миниатюру"
+
 #~ msgid "Current Developers"
 #~ msgstr "Разработчики"
 
@@ -6464,6 +6438,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Decrease User Interface Font Size"
 #~ msgstr "Уменьшить размер шрифта пользовательского интерфейса"
+
+#~ msgid "Decryption failed"
+#~ msgstr "Не удалось выполнить расшифровку"
 
 #~ msgid "Default"
 #~ msgstr "По умолчанию"
@@ -6513,11 +6490,21 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Download"
 #~ msgstr "Скачать"
 
+#~ msgid "Download File"
+#~ msgstr "Скачать файл"
+
 #~ msgid "Download Update"
 #~ msgstr "Скачать обновление"
 
 #~ msgid "Download and Install"
 #~ msgstr "Скачать и установить"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Ошибка скачивания (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Скачивание…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Перетащите файлы или контакты"
@@ -6575,9 +6562,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Features:"
 #~ msgstr "Возможности:"
 
-#~ msgid "File Name: "
-#~ msgstr "Имя файла: "
-
 #~ msgid "File Offered"
 #~ msgstr "Предложена передача файла"
 
@@ -6592,6 +6576,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "File error"
 #~ msgstr "Ошибка файла"
+
+#~ msgid "File size unknown"
+#~ msgstr "Размер файла неизвестен"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr ""
@@ -6751,6 +6738,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Last seen %s"
 #~ msgstr "Причина: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Действие при щелчке левой кнопкой мыши"
+
 #~ msgid "Local System Time"
 #~ msgstr "Местное системное время"
 
@@ -6826,8 +6816,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Open Link"
 #~ msgstr "Открыть ссылку"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Открыть ссылку в браузере"
+
 #~ msgid "Open Path"
 #~ msgstr "Открыть путь"
+
+#~ msgid "Open _Folder"
+#~ msgstr "Открыть _папку"
 
 #~ msgid "Open search bar"
 #~ msgstr "Открыть панель поиска"
@@ -6971,6 +6967,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Save File as…"
 #~ msgstr "Сохранить файл как…"
 
+#~ msgid "Save as…"
+#~ msgstr "Сохранить как…"
+
 #~ msgid "Search your conversation"
 #~ msgstr "Искать в чате"
 
@@ -7036,6 +7035,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Server Uptime"
 #~ msgstr "Время бесперебойной работы сервера"
 
+#~ msgid "Set status message"
+#~ msgstr "Установить сообщение о статусе"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr ""
 #~ "Инструменты для указания текущего занятия или мелодии, чтобы друзья могли "
@@ -7072,6 +7074,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Show debug console"
 #~ msgstr "Показать консоль отладки"
 
+#~ msgid "Show previews for files"
+#~ msgstr "Показывать предпросмотр для файлов"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Транслировать собственный видеопоток при звонках"
 
@@ -7096,6 +7101,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Статус и сообщение о статусе для всех учётных записей"
+
+#~ msgid "Status message…"
+#~ msgstr "Сообщение о статусе…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7145,6 +7153,10 @@ msgstr "…или перетащите его сюда"
 #~ msgstr "Версия TLS"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Сбой проверки TLS: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7158,6 +7170,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Учётная запись не подключена к серверу"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "Это ваш адрес XMPP"
 
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "Показать панель меню"
@@ -7201,6 +7216,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Upload Files"
 #~ msgstr "Передать файлы"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "Отправка файла не может быть завершена."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Использовать STUN-сервер"
@@ -7304,6 +7322,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Больше не спрашивать"
 
+#~ msgid "_Download"
+#~ msgstr "_Скачать"
+
 #~ msgid "_Download Again"
 #~ msgstr "_Скачать снова"
 
@@ -7326,11 +7347,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "_New post"
 #~ msgstr "_Новый пост"
 
+#~ msgid "_Open"
+#~ msgstr "_Открыть"
+
 #~ msgid "_Open Folder"
 #~ msgstr "_Открыть папку"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Параметры"
+
+#~ msgid "_Save as…"
+#~ msgstr "Сохранить _как…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Показывать уведомление при успешной передаче файла"
@@ -7350,6 +7377,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "_View"
 #~ msgstr "_Вид"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Открыть папку"
 
 #~ msgid "dark skin tone"
 #~ msgstr "очень тёмный тон кожи"

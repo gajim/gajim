@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -152,10 +152,6 @@ msgstr "Įveskite naują prieigos %s pavadinimą"
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
-
-#, python-format
-msgid "%s has read up to this point"
 msgstr ""
 
 #, python-format
@@ -480,9 +476,6 @@ msgstr "Prieiga"
 
 msgid "Accounts"
 msgstr "Prieiga"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1298,6 +1291,9 @@ msgstr ""
 msgid "Color"
 msgstr "Colour"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Commands: %s"
@@ -1427,29 +1423,6 @@ msgid "Contact List – %(account)s"
 msgstr "Contact Disconnected"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Contact Connected"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Contact Disconnected"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Contact Connected"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Contact Disconnected"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Rodyti įvykį kontaktų sąraše"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Prieiga"
 
@@ -1499,10 +1472,6 @@ msgstr "Kambario JID"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopijuoti JID/El. pašto adresą"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1586,9 +1555,6 @@ msgstr "Leave Groupchats"
 msgid "Creating Account..."
 msgstr "Gajim account %s"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Passphrase Required"
@@ -1633,10 +1599,6 @@ msgstr "_Naudotojo vardas:"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Nepavyko prisijungti prie proksi"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1859,21 +1821,9 @@ msgstr ""
 msgid "Download"
 msgstr "Do _not ask me again"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Do _not ask me again"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "Do _not ask me again"
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Persiųsti neskaitytas žinutes"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Banning..."
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1885,6 +1835,10 @@ msgstr "Sends file to a contact"
 
 msgid "Eating"
 msgstr "Eating"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Redaguoti"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2215,8 +2169,9 @@ msgstr "File path"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Filename: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2883,9 +2838,6 @@ msgstr "Leave Groupchats"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3479,16 +3431,8 @@ msgid "Open Folder"
 msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "_Atverti nuorodą naršyklėje"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Atverti nuorodą naršyklėje"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 msgid "Open as _Link"
 msgstr "Open as _Link"
@@ -3507,6 +3451,10 @@ msgstr "Blogas CA sertifikatas"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Administrator"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Administrator"
 
 msgid "Organization (O): "
@@ -3852,6 +3800,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4350,10 +4301,6 @@ msgstr "Save password"
 msgid "Save as..."
 msgstr "Turiu "
 
-#, fuzzy
-msgid "Save as…"
-msgstr "Turiu "
-
 msgid "Save display name"
 msgstr ""
 
@@ -4478,6 +4425,14 @@ msgstr "Saved in: %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Saved in: %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Keisti _Slapyvardį..."
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Participants"
 
 #, fuzzy
 msgid "Select Account"
@@ -4629,10 +4584,6 @@ msgstr "Kambario nustatymai"
 msgid "Set date…"
 msgstr "Moderator"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "status message"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4780,10 +4731,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Connection not available"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4947,10 +4894,6 @@ msgstr "Status Message"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Status Message"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "_Būklės pranešimas:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5161,12 +5104,11 @@ msgstr "Sinchronizuoti kontaktus"
 msgid "System"
 msgstr "<b>Sistema:</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Adding Special Notification for %s"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5375,10 +5317,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopijuoti JID/El. pašto adresą"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "The status has been changed."
 
@@ -5467,6 +5405,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Esu išėjęs"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Time"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5618,6 +5560,10 @@ msgstr "Klientas:"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Kambario nustatymai"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Kambario nustatymai"
@@ -5707,10 +5653,6 @@ msgstr "Could not load image"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Save File as..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "The service could not be found"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6258,10 +6200,6 @@ msgstr "Prieiga"
 msgid "_Do not ask me again"
 msgstr "Do _not ask me again"
 
-#, fuzzy
-msgid "_Download"
-msgstr "Do _not ask me again"
-
 msgid "_Edit"
 msgstr "_Redaguoti"
 
@@ -6336,10 +6274,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "A_tsijungęs"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6387,10 +6321,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "Turiu "
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "Turiu "
 
 msgid "_Search"
@@ -6640,10 +6570,6 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Keisti _Slapyvardį..."
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7039,6 +6965,26 @@ msgstr ""
 #~ msgstr "Būklės pranešimas:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Contact Connected"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Contact Disconnected"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Contact Connected"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Contact Disconnected"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Rodyti įvykį kontaktų sąraše"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Contact Connected"
 
@@ -7061,6 +7007,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopijuoti JID/El. pašto adresą"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7096,6 +7046,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Current Developers:"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Nepavyko prisijungti prie proksi"
 
 #~ msgid "Default"
 #~ msgstr "Default"
@@ -7137,12 +7091,24 @@ msgstr ""
 #~ msgstr "Do _not ask me again"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Do _not ask me again"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "Do _not ask me again"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Banning..."
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7179,10 +7145,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Savybės"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Filename: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7368,8 +7330,16 @@ msgstr ""
 #~ msgstr "Open as _Link"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Atverti nuorodą naršyklėje"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7475,6 +7445,10 @@ msgstr ""
 #~ msgstr "Save File as..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Turiu "
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Siųsti _Failą"
 
@@ -7537,6 +7511,10 @@ msgstr ""
 #~ msgstr "Serveris atsakė: %s"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "status message"
+
+#, fuzzy
 #~ msgid "Show Location"
 #~ msgstr "Padėtis:"
 
@@ -7551,6 +7529,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "Rodyti _XML konsolę"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Connection not available"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7570,6 +7552,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Changes the status of account or accounts"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Būklės pranešimas:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7607,8 +7593,16 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "GTK+ Version:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Adding Special Notification for %s"
+
 #~ msgid "The service could not be found"
 #~ msgstr "The service could not be found"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopijuoti JID/El. pašto adresą"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7647,6 +7641,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "The service could not be found"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7725,6 +7723,10 @@ msgstr ""
 #~ msgstr "Do _not ask me again"
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "Do _not ask me again"
 
@@ -7753,12 +7755,20 @@ msgstr ""
 #~ msgstr "Prijungti naują asmenį"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Parinktys"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Turiu "
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7778,6 +7788,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Rodinys"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 #~ msgid "file transfers list"
 #~ msgstr "failų siuntimų sąrašas"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -148,10 +148,6 @@ msgstr ""
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
-
-#, python-format
-msgid "%s has read up to this point"
 msgstr ""
 
 #, python-format
@@ -436,9 +432,6 @@ msgid "Account: %s"
 msgstr ""
 
 msgid "Accounts"
-msgstr ""
-
-msgid "Action for left-clicking a preview"
 msgstr ""
 
 msgid "Action on Close"
@@ -1140,6 +1133,9 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr ""
 
@@ -1250,24 +1246,6 @@ msgstr ""
 msgid "Contact List – %(account)s"
 msgstr ""
 
-msgid "Contact List: Contact Background Color"
-msgstr ""
-
-msgid "Contact List: Contact Font"
-msgstr ""
-
-msgid "Contact List: Contact Foreground Color"
-msgstr ""
-
-msgid "Contact List: Group Background Color"
-msgstr ""
-
-msgid "Contact List: Group Font"
-msgstr ""
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
 msgid "Contact Removed"
 msgstr ""
 
@@ -1306,9 +1284,6 @@ msgid "Copy"
 msgstr ""
 
 msgid "Copy Address"
-msgstr ""
-
-msgid "Copy Link"
 msgstr ""
 
 msgid "Copy Text"
@@ -1376,9 +1351,6 @@ msgstr ""
 msgid "Creating Account..."
 msgstr ""
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 msgid "Credentials expired"
 msgstr ""
 
@@ -1416,9 +1388,6 @@ msgid "Decrease Font Size"
 msgstr ""
 
 msgid "Decrease playback speed"
-msgstr ""
-
-msgid "Decryption failed"
 msgstr ""
 
 msgid "Default Encryption"
@@ -1610,18 +1579,8 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-msgid "Download File"
-msgstr ""
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr ""
-
 #, python-format
 msgid "Downloaded %s messages"
-msgstr ""
-
-msgid "Downloading…"
 msgstr ""
 
 #, python-format
@@ -1632,6 +1591,9 @@ msgid "Drop files here"
 msgstr ""
 
 msgid "Eating"
+msgstr ""
+
+msgid "Edit"
 msgstr ""
 
 msgid "Edit Shortcut"
@@ -1917,7 +1879,7 @@ msgstr ""
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
+msgid "File saved"
 msgstr ""
 
 msgid "File too big"
@@ -2488,9 +2450,6 @@ msgstr ""
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -2994,13 +2953,7 @@ msgstr ""
 msgid "Open Folder"
 msgstr ""
 
-msgid "Open Link in Browser"
-msgstr ""
-
 msgid "Open Link in _Browser"
-msgstr ""
-
-msgid "Open _Folder"
 msgstr ""
 
 msgid "Open as _Link"
@@ -3017,6 +2970,9 @@ msgstr ""
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr ""
+
+msgid "Organization"
 msgstr ""
 
 msgid "Organization (O): "
@@ -3317,6 +3273,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -3730,9 +3689,6 @@ msgstr ""
 msgid "Save as..."
 msgstr ""
 
-msgid "Save as…"
-msgstr ""
-
 msgid "Save display name"
 msgstr ""
 
@@ -3838,6 +3794,14 @@ msgid "Security Labels"
 msgstr ""
 
 msgid "Security Warning"
+msgstr ""
+
+#, python-format
+msgid "Seen by %s"
+msgstr ""
+
+#, python-format
+msgid "Seen by %s participants"
 msgstr ""
 
 msgid "Select Account"
@@ -3962,9 +3926,6 @@ msgstr ""
 msgid "Set date…"
 msgstr ""
 
-msgid "Set status message"
-msgstr ""
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4081,9 +4042,6 @@ msgid ""
 msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
-msgstr ""
-
-msgid "Show previews for files"
 msgstr ""
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
@@ -4223,9 +4181,6 @@ msgid "Status is not shared"
 msgstr ""
 
 msgid "Status is shared"
-msgstr ""
-
-msgid "Status message…"
 msgstr ""
 
 msgid "Status: Away Color"
@@ -4397,12 +4352,11 @@ msgstr ""
 msgid "System"
 msgstr ""
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr ""
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -4588,9 +4542,6 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr ""
 
-msgid "This is your XMPP address"
-msgstr ""
-
 msgid "This message has been moderated"
 msgstr ""
 
@@ -4672,6 +4623,9 @@ msgid "Time Until Away"
 msgstr ""
 
 msgid "Time Until Not Available"
+msgstr ""
+
+msgid "Time Zone"
 msgstr ""
 
 msgctxt "Profile"
@@ -4808,6 +4762,9 @@ msgstr ""
 msgid "Unknown Artist"
 msgstr ""
 
+msgid "Unknown Error"
+msgstr ""
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr ""
@@ -4882,9 +4839,6 @@ msgid "Updating provider list…"
 msgstr ""
 
 msgid "Upload File…"
-msgstr ""
-
-msgid "Upload could not be completed."
 msgstr ""
 
 msgid "Uploading Avatar Failed"
@@ -5361,9 +5315,6 @@ msgstr ""
 msgid "_Do not ask me again"
 msgstr ""
 
-msgid "_Download"
-msgstr ""
-
 msgid "_Edit"
 msgstr ""
 
@@ -5426,9 +5377,6 @@ msgstr ""
 msgid "_Offline"
 msgstr ""
 
-msgid "_Open"
-msgstr ""
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -5469,9 +5417,6 @@ msgid "_Retract"
 msgstr ""
 
 msgid "_Save"
-msgstr ""
-
-msgid "_Save as…"
 msgstr ""
 
 msgid "_Search"

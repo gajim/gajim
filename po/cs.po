@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -166,10 +166,6 @@ msgstr "%s byli pozváni do této skupinové konverzace"
 #, python-format
 msgid "%s has joined"
 msgstr "%s se připojil"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr "%s přečetl do tohoto bodu"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
@@ -474,9 +470,6 @@ msgstr "Účet: %s"
 
 msgid "Accounts"
 msgstr "Účty"
-
-msgid "Action for left-clicking a preview"
-msgstr "Akce pro kliknutí levým tlačítkem na náhled"
 
 msgid "Action on Close"
 msgstr "Akce při zavření"
@@ -1222,6 +1215,9 @@ msgstr "Útržek kódu"
 msgid "Color"
 msgstr "Barva"
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 msgid "Command List"
 msgstr "Seznam příkazů"
 
@@ -1333,24 +1329,6 @@ msgstr "Výměna seznamu kontaktů"
 msgid "Contact List – %(account)s"
 msgstr "Seznam kontaktů: písmo"
 
-msgid "Contact List: Contact Background Color"
-msgstr "Seznam kontaktů: barva pozadí"
-
-msgid "Contact List: Contact Font"
-msgstr "Seznam kontaktů: písmo"
-
-msgid "Contact List: Contact Foreground Color"
-msgstr "Seznam kontaktů: barva popředí"
-
-msgid "Contact List: Group Background Color"
-msgstr "Seznam kontaktů: barva pozadí skupinových konverzací"
-
-msgid "Contact List: Group Font"
-msgstr "Seznam kontaktů: písmo skupinových konverzací"
-
-msgid "Contact List: Group Foreground Color"
-msgstr "Seznam kontaktů: Barva popředí skupiny"
-
 #, fuzzy
 msgid "Contact Removed"
 msgstr "Účet byl odebrán"
@@ -1392,9 +1370,6 @@ msgstr "Kopírovat"
 
 msgid "Copy Address"
 msgstr "Kopírovat adresu"
-
-msgid "Copy Link"
-msgstr "Kopírovat odkaz"
 
 msgid "Copy Text"
 msgstr "Kopírovat text"
@@ -1468,9 +1443,6 @@ msgstr "Vytvořit skupinovou konverzaci"
 msgid "Creating Account..."
 msgstr "Vytvářím účet..."
 
-msgid "Creating thumbnail failed"
-msgstr "Vytváření náhledu selhalo"
-
 msgid "Credentials expired"
 msgstr "Platnost přístupových údajů vypršela"
 
@@ -1512,9 +1484,6 @@ msgstr "Rozhraní D-Bus"
 
 msgid "Decrease playback speed"
 msgstr "Snížit rychlost přehrávání"
-
-msgid "Decryption failed"
-msgstr "Dešifrování se nezdařilo"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1727,19 +1696,9 @@ msgstr ""
 msgid "Download"
 msgstr "Stáhnout"
 
-msgid "Download File"
-msgstr "Stáhnout soubor"
-
-#, python-format
-msgid "Download failed (%s)"
-msgstr "Stahování selhalo (%s)"
-
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "Staženo %s zpráv"
-
-msgid "Downloading…"
-msgstr "Stahuji…"
 
 #, python-format
 msgid "Draft: %s"
@@ -1750,6 +1709,10 @@ msgstr "Sem přetáhněte soubory"
 
 msgid "Eating"
 msgstr "Jím"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Úpravy"
 
 #, fuzzy
 msgid "Edit Shortcut"
@@ -2048,8 +2011,9 @@ msgstr "Soubor je prázdný"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Soubor je příliš velký, maximální povolená velikost souboru je %s"
 
-msgid "File size unknown"
-msgstr "Neznámá velikost souboru"
+#, fuzzy
+msgid "File saved"
+msgstr "Název souboru: "
 
 #, fuzzy
 msgid "File too big"
@@ -2669,9 +2633,6 @@ msgstr "Opustit skupinovou konverzaci"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr "Akce kliknutí levého tlačítka"
-
 msgid "Let others know if you read up to this point"
 msgstr "Dejte vědět ostatním, pokud jste dočetli až sem"
 
@@ -3211,14 +3172,8 @@ msgstr "Otevřít editor emailu"
 msgid "Open Folder"
 msgstr "Otevřít složku"
 
-msgid "Open Link in Browser"
-msgstr "Otevřít odkaz v prohlížeči"
-
 msgid "Open Link in _Browser"
 msgstr "Otevřít odkaz v prohlížeči"
-
-msgid "Open _Folder"
-msgstr "Otevřít složku"
 
 msgid "Open as _Link"
 msgstr "Otevřít jako _Odkaz"
@@ -3234,6 +3189,10 @@ msgstr "Operační systém"
 
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Organizace"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Organizace"
 
 msgid "Organization (O): "
@@ -3554,6 +3513,9 @@ msgstr "Profilová aplikace s cprofile"
 msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Diskuze o projektu"
+
+msgid "Pronouns"
+msgstr ""
 
 msgid "Protocol"
 msgstr ""
@@ -4006,9 +3968,6 @@ msgstr "Uložit heslo"
 msgid "Save as..."
 msgstr "Uložit jako..."
 
-msgid "Save as…"
-msgstr "Uložit jako…"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4125,6 +4084,14 @@ msgstr "Bezpečnostní známka"
 
 msgid "Security Warning"
 msgstr "Bezpečnostní varování"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Změněno %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Účastníci"
 
 msgid "Select Account"
 msgstr "Vybrat účet"
@@ -4259,9 +4226,6 @@ msgstr "Zvolit adresář nastavení"
 msgid "Set date…"
 msgstr "Moderováno"
 
-msgid "Set status message"
-msgstr "Nastavit zprávu o stavu"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "Nastaví proměnnou prostředí pro ladicí zprávy GLib"
 
@@ -4394,9 +4358,6 @@ msgstr "Automaticky zobrazovat náhledy ve veřejných skupinových konverzacíc
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr "Zobrazovat náhledy všech adres URL obsahujících obrázky"
-
-msgid "Show previews for files"
-msgstr "Zobrazit náhledy pro soubory"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Zobrazit návrhy pro předpony např. :+1:"
@@ -4542,9 +4503,6 @@ msgstr "Text stavu"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Text stavu"
-
-msgid "Status message…"
-msgstr "Zpráva o stavu…"
 
 msgid "Status: Away Color"
 msgstr "Stav: Pryč"
@@ -4745,13 +4703,12 @@ msgstr "Synchronizuje se historie konverzace…"
 msgid "System"
 msgstr "Systém"
 
-#, python-format
-msgid "TLS verification failed: %s"
-msgstr "Ověření TLS selhalo: %s"
-
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Tým"
+
+msgid "Telephone"
+msgstr ""
 
 msgid "Tell your contacts if you received a message"
 msgstr "Sdělit kontaktům, že jste obdrželi zprávu"
@@ -4957,10 +4914,6 @@ msgstr ""
 "Opravdu si přejete odstranit tento motiv vzhledu?"
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "Vaši XMPP adresu mohou vidět pouze moderátoři"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "Tato zpráva byla stažena uživatelem %s."
 
@@ -5056,6 +5009,10 @@ msgstr "Čas do odchodu"
 
 msgid "Time Until Not Available"
 msgstr "Doba do nedostupnosti"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Čas"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5197,6 +5154,10 @@ msgstr "Neznámý"
 msgid "Unknown Artist"
 msgstr "Neznámý Umělec"
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "Neznámá chyba SSL: \"%s\""
+
 #, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "Neznámá chyba SSL: \"%s\""
@@ -5277,10 +5238,6 @@ msgstr "Nelze získat přístup k souboru (%s)"
 
 msgid "Upload File…"
 msgstr "Nahrát soubor…"
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Vybraný soubor nebylo možné načíst."
 
 msgid "Uploading Avatar Failed"
 msgstr "Nahrávání profilového obrázku selhalo"
@@ -5779,9 +5736,6 @@ msgstr "Zrušit účet"
 msgid "_Do not ask me again"
 msgstr "Příště se neptat"
 
-msgid "_Download"
-msgstr "Stáhnout"
-
 msgid "_Edit"
 msgstr "_Úpravy"
 
@@ -5848,9 +5802,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Odpojen"
 
-msgid "_Open"
-msgstr "Otevřít"
-
 msgid "_Overwrite"
 msgstr "Přepsat"
 
@@ -5895,9 +5846,6 @@ msgstr "Odvolat"
 
 msgid "_Save"
 msgstr "Uložit"
-
-msgid "_Save as…"
-msgstr "Uložit jako…"
 
 msgid "_Search"
 msgstr "_Najít"
@@ -6135,10 +6083,6 @@ msgstr "{nick} je nyní {show}{status}"
 msgid "…or drop it here"
 msgstr "...nebo přetáhněte sem"
 
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Změněno %s"
-
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " od {actor}"
@@ -6155,6 +6099,10 @@ msgstr "...nebo přetáhněte sem"
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s skupinové konverzace nalezeny"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s přečetl do tohoto bodu"
 
 #, python-format
 #~ msgid ""
@@ -6454,6 +6402,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Account Settings…"
 #~ msgstr "Nastavení účtu…"
 
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "Akce pro kliknutí levým tlačítkem na náhled"
+
 #, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktivovat"
@@ -6636,6 +6587,24 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Contact Addresses"
 #~ msgstr "Adresy kontaktu"
 
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Seznam kontaktů: barva pozadí"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Seznam kontaktů: písmo"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Seznam kontaktů: barva popředí"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Seznam kontaktů: barva pozadí skupinových konverzací"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Seznam kontaktů: písmo skupinových konverzací"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "Seznam kontaktů: Barva popředí skupiny"
+
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Kontakt odstraněn"
 
@@ -6653,6 +6622,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Copy Email Address"
 #~ msgstr "Kopírovat emailovou adresu"
+
+#~ msgid "Copy Link"
+#~ msgstr "Kopírovat odkaz"
 
 #~ msgid "Copy Link Location"
 #~ msgstr "Kopírovat odkaz"
@@ -6679,11 +6651,17 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Create new post"
 #~ msgstr "Vytvoř nový zápis"
 
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "Vytváření náhledu selhalo"
+
 #~ msgid "Current Developers"
 #~ msgstr "Současní vývojáři"
 
 #~ msgid "Decline Invitation"
 #~ msgstr "Odmítnout pozvánku"
+
+#~ msgid "Decryption failed"
+#~ msgstr "Dešifrování se nezdařilo"
 
 #~ msgid "Default"
 #~ msgstr "Výchozí"
@@ -6729,11 +6707,21 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Download"
 #~ msgstr "Stáhnout"
 
+#~ msgid "Download File"
+#~ msgstr "Stáhnout soubor"
+
 #~ msgid "Download Update"
 #~ msgstr "Stáhnout aktualizaci"
 
 #~ msgid "Download and Install"
 #~ msgstr "Stáhnout a nainstalovat"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Stahování selhalo (%s)"
+
+#~ msgid "Downloading…"
+#~ msgstr "Stahuji…"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "Přetáhnout soubory nebo kontakty"
@@ -6792,9 +6780,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Features:"
 #~ msgstr "Vlastnosti:"
 
-#~ msgid "File Name: "
-#~ msgstr "Název souboru: "
-
 #~ msgid "File Offered"
 #~ msgstr "Soubor nabídnut"
 
@@ -6809,6 +6794,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "File error"
 #~ msgstr "Chyba v souboru"
+
+#~ msgid "File size unknown"
+#~ msgstr "Neznámá velikost souboru"
 
 #~ msgid "File too big, will use direct transfer (not encrypted)"
 #~ msgstr "Soubor je příliš veliký, bude použit přímý přenos (bez šifrování)"
@@ -6959,6 +6947,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Last seen %s"
 #~ msgstr "Důvod: %s"
 
+#~ msgid "Left Click Action"
+#~ msgstr "Akce kliknutí levého tlačítka"
+
 #~ msgid "Local System Time"
 #~ msgstr "Místní systémový čas"
 
@@ -7031,8 +7022,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Open Link"
 #~ msgstr "Otevřít odkaz"
 
+#~ msgid "Open Link in Browser"
+#~ msgstr "Otevřít odkaz v prohlížeči"
+
 #~ msgid "Open Path"
 #~ msgstr "Otevřít cestu k souboru"
+
+#~ msgid "Open _Folder"
+#~ msgstr "Otevřít složku"
 
 #~ msgid "Open search bar"
 #~ msgstr "Otevřít vyhledávací panel"
@@ -7178,6 +7175,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Save File as…"
 #~ msgstr "Uložit jako…"
 
+#~ msgid "Save as…"
+#~ msgstr "Uložit jako…"
+
 #~ msgid "Select File…"
 #~ msgstr "Vybrat soubor…"
 
@@ -7242,6 +7242,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Server Uptime"
 #~ msgstr "Doba běhu serveru"
 
+#~ msgid "Set status message"
+#~ msgstr "Nastavit zprávu o stavu"
+
 #~ msgid "Set your activity or tune to show your friends how you are feeling"
 #~ msgstr "Nastavte si aktivitu"
 
@@ -7273,6 +7276,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Show debug console"
 #~ msgstr "Zobrazit konzoli XML"
 
+#~ msgid "Show previews for files"
+#~ msgstr "Zobrazit náhledy pro soubory"
+
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Zobrazovat Váš video stream během hovorů"
 
@@ -7297,6 +7303,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Stav a zprávy o stavu u všech účtů"
+
+#~ msgid "Status message…"
+#~ msgstr "Zpráva o stavu…"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
@@ -7344,6 +7353,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr "Verze TLS"
 
 #, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Ověření TLS selhalo: %s"
+
+#, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
 #~ "the way.\n"
@@ -7357,6 +7370,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet není připojen k serveru"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "Vaši XMPP adresu mohou vidět pouze moderátoři"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7401,6 +7418,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Upload Files"
 #~ msgstr "Nahrát soubory"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Vybraný soubor nebylo možné načíst."
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Použít server STUN"
@@ -7503,6 +7524,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "_Don’t ask again"
 #~ msgstr "Znovu se neptat"
 
+#~ msgid "_Download"
+#~ msgstr "Stáhnout"
+
 #~ msgid "_Download Again"
 #~ msgstr "Znovu stáhnout"
 
@@ -7525,11 +7549,17 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "_New post"
 #~ msgstr "Nový příspěvek"
 
+#~ msgid "_Open"
+#~ msgstr "Otevřít"
+
 #~ msgid "_Open Folder"
 #~ msgstr "Otevřít složku"
 
 #~ msgid "_Preferences"
 #~ msgstr "Nastavení"
+
+#~ msgid "_Save as…"
+#~ msgstr "Uložit jako…"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "Upozornit při dokončení přenosu souboru"
@@ -7549,6 +7579,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "_View"
 #~ msgstr "Zobrazit"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Otevřít složku"
 
 #~ msgid "dark skin tone"
 #~ msgstr "tmavý motiv vzhledu"

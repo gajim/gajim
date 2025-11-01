@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-17 20:43+0000\n"
+"POT-Creation-Date: 2025-10-31 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -156,10 +156,6 @@ msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 #, fuzzy, python-format
 msgid "%s has joined"
 msgstr "%s deskonektatu da"
-
-#, python-format
-msgid "%s has read up to this point"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "%s is a file but it should be a directory"
@@ -490,9 +486,6 @@ msgstr "Kontuak"
 
 msgid "Accounts"
 msgstr "Kontuak"
-
-msgid "Action for left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Action on Close"
@@ -1313,6 +1306,9 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Comma-separated list of emojis for quick reaction buttons"
+msgstr ""
+
 #, fuzzy
 msgid "Command List"
 msgstr "Azalpenak: %s"
@@ -1444,29 +1440,6 @@ msgid "Contact List – %(account)s"
 msgstr "Kontaktua Deskonektatuta"
 
 #, fuzzy
-msgid "Contact List: Contact Background Color"
-msgstr "Kontaktua Konektatuta"
-
-#, fuzzy
-msgid "Contact List: Contact Font"
-msgstr "Kontaktua Deskonektatuta"
-
-#, fuzzy
-msgid "Contact List: Contact Foreground Color"
-msgstr "Kontaktua Konektatuta"
-
-#, fuzzy
-msgid "Contact List: Group Background Color"
-msgstr "Kontaktua Deskonektatuta"
-
-#, fuzzy
-msgid "Contact List: Group Font"
-msgstr "_Ikusarazi gertaera zerrendan"
-
-msgid "Contact List: Group Foreground Color"
-msgstr ""
-
-#, fuzzy
 msgid "Contact Removed"
 msgstr "Kontua"
 
@@ -1515,10 +1488,6 @@ msgstr "Gela:"
 #, fuzzy
 msgid "Copy Address"
 msgstr "_Kopiatu JID/Email-a"
-
-#, fuzzy
-msgid "Copy Link"
-msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1602,9 +1571,6 @@ msgstr "Txat Taldea Berria"
 msgid "Creating Account..."
 msgstr "%s kontua ezabatzen"
 
-msgid "Creating thumbnail failed"
-msgstr ""
-
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Pasa-esaldia Behar da"
@@ -1651,10 +1617,6 @@ msgstr "_Izena"
 
 msgid "Decrease playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Decryption failed"
-msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1877,21 +1839,9 @@ msgstr ""
 msgid "Download"
 msgstr "Deskargatu"
 
-#, fuzzy
-msgid "Download File"
-msgstr "Deskargatu"
-
-#, fuzzy, python-format
-msgid "Download failed (%s)"
-msgstr "E_z galdetu berriro  "
-
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d mezu irakurri gabe"
-
-#, fuzzy
-msgid "Downloading…"
-msgstr "Sortzen"
 
 #, fuzzy, python-format
 msgid "Draft: %s"
@@ -1903,6 +1853,10 @@ msgstr "Fitxero bat bidali kontaktu bati"
 
 msgid "Eating"
 msgstr "Jaten"
+
+#, fuzzy
+msgid "Edit"
+msgstr "_Editatu"
 
 msgid "Edit Shortcut"
 msgstr ""
@@ -2237,8 +2191,9 @@ msgstr "Fitxeroaren tokia"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File size unknown"
-msgstr ""
+#, fuzzy
+msgid "File saved"
+msgstr "Fitxeroaren izena: %s"
 
 msgid "File too big"
 msgstr ""
@@ -2909,9 +2864,6 @@ msgstr "Txat Taldea Berria"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Left Click Action"
-msgstr ""
-
 msgid "Let others know if you read up to this point"
 msgstr ""
 
@@ -3509,16 +3461,8 @@ msgid "Open Folder"
 msgstr "_Ireki Fitxeroaren Edukia"
 
 #, fuzzy
-msgid "Open Link in Browser"
-msgstr "Web-ean _Ireki Lotura"
-
-#, fuzzy
 msgid "Open Link in _Browser"
 msgstr "Web-ean _Ireki Lotura"
-
-#, fuzzy
-msgid "Open _Folder"
-msgstr "_Ireki Fitxeroaren Edukia"
 
 msgid "Open as _Link"
 msgstr "Ireki _lotura bezala"
@@ -3537,6 +3481,10 @@ msgstr "Baliogabeko izena"
 #, fuzzy
 msgctxt "Profile"
 msgid "Organisation"
+msgstr "Administratzailea"
+
+#, fuzzy
+msgid "Organization"
 msgstr "Administratzailea"
 
 msgid "Organization (O): "
@@ -3884,6 +3832,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Project discussion"
+msgstr ""
+
+msgid "Pronouns"
 msgstr ""
 
 msgid "Protocol"
@@ -4387,10 +4338,6 @@ msgstr "Gorde pasahitza"
 msgid "Save as..."
 msgstr "daukadanean"
 
-#, fuzzy
-msgid "Save as…"
-msgstr "daukadanean"
-
 msgid "Save display name"
 msgstr ""
 
@@ -4515,6 +4462,14 @@ msgstr "Debekatzen %s"
 #, fuzzy
 msgid "Security Warning"
 msgstr "Debekatzen %s"
+
+#, fuzzy, python-format
+msgid "Seen by %s"
+msgstr "Aldatu _Izengoitia"
+
+#, fuzzy, python-format
+msgid "Seen by %s participants"
+msgstr "Partaideak"
 
 #, fuzzy
 msgid "Select Account"
@@ -4667,10 +4622,6 @@ msgstr "Gelaren Konfigurazioa"
 msgid "Set date…"
 msgstr "Moderatzailea"
 
-#, fuzzy
-msgid "Set status message"
-msgstr "egoera mezua"
-
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
@@ -4818,10 +4769,6 @@ msgstr ""
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
-
-#, fuzzy
-msgid "Show previews for files"
-msgstr "Konexioa ez dago erabilgarri"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4985,10 +4932,6 @@ msgstr "Egoera Mezua"
 #, fuzzy
 msgid "Status is shared"
 msgstr "Egoera Mezua"
-
-#, fuzzy
-msgid "Status message…"
-msgstr "Egoera mezua:"
 
 #, fuzzy
 msgid "Status: Away Color"
@@ -5200,12 +5143,11 @@ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 msgid "System"
 msgstr "<b>Bezeroak</b>"
 
-#, fuzzy, python-format
-msgid "TLS verification failed: %s"
-msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
-
 msgctxt "Group chat name"
 msgid "Team"
+msgstr ""
+
+msgid "Telephone"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5418,10 +5360,6 @@ msgstr ""
 "beste izen bat."
 
 #, fuzzy
-msgid "This is your XMPP address"
-msgstr "_Kopiatu JID/Email-a"
-
-#, fuzzy
 msgid "This message has been moderated"
 msgstr "[Mezu hau enkriptatua dago]"
 
@@ -5513,6 +5451,10 @@ msgstr ""
 #, fuzzy
 msgid "Time Until Not Available"
 msgstr "Ez Erabilgarri"
+
+#, fuzzy
+msgid "Time Zone"
+msgstr "Denbora"
 
 #, fuzzy
 msgctxt "Profile"
@@ -5666,6 +5608,10 @@ msgstr "Aurkitu gabea"
 msgid "Unknown Artist"
 msgstr ""
 
+#, fuzzy
+msgid "Unknown Error"
+msgstr "D-Bus bertsioa aurkitugabea: %s"
+
 #, fuzzy, python-format
 msgid "Unknown SSL error \"%s\""
 msgstr "D-Bus bertsioa aurkitugabea: %s"
@@ -5755,10 +5701,6 @@ msgstr "Ezin izan da irudia kargatu"
 #, fuzzy
 msgid "Upload File…"
 msgstr "Gorde Bezala..."
-
-#, fuzzy
-msgid "Upload could not be completed."
-msgstr "Zerbitzua ezin izan da aurkitu"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -6307,10 +6249,6 @@ msgstr "Kontu izen baliogabea"
 msgid "_Do not ask me again"
 msgstr "E_z galdetu berriro  "
 
-#, fuzzy
-msgid "_Download"
-msgstr "E_z galdetu berriro  "
-
 msgid "_Edit"
 msgstr "_Editatu"
 
@@ -6385,10 +6323,6 @@ msgstr "_OK"
 msgid "_Offline"
 msgstr "_Deskonektatuta"
 
-#, fuzzy
-msgid "_Open"
-msgstr "OpenPGP: "
-
 msgid "_Overwrite"
 msgstr ""
 
@@ -6437,10 +6371,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Save"
-msgstr "daukadanean"
-
-#, fuzzy
-msgid "_Save as…"
 msgstr "daukadanean"
 
 msgid "_Search"
@@ -6694,10 +6624,6 @@ msgstr "%(nick)s orain dago %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid " by %s"
-#~ msgstr "Aldatu _Izengoitia"
 
 #, fuzzy, python-format
 #~ msgid "%s (desynced)"
@@ -7116,6 +7042,26 @@ msgstr ""
 #~ msgstr "Egoera mezua:"
 
 #, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontaktua Konektatuta"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kontaktua Deskonektatuta"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontaktua Konektatuta"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontaktua Deskonektatuta"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "_Ikusarazi gertaera zerrendan"
+
+#, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Harpidetza ezabat_u"
 
@@ -7138,6 +7084,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopiatu JID/Email-a"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
 #~ msgid "Copy Link Location"
@@ -7173,6 +7123,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Egungo diseinatzaileak: "
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Konexioak huts egin du"
 
 #~ msgid "Default"
 #~ msgstr "Berezkoa"
@@ -7215,12 +7169,24 @@ msgstr ""
 #~ msgstr "Deskargatu"
 
 #, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Deskargatu"
+
+#, fuzzy
 #~ msgid "Download Update"
 #~ msgstr "Deskargatu"
 
 #, fuzzy
 #~ msgid "Download and Install"
 #~ msgstr "E_z galdetu berriro  "
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "E_z galdetu berriro  "
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Sortzen"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7261,10 +7227,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Features:"
 #~ msgstr "Zerbitzariaren Ezaugarriak:"
-
-#, fuzzy
-#~ msgid "File Name: "
-#~ msgstr "Fitxeroaren izena: %s"
 
 #, fuzzy
 #~ msgid "File Offered"
@@ -7457,8 +7419,16 @@ msgstr ""
 #~ msgstr "Ireki _lotura bezala"
 
 #, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "Web-ean _Ireki Lotura"
+
+#, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "OpenPGP: "
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Ireki Fitxeroaren Edukia"
 
 #, fuzzy
 #~ msgid "Organization (O)"
@@ -7569,6 +7539,10 @@ msgstr ""
 #~ msgstr "Gorde Bezala..."
 
 #, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "daukadanean"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Bidali _Fitxeroa"
 
@@ -7631,6 +7605,10 @@ msgstr ""
 #~ msgstr "%s gordea"
 
 #, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "egoera mezua"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7649,6 +7627,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show debug console"
 #~ msgstr "_XML Konsola Ikusarazi"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Konexioa ez dago erabilgarri"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -7673,6 +7655,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "Egoera mezua:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7710,12 +7696,20 @@ msgstr ""
 #~ msgid "TLS Version"
 #~ msgstr "GTK+ Bertsioa:"
 
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
+
 #~ msgid "The service could not be found"
 #~ msgstr "Zerbitzua ezin izan da aurkitu"
 
 #, fuzzy
 #~ msgid "This account is not connected to the server"
 #~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopiatu JID/Email-a"
 
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
@@ -7758,6 +7752,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Upload Files"
 #~ msgstr "Gorde Bezala..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Zerbitzua ezin izan da aurkitu"
 
 #, fuzzy
 #~ msgid "Use STUN Server"
@@ -7852,6 +7850,10 @@ msgstr ""
 #~ msgstr "E_z galdetu berriro  "
 
 #, fuzzy
+#~ msgid "_Download"
+#~ msgstr "E_z galdetu berriro  "
+
+#, fuzzy
 #~ msgid "_Download Again"
 #~ msgstr "E_z galdetu berriro  "
 
@@ -7880,12 +7882,20 @@ msgstr ""
 #~ msgstr "Mezu berria"
 
 #, fuzzy
+#~ msgid "_Open"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "_Open Folder"
 #~ msgstr "_Ireki Fitxeroaren Edukia"
 
 #, fuzzy
 #~ msgid "_Preferences"
 #~ msgstr "Hobespenak"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "daukadanean"
 
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
@@ -7906,6 +7916,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_View"
 #~ msgstr "_Ikusi"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Ireki Fitxeroaren Edukia"
 
 #~ msgid "file transfers list"
 #~ msgstr "fitxeroen transferentziaren lista"
