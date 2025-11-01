@@ -69,6 +69,9 @@ class Translation:
 
     @staticmethod
     def _get_win32_default_lang() -> str:
+        if env_lang := os.environ.get('LANGUAGE'):
+            return env_lang
+
         import ctypes
         windll = ctypes.windll.kernel32
         return locale.windows_locale[windll.GetUserDefaultUILanguage()]
