@@ -39,9 +39,7 @@ def create_thumbnail(
         raise
 
     except Exception:
-        thumbnail_bytes, metadata = _create_thumbnail_with_pixbuf(
-            data, size, mime_type
-        )
+        thumbnail_bytes, metadata = _create_thumbnail_with_pixbuf(data, size, mime_type)
 
     assert thumbnail_bytes is not None
     if output is not None:

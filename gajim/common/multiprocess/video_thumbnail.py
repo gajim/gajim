@@ -10,7 +10,7 @@ from pathlib import Path
 import gi
 
 try:
-    gi.require_version('Gst', '1.0')
+    gi.require_version("Gst", "1.0")
     from gi.repository import Gst
 except Exception:
     if typing.TYPE_CHECKING:
@@ -18,11 +18,10 @@ except Exception:
 
 Gst.init(None)
 
+
 def extract_video_thumbnail_and_properties(
-        input_: Path,
-        output: Path | None,
-        preview_size: int
-    ) -> tuple[bytes, dict[str, typing.Any]]:
+    input_: Path, output: Path | None, preview_size: int
+) -> tuple[bytes, dict[str, typing.Any]]:
     pipeline = Gst.Pipeline.new()
 
     uridecodebin = Gst.ElementFactory.make("uridecodebin3")
@@ -38,7 +37,7 @@ def extract_video_thumbnail_and_properties(
         videoscale,
         capsfilter,
         pngenc,
-        appsink
+        appsink,
     ]
     if any(element is None for element in pipeline_elements):
         raise Exception(f"\n{__name__}: Some pipeline elements were None")
@@ -63,18 +62,19 @@ def extract_video_thumbnail_and_properties(
     pipeline.add(pngenc)
     pipeline.add(appsink)
 
-    metadata: dict[str, typing.Any] = {'width': 0, 'height': 0}
+    metadata: dict[str, typing.Any] = {"width": 0, "height": 0}
 
     def probe_original_size(
-            pad: Gst.Pad, _info: Gst.PadProbeInfo) -> Gst.PadProbeReturn:
+        pad: Gst.Pad, _info: Gst.PadProbeInfo
+    ) -> Gst.PadProbeReturn:
         caps = pad.get_current_caps()
         if caps is None:
             return Gst.PadProbeReturn.OK
 
         structure = caps.get_structure(0)
         if structure.has_field("width") and structure.has_field("height"):
-            metadata['width'] = structure.get_int("width")[1]
-            metadata['height'] = structure.get_int("height")[1]
+            metadata["width"] = structure.get_int("width")[1]
+            metadata["height"] = structure.get_int("height")[1]
             return Gst.PadProbeReturn.REMOVE
 
         return Gst.PadProbeReturn.OK
@@ -101,8 +101,7 @@ def extract_video_thumbnail_and_properties(
     lanczos_filter = 3
     videoscale.set_property("method", lanczos_filter)
     caps = Gst.Caps.from_string(
-        f"video/x-raw,width={preview_size},"
-        "pixel-aspect-ratio=1/1"
+        f"video/x-raw,width={preview_size},pixel-aspect-ratio=1/1"
     )
     capsfilter.set_property("caps", caps)
 
@@ -134,7 +133,7 @@ def extract_video_thumbnail_and_properties(
     pipeline.seek_simple(
         Gst.Format.TIME,
         Gst.SeekFlags.FLUSH | Gst.SeekFlags.ACCURATE,
-        int(timestamp_ms) * Gst.MSECOND
+        int(timestamp_ms) * Gst.MSECOND,
     )
 
     pipeline.set_state(Gst.State.PLAYING)

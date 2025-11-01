@@ -162,9 +162,6 @@ force-exclude = '''
     | ^/gajim/common/modules/vcard4.py
     | ^/gajim/common/modules/vcard_avatars.py
     | ^/gajim/common/modules/vcard_temp.py
-    | ^/gajim/common/multiprocess/http.py
-    | ^/gajim/common/multiprocess/thumbnail.py
-    | ^/gajim/common/multiprocess/video_thumbnail.py
     | ^/gajim/common/passwords.py
     | ^/gajim/common/preview.py
     | ^/gajim/common/regex.py
