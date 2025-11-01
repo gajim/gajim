@@ -39,23 +39,23 @@ EventStorageEventT = (
 )
 
 EVENT_CLASSES: dict[str, Any] = {
-    'muc-nickname-changed': events.MUCNicknameChanged,
-    'muc-room-config-changed': events.MUCRoomConfigChanged,
-    'muc-room-config-finished': events.MUCRoomConfigFinished,
-    'muc-room-presence-error': events.MUCRoomPresenceError,
-    'muc-room-kicked': events.MUCRoomKicked,
-    'muc-room-destroyed': events.MUCRoomDestroyed,
-    'muc-room-voice-request-error': events.MUCRoomVoiceRequestError,
-    'muc-user-joined': events.MUCUserJoined,
-    'muc-user-left': events.MUCUserLeft,
-    'muc-user-role-changed': events.MUCUserRoleChanged,
-    'muc-user-affiliation-changed': events.MUCUserAffiliationChanged,
-    'muc-user-status-show-changed': events.MUCUserStatusShowChanged,
-    'muc-user-hats-changed': events.MUCUserHatsChanged,
-    'room-affiliation-changed': events.MUCAffiliationChanged,
+    "muc-nickname-changed": events.MUCNicknameChanged,
+    "muc-room-config-changed": events.MUCRoomConfigChanged,
+    "muc-room-config-finished": events.MUCRoomConfigFinished,
+    "muc-room-presence-error": events.MUCRoomPresenceError,
+    "muc-room-kicked": events.MUCRoomKicked,
+    "muc-room-destroyed": events.MUCRoomDestroyed,
+    "muc-room-voice-request-error": events.MUCRoomVoiceRequestError,
+    "muc-user-joined": events.MUCUserJoined,
+    "muc-user-left": events.MUCUserLeft,
+    "muc-user-role-changed": events.MUCUserRoleChanged,
+    "muc-user-affiliation-changed": events.MUCUserAffiliationChanged,
+    "muc-user-status-show-changed": events.MUCUserStatusShowChanged,
+    "muc-user-hats-changed": events.MUCUserHatsChanged,
+    "room-affiliation-changed": events.MUCAffiliationChanged,
 }
 
-log = logging.getLogger('gajim.c.storage.events')
+log = logging.getLogger("gajim.c.storage.events")
 
 
 class EventStorage(AlchemyStorage):
@@ -68,13 +68,15 @@ class EventStorage(AlchemyStorage):
 
     def _create_table(self, session: Session, engine: Engine) -> None:
         mod.Base.metadata.create_all(engine)
-        session.execute(sa.text('PRAGMA user_version=1'))
+        session.execute(sa.text("PRAGMA user_version=1"))
 
     def _migrate(self) -> None:
         pass
 
     @with_session
-    def store(self, session: Session, contact: ChatContactT, event_: EventStorageEventT) -> None:
+    def store(
+        self, session: Session, contact: ChatContactT, event_: EventStorageEventT
+    ) -> None:
         event = mod.Event(
             account=contact.account,
             jid=contact.jid,

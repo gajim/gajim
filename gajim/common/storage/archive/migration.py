@@ -35,7 +35,7 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import is_unique_constraint_error
 
-log = logging.getLogger('gajim.c.storage.archive.migration')
+log = logging.getLogger("gajim.c.storage.archive.migration")
 
 
 class MigrationBase(DeclarativeBase):
@@ -43,17 +43,17 @@ class MigrationBase(DeclarativeBase):
 
 
 class LastArchiveMessage(MappedAsDataclass, MigrationBase, kw_only=True):
-    __tablename__ = 'last_archive_message'
+    __tablename__ = "last_archive_message"
 
-    jid_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'), primary_key=True)
-    remote: Mapped[Jids | None] = relationship(lazy='joined', viewonly=True, init=False)
+    jid_id: Mapped[int] = mapped_column(sa.ForeignKey("jids.jid_id"), primary_key=True)
+    remote: Mapped[Jids | None] = relationship(lazy="joined", viewonly=True, init=False)
     last_mam_id: Mapped[str | None]
     oldest_mam_timestamp: Mapped[float | None]
     last_muc_timestamp: Mapped[float | None]
 
 
 class Jids(MappedAsDataclass, MigrationBase, kw_only=True):
-    __tablename__ = 'jids'
+    __tablename__ = "jids"
 
     jid_id: Mapped[int] = mapped_column(primary_key=True)
     jid: Mapped[str]
@@ -61,17 +61,17 @@ class Jids(MappedAsDataclass, MigrationBase, kw_only=True):
 
 
 class Logs(MappedAsDataclass, MigrationBase, kw_only=True):
-    __tablename__ = 'logs'
+    __tablename__ = "logs"
 
     log_line_id: Mapped[int] = mapped_column(primary_key=True)
-    account_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
+    account_id: Mapped[int] = mapped_column(sa.ForeignKey("jids.jid_id"))
     account: Mapped[Jids | None] = relationship(
-        lazy='joined', foreign_keys=[account_id], viewonly=True, init=False
+        lazy="joined", foreign_keys=[account_id], viewonly=True, init=False
     )
 
-    jid_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
+    jid_id: Mapped[int] = mapped_column(sa.ForeignKey("jids.jid_id"))
     remote: Mapped[Jids | None] = relationship(
-        lazy='joined', foreign_keys=[jid_id], viewonly=True, init=False
+        lazy="joined", foreign_keys=[jid_id], viewonly=True, init=False
     )
 
     contact_name: Mapped[str | None]
@@ -132,8 +132,7 @@ class Migration:
                 conn.execute(sa.text(stmt))
 
     def _execute_multiple_with_error(
-        self,
-        statements: list[tuple[str, str] | tuple[str, None]]
+        self, statements: list[tuple[str, str] | tuple[str, None]]
     ) -> None:
         with self._engine.begin() as conn:
             for stmt, error_string in statements:
@@ -158,13 +157,13 @@ class Migration:
                 'ALTER TABLE logs ADD COLUMN "encryption_state" TEXT',
                 'ALTER TABLE logs ADD COLUMN "marker" INTEGER',
                 'ALTER TABLE logs ADD COLUMN "additional_data" TEXT',
-                '''CREATE TABLE IF NOT EXISTS last_archive_message(
+                """CREATE TABLE IF NOT EXISTS last_archive_message(
                     jid_id INTEGER PRIMARY KEY UNIQUE,
                     last_mam_id TEXT,
                     oldest_mam_timestamp TEXT,
                     last_muc_timestamp TEXT
-                    )''',
-                'PRAGMA user_version=1',
+                    )""",
+                "PRAGMA user_version=1",
             ]
 
             self._execute_multiple(statements)
@@ -172,24 +171,24 @@ class Migration:
         if user_version < 2:
             statements = [
                 (
-                    'ALTER TABLE last_archive_message '
+                    "ALTER TABLE last_archive_message "
                     'ADD COLUMN "sync_threshold" INTEGER'
                 ),
-                'PRAGMA user_version=2',
+                "PRAGMA user_version=2",
             ]
             self._execute_multiple(statements)
 
         if user_version < 3:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "message_id" TEXT',
-                'PRAGMA user_version=3',
+                "PRAGMA user_version=3",
             ]
             self._execute_multiple(statements)
 
         if user_version < 4:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "error" TEXT',
-                'PRAGMA user_version=4',
+                "PRAGMA user_version=4",
             ]
             self._execute_multiple(statements)
 
@@ -197,7 +196,7 @@ class Migration:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "real_jid" TEXT',
                 'ALTER TABLE logs ADD COLUMN "occupant_id" TEXT',
-                'PRAGMA user_version=7',
+                "PRAGMA user_version=7",
             ]
             self._execute_multiple(statements)
 
@@ -235,22 +234,22 @@ class Migration:
             for archive_row in self._archive.get_session().scalars(stmt):
                 self._process_archive_row(conn, archive_row, account_pks)
 
-            conn.execute(sa.text('DROP TABLE last_archive_message'))
-            conn.execute(sa.text('DROP TABLE logs'))
-            conn.execute(sa.text('DROP TABLE jids'))
-            conn.execute(sa.text('DROP TABLE IF EXISTS unread_messages'))
-            conn.execute(sa.text('PRAGMA user_version=8'))
+            conn.execute(sa.text("DROP TABLE last_archive_message"))
+            conn.execute(sa.text("DROP TABLE logs"))
+            conn.execute(sa.text("DROP TABLE jids"))
+            conn.execute(sa.text("DROP TABLE IF EXISTS unread_messages"))
+            conn.execute(sa.text("PRAGMA user_version=8"))
 
     def _v9(self) -> None:
         statements = [
-            'CREATE INDEX IF NOT EXISTS idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);',
-            'PRAGMA user_version=9',
+            "CREATE INDEX IF NOT EXISTS idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);",
+            "PRAGMA user_version=9",
         ]
 
         self._execute_multiple(statements)
 
     def _v10(self) -> None:
-        self._execute_multiple(['PRAGMA foreign_keys=OFF'])
+        self._execute_multiple(["PRAGMA foreign_keys=OFF"])
 
         with self._engine.begin() as conn:
 
@@ -261,7 +260,9 @@ class Migration:
             occupant_pks: set[int | None] = set(conn.scalars(stmt))
             occupant_pks.discard(None)
 
-            conn.execute(sa.delete(mod.Occupant).where(mod.Occupant.pk.not_in(occupant_pks)))
+            conn.execute(
+                sa.delete(mod.Occupant).where(mod.Occupant.pk.not_in(occupant_pks))
+            )
             conn.commit()
 
         with self._engine.begin() as conn:
@@ -280,32 +281,37 @@ class Migration:
             occupant_pks: set[int | None] = set(conn.scalars(stmt))
             occupant_pks.discard(None)
 
-            conn.execute(sa.delete(mod.Remote).where(mod.Remote.pk.not_in(occupant_pks)))
+            conn.execute(
+                sa.delete(mod.Remote).where(mod.Remote.pk.not_in(occupant_pks))
+            )
 
-        self._execute_multiple([
-            'PRAGMA foreign_keys=ON',
-            'PRAGMA user_version=10'
-        ])
+        self._execute_multiple(["PRAGMA foreign_keys=ON", "PRAGMA user_version=10"])
 
     def _v11_and_v12(self) -> None:
         mod.Base.metadata.create_all(self._engine)
-        self._execute_multiple(['PRAGMA user_version=12'])
+        self._execute_multiple(["PRAGMA user_version=12"])
 
     def _v13(self) -> None:
         statements = [
-            ('ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
-             'duplicate column'),
-            ('PRAGMA user_version=13', None)
+            (
+                'ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
+                "duplicate column",
+            ),
+            ("PRAGMA user_version=13", None),
         ]
         self._execute_multiple_with_error(statements)
 
     def _v14(self) -> None:
         statements = [
-            ('CREATE INDEX IF NOT EXISTS idx_displayed_marker_last ON displayed_marker '
-             '(fk_remote_pk, fk_account_pk, timestamp DESC)'),
-            ('CREATE INDEX IF NOT EXISTS idx_displayed_marker_last_gc ON displayed_marker '
-             '(fk_remote_pk, fk_account_pk, fk_occupant_pk, timestamp DESC)'),
-            'PRAGMA user_version=14',
+            (
+                "CREATE INDEX IF NOT EXISTS idx_displayed_marker_last ON displayed_marker "
+                "(fk_remote_pk, fk_account_pk, timestamp DESC)"
+            ),
+            (
+                "CREATE INDEX IF NOT EXISTS idx_displayed_marker_last_gc ON displayed_marker "
+                "(fk_remote_pk, fk_account_pk, fk_occupant_pk, timestamp DESC)"
+            ),
+            "PRAGMA user_version=14",
         ]
         self._execute_multiple(statements)
 
@@ -316,7 +322,7 @@ class Migration:
             try:
                 jid = JID.from_string(jid_str)
             except Exception:
-                log.warning('Unable to parse account: %s', jid_str)
+                log.warning("Unable to parse account: %s", jid_str)
                 continue
 
             pk = self._get_account_pk(conn, jid)
@@ -332,7 +338,7 @@ class Migration:
     ) -> None:
         if archive_row.remote is None:
             log.warning(
-                'Unable to migrate mam state because jid_id %s was not found',
+                "Unable to migrate mam state because jid_id %s was not found",
                 archive_row.jid_id,
             )
             return
@@ -340,9 +346,7 @@ class Migration:
         try:
             remote_jid = JID.from_string(archive_row.remote.jid)
         except Exception as error:
-            log.warning(
-                'Invalid JID found, unable to migrate archive state: %s', error
-            )
+            log.warning("Invalid JID found, unable to migrate archive state: %s", error)
             return
 
         remote_pk = self._get_remote_pk(conn, remote_jid)
@@ -378,7 +382,7 @@ class Migration:
                 )
             except IntegrityError:
                 log.warning(
-                    'Unable to migrate mam archive state, because it was already migrated'
+                    "Unable to migrate mam archive state, because it was already migrated"
                 )
                 return
 
@@ -386,19 +390,19 @@ class Migration:
         m_type, direction = KIND_MAPPING[log_row.kind]
 
         if log_row.time is None:
-            log.warning('Unable to migrate message because timestamp is empty')
+            log.warning("Unable to migrate message because timestamp is empty")
             return
 
         if log_row.account is None:
             log.warning(
-                'Unable to migrate message because account_id %s was not found',
+                "Unable to migrate message because account_id %s was not found",
                 log_row.account_id,
             )
             return
 
         if log_row.remote is None:
             log.warning(
-                'Unable to migrate message because jid_id %s was not found',
+                "Unable to migrate message because jid_id %s was not found",
                 log_row.jid_id,
             )
             return
@@ -407,7 +411,7 @@ class Migration:
             account_jid = JID.from_string(log_row.account.jid)
         except Exception:
             log.warning(
-                'Unable to migrate message because of invalid account jid: %s',
+                "Unable to migrate message because of invalid account jid: %s",
                 log_row.account.jid,
             )
             return
@@ -416,7 +420,7 @@ class Migration:
             remote_jid = JID.from_string(log_row.remote.jid)
         except Exception:
             log.warning(
-                'Unable to migrate message because of invalid remote jid: %s',
+                "Unable to migrate message because of invalid remote jid: %s",
                 log_row.remote.jid,
             )
             return
@@ -425,13 +429,13 @@ class Migration:
         remote_pk = self._get_remote_pk(conn, remote_jid)
 
         try:
-            additional_data = json.loads(log_row.additional_data or '{}')
+            additional_data = json.loads(log_row.additional_data or "{}")
         except Exception as error:
             raise ValueError(
-                f'failed to parse additional_data: {error} - {log_row.additional_data}'
+                f"failed to parse additional_data: {error} - {log_row.additional_data}"
             )
 
-        user_timestamp = additional_data.get('user_timestamp')
+        user_timestamp = additional_data.get("user_timestamp")
         user_delay_ts = None
         if user_timestamp is not None:
             user_delay_ts = datetime.fromtimestamp(user_timestamp, UTC)
@@ -441,23 +445,23 @@ class Migration:
         encryption_pk = self._insert_encryption_data(conn, additional_data)
 
         text = log_row.message
-        corrected = additional_data.get('corrected')
+        corrected = additional_data.get("corrected")
         if corrected is not None:
-            text = corrected.get('original_text') or text
+            text = corrected.get("original_text") or text
 
         message_data: dict[str, Any] = {
-            'fk_account_pk': account_pk,
-            'fk_remote_pk': remote_pk,
-            'resource': log_row.contact_name,
-            'type': m_type,
-            'direction': direction,
-            'timestamp': timestamp,
-            'state': MessageState.ACKNOWLEDGED,
-            'id': log_row.message_id,
-            'stanza_id': log_row.stanza_id,
-            'text': text,
-            'user_delay_ts': user_delay_ts,
-            'fk_encryption_pk': encryption_pk,
+            "fk_account_pk": account_pk,
+            "fk_remote_pk": remote_pk,
+            "resource": log_row.contact_name,
+            "type": m_type,
+            "direction": direction,
+            "timestamp": timestamp,
+            "state": MessageState.ACKNOWLEDGED,
+            "id": log_row.message_id,
+            "stanza_id": log_row.stanza_id,
+            "text": text,
+            "user_delay_ts": user_delay_ts,
+            "fk_encryption_pk": encryption_pk,
         }
 
         try:
@@ -465,10 +469,10 @@ class Migration:
                 sa.insert(mod.Message).returning(mod.Message.pk), [message_data]
             ).scalar()
         except IntegrityError as error:
-            if 'message.stanza_id' not in error.args[0]:
+            if "message.stanza_id" not in error.args[0]:
                 raise
 
-            message_data['stanza_id'] = str(uuid.uuid4())
+            message_data["stanza_id"] = str(uuid.uuid4())
 
             pk = conn.execute(
                 sa.insert(mod.Message).returning(mod.Message.pk), [message_data]
@@ -489,7 +493,7 @@ class Migration:
         ).scalar()
 
         if pk is None:
-            raise ValueError('Failed to insert account')
+            raise ValueError("Failed to insert account")
 
         self._account_pks[jid] = pk
         return pk
@@ -504,7 +508,7 @@ class Migration:
         ).scalar()
 
         if pk is None:
-            raise ValueError('Failed to insert remote')
+            raise ValueError("Failed to insert remote")
 
         self._remote_pks[jid] = pk
         return pk
@@ -518,20 +522,20 @@ class Migration:
         if not additional_data:
             return None
 
-        gajim_data = additional_data.get('gajim')
+        gajim_data = additional_data.get("gajim")
         if gajim_data is None:
             return None
 
-        url = gajim_data.get('oob_url')
-        description = gajim_data.get('oob_desc')
+        url = gajim_data.get("oob_url")
+        description = gajim_data.get("oob_desc")
 
         if url is None:
             return None
 
         oob_data = {
-            'fk_message_pk': fk_message_pk,
-            'url': url,
-            'description': description,
+            "fk_message_pk": fk_message_pk,
+            "url": url,
+            "description": description,
         }
 
         conn.execute(sa.insert(mod.OOB), [oob_data])
@@ -564,15 +568,15 @@ class Migration:
             return None
 
         error_data = {
-            'fk_account_pk': fk_account_pk,
-            'fk_remote_pk': fk_remote_pk,
-            'message_id': log_row.message_id,
-            'by': by,
-            'type': e_type,
-            'text': text,
-            'condition': condition,
-            'condition_text': condition_text,
-            'timestamp': timestamp + timedelta(seconds=1),
+            "fk_account_pk": fk_account_pk,
+            "fk_remote_pk": fk_remote_pk,
+            "message_id": log_row.message_id,
+            "by": by,
+            "type": e_type,
+            "text": text,
+            "condition": condition,
+            "condition_text": condition_text,
+            "timestamp": timestamp + timedelta(seconds=1),
         }
 
         try:
@@ -587,19 +591,19 @@ class Migration:
         if not additional_data:
             return None
 
-        encrypted = additional_data.get('encrypted')
+        encrypted = additional_data.get("encrypted")
         if encrypted is None:
             return None
 
-        protocol = encrypted.get('name')
-        key = encrypted.get('fingerprint')
-        trust = encrypted.get('trust')
+        protocol = encrypted.get("name")
+        key = encrypted.get("fingerprint")
+        trust = encrypted.get("trust")
 
-        if protocol not in ('OpenPGP', 'OMEMO', 'PGP'):
+        if protocol not in ("OpenPGP", "OMEMO", "PGP"):
             return None
 
         if key is None:
-            key = 'Unknown'
+            key = "Unknown"
 
         if trust is None:
             trust = Trust.VERIFIED
@@ -610,7 +614,7 @@ class Migration:
             except Exception:
                 trust = Trust.UNTRUSTED
 
-        encryption_data = {'protocol': protocol, 'key': key, 'trust': trust}
+        encryption_data = {"protocol": protocol, "key": key, "trust": trust}
         encryption_pk = self._encryption_pks.get(tuple(encryption_data.values()))
         if encryption_pk is not None:
             return encryption_pk

@@ -29,7 +29,7 @@ class Base(DeclarativeBase):
 
 
 class Event(MappedAsDataclass, Base, kw_only=True):
-    __tablename__ = 'event'
+    __tablename__ = "event"
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     account: Mapped[str] = mapped_column()

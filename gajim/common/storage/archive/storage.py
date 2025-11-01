@@ -72,21 +72,21 @@ from gajim.common.util.text import get_random_string
 CURRENT_USER_VERSION = 14
 
 
-log = logging.getLogger('gajim.c.storage.archive')
+log = logging.getLogger("gajim.c.storage.archive")
 
 
 class MessageArchiveStorage(AlchemyStorage):
     def __init__(self, in_memory: bool = False, path: Path | None = None) -> None:
         if path is None:
-            path = configpaths.get('LOG_DB')
+            path = configpaths.get("LOG_DB")
 
         AlchemyStorage.__init__(
             self,
             log,
             None if in_memory else path,
             pragma={
-                'journal_mode': 'wal',
-                'secure_delete': 'on',
+                "journal_mode": "wal",
+                "secure_delete": "on",
             },
         )
 
@@ -101,16 +101,16 @@ class MessageArchiveStorage(AlchemyStorage):
     def _log_row(self, row: Any) -> None:
         if self._log.getEffectiveLevel() != logging.DEBUG:
             return
-        self._log.debug('Object before query\n%s', pprint.pformat(row))
+        self._log.debug("Object before query\n%s", pprint.pformat(row))
 
     def _create_table(self, session: Session, engine: Engine) -> None:
         Base.metadata.create_all(engine)
-        session.execute(sa.text(f'PRAGMA user_version={CURRENT_USER_VERSION}'))
+        session.execute(sa.text(f"PRAGMA user_version={CURRENT_USER_VERSION}"))
 
     def _make_backup(self) -> None:
-        db_path = configpaths.get('LOG_DB')
+        db_path = configpaths.get("LOG_DB")
         random_string = get_random_string(10)
-        db_backup_path = db_path.parent / f'{db_path.name}.{random_string}.bak'
+        db_backup_path = db_path.parent / f"{db_path.name}.{random_string}.bak"
         shutil.copy(db_path, db_backup_path)
 
     def _migrate(self) -> None:
@@ -162,20 +162,20 @@ class MessageArchiveStorage(AlchemyStorage):
 
     def _set_foreign_keys(self, session: Session, row: Any) -> None:
         fk_account_pk = None
-        account = getattr(row, 'account_', None)
+        account = getattr(row, "account_", None)
         if account is not None:
             fk_account_pk = self._get_account_pk(session, account)
             row.account_ = None
             row.fk_account_pk = fk_account_pk
 
         fk_remote_pk = None
-        remote_jid = getattr(row, 'remote_jid_', None)
+        remote_jid = getattr(row, "remote_jid_", None)
         if remote_jid is not None:
             row.remote_jid_ = None
             fk_remote_pk = self._get_jid_pk(session, remote_jid)
             row.fk_remote_pk = fk_remote_pk
 
-        if hasattr(row, 'real_remote_jid_'):
+        if hasattr(row, "real_remote_jid_"):
             real_remote_jid = row.real_remote_jid_
             if real_remote_jid is not VALUE_MISSING:
                 row.real_remote_jid_ = None
@@ -184,19 +184,19 @@ class MessageArchiveStorage(AlchemyStorage):
                 else:
                     row.fk_real_remote_pk = self._get_jid_pk(session, real_remote_jid)
 
-        security_label = getattr(row, 'security_label_', None)
+        security_label = getattr(row, "security_label_", None)
         if security_label is not None:
             pk = self._upsert_row(session, row.security_label_)
             row.security_label_ = None
             row.fk_security_label_pk = pk
 
-        encryption = getattr(row, 'encryption_', None)
+        encryption = getattr(row, "encryption_", None)
         if encryption is not None:
             pk = self._insert_row(session, encryption, return_pk_on_conflict=True)
             row.encryption_ = None
             row.fk_encryption_pk = pk
 
-        thread_id = getattr(row, 'thread_id_', None)
+        thread_id = getattr(row, "thread_id_", None)
         if thread_id is not None:
             assert fk_account_pk is not None
             assert fk_remote_pk is not None
@@ -209,7 +209,7 @@ class MessageArchiveStorage(AlchemyStorage):
             row.thread_ = None
             row.fk_thread_pk = pk
 
-        occupant = getattr(row, 'occupant_', None)
+        occupant = getattr(row, "occupant_", None)
         if occupant is not None:
             pk = self._upsert_row(session, occupant)
             row.occupant_ = None
@@ -234,7 +234,6 @@ class MessageArchiveStorage(AlchemyStorage):
             return -1
 
         return obj.pk
-
 
     @with_session
     @timeit
@@ -339,7 +338,8 @@ class MessageArchiveStorage(AlchemyStorage):
         stmt = insert(table).values(**row.get_insert_values())
         stmt = stmt.on_conflict_do_update(
             set_=row.get_upsert_values(),
-            where=sa.text('excluded.timestamp > timestamp'))
+            where=sa.text("excluded.timestamp > timestamp"),
+        )
         stmt = stmt.returning(table.pk)
         pk = session.scalar(stmt)
         return pk
@@ -362,11 +362,7 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_message_with_id(
-        self,
-        session: Session,
-        account: str,
-        jid: JID,
-        message_id: str
+        self, session: Session, account: str, jid: JID, message_id: str
     ) -> Message | None:
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -383,17 +379,14 @@ class MessageArchiveStorage(AlchemyStorage):
             return result[0]
 
         self._log.warning(
-            'Found %s messages with message id %s', len(result), message_id)
+            "Found %s messages with message id %s", len(result), message_id
+        )
         return None
 
     @with_session
     @timeit
     def get_message_with_stanza_id(
-        self,
-        session: Session,
-        account: str,
-        jid: JID,
-        stanza_id: str
+        self, session: Session, account: str, jid: JID, stanza_id: str
     ) -> Message | None:
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -409,8 +402,7 @@ class MessageArchiveStorage(AlchemyStorage):
         if len(result) == 1:
             return result[0]
 
-        self._log.warning(
-            'Found %s messages with stanza id %s', len(result), stanza_id)
+        self._log.warning("Found %s messages with stanza id %s", len(result), stanza_id)
         return None
 
     @with_session
@@ -420,7 +412,7 @@ class MessageArchiveStorage(AlchemyStorage):
             session, pk, options=[selectinload(Message.markers)]
         )
         if message is None:
-            self._log.warning('Deletion failed, no message found with pk %s', pk)
+            self._log.warning("Deletion failed, no message found with pk %s", pk)
             return
 
         self._delete_message(session, message)
@@ -474,7 +466,7 @@ class MessageArchiveStorage(AlchemyStorage):
             fk_occupant_pk = session.scalar(stmt)
             if fk_occupant_pk is None:
                 self._log.warning(
-                    'Unable to delete reaction, unknown occupant-id: %s', occupant_id
+                    "Unable to delete reaction, unknown occupant-id: %s", occupant_id
                 )
                 return
 
@@ -503,11 +495,15 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        exists_criteria = select(Message.id).where(
-            Message.id == message_id,
-            Message.fk_remote_pk == fk_remote_pk,
-            Message.fk_account_pk == fk_account_pk,
-        ).exists()
+        exists_criteria = (
+            select(Message.id)
+            .where(
+                Message.id == message_id,
+                Message.fk_remote_pk == fk_remote_pk,
+                Message.fk_account_pk == fk_account_pk,
+            )
+            .exists()
+        )
 
         res = session.scalar(select(1).where(exists_criteria))
         return bool(res)
@@ -520,11 +516,15 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        exists_criteria = select(Message.id).where(
-            Message.stanza_id == stanza_id,
-            Message.fk_remote_pk == fk_remote_pk,
-            Message.fk_account_pk == fk_account_pk,
-        ).exists()
+        exists_criteria = (
+            select(Message.id)
+            .where(
+                Message.stanza_id == stanza_id,
+                Message.fk_remote_pk == fk_remote_pk,
+                Message.fk_account_pk == fk_account_pk,
+            )
+            .exists()
+        )
 
         res = session.scalar(select(1).where(exists_criteria))
         return bool(res)
@@ -557,7 +557,7 @@ class MessageArchiveStorage(AlchemyStorage):
         timestamp: datetime,
         n_lines: int,
     ) -> Sequence[Message]:
-        '''
+        """
         Load n messages from jid before or after timestamp
 
         :param account:
@@ -570,7 +570,7 @@ class MessageArchiveStorage(AlchemyStorage):
             The point in time from where to search
         :param nlines:
             The maximal count of Message returned
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -598,13 +598,9 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_conversation_around_timestamp(
-        self,
-        session: Session,
-        account: str,
-        jid: JID,
-        timestamp: datetime
+        self, session: Session, account: str, jid: JID, timestamp: datetime
     ) -> list[Message]:
-        '''
+        """
         Loads messages around a primary key
 
         :param account:
@@ -613,7 +609,7 @@ class MessageArchiveStorage(AlchemyStorage):
             The jid for which we request the conversation
         :param timestamp:
             The timestamp in the conversation
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -624,17 +620,23 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.correction_id.is_(None),
         )
 
-        preceding_query = base_stmt.where(
-            Message.timestamp <= timestamp,
-        ).order_by(
-            sa.desc(Message.timestamp), sa.desc(Message.pk)
-        ).limit(50).subquery()
+        preceding_query = (
+            base_stmt.where(
+                Message.timestamp <= timestamp,
+            )
+            .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
+            .limit(50)
+            .subquery()
+        )
 
-        following_query = base_stmt.where(
-            Message.timestamp > timestamp,
-        ).order_by(
-            sa.asc(Message.timestamp), sa.asc(Message.pk)
-        ).limit(50).subquery()
+        following_query = (
+            base_stmt.where(
+                Message.timestamp > timestamp,
+            )
+            .order_by(sa.asc(Message.timestamp), sa.asc(Message.pk))
+            .limit(50)
+            .subquery()
+        )
 
         u_stmt = union_all(select(preceding_query), select(following_query))
         stmt = select(Message).where(Message.pk.in_(u_stmt.scalar_subquery()))
@@ -647,7 +649,7 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_last_conversation_row(
         self, session: Session, account: str, jid: JID
     ) -> Message | None:
-        '''
+        """
         Load the last line of a conversation with jid for account.
         Loads messages, but no status messages or error messages.
 
@@ -655,7 +657,7 @@ class MessageArchiveStorage(AlchemyStorage):
         :param jid:             The jid for which we request the conversation
 
         returns a namedtuple or None
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -666,7 +668,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
                 Message.correction_id.is_(None),
-                sa.or_(Occupant.blocked == sa.false(), Occupant.blocked.is_(None))
+                sa.or_(Occupant.blocked == sa.false(), Occupant.blocked.is_(None)),
             )
             .outerjoin(Occupant)
             .options(contains_eager(Message.occupant))
@@ -682,9 +684,9 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_last_correctable_message(
         self, session: Session, account: str, jid: JID, message_id: str
     ) -> Message | None:
-        '''
+        """
         Load the last correctable message of a conversation by message_id.
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -732,19 +734,15 @@ class MessageArchiveStorage(AlchemyStorage):
         return session.scalar(stmt)
 
     def get_referenced_message(
-        self,
-        account: str,
-        jid: JID,
-        message_type: MessageType | int,
-        reply_id: str
+        self, account: str, jid: JID, message_type: MessageType | int, reply_id: str
     ) -> Message | None:
 
         if message_type == MessageType.GROUPCHAT:
             return app.storage.archive.get_message_with_stanza_id(
-                account, jid, reply_id)
+                account, jid, reply_id
+            )
 
-        return app.storage.archive.get_message_with_id(
-            account, jid, reply_id)
+        return app.storage.archive.get_message_with_id(account, jid, reply_id)
 
     @with_session
     @timeit
@@ -761,10 +759,7 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_last_display_marker(
-        self,
-        session: Session,
-        account: str,
-        jid: JID
+        self, session: Session, account: str, jid: JID
     ) -> DisplayedMarker | None:
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -775,7 +770,7 @@ class MessageArchiveStorage(AlchemyStorage):
             .where(
                 DisplayedMarker.fk_remote_pk == fk_remote_pk,
                 DisplayedMarker.fk_account_pk == fk_account_pk,
-                DisplayedMarker.timestamp > utc_now() - timedelta(days=180)
+                DisplayedMarker.timestamp > utc_now() - timedelta(days=180),
             )
             .order_by(sa.desc(DisplayedMarker.timestamp))
             .limit(1)
@@ -787,10 +782,7 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_last_display_markers(
-        self,
-        session: Session,
-        account: str,
-        jid: JID
+        self, session: Session, account: str, jid: JID
     ) -> list[DisplayedMarker]:
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -799,23 +791,23 @@ class MessageArchiveStorage(AlchemyStorage):
         cte = (
             select(
                 DisplayedMarker,
-                func.row_number().over(
+                func.row_number()
+                .over(
                     partition_by=DisplayedMarker.fk_occupant_pk,
-                    order_by=sa.desc(DisplayedMarker.timestamp)
-                ).label("rn"),
+                    order_by=sa.desc(DisplayedMarker.timestamp),
+                )
+                .label("rn"),
             )
             .where(
                 DisplayedMarker.fk_remote_pk == fk_remote_pk,
                 DisplayedMarker.fk_account_pk == fk_account_pk,
-                DisplayedMarker.timestamp > utc_now() - timedelta(days=90)
-            ).cte()
+                DisplayedMarker.timestamp > utc_now() - timedelta(days=90),
+            )
+            .cte()
         )
 
         dm = aliased(DisplayedMarker, cte)
-        stmt = (
-            select(dm).where(cte.c.rn == 1)
-            .options(joinedload(dm.remote))
-        )
+        stmt = select(dm).where(cte.c.rn == 1).options(joinedload(dm.remote))
 
         self._explain(session, stmt)
         return list(session.scalars(stmt).all())
@@ -830,8 +822,8 @@ class MessageArchiveStorage(AlchemyStorage):
         occupant_id: str,
     ) -> Sequence[str] | None:
         """Get stanza IDs for all messages which were sent by a participant
-         with occupant_id.
-         """
+        with occupant_id.
+        """
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
         stmt = select(Occupant.pk).where(
@@ -842,7 +834,7 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_occupant_pk = session.scalar(stmt)
         if fk_occupant_pk is None:
             self._log.warning(
-                'Unable to get messages, unknown occupant-id: %s', occupant_id
+                "Unable to get messages, unknown occupant-id: %s", occupant_id
             )
             return None
 
@@ -868,7 +860,7 @@ class MessageArchiveStorage(AlchemyStorage):
         before: datetime | None = None,
         after: datetime | None = None,
     ) -> Iterator[Message]:
-        '''
+        """
         Search the conversation log for messages containing the `query` string.
 
         The search can either span the complete log for the given
@@ -888,7 +880,7 @@ class MessageArchiveStorage(AlchemyStorage):
         :param after: A datetime.datetime instance or None
 
         returns a list of namedtuples
-        '''
+        """
 
         # TODO: Does not search in corrections
 
@@ -918,7 +910,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         stmt = (
             stmt.where(
-                Message.text.ilike(f'%{query}%'),
+                Message.text.ilike(f"%{query}%"),
                 Message.timestamp.between(after, before),
                 ~Message.moderation.has(),
                 ~Message.retraction.has(),
@@ -935,9 +927,9 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_days_containing_messages(
         self, session: Session, account: str, jid: JID, year: int, month: int
     ) -> Sequence[int]:
-        '''
+        """
         Get days in month of year where messages for account/jid exist
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -969,7 +961,7 @@ class MessageArchiveStorage(AlchemyStorage):
         stmt = (
             select(
                 sa.func.cast(
-                    sa.func.strftime('%d', Message.timestamp, 'unixepoch', 'localtime'),
+                    sa.func.strftime("%d", Message.timestamp, "unixepoch", "localtime"),
                     sa.INTEGER,
                 )
             )
@@ -990,7 +982,7 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         account: str,
         jid: JID,
-        direction: Literal['first', 'last'],
+        direction: Literal["first", "last"],
     ) -> datetime | None:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -1000,7 +992,7 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.fk_account_pk == fk_account_pk,
             Message.correction_id.is_(None),
         )
-        if direction == 'first':
+        if direction == "first":
             stmt = stmt.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
         else:
             stmt = stmt.order_by(Message.timestamp, Message.pk)
@@ -1015,33 +1007,33 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_last_message_ts(
         self, session: Session, account: str, jid: JID
     ) -> datetime | None:
-        '''
+        """
         Get the timestamp of the last message we received for the jid
-        '''
-        return self._get_message_ts(session, account, jid, direction='first')
+        """
+        return self._get_message_ts(session, account, jid, direction="first")
 
     @with_session
     @timeit
     def get_first_message_ts(
         self, session: Session, account: str, jid: JID
     ) -> datetime | None:
-        '''
+        """
         Get the timestamp of the first message we received for the jid
-        '''
-        return self._get_message_ts(session, account, jid, direction='last')
+        """
+        return self._get_message_ts(session, account, jid, direction="last")
 
     @with_session
     @timeit
     def get_first_message_meta_for_date(
         self, session: Session, account: str, jid: JID, date: dt.date
     ) -> tuple[int, datetime] | None:
-        '''
+        """
         Load meta data (pk, timestamp) for the first message of
         a specific date
 
         for details about finding start and end of a day see
         get_days_containing_messages()
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -1154,9 +1146,9 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def remove_history_for_jid(self, session: Session, account: str, jid: JID) -> None:
-        '''
+        """
         Remove messages and metadata for a specific jid.
-        '''
+        """
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -1182,14 +1174,14 @@ class MessageArchiveStorage(AlchemyStorage):
 
             session.execute(stmt)
 
-        log.info('Removed history for: %s', jid)
+        log.info("Removed history for: %s", jid)
 
     @with_session
     @timeit
     def remove_all_history(self, session: Session) -> None:
-        '''
+        """
         Remove all message related data for all accounts
-        '''
+        """
 
         session.execute(delete(MessageError))
         session.execute(delete(Moderation))
@@ -1204,7 +1196,7 @@ class MessageArchiveStorage(AlchemyStorage):
         session.execute(delete(Thread))
         session.execute(delete(Encryption))
 
-        log.info('Removed all chat history')
+        log.info("Removed all chat history")
 
     @with_session
     @timeit
@@ -1218,11 +1210,11 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def cleanup_chat_history(self, session: Session) -> None:
-        '''
+        """
         Remove messages from account where messages are older than max_age
-        '''
+        """
         for account in app.settings.get_accounts():
-            max_age = app.settings.get_account_setting(account, 'chat_history_max_age')
+            max_age = app.settings.get_account_setting(account, "chat_history_max_age")
             if max_age == -1:
                 continue
 
@@ -1231,14 +1223,19 @@ class MessageArchiveStorage(AlchemyStorage):
             now = datetime.now(dt.UTC)
             threshold = now - timedelta(seconds=max_age)
 
-            stmt = select(Message).where(
-                Message.fk_account_pk == fk_account_pk, Message.timestamp < threshold
-            ).options(selectinload(Message.markers))
+            stmt = (
+                select(Message)
+                .where(
+                    Message.fk_account_pk == fk_account_pk,
+                    Message.timestamp < threshold,
+                )
+                .options(selectinload(Message.markers))
+            )
 
             for message in session.scalars(stmt).unique().all():
                 self._delete_message(session, message)
 
-            log.info('Removed messages older then %s', threshold.isoformat())
+            log.info("Removed messages older then %s", threshold.isoformat())
 
     @with_session_yield_from
     @timeit
@@ -1267,7 +1264,10 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_blocked_occupants(
-        self, session: Session, account: str, jid: JID | None = None,
+        self,
+        session: Session,
+        account: str,
+        jid: JID | None = None,
     ) -> Sequence[Occupant]:
         fk_account_pk = self._get_account_pk(session, account)
 
@@ -1308,7 +1308,6 @@ class MessageArchiveStorage(AlchemyStorage):
         stmt = stmt.where(
             Occupant.fk_account_pk == fk_account_pk,
             Occupant.blocked != value,
-
         ).values(blocked=value)
 
         self._explain(session, stmt)

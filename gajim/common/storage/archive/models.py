@@ -80,32 +80,32 @@ class UtilMixin:
 
 
 class Account(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'account'
-    __table_args__ = (Index('idx_account', 'jid', unique=True),)
+    __tablename__ = "account"
+    __table_args__ = (Index("idx_account", "jid", unique=True),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     jid: Mapped[JID] = mapped_column(JIDType)
 
 
 class Remote(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'remote'
-    __table_args__ = (Index('idx_remote', 'jid', unique=True),)
+    __tablename__ = "remote"
+    __table_args__ = (Index("idx_remote", "jid", unique=True),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     jid: Mapped[JID] = mapped_column(JIDType)
 
 
 class Thread(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'thread'
-    __index_cols__ = ['id', 'fk_remote_pk', 'fk_account_pk']
+    __tablename__ = "thread"
+    __index_cols__ = ["id", "fk_remote_pk", "fk_account_pk"]
     __no_table_cols__ = []
-    __table_args__ = (Index('idx_thread', *__index_cols__, unique=True),)
+    __table_args__ = (Index("idx_thread", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE')
+        ForeignKey("account.pk", ondelete="CASCADE")
     )
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'))
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"))
 
     id: Mapped[str]
 
@@ -118,22 +118,30 @@ class Thread(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'occupant'
-    __index_cols__ = ['id', 'fk_remote_pk', 'fk_account_pk']
-    __upsert_cols__ = ['fk_real_remote_pk', 'nickname', 'avatar_sha', 'updated_at']
-    __no_table_cols__ = ['account_', 'remote_jid_', 'remote', 'real_remote_jid_', 'real_remote']
-    __table_args__ = (Index('idx_occupant', *__index_cols__, unique=True),)
+    __tablename__ = "occupant"
+    __index_cols__ = ["id", "fk_remote_pk", "fk_account_pk"]
+    __upsert_cols__ = ["fk_real_remote_pk", "nickname", "avatar_sha", "updated_at"]
+    __no_table_cols__ = [
+        "account_",
+        "remote_jid_",
+        "remote",
+        "real_remote_jid_",
+        "real_remote",
+    ]
+    __table_args__ = (Index("idx_occupant", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
-    remote: Mapped[Remote] = relationship(lazy='raise', foreign_keys=fk_remote_pk, viewonly=True, init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
+    remote: Mapped[Remote] = relationship(
+        lazy="raise", foreign_keys=fk_remote_pk, viewonly=True, init=False
+    )
 
     id: Mapped[str]
 
@@ -141,10 +149,10 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         default=VALUE_MISSING, repr=False
     )
     fk_real_remote_pk: Mapped[int | None] = mapped_column(
-        StrValueMissingType, ForeignKey('remote.pk'), default=VALUE_MISSING, init=False
+        StrValueMissingType, ForeignKey("remote.pk"), default=VALUE_MISSING, init=False
     )
     real_remote: Mapped[Remote | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         foreign_keys=fk_real_remote_pk,
         default=None,
         viewonly=True,
@@ -176,47 +184,47 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         )
 
     def get_upsert_values(self) -> dict[str, Any]:
-        values: dict[str, Any] = {'updated_at': self.updated_at}
+        values: dict[str, Any] = {"updated_at": self.updated_at}
         if self.nickname is not None:
-            values['nickname'] = self.nickname
+            values["nickname"] = self.nickname
 
         if isinstance(self.fk_real_remote_pk, int):
-            values['fk_real_remote_pk'] = sa.func.coalesce(
+            values["fk_real_remote_pk"] = sa.func.coalesce(
                 Occupant.fk_real_remote_pk, self.fk_real_remote_pk
             )
 
         if self.avatar_sha is not VALUE_MISSING:
-            values['avatar_sha'] = self.avatar_sha
+            values["avatar_sha"] = self.avatar_sha
 
         return values
 
 
 class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'oob'
+    __tablename__ = "oob"
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     fk_message_pk: Mapped[int] = mapped_column(
-        ForeignKey('message.pk', ondelete='CASCADE'), init=False
+        ForeignKey("message.pk", ondelete="CASCADE"), init=False
     )
     url: Mapped[str]
     description: Mapped[str | None]
 
 
 class Reply(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'reply'
+    __tablename__ = "reply"
 
     fk_message_pk: Mapped[int] = mapped_column(
-        ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey("message.pk", ondelete="CASCADE"), primary_key=True, init=False
     )
     id: Mapped[str]
     to: Mapped[JID | None] = mapped_column(JIDType)
 
 
 class Call(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'call'
+    __tablename__ = "call"
 
     fk_message_pk: Mapped[int] = mapped_column(
-        ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey("message.pk", ondelete="CASCADE"), primary_key=True, init=False
     )
     sid: Mapped[str]
     end_ts: Mapped[datetime.datetime | None] = mapped_column(
@@ -226,10 +234,10 @@ class Call(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class Encryption(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'encryption'
-    __index_cols__ = ['key', 'trust', 'protocol']
+    __tablename__ = "encryption"
+    __index_cols__ = ["key", "trust", "protocol"]
     __no_table_cols__ = []
-    __table_args__ = (Index('idx_encryption', 'key', 'trust', 'protocol', unique=True),)
+    __table_args__ = (Index("idx_encryption", "key", "trust", "protocol", unique=True),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     protocol: Mapped[int]
@@ -245,21 +253,21 @@ class Encryption(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class SecurityLabel(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'securitylabel'
-    __index_cols__ = ['label_hash', 'fk_remote_pk', 'fk_account_pk']
-    __upsert_cols__ = ['displaymarking', 'fgcolor', 'bgcolor', 'updated_at']
-    __no_table_cols__ = ['account_', 'remote_jid_']
-    __table_args__ = (Index('idx_security_label', *__index_cols__, unique=True),)
+    __tablename__ = "securitylabel"
+    __index_cols__ = ["label_hash", "fk_remote_pk", "fk_account_pk"]
+    __upsert_cols__ = ["displaymarking", "fgcolor", "bgcolor", "updated_at"]
+    __no_table_cols__ = ["account_", "remote_jid_"]
+    __table_args__ = (Index("idx_security_label", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     label_hash: Mapped[str]
     displaymarking: Mapped[str]
@@ -279,20 +287,20 @@ class SecurityLabel(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class MessageError(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'error'
-    __index_cols__ = ['message_id', 'fk_remote_pk', 'fk_account_pk']
-    __no_table_cols__ = ['account_', 'remote_jid_']
-    __table_args__ = (Index('idx_error', *__index_cols__, unique=True),)
+    __tablename__ = "error"
+    __index_cols__ = ["message_id", "fk_remote_pk", "fk_account_pk"]
+    __no_table_cols__ = ["account_", "remote_jid_"]
+    __table_args__ = (Index("idx_error", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     message_id: Mapped[str]
     by: Mapped[JID | None] = mapped_column(JIDType)
@@ -304,27 +312,27 @@ class MessageError(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class Moderation(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'moderation'
-    __index_cols__ = ['stanza_id', 'fk_remote_pk', 'fk_account_pk']
-    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
-    __table_args__ = (Index('idx_moderation', *__index_cols__, unique=True),)
+    __tablename__ = "moderation"
+    __index_cols__ = ["stanza_id", "fk_remote_pk", "fk_account_pk"]
+    __no_table_cols__ = ["account_", "remote_jid_", "occupant", "occupant_"]
+    __table_args__ = (Index("idx_moderation", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('occupant.pk'), default=None, init=False
+        ForeignKey("occupant.pk"), default=None, init=False
     )
 
     stanza_id: Mapped[str]
@@ -334,26 +342,28 @@ class Moderation(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class DisplayedMarker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'displayed_marker'
-    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
+    __tablename__ = "displayed_marker"
+    __no_table_cols__ = ["account_", "remote_jid_", "occupant", "occupant_"]
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
-    remote: Mapped[Remote] = relationship(lazy='raise', foreign_keys=fk_remote_pk, viewonly=True, init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
+    remote: Mapped[Remote] = relationship(
+        lazy="raise", foreign_keys=fk_remote_pk, viewonly=True, init=False
+    )
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('occupant.pk'), default=None, init=False
+        ForeignKey("occupant.pk"), default=None, init=False
     )
 
     id: Mapped[str] = mapped_column()
@@ -361,47 +371,47 @@ class DisplayedMarker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     __table_args__ = (
         Index(
-            'idx_displayed_marker',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
+            "idx_displayed_marker",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
             unique=True,
             sqlite_where=fk_occupant_pk.is_(None),
         ),
         Index(
-            'idx_displayed_marker_gc',
-            'id',
-            'fk_remote_pk',
-            'fk_occupant_pk',
-            'fk_account_pk',
+            "idx_displayed_marker_gc",
+            "id",
+            "fk_remote_pk",
+            "fk_occupant_pk",
+            "fk_account_pk",
             unique=True,
             sqlite_where=fk_occupant_pk.isnot(None),
         ),
         Index(
-            'idx_last_displayed_marker',
-            'fk_remote_pk',
-            'fk_account_pk',
-            sa.text('timestamp DESC'),
+            "idx_last_displayed_marker",
+            "fk_remote_pk",
+            "fk_account_pk",
+            sa.text("timestamp DESC"),
         ),
         Index(
-            'idx_last_displayed_marker_gc',
-            'fk_remote_pk',
-            'fk_account_pk',
-            'fk_occupant_pk',
-            sa.text('timestamp DESC'),
+            "idx_last_displayed_marker_gc",
+            "fk_remote_pk",
+            "fk_account_pk",
+            "fk_occupant_pk",
+            sa.text("timestamp DESC"),
         ),
     )
 
 
 class Receipt(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'receipt'
-    __no_table_cols__ = ['account_', 'remote_jid_']
+    __tablename__ = "receipt"
+    __no_table_cols__ = ["account_", "remote_jid_"]
     __table_args__ = (
         Index(
-            'idx_receipt',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
+            "idx_receipt",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
             unique=True,
         ),
     )
@@ -410,37 +420,37 @@ class Receipt(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     id: Mapped[str] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
 
 class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'mam_archive_state'
-    __index_cols__ = ['fk_remote_pk', 'fk_account_pk']
+    __tablename__ = "mam_archive_state"
+    __index_cols__ = ["fk_remote_pk", "fk_account_pk"]
     __upsert_cols__ = [
-        'from_stanza_id',
-        'from_stanza_ts',
-        'to_stanza_id',
-        'to_stanza_ts',
+        "from_stanza_id",
+        "from_stanza_ts",
+        "to_stanza_id",
+        "to_stanza_ts",
     ]
-    __no_table_cols__ = ['account_', 'remote_jid_']
-    __table_args__ = (Index('idx_mam_archive_state', *__index_cols__, unique=True),)
+    __no_table_cols__ = ["account_", "remote_jid_"]
+    __table_args__ = (Index("idx_mam_archive_state", *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     from_stanza_id: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
@@ -466,69 +476,69 @@ class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class FileTransferSource(MappedAsDataclass, Base, kw_only=True):
-    __tablename__ = 'ft_source'
+    __tablename__ = "ft_source"
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     fk_filetransfer_pk: Mapped[int] = mapped_column(
-        ForeignKey('filetransfer.pk', ondelete='CASCADE'), init=False
+        ForeignKey("filetransfer.pk", ondelete="CASCADE"), init=False
     )
     type: Mapped[str]
 
     __mapper_args__ = {
-        'polymorphic_identity': 'source',
-        'polymorphic_on': 'type',
+        "polymorphic_identity": "source",
+        "polymorphic_on": "type",
     }
 
 
 class UrlData(FileTransferSource):
-    __tablename__ = 'ft_source_urldata'
+    __tablename__ = "ft_source_urldata"
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
     )
     target: Mapped[str]
     scheme_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
 
     __mapper_args__ = {
-        'polymorphic_load': 'selectin',
-        'polymorphic_identity': 'urldata',
+        "polymorphic_load": "selectin",
+        "polymorphic_identity": "urldata",
     }
 
 
 class JingleFT(FileTransferSource):
-    __tablename__ = 'ft_source_jingleft'
+    __tablename__ = "ft_source_jingleft"
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
     )
     sid: Mapped[str]
 
     __mapper_args__ = {
-        'polymorphic_load': 'selectin',
-        'polymorphic_identity': 'jingleft',
+        "polymorphic_load": "selectin",
+        "polymorphic_identity": "jingleft",
     }
 
 
 class JinglePub(FileTransferSource):
-    __tablename__ = 'ft_source_jinglepub'
+    __tablename__ = "ft_source_jinglepub"
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey("ft_source.pk", ondelete="CASCADE"), primary_key=True, init=False
     )
     id: Mapped[str]
 
     __mapper_args__ = {
-        'polymorphic_load': 'selectin',
-        'polymorphic_identity': 'jinglepub',
+        "polymorphic_load": "selectin",
+        "polymorphic_identity": "jinglepub",
     }
 
 
 class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'filetransfer'
+    __tablename__ = "filetransfer"
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     fk_message_pk: Mapped[int] = mapped_column(
-        ForeignKey('message.pk', ondelete='CASCADE'), init=False
+        ForeignKey("message.pk", ondelete="CASCADE"), init=False
     )
 
     date: Mapped[datetime.datetime | None] = mapped_column(
@@ -548,34 +558,34 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     path: Mapped[str | None] = mapped_column(default=None, init=False)
 
     source: Mapped[list[FileTransferSource]] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         default_factory=list,
-        cascade='all, delete',
+        cascade="all, delete",
         passive_deletes=True,
     )
 
 
 class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'reaction'
-    __upsert_cols__ = ['emojis', 'timestamp']
-    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
+    __tablename__ = "reaction"
+    __upsert_cols__ = ["emojis", "timestamp"]
+    __no_table_cols__ = ["account_", "remote_jid_", "occupant", "occupant_"]
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('occupant.pk'), default=None, init=False
+        ForeignKey("occupant.pk"), default=None, init=False
     )
 
     id: Mapped[str] = mapped_column()
@@ -585,21 +595,21 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     __table_args__ = (
         Index(
-            'idx_reaction_id',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
-            'direction',
+            "idx_reaction_id",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
+            "direction",
             unique=True,
             sqlite_where=fk_occupant_pk.is_(None),
         ),
         Index(
-            'idx_reaction_id_gc',
-            'id',
-            'fk_remote_pk',
-            'fk_occupant_pk',
-            'fk_account_pk',
-            'direction',
+            "idx_reaction_id_gc",
+            "id",
+            "fk_remote_pk",
+            "fk_occupant_pk",
+            "fk_account_pk",
+            "direction",
             unique=True,
             sqlite_where=fk_occupant_pk.isnot(None),
         ),
@@ -607,25 +617,25 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'retraction'
-    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
+    __tablename__ = "retraction"
+    __no_table_cols__ = ["account_", "remote_jid_", "occupant", "occupant_"]
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     occupant_: Occupant | None = dataclasses.field(repr=False)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('occupant.pk'), default=None, init=False
+        ForeignKey("occupant.pk"), default=None, init=False
     )
 
     id: Mapped[str] = mapped_column()
@@ -635,45 +645,45 @@ class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     __table_args__ = (
         Index(
-            'idx_retraction_id',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
-            'direction',
+            "idx_retraction_id",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
+            "direction",
             unique=True,
             sqlite_where=fk_occupant_pk.is_(None),
         ),
         Index(
-            'idx_retraction_id_gc',
-            'id',
-            'fk_remote_pk',
-            'fk_occupant_pk',
-            'fk_account_pk',
-            'direction',
+            "idx_retraction_id_gc",
+            "id",
+            "fk_remote_pk",
+            "fk_occupant_pk",
+            "fk_account_pk",
+            "direction",
             unique=True,
             sqlite_where=fk_occupant_pk.isnot(None),
         ),
         Index(
-            'idx_retraction_state',
-            'state',
+            "idx_retraction_state",
+            "state",
         ),
     )
 
 
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
-    __tablename__ = 'message'
+    __tablename__ = "message"
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     account_: str = dataclasses.field(repr=False)
-    account: Mapped[Account] = relationship(lazy='joined', viewonly=True, init=False)
+    account: Mapped[Account] = relationship(lazy="joined", viewonly=True, init=False)
     fk_account_pk: Mapped[int] = mapped_column(
-        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
     )
 
     remote_jid_: JID = dataclasses.field(repr=False)
-    remote: Mapped[Remote] = relationship(lazy='joined', viewonly=True, init=False)
-    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    remote: Mapped[Remote] = relationship(lazy="joined", viewonly=True, init=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
 
     resource: Mapped[str | None] = mapped_column()
     type: Mapped[int] = mapped_column()
@@ -691,40 +701,40 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     thread_id_: str | None = dataclasses.field(repr=False, default=None)
     thread: Mapped[Thread | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_thread_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('thread.pk'), default=None, init=False
+        ForeignKey("thread.pk"), default=None, init=False
     )
 
     occupant_: Occupant | None = dataclasses.field(repr=False, default=None)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('occupant.pk'), default=None, init=False
+        ForeignKey("occupant.pk"), default=None, init=False
     )
 
     encryption_: Encryption | None = dataclasses.field(repr=False, default=None)
     encryption: Mapped[Encryption | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_encryption_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('encryption.pk'), default=None, init=False
+        ForeignKey("encryption.pk"), default=None, init=False
     )
 
     security_label_: SecurityLabel | None = dataclasses.field(repr=False, default=None)
     security_label: Mapped[SecurityLabel | None] = relationship(
-        lazy='joined', viewonly=True, init=False
+        lazy="joined", viewonly=True, init=False
     )
     fk_security_label_pk: Mapped[int | None] = mapped_column(
-        ForeignKey('securitylabel.pk'), default=None, init=False
+        ForeignKey("securitylabel.pk"), default=None, init=False
     )
 
     correction_id: Mapped[str | None] = mapped_column(default=None)
 
     corrections: Mapped[list[Message]] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         init=False,
         primaryjoin=sa.and_(
             foreign(id) == sa_remote(correction_id),
@@ -750,7 +760,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     markers: Mapped[list[DisplayedMarker]] = relationship(
-        lazy='raise',
+        lazy="raise",
         init=False,
         primaryjoin=sa.and_(
             expr.case(
@@ -769,7 +779,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     receipt: Mapped[Receipt | None] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         init=False,
         primaryjoin=sa.and_(
             foreign(id) == Receipt.id,
@@ -780,7 +790,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     reactions: Mapped[list[Reaction]] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         init=False,
         primaryjoin=sa.and_(
             expr.case(
@@ -798,7 +808,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     retraction: Mapped[Retraction | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         default=None,
         init=False,
         primaryjoin=sa.and_(
@@ -818,7 +828,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     moderation: Mapped[Moderation | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         default=None,
         init=False,
         primaryjoin=sa.and_(
@@ -830,7 +840,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     error: Mapped[MessageError | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         default=None,
         init=False,
         primaryjoin=sa.and_(
@@ -842,52 +852,52 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     filetransfers: Mapped[list[FileTransfer]] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         default_factory=list,
-        cascade='all, delete',
+        cascade="all, delete",
         passive_deletes=True,
     )
     call: Mapped[Call | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         default=None,
-        cascade='all, delete',
+        cascade="all, delete",
         passive_deletes=True,
     )
     oob: Mapped[list[OOB]] = relationship(
-        lazy='selectin',
+        lazy="selectin",
         default_factory=list,
-        cascade='all, delete',
+        cascade="all, delete",
         passive_deletes=True,
     )
     reply: Mapped[Reply | None] = relationship(
-        lazy='joined',
+        lazy="joined",
         default=None,
-        cascade='all, delete',
+        cascade="all, delete",
         passive_deletes=True,
     )
 
     __table_args__ = (
         Index(
-            'idx_message', 'fk_remote_pk', 'fk_account_pk', sa.text('timestamp DESC')
+            "idx_message", "fk_remote_pk", "fk_account_pk", sa.text("timestamp DESC")
         ),
         Index(
-            'idx_message_corrections',
-            'correction_id',
-            'fk_remote_pk',
-            'fk_account_pk',
-            sa.text('timestamp ASC'),
+            "idx_message_corrections",
+            "correction_id",
+            "fk_remote_pk",
+            "fk_account_pk",
+            sa.text("timestamp ASC"),
         ),
         Index(
-            'idx_message_id',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
+            "idx_message_id",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
         ),
         Index(
-            'idx_stanza_id',
-            'stanza_id',
-            'fk_remote_pk',
-            'fk_account_pk',
+            "idx_stanza_id",
+            "stanza_id",
+            "fk_remote_pk",
+            "fk_account_pk",
         ),
     )
 
@@ -900,8 +910,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     def get_last_correction(self) -> Message | None:
         for message in reversed(self.corrections):
-            if (message.retraction is None and
-                    message.moderation is None):
+            if message.retraction is None and message.moderation is None:
                 return message
 
         return None
@@ -911,10 +920,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             return None
         account = app.settings.get_account_from_jid(self.account.jid)
         return app.storage.archive.get_referenced_message(
-            account,
-            self.remote.jid,
-            self.type,
-            self.reply.id
+            account, self.remote.jid, self.type, self.reply.id
         )
 
     def get_ids_for_moderate(self) -> list[str]:

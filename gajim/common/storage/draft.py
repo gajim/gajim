@@ -26,15 +26,12 @@ class DraftStorage(Observable):
             return
 
         self._drafts[contact] = draft
-        self.notify('draft-update', contact, draft)
+        self.notify("draft-update", contact, draft)
 
-    def get(
-        self,
-        contact: types.ChatContactT
-    ) -> Draft | None:
+    def get(self, contact: types.ChatContactT) -> Draft | None:
 
         return self._drafts.get(contact)
 
     def remove(self, contact: types.ChatContactT) -> None:
         self._drafts.pop(contact, None)
-        self.notify('draft-update', contact, None)
+        self.notify("draft-update", contact, None)
