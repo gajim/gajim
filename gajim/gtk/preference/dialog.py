@@ -42,7 +42,6 @@ from gajim.gtk.preference.app import AutoExtendedAwayPage
 from gajim.gtk.preference.app import ChatsPage
 from gajim.gtk.preference.app import GeneralPage
 from gajim.gtk.preference.app import MiscellaneousGroup
-from gajim.gtk.preference.app import NotificationsPage
 from gajim.gtk.preference.app import PluginsPage
 from gajim.gtk.preference.app import StatusPage
 from gajim.gtk.preference.app import StylePage
@@ -91,7 +90,6 @@ class Preferences(GajimAppWindow, EventHelper):
             # Subpages
             AutoAwayPage(),
             AutoExtendedAwayPage(),
-            NotificationsPage(),
         ]
 
         for page in preferences:

@@ -414,40 +414,27 @@ class VisualNotificationsGroup(GajimPreferencesGroup):
         settings = [
             Setting(
                 SettingKind.SWITCH,
-                _("Notification Area Icon"),
+                _("System Tray Icon"),
                 SettingType.CONFIG,
                 "show_trayicon",
             ),
             Setting(
-                SettingKind.SUBPAGE,
-                _("Show Notifications"),
+                SettingKind.SWITCH,
+                _("System Tray Notifications"),
                 SettingType.CONFIG,
-                "show_notifications",
-                props={"subpage": "notifications"},
+                "trayicon_notification_on_events",
+                desc=_("Show notifications on the system tray icon"),
+                bind="show_trayicon",
             ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-
-class NotificationsGroup(GajimPreferencesGroup):
-    def __init__(self) -> None:
-        GajimPreferencesGroup.__init__(
-            self,
-            key="notifications",
-        )
-
-        settings = [
             Setting(
                 SettingKind.SWITCH,
-                _("Show Notifications"),
+                _("System Notifications"),
                 SettingType.CONFIG,
                 "show_notifications",
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Notifications When Away"),
+                _("System Notifications When Away"),
                 SettingType.CONFIG,
                 "show_notifications_away",
                 desc=_("Show notifications even if you are Away, Busy, etc."),
@@ -1284,14 +1271,4 @@ class AutoExtendedAwayPage(GajimPreferencePage):
             key="auto-extended-away",
             title=_("Auto Not Available"),
             groups=[AutoExtendedAwayGroup],
-        )
-
-
-class NotificationsPage(GajimPreferencePage):
-    def __init__(self) -> None:
-        GajimPreferencePage.__init__(
-            self,
-            key="notifications",
-            title=_("Notifications"),
-            groups=[NotificationsGroup],
         )

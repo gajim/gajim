@@ -644,8 +644,6 @@ ADVANCED_SETTINGS = {
             'Send message on Ctrl+Enter and make a new line with Enter.'),
         'stun_server': _('STUN server to use when using Jingle'),
         'time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
-        'trayicon_notification_on_events': _(
-            'Notify of events in the notification area.'),
         'use_kib_mib': _(
             'IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),
         'use_stun_server': _(
