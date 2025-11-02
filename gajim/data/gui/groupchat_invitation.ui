@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GroupChatInvitation" parent="GtkBox">
+    <property name="hexpand">true</property>
+    <property name="spacing">36</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="halign">center</property>
+        <style>
+          <class name="card"/>
+          <class name="p-18"/>
+        </style>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkImage" id="_inviter_avatar">
+                <property name="pixel-size">24</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_inviter_name_label">
+                <property name="max-width-chars">32</property>
+                <property name="ellipsize">end</property>
+                <style>
+                  <class name="bold"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AccountBadge" id="_account_badge">
+                <property name="visible">false</property>
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">invites you to join a group chat</property>
+            <property name="max-width-chars">32</property>
+            <property name="wrap">true</property>
+            <property name="halign">start</property>
+            <property name="wrap-mode">word-char</property>
+            <style>
+              <class name="dimmed"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="_info_box">
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="_actions_box">
+        <property name="valign">end</property>
+        <property name="vexpand">true</property>
+        <style>
+          <class name="pt-6"/>
+        </style>
+        <child>
+          <object class="GtkButton" id="_decline_button">
+            <property name="halign">start</property>
+            <property name="margin-end">24</property>
+            <property name="label" translatable="yes">_Decline</property>
+            <property name="use-underline">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">end</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GroupChatNickChooser" id="_nick_chooser"/>
+            </child>
+            <child>
+              <object class="GtkButton" id="_join_button">
+                <property name="label" translatable="yes">_Join</property>
+                <property name="use-underline">true</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

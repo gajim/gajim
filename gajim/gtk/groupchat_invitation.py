@@ -8,6 +8,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.events import MucInvitation
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -17,6 +18,7 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import AccountBadge
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -45,7 +47,21 @@ class GroupChatInvitationDialog(GajimAppWindow):
         pass
 
 
+@Gtk.Template(string=get_ui_string("groupchat_invitation.ui"))
 class GroupChatInvitation(Gtk.Box, SignalManager):
+
+    __gtype_name__ = "GroupChatInvitation"
+
+    _inviter_avatar: Gtk.Image = Gtk.Template.Child()
+    _inviter_name_label: Gtk.Label = Gtk.Template.Child()
+    _account_badge: AccountBadge = Gtk.Template.Child()
+
+    _info_box: Gtk.Box = Gtk.Template.Child()
+
+    _actions_box: Gtk.Box = Gtk.Template.Child()
+    _decline_button: Gtk.Button = Gtk.Template.Child()
+    _join_button: Gtk.Button = Gtk.Template.Child()
+    _nick_chooser: GroupChatNickChooser = Gtk.Template.Child()
 
     __gsignals__ = {
         "accepted": (
@@ -61,7 +77,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
     }
 
     def __init__(self, account: str, event: MucInvitation) -> None:
-        Gtk.Box.__init__(self, halign=Gtk.Align.CENTER)
+        Gtk.Box.__init__(self)
         SignalManager.__init__(self)
 
         self._account = account
@@ -70,75 +86,28 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         self._from = str(event.from_)
         self._password = event.password
 
-        main_box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL, spacing=12, valign=Gtk.Align.FILL
-        )
-
         muc_info_box = GroupChatInfoScrolled(account, minimal=True)
+        muc_info_box.set_hexpand(True)
         muc_info_box.set_from_disco_info(event.info)
-        main_box.append(muc_info_box)
-
-        separator = Gtk.Separator()
-        main_box.append(separator)
+        self._info_box.append(muc_info_box)
 
         contact = self._client.get_module("Contacts").get_contact(event.from_.bare)
         assert isinstance(contact, BareContact | GroupchatContact)
-        contact_label = Gtk.Label(label=contact.name, wrap=True)
-        contact_label.add_css_class("title-3")
-        contact_box = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL, spacing=6, halign=Gtk.Align.CENTER
+        self._inviter_avatar.set_from_paintable(
+            contact.get_avatar(AvatarSize.SMALL, self.get_scale_factor())
         )
-        contact_box.append(contact_label)
-        main_box.append(contact_box)
+        self._inviter_name_label.set_text(contact.name)
 
         enabled_accounts = app.get_enabled_accounts_with_labels()
-        if len(enabled_accounts) > 1:
-            account_badge = AccountBadge(account)
-            account_badge.set_valign(Gtk.Align.CENTER)
-            contact_box.append(account_badge)
+        self._account_badge.set_account(account)
+        self._account_badge.set_visible(len(enabled_accounts) > 1)
 
-        invitation_label = Gtk.Label(
-            label=_("has invited you to a group chat.\nDo you want to join?"),
-            halign=Gtk.Align.CENTER,
-            justify=Gtk.Justification.CENTER,
-            max_width_chars=50,
-            wrap=True,
-        )
-        main_box.append(invitation_label)
+        self._connect(self._decline_button, "clicked", self._on_decline)
+        self._connect(self._join_button, "clicked", self._on_join)
 
-        decline_button = Gtk.Button.new_with_mnemonic(_("_Decline"))
-        decline_button.set_halign(Gtk.Align.START)
-        decline_button.set_margin_end(24)
-        self._connect(decline_button, "clicked", self._on_decline)
-
-        self._nick_chooser = GroupChatNickChooser()
         self._nick_chooser.set_text(get_group_chat_nick(self._account, event.info.jid))
 
-        join_button = Gtk.Button.new_with_mnemonic(_("_Join"))
-        join_button.set_halign(Gtk.Align.END)
-        join_button.add_css_class("suggested-action")
-        self._connect(join_button, "clicked", self._on_join)
-
-        join_box = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.END, hexpand=True
-        )
-        join_box.add_css_class("linked")
-        join_box.append(self._nick_chooser)
-        join_box.append(join_button)
-
-        self._button_box = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            margin_top=6,
-            vexpand=True,
-            valign=Gtk.Align.END,
-        )
-        self._button_box.prepend(decline_button)
-        self._button_box.append(join_box)
-
-        main_box.append(self._button_box)
-        self.append(main_box)
-
-        join_button.grab_focus()
+        self._join_button.grab_focus()
 
     def do_unroot(self) -> None:
         Gtk.Box.do_unroot(self)
@@ -157,4 +126,4 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         self.emit("declined")
 
     def disable_buttons(self) -> None:
-        self._button_box.set_sensitive(False)
+        self._actions_box.set_sensitive(False)

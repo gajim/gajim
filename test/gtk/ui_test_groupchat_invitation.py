@@ -165,17 +165,19 @@ class TestContactsModule:
             contact.jid = MUC_JID
             contact.name = "Group Chat Name"
             contact.is_groupchat = True
+            avatar = convert_surface_to_texture(
+                generate_default_avatar("G", (0.2, 0.7, 0.4), AvatarSize.GROUP_INFO, 1)
+            )
         else:
             contact = MagicMock(spec_set=BareContact)
             contact.jid = INVITER_JID
-            contact.name = "Inviter"
+            contact.name = "Inviter Name"
             contact.is_groupchat = False
+            avatar = convert_surface_to_texture(
+                generate_default_avatar("I", (0.2, 0.1, 0.7), AvatarSize.SMALL, 1)
+            )
 
-        avatar = convert_surface_to_texture(
-            generate_default_avatar("T", (0.2, 0.1, 0.7), AvatarSize.CALL_BIG, 1)
-        )
         contact.get_avatar = MagicMock(return_value=avatar)
-
         contact.account = accounts[0]
 
         return contact
