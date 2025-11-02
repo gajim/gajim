@@ -27,7 +27,7 @@ from gajim.common.i18n import p_
 STOP_EVENT = True
 PROPAGATE_EVENT = False
 
-MAX_MESSAGE_CORRECTION_DELAY = 300
+MAX_MESSAGE_CORRECTION_DELAY = 3600
 
 
 class EncryptionInfoMsg(Enum):
