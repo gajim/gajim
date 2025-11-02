@@ -123,6 +123,8 @@ class Migration:
             self._v13()
         if user_version < 14:
             self._v14()
+        if user_version < 15:
+            self._v15()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -314,6 +316,29 @@ class Migration:
             "PRAGMA user_version=14",
         ]
         self._execute_multiple(statements)
+
+    def _v15(self) -> None:
+        # In the past some PM messages were not correctly discovered
+        # Find them and set the type and resource
+        unique_remotes_stmt = (
+            sa.select(mod.Message.fk_remote_pk).distinct().where(mod.Message.type == 3)
+        )
+        remotes_stmt = sa.select(mod.Remote).where(
+            mod.Remote.pk.in_(unique_remotes_stmt.scalar_subquery())
+        )
+
+        with self._archive.get_session() as s:
+            remotes = s.execute(remotes_stmt).scalars().all()
+            for remote in remotes:
+                stmt = (
+                    sa.update(mod.Message)
+                    .where(mod.Message.fk_remote_pk == remote.pk, mod.Message.type != 3)
+                    .values(type=3, resource=remote.jid.resource)
+                )
+                s.execute(stmt)
+            s.commit()
+
+        self._execute_multiple(["PRAGMA user_version=15"])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
