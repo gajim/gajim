@@ -73,7 +73,7 @@ def load_icon_surface(
     return convert_texture_to_surface(texture)
 
 
-def get_status_icon_name(name: str) -> str:
+def get_tray_icon_name(name: str) -> str:
     prefix = "gajim"
     if app.is_flatpak():
         prefix = app.get_default_app_id()

@@ -34,27 +34,27 @@ from gajim.common.i18n import _
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
 
-from gajim.gtk.util.icons import get_status_icon_name
+from gajim.gtk.util.icons import get_tray_icon_name
 from gajim.gtk.util.window import open_window
 
-log = logging.getLogger("gajim.gtk.statusicon")
+log = logging.getLogger("gajim.gtk.trayicon")
 
 if sys.platform == "win32":
     import pystray
     from PIL import Image
 
 
-class StatusIcon:
+class TrayIcon:
     def __init__(self) -> None:
 
         app.settings.connect_signal("show_trayicon", self._on_setting_changed)
 
         if sys.platform == "win32":
-            self._backend = WindowsStatusIcon()
+            self._backend = WindowsTrayIcon()
         elif sys.platform == "darwin":
             self._backend = NoneBackend()
         else:
-            self._backend = LinuxStatusIcon()
+            self._backend = LinuxTrayIcon()
 
     def _on_setting_changed(self, value: bool, *args: Any) -> None:
         self._backend.set_enabled(value)
@@ -88,7 +88,7 @@ class NoneBackend:
         pass
 
 
-class StatusIconBackend(EventHelper):
+class TrayIconBackend(EventHelper):
     def __init__(self) -> None:
         EventHelper.__init__(self)
 
@@ -155,36 +155,36 @@ class StatusIconBackend(EventHelper):
         self._on_show_hide()
 
 
-class WindowsStatusIcon(StatusIconBackend):
+class WindowsTrayIcon(TrayIconBackend):
     def __init__(self) -> None:
-        StatusIconBackend.__init__(self)
-        self._status_icon = self._create_status_icon()
+        TrayIconBackend.__init__(self)
+        self._tray_icon = self._create_tray_icon()
 
         if app.settings.get("show_trayicon"):
-            self._status_icon.run_detached()
+            self._tray_icon.run_detached()
 
     def update_state(self, init: bool = False) -> None:
         if not init and app.window.get_total_unread_count():
-            self._status_icon.icon = self._get_icon("message-new")
+            self._tray_icon.icon = self._get_icon("message-new")
             return
 
         show = get_global_show()
-        self._status_icon.icon = self._get_icon(show)
+        self._tray_icon.icon = self._get_icon(show)
 
     def set_enabled(self, enabled: bool) -> None:
-        self._status_icon.stop()
+        self._tray_icon.stop()
 
         if enabled:
-            self._status_icon = self._create_status_icon()
-            self._status_icon.run_detached()
+            self._tray_icon = self._create_tray_icon()
+            self._tray_icon.run_detached()
 
     def is_visible(self) -> bool:
-        return self._status_icon.visible
+        return self._tray_icon.visible
 
     def shutdown(self) -> None:
-        self._status_icon.stop()
+        self._tray_icon.stop()
 
-    def _create_status_icon(self) -> pystray.Icon:
+    def _create_tray_icon(self) -> pystray.Icon:
         assert pystray  # type: ignore
         menu_items: list[pystray.MenuItem] = [
             pystray.MenuItem(
@@ -249,23 +249,23 @@ class WindowsStatusIcon(StatusIconBackend):
 
     @staticmethod
     def _get_icon(icon_name: str) -> Image.Image:
-        status_icon_name = get_status_icon_name(icon_name)
+        tray_icon_name = get_tray_icon_name(icon_name)
         path = (
             configpaths.get("ICONS")
             / "hicolor"
             / "32x32"
             / "status"
-            / f"{status_icon_name}.png"
+            / f"{tray_icon_name}.png"
         )
         return Image.open(path)  # type: ignore
 
 
-class LinuxStatusIcon(StatusIconBackend):
+class LinuxTrayIcon(TrayIconBackend):
     def __init__(self) -> None:
-        StatusIconBackend.__init__(self)
+        TrayIconBackend.__init__(self)
 
         self._shutdown = False
-        self._status_icon: StatusNotifierItemService | None = None
+        self._tray_icon: StatusNotifierItemService | None = None
 
         self._theme_path = None
         if not app.is_flatpak():
@@ -280,14 +280,14 @@ class LinuxStatusIcon(StatusIconBackend):
             log.error(error)
             return
 
-        self._status_icon = StatusNotifierItemService(
+        self._tray_icon = StatusNotifierItemService(
             connection, self._get_menu(), self._theme_path, self._on_activate
         )
 
-        log.info("Status icon init successful")
+        log.info("Tray icon init successful")
 
         if app.settings.get("show_trayicon"):
-            self._status_icon.register()
+            self._tray_icon.register()
             self.update_state(init=True)
 
     def _get_menu(self) -> DBusMenu:
@@ -349,8 +349,8 @@ class LinuxStatusIcon(StatusIconBackend):
         )
 
     def update_state(self, init: bool = False) -> None:
-        if self._status_icon is None:
-            # Status icon is not initialized
+        if self._tray_icon is None:
+            # Tray icon is not initialized
             return
 
         if self._shutdown:
@@ -358,33 +358,33 @@ class LinuxStatusIcon(StatusIconBackend):
             return
 
         if not init and app.window.get_total_unread_count():
-            icon_name = get_status_icon_name("message-new")
-            self._status_icon.set_icon(icon_name)
+            icon_name = get_tray_icon_name("message-new")
+            self._tray_icon.set_icon(icon_name)
             return
 
         show = get_global_show()
-        icon_name = get_status_icon_name(show)
-        self._status_icon.set_icon(icon_name)
+        icon_name = get_tray_icon_name(show)
+        self._tray_icon.set_icon(icon_name)
 
     def set_enabled(self, enabled: bool) -> None:
-        if self._status_icon is None:
+        if self._tray_icon is None:
             return
 
-        log.info("Set status icon enabled: %s", enabled)
+        log.info("Set tray icon enabled: %s", enabled)
 
         if enabled:
-            self._status_icon.register()
+            self._tray_icon.register()
             self.update_state(init=True)
         else:
-            self._status_icon.unregister()
+            self._tray_icon.unregister()
 
     def is_visible(self) -> bool:
-        if self._status_icon is None:
+        if self._tray_icon is None:
             return False
-        return self._status_icon.get_visible()
+        return self._tray_icon.get_visible()
 
     def shutdown(self) -> None:
-        if self._status_icon is None:
+        if self._tray_icon is None:
             return
         self._shutdown = True
-        self._status_icon.unregister()
+        self._tray_icon.unregister()

@@ -251,9 +251,9 @@ class GajimApplication(Adw.Application, CoreApplication):
             app.settings.get("autoawaytime") * 60, app.settings.get("autoxatime") * 60
         )
 
-        from gajim.gtk.status_icon import StatusIcon
+        from gajim.gtk.tray_icon import TrayIcon
 
-        self.systray = StatusIcon()
+        self.systray = TrayIcon()
 
         self._add_app_actions()
         accounts = app.settings.get_accounts()
