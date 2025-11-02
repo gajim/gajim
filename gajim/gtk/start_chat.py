@@ -54,7 +54,7 @@ from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_filter import ChatTypeFilter
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.menus import get_start_chat_menu
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.util.classes import SignalManager
@@ -100,7 +100,7 @@ class StartChatDialog(GajimAppWindow):
         self._ui = get_builder("start_chat_dialog.ui")
         self.set_child(self._ui.stack)
 
-        self._nick_chooser = NickChooser()
+        self._nick_chooser = GroupChatNickChooser()
         self._ui.join_box.prepend(self._nick_chooser)
 
         self._search_is_valid_jid = False

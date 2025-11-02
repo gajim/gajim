@@ -4,13 +4,13 @@
 
 from gi.repository import Gtk
 
-from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
 
-class TestNickChooser(GajimAppWindow):
+class TestGroupChatNickChooser(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
@@ -24,7 +24,7 @@ class TestNickChooser(GajimAppWindow):
             hexpand=True, halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER
         )
 
-        self._nick_chooser = NickChooser()
+        self._nick_chooser = GroupChatNickChooser()
         self._nick_chooser.set_text("Fancy Nickname")
 
         self._main_box.append(self._nick_chooser)
@@ -37,7 +37,7 @@ class TestNickChooser(GajimAppWindow):
 
 util.init_settings()
 
-window = TestNickChooser()
+window = TestGroupChatNickChooser()
 window.show()
 
 util.run_app()

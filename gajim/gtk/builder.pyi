@@ -426,13 +426,6 @@ class GroupchatManageBuilder(Builder):
     destroy_cancel_button: Gtk.Button
     destroy_button: Gtk.Button
 
-class GroupchatNickChooserBuilder(Builder):
-    button_content: Gtk.Box
-    label: Gtk.Label
-    popover: Gtk.Popover
-    entry: Gtk.Entry
-    apply_button: Gtk.Button
-
 class GroupchatOutcastBuilder(Builder):
     info_popover: Gtk.Popover
     outcast_store: Gtk.ListStore
@@ -924,12 +917,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> GroupchatManageBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["groupchat_nick_chooser.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatNickChooserBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["groupchat_outcast.ui"],

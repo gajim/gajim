@@ -15,7 +15,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.util.muc import get_group_chat_nick
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.widgets import AccountBadge
 from gajim.gtk.widgets import GajimAppWindow
@@ -111,7 +111,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         decline_button.set_margin_end(24)
         self._connect(decline_button, "clicked", self._on_decline)
 
-        self._nick_chooser = NickChooser()
+        self._nick_chooser = GroupChatNickChooser()
         self._nick_chooser.set_text(get_group_chat_nick(self._account, event.info.jid))
 
         join_button = Gtk.Button.new_with_mnemonic(_("_Join"))

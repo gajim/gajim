@@ -21,7 +21,7 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.standards import get_rfc5646_lang
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -59,7 +59,7 @@ class GroupchatJoin(GajimAppWindow):
         self._connect(self._stack, "notify::visible-child-name", self._on_page_changed)
         self._main_box.append(self._stack)
 
-        self._nick_chooser = NickChooser()
+        self._nick_chooser = GroupChatNickChooser()
 
         self._join_button = Gtk.Button.new_with_mnemonic(_("_Join"))
         self._join_button.set_halign(Gtk.Align.END)

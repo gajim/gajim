@@ -1,67 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkBox" id="button_content">
-    <property name="spacing">12</property>
+  <template class="GroupChatNickChooser" parent="GtkMenuButton">
+    <property name="receives-default">false</property>
+    <property name="popover">_popover</property>
     <child>
-      <object class="GtkLabel" id="label">
-        <property name="ellipsize">end</property>
-        <property name="max_width_chars">15</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImage">
-        <property name="icon_name">lucide-square-pen-symbolic</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkPopover" id="popover">
-    <property name="child">
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">Join Group Chat as…</property>
-            <style>
-              <class name="bold"/>
-            </style>
+          <object class="GtkLabel" id="_label">
+            <property name="ellipsize">end</property>
+            <property name="max_width_chars">15</property>
           </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <child>
-              <object class="GtkEntry" id="entry">
-                <property name="focusable">1</property>
-                <property name="tooltip_text" translatable="yes">Your Nickname</property>
-                <property name="activates_default">1</property>
-                <style>
-                  <class name="linked"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="apply_button">
-                <property name="focusable">1</property>
+          <object class="GtkImage">
+            <property name="icon_name">lucide-square-pen-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPopover" id="_popover">
+            <property name="default-widget">_apply_button</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage">
-                    <property name="icon_name">lucide-check-symbolic</property>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Join Group Chat as…</property>
+                    <style>
+                      <class name="bold"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <child>
+                      <object class="GtkEntry" id="_entry">
+                        <property name="focusable">1</property>
+                        <property name="tooltip_text" translatable="yes">Your Nickname</property>
+                        <property name="activates_default">1</property>
+                        <style>
+                          <class name="linked"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="_apply_button">
+                        <property name="focusable">1</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon_name">lucide-check-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="linked"/>
+                    </style>
                   </object>
                 </child>
                 <style>
-                  <class name="suggested-action"/>
+                  <class name="p-6"/>
                 </style>
               </object>
-            </child>
-            <style>
-              <class name="linked"/>
-            </style>
+            </property>
           </object>
         </child>
-        <style>
-          <class name="p-6"/>
-        </style>
       </object>
-    </property>
-  </object>
+    </child>
+  </template>
 </interface>
