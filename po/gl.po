@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -3395,10 +3395,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Usar a icona na á_rea de notificación"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Modificar a conta"
 
@@ -3406,19 +3402,11 @@ msgstr "Modificar a conta"
 msgid "Notifications"
 msgstr "Modificar a conta"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Modificar a conta"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Notifica acontecementos na área de notificación."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4562,12 +4550,6 @@ msgstr "Enviar paquetes de mantemento de actividade"
 msgid "Send _Report"
 msgstr "_Informar do erro"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Envíe un mensaxe con Ctrl+Intro e con Intro faise unha liña nova (como o "
-"cliente de Mirabilis ICQ)"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4694,10 +4676,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Modificar a conta"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Fallou a conexión"
 
@@ -4710,7 +4688,7 @@ msgid "Show Status Changes"
 msgstr "_Rexistrar os cambios de estado dos contactos"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Asunto"
 
 #, fuzzy
@@ -4762,6 +4740,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Usar a icona na á_rea de notificación"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Notificarme cando rematar unha transferencia"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5150,6 +5132,21 @@ msgstr "Amosar os contactos desconectados"
 #, fuzzy
 msgid "System"
 msgstr "<b>Personalizado</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Modificar a conta"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Modificar a conta"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Notificacións visuais</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6510,10 +6507,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Por favor, cubra a información do contacto que quere engadir"
+msgid "invites you to join a group chat"
+msgstr "%s entrou no grupo de charla"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7436,6 +7431,14 @@ msgstr ""
 #~ msgstr "Non iniciado"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Usar a icona na á_rea de notificación"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notifica acontecementos na área de notificación."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Estado"
 
@@ -7597,6 +7600,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Gardar o ficheiro como..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Envíe un mensaxe con Ctrl+Intro e con Intro faise unha liña nova (como o "
+#~ "cliente de Mirabilis ICQ)"
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7921,10 +7930,6 @@ msgstr ""
 #~ msgstr "Ten "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Notificarme cando rematar unha transferencia"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Iniciar a charla"
 
@@ -7946,6 +7951,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferencias"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Por favor, cubra a información do contacto que quere engadir"
 
 #, fuzzy
 #~ msgid "yesterday "

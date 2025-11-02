@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -3255,18 +3255,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "在通知區域顯示圖示:"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "通知"
 
 msgid "Notifications"
-msgstr "通知"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "通知"
 
 msgid "Notify after update"
@@ -3274,9 +3266,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-msgid "Notify of events in the notification area."
-msgstr "在通知區域中提示事件"
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4422,10 +4411,6 @@ msgstr "傳送資料封包以防止連線逾時"
 msgid "Send _Report"
 msgstr "報告錯誤(_R)"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "用 Ctrl+Enter 傳送訊息，Enter 開始新列(紫茉莉 ICQ 客戶端預設作業)。"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "已傳送聯絡人: \"%s\" (%s)"
@@ -4551,10 +4536,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "通知"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "外掛程式"
 
@@ -4567,7 +4548,7 @@ msgid "Show Status Changes"
 msgstr "記錄聯絡人狀態變化(_L)"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "主題"
 
 #, fuzzy
@@ -4617,6 +4598,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "在通知區域顯示圖示:"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "檔案傳輸完成時提醒我(_N)"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5006,6 +4991,21 @@ msgstr "同步"
 #, fuzzy
 msgid "System"
 msgstr "<b>系統:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "通知"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "通知"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>可視化提示</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6370,10 +6370,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "選擇您想要離開的聊天室"
+msgid "invites you to join a group chat"
+msgstr "任何人都可以加入此群聊"
 
 msgid "is composing a message…"
 msgstr "對方正在輸入…"
@@ -7341,6 +7339,13 @@ msgstr ""
 #~ msgstr "未開始"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "在通知區域顯示圖示:"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "在通知區域中提示事件"
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "狀態"
 
@@ -7517,6 +7522,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "另存為…"
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "用 Ctrl+Enter 傳送訊息，Enter 開始新列(紫茉莉 ICQ 客戶端預設作業)。"
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7841,10 +7850,6 @@ msgstr ""
 #~ msgstr "儲存在: %s"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "檔案傳輸完成時提醒我(_N)"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "開始聊天"
 
@@ -7865,6 +7870,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "檔案傳輸清單"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "選擇您想要離開的聊天室"
 
 #, fuzzy
 #~ msgid "yesterday "

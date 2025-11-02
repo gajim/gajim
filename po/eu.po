@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -3385,10 +3385,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "E_rabili ikonifikazioa (aka. notification area)"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Kontu Eraldaketa"
 
@@ -3396,19 +3392,11 @@ msgstr "Kontu Eraldaketa"
 msgid "Notifications"
 msgstr "Kontu Eraldaketa"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Kontu Eraldaketa"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Jakin arazi gertaerak system trayicon-ean."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4554,12 +4542,6 @@ msgstr "Bidali keep-alive paketeak"
 msgid "Send _Report"
 msgstr "_Report Bug"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Bidali mezua Ctrl+Enter -rekin eta Enter-ekin lerro berria egin. (Mirabilis "
-"ICQ Client default behaviour)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4686,10 +4668,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Kontu Eraldaketa"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Konexioak huts egin du"
 
@@ -4702,7 +4680,7 @@ msgid "Show Status Changes"
 msgstr "Kontaktuen egoera aldaketak gorde"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Gaia"
 
 #, fuzzy
@@ -4754,6 +4732,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Jakinarazi  fitxeroa transferitu denean"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5142,6 +5124,21 @@ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 #, fuzzy
 msgid "System"
 msgstr "<b>Bezeroak</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Kontu Eraldaketa"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Kontu Eraldaketa"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Ikusizko Jakinarazketa</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6501,10 +6498,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
+msgid "invites you to join a group chat"
+msgstr "%s gelan sartu da"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7411,6 +7406,14 @@ msgstr ""
 #~ msgstr "Hasigabea"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "E_rabili ikonifikazioa (aka. notification area)"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Jakin arazi gertaerak system trayicon-ean."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Egoera"
 
@@ -7573,6 +7576,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Gorde Bezala..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Bidali mezua Ctrl+Enter -rekin eta Enter-ekin lerro berria egin. "
+#~ "(Mirabilis ICQ Client default behaviour)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7898,10 +7907,6 @@ msgstr ""
 #~ msgstr "daukadanean"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Jakinarazi  fitxeroa transferitu denean"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Elkarrizketa Hasi"
 
@@ -7923,6 +7928,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "fitxeroen transferentziaren lista"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
 
 #, fuzzy
 #~ msgid "yesterday "

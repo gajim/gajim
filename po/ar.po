@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-10-20 08:48+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -2976,26 +2976,17 @@ msgstr "ملاحظة: الحسابات المجهولة غير ممكنة مع �
 msgid "Notes"
 msgstr "الملاحظات"
 
-msgid "Notification Area Icon"
-msgstr "أيقونة منطقة التنبيهات"
-
 msgid "Notification Sounds"
 msgstr "أصوات التنبيهات"
 
 msgid "Notifications"
 msgstr "التنبيهات"
 
-msgid "Notifications When Away"
-msgstr "التنبيهات عند حالة «بعيد»"
-
 msgid "Notify after update"
 msgstr "التنبيه بعد التحديث"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "ينبِّه عند نجاح التحديث التلقائي"
-
-msgid "Notify of events in the notification area."
-msgstr "نبِّه بالأحداث في منطقة التنبيهات."
 
 msgid "Notify on all Messages"
 msgstr "التنبيه عند كل الرسائل"
@@ -3981,9 +3972,6 @@ msgstr "إرسال علامات القراءة"
 msgid "Send _Report"
 msgstr "أرسل ال_تقرير"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "أرسل الرسالة عند الضغط على Ctrl+Enter وأنشئ سطرًا جديدًا ب‍ Enter."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "المتراسل المُرسل: \"%(jid)s\" (%(name)s)"
@@ -4085,9 +4073,6 @@ msgstr "إظهار الانضمام\\المغادرة"
 msgid "Show Joined / Left"
 msgstr "إظهار من انضم \\ غادر"
 
-msgid "Show Notifications"
-msgstr "إظهار التنبيهات"
-
 msgid "Show Plugins"
 msgstr "أظهر الملحقات"
 
@@ -4097,7 +4082,8 @@ msgstr "إظهار زر إرسال الرسالة"
 msgid "Show Status Changes"
 msgstr "إظهار تغييرات الحالة"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "إظهار الموضوع"
 
 msgid "Show Title Bar"
@@ -4140,6 +4126,10 @@ msgstr ""
 "فقط، في حال كانت هناك رسائل متعددة من نفس المرسل خلال فترة زمنية محددة."
 
 msgid "Show notifications even if you are Away, Busy, etc."
+msgstr "يظهر التنبيهات حتى لو كنت في حالة «بعيد»، أو «مشغول»، أو إلخ."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
 msgstr "يظهر التنبيهات حتى لو كنت في حالة «بعيد»، أو «مشغول»، أو إلخ."
 
 msgid "Show on Startup"
@@ -4472,6 +4462,22 @@ msgstr "يزامن تأريخ الدردشات…"
 
 msgid "System"
 msgstr "النظام"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "إظهار التنبيهات"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "التنبيهات عند حالة «بعيد»"
+
+#, fuzzy
+msgid "System Tray Icon"
+msgstr "أ_خفِ (أيقونة صينية النظام)"
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "تنبيهات مرئية"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5686,12 +5692,9 @@ msgstr "عائلة"
 msgid "floor"
 msgstr "الطابق"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"دعاك إلى مجموعة دردشة.\n"
-"أتنضم؟"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "يمكن لأي أحد الانضمام لمجموعة الدردشة هذه"
 
 msgid "is composing a message…"
 msgstr "يكتب رسالة…"
@@ -6222,6 +6225,12 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Message composition"
 #~ msgstr "إنشاء الرسالة"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "أيقونة منطقة التنبيهات"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "نبِّه بالأحداث في منطقة التنبيهات."
+
 #~ msgid "Open Link in Browser"
 #~ msgstr "افتح الوصلة في المتصفح"
 
@@ -6254,6 +6263,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Send Chatstate"
 #~ msgstr "أرسِل حالة الدردشة"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "أرسل الرسالة عند الضغط على Ctrl+Enter وأنشئ سطرًا جديدًا ب‍ Enter."
 
 #~ msgid "Send the message"
 #~ msgstr "أرسِل الرسالة"
@@ -6391,3 +6403,10 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "app.save-file-as"
 #~ msgstr "app.save-file-as"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "دعاك إلى مجموعة دردشة.\n"
+#~ "أتنضم؟"

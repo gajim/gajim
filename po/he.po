@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -3474,18 +3474,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "הצג סמל אזור התראה:"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "התראות"
 
 msgid "Notifications"
-msgstr "התראות"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "התראות"
 
 msgid "Notify after update"
@@ -3493,9 +3485,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-msgid "Notify of events in the notification area."
-msgstr "הודע על אירועים באזור ההתראה."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4668,12 +4657,6 @@ msgstr "ש_לח חבילות keep-alive"
 msgid "Send _Report"
 msgstr "_דווחו על בעיה"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"מסירת הודעה בלחיצת Ctrl+Enter ויצירת שורה חדשה באמצעות המקש Enter (התנהגות "
-"שגרתית של Mirabilis לקוח ICQ)."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
@@ -4801,10 +4784,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "התראות"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "תוספים"
 
@@ -4817,7 +4796,7 @@ msgid "Show Status Changes"
 msgstr "הצג _הודעות מצב"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "נושא"
 
 #, fuzzy
@@ -4869,6 +4848,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "הצג סמל אזור התראה:"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "הו_דע לי כאשר העברת קובץ הושלמה"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5264,6 +5247,21 @@ msgstr "סנכרון"
 #, fuzzy
 msgid "System"
 msgstr "<b>מערכת:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "התראות"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "התראות"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>התראות חזותיות</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6656,12 +6654,10 @@ msgstr ""
 msgid "floor"
 msgstr "קומה"
 
-# בליווי תכלית
+# הצטרף
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "הזמנת משתמש לחדר עם ציון סיבה"
+msgid "invites you to join a group chat"
+msgstr "%s נכנס/ה לשיחת קבוצה"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7644,6 +7640,13 @@ msgstr ""
 #~ msgstr "לא הותחלה"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "הצג סמל אזור התראה:"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "הודע על אירועים באזור ההתראה."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "מצב"
 
@@ -7822,6 +7825,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "שמור קובץ בשם..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "מסירת הודעה בלחיצת Ctrl+Enter ויצירת שורה חדשה באמצעות המקש Enter "
+#~ "(התנהגות שגרתית של Mirabilis לקוח ICQ)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -8170,10 +8179,6 @@ msgstr ""
 #~ msgstr "נשמר בתוך: ‎%s"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "הו_דע לי כאשר העברת קובץ הושלמה"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "התחלת שיחה"
 
@@ -8194,6 +8199,13 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "רשימת העברת קבצים"
+
+# בליווי תכלית
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "הזמנת משתמש לחדר עם ציון סיבה"
 
 #, fuzzy
 #~ msgid "yesterday "

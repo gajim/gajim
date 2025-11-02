@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -3255,27 +3255,16 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Afegeix _Notificació Especial..."
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Afegeix _Notificació Especial..."
 
 msgid "Notifications"
 msgstr ""
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Afegeix _Notificació Especial..."
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
-
-msgid "Notify of events in the notification area."
 msgstr ""
 
 #, fuzzy
@@ -4389,9 +4378,6 @@ msgstr "Enviar paquets _keep-alive"
 msgid "Send _Report"
 msgstr "Informa de l'error"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4515,10 +4501,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "_Copia la ubicació de l'enllaç"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Connectors"
 
@@ -4531,7 +4513,7 @@ msgid "Show Status Changes"
 msgstr "Mostra els canvis d'estat"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Assumpte:"
 
 #, fuzzy
@@ -4578,6 +4560,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
+msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
 msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
 #, fuzzy
@@ -4951,6 +4937,21 @@ msgstr "Sincronitza els contactes"
 
 msgid "System"
 msgstr ""
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Afegeix _Notificació Especial..."
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Afegeix _Notificació Especial..."
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6242,10 +6243,9 @@ msgstr ""
 msgid "floor"
 msgstr ""
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Uneix-te al xat en grup"
 
 msgid "is composing a message…"
 msgstr ""
@@ -6846,6 +6846,10 @@ msgstr ""
 #~ msgstr "Entrada següent"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Estat"
 
@@ -7172,10 +7176,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Save as…"
 #~ msgstr "Desa la contrasenya"
-
-#, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
 #, fuzzy
 #~ msgid "_Start / Join Chat…"

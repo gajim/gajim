@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -3402,18 +3402,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Notification-daemon"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Obaveštenja"
 
 msgid "Notifications"
-msgstr "Obaveštenja"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Obaveštenja"
 
 msgid "Notify after update"
@@ -3421,10 +3413,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Obavesti me o svim događajima u ikoni sistemske kasete."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4576,12 +4564,6 @@ msgstr "Šalji podatke o živosti"
 msgid "Send _Report"
 msgstr "_Prijavi grešku"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Pošalji poruku sa Ctrl+Enter, a sa Enter pravi novu liniju. (Podrazumevano "
-"ponašanje Miralabisovog ICQ klijenta)"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Poslati kontakti: \"%s\" (%s)"
@@ -4707,10 +4689,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Obaveštenja"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Registracija neuspela"
 
@@ -4723,7 +4701,7 @@ msgid "Show Status Changes"
 msgstr "_Zapisuj u dnevnik statusne promene kontakata"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Tema"
 
 #, fuzzy
@@ -4775,6 +4753,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Notification-daemon"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Obavesti me kada se završi prenos datoteke"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5164,6 +5146,21 @@ msgstr "Sinhronizuj"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Obaveštenja"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Obaveštenja"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Vizualna obaveštenja</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6532,10 +6529,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Odaberite grupne razgovore koje želite da napustite"
+msgid "invites you to join a group chat"
+msgstr "%s se pridružio grupnom razgovoru"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7456,6 +7451,14 @@ msgstr ""
 #~ msgstr "Nije počeo"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Notification-daemon"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Obavesti me o svim događajima u ikoni sistemske kasete."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Status"
 
@@ -7620,6 +7623,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Pošalji poruku sa Ctrl+Enter, a sa Enter pravi novu liniju. "
+#~ "(Podrazumevano ponašanje Miralabisovog ICQ klijenta)"
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7942,10 +7951,6 @@ msgstr ""
 #~ msgstr "Imam "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Obavesti me kada se završi prenos datoteke"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Započni razgovor"
 
@@ -7966,6 +7971,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "lista prenosa datoteka"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Odaberite grupne razgovore koje želite da napustite"
 
 #, fuzzy
 #~ msgid "yesterday "

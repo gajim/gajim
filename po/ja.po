@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-09-17 00:18+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -3008,26 +3008,17 @@ msgstr ""
 msgid "Notes"
 msgstr "備考"
 
-msgid "Notification Area Icon"
-msgstr "通知エリアのアイコン"
-
 msgid "Notification Sounds"
 msgstr "通知音"
 
 msgid "Notifications"
 msgstr "通知"
 
-msgid "Notifications When Away"
-msgstr "離席中の通知"
-
 msgid "Notify after update"
 msgstr "更新後に通知する"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "自動更新に成功したら通知します"
-
-msgid "Notify of events in the notification area."
-msgstr "システムの通知エリアでイベントを通知します。"
 
 msgid "Notify on all Messages"
 msgstr "すべてのメッセージを通知する"
@@ -4021,9 +4012,6 @@ msgstr "既読マークを送信"
 msgid "Send _Report"
 msgstr "報告を送信 (_R)"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Ctrl+Enter をメッセージ送信として、Enter を改行とします。"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "送った相手先: \"%(jid)s\" (%(name)s)"
@@ -4125,9 +4113,6 @@ msgstr "入室/退出を表示する"
 msgid "Show Joined / Left"
 msgstr "入室/退出を表示する"
 
-msgid "Show Notifications"
-msgstr "通知を表示する"
-
 msgid "Show Plugins"
 msgstr "プラグインを表示"
 
@@ -4137,7 +4122,8 @@ msgstr "メッセージ送信ボタンを表示する"
 msgid "Show Status Changes"
 msgstr "状況変更を表示する"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "題を表示する"
 
 msgid "Show Title Bar"
@@ -4184,6 +4170,10 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "離席や取り込み中などでも通知を表示します"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "ファイル転送が完了したら通知する (_S)"
 
 msgid "Show on Startup"
 msgstr "起動時に表示する"
@@ -4524,6 +4514,22 @@ msgstr "会話履歴を同期…"
 
 msgid "System"
 msgstr "システム"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "通知を表示する"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "離席中の通知"
+
+#, fuzzy
+msgid "System Tray Icon"
+msgstr "隠す (トレイアイコン) (_H)"
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "目への通知"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5757,12 +5763,9 @@ msgstr "家族"
 msgid "floor"
 msgstr "階"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"談話室に招待されました。\n"
-"参加したいですか ?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "誰でもこの談話室に参加できます"
 
 msgid "is composing a message…"
 msgstr "さんはメッセージを書いています…"
@@ -6782,6 +6785,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Not started"
 #~ msgstr "開始していません"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "通知エリアのアイコン"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "システムの通知エリアでイベントを通知します。"
+
 #~ msgid "Online Status"
 #~ msgstr "在席状況"
 
@@ -6980,6 +6989,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "直接ファイルを送信"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "Ctrl+Enter をメッセージ送信として、Enter を改行とします。"
 
 #~ msgid "Send the message"
 #~ msgstr "メッセージを送信"
@@ -7323,9 +7335,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "_Save as…"
 #~ msgstr "名前を付けて保存…(_S)"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "ファイル転送が完了したら通知する (_S)"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "チャットを開始…(_S)"
 
@@ -7351,6 +7360,13 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "file transfers list"
 #~ msgstr "ファイル転送の一覧"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "談話室に招待されました。\n"
+#~ "参加したいですか ?"
 
 #~ msgid "help"
 #~ msgstr "ヘルプ"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -3386,10 +3386,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "_Значка панэлі паведамленняў"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Змяненне рахунка"
 
@@ -3397,19 +3393,11 @@ msgstr "Змяненне рахунка"
 msgid "Notifications"
 msgstr "Змяненне рахунка"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Змяненне рахунка"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Нагадваць аб падзеях праз значку прасторы паведамленняў."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4553,12 +4541,6 @@ msgstr "Адпраўляць праверачныя пакункі сервер�
 msgid "Send _Report"
 msgstr "_Паведаміць пра памылку"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Адпраўляць паведамленне праз Ctrl+Enter, а Enter стварае новы радок "
-"(стандартныя паводзіны Mirabilis ICQ)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4685,10 +4667,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Змяненне рахунка"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Памылка злучэння"
 
@@ -4701,7 +4679,7 @@ msgid "Show Status Changes"
 msgstr "_Пісаць у журнал паведамленні аб змене стану чалавека"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Тэма"
 
 #, fuzzy
@@ -4753,6 +4731,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Значка панэлі паведамленняў"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Паведамляць мне аб сканчэнні перадачы файлаў"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5141,6 +5123,21 @@ msgstr "Паказаць _адлучаных людзей"
 #, fuzzy
 msgid "System"
 msgstr "<b>Адмысловы</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Змяненне рахунка"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Змяненне рахунка"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Візуальныя нагадванні</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6499,10 +6496,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Выберыце групавыя размовы, з якіх Вы хочаце сысці"
+msgid "invites you to join a group chat"
+msgstr "%s далучыўся да групавой размовы"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7410,6 +7405,14 @@ msgstr ""
 #~ msgstr "Не пачатая"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "_Значка панэлі паведамленняў"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Нагадваць аб падзеях праз значку прасторы паведамленняў."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Стан"
 
@@ -7571,6 +7574,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Захаваць файл як..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Адпраўляць паведамленне праз Ctrl+Enter, а Enter стварае новы радок "
+#~ "(стандартныя паводзіны Mirabilis ICQ)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7895,10 +7904,6 @@ msgstr ""
 #~ msgstr "Мае "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Паведамляць мне аб сканчэнні перадачы файлаў"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Пачаць размову"
 
@@ -7920,6 +7925,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "спіс файлаў у чарзе на перадачу"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Выберыце групавыя размовы, з якіх Вы хочаце сысці"
 
 #, fuzzy
 #~ msgid "yesterday "

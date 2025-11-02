@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -3397,18 +3397,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Vis et faneblad når der kun er en samtale?"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Påmindelser"
 
 msgid "Notifications"
-msgstr "Påmindelser"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Påmindelser"
 
 msgid "Notify after update"
@@ -3416,10 +3408,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Vis påmindelse af hændelser i statusfelt ikonet."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4569,12 +4557,6 @@ msgstr "Send hold-i-live pakker"
 msgid "Send _Report"
 msgstr "_Rapporter Fejl"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Send besked med Ctrl+Enter og lave en ny linie med Enter (standard Mirabilis "
-"ICQ klient adfærd)."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Sendt kontakt: \"%s\" (%s)"
@@ -4700,10 +4682,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Påmindelser"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Tilslutning fejlede"
 
@@ -4716,7 +4694,7 @@ msgid "Show Status Changes"
 msgstr "_Log status ændringer hos kontakter"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Emne"
 
 #, fuzzy
@@ -4768,6 +4746,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Vis et faneblad når der kun er en samtale?"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Påmind mig når en filoverførsel er færdig"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5157,6 +5139,21 @@ msgstr "Synkroniser"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Påmindelser"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Påmindelser"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Synlige Påmindelser</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6524,10 +6521,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Vælg de gruppesamtaler du vil forlade"
+msgid "invites you to join a group chat"
+msgstr "%s deltager nu i gruppe samtalen"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7456,6 +7451,14 @@ msgstr ""
 #~ msgstr "Ikke startet"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Vis et faneblad når der kun er en samtale?"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Vis påmindelse af hændelser i statusfelt ikonet."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Status"
 
@@ -7620,6 +7623,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Gem Fil som..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Send besked med Ctrl+Enter og lave en ny linie med Enter (standard "
+#~ "Mirabilis ICQ klient adfærd)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7949,10 +7958,6 @@ msgstr ""
 #~ msgstr "Har"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Påmind mig når en filoverførsel er færdig"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Start Samtale"
 
@@ -7976,6 +7981,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "filoverførsel liste"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Vælg de gruppesamtaler du vil forlade"
 
 #, fuzzy
 #~ msgid "yesterday "

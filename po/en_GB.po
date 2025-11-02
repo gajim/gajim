@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -3391,18 +3391,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Use t_rayicon (aka. notification area icon)"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Notifications"
 
 msgid "Notifications"
-msgstr "Notifications"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Notifications"
 
 msgid "Notify after update"
@@ -3410,10 +3402,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Notify of events in the system trayicon."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4560,12 +4548,6 @@ msgstr "Send keep-alive packets"
 msgid "Send _Report"
 msgstr "_Report Bug"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
-"Client default behaviour)."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Sent contact: \"%s\" (%s)"
@@ -4691,10 +4673,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Notifications"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Registration failed"
 
@@ -4707,7 +4685,7 @@ msgid "Show Status Changes"
 msgstr "_Log status changes of contacts"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Subject"
 
 #, fuzzy
@@ -4759,6 +4737,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Use t_rayicon (aka. notification area icon)"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Notify me when a file transfer is complete"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5148,6 +5130,21 @@ msgstr "Synchronise"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Notifications"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Notifications"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Visual Notifications</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6516,10 +6513,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Choose the groupchats you want to leave"
+msgid "invites you to join a group chat"
+msgstr "%s has joined the group chat"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7439,6 +7434,14 @@ msgstr ""
 #~ msgstr "Not started"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Use t_rayicon (aka. notification area icon)"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notify of events in the system trayicon."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Status"
 
@@ -7604,6 +7607,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
+#~ "Client default behaviour)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7930,10 +7939,6 @@ msgstr ""
 #~ msgstr "Have "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Notify me when a file transfer is complete"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Start Chat"
 
@@ -7954,6 +7959,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "file transfers list"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Choose the groupchats you want to leave"
 
 #, fuzzy
 #~ msgid "yesterday "

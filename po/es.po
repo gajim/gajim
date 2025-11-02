@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
-"PO-Revision-Date: 2025-10-23 17:48+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"PO-Revision-Date: 2025-11-02 23:18+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1657,9 +1657,8 @@ msgstr "Soltar ficheros aquí"
 msgid "Eating"
 msgstr "Comiendo"
 
-#, fuzzy
 msgid "Edit"
-msgstr "_Editar"
+msgstr "Editar"
 
 msgid "Edit Shortcut"
 msgstr "Editar Atajo de Teclado"
@@ -1953,9 +1952,8 @@ msgstr "El archivo está vacío"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "El fichero es demasiado grande, el tamaño máximo permitido es: %s"
 
-#, fuzzy
 msgid "File saved"
-msgstr "Nombre de archivo: "
+msgstr "Fichero guardado"
 
 msgid "File too big"
 msgstr "Fichero demasiado grande"
@@ -3001,26 +2999,17 @@ msgstr "Nota: las cuentas anónimas no son posibles con todos los proveedores"
 msgid "Notes"
 msgstr "Notas"
 
-msgid "Notification Area Icon"
-msgstr "Icono en el área de notificación"
-
 msgid "Notification Sounds"
 msgstr "Sonidos de notificaciones"
 
 msgid "Notifications"
 msgstr "Notificaciones"
 
-msgid "Notifications When Away"
-msgstr "Notificaciones para ausencia"
-
 msgid "Notify after update"
 msgstr "Notificar después de actualizar"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Notificarme cuando una actualización automática ha sido exitosa"
-
-msgid "Notify of events in the notification area."
-msgstr "Notificar eventos en el área de notificación."
 
 msgid "Notify on all Messages"
 msgstr "Notificar para todos los mensajes"
@@ -3083,7 +3072,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Organización"
 
-#, fuzzy
 msgid "Organization"
 msgstr "Organización"
 
@@ -3933,13 +3921,13 @@ msgstr "Etiquetas de Seguridad"
 msgid "Security Warning"
 msgstr "Advertencia de seguridad"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s"
-msgstr " por %s"
+msgstr "Visto por %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s participants"
-msgstr "Participantes"
+msgstr "Visto por %s participantes"
 
 msgid "Select Account"
 msgstr "Seleccionar cuenta"
@@ -4009,9 +3997,6 @@ msgstr "Enviar Marcadores de Lectura"
 
 msgid "Send _Report"
 msgstr "Enviar informe"
-
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Envía mensaje con Ctrl+Intro y con Intro hace un nuevo renglón."
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4118,9 +4103,6 @@ msgstr "Mostrar unirse/abandonar"
 msgid "Show Joined / Left"
 msgstr "Mostrar unirse/abandonar"
 
-msgid "Show Notifications"
-msgstr "Mostrar notificaciones"
-
 msgid "Show Plugins"
 msgstr "Mostrar Complementos"
 
@@ -4130,8 +4112,8 @@ msgstr "Mostrar botón de enviar mensaje"
 msgid "Show Status Changes"
 msgstr "Mostrar cambios de estado"
 
-msgid "Show Subject"
-msgstr "Mostrar asunto"
+msgid "Show Subject on Join"
+msgstr "Mostrar asunto al unirse"
 
 msgid "Show Title Bar"
 msgstr "Mostrar barra de título"
@@ -4178,6 +4160,9 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Mostrar notificaciones incluso si estás Ausente, Ocupado, etc."
+
+msgid "Show notifications on the system tray icon"
+msgstr "Mostrar notificaciones en la bandeja del sistema"
 
 msgid "Show on Startup"
 msgstr "Mostrar al inicio"
@@ -4517,12 +4502,24 @@ msgstr "Sincronizando historial de chat…"
 msgid "System"
 msgstr "Sistema"
 
+msgid "System Notifications"
+msgstr "Notificaciones de sistema"
+
+msgid "System Notifications When Away"
+msgstr "Notificaciones de sistema para ausencia"
+
+msgid "System Tray Icon"
+msgstr "Icono de bandeja del sistema"
+
+msgid "System Tray Notifications"
+msgstr "Notificaciones de la bandeja del sistema"
+
 msgctxt "Group chat name"
 msgid "Team"
 msgstr "Equipo"
 
 msgid "Telephone"
-msgstr ""
+msgstr "Teléfono"
 
 msgid "Tell your contacts if you received a message"
 msgstr "Dile a tus contactos si recibiste un mensaje"
@@ -4817,9 +4814,8 @@ msgstr "Tiempo hasta Ausente"
 msgid "Time Until Not Available"
 msgstr "Tiempo hasta no disponible"
 
-#, fuzzy
 msgid "Time Zone"
-msgstr "Huso horario"
+msgstr "Zona horaria"
 
 msgctxt "Profile"
 msgid "Timezone"
@@ -5744,12 +5740,8 @@ msgstr "familia"
 msgid "floor"
 msgstr "planta"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"te ha invitado a un grupo de chat.\n"
-"¿Quieres unirte?"
+msgid "invites you to join a group chat"
+msgstr "te invita a unirte al grupo de chat"
 
 msgid "is composing a message…"
 msgstr "está escribiendo un mensaje…"
@@ -6823,6 +6815,12 @@ msgstr "…o soltarla aqui"
 #~ msgid "Not started"
 #~ msgstr "No iniciado"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Icono en el área de notificación"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notificar eventos en el área de notificación."
+
 #~ msgid "Online Status"
 #~ msgstr "Estado"
 
@@ -7023,6 +7021,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Enviar ficheros directamente"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "Envía mensaje con Ctrl+Intro y con Intro hace un nuevo renglón."
 
 #~ msgid "Send the message"
 #~ msgstr "Enviar el mensaje"
@@ -7376,9 +7377,6 @@ msgstr "…o soltarla aqui"
 #~ msgid "_Save as…"
 #~ msgstr "Guardar como…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "Mostrar notificación cuando una transferencia finalice"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "_Iniciar / unirse a conversación…"
 
@@ -7415,6 +7413,13 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferencias"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "te ha invitado a un grupo de chat.\n"
+#~ "¿Quieres unirte?"
 
 #~ msgid "help"
 #~ msgstr "ayuda"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -3368,27 +3368,16 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Bildirimler"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Bildirimler"
 
 msgid "Notifications"
 msgstr "Bildirimler"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Bildirimler"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
-
-msgid "Notify of events in the notification area."
 msgstr ""
 
 #, fuzzy
@@ -4537,9 +4526,6 @@ msgstr "_Yaşamda kal paketleri gönder"
 msgid "Send _Report"
 msgstr "_Hata Bildir"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Kişinin bağlantısı kesildi"
@@ -4666,10 +4652,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Bildirimler"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Bağlantı Kurulamıyor"
 
@@ -4682,7 +4664,7 @@ msgid "Show Status Changes"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Konu"
 
 #, fuzzy
@@ -4730,6 +4712,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
+msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
 msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
 
 #, fuzzy
@@ -5124,6 +5110,21 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Bildirimler"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Bildirimler"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Görsel Bildirimler</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6479,10 +6480,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
+msgid "invites you to join a group chat"
+msgstr "%s grup sohbete katıldı"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7364,6 +7363,10 @@ msgstr ""
 #~ msgstr "Başlatılmadı"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Bildirimler"
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Durum"
 
@@ -7823,10 +7826,6 @@ msgstr ""
 #~ msgstr "Sahip"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Sohbet _Başla"
 
@@ -7851,6 +7850,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "dosya aktarımların listesi"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
 
 #, fuzzy, python-brace-format
 #~ msgid "{nick} has been removed from the group chat{by}{reason}"

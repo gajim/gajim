@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -3384,18 +3384,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Vis merknad i systemstatusfeltet (systray):"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Merknader"
 
 msgid "Notifications"
-msgstr "Merknader"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Merknader"
 
 msgid "Notify after update"
@@ -3403,9 +3395,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-msgid "Notify of events in the notification area."
-msgstr "Varsle om hendelser i system-statusfeltområdet."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4550,12 +4539,6 @@ msgstr "Send hold-i-live meldinger"
 msgid "Send _Report"
 msgstr "Rapporter feil"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Send meldinger med Ctrl+Enter og lag ny linje med Enter (ICQ-klientens "
-"Mirabilis standardoppførsel)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Sendt kontakt: \"%(jid)s\" (%(name)s)"
@@ -4682,10 +4665,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Merknader"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Tillegg"
 
@@ -4698,7 +4677,7 @@ msgid "Show Status Changes"
 msgstr "_Vis statusendringer"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Tema"
 
 #, fuzzy
@@ -4749,6 +4728,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Vis merknad i systemstatusfeltet (systray):"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Gi meg beskjed når ei filoverføring er fullført"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5134,6 +5117,21 @@ msgstr "Synkroniser historikk"
 
 msgid "System"
 msgstr "System"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Merknader"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Merknader"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Visuelle merknader</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6511,10 +6509,8 @@ msgid "floor"
 msgstr "etasje"
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Inviter en bruker til et rom av en grunn"
+msgid "invites you to join a group chat"
+msgstr "%s har tatt del i gruppesamtalen"
 
 msgid "is composing a message…"
 msgstr "skriver en melding…"
@@ -7466,6 +7462,13 @@ msgstr ""
 #~ msgstr "Ikke startet"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Vis merknad i systemstatusfeltet (systray):"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Varsle om hendelser i system-statusfeltområdet."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Status"
 
@@ -7650,6 +7653,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Send meldinger med Ctrl+Enter og lag ny linje med Enter (ICQ-klientens "
+#~ "Mirabilis standardoppførsel)."
 
 #~ msgid "Send the message"
 #~ msgstr "Send meldingen"
@@ -7991,10 +8000,6 @@ msgstr ""
 #~ msgstr "Lagre _som"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Gi meg beskjed når ei filoverføring er fullført"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Start samtale"
 
@@ -8018,6 +8023,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "filoverføringsliste"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Inviter en bruker til et rom av en grunn"
 
 #, fuzzy
 #~ msgid "yesterday "

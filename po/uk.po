@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-10-10 19:49+0000\n"
 "Last-Translator: Viktor Varvaruk <viktorvarvaruk01@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -2990,26 +2990,17 @@ msgstr "Примітка: Анонімні акаунти можливі не у
 msgid "Notes"
 msgstr "Примітки"
 
-msgid "Notification Area Icon"
-msgstr "Піктограма області сповіщень"
-
 msgid "Notification Sounds"
 msgstr "Звуки сповіщень"
 
 msgid "Notifications"
 msgstr "Сповіщення"
 
-msgid "Notifications When Away"
-msgstr "Сповіщення про відсутність"
-
 msgid "Notify after update"
 msgstr "Повідомити після оновлення"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Повідомте мене, коли автоматичне оновлення буде успішним"
-
-msgid "Notify of events in the notification area."
-msgstr "Сповіщення про події у зоні сповіщень."
 
 msgid "Notify on all Messages"
 msgstr "Повідомляти про всі повідомлення"
@@ -4003,11 +3994,6 @@ msgstr "Надіслати маркери читання"
 msgid "Send _Report"
 msgstr "Надіслати _Звіт"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Надішліть повідомлення на Ctrl+Enter та створіть новий рядок, натиснувши "
-"Enter."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Відправлено контакт: «%(jid)s» (%(name)s)"
@@ -4110,9 +4096,6 @@ msgstr "Показати Приєднався/Покинув"
 msgid "Show Joined / Left"
 msgstr "Показати приєднався / залишив"
 
-msgid "Show Notifications"
-msgstr "Показати сповіщення"
-
 msgid "Show Plugins"
 msgstr "Показати плагіни"
 
@@ -4122,7 +4105,8 @@ msgstr "Показати кнопку \"Надіслати повідомлен�
 msgid "Show Status Changes"
 msgstr "Показати зміни статусу"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "Показати тему"
 
 msgid "Show Title Bar"
@@ -4171,6 +4155,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr ""
 "Показувати сповіщення, навіть якщо ви перебуваєте у від'їзді, зайняті тощо."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "П_овідомити мене про завершення передавання файлу"
 
 msgid "Show on Startup"
 msgstr "Показати на Startup"
@@ -4507,6 +4495,22 @@ msgstr "Синхронізація історії чату."
 
 msgid "System"
 msgstr "Система"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Показати сповіщення"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Сповіщення про відсутність"
+
+#, fuzzy
+msgid "System Tray Icon"
+msgstr "Приховати (піктограма в лотку)"
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Візуальні сповіщення"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5746,12 +5750,9 @@ msgstr "сім'я"
 msgid "floor"
 msgstr "поверх"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"запросив вас до групового чату.\n"
-"Бажаєте приєднатися?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Будь-хто може приєднатися до цього групового чату"
 
 msgid "is composing a message…"
 msgstr "пише повідомлення…"
@@ -6733,6 +6734,12 @@ msgstr "...або киньте сюди."
 #~ msgid "Not started"
 #~ msgstr "Не розпочато"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Піктограма області сповіщень"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Сповіщення про події у зоні сповіщень."
+
 #, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Стан"
@@ -6911,6 +6918,11 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Зберегти файл як..."
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Надішліть повідомлення на Ctrl+Enter та створіть новий рядок, натиснувши "
+#~ "Enter."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7245,10 +7257,6 @@ msgstr "...або киньте сюди."
 #~ msgstr "Зберегти _як"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "П_овідомити мене про завершення передавання файлу"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Почати балачку"
 
@@ -7280,6 +7288,13 @@ msgstr "...або киньте сюди."
 
 #~ msgid "file transfers list"
 #~ msgstr "перелік передач файлів"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "запросив вас до групового чату.\n"
+#~ "Бажаєте приєднатися?"
 
 #, fuzzy
 #~ msgid "yesterday "

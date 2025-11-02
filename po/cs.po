@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -3109,16 +3109,10 @@ msgstr "Poznámka: Anonymní účty nejsou povolené na všech serverech"
 msgid "Notes"
 msgstr "Poznámky"
 
-msgid "Notification Area Icon"
-msgstr "Ikona v oznamovací oblasti"
-
 msgid "Notification Sounds"
 msgstr "Zvuky upozornění"
 
 msgid "Notifications"
-msgstr "Upozornění"
-
-msgid "Notifications When Away"
 msgstr "Upozornění"
 
 msgid "Notify after update"
@@ -3126,9 +3120,6 @@ msgstr "Upozornit po aktualizaci"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Upozornit, pokud byla automatická aktualizace úspěšná"
-
-msgid "Notify of events in the notification area."
-msgstr "Upozornění v oznamovací oblasti."
 
 msgid "Notify on all Messages"
 msgstr "Upozornit na všechny zprávy"
@@ -4164,11 +4155,6 @@ msgstr "Odesílat potvrzení o přečtení"
 msgid "Send _Report"
 msgstr "Odeslat hlášení"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Odeslat zprávu pomocí Ctrl+Enter a při stisknutí klávesy Enter přejít na "
-"nový řádek."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Odeslán kontakt: \"%(jid)s\" (%(name)s)"
@@ -4283,9 +4269,6 @@ msgstr "Ukázat příchody/odchody"
 msgid "Show Joined / Left"
 msgstr "Zobrazit připojení / odchody"
 
-msgid "Show Notifications"
-msgstr "Zobrazit upozornění"
-
 #, fuzzy
 msgid "Show Plugins"
 msgstr "Zásuvné moduly"
@@ -4296,7 +4279,8 @@ msgstr "Zobrazit tlačítko pro odesílání zpráv"
 msgid "Show Status Changes"
 msgstr "Zaznamenávat změny stavu kontaktů"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "Zobrazit předmět"
 
 #, fuzzy
@@ -4345,6 +4329,10 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Zobrazit oznámení, i když nejste aktivní."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "Upozornit při dokončení přenosu souboru"
 
 msgid "Show on Startup"
 msgstr "Zobrazit při zapnutí"
@@ -4702,6 +4690,21 @@ msgstr "Synchronizuje se historie konverzace…"
 
 msgid "System"
 msgstr "Systém"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Zobrazit upozornění"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Upozornění"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Vizuální upozornění"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5962,12 +5965,9 @@ msgstr "rodina"
 msgid "floor"
 msgstr "podlaha"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"vás pozvali do skupinové konverzace.\n"
-"Chcete se připojit?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Kdokoli se smí připojit do této skupinové konverzace"
 
 msgid "is composing a message…"
 msgstr "píše…"
@@ -7016,6 +7016,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Not started"
 #~ msgstr "Není spuštěno"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Ikona v oznamovací oblasti"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Upozornění v oznamovací oblasti."
+
 #~ msgid "Online Status"
 #~ msgstr "Stav"
 
@@ -7216,6 +7222,11 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Poslat soubory přímo"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Odeslat zprávu pomocí Ctrl+Enter a při stisknutí klávesy Enter přejít na "
+#~ "nový řádek."
 
 #~ msgid "Send the message"
 #~ msgstr "Odeslat zprávu"
@@ -7561,9 +7572,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "_Save as…"
 #~ msgstr "Uložit jako…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "Upozornit při dokončení přenosu souboru"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Vytvořit / připojit se ke konverzaci…"
 
@@ -7589,6 +7597,13 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "file transfers list"
 #~ msgstr "výpis přenosů souborů"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "vás pozvali do skupinové konverzace.\n"
+#~ "Chcete se připojit?"
 
 #~ msgid "help"
 #~ msgstr "pomoc"

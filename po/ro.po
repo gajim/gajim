@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -3120,26 +3120,17 @@ msgstr "Notă: Conturile anonime nu sunt posibile pe toate serverele"
 msgid "Notes"
 msgstr "Note"
 
-msgid "Notification Area Icon"
-msgstr "Pictograma zonei de notificare"
-
 msgid "Notification Sounds"
 msgstr "Sunete de notificare"
 
 msgid "Notifications"
 msgstr "Notificări"
 
-msgid "Notifications When Away"
-msgstr "Notificări în timpul absenței"
-
 msgid "Notify after update"
 msgstr "Notificare după actualizare"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Anunțați-mă când actualizarea automată a fost efectuată cu succes"
-
-msgid "Notify of events in the notification area."
-msgstr "Notificarea evenimentelor în zona de notificare."
 
 msgid "Notify on all Messages"
 msgstr "Notificare la toate mesajele"
@@ -4172,9 +4163,6 @@ msgstr "Trimiteți markeri de citire"
 msgid "Send _Report"
 msgstr "Trimiteți _Raportul"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Trimiteți mesajul cu Ctrl+Inter și creați o nouă linie cu Enter."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contact trimis: \"%(jid)s\" (%(name)s)"
@@ -4288,9 +4276,6 @@ msgstr "Afișați Join/Leave"
 msgid "Show Joined / Left"
 msgstr "Afișați Joined / Left"
 
-msgid "Show Notifications"
-msgstr "Afișați notificările"
-
 #, fuzzy
 msgid "Show Plugins"
 msgstr "Plugin-uri"
@@ -4301,7 +4286,8 @@ msgstr "Afișați butonul Trimite mesaj"
 msgid "Show Status Changes"
 msgstr "Afișați modificările de stare"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "Afișați Subiectul"
 
 #, fuzzy
@@ -4350,6 +4336,11 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Afișați notificări chiar dacă sunteți plecat, ocupat etc."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr ""
+"_Afișează o notificare atunci când transferul de fișiere este finalizat"
 
 msgid "Show on Startup"
 msgstr "Afișați la pornire"
@@ -4712,6 +4703,21 @@ msgstr "Sincronizarea istoricului de chat…"
 
 msgid "System"
 msgstr "Sistem"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Afișați notificările"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Notificări în timpul absenței"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Notificări vizuale"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5978,12 +5984,9 @@ msgstr "familie"
 msgid "floor"
 msgstr "pardoseală"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"v-a invitat la un chat de grup.\n"
-"Doriți să vă alăturați?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Oricine se poate alătura acestui grup de chat"
 
 msgid "is composing a message…"
 msgstr "compune un mesaj…"
@@ -7019,6 +7022,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Not started"
 #~ msgstr "Nu a început"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Pictograma zonei de notificare"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notificarea evenimentelor în zona de notificare."
+
 #~ msgid "Online Status"
 #~ msgstr "Starea online"
 
@@ -7218,6 +7227,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Trimiteți fișierele direct"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "Trimiteți mesajul cu Ctrl+Inter și creați o nouă linie cu Enter."
 
 #~ msgid "Send the message"
 #~ msgstr "Trimiteți mesajul"
@@ -7573,10 +7585,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_Save as…"
 #~ msgstr "_Salvați ca…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr ""
-#~ "_Afișează o notificare atunci când transferul de fișiere este finalizat"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "_Începeți / Intrați pe chat…"
 
@@ -7602,6 +7610,13 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "file transfers list"
 #~ msgstr "lista transferurilor de fișiere"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "v-a invitat la un chat de grup.\n"
+#~ "Doriți să vă alăturați?"
 
 #~ msgid "help"
 #~ msgstr "ajutor"

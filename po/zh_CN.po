@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-11-01 01:52+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
@@ -2953,26 +2953,17 @@ msgstr "注意：并非所有提供者都支持匿名账号"
 msgid "Notes"
 msgstr "备注"
 
-msgid "Notification Area Icon"
-msgstr "通知区域图标"
-
 msgid "Notification Sounds"
 msgstr "通知提示音"
 
 msgid "Notifications"
 msgstr "通知"
 
-msgid "Notifications When Away"
-msgstr "离开时通知"
-
 msgid "Notify after update"
 msgstr "更新后通知"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "自动更新成功时通知我"
-
-msgid "Notify of events in the notification area."
-msgstr "在通知区域中通知事件。"
 
 msgid "Notify on all Messages"
 msgstr "通知所有消息"
@@ -3950,9 +3941,6 @@ msgstr "发送已读标记"
 msgid "Send _Report"
 msgstr "发送报告(_R)"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "按 Ctrl+Enter 发送消息，按 Enter 键换行。"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "已发送联系人：“%(jid)s”（%(name)s）"
@@ -4054,9 +4042,6 @@ msgstr "显示加入/离开"
 msgid "Show Joined / Left"
 msgstr "显示已加入/已离开"
 
-msgid "Show Notifications"
-msgstr "显示通知"
-
 msgid "Show Plugins"
 msgstr "显示插件"
 
@@ -4066,7 +4051,8 @@ msgstr "显示发送消息按钮"
 msgid "Show Status Changes"
 msgstr "显示状态更改"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "显示主题"
 
 msgid "Show Title Bar"
@@ -4109,6 +4095,10 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "即使是离开、忙碌等状态时仍显示通知"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "文件传输完成时显示通知(_S)"
 
 msgid "Show on Startup"
 msgstr "启动时显示"
@@ -4437,6 +4427,22 @@ msgstr "正在同步聊天记录…"
 
 msgid "System"
 msgstr "系统"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "显示通知"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "离开时通知"
+
+#, fuzzy
+msgid "System Tray Icon"
+msgstr "隐藏(托盘图标)(_H)"
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "视觉通知"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5634,12 +5640,9 @@ msgstr "家人"
 msgid "floor"
 msgstr "楼层"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"邀请您加入群聊。\n"
-"是否要加入？"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "任何人都可以加入此群聊"
 
 msgid "is composing a message…"
 msgstr "正在撰写消息…"
@@ -6679,6 +6682,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Not started"
 #~ msgstr "未开始"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "通知区域图标"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "在通知区域中通知事件。"
+
 #~ msgid "Online Status"
 #~ msgstr "在线状态"
 
@@ -6872,6 +6881,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "直接发送文件"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "按 Ctrl+Enter 发送消息，按 Enter 键换行。"
 
 #~ msgid "Send the message"
 #~ msgstr "发送消息"
@@ -7216,9 +7228,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "_Save as…"
 #~ msgstr "另存为(_S)…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "文件传输完成时显示通知(_S)"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "开始/加入聊天(_S)…"
 
@@ -7243,6 +7252,13 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "file transfers list"
 #~ msgstr "文件传输列表"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "邀请您加入群聊。\n"
+#~ "是否要加入？"
 
 #~ msgid "help"
 #~ msgstr "帮助"

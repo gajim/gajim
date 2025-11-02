@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -3384,10 +3384,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Uzi pletpiktogramon"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Konta korektado"
 
@@ -3395,19 +3391,11 @@ msgstr "Konta korektado"
 msgid "Notifications"
 msgstr "Konta korektado"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Konta korektado"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Avizi eventojn en la sistema taskopleta bildeto."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4552,12 +4540,6 @@ msgstr "Sendi vivkontrolajn pakaĵojn"
 msgid "Send _Report"
 msgstr "_Raporti pri eraro"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Sendi mesaĝon per Ctrl+Enter kaj Enter faras novan lineon (defaŭlta "
-"kondutmaniero de Mirabilis ICQ Kliento)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4684,10 +4666,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Konta korektado"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Kromaĵoj"
 
@@ -4700,7 +4678,7 @@ msgid "Show Status Changes"
 msgstr "_Protokoli statŝanĝojn de kontaktoj"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Temo"
 
 #, fuzzy
@@ -4752,6 +4730,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Uzi pletpiktogramon"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Avizi min kiam dosiero estas transdonita"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5140,6 +5122,21 @@ msgstr "Montri _senkonektajn kontaktojn"
 #, fuzzy
 msgid "System"
 msgstr "<b>Propraj</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Konta korektado"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Konta korektado"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Bildavizoj</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6495,10 +6492,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
+msgid "invites you to join a group chat"
+msgstr "%s aliĝis al la babilejo"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7413,6 +7408,14 @@ msgstr ""
 #~ msgstr "Ne lanĉitas"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Uzi pletpiktogramon"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Avizi eventojn en la sistema taskopleta bildeto."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Stato"
 
@@ -7585,6 +7588,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Konservi dosieron kiel..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Sendi mesaĝon per Ctrl+Enter kaj Enter faras novan lineon (defaŭlta "
+#~ "kondutmaniero de Mirabilis ICQ Kliento)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7923,10 +7932,6 @@ msgstr ""
 #~ msgstr "Havas "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Avizi min kiam dosiero estas transdonita"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Babili"
 
@@ -7951,6 +7956,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "dosiertransdonada listo"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
 
 #, fuzzy
 #~ msgid "yesterday "

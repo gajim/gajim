@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -3390,10 +3390,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Τροποποίηση λογαριασμού"
 
@@ -3401,17 +3397,10 @@ msgstr "Τροποποίηση λογαριασμού"
 msgid "Notifications"
 msgstr "Τροποποίηση λογαριασμού"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Τροποποίηση λογαριασμού"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
-
-msgid "Notify of events in the notification area."
 msgstr ""
 
 #, fuzzy
@@ -4563,12 +4552,6 @@ msgstr "Αποστολή πακέτων keep-alive"
 msgid "Send _Report"
 msgstr "_Αναφορά σφάλματος"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Αποστολή μηνύματος με Ctrl+Enter και εισαγωγή νέας γραμμής με το Enter (Εξ "
-"ορισμού συμπεριφορά του πελάτη ICQ της Mirabilis)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4695,10 +4678,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Τροποποίηση λογαριασμού"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
@@ -4711,7 +4690,7 @@ msgid "Show Status Changes"
 msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Θέμα"
 
 #, fuzzy
@@ -4760,6 +4739,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5146,6 +5129,21 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 #, fuzzy
 msgid "System"
 msgstr "<b>Προσαρμοσμένες ρυθμίσεις</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Τροποποίηση λογαριασμού"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Τροποποίηση λογαριασμού"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6511,10 +6509,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Παρακαλώ συμπληρώστε τα στοιχεία της επαφής που θέλετε να προσθέσετε"
+msgid "invites you to join a group chat"
+msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7423,6 +7419,10 @@ msgstr ""
 #~ msgstr "Δεν έχει ξεκινήσει"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Κατάσταση"
 
@@ -7589,6 +7589,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Αποθήκευση αρχείου ως..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Αποστολή μηνύματος με Ctrl+Enter και εισαγωγή νέας γραμμής με το Enter "
+#~ "(Εξ ορισμού συμπεριφορά του πελάτη ICQ της Mirabilis)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7916,10 +7922,6 @@ msgstr ""
 #~ msgstr "Έχει"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Έναρξη κουβέντας"
 
@@ -7941,6 +7943,13 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "λίστα μεταφορών αρχείων"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "Παρακαλώ συμπληρώστε τα στοιχεία της επαφής που θέλετε να προσθέσετε"
 
 #, fuzzy
 #~ msgid "yesterday "

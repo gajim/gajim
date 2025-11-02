@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -3356,18 +3356,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Pranešimai"
 
 msgid "Notifications"
-msgstr "Pranešimai"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Pranešimai"
 
 msgid "Notify after update"
@@ -3375,10 +3367,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Notify of events in the system trayicon."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4517,12 +4505,6 @@ msgstr "Siųsti „aš-gyvas“ paketus"
 msgid "Send _Report"
 msgstr "Sender: "
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
-"Client default behaviour)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4648,10 +4630,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Pranešimai"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Registracija nesėkminga"
 
@@ -4664,7 +4642,7 @@ msgid "Show Status Changes"
 msgstr "_Registruoti asmenų būklės pakitimus"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Tema"
 
 #, fuzzy
@@ -4716,6 +4694,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Pranešti, kai failo siuntimas bus baigtas"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5103,6 +5085,21 @@ msgstr "Sinchronizuoti kontaktus"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistema:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Pranešimai"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Pranešimai"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Vizualinis informavimas</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6448,10 +6445,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Choose the groupchats you want to leave"
+msgid "invites you to join a group chat"
+msgstr "Unable to join group chat"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7322,6 +7317,14 @@ msgstr ""
 #~ msgstr "Not in roster"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notify of events in the system trayicon."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Būklė"
 
@@ -7479,6 +7482,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
+#~ "Client default behaviour)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7771,10 +7780,6 @@ msgstr ""
 #~ msgstr "Turiu "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Pranešti, kai failo siuntimas bus baigtas"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Start Chat"
 
@@ -7795,6 +7800,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "failų siuntimų sąrašas"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Choose the groupchats you want to leave"
 
 #, fuzzy
 #~ msgid "yesterday "

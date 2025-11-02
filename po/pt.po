@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -3183,26 +3183,17 @@ msgstr "Observação: contas anônimas não são possíveis em todos os servidor
 msgid "Notes"
 msgstr "Observações"
 
-msgid "Notification Area Icon"
-msgstr "Ícone da Área de Notificação"
-
 msgid "Notification Sounds"
 msgstr "Sons de Notificação"
 
 msgid "Notifications"
 msgstr "Notificações"
 
-msgid "Notifications When Away"
-msgstr "Notificações Quando Ausente"
-
 msgid "Notify after update"
 msgstr "Notificar após atualização"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Notifique-me quando a atualização automática for bem-sucedida"
-
-msgid "Notify of events in the notification area."
-msgstr "Notifique os eventos na área de notificação."
 
 msgid "Notify on all Messages"
 msgstr "Notificar em todas as Mensagens"
@@ -4266,9 +4257,6 @@ msgstr "Enviar Favoritos de Leitura"
 msgid "Send _Report"
 msgstr "Enviar_Relatório"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Envie mensagem em Ctrl+Enter e faça uma nova linha com Enter."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contato enviado: \"%(jid)s\" (%(name)s)"
@@ -4387,9 +4375,6 @@ msgstr "Mostrar Entrar/Sair"
 msgid "Show Joined / Left"
 msgstr "Mostrar Entraram / Deixaram"
 
-msgid "Show Notifications"
-msgstr "Mostrar Notificações"
-
 #, fuzzy
 msgid "Show Plugins"
 msgstr "Plugins"
@@ -4400,7 +4385,8 @@ msgstr "Mostrar Botão de Envio de Mensagem"
 msgid "Show Status Changes"
 msgstr "Mostrar Mudanças de Status"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "Mostrar Assunto"
 
 #, fuzzy
@@ -4451,6 +4437,10 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Mostre notificações mesmo se estiver Ausente, Ocupado, etc."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Mostrar notificação quando a transferência do arquivo for concluída"
 
 msgid "Show on Startup"
 msgstr "Mostrar na Inicialização"
@@ -4817,6 +4807,21 @@ msgstr "Sincronizando Histórico de Bate-papo…"
 
 msgid "System"
 msgstr "Sistema"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Mostrar Notificações"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Notificações Quando Ausente"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Notificações Visuais"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6104,12 +6109,9 @@ msgstr ""
 msgid "floor"
 msgstr "piso"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"convidou você para um bate-papo em grupo.\n"
-"Você quer se juntar?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Qualquer pessoa pode participar deste bate-papo em grupo"
 
 msgid "is composing a message…"
 msgstr "está digitando uma mensagem…"
@@ -7148,6 +7150,12 @@ msgstr "…ou solte aqui"
 #~ msgid "Not started"
 #~ msgstr "Não encriptado"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Ícone da Área de Notificação"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Notifique os eventos na área de notificação."
+
 #~ msgid "Online Status"
 #~ msgstr "Status Online"
 
@@ -7336,6 +7344,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Enviar Arquivos Diretamente"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "Envie mensagem em Ctrl+Enter e faça uma nova linha com Enter."
 
 #~ msgid "Send the message"
 #~ msgstr "Envie a mensagem"
@@ -7688,10 +7699,6 @@ msgstr "…ou solte aqui"
 #~ msgid "_Save as…"
 #~ msgstr "Salvar Como…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr ""
-#~ "_Mostrar notificação quando a transferência do arquivo for concluída"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "_Iniciar / Entrar no bate-papo…"
 
@@ -7714,6 +7721,13 @@ msgstr "…ou solte aqui"
 
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferências de arquivos"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "convidou você para um bate-papo em grupo.\n"
+#~ "Você quer se juntar?"
 
 #~ msgid "help"
 #~ msgstr "ajuda"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -2968,25 +2968,16 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-msgid "Notification Area Icon"
-msgstr ""
-
 msgid "Notification Sounds"
 msgstr ""
 
 msgid "Notifications"
 msgstr ""
 
-msgid "Notifications When Away"
-msgstr ""
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
-
-msgid "Notify of events in the notification area."
 msgstr ""
 
 msgid "Notify on all Messages"
@@ -3977,9 +3968,6 @@ msgstr ""
 msgid "Send _Report"
 msgstr ""
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4085,9 +4073,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-msgid "Show Notifications"
-msgstr ""
-
 msgid "Show Plugins"
 msgstr ""
 
@@ -4097,7 +4082,7 @@ msgstr ""
 msgid "Show Status Changes"
 msgstr ""
 
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr ""
 
 msgid "Show Title Bar"
@@ -4137,6 +4122,9 @@ msgid ""
 msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
+msgstr ""
+
+msgid "Show notifications on the system tray icon"
 msgstr ""
 
 msgid "Show on Startup"
@@ -4479,6 +4467,18 @@ msgid "Synchronizing Chat History…"
 msgstr ""
 
 msgid "System"
+msgstr ""
+
+msgid "System Notifications"
+msgstr ""
+
+msgid "System Notifications When Away"
+msgstr ""
+
+msgid "System Tray Icon"
+msgstr ""
+
+msgid "System Tray Notifications"
 msgstr ""
 
 msgctxt "Group chat name"
@@ -5677,9 +5677,7 @@ msgstr ""
 msgid "floor"
 msgstr ""
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
+msgid "invites you to join a group chat"
 msgstr ""
 
 msgid "is composing a message…"

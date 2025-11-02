@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -3094,26 +3094,17 @@ msgstr "Ескерту: Анонимді тіркелгілер барлық с�
 msgid "Notes"
 msgstr "Естеліктер"
 
-msgid "Notification Area Icon"
-msgstr "Жүйелік сөре таңбашасы"
-
 msgid "Notification Sounds"
 msgstr "Хабарламалар дыбыстары"
 
 msgid "Notifications"
 msgstr "Хабарламалар"
 
-msgid "Notifications When Away"
-msgstr "\"Кетіп қалған\" кезіндегі хабарландырулар"
-
 msgid "Notify after update"
 msgstr "Жаңартудан кейін хабарлау"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Автоматты жаңарту сәтті өткенде маған хабарлау"
-
-msgid "Notify of events in the notification area."
-msgstr "Оқиғалар жөнінде жүйелік сөреде хабарлау."
 
 msgid "Notify on all Messages"
 msgstr "Барлық хабарламалар туралы ескерту"
@@ -4147,9 +4138,6 @@ msgstr "Оқу маркерлерін жіберу"
 msgid "Send _Report"
 msgstr "_Есеп жіберу"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Хабарламаларды Ctrl+Enter басқанда жіберу, ал Enter жаңа жолға өтеді."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Жіберген контакт: \"%(jid)s\" (%(name)s)"
@@ -4262,9 +4250,6 @@ msgstr "Кіру/шығуды көрсету"
 msgid "Show Joined / Left"
 msgstr "Кіру/шығуды көрсету"
 
-msgid "Show Notifications"
-msgstr "Хабарламаларды көрсету"
-
 #, fuzzy
 msgid "Show Plugins"
 msgstr "Плагиндер"
@@ -4275,7 +4260,8 @@ msgstr "Хабарламаны жіберу батырмасын көрсету"
 msgid "Show Status Changes"
 msgstr "Қалып-күй өзгерісін көрсету"
 
-msgid "Show Subject"
+#, fuzzy
+msgid "Show Subject on Join"
 msgstr "Тақырыпты көрсету"
 
 #, fuzzy
@@ -4326,6 +4312,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr ""
 "Қалып-күйіңіз \"Кетіп қалған\", \"Бос емес\", т.с.с. болса да, "
 "хабарландыруларды көрсету."
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "Файлдармен алмасу аяқталғанда е_скерту"
 
 msgid "Show on Startup"
 msgstr "Іске қосылғанда көрсету"
@@ -4687,6 +4677,21 @@ msgstr "Чат тарихын синхрондау…"
 
 msgid "System"
 msgstr "Жүйе"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Хабарламаларды көрсету"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "\"Кетіп қалған\" кезіндегі хабарландырулар"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Визуалды хабарламалар"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5942,12 +5947,9 @@ msgstr "отбасы"
 msgid "floor"
 msgstr "қабат"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"сізді топтық чатқа шақырды.\n"
-"Оған қосылғыңыз келе ме?"
+#, fuzzy
+msgid "invites you to join a group chat"
+msgstr "Бұл топтық чатқа кез келген адам қосыла алады"
 
 msgid "is composing a message…"
 msgstr "хабарлама жазып тұр…"
@@ -6942,6 +6944,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Not started"
 #~ msgstr "Басталмаған"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Жүйелік сөре таңбашасы"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Оқиғалар жөнінде жүйелік сөреде хабарлау."
+
 #~ msgid "Online Status"
 #~ msgstr "Желідегі күйі"
 
@@ -7139,6 +7147,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Файлдарды тікелей жіберу"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Хабарламаларды Ctrl+Enter басқанда жіберу, ал Enter жаңа жолға өтеді."
 
 #~ msgid "Send the message"
 #~ msgstr "Хабарламаны жіберу"
@@ -7488,9 +7500,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "_Save as…"
 #~ msgstr "Қал_айша сақтау…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "Файлдармен алмасу аяқталғанда е_скерту"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Чатты бастау/қосылу…"
 
@@ -7516,6 +7525,13 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "file transfers list"
 #~ msgstr "файлдармен алмасу тізімі"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "сізді топтық чатқа шақырды.\n"
+#~ "Оған қосылғыңыз келе ме?"
 
 #~ msgid "help"
 #~ msgstr "көмек"

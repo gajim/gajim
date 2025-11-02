@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -3372,10 +3372,6 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "_Implij an arlun-gelaouiñ (trayicon)"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Kemmañ ar gont"
 
@@ -3383,17 +3379,10 @@ msgstr "Kemmañ ar gont"
 msgid "Notifications"
 msgstr "Kemmañ ar gont"
 
-#, fuzzy
-msgid "Notifications When Away"
-msgstr "Kemmañ ar gont"
-
 msgid "Notify after update"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
-
-msgid "Notify of events in the notification area."
 msgstr ""
 
 #, fuzzy
@@ -4537,12 +4526,6 @@ msgstr "Kas ar pakadoù derc'hel al lugadenn vev"
 msgid "Send _Report"
 msgstr "_Diskleriañ ar Bug"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Kas ar gemennadenn gant Ctrl+Kas ha mont d'al linenn gant Kas (emzalc'h dre-"
-"ziouer ar poellad ICQ Mirabilis)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4668,10 +4651,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Kemmañ ar gont"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "échec lors de la publication de votre vCard"
 
@@ -4684,7 +4663,7 @@ msgid "Show Status Changes"
 msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Titl"
 
 #, fuzzy
@@ -4733,6 +4712,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Implij an arlun-gelaouiñ (trayicon)"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Kelaouiñ ac'hanon p'eo echu un treuzkas"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5119,6 +5102,21 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 #, fuzzy
 msgid "System"
 msgstr "<b>Personelaet</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Kemmañ ar gont"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Kemmañ ar gont"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Kelaouennoù dre welet</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6473,10 +6471,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
+msgid "invites you to join a group chat"
+msgstr "Er strollad"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7351,6 +7347,10 @@ msgstr ""
 #~ msgstr "N'eo ket kroget"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "_Implij an arlun-gelaouiñ (trayicon)"
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Stad"
 
@@ -7515,6 +7515,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Enrollañ ar restr dindan..."
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Kas ar gemennadenn gant Ctrl+Kas ha mont d'al linenn gant Kas (emzalc'h "
+#~ "dre-ziouer ar poellad ICQ Mirabilis)."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7821,10 +7827,6 @@ msgstr ""
 #~ msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Kelaouiñ ac'hanon p'eo echu un treuzkas"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Kregiñ da flapiñ"
 
@@ -7842,6 +7844,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "roll an treuzkasadoù"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
 
 #, fuzzy
 #~ msgid "yesterday "

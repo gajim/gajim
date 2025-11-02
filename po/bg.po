@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -3408,18 +3408,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Демон за уведомления"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Уведомления"
 
 msgid "Notifications"
-msgstr "Уведомления"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Уведомления"
 
 msgid "Notify after update"
@@ -3427,10 +3419,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-#, fuzzy
-msgid "Notify of events in the notification area."
-msgstr "Уведомяване за събития в областта за уведомяване."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4581,10 +4569,6 @@ msgstr "Изпращане на пакети за поддържане на вр
 msgid "Send _Report"
 msgstr "_Докладване на грешка"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr "Изпращане на съобщение при Ctrl+Enter и нов ред с „Enter“."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4711,10 +4695,6 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Уведомления"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Неуспех при свързването"
 
@@ -4727,7 +4707,7 @@ msgid "Show Status Changes"
 msgstr "Запазване на промените на _състоянията на контактите"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Тема"
 
 #, fuzzy
@@ -4779,6 +4759,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Демон за уведомления"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Уведомяване при завършване на файловия трансфер"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5167,6 +5151,21 @@ msgstr "Синхронизиране"
 #, fuzzy
 msgid "System"
 msgstr "<b>Система:</b>"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Уведомления"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Уведомления"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "<b>Зрителни уведомления</b>"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6540,10 +6539,8 @@ msgid "floor"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Изберете стаите, които искате да напуснете"
+msgid "invites you to join a group chat"
+msgstr "%s влезе в стаята"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -7467,6 +7464,14 @@ msgstr ""
 #~ msgstr "Не е започнал"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Демон за уведомления"
+
+#, fuzzy
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Уведомяване за събития в областта за уведомяване."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Състояние"
 
@@ -7633,6 +7638,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Запазване на файла като…"
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "Изпращане на съобщение при Ctrl+Enter и нов ред с „Enter“."
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7956,10 +7965,6 @@ msgstr ""
 #~ msgstr "имам "
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Уведомяване при завършване на файловия трансфер"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Започване на разговор"
 
@@ -7980,6 +7985,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "списък с файлови трансфери"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Изберете стаите, които искате да напуснете"
 
 #, fuzzy
 #~ msgid "yesterday "

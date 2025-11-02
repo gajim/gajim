@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
-"PO-Revision-Date: 2025-11-01 07:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"PO-Revision-Date: 2025-11-02 20:52+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -2979,26 +2979,17 @@ msgstr "Figyelem: nem minden szolgáltatónál lehet névtelen fiókot létrehoz
 msgid "Notes"
 msgstr "Megjegyzések"
 
-msgid "Notification Area Icon"
-msgstr "Ikon az értesítési területen"
-
 msgid "Notification Sounds"
 msgstr "Értesítési hangok"
 
 msgid "Notifications"
 msgstr "Értesítések"
 
-msgid "Notifications When Away"
-msgstr "Értesítések távollét esetén is"
-
 msgid "Notify after update"
 msgstr "Értesítés frissítés után"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Üzenet megjelenítése az automatikus frissítés végeztével"
-
-msgid "Notify of events in the notification area."
-msgstr "Értesítések megjelenítése az értesítési területen."
 
 msgid "Notify on all Messages"
 msgstr "Értesítés minden üzenetről"
@@ -3985,10 +3976,6 @@ msgstr "Olvasás visszajelzése"
 msgid "Send _Report"
 msgstr "Jelentés _küldése"
 
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"A Ctrl+Enter az üzenet elküldésére, az Enter új sor beszúrására szolgáljon."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Továbbított névjegy: %(jid)s (%(name)s)"
@@ -4091,9 +4078,6 @@ msgstr "Be- és kilépések jelzése"
 msgid "Show Joined / Left"
 msgstr "Be- és kilépések jelzése"
 
-msgid "Show Notifications"
-msgstr "Értesítések megjelenítése"
-
 msgid "Show Plugins"
 msgstr "Bővítmények"
 
@@ -4103,8 +4087,8 @@ msgstr "Küldés gomb megjelenítése"
 msgid "Show Status Changes"
 msgstr "Állapotváltozások jelzése"
 
-msgid "Show Subject"
-msgstr "Téma megjelenítése"
+msgid "Show Subject on Join"
+msgstr "A téma kijelzése belépéskor"
 
 msgid "Show Title Bar"
 msgstr "Címsor megjelenítése"
@@ -4151,6 +4135,9 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr ""
 "Értesítések megjelenítése a „távol”, „elfoglalt” stb. jelenléti állapotoknál"
+
+msgid "Show notifications on the system tray icon"
+msgstr "Értesítések jelzése a tálcaikonon"
 
 msgid "Show on Startup"
 msgstr "Megjelenés indításkor"
@@ -4485,6 +4472,18 @@ msgstr "Beszélgetési előzmények szinkronizálása…"
 
 msgid "System"
 msgstr "Rendszer"
+
+msgid "System Notifications"
+msgstr "Rendszerértesítések"
+
+msgid "System Notifications When Away"
+msgstr "Rendszerértesítések távollét esetén"
+
+msgid "System Tray Icon"
+msgstr "Rendszertálcaikon"
+
+msgid "System Tray Notifications"
+msgstr "Tálcaikon-értesítések"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5712,12 +5711,8 @@ msgstr "család"
 msgid "floor"
 msgstr "emelet"
 
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr ""
-"egy társalgóba szóló meghívót küldött.\n"
-"El legyen fogadva a meghívás?"
+msgid "invites you to join a group chat"
+msgstr "egy társalgóba szóló meghívót küldött"
 
 msgid "is composing a message…"
 msgstr "üzenetet fogalmaz…"
@@ -6784,6 +6779,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Not started"
 #~ msgstr "Kezdésre vár"
 
+#~ msgid "Notification Area Icon"
+#~ msgstr "Ikon az értesítési területen"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Értesítések megjelenítése az értesítési területen."
+
 #~ msgid "Online Status"
 #~ msgstr "Jelenléti állapot"
 
@@ -6980,6 +6981,11 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Közvetlen fájlküldés"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "A Ctrl+Enter az üzenet elküldésére, az Enter új sor beszúrására "
+#~ "szolgáljon."
 
 #~ msgid "Send the message"
 #~ msgstr "Az üzenet elküldése"
@@ -7328,9 +7334,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "_Save as…"
 #~ msgstr "Menté_s másként…"
 
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "Ér_tesítés a fájlátvitel befejezése után"
-
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Beszélgeté_s kezdeményezése…"
 
@@ -7351,6 +7354,13 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "file transfers list"
 #~ msgstr "fájlátvitelek"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "egy társalgóba szóló meghívót küldött.\n"
+#~ "El legyen fogadva a meghívás?"
 
 #~ msgid "help"
 #~ msgstr "súgó"

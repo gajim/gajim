@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-31 20:52+0000\n"
+"POT-Creation-Date: 2025-11-02 19:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -3385,18 +3385,10 @@ msgid "Notes"
 msgstr ""
 
 #, fuzzy
-msgid "Notification Area Icon"
-msgstr "Pictogram weergeven i_n meldingsvak"
-
-#, fuzzy
 msgid "Notification Sounds"
 msgstr "Meldingen"
 
 msgid "Notifications"
-msgstr "Meldingen"
-
-#, fuzzy
-msgid "Notifications When Away"
 msgstr "Meldingen"
 
 msgid "Notify after update"
@@ -3404,9 +3396,6 @@ msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr ""
-
-msgid "Notify of events in the notification area."
-msgstr "Meldingen van gebeurtenissen weergeven in het systeemvak."
 
 #, fuzzy
 msgid "Notify on all Messages"
@@ -4544,12 +4533,6 @@ msgstr "Keep-alive-pakketten verzenden"
 msgid "Send _Report"
 msgstr "_Fout melden"
 
-#, fuzzy
-msgid "Send message on Ctrl+Enter and make a new line with Enter."
-msgstr ""
-"Ctrl+Enter stuurt bericht, enkel Enter maakt een nieuwe regel "
-"(standaardgedrag van Mirabilis ICQ)."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contact verzonden: ‘%(jid)s’ (%(name)s)"
@@ -4678,10 +4661,6 @@ msgid "Show Joined / Left"
 msgstr "Berichten over deelnemen/verlaten tonen"
 
 #, fuzzy
-msgid "Show Notifications"
-msgstr "Meldingen"
-
-#, fuzzy
 msgid "Show Plugins"
 msgstr "Plug-ins"
 
@@ -4694,7 +4673,7 @@ msgid "Show Status Changes"
 msgstr "Statusveranderingen tonen"
 
 #, fuzzy
-msgid "Show Subject"
+msgid "Show Subject on Join"
 msgstr "Onderwerp"
 
 #, fuzzy
@@ -4745,6 +4724,10 @@ msgstr ""
 #, fuzzy
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Pictogram weergeven i_n meldingsvak"
+
+#, fuzzy
+msgid "Show notifications on the system tray icon"
+msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
 
 #, fuzzy
 msgid "Show on Startup"
@@ -5127,6 +5110,21 @@ msgstr "Geschiedenis synchroniseren"
 
 msgid "System"
 msgstr "Systeem"
+
+#, fuzzy
+msgid "System Notifications"
+msgstr "Meldingen"
+
+#, fuzzy
+msgid "System Notifications When Away"
+msgstr "Meldingen"
+
+msgid "System Tray Icon"
+msgstr ""
+
+#, fuzzy
+msgid "System Tray Notifications"
+msgstr "Visuele meldingen"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -6499,10 +6497,8 @@ msgid "floor"
 msgstr "verdiep"
 
 #, fuzzy
-msgid ""
-"has invited you to a group chat.\n"
-"Do you want to join?"
-msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
+msgid "invites you to join a group chat"
+msgstr "%s neemt nu deel aan het groepsgesprek"
 
 msgid "is composing a message…"
 msgstr "is een bericht aan het typen…"
@@ -7527,6 +7523,13 @@ msgstr ""
 #~ msgstr "Niet versleuteld"
 
 #, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Pictogram weergeven i_n meldingsvak"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Meldingen van gebeurtenissen weergeven in het systeemvak."
+
+#, fuzzy
 #~ msgid "Online Status"
 #~ msgstr "Status"
 
@@ -7725,6 +7728,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Bestand rechtstreeks verzenden…"
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Ctrl+Enter stuurt bericht, enkel Enter maakt een nieuwe regel "
+#~ "(standaardgedrag van Mirabilis ICQ)."
 
 #~ msgid "Send the message"
 #~ msgstr "Bericht verzenden"
@@ -8091,10 +8100,6 @@ msgstr ""
 #~ msgstr "Opslaan _als"
 
 #, fuzzy
-#~ msgid "_Show notification when file transfer is complete"
-#~ msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
-
-#, fuzzy
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "Gesprek beginnen"
 
@@ -8118,6 +8123,12 @@ msgstr ""
 
 #~ msgid "file transfers list"
 #~ msgstr "bestandsoverdrachtlijst"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
 
 #, fuzzy
 #~ msgid "yesterday "
