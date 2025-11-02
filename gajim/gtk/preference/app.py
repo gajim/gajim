@@ -275,7 +275,7 @@ class GroupChatsGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Show Subject"),
+                _("Show Subject on Join"),
                 SettingType.CONFIG,
                 "show_subject_on_join",
             ),
