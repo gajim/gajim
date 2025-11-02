@@ -8,12 +8,11 @@
       <object class="GtkBox">
         <property name="visible">1</property>
         <property name="can-focus">False</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkBox" id="_account_identifier">
-            <property name="width-request">3</property>
             <property name="can-focus">False</property>
             <property name="visible">0</property>
-            <property name="margin-end">6</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -27,7 +26,6 @@
           <object class="GtkImage" id="_avatar_image">
             <property name="visible">1</property>
             <property name="can-focus">False</property>
-            <property name="margin-end">12</property>
             <property name="pixel-size">32</property>
           </object>
         </child>
@@ -35,7 +33,6 @@
           <object class="GtkBox">
             <property name="visible">1</property>
             <property name="can-focus">False</property>
-            <property name="margin-end">6</property>
             <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>

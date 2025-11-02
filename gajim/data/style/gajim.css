@@ -264,7 +264,8 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Generic sidebar / chatlist elements */
 .account-identifier-bar {
-	border-radius: 6px;
+    border-radius: 6px;
+    min-width: 3px;
 }
 
 .selection-bar {
@@ -282,10 +283,6 @@ button.flat.link { padding: 0; border: 0; }
 /* AccountPopover */
 #AccountPopoverRow image {
     -gtk-icon-size: 24px;
-}
-
-#AccountPopoverRow .account-identifier-bar {
-    padding-left: 3px;
 }
 
 /* SideBarListBox */

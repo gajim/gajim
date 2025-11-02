@@ -5,11 +5,10 @@
     <property name="can-focus">0</property>
     <child>
       <object class="GtkBox">
+        <property name="spacing">12</property>
         <child>
           <object class="GtkBox" id="account_identifier">
             <property name="visible">0</property>
-            <property name="width-request">3</property>
-            <property name="margin-end">6</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -20,13 +19,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkImage" id="avatar_image">
-            <property name="margin-end">12</property>
-          </object>
+          <object class="GtkImage" id="avatar_image" />
         </child>
         <child>
           <object class="GtkBox">
-            <property name="margin-end">6</property>
             <property name="hexpand">1</property>
             <property name="orientation">vertical</property>
             <child>
