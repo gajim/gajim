@@ -19,7 +19,7 @@ from types import FrameType
 
 from packaging.version import Version as V
 
-_MIN_NBXMPP_VER = "6.3.0"
+_MIN_NBXMPP_VER = "6.4.0"
 _MIN_GTK_VER = "4.17.5"
 _MIN_ADW_VER = "1.7.0"
 _MIN_CAIRO_VER = "1.16.0"
