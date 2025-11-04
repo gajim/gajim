@@ -75,11 +75,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.10-py3-none-any.whl
+      - pip3 install idna-3.11-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl
-        sha256: 946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
+        url: https://files.pythonhosted.org/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl
+        sha256: 771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea
 
   - name: python3-cryptography
     buildsystem: simple
@@ -184,11 +184,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install precis_i18n-1.1.1-py3-none-any.whl
+      - pip3 install precis_i18n-1.1.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/26/e3/fe4c56b96b3af0990ecfd03f7d6e5c05b75067574da71527d21778ac8a54/precis_i18n-1.1.1-py3-none-any.whl
-        sha256: eabb3a3a8c01dededbc36cb0173f143c7bdfaa3f4fcd9b4ca215c9fd6aed865f
+        url: https://files.pythonhosted.org/packages/c3/9b/b68be6845faedb6fa33c4ffda7741467a8e8aabff82c6a941a0ba2785c3d/precis_i18n-1.1.2-py3-none-any.whl
+        sha256: 8e6cce33bdd8cb6289b9e85cdd7be74c30a1111cadb9d759492349c8c10b0840
 
   # GSound dependency
   - shared-modules/libcanberra/libcanberra.json
@@ -224,9 +224,10 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238/pillow-11.3.0.tar.gz
-        sha256: 3828ee7586cd0b2091b6209e5ad53e20d0649bbe87164a459d0676e035e8f523
+        url: https://files.pythonhosted.org/packages/5a/b0/cace85a1b0c9775a9f8f5d5423c8261c858760e2466c79b2dd184638b056/pillow-12.0.0.tar.gz
+        sha256: 87d4f8125c9988bfbed67af47dd7a953e2fc7b0cc1e7800ec6d2080d490bb353
 
+  # httpx dependencies
   - name: python3-truststore
     buildsystem: simple
     build-commands:
@@ -236,7 +237,6 @@ modules:
         url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
         sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
 
-  # httpx dependencies
   - name: python3-h2
     buildsystem: simple
     build-commands:
@@ -249,11 +249,11 @@ modules:
   - name: python3-anyio
     buildsystem: simple
     build-commands:
-      - pip3 install anyio-4.10.0-py3-none-any.whl
+      - pip3 install anyio-4.11.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/6f/12/e5e0282d673bb9746bacfb6e2dba8719989d3660cdb2ea79aee9a9651afb/anyio-4.10.0-py3-none-any.whl
-        sha256: 60e474ac86736bbfd6f210f7a61218939c318f43f9972497381f1c5e930ed3d1
+        url: https://files.pythonhosted.org/packages/15/b3/9b1a8074496371342ec1e796a96f99c82c945a339cd81a8e73de28b4cf9e/anyio-4.11.0-py3-none-any.whl
+        sha256: 0287e96f4d26d4149305414d4e3bc32f0dcd0862365a4bddea19d7a1ec38c4fc
 
   - name: python3-httpcore
     buildsystem: simple
@@ -267,11 +267,11 @@ modules:
   - name: python3-httpx
     buildsystem: simple
     build-commands:
-      - pip3 install httpx-0.10.4-py3-none-any.whl
+      - pip3 install httpx-0.28.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
-        sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
+        url: https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl
+        sha256: d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -286,20 +286,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2025.8.3-py3-none-any.whl
+      - pip3 install certifi-2025.10.5-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e5/48/1549795ba7742c948d2ad169c1c8cdbae65bc450d6cd753d124b17c8cd32/certifi-2025.8.3-py3-none-any.whl
-        sha256: f6c12493cfb1b06ba2ff328595af9350c65d6644968e5d3a2ffd78699af217a5
+        url: https://files.pythonhosted.org/packages/e4/37/af0d2ef3967ac0d6113837b44a4f0bfe1328c2b9763bd5b1744520e5cfed/certifi-2025.10.5-py3-none-any.whl
+        sha256: 0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.39.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.43.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/dd/44/4356cc64246ba7b2b920f7c97a85c3c52748e213e250b512ee8152eb559d/sentry_sdk-2.39.0-py2.py3-none-any.whl
-        sha256: ba655ca5e57b41569b18e2a5552cb3375209760a5d332cdd87c6c3f28f729602
+        url: https://files.pythonhosted.org/packages/69/31/8228fa962f7fd8814d634e4ebece8780e2cdcfbdf0cd2e14d4a6861a7cd5/sentry_sdk-2.43.0-py2.py3-none-any.whl
+        sha256: 4aacafcf1756ef066d359ae35030881917160ba7f6fc3ae11e0e58b09edc2d5d
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -322,11 +322,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install sqlalchemy-2.0.43-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.44-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/b8/d9/13bdde6521f322861fab67473cec4b1cc8999f3871953531cf61945fad92/sqlalchemy-2.0.43-py3-none-any.whl
-        sha256: 1681c21dd2ccee222c2fe0bef671d1aef7c504087c9c4e800371cfcc8ac966fc
+        url: https://files.pythonhosted.org/packages/9c/5e/6a29fa884d9fb7ddadf6b69490a9d45fded3b38541713010dad16b77d015/sqlalchemy-2.0.44-py3-none-any.whl
+        sha256: 19de7ca1246fbef9f9d1bff8f1ab25641569df226364a0e40457dc5457c54b05
 
   - name: python3-emoji
     buildsystem: simple
@@ -370,11 +370,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.32.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.33.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/97/b7/15cc7d93443d6c6a84626ae3258a91f4c6ac8c0edd5df35ea7658f71b79c/protobuf-6.32.1-py3-none-any.whl
-        sha256: 2601b779fc7d32a866c6b4404f9d42a3f67c5b9f3f15b4db3cccabe06b95c346
+        url: https://files.pythonhosted.org/packages/07/d1/0a28c21707807c6aacd5dc9c3704b2aa1effbf37adebd8caeaf68b17a636/protobuf-6.33.0-py3-none-any.whl
+        sha256: 25c9e1963c6734448ea2d308cfa610e692b801304ba0908d7bfa564ac5132995
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -392,17 +392,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/72/c8/90912e90208bd20ed9384f299384cc9ee8f354758bd8650155eba33d4655/gssapi-1.10.0.tar.gz
-        sha256: f1495e0dc20bee3ad2839724d98ae723c7dae78c1ddea37a7c861c3c4bd77763
+        url: https://files.pythonhosted.org/packages/b7/bf/95eed332e3911e2b113ceef5e6b0da807b22e45dbf897d8371e83b0a4958/gssapi-1.10.1.tar.gz
+        sha256: 7b54335dc9a3c55d564624fb6e25fcf9cfc0b80296a5c51e9c7cf9781c7d295b
 
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-6.3.1-py3-none-any.whl
+      - pip3 install nbxmpp-6.4.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/b2/da/f282d64b7f0126cde1cdccb46cb31978a66c6f769d32b2a7a5169fe8eb0e/nbxmpp-6.3.1-py3-none-any.whl
-        sha256: 2078c2329dab32d3ed8a95593cf08cedc0c94094ab2658730e68899e4bf330a1
+        url: https://files.pythonhosted.org/packages/27/5d/9746fd1b03a02a3e0eb305d56a5436444515645ed927564bbad89050814c/nbxmpp-6.4.0-py3-none-any.whl
+        sha256: 9b81e178cdee77babce268c3a6baf0ca32f4580f533809776de5f998fe6e1e51
 
   - name: gajim
     buildsystem: simple
