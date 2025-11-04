@@ -1,3 +1,52 @@
+Gajim 2.4.0 (04 Nov 2025)
+
+  New
+
+  * Raise correction time limit
+  * GroupChat: Show read markers
+  * Customize emojis list for quick reactions
+  * Reactions: Add support for max_reactions_per_user
+
+  Improvements
+
+  * Group chat invitation: Improve layout and details
+  * Preferences: Improve name of subject setting
+  * Preferences: Improve terminology and structure of app notification settings
+  * ChatList: Make account identifies less wide
+  * HTTPUpload: Improve support for .onion domains
+  * HTTPUpload: Replace nbxmpp http request
+  * Application: Improve error text on DBus register errors
+  * Display toast with 'Open Folder' button after saving a file (#12511)
+  * AccountPage: Use Adw widgets and integrate profile
+  * DiscoverServices: Recognize pep as pubsub service
+  * GroupChat: Support color for hats
+  * Support for pronouns in profiles
+  * ChatList: Display messages with 'Code snippet' instead of '```'
+
+  Change
+
+  * Raise nbxmpp version
+  * Add socks as new dependency
+
+  Bug Fixes
+
+  * Windows: Allow overriding language with LANGUAGE env var
+  * MessageRowActions: Fix memory leak
+  * Windows: Add full-width question mark to blacklisted characters for file names (#11603)
+  * Password storage: Catch more exceptions when trying to delete password (#12506)
+  * File selector/avatar selector: Guard for missing value on drop (#12505)
+  * Contact info: Only allow renaming contact if contact is in roster (#12504)
+  * PEP Config: Disable buttons according to account connectivity (#12503)
+  * Apply scaling to image previews again
+  * Rotate image preview correctly
+  * ChatList: Filter contact groups correctly
+  * Themes: Remove obsolete style entries
+  * Discovery: Add a cache per account (#12496)
+  * Do not fail to open file with relative paths
+  * Reference CopyButton to fix template initialization issues (#12470)
+  * Tests: Initialize Adw when initializing tests
+  * Preferences: Don’t fail to open dialog if connection is PLAIN (#12471)
+
 Gajim 2.3.6 (30 Sep 2025)
 
   Improvements
