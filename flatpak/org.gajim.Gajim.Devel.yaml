@@ -222,6 +222,16 @@ modules:
       - type: patch
         path: farstream-make-4.3.patch
 
+  # pillow dependency
+  - name: python3-pybind11
+    buildsystem: simple
+    build-commands:
+      - pip3 install pybind11-3.0.1-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/cd/8a/37362fc2b949d5f733a8b0f2ff51ba423914cabefe69f1d1b6aab710f5fe/pybind11-3.0.1-py3-none-any.whl
+        sha256: aa8f0aa6e0a94d3b64adfc38f560f33f15e589be2175e103c0a33c6bce55ee89
+
   - name: python3-pillow
     buildsystem: simple
     build-commands:
@@ -241,6 +251,25 @@ modules:
         url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
         sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
 
+  # h2 dependencies
+  - name: python3-hpack
+    buildsystem: simple
+    build-commands:
+      - pip3 install hpack-4.1.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/07/c6/80c95b1b2b94682a72cbdbfb85b81ae2daffa4291fbfa1b1464502ede10d/hpack-4.1.0-py3-none-any.whl
+        sha256: 157ac792668d995c657d93111f46b4535ed114f0c9c8d672271bbec7eae1b496
+
+  - name: python3-hyperframe
+    buildsystem: simple
+    build-commands:
+      - pip3 install hyperframe-6.1.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/48/30/47d0bf6072f7252e6521f3447ccfa40b421b6824517f82854703d0f5a98b/hyperframe-6.1.0-py3-none-any.whl
+        sha256: b03380493a519fce58ea5af42e4a42317bf9bd425596f7a0835ffce80f1a42e5
+
   - name: python3-h2
     buildsystem: simple
     build-commands:
@@ -249,6 +278,16 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/69/b2/119f6e6dcbd96f9069ce9a2665e0146588dc9f88f29549711853645e736a/h2-4.3.0-py3-none-any.whl
         sha256: c438f029a25f7945c69e0ccf0fb951dc3f73a5f6412981daee861431b70e2bdd
+
+  # anyio dependency
+  - name: python3-sniffio
+    buildsystem: simple
+    build-commands:
+      - pip3 install sniffio-1.3.1-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl
+        sha256: 2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2
 
   - name: python3-anyio
     buildsystem: simple
@@ -259,6 +298,24 @@ modules:
         url: https://files.pythonhosted.org/packages/15/b3/9b1a8074496371342ec1e796a96f99c82c945a339cd81a8e73de28b4cf9e/anyio-4.11.0-py3-none-any.whl
         sha256: 0287e96f4d26d4149305414d4e3bc32f0dcd0862365a4bddea19d7a1ec38c4fc
 
+  - name: python3-certifi
+    buildsystem: simple
+    build-commands:
+      - pip3 install certifi-2025.10.5-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/e4/37/af0d2ef3967ac0d6113837b44a4f0bfe1328c2b9763bd5b1744520e5cfed/certifi-2025.10.5-py3-none-any.whl
+        sha256: 0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de
+
+  - name: python3-h11
+    buildsystem: simple
+    build-commands:
+      - pip3 install h11-0.16.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl
+        sha256: 63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86
+
   - name: python3-httpcore
     buildsystem: simple
     build-commands:
@@ -267,6 +324,25 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl
         sha256: 2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55
+
+  # sockio dependency
+  - name: python3-flit-core
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/69/59/b6fc2188dfc7ea4f936cd12b49d707f66a1cb7a1d2c16172963534db741b/flit_core-3.12.0.tar.gz
+        sha256: 18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2
+
+  - name: python3-socksio
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation .
+    sources:
+      - type: git
+        url: https://github.com/sethmlarson/socksio.git
+        commit: b326406915fd98a8185c1c160165c5b8963b30c1
 
   - name: python3-httpx
     buildsystem: simple
@@ -286,15 +362,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/a7/c2/fe1e52489ae3122415c51f387e221dd0773709bad6c6cdaa599e8a2c5185/urllib3-2.5.0-py3-none-any.whl
         sha256: e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc
-
-  - name: python3-certifi
-    buildsystem: simple
-    build-commands:
-      - pip3 install certifi-2025.10.5-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/e4/37/af0d2ef3967ac0d6113837b44a4f0bfe1328c2b9763bd5b1744520e5cfed/certifi-2025.10.5-py3-none-any.whl
-        sha256: 0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de
 
   - name: python3-sentry-sdk
     buildsystem: simple
