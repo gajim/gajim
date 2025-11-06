@@ -95,7 +95,11 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
             log.info("Certificate does not have extension: %s", err)
             self._it_subject_alt_names = "-"
 
-        serial_bytes = format_bytes_as_hex(int_to_bytes(cert.serial_number), 2)
+        try:
+            serial_bytes = format_bytes_as_hex(int_to_bytes(cert.serial_number), 2)
+        except Exception:
+            log.exception("Error while trying to get serial number of certificate")
+            serial_bytes = ""
         self._it_serial_number = serial_bytes
 
         self._ib_common_name = "-"
