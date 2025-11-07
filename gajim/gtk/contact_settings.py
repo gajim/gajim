@@ -37,7 +37,7 @@ class ContactSettings(SettingsBox):
                 _("Send Read Markers"),
                 SettingType.CONTACT,
                 "send_marker",
-                desc=_("Let others know if you read up to this point"),
+                desc=_("Let this contact know if you read up to this point"),
             ),
         ]
 
