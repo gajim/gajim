@@ -175,7 +175,7 @@ class ProfileWindow(GajimAppWindow):
 
         self._ui.save_button.set_sensitive(state.is_connected)
         self._ui.save_button.set_tooltip_text(
-            _("Not connected") if not state.is_connected else ""
+            _("You are offline") if not state.is_connected else ""
         )
 
     @ensure_not_destroyed

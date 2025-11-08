@@ -238,7 +238,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         assert self._account is not None
         if not app.account_is_available(self._account):
             InformationAlertDialog(
-                _("Not Connected"),
+                _("You are offline"),
                 _("You have to be connected to create a group chat."),
             )
             return

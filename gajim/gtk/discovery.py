@@ -603,7 +603,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         # Check connection
         if not app.account_is_available(account):
             InformationAlertDialog(
-                _("Not Connected"),
+                _("You are offline"),
                 _(
                     "You are not connected to the server. "
                     "Without a connection, you can not browse available services"

@@ -411,7 +411,7 @@
                 <property name="name">offline</property>
                 <property name="child">
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">You are offline.</property>
+                    <property name="label" translatable="yes">You are offline</property>
                     <style>
                       <class name="dimmed"/>
                     </style>
@@ -479,7 +479,7 @@
                 <property name="name">offline</property>
                 <property name="child">
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">You are offline.</property>
+                    <property name="label" translatable="yes">You are offline</property>
                     <style>
                       <class name="dimmed"/>
                     </style>

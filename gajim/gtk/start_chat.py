@@ -529,7 +529,7 @@ class StartChatDialog(GajimAppWindow):
 
     def _disco_info(self, item: ContactListItem) -> None:
         if not app.account_is_available(item.account):
-            self._show_error_page(_("You are offline."))
+            self._show_error_page(_("You are offline"))
             return
 
         self._ui.stack.set_visible_child_name("progress")
