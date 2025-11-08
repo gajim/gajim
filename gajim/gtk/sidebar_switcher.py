@@ -56,7 +56,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         self._menu = menu
         self._stack = stack
         self._remove_pages()
-        self._append_menus(menu, "__main")
+        self._append_menus(menu, "__main", visible=visible)
         self.set_visible_child_name("__main")
 
     def set_with_stack(self, stack: Gtk.Stack, visible: bool = True) -> None:

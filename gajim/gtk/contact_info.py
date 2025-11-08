@@ -12,8 +12,6 @@ from enum import IntEnum
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gtk
-from nbxmpp.const import Affiliation
-from nbxmpp.const import Role
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -64,7 +62,10 @@ class Column(IntEnum):
 
 class ContactInfo(GajimAppWindow, EventHelper):
     def __init__(
-        self, account: str, contact: ContactT, page: str | None = None
+        self,
+        account: str,
+        contact: GroupchatParticipant | BareContact,
+        page: str | None = None,
     ) -> None:
 
         GajimAppWindow.__init__(
@@ -83,23 +84,16 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self.account = account
         self.contact = contact
 
-        self._client = app.get_client(account)
-
-        affiliation = None
-        role = None
         if isinstance(contact, GroupchatParticipant):
-            # Display full contact dialog if we know contact's real JID
-            # (but keep affiliation/role infos)
-            affiliation = contact.affiliation
-            role = contact.role
+            self._is_in_roster = False
+            self._bare_contact = contact.get_real_contact()
+            if self._bare_contact is not None:
+                self._is_in_roster = self._bare_contact.is_in_roster
+        else:
+            self._bare_contact = contact
+            self._is_in_roster = contact.is_in_roster
 
-            if contact.real_jid is not None:
-                bare_contact = self._client.get_module("Contacts").get_contact(
-                    contact.real_jid
-                )
-                assert isinstance(bare_contact, BareContact)
-                self.contact = bare_contact
-
+        self._client = app.get_client(account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._ui = get_builder("contact_info.ui")
@@ -129,22 +123,12 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self._load_avatar()
 
-        self._contact_name_widget = ContactNameWidget(
-            contact=self.contact, edit_mode=self.contact.is_in_roster
-        )
-        self._connect(
-            self._contact_name_widget, "name-updated", self._on_contact_name_updated
-        )
-        self._ui.contact_name_controls_box.append(self._contact_name_widget)
-
-        self._fill_information_page(self.contact, affiliation, role)
-
-        if isinstance(self.contact, BareContact):
-            self._fill_settings_page(self.contact)
-            self._fill_encryption_page(self.contact)
-            self._fill_device_info(self.contact)
-            self._fill_groups_page(self.contact)
-            self._fill_note_page(self.contact)
+        self._fill_information_page()
+        self._fill_settings_page()
+        self._fill_encryption_page()
+        self._fill_device_info()
+        self._fill_groups_page()
+        self._fill_note_page()
 
         if page is not None:
             self._switcher.activate_item(page)
@@ -195,15 +179,13 @@ class ContactInfo(GajimAppWindow, EventHelper):
         for task in self._tasks:
             task.cancel()
 
-        if self.contact.is_in_roster and self._client.state.is_available:
-            self._save_annotation()
+        self._save_annotation()
 
         for device_grid in self._devices.values():
             self._ui.devices_page.remove(device_grid)
         self._devices.clear()
 
         del self._switcher
-        del self._contact_name_widget
 
         self._client.disconnect_all_from_obj(self)
         self._disconnect_all()
@@ -225,42 +207,53 @@ class ContactInfo(GajimAppWindow, EventHelper):
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._sidebar_page.set_title(name)
 
-    def _fill_information_page(
-        self,
-        contact: ContactT,
-        affiliation: Affiliation | None = None,
-        role: Role | None = None,
-    ) -> None:
+    def _fill_information_page(self) -> None:
+        contact_name_widget = ContactNameWidget(
+            contact=self.contact, edit_mode=self._is_in_roster
+        )
+        self._connect(
+            contact_name_widget, "name-updated", self._on_contact_name_updated
+        )
+        self._ui.contact_name_controls_box.append(contact_name_widget)
+
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.append(self._vcard_grid)
-        if self._client.state.is_available:
+        if self._client.state.is_available and self._bare_contact is not None:
             self._client.get_module("VCard4").request_vcard(
-                jid=self.contact.jid, callback=self._on_vcard_received
+                jid=self._bare_contact.jid, callback=self._on_vcard_received
             )
 
-        jid = str(contact.get_address())
+        if self._bare_contact is not None:
+            jid = str(self._bare_contact.get_address())
+        else:
+            jid = str(self.contact.get_address())
 
         self._ui.contact_jid_label.set_text(jid)
         self._ui.contact_jid_label.set_tooltip_text(jid)
 
-        if affiliation is not None and role is not None:
-            self._ui.affiliation_label.set_text(get_uf_affiliation(affiliation))
-            self._ui.role_label.set_text(get_uf_role(role))
+        if isinstance(self.contact, GroupchatParticipant):
+            self._ui.affiliation_label.set_text(
+                get_uf_affiliation(self.contact.affiliation)
+            )
+            self._ui.role_label.set_text(get_uf_role(self.contact.role))
             self._ui.group_chat_grid.set_visible(True)
 
         self._switcher.set_item_visible("information", True)
 
-    def _fill_encryption_page(self, contact: ContactT) -> None:
+    def _fill_encryption_page(self) -> None:
+        if self._bare_contact is None:
+            return
+
         self._ui.encryption_box.set_child(
-            OMEMOTrustManager(self.contact.account, self.contact)
+            OMEMOTrustManager(self._bare_contact.account, self._bare_contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)
 
-    def _fill_note_page(self, contact: BareContact) -> None:
-        if not contact.is_in_roster:
+    def _fill_note_page(self) -> None:
+        if self._bare_contact is None or not self._is_in_roster:
             return
 
-        note = self._client.get_module("Annotations").get_note(contact.jid)
+        note = self._client.get_module("Annotations").get_note(self._bare_contact.jid)
         if note is not None:
             self._ui.textview_annotation.get_buffer().set_text(note.data)
 
@@ -272,18 +265,18 @@ class ContactInfo(GajimAppWindow, EventHelper):
             # Delimiter as a "proxy" for the availability of private storage.
             self._switcher.set_item_visible("notes", True)
 
-    def _fill_settings_page(self, contact: BareContact) -> None:
-        if not contact.is_in_roster:
+    def _fill_settings_page(self) -> None:
+        if self._bare_contact is None or not self._is_in_roster:
             return
 
-        self._ui.from_subscription_switch.set_active(contact.is_subscribed)
+        self._ui.from_subscription_switch.set_active(self._bare_contact.is_subscribed)
 
         self._ui.subscription_listbox.set_sensitive(self._client.state.is_available)
 
-        if contact.subscription in ("to", "both"):
+        if self._bare_contact.subscription in ("to", "both"):
             self._ui.to_subscription_stack.set_visible_child_name("checkmark")
 
-        elif contact.ask == "subscribe":
+        elif self._bare_contact.ask == "subscribe":
             self._ui.to_subscription_stack.set_visible_child_name("request")
             self._ui.request_stack.set_visible_child_name("requested")
         else:
@@ -291,15 +284,22 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._ui.request_stack.set_visible_child_name("cross")
 
         self._switcher.set_item_visible("settings", True)
-        contact_settings = ContactSettings(self.account, contact.jid)
-        self._ui.contact_settings_box.add(contact_settings)
+
+        if isinstance(self.contact, BareContact):
+            # All settings for PM are derived from the groupchat settings
+            # so we dont need to show them
+            contact_settings = ContactSettings(self.account, self._bare_contact.jid)
+            self._ui.contact_settings_box.add(contact_settings)
 
         params = AccountJidParam(account=self.account, jid=self.contact.jid)
         self._ui.remove_history_button.set_action_target_value(params.to_variant())
         self._ui.remove_history_button.set_action_name("app.remove-history")
 
-    def _fill_groups_page(self, contact: BareContact) -> None:
-        if not contact.is_in_roster or not self._client.state.is_available:
+    def _fill_groups_page(self) -> None:
+        if self._bare_contact is None or not self._is_in_roster:
+            return
+
+        if not self._client.state.is_available:
             return
 
         model = self._ui.groups_treeview.get_model()
@@ -307,13 +307,16 @@ class ContactInfo(GajimAppWindow, EventHelper):
         model.set_sort_column_id(Column.GROUP_NAME, Gtk.SortType.ASCENDING)
         groups = self._client.get_module("Roster").get_groups()
         for group in groups:
-            is_in_group = group in contact.groups
+            is_in_group = group in self._bare_contact.groups
             model.append([is_in_group, group])
 
         self._switcher.set_item_visible("groups", True)
 
-    def _fill_device_info(self, contact: BareContact) -> None:
-        contacts = list(contact.iter_resources())
+    def _fill_device_info(self) -> None:
+        if self._bare_contact is None or not self._is_in_roster:
+            return
+
+        contacts = list(self._bare_contact.iter_resources())
         if not contacts:
             return
 
@@ -343,10 +346,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
-        texture1 = self.contact.get_avatar(AvatarSize.VCARD, scale, add_show=False)
-
+        texture = self.contact.get_avatar(AvatarSize.VCARD, scale, add_show=False)
         self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
-        self._ui.avatar_image.set_from_paintable(texture1)
+        self._ui.avatar_image.set_from_paintable(texture)
 
     def _set_os_info(self, task: Task) -> None:
         self._tasks.remove(task)
@@ -376,11 +378,17 @@ class ContactInfo(GajimAppWindow, EventHelper):
         device_grid.set_entity_time(entity_time)
 
     def _save_annotation(self) -> None:
+        if self._bare_contact is None or not self._is_in_roster:
+            return
+
+        if not self._client.state.is_available:
+            return
+
         buffer_ = self._ui.textview_annotation.get_buffer()
         new_annotation = buffer_.get_property("text")
-        note = self._client.get_module("Annotations").get_note(self.contact.jid)
+        note = self._client.get_module("Annotations").get_note(self._bare_contact.jid)
         if note is None or new_annotation != note.data:
-            new_note = AnnotationNote(jid=self.contact.jid, data=new_annotation)
+            new_note = AnnotationNote(jid=self._bare_contact.jid, data=new_annotation)
             self._client.get_module("Annotations").set_note(new_note)
 
     def _on_from_subscription_switch_toggled(
@@ -388,13 +396,15 @@ class ContactInfo(GajimAppWindow, EventHelper):
     ) -> int:
         def _on_response(response_id: str) -> None:
             if response_id == "stop":
-                self._client.get_module("Presence").unsubscribed(self.contact.jid)
+                assert self._bare_contact is not None
+                self._client.get_module("Presence").unsubscribed(self._bare_contact.jid)
                 switch.set_state(state)
             else:
                 switch.set_active(True)
 
         if state:
-            self._client.get_module("Presence").subscribed(self.contact.jid)
+            assert self._bare_contact is not None
+            self._client.get_module("Presence").subscribed(self._bare_contact.jid)
             switch.set_state(state)
         else:
             AlertDialog(
@@ -416,8 +426,10 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
     def _on_to_subscription_button_clicked(self, _widget: Gtk.Button) -> None:
         # Save auto_auth if switch for disclosing presence is active
+        assert self._bare_contact is not None
         self._client.get_module("Presence").subscribe(
-            self.contact.jid, auto_auth=self._ui.from_subscription_switch.get_active()
+            self._bare_contact.jid,
+            auto_auth=self._ui.from_subscription_switch.get_active(),
         )
         self._ui.request_stack.set_visible_child_name("requested")
 
@@ -483,7 +495,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         return Gdk.EVENT_STOP
 
     def _on_group_toggled(self, _renderer: Gtk.CellRendererToggle, path: str) -> None:
-
+        assert self._bare_contact is not None
         model = self._ui.groups_treeview.get_model()
         assert model is not None
         model[path][Column.IN_GROUP] = not model[path][Column.IN_GROUP]
@@ -496,7 +508,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                 groups.add(group_name)
             iter_ = model.iter_next(iter_)
 
-        self._client.get_module("Roster").set_groups(self.contact.jid, groups)
+        self._client.get_module("Roster").set_groups(self._bare_contact.jid, groups)
 
     def _on_group_add_button_clicked(self, _widget: Gtk.Button) -> None:
         default_name = _("New Group")
