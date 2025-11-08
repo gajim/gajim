@@ -13,7 +13,6 @@ from gajim.common import configpaths
 from gajim.common.const import AvatarSize
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ContactSettings
-from gajim.common.preview import PreviewManager
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -120,8 +119,6 @@ configpaths.init()
 app.storage.archive = MessageArchiveStorage(in_memory=True)
 app.storage.archive.init()
 add_archive_messages()
-
-app.preview_manager = PreviewManager()
 
 window = TestConversationView()
 window.show()

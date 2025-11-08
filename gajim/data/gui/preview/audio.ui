@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkAdjustment" id="_seek_bar_adj">
+    <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">1</property>
+  </object>
+  <template class="AudioPreviewWidget" parent="GtkBox">
+    <child>
+      <object class="GtkStack" id="_stack">
+        <property name="hhomogeneous">0</property>
+        <property name="vhomogeneous">0</property>
+        <property name="halign">start</property>
+        <property name="transition-duration">50</property>
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">loading</property>
+            <property name="child">
+              <object class="LoadingBox" />
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">preview</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="can-focus">0</property>
+                <property name="halign">center</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkGrid">
+                    <child>
+                      <object class="GtkBox" id="_drawing_box">
+                        <property name="width-request">300</property>
+                        <property name="height-request">50</property>
+                        <property name="orientation">vertical</property>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">0</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="_seek_bar_box">
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkScale" id="_seek_bar">
+                            <property name="adjustment">_seek_bar_adj</property>
+                            <property name="width-request">300</property>
+                          </object>
+                        </child>
+                        <layout>
+                          <property name="column">0</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="_progress_label">
+                        <property name="label">-0:00/0:00</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                # end of grid
+                <child>
+                  <object class="GtkBox" id="_control_box">
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="homogeneous">1</property>
+                        <child>
+                          <object class="GtkButton" id="_rewind_button">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="yes">Rewind 10 seconds</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">lucide-rewind-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_play_pause_button">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <child>
+                              <object class="GtkImage" id="_play_icon">
+                                <property name="tooltip-text" translatable="yes">Start/stop playback</property>
+                                <property name="icon-name">lucide-play-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_forward_button">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="tooltip-text" translatable="yes">Forward 10 seconds</property>
+                                <property name="icon-name">lucide-fast-forward-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="linked" />
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkButton" id="_speed_dec_button">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="yes">Decrease playback speed</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="icon-name">lucide-minus-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkPopover" id="_speed_popover">
+                            <property name="child">
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkAdjustment" id="_speed_bar_adj">
+                                    <property name="lower">0.25</property>
+                                    <property name="upper">2</property>
+                                    <property name="value">1</property>
+                                    <property name="step-increment">0.25</property>
+                                    <property name="page-increment">0.25</property>
+                                  </object>
+                                  <object class="GtkBox">
+                                    <property name="can-focus">0</property>
+                                    <child>
+                                      <object class="GtkScale" id="_speed_bar">
+                                        <property name="width-request">225</property>
+                                        <property name="focusable">1</property>
+                                        <property name="margin-start">3</property>
+                                        <property name="margin-end">3</property>
+                                        <property name="adjustment">_speed_bar_adj</property>
+                                        <property name="restrict-to-fill-level">0</property>
+                                        <property name="fill-level">1</property>
+                                        <property name="round-digits">2</property>
+                                        <property name="digits">2</property>
+                                        <property name="has-origin">0</property>
+                                        <property name="value-pos">right</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="p-6" />
+                                </style>
+                              </object>
+                            </property>
+                          </object>
+                          <object class="GtkMenuButton" id="_speed_menubutton">
+                            <property name="focusable">1</property>
+                            <property name="focus-on-click">0</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="yes">Select playback speed</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="popover">_speed_popover</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="spacing">1</property>
+                                <child>
+                                  <object class="GtkLabel" id="_speed_label">
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="margin-start">2</property>
+                                    <property name="label">1.00x</property>
+                                    <property name="single-line-mode">1</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="margin-start">2</property>
+                                    <property name="icon-name">lucide-chevron-down-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="linked" />
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_speed_inc_button">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="yes">Increase playback speed</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="icon-name">lucide-plus-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="linked" />
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="_open_folder_button">
+                        <property name="valign">center</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Open folder</property>
+                        <property name="action-name">app.open-folder</property>
+                        <property name="action-target">''</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">lucide-folder-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="_save_as_button">
+                        <property name="valign">center</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Save as...</property>
+                        <property name="action-name">app.save-file-as</property>
+                        <property name="action-target">''</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">lucide-save-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

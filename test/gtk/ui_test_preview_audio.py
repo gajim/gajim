@@ -1,23 +1,29 @@
 # This file is part of Gajim.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+import typing
 
 from pathlib import Path
 from unittest.mock import MagicMock
 
 import gi
 
-gi.require_version("Gst", "1.0")
+try:
+    gi.require_version("Gst", "1.0")
+    from gi.repository import Gst
+except Exception:
+    if typing.TYPE_CHECKING:
+        from gi.repository import Gst
 
 from gi.repository import Gst
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.preview import AudioPreviewState
 
+from gajim.gtk.audio_player import AudioPlayer
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.preview_audio import AudioWidget
+from gajim.gtk.preview.audio import AudioPreviewWidget
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
@@ -56,14 +62,20 @@ class TestAudioWidget(GajimAppWindow):
         file_chooser_button.connect("path-picked", self._on_path_picked)
         self._box.append(file_chooser_button)
 
-        self._audio_widget = AudioWidget(DEFAULT_AUDIO_FILE_PATH)
+        self._audio_widget = AudioPreviewWidget(
+            DEFAULT_AUDIO_FILE_PATH.name,
+            DEFAULT_AUDIO_FILE_PATH.stat().st_size,
+            DEFAULT_AUDIO_FILE_PATH,
+        )
         self._box.append(self._audio_widget)
 
     def _on_path_picked(self, _button: FileChooserButton, paths: list[Path]) -> None:
         self._box.remove(self._audio_widget)
         del self._audio_widget
 
-        self._audio_widget = AudioWidget(paths[0])
+        self._audio_widget = AudioPreviewWidget(
+            paths[0].as_posix(), paths[0].stat().st_size, paths[0]
+        )
         self._box.append(self._audio_widget)
 
 
@@ -73,8 +85,8 @@ Gst.init()
 
 app.is_installed = MagicMock(return_value=True)
 
-app.preview_manager = MagicMock()
-app.preview_manager.get_audio_state = MagicMock(return_value=AudioPreviewState())
+app.init_process_pool()
+app.audio_player = AudioPlayer()
 
 window = TestAudioWidget()
 window.show()

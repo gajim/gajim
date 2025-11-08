@@ -38,9 +38,9 @@ from gajim.common.util.preview import is_video
 from gajim.common.util.preview import UrlPreview
 
 from gajim.gtk.menus import get_preview_menu
+from gajim.gtk.preview.audio import AudioPreviewWidget
 from gajim.gtk.preview.file_control_buttons import FileControlButtons
 from gajim.gtk.preview.image import ImagePreviewWidget
-from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import GajimPopover
@@ -227,8 +227,14 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 )
 
             elif is_audio(self._mime_type):
-                if app.is_installed("GST") and contains_audio_streams(self._orig_path):
-                    widget = AudioWidget(self._orig_path)
+                if (
+                    app.audio_player is not None
+                    and app.is_installed("GST")
+                    and contains_audio_streams(self._orig_path)
+                ):
+                    widget = AudioPreviewWidget(
+                        self._filename, self._file_size, self._orig_path
+                    )
 
             if widget is not None:
                 self._connect(widget, "display-error", self._on_display_error)

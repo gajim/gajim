@@ -100,8 +100,9 @@ class CoreApplication(ged.EventHelper):
         # from gajim.common.call_manager import CallManager
         # app.call_manager = CallManager()
 
-        from gajim.common.preview import PreviewManager
-        app.preview_manager = PreviewManager()
+        if app.is_installed("GST"):
+            from gajim.gtk.audio_player import AudioPlayer
+            app.audio_player = AudioPlayer()
 
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',

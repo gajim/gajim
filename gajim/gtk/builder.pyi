@@ -567,28 +567,6 @@ class PepConfigBuilder(Builder):
     config_back_button: Gtk.Button
     save_button: Gtk.Button
 
-class PreviewAudioBuilder(Builder):
-    seek_bar_adj: Gtk.Adjustment
-    speed_bar_adj: Gtk.Adjustment
-    preview_box: Gtk.Box
-    drawing_box: Gtk.Box
-    seek_bar_box: Gtk.Box
-    seek_bar: Gtk.Scale
-    progress_label: Gtk.Label
-    control_box: Gtk.Box
-    rewind_button: Gtk.Button
-    play_pause_button: Gtk.Button
-    play_icon: Gtk.Image
-    forward_button: Gtk.Button
-    speed_dec_button: Gtk.Button
-    speed_menubutton: Gtk.MenuButton
-    speed_label: Gtk.Label
-    speed_inc_button: Gtk.Button
-    open_folder_button: Gtk.Button
-    save_as_button: Gtk.Button
-    speed_popover: Gtk.Popover
-    speed_bar: Gtk.Scale
-
 class ProfileBuilder(Builder):
     privacy_popover: Gtk.Popover
     avatar_nick_access: Gtk.Switch
@@ -981,12 +959,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> PepConfigBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["preview_audio.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> PreviewAudioBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["profile.ui"], instance: Any = None, widgets: list[str] = ...

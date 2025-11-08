@@ -8,7 +8,6 @@ from typing import Any
 
 import logging
 from collections.abc import Callable
-from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -21,8 +20,8 @@ from gajim.common.i18n import _
 from gajim.common.util.text import format_duration
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.preview_audio import AudioWidget
-from gajim.gtk.preview_audio_visualizer import AudioVisualizerWidget
+from gajim.gtk.preview.audio import AudioPreviewWidget
+from gajim.gtk.preview.audio_visualizer import AudioVisualizerWidget
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.voice_message_recorder import GST_ERROR_ON_RECORDING
 from gajim.gtk.voice_message_recorder import GST_ERROR_ON_START
@@ -46,7 +45,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
         self._ui = get_builder("voice_message_recorder.ui")
 
-        if not app.is_installed("GST"):
+        if not app.is_installed("GST") or app.audio_player is None:
             self.set_sensitive(False)
             self.set_tooltip_text(_("Voice Messages are not available"))
             self.set_child(Gtk.Image.new_from_icon_name("lucide-mic-symbolic"))
@@ -80,7 +79,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._new_recording = True
 
         self._voice_message_recorder = VoiceMessageRecorder(self._on_error_occurred)
-        self._audio_player_widget = AudioWidget(Path(""))
+        # TODO: When creating the widget, the file path is initialized with some value,
+        # which will be overwritten with the first recording.
+        # This is fine in this case, b/c we generate a static ID for the audio player.
+        # We might want to handle this a little bit more intuitive though in the future.
+        self._audio_player_widget = AudioPreviewWidget(
+            "", 0, self._voice_message_recorder.audio_file_abspath
+        )
 
         self._connect(self._ui.cancel_button, "clicked", self._on_cancel_clicked)
         self._connect(
@@ -116,9 +121,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         Gtk.MenuButton.do_unroot(self)
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
-        # action = app.window.get_action('send-file-jingle')
-        # action.connect('notify::enabled', self._on_send_file_action_changed)
-
         action = app.window.get_action("send-file-httpupload")
         self._connect(action, "notify::enabled", self._on_send_file_action_changed)
 
@@ -186,9 +188,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             return False
 
         httpupload = app.window.get_action_enabled("send-file-httpupload")
-        # jingle = app.window.get_action_enabled('send-file-jingle')
-        jingle = False
-        return httpupload or jingle
+        return httpupload
 
     def _remove_timeout_ids(self) -> None:
         if self._time_label_update_timeout_id is not None:
@@ -226,6 +226,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._animation_index = 0
 
     def _stop_and_reset_recording(self) -> None:
+        assert app.audio_player is not None
         log.debug("Stopping and resetting recording")
         self._voice_message_recorder.stop_and_reset()
 
@@ -236,6 +237,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._animation_index = 0
         self._new_recording = True
         self._update_visualization(self._voice_message_recorder.recording_samples)
+        app.audio_player.stop(self._audio_player_widget.id)
 
         self._show_recording_box()
         self._remove_timeout_ids()
@@ -255,8 +257,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             if not self._voice_message_recorder.audio_file_is_valid:
                 self._stop_and_reset_recording()
             else:
-                self._audio_player_widget.load_audio_file(
-                    Path(self._voice_message_recorder.audio_file_abspath)
+                self._audio_player_widget.sample_voice_message(
+                    self._voice_message_recorder.audio_file_abspath
                 )
                 self._show_playback_box()
         else:
@@ -271,10 +273,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self,
         samples: Callable[..., list[tuple[float, float]]],
     ) -> bool:
-        if self._animation_index == 0:
-            if not self._new_recording:
-                self._voice_message_recorder.request_new_sample()
-            self._audio_visualizer.set_samples(samples())
+        self._voice_message_recorder.request_new_sample()
+        self._audio_visualizer.set_samples(samples())
         self._audio_visualizer.render_animated_graph(self._animation_index)
         self._animation_index = (self._animation_index + 1) % ANIMATION_PERIOD
         return True
@@ -286,7 +286,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
     def _show_recording_box(self) -> None:
         self._ui.audio_player_box.set_visible(False)
         self._ui.progression_box.set_visible(True)
-        self._audio_player_widget.set_pause(True)
 
     def _show_recording_controls(self) -> None:
         self._ui.record_control_box.set_visible(True)
@@ -302,7 +301,9 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._ui.error_label.set_visible(False)
 
     def _on_record_toggle_clicked(self, _button: Gtk.Button) -> None:
+        assert app.audio_player is not None
         self._hide_error_message()
+        app.audio_player.stop_any()
 
         if self._voice_message_recorder.recording_in_progress:
             self._stop_recording()
@@ -311,11 +312,12 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
                 log.error("Audio file is corrupted")
                 return
 
-            self._audio_player_widget.load_audio_file(
-                Path(self._voice_message_recorder.audio_file_abspath)
+            self._audio_player_widget.sample_voice_message(
+                self._voice_message_recorder.audio_file_abspath
             )
         else:
             # Paused -> Recording
+            app.audio_player.stop(self._audio_player_widget.id)
             self._hide_error_message()
             self._ui.send_button.set_sensitive(True)
             self._ui.cancel_button.set_sensitive(True)

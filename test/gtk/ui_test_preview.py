@@ -24,7 +24,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common.const import CSSPriority
-from gajim.common.preview import PreviewManager
 
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.dropdown import KeyValueItem
@@ -121,7 +120,6 @@ configpaths.set_config_root(str(configpaths.get_temp_dir()))
 configpaths.init()
 configpaths.create_paths()
 
-app.preview_manager = PreviewManager()
 app.ftm = FileTransferManager()
 
 window = TestPreview()

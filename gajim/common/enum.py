@@ -7,6 +7,13 @@ from __future__ import annotations
 from enum import IntEnum
 
 
+class AudioPlayerState(IntEnum):
+    NULL = 0
+    READY = 1
+    PAUSED = 2
+    PLAYING = 3
+
+
 class FTState(IntEnum):
     CREATED = 0
     PREPARING = 1

@@ -19,6 +19,7 @@ from __future__ import annotations
 import typing
 from typing import Any
 from typing import cast
+from typing import Union
 
 import gc
 import logging
@@ -49,7 +50,6 @@ if typing.TYPE_CHECKING:
     from gajim.common.cert_store import CertificateStore
     from gajim.common.commands import ChatCommands  # noqa: F401
     from gajim.common.file_transfer_manager import FileTransferManager
-    from gajim.common.preview import PreviewManager
     from gajim.common.storage.archive.storage import MessageArchiveStorage
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.draft import DraftStorage
@@ -58,6 +58,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.task_manager import TaskManager
 
     from gajim.gtk.application import GajimApplication  # noqa: F401
+    from gajim.gtk.audio_player import AudioPlayer
     from gajim.gtk.main import MainWindow  # noqa: F401
 
 
@@ -102,8 +103,7 @@ nicks: dict[str, str] = {}
 cert_store = cast('CertificateStore', None)
 
 call_manager = cast('CallManager', None)
-
-preview_manager = cast('PreviewManager', None)
+audio_player: Union['AudioPlayer', None] = None  # noqa: UP007
 ftm = cast('FileTransferManager', None)
 
 task_manager = cast('TaskManager', None)

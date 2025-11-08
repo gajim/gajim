@@ -9,12 +9,14 @@ import math
 from statistics import mean
 
 from gi.repository import Adw
+from gi.repository import Gdk
 from gi.repository import Graphene
 from gi.repository import Gsk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.preview import AudioSampleT
+
+from gajim.gtk.audio_player import AudioSampleT
 
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 
@@ -49,8 +51,12 @@ class AudioVisualizerWidget(Gtk.Widget):
 
         self._color_progress = accent_color
 
-        color_seek = accent_color.copy()
-        color_seek.alpha = color_seek.alpha - 0.2
+        color_seek = Gdk.RGBA(
+            red=accent_color.red * 1.3,
+            green=accent_color.green * 1.3,
+            blue=accent_color.blue * 1.3,
+            alpha=accent_color.alpha,
+        )
         self._color_seek = color_seek
 
         color_default = accent_color.copy()
@@ -61,12 +67,12 @@ class AudioVisualizerWidget(Gtk.Widget):
         Gtk.Widget.do_unroot(self)
         app.check_finalize(self)
 
+    def get_effective_width(self):
+        return self._width
+
     def set_parameters(self, position: float, animation_period: int = 1) -> None:
         self._position = position
         self._animation_period = animation_period
-
-    def set_position(self, position: float) -> None:
-        self._position = position
 
     def set_samples(self, samples: AudioSampleT) -> None:
         if self._is_static():
