@@ -100,7 +100,9 @@ class Features(GajimAppWindow):
                     "Enables Gajim to measure your computer’s idle time in "
                     "order to set your Status automatically"
                 ),
-                _("Requires: libxss"),
+                _(
+                    "Requires:\norg.freedesktop.ScreenSaver or\norg.gnome.Mutter.IdleMonitor or\nlibxss"
+                ),
                 _("No additional requirements"),
                 auto_status_enabled,
             ),
