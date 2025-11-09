@@ -25,88 +25,78 @@
             <property name="child">
               <object class="GtkViewport">
                 <property name="child">
-                  <object class="GtkBox" id="vcard_box">
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
+                  <object class="AdwClamp">
                     <child>
-                      <object class="GtkImage" id="avatar_image">
-                        <property name="icon-name">lucide-image-off-symbolic</property>
-                        <style>
-                          <class name="m-18"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="contact_name_controls_box">
-                        <property name="halign">center</property>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkImage" id="avatar_image">
+                            <property name="icon-name">lucide-image-off-symbolic</property>
+                            <style>
+                              <class name="m-18"/>
+                            </style>
+                          </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="contact_jid_label">
-                        <property name="focusable">1</property>
-                        <property name="margin-bottom">6</property>
-                        <property name="selectable">1</property>
-                        <property name="ellipsize">end</property>
-                        <property name="single-line-mode">1</property>
-                        <property name="max-width-chars">50</property>
-                        <style>
-                          <class name="dimmed"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkGrid" id="group_chat_grid">
-                        <property name="visible">0</property>
-                        <property name="row-spacing">12</property>
-                        <property name="column-spacing">12</property>
-                        <property name="column-homogeneous">1</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="halign">end</property>
-                            <property name="margin-end">18</property>
-                            <property name="label" translatable="yes">Role</property>
+                          <object class="GtkBox" id="contact_name_controls_box">
+                            <property name="halign">center</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="contact_jid_label">
+                            <property name="focusable">1</property>
+                            <property name="margin-bottom">6</property>
+                            <property name="selectable">1</property>
+                            <property name="ellipsize">end</property>
+                            <property name="single-line-mode">1</property>
+                            <property name="max-width-chars">50</property>
                             <style>
                               <class name="dimmed"/>
                             </style>
-                            <layout>
-                              <property name="column">0</property>
-                              <property name="row">0</property>
-                            </layout>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="role_label">
-                            <property name="halign">start</property>
-                            <layout>
-                              <property name="column">1</property>
-                              <property name="row">0</property>
-                            </layout>
+                          <object class="AdwPreferencesGroup" id="group_chat_info">
+                            <property name="title" translatable="yes">In this group chat</property>
+                            <property name="visible">0</property>
+                            <child>
+                              <object class="AdwActionRow" id="role_info">
+                                <property name="title" translatable="yes">Role</property>
+                                <style>
+                                  <class name="property"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwActionRow" id="affiliation_info">
+                                <property name="title" translatable="yes">Affiliation</property>
+                                <style>
+                                  <class name="property"/>
+                                </style>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="halign">end</property>
-                            <property name="margin-end">18</property>
-                            <property name="label" translatable="yes">Affiliation</property>
+                          <object class="GtkBox" id="vcard_box">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">18</property>
+                            <property name="visible">0</property>
                             <style>
-                              <class name="dimmed"/>
+                              <class name="py-18"/>
                             </style>
-                            <layout>
-                              <property name="column">0</property>
-                              <property name="row">1</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="affiliation_label">
-                            <property name="halign">start</property>
-                            <layout>
-                              <property name="column">1</property>
-                              <property name="row">1</property>
-                            </layout>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Contact Information</property>
+                                <style>
+                                  <class name="bold"/>
+                                </style>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

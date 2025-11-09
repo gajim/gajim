@@ -316,6 +316,9 @@ class VCardGrid(Gtk.Grid):
         assert self._vcard is not None
         self._vcard.remove_property(prop.get_base_property())
 
+    def get_row_count(self) -> int:
+        return self._row_count
+
     def clear(self) -> None:
         self._vcard = None
         self._row_count = 0

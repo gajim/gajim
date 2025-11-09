@@ -191,13 +191,13 @@ class ContactInfoBuilder(Builder):
     groups_model: Gtk.ListStore
     main_stack: Gtk.Stack
     vcard_scrolled: Gtk.ScrolledWindow
-    vcard_box: Gtk.Box
     avatar_image: Gtk.Image
     contact_name_controls_box: Gtk.Box
     contact_jid_label: Gtk.Label
-    group_chat_grid: Gtk.Grid
-    role_label: Gtk.Label
-    affiliation_label: Gtk.Label
+    group_chat_info: Adw.PreferencesGroup
+    role_info: Adw.ActionRow
+    affiliation_info: Adw.ActionRow
+    vcard_box: Gtk.Box
     settings_scrolled: Gtk.ScrolledWindow
     settings_box: Gtk.Box
     subscription_listbox: Gtk.ListBox

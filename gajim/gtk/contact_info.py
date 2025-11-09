@@ -232,11 +232,11 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.contact_jid_label.set_tooltip_text(jid)
 
         if isinstance(self.contact, GroupchatParticipant):
-            self._ui.affiliation_label.set_text(
+            self._ui.affiliation_info.set_subtitle(
                 get_uf_affiliation(self.contact.affiliation)
             )
-            self._ui.role_label.set_text(get_uf_role(self.contact.role))
-            self._ui.group_chat_grid.set_visible(True)
+            self._ui.role_info.set_subtitle(get_uf_role(self.contact.role))
+            self._ui.group_chat_info.set_visible(True)
 
         self._switcher.set_item_visible("information", True)
 
@@ -343,6 +343,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
     def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
         self._vcard_grid.set_vcard(vcard)
+        self._ui.vcard_box.set_visible(self._vcard_grid.get_row_count() != 0)
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
