@@ -360,6 +360,12 @@ class Chatstate(BaseModule):
             2, self.set_chatstate, contact, state
         )
 
+    @staticmethod
+    def _get_chatstate_setting(contact: types.ChatContactT) -> str:
+        if isinstance(contact, GroupchatParticipant):
+            return contact.room.settings.get('send_chatstate')
+        return contact.settings.get('send_chatstate')
+
     @ensure_enabled
     def set_chatstate(self, contact: types.ChatContactT, state: State) -> None:
         # Don’t send chatstates to ourself
@@ -371,7 +377,7 @@ class Chatstate(BaseModule):
 
         self._remove_delay_timeout(contact)
         current_state = self._chatstates.get(contact.jid)
-        setting = contact.settings.get('send_chatstate')
+        setting = self._get_chatstate_setting(contact)
         if setting == 'disabled':
             # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
