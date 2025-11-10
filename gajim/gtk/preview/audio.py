@@ -377,7 +377,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
             return
 
         if self._is_ltr:
-            pos_x = x + SEEK_BAR_PADDING + 1
+            pos_x = x + SEEK_BAR_PADDING
         else:
             width = self._seek_bar.get_width()
             pos_x = width - (x + SEEK_BAR_PADDING)
@@ -392,7 +392,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
             self._user_holds_position_slider
             and self._preview_state.pipeline_state != AudioPlayerState.PLAYING
         ):
-            app.audio_player.set_playback_position(self._id, seek_ts)
+            if app.audio_player.preview_id != self.id:
+                self._preview_state.position = seek_ts
+            else:
+                app.audio_player.set_playback_position(self._id, seek_ts)
             self._update_ui_from_state()
         else:
             self._seek_ts = seek_ts
