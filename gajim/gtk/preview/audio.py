@@ -28,7 +28,7 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preview.audio")
 
 
-SEEK_BAR_PADDING = 11
+SEEK_BAR_PADDING = 12
 
 
 @Gtk.Template.from_string(string=get_ui_string("preview/audio.ui"))
@@ -88,7 +88,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._offset_backward = -10e9  # in ns
         self._offset_forward = 10e9
         self._cursor_pos = 0.0
-        self._user_drags_position_slider = False
         self._user_holds_position_slider = False
         self._seek_ts = -1  # in ns, -1 means invalid
         self._new_voice_message_track = False
@@ -317,7 +316,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         return Gdk.EVENT_STOP
 
     def _convert_position_to_timestamp(self, position_px: float) -> float:
-        position_max = self._seek_bar.get_width() + SEEK_BAR_PADDING
+        position_max = self._seek_bar.get_width()
         position_px = max(0.0, position_px)
         position_px = min(position_px, position_max)
         timestamp = position_px / position_max * self._preview_state.duration
@@ -327,42 +326,31 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self,
         _gesture_click: Gtk.GestureClick,
         _n_press: int,
-        x: float,
+        _x: float,
         _y: float,
     ) -> int:
-        assert app.audio_player is not None
-        assert self._cursor_pos is not None
         self._user_holds_position_slider = True
-
-        new_pos = self._convert_position_to_timestamp(x)
-        if app.audio_player.preview_id != self.id:
-            self._preview_state.position = new_pos
-        else:
-            app.audio_player.set_playback_position(self._id, new_pos)
-
-        self._update_ui_from_state()
-
         return Gdk.EVENT_STOP
 
     def _on_seek_bar_button_released(
         self,
         _gesture_click: Gtk.GestureClick,
         _n_press: int,
-        x: float,
+        _x: float,
         _y: float,
     ) -> int:
         assert app.audio_player is not None
-        new_pos = self._convert_position_to_timestamp(x)
+
+        seek_ts = self._convert_position_to_timestamp(self._cursor_pos)
         if app.audio_player.preview_id != self.id:
-            self._preview_state.position = new_pos
+            self._preview_state.position = seek_ts
         else:
-            app.audio_player.set_playback_position(self._id, new_pos)
+            app.audio_player.set_playback_position(self._id, seek_ts)
 
         self._update_ui_from_state()
 
         self._seek_ts = -1
         self._user_holds_position_slider = False
-        self._user_drags_position_slider = False
 
         return Gdk.EVENT_STOP
 
@@ -377,10 +365,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
             return
 
         if self._is_ltr:
-            pos_x = x + SEEK_BAR_PADDING
+            pos_x = x
         else:
             width = self._seek_bar.get_width()
-            pos_x = width - (x + SEEK_BAR_PADDING)
+            pos_x = width - x
 
         if abs(pos_x - self._cursor_pos) < 1e-2:
             return
