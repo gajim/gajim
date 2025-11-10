@@ -94,6 +94,7 @@ This may take a while…</property>
                           <object class="GtkScrolledWindow">
                             <property name="height-request">100</property>
                             <property name="focusable">1</property>
+                            <property name="has-frame">1</property>
                             <property name="child">
                               <object class="GtkTextView" id="error_view">
                                 <property name="focusable">1</property>
