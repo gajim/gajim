@@ -172,13 +172,17 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
                 self._display_audio_preview()
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self._id
 
-    def do_unroot(self):
+    def do_unroot(self) -> None:
         self._cleanup()
 
     def sample_voice_message(self, audio_path: Path) -> None:
+        assert app.audio_player is not None
+        if app.audio_player.preview_id == self._id:
+            app.audio_player.stop(self._id)
+        self._play_icon.set_from_icon_name("lucide-play-symbolic")
         self._orig_path = audio_path
         self._preview_state.position = 0
         self._seek_bar.set_value(0)
