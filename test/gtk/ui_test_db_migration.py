@@ -6,6 +6,7 @@ from typing import cast
 
 import time
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -44,7 +45,16 @@ class DBMigrationTest:
 
         window.show()
 
-    def _on_progress_clicked(self, _button: Gtk.Button) -> None:
+        GLib.timeout_add_seconds(3, self._add_window)
+
+        self._progress()
+
+    def _add_window(self) -> None:
+        # Simulate main window becoming available
+        app.window = Gtk.Window(width_request=800, height_request=800)
+        app.window.show()
+
+    def _progress(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=1))
         self._progressing = True
 
@@ -56,6 +66,9 @@ class DBMigrationTest:
             time.sleep(0.0000001)
             if i % 1000 == 0:
                 app.ged.raise_event(DBMigrationProgress(count=count, progress=i))
+
+    def _on_progress_clicked(self, _button: Gtk.Button) -> None:
+        self._progress()
 
     def _on_finish_clicked(self, _button: Gtk.Button) -> None:
         self._progressing = False

@@ -42,6 +42,7 @@ class DBMigration(GajimAppWindow, EventHelper):
         EventHelper.__init__(self)
 
         self.window.set_deletable(False)
+        self.window.set_resizable(False)
 
         self._ui = get_builder("db_migration.ui")
         self.set_child(self._ui.box)
@@ -65,7 +66,16 @@ class DBMigration(GajimAppWindow, EventHelper):
             ]
         )
 
+        self._timeout_id = GLib.timeout_add(100, self._set_transient)
+
+    def _set_transient(self) -> int:
+        # Set transient on every update to make sure transient is set as
+        # soon as main window is available
+        self.window.set_transient_for(app.window)
+        return GLib.SOURCE_CONTINUE
+
     def _cleanup(self) -> None:
+        GLib.source_remove(self._timeout_id)
         self.unregister_events()
 
     def _on_start(self, event: DBMigrationStart) -> None:
@@ -84,7 +94,7 @@ class DBMigration(GajimAppWindow, EventHelper):
         while context.pending():
             context.iteration(may_block=False)
 
-    def _on_finished(self, event: DBMigrationFinished) -> None:
+    def _on_finished(self, _event: DBMigrationFinished) -> None:
         self._ui.stack.set_visible_child_name("success-page")
         GLib.timeout_add_seconds(2, self.present)
 
