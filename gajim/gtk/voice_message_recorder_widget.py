@@ -317,7 +317,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             )
         else:
             # Paused -> Recording
-            app.audio_player.stop(self._audio_player_widget.id)
             self._hide_error_message()
             self._ui.send_button.set_sensitive(True)
             self._ui.cancel_button.set_sensitive(True)

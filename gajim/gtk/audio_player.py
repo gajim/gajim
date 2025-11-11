@@ -153,9 +153,16 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
     def stop_any(self):
         assert self._playbin is not None
 
-        self._preview_id = -1
         self._do_broadcasting = False
+        self._preview_id = -1
         self._playbin.set_state(Gst.State.NULL)
+        if self._state is not None:
+            self._state.pipeline_state = AudioPlayerState.NULL
+        self.emit(
+            "audio-playback-changed",
+            -1,
+            AudioPlayerState.NULL.value,
+        )
 
     def set_playback_position(self, preview_id: int, position: float) -> None:
         assert self._playbin is not None
