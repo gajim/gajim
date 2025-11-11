@@ -29,7 +29,11 @@ class AudioVisualizerWidget(Gtk.Widget):
         x_offset: int = 0,
     ) -> None:
         Gtk.Widget.__init__(
-            self, margin_start=x_offset, width_request=width, height_request=height
+            self,
+            margin_start=x_offset,
+            width_request=width,
+            height_request=height,
+            halign=Gtk.Align.START,
         )
 
         self._peak_width = 2  # in px

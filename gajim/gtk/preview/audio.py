@@ -84,7 +84,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._preview_state = app.audio_player.get_audio_state(self._id)
 
         # UI
-        self._is_ltr = True
+        self._is_ltr = bool(self.get_direction() == Gtk.TextDirection.LTR)
         self._offset_backward = -10e9  # in ns
         self._offset_forward = 10e9
         self._cursor_pos = 0.0
@@ -315,11 +315,16 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._update_timestamp_label()
         return Gdk.EVENT_STOP
 
-    def _convert_position_to_timestamp(self, position_px: float) -> float:
-        position_max = self._seek_bar.get_width()
-        position_px = max(0.0, position_px)
-        position_px = min(position_px, position_max)
-        timestamp = position_px / position_max * self._preview_state.duration
+    def _convert_position_to_timestamp(self, x: float, x_max: float) -> float:
+        if x_max == 0.0:
+            log.warning("Width is zero, when converting position to timestamp")
+            return 0.0
+
+        if not self._is_ltr:
+            x = x_max - x
+        x = max(0.0, x)
+        x = min(x, x_max)
+        timestamp = x / x_max * self._preview_state.duration
         return timestamp
 
     def _on_seek_bar_button_pressed(
@@ -341,7 +346,9 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     ) -> int:
         assert app.audio_player is not None
 
-        seek_ts = self._convert_position_to_timestamp(self._cursor_pos)
+        seek_ts = self._convert_position_to_timestamp(
+            self._cursor_pos, self._seek_bar.get_width()
+        )
         if app.audio_player.preview_id != self.id:
             self._preview_state.position = seek_ts
         else:
@@ -364,18 +371,11 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         if not self._user_holds_position_slider:
             return
 
-        if self._is_ltr:
-            pos_x = x
-        else:
-            width = self._seek_bar.get_width()
-            pos_x = width - x
-
-        if abs(pos_x - self._cursor_pos) < 1e-2:
+        if abs(x - self._cursor_pos) < 1e-2:
             return
 
-        self._cursor_pos = pos_x
-
-        seek_ts = self._convert_position_to_timestamp(pos_x)
+        self._cursor_pos = x
+        seek_ts = self._convert_position_to_timestamp(x, self._seek_bar.get_width())
         if (
             self._user_holds_position_slider
             and self._preview_state.pipeline_state != AudioPlayerState.PLAYING
@@ -413,12 +413,9 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     ) -> int:
         assert app.audio_player is not None
         assert self._cursor_pos is not None
-        pos_px = max(0.0, x)
-        pos_px = min(pos_px, self._visualizer.get_effective_width())
-        timestamp = (
-            self._preview_state.duration
-            * pos_px
-            / self._visualizer.get_effective_width()
+
+        timestamp = self._convert_position_to_timestamp(
+            x, self._visualizer.get_effective_width()
         )
 
         self._set_preview_state_position(timestamp)
