@@ -454,10 +454,15 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         dialog.save(parent, None, _on_file_picked)
 
     def _export(self, path: Path) -> None:
-        with path.open(mode="w", encoding="utf-8") as csvfile:
-            writer = csv.writer(csvfile)
-            for jid, item in self._client.get_module("Roster").iter():
-                writer.writerow([jid, item.name, ";".join(item.groups)])
+        try:
+            with path.open(mode="w", encoding="utf-8") as csvfile:
+                writer = csv.writer(csvfile)
+                for jid, item in self._client.get_module("Roster").iter():
+                    writer.writerow([jid, item.name, ";".join(item.groups)])
+        except PermissionError:
+            InformationAlertDialog(
+                _("Export Error"), _("No permission to export file to %s") % path.parent
+            )
 
     def _import(self, path: Path) -> None:
         jids = {str(jid) for jid, _item in self._client.get_module("Roster").iter()}
