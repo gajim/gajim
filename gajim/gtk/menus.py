@@ -692,7 +692,7 @@ def get_chat_row_menu(
 
     if show_correction and not is_retracted:
         menu_items.append(
-            (p_("Message row action", "Correct…"), "win.correct-message", None)
+            (p_("Message row action", "Edit…"), "win.correct-message", None)
         )
 
     param = None
