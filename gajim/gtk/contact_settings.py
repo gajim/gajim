@@ -34,10 +34,10 @@ class ContactSettings(SettingsBox):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Send Read Markers"),
+                _("Read Receipts"),
                 SettingType.CONTACT,
                 "send_marker",
-                desc=_("Let this contact know if you read up to this point"),
+                desc=_("Send and receive read receipts"),
             ),
         ]
 

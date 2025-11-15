@@ -89,7 +89,7 @@ class ChatMarkers(BaseModule):
                 return
 
             if properties.muc_nickname != contact.nickname:
-                self._raise_event('displayed-received', properties)
+                self._raise_event(properties)
                 return
 
             self._raise_read_state_sync(jid, properties.marker.id)
@@ -100,7 +100,7 @@ class ChatMarkers(BaseModule):
             self._raise_read_state_sync(jid, properties.marker.id)
             return
 
-        self._raise_event('displayed-received', properties)
+        self._raise_event(properties)
 
     def _raise_read_state_sync(self, jid: JID, marker_id: str) -> None:
         self._log.info('Read state sync: %s - %s', jid, marker_id)
@@ -109,13 +109,12 @@ class ChatMarkers(BaseModule):
                           jid=jid,
                           marker_id=marker_id))
 
-    def _raise_event(self, name: str, properties: MessageProperties) -> None:
+    def _raise_event(self, properties: MessageProperties) -> None:
         assert properties.marker is not None
         assert properties.jid is not None
         assert properties.remote_jid is not None
 
-        self._log.info('%s: %s %s',
-                       name,
+        self._log.info('displayed-received: %s %s',
                        properties.remote_jid,
                        properties.marker.id)
 
@@ -137,14 +136,17 @@ class ChatMarkers(BaseModule):
         if direction == ChatDirection.OUTGOING:
             return
 
+        contact = self._get_contact_with_mtype(m_type, properties.jid)
+
+        if not self._is_sending_marker_allowed(contact):
+            self._log.info('Ignore marker because setting is disabled')
+            return
+
         occupant = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
             if properties.jid.is_bare:
                 self._log.warning("Received marker from MUC bare jid")
                 return
-
-            contact = self._client.get_module('Contacts').get_contact(
-                    properties.jid, groupchat=True)
 
             assert isinstance(contact, GroupchatParticipant)
             occupant = get_occupant_info(
@@ -223,6 +225,18 @@ class ChatMarkers(BaseModule):
         if isinstance(contact, GroupchatContact):
             return stanza_id
         return message_id
+
+    def _get_contact_with_mtype(
+        self, mtype: MessageType,
+        jid: JID
+    ) -> types.ChatContactT:
+
+        if mtype in (MessageType.GROUPCHAT, MessageType.PM):
+            contact = self._get_contact(jid, groupchat=True)
+        else:
+            contact = self._get_contact(jid.new_as_bare(), groupchat=False)
+        assert not isinstance(contact, ResourceContact)
+        return contact
 
     @staticmethod
     def _is_sending_marker_allowed(contact: types.ChatContactT) -> bool:

@@ -32,6 +32,7 @@ from gajim.common.helpers import to_user_string
 from gajim.common.modules.chat_markers import DisplayedMarkerData
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
@@ -219,7 +220,13 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self.disable_row_selection()
 
-        self._load_displayed_marker()
+        if isinstance(self._contact, GroupchatParticipant):
+            show_markers = self._contact.room.settings.get("send_marker")
+        else:
+            show_markers = self._contact.settings.get("send_marker")
+
+        if show_markers:
+            self._load_displayed_marker()
 
         self._scroll_hint_row = ScrollHintRow(self._contact.account)
         self._list_box.append(self._scroll_hint_row)

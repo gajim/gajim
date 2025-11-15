@@ -54,10 +54,10 @@ class GroupChatSettings(SettingsBox):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Send Read Markers"),
+                _("Read Receipts"),
                 SettingType.GROUP_CHAT,
                 "send_marker",
-                desc=_("Let others know if you read up to this point"),
+                desc=_("Send and receive read receipts"),
             ),
             Setting(
                 SettingKind.DROPDOWN,
