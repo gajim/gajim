@@ -13,7 +13,6 @@ import locale
 import logging
 import time
 
-from gi.repository import Adw
 from gi.repository import Gtk
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.structs import IdentityInfo
@@ -35,23 +34,32 @@ from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
+from gajim.gtk.util.misc import remove_css_class
 from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.omemo_trust_manager")
 
 
 TRUST_DATA = {
-    OMEMOTrust.UNTRUSTED: ("lucide-shield-x-symbolic", _("Untrusted"), "error"),
-    OMEMOTrust.UNDECIDED: ("lucide-shield-alert-symbolic", _("Not Decided"), "warning"),
+    OMEMOTrust.UNTRUSTED: (
+        "lucide-shield-x-symbolic",
+        _("Untrusted"),
+        "omemo-untrusted-color",
+    ),
+    OMEMOTrust.UNDECIDED: (
+        "lucide-shield-question-mark-symbolic",
+        _("Not Decided"),
+        "omemo-undecided-color",
+    ),
     OMEMOTrust.VERIFIED: (
         "lucide-shield-check-symbolic",
         _("Verified"),
-        "encrypted-color",
+        "omemo-verified-color",
     ),
     OMEMOTrust.BLIND: (
-        "lucide-shield-question-mark-symbolic",
+        "lucide-shield-symbolic",
         _("Blind Trust"),
-        "encrypted-color",
+        "omemo-blind-color",
     ),
 }
 
@@ -68,7 +76,6 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui = get_builder("omemo_trust_manager.ui")
         self.append(self._ui.stack)
 
-        self._connect(self._ui.search, "search-changed", self._on_search_changed)
         self._connect(
             self._ui.manage_trust_button, "clicked", self._on_manage_trust_clicked
         )
@@ -80,7 +87,6 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         )
         self._connect(self._ui.copy_button, "clicked", self._on_copy_button_clicked)
 
-        self._ui.list.set_filter_func(self._filter_func, None)
         self._ui.list.set_sort_func(self._sort_func, None)
 
         self.register_events(
@@ -119,11 +125,21 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
                 "contact’s screen to ensure the safety of "
                 "your end-to-end encrypted chat."
             )
+
         else:
             assert isinstance(
                 self._contact, BareContact | GroupchatContact | GroupchatParticipant
             )
-            header_text = _('Devices connected with "%s"') % self._contact.name
+            if self._contact.is_groupchat:
+                header_text = (
+                    _('Undecided fingerprints of devices connected with "%s"')
+                    % self._contact.name
+                )
+            else:
+                header_text = (
+                    _('Fingerprints of devices connected with "%s"')
+                    % self._contact.name
+                )
             popover_qr_text = (
                 _(
                     "Compare this code with the one shown on your "
@@ -155,7 +171,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         else:
             self._ui.manage_trust_button.set_visible(True)
             if self._contact.is_groupchat:
-                self._ui.search_button.set_visible(True)
+                self._ui.list_heading_box.set_visible(False)
 
         assert isinstance(
             self._contact, BareContact | GroupchatContact | GroupchatParticipant
@@ -173,16 +189,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         else:
             self._ui.stack.set_visible_child_name("no-connection")
 
-    def _filter_func(self, row: KeyRow, _user_data: Any) -> bool:
-        search_text = self._ui.search.get_text()
-        if search_text and search_text.lower() not in row.address:
-            return False
-        if self._ui.show_inactive_switch.get_active():
-            return True
-        return row.active
-
     @staticmethod
-    def _sort_func(row1: KeyRow, row2: KeyRow, _user_data: Any) -> int:
+    def _sort_func(row1: DeviceRow, row2: DeviceRow, _user_data: Any) -> int:
         result = locale.strcoll(row1.address, row2.address)
         if result != 0:
             return result
@@ -194,15 +202,22 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
             return -1 if row1.trust > row2.trust else 1
         return 0
 
-    def _on_search_changed(self, _entry: Gtk.SearchEntry) -> None:
-        self._ui.list.invalidate_filter()
-
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
         client = app.get_client(self._account)
-        for identity_info in client.get_module("OMEMO").backend.get_identity_infos(
-            str(contact.jid)
-        ):
-            self._ui.list.append(KeyRow(contact, identity_info))
+
+        identity_info = client.get_module("OMEMO").backend.get_identity_infos(
+            str(contact.jid),
+            only_active=contact.is_groupchat,
+            trust=OMEMOTrust.UNDECIDED if contact.is_groupchat else None,
+        )
+
+        for info in identity_info:
+            self._ui.list.append(DeviceRow(contact, info))
+
+        assert self._contact is not None
+        if self._contact.is_groupchat:
+            self._ui.list.set_visible(bool(identity_info))
+            self._ui.undecided_placeholder.set_visible(not bool(identity_info))
 
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
@@ -237,15 +252,14 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         app.window.get_clipboard().set(self._our_fpr_formatted)
 
 
-class KeyRow(Adw.ActionRow, SignalManager):
+class DeviceRow(Gtk.ListBoxRow, SignalManager):
     def __init__(
         self, contact: types.ChatContactT, identity_info: IdentityInfo
     ) -> None:
-        Adw.ActionRow.__init__(self)
+        Gtk.ListBoxRow.__init__(self)
         SignalManager.__init__(self)
-        self.add_css_class("property")
+        self.add_css_class("omemo-device-row")
         self.add_css_class("monospace")
-        self.add_css_class("omemo-fingerprint")
 
         self._contact = contact
         self._client = app.get_client(contact.account)
@@ -254,28 +268,18 @@ class KeyRow(Adw.ActionRow, SignalManager):
         self._identity_info = identity_info
         self._trust = identity_info.trust
 
-        self._copy_button = Gtk.Button(
-            icon_name="lucide-copy-symbolic",
-            tooltip_text=_("Copy to Clipboard"),
-            valign=Gtk.Align.CENTER,
-        )
-        self.add_suffix(self._copy_button)
-        self._connect(self._copy_button, "clicked", self._on_copy_button_clicked)
+        box = Gtk.Box(spacing=6)
 
-        self._trust_button = TrustButton(self)
-        self.add_suffix(self._trust_button)
+        fingerprint_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
-        title = _("Fingerprint")
         if contact.is_groupchat:
-            title = f"{title} ({self._address})"
-
-        self.set_title(title)
+            fingerprint_box.append(Gtk.Label(label=self._address, xalign=0))
 
         self._formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
             formatted=True
         )
 
-        if self._identity_info.last_seen is not None:
+        if self._identity_info.last_seen is not None and not contact.is_groupchat:
             last_seen_data = time.strftime(
                 app.settings.get("date_time_format"),
                 time.localtime(self._identity_info.last_seen),
@@ -284,7 +288,36 @@ class KeyRow(Adw.ActionRow, SignalManager):
             last_seen_data = _("Never")
         last_seen = "\n" + _("Last seen: %s") % last_seen_data
 
-        self.set_subtitle(self._formatted_fingerprint + last_seen)
+        subtitle = Gtk.Label(label=self._formatted_fingerprint + last_seen)
+        subtitle.add_css_class("smaller")
+
+        fingerprint_box.append(subtitle)
+        if not self._identity_info.active:
+            fingerprint_box.add_css_class("dimmed")
+
+        suffix_box = Gtk.Box(spacing=12)
+
+        self._trust_label = TrustLabel(identity_info.trust)
+
+        self._copy_button = Gtk.Button(
+            icon_name="lucide-copy-symbolic",
+            tooltip_text=_("Copy to Clipboard"),
+            valign=Gtk.Align.CENTER,
+            halign=Gtk.Align.END,
+        )
+
+        self._trust_button = TrustButton(self)
+
+        suffix_box.append(self._copy_button)
+        suffix_box.append(self._trust_button)
+
+        box.append(fingerprint_box)
+        box.append(self._trust_label)
+        box.append(suffix_box)
+
+        self.set_child(box)
+
+        self._connect(self._copy_button, "clicked", self._on_copy_button_clicked)
 
     def do_unroot(self) -> None:
         del self._trust_button
@@ -312,7 +345,7 @@ class KeyRow(Adw.ActionRow, SignalManager):
 
     def set_trust(self, trust: OMEMOTrust) -> None:
         self._trust = trust
-        self._trust_button.update()
+        self._trust_label.set_trust(trust)
 
         self._client.get_module("OMEMO").backend.set_trust(
             self._address, self._identity_info.public_key, trust
@@ -334,15 +367,43 @@ class KeyRow(Adw.ActionRow, SignalManager):
         app.window.get_clipboard().set(self._formatted_fingerprint)
 
 
+class TrustLabel(Gtk.Box):
+    def __init__(self, trust: OMEMOTrust) -> None:
+        Gtk.Box.__init__(
+            self, margin_start=24, spacing=6, valign=Gtk.Align.CENTER, hexpand=True
+        )
+
+        self._label = Gtk.Label()
+        self._image = Gtk.Image()
+
+        self.append(self._image)
+        self.append(self._label)
+
+        self.set_trust(trust)
+
+    def set_trust(self, trust: OMEMOTrust) -> None:
+        remove_css_class(self._label, "omemo-")
+        remove_css_class(self._image, "omemo-")
+
+        icon_name, text, css_class = TRUST_DATA[trust]
+
+        self._label.set_text(text)
+        self._label.add_css_class(css_class)
+
+        self._image.set_from_icon_name(icon_name)
+        self._image.add_css_class(css_class)
+
+
 class TrustButton(Gtk.MenuButton):
-    def __init__(self, row: KeyRow) -> None:
-        Gtk.MenuButton.__init__(self)
+    def __init__(self, row: DeviceRow) -> None:
+        Gtk.MenuButton.__init__(self, halign=Gtk.Align.END, valign=Gtk.Align.CENTER)
         self._row = row
-        self._css_class = ""
         self._trust_popover = TrustPopver(row, self)
+
+        image = Gtk.Image.new_from_icon_name("lucide-shield-symbolic")
+        self.set_child(image)
         self.set_popover(self._trust_popover)
-        self.set_valign(Gtk.Align.CENTER)
-        self.update()
+        self.set_tooltip_text(_("Set Trust"))
 
     def do_unroot(self) -> None:
         del self._trust_popover
@@ -351,28 +412,9 @@ class TrustButton(Gtk.MenuButton):
         Gtk.MenuButton.do_unroot(self)
         app.check_finalize(self)
 
-    def update(self) -> None:
-        icon_name, tooltip, css_class = TRUST_DATA[self._row.trust]
-        image = Gtk.Image.new_from_icon_name(icon_name)
-        label = Gtk.Label(label=_("Set Trust"))
-
-        if not self._row.active:
-            css_class = "omemo-inactive-color"
-            tooltip = f'{_("Inactive")} - {tooltip}'
-
-        image.add_css_class(css_class)
-
-        box = Gtk.Box(spacing=12)
-        box.append(image)
-        box.append(label)
-        self.set_child(box)
-
-        self._css_class = css_class
-        self.set_tooltip_text(tooltip)
-
 
 class TrustPopver(Gtk.Popover, SignalManager):
-    def __init__(self, row: KeyRow, trust_button: TrustButton) -> None:
+    def __init__(self, row: DeviceRow, trust_button: TrustButton) -> None:
         Gtk.Popover.__init__(self)
         SignalManager.__init__(self)
         self._row = row
@@ -399,7 +441,6 @@ class TrustPopver(Gtk.Popover, SignalManager):
             self._row.delete_fingerprint()
         else:
             self._row.set_trust(row.type_)
-            self._trust_button.update()
             self.update()
 
     def update(self) -> None:
@@ -444,7 +485,7 @@ class BlindOption(MenuOption):
     def __init__(self) -> None:
         MenuOption.__init__(
             self,
-            "lucide-shield-question-mark-symbolic",
+            "lucide-shield-symbolic",
             _("Blind Trust"),
             "encrypted-color",
             OMEMOTrust.BLIND,

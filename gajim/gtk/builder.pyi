@@ -522,8 +522,6 @@ class MessageActionsBoxBuilder(Builder):
     request_voice_button: Gtk.Button
 
 class OmemoTrustManagerBuilder(Builder):
-    search_popover: Gtk.Popover
-    search: Gtk.SearchEntry
     qr_code_popover: Gtk.Popover
     comparing_instructions: Gtk.Label
     our_fingerprint_2: Gtk.Label
@@ -536,9 +534,9 @@ class OmemoTrustManagerBuilder(Builder):
     list_heading: Gtk.Label
     list_heading_box: Gtk.Box
     show_inactive_switch: Gtk.Switch
-    search_button: Gtk.MenuButton
     clear_devices_button: Gtk.Button
     list: Gtk.ListBox
+    undecided_placeholder: Gtk.Label
 
 class PasswordDialogBuilder(Builder):
     pass_box: Gtk.Box

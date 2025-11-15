@@ -17,6 +17,7 @@ button.flat.link { padding: 0; border: 0; }
 .small-label {
     font-size: 90%;
 }
+.smaller {font-size: smaller;}
 .draft {
     font-style: italic;
     color: var(--warning-color);
@@ -909,7 +910,11 @@ list.sidebar-switcher .sidebar-row-header {
 
 /* OMEMO */
 .omemo-inactive-color { color: var(--light-5); }
-.omemo-fingerprint label.subtitle { font-size: 1em; }
+.omemo-undecided-color { color: var(--warning-color); }
+.omemo-verified-color { color: var(--success-color); }
+.omemo-blind-color { color: var(--success-color); }
+.omemo-untrusted-color { color: var(--error-color); }
+.omemo-device-row { padding: 6px 12px 6px 12px; }
 
 /* StartChatDialog */
 .start-chat-treeview { padding: 5px; }
