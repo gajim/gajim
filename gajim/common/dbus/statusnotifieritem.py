@@ -66,7 +66,7 @@ class StatusNotifierItemService(DBusService):
     IconThemePath = ""
     AttentionIconName = ""
     ToolTip: tuple[str, list[Any], str, str] = ("", [], "Gajim", "")
-    ItemIsMenu = True
+    ItemIsMenu = False
     Menu = "/StatusNotifierItem/Menu"
 
     def __init__(
