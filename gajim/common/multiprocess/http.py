@@ -272,7 +272,6 @@ def http_upload(
         file = io.BytesIO(input_)
     else:
         content_size = input_.stat().st_size
-        print("content-size", content_size)
         file = input_.open(mode="rb")
 
     match encryption_data:
@@ -281,8 +280,6 @@ def http_upload(
             content_size += 16
         case _:
             encryptor = NonEncryptor()
-
-    print("content-size-after", content_size)
 
     default_headers = {
         "User-Agent": USER_AGENT,
