@@ -13,6 +13,7 @@ import ssl
 import threading
 from collections.abc import Iterable
 from dataclasses import dataclass
+from functools import partial
 from io import BytesIO
 from pathlib import Path
 
@@ -189,38 +190,38 @@ def http_download(
             decryptor = NonDecryptor()
 
     if output is None:
-        file = BytesIO()
+        file_method = BytesIO
     else:
-        file = output.open(mode="wb")
+        file_method = partial(output.open, mode="wb")
 
     queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
 
-    for data in resp.iter_bytes(chunk_size=chunk_size):
-        if event.is_set():
-            file.close()
-            raise CancelledError
+    with file_method() as file:
+        for data in resp.iter_bytes(chunk_size=chunk_size):
+            if event.is_set():
+                raise CancelledError
 
-        received_length += len(data)
-        if received_length > content_length:
-            raise OverflowError(f"{received_length} > {content_length}")
+            received_length += len(data)
+            if received_length > content_length:
+                raise OverflowError(f"{received_length} > {content_length}")
 
-        progress = round(received_length / content_length, 2)
-        hash_obj.update(data)
-        file.write(decryptor.decrypt(data))
+            progress = round(received_length / content_length, 2)
+            hash_obj.update(data)
+            file.write(decryptor.decrypt(data))
+            if with_progress:
+                queue.put(
+                    TransferState(
+                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
+                    )
+                )
+
+        file.write(decryptor.finalize())
         if with_progress:
-            queue.put(
-                TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=progress)
-            )
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
 
-    file.write(decryptor.finalize())
-    if with_progress:
-        queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
-
-    content = b""
-    if isinstance(file, BytesIO):
-        content = file.getvalue()
-
-    file.close()
+        content = b""
+        if isinstance(file, BytesIO):
+            content = file.getvalue()
 
     digest = hash_obj.hexdigest()
     if hash_value is not None and digest != hash_value:
