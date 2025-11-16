@@ -35,6 +35,8 @@ from gajim.common.events import PlainConnection
 from gajim.common.events import SignedIn
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.file_transfer_manager import FileTransfer
+from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_account_proxy
 from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_resource
@@ -45,8 +47,8 @@ from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
+from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.structs import OutgoingMessage
-from gajim.common.util.http import create_http_session
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import get_idle_status_message
 from gajim.common.util.text import to_one_line
@@ -170,7 +172,6 @@ class Client(Observable, ClientModules):
         self._client.set_domain(self._address.domain)
         self._client.set_username(self._address.localpart)
         self._client.set_resource(get_resource(self._account))
-        self._client.set_http_session(create_http_session())
         self._client.set_supported_fallback_ns([Namespace.REPLY])
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
@@ -555,6 +556,7 @@ class Client(Observable, ClientModules):
             # Do not try to reco while we are already trying
             return
 
+        assert self._client is not None
         custom_host = get_custom_host(self._account)
         if custom_host is not None:
             self._client.set_custom_host(*custom_host)
@@ -596,7 +598,27 @@ class Client(Observable, ClientModules):
                                                 abort=self._abort_reconnect))
             return
 
-        self._client.connect()
+        def _on_host_meta_response(obj: FileTransfer[DownloadResult]) -> None:
+            if self._client is None or self._state != ClientState.CONNECTING:
+                # State was changed in the meantime
+                return
+
+            try:
+                result = obj.get_result()
+            except Exception as error:
+                log.warning('Error while requesting host-meta data: %s', error)
+            else:
+                log.info("Received host meta data with length: %s", len(result.content))
+                self._client.set_host_meta_data(result.content)
+
+            self._client.connect()
+
+        app.ftm.http_download(
+            f'https://{self._address.domain}/.well-known/host-meta',
+            proxy=determine_proxy(self._account),
+            timeout=3,
+            callback=_on_host_meta_response,
+        )
 
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)

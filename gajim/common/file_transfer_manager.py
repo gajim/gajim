@@ -95,6 +95,7 @@ class FileTransferManager:
         hash_algo: str | None = None,
         hash_value: str | None = None,
         proxy: ProxyData | None = None,
+        timeout: int = 5,
         user_data: Any = None,
         callback: Callable[[FileTransfer[DownloadResult]], Any] | None = None,
     ) -> FileTransfer[DownloadResult] | None:
@@ -126,6 +127,7 @@ class FileTransferManager:
                 event,
                 id_,
                 urlparts.geturl(),
+                timeout,
                 output=output,
                 with_progress=with_progress,
                 max_content_length=max_content_length,

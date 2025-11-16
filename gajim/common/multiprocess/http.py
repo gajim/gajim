@@ -117,6 +117,8 @@ def http_download(
     event: threading.Event,
     ft_id: str,
     url: str,
+    timeout: int,
+    *,
     output: Path | None = None,
     with_progress: bool = False,
     max_content_length: int | None = None,
@@ -138,7 +140,7 @@ def http_download(
     ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     client = httpx.Client(
         headers={"User-Agent": USER_AGENT},
-        timeout=10,
+        timeout=timeout,
         verify=ctx,
         http2=True,
         proxy=proxy,

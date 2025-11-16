@@ -41,7 +41,6 @@ from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
 from gajim.common.multiprocess.http import DownloadResult
-from gajim.common.util.http import create_http_session
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
 
@@ -281,7 +280,6 @@ class AccountWizard(Assistant):
 
         proxy_data = self._get_proxy_data(advanced)
         client.set_proxy(proxy_data)
-        client.set_http_session(create_http_session(proxy=proxy_data))
         client.subscribe("disconnected", self._on_disconnected)
         client.subscribe("connection-failed", self._on_connection_failed)
         client.subscribe("stanza-sent", self._on_stanza_sent)
@@ -305,6 +303,30 @@ class AccountWizard(Assistant):
     ) -> None:
         app.ged.raise_event(StanzaReceived(account="AccountWizard", stanza=stanza))
 
+    def _request_host_meta_and_connect(
+        self, client: NBXMPPClient, advanced: bool
+    ) -> None:
+
+        def _on_host_meta_response(obj: FileTransfer[DownloadResult]) -> None:
+            if self._destroyed:
+                return
+
+            try:
+                result = obj.get_result()
+            except Exception as error:
+                log.warning("Error while requesting host-meta data: %s", error)
+            else:
+                log.info("Received host meta data with length: %s", len(result.content))
+                client.set_host_meta_data(result.content)
+
+            client.connect()
+
+        app.ftm.http_download(
+            f"https://{client.domain}/.well-known/host-meta",
+            proxy=self._get_proxy_data(advanced),
+            callback=_on_host_meta_response,
+        )
+
     def _test_credentials(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_("Connecting..."), _("Connecting to server..."))
         jid, password = self.get_page("login").get_credentials()
@@ -317,8 +339,7 @@ class AccountWizard(Assistant):
 
         self._client.set_password(password)
         self._client.subscribe("login-successful", self._on_login_successful)
-
-        self._client.connect()
+        self._request_host_meta_and_connect(self._client, advanced)
 
     def _test_anonymous_server(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_("Connecting..."), _("Connecting to server..."))
@@ -332,7 +353,7 @@ class AccountWizard(Assistant):
         )
 
         self._client.subscribe("anonymous-supported", self._on_anonymous_supported)
-        self._client.connect()
+        self._request_host_meta_and_connect(self._client, advanced)
 
     def _register_with_server(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_("Connecting..."), _("Connecting to server..."))
@@ -346,8 +367,7 @@ class AccountWizard(Assistant):
         )
 
         self._client.subscribe("connected", self._on_connected)
-
-        self._client.connect()
+        self._request_host_meta_and_connect(self._client, advanced)
 
     def _on_login_successful(self, client: NBXMPPClient, _signal_name: str) -> None:
         account = self._generate_account_name(client.domain)
