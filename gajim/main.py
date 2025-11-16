@@ -46,6 +46,7 @@ def gi_require_versions() -> None:
         {
             "Adw": "1",
             "Gdk": "4.0",
+            "GdkPixbuf": "2.0",
             "Gio": "2.0",
             "GLib": "2.0",
             "GObject": "2.0",
