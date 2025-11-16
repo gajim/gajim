@@ -231,7 +231,7 @@ class OMEMO(BaseModule):
             return False
 
         has_trusted_keys = False
-        for member_jid in self.backend.get_group_members(jid):
+        for member_jid in self.backend.get_group_members(jid, without_self=False):
             self._request_bundles_for_new_devices(member_jid)
             if self._has_trusted_keys(member_jid):
                 has_trusted_keys = True
