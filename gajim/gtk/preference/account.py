@@ -286,7 +286,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Send Read Markers"),
+                _("Read Receipts"),
                 SettingType.VALUE,
                 app.settings.get_account_setting(account, "send_marker_default"),
                 callback=self._send_read_marker,
