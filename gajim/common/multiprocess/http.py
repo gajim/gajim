@@ -225,13 +225,13 @@ def http_request(
     if event.is_set():
         raise CancelledError
 
-    content_length, content_type = get_header_values(resp.headers)
-
     try:
         resp.raise_for_status()
     except httpx.HTTPStatusError:
         # https://github.com/encode/httpx/issues/1990
         raise HTTPStatusError(f"{resp.status_code} {resp.reason_phrase}")
+
+    content_length, content_type = get_header_values(resp.headers)
 
     queue.put(
         TransferMetadata(
@@ -240,7 +240,14 @@ def http_request(
     )
 
     if content_length == 0:
-        raise OverflowError("No content length available")
+        return HTTPResult(
+            hash_algo=hash_algo,
+            req_hash_value=req_hash_obj.hexdigest(),
+            resp_hash_value="",
+            content_length=content_length,
+            content_type=content_type,
+            content=b"",
+        )
 
     if max_content_length >= 0 and content_length > max_content_length:
         raise MaxContentLengthExceeded(content_length)
