@@ -382,6 +382,10 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         assert self._contact is not None
         client = app.get_client(self._contact.account)
 
+        stack = app.window.get_chat_stack()
+        if not stack.check_send_preconditons():
+            return
+
         # catalog: list[(file Path, transfer method, recipient JID)]
         for path, method, _jid in catalog:
             if method == "httpupload":

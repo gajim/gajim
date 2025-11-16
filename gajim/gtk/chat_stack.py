@@ -847,6 +847,31 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         self._chat_control.add_info_message(message)
 
+    def check_send_preconditons(self) -> bool:
+        contact = self._current_contact
+        assert contact is not None
+
+        client = app.get_client(contact.account)
+
+        encryption = contact.settings.get("encryption")
+        if not encryption:
+            return True
+
+        if encryption == "OMEMO":
+            return client.get_module("OMEMO").check_send_preconditions(contact)
+
+        if encryption not in app.plugin_manager.encryption_plugins:
+            InformationAlertDialog(
+                _("Encryption Error"), _("Missing necessary encryption plugin")
+            )
+            return False
+
+        self._chat_control.sendmessage = True
+        app.plugin_manager.extension_point(
+            "send_message" + encryption, self._chat_control
+        )
+        return self._chat_control.sendmessage
+
     def _on_send_message(self) -> None:
         message = self._message_action_box.get_text()
         if message.startswith("//"):
@@ -858,24 +883,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         client = app.get_client(contact.account)
 
-        encryption = contact.settings.get("encryption")
-        if encryption == "OMEMO":
-            if not client.get_module("OMEMO").check_send_preconditions(contact):
-                return
-
-        elif encryption:
-            if encryption not in app.plugin_manager.encryption_plugins:
-                InformationAlertDialog(
-                    _("Encryption Error"), _("Missing necessary encryption plugin")
-                )
-                return
-
-            self._chat_control.sendmessage = True
-            app.plugin_manager.extension_point(
-                "send_message" + encryption, self._chat_control
-            )
-            if not self._chat_control.sendmessage:
-                return
+        if not self.check_send_preconditons():
+            return
 
         message = remove_invalid_xml_chars(message)
         if message in ("", "\n"):
