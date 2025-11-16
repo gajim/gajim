@@ -41,7 +41,6 @@ from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.file_transfer_manager import FileTransferManager
-from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
@@ -319,12 +318,13 @@ class CoreApplication(ged.EventHelper):
     def check_for_gajim_updates(self) -> None:
         self._log.info('Checking for Gajim updates')
 
-        app.ftm.http_download(
+        app.ftm.http_request(
+            'GET',
             'https://gajim.org/current-version.json',
             callback=self._on_update_response,
         )
 
-    def _on_update_response(self, obj: FileTransfer[DownloadResult]) -> None:
+    def _on_update_response(self, obj: FileTransfer) -> None:
         try:
             result = obj.get_result()
         except Exception as error:

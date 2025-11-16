@@ -17,7 +17,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import Observable
-from gajim.common.multiprocess.http import DownloadResult
 
 from .manifest import PluginManifest
 
@@ -51,15 +50,17 @@ class PluginRepository(Observable):
         self._download_queue: set[PluginManifest] = set()
 
         if app.settings.get("plugins_repository_enabled"):
-            app.ftm.http_download(
-                "https://gajim.org/updates.json", callback=self._on_repository_received
+            app.ftm.http_request(
+                "GET",
+                "https://gajim.org/updates.json",
+                callback=self._on_repository_received,
             )
 
     @property
     def available(self):
         return bool(self._repository_url)
 
-    def _on_repository_received(self, obj: FileTransfer[DownloadResult]) -> None:
+    def _on_repository_received(self, obj: FileTransfer) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -140,13 +141,14 @@ class PluginRepository(Observable):
 
     def _refresh_plugin_index(self, callback: Any | None = None) -> None:
         log.info("Refresh index")
-        app.ftm.http_download(
+        app.ftm.http_request(
+            "GET",
             self._repository_index_url,
             user_data=callback,
             callback=self._on_index_received,
         )
 
-    def _on_index_received(self, obj: FileTransfer[DownloadResult]) -> None:
+    def _on_index_received(self, obj: FileTransfer) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -164,7 +166,8 @@ class PluginRepository(Observable):
         image_path = package_index["metadata"]["image_path"]
         callback = obj.get_user_data()
 
-        app.ftm.http_download(
+        app.ftm.http_request(
+            "GET",
             f"{self._repository_url}/{image_path}",
             callback=self._on_images_received,
         )
@@ -174,7 +177,7 @@ class PluginRepository(Observable):
         if callback is not None:
             callback()
 
-    def _on_images_received(self, obj: FileTransfer[DownloadResult]) -> None:
+    def _on_images_received(self, obj: FileTransfer) -> None:
         try:
             result = obj.get_result()
         except Exception as error:
@@ -233,11 +236,14 @@ class PluginRepository(Observable):
         log.info("Download plugin %s", manifest.short_name)
         url = manifest.get_remote_url(self._repository_url)
 
-        app.ftm.http_download(
-            url, user_data=manifest, callback=self._on_download_plugin_finished
+        app.ftm.http_request(
+            "GET",
+            url,
+            user_data=manifest,
+            callback=self._on_download_plugin_finished,
         )
 
-    def _on_download_plugin_finished(self, obj: FileTransfer[DownloadResult]) -> None:
+    def _on_download_plugin_finished(self, obj: FileTransfer) -> None:
         manifest = cast(PluginManifest, obj.get_user_data())
         self._download_queue.remove(manifest)
 

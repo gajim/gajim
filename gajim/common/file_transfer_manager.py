@@ -5,11 +5,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
-from typing import Generic
 from typing import Literal
 from typing import overload
-from typing import TypeVar
 
 import logging
 import multiprocessing as mp
@@ -32,32 +29,26 @@ from gajim.common.aes import AESKeyData
 from gajim.common.enum import FTState
 from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_uuid
-from gajim.common.multiprocess.http import DownloadResult
-from gajim.common.multiprocess.http import http_download
-from gajim.common.multiprocess.http import http_upload
+from gajim.common.multiprocess.http import DEFAULT_MAX_CONTENT_LENGTH
+from gajim.common.multiprocess.http import http_request
+from gajim.common.multiprocess.http import HTTPResult
 from gajim.common.multiprocess.http import TransferMetadata
 from gajim.common.multiprocess.http import TransferState
-from gajim.common.multiprocess.http import UploadResult
 from gajim.common.util.http import get_aes_key_data
 
 log = logging.getLogger("gajim.c.ftm")
 
-_T = TypeVar("_T")
 QueueT = queue.Queue[TransferState | TransferMetadata]
 
 
 class FileTransferManager:
     def __init__(self) -> None:
-        self._transfers: dict[
-            str, FileTransfer[UploadResult] | FileTransfer[DownloadResult]
-        ] = {}
+        self._transfers: dict[str, FileTransfer] = {}
         self._manager = mp.Manager()
         self._queue: QueueT = self._manager.Queue()
         GLib.timeout_add(100, self._poll_queue)
 
-    def get_transfer(
-        self, id_: str
-    ) -> FileTransfer[UploadResult] | FileTransfer[DownloadResult] | None:
+    def get_transfer(self, id_: str) -> FileTransfer | None:
         return self._transfers.get(id_)
 
     def _poll_queue(self) -> bool:
@@ -84,28 +75,33 @@ class FileTransferManager:
 
         return GLib.SOURCE_CONTINUE
 
-    def http_download(
+    def http_request(
         self,
+        method: Literal["GET", "POST", "PUT"],
         url: str,
         id_: str | None = None,
+        headers: dict[str, str] | None = None,
+        content_type: str | None = None,
+        encryption_data: AESKeyData | None = None,
+        input_: Path | bytes = b"",
         output: Path | None = None,
         with_progress: bool = False,
-        max_content_length: int | None = None,
+        max_content_length: int = DEFAULT_MAX_CONTENT_LENGTH,
         allowed_content_types: Iterable[str] | None = None,
-        hash_algo: str | None = None,
+        hash_algo: str = "sha256",
         hash_value: str | None = None,
         proxy: ProxyData | None = None,
         timeout: int = 5,
         user_data: Any = None,
-        callback: Callable[[FileTransfer[DownloadResult]], Any] | None = None,
-    ) -> FileTransfer[DownloadResult] | None:
+        callback: Callable[[FileTransfer], Any] | None = None,
+    ) -> FileTransfer | None:
 
         if id_ is None:
             id_ = get_uuid()
 
         obj = self._transfers.get(id_)
         if obj is not None:
-            return cast(FileTransfer[DownloadResult], obj)
+            return obj
 
         if proxy is None:
             proxy = determine_proxy()
@@ -122,18 +118,24 @@ class FileTransferManager:
 
         try:
             future = app.process_pool.submit(
-                http_download,
+                http_request,
                 self._queue,
                 event,
                 id_,
+                method,
                 urlparts.geturl(),
                 timeout,
+                headers=headers,
+                content_type=content_type,
+                input_=input_,
                 output=output,
-                with_progress=with_progress,
+                with_resp_progress=with_progress and method in ("GET", "POST"),
+                with_req_progress=with_progress and method == "PUT",
                 max_content_length=max_content_length,
                 allowed_content_types=allowed_content_types,
                 hash_algo=hash_algo,
                 hash_value=hash_value,
+                encryption_data=encryption_data,
                 decryption_data=decryption_data,
                 proxy=None if proxy is None else proxy.get_uri(),
             )
@@ -144,21 +146,19 @@ class FileTransferManager:
         future.add_done_callback(
             partial(
                 GLib.idle_add,
-                self._on_download_finished,
+                self._on_http_result,
                 id_,
             )
         )
 
-        obj = FileTransfer[DownloadResult](
-            self, id_, event, output=output, user_data=user_data
-        )
+        obj = FileTransfer(self, id_, event, output=output, user_data=user_data)
         if callback is not None:
             obj.connect("finished", callback)
         self._transfers[id_] = obj
         return obj
 
-    def _on_download_finished(self, id_: str, future: Future[DownloadResult]) -> None:
-        obj = cast(FileTransfer[DownloadResult] | None, self._transfers.get(id_))
+    def _on_http_result(self, id_: str, future: Future[HTTPResult]) -> None:
+        obj = self._transfers.get(id_)
         if obj is None:
             log.error("Unable to find transfer object with id: %s", id_)
             return
@@ -179,85 +179,8 @@ class FileTransferManager:
 
         del self._transfers[id_]
 
-    def http_upload(
-        self,
-        url: str,
-        content_type: str,
-        input_: Path | bytes,
-        headers: dict[str, str] | None = None,
-        id_: str | None = None,
-        with_progress: bool = False,
-        encryption_data: AESKeyData | None = None,
-        proxy: ProxyData | None = None,
-        user_data: Any = None,
-        callback: Callable[[FileTransfer[UploadResult]], Any] | None = None,
-    ) -> FileTransfer[UploadResult] | None:
 
-        if id_ is None:
-            id_ = get_uuid()
-
-        obj = self._transfers.get(id_)
-        if obj is not None:
-            return cast(FileTransfer[UploadResult], obj)
-
-        if proxy is None:
-            proxy = determine_proxy()
-
-        event = self._manager.Event()
-
-        try:
-            future = app.process_pool.submit(
-                http_upload,
-                self._queue,
-                event,
-                id_,
-                url,
-                content_type,
-                input_,
-                headers=headers,
-                with_progress=with_progress,
-                encryption_data=encryption_data,
-                proxy=None if proxy is None else proxy.get_uri(),
-            )
-        except Exception as error:
-            log.exception(error)
-            return None
-
-        future.add_done_callback(
-            partial(
-                GLib.idle_add,
-                self._on_upload_finished,
-                id_,
-            )
-        )
-
-        obj = FileTransfer[UploadResult](self, id_, event, user_data=user_data)
-        if callback is not None:
-            obj.connect("finished", callback)
-        self._transfers[id_] = obj
-        return obj
-
-    def _on_upload_finished(self, id_: str, future: Future[UploadResult]) -> None:
-        obj = cast(FileTransfer[UploadResult] | None, self._transfers.get(id_))
-        if obj is None:
-            log.error("Unable to find transfer object with id: %s", id_)
-            return
-
-        self._poll_queue()
-
-        try:
-            upload_result = future.result()
-        except Exception as error:
-            obj.set_exception(error)
-
-        else:
-            obj.set_result(upload_result)
-            obj.set_finished()
-
-        del self._transfers[id_]
-
-
-class FileTransfer(Generic[_T], GObject.Object):
+class FileTransfer(GObject.Object):
     __gtype_name__ = "FileTransfer"
 
     __gsignals__ = {
@@ -342,26 +265,23 @@ class FileTransfer(Generic[_T], GObject.Object):
     def get_metadata(self) -> TransferMetadata | None:
         return self._metadata
 
-    def set_result(self, result: _T) -> None:
+    def set_result(self, result: HTTPResult) -> None:
         self._result = result
 
     @overload
-    def get_result(self, *, raise_if_empty: Literal[False]) -> _T | None: ...
+    def get_result(self, *, raise_if_empty: Literal[False]) -> HTTPResult | None: ...
 
     @overload
-    def get_result(self, *, raise_if_empty: Literal[True]) -> _T: ...
+    def get_result(self, *, raise_if_empty: Literal[True]) -> HTTPResult: ...
 
     @overload
-    def get_result(self) -> _T: ...
+    def get_result(self) -> HTTPResult: ...
 
-    def get_result(self, *, raise_if_empty: bool = True) -> _T | None:
+    def get_result(self, *, raise_if_empty: bool = True) -> HTTPResult | None:
         self.raise_for_error()
         if raise_if_empty:
-            if self._result is None:
+            if self._result is None or not self._result.content:
                 raise ValueError("No result available")
-
-            if isinstance(self._result, DownloadResult) and not self._result.content:
-                raise ValueError("No content received")
 
         return self._result
 

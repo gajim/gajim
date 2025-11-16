@@ -40,7 +40,6 @@ from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
-from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
 
@@ -307,7 +306,7 @@ class AccountWizard(Assistant):
         self, client: NBXMPPClient, advanced: bool
     ) -> None:
 
-        def _on_host_meta_response(obj: FileTransfer[DownloadResult]) -> None:
+        def _on_host_meta_response(obj: FileTransfer) -> None:
             if self._destroyed:
                 return
 
@@ -321,7 +320,8 @@ class AccountWizard(Assistant):
 
             client.connect()
 
-        app.ftm.http_download(
+        app.ftm.http_request(
+            "GET",
             f"https://{client.domain}/.well-known/host-meta",
             proxy=self._get_proxy_data(advanced),
             callback=_on_host_meta_response,
@@ -680,7 +680,7 @@ class Signup(Page):
         self.title: str = _("Create New Account")
 
         self._servers: list[dict[str, Any]] = []
-        self._provider_list_request: FileTransfer[DownloadResult] | None = None
+        self._provider_list_request: FileTransfer | None = None
 
         self._ui = get_builder("account_wizard.ui")
         entry = self._ui.server_comboboxtext_sign_up.get_child()
@@ -726,14 +726,13 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up.set_sensitive(False)
         self._ui.update_provider_list_icon.add_css_class("spin")
 
-        self._provider_list_request = app.ftm.http_download(
+        self._provider_list_request = app.ftm.http_request(
+            "GET",
             app.settings.get_app_setting("providers_list_url"),
             callback=self._on_download_provider_list_finished,
         )
 
-    def _on_download_provider_list_finished(
-        self, obj: FileTransfer[DownloadResult]
-    ) -> None:
+    def _on_download_provider_list_finished(self, obj: FileTransfer) -> None:
         self._provider_list_request = None
         self._ui.server_comboboxtext_sign_up.set_sensitive(True)
         self._ui.update_provider_list_icon.remove_css_class("spin")

@@ -36,7 +36,6 @@ from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.multiprocess.http import CancelledError
-from gajim.common.multiprocess.http import UploadResult
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.preview import guess_mime_type
 
@@ -53,7 +52,7 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace: str | None = None
         self.max_file_size: float | None = None  # max file size in bytes
 
-        self._requests_in_progress: dict[int, FileTransferM[UploadResult]] = {}
+        self._requests_in_progress: dict[int, FileTransferM] = {}
 
         self._running_transfers: dict[tuple[str, JID], set[HTTPFileTransfer]] = (
             defaultdict(set)
@@ -250,13 +249,14 @@ class HTTPUpload(BaseModule):
         transfer.set_started()
 
         assert transfer.put_uri is not None
-        obj = app.ftm.http_upload(
+        obj = app.ftm.http_request(
+            "PUT",
             transfer.put_uri,
-            transfer.mime,
-            transfer.path,
-            transfer.headers,
-            with_progress=True,
+            headers=transfer.headers,
+            content_type=transfer.mime,
             encryption_data=transfer.get_encryption_data(),
+            input_=transfer.path,
+            with_progress=True,
             proxy=determine_proxy(self._account),
             user_data=transfer,
             callback=self._on_finish,
@@ -268,7 +268,7 @@ class HTTPUpload(BaseModule):
 
         self._requests_in_progress[id(transfer)] = obj
 
-    def _on_finish(self, ftobj: FileTransferM[UploadResult]) -> None:
+    def _on_finish(self, ftobj: FileTransferM) -> None:
 
         transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
 
@@ -291,7 +291,7 @@ class HTTPUpload(BaseModule):
             self._log.info("Upload completed successfully")
 
     def _on_upload_progress(
-        self, ftobj: FileTransferM[UploadResult], _param: GObject.ParamSpec
+        self, ftobj: FileTransferM, _param: GObject.ParamSpec
     ) -> None:
 
         transfer = cast(HTTPFileTransfer, ftobj.get_user_data())

@@ -47,7 +47,6 @@ from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
-from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import get_idle_status_message
@@ -598,7 +597,7 @@ class Client(Observable, ClientModules):
                                                 abort=self._abort_reconnect))
             return
 
-        def _on_host_meta_response(obj: FileTransfer[DownloadResult]) -> None:
+        def _on_host_meta_response(obj: FileTransfer) -> None:
             if self._client is None or self._state != ClientState.CONNECTING:
                 # State was changed in the meantime
                 return
@@ -613,7 +612,8 @@ class Client(Observable, ClientModules):
 
             self._client.connect()
 
-        app.ftm.http_download(
+        app.ftm.http_request(
+            'GET',
             f'https://{self._address.domain}/.well-known/host-meta',
             proxy=determine_proxy(self._account),
             timeout=3,

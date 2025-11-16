@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 import hashlib
 import io
 import logging
@@ -26,6 +28,7 @@ from gajim.common.aes import AESKeyData
 from gajim.common.enum import FTState
 
 MIN_CHUNK_SIZE = 1024 * 100  # 100 KB
+DEFAULT_MAX_CONTENT_LENGTH = 1024 * 1024 * 10  # 10 MB
 USER_AGENT = "Gajim 2.x"
 
 log = logging.getLogger("gajim.http")
@@ -46,18 +49,13 @@ class TransferMetadata:
 
 
 @dataclass
-class DownloadResult:
+class HTTPResult:
     hash_algo: str
-    hash_value: str
+    req_hash_value: str
+    resp_hash_value: str
     content_length: int
     content_type: str | None
     content: bytes
-
-
-@dataclass
-class UploadResult:
-    hash_algo: str
-    hash_value: str
 
 
 class InvalidHash(Exception):
@@ -112,34 +110,36 @@ def get_header_values(headers: httpx.Headers) -> tuple[int, str | None]:
     return content_length, content_type
 
 
-def http_download(
+def http_request(
     queue: queue.Queue[TransferState | TransferMetadata],
     event: threading.Event,
     ft_id: str,
+    method: Literal["GET", "POST", "PUT"],
     url: str,
     timeout: int,
     *,
+    headers: dict[str, str] | None = None,
+    content_type: str | None = None,
+    input_: Path | bytes = b"",
+    with_req_progress: bool = False,
     output: Path | None = None,
-    with_progress: bool = False,
-    max_content_length: int | None = None,
+    with_resp_progress: bool = False,
+    max_content_length: int = DEFAULT_MAX_CONTENT_LENGTH,
     allowed_content_types: Iterable[str] | None = None,
-    hash_algo: str | None = None,
+    hash_algo: str = "sha256",
     hash_value: str | None = None,
+    encryption_data: AESKeyData | None = None,
     decryption_data: AESKeyData | None = None,
     proxy: str | None = None,
-) -> DownloadResult:
+) -> HTTPResult:
 
     trust_env = True
     if proxy == "direct://":
         proxy = None
         trust_env = False
 
-    hash_algo = hash_algo or "sha256"
-    hash_obj = hashlib.new(hash_algo)
-
     ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     client = httpx.Client(
-        headers={"User-Agent": USER_AGENT},
         timeout=timeout,
         verify=ctx,
         http2=True,
@@ -150,7 +150,76 @@ def http_download(
 
     queue.put(TransferState(id=ft_id, state=FTState.STARTED))
 
-    req = client.build_request("GET", url=url)
+    if isinstance(input_, bytes):
+        req_content_size = len(input_)
+        input_file = io.BytesIO(input_)
+    else:
+        req_content_size = input_.stat().st_size
+        input_file = input_.open(mode="rb")
+
+    match encryption_data:
+        case AESKeyData():
+            encryptor = AESGCMEncryptor(encryption_data)
+            req_content_size += 16
+        case _:
+            encryptor = NonEncryptor()
+
+    default_headers = {
+        "User-Agent": USER_AGENT,
+    }
+
+    if content_type is not None:
+        default_headers.update(
+            {
+                "Content-Type": content_type,
+                "Content-Length": str(req_content_size),
+            }
+        )
+
+    if headers is not None:
+        headers.update(default_headers)
+    else:
+        headers = default_headers
+
+    req_hash_obj = hashlib.new(hash_algo)
+
+    def _read_file_generator() -> Iterable[bytes]:
+        if with_req_progress:
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
+
+        chunk_size = math.ceil(req_content_size / 100)
+        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
+
+        uploaded = 0
+        while data := input_file.read(chunk_size):
+            if event.is_set():
+                input_file.close()
+                raise CancelledError
+
+            req_hash_obj.update(data)
+            data = encryptor.encrypt(data)
+            uploaded += len(data)
+            progress = round(uploaded / req_content_size, 2)
+            if with_req_progress:
+                queue.put(
+                    TransferState(
+                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
+                    )
+                )
+            yield data
+
+        yield encryptor.finalize()
+        if with_req_progress:
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
+        input_file.close()
+
+    read_file_generator = None
+    if input_:
+        read_file_generator = _read_file_generator()
+
+    req = client.build_request(
+        method, url=url, content=read_file_generator, headers=headers
+    )
     resp = client.send(req, stream=True)
 
     if event.is_set():
@@ -173,17 +242,12 @@ def http_download(
     if content_length == 0:
         raise OverflowError("No content length available")
 
-    if max_content_length is not None:
-        if content_length > max_content_length:
-            raise MaxContentLengthExceeded(content_length)
+    if max_content_length >= 0 and content_length > max_content_length:
+        raise MaxContentLengthExceeded(content_length)
 
     if allowed_content_types is not None:
         if content_type is None or content_type not in allowed_content_types:
             raise ContentTypeNotAllowed(content_type)
-
-    received_length = 0
-    chunk_size = math.ceil(content_length / 100)
-    chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
 
     match decryption_data:
         case AESKeyData():
@@ -196,9 +260,17 @@ def http_download(
     else:
         file_method = partial(output.open, mode="wb")
 
-    queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
+    if with_resp_progress:
+        queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
 
-    with file_method() as file:
+    resp_hash_obj = hashlib.new(hash_algo)
+
+    with file_method() as output_file:
+
+        received_length = 0
+        chunk_size = math.ceil(content_length / 100)
+        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
+
         for data in resp.iter_bytes(chunk_size=chunk_size):
             if event.is_set():
                 raise CancelledError
@@ -208,136 +280,34 @@ def http_download(
                 raise OverflowError(f"{received_length} > {content_length}")
 
             progress = round(received_length / content_length, 2)
-            hash_obj.update(data)
-            file.write(decryptor.decrypt(data))
-            if with_progress:
+            resp_hash_obj.update(data)
+            output_file.write(decryptor.decrypt(data))
+            if with_resp_progress:
                 queue.put(
                     TransferState(
                         id=ft_id, state=FTState.IN_PROGRESS, progress=progress
                     )
                 )
 
-        file.write(decryptor.finalize())
-        if with_progress:
+        output_file.write(decryptor.finalize())
+        if with_resp_progress:
             queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
 
         content = b""
-        if isinstance(file, BytesIO):
-            content = file.getvalue()
+        if isinstance(output_file, BytesIO):
+            content = output_file.getvalue()
 
-    digest = hash_obj.hexdigest()
-    if hash_value is not None and digest != hash_value:
-        raise InvalidHash(f"{digest} != {hash_value}")
+    resp_digest = resp_hash_obj.hexdigest()
+    if hash_value is not None and resp_digest != hash_value:
+        raise InvalidHash(f"{resp_digest} != {hash_value}")
 
-    result = DownloadResult(
+    result = HTTPResult(
         hash_algo=hash_algo,
-        hash_value=digest,
+        req_hash_value=req_hash_obj.hexdigest(),
+        resp_hash_value=resp_digest,
         content_length=content_length,
         content_type=content_type,
         content=content,
     )
 
     return result
-
-
-def http_upload(
-    queue: queue.Queue[TransferState | TransferMetadata],
-    event: threading.Event,
-    ft_id: str,
-    url: str,
-    content_type: str,
-    input_: Path | bytes,
-    headers: dict[str, str] | None = None,
-    with_progress: bool = False,
-    encryption_data: AESKeyData | None = None,
-    proxy: str | None = None,
-) -> UploadResult:
-
-    trust_env = True
-    if proxy == "direct://":
-        proxy = None
-        trust_env = False
-
-    ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    client = httpx.Client(
-        timeout=10,
-        verify=ctx,
-        http2=True,
-        proxy=proxy,
-        trust_env=trust_env,
-    )
-
-    queue.put(TransferState(id=ft_id, state=FTState.STARTED))
-
-    if isinstance(input_, bytes):
-        content_size = len(input_)
-        file = io.BytesIO(input_)
-    else:
-        content_size = input_.stat().st_size
-        file = input_.open(mode="rb")
-
-    match encryption_data:
-        case AESKeyData():
-            encryptor = AESGCMEncryptor(encryption_data)
-            content_size += 16
-        case _:
-            encryptor = NonEncryptor()
-
-    default_headers = {
-        "User-Agent": USER_AGENT,
-        "Content-Type": content_type,
-        "Content-Length": str(content_size),
-    }
-
-    if headers is not None:
-        headers.update(default_headers)
-    else:
-        headers = default_headers
-
-    hash_obj = hashlib.new("sha256")
-
-    def _read_file_generator() -> Iterable[bytes]:
-        if with_progress:
-            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
-
-        chunk_size = math.ceil(content_size / 100)
-        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
-
-        uploaded = 0
-        while data := file.read(chunk_size):
-            if event.is_set():
-                file.close()
-                raise CancelledError
-
-            hash_obj.update(data)
-            data = encryptor.encrypt(data)
-            uploaded += len(data)
-            progress = round(uploaded / content_size, 2)
-            if with_progress:
-                queue.put(
-                    TransferState(
-                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
-                    )
-                )
-            yield data
-
-        yield encryptor.finalize()
-        if with_progress:
-            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
-        file.close()
-
-    req = client.build_request(
-        "PUT", url=url, content=_read_file_generator(), headers=headers
-    )
-    resp = client.send(req)
-
-    try:
-        resp.raise_for_status()
-    except httpx.HTTPStatusError:
-        # https://github.com/encode/httpx/issues/1990
-        raise HTTPStatusError(f"{resp.status_code} {resp.reason_phrase}")
-
-    return UploadResult(
-        hash_algo="sha256",
-        hash_value=hash_obj.hexdigest(),
-    )

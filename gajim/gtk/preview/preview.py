@@ -25,7 +25,6 @@ from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
 from gajim.common.multiprocess.http import CancelledError
 from gajim.common.multiprocess.http import ContentTypeNotAllowed
-from gajim.common.multiprocess.http import DownloadResult
 from gajim.common.multiprocess.http import HTTPStatusError
 from gajim.common.multiprocess.http import MaxContentLengthExceeded
 from gajim.common.util.preview import contains_audio_streams
@@ -303,13 +302,14 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def _download_content(
         self,
-        max_content_length: int | None = None,
+        max_content_length: int = -1,
         allowed_content_types: set[str] | None = None,
     ) -> None:
 
         log.info("Start downloading: %s %s", self._preview_id_short, self._uri)
 
-        obj = app.ftm.http_download(
+        obj = app.ftm.http_request(
+            "GET",
             self._uri,
             self._preview_id,
             output=self._orig_path,
@@ -324,7 +324,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
         self._connect_to_ftobj(obj)
 
-    def _connect_to_ftobj(self, obj: FileTransfer[Any]) -> None:
+    def _connect_to_ftobj(self, obj: FileTransfer) -> None:
         self._connect(obj, "finished", self._on_download_finished)
         self._connect(obj, "notify::progress", self._on_download_progress)
         self._http_obj = obj
@@ -334,7 +334,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._set_widget_state(PreviewState.DOWNLOADING)
 
     def _on_download_progress(
-        self, ftobj: FileTransfer[DownloadResult], _param: GObject.ParamSpec
+        self, ftobj: FileTransfer, _param: GObject.ParamSpec
     ) -> None:
 
         progress = ftobj.get_property("progress")
@@ -343,7 +343,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def _on_download_finished(
         self,
-        ftobj: FileTransfer[DownloadResult],
+        ftobj: FileTransfer,
     ) -> None:
 
         self._disconnect_object(ftobj)
