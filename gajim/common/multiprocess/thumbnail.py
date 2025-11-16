@@ -15,9 +15,16 @@ from gi.repository import GLib
 from PIL import Image
 from PIL import ImageFile
 
-from gajim.common.util.image import get_image_orientation
-
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+def get_image_orientation(image: Image.Image) -> int:
+    exif = image.getexif()
+    exif_orientation_code = 274
+    orientation = exif.get(exif_orientation_code, 1)
+    degrees = {1: 0, 3: 180, 6: 270, 8: 90}.get(orientation, 0)
+
+    return degrees
 
 
 def create_thumbnail(
