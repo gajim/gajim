@@ -311,9 +311,12 @@ class Client(Observable, ClientModules):
                              text=text or error))
 
         if self._reconnect:
+            # Save resumeable information because in
+            # _after_disconnect() we destroy the client object
+            stream_is_resumeable = self._client.resumeable
             self._after_disconnect()
             self._schedule_reconnect()
-            if not self._client.resumeable:
+            if not stream_is_resumeable:
                 self.notify('state-changed', SimpleClientState.DISCONNECTED)
             self.notify('state-changed', SimpleClientState.RESUME_IN_PROGRESS)
 
