@@ -24,7 +24,6 @@ from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageRetracted
 from gajim.common.events import MessageSent
-from gajim.common.events import RawMessageReceived
 from gajim.common.events import ReactionUpdated
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -108,11 +107,6 @@ class Message(BaseModule):
             return
 
         self._log.info('Received from %s', stanza.getFrom())
-
-        app.ged.raise_event(RawMessageReceived(
-            conn=self._con,
-            stanza=stanza,
-            account=self._account))
 
         if properties.carbon is not None and properties.carbon.is_sent:
             # Ugly, we treat the from attr as the remote jid,

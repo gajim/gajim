@@ -415,14 +415,6 @@ class MucDiscoUpdate(ApplicationEvent):
 
 
 @dataclass
-class RawMessageReceived(ApplicationEvent):
-    name: str = field(init=False, default='raw-message-received')
-    account: str
-    stanza: Any
-    conn: 'Client'
-
-
-@dataclass
 class RawMamMessageReceived(ApplicationEvent):
     name: str = field(init=False, default='raw-mam-message-received')
     account: str
