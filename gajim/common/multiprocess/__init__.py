@@ -8,7 +8,12 @@ import signal
 
 
 def init_process() -> None:
+    from gajim.main import set_proc_title
+
+    set_proc_title("gajim-worker")
+
     signal.signal(signal.SIGINT, signal.SIG_IGN)
+
     gi_require_versions()
 
 

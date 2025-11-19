@@ -169,7 +169,7 @@ def _run_app() -> None:
     application.run(sys.argv)
 
 
-def _set_proc_title() -> None:
+def set_proc_title(title: str) -> None:
     sysname = platform.system()
     if sysname in ("Linux", "FreeBSD", "OpenBSD", "NetBSD"):
         libc = CDLL(find_library("c"))
@@ -179,12 +179,12 @@ def _set_proc_title() -> None:
         PR_SET_NAME = 15
 
         if sysname == "Linux":
-            proc_name = b"gajim"
+            proc_name = title.encode("utf-8")
             buff = create_string_buffer(len(proc_name) + 1)
             buff.value = proc_name
             libc.prctl(PR_SET_NAME, byref(buff), 0, 0, 0)
         elif sysname in ("FreeBSD", "OpenBSD", "NetBSD"):
-            libc.setproctitle("gajim")
+            libc.setproctitle(title)
 
 
 def run() -> None:
@@ -194,7 +194,7 @@ def run() -> None:
             sys.exit("You must not launch gajim as root, it is insecure.")
 
     _check_required_deps()
-    _set_proc_title()
+    set_proc_title("gajim")
     _set_env_vars()
     _init_translations()
     _init_gui("GTK")
