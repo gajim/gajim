@@ -185,8 +185,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
             return
 
         log.debug("Received message")
-        progress_page = self.get_page("progress")
-        GLib.idle_add(progress_page.set_fraction)
+        self.get_page("progress").set_fraction()
 
 
 class SelectTime(Page):
