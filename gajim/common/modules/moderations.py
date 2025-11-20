@@ -217,7 +217,7 @@ class Moderations(BaseModule):
                 account=self._account,
                 jid=remote_jid,
                 m_type=MessageType.GROUPCHAT,
-                from_mam=True,
+                mam=properties.mam,
                 pk=pk))
 
     def _is_occupant_id_supported(self, properties: MessageProperties) -> bool:

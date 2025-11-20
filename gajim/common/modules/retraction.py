@@ -140,7 +140,7 @@ class Retraction(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     m_type=m_type,
-                    from_mam=True,
+                    mam=properties.mam,
                     pk=pk,
                 )
             )

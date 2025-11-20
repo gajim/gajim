@@ -37,7 +37,7 @@ log = logging.getLogger("gajim.gtk.history_sync")
 
 class HistorySyncAssistant(Assistant, EventHelper):
     def __init__(self, account: str) -> None:
-        Assistant.__init__(self, width=600)
+        Assistant.__init__(self, name="HistorySyncAssistant", width=600)
         EventHelper.__init__(self)
 
         self.account = account
@@ -94,6 +94,9 @@ class HistorySyncAssistant(Assistant, EventHelper):
             self.show_page("success")
 
         self.show_all()
+
+    def get_active_query_id(self) -> str | None:
+        return self._query_id
 
     @overload
     def get_page(self, name: Literal["select"]) -> SelectTime: ...

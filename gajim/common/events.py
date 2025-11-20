@@ -24,6 +24,7 @@ from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import LocationData
+from nbxmpp.structs import MAMData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 
@@ -466,7 +467,7 @@ class MessageReceived(ApplicationEvent):
     account: str
     jid: JID
     m_type: MessageType
-    from_mam: bool
+    mam: MAMData | None
     pk: int
 
     @cached_property
@@ -474,6 +475,10 @@ class MessageReceived(ApplicationEvent):
         m = app.storage.archive.get_message_with_pk(self.pk)
         assert m is not None
         return m
+
+    @property
+    def from_mam(self) -> bool:
+        return self.mam is not None
 
 
 @dataclass

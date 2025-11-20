@@ -1295,7 +1295,20 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._set_startup_finished()
 
+    def _is_history_sync(self, event: events.MessageReceived) -> bool:
+        if event.mam is None:
+            return False
+
+        win = get_app_window("HistorySyncAssistant", account=event.account)
+        if win is None:
+            return False
+
+        return win.get_active_query_id() == event.mam.query_id
+
     def _on_message_received(self, event: events.MessageReceived) -> bool | None:
+        if self._is_history_sync(event):
+            return ged.STOP_PROPAGATION
+
         if self.chat_exists(event.account, event.jid):
             return
 

@@ -257,7 +257,7 @@ class Message(BaseModule):
         app.ged.raise_event(MessageReceived(account=self._account,
                                             jid=remote_jid,
                                             m_type=m_type,
-                                            from_mam=properties.is_mam_message,
+                                            mam=properties.mam,
                                             pk=pk))
 
     def _message_error_received(self,
