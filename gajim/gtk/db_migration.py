@@ -15,6 +15,7 @@ from gajim.common import app
 from gajim.common.events import DBMigrationError
 from gajim.common.events import DBMigrationFinished
 from gajim.common.events import DBMigrationProgress
+from gajim.common.events import DBMigrationStart
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
@@ -57,6 +58,7 @@ class DBMigration(GajimAppWindow, EventHelper):
 
         self.register_events(
             [
+                ("db-migration-start", 0, self._on_start),
                 ("db-migration-progress", 0, self._on_progress),
                 ("db-migration-error", 0, self._on_error),
                 ("db-migration-finished", 0, self._on_finished),
@@ -66,8 +68,16 @@ class DBMigration(GajimAppWindow, EventHelper):
     def _cleanup(self) -> None:
         self.unregister_events()
 
-    def _on_progress(self, event: DBMigrationProgress) -> None:
+    def _on_start(self, event: DBMigrationStart) -> None:
         self._ui.stack.set_visible_child_name("progress-page")
+        self._ui.status_label.set_text("0 %")
+        self._ui.version_label.set_text(_("Migration to version %s") % event.version)
+
+        context = GLib.MainContext.default()
+        while context.pending():
+            context.iteration(may_block=False)
+
+    def _on_progress(self, event: DBMigrationProgress) -> None:
         self._ui.status_label.set_text(f"{event.value} %")
 
         context = GLib.MainContext.default()

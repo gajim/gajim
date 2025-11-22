@@ -43,6 +43,15 @@ This may take a while…</property>
                     </style>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="version_label">
+                    <property name="label"></property>
+                    <property name="justify">center</property>
+                    <style>
+                      <class name="dimmed"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </property>
           </object>

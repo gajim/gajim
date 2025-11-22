@@ -886,6 +886,12 @@ class DBMigration(ApplicationEvent):
 
 
 @dataclass
+class DBMigrationStart(ApplicationEvent):
+    name: str = field(init=False, default='db-migration-start')
+    version: int
+
+
+@dataclass
 class DBMigrationProgress(ApplicationEvent):
     name: str = field(init=False, default='db-migration-progress')
     count: int

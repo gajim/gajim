@@ -12,6 +12,7 @@ from gajim.common import app
 from gajim.common.events import DBMigrationError
 from gajim.common.events import DBMigrationFinished
 from gajim.common.events import DBMigrationProgress
+from gajim.common.events import DBMigrationStart
 
 from gajim.gtk.db_migration import DBMigration
 
@@ -44,6 +45,7 @@ class DBMigrationTest:
         window.show()
 
     def _on_progress_clicked(self, _button: Gtk.Button) -> None:
+        app.ged.raise_event(DBMigrationStart(version=1))
         self._progressing = True
 
         count = 100000

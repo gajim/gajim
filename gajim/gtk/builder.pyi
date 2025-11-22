@@ -226,6 +226,7 @@ class DbMigrationBuilder(Builder):
     box: Gtk.Box
     stack: Gtk.Stack
     status_label: Gtk.Label
+    version_label: Gtk.Label
     error_label: Gtk.Label
     error_view: Gtk.TextView
     error_copy_button: Gtk.Button

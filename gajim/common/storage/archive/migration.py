@@ -28,6 +28,7 @@ from gajim.common import app
 from gajim.common.const import Trust
 from gajim.common.events import DBMigrationFinished
 from gajim.common.events import DBMigrationProgress
+from gajim.common.events import DBMigrationStart
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -150,6 +151,8 @@ class Migration:
                     raise
 
     def _pre_v7(self, user_version: int) -> None:
+        app.ged.raise_event(DBMigrationStart(version=7))
+
         if user_version == 0:
             # All migrations from 0.16.9 until 1.0.0
             statements = [
@@ -203,6 +206,8 @@ class Migration:
             self._execute_multiple(statements)
 
     def _v8(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=8))
+
         for account_name in app.settings.get_accounts():
             jid = app.get_jid_from_account(account_name)
             self._accounts[jid] = account_name
@@ -243,6 +248,7 @@ class Migration:
             conn.execute(sa.text("PRAGMA user_version=8"))
 
     def _v9(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=9))
         statements = [
             "CREATE INDEX IF NOT EXISTS idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);",
             "PRAGMA user_version=9",
@@ -251,6 +257,7 @@ class Migration:
         self._execute_multiple(statements)
 
     def _v10(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=10))
         self._execute_multiple(["PRAGMA foreign_keys=OFF"])
 
         with self._engine.begin() as conn:
@@ -266,6 +273,8 @@ class Migration:
                 sa.delete(mod.Occupant).where(mod.Occupant.pk.not_in(occupant_pks))
             )
             conn.commit()
+
+        app.ged.raise_event(DBMigrationProgress(count=100, progress=50))
 
         with self._engine.begin() as conn:
 
@@ -290,10 +299,12 @@ class Migration:
         self._execute_multiple(["PRAGMA foreign_keys=ON", "PRAGMA user_version=10"])
 
     def _v11_and_v12(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=12))
         mod.Base.metadata.create_all(self._engine)
         self._execute_multiple(["PRAGMA user_version=12"])
 
     def _v13(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=13))
         statements = [
             (
                 'ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
@@ -304,6 +315,7 @@ class Migration:
         self._execute_multiple_with_error(statements)
 
     def _v14(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=14))
         statements = [
             (
                 "CREATE INDEX IF NOT EXISTS idx_displayed_marker_last ON displayed_marker "
@@ -320,6 +332,7 @@ class Migration:
     def _v15(self) -> None:
         # In the past some PM messages were not correctly discovered
         # Find them and set the type and resource
+        app.ged.raise_event(DBMigrationStart(version=15))
         unique_remotes_stmt = (
             sa.select(mod.Message.fk_remote_pk).distinct().where(mod.Message.type == 3)
         )
@@ -327,6 +340,7 @@ class Migration:
             mod.Remote.pk.in_(unique_remotes_stmt.scalar_subquery())
         )
 
+        app.ged.raise_event(DBMigrationProgress(count=100, progress=10))
         with self._archive.get_session() as s:
             remotes = s.execute(remotes_stmt).scalars().all()
             for remote in remotes:
