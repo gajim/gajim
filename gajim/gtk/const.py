@@ -366,15 +366,17 @@ SHORTCUTS = {
     "win.increase-app-font-size": ShortcutData(
         label=_("Increase Font Size"),
         category="general",
-        accelerators=["<Primary>plus"],
+        accelerators=["<Primary>plus", "<Primary>KP_Add"],
     ),
     "win.decrease-app-font-size": ShortcutData(
         label=_("Decrease Font Size"),
         category="general",
-        accelerators=["<Primary>minus"],
+        accelerators=["<Primary>minus", "<Primary>KP_Subtract"],
     ),
     "win.reset-app-font-size": ShortcutData(
-        label=_("Reset Font Size"), category="general", accelerators=["<Primary>0"]
+        label=_("Reset Font Size"),
+        category="general",
+        accelerators=["<Primary>0", "<Primary>KP_0"],
     ),
     # chats
     "win.focus-search": ShortcutData(
@@ -431,58 +433,94 @@ SHORTCUTS = {
         accelerators=["<Primary>ISO_Left_Tab"],
     ),
     "win.switch-chat-1": ShortcutData(
-        label=_("Switch to Chat 1"), category="chats", accelerators=["<Alt>1"]
+        label=_("Switch to Chat 1"),
+        category="chats",
+        accelerators=["<Alt>1", "<Alt>KP_1"],
     ),
     "win.switch-chat-2": ShortcutData(
-        label=_("Switch to Chat 2"), category="chats", accelerators=["<Alt>2"]
+        label=_("Switch to Chat 2"),
+        category="chats",
+        accelerators=["<Alt>2", "<Alt>KP_2"],
     ),
     "win.switch-chat-3": ShortcutData(
-        label=_("Switch to Chat 3"), category="chats", accelerators=["<Alt>3"]
+        label=_("Switch to Chat 3"),
+        category="chats",
+        accelerators=["<Alt>3", "<Alt>KP_3"],
     ),
     "win.switch-chat-4": ShortcutData(
-        label=_("Switch to Chat 4"), category="chats", accelerators=["<Alt>4"]
+        label=_("Switch to Chat 4"),
+        category="chats",
+        accelerators=["<Alt>4", "<Alt>KP_4"],
     ),
     "win.switch-chat-5": ShortcutData(
-        label=_("Switch to Chat 5"), category="chats", accelerators=["<Alt>5"]
+        label=_("Switch to Chat 5"),
+        category="chats",
+        accelerators=["<Alt>5", "<Alt>KP_5"],
     ),
     "win.switch-chat-6": ShortcutData(
-        label=_("Switch to Chat 6"), category="chats", accelerators=["<Alt>6"]
+        label=_("Switch to Chat 6"),
+        category="chats",
+        accelerators=["<Alt>6", "<Alt>KP_6"],
     ),
     "win.switch-chat-7": ShortcutData(
-        label=_("Switch to Chat 7"), category="chats", accelerators=["<Alt>7"]
+        label=_("Switch to Chat 7"),
+        category="chats",
+        accelerators=["<Alt>7", "<Alt>KP_7"],
     ),
     "win.switch-chat-8": ShortcutData(
-        label=_("Switch to Chat 8"), category="chats", accelerators=["<Alt>8"]
+        label=_("Switch to Chat 8"),
+        category="chats",
+        accelerators=["<Alt>8", "<Alt>KP_8"],
     ),
     "win.switch-chat-9": ShortcutData(
-        label=_("Switch to Chat 9"), category="chats", accelerators=["<Alt>9"]
+        label=_("Switch to Chat 9"),
+        category="chats",
+        accelerators=["<Alt>9", "<Alt>KP_9"],
     ),
     "win.switch-workspace-1": ShortcutData(
-        label=_("Switch to Workspace 1"), category="chats", accelerators=["<Primary>1"]
+        label=_("Switch to Workspace 1"),
+        category="chats",
+        accelerators=["<Primary>1", "<Primary>KP_1"],
     ),
     "win.switch-workspace-2": ShortcutData(
-        label=_("Switch to Workspace 2"), category="chats", accelerators=["<Primary>2"]
+        label=_("Switch to Workspace 2"),
+        category="chats",
+        accelerators=["<Primary>2", "<Primary>KP_2"],
     ),
     "win.switch-workspace-3": ShortcutData(
-        label=_("Switch to Workspace 3"), category="chats", accelerators=["<Primary>3"]
+        label=_("Switch to Workspace 3"),
+        category="chats",
+        accelerators=["<Primary>3", "<Primary>KP_3"],
     ),
     "win.switch-workspace-4": ShortcutData(
-        label=_("Switch to Workspace 4"), category="chats", accelerators=["<Primary>4"]
+        label=_("Switch to Workspace 4"),
+        category="chats",
+        accelerators=["<Primary>4", "<Primary>KP_4"],
     ),
     "win.switch-workspace-5": ShortcutData(
-        label=_("Switch to Workspace 5"), category="chats", accelerators=["<Primary>5"]
+        label=_("Switch to Workspace 5"),
+        category="chats",
+        accelerators=["<Primary>5", "<Primary>KP_5"],
     ),
     "win.switch-workspace-6": ShortcutData(
-        label=_("Switch to Workspace 6"), category="chats", accelerators=["<Primary>6"]
+        label=_("Switch to Workspace 6"),
+        category="chats",
+        accelerators=["<Primary>6", "<Primary>KP_6"],
     ),
     "win.switch-workspace-7": ShortcutData(
-        label=_("Switch to Workspace 7"), category="chats", accelerators=["<Primary>7"]
+        label=_("Switch to Workspace 7"),
+        category="chats",
+        accelerators=["<Primary>7", "<Primary>KP_7"],
     ),
     "win.switch-workspace-8": ShortcutData(
-        label=_("Switch to Workspace 8"), category="chats", accelerators=["<Primary>8"]
+        label=_("Switch to Workspace 8"),
+        category="chats",
+        accelerators=["<Primary>8", "<Primary>KP_8"],
     ),
     "win.switch-workspace-9": ShortcutData(
-        label=_("Switch to Workspace 9"), category="chats", accelerators=["<Primary>9"]
+        label=_("Switch to Workspace 9"),
+        category="chats",
+        accelerators=["<Primary>9", "<Primary>KP_9"],
     ),
     # messages
     "win.show-emoji-chooser": ShortcutData(

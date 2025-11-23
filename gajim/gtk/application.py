@@ -73,7 +73,6 @@ from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.const import SHORTCUTS
 from gajim.gtk.util.icons import get_icon_theme
-from gajim.gtk.util.misc import add_alternative_accelerator
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.misc import open_uri
 from gajim.gtk.util.window import get_app_window
@@ -541,9 +540,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         shortcuts.update(user_shortcuts)
 
         for action, accelerators in shortcuts.items():
-            self.set_accels_for_action(
-                action, add_alternative_accelerator(accelerators)
-            )
+            self.set_accels_for_action(action, accelerators)
 
     def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
         self.update_feature_actions_state(event.account)
