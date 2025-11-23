@@ -31,7 +31,6 @@ from gajim.common.util.classes import Singleton
 from .events import PluginAdded
 from .events import PluginRemoved
 from .gajimplugin import GajimPlugin
-from .gajimplugin import GajimPluginException
 from .helpers import GajimPluginActivateException
 from .helpers import is_shipped_plugin
 from .manifest import PluginManifest
@@ -196,6 +195,8 @@ class PluginManager(metaclass=Singleton):
             return None
 
         if manifest.short_name not in app.settings.get_plugins():
+            # Enable plugins automatically when we first see them
+            # if they are shipped by the distro
             app.settings.set_plugin_setting(
                 manifest.short_name, "active", manifest.is_shipped
             )
@@ -204,7 +205,10 @@ class PluginManager(metaclass=Singleton):
         plugin_obj.active = False
 
         if activate:
-            self.activate_plugin(plugin_obj)
+            try:
+                self.activate_plugin(plugin_obj)
+            except GajimPluginActivateException:
+                pass
 
         app.ged.raise_event(PluginAdded(manifest=manifest))
 
@@ -372,7 +376,7 @@ class PluginManager(metaclass=Singleton):
 
     def _remove_name_from_encryption_plugins(self, plugin: GajimPlugin) -> None:
         if plugin.encryption_name:
-            del self.encryption_plugins[plugin.encryption_name]
+            self.encryption_plugins.pop(plugin.encryption_name, None)
 
     def _register_modules_with_handlers(self, plugin: GajimPlugin) -> None:
         if not hasattr(plugin, "modules"):
@@ -390,7 +394,12 @@ class PluginManager(metaclass=Singleton):
             return
         for client in app.get_clients():
             for module in plugin.modules:
-                instance = cast(BaseModule, client.get_module(module.name))
+                try:
+                    instance = cast(BaseModule, client.get_module(module.name))
+                except Exception:
+                    log.exception("Error while unregistering module")
+                    continue
+
                 modules.unregister_single_module(client, module.name)
 
                 for handler in instance.handlers:
@@ -404,18 +413,21 @@ class PluginManager(metaclass=Singleton):
         if plugin.active or not plugin.activatable:
             return
 
-        self._add_gui_extension_points_handlers_from_plugin(plugin)
-        self._add_encryption_name_from_plugin(plugin)
-        self._handle_all_gui_extension_points_with_plugin(plugin)
-        self._register_events_handlers_in_ged(plugin)
-        self._register_modules_with_handlers(plugin)
-
-        self.active_plugins.append(plugin)
         try:
+            self._add_gui_extension_points_handlers_from_plugin(plugin)
+            self._add_encryption_name_from_plugin(plugin)
+            self._handle_all_gui_extension_points_with_plugin(plugin)
+            self._register_events_handlers_in_ged(plugin)
+            self._register_modules_with_handlers(plugin)
+
+            self.active_plugins.append(plugin)
+
             plugin.activate()
-        except GajimPluginException as e:
+        except Exception as error:
             self.deactivate_plugin(plugin)
-            raise GajimPluginActivateException(str(e))
+            log.exception("Error while activating plugin")
+            raise GajimPluginActivateException(str(error))
+
         app.settings.set_plugin_setting(plugin.manifest.short_name, "active", True)
         plugin.active = True
 
@@ -423,15 +435,7 @@ class PluginManager(metaclass=Singleton):
             app.commands.init()
 
     def deactivate_plugin(self, plugin: GajimPlugin) -> None:
-        # remove GUI extension points handlers (provided by plug-in) from
-        # handlers list
-        for (
-            gui_extpoint_name,
-            gui_extpoint_handlers,
-        ) in plugin.gui_extension_points.items():
-            self.gui_extension_points_handlers[gui_extpoint_name].remove(
-                gui_extpoint_handlers
-            )
+        self._remove_gui_extension_points_handlers_from_plugin(plugin)
 
         # detaching plug-in from handler GUI extension points (calling
         # cleaning up method that must be provided by plug-in developer
@@ -459,7 +463,11 @@ class PluginManager(metaclass=Singleton):
         plugin.deactivate()
 
         self._unregister_modules_with_handlers(plugin)
-        self.active_plugins.remove(plugin)
+        try:
+            self.active_plugins.remove(plugin)
+        except ValueError:
+            pass
+
         app.settings.set_plugin_setting(plugin.manifest.short_name, "active", False)
         plugin.active = False
         app.commands.init()
@@ -474,6 +482,20 @@ class PluginManager(metaclass=Singleton):
             self.gui_extension_points_handlers.setdefault(gui_extpoint_name, []).append(
                 gui_extpoint_handlers
             )
+
+    def _remove_gui_extension_points_handlers_from_plugin(
+        self, plugin: GajimPlugin
+    ) -> None:
+        for (
+            gui_extpoint_name,
+            gui_extpoint_handlers,
+        ) in plugin.gui_extension_points.items():
+            try:
+                self.gui_extension_points_handlers[gui_extpoint_name].remove(
+                    gui_extpoint_handlers
+                )
+            except ValueError:
+                pass
 
     def _add_encryption_name_from_plugin(self, plugin: GajimPlugin) -> None:
         if plugin.encryption_name:
@@ -624,9 +646,6 @@ class PluginManager(metaclass=Singleton):
         """
         Deactivate and remove plugin from `plugins` list
         """
-        if not plugin:
-            return
-
         self._remove_plugin(plugin)
         self.delete_plugin_files(Path(plugin.__path__))
         if not is_shipped_plugin(Path(plugin.__path__)):

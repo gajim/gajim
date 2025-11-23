@@ -12,6 +12,7 @@ from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from packaging.version import Version
 
@@ -263,9 +264,11 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
         plugin = app.plugin_manager.get_plugin(manifest.short_name)
         plugin_active = plugin.active if plugin is not None else False
 
-        self._connect(self._config_button, "clicked", self._on_config_clicked)
         self._enable_switch.set_active(plugin_active)
-        self._connect(self._enable_switch, "state-set", self._on_enable_switch_toggled)
+        self._connect(self._config_button, "clicked", self._on_config_clicked)
+        self._active_signal_id = self._connect(
+            self._enable_switch, "notify::active", self._on_switch_active
+        )
         self._connect(self._install_button, "clicked", self._on_install_clicked)
         self._connect(self._update_button, "clicked", self._on_install_clicked)
         self._connect(self._uninstall_button, "clicked", self._on_uninstall_clicked)
@@ -389,20 +392,25 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
             return True, plugin.available_text
         return False, ""
 
-    def _on_enable_switch_toggled(self, _switch: Gtk.Switch, state: bool) -> None:
-        self._config_button.set_sensitive(state)
-
+    def _on_switch_active(self, switch: Gtk.Switch, spec: GObject.ParamSpec) -> None:
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
         assert plugin is not None
 
-        if plugin.active:
-            app.plugin_manager.deactivate_plugin(plugin)
-        else:
+        if switch.get_active():
             try:
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
+                self._config_button.set_sensitive(False)
+                with switch.handler_block(self._active_signal_id):
+                    switch.set_active(False)
                 InformationAlertDialog(_("Plugin Failed"), str(e))
-                return
+
+            else:
+                self._config_button.set_sensitive(True)
+
+        else:
+            app.plugin_manager.deactivate_plugin(plugin)
+            self._config_button.set_sensitive(False)
 
     def _on_config_clicked(self, _button: Gtk.Button) -> None:
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
