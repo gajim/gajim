@@ -326,6 +326,7 @@ class ShortcutData:
     label: str
     category: str
     accelerators: list[str]
+    allow_rebind: bool = True
 
 
 SHORTCUT_CATEGORIES = {
@@ -396,7 +397,7 @@ SHORTCUTS = {
         accelerators=["<Primary><Shift>S"],
     ),
     "win.escape": ShortcutData(
-        label=_("Unselect Chat"), category="chats", accelerators=["Escape"]
+        label="Escape", category="chats", accelerators=["Escape"], allow_rebind=False
     ),
     "win.close-chat": ShortcutData(
         label=_("Close Chat"), category="chats", accelerators=["<Primary>W"]

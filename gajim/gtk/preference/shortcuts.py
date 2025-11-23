@@ -64,6 +64,9 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
             self.add(preferences_group)
 
         for action_name, shortcut_data in SHORTCUTS.items():
+            if not shortcut_data.allow_rebind:
+                continue
+
             row = ShortcutsManagerRow(action_name)
             self._connect(row, "activated", self._on_activated)
 

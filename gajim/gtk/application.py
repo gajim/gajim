@@ -526,10 +526,18 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _load_shortcuts(self) -> None:
         shortcuts = {
-            action_name: shortcut_data.accelerators
-            for action_name, shortcut_data in SHORTCUTS.items()
+            action_name: data.accelerators for action_name, data in SHORTCUTS.items()
         }
+        no_rebind_allowed = [
+            action_name
+            for action_name, data in SHORTCUTS.items()
+            if not data.allow_rebind
+        ]
+
         user_shortcuts = self.get_user_shortcuts()
+        for action_name in no_rebind_allowed:
+            shortcuts.pop(action_name, None)
+
         shortcuts.update(user_shortcuts)
 
         for action, accelerators in shortcuts.items():
