@@ -517,8 +517,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 self._chat_page.remove_chat(contact.account, contact.jid)
                 return None
 
-        if action_name in ("escape", "close-chat"):
-            # Attempt to close Gajim window if no chat has been selected
+        if action_name == "escape" and app.settings.get("escape_key_closes"):
+            self.close()
+
+        elif action_name == "close-chat":
             self.close()
 
         elif action_name == "restore-chat":
