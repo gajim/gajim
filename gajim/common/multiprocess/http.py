@@ -274,7 +274,6 @@ def http_request(
 
     with file_method() as output_file:
 
-        received_length = 0
         chunk_size = math.ceil(content_length / 100)
         chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
 
@@ -282,11 +281,10 @@ def http_request(
             if event.is_set():
                 raise CancelledError
 
-            received_length += len(data)
-            if received_length > content_length:
-                raise OverflowError(f"{received_length} > {content_length}")
+            if resp.num_bytes_downloaded > content_length:
+                raise OverflowError(f"{resp.num_bytes_downloaded} > {content_length}")
 
-            progress = round(received_length / content_length, 2)
+            progress = round(resp.num_bytes_downloaded / content_length, 2)
             resp_hash_obj.update(data)
             output_file.write(decryptor.decrypt(data))
             if with_resp_progress:
