@@ -232,13 +232,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._start_queue_resize_if_needed()
 
     def _start_queue_resize_if_needed(self) -> None:
-        if self._wait_queue_resize is None:
+        if self._wait_queue_resize is None and self._contact is not None:
             self._wait_queue_resize = GLib.timeout_add(50, self._queue_resize_if_needed)
 
     def _queue_resize_if_needed(self) -> bool:
         if (
             self._ui.input_scrolled.get_height()
-            == self._ui.input_scrolled.get_size_request()[1]
+            >= self._ui.input_scrolled.get_size_request()[1]
         ):
             self._wait_queue_resize = None
             return GLib.SOURCE_REMOVE
