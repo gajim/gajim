@@ -199,7 +199,8 @@ class FileTransfer(GObject.Object):
 
         self._id = id_
         self._state = FTState.CREATED
-        self._progress = 0
+        self._progress: int = 0
+        self._total: int | None = None
 
         self._event = event
         self._output = output
@@ -220,9 +221,12 @@ class FileTransfer(GObject.Object):
     def state(self) -> int:
         return self._state
 
-    @GObject.Property(type=float, flags=GObject.ParamFlags.READABLE)
-    def progress(self) -> float:
+    @GObject.Property(type=int, flags=GObject.ParamFlags.READABLE)
+    def progress(self) -> int:
         return self._progress
+
+    def get_total(self) -> int | None:
+        return self._total
 
     def process_multiple_states(
         self, states: list[TransferState | TransferMetadata]
@@ -240,6 +244,7 @@ class FileTransfer(GObject.Object):
                 case TransferState():
                     self._state = state.state
                     if self._state == FTState.IN_PROGRESS:
+                        self._total = state.total
                         self._progress = state.progress
 
         if self._state != old_state:

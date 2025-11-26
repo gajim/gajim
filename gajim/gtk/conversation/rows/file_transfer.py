@@ -115,20 +115,20 @@ class FileTransferRow(BaseRow):
         self._ui.file_size.set_text(size_total)
 
         progress = transfer.get_progress()
-        seen = transfer.size * progress
+        fraction = progress / transfer.size
 
-        bytes_sec = int(round(seen / (time_now - self._start_time), 1))
+        bytes_sec = int(round(progress / (time_now - self._start_time), 1))
         speed = f"{GLib.format_size_full(bytes_sec, self._units)}/s"
         self._ui.transfer_progress.set_tooltip_text(_("Speed: %s") % speed)
 
         if bytes_sec == 0:
             eta = "∞"
         else:
-            eta = format_eta(round((transfer.size - seen) / bytes_sec))
+            eta = format_eta(round((transfer.size - progress) / bytes_sec))
 
         self._ui.transfer_progress.set_text(
             _("%(progress)s %% (%(time)s remaining)")
-            % {"progress": round(progress * 100), "time": eta}
+            % {"progress": round(fraction * 100), "time": eta}
         )
 
-        self._ui.progress_bar.set_fraction(progress)
+        self._ui.progress_bar.set_fraction(fraction)

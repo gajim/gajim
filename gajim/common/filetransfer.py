@@ -42,10 +42,10 @@ class FileTransfer(Observable):
     def error_domain(self) -> str | None:
         return self._error_domain
 
-    def get_progress(self) -> float:
+    def get_progress(self) -> int:
         return self._progress
 
-    def set_progress(self, progress: float) -> None:
+    def set_progress(self, progress: int) -> None:
         self._progress = progress
         self.update_progress()
 

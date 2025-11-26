@@ -29,6 +29,7 @@ from gajim.common.enum import FTState
 
 MIN_CHUNK_SIZE = 1024 * 100  # 100 KB
 DEFAULT_MAX_CONTENT_LENGTH = 1024 * 1024 * 10  # 10 MB
+NO_CONTENT_LENGTH_MAX_DOWNLOAD = 1024 * 1024  # 1 MB
 USER_AGENT = "Gajim 2.x"
 
 log = logging.getLogger("gajim.http")
@@ -38,13 +39,14 @@ log = logging.getLogger("gajim.http")
 class TransferState:
     id: str
     state: FTState
-    progress: float = 0
+    total: int | None = None
+    progress: int = 0
 
 
 @dataclass
 class TransferMetadata:
     id: str
-    content_length: int
+    content_length: int | None
     content_type: str | None
 
 
@@ -53,7 +55,7 @@ class HTTPResult:
     hash_algo: str
     req_hash_value: str
     resp_hash_value: str
-    content_length: int
+    content_length: int | None
     content_type: str | None
     content: bytes
 
@@ -96,11 +98,11 @@ class NonEncryptor:
         return b""
 
 
-def get_header_values(headers: httpx.Headers) -> tuple[int, str | None]:
+def get_header_values(headers: httpx.Headers) -> tuple[int | None, str | None]:
     try:
         content_length = max(int(headers["Content-Length"]), 0)
     except Exception:
-        content_length = 0
+        content_length = None
 
     try:
         content_type = headers["Content-Type"]
@@ -108,6 +110,12 @@ def get_header_values(headers: httpx.Headers) -> tuple[int, str | None]:
         content_type = None
 
     return content_length, content_type
+
+
+def get_chunk_size(content_length: int | None) -> int:
+    if content_length is None:
+        return MIN_CHUNK_SIZE
+    return max(math.ceil(content_length / 100), MIN_CHUNK_SIZE)
 
 
 def http_request(
@@ -185,10 +193,9 @@ def http_request(
 
     def _read_file_generator() -> Iterable[bytes]:
         if with_req_progress:
-            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
+            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS))
 
-        chunk_size = math.ceil(req_content_size / 100)
-        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
+        chunk_size = get_chunk_size(req_content_size)
 
         uploaded = 0
         while data := input_file.read(chunk_size):
@@ -199,19 +206,33 @@ def http_request(
             req_hash_obj.update(data)
             data = encryptor.encrypt(data)
             uploaded += len(data)
-            progress = round(uploaded / req_content_size, 2)
             if with_req_progress:
                 queue.put(
                     TransferState(
-                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
+                        id=ft_id,
+                        state=FTState.IN_PROGRESS,
+                        total=req_content_size,
+                        progress=uploaded,
                     )
                 )
             yield data
 
-        yield encryptor.finalize()
+        data = encryptor.finalize()
+        uploaded += len(data)
+        req_hash_obj.update(data)
+
         if with_req_progress:
-            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
+            queue.put(
+                TransferState(
+                    id=ft_id,
+                    state=FTState.IN_PROGRESS,
+                    total=req_content_size,
+                    progress=uploaded,
+                )
+            )
+
         input_file.close()
+        yield data
 
     read_file_generator = None
     if input_:
@@ -249,8 +270,9 @@ def http_request(
             content=b"",
         )
 
-    if max_content_length >= 0 and content_length > max_content_length:
-        raise MaxContentLengthExceeded(content_length)
+    if content_length is not None:
+        if max_content_length >= 0 and content_length > max_content_length:
+            raise MaxContentLengthExceeded(content_length)
 
     if allowed_content_types is not None:
         if content_type is None or content_type not in allowed_content_types:
@@ -268,35 +290,45 @@ def http_request(
         file_method = partial(output.open, mode="wb")
 
     if with_resp_progress:
-        queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=0))
+        queue.put(
+            TransferState(
+                id=ft_id, state=FTState.IN_PROGRESS, total=content_length, progress=0
+            )
+        )
 
     resp_hash_obj = hashlib.new(hash_algo)
 
+    max_bytes_downloaded = content_length or NO_CONTENT_LENGTH_MAX_DOWNLOAD
+
     with file_method() as output_file:
-
-        chunk_size = math.ceil(content_length / 100)
-        chunk_size = max(chunk_size, MIN_CHUNK_SIZE)
-
+        chunk_size = get_chunk_size(content_length)
         for data in resp.iter_bytes(chunk_size=chunk_size):
             if event.is_set():
                 raise CancelledError
 
-            if resp.num_bytes_downloaded > content_length:
-                raise OverflowError(f"{resp.num_bytes_downloaded} > {content_length}")
+            if (
+                max_bytes_downloaded >= 0
+                and resp.num_bytes_downloaded > max_bytes_downloaded
+            ):
+                raise OverflowError(
+                    f"{resp.num_bytes_downloaded} > {max_bytes_downloaded}"
+                )
 
-            progress = round(resp.num_bytes_downloaded / content_length, 2)
             resp_hash_obj.update(data)
             output_file.write(decryptor.decrypt(data))
             if with_resp_progress:
                 queue.put(
                     TransferState(
-                        id=ft_id, state=FTState.IN_PROGRESS, progress=progress
+                        id=ft_id,
+                        state=FTState.IN_PROGRESS,
+                        total=content_length,
+                        progress=resp.num_bytes_downloaded,
                     )
                 )
 
-        output_file.write(decryptor.finalize())
-        if with_resp_progress:
-            queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS, progress=1))
+        data = decryptor.finalize()
+        output_file.write(data)
+        resp_hash_obj.update(data)
 
         content = b""
         if isinstance(output_file, BytesIO):

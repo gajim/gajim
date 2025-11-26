@@ -338,8 +338,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
     ) -> None:
 
         progress = ftobj.get_property("progress")
-        self._progress_text.set_label(f"{int(progress * 100)} %")
-        self._progressbar.set_fraction(progress)
+        total = ftobj.get_total()
+        if total is None:
+            self._progressbar.set_pulse_step(0.1)
+            self._progressbar.pulse()
+            return
+
+        fraction = progress / total
+        self._progress_text.set_label(f"{int(fraction * 100)} %")
+        self._progressbar.set_fraction(fraction)
 
     def _on_download_finished(
         self,
@@ -389,7 +396,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
                 else:
                     self._mime_type = metadata.content_type or ""
-                    self._file_size = metadata.content_length
+                    self._file_size = metadata.content_length or -1
 
         self._set_widget_state(next_state)
 
