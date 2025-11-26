@@ -103,7 +103,7 @@ class GCTooltip:
                     css_provider = Gtk.CssProvider()
                     css_provider.load_from_string(
                         ".badge-hat "
-                        f"{{background-color: hsl({hat.hue * 360}, 100%, 25%);}}"
+                        f"{{background-color: hsl({hat.hue}, 100%, 25%);}}"
                     )
                     context = hat_badge.get_style_context()
                     context.add_provider(
