@@ -96,11 +96,14 @@ class GajimDropDown(Gtk.DropDown):
             return None
         return selected_item.get_property("key")
 
+    def get_selected_item(self) -> KeyValueItem | None:
+        return cast(KeyValueItem | None, super().get_selected_item())
+
     def select_key(self, key: Any) -> None:
         for pos in range(self._model.get_n_items()):
-            item = self._model.get_item(pos)
+            item = cast(KeyValueItem | None, self._model.get_item(pos))
             assert item is not None
-            if item.props.key == key:
+            if item.key == key:
                 self.set_selected(pos)
 
     def do_unroot(self) -> None:
