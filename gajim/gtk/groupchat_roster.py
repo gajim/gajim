@@ -479,7 +479,7 @@ class GroupchatContactListItem(GObject.Object):
         )
 
     def __repr__(self) -> str:
-        return f"GroupchatContactListItem: {self.props.nick}"
+        return f"GroupchatContactListItem: {self.nick}"
 
 
 @Gtk.Template(string=get_ui_string("groupchat_contact_view_item.ui"))

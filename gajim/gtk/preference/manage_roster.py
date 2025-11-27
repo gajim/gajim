@@ -619,7 +619,7 @@ class RosterListItem(GObject.Object):
                 raise ValueError("Invalid value: %s" % ask)
 
     def __repr__(self) -> str:
-        return f"RosterListItem: {self.props.jid} {self.props.name}"
+        return f"RosterListItem: {self.jid} {self.name}"
 
 
 class RosterViewItemLabel(Gtk.Label):

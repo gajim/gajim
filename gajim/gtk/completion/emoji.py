@@ -185,7 +185,7 @@ class EmojiCompletionListItem(BaseCompletionListItem, GObject.Object):
     var5 = GObject.Property(type=str, default="")
 
     def get_text(self) -> str:
-        return self.props.emoji
+        return self.emoji
 
 
 @Gtk.Template(string=get_ui_string("emoji_completion_view_item.ui"))

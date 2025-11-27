@@ -211,7 +211,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
     def _on_account_change(self, dropdown: GajimDropDown, *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
-        self._selected_send_account = item.props.key
+        self._selected_send_account = item.key
 
     def _set_title(self) -> None:
         if self._selected_account == "AllAccounts":

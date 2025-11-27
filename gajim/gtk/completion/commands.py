@@ -33,7 +33,7 @@ class CommandsCompletionListItem(BaseCompletionListItem, GObject.Object):
     usage = GObject.Property(type=str)
 
     def get_text(self) -> str:
-        return f"/{self.props.command} "
+        return f"/{self.command} "
 
 
 class CommandsCompletionViewItem(

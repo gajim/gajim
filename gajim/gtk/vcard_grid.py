@@ -1038,6 +1038,6 @@ class TzPropertyGui(VCardPropertyGui):
         item = dropdown.get_selected_item()
         assert item is not None
         assert isinstance(self._prop, TzProperty)
-        self._prop.value = item.props.key
+        self._prop.value = item.key
         self._value_label.update_text()
         self._time_label.update_text()

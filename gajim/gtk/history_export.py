@@ -218,7 +218,7 @@ class ExportSettings(Page):
     def _on_account_changed(self, dropdown: GajimDropDown, *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
-        account = item.props.key
+        account = item.key
         self._account = account
         self._update_chat_dropdown()
         self._set_complete()
@@ -228,7 +228,7 @@ class ExportSettings(Page):
         if item is None:
             return
 
-        address = item.props.key
+        address = item.key
         if address:
             self._jid = JID.from_string(address)
         else:

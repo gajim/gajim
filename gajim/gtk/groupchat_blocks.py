@@ -167,7 +167,7 @@ class BlockListItem(GObject.Object):
         )
 
     def __repr__(self) -> str:
-        return f"BlockListItem: {self.props.occupant.id} {self.props.occupant.nickname}"
+        return f"BlockListItem: {self.id} {self.nickname}"
 
 
 class BlockViewItemLabel(Gtk.Label):
