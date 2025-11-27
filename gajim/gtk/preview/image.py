@@ -101,7 +101,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
     ) -> None:
 
         if data is None:
-            log.error("%s: %s", self._thumb_path.name, error)
+            log.error("Loading thumbnail failed, %s: %s", self._thumb_path.name, error)
             self.emit("display-error")
             return
 
