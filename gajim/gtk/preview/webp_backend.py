@@ -111,6 +111,17 @@ class WebPBackend(GObject.Object, SignalManager):
         self.emit("playback-changed", False)
 
     def setup_pipeline(self) -> None:
+        try:
+            self._setup_pipeline()
+        except Exception:
+            log.exception("Unable to play animated image")
+            self._pipeline_setup_failed = True
+            self.emit("pipeline-changed", False)
+        else:
+            self._pipeline_is_setup = True
+            self.emit("pipeline-changed", True)
+
+    def _setup_pipeline(self) -> None:
         if (
             self._creating_pipeline
             or self._pipeline_is_setup
@@ -140,9 +151,7 @@ class WebPBackend(GObject.Object, SignalManager):
             self._sink,
         ]
         if any(elem is None for elem in self._pipeline_elements):
-            log.error("Could not set up pipeline for GIF preview")
-            self._pipeline_setup_failed = True
-            return
+            raise Exception("Could not set up pipeline for GIF preview")
 
         assert self._pipeline is not None
         assert self._src is not None
@@ -213,8 +222,8 @@ class WebPBackend(GObject.Object, SignalManager):
             self.emit("pipeline-changed", False)
             return GLib.SOURCE_REMOVE
 
-        self.emit("pipeline-changed", True)
         self._pipeline_is_setup = True
+        self.emit("pipeline-changed", True)
         return GLib.SOURCE_REMOVE
 
     def _push_frame(self):

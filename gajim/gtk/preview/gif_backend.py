@@ -87,10 +87,20 @@ class GifBackend(GObject.Object, SignalManager):
         self.emit("playback-changed", False)
 
     def setup_pipeline(self) -> None:
+        try:
+            self._setup_pipeline()
+        except Exception:
+            log.exception("Unable to play animated image")
+            self._pipeline_setup_failed = True
+            self.emit("pipeline-changed", False)
+        else:
+            self._pipeline_is_setup = True
+            self.emit("pipeline-changed", True)
+
+    def _setup_pipeline(self) -> None:
         if self._pipeline_is_setup:
             return
 
-        self._pipeline_is_setup = True
         self._pipeline = Gst.Pipeline.new()
         self._src = Gst.ElementFactory.make("filesrc")
         self._decodebin = Gst.ElementFactory.make("decodebin")
@@ -133,7 +143,6 @@ class GifBackend(GObject.Object, SignalManager):
 
         assert self._sink is not None
         self._paintable = self._sink.get_property("paintable")
-        self.emit("pipeline-changed", True)
 
     def _on_pad_added(self, _bin: Gst.Bin, pad: Gst.Pad) -> None:
         assert pad is not None
