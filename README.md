@@ -53,22 +53,13 @@ thoughts or discuss the news with your groups.
 - [GeoClue](https://gitlab.freedesktop.org/geoclue/geoclue) for sharing your location
 - [GSound](https://gitlab.gnome.org/GNOME/gsound) for sound on Linux
 
-#### For Video and Audio Calls
-
-- [Farstream](https://gitlab.freedesktop.org/farstream/farstream)
-- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
-- [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
-- [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (for gst-plugin-gtk4)
-- [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
-- [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
-
 #### For Voice Messages
 
 - [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
 - [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
 - [gst-plugins-good](https://gitlab.freedesktop.org/gstreamer/gst-plugins-good)
 
-#### Rich File Previews 
+#### Rich File Previews
 
 - [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
 - [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
