@@ -32,6 +32,8 @@ from gajim.common.util.uri import get_geo_choords
 
 log = logging.getLogger("gajim.c.util.preview")
 
+MIME_TYPE_MAP = {"application/x-ext-webp": "image/webp"}
+
 
 def get_image_paths(
     uri: str, urlparts: ParseResult, size: int, orig_dir: Path, thumb_dir: Path
@@ -112,6 +114,12 @@ def guess_mime_type(file_path: Path | str, data: bytes | None = None) -> str:
         # Gio does also guess based on file content
         extension, _ = Gio.content_type_guess(file_path, data)
         mime_type = Gio.content_type_get_mime_type(extension)
+
+    if mime_type is not None:
+        # Mime type guessing via Gio on Windows is partly broken, which results in
+        # e.g. "application/x-ext-webp". Try to map those mime types.
+        # See https://gitlab.gnome.org/GNOME/librsvg/-/issues/1181#note_2526154
+        mime_type = MIME_TYPE_MAP.get(mime_type, mime_type)
 
     log.debug("Guessed MIME type: %s", mime_type)
     return mime_type or ""

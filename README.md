@@ -68,6 +68,12 @@ thoughts or discuss the news with your groups.
 - [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
 - [gst-plugins-good](https://gitlab.freedesktop.org/gstreamer/gst-plugins-good)
 
+#### Rich File Previews 
+
+- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
+- [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
+- [gst-plugins-bad](https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad)
+
 ### Build Requirements
 
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)

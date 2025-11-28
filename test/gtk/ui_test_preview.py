@@ -40,6 +40,8 @@ ACCOUNT = "me@example.org"
 PREVIEW_TYPES = {
     "geo: URI": "geo:50.3333,24.5555",
     "Image URL": "https://gajim.org/img/screenshots/server-info.png",
+    "GIF URL": "https://gajim.org/img/gajim-test.gif",
+    "WebP URL": "https://gajim.org/img/gajim-test.webp",
     "Audio URL": "https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg",
     "PDF URL": "https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf",
 }
