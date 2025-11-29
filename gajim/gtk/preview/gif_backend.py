@@ -42,12 +42,10 @@ class GifBackend(GObject.Object, SignalManager):
         self._pipeline_is_setup = False
         self._pipeline_setup_failed = False
 
-        self._paintable = None
-        self._pipeline_elements = []
-        self._pipeline = None
-        self._src = None
-        self._decodebin = None
-        self._bus = None
+        self._paintable: Paintable | None = None
+        self._pipeline: Gst.Pipeline | None = None
+        self._src: Gst.Element | None = None
+        self._bus: Gst.Bus | None = None
 
         self._loop_counter = 0
         self._max_loop_counts = max_loops
@@ -101,48 +99,38 @@ class GifBackend(GObject.Object, SignalManager):
         if self._pipeline_is_setup:
             return
 
-        self._pipeline = Gst.Pipeline.new()
-        self._src = Gst.ElementFactory.make("filesrc")
-        self._decodebin = Gst.ElementFactory.make("decodebin")
-        self._glupload = Gst.ElementFactory.make("glupload")
-        self._glcolorconvert = Gst.ElementFactory.make("glcolorconvert")
-        self._queue = Gst.ElementFactory.make("queue")
-        self._sink = Gst.ElementFactory.make("gtk4paintablesink")
-
-        assert self._src is not None
-        assert self._decodebin is not None
-        assert self._glupload is not None
-        assert self._glcolorconvert is not None
-        assert self._queue is not None
-        assert self._sink is not None
-
-        self._pipeline_elements = [
-            self._src,
-            self._decodebin,
-            self._glupload,
-            self._glcolorconvert,
-            self._queue,
-            self._sink,
+        pipeline_parts = [
+            "filesrc name=src",
+            "decodebin name=decodebin",
+            "glupload name=glupload",
+            "glcolorconvert name=glcolorconvert",
+            "queue name=queue",
+            "gtk4paintablesink name=sink",
         ]
+        pipeline = " ! ".join(pipeline_parts)
+        try:
+            self._pipeline = typing.cast(Gst.Pipeline, Gst.parse_launch(pipeline))
+        except Exception as e:
+            self._pipeline_setup_failed = True
+            self.emit("pipeline-changed", False)
+            log.warning("Failed to setup pipeline: %s", e)
+            return
 
-        for elem in self._pipeline_elements:
-            self._pipeline.add(elem)
+        decodebin = typing.cast(Gst.Element, self._pipeline.get_by_name("decodebin"))
+        self._connect(decodebin, "pad-added", self._on_pad_added)
 
-        self._src.link(self._decodebin)
-        self._connect(self._decodebin, "pad-added", self._on_pad_added)
-        self._glupload.link(self._glcolorconvert)
-        self._glcolorconvert.link(self._queue)
-        self._queue.link(self._sink)
-
+        self._src = self._pipeline.get_by_name("src")
+        assert self._src is not None
         self._src.set_property("location", str(self._orig_path))
+
         self._bus = self._pipeline.get_bus()
         self._bus.add_signal_watch()
-        assert self._bus is not None
         self._connect(self._bus, "message::eos", self._on_eos)
         self._connect(self._bus, "message::state-changed", self._on_state_changed)
 
-        assert self._sink is not None
-        self._paintable = self._sink.get_property("paintable")
+        sink = self._pipeline.get_by_name("sink")
+        assert sink is not None
+        self._paintable = sink.get_property("paintable")
 
     def _on_pad_added(self, _bin: Gst.Bin, pad: Gst.Pad) -> None:
         assert pad is not None
@@ -151,8 +139,10 @@ class GifBackend(GObject.Object, SignalManager):
             return
 
         log.debug("Link decodebin with glupload")
-        assert self._glupload is not None
-        sink_pad = self._glupload.get_static_pad("sink")
+        assert self._pipeline is not None
+        glupload = self._pipeline.get_by_name("glupload")
+        assert glupload is not None
+        sink_pad = glupload.get_static_pad("sink")
         assert sink_pad is not None
         if not sink_pad.is_linked():
             pad.link(sink_pad)
@@ -176,17 +166,9 @@ class GifBackend(GObject.Object, SignalManager):
         if self._pipeline is not None:
             self._pipeline.set_state(Gst.State.NULL)
 
-        if self._decodebin is not None:
-            self._disconnect_object(self._decodebin)
-
         if self._pipeline is not None:
-            for elem in self._pipeline_elements:
-                self._pipeline.remove(elem)
-                elem.run_dispose()
             self._pipeline.run_dispose()
             self._pipeline = None
-
-        self._pipeline_elements = []
 
         if self._bus is not None:
             self._bus.remove_signal_watch()

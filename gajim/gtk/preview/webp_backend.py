@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import TYPE_CHECKING
 
 from concurrent.futures import Future
@@ -50,12 +51,12 @@ class WebPBackend(GObject.Object, SignalManager):
         self._do_stop = True
         self._push_id = None
 
-        self._paintable = None
-        self._pipeline = None
-        self._src = None
-        self._bus = None
+        self._paintable: Paintable | None = None
+        self._pipeline: Gst.Element | None = None
+        self._src: Gst.Element | None = None
+        self._bus: Gst.Bus | None = None
 
-        self._buf = None
+        self._buf: Gst.Buffer | None = None
         self._frames: list[tuple[bytes, int]] = []
         self._current_frame = 1
 
@@ -131,61 +132,36 @@ class WebPBackend(GObject.Object, SignalManager):
         self._loop_counter = 0
         self._do_stop = True
 
-        self._pipeline = Gst.Pipeline.new()
-        self._src = Gst.ElementFactory.make("appsrc")
-        self._webpdec = Gst.ElementFactory.make("webpdec")
-        self._videoconvert = Gst.ElementFactory.make("videoconvert")
-        self._glupload = Gst.ElementFactory.make("glupload")
-        self._queue = Gst.ElementFactory.make("queue", "queue")
-        self._sink = Gst.ElementFactory.make("gtk4paintablesink")
-
-        self._pipeline_elements = [
-            self._src,
-            self._webpdec,
-            self._videoconvert,
-            self._glupload,
-            self._queue,
-            self._sink,
+        pipeline_parts = [
+            "appsrc name=src "
+            "is-live=true format=time block=false leaky-type=2 do-timestamp=true",
+            "webpdec name=webpdec "
+            "bypass-filtering=false no-fancy-upsampling=true use-threads=true",
+            "videoconvert name=videoconvert",
+            "glupload name=glupload",
+            "queue name=queue",
+            "gtk4paintablesink name=sink",
         ]
-        if any(elem is None for elem in self._pipeline_elements):
-            raise Exception("Could not set up pipeline for GIF preview")
-
-        assert self._pipeline is not None
-        assert self._src is not None
-        assert self._webpdec is not None
-        assert self._videoconvert is not None
-        assert self._glupload is not None
-        assert self._queue is not None
-        assert self._sink is not None
-
-        for elem in self._pipeline_elements:
-            assert elem is not None
-            self._pipeline.add(elem)
-
-        self._src.set_property("is-live", True)
-        self._src.set_property("format", Gst.Format.TIME)
-        self._src.set_property("block", False)
-        self._src.set_property("leaky-type", 2)
-        self._src.set_property("do-timestamp", True)
-
-        self._webpdec.set_property("bypass-filtering", False)
-        self._webpdec.set_property("no-fancy-upsampling", True)
-        self._webpdec.set_property("use-threads", True)
-
-        self._src.link(self._webpdec)
-        self._webpdec.link(self._videoconvert)
-        self._videoconvert.link(self._glupload)
-        self._glupload.link(self._queue)
-        self._queue.link(self._sink)
+        pipeline = " ! ".join(pipeline_parts)
+        try:
+            self._pipeline = typing.cast(Gst.Pipeline, Gst.parse_launch(pipeline))
+        except Exception as e:
+            self._pipeline_setup_failed = False
+            self.emit("pipeline-changed", False)
+            log.warning("Failed to setup pipeline: %s", e)
+            return
 
         self._bus = self._pipeline.get_bus()
-        self._bus.add_signal_watch()
         assert self._bus is not None
+        self._bus.add_signal_watch()
         self._connect(self._bus, "message::eos", self._on_eos)
         self._connect(self._bus, "message::state-changed", self._on_state_changed)
 
-        assert self._sink is not None
-        self._paintable = self._sink.get_property("paintable")
+        sink: Gst.Element | None = self._pipeline.get_by_name("sink")
+        assert sink is not None
+        self._paintable = sink.get_property("paintable")
+        self._src = self._pipeline.get_by_name("src")
+
         self._get_frames()
 
     def _on_state_changed(self, _bus: Gst.Bus, message: Gst.Message) -> None:
@@ -253,13 +229,10 @@ class WebPBackend(GObject.Object, SignalManager):
 
         if self._pipeline is not None:
             self._pipeline.set_state(Gst.State.NULL)
-            for elem in self._pipeline_elements:
-                if elem is not None:
-                    self._pipeline.remove(elem)
-                    elem.run_dispose()
             self._pipeline.run_dispose()
             self._pipeline = None
-        self._pipeline_elements = []
+        if self._src is not None:
+            self._src.run_dispose()
         if self._bus is not None:
             self._bus.remove_signal_watch()
             self._bus = None
