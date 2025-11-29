@@ -9,6 +9,7 @@ import argparse
 import io
 import operator
 import shlex
+import sys
 from collections.abc import Callable
 
 from nbxmpp.protocol import JID
@@ -77,7 +78,12 @@ class ChatCommands(Observable):
         Observable.__init__(self)
 
     def init(self) -> None:
-        self._parser = ArgumentParser(prog='ChatCommands')
+        if sys.version_info >= (3, 14):
+            # Disable colors because we depend on a stable format for the
+            # usage string
+            self._parser = ArgumentParser(prog='ChatCommands', color=False)
+        else:
+            self._parser = ArgumentParser(prog='ChatCommands')
         self._sub_parser = self._parser.add_subparsers(title='Commands')
         self._commands: dict[str, tuple[list[str], str]] = {}
 
