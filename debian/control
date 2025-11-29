@@ -57,6 +57,7 @@ Recommends:
     gstreamer1.0-plugins-good,
     gstreamer1.0-plugins-bad,
     gstreamer1.0-libav,
+    gstreamer1.0-gtk4,
     notification-daemon,
     pulseaudio-utils | alsa-utils | sox | oss4-base,
     python3-sentry-sdk,

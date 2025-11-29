@@ -22,7 +22,6 @@ QL_VERSION_DESC="UNKNOWN"
 
 MINGW_DEPS="\
 ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
-${MINGW_PACKAGE_PREFIX}-farstream \
 ${MINGW_PACKAGE_PREFIX}-gst-plugins-base \
 ${MINGW_PACKAGE_PREFIX}-gst-plugins-good \
 ${MINGW_PACKAGE_PREFIX}-gst-plugins-bad \
