@@ -57,7 +57,7 @@ class WebPBackend(GObject.Object, SignalManager):
 
         self._buf = None
         self._frames: list[tuple[bytes, int]] = []
-        self._current_frame = 0
+        self._current_frame = 1
 
         self._loop_counter = 0
         self._max_loops = max_loops
@@ -117,9 +117,6 @@ class WebPBackend(GObject.Object, SignalManager):
             log.exception("Unable to play animated image")
             self._pipeline_setup_failed = True
             self.emit("pipeline-changed", False)
-        else:
-            self._pipeline_is_setup = True
-            self.emit("pipeline-changed", True)
 
     def _setup_pipeline(self) -> None:
         if (
