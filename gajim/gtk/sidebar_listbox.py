@@ -117,7 +117,7 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
 
     def set_unread_notify(self, obj: GObject.Object) -> None:
         def _on_notify(obj_: GObject.Object, _param: GObject.ParamSpec) -> None:
-            self.set_unread_count(obj_.props.unread_count)  # pyright: ignore
+            self.set_unread_count(obj_.unread_count)  # pyright: ignore
 
         self._connect(obj, "notify::unread-count", _on_notify)
 
