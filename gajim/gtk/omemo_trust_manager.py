@@ -13,6 +13,7 @@ import locale
 import logging
 import time
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.structs import IdentityInfo
@@ -156,7 +157,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._our_fpr_formatted = client.get_module(
             "OMEMO"
         ).backend.get_our_fingerprint(formatted=True)
-        self._ui.our_fingerprint_row.set_subtitle(self._our_fpr_formatted)
+        self._ui.our_fingerprint_row.set_title(self._our_fpr_formatted)
         self._ui.our_fingerprint_2.set_text(self._our_fpr_formatted)
 
         self.update()
@@ -252,14 +253,13 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         app.window.get_clipboard().set(self._our_fpr_formatted)
 
 
-class DeviceRow(Gtk.ListBoxRow, SignalManager):
+class DeviceRow(Adw.ActionRow, SignalManager):
     def __init__(
         self, contact: types.ChatContactT, identity_info: IdentityInfo
     ) -> None:
-        Gtk.ListBoxRow.__init__(self)
+        Adw.ActionRow.__init__(self)
         SignalManager.__init__(self)
         self.add_css_class("omemo-device-row")
-        self.add_css_class("monospace")
 
         self._contact = contact
         self._client = app.get_client(contact.account)
@@ -268,12 +268,9 @@ class DeviceRow(Gtk.ListBoxRow, SignalManager):
         self._identity_info = identity_info
         self._trust = identity_info.trust
 
-        box = Gtk.Box(spacing=6)
-
-        fingerprint_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-
+        subtitle_entries: list[str] = []
         if contact.is_groupchat:
-            fingerprint_box.append(Gtk.Label(label=self._address, xalign=0))
+            subtitle_entries.append(self._address)
 
         self._formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
             formatted=True
@@ -286,18 +283,19 @@ class DeviceRow(Gtk.ListBoxRow, SignalManager):
             )
         else:
             last_seen_data = _("Never")
-        last_seen = "\n" + _("Last seen: %s") % last_seen_data
+        subtitle_entries.append(_("Last seen: %s") % last_seen_data)
 
-        subtitle = Gtk.Label(label=self._formatted_fingerprint + last_seen)
-        subtitle.add_css_class("smaller")
-
-        fingerprint_box.append(subtitle)
         if not self._identity_info.active:
-            fingerprint_box.add_css_class("dimmed")
+            subtitle_entries.append(_("(inactive)"))
 
-        suffix_box = Gtk.Box(spacing=12)
+        self.set_title(self._formatted_fingerprint)
+        self.set_subtitle(" ".join(subtitle_entries))
 
         self._trust_label = TrustLabel(identity_info.trust)
+        self.add_suffix(self._trust_label)
+
+        self._trust_button = TrustButton(self)
+        self.add_suffix(self._trust_button)
 
         self._copy_button = Gtk.Button(
             icon_name="lucide-copy-symbolic",
@@ -305,24 +303,13 @@ class DeviceRow(Gtk.ListBoxRow, SignalManager):
             valign=Gtk.Align.CENTER,
             halign=Gtk.Align.END,
         )
-
-        self._trust_button = TrustButton(self)
-
-        suffix_box.append(self._copy_button)
-        suffix_box.append(self._trust_button)
-
-        box.append(fingerprint_box)
-        box.append(self._trust_label)
-        box.append(suffix_box)
-
-        self.set_child(box)
-
         self._connect(self._copy_button, "clicked", self._on_copy_button_clicked)
+        self.add_suffix(self._copy_button)
 
     def do_unroot(self) -> None:
         del self._trust_button
         self._disconnect_all()
-        Gtk.ListBoxRow.do_unroot(self)
+        Adw.ActionRow.do_unroot(self)
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
@@ -370,7 +357,12 @@ class DeviceRow(Gtk.ListBoxRow, SignalManager):
 class TrustLabel(Gtk.Box):
     def __init__(self, trust: OMEMOTrust) -> None:
         Gtk.Box.__init__(
-            self, margin_start=24, spacing=6, valign=Gtk.Align.CENTER, hexpand=True
+            self,
+            margin_end=12,
+            spacing=6,
+            valign=Gtk.Align.CENTER,
+            hexpand=True,
+            halign=Gtk.Align.END,
         )
 
         self._label = Gtk.Label()

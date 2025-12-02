@@ -76,8 +76,7 @@
                 <child>
                   <object class="AdwActionRow" id="our_fingerprint_row">
                     <style>
-                      <class name="property"/>
-                      <class name="monospace"/>
+                      <class name="omemo-device-row"/>
                     </style>
                     <child type="suffix">
                       <object class="GtkBox">
@@ -188,6 +187,9 @@
                 <property name="margin-top">12</property>
                 <property name="visible">0</property>
                 <property name="label" translatable="yes">No undecided fingerprints</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
               </object>
             </child>
           </object>

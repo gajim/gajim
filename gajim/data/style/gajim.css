@@ -914,7 +914,10 @@ list.sidebar-switcher .sidebar-row-header {
 .omemo-verified-color { color: var(--success-color); }
 .omemo-blind-color { color: var(--success-color); }
 .omemo-untrusted-color { color: var(--error-color); }
-.omemo-device-row { padding: 6px 12px 6px 12px; }
+.omemo-device-row .title .title {
+    font-size: small;
+    font-family: monospace;
+}
 
 /* StartChatDialog */
 .start-chat-treeview { padding: 5px; }
