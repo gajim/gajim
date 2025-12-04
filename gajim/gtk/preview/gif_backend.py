@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import typing
 
+import sys
 from pathlib import Path
 
 from gi.repository import GObject
@@ -46,6 +47,10 @@ class GifBackend(GObject.Object, SignalManager):
         self._pipeline: Gst.Pipeline | None = None
         self._src: Gst.Element | None = None
         self._bus: Gst.Bus | None = None
+
+        # Workaround a regression of Gst or Gtk on Windows,
+        # wglShareLists() called by GstGL would fail due to ERROR_BUSY (0xAA)
+        self._use_gl = sys.platform != "win32"
 
         self._loop_counter = 0
         self._max_loop_counts = max_loops
@@ -99,15 +104,14 @@ class GifBackend(GObject.Object, SignalManager):
         if self._pipeline_is_setup:
             return
 
-        pipeline_parts = [
-            "filesrc name=src",
-            "decodebin name=decodebin",
-            "glupload name=glupload",
-            "glcolorconvert name=glcolorconvert",
-            "queue name=queue",
-            "gtk4paintablesink name=sink",
-        ]
-        pipeline = " ! ".join(pipeline_parts)
+        pipeline_parts = {
+            "src": "filesrc name=src",
+            "decode": "decodebin name=decodebin",
+            "gl": "glupload name=glupload ! glcolorconvert" if self._use_gl else "",
+            "queue": "queue name=queue",
+            "sink": "gtk4paintablesink name=sink",
+        }
+        pipeline = " ! ".join(filter(None, pipeline_parts.values()))
         try:
             self._pipeline = typing.cast(Gst.Pipeline, Gst.parse_launch(pipeline))
         except Exception as e:
@@ -140,9 +144,12 @@ class GifBackend(GObject.Object, SignalManager):
 
         log.debug("Link decodebin with glupload")
         assert self._pipeline is not None
-        glupload = self._pipeline.get_by_name("glupload")
-        assert glupload is not None
-        sink_pad = glupload.get_static_pad("sink")
+        if self._use_gl:
+            elem = self._pipeline.get_by_name("glupload")
+        else:
+            elem = self._pipeline.get_by_name("queue")
+        assert elem is not None
+        sink_pad = elem.get_static_pad("sink")
         assert sink_pad is not None
         if not sink_pad.is_linked():
             pad.link(sink_pad)

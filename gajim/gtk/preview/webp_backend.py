@@ -7,6 +7,7 @@ from __future__ import annotations
 import typing
 from typing import TYPE_CHECKING
 
+import sys
 from concurrent.futures import Future
 from functools import partial
 from pathlib import Path
@@ -55,6 +56,10 @@ class WebPBackend(GObject.Object, SignalManager):
         self._pipeline: Gst.Element | None = None
         self._src: Gst.Element | None = None
         self._bus: Gst.Bus | None = None
+
+        # Workaround a regression of Gst or Gtk on Windows,
+        # wglShareLists() called by GstGL would fail due to ERROR_BUSY (0xAA)
+        self._use_gl = sys.platform != "win32"
 
         self._buf: Gst.Buffer | None = None
         self._frames: list[tuple[bytes, int]] = []
@@ -132,17 +137,15 @@ class WebPBackend(GObject.Object, SignalManager):
         self._loop_counter = 0
         self._do_stop = True
 
-        pipeline_parts = [
-            "appsrc name=src "
-            "is-live=true format=time block=false leaky-type=2 do-timestamp=true",
-            "webpdec name=webpdec "
-            "bypass-filtering=false no-fancy-upsampling=true use-threads=true",
-            "videoconvert name=videoconvert",
-            "glupload name=glupload",
-            "queue name=queue",
-            "gtk4paintablesink name=sink",
-        ]
-        pipeline = " ! ".join(pipeline_parts)
+        pipeline_parts = {
+            "src": "appsrc name=src is-live=true format=time block=false leaky-type=2 do-timestamp=true",
+            "dec": "webpdec name=webpdec bypass-filtering=false no-fancy-upsampling=true use-threads=true",
+            "convert": "videoconvert name=videoconvert",
+            "gl": "glupload name=glupload ! glcolorconvert" if self._use_gl else "",
+            "queue": "queue name=queue",
+            "sink": "gtk4paintablesink name=sink",
+        }
+        pipeline = " ! ".join(filter(None, pipeline_parts.values()))
         try:
             self._pipeline = typing.cast(Gst.Pipeline, Gst.parse_launch(pipeline))
         except Exception as e:
