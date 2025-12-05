@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkPopover" id="search_popover">
-    <property name="child">
-      <object class="GtkSearchEntry" id="search">
-        <property name="focusable">1</property>
-      </object>
-    </property>
-  </object>
   <object class="GtkPopover" id="qr_code_popover">
     <property name="child">
       <object class="GtkBox">
@@ -67,7 +60,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="yes">This Device</property>
+                <property name="label" translatable="yes">Fingerprint for this Device</property>
                 <property name="xalign">0</property>
                 <style>
                   <class name="bold"/>
@@ -82,11 +75,8 @@
                 </style>
                 <child>
                   <object class="AdwActionRow" id="our_fingerprint_row">
-                    <property name="title" translatable="yes">Fingerprint for this Device</property>
                     <style>
-                      <class name="property"/>
-                      <class name="monospace"/>
-                      <class name="omemo-fingerprint"/>
+                      <class name="omemo-device-row"/>
                     </style>
                     <child type="suffix">
                       <object class="GtkBox">
@@ -170,22 +160,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkMenuButton" id="search_button">
-                    <property name="visible">0</property>
-                    <property name="focusable">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="yes">Search…</property>
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="popover">search_popover</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">lucide-search-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkButton" id="clear_devices_button">
                     <property name="visible">0</property>
                     <property name="label" translatable="yes">Clear Devices…</property>
@@ -201,11 +175,20 @@
             </child>
             <child>
               <object class="GtkListBox" id="list">
-                <property name="vexpand">1</property>
                 <property name="margin-bottom">24</property>
                 <property name="selection-mode">none</property>
                 <style>
                   <class name="boxed-list"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="undecided_placeholder">
+                <property name="margin-top">12</property>
+                <property name="visible">0</property>
+                <property name="label" translatable="yes">No undecided fingerprints</property>
+                <style>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

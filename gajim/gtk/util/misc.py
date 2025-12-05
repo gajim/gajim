@@ -394,3 +394,9 @@ def open_file(path: Path, *, show_in_folder: bool = False) -> None:
             launcher.launch(app.window)
     except Exception as error:
         log.warning("Unable to open file: %s", error)
+
+
+def remove_css_class(widget: Gtk.Widget, css_class_name: str) -> None:
+    for css_class in list(widget.get_css_classes()):
+        if css_class_name in css_class:
+            widget.remove_css_class(css_class)
