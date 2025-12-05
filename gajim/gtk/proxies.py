@@ -46,6 +46,10 @@ class ManageProxies(GajimAppWindow):
             "clicked",
             self._on_remove_proxy_button_clicked,
         )
+
+        self._connect(
+            self._ui.proxyuser_entry, "changed", self._on_proxyuser_entry_changed
+        )
         self._connect(
             self._ui.proxypass_entry, "changed", self._on_proxypass_entry_changed
         )
