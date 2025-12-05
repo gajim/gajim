@@ -123,7 +123,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         add_padding: bool = True,
     ) -> None:
         SignalManager.__init__(self)
-        Gtk.ScrolledWindow.__init__(self, width_request=width, halign=Gtk.Align.CENTER)
+        Gtk.ScrolledWindow.__init__(self, width_request=width)
 
         self._minimal = minimal
         self._show_users = show_users
