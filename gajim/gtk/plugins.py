@@ -356,6 +356,12 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
 
         self._management_row.set_visible(self._installed and not app.is_flatpak())
 
+        if self._manifest.is_shipped:
+            self._management_row.set_subtitle(
+                _("This plugin is managed by your operating system")
+            )
+            self._uninstall_button.set_sensitive(False)
+
     def _get_plugin_icon(self) -> Gtk.Image:
         image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="lucide-package-symbolic"))
 
