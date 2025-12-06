@@ -180,7 +180,11 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
                 self._display_animated_image_preview(AnimatedImageBackend)
                 return
 
-            if self._mime_type == "image/webp" and is_image_animated(self._orig_path):
+            if self._mime_type in [
+                "image/webp",
+                "image/avif",
+                "image/png",
+            ] and is_image_animated(self._orig_path):
                 self._display_animated_image_preview(AnimatedImageFallbackBackend)
                 return
 
