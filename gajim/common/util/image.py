@@ -4,8 +4,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 import logging
 from io import BytesIO
 from pathlib import Path
@@ -131,15 +129,7 @@ def image_size(image_path: Path) -> tuple[int, int]:
         return width, height
 
 
-def is_webp_animated(image_path: Path) -> bool:
+def is_image_animated(image_path: Path) -> bool:
     with Image.open(image_path) as image:
         n_frames: int = getattr(image, "n_frames", 1)
         return getattr(image, "is_animated", False) and n_frames > 1
-
-
-def is_gif_animated(
-    image_path: Path,
-) -> bool:
-    with Image.open(image_path) as image:
-        duration = cast(int, image.info.get("duration", 0))
-    return duration > 0

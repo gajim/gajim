@@ -11,8 +11,8 @@ from pathlib import Path
 from PIL import Image
 
 
-def extract_webp_frames(webp_path: Path) -> list[tuple[bytes, int]]:
-    with Image.open(webp_path) as pil_img:
+def extract_frames(animated_image_path: Path) -> list[tuple[bytes, int]]:
+    with Image.open(animated_image_path) as pil_img:
         frames: list[tuple[bytes, int]] = []
         n_frames: int = getattr(pil_img, "n_frames", 1)
 
@@ -26,8 +26,8 @@ def extract_webp_frames(webp_path: Path) -> list[tuple[bytes, int]]:
                     lossless=False,
                     method=0,
                     exact=False,
-                    quality=40,
-                    alpha_quality=40,
+                    quality=50,
+                    alpha_quality=50,
                 )
                 frame_bytes = byte_io.getvalue()
             duration_ms = typing.cast(int, frame.info.get("duration", 100))

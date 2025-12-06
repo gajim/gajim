@@ -17,7 +17,7 @@ from gi.repository import GObject
 from gi.repository.Gdk import Paintable
 
 from gajim.common import app
-from gajim.common.multiprocess.webp_frames import extract_webp_frames
+from gajim.common.multiprocess.animated_image_frames import extract_frames
 
 try:
     from gi.repository import Gst
@@ -29,11 +29,11 @@ import logging
 
 from gajim.gtk.util.classes import SignalManager
 
-log = logging.getLogger("gajim.gtk.preview_webp_backend")
+log = logging.getLogger("gajim.gtk.preview_animated_image_fallback_backend")
 
 
-class WebPBackend(GObject.Object, SignalManager):
-    __gtype_name__ = "WebPBackend"
+class AnimatedImageFallbackBackend(GObject.Object, SignalManager):
+    __gtype_name__ = "AnimatedImageFallbackBackend"
     __gsignals__ = {
         "pipeline-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
         "playback-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
@@ -178,7 +178,7 @@ class WebPBackend(GObject.Object, SignalManager):
     def _get_frames(self) -> None:
         assert self._orig_path is not None
         try:
-            future = app.process_pool.submit(extract_webp_frames, self._orig_path)
+            future = app.process_pool.submit(extract_frames, self._orig_path)
             future.add_done_callback(
                 partial(GLib.idle_add, self._extracting_frames_finished)
             )

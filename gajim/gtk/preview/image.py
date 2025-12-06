@@ -26,14 +26,15 @@ from gajim.common.multiprocess.video_thumbnail import (
     extract_video_thumbnail_and_properties,
 )
 from gajim.common.util.image import image_size
-from gajim.common.util.image import is_gif_animated
-from gajim.common.util.image import is_webp_animated
+from gajim.common.util.image import is_image_animated
 
 from gajim.gtk.preview.animated_image import AnimatedImage
+from gajim.gtk.preview.animated_image_backend import AnimatedImageBackend
+from gajim.gtk.preview.animated_image_fallback_backend import (
+    AnimatedImageFallbackBackend,
+)
 from gajim.gtk.preview.file_control_buttons import FileControlButtons
-from gajim.gtk.preview.gif_backend import GifBackend
 from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # pyright: ignore
-from gajim.gtk.preview.webp_backend import WebPBackend
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -175,12 +176,12 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
 
     def _display_image_preview(self) -> None:
         if app.is_installed("GST"):
-            if self._mime_type == "image/webp" and is_webp_animated(self._orig_path):
-                self._display_animated_image_preview(WebPBackend)
+            if self._mime_type == "image/gif" and is_image_animated(self._orig_path):
+                self._display_animated_image_preview(AnimatedImageBackend)
                 return
 
-            if self._mime_type == "image/gif" and is_gif_animated(self._orig_path):
-                self._display_animated_image_preview(GifBackend)
+            if self._mime_type == "image/webp" and is_image_animated(self._orig_path):
+                self._display_animated_image_preview(AnimatedImageFallbackBackend)
                 return
 
         self._display_static_image_preview()
@@ -230,7 +231,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         self._stack.set_visible_child_name("preview")
 
     def _display_animated_image_preview(
-        self, backend: typing.Any[GifBackend, WebPBackend]
+        self, backend: typing.Any[AnimatedImageBackend, AnimatedImageFallbackBackend]
     ) -> None:
         image_width, image_height = image_size(self._orig_path)
         width, height = self._image_preview_dimension(image_width, image_height)

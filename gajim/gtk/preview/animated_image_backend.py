@@ -24,11 +24,11 @@ import logging
 
 from gajim.gtk.util.classes import SignalManager
 
-log = logging.getLogger("gajim.gtk.preview_gif_backend")
+log = logging.getLogger("gajim.gtk.preview_animated_image_backend")
 
 
-class GifBackend(GObject.Object, SignalManager):
-    __gtype_name__ = "GifBackend"
+class AnimatedImageBackend(GObject.Object, SignalManager):
+    __gtype_name__ = "AnimatedImageBackend"
     __gsignals__ = {
         "pipeline-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
         "playback-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),

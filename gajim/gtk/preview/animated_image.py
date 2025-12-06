@@ -14,8 +14,10 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from gajim.gtk.preview.gif_backend import GifBackend
-from gajim.gtk.preview.webp_backend import WebPBackend
+from gajim.gtk.preview.animated_image_backend import AnimatedImageBackend
+from gajim.gtk.preview.animated_image_fallback_backend import (
+    AnimatedImageFallbackBackend,
+)
 from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.animated_image")
@@ -33,7 +35,7 @@ class AnimatedImage(Gtk.Box, SignalManager):
         orig_path: Path,
         width: int,
         height: int,
-        player_backend: typing.Any[GifBackend, WebPBackend],
+        player_backend: typing.Any[AnimatedImageBackend, AnimatedImageFallbackBackend],
     ) -> None:
         Gtk.Box.__init__(self)
         SignalManager.__init__(self)
