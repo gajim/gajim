@@ -163,7 +163,6 @@ force-exclude = '''
     | ^/gajim/common/modules/vcard_avatars.py
     | ^/gajim/common/modules/vcard_temp.py
     | ^/gajim/common/passwords.py
-    | ^/gajim/common/preview.py
     | ^/gajim/common/regex.py
     | ^/gajim/common/setting_values.py
     | ^/gajim/common/settings.py
