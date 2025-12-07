@@ -3,8 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 from __future__ import annotations
 
-import typing
-
 import io
 from pathlib import Path
 
@@ -30,7 +28,7 @@ def extract_frames(animated_image_path: Path) -> list[tuple[bytes, int]]:
                     alpha_quality=50,
                 )
                 frame_bytes = byte_io.getvalue()
-            duration_ms = typing.cast(int, frame.info.get("duration", 100))
+            duration_ms = int(frame.info.get("duration", 100))
             frames.append((frame_bytes, duration_ms))
             del frame
 
