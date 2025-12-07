@@ -22,7 +22,7 @@ from .manifest import PluginManifest
 log = logging.getLogger("gajim.p.plugin")
 
 
-class GajimPlugin:
+class GajimPlugin:  # noqa: PLW1641
     """
     Base class for implementing Gajim plugins.
     """

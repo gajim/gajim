@@ -38,6 +38,7 @@ def get_zone_data(key: str) -> ZoneData:
 """
 
 logging.basicConfig(level="INFO", format="%(levelname)s: %(message)s")
+log = logging.getLogger(__name__)
 
 
 class ZoneData(NamedTuple):
@@ -49,14 +50,14 @@ class ZoneData(NamedTuple):
 
 
 def download_file(url: str) -> str:
-    logging.info("Download: %s", url)
+    log.info("Download: %s", url)
     with urlopen(url) as f:
         content = f.read()
     return content.decode()
 
 
 def parse_uri_schemes(content: str) -> list[str]:
-    logging.info("Parse uri schemes")
+    log.info("Parse uri schemes")
     schemes: list[str] = []
 
     reader = csv.reader(io.StringIO(content), delimiter=",")
@@ -64,7 +65,7 @@ def parse_uri_schemes(content: str) -> list[str]:
     for line in reader:
         scheme = line[0].lower().removesuffix(" (obsolete)")
         if not re.fullmatch("[a-z0-9+.-]+", scheme):
-            logging.warning("unexpected scheme field contents: %s", scheme)
+            log.warning("unexpected scheme field contents: %s", scheme)
             continue
 
         schemes.append(scheme)
@@ -73,7 +74,7 @@ def parse_uri_schemes(content: str) -> list[str]:
 
 
 def parse_zone_names(content: str) -> list[tuple[str, str]]:
-    logging.info("Parse tz data")
+    log.info("Parse tz data")
 
     zones: list[tuple[str, str]] = []
 
@@ -88,7 +89,7 @@ def parse_zone_names(content: str) -> list[tuple[str, str]]:
 
 
 def parse_country_names(content: str) -> dict[str, str]:
-    logging.info("Parse country data")
+    log.info("Parse country data")
 
     countries: dict[str, str] = {}
 
@@ -126,7 +127,7 @@ def generate_output(
     schemes: list[str], zones: dict[str, ZoneData], outpath: Path
 ) -> None:
 
-    logging.info("Generate output")
+    log.info("Generate output")
     current_date = datetime.now(tz=UTC).isoformat()
     content = BOILER_PLATE.format(current_date=current_date)
 
@@ -142,7 +143,7 @@ def generate_output(
     content += "}\n"
 
     outpath.write_text(content)
-    logging.info("Wrote file to %s", outpath)
+    log.info("Wrote file to %s", outpath)
 
 
 if __name__ == "__main__":
@@ -166,4 +167,4 @@ if __name__ == "__main__":
     zones = merge_zone_data(zone_data, country_data)
 
     generate_output(schemes, zones, outpath)
-    logging.info("Finished !")
+    log.info("Finished !")

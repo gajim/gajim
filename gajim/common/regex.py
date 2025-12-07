@@ -57,7 +57,7 @@ IPv6address    =\
     fr'|(?:(?:{h16}:){{,3}}{h16})?::{h16}:{ls32}'\
     fr'|(?:(?:{h16}:){{,4}}{h16})?::{ls32}'\
     fr'|(?:(?:{h16}:){{,5}}{h16})?::{h16}'\
-    fr'|(?:(?:{h16}:){{,6}}{h16})?::)'  # noqa: E126,E127,E131
+    fr'|(?:(?:{h16}:){{,6}}{h16})?::)'
 ZoneID         = fr'(?:{unreserved}|{pct_encoded})+'
 IPv6addrz      = fr'{IPv6address}%25{ZoneID}'
 IPvFuture      = fr'[Vv]{HEXDIG}+\.[{unreserved}{sub_delims}:]+'

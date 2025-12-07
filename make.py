@@ -10,6 +10,7 @@ import subprocess
 from pathlib import Path
 
 logging.basicConfig(level="INFO", format="%(message)s")
+log = logging.getLogger(__name__)
 
 CONFIG_VALUES = {
     "APP_ID": "org.gajim.Gajim",
@@ -66,7 +67,7 @@ INSTALL_FLATPAK_ICONS = {
 
 
 def configure_file(path: Path, values: dict[str, str]) -> None:
-    logging.info("Configure %s", path)
+    log.info("Configure %s", path)
     content = path.read_text()
     for old, new in values.items():
         content = content.replace(f"@{old}@", new)
@@ -94,7 +95,7 @@ def build_man() -> None:
         man_file_name = man_path.name
 
         man_out_path = METADATA / f"{man_file_name}.gz"
-        logging.info("Compress %s >> %s", man_file_name, man_out_path)
+        log.info("Compress %s >> %s", man_file_name, man_out_path)
 
         with gzip.GzipFile(man_out_path, "wb", mtime=0) as f_out:
             f_out.write(data)
@@ -104,7 +105,7 @@ def build_meta() -> None:
     for file_path, option in META_FILES:
         out_path = METADATA / file_path.name
 
-        logging.info("Compile %s >> %s", file_path, out_path)
+        log.info("Compile %s >> %s", file_path, out_path)
 
         subprocess.run(
             [
@@ -126,7 +127,7 @@ def build_app_icons() -> None:
         icon_name = file_path.name.replace("gajim", "org.gajim.Gajim")
         out_path = METADATA / icon_name
 
-        logging.info("Copy %s >> %s", file_path, out_path)
+        log.info("Copy %s >> %s", file_path, out_path)
         shutil.copy2(file_path, out_path)
 
 
@@ -144,7 +145,7 @@ def build_translations() -> None:
         mo_file = locale_dir / lang / "LC_MESSAGES" / "gajim.mo"
         mo_file.parent.mkdir(parents=True, exist_ok=True)
 
-        logging.info("Compile %s >> %s", po_file, mo_file)
+        log.info("Compile %s >> %s", po_file, mo_file)
 
         subprocess.run(["msgfmt", str(po_file), "-o", str(mo_file)], check=True)
 
@@ -153,7 +154,7 @@ def install(*, prefix: Path, files: dict[str, str]) -> None:
     for file, path in files.items():
         src = METADATA / file
         dest_dir = prefix / path
-        logging.info("Copy %s to %s", src, dest_dir)
+        log.info("Copy %s to %s", src, dest_dir)
         if not dest_dir.exists():
             dest_dir.mkdir(parents=True)
         shutil.copy(src, dest_dir / file)
@@ -165,7 +166,7 @@ def rename(*, prefix: Path, files: dict[str, str], new_app_id: str) -> None:
         file = dest_dir / file_name
         new_file_name = file_name.replace("org.gajim.Gajim", new_app_id)
         new_file = dest_dir / new_file_name
-        logging.info("Rename File %s to %s", file, new_file)
+        log.info("Rename File %s to %s", file, new_file)
         file.rename(new_file)
 
 

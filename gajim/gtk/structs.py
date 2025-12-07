@@ -72,7 +72,7 @@ class OccupantParam(VariantMixin):
 @dataclass
 class ExportHistoryParam(VariantMixin):
     account: str
-    jid: Optional[JID]  # noqa: UP007
+    jid: Optional[JID]  # noqa: UP007, UP045
 
 
 @dataclass
@@ -110,7 +110,7 @@ class DeleteMessageParam(VariantMixin):
 class SubscriptionAcceptParam(VariantMixin):
     account: str
     jid: JID
-    nickname: Optional[str]  # noqa: UP007
+    nickname: Optional[str]  # noqa: UP007, UP045
 
 
 def get_params_class(func: Callable[..., Any]) -> Any:

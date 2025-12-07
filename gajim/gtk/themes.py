@@ -275,7 +275,7 @@ class Themes(GajimAppWindow):
         pass
 
 
-class Option(Gtk.ListBoxRow, SignalManager):
+class Option(Gtk.ListBoxRow, SignalManager):  # noqa: PLW1641
     def __init__(
         self, option: StyleOption, value: str | Pango.FontDescription | None
     ) -> None:

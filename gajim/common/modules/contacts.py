@@ -58,18 +58,18 @@ class ContactSettings:
         self._jid = jid
 
     @overload
-    def get(self, setting: StringContactSettings) -> str: ...  # noqa: E704
+    def get(self, setting: StringContactSettings) -> str: ...
     @overload
-    def get(self, setting: BoolContactSettings) -> bool: ...  # noqa: E704
+    def get(self, setting: BoolContactSettings) -> bool: ...
 
     def get(self, setting: AllContactSettings) -> AllContactSettingsT:
         return app.settings.get_contact_setting(
             self._account, self._jid, setting)
 
     @overload
-    def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501, E704
+    def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501, E704
+    def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501
 
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_contact_setting(
@@ -82,22 +82,22 @@ class GroupChatSettings:
         self._jid = jid
 
     @overload
-    def get(self, setting: StringGroupChatSettings) -> str: ...  # noqa: E704
+    def get(self, setting: StringGroupChatSettings) -> str: ...
     @overload
-    def get(self, setting: BoolGroupChatSettings) -> bool: ...  # noqa: E704
+    def get(self, setting: BoolGroupChatSettings) -> bool: ...
     @overload
-    def get(self, setting: IntGroupChatSettings) -> int: ...  # noqa: E704
+    def get(self, setting: IntGroupChatSettings) -> int: ...
 
     def get(self, setting: AllGroupChatSettings) -> AllGroupChatSettingsT:
         return app.settings.get_group_chat_setting(
             self._account, self._jid, setting)
 
     @overload
-    def set(self, setting: StringGroupChatSettings, value: str | None) -> None: ...  # noqa: E501, E704
+    def set(self, setting: StringGroupChatSettings, value: str | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: BoolGroupChatSettings, value: bool | None) -> None: ...  # noqa: E501, E704
+    def set(self, setting: BoolGroupChatSettings, value: bool | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: IntGroupChatSettings, value: int | None) -> None: ...  # noqa: E501, E704
+    def set(self, setting: IntGroupChatSettings, value: int | None) -> None: ...  # noqa: E501
 
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_group_chat_setting(

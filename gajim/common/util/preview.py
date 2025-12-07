@@ -61,7 +61,7 @@ def format_geo_coords(coords: Coords) -> str:
     lon = float(coords.lon)
 
     def fmt(f: float) -> str:
-        i = int(round(f * 3600.0))
+        i = round(f * 3600.0)
         seconds = i % 60
         i //= 60
         minutes = i % 60

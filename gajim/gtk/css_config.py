@@ -229,7 +229,7 @@ class CSSConfig:
             return 100
         if number > 900:
             return 900
-        return int(math.ceil(number / 100.0)) * 100
+        return math.ceil(number / 100.0) * 100
 
     def _gather_available_themes(self) -> None:
         files = configpaths.get("MY_THEME").iterdir()

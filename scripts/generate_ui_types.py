@@ -103,8 +103,7 @@ def parse(path: Path, file: TextIOWrapper) -> str:
     if not lines:
         file.write("\n    pass")
     else:
-        for line in lines:
-            file.write(line)
+        file.writelines(lines)
     file.write("\n\n")
     return klass_name
 

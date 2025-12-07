@@ -31,7 +31,7 @@ def load_style(filename: str, priority: CSSPriority) -> None:
         with open(str(path), encoding="utf8") as file:
             css = file.read()
     except Exception:
-        logging.exception("")
+        logging.exception("")  # noqa: LOG015
         return
     provider = Gtk.CssProvider()
     provider.load_from_bytes(GLib.Bytes.new(css.encode("utf-8")))

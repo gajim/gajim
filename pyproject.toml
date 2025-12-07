@@ -324,6 +324,7 @@ ignore = [
   "N817",   # CamelCase imported as acronym
   "N818",   # Exception name should be named with an Error suffix
   "PGH003", # Use specific rule codes when ignoring type issues
+  "PLC0415",# import-outside-top-level
   "PLC1901",# Expression can be simplified to x as an empty string is falsey
   "PLR0911",# Too many return statements
   "PLR0912",# Too many branches

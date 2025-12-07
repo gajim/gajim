@@ -202,7 +202,7 @@ def init() -> None:
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
     # Gajim-Debug.exe shows a command line prompt and we want to redirect
     # log output to it
-    if app.get_debug_mode() or os.environ.get('GAJIM_DEBUG', False):
+    if app.get_debug_mode() or os.environ.get('GAJIM_DEBUG', False):  # noqa: PLW1508
         set_verbose()
 
 

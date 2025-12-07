@@ -16,6 +16,7 @@ YAML.preserve_quotes = True
 YAML.width = 180
 
 logging.basicConfig(level="INFO", format="%(levelname)s: %(message)s")
+log = logging.getLogger(__name__)
 
 
 def get_package_type(module: ruamel.yaml.comments.CommentedMap) -> str:
@@ -69,11 +70,11 @@ def get_latest_version(
 
 def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
     if not module["name"].startswith("python3-"):
-        logging.warning("Check %s manually", module["name"])
+        log.warning("Check %s manually", module["name"])
         return
 
     if "only-arches" in module:
-        logging.warning("Update %s manually", module["name"])
+        log.warning("Update %s manually", module["name"])
         return
 
     package_type = get_package_type(module)
@@ -83,12 +84,12 @@ def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
         return
 
     name = module["name"].replace("python3-", "")
-    latest_version, sha, url, filename = get_latest_version(
+    _latest_version, sha, url, filename = get_latest_version(
         name, package_type, py_version
     )
 
-    logging.info("Update %s", name)
-    "".rsplit(" ", maxsplit=1)
+    log.info("Update %s", name)
+    "".rsplit(" ", maxsplit=1)  # noqa: SIM905
     if module["sources"][0]["type"] == "file":
         command = module["build-commands"][0]
         current_filename = command.rsplit(" ", maxsplit=1)[1]

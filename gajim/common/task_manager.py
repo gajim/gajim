@@ -73,7 +73,7 @@ class TaskManager:
 
 
 @functools.total_ordering
-class Task:
+class Task:  # noqa: PLW1641
     def __init__(self, priority: int = 0) -> None:
         self.priority = priority
         self._obsolete = False

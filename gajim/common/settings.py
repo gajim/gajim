@@ -196,7 +196,7 @@ class Settings:
         callbacks = self._callbacks[(setting, account, jid)]
         for func in list(callbacks):
             if isinstance(func, tuple):
-                func, widget, inverted, default_text = func
+                func, _widget, inverted, default_text = func
                 if isinstance(value, bool) and inverted:
                     value = not value
 

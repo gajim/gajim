@@ -52,12 +52,11 @@ def get_ui_path(filename: str) -> Path:
 
 
 def get_paths(type_: PathType) -> Generator[Path, None, None]:
-    # pylint: disable=unnecessary-dict-index-lookup
     for key, value in _paths.items():
         path_type = value[2]
         if type_ != path_type:
             continue
-        yield _paths[key]
+        yield _paths[key]  # noqa: PLR1733
 
 
 def set_separation(active: bool) -> None:
