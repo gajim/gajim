@@ -63,7 +63,10 @@ test-ruff:
       - "**/*.py"
   script:
     - ruff --version
-    - ruff check .
+    - ruff check --output-format=gitlab --output-file=code-quality-report.json
+  artifacts:
+    reports:
+      codequality: $CI_PROJECT_DIR/code-quality-report.json
   interruptible: true
 
 test-isort:

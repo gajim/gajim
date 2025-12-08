@@ -54,7 +54,7 @@ repository = "https://dev.gajim.org/gajim/gajim"
 
 [project.optional-dependencies]
 dev = [
-  "ruff>=0.9.7",
+  "ruff>=0.14.8",
   "codespell[toml]>=2.4.1",
   "isort>=7.0.0",
   "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
