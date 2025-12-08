@@ -44,7 +44,6 @@ from gajim.gtk.widgets import MultiLineLabel
 
 
 class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
-
     __gsignals__ = {
         "is-valid": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
@@ -54,7 +53,6 @@ class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
         form_node: SimpleDataForm | MultipleDataForm,
         options: dict[str, Any] | None = None,
     ) -> None:
-
         Gtk.ScrolledWindow.__init__(
             self, hexpand=True, vexpand=True, overlay_scrolling=False
         )
@@ -131,11 +129,9 @@ class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
 
 
 class FormGrid(Gtk.Grid, SignalManager):
-
     __gsignals__ = {"form-completed": (GObject.SignalFlags.RUN_LAST, None, ())}
 
     def __init__(self, form_node: SimpleDataForm, options: dict[str, Any]) -> None:
-
         Gtk.Grid.__init__(self)
         SignalManager.__init__(self)
         self.set_column_spacing(12)
@@ -191,14 +187,12 @@ class FormGrid(Gtk.Grid, SignalManager):
     def _add_row(
         self, field: SizeAdjustment | Title | Instructions | Field | ImageMediaField
     ) -> None:
-
         field.add(self, self.row_count)
         self.row_count += 1
         self.rows.append(field)
 
     @staticmethod
     def _analyse_fields(form_node: SimpleDataForm, options: dict[str, Any]) -> None:
-
         if "right-align" in options:
             # Don’t overwrite option
             return
@@ -216,7 +210,6 @@ class FormGrid(Gtk.Grid, SignalManager):
         options["right-align"] = max(label_lengths) < 30
 
     def _parse_form(self, form_node: SimpleDataForm, options: dict[str, Any]) -> None:
-
         single_field = (
             len(
                 [
@@ -320,7 +313,6 @@ class Field(GObject.GObject, SignalManager):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         GObject.GObject.__init__(self)
         SignalManager.__init__(self)
 
@@ -354,7 +346,6 @@ class Field(GObject.GObject, SignalManager):
         return self._read_only
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
-
         assert self._widget is not None
         form_grid.attach(self._label, 0, row_number, 1, 1)
         form_grid.attach_next_to(
@@ -376,7 +367,6 @@ class Field(GObject.GObject, SignalManager):
             self._set_warning(is_valid, error)
 
     def _set_warning(self, is_valid: bool, error: str | InvalidJid) -> None:
-
         if not self._field.required and not is_valid and not error:
             # If its not valid and no error is given, its the initial call
             # to show all icons on required fields.
@@ -423,7 +413,6 @@ class BooleanField(Field):
     def __init__(
         self, field: NBXMPPBooleanField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
 
         if self.read_only:
@@ -447,7 +436,6 @@ class FixedField(Field):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
 
         self._label.set_markup(make_href_markup(field.value))
@@ -467,7 +455,6 @@ class FixedField(Field):
 
 
 class ListSingleField(Field):
-
     __gsignals__ = {"row-activated": (GObject.SignalFlags.RUN_LAST, None, ())}
 
     def __init__(
@@ -477,7 +464,6 @@ class ListSingleField(Field):
         options: dict[str, Any],
         treeview: bool = False,
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
 
         self._unique = treeview
@@ -552,7 +538,6 @@ class ListSingleField(Field):
 
 class ListSingleTreeView(Gtk.TreeView):
     def __init__(self, field: NBXMPPListField, multi_field: ListSingleField) -> None:
-
         Gtk.TreeView.__init__(self)
 
         self._field = field
@@ -592,7 +577,6 @@ class ListMultiField(Field):
     def __init__(
         self, field: NBXMPPListMultiField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -618,7 +602,6 @@ class ListMultiTreeView(Gtk.TreeView, SignalManager):
     def __init__(
         self, field: NBXMPPListMultiField, multi_field: ListMultiField
     ) -> None:
-
         Gtk.TreeView.__init__(self)
         SignalManager.__init__(self)
 
@@ -670,7 +653,6 @@ class ListMultiTreeView(Gtk.TreeView, SignalManager):
         app.check_finalize(self)
 
     def _toggled(self, _renderer: Gtk.CellRendererToggle, path: str) -> None:
-
         iter_ = self._store.get_iter(path)
         current_value = self._store[iter_][3]
         self._store.set_value(iter_, 3, not current_value)
@@ -692,7 +674,6 @@ class JidMultiField(Field):
     def __init__(
         self, field: NBXMPPListMultiField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -765,7 +746,6 @@ class JidMultiField(Field):
 
 class JidMutliTreeView(Gtk.TreeView, SignalManager):
     def __init__(self, field: NBXMPPListMultiField, multi_field: JidMultiField) -> None:
-
         Gtk.TreeView.__init__(self)
         SignalManager.__init__(self)
 
@@ -801,7 +781,6 @@ class JidMutliTreeView(Gtk.TreeView, SignalManager):
     def _jid_edited(
         self, _renderer: Gtk.CellRendererText, path: str, new_text: str
     ) -> None:
-
         iter_ = self._store.get_iter(path)
         self._store.set_value(iter_, 0, new_text)
         self._set_values()
@@ -820,7 +799,6 @@ class TextSingleField(Field):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
 
         if self.read_only:
@@ -845,7 +823,6 @@ class TextPrivateField(TextSingleField):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         TextSingleField.__init__(self, field, form_grid, options)
         if isinstance(self._widget, Gtk.Entry):
             self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
@@ -856,7 +833,6 @@ class JidSingleField(TextSingleField):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         TextSingleField.__init__(self, field, form_grid, options)
 
 
@@ -864,7 +840,6 @@ class TextMultiField(Field):
     def __init__(
         self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
-
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -903,7 +878,6 @@ class TextMultiField(Field):
 
 class ImageMediaField:
     def __init__(self, uri: Uri, form_grid: FormGrid, _options: dict[str, Any]) -> None:
-
         self._uri = uri
         self._form_grid = form_grid
 

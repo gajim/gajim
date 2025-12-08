@@ -23,7 +23,6 @@ log = logging.getLogger("gajim.c.util.decorators")
 
 
 def cache_with_ttl(ttl: int = 2) -> Any:
-
     class Result:
         __slots__ = ("timeout", "value")
 

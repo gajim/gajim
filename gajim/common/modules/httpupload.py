@@ -41,7 +41,6 @@ from gajim.common.util.preview import guess_mime_type
 
 
 class HTTPUpload(BaseModule):
-
     _nbxmpp_extends = "HTTPUpload"
 
     def __init__(self, con: types.Client) -> None:
@@ -80,7 +79,6 @@ class HTTPUpload(BaseModule):
     def get_running_transfers(
         self, contact: types.ChatContactT
     ) -> set[HTTPFileTransfer] | None:
-
         return self._running_transfers.get((contact.account, contact.jid))
 
     def send_file(self, contact: types.ChatContactT, path: Path) -> None:
@@ -118,7 +116,6 @@ class HTTPUpload(BaseModule):
         encryption: str | None,
         contact: types.ChatContactT,
     ) -> HTTPFileTransfer:
-
         if not path or not path.exists():
             raise FileError(_("Could not access file"))
 
@@ -139,7 +136,7 @@ class HTTPUpload(BaseModule):
             size = GLib.format_size_full(
                 int(self.max_file_size), GLib.FormatSizeFlags.IEC_UNITS
             )
-            msg = _("File is too large, " "maximum allowed file size is: %s") % size
+            msg = _("File is too large, maximum allowed file size is: %s") % size
 
         if invalid_file:
             raise FileError(msg)
@@ -161,7 +158,6 @@ class HTTPUpload(BaseModule):
     def _on_http_upload_state_changed(
         self, transfer: HTTPFileTransfer, _signal_name: str, state: FTState
     ) -> None:
-
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
@@ -175,7 +171,6 @@ class HTTPUpload(BaseModule):
             self._client.send_message(message)
 
     def _on_cancel_upload(self, transfer: HTTPFileTransfer, _signal_name: str) -> None:
-
         transfer.set_cancelled()
 
         key = (transfer.account, transfer.contact.jid)
@@ -209,7 +204,6 @@ class HTTPUpload(BaseModule):
         try:
             result = cast(HTTPUploadData, task.finish())
         except HTTPUploadStanzaError as error:
-
             if error.app_condition == "file-too-large":
                 size = error.get_max_file_size()
                 if size is not None:
@@ -220,8 +214,7 @@ class HTTPUpload(BaseModule):
                     size_text = "Unknown"
 
                 error_text = (
-                    _("File is too large, " "maximum allowed file size is: %s")
-                    % size_text
+                    _("File is too large, maximum allowed file size is: %s") % size_text
                 )
                 transfer.set_error("file-too-large", error_text)
             else:
@@ -269,7 +262,6 @@ class HTTPUpload(BaseModule):
         self._requests_in_progress[id(transfer)] = obj
 
     def _on_finish(self, ftobj: FileTransferM) -> None:
-
         transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
 
         self._requests_in_progress.pop(id(transfer), None)
@@ -293,13 +285,11 @@ class HTTPUpload(BaseModule):
     def _on_upload_progress(
         self, ftobj: FileTransferM, _param: GObject.ParamSpec
     ) -> None:
-
         transfer = cast(HTTPFileTransfer, ftobj.get_user_data())
         transfer.set_progress(ftobj.progress)
 
 
 class HTTPFileTransfer(FileTransfer):
-
     _state_descriptions = {
         FTState.ENCRYPTING: _("Encrypting file…"),
         FTState.PREPARING: _("Requesting HTTP File Upload Slot…"),
@@ -309,7 +299,7 @@ class HTTPFileTransfer(FileTransfer):
     _errors = {
         "insecure": _("The server returned an insecure transport (HTTP)."),
         "encryption-not-available": _(
-            "There is no encryption method available " "for the chosen encryption."
+            "There is no encryption method available for the chosen encryption."
         ),
         "unknown": _("Unknown error."),
     }
@@ -323,7 +313,6 @@ class HTTPFileTransfer(FileTransfer):
         encryption: str | None,
         groupchat: bool,
     ) -> None:
-
         FileTransfer.__init__(self, account)
 
         self._path = Path(path)

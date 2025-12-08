@@ -20,7 +20,6 @@ log = logging.getLogger("gajim.gtk")
 
 
 class GajimBuilder:
-
     filename = ""
 
     def __init__(
@@ -31,7 +30,6 @@ class GajimBuilder:
         domain: str | None = None,
         gettext_: Any | None = None,
     ) -> None:
-
         if filename is None:
             filename = self.filename
 

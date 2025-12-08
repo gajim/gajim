@@ -32,7 +32,6 @@ from gajim.gtk.chat_list_row import ChatListRow
 
 
 class ChatListStack(Gtk.Stack, EventHelper):
-
     __gtype_name__ = "ChatListStack"
     __gsignals__ = {
         "unread-count-changed": (GObject.SignalFlags.RUN_LAST, None, (str, int)),
@@ -163,7 +162,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         self.emit("chat-selected", row.workspace_id, row.account, row.jid)
 
     def _on_chat_order_changed(self, chat_list: ChatList) -> None:
-
         self.store_open_chats(chat_list.workspace_id)
 
     def show_chat_list(self, workspace_id: str) -> None:
@@ -182,7 +180,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         pinned: bool,
         position: int,
     ) -> None:
-
         chat_list = self._chat_lists.get(workspace_id)
         if chat_list is None:
             chat_list = self.add_chat_list(workspace_id)
@@ -205,7 +202,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def _toggle_chat_pinned(
         self, _action: Gio.SimpleAction, params: structs.ChatListEntryParam
     ) -> None:
-
         chat_list = self._chat_lists[params.workspace_id]
         chat_list.toggle_chat_pinned(params.account, params.jid)
         self.store_open_chats(params.workspace_id)
@@ -235,7 +231,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def _mark_as_read(
         self, _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-
         self.mark_as_read(params.account, params.jid)
 
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:

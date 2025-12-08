@@ -123,7 +123,6 @@ def ensure_not_destroyed(func: Any) -> Any:
 def get_contact_name_for_message(
     db_row: mod.Message, contact: types.ChatContactT
 ) -> str:
-
     if isinstance(contact, BareContact) and contact.is_self:
         return _("Me")
 
@@ -152,7 +151,6 @@ def get_contact_name_for_message(
 def get_avatar_for_message(
     db_row: mod.Message, contact: types.ChatContactT, scale: int, size: AvatarSize
 ) -> Gdk.Texture | None:
-
     if db_row.direction == ChatDirection.OUTGOING:
         return app.app.avatar_storage.get_own_avatar_texture(
             contact.account, size, scale
@@ -160,7 +158,6 @@ def get_avatar_for_message(
 
     match db_row.type:
         case MessageType.GROUPCHAT | MessageType.PM:
-
             if db_row.resource is None:
                 # Message from Groupchat itself
                 assert isinstance(contact, GroupchatContact)

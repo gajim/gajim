@@ -122,7 +122,7 @@ def get_params_class(func: Callable[..., Any]) -> Any:
 
 
 def actionmethod(
-    func: Callable[[Any, Gio.SimpleAction, Any], None]
+    func: Callable[[Any, Gio.SimpleAction, Any], None],
 ) -> Callable[[Any, Gio.SimpleAction, GLib.Variant], None]:
     @functools.wraps(func)
     def method_wrapper(obj: Any, action: Gio.SimpleAction, param: GLib.Variant) -> None:
@@ -134,7 +134,7 @@ def actionmethod(
 
 
 def actionfunction(
-    func: Callable[[Gio.SimpleAction, Any], None]
+    func: Callable[[Gio.SimpleAction, Any], None],
 ) -> Callable[[Gio.SimpleAction, GLib.Variant], None]:
     @functools.wraps(func)
     def func_wrapper(action: Gio.SimpleAction, param: GLib.Variant) -> None:

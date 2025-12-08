@@ -48,7 +48,6 @@ def load_icon_surface(
     size: int = 16,
     scale: int | None = None,
 ) -> cairo.ImageSurface | None:
-
     if scale is None:
         scale = app.window.get_scale_factor()
 
@@ -58,7 +57,12 @@ def load_icon_surface(
 
     icon_theme = get_icon_theme()
     icon = icon_theme.lookup_icon(
-        icon_name, None, size, scale, Gtk.TextDirection.NONE, 0  # pyright: ignore
+        icon_name,
+        None,
+        size,
+        scale,
+        Gtk.TextDirection.NONE,
+        0,  # pyright: ignore
     )
 
     snapshot = Gtk.Snapshot()

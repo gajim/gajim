@@ -261,7 +261,6 @@ class Migration:
         self._execute_multiple(["PRAGMA foreign_keys=OFF"])
 
         with self._engine.begin() as conn:
-
             stmt = sa.select(mod.Message.fk_occupant_pk).union(
                 sa.select(mod.Moderation.fk_occupant_pk),
                 sa.select(mod.DisplayedMarker.fk_occupant_pk),
@@ -277,7 +276,6 @@ class Migration:
         app.ged.raise_event(DBMigrationProgress(count=100, progress=50))
 
         with self._engine.begin() as conn:
-
             stmt = sa.select(mod.Occupant.fk_remote_pk).union(
                 sa.select(mod.Occupant.fk_real_remote_pk),
                 sa.select(mod.SecurityLabel.fk_remote_pk),

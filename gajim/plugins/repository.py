@@ -112,7 +112,6 @@ class PluginRepository(Observable):
     def _parse_package_json(
         self, package_index: dict[str, Any]
     ) -> dict[str, PluginManifest]:
-
         suitable_plugins: dict[str, PluginManifest] = {}
         plugins = package_index["plugins"]
         for name, versions in plugins.items():

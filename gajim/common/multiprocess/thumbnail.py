@@ -33,7 +33,6 @@ def create_thumbnail(
     size: int,
     mime_type: str,
 ) -> tuple[bytes, dict[str, Any]]:
-
     if isinstance(input_, Path):
         data = input_.read_bytes()
     else:

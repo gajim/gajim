@@ -110,7 +110,6 @@ class CacheStorage(SqliteStorage):
 
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> NamedTuple:
-
         assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
         Row = namedtuple("Row", fields)  # pyright: ignore
@@ -136,7 +135,7 @@ class CacheStorage(SqliteStorage):
     @timeit
     def _load_caps_data(self) -> None:
         rows = self._con.execute(
-            'SELECT hash_method, hash, data as "data [disco_info]" ' "FROM caps_cache"
+            'SELECT hash_method, hash, data as "data [disco_info]" FROM caps_cache'
         )
 
         for row in rows:
@@ -278,7 +277,6 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def set_muc(self, account: str, jid: JID, prop: str, value: Any) -> None:
-
         sql = f"""INSERT INTO muc (account, jid, {prop}) VALUES (?, ?, ?)"""
 
         try:
@@ -306,7 +304,6 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def set_contact(self, account: str, jid: JID, prop: str, value: Any) -> None:
-
         sql = f"""INSERT INTO contact (account, jid, {prop}, {prop}_ts)
                   VALUES (?, ?, ?, ?)"""
 
@@ -355,7 +352,6 @@ class CacheStorage(SqliteStorage):
     def set_unread_count(
         self, account: str, jid: JID, count: int, message_id: str, timestamp: float
     ) -> None:
-
         if self.get_unread_count(account, jid) is not None:
             self.update_unread_count(account, jid, count)
         else:

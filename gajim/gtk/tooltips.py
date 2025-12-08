@@ -91,7 +91,6 @@ class GCTooltip:
             self._ui.affiliation.set_visible(True)
 
         if contact.hats is not None:
-
             container_remove_all(self._ui.hats_box)
 
             for hat in contact.hats.get_hats()[:5]:
@@ -102,8 +101,7 @@ class GCTooltip:
                 if hat.hue is not None:
                     css_provider = Gtk.CssProvider()
                     css_provider.load_from_string(
-                        ".badge-hat "
-                        f"{{background-color: hsl({hat.hue}, 100%, 25%);}}"
+                        f".badge-hat {{background-color: hsl({hat.hue}, 100%, 25%);}}"
                     )
                     context = hat_badge.get_style_context()
                     context.add_provider(

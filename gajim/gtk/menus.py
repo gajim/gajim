@@ -79,7 +79,6 @@ class GajimMenu(Gio.Menu):
 def make_menu_item(
     label: str, action: str | None = None, value: MenuValueT = None
 ) -> Gio.MenuItem:
-
     item = Gio.MenuItem.new(label)
 
     if value is None:
@@ -214,7 +213,6 @@ def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
 
 
 def get_account_menu(account: str) -> GajimMenu:
-
     client = app.get_client(account)
     server_jid = client.get_own_jid().domain
     assert server_jid is not None
@@ -231,7 +229,6 @@ def get_account_menu(account: str) -> GajimMenu:
 
 
 def get_encryption_menu() -> GajimMenu:
-
     menuitems: MenuItemListT = [
         (_("Disabled"), "win.set-encryption", ""),
         ("OMEMO", "win.set-encryption", "OMEMO"),
@@ -264,7 +261,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
 
     # Wikipedia search
     if app.settings.get("always_english_wikipedia"):
-        uri = f"https://en.wikipedia.org/wiki/" f"Special:Search?search={uri_text}"
+        uri = f"https://en.wikipedia.org/wiki/Special:Search?search={uri_text}"
     else:
         uri = (
             f"https://{get_short_lang_code()}.wikipedia.org/"
@@ -281,7 +278,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
     if dict_link == "WIKTIONARY":
         # Default is wikitionary.org
         if app.settings.get("always_english_wiktionary"):
-            uri = f"https://en.wiktionary.org/wiki/" f"Special:Search?search={uri_text}"
+            uri = f"https://en.wiktionary.org/wiki/Special:Search?search={uri_text}"
         else:
             uri = (
                 f"https://{get_short_lang_code()}.wiktionary.org/"
@@ -419,7 +416,6 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
 
 
 def get_start_chat_button_menu() -> GajimMenu:
-
     value = GLib.Variant("as", ["", ""])
 
     menuitems: MenuItemListT = [
@@ -457,7 +453,6 @@ def get_start_chat_row_menu(account: str, jid: JID | None) -> GajimMenu | None:
 def get_chat_list_row_menu(
     workspace_id: str, account: str, jid: JID, pinned: bool
 ) -> GajimMenu:
-
     client = app.get_client(account)
     contact = client.get_module("Contacts").get_contact(jid)
     assert isinstance(contact, BareContact | GroupchatContact | GroupchatParticipant)
@@ -521,7 +516,6 @@ def get_chat_list_row_menu(
 def get_workspace_params(
     current_workspace_id: str, account: str, jid: JID
 ) -> Iterator[tuple[str, ChatListEntryParam]]:
-
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
             continue
@@ -538,7 +532,6 @@ def get_workspace_params(
 def get_groupchat_admin_menu(
     self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
 ) -> GajimMenu:
-
     menu = GajimMenu()
 
     if contact.real_jid is None:
@@ -576,7 +569,6 @@ def get_groupchat_admin_menu(
 def get_groupchat_mod_menu(
     self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
 ) -> GajimMenu:
-
     menu = GajimMenu()
 
     if not contact.is_available:
@@ -609,7 +601,6 @@ def get_groupchat_participant_menu(
     self_contact: types.GroupchatParticipant,
     contact: types.GroupchatParticipant,
 ) -> GajimMenu:
-
     group_chat = self_contact.room
     disco = group_chat.get_disco()
     assert disco is not None
@@ -678,7 +669,6 @@ def get_chat_row_menu(
     message: Message,
     original_message: Message,
 ) -> GajimMenu:
-
     menu_items: MenuItemListT = []
     is_retracted = original_message.is_retracted()
 
@@ -744,7 +734,6 @@ def _get_retract_param(
     contact: types.ChatContactT,
     original_message: Message,
 ) -> RetractMessageParam | None:
-
     if original_message.direction == ChatDirection.INCOMING:
         return
 
@@ -824,7 +813,6 @@ def get_preview_menu(uri: str, *, encrypted: bool = False) -> GajimMenu:
 
 
 def get_format_menu() -> GajimMenu:
-
     menuitems: MenuItemListT = [
         (_("bold"), "win.input-bold", None),
         (_("italic"), "win.input-italic", None),

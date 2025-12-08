@@ -119,10 +119,7 @@ class GajimApplication(Adw.Application, CoreApplication):
             ord("s"),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
-            _(
-                "Separate profile files completely "
-                "(even history database and plugins)"
-            ),
+            _("Separate profile files completely (even history database and plugins)"),
         )
 
         self.add_main_option(
@@ -323,7 +320,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _handle_local_options(
         self, _application: Gtk.Application, options: GLib.VariantDict
     ) -> int:
-
         if options.contains("version"):
             print(gajim.__version__)
             return 0
@@ -486,7 +482,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         action.set_enabled(state)
 
     def set_account_actions_state(self, account: str, new_state: bool = False) -> None:
-
         for action_name in ONLINE_ACCOUNT_ACTIONS:
             self.set_action_state(f"{account}-{action_name}", new_state)
 
@@ -554,7 +549,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         custom_host: tuple[str, ConnectionProtocol, ConnectionType] | None,
         anonymous: bool = False,
     ) -> None:
-
         CoreApplication.create_account(
             self, account, address, password, proxy_name, custom_host, anonymous
         )
@@ -627,7 +621,6 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     @staticmethod
     def _on_new_chat_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         jid, initial_message = param.get_strv()
         open_window(
             "StartChatDialog",
@@ -785,18 +778,15 @@ class GajimApplication(Adw.Application, CoreApplication):
         _action: Gio.SimpleAction, params: structs.OpenEventActionParams
     ) -> None:
         if params.type in ("connection-failed", "server-shutdown"):
-
             app.window.show_account_page(params.account)
 
         elif params.type in (
             "subscription-request",
             "muc-invitation",
         ):
-
             app.window.show_activity_page(params.context_id)
 
         elif params.type in ("incoming-message", "incoming-call", "file-transfer"):
-
             assert params.jid
             jid = JID.from_string(params.jid)
             app.window.select_chat(params.account, jid)
@@ -807,7 +797,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_mark_as_read_action(
         self, _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-
         app.window.mark_as_read(params.account, params.jid)
 
     @staticmethod
@@ -828,7 +817,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_mute_chat_action(
         _action: Gio.SimpleAction, params: structs.MuteContactParam
     ) -> None:
-
         client = app.get_client(params.account)
         contact = client.get_module("Contacts").get_contact(params.jid)
         assert not isinstance(contact, ResourceContact)
@@ -875,7 +863,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_forget_groupchat_action(
         _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-
         def _on_response() -> None:
             window = get_app_window("StartChatDialog")
             if window is not None:
@@ -942,10 +929,7 @@ class GajimApplication(Adw.Application, CoreApplication):
             except Exception as e:
                 InformationAlertDialog(
                     _("Could Not Save File"),
-                    _(
-                        "There was an error while trying to save the file.\n"
-                        "Error: %s."
-                    )
+                    _("There was an error while trying to save the file.\nError: %s.")
                     % e,
                 )
                 return

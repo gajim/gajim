@@ -227,7 +227,6 @@ class Preferences(GajimAppWindow, EventHelper):
         return False
 
     def _relog(self, account: str) -> None:
-
         def _on_response(response_id: str) -> None:
             if response_id == "accept":
                 client = app.get_client(account)

@@ -45,7 +45,6 @@ class RetractionTest(unittest.TestCase):
         app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_insert_retraction(self) -> None:
-
         # Test unique index without occupant id
 
         uuid = get_uuid()

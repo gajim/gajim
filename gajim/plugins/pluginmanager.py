@@ -141,7 +141,6 @@ class PluginManager(metaclass=Singleton):
                 plugin.available_text = str(error)
 
     def _load_plugin_module(self, manifest: PluginManifest) -> type[GajimPlugin] | None:
-
         assert manifest.path is not None
         module_path = manifest.path / "__init__.py"
         if not module_path.exists():
@@ -175,7 +174,6 @@ class PluginManager(metaclass=Singleton):
     def _add_plugin(
         self, manifest: PluginManifest, activate: bool = False
     ) -> GajimPlugin | None:
-
         plugin_class = self._load_plugin_module(manifest)
         if plugin_class is None:
             return None
@@ -632,7 +630,6 @@ class PluginManager(metaclass=Singleton):
 
     def delete_plugin_files(self, plugin_path: Path) -> None:
         def _on_error(func: Callable[..., Any], path: Path, error: RmErrorT) -> None:
-
             if func is os.path.islink:
                 # if symlink
                 os.unlink(path)

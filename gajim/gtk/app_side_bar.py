@@ -150,7 +150,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         x: float,
         y: float,
     ) -> int:
-
         current_button = gesture_click.get_current_button()
         if current_button == Gdk.BUTTON_PRIMARY:
             # Left click

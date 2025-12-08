@@ -137,7 +137,6 @@ class GroupchatDetails(GajimAppWindow):
     def _on_disco_info_update(
         self, _contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._groupchat_info.set_info_from_contact(self._contact)
 
     def _on_avatar_update(self, _contact: GroupchatContact, _signal_name: str) -> None:

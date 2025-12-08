@@ -24,7 +24,6 @@ from gajim.gtk.widgets import GajimAppWindow
 
 
 class Assistant(GObject.Object, GajimAppWindow, EventHelper):
-
     __gsignals__ = {
         "button-clicked": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
@@ -173,7 +172,6 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         name: str,
         transition: Gtk.StackTransitionType = Gtk.StackTransitionType.NONE,
     ) -> None:
-
         if self._ui.stack.get_visible_child_name() == name:
             return
         self._hide_buttons()
@@ -208,7 +206,6 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
 
 class Page(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "update-page-complete": (GObject.SignalFlags.RUN_LAST, None, ()),
     }

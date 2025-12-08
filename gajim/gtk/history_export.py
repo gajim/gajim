@@ -167,7 +167,7 @@ class HistoryExport(Assistant):
         if corrected_message := message.get_last_correction():
             text = corrected_message.text
 
-        return f'{timestamp} {name}: {text or ""}\n'
+        return f"{timestamp} {name}: {text or ''}\n"
 
 
 class ExportSettings(Page):

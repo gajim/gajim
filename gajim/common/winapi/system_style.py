@@ -47,7 +47,6 @@ class SystemStyleListener:
     def _signal_color_values_changed(
         self, _ui_settings: UISettings | None, *args: Any
     ) -> None:
-
         prefer_dark = self._get_prefer_dark()
         if prefer_dark != self._prefer_dark:
             self._prefer_dark = prefer_dark

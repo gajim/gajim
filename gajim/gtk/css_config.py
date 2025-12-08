@@ -302,7 +302,6 @@ class CSSConfig:
         value: str | Pango.FontDescription,
         pre: bool = False,
     ) -> None:
-
         if attr == StyleAttr.FONT:
             # forward to set_font() for convenience
             assert isinstance(value, Pango.FontDescription)
@@ -382,7 +381,6 @@ class CSSConfig:
     def _get_attr_from_description(
         self, description: Pango.FontDescription
     ) -> tuple[str | None, float, str, int]:
-
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
         weight = self._pango_to_css_weight(int(description.get_weight()))
@@ -390,7 +388,6 @@ class CSSConfig:
         return family, size, style, weight
 
     def _get_default_rule(self, selector: str, _attr: str) -> CSSStyleRule | None:
-
         assert self._default_css is not None
         for rule in self._default_css:
             if rule.type != rule.STYLE_RULE:
@@ -447,7 +444,6 @@ class CSSConfig:
         style: str | None,
         weight: str | None,
     ) -> Pango.FontDescription | None:
-
         if family is None:
             return None
         desc = Pango.FontDescription()
@@ -481,7 +477,6 @@ class CSSConfig:
     def get_value(
         self, selector: str, attr: str | StyleAttr, pre: bool = False
     ) -> str | Pango.FontDescription | None:
-
         if attr == StyleAttr.FONT:
             # forward to get_font() for convenience
             return self.get_font(selector, pre)
@@ -521,7 +516,6 @@ class CSSConfig:
     def remove_value(
         self, selector: str, attr: str | StyleAttr, pre: bool = False
     ) -> None:
-
         if attr == StyleAttr.FONT:
             # forward to remove_font() for convenience
             self.remove_font(selector, pre)
@@ -630,13 +624,11 @@ class CSSConfig:
     def _add_to_cache(
         self, selector: str, attr: str, value: str | Pango.FontDescription | None
     ) -> None:
-
         self._cache[selector + attr] = value
 
     def _get_from_cache(
         self, selector: str, attr: str
     ) -> str | Pango.FontDescription | None:
-
         return self._cache[selector + attr]
 
     def _invalidate_cache(self) -> None:

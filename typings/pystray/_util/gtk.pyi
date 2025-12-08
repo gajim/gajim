@@ -7,8 +7,7 @@ import typing
 from gi.repository import Gtk
 from pystray import _base
 
-if not Gtk.init_check()[0]:
-    ...
+if not Gtk.init_check()[0]: ...
 
 def mainloop(f: typing.Any) -> typing.Any:
     """Marks a function to be executed in the main loop.

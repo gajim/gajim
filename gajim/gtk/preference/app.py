@@ -521,9 +521,7 @@ class AutomaticStatusGroup(GajimPreferencesGroup):
                 _("Auto Away"),
                 SettingType.CONFIG,
                 "autoaway",
-                desc=_(
-                    'Change your status to "Away" after a certain ' "amount of time"
-                ),
+                desc=_('Change your status to "Away" after a certain amount of time'),
                 props={"subpage": "auto-away"},
             ),
             Setting(

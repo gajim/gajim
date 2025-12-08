@@ -88,7 +88,6 @@ class ManageSounds(GajimAppWindow):
     def _on_row_changed(
         model: Gtk.TreeModel, path: Gtk.TreePath, iter_: Gtk.TreeIter
     ) -> None:
-
         sound_event = model[iter_][Column.CONFIG]
         app.settings.set_soundevent_setting(
             sound_event, "enabled", model[path][Column.ENABLED]

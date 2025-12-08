@@ -182,8 +182,7 @@ class RosterItemExchange(GajimAppWindow):
                         contact, BareContact | GroupchatContact | GroupchatParticipant
                     )
                     message = _(
-                        "%(name)s %(jid)s suggested me to add you to "
-                        "my contact list."
+                        "%(name)s %(jid)s suggested me to add you to my contact list."
                     ) % {"name": contact.name, "jid": self._jid_from.bare}
                     # Keep same groups and same nickname
                     groups: list[str] = []

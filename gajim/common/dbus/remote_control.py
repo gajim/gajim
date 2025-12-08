@@ -150,7 +150,6 @@ class Server:
         parameters: GLib.Variant,
         invocation: Gio.DBusMethodInvocation,
     ) -> None:
-
         args = list(parameters.unpack())
         for i, sig in enumerate(self._method_inargs[method_name]):
             if sig == "h":
@@ -247,7 +246,6 @@ class GajimRemote(Server):
 
     @staticmethod
     def _send_message(jid: str, message: str, account: str, type_: str) -> bool:
-
         if not app.account_is_available(account):
             return False
 
@@ -275,7 +273,6 @@ class GajimRemote(Server):
         return self._send_message(jid, message, account, "chat")
 
     def send_groupchat_message(self, jid: str, message: str, account: str) -> bool:
-
         if not jid or not message or not account:
             return False
 

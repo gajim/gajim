@@ -108,7 +108,6 @@ MUC_FEATURES = {
 
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
-
     __gsignals__ = {
         "name-updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }

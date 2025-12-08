@@ -266,7 +266,6 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         parent = self.get_ancestor(Adw.ApplicationWindow)
         assert parent is not None
 
@@ -345,7 +344,6 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         )
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
-
         item = self._get_selected_items()[0]
 
         def _on_response(name: str) -> None:
@@ -366,7 +364,6 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
     def _on_import_from_account(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-
         remote_client = app.get_client(param.get_string())
         remote_items = [
             item for _jid, item in remote_client.get_module("Roster").iter()
@@ -394,9 +391,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         )
 
     def _on_import_from_file(self, _action: Gio.SimpleAction, param: None) -> None:
-
         def _on_file_picked(dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
-
             try:
                 g_file = dialog.open_finish(result)
             except GLib.Error as e:
@@ -422,9 +417,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         dialog.open(parent, None, _on_file_picked)
 
     def _on_export_to_csv(self, _action: Gio.SimpleAction, param: None) -> None:
-
         def _on_file_picked(dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
-
             try:
                 g_file = dialog.save_finish(result)
             except GLib.Error as e:
@@ -541,7 +534,6 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         x: float,
         y: float,
     ) -> bool:
-
         items = self._get_selected_items()
         if not items:
             return Gdk.EVENT_STOP
@@ -569,7 +561,6 @@ class RosterListItem(GObject.Object):
     search_string = GObject.Property(type=str)
 
     def __init__(self, item: RosterItem, group: str) -> None:
-
         subscription = self._get_subscription_data(item.subscription)
         ask = self._get_ask_data(item.ask)
 

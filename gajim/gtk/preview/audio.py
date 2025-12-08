@@ -33,7 +33,6 @@ SEEK_BAR_PADDING = 12
 
 @Gtk.Template.from_string(string=get_ui_string("preview/audio.ui"))
 class AudioPreviewWidget(Gtk.Box, SignalManager):
-
     __gtype_name__ = "AudioPreviewWidget"
 
     __gsignals__ = {
@@ -444,7 +443,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     def _on_speed_change(
         self, _range: Gtk.Range, _scroll: Gtk.ScrollType, value: float
     ) -> None:
-
         self._set_playback_speed(value)
 
     def _on_speed_dec_clicked(self, _button: Gtk.Button) -> None:

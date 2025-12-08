@@ -75,13 +75,11 @@ log = logging.getLogger("gajim.gtk.start_chat")
 
 
 class StartChatDialog(GajimAppWindow):
-
     last_chat_filters = ChatFilters()
 
     def __init__(
         self, initial_jid: str | None = None, initial_message: str | None = None
     ) -> None:
-
         GajimAppWindow.__init__(
             self,
             name="StartChatDialog",
@@ -378,7 +376,6 @@ class StartChatDialog(GajimAppWindow):
         _keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
-
         if keyval == Gdk.KEY_Down:
             self._ui.search_entry.emit("next-match")
             return Gdk.EVENT_STOP
@@ -434,7 +431,6 @@ class StartChatDialog(GajimAppWindow):
         _keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
-
         if keyval == Gdk.KEY_Escape:
             if self._ui.stack.get_visible_child_name() == "progress":
                 # Propagate to GajimAppWindow
@@ -686,7 +682,6 @@ class StartChatDialog(GajimAppWindow):
             item.props.jid = JID.from_string(search_text)
 
     def _select_new_match(self, _entry: Gtk.Entry, direction: Direction) -> None:
-
         if self._is_global_search_active():
             self._global_search_view.select(direction)
         else:
@@ -786,7 +781,6 @@ class StartChatDialog(GajimAppWindow):
 
 
 class BaseListView(Generic[L, V], Gtk.ListView, SignalManager):
-
     _selection_model: Gtk.SingleSelection
     _filter_model: Gtk.FilterListModel
 
@@ -909,7 +903,6 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
     def _on_filter_items_changed(
         self, filter_model: Gtk.FilterListModel, _pos: int, _removed: int, _added: int
     ) -> None:
-
         # Cancel any active source at first so we dont have
         # multiple timeouts running
 
@@ -961,7 +954,6 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         obj2: ContactListItem,
         _user_data: object | None,
     ) -> int:
-
         if obj1.is_new != obj2.is_new:
             return 1 if obj1.is_new else -1
 
@@ -1030,7 +1022,6 @@ class ContactListItem(GObject.Object):
         account_visible: bool,
         groupchat: bool = False,
     ) -> None:
-
         name = name or _("Start / Join Chat")
 
         idle = None
@@ -1155,7 +1146,6 @@ class ContactViewItem(Gtk.Grid, SignalManager):
         x: float,
         y: float,
     ) -> int:
-
         if self._menu.get_menu_model() is None:
             return Gdk.EVENT_PROPAGATE
 
@@ -1170,7 +1160,6 @@ class GlobalSearch(
     Gtk.ListView,
     SignalManager,
 ):
-
     __gsignals__ = {
         "global-search-progress": (GObject.SignalFlags.RUN_FIRST, None, (bool, int)),
     }

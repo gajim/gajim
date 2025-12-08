@@ -162,7 +162,6 @@ class AccountWizard(Assistant):
                 self._test_credentials(ignore_all_errors=True)
 
         elif button_name == "signup":
-
             if self.get_page("signup").is_anonymous():
                 domain = self.get_page("signup").get_server()
 
@@ -264,7 +263,6 @@ class AccountWizard(Assistant):
     def _get_base_client(
         self, address: JID, mode: Mode, advanced: bool, ignore_all_errors: bool
     ) -> NBXMPPClient:
-
         client = NBXMPPClient(log_context="Account Wizard")
         client.set_domain(address.domain)
         client.set_username(address.localpart)
@@ -305,7 +303,6 @@ class AccountWizard(Assistant):
     def _request_host_meta_and_connect(
         self, client: NBXMPPClient, advanced: bool
     ) -> None:
-
         def _on_host_meta_response(obj: FileTransfer) -> None:
             if self._destroyed:
                 return
@@ -563,7 +560,6 @@ class AccountWizard(Assistant):
     def _set_error_text(
         self, error: StanzaError | RegisterStanzaError | MalformedStanzaError
     ) -> None:
-
         error_text = error.get_text()
         if not error_text:
             error_text = _(
@@ -577,7 +573,6 @@ class AccountWizard(Assistant):
 
 
 class Login(Page):
-
     __gsignals__ = {
         "clicked": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
@@ -816,7 +811,7 @@ class Signup(Page):
 
         providers_link = Gtk.LinkButton(
             label=_("More infos at providers.xmpp.net"),
-            uri=f'https://providers.xmpp.net/provider/{server_data["jid"]}/',
+            uri=f"https://providers.xmpp.net/provider/{server_data['jid']}/",
             halign=Gtk.Align.START,
         )
         self._ui.sign_up_info_grid.attach(providers_link, 0, 2, 2, 1)

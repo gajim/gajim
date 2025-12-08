@@ -135,7 +135,8 @@ class TestActivityFeed(GajimAppWindow):
         # Trigger plugin update successful event with delay, because it removes
         # available update message
         GLib.timeout_add_seconds(
-            10, app.plugin_repository.trigger_plugin_update_successful  # type: ignore
+            10,
+            app.plugin_repository.trigger_plugin_update_successful,  # type: ignore
         )
 
     def _on_subscription_button_clicked(self, _button: Gtk.Button) -> None:

@@ -168,7 +168,6 @@ class InformationAlertDialog(_BaseAlertDialog):
         callback: Callable[[], None] | None = None,
         parent: Gtk.Window | None = None,
     ) -> None:
-
         _BaseAlertDialog.__init__(
             self,
             heading,
@@ -229,7 +228,6 @@ class ConfirmationAlertDialog(_BaseAlertDialog):
         callback: Callable[..., None] | None = None,
         parent: Gtk.Window | None = None,
     ) -> None:
-
         _BaseAlertDialog.__init__(
             self,
             heading,

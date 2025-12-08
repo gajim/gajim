@@ -32,7 +32,7 @@ def format_idle_time(idle_time: dt.datetime) -> str:
     if idle_date == now_date - dt.timedelta(days=1):
         return _("Yesterday (%s)") % idle_time.strftime(app.settings.get("time_format"))
     if idle_date >= now_date - dt.timedelta(days=6):
-        return idle_time.strftime(f'%a {app.settings.get("time_format")}')
+        return idle_time.strftime(f"%a {app.settings.get('time_format')}")
 
     return idle_date.strftime(app.settings.get("date_format"))
 

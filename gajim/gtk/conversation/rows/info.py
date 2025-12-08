@@ -19,7 +19,6 @@ from gajim.gtk.conversation.rows.widgets import SimpleLabel
 
 class InfoMessage(BaseRow):
     def __init__(self, account: str, text: str, timestamp: datetime | None) -> None:
-
         BaseRow.__init__(self, account)
 
         self.type = "info"

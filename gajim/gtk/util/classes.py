@@ -24,7 +24,6 @@ class SignalManager:
         callback: Any,
         *args: Any,
     ) -> int:
-
         signal_id = obj.connect(signal_name, callback, *args)
         self._signal_data.append((obj, signal_id))
         return signal_id
@@ -32,7 +31,6 @@ class SignalManager:
     def _connect_after(
         self, obj: GObject.Object, signal_name: str, callback: Any, *args: Any
     ) -> int:
-
         signal_id = obj.connect_after(signal_name, callback, *args)
         self._signal_data.append((obj, signal_id))
         return signal_id

@@ -13,7 +13,6 @@ from gi.repository import GObject
 
 
 class Singleton(type):
-
     _instances: dict[Any, Any] = {}
 
     def __call__(cls, *args: Any, **kwargs: Any):
@@ -23,11 +22,9 @@ class Singleton(type):
 
 
 class SettingsAction(Gio.SimpleAction):
-
     def simple_bind_property(
         self, target: GObject.Object, target_property: str
     ) -> None:
-
         self.bind_property(
             "state",
             target,

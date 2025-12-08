@@ -76,7 +76,6 @@ class ContactItem(Gtk.FlowBoxChild, SignalManager):
 
 
 class ContactsFlowBox(Gtk.FlowBox):
-
     __gsignals__ = {
         "contact-removed": (GObject.SignalFlags.RUN_LAST, None, (str, str, bool))
     }

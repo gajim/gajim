@@ -30,7 +30,6 @@ log = logging.getLogger("gajim.gtk.groupchat_join")
 
 class GroupchatJoin(GajimAppWindow):
     def __init__(self, account: str, jid: str) -> None:
-
         GajimAppWindow.__init__(
             self,
             name="GroupchatJoin",

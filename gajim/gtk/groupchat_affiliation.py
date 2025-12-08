@@ -157,7 +157,6 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
     def _on_jid_edited(
         self, _renderer: Gtk.CellRendererText, path: str, new_text: str
     ) -> None:
-
         old_text = self._store[path][Column.JID]
         if new_text == old_text:
             return
@@ -181,7 +180,6 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
         path_string: str,
         new_iter: Gtk.TreeIter,
     ) -> None:
-
         combo_store = cell_renderer_combo.get_property("model")
         affiliation_text = combo_store.get_value(new_iter, 0)
         affiliation = combo_store.get_value(new_iter, 1)
@@ -211,7 +209,6 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
     def _set_remove_button_state(
         self, sensitive: bool, selected_affiliations: set[str]
     ) -> None:
-
         if self._own_affiliation not in ("admin", "owner"):
             self._ui.remove_button.set_sensitive(False)
             return
@@ -229,10 +226,7 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
         if {"owner", "admin"}.intersection(selected_affiliations):
             self._ui.remove_button.set_sensitive(False)
             self._ui.remove_button.set_tooltip_text(
-                _(
-                    "You are not allowed to modify the affiliation "
-                    "of Admins and Owners"
-                )
+                _("You are not allowed to modify the affiliation of Admins and Owners")
             )
             return
 
@@ -271,7 +265,6 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
         return rows
 
     def _get_diff(self) -> list[AffiliationRow]:
-
         new_rows = self._get_new_rows()
 
         before = {row.jid for row in self._current_rows}

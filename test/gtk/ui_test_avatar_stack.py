@@ -53,7 +53,6 @@ class TestAvatarStack(GajimAppWindow):
 
 
 def insert_test_markers() -> None:
-
     occupants: dict[int, mod.Occupant] = {}
     for i in range(10):
         occupants[i] = mod.Occupant(

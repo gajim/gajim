@@ -205,8 +205,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "encryption_default",
                 desc=_(
-                    "Encryption method to use "
-                    "unless overridden on a per-contact basis"
+                    "Encryption method to use unless overridden on a per-contact basis"
                 ),
                 props={"data": encryption_entries},
             ),
@@ -225,8 +224,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
                 "send_os_info",
                 callback=self._send_os_info,
                 desc=_(
-                    "Disclose information about the "
-                    "operating system you currently use"
+                    "Disclose information about the operating system you currently use"
                 ),
             ),
             Setting(
@@ -1045,12 +1043,10 @@ class AccountActiveSwitch(Adw.ActionRow, SignalManager, EventHelper):
     def _on_state_changed(
         self, client: types.Client, _signal_name: str, client_state: ClientState
     ) -> None:
-
         if client_state.is_disconnected:
             app.app.disable_account(client.account)
 
     def _on_state_set(self, switch: Gtk.Switch, state: bool, account: str) -> int:
-
         def _on_response(response_id: str) -> None:
             if response_id == "disable":
                 client = app.get_client(account)

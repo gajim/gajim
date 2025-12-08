@@ -160,7 +160,6 @@ class BlockListItem(GObject.Object):
     nickname = GObject.Property(type=str)
 
     def __init__(self, occupant: Occupant) -> None:
-
         super().__init__(
             id=occupant.id,
             nickname=occupant.nickname,

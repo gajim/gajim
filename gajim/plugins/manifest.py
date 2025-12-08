@@ -84,7 +84,7 @@ class PluginManifest:
             try:
                 manifest = json.load(f)
             except Exception as error:
-                raise ValueError(f"Error while parsing manifest: " f"{path}, {error}")
+                raise ValueError(f"Error while parsing manifest: {path}, {error}")
         return cls.from_manifest_json(manifest, manifest_path)
 
     def _check_requirements(self) -> bool:

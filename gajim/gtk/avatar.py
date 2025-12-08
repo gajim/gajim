@@ -65,7 +65,6 @@ def generate_avatar_letter(text: str) -> str:
 def generate_avatar(
     letters: str, color: tuple[float, float, float], size: int, scale: int
 ) -> cairo.ImageSurface:
-
     # Get color for nickname with XEP-0392
     color_r, color_g, color_b = color
 
@@ -116,7 +115,6 @@ def generate_default_avatar(
     scale: int,
     style: str = "circle",
 ) -> cairo.ImageSurface:
-
     surface = generate_avatar(letter, color, size, scale)
     surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
@@ -131,7 +129,6 @@ def make_workspace_avatar(
     scale: int,
     style: str = "round-corners",
 ) -> Gdk.Texture:
-
     surface = generate_avatar(letter, color, size, scale)
     surface.set_device_scale(scale, scale)
     return convert_surface_to_texture(clip(surface, style))
@@ -141,7 +138,6 @@ def add_transport_to_avatar(
     surface: cairo.ImageSurface,
     transport_icon: str,
 ) -> cairo.ImageSurface:
-
     scale = surface.get_device_scale()[0]
     width = surface.get_width()
     height = surface.get_height()
@@ -185,7 +181,6 @@ def add_transport_to_avatar(
 
 
 def add_status_to_avatar(surface: cairo.ImageSurface, show: str) -> cairo.ImageSurface:
-
     width = surface.get_width()
     height = surface.get_height()
 
@@ -276,7 +271,6 @@ def merge_avatars(avatar1: Gdk.Texture, avatar2: Gdk.Texture) -> Gdk.Texture:
 def get_show_circle(
     show: str | types.PresenceShowT, size: int, scale: int
 ) -> cairo.ImageSurface:
-
     if not isinstance(show, str):
         show = show.value
 
@@ -407,9 +401,7 @@ def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 
     context.new_sub_path()
     context.arc(width - radius, radius, radius, -90 * degrees, 0 * degrees)
-    context.arc(
-        width - radius, height - radius, radius, 0 * degrees, 90 * degrees
-    )  # noqa: E501
+    context.arc(width - radius, height - radius, radius, 0 * degrees, 90 * degrees)  # noqa: E501
     context.arc(radius, height - radius, radius, 90 * degrees, 180 * degrees)
     context.arc(radius, radius, radius, 180 * degrees, 270 * degrees)
     context.close_path()
@@ -462,7 +454,6 @@ class AvatarStorage(metaclass=Singleton):
         transport_icon: str | None = None,
         style: str = "circle",
     ) -> Gdk.Texture:
-
         jid = contact.jid
 
         if not default:
@@ -508,7 +499,6 @@ class AvatarStorage(metaclass=Singleton):
         transport_icon: str | None = None,
         style: str = "circle",
     ) -> Gdk.Texture:
-
         if not default:
             texture = self._cache[jid].get((size, scale, None, transport_icon))
             if texture is not None:
@@ -556,7 +546,6 @@ class AvatarStorage(metaclass=Singleton):
         scale: int,
         style: str = "circle",
     ) -> Gdk.Texture:
-
         if isinstance(occupant, str):
             key = occupant
             nickname = occupant
@@ -604,7 +593,6 @@ class AvatarStorage(metaclass=Singleton):
     def get_workspace_texture(
         self, workspace_id: str, size: int, scale: int
     ) -> Gdk.Texture | None:
-
         texture = self._cache[workspace_id].get((size, scale, None, None))
         if texture is not None:
             return texture
@@ -753,7 +741,6 @@ class AvatarStorage(metaclass=Singleton):
     def surface_from_filename(
         self, filename: str, size: int, scale: int
     ) -> cairo.ImageSurface | None:
-
         size = size * scale
         path = self.get_avatar_path(filename)
         if path is None:
@@ -786,7 +773,6 @@ class AvatarStorage(metaclass=Singleton):
         scale: int,
         style: str,
     ) -> cairo.ImageSurface | None:
-
         if sha is None:
             return None
 

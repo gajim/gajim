@@ -62,14 +62,12 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         if state == SimpleClientState.CONNECTED:
             self._update_combo_box()
 
     def _on_setting_changed(
         self, state: bool, _name: str, _account: str | None, _jid: JID | None
     ) -> None:
-
         if state:
             self._update_combo_box()
         else:
@@ -86,7 +84,6 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         self._update_combo_box()
 
     def _update_combo_box(self) -> None:
-
         assert self._contact is not None
         assert self._client is not None
 

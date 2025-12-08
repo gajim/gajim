@@ -14,7 +14,6 @@ from gajim.gtk.completion.nickname import NicknameCompletionProvider
 
 class Test(unittest.TestCase):
     def test_generate_suggestions(self):
-
         def _get_mock_participant(nick: str) -> GroupchatParticipant:
             participant = MagicMock(spec_set=GroupchatParticipant)
             participant.name = nick

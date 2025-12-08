@@ -20,7 +20,6 @@ class DraftStorage(Observable):
         contact: types.ChatContactT,
         draft: Draft | None,
     ) -> None:
-
         if draft is None:
             self.remove(contact)
             return
@@ -29,7 +28,6 @@ class DraftStorage(Observable):
         self.notify("draft-update", contact, draft)
 
     def get(self, contact: types.ChatContactT) -> Draft | None:
-
         return self._drafts.get(contact)
 
     def remove(self, contact: types.ChatContactT) -> None:

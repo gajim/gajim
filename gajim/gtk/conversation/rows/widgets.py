@@ -188,7 +188,6 @@ class MessageRowActions(Gtk.Box):
         _x: int,
         _y: int,
     ) -> None:
-
         self._has_cursor = True
 
         if self._is_menu_open:
@@ -226,7 +225,7 @@ class MessageRowActions(Gtk.Box):
 
     def _on_reaction_added(self, _widget: EmojiChooser, emoji: str) -> None:
         # Remove emoji variant selectors
-        emoji = emoji.strip("\uFE0E\uFE0F")
+        emoji = emoji.strip("\ufe0e\ufe0f")
         self._send_reaction(emoji, toggle=False)
 
     def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
@@ -256,12 +255,11 @@ class MessageRowActions(Gtk.Box):
 
 class QuickReactionButton(Gtk.Button):
     def __init__(self, emoji: str) -> None:
-
         self.emoji = emoji
 
         # Add emoji presentation selector, otherwise depending on the font
         # emojis might be displayed in its text variant
-        emoji_presentation_form = f"{emoji}\uFE0F"
+        emoji_presentation_form = f"{emoji}\ufe0f"
 
         Gtk.Button.__init__(
             self,

@@ -95,7 +95,7 @@ def format_fingerprint(fingerprint: str) -> str:
     wordsize = fplen // 8
     buf = ""
     for char in range(0, fplen, wordsize):
-        buf += f"{fingerprint[char:char + wordsize]} "
+        buf += f"{fingerprint[char : char + wordsize]} "
     buf = textwrap.fill(buf, width=36)
     return buf.rstrip().upper()
 
@@ -105,7 +105,7 @@ def format_tune(data: TuneData) -> str:
     title = GLib.markup_escape_text(data.title or _("Unknown Title"))
     source = GLib.markup_escape_text(data.source or _("Unknown Source"))
 
-    return _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n' "from <i>%(source)s</i>") % {
+    return _('<b>"%(title)s"</b> by <i>%(artist)s</i>\nfrom <i>%(source)s</i>') % {
         "title": title,
         "artist": artist,
         "source": source,
@@ -175,7 +175,7 @@ def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
         # Remove emoji variant selectors. They are not needed because
         # reactions are required to be shown as emoji representation.
         # Furthermore it allows us to unify both versions.
-        reaction = reaction.strip("\uFE0E\uFE0F")
+        reaction = reaction.strip("\ufe0e\ufe0f")
         if not emoji.is_emoji(reaction):
             invalid.add(reaction)
             continue

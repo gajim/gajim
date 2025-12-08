@@ -8,6 +8,7 @@
 Watch for system shutdown using systemd-logind.
 Documentation: https://www.freedesktop.org/wiki/Software/systemd/inhibit
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -74,7 +75,7 @@ class LogindListener:
             # Something is wrong, we have an inhibitor fd, and we are asking for
             # yet another one.
             log.warning(
-                "Trying to obtain a shutdown inhibitor " "while already holding one."
+                "Trying to obtain a shutdown inhibitor while already holding one."
             )
             return
 
@@ -101,7 +102,7 @@ class LogindListener:
             )
         except GLib.Error as error:
             log.warning(
-                "Could not obtain a shutdown delay inhibitor from " "logind: %s", error
+                "Could not obtain a shutdown delay inhibitor from logind: %s", error
             )
             return
 

@@ -262,7 +262,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_action(
         self, action: Gio.SimpleAction, param: GLib.Variant | None
     ) -> int | None:
-
         if self._contact is None:
             return
 
@@ -579,7 +578,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             )
 
     def _change_encryption(self, action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         new_state = param.get_string()
         action_state = action.get_state()
         assert action_state is not None
@@ -604,7 +602,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._update_encryption_details_button(new_state)
 
     def _update_encryption_button(self, encryption: str, *, is_available: bool) -> None:
-
         contact = self.get_current_contact()
 
         if is_available:
@@ -713,7 +710,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_send_file_enabled_changed(
         self, action: Gio.SimpleAction, _param: GObject.ParamSpec
     ) -> None:
-
         self._update_send_file_button_tooltip()
 
     def _update_send_file_button_tooltip(self):

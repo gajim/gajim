@@ -20,7 +20,6 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
     def __init__(
         self, button_text: str, on_clicked: Callable[[Gtk.Button], Any]
     ) -> None:
-
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         SignalManager.__init__(self)
 

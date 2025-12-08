@@ -309,37 +309,31 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_room_password_required(
         self, _contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.PASSWORD_REQUEST)
 
     def _on_room_captcha_challenge(
         self, contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.CAPTCHA_REQUEST)
 
     def _on_room_captcha_error(
         self, _contact: GroupchatContact, _signal_name: str, error: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.CAPTCHA_ERROR, error)
 
     def _on_room_creation_failed(
         self, _contact: GroupchatContact, _signal_name: str, error: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.CREATION_FAILED, error)
 
     def _on_room_join_failed(
         self, _contact: GroupchatContact, _signal_name: str, error: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.JOIN_FAILED, error)
 
     def _on_room_config_failed(
         self, _contact: GroupchatContact, _signal_name: str, error: str
     ) -> None:
-
         self._show_chat_function_page(FunctionMode.CONFIG_FAILED)
 
     def _on_muc_state_changed(
@@ -354,7 +348,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         _user_contact: GroupchatParticipant,
         _event: events.MUCUserJoined,
     ) -> None:
-
         self._update_group_chat_actions(contact)
 
     def _on_user_role_changed(
@@ -364,7 +357,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         _user_contact: GroupchatParticipant,
         _event: events.MUCUserRoleChanged,
     ) -> None:
-
         self._update_group_chat_actions(contact)
 
     def _on_user_affiliation_changed(
@@ -388,7 +380,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_account_state(
         self, event: events.AccountConnected | events.AccountDisconnected
     ) -> None:
-
         if self._current_contact is None:
             return
 
@@ -450,7 +441,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._issue_notification(event.account, message)
 
     def _issue_notification(self, account: str, message: Message) -> None:
-
         text = message.text
         assert text is not None
 
@@ -582,7 +572,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         pass
 
     def _on_action(self, action: Gio.SimpleAction, param: GLib.Variant | None) -> None:
-
         if self.get_visible_child_name() != "controls":
             return
 
@@ -757,7 +746,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         _x: float,
         _y: float,
     ) -> bool:
-
         if value is None:
             log.debug("Drop received, but value is None")
             return False
@@ -824,7 +812,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         data: str | None = None,
         files: list[str] | None = None,
     ) -> None:
-
         assert self._current_contact is not None
         self._chat_function_page.set_mode(
             self._current_contact, function_mode, data, files
@@ -847,7 +834,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_function_message(
         self, _function_page: ChatFunctionPage, message: str
     ) -> None:
-
         self._chat_control.add_info_message(message)
 
     def check_send_preconditons(self) -> bool:
@@ -941,7 +927,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_command_signal(
         self, _chat_commands: ChatCommands, signal_name: str, text: str
     ) -> None:
-
         is_error = signal_name != "command-result"
         self._chat_control.add_command_output(text, is_error)
 

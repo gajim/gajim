@@ -22,7 +22,6 @@ from gajim.gtk.util.misc import convert_surface_to_texture
 
 class UserStatus(BaseRow):
     def __init__(self, account: str, name: str, show: str, status: str | None) -> None:
-
         BaseRow.__init__(self, account)
 
         self.type = "muc-user-status"

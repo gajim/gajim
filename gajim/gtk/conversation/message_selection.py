@@ -11,7 +11,6 @@ from gajim.common.i18n import _
 
 
 class MessageSelection(Gtk.Grid):
-
     __gsignals__ = {
         "copy": (GObject.SignalFlags.RUN_LAST, None, ()),
         "cancel": (GObject.SignalFlags.RUN_LAST, None, ()),

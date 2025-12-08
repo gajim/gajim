@@ -54,7 +54,6 @@ class FileChooserButton(Gtk.Button, SignalManager):
         icon_name: str | None = None,
         initial_path: Path | None = None,
     ) -> None:
-
         Gtk.Button.__init__(self)
         SignalManager.__init__(self)
         self._path = path
@@ -167,7 +166,6 @@ class FileChooserButton(Gtk.Button, SignalManager):
         self, file_dialog: Gtk.FileDialog, result: Gio.AsyncResult
     ) -> None:
         try:
-
             match (self._mode, self._multiple):
                 case ("file-open", True):
                     g_files = cast(

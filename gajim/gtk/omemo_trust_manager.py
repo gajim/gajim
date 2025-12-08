@@ -180,7 +180,6 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._load_fingerprints(self._contact)
 
     def _on_account_state(self, event: AccountConnected | AccountDisconnected) -> None:
-
         if event.account != self._account:
             return
 
@@ -313,7 +312,6 @@ class DeviceRow(Adw.ActionRow, SignalManager):
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
-
         def _on_response() -> None:
             self._client.get_module("OMEMO").backend.delete_session(
                 self._address, self._identity_info.device_id, delete_identity=True
@@ -451,7 +449,6 @@ class MenuOption(Gtk.ListBoxRow):
     def __init__(
         self, icon: str, label_text: str, color: str, type_: OMEMOTrust | None = None
     ) -> None:
-
         Gtk.ListBoxRow.__init__(self)
 
         self.type_ = type_

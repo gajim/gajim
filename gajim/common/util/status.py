@@ -113,7 +113,6 @@ def compare_show(
     show1: PresenceShow | PresenceShowExt,
     show2: PresenceShow | PresenceShowExt,
 ) -> int:
-
     val1 = ShowSortOrder[show1]
     val2 = ShowSortOrder[show2]
     if val1 == val2:

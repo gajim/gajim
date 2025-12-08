@@ -232,7 +232,6 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         assert self._results_iterator is not None
         has_results = False
         for message in itertools.islice(self._results_iterator, 25):
-
             # With the current database design for corrections, we found
             # no way of only searching within the last correction of a
             # message so the search can return the original message, the
@@ -377,7 +376,6 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
         control = app.window.get_control()
         if not control.is_chat_active(row.account, row.remote_jid):
-
             chat_type = "chat"
             if row.type == MessageType.GROUPCHAT:
                 chat_type = "groupchat"
@@ -497,7 +495,6 @@ class ResultRow(Gtk.ListBoxRow):
         raise ValueError("Unable to find account: %s" % account_jid)
 
     def _get_avatar(self, direction: ChatDirection, name: str) -> Gdk.Texture | None:
-
         scale = self.get_scale_factor()
         if isinstance(self.contact, GroupchatContact):
             contact = self.contact.get_resource(name)
@@ -522,7 +519,6 @@ class SearchFilterData:
 
 
 class SearchFilters(Gtk.Expander, SignalManager):
-
     __gsignals__ = {
         "filter-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
         "filter-activated": (

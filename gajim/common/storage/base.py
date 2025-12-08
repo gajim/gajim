@@ -75,7 +75,7 @@ def timeit(func: Callable[P, R]) -> Callable[P, R]:
 
 
 def with_session(
-    func: Callable[Concatenate[Any, Session, P], R]
+    func: Callable[Concatenate[Any, Session, P], R],
 ) -> Callable[Concatenate[Any, P], R]:
     def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> R:
         with self._create_session() as session, session.begin():
@@ -85,7 +85,7 @@ def with_session(
 
 
 def with_session_yield_from(
-    func: Callable[Concatenate[Any, Session, P], Iterator[R]]
+    func: Callable[Concatenate[Any, Session, P], Iterator[R]],
 ) -> Callable[Concatenate[Any, P], Iterator[Any]]:
     def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> Iterator[R]:
         with self._create_session() as session, session.begin():

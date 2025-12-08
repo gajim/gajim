@@ -44,7 +44,6 @@ def get_current_version(
 def get_latest_version(
     package_name: str, package_type: str, py_version: str | None
 ) -> tuple[str, str, str, str]:
-
     with urlopen(f"{PYPI_INDEX}/{package_name}/json") as f:
         data = f.read()
         d = json.loads(data)

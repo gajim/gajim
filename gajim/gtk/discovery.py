@@ -238,7 +238,6 @@ class Closure:
         remove: Callable[..., Any],
         removeargs: tuple[Any, ...],
     ) -> None:
-
         self.userargs = userargs or ()
         self.remove = remove
         self.removeargs = removeargs or ()

@@ -148,7 +148,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
 
     def _on_emoji_added(self, _widget: EmojiChooser, emoji: str) -> None:
         # Remove emoji variant selectors
-        emoji = emoji.strip("\uFE0E\uFE0F")
+        emoji = emoji.strip("\ufe0e\ufe0f")
         self._message_row.send_reaction(emoji, toggle=False)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
@@ -200,7 +200,7 @@ class ReactionButton(Gtk.Button):
 
         # Add emoji presentation selector, otherwise depending on the font
         # emojis might be displayed in its text variant
-        emoji_presentation_form = f"{emoji}\uFE0F"
+        emoji_presentation_form = f"{emoji}\ufe0f"
 
         format_string = app.settings.get("date_time_format")
         tooltip_markup = f'<span size="200%">{emoji_presentation_form}</span>\n'

@@ -61,7 +61,6 @@ log = logging.getLogger("gajim.gtk.conversation_view")
 
 
 class ConversationView(Gtk.ScrolledWindow):
-
     __gsignals__ = {
         "request-history": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
@@ -152,7 +151,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 timestamp_formatted = row.timestamp.strftime(format_string)
                 selection_text += (
-                    f"{timestamp_formatted} - {row.name}:\n" f"{row.get_text()}\n"
+                    f"{timestamp_formatted} - {row.name}:\n{row.get_text()}\n"
                 )
 
         self.get_clipboard().set(selection_text)
@@ -160,7 +159,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self.disable_row_selection()
 
     def enable_row_selection(self, pk: int | None) -> None:
-
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 
         if pk is not None:
@@ -343,7 +341,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _on_adj_value_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
-
         if self._requesting is not None:
             return
 
@@ -498,12 +495,10 @@ class ConversationView(Gtk.ScrolledWindow):
     def add_muc_subject(
         self, subject: MucSubject, timestamp: float | None = None
     ) -> None:
-
         muc_subject = MUCSubject(self.contact.account, subject, timestamp)
         self._insert_message(muc_subject)
 
     def add_muc_user_left(self, event: events.MUCUserLeft, error: bool = False) -> None:
-
         assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get("print_join_left"):
             return
@@ -534,7 +529,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self._insert_message(user_status)
 
     def add_info_message(self, text: str, timestamp: datetime | None = None) -> None:
-
         message = InfoMessage(self.contact.account, text, timestamp)
         self._insert_message(message)
 
@@ -548,7 +542,6 @@ class ConversationView(Gtk.ScrolledWindow):
         event: events.FileRequestReceivedEvent | events.FileRequestSent | None = None,
         message: Message | None = None,
     ) -> None:
-
         assert isinstance(self._contact, BareContact)
         jingle_transfer_row = FileTransferJingleRow(
             self._contact.account, self._contact, event=event, message=message
@@ -718,7 +711,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _add_or_update_displayed_marker_row(
         self, timestamp: datetime, markers: list[DisplayedMarkerData]
     ) -> DisplayedRow | None:
-
         displayed_id = markers[0].id
         row = self._dm_rows.get(displayed_id)
         if row is not None:
@@ -912,7 +904,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _get_message_row_by_direction(
         self, pk: int, direction: Direction | None = None
     ) -> MessageRow | None:
-
         row = self.get_row_by_pk(pk)
         if row is None:
             return None
@@ -1027,7 +1018,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _on_contact_setting_changed(
         self, value: Any, setting: str, _account: str | None, _jid: JID | None
     ) -> None:
-
         if setting == "print_join_left":
             if value:
                 return

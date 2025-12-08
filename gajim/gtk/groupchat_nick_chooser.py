@@ -14,7 +14,6 @@ from gajim.gtk.util.misc import get_ui_string
 
 @Gtk.Template(string=get_ui_string("groupchat_nick_chooser.ui"))
 class GroupChatNickChooser(Gtk.MenuButton, SignalManager):
-
     __gtype_name__ = "GroupChatNickChooser"
 
     _label: Gtk.Label = Gtk.Template.Child()

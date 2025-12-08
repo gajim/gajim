@@ -128,7 +128,6 @@ class AdvancedConfig(GajimAppWindow):
         _keycode: int,
         _state: Gdk.ModifierType,
     ) -> bool:
-
         if keyval != Gdk.KEY_Escape:
             return Gdk.EVENT_PROPAGATE
 
@@ -146,7 +145,6 @@ class AdvancedConfig(GajimAppWindow):
         iter_: Gtk.TreeIter,
         _data: object | None,
     ) -> None:
-
         opt_is_default = model[iter_][Column.IS_DEFAULT]
         cell.set_property("weight", 400 if opt_is_default else 700)
 
@@ -158,7 +156,6 @@ class AdvancedConfig(GajimAppWindow):
         iter_: Gtk.TreeIter,
         _data: object | None,
     ) -> None:
-
         opt_type = model[iter_][Column.TYPE]
         cell.set_property("editable", opt_type != SETTING_TYPES[bool])
 
@@ -166,7 +163,6 @@ class AdvancedConfig(GajimAppWindow):
         cell.set_property("weight", 400 if opt_is_default else 700)
 
     def _on_treeview_selection_changed(self, treeselection: Gtk.TreeSelection) -> None:
-
         model, iter_ = treeselection.get_selected()
         if not iter_:
             self._ui.reset_button.set_sensitive(False)
@@ -202,7 +198,6 @@ class AdvancedConfig(GajimAppWindow):
     def _on_config_edited(
         self, _cell: Gtk.CellRendererText, path: str, text: str
     ) -> None:
-
         treepath = Gtk.TreePath.new_from_string(path)
         assert treepath is not None
         modelpath = self.modelfilter.convert_path_to_child_path(treepath)
@@ -271,7 +266,6 @@ class AdvancedConfig(GajimAppWindow):
     def _visible_func(
         self, model: Gtk.TreeModel, treeiter: Gtk.TreeIter, _data: object | None
     ) -> bool:
-
         search_string = self._ui.search_entry.get_text().lower()
         if not search_string:
             return True

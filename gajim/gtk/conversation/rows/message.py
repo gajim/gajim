@@ -59,7 +59,6 @@ MERGE_TIMEFRAME = timedelta(seconds=120)
 
 class MessageRow(BaseRow):
     def __init__(self, contact: ChatContactT, message: Message) -> None:
-
         BaseRow.__init__(self, contact.account)
         self.set_selectable(True)
         self.type = "chat"
@@ -262,7 +261,6 @@ class MessageRow(BaseRow):
     def get_chat_row_menu(
         self,
     ) -> GajimMenu:
-
         copy_text = self._get_copy_text(self.get_text(), self.name, self.timestamp)
 
         return get_chat_row_menu(
@@ -299,7 +297,6 @@ class MessageRow(BaseRow):
     def _get_security_labels_data(
         self, security_labels: mod.SecurityLabel | None
     ) -> tuple[str, str] | None:
-
         if security_labels is None:
             return None
 
@@ -390,7 +387,6 @@ class MessageRow(BaseRow):
         self,
         encryption_data: mod.Encryption | None,
     ) -> tuple[str, str, str] | None:
-
         contact_encryption = self._contact.settings.get("encryption")
         if encryption_data is None:
             if not contact_encryption:

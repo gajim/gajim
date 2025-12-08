@@ -102,7 +102,6 @@ class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
         title: str = "",
         header_suffix: Gtk.Widget | None = None,
     ) -> None:
-
         EventHelper.__init__(self)
         SignalManager.__init__(self)
         Adw.PreferencesGroup.__init__(
@@ -289,7 +288,6 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         enabled_func: Callable[..., bool] | None = None,
         **kwargs: Any,
     ) -> None:
-
         Adw.ActionRow.__init__(self, activatable=True, title=label, subtitle=desc or "")
         SignalManager.__init__(self)
 

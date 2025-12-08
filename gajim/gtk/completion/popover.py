@@ -24,7 +24,6 @@ log = logging.getLogger("gajim.gtk.chat_action_processor")
 
 
 class CompletionPopover(Gtk.Popover):
-
     __gsignals__ = {
         "completion-picked": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
@@ -133,7 +132,6 @@ class CompletionPopover(Gtk.Popover):
         _keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
-
         if not self.get_visible():
             return Gdk.EVENT_PROPAGATE
 

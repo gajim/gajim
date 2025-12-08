@@ -42,7 +42,6 @@ class GajimAppWindow(SignalManager):
         add_window_padding: bool = True,
         header_bar: bool = True,
     ) -> None:
-
         SignalManager.__init__(self)
 
         self._add_window_padding = add_window_padding
@@ -123,7 +122,6 @@ class GajimAppWindow(SignalManager):
         keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
-
         if keyval == Gdk.KEY_Escape:
             self.window.close()
             return Gdk.EVENT_STOP
@@ -292,14 +290,12 @@ class AccountBadge(Gtk.Label):
     def _on_account_label_changed(
         self, _value: str, _setting: str, account: str | None, *args: Any
     ) -> None:
-
         assert account is not None
         self.set_account(account)
 
 
 class GdkRectangle(Gdk.Rectangle):
     def __init__(self, x: int, y: int, height: int = 1, width: int = 1) -> None:
-
         Gdk.Rectangle.__init__(self)
         self.x = x
         self.y = y
@@ -316,7 +312,6 @@ class GajimPopover(Gtk.PopoverMenu):
         position: Gtk.PositionType = Gtk.PositionType.RIGHT,
         event: Any | None = None,
     ) -> None:
-
         Gtk.PopoverMenu.__init__(self, autohide=True)
 
         if menu is not None:

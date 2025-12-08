@@ -92,8 +92,7 @@ def get_texture_from_data(data: bytes, size: int | None = None) -> Gdk.Texture |
             image.close()
         except Exception:
             log.warning(
-                "Could not use Pillow to convert image data. "
-                "Image cannot be displayed",
+                "Could not use Pillow to convert image data. Image cannot be displayed",
                 exc_info=True,
             )
             return None

@@ -20,7 +20,6 @@ from gajim.gtk.widgets import GajimPopover
 
 @Gtk.Template.from_string(string=get_ui_string("preview/geo.ui"))
 class GeoPreviewWidget(Gtk.Box, SignalManager):
-
     __gtype_name__ = "GeoPreviewWidget"
 
     _image_button: Gtk.Button = Gtk.Template.Child()
@@ -58,7 +57,6 @@ class GeoPreviewWidget(Gtk.Box, SignalManager):
         x: float,
         y: float,
     ) -> None:
-
         menu = get_preview_menu(self._uri)
         self._menu_popover.set_menu_model(menu)
         self._menu_popover.set_pointing_to_coord(x, y)

@@ -108,7 +108,6 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
     def _jid_edited(
         self, _renderer: Gtk.CellRendererText, path: str, new_text: str
     ) -> None:
-
         iter_ = self._preferences_store.get_iter(path)
         self._preferences_store.set_value(iter_, 0, new_text)
 

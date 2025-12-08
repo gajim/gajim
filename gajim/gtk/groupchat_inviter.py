@@ -183,7 +183,6 @@ class GroupChatInviter(Gtk.Box, SignalManager):
                 self._ui.contacts_listbox.append(row)
 
     def _on_contacts_row_activated(self, listbox: Gtk.ListBox, row: ContactRow) -> None:
-
         self._invitees_box.add_contact(row.account, row.jid, is_new=row.is_new)
 
         if row.is_new:

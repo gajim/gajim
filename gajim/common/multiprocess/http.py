@@ -81,7 +81,6 @@ class CancelledError(Exception):
 
 
 class NonDecryptor:
-
     def decrypt(self, data: bytes) -> bytes:
         return data
 
@@ -90,7 +89,6 @@ class NonDecryptor:
 
 
 class NonEncryptor:
-
     def encrypt(self, data: bytes) -> bytes:
         return data
 
@@ -140,7 +138,6 @@ def http_request(
     decryption_data: AESKeyData | None = None,
     proxy: str | None = None,
 ) -> HTTPResult:
-
     trust_env = True
     if proxy == "direct://":
         proxy = None

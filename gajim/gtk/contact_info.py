@@ -67,7 +67,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
         contact: GroupchatParticipant | BareContact,
         page: str | None = None,
     ) -> None:
-
         GajimAppWindow.__init__(
             self,
             name="ContactInfo",
@@ -437,13 +436,11 @@ class ContactInfo(GajimAppWindow, EventHelper):
     def _on_subscribed_presence_received(
         self, _event: SubscribedPresenceReceived
     ) -> None:
-
         self._ui.to_subscription_stack.set_visible_child_name("checkmark")
 
     def _on_unsubscribed_presence_received(
         self, _event: UnsubscribedPresenceReceived
     ) -> None:
-
         self._ui.to_subscription_stack.set_visible_child_name("request")
         self._ui.request_stack.set_visible_child_name("cross")
 
@@ -533,7 +530,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
 @Gtk.Template(string=get_ui_string("device_info.ui"))
 class DeviceInfo(Adw.PreferencesGroup):
-
     __gtype_name__ = "DeviceInfo"
 
     _spinner: Adw.Spinner = Gtk.Template.Child()

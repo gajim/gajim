@@ -27,7 +27,6 @@ class AESKeyData:
 
 class AESGCMDecryptor:
     def __init__(self, data: AESKeyData) -> None:
-
         self._cipher = Cipher(
             algorithms.AES(data.key), GCM(data.iv), backend=default_backend()
         ).decryptor()
@@ -46,7 +45,6 @@ class AESGCMDecryptor:
 
 class AESGCMEncryptor:
     def __init__(self, data: AESKeyData) -> None:
-
         self._cipher = Cipher(
             algorithms.AES(data.key), GCM(data.iv), backend=default_backend()
         ).encryptor()

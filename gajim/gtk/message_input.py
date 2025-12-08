@@ -152,7 +152,6 @@ class MessageInputTextView(GtkSource.View):
         self.set_extra_menu(menu)
 
     def _on_buffer_changed(self, _text_buffer_manager: TextBufferManager) -> None:
-
         buf = self.get_buffer()
         if self._populate_completion(buf):
             _success, rect = self.compute_bounds(self._parent)
@@ -418,7 +417,6 @@ class MessageInputTextView(GtkSource.View):
 
 
 class TextBufferManager(GObject.Object):
-
     __gsignals__ = {
         "buffer-changed": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,

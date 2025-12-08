@@ -23,7 +23,6 @@ class GajimDropDown(Gtk.DropDown):
         data: GajimDropDownDataT | None = None,
         fixed_width: int = -1,
     ) -> None:
-
         Gtk.DropDown.__init__(self)
 
         self._kwargs: dict[str, Any] = {

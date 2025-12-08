@@ -108,7 +108,6 @@ def try_load_raw_emoji_data(locale: str) -> GLib.Bytes | None:
 
 
 def parse_emoji_data(bytes_data: GLib.Bytes, loc: str) -> Gio.ListStore:
-
     variant = GLib.Variant.new_from_bytes(
         # Reference for the data format:
         # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/emoji/convert-emoji.c#L25
@@ -153,7 +152,7 @@ def parse_emoji_data(bytes_data: GLib.Bytes, loc: str) -> Gio.ListStore:
             emoji=u_sequence,
             short_name=trans_short_name,
             keywords=f"[ {keywords_string} ]",
-            search=f'{trans_short_name}|{"|".join(trans_keywords)}',
+            search=f"{trans_short_name}|{'|'.join(trans_keywords)}",
             has_skin_variation=has_skin_variation,
             **u_mod_sequences,
         )
@@ -230,7 +229,6 @@ class EmojiCompletionViewItem(
         _x: float,
         _y: float,
     ) -> int:
-
         if not self.props.has_skin_variation:  # pyright: ignore
             return Gdk.EVENT_PROPAGATE
 
@@ -274,7 +272,6 @@ class EmojiCompletionViewItem(
 
 
 class EmojiCompletionProvider(BaseCompletionProvider):
-
     trigger_char: Final = ":"
     name = _("Emojis")
 

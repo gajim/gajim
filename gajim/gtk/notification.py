@@ -126,7 +126,6 @@ class NotificationBackend(EventHelper):
     def _on_client_state_changed(
         self, client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         if not state.is_connected:
             return
         self._withdraw(["connection-failed", client.account])
@@ -140,7 +139,6 @@ class NotificationBackend(EventHelper):
 
 
 class DummyBackend(NotificationBackend):
-
     def _send(self, event: events.Notification) -> None:
         pass
 
@@ -296,7 +294,6 @@ class WindowsToastNotification(NotificationBackend):
 
 
 class Linux(NotificationBackend):
-
     _action_types = [
         "connection-failed",
         "server-shutdown",
@@ -336,7 +333,6 @@ class Linux(NotificationBackend):
     def _add_actions(
         self, event: events.Notification, notification: Gio.Notification
     ) -> None:
-
         if event.type not in self._action_types:
             return
 

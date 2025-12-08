@@ -220,7 +220,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def insert_object(
         self, session: Session, obj: Any, ignore_on_conflict: bool = True
     ) -> int:
-
         obj.validate()
         self._set_foreign_keys(session, obj)
         self._log_row(obj)
@@ -260,7 +259,6 @@ class MessageArchiveStorage(AlchemyStorage):
         return_pk_on_conflict: bool = False,
         ignore_on_conflict: bool = False,
     ) -> int:
-
         row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
@@ -292,7 +290,6 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         row: Any,
     ) -> int:
-
         row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
@@ -329,7 +326,6 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         row: Any,
     ) -> int | None:
-
         row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
@@ -364,7 +360,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_message_with_id(
         self, session: Session, account: str, jid: JID, message_id: str
     ) -> Message | None:
-
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
@@ -388,7 +383,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_message_with_stanza_id(
         self, session: Session, account: str, jid: JID, stanza_id: str
     ) -> Message | None:
-
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
@@ -736,7 +730,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_referenced_message(
         self, account: str, jid: JID, message_type: MessageType | int, reply_id: str
     ) -> Message | None:
-
         if message_type == MessageType.GROUPCHAT:
             return app.storage.archive.get_message_with_stanza_id(
                 account, jid, reply_id
@@ -761,7 +754,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_last_display_marker(
         self, session: Session, account: str, jid: JID
     ) -> DisplayedMarker | None:
-
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
@@ -784,7 +776,6 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_last_display_markers(
         self, session: Session, account: str, jid: JID
     ) -> list[DisplayedMarker]:
-
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 

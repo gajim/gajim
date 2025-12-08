@@ -45,7 +45,6 @@ from gajim.gtk.widgets import GajimPopover
 
 
 class ChatListRow(Gtk.ListBoxRow, SignalManager):
-
     __gsignals__ = {
         "unread-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
         "context-menu-state-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
@@ -60,7 +59,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         pinned: bool,
         position: int,
     ) -> None:
-
         Gtk.ListBoxRow.__init__(self)
         SignalManager.__init__(self)
 
@@ -261,7 +259,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         icon_name: str | None = None,
         oob: list[mod.OOB] | None = None,
     ) -> None:
-
         if self._has_draft:
             return
 
@@ -413,7 +410,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         contact: ChatContactT,
         draft: Draft | None,
     ) -> None:
-
         if contact != self.contact:
             return
 
@@ -471,7 +467,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         x: float,
         y: float,
     ) -> int:
-
         if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
             app.window.activate_action(
                 "win.remove-chat", GLib.Variant("as", [self.account, str(self.jid)])
@@ -587,7 +582,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def _on_mam_sync_changed(
         self, _contact: GroupchatContact, signal_name: str
     ) -> None:
-
         self._reset_connection_icon()
 
         if signal_name == "mam-sync-started":
@@ -600,7 +594,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def _on_mam_sync_error(
         self, _contact: GroupchatContact, _signal_name: str, error_text: str
     ) -> None:
-
         self._reset_connection_icon()
         self._ui.connection_icon.set_from_icon_name("lucide-zap-symbolic")
         self._ui.connection_icon.add_css_class("error")

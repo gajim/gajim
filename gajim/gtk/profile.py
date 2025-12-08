@@ -172,7 +172,6 @@ class ProfileWindow(GajimAppWindow):
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         self._ui.save_button.set_sensitive(state.is_connected)
         self._ui.save_button.set_tooltip_text(
             _("You are offline") if not state.is_connected else ""

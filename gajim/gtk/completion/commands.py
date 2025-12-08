@@ -72,7 +72,6 @@ class CommandsCompletionViewItem(
 
 
 class CommandsCompletionProvider(BaseCompletionProvider):
-
     trigger_char: Final = "/"
     name = _("Commands")
 

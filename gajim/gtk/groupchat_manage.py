@@ -155,7 +155,6 @@ class GroupchatManage(Gtk.Box, SignalManager):
     def _on_room_subject(
         self, _contact: GroupchatContact, _signal_name: str, subject: MucSubject
     ) -> None:
-
         self._ui.subject_textview.get_buffer().set_text(subject.text)
 
         assert self._contact.subject is not None

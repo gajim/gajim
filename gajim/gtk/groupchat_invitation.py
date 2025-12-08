@@ -49,7 +49,6 @@ class GroupChatInvitationDialog(GajimAppWindow):
 
 @Gtk.Template(string=get_ui_string("groupchat_invitation.ui"))
 class GroupChatInvitation(Gtk.Box, SignalManager):
-
     __gtype_name__ = "GroupChatInvitation"
 
     _inviter_avatar: Gtk.Image = Gtk.Template.Child()

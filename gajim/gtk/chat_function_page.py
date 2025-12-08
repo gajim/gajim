@@ -52,7 +52,6 @@ MUC_ERROR_CONDITION_TEXT = {
 
 
 class ChatFunctionPage(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "finish": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
         "message": (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -154,7 +153,6 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         data: str | None = None,
         files: list[str] | None = None,
     ) -> None:
-
         self._reset()
 
         self._contact = contact
@@ -261,11 +259,9 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, _state: SimpleClientState
     ) -> None:
-
         self._update_button_state()
 
     def _on_ready(self, _widget: Gtk.Widget, state: bool) -> None:
-
         self._ready_state = state
         self._update_button_state()
 
@@ -399,7 +395,6 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
 
 
 class InputWidget(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
@@ -407,7 +402,6 @@ class InputWidget(Gtk.Box, SignalManager):
     def __init__(
         self, contact: types.ChatContactT, mode: FunctionMode, data: str | None = None
     ) -> None:
-
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         SignalManager.__init__(self)
 

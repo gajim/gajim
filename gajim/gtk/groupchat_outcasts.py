@@ -132,7 +132,6 @@ class GroupchatOutcasts(Gtk.Box, SignalManager):
     def _on_jid_edited(
         self, _renderer: Gtk.CellRendererText, path: str, new_text: str
     ) -> None:
-
         old_text = self._store[path][Column.JID]
         if new_text == old_text:
             return
@@ -181,7 +180,6 @@ class GroupchatOutcasts(Gtk.Box, SignalManager):
         return rows
 
     def _get_diff(self) -> tuple[list[OutcastRow], list[OutcastRow]]:
-
         new_rows = self._get_new_rows()
 
         before = {row.jid for row in self._current_rows}

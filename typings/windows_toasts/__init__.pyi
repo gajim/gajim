@@ -38,8 +38,7 @@ from .wrappers import ToastSystemButtonAction
 
 MIN_VERSION = ...
 osVersion = int(platform.version().split(".")[2])
-if platform.system() == "Windows" and osVersion < MIN_VERSION:
-    ...
+if platform.system() == "Windows" and osVersion < MIN_VERSION: ...
 __all__ = [
     "__author__",
     "__description__",

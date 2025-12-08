@@ -155,7 +155,6 @@ class AddContact(Assistant):
         self._process_info(account, result)
 
     def _process_error(self, account: str, result: BaseError) -> None:
-
         log.debug("Error received: %s", result)
         self._result = result
 

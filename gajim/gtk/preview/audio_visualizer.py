@@ -244,7 +244,6 @@ class AudioVisualizerWidget(Gtk.Widget):
         height1: float,
         height2: float,
     ) -> Gsk.Path:
-
         # Don't insert a gap if bars are too small
         if height1 + height2 < 3 or not self._is_static():
             gap = 0.0

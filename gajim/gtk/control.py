@@ -145,7 +145,6 @@ class ChatControl(EventHelper):
         self._scrolled_view.add_command_output(text, is_error)
 
     def add_info_message(self, text: str, timestamp: dt.datetime | None = None) -> None:
-
         self._scrolled_view.add_info_message(text, timestamp)
 
     def drag_data_file_transfer(self, paths: list[str]) -> None:
@@ -228,7 +227,6 @@ class ChatControl(EventHelper):
     def switch_contact(
         self, contact: BareContact | GroupchatContact | GroupchatParticipant
     ) -> None:
-
         log.info("Switch to %s (%s)", contact.jid, contact.account)
         if self._contact is not None:
             self._contact.disconnect_all_from_obj(self)
@@ -431,7 +429,6 @@ class ChatControl(EventHelper):
         self._scrolled_view.update_call_rows()
 
     def _on_jingle_request_received(self, event: events.JingleRequestReceived) -> None:
-
         if not self._is_event_processable(event):
             return
 
@@ -447,7 +444,6 @@ class ChatControl(EventHelper):
     def _on_file_request_event(
         self, event: events.FileRequestReceivedEvent | events.FileRequestSent
     ) -> None:
-
         if not self._is_event_processable(event):
             return
 
@@ -475,7 +471,6 @@ class ChatControl(EventHelper):
     def _on_autoscroll_changed(
         self, _widget: ConversationView, autoscroll: bool
     ) -> None:
-
         if not autoscroll:
             self._jump_to_end_button.toggle(True)
             return
@@ -492,7 +487,6 @@ class ChatControl(EventHelper):
     def _on_activate_message_selection(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-
         pk = param.get_uint32()
         self._scrolled_view.enable_row_selection(pk)
         self._message_selection.set_visible(True)
@@ -507,7 +501,6 @@ class ChatControl(EventHelper):
     def _on_jump_to_message(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-
         pk, timestamp = param.unpack()
         self.scroll_to_message(pk, dt.datetime.fromtimestamp(timestamp, dt.UTC))
 
@@ -661,7 +654,6 @@ class ChatControl(EventHelper):
         event_rows: list[events.ApplicationEvent],
         before: bool,
     ) -> list[HistoryRowT]:
-
         def sort_func(obj: HistoryRowT) -> float:
             return obj.timestamp  # pyright: ignore
 
@@ -679,11 +671,9 @@ class ChatControl(EventHelper):
         _old_contact: types.GroupchatParticipant,
         _new_contact: types.GroupchatParticipant,
     ) -> None:
-
         self._process_muc_nickname_changed(event)
 
     def _process_muc_nickname_changed(self, event: events.MUCNicknameChanged) -> None:
-
         if event.is_self:
             message = _("You are now known as %s") % event.new_name
         else:
@@ -695,7 +685,6 @@ class ChatControl(EventHelper):
     def _on_room_kicked(
         self, _contact: GroupchatContact, _signal_name: str, event: events.MUCRoomKicked
     ) -> None:
-
         self._process_muc_room_kicked(event)
 
     def _process_muc_room_kicked(self, event: events.MUCRoomKicked) -> None:
@@ -754,7 +743,6 @@ class ChatControl(EventHelper):
         user_contact: GroupchatParticipant,
         event: events.MUCUserAffiliationChanged,
     ) -> None:
-
         self._process_muc_user_affiliation_changed(event)
 
     def _process_muc_user_affiliation_changed(
@@ -855,11 +843,9 @@ class ChatControl(EventHelper):
         user_contact: GroupchatParticipant,
         event: events.MUCUserRoleChanged,
     ) -> None:
-
         self._process_muc_user_role_changed(event)
 
     def _process_muc_user_role_changed(self, event: events.MUCUserRoleChanged) -> None:
-
         uf_role = get_uf_role(event.role)
         nick = event.nick
 
@@ -895,11 +881,9 @@ class ChatControl(EventHelper):
         user_contact: GroupchatParticipant,
         event: events.MUCUserHatsChanged,
     ) -> None:
-
         self._process_muc_user_hats_changed(event)
 
     def _process_muc_user_hats_changed(self, event: events.MUCUserHatsChanged) -> None:
-
         if event.hats:
             hats = ", ".join(event.hats)
             if event.is_self:
@@ -924,7 +908,6 @@ class ChatControl(EventHelper):
         _user_contact: GroupchatParticipant,
         event: events.MUCUserStatusShowChanged,
     ) -> None:
-
         self._process_muc_user_status_show_changed(event)
 
     def _on_participant_status_show_changed(
@@ -933,13 +916,11 @@ class ChatControl(EventHelper):
         _signal_name: str,
         event: events.MUCUserStatusShowChanged,
     ) -> None:
-
         self._process_muc_user_status_show_changed(event)
 
     def _process_muc_user_status_show_changed(
         self, event: events.MUCUserStatusShowChanged
     ) -> None:
-
         if isinstance(self._contact, GroupchatContact):
             contact = self._contact
         elif isinstance(self._contact, GroupchatParticipant):
@@ -971,13 +952,11 @@ class ChatControl(EventHelper):
         _signal_name: str,
         event: events.MUCRoomConfigChanged,
     ) -> None:
-
         self._process_muc_room_config_changed(event)
 
     def _process_muc_room_config_changed(
         self, event: events.MUCRoomConfigChanged
     ) -> None:
-
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
         status_codes = event.status_codes
         changes: list[str] = []
@@ -1025,7 +1004,6 @@ class ChatControl(EventHelper):
     def _process_muc_room_config_finished(
         self, event: events.MUCRoomConfigFinished
     ) -> None:
-
         self.add_info_message(_("A new group chat has been created"), event.timestamp)
 
     def _on_room_presence_error(
@@ -1034,13 +1012,11 @@ class ChatControl(EventHelper):
         _signal_name: str,
         event: events.MUCRoomPresenceError,
     ) -> None:
-
         self._process_muc_room_presence_error(event)
 
     def _process_muc_room_presence_error(
         self, event: events.MUCRoomPresenceError
     ) -> None:
-
         self.add_info_message(_("Error: %s") % event.error, event.timestamp)
 
     def _on_room_destroyed(
@@ -1049,11 +1025,9 @@ class ChatControl(EventHelper):
         _signal_name: str,
         event: events.MUCRoomDestroyed,
     ) -> None:
-
         self._process_muc_room_destroyed(event)
 
     def _process_muc_room_destroyed(self, event: events.MUCRoomDestroyed) -> None:
-
         reason = event.reason
         reason = "" if reason is None else _("(reason: %s)") % reason
 
@@ -1073,7 +1047,6 @@ class ChatControl(EventHelper):
         _signal_name: str,
         event: events.MUCRoomVoiceRequestError,
     ) -> None:
-
         self._process_muc_room_voice_request_error(event)
 
     def _process_muc_room_voice_request_error(
@@ -1088,7 +1061,6 @@ class ChatControl(EventHelper):
         _user_contact: GroupchatParticipant,
         event: events.MUCUserJoined,
     ) -> None:
-
         self._process_muc_user_joined(event)
 
     def _process_muc_user_joined(self, event: events.MUCUserJoined) -> None:
@@ -1114,8 +1086,7 @@ class ChatControl(EventHelper):
 
         if StatusCode.NICKNAME_MODIFIED in status_codes:
             message = _(
-                "The server has assigned or modified your "
-                "nickname in this group chat"
+                "The server has assigned or modified your nickname in this group chat"
             )
 
         if message is not None:
@@ -1128,7 +1099,6 @@ class ChatControl(EventHelper):
         _user_contact: GroupchatParticipant,
         event: events.MUCUserLeft,
     ) -> None:
-
         self._process_muc_user_left(event)
 
     def _process_muc_user_left(self, event: events.MUCUserLeft) -> None:

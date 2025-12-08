@@ -55,7 +55,6 @@ def get_build_args() -> list[str]:
 def build_exe(
     source_path: str, resource_path: str, out_path: str, *, is_gui: bool
 ) -> None:
-
     args = ["gcc", "-s"]
     if is_gui:
         args.append("-mwindows")
@@ -65,8 +64,8 @@ def build_exe(
 
 
 def get_launcher_code(*, debug: bool) -> str:
-
-    main_code = """
+    main_code = (
+        """
 import os
 import sys
 from ctypes import windll
@@ -80,16 +79,15 @@ windll.kernel32.SetDllDirectoryW(str(root_path / 'bin'))
 if __name__ == '__main__':
     import gajim.main
     gajim.main.run()
-""".strip() % int(
-        debug
+""".strip()
+        % int(debug)
     )
 
     c_string = ""
     for line in main_code.splitlines():
         c_string += f'        "{line}\\n"\n'
 
-    template = (
-        """\
+    template = """\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -122,9 +120,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_Finalize();
     return result;
 }
-    """
-        % c_string[:-1]
-    )
+    """ % c_string[:-1]
 
     return template
 
@@ -138,7 +134,6 @@ def get_resouce_code(
     product_version: str,
     company_name: str,
 ) -> str:
-
     template = """\
 1 ICON "%(icon_path)s"
 1 VERSIONINFO
@@ -199,7 +194,6 @@ def build_launcher(
     is_gui: bool,
     debug: bool,
 ) -> None:
-
     src_ico = os.path.abspath(icon_path)
     target = os.path.abspath(out_path)
 

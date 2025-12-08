@@ -27,7 +27,6 @@ log = logging.getLogger("gajim.gtk.resource_selector")
 
 
 class ResourceSelector(Gtk.ScrolledWindow, SignalManager):
-
     __gsignals__ = {
         "selection-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }

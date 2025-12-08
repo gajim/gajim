@@ -3,18 +3,15 @@ from __future__ import annotations
 from typing import Any
 
 class CSSRule:
-
     STYLE_RULE: int
 
 class CSSStyleSheet:
-
     cssText: bytes
 
     def __iter__(self) -> CSSStyleRule: ...
     def add(self, rule: CSSStyleRule) -> None: ...
 
 class CSSStyleRule(CSSRule):
-
     style: CSSStyleDeclaration
     type: int
     selectorText: str

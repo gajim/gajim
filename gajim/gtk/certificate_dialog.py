@@ -19,7 +19,6 @@ class CertificateDialog(GajimAppWindow):
     def __init__(
         self, transient_for: Gtk.Window | None, account: str, cert: Gio.TlsCertificate
     ) -> None:
-
         GajimAppWindow.__init__(
             self,
             name="CertificateDialog",

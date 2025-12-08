@@ -49,11 +49,7 @@ STANZA_PRESETS = {
     "Message": (
         '<message to="" type="" xmlns="jabber:client">\n<body></body>\n</message>'
     ),
-    "Iq": (
-        '<iq to="" type="" xmlns="jabber:client">\n'
-        '<query xmlns=""></query>\n'
-        "</iq>"
-    ),
+    "Iq": ('<iq to="" type="" xmlns="jabber:client">\n<query xmlns=""></query>\n</iq>'),
     "XEP-0030: Disco Info Query": (
         '<iq to="" type="get" xmlns="jabber:client">\n'
         f'<query xmlns="{Namespace.DISCO_INFO}">'
@@ -234,7 +230,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
     def _on_stack_child_changed(
         self, _widget: Gtk.Stack, _pspec: GObject.ParamSpec
     ) -> None:
-
         name = self._ui.stack.get_visible_child_name()
         self._ui.search_toggle.set_sensitive(name == "protocol")
 
@@ -422,7 +417,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         result: Gio.AsyncResult,
         direction: Direction,
     ) -> None:
-
         if direction == Direction.NEXT:
             match = self._search_context.forward_finish(result)
         else:

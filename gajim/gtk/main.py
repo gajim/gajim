@@ -232,7 +232,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _mark_workspace_as_read(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-
         workspace_id = param.get_string() or None
         if workspace_id is not None:
             self.mark_workspace_as_read(workspace_id)
@@ -274,7 +273,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         _keycode: int,
         state: Gdk.ModifierType,
     ) -> bool:
-
         if keyval == Gdk.KEY_space:
             self.get_chat_stack().get_message_input().grab_focus()
             return Gdk.EVENT_STOP
@@ -284,12 +282,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_client_state_changed(
         self, client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         app.app.set_account_actions_state(client.account, state.is_connected)
         app.app.update_app_actions_state()
 
     def _on_client_resume_successful(self, client: Client, _signal_name: str) -> None:
-
         app.app.update_feature_actions_state(client.account)
 
     @staticmethod
@@ -304,7 +300,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _on_plain_connection(event: events.PlainConnection) -> None:
-
         def _on_response(response_id: str) -> None:
             if response_id == "connect":
                 event.connect()
@@ -479,7 +474,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_action(
         self, action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> int | None:
-
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
 
@@ -551,7 +545,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_app_font_size_action(
         self, action: Gio.SimpleAction, _param: GLib.Variant
     ) -> None:
-
         action_name = action.get_name()
         if action_name == "reset-app-font-size":
             app.settings.set_app_setting("app_font_size", None)
@@ -575,7 +568,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         app.css_config.apply_app_font_size()
 
     def _on_copy_message(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         self.get_clipboard().set(param.get_string())
 
     @actionmethod
@@ -593,7 +585,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_muc_user_block(
         self, _action: Gio.SimpleAction, params: OccupantParam
     ) -> None:
-
         def _on_response() -> None:
             client = app.get_client(params.account)
             client.get_module("MucBlocking").set_block_occupants(
@@ -625,7 +616,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_muc_user_unblock(
         self, _action: Gio.SimpleAction, params: OccupantParam
     ) -> None:
-
         def _on_response() -> None:
             client = app.get_client(params.account)
             client.get_module("MucBlocking").set_block_occupants(
@@ -643,7 +633,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_retract_message(
         self, _action: Gio.SimpleAction, params: RetractMessageParam
     ) -> None:
-
         def _on_response() -> None:
             client = app.get_client(params.account)
             contact = client.get_module("Contacts").get_contact(params.jid)
@@ -666,7 +655,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_moderate_message(
         self, _action: Gio.SimpleAction, params: ModerateMessageParam
     ) -> None:
-
         def _on_response(reason: str) -> None:
             client = app.get_client(params.account)
             client.get_module("MUC").moderate_messages(
@@ -728,7 +716,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_delete_message_locally(
         self, _action: Gio.SimpleAction, params: DeleteMessageParam
     ) -> None:
-
         def _on_response() -> None:
             app.storage.archive.delete_message(params.pk)
             app.ged.raise_event(
@@ -880,7 +867,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._app_side_bar.highlight_dnd_targets(highlight)
 
     def _add_workspace(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         workspace_id = param.get_string()
         if workspace_id:
             self.add_workspace(workspace_id)
@@ -888,7 +874,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def add_workspace(
         self, workspace_id: str | None = None, switch: bool = True
     ) -> str:
-
         if workspace_id is None:
             workspace_id = app.settings.add_workspace(_("My Workspace"))
 
@@ -908,7 +893,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         open_window("WorkspaceDialog", workspace_id=workspace_id)
 
     def _remove_workspace(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         workspace_id = param.get_string() or None
         if workspace_id is None:
             workspace_id = self.get_active_workspace()
@@ -966,7 +950,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _activate_workspace(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-
         workspace_id = param.get_string()
         if workspace_id:
             self.activate_workspace(workspace_id)
@@ -988,7 +971,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _get_suitable_workspace(
         self, account: str, jid: JID, private_chat: bool = False
     ) -> str:
-
         if private_chat:
             # Try to add private chat to the same workspace the MUC resides in
             chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -1007,19 +989,16 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         return self._app_side_bar.get_first_workspace()
 
     def _add_group_chat(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         account, jid, select = param.unpack()
         self.add_group_chat(account, JID.from_string(jid), select)
 
     def add_group_chat(self, account: str, jid: JID, select: bool = False) -> None:
-
         workspace_id = self._get_suitable_workspace(account, jid)
         self._chat_page.add_chat_for_workspace(
             workspace_id, account, jid, "groupchat", select=select
         )
 
     def _add_chat(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         params = AddChatActionParams.from_variant(param)
         self.add_chat(params.account, params.jid, params.type, params.select)
 
@@ -1031,14 +1010,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         select: bool = False,
         message: str | None = None,
     ) -> None:
-
         workspace_id = self._get_suitable_workspace(account, jid)
         self._chat_page.add_chat_for_workspace(
             workspace_id, account, jid, type_, select=select, message=message
         )
 
     def add_private_chat(self, account: str, jid: JID, select: bool = False) -> None:
-
         workspace_id = self._get_suitable_workspace(account, jid, private_chat=True)
         self._chat_page.add_chat_for_workspace(
             workspace_id, account, jid, "pm", select=select
@@ -1082,7 +1059,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def is_message_correctable(
         self, contact: types.ChatContactT, message_id: str
     ) -> bool:
-
         chat_stack = self._chat_page.get_chat_stack()
         last_message_id = chat_stack.get_last_message_id(contact)
         if last_message_id is None or last_message_id != message_id:
@@ -1111,7 +1087,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         *,
         is_sync: bool = False,
     ) -> None:
-
         unread_count = self.get_chat_unread_count(account, jid, include_silent=True)
 
         self.set_urgency_hint(False)
@@ -1167,7 +1142,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.mark_as_read(contact.account, contact.jid)
 
     def get_preferred_ft_method(self, contact: types.ChatContactT) -> str | None:
-
         httpupload_enabled = app.window.get_action_enabled("send-file-httpupload")
         return "httpupload" if httpupload_enabled else None
         # TODO Jingle FT
@@ -1200,7 +1174,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         nickname: str | None = None,
         password: str | None = None,
     ) -> None:
-
         jid_ = JID.from_string(jid)
         if not self.chat_exists(account, jid_):
             client = app.get_client(account)
@@ -1211,7 +1184,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def start_chat_from_jid(
         self, account: str, jid: str, message: str | None = None
     ) -> None:
-
         jid_ = JID.from_string(jid)
         if self.chat_exists(account, jid_):
             self.select_chat(account, jid_)

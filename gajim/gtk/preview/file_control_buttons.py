@@ -18,7 +18,6 @@ from gajim.gtk.util.misc import get_ui_string
 
 @Gtk.Template.from_string(string=get_ui_string("preview/file_control_buttons.ui"))
 class FileControlButtons(Gtk.Box, SignalManager):
-
     __gtype_name__ = "FileControlButtons"
 
     _file_name_label: Gtk.Label = Gtk.Template.Child()

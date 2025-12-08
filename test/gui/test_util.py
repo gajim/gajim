@@ -18,24 +18,24 @@ class Test(unittest.TestCase):
         ueber = "u\u0308ber"
         self.assertEqual(get_first_grapheme(ueber), "u\u0308", ueber + " -> ü")
 
-        woman = "\U0001F469"
-        zwj = "\u200D"
-        vs16 = "\uFE0F"
-        fitz4 = "\U0001F3FD"
+        woman = "\U0001f469"
+        zwj = "\u200d"
+        vs16 = "\ufe0f"
+        fitz4 = "\U0001f3fd"
 
-        farmeress = f"{woman}{zwj}\U0001F33E{vs16}"
+        farmeress = f"{woman}{zwj}\U0001f33e{vs16}"
         self.assertEqual(get_first_grapheme(farmeress), farmeress, "👩‍🌾️")
 
-        longass = f"{woman}{fitz4}{zwj}\u2764{vs16}{zwj}\U0001F468{fitz4}"
+        longass = f"{woman}{fitz4}{zwj}\u2764{vs16}{zwj}\U0001f468{fitz4}"
         self.assertEqual(get_first_grapheme(longass), longass, "👩🏽‍❤️‍👨🏽")
 
         # The following are from
         # https://www.unicode.org/reports/tr29/#Table_Sample_Grapheme_Clusters
 
-        hangul_gag = "\u1100\u1161\u11A8"
+        hangul_gag = "\u1100\u1161\u11a8"
         self.assertEqual(get_first_grapheme(hangul_gag), hangul_gag, "각")
 
-        tamil_ni = "\u0BA8\u0BBF"
+        tamil_ni = "\u0ba8\u0bbf"
         self.assertEqual(get_first_grapheme(tamil_ni), tamil_ni, "நி")
 
         # Fails 🤷 (returns the first char)
@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
         # self.assertEqual(
         #    get_first_grapheme(thai_kam), thai_kam, 'กำ')
 
-        devanagari_ssi = "\u0937\u093F"
+        devanagari_ssi = "\u0937\u093f"
         self.assertEqual(get_first_grapheme(devanagari_ssi), devanagari_ssi, "षि")
 
         # Only in some locales (e.g., Slovak):
@@ -54,9 +54,9 @@ class Test(unittest.TestCase):
         # returns 'c', not 'ch'.
 
         # In most locales (say, any western one):
-        devanagari_kshi = "\u0915\u094D" + devanagari_ssi
+        devanagari_kshi = "\u0915\u094d" + devanagari_ssi
         self.assertEqual(
-            get_first_grapheme(devanagari_kshi), "\u0915\u094D", "क्षि -> क् "
+            get_first_grapheme(devanagari_kshi), "\u0915\u094d", "क्षि -> क् "
         )
         # This probably won't fail on *any* locale, ever, again because the
         # implementation doesn't seem locale-specific.

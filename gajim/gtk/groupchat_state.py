@@ -71,14 +71,12 @@ class GroupchatState(Gtk.Box, SignalManager):
     def _on_client_state_changed(
         self, client: types.Client, _signal_name: str, _state: SimpleClientState
     ) -> None:
-
         assert self._contact is not None
         self._update_state(self._contact)
 
     def _on_muc_state_changed(
         self, contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._update_state(contact)
 
     def _update_state(self, contact: GroupchatContact) -> None:
@@ -96,7 +94,6 @@ class GroupchatState(Gtk.Box, SignalManager):
         _contact: GroupchatContact,
         signal_name: str,
     ) -> None:
-
         if signal_name == "mam-sync-started":
             self.set_visible(True)
             self._ui.groupchat_state.set_visible_child_name(signal_name)
@@ -107,7 +104,6 @@ class GroupchatState(Gtk.Box, SignalManager):
     def _on_mam_sync_error(
         self, _contact: GroupchatContact, signal_name: str, error_text: str
     ) -> None:
-
         self.set_visible(True)
         self._ui.groupchat_state.set_visible_child_name(signal_name)
         self._ui.mam_error_label.set_text(

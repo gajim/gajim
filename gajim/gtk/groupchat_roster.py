@@ -209,7 +209,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         _list_view: Gtk.ListView,
         position: int,
     ) -> None:
-
         item = self._contact_view.get_listitem(position)
         assert item is not None
 
@@ -282,7 +281,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         user_contact: types.GroupchatParticipant,
         *args: Any,
     ) -> None:
-
         if signal_name == "user-joined":
             self._add_contact(user_contact, notify=True)
 
@@ -301,14 +299,12 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         old_contact: types.GroupchatParticipant,
         new_contact: types.GroupchatParticipant,
     ) -> None:
-
         self._remove_contact(old_contact)
         self._add_contact(new_contact)
 
     def _on_muc_state_changed(
         self, contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         if contact.is_joined:
             self._load_roster()
 
@@ -404,7 +400,6 @@ class GroupchatContactListView(Gtk.ListView):
         obj2: Any,
         _user_data: object | None,
     ) -> int:
-
         group1_index = AffiliationRoleSortOrder[obj1.group]
         group2_index = AffiliationRoleSortOrder[obj2.group]
         if group1_index == group2_index:
@@ -417,7 +412,6 @@ class GroupchatContactListView(Gtk.ListView):
         obj2: Any,
         _user_data: object | None,
     ) -> int:
-
         if obj1.contact.is_self or obj2.contact.is_self:
             return -1 if obj1.contact.is_self else 1
 
@@ -573,7 +567,6 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         x: float,
         y: float,
     ) -> bool:
-
         assert self._contact is not None
         participant = self._contact
         if participant.is_self:
@@ -600,7 +593,6 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         _keyboard_mode: bool,
         tooltip: Gtk.Tooltip,
     ) -> bool:
-
         assert self._contact is not None
         value, widget = self._tooltip.get_tooltip(self._contact)
         tooltip.set_custom(widget)

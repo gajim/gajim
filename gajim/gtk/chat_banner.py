@@ -173,24 +173,20 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
     ):
-
         self._update_avatar()
 
     def _on_presence_update(
         self, _contact: types.BareContact, _signal_name: str
     ) -> None:
-
         self._update_avatar()
         self._update_description_label()
 
     def _on_nickname_update(
         self, _contact: types.BareContact, _signal_name: str
     ) -> None:
-
         self._update_name_label()
 
     def _on_avatar_update(self, _contact: types.BareContact, _signal_name: str) -> None:
-
         self._update_avatar()
 
     def _on_caps_update(self, _contact: types.BareContact, _signal_name: str) -> None:
@@ -215,7 +211,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _on_disco_info_update(
         self, _contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._update_name_label()
         self._update_description_label()
 
@@ -389,7 +384,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         app.settings.set("hide_groupchat_occupants_list", not state)
 
     def _set_toggle_roster_button_icon(self, hide_roster: bool, *args: Any) -> None:
-
         icon = (
             "lucide-chevron-right-symbolic"
             if not hide_roster

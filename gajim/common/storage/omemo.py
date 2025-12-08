@@ -68,7 +68,6 @@ class OMEMOStorage(Store):
 
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> NamedTuple:
-
         fields: list[str] = []
         for col in cursor.description:
             if col[0] == "_id":
@@ -88,7 +87,6 @@ class OMEMOStorage(Store):
 
     def create_db(self) -> None:
         if self.user_version() == 0:
-
             create_tables = """
                 CREATE TABLE IF NOT EXISTS secret (
                     device_id INTEGER, public_key BLOB, private_key BLOB);
@@ -125,9 +123,7 @@ class OMEMOStorage(Store):
                 %s
                 PRAGMA user_version=12;
                 END TRANSACTION;
-                """ % (
-                create_tables
-            )
+                """ % (create_tables)
             self._con.executescript(create_db_sql)
 
     def migrate_db(self) -> None:
@@ -376,7 +372,6 @@ class OMEMOStorage(Store):
     def store_signed_pre_key(
         self, signed_pre_key_id: int, signed_pre_key_record: SignedPreKeyRecord
     ) -> None:
-
         query = "INSERT INTO signed_prekeys (prekey_id, record) VALUES(?,?)"
         self._con.execute(query, (signed_pre_key_id, signed_pre_key_record.serialize()))
         self._con.commit()
@@ -439,7 +434,6 @@ class OMEMOStorage(Store):
     def store_session(
         self, recipient_id: str, device_id: int, session_record: SessionRecord
     ) -> None:
-
         query = """INSERT INTO sessions(recipient_id, device_id, record)
                    VALUES(?,?,?)"""
         try:
@@ -473,7 +467,6 @@ class OMEMOStorage(Store):
         self._con.commit()
 
     def get_identity_infos(self, recipient_ids: str | list[str]) -> list[IdentityInfo]:
-
         if isinstance(recipient_ids, str):
             recipient_ids = [recipient_ids]
 
@@ -544,7 +537,6 @@ class OMEMOStorage(Store):
         self._con.commit()
 
     def get_inactive_sessions_keys(self, recipient_id: str) -> list[IdentityKey]:
-
         query = """SELECT record as "record [session_record]" FROM sessions
                    WHERE active = 0 AND recipient_id = ?"""
         results = self._con.execute(query, (recipient_id,)).fetchall()
@@ -610,11 +602,10 @@ class OMEMOStorage(Store):
     def set_our_identity(
         self, device_id: int, identity_key_pair: IdentityKeyPair
     ) -> None:
-
         query = "SELECT * FROM secret"
         result = self._con.execute(query).fetchone()
         if result is not None:
-            self._log.error("Trying to save secret key into " "non-empty secret table")
+            self._log.error("Trying to save secret key into non-empty secret table")
             return
 
         query = """INSERT INTO secret(device_id, public_key, private_key)
@@ -643,7 +634,6 @@ class OMEMOStorage(Store):
             self._con.commit()
 
     def contains_identity(self, recipient_id: str, identity_key: IdentityKey) -> bool:
-
         query = """SELECT * FROM identities WHERE recipient_id = ?
                    AND public_key = ?"""
 
@@ -653,7 +643,6 @@ class OMEMOStorage(Store):
         return result is not None
 
     def delete_identity(self, recipient_id: str, identity_key: IdentityKey) -> None:
-
         query = """DELETE FROM identities
                    WHERE recipient_id = ? AND public_key = ?"""
         public_key = identity_key.get_public_key().serialize()
@@ -661,13 +650,11 @@ class OMEMOStorage(Store):
         self._con.commit()
 
     def is_trusted_identity(self, recipient_id: str, identity_key: IdentityKey) -> bool:
-
         return True
 
     def get_trust_for_identity(
         self, recipient_id: str, identity_key: IdentityKey
     ) -> OMEMOTrust | None:
-
         query = """SELECT trust FROM identities WHERE recipient_id = ?
                    AND public_key = ?"""
         public_key = identity_key.get_public_key().serialize()
@@ -691,9 +678,7 @@ class OMEMOStorage(Store):
                    timestamp
             FROM identities
             WHERE recipient_id IN ({}) ORDER BY trust ASC
-            """.format(
-            ", ".join(["?"] * len(jids))
-        )
+            """.format(", ".join(["?"] * len(jids)))
 
         return self._con.execute(query, jids).fetchall()
 
@@ -711,7 +696,6 @@ class OMEMOStorage(Store):
     def set_trust(
         self, recipient_id: str, identity_key: IdentityKey, trust: OMEMOTrust
     ) -> None:
-
         query = """UPDATE identities SET trust = ? WHERE public_key = ?
                    AND recipient_id = ?"""
         public_key = identity_key.get_public_key().serialize()
@@ -731,7 +715,6 @@ class OMEMOStorage(Store):
     def get_identity_last_seen(
         self, recipient_id: str, identity_key: IdentityKey
     ) -> int | None:
-
         serialized = identity_key.get_public_key().serialize()
         query = """SELECT timestamp FROM identities
                    WHERE recipient_id = ? AND public_key = ?"""
@@ -741,7 +724,6 @@ class OMEMOStorage(Store):
     def set_identity_last_seen(
         self, recipient_id: str, identity_key: IdentityKey
     ) -> None:
-
         timestamp = int(time.time())
         serialized = identity_key.get_public_key().serialize()
         self._log.info("Set last seen for %s %s", recipient_id, timestamp)

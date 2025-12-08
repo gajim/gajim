@@ -15,7 +15,6 @@ ContactT = BareContact | GroupchatContact | GroupchatParticipant
 
 
 class JumpToEndButton(Gtk.Overlay):
-
     __gsignals__ = {
         "clicked": (GObject.SignalFlags.RUN_LAST, None, ()),
     }

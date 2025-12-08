@@ -26,7 +26,6 @@ class MUCJoinLeft(BaseRow):
         error: bool = False,
         timestamp: datetime | None = None,
     ) -> None:
-
         BaseRow.__init__(self, account)
 
         self.type = type_

@@ -42,8 +42,7 @@ def create_icns(icon_path: str) -> None:
 
 if __name__ == "__main__":
     parser = ArgumentParser(
-        description="Create a macOS .icns icon. "
-        "Requires Inkscape and iconutil (macOS)."
+        description="Create a macOS .icns icon. Requires Inkscape and iconutil (macOS)."
     )
     parser.add_argument("output", help="bundle output location")
     args = parser.parse_args()

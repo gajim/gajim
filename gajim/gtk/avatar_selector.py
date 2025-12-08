@@ -295,7 +295,6 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         _width: int,
         _height: int,
     ) -> None:
-
         if self._browse_pixbuf is None:
             return
 
@@ -626,7 +625,6 @@ class CropArea(Gtk.DrawingArea, SignalManager):
             or self._pixbuf.get_width() != allocated_width
             or self._pixbuf.get_height() != allocated_height
         ):
-
             self._pixbuf = GdkPixbuf.Pixbuf.new(
                 GdkPixbuf.Colorspace.RGB,
                 self._browse_pixbuf.get_has_alpha(),

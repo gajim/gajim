@@ -130,7 +130,6 @@ class ChatPage(Gtk.Paned):
     def _on_chat_selected(
         self, _chat_list_stack: ChatListStack, workspace_id: str, account: str, jid: JID
     ) -> None:
-
         self._list_stack.set_visible_child_name("chat-list-stack")
         self._chat_stack.show_chat(account, jid)
 
@@ -164,7 +163,6 @@ class ChatPage(Gtk.Paned):
     def _on_search_history(
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:
-
         contact = self._chat_control.get_contact()
         if contact is not None:
             self._search_view.set_context(contact.account, contact.jid)
@@ -229,7 +227,6 @@ class ChatPage(Gtk.Paned):
     def chat_exists_for_workspace(
         self, workspace_id: str, account: str, jid: JID
     ) -> bool:
-
         return self._chat_list_stack.contains_chat(
             account, jid, workspace_id=workspace_id
         )
@@ -245,7 +242,6 @@ class ChatPage(Gtk.Paned):
         select: bool = False,
         message: str | None = None,
     ) -> None:
-
         client = app.get_client(account)
 
         if type_ == "chat":
@@ -312,7 +308,6 @@ class ChatPage(Gtk.Paned):
         )
 
     def _remove_chat(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-
         account, jid = param.unpack()
         jid = JID.from_string(jid)
 
@@ -334,7 +329,6 @@ class ChatPage(Gtk.Paned):
         type_: str,
         unregister: bool,
     ) -> None:
-
         if self._chat_control.is_chat_active(account, jid):
             self._chat_control.clear()
 

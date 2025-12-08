@@ -511,7 +511,6 @@ class IdentityEntry(Gtk.Entry):
 
 
 class AdrBox(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "field-changed": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,

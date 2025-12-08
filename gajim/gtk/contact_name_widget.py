@@ -19,7 +19,6 @@ from gajim.gtk.util.classes import SignalManager
 
 
 class ContactNameWidget(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "name-updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
@@ -88,7 +87,6 @@ class ContactNameWidget(Gtk.Box, SignalManager):
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
     ) -> None:
-
         self._edit_button.set_sensitive(state.is_connected)
         self._clear_button.set_sensitive(state.is_connected)
 

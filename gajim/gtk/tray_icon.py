@@ -46,7 +46,6 @@ if sys.platform == "win32":
 
 class TrayIcon:
     def __init__(self) -> None:
-
         app.settings.connect_signal("show_trayicon", self._on_setting_changed)
 
         if sys.platform == "win32":

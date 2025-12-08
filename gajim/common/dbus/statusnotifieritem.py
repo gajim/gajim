@@ -57,7 +57,6 @@ log = logging.getLogger("gajim.c.tray.linux")
 
 
 class StatusNotifierItemService(DBusService):
-
     Category = "Communications"
     Id = "org.gajim.Gajim"
     Title = "Gajim"

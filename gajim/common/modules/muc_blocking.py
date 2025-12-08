@@ -46,7 +46,6 @@ class MucBlocking(BaseModule):
     def _bookmark_1_event_received(
         self, _con: types.NBXMPPClient, stanza: Any, properties: MessageProperties
     ) -> None:
-
         if not self._sync_muc_blocks():
             return
 

@@ -43,7 +43,6 @@ log = logging.getLogger("gajim.gtk.preview.image")
 
 @Gtk.Template.from_string(string=get_ui_string("preview/image.ui"))
 class ImagePreviewWidget(Gtk.Box, SignalManager):
-
     __gtype_name__ = "ImagePreviewWidget"
 
     __gsignals__ = {
@@ -107,7 +106,6 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
     def _on_thumb_load_finished(
         self, data: bytes | None, error: GLib.Error | None, user_data: typing.Any
     ) -> None:
-
         if data is None:
             log.error("Loading thumbnail failed, %s: %s", self._thumb_path.name, error)
             self.emit("display-error")
@@ -262,14 +260,12 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         _x: int,
         _y: int,
     ) -> None:
-
         self._file_control_buttons.set_visible(True)
 
     def _on_content_cursor_leave(
         self,
         _controller: Gtk.EventControllerMotion,
     ) -> None:
-
         self._file_control_buttons.set_visible(False)
 
     def do_unroot(self) -> None:

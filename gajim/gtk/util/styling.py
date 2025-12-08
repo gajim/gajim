@@ -22,7 +22,6 @@ def text_to_color(text: str) -> tuple[float, float, float]:
 
 
 def get_contact_color(contact: types.ChatContactT) -> tuple[float, float, float]:
-
     if isinstance(contact, GroupchatParticipant):
         if contact.room.muc_context in (None, "public"):
             return text_to_color(contact.name)

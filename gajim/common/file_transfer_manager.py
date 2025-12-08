@@ -95,7 +95,6 @@ class FileTransferManager:
         user_data: Any = None,
         callback: Callable[[FileTransfer], Any] | None = None,
     ) -> FileTransfer | None:
-
         if id_ is None:
             id_ = get_uuid()
 

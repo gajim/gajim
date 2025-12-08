@@ -14,7 +14,6 @@ from gi.repository import Gtk
 
 
 class BaseCompletionListItem:
-
     def get_text(self) -> str:
         raise NotImplementedError
 
@@ -23,7 +22,6 @@ L = TypeVar("L", bound=BaseCompletionListItem)
 
 
 class BaseCompletionViewItem(Generic[L]):
-
     css_class = ""
 
     def __init__(self) -> None:
@@ -40,7 +38,6 @@ class BaseCompletionViewItem(Generic[L]):
 
 
 class BaseCompletionProvider:
-
     trigger_char = ""
     name = ""
 

@@ -21,13 +21,11 @@ from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 
 
 class MUCSubject(BaseRow):
-
     type = "muc-subject"
 
     def __init__(
         self, account: str, subject: MucSubject, timestamp: float | None = None
     ) -> None:
-
         BaseRow.__init__(self, account)
 
         current_timestamp = timestamp or time.time()

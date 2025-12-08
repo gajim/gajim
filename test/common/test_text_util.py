@@ -12,7 +12,6 @@ from gajim.common.util.text import remove_invalid_xml_chars
 
 
 class Test(unittest.TestCase):
-
     def test_remove_invalid_xml_chars(self) -> None:
         invalid_chars = ["\x0b", "\udfff", "\x08"]
         for char in invalid_chars:

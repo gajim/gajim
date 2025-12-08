@@ -105,7 +105,6 @@ def parse_country_names(content: str) -> dict[str, str]:
 def merge_zone_data(
     zones: list[tuple[str, str]], countries: dict[str, str]
 ) -> dict[str, ZoneData]:
-
     data: dict[str, ZoneData] = {}
 
     for country_code, key in zones:
@@ -126,7 +125,6 @@ def merge_zone_data(
 def generate_output(
     schemes: list[str], zones: dict[str, ZoneData], outpath: Path
 ) -> None:
-
     log.info("Generate output")
     current_date = datetime.now(tz=UTC).isoformat()
     content = BOILER_PLATE.format(current_date=current_date)

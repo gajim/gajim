@@ -46,7 +46,6 @@ log = logging.getLogger("gajim.gtk.chatlist")
 
 
 class ChatList(Gtk.ListBox, EventHelper, SignalManager):
-
     __gsignals__ = {
         "chat-order-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
@@ -202,7 +201,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         pinned: bool,
         position: int,
     ) -> None:
-
         key = (account, jid)
         if self._chats.get(key) is not None:
             # Chat is already in the List
@@ -294,7 +292,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         return list(self._iterate_rows())
 
     def remove_chat(self, account: str, jid: JID, emit_unread: bool = True) -> None:
-
         row = self._chats.pop((account, jid))
 
         if row.is_pinned:
@@ -336,9 +333,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             self._on_message_sent(event)
         elif isinstance(event, events.JingleRequestReceived):
             self._on_jingle_request_received(event)
-        elif isinstance(
-            event, events.FileRequestReceivedEvent
-        ):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa: E501
+        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa: E501
             self._on_file_request_received(event)
         else:
             log.warning("Unhandled Event: %s", event.name)
@@ -384,7 +379,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     def _on_context_menu_state_changed(
         self, row: ChatListRow, menu_is_visible: bool
     ) -> None:
-
         self._context_menu_visible = menu_is_visible
         self._schedule_sort()
 
@@ -547,7 +541,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     @staticmethod
     def _get_nick_for_received_message(account: str, message: Message) -> str:
-
         if message.direction == ChatDirection.OUTGOING:
             return _("Me")
 

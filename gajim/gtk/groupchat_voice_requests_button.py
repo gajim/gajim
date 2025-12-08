@@ -139,7 +139,6 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
         voice_request: VoiceRequest,
         contact: GroupchatContact,
     ) -> None:
-
         client = app.get_client(contact.account)
         client.get_module("MUC").approve_voice_request(contact, voice_request)
         self._update()
@@ -151,7 +150,6 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
         voice_request: VoiceRequest,
         contact: GroupchatContact,
     ) -> None:
-
         client = app.get_client(contact.account)
         client.get_module("MUC").decline_voice_request(contact, voice_request)
         self._update()

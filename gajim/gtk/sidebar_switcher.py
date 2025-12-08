@@ -168,7 +168,6 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         return menu
 
     def _find_menu_item_by_key(self, key: str) -> SideBarMenuItem | None:
-
         def _find(menu: list[SideBarMenuItem]) -> SideBarMenuItem | None:
             for m in menu:
                 if m.key == key:

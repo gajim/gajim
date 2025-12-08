@@ -19,7 +19,6 @@ class DBusService:
         object_path: str,
         bus: Gio.DBusConnection,
     ) -> None:
-
         self._interface_info = interface_info
         self._bus = bus
         self._object_path = object_path
@@ -61,7 +60,6 @@ class DBusService:
         parameters: GLib.Variant,
         invocation: Gio.DBusMethodInvocation,
     ) -> None:
-
         method_info = self._interface_info.lookup_method(method_name)
         if method_info is None:
             log.warning("Unknown method name called: %s", method_name)
@@ -88,7 +86,6 @@ class DBusService:
         _interface_name: str,
         property_name: str,
     ) -> GLib.Variant | None:
-
         property_info = self._interface_info.lookup_property(property_name)
         if property_info is None:
             log.warning("Unknown property requested: %s", property_name)

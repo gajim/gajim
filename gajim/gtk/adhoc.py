@@ -220,7 +220,6 @@ class AdHocCommands(Assistant):
 
 
 class Commands(Page):
-
     __gsignals__ = {
         "execute": (GObject.SignalFlags.RUN_LAST, None, ()),
     }

@@ -41,13 +41,11 @@ log = logging.getLogger("gajim.gtk.file_transfer_selector")
 
 
 class FileTransferSelector(Gtk.Box, SignalManager):
-
     __gsignals__ = {
         "changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
     def __init__(self, contact: types.ChatContactT, method: str | None = None) -> None:
-
         Gtk.Box.__init__(self)
         SignalManager.__init__(self)
 
@@ -254,13 +252,11 @@ class FileTransferSelector(Gtk.Box, SignalManager):
 
 
 class FileRow(Gtk.ListBoxRow, SignalManager):
-
     __gsignals__ = {
         "removed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self, path: Path, size_warning: bool, jingle_warning: bool) -> None:
-
         Gtk.ListBoxRow.__init__(self)
         SignalManager.__init__(self)
 
@@ -314,7 +310,6 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
     def _on_load_finished(
         self, data: bytes | None, _error: GLib.Error | None, mime_type: Any
     ) -> None:
-
         if data is None:
             self._set_icon_for_mime_type(mime_type)
             return

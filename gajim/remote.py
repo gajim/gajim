@@ -55,7 +55,6 @@ def call_method(args: argparse.Namespace) -> Any:
 
 
 def create_arg_parser() -> argparse.ArgumentParser:
-
     account_help = "The account the command is executed for"
 
     parser = argparse.ArgumentParser(prog="gajim-remote")

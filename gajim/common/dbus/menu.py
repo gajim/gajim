@@ -193,7 +193,6 @@ class DBusMenuItem:
 
 
 class DBusMenuService(DBusService):
-
     Status = "normal"
     IconThemePath = ""
     Version = 3
@@ -222,7 +221,6 @@ class DBusMenuService(DBusService):
         items: list[DBusMenuItem],
         flat_items: dict[int, DBusMenuItem] | None = None,
     ) -> dict[int, DBusMenuItem]:
-
         if flat_items is None:
             flat_items = {}
 
@@ -237,7 +235,6 @@ class DBusMenuService(DBusService):
     def GetLayout(
         self, parent_id: int, recursion_depth: int, property_names: list[str]
     ) -> tuple[int, tuple[int, dict[str, GLib.Variant], list[GLib.Variant]]]:
-
         property_names = remove_invalid_properties(property_names)
 
         children = self._menu.serialize(parent_id, recursion_depth, property_names)

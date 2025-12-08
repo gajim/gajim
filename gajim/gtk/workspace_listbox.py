@@ -219,7 +219,6 @@ class WorkspaceListBox(Gtk.ListBox):
         y: float,
         row: SideBarListBoxRow,
     ) -> bool:
-
         res = row.translate_coordinates(self, x, y)
         if res is None:
             return Gdk.EVENT_PROPAGATE

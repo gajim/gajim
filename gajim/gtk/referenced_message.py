@@ -112,7 +112,6 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
         message_box = Gtk.Box(spacing=12)
         label_text = ""
         if message.text is not None:
-
             preview = get_preview_data(message.text, message.oob)
             if preview is not None:
                 label_text = preview.text

@@ -35,7 +35,6 @@ class TrackProperties(TypedDict, total=False):
 
 
 class MusicTrackListener:
-
     _instance: MusicTrackListener | None = None
 
     @classmethod

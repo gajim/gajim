@@ -56,7 +56,6 @@ EventNotifications = (
 
 
 class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
-
     __gtype_name__ = "ActivityListView"
     __gsignals__ = {
         "unselected": (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -336,7 +335,6 @@ class ActivityListItem(Generic[E], GObject.Object):
         read: bool,
         event: E,
     ) -> None:
-
         self._timestamp_string = get_uf_relative_time(timestamp)
 
         super().__init__(
@@ -450,7 +448,6 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
 
 
 class GajimUpdate(ActivityListItem[events.GajimUpdateAvailable]):
-
     @classmethod
     def from_event(cls, event: events.GajimUpdateAvailable) -> GajimUpdate:
         scale = app.window.get_scale_factor()
@@ -472,7 +469,6 @@ class GajimUpdate(ActivityListItem[events.GajimUpdateAvailable]):
 
 
 class GajimUpdatePermission(ActivityListItem[events.AllowGajimUpdateCheck]):
-
     @classmethod
     def from_event(cls, event: events.AllowGajimUpdateCheck) -> GajimUpdatePermission:
         scale = app.window.get_scale_factor()
@@ -494,7 +490,6 @@ class GajimUpdatePermission(ActivityListItem[events.AllowGajimUpdateCheck]):
 
 
 class GajimPluginUpdate(ActivityListItem[events.PluginUpdatesAvailable]):
-
     @classmethod
     def from_event(cls, event: events.PluginUpdatesAvailable) -> GajimPluginUpdate:
         scale = app.window.get_scale_factor()
@@ -516,7 +511,6 @@ class GajimPluginUpdate(ActivityListItem[events.PluginUpdatesAvailable]):
 
 
 class GajimPluginUpdateFinished(ActivityListItem[None]):
-
     @classmethod
     def from_event(cls) -> GajimPluginUpdateFinished:
         scale = app.window.get_scale_factor()
@@ -538,7 +532,6 @@ class GajimPluginUpdateFinished(ActivityListItem[None]):
 
 
 class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
-
     @classmethod
     def from_event(cls, event: events.SubscribePresenceReceived) -> Subscribe:
         client = app.get_client(event.account)
@@ -573,7 +566,6 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
 
 
 class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
-
     @classmethod
     def from_event(cls, event: events.UnsubscribedPresenceReceived) -> Unsubscribed:
         client = app.get_client(event.account)
@@ -601,7 +593,6 @@ class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
 
 
 class MucInvitation(ActivityListItem[events.MucInvitation]):
-
     @classmethod
     def from_event(cls, event: events.MucInvitation) -> MucInvitation:
         client = app.get_client(event.account)
@@ -645,10 +636,8 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
 
 
 class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
-
     @classmethod
     def from_event(cls, event: events.MucDecline) -> MucInvitationDeclined:
-
         client = app.get_client(event.account)
         contact = client.get_module("Contacts").get_contact(event.from_.bare)
 

@@ -213,7 +213,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         # Handle PreviewState.DISPLAY state first, so if no fitting widget is found
         # all other widget states remain as in PreviewState.DOWNLOADED
         if state == PreviewState.DISPLAY:
-
             widget = None
             if is_image(self._mime_type) or is_video(self._mime_type):
                 assert self._mime_type is not None
@@ -293,7 +292,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         x: float,
         y: float,
     ) -> None:
-
         encrypted = self._uri.startswith("aesgcm://")
         menu = get_preview_menu(self._uri, encrypted=encrypted)
         self._menu_popover.set_menu_model(menu)
@@ -305,7 +303,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         max_content_length: int = -1,
         allowed_content_types: set[str] | None = None,
     ) -> None:
-
         log.info("Start downloading: %s %s", self._preview_id_short, self._uri)
 
         obj = app.ftm.http_request(
@@ -336,7 +333,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
     def _on_download_progress(
         self, ftobj: FileTransfer, _param: GObject.ParamSpec
     ) -> None:
-
         progress = ftobj.get_property("progress")
         total = ftobj.get_total()
         if total is None:
@@ -352,7 +348,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self,
         ftobj: FileTransfer,
     ) -> None:
-
         self._disconnect_object(ftobj)
         assert self._orig_path is not None
         self._info_message = None

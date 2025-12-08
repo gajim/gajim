@@ -8,7 +8,6 @@ from gajim.common.util.uri import XmppIri
 
 
 class TestUriUtil(unittest.TestCase):
-
     def test_parsing_xmpp_iri(self) -> None:
         xiri = XmppIri.from_string(
             r"xmpp:nasty!%23$%25()*+,-.;=%3F%5B%5C%5D%5E_%60%7B%7C%7D~n@example.com"

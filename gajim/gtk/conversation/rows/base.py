@@ -16,7 +16,6 @@ from gajim.gtk.util.classes import SignalManager
 
 
 class BaseRow(Gtk.ListBoxRow, SignalManager):
-
     __gsignals__ = {
         "remove": (GObject.SignalFlags.RUN_LAST, None, ()),
     }

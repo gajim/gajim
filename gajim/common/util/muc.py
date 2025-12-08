@@ -44,14 +44,12 @@ def is_affiliation_change_allowed(
 def is_role_change_allowed(
     self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
 ) -> bool:
-
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation
 
 
 def is_moderation_allowed(self_contact: types.GroupchatParticipant) -> bool:
-
     return self_contact.role >= Role.MODERATOR
 
 

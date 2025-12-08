@@ -38,7 +38,6 @@ MIME_TYPE_MAP = {"application/x-ext-webp": "image/webp"}
 def get_image_paths(
     uri: str, urlparts: ParseResult, size: int, orig_dir: Path, thumb_dir: Path
 ) -> tuple[Path, Path]:
-
     path = Path(unquote(urlparts.path))
     web_stem = path.stem
     extension = path.suffix
@@ -128,7 +127,6 @@ def guess_mime_type(file_path: Path | str, data: bytes | None = None) -> str:
 def guess_simple_file_type(
     file_path: str, data: bytes | None = None
 ) -> tuple[Gio.Icon, str, str]:
-
     mime_type = guess_mime_type(file_path, data)
     icon = get_icon_for_mime_type(mime_type)
 
@@ -209,7 +207,6 @@ class GeoPreview:
 def get_preview_data(
     uri: str, oob_data: list[mod.OOB]
 ) -> GeoPreview | UrlPreview | None:
-
     if not IRI_RX.fullmatch(uri):
         # urlparse removes whitespace (and who knows what else) from URLs,
         # so can't be used for validation.

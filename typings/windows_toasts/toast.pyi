@@ -84,7 +84,6 @@ class Toast:
     def __eq__(self, other) -> bool: ...
     def __repr__(self):  # -> str:
         ...
-
     def AddAction(self, action: Union[ToastButton, ToastSystemButton]) -> None:
         """
         Add an action to the action list. For example, if you're setting up a reminder,
@@ -119,7 +118,6 @@ class Toast:
     @launch_action.setter
     def launch_action(self, value: Optional[str]):  # -> None:
         ...
-
     def clone(self) -> Toast:
         """
         Clone the current toast and return the new one
