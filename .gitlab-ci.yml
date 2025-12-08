@@ -21,17 +21,6 @@ test-other:
     - appstream-util validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
 
-test-black:
-  image: gajim-test
-  stage: test
-  rules:
-    - changes:
-      - "**/*.py"
-  script:
-    - black --version
-    - black --check .
-  interruptible: true
-
 test-codespell:
   image: gajim-test
   stage: test
@@ -55,7 +44,7 @@ test-pyright:
     - pyright
   interruptible: true
 
-test-ruff:
+test-ruff-lint:
   image: gajim-test
   stage: test
   rules:
@@ -67,6 +56,17 @@ test-ruff:
   artifacts:
     reports:
       codequality: $CI_PROJECT_DIR/code-quality-report.json
+  interruptible: true
+
+test-ruff-format:
+  image: gajim-test
+  stage: test
+  rules:
+    - changes:
+      - "**/*.py"
+  script:
+    - ruff --version
+    - ruff format --diff
   interruptible: true
 
 test-isort:

@@ -61,7 +61,6 @@ dev = [
   "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
   "python-gitlab",
   "sentry-sdk",
-  "black==24.10.0",
 ]
 
 [project.scripts]
@@ -79,102 +78,6 @@ gajim = ["py.typed"]
 
 [tool.setuptools.dynamic]
 version = {attr = "gajim.__version__"}
-
-[tool.black]
-line-length = 88
-target-version = ["py311", "py312", "py313"]
-force-exclude = '''
-# A regex preceded with ^/ will apply only to files and directories
-# in the root of the project.
-(
-      ^/gajim/common/app.py
-    | ^/gajim/common/application.py
-    | ^/gajim/common/call_manager.py
-    | ^/gajim/common/cert_store.py
-    | ^/gajim/common/client.py
-    | ^/gajim/common/client_modules.py
-    | ^/gajim/common/commands.py
-    | ^/gajim/common/configpaths.py
-    | ^/gajim/common/const.py
-    | ^/gajim/common/events.py
-    | ^/gajim/common/exceptions.py
-    | ^/gajim/common/file_props.py
-    | ^/gajim/common/filetransfer.py
-    | ^/gajim/common/ged.py
-    | ^/gajim/common/helpers.py
-    | ^/gajim/common/i18n.py
-    | ^/gajim/common/iana.py
-    | ^/gajim/common/idle.py
-    | ^/gajim/common/jingle_content.py
-    | ^/gajim/common/jingle_ft.py
-    | ^/gajim/common/jingle_ftstates.py
-    | ^/gajim/common/jingle_rtp.py
-    | ^/gajim/common/jingle_session.py
-    | ^/gajim/common/jingle_transport.py
-    | ^/gajim/common/logging_helpers.py
-    | ^/gajim/common/modules/__init__.py
-    | ^/gajim/common/modules/adhoc_commands.py
-    | ^/gajim/common/modules/annotations.py
-    | ^/gajim/common/modules/base.py
-    | ^/gajim/common/modules/bits_of_binary.py
-    | ^/gajim/common/modules/blocking.py
-    | ^/gajim/common/modules/bookmarks.py
-    | ^/gajim/common/modules/bytestream.py
-    | ^/gajim/common/modules/caps.py
-    | ^/gajim/common/modules/carbons.py
-    | ^/gajim/common/modules/chat_markers.py
-    | ^/gajim/common/modules/chatstates.py
-    | ^/gajim/common/modules/contacts.py
-    | ^/gajim/common/modules/discovery.py
-    | ^/gajim/common/modules/entity_time.py
-    | ^/gajim/common/modules/gateway.py
-    | ^/gajim/common/modules/http_auth.py
-    | ^/gajim/common/modules/ibb.py
-    | ^/gajim/common/modules/iq.py
-    | ^/gajim/common/modules/jingle.py
-    | ^/gajim/common/modules/last_activity.py
-    | ^/gajim/common/modules/mam.py
-    | ^/gajim/common/modules/mds.py
-    | ^/gajim/common/modules/message.py
-    | ^/gajim/common/modules/message_util.py
-    | ^/gajim/common/modules/misc.py
-    | ^/gajim/common/modules/moderations.py
-    | ^/gajim/common/modules/muc.py
-    | ^/gajim/common/modules/omemo.py
-    | ^/gajim/common/modules/pep.py
-    | ^/gajim/common/modules/ping.py
-    | ^/gajim/common/modules/presence.py
-    | ^/gajim/common/modules/pubsub.py
-    | ^/gajim/common/modules/reactions.py
-    | ^/gajim/common/modules/receipts.py
-    | ^/gajim/common/modules/register.py
-    | ^/gajim/common/modules/retraction.py
-    | ^/gajim/common/modules/roster.py
-    | ^/gajim/common/modules/roster_item_exchange.py
-    | ^/gajim/common/modules/search.py
-    | ^/gajim/common/modules/security_labels.py
-    | ^/gajim/common/modules/software_version.py
-    | ^/gajim/common/modules/user_avatar.py
-    | ^/gajim/common/modules/user_location.py
-    | ^/gajim/common/modules/user_nickname.py
-    | ^/gajim/common/modules/user_tune.py
-    | ^/gajim/common/modules/util.py
-    | ^/gajim/common/modules/vcard4.py
-    | ^/gajim/common/modules/vcard_avatars.py
-    | ^/gajim/common/modules/vcard_temp.py
-    | ^/gajim/common/passwords.py
-    | ^/gajim/common/regex.py
-    | ^/gajim/common/setting_values.py
-    | ^/gajim/common/settings.py
-    | ^/gajim/common/socks5.py
-    | ^/gajim/common/sound.py
-    | ^/gajim/common/structs.py
-    | ^/gajim/common/styling.py
-    | ^/gajim/common/task_manager.py
-    | ^/gajim/common/types.py
-)
-'''
-required-version = "24.10.0"
 
 [tool.codespell]
 skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec"
@@ -400,6 +303,96 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 15
+
+[tool.ruff.format]
+
+exclude = [
+  "gajim/common/app.py",
+  "gajim/common/application.py",
+  "gajim/common/call_manager.py",
+  "gajim/common/cert_store.py",
+  "gajim/common/client.py",
+  "gajim/common/client_modules.py",
+  "gajim/common/commands.py",
+  "gajim/common/configpaths.py",
+  "gajim/common/const.py",
+  "gajim/common/events.py",
+  "gajim/common/exceptions.py",
+  "gajim/common/file_props.py",
+  "gajim/common/filetransfer.py",
+  "gajim/common/ged.py",
+  "gajim/common/helpers.py",
+  "gajim/common/i18n.py",
+  "gajim/common/iana.py",
+  "gajim/common/idle.py",
+  "gajim/common/jingle_content.py",
+  "gajim/common/jingle_ft.py",
+  "gajim/common/jingle_ftstates.py",
+  "gajim/common/jingle_rtp.py",
+  "gajim/common/jingle_session.py",
+  "gajim/common/jingle_transport.py",
+  "gajim/common/logging_helpers.py",
+  "gajim/common/modules/__init__.py",
+  "gajim/common/modules/adhoc_commands.py",
+  "gajim/common/modules/annotations.py",
+  "gajim/common/modules/base.py",
+  "gajim/common/modules/bits_of_binary.py",
+  "gajim/common/modules/blocking.py",
+  "gajim/common/modules/bookmarks.py",
+  "gajim/common/modules/bytestream.py",
+  "gajim/common/modules/caps.py",
+  "gajim/common/modules/carbons.py",
+  "gajim/common/modules/chat_markers.py",
+  "gajim/common/modules/chatstates.py",
+  "gajim/common/modules/contacts.py",
+  "gajim/common/modules/discovery.py",
+  "gajim/common/modules/entity_time.py",
+  "gajim/common/modules/gateway.py",
+  "gajim/common/modules/http_auth.py",
+  "gajim/common/modules/ibb.py",
+  "gajim/common/modules/iq.py",
+  "gajim/common/modules/jingle.py",
+  "gajim/common/modules/last_activity.py",
+  "gajim/common/modules/mam.py",
+  "gajim/common/modules/mds.py",
+  "gajim/common/modules/message.py",
+  "gajim/common/modules/message_util.py",
+  "gajim/common/modules/misc.py",
+  "gajim/common/modules/moderations.py",
+  "gajim/common/modules/muc.py",
+  "gajim/common/modules/omemo.py",
+  "gajim/common/modules/pep.py",
+  "gajim/common/modules/ping.py",
+  "gajim/common/modules/presence.py",
+  "gajim/common/modules/pubsub.py",
+  "gajim/common/modules/reactions.py",
+  "gajim/common/modules/receipts.py",
+  "gajim/common/modules/register.py",
+  "gajim/common/modules/retraction.py",
+  "gajim/common/modules/roster.py",
+  "gajim/common/modules/roster_item_exchange.py",
+  "gajim/common/modules/search.py",
+  "gajim/common/modules/security_labels.py",
+  "gajim/common/modules/software_version.py",
+  "gajim/common/modules/user_avatar.py",
+  "gajim/common/modules/user_location.py",
+  "gajim/common/modules/user_nickname.py",
+  "gajim/common/modules/user_tune.py",
+  "gajim/common/modules/util.py",
+  "gajim/common/modules/vcard4.py",
+  "gajim/common/modules/vcard_avatars.py",
+  "gajim/common/modules/vcard_temp.py",
+  "gajim/common/passwords.py",
+  "gajim/common/regex.py",
+  "gajim/common/setting_values.py",
+  "gajim/common/settings.py",
+  "gajim/common/sound.py",
+  "gajim/common/socks5.py",
+  "gajim/common/structs.py",
+  "gajim/common/styling.py",
+  "gajim/common/task_manager.py",
+  "gajim/common/types.py",
+]
 
 [tool.isort]
 profile = "black"

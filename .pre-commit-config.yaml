@@ -4,6 +4,7 @@ repos:
     hooks:
       - id: ruff-check
         exclude: ".githooks/"
+      - id: ruff-format
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
@@ -30,13 +31,6 @@ repos:
     rev: 7.0.0
     hooks:
       - id: isort
-
-  - repo: https://github.com/psf/black
-    # The `refs/tags/<tag>:refs/tags/<tag>` is needed for black's required-version to work:
-    # https://github.com/psf/black/issues/2493#issuecomment-1081987650
-    rev: 'refs/tags/24.10.0:refs/tags/24.10.0'
-    hooks:
-      - id: black
 
   - repo: https://github.com/fsfe/reuse-tool
     rev: v5.0.2
