@@ -27,7 +27,7 @@ repos:
       stages: [manual]
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 7.0.0
     hooks:
       - id: isort
 
