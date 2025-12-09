@@ -23,6 +23,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
+from packaging.version import Version as V
 
 from gajim.common import app
 from gajim.common import types
@@ -56,6 +57,10 @@ def get_gtk_version() -> str:
         Gtk.get_minor_version(),
         Gtk.get_micro_version(),
     )
+
+
+def has_min_gtk_version(required_version: str) -> bool:
+    return V(required_version) >= V(get_gtk_version())
 
 
 def get_adw_version() -> str:
