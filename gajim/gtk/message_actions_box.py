@@ -229,22 +229,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             > scrolled.get_max_content_height() - 2 * self._vscrollbar_min_height
         )
 
-        self._start_queue_resize_if_needed()
+        if self._contact is not None and self._wait_queue_resize is None:
+            self._wait_queue_resize = GLib.timeout_add(100, self._queue_resize)
 
-    def _start_queue_resize_if_needed(self) -> None:
-        if self._wait_queue_resize is None and self._contact is not None:
-            self._wait_queue_resize = GLib.timeout_add(50, self._queue_resize_if_needed)
-
-    def _queue_resize_if_needed(self) -> bool:
-        if (
-            self._ui.input_scrolled.get_height()
-            >= self._ui.input_scrolled.get_size_request()[1]
-        ):
-            self._wait_queue_resize = None
-            return GLib.SOURCE_REMOVE
-
+    def _queue_resize(self) -> bool:
+        self._wait_queue_resize = None
         self._ui.input_scrolled.queue_resize()
-        return GLib.SOURCE_CONTINUE
+        return GLib.SOURCE_REMOVE
 
     def _on_view_realize(self, _view: Gtk.TextView) -> None:
         min_size, _ = self._ui.input_scrolled.get_preferred_size()
