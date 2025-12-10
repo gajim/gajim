@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -227,6 +227,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Aldatu _Izengoitia"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktibatuta"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -466,14 +470,6 @@ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "\"%s\"  kontua zerbitzarira konektatu da"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "\"%s\"  kontua zerbitzarira konektatu da"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 
 #, fuzzy
@@ -851,10 +847,6 @@ msgstr "Berezko Egoera Mezuak"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Fitxeroa:"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Konexioa ez dago erabilgarri"
 
 msgid "Audio test"
 msgstr ""
@@ -1274,9 +1266,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Sakatu abatarea ezartzeko"
@@ -1512,10 +1501,6 @@ msgstr "_Lotura kokapena kopiatu"
 msgid "Copy to clipboard"
 msgstr "_Lotura kokapena kopiatu"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Ezin izan da irudia kargatu"
@@ -1716,10 +1701,6 @@ msgid "Devices"
 msgstr "Zerbitzaria"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL bilatzailea ez da aurkizten \"%s\" -an"
 
@@ -1869,6 +1850,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Editatu"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Editatu"
 
@@ -2072,6 +2058,10 @@ msgid "Export Contacts"
 msgstr "Kontaktua"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Esportatu"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Bukatu"
 
@@ -2218,14 +2208,15 @@ msgstr "Filtroa:"
 msgid "Filters (active)"
 msgstr "Lehen Mezu Jasoa"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
 
 #, fuzzy
 msgid "Finished"
@@ -2637,6 +2628,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "%s gelan zaude dagoeneko"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Baliogabeko izena"
 
@@ -2864,9 +2859,6 @@ msgstr "Txat Taldea Berria"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3067,6 +3059,10 @@ msgstr "Ez zaude zerbitzarira konektatuta"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ Bertsioa:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3294,6 +3290,10 @@ msgstr "Ez dago konturik erabilgarri"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "%s ez da aurkitu"
@@ -3301,6 +3301,9 @@ msgstr "%s ez da aurkitu"
 #, fuzzy
 msgid "No results found"
 msgstr "%s ez da aurkitu"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3337,10 +3340,6 @@ msgstr "Ez Erabilgarri"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Ez Erabilgarri"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Konektatu"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3934,6 +3933,10 @@ msgstr "Erre_gistratu"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Lehen Mezu Jasoa"
+
 msgid "Read _Wikipedia Article"
 msgstr "Irakurri _Wikipedia Artikuloa"
 
@@ -4176,6 +4179,13 @@ msgstr ""
 msgid "Required"
 msgstr "Pasahitza behar da"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Historial Administratzailea"
@@ -4190,9 +4200,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Pasahitza behar da"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4535,12 +4542,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Bidali keep-alive paketeak"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Report Bug"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5391,6 +5397,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Zure zerbitzariak ez du Vcard-ik onartzen"
@@ -5585,6 +5594,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr "Partaidea"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Hasigabea"
@@ -5645,10 +5658,6 @@ msgstr "Fitxeroa Transferitzeko Baimena"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Fitxeroa Transferitzeko Baimena"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Fitxeroa Transferitzeko Baimena"
 
 msgid "Unsupported certificate purpose"
@@ -5949,10 +5958,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Ez zaude zerbitzarira konektatuta"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5975,7 +5980,7 @@ msgid "You are now {show}{status}"
 msgstr "Orain %s bezala ezaguna zara"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "deskonektatuta"
 
 msgid "You are offline. Go online to send messages…"
@@ -6871,6 +6876,14 @@ msgstr ""
 #~ msgstr "Konexioak huts egin du"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktibatuta"
 
@@ -6933,6 +6946,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Berezko Egoera Mezuak"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Konexioa ez dago erabilgarri"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7324,10 +7341,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Irudiak"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktibatuta"
-
 #~ msgid "Invalid File"
 #~ msgstr "Fitxero Baliogabea"
 
@@ -7399,6 +7412,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Konektatu"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7578,6 +7595,10 @@ msgstr ""
 #~ msgstr "Gorde Bezala..."
 
 #, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Bidali keep-alive paketeak"
+
+#, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
 #~ "Bidali mezua Ctrl+Enter -rekin eta Enter-ekin lerro berria egin. "
@@ -7755,6 +7776,10 @@ msgstr ""
 #~ msgstr "Irakurri gabeko gertaerak"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Fitxeroa Transferitzeko Baimena"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "MOTD Gaurkotu"
 
@@ -7812,6 +7837,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Ez zaude zerbitzarira konektatuta"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Ez zaude zerbitzarira konektatuta"

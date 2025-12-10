@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -228,6 +228,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Zmeniť p_rezývku..."
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktívne"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -469,14 +473,6 @@ msgstr "Účet \"%s\" je pripojený na server"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Účet \"%s\" je pripojený na server"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Účet \"%s\" je pripojený na server"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Účet \"%s\" je pripojený na server"
 
 #, fuzzy
@@ -858,10 +854,6 @@ msgstr "Vstupné zariadenie zvuku"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Súbor:"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Pripojenie nie je dostupné"
 
 msgid "Audio test"
 msgstr "Zvukový test"
@@ -1283,9 +1275,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Kliknite pre výber avataru"
@@ -1521,10 +1510,6 @@ msgstr "_Kopírovať umiestnenie odkazu"
 msgid "Copy to clipboard"
 msgstr "_Kopírovať umiestnenie odkazu"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Nie je možné načítať obrázok"
@@ -1724,10 +1709,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Prosím, uistite sa, že ste pripojený k \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL pre web vyhľadávanie chýba \"%s\""
 
@@ -1881,6 +1862,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Upraviť"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Upraviť"
 
@@ -2085,6 +2071,10 @@ msgid "Export Contacts"
 msgstr "Pozvať _kontakty"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Exportovať"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Dokončiť"
 
@@ -2229,14 +2219,15 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Prvá prijatá správa"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Prosím, uistite sa, že ste pripojený k \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2648,6 +2639,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Opustili ste nasledujúce diskusné skupiny:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Prichádzajúca správa:"
 
@@ -2873,9 +2868,6 @@ msgstr "Opustiť diskusnú skupinu"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -3072,6 +3064,10 @@ msgstr "Relácia NEBUDE zaznamenaná"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Verzia GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3298,6 +3294,10 @@ msgstr "Žiadne účty nie sú dostupné"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Žiadny výsledok"
@@ -3305,6 +3305,9 @@ msgstr "Žiadny výsledok"
 #, fuzzy
 msgid "No results found"
 msgstr "Žiadny výsledok"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr ""
@@ -3340,10 +3343,6 @@ msgstr "Neprítomný"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Neprítomný"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Pripojený"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3938,6 +3937,10 @@ msgstr "Re_gistrácia"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Prvá prijatá správa"
+
 msgid "Read _Wikipedia Article"
 msgstr "Čítať článok na _Wikipédii"
 
@@ -4180,6 +4183,13 @@ msgstr ""
 msgid "Required"
 msgstr "Heslo je požadované"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Požaduje gnome-keyring a python-gnome2-desktop, alebo kwalletcli."
@@ -4194,10 +4204,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vyžaduje libgtkspell."
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Požaduje knižnicu libxss."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4536,12 +4542,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Použitie: /%s, pošle správu kontaktu"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Poslať pakety na udržiavanie spojenia"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "Sp_ráva o chybe"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5401,6 +5406,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Server nepodporuje Vcard"
@@ -5596,6 +5604,10 @@ msgstr "_Odblokovať"
 msgid "Unblock Participant?"
 msgstr "Účastník"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Prosím, uistite sa, že ste pripojený k \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Nezačal"
@@ -5656,10 +5668,6 @@ msgstr "Požiadavka na hlasový rozhovor"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Požiadavka na hlasový rozhovor"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Požiadavka na hlasový rozhovor"
 
 msgid "Unsupported certificate purpose"
@@ -5964,10 +5972,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Nie ste pripojený k serveru"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5989,8 +5993,9 @@ msgstr "Teraz ste známy ako %s"
 msgid "You are now {show}{status}"
 msgstr "Teraz ste známy ako %s"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Nie ste pripojený k serveru"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6884,6 +6889,14 @@ msgstr ""
 #~ msgstr "Registrácia zlyhala"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Účet \"%s\" je pripojený na server"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Účet \"%s\" je pripojený na server"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktivovaná"
 
@@ -6945,6 +6958,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Výstupné zariadenie zvuku"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Pripojenie nie je dostupné"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7340,10 +7357,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Obrázky"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktívne"
-
 #~ msgid "Invalid File"
 #~ msgstr "Nesprávny súbor"
 
@@ -7417,6 +7430,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Pripojený"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7550,6 +7567,10 @@ msgstr ""
 #~ msgstr "Požaduje knižnicu libxss."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Požaduje knižnicu libxss."
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "STUN server:"
 
@@ -7596,6 +7617,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Uložiť súbor ako..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Poslať pakety na udržiavanie spojenia"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7774,6 +7799,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "Neprečítané udalosti"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Požiadavka na hlasový rozhovor"
 
 #, fuzzy
 #~ msgid "Update Check"

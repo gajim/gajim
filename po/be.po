@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -227,6 +227,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Змяніць м_янушку"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Актыўны"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -465,14 +469,6 @@ msgstr "Рахунак \"%s\" злучаны з серверам"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Рахунак \"%s\" злучаны з серверам"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Рахунак \"%s\" злучаны з серверам"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Рахунак \"%s\" злучаны з серверам"
 
 #, fuzzy
@@ -851,10 +847,6 @@ msgstr "Стандартныя паведамленні стану"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Файл: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Няма злучэння"
 
 msgid "Audio test"
 msgstr ""
@@ -1272,9 +1264,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(who)s пакараў %(nick)s: %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Пстрыкніце, каб вызначыць свой аватар"
@@ -1510,10 +1499,6 @@ msgstr "_Скапіяваць адрас спасылкі"
 msgid "Copy to clipboard"
 msgstr "_Скапіяваць адрас спасылкі"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Немагчыма загрузіць малюнак"
@@ -1713,10 +1698,6 @@ msgid "Devices"
 msgstr "Сервер"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Праверце злучэнне з \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "У адрасе пошуку ў Сеціве не хапае \"%s\""
 
@@ -1870,6 +1851,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Змяніць"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Змяніць"
 
@@ -2073,6 +2059,10 @@ msgid "Export Contacts"
 msgstr "Людзі"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Экспартаваць"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Скончыць"
 
@@ -2219,14 +2209,15 @@ msgstr "Фільтар:"
 msgid "Filters (active)"
 msgstr "Атрыманае першае паведамленне"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Праверце злучэнне з \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2638,6 +2629,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Вы сышлі з наступных групавых размоў:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Няправільнае імя карыстальніка"
 
@@ -2865,9 +2860,6 @@ msgstr "Сысці з групавых размоў"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3068,6 +3060,10 @@ msgstr "Вы не злучаны з серверам"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Версія GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3295,6 +3291,10 @@ msgstr "Рахункаў няма"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "%s не знойдзены"
@@ -3302,6 +3302,9 @@ msgstr "%s не знойдзены"
 #, fuzzy
 msgid "No results found"
 msgstr "%s не знойдзены"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3338,10 +3341,6 @@ msgstr "Мяне няма"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Мяне няма"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Злучэнне"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3936,6 +3935,10 @@ msgstr "Зарэ_гістравацца"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Атрыманае першае паведамленне"
+
 msgid "Read _Wikipedia Article"
 msgstr "Прачытаць артыкул у _Вікіпедыі"
 
@@ -4179,6 +4182,13 @@ msgstr ""
 msgid "Required"
 msgstr "Патрабуецца пароль"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Кіраўнік журналаў"
@@ -4193,9 +4203,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Патрабуецца пароль"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4534,12 +4541,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Карыстанне: /%s, хавае кнопкі размовы."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Адпраўляць праверачныя пакункі серверу"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Паведаміць пра памылку"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5388,6 +5394,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Ваш сервер не падтрымлівае Vcard"
@@ -5581,6 +5590,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr "Удзельнік"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Праверце злучэнне з \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Не пачатая"
@@ -5641,10 +5654,6 @@ msgstr "Запыт на перадачу файла"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Запыт на перадачу файла"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Запыт на перадачу файла"
 
 msgid "Unsupported certificate purpose"
@@ -5945,10 +5954,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Вы не злучаны з серверам"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5972,7 +5977,7 @@ msgid "You are now {show}{status}"
 msgstr "Вашая мянушка змененая на %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "адключаны"
 
 msgid "You are offline. Go online to send messages…"
@@ -6866,6 +6871,14 @@ msgstr ""
 #~ msgstr "Памылка злучэння"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Рахунак \"%s\" злучаны з серверам"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Рахунак \"%s\" злучаны з серверам"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Актывізаваны"
 
@@ -6928,6 +6941,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Стандартныя паведамленні стану"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Няма злучэння"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7321,10 +7338,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Малюнкі"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Актыўны"
-
 #~ msgid "Invalid File"
 #~ msgstr "Няправільны файл"
 
@@ -7398,6 +7411,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Проксі:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Злучэнне"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7574,6 +7591,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Захаваць файл як..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Адпраўляць праверачныя пакункі серверу"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7753,6 +7774,10 @@ msgstr ""
 #~ msgstr "Нягледжаныя падзеі"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Запыт на перадачу файла"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Абнавіць MOTD"
 
@@ -7810,6 +7835,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Вы не злучаны з серверам"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Вы не злучаны з серверам"

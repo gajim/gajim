@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -243,6 +243,10 @@ msgstr "'@' está faltando no endereço. Tem certeza de que está correto?"
 msgid "(changed by %s)"
 msgstr "(modificado por %s)"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Ativo"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "(motivo: %s)"
@@ -458,13 +462,6 @@ msgstr "Conta deve estar conectada"
 
 msgid "Account is being created"
 msgstr "Conta está sendo criada"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "A conta não está conectada."
-
-msgid "Account is not connected."
-msgstr "A conta não está conectada."
 
 #, fuzzy
 msgid "Account name: "
@@ -795,9 +792,6 @@ msgstr "Dispositivo de Entrada de Áudio"
 
 msgid "Audio Preview"
 msgstr "Pré-visualização de Áudio"
-
-msgid "Audio preview is not available"
-msgstr "A escuta de áudio não está disponível"
 
 msgid "Audio test"
 msgstr "Teste de áudio"
@@ -1179,9 +1173,6 @@ msgstr ""
 "Clique nos contatos que você gostaria de convidar para este bate-papo em "
 "grupo."
 
-msgid "Click to change time display"
-msgstr "Clique para alterar o display de horário"
-
 msgid "Click to view location"
 msgstr "Clique para ver a localização"
 
@@ -1388,10 +1379,6 @@ msgstr "Copiar para a área de transferência"
 msgid "Copy to clipboard"
 msgstr "Copiar para a área de transferência"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Corrigir…"
-
 msgid "Could Not Save File"
 msgstr "Não foi Possível Salvar o Arquivo"
 
@@ -1562,10 +1549,6 @@ msgid "Devices"
 msgstr "Aparelhos"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Dispositivos conectados com \"%s\""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Está faltando um \"%s\" na URL do diretório"
 
@@ -1706,6 +1689,11 @@ msgstr "Editar nome de exibição…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Edite sua mensagem (Esc para cancelar)…"
 
+msgid "Edit…"
+msgstr "Editar…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Editar…"
 
@@ -1888,6 +1876,10 @@ msgstr "Exportar Historico de Chat"
 msgid "Export Contacts"
 msgstr "Exportar Contatos"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "Erro de Importação"
+
 msgid "Export Finished"
 msgstr "Exportação finalizada"
 
@@ -2011,15 +2003,15 @@ msgstr "Filtros"
 msgid "Filters (active)"
 msgstr "Filtros (ativos)"
 
-#, fuzzy
-msgid "Fingerprint"
-msgstr "Impressões Digitais"
-
 msgid "Fingerprint for this Device"
 msgstr "Impressão Digital para este Dispositivo"
 
 msgid "Fingerprints"
 msgstr "Impressões Digitais"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Dispositivos conectados com \"%s\""
 
 msgid "Finished"
 msgstr "Finalizado"
@@ -2391,6 +2383,10 @@ msgstr ""
 "primeiro.\n"
 "Um moderador irá processar seu pedido."
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "Você saiu deste bate-papo em grupo"
+
 msgid "Incoming Call"
 msgstr "Chamada recebida"
 
@@ -2588,9 +2584,6 @@ msgstr "Sair do Bate-Papo em Grupo?"
 msgid "Leave _Permanently"
 msgstr "Sair_Permanentemente"
 
-msgid "Let others know if you read up to this point"
-msgstr "Avise aos outros se você leu até esse ponto"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2766,6 +2759,10 @@ msgstr "As mensagens são arquivadas no servidor"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Versão do Pango: %s"
 
 msgid "Minimize"
 msgstr "Minimizar"
@@ -2967,11 +2964,18 @@ msgstr "Nenhuma informação disponível"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr "Sem resultados"
 
 msgid "No results found"
 msgstr "Nenhum resultado encontrado"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Nó"
@@ -3006,9 +3010,6 @@ msgstr "Não disponível"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Não Disponível"
-
-msgid "Not Connected"
-msgstr "Não Conectado"
 
 msgid "Not Decided"
 msgstr "Confiança Não Decidida"
@@ -3535,6 +3536,10 @@ msgstr "Re_gistrar"
 msgid "React with %s"
 msgstr "Reagir com %s"
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Enviar Comprovantes de Recebimento"
+
 msgid "Read _Wikipedia Article"
 msgstr "Ler artigo da _Wikipedia"
 
@@ -3737,6 +3742,13 @@ msgstr "Solicitando formulário de pesquisa do servidor"
 msgid "Required"
 msgstr "Obrigatório"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Requer: gnome-keyring or kwallet"
 
@@ -3748,9 +3760,6 @@ msgstr "Requer: gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "Requer: libspelling"
-
-msgid "Requires: libxss"
-msgstr "Requer: libxss"
 
 msgid "Reserved Name"
 msgstr "Nome Reservado"
@@ -4050,11 +4059,11 @@ msgstr "Enviar Comprovantes de Recebimento"
 msgid "Send Messages with Control+Enter"
 msgstr "Enviar Mensagens com Ctrl+Enter"
 
-msgid "Send Read Markers"
-msgstr "Enviar Marcadores de Leitura"
-
 msgid "Send _Report"
 msgstr "Enviar_Reporte"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4856,6 +4865,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Esta mensagem será excluída do seu histórico de conversas local"
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Este servidor não permite inscrição."
 
@@ -5038,6 +5050,10 @@ msgstr "Desbloquear"
 msgid "Unblock Participant?"
 msgstr "Participante"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Dispositivos conectados com \"%s\""
+
 msgid "Unencrypted"
 msgstr "Não criptografado"
 
@@ -5091,10 +5107,6 @@ msgstr "Remover Mudo da Conversa"
 
 msgid "Unpin Chat"
 msgstr "Desafixar Conversa"
-
-#, fuzzy
-msgid "Unselect Chat"
-msgstr "Remover Mudo da Conversa"
 
 msgid "Unsupported certificate purpose"
 msgstr "Certificado de propósito não suportado"
@@ -5366,9 +5378,6 @@ msgstr ""
 "Você não está autorizado(a) a modificar a filiação de Administradores e "
 "Proprietários"
 
-msgid "You are not connected"
-msgstr "Você não está conectado(a)"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5392,7 +5401,8 @@ msgstr "Você agora é conhecido como %s"
 msgid "You are now {show}{status}"
 msgstr "Agora você está {show}{status}"
 
-msgid "You are offline."
+#, fuzzy
+msgid "You are offline"
 msgstr "Você está offline."
 
 msgid "You are offline. Go online to send messages…"
@@ -6273,6 +6283,13 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Account Settings…"
 #~ msgstr "Configurações de Conta…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "A conta não está conectada."
+
+#~ msgid "Account is not connected."
+#~ msgstr "A conta não está conectada."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Ação ao clicar com o botão esquerdo do mouse em uma visualização"
 
@@ -6339,6 +6356,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Dispositivo de Saída de Áudio"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "A escuta de áudio não está disponível"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Áudio/Vídeo"
@@ -6426,6 +6446,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Limpar entrada de mensagem"
+
+#~ msgid "Click to change time display"
+#~ msgstr "Clique para alterar o display de horário"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6518,6 +6541,10 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Corrijir a ultima mensagem"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Corrigir…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Criar _Grupo de Chat…"
@@ -6697,6 +6724,10 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Filter Chats…"
 #~ msgstr "Conversas privadas"
 
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Impressões Digitais"
+
 #~ msgid "Full Message View"
 #~ msgstr "Visualização Completa de Mensagem"
 
@@ -6786,10 +6817,6 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Images"
 #~ msgstr "Imagens"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Ativo"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "Aumentar Tamanho de Fonte da Interface de Usuário"
 
@@ -6830,6 +6857,13 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Ação do Botão Esquerdo"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Avise aos outros se você leu até esse ponto"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Avise aos outros se você leu até esse ponto"
 
 #~ msgid "Local System Time"
 #~ msgstr "Tempo do sistema local"
@@ -6896,6 +6930,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "No proxy used"
 #~ msgstr "Nenhum proxy usado"
+
+#~ msgid "Not Connected"
+#~ msgstr "Não Conectado"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7051,6 +7088,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Requer: libxss"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Requer: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7114,6 +7154,9 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Enviar Arquivo Diretamente…"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Enviar Marcadores de Leitura"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr "Enviar a mensagem com Ctrl+Enter e criar uma nova linha com Enter."
@@ -7320,6 +7363,10 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Unread Messages"
 #~ msgstr "Mensagens não lidas"
 
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Remover Mudo da Conversa"
+
 #~ msgid "Unverified"
 #~ msgstr "Não Verificado"
 
@@ -7379,6 +7426,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Você vai sair do Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "Você não está conectado(a)"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Você não está conectado ao servidor"

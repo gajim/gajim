@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -229,6 +229,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Bijnaam veranderen"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Actief"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -465,14 +469,6 @@ msgstr "Account %s is nog verbonden"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Account %s is nog verbonden"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Account %s is nog verbonden"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Account %s is nog verbonden"
 
 #, fuzzy
@@ -848,10 +844,6 @@ msgstr "_Audio-invoerapparaat"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Bestanden:"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Audiosessies zijn niet beschikbaar"
 
 msgid "Audio test"
 msgstr "Audiotest"
@@ -1268,9 +1260,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klik om je avatar in te stellen"
@@ -1500,10 +1489,6 @@ msgstr "Info kopiëren naar klembord"
 msgid "Copy to clipboard"
 msgstr "Info kopiëren naar klembord"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Kon bestand niet openen"
@@ -1702,10 +1687,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "‘%s’ ontbreekt in de URL van de zoekmachine"
 
@@ -1860,6 +1841,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "B_ewerken"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "B_ewerken"
 
@@ -2068,6 +2054,10 @@ msgid "Export Contacts"
 msgstr "Contacten importeren"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "_Exporteren"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "Voltooid"
 
@@ -2212,15 +2202,15 @@ msgid "Filters (active)"
 msgstr "Eerste ontvangen bericht"
 
 #, fuzzy
-msgid "Fingerprint"
-msgstr "Vingerafdrukken"
-
-#, fuzzy
 msgid "Fingerprint for this Device"
 msgstr "Vingerafdrukken"
 
 msgid "Fingerprints"
 msgstr "Vingerafdrukken"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
 
 #, fuzzy
 msgid "Finished"
@@ -2643,6 +2633,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Je hebt deze groepsgesprekken verlaten:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Binnenkomend bericht:"
 
@@ -2869,9 +2863,6 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3075,6 +3066,10 @@ msgstr "Deze sessie ZAL gearchiveerd worden op de server"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+-versie: %s"
 
 #, fuzzy
 msgid "Minimize"
@@ -3296,6 +3291,10 @@ msgstr "Geen account beschikbaar"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Geen resultaat"
@@ -3303,6 +3302,9 @@ msgstr "Geen resultaat"
 #, fuzzy
 msgid "No results found"
 msgstr "Geen resultaten gevonden"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Knooppunt"
@@ -3338,10 +3340,6 @@ msgstr "Niet beschikbaar"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Niet beschikbaar"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Verbonden"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3924,6 +3922,10 @@ msgstr "Re_gistreren"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Aandachtsbericht ontvangen"
+
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia-artikel lezen"
 
@@ -4164,6 +4166,13 @@ msgstr ""
 msgid "Required"
 msgstr "Vereist"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Vereist gnome-keyring en python-gnome2-desktop, of kwalletcli."
@@ -4181,9 +4190,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vereist: Gspell"
-
-msgid "Requires: libxss"
-msgstr "Vereist: libxss"
 
 msgid "Reserved Name"
 msgstr "Gereserveerde naam"
@@ -4526,12 +4532,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Een bericht naar het contact sturen"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Keep-alive-pakketten verzenden"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Fout melden"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5388,6 +5393,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Je server biedt geen ondersteuning voor vCard"
@@ -5584,6 +5592,10 @@ msgstr "_Deblokkeren"
 msgid "Unblock Participant?"
 msgstr "Deelnemer"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Niet versleuteld"
@@ -5643,10 +5655,6 @@ msgstr "Audiogespreksverzoek"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Audiogespreksverzoek"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Audiogespreksverzoek"
 
 msgid "Unsupported certificate purpose"
@@ -5953,10 +5961,6 @@ msgstr ""
 "aan te passen"
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Er is geen verbinding met de server"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5980,7 +5984,7 @@ msgid "You are now {show}{status}"
 msgstr "Je bent nu {show}{status}"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "offline"
 
 msgid "You are offline. Go online to send messages…"
@@ -6635,10 +6639,6 @@ msgstr ""
 #~ msgstr "%s groepsgesprekken gevonden"
 
 #, python-format
-#~ msgid "%s has read up to this point"
-#~ msgstr "%s heeft tot op dit punt gelezen"
-
-#, python-format
 #~ msgid ""
 #~ "%s is online with multiple devices.\n"
 #~ "Choose the device you would like to send the files to."
@@ -6898,6 +6898,14 @@ msgstr ""
 #~ msgstr "Plug-in-instellingen"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Account %s is nog verbonden"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Account %s is nog verbonden"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Ingeschakeld"
 
@@ -6965,6 +6973,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "A_udio-uitvoerapparaat"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Audiosessies zijn niet beschikbaar"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/video"
@@ -7332,6 +7344,10 @@ msgstr ""
 #~ msgstr "Privégesprekken"
 
 #, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Vingerafdrukken"
+
+#, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Bericht verzonden"
 
@@ -7416,10 +7432,6 @@ msgstr ""
 #~ msgstr "Afbeeldingen"
 
 #, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Actief"
-
-#, fuzzy
 #~ msgid "Insert Emoji"
 #~ msgstr "ASCII-emoji’s _converteren"
 
@@ -7452,6 +7464,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reden"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "%s heeft tot op dit punt gelezen"
 
 #~ msgid "Location:"
 #~ msgstr "Locatie:"
@@ -7516,6 +7532,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Geen proxy"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Verbonden"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7670,6 +7690,9 @@ msgstr ""
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Vereist: libxss"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Vereist: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7728,6 +7751,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Bestand rechtstreeks verzenden…"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Keep-alive-pakketten verzenden"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7935,6 +7962,10 @@ msgstr ""
 #~ msgid "Unread Messages"
 #~ msgstr "Ongelezen gebeurtenissen"
 
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Audiogespreksverzoek"
+
 #~ msgid "Unverified"
 #~ msgstr "Ongeverifieerd"
 
@@ -8002,6 +8033,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Er is geen verbinding met de server"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Er is geen verbinding met de server"

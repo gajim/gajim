@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -229,6 +229,10 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr "Ändrad av %s"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktiv"
+
 #, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Anledning"
@@ -441,13 +445,6 @@ msgstr "Kontot måste vara anslutet"
 
 msgid "Account is being created"
 msgstr "Kontot skapas"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Kontot är inte anslutet."
-
-msgid "Account is not connected."
-msgstr "Kontot är inte anslutet."
 
 #, fuzzy
 msgid "Account name: "
@@ -794,10 +791,6 @@ msgstr "Standardmeddelande"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Fil: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Sessionsbus inte tillgänglig"
 
 msgid "Audio test"
 msgstr ""
@@ -1196,9 +1189,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klicka för att ange din avatar"
@@ -1431,10 +1421,6 @@ msgstr "Kopiera till urklipp"
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Korrigera…"
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Det gick inte att spara filen"
@@ -1615,10 +1601,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Kontrollera att du är ansluten med \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL för webbsökning saknar ett \"%s\""
 
@@ -1770,6 +1752,11 @@ msgstr "Redigera namn…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Redigera ditt meddelande (Esc för att avbryta)…"
 
+msgid "Edit…"
+msgstr "Redigera…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Redigera…"
 
@@ -1958,6 +1945,10 @@ msgstr "Exportera chatthistorik"
 msgid "Export Contacts"
 msgstr "Bjud in _kontakter"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "Exportera"
+
 msgid "Export Finished"
 msgstr "Exporten avslutad"
 
@@ -2088,16 +2079,16 @@ msgstr "Filter"
 msgid "Filters (active)"
 msgstr "Första meddelandet mottaget"
 
-#, fuzzy
-msgid "Fingerprint"
-msgstr "Fingeravtryck"
-
 msgid "Fingerprint for this Device"
 msgstr "Fingeravtryck för den här enheten"
 
 #, fuzzy
 msgid "Fingerprints"
 msgstr "Fingeravtryck"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Kontrollera att du är ansluten med \"%s\"."
 
 msgid "Finished"
 msgstr "Färdig"
@@ -2502,6 +2493,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Du lämnade följande gruppchattar:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Ogiltigt smeknamn"
 
@@ -2714,9 +2709,6 @@ msgstr "Lämna gruppchatt"
 msgid "Leave _Permanently"
 msgstr "Lämna _Permanent"
 
-msgid "Let others know if you read up to this point"
-msgstr "Låt andra veta om du läser fram till denna punkt"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2891,6 +2883,10 @@ msgstr "Sessionen KOMMER INTE att loggas"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Pango-version: %s"
 
 #, fuzzy
 msgid "Minimize"
@@ -3118,6 +3114,10 @@ msgstr "Inget konto tillgängligt"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Inga resultat"
@@ -3125,6 +3125,9 @@ msgstr "Inga resultat"
 #, fuzzy
 msgid "No results found"
 msgstr "Inga resultat"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Nod"
@@ -3160,10 +3163,6 @@ msgstr "Inte tillgänglig"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Inte tillgänglig"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Ansluten"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3727,6 +3726,10 @@ msgstr "Re_gistrera"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Första meddelandet mottaget"
+
 msgid "Read _Wikipedia Article"
 msgstr "Läs _Wikipedia Artikel"
 
@@ -3958,6 +3961,13 @@ msgstr "Begär sökformulär från servern"
 msgid "Required"
 msgstr "Nödvändig"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kräver: gnome-keyring eller kwallet"
 
@@ -3970,9 +3980,6 @@ msgstr "Kräver: gstreamer-1.0, gst-plugins-base-1.0"
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kräver: Gspell"
-
-msgid "Requires: libxss"
-msgstr "Kräver: libxss"
 
 msgid "Reserved Name"
 msgstr "Reserverat namn"
@@ -4311,12 +4318,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Användning: /%s, skickar meddelandet till kontakten"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Skicka keep-alive-paket"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Rapportera fel"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5170,6 +5176,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Din server saknar stöd för Vcard"
@@ -5364,6 +5373,10 @@ msgstr "A_vblockera"
 msgid "Unblock Participant?"
 msgstr "Deltagare"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Kontrollera att du är ansluten med \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Inte startad"
@@ -5424,10 +5437,6 @@ msgstr "Förfrågan om Filöverföring"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Förfrågan om Filöverföring"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Förfrågan om Filöverföring"
 
 msgid "Unsupported certificate purpose"
@@ -5733,10 +5742,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Du är inte ansluten till servern"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5759,7 +5764,7 @@ msgid "You are now {show}{status}"
 msgstr "Du är nu känd som %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "frånkopplad"
 
 msgid "You are offline. Go online to send messages…"
@@ -6690,6 +6695,13 @@ msgstr ""
 #~ msgid "Account Settings…"
 #~ msgstr "Kontoinställningar…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Kontot är inte anslutet."
+
+#~ msgid "Account is not connected."
+#~ msgstr "Kontot är inte anslutet."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Åtgärd när du vänsterklickar på en förhandsgranskning"
 
@@ -6752,6 +6764,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Standardmeddelande"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Sessionsbus inte tillgänglig"
 
 #, fuzzy
 #~ msgid "Author"
@@ -6922,6 +6938,10 @@ msgstr ""
 #~ msgid "Correct the last message"
 #~ msgstr "Korrigera det sista meddelandet"
 
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Korrigera…"
+
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Skapa _gruppchatt…"
 
@@ -7078,6 +7098,10 @@ msgstr ""
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrera chattar…"
 
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Fingeravtryck"
+
 #~ msgid "Full Message View"
 #~ msgstr "Fullständig meddelandevy"
 
@@ -7130,10 +7154,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Bilder"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktiv"
-
 #~ msgid "Insert Emoji"
 #~ msgstr "Infoga emoji"
 
@@ -7170,6 +7190,13 @@ msgstr ""
 
 #~ msgid "Left Click Action"
 #~ msgstr "Händelse vid vänsterklick"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Låt andra veta om du läser fram till denna punkt"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Låt andra veta om du läser fram till denna punkt"
 
 #~ msgid "Local System Time"
 #~ msgstr "Lokal systemtid"
@@ -7234,6 +7261,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxyserver:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Ansluten"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -7378,6 +7409,9 @@ msgstr ""
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Kräver: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Kräver: libxss"
+
 #, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "Server:"
@@ -7429,6 +7463,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Spara fil som..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Skicka keep-alive-paket"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7610,6 +7648,10 @@ msgstr ""
 #~ msgstr "Olästa händelser"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Förfrågan om Filöverföring"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Stavningskontroll"
 
@@ -7667,6 +7709,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Är du säker på att du vill avsluta Gajim?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Du är inte ansluten till servern"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Du är inte ansluten till servern"

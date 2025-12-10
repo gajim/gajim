@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -230,6 +230,10 @@ msgstr "位址中缺少 『@』。您確定這是正確的嗎？"
 msgid "(changed by %s)"
 msgstr "（由 %s 變更）"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "活動"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "（原因：%s）"
@@ -437,13 +441,6 @@ msgstr "必須連接帳戶"
 
 msgid "Account is being created"
 msgstr "正在創建帳戶"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "帳戶未連接。"
-
-msgid "Account is not connected."
-msgstr "帳戶未連接。"
 
 msgid "Account name: "
 msgstr "帳戶名稱： "
@@ -764,9 +761,6 @@ msgstr "音訊輸入裝置"
 
 msgid "Audio Preview"
 msgstr "音訊預覽"
-
-msgid "Audio preview is not available"
-msgstr "音訊預覽不可用"
 
 msgid "Audio test"
 msgstr "音訊測試"
@@ -1146,9 +1140,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "按一下以設定您的頭像"
@@ -1383,10 +1374,6 @@ msgstr "複製連結位置(_C)"
 msgid "Copy to clipboard"
 msgstr "複製連結位置(_C)"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "無法讀取圖片"
@@ -1586,10 +1573,6 @@ msgid "Devices"
 msgstr "伺服器"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "請確認您已經連線到 \"%s\"。"
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "網路搜尋位址缺少 \"%s\""
 
@@ -1739,6 +1722,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "編輯(_E)"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "編輯(_E)"
 
@@ -1945,6 +1933,10 @@ msgid "Export Contacts"
 msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "匯出"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "完成(_F)"
 
@@ -2089,14 +2081,15 @@ msgstr "過濾器:"
 msgid "Filters (active)"
 msgstr "最初收到的訊息"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "請確認您已經連線到 \"%s\"。"
 
 #, fuzzy
 msgid "Finished"
@@ -2511,6 +2504,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "您離開了下列聊天室:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "收到訊息的暱稱顏色。"
 
@@ -2739,9 +2736,6 @@ msgstr "離開聊天室"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2941,6 +2935,10 @@ msgstr "本次作業階段將在伺服器上被存檔"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ 版本:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3165,6 +3163,10 @@ msgstr "沒有有效帳號"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "無結果"
@@ -3172,6 +3174,9 @@ msgstr "無結果"
 #, fuzzy
 msgid "No results found"
 msgstr "無結果"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "節點"
@@ -3207,10 +3212,6 @@ msgstr "離開很久了"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "離開很久了"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "已連線"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3805,6 +3806,10 @@ msgstr "註冊(_G)"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "最初收到的訊息"
+
 msgid "Read _Wikipedia Article"
 msgstr "檢視 Wikipedia 文章(_W)"
 
@@ -4047,6 +4052,13 @@ msgstr ""
 msgid "Required"
 msgstr "require"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要 gnome-keyring 和 python-gnome2-desktop，或 kwalletcli。"
@@ -4061,10 +4073,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "需要 libgtkspell。"
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "需要 libxss 函式庫。"
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4404,12 +4412,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "向聯絡人傳送檔案"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "傳送資料封包以防止連線逾時"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "報告錯誤(_R)"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5261,6 +5268,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "您的伺服器不支援 Vcard"
@@ -5455,6 +5465,10 @@ msgstr "解除阻斷(_U)"
 msgid "Unblock Participant?"
 msgstr "參與者"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "請確認您已經連線到 \"%s\"。"
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "未開始"
@@ -5515,10 +5529,6 @@ msgstr "語音聊天請求"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "語音聊天請求"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "語音聊天請求"
 
 msgid "Unsupported certificate purpose"
@@ -5823,10 +5833,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "尚未連線到伺服器"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5848,8 +5854,9 @@ msgstr "您現在成了 %s "
 msgid "You are now {show}{status}"
 msgstr "您現在成了 %s "
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "尚未連線到伺服器"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6513,10 +6520,6 @@ msgstr ""
 #~ msgstr " %s 找不到"
 
 #, python-format
-#~ msgid "%s has read up to this point"
-#~ msgstr "%s 已閱讀到此為止"
-
-#, python-format
 #~ msgid "(%(filesize_unit)s/s)"
 #~ msgstr "(%(filesize_unit)s/s)"
 
@@ -6774,6 +6777,13 @@ msgstr ""
 #~ msgid "Account Settings…"
 #~ msgstr "賬戶設定…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "帳戶未連接。"
+
+#~ msgid "Account is not connected."
+#~ msgstr "帳戶未連接。"
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "左鍵按下預覽的操作"
 
@@ -6838,6 +6848,9 @@ msgstr ""
 
 #~ msgid "Audio Output Device"
 #~ msgstr "音訊輸出裝置"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "音訊預覽不可用"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7254,10 +7267,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "圖像"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "活動"
-
 #~ msgid "Invalid File"
 #~ msgstr "無效檔案"
 
@@ -7275,6 +7284,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "原因"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "%s 已閱讀到此為止"
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7332,6 +7345,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "代理伺服器(_Y):"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "已連線"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7471,6 +7488,10 @@ msgstr ""
 #~ msgstr "需要 libxss 函式庫。"
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "需要 libxss 函式庫。"
+
+#, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
@@ -7522,6 +7543,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "另存為…"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "傳送資料封包以防止連線逾時"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7703,6 +7728,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "未讀取的事件"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "語音聊天請求"
 
 #, fuzzy
 #~ msgid "Update Check"

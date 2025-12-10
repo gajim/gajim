@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
-"PO-Revision-Date: 2025-11-01 14:52+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"PO-Revision-Date: 2025-12-07 03:19+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -235,6 +235,9 @@ msgstr "Brakuje „@” w adresie. Czy jesteś pewien, że to jest prawidłowe?
 msgid "(changed by %s)"
 msgstr "(zmieniony przez %s)"
 
+msgid "(inactive)"
+msgstr "(nieaktywny)"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "(powód: %s)"
@@ -446,12 +449,6 @@ msgstr "Konto musi być połączone z serwerem"
 
 msgid "Account is being created"
 msgstr "Konto jest tworzone"
-
-msgid "Account is not connected"
-msgstr "Konto nie jest połączone"
-
-msgid "Account is not connected."
-msgstr "Konto nie jest połączone."
 
 msgid "Account name: "
 msgstr "Nazwa konta: "
@@ -777,9 +774,6 @@ msgstr "Urządzenie wejścia audio"
 
 msgid "Audio Preview"
 msgstr "Podgląd dźwięku"
-
-msgid "Audio preview is not available"
-msgstr "Podgląd audio jest niedostępny"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1150,9 +1144,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Kliknij na kontakty, które chcesz zaprosić do tej rozmowy grupowej."
 
-msgid "Click to change time display"
-msgstr "Kliknij aby zmienić pokazywanie czasu"
-
 msgid "Click to view location"
 msgstr "Kliknij aby wyświetlić lokalizację"
 
@@ -1357,10 +1348,6 @@ msgstr "Kopiuj do schowka"
 msgid "Copy to clipboard"
 msgstr "Kopiuj do schowka"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Popraw…"
-
 msgid "Could Not Save File"
 msgstr "Nie udało się zapisać pliku"
 
@@ -1525,10 +1512,6 @@ msgid "Devices"
 msgstr "Urządzenia"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Urządzenia połączone z „%s”"
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL słownika nie zawiera „%s”"
 
@@ -1666,6 +1649,10 @@ msgstr "Edytuj wyświetlaną nazwę…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Edytuj wiadomość (Esc anuluje)…"
 
+msgid "Edit…"
+msgstr "Edytuj…"
+
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Edytuj…"
 
@@ -1848,6 +1835,9 @@ msgstr "Eksportuj historię rozmowy"
 msgid "Export Contacts"
 msgstr "Eksportuj kontakty"
 
+msgid "Export Error"
+msgstr "Błąd eksportowania"
+
 msgid "Export Finished"
 msgstr "Eksport zakończony"
 
@@ -1973,14 +1963,15 @@ msgstr "Filtry"
 msgid "Filters (active)"
 msgstr "Filtry (aktywne)"
 
-msgid "Fingerprint"
-msgstr "Odcisk palca"
-
 msgid "Fingerprint for this Device"
 msgstr "Odcisk palca dla tego urządzenia"
 
 msgid "Fingerprints"
 msgstr "Odciski palców"
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Odciski palców urządzeń połączonych z „%s”"
 
 msgid "Finished"
 msgstr "Zakończony"
@@ -2355,6 +2346,9 @@ msgstr ""
 "głosu.\n"
 "Moderator przetworzy Twoją prośbę."
 
+msgid "In this group chat"
+msgstr "W tej rozmowie grupowej"
+
 msgid "Incoming Call"
 msgstr "Przychodząca rozmowa"
 
@@ -2546,9 +2540,6 @@ msgstr "Opuścić rozmowę grupową?"
 msgid "Leave _Permanently"
 msgstr "Opuść _na stałe"
 
-msgid "Let others know if you read up to this point"
-msgstr "Pozwól innym wiedzieć czy przeczytałeś do tego miejsca"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2722,6 +2713,10 @@ msgstr "Wiadomości są archiwizowane na serwerze"
 
 msgid "Messages from this users are blocked"
 msgstr "Wiadomości od tego użytkownika są blokowane"
+
+#, python-format
+msgid "Migration to version %s"
+msgstr "Migracja do wersji %s"
 
 msgid "Minimize"
 msgstr "Minimalizuj"
@@ -2920,11 +2915,18 @@ msgstr "Brak dostępnych informacji"
 msgid "No keys pressed"
 msgstr "Nie naciśnięto klawiszy"
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr "Brak uprawnień do eksportu pliku do %s"
+
 msgid "No results"
 msgstr "Brak wyników"
 
 msgid "No results found"
 msgstr "Nie odnaleziono wyników"
+
+msgid "No undecided fingerprints"
+msgstr "Brak niezdecydowanych odcisków palców"
 
 msgid "Node"
 msgstr "Węzeł"
@@ -2959,9 +2961,6 @@ msgstr "Nieobecny"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Nieobecny"
-
-msgid "Not Connected"
-msgstr "Niepołączony"
 
 msgid "Not Decided"
 msgstr "Niezdecydowany"
@@ -2999,7 +2998,7 @@ msgid "Notes"
 msgstr "Notatki"
 
 msgid "Notification Sounds"
-msgstr "Dźwięki powiadomienień"
+msgstr "Dźwięki powiadomień"
 
 msgid "Notifications"
 msgstr "Powiadomienia"
@@ -3483,6 +3482,9 @@ msgstr "Za_rejestruj"
 msgid "React with %s"
 msgstr "Zareaguj z %s"
 
+msgid "Read Receipts"
+msgstr "Potwierdzenia przeczytania"
+
 msgid "Read _Wikipedia Article"
 msgstr "Przeczytaj artykuł na _Wikipedii"
 
@@ -3687,6 +3689,17 @@ msgstr "Żądanie formularza wyszukiwania z serwera"
 msgid "Required"
 msgstr "Wymagane"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+"Wymaga:\n"
+"org.freedesktop.ScreenSaver lub\n"
+"org.gnome.Mutter.IdleMonitor lub\n"
+"libxss"
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Wymaga: gnome-keyring lub kwallet"
 
@@ -3698,9 +3711,6 @@ msgstr "Wymaga: gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "Wymaga: libspelling"
-
-msgid "Requires: libxss"
-msgstr "Wymaga: libxss"
 
 msgid "Reserved Name"
 msgstr "Zarezerwowana nazwa"
@@ -3992,11 +4002,11 @@ msgstr "Wysyłaj potwierdzenia otrzymania"
 msgid "Send Messages with Control+Enter"
 msgstr "Wysyłaj wiadomości używając Control+Enter"
 
-msgid "Send Read Markers"
-msgstr "Wysyłaj znaczniki przeczytania"
-
 msgid "Send _Report"
 msgstr "Wyślij _zgłoszenie"
+
+msgid "Send and receive read receipts"
+msgstr "Wysyłaj i odbieraj potwierdzenia przeczytania"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4110,9 +4120,8 @@ msgstr "Pokaż przycisk wysyłania wiadomości"
 msgid "Show Status Changes"
 msgstr "Pokazuj zmiany statusu"
 
-#, fuzzy
 msgid "Show Subject on Join"
-msgstr "Pokaż temat"
+msgstr "Pokaż temat przy dołączaniu"
 
 msgid "Show Title Bar"
 msgstr "Pokaż pasek tytułu"
@@ -4160,9 +4169,8 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Pokazuj powiadomienia nawet gdy jesteś zaraz wracam, zajęty itd."
 
-#, fuzzy
 msgid "Show notifications on the system tray icon"
-msgstr "_Pokaż powiadomienie gdy przesyłanie pliku dobiegnie końca"
+msgstr "Pokaż powiadomienia na ikonie paska zadań"
 
 msgid "Show on Startup"
 msgstr "Pokaż po uruchomieniu"
@@ -4398,7 +4406,7 @@ msgstr ""
 "Nie będziesz mógł wysyłać i otrzymywać wiadomości jeśli tak zrobisz.\n"
 "\n"
 "Alternatywnie możesz albo zminimalizować okno Gajima, albo ukryć je "
-"całkowicie. Użyj ikony Gajima w obszarze powiadomień aby przywrócić okno."
+"całkowicie. Użyj ikony Gajima na pasku zadań aby przywrócić okno."
 
 msgid "Switch to Chat 1"
 msgstr "Przełącz na 1. rozmowę"
@@ -4500,21 +4508,17 @@ msgstr "Synchronizowanie historii rozmowy…"
 msgid "System"
 msgstr "System"
 
-#, fuzzy
 msgid "System Notifications"
-msgstr "Pokaż powiadomienia"
+msgstr "Powiadomienia systemowe"
 
-#, fuzzy
 msgid "System Notifications When Away"
-msgstr "Powiadomienia gdy zaraz wracam"
+msgstr "Powiadomienia systemowe gdy zaraz wracam"
 
-#, fuzzy
 msgid "System Tray Icon"
-msgstr "_Ukryj (ikona obszaru powiadomień)"
+msgstr "Ikona paska zadań"
 
-#, fuzzy
 msgid "System Tray Notifications"
-msgstr "Powiadomienia wizualne"
+msgstr "Powiadomienia na pasku zadań"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -4774,6 +4778,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Ta wiadomość zostanie usunięta z Twojej lokalnej historii rozmowy"
 
+msgid "This plugin is managed by your operating system"
+msgstr "Ta wtyczka jest zarządzana przez Twój system operacyjny"
+
 msgid "This server does not allow signup."
 msgstr "Ten serwer nie pozwala na rejestrację."
 
@@ -4951,6 +4958,10 @@ msgstr "Odblokuj"
 msgid "Unblock Participant?"
 msgstr "Odblokować uczestnika?"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Niezdecydowane odciski palców urządzeń połączonych z „%s”"
+
 msgid "Unencrypted"
 msgstr "Nieszyfrowane"
 
@@ -5002,9 +5013,6 @@ msgstr "Wyłącz wyciszenie rozmowy"
 
 msgid "Unpin Chat"
 msgstr "Odepnij rozmowę"
-
-msgid "Unselect Chat"
-msgstr "Cofnij wybór rozmowy"
 
 msgid "Unsupported certificate purpose"
 msgstr "Nieobsługiwane przeznaczenie certyfikatu"
@@ -5275,9 +5283,6 @@ msgstr ""
 "Nie jesteś uprawniony do modyfikowania afiliacji administratorów "
 "i właścicieli"
 
-msgid "You are not connected"
-msgstr "Nie jesteś podłączony"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5301,8 +5306,8 @@ msgstr "Występujesz od teraz pod nazwą %s"
 msgid "You are now {show}{status}"
 msgstr "Jesteś teraz {show}{status}"
 
-msgid "You are offline."
-msgstr "Jesteś niedostępny."
+msgid "You are offline"
+msgstr "Jesteś rozłączony"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "Jesteś rozłączony. Połącz się aby wysyłać wiadomości…"
@@ -5549,7 +5554,7 @@ msgid "_Free for Chat"
 msgstr "_Chętny do rozmowy"
 
 msgid "_Hide (Tray Icon)"
-msgstr "_Ukryj (ikona obszaru powiadomień)"
+msgstr "_Ukryj (ikona paska zadań)"
 
 msgid "_Host"
 msgstr "_Host"
@@ -5754,9 +5759,8 @@ msgstr "rodzina"
 msgid "floor"
 msgstr "piętro"
 
-#, fuzzy
 msgid "invites you to join a group chat"
-msgstr "Każdy może dołączyć do tej rozmowy grupowej"
+msgstr "zaprasza Cię do dołączenia do tej rozmowy grupowej"
 
 msgid "is composing a message…"
 msgstr "pisze wiadomość…"
@@ -6181,6 +6185,12 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Account Settings…"
 #~ msgstr "Ustawienia konta…"
 
+#~ msgid "Account is not connected"
+#~ msgstr "Konto nie jest połączone"
+
+#~ msgid "Account is not connected."
+#~ msgstr "Konto nie jest połączone."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Akcja dla kliknięcia podglądu lewym przyciskiem"
 
@@ -6248,6 +6258,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Urządzenie wyjścia audio"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "Podgląd audio jest niedostępny"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Dźwięk/Wideo"
@@ -6336,6 +6349,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Wyczyść wpis wiadomości"
+
+#~ msgid "Click to change time display"
+#~ msgstr "Kliknij aby zmienić pokazywanie czasu"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6427,6 +6443,10 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Popraw ostatnią wiadomość"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Popraw…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Utwórz rozmowę _grupową…"
@@ -6615,6 +6635,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtruj rozmowy…"
 
+#~ msgid "Fingerprint"
+#~ msgstr "Odcisk palca"
+
 #~ msgid "Full Message View"
 #~ msgstr "Widok pełnej wiadomości"
 
@@ -6700,9 +6723,6 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Images"
 #~ msgstr "Obrazki"
 
-#~ msgid "Inactive"
-#~ msgstr "Nieaktywny"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "Zwiększ rozmiar czcionki interfejsu użytkownika"
 
@@ -6750,6 +6770,12 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Akcja kliknięcia lewym przyciskiem"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Pozwól innym wiedzieć czy przeczytałeś do tego miejsca"
+
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Pozwól temu kontaktowi wiedzieć czy przeczytałeś do tego miejsca"
 
 #~ msgid "Local System Time"
 #~ msgstr "Lokalny czas systemu"
@@ -6817,12 +6843,18 @@ msgstr "…lub upuść tutaj"
 #~ msgid "No proxy used"
 #~ msgstr "Proxy nie jest używane"
 
+#~ msgid "Not Connected"
+#~ msgstr "Niepołączony"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Nierozpoczęty"
 
 #~ msgid "Notification Area Icon"
 #~ msgstr "Ikona w obszarze powiadomień"
+
+#~ msgid "Notifications When Away"
+#~ msgstr "Powiadomienia gdy zaraz wracam"
 
 #~ msgid "Notify of events in the notification area."
 #~ msgstr "Powiadamiaj o zdarzeniach w obszarze powiadamiania."
@@ -6963,6 +6995,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Wymaga: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Wymaga: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA‑1"
 
@@ -7025,6 +7060,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Send Files Directly"
 #~ msgstr "Wyślij pliki bezpośrednio"
 
+#~ msgid "Send Read Markers"
+#~ msgstr "Wysyłaj znaczniki przeczytania"
+
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
 #~ "Wyślij wiadomość po kliknięciu Ctrl+Enter, utwórz nową linię po "
@@ -7075,8 +7113,14 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Show My Video Stream"
 #~ msgstr "Pokaż mój strumień wideo"
 
+#~ msgid "Show Notifications"
+#~ msgstr "Pokaż powiadomienia"
+
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Pokaż rozłączone kontakty"
+
+#~ msgid "Show Subject"
+#~ msgstr "Pokaż temat"
 
 #~ msgid "Show _Features"
 #~ msgstr "Pokaż _możliwości programu"
@@ -7230,6 +7274,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Unread Messages"
 #~ msgstr "Nieprzeczytane wiadomości"
 
+#~ msgid "Unselect Chat"
+#~ msgstr "Cofnij wybór rozmowy"
+
 #~ msgid "Unverified"
 #~ msgstr "Niezweryfikowany"
 
@@ -7299,6 +7346,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Zamierzasz wyjść z Gajima"
+
+#~ msgid "You are not connected"
+#~ msgstr "Nie jesteś podłączony"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Brak połączenia z serwerem"
@@ -7382,6 +7432,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "_Save as…"
 #~ msgstr "Zapisz _jako…"
+
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "_Pokaż powiadomienie gdy przesyłanie pliku dobiegnie końca"
 
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "_Rozpocznij rozmowę / dołącz do rozmowy…"

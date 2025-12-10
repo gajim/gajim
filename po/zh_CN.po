@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
-"PO-Revision-Date: 2025-11-01 01:52+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"PO-Revision-Date: 2025-12-06 04:19+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -236,6 +236,9 @@ msgstr "地址中缺少“@”。是否确定这是正确的？"
 msgid "(changed by %s)"
 msgstr "（由 %s 更改）"
 
+msgid "(inactive)"
+msgstr "（不活跃）"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "（原因：%s）"
@@ -441,12 +444,6 @@ msgstr "必须连接账号"
 
 msgid "Account is being created"
 msgstr "正在创建账号"
-
-msgid "Account is not connected"
-msgstr "账号未连接"
-
-msgid "Account is not connected."
-msgstr "账号未连接。"
 
 msgid "Account name: "
 msgstr "账号名称： "
@@ -763,9 +760,6 @@ msgstr "音频输入设备"
 
 msgid "Audio Preview"
 msgstr "音频预览"
-
-msgid "Audio preview is not available"
-msgstr "音频预览不可用"
 
 msgid "Audio test"
 msgstr "音频测试"
@@ -1132,9 +1126,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "点击要邀请加入此群聊的联系人。"
 
-msgid "Click to change time display"
-msgstr "点击即可更改时间显示"
-
 msgid "Click to view location"
 msgstr "点击即可查看位置"
 
@@ -1163,7 +1154,7 @@ msgid "Color"
 msgstr "颜色"
 
 msgid "Comma-separated list of emojis for quick reaction buttons"
-msgstr "用于快速回应按钮的以逗号分隔的表情符号列表"
+msgstr "用于快捷回应按钮的以逗号分隔的表情符号列表"
 
 msgid "Command List"
 msgstr "命令列表"
@@ -1336,10 +1327,6 @@ msgstr "复制到剪贴板"
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "更正…"
-
 msgid "Could Not Save File"
 msgstr "无法保存文件"
 
@@ -1504,10 +1491,6 @@ msgid "Devices"
 msgstr "设备"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "与“%s”连接的设备"
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "目录 URL 缺少“%s”"
 
@@ -1645,6 +1628,10 @@ msgstr "编辑您的消息（Esc 取消）…"
 msgid "Edit…"
 msgstr "编辑…"
 
+msgctxt "Message row action"
+msgid "Edit…"
+msgstr "编辑…"
+
 #, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
@@ -1680,7 +1667,7 @@ msgid ""
 msgstr "允许 Gajim 检测您计算机的空闲时间，以便自动设置您的状态"
 
 msgid "Enables Gajim to play sounds for various notifications"
-msgstr "允许 Gajim 播放各种通知提示音‌"
+msgstr "允许 Gajim 播放各种通知提示音"
 
 msgid "Enables Gajim to provide a Audio preview"
 msgstr "允许 Gajim 提供音频预览"
@@ -1818,6 +1805,9 @@ msgstr "导出聊天记录"
 msgid "Export Contacts"
 msgstr "导出联系人"
 
+msgid "Export Error"
+msgstr "导出错误"
+
 msgid "Export Finished"
 msgstr "导出已完成"
 
@@ -1840,7 +1830,7 @@ msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
 msgstr ""
-"‌自在表达：有时言语不足以传情达意。使用表情回应、回复引用、录制语音消息和发送"
+"自在表达：有时言语不足以传情达意。使用表情回应、回复引用、录制语音消息和发送"
 "状态更新，让您的表达更生动传神。"
 
 msgid "Extended Address"
@@ -1942,14 +1932,15 @@ msgstr "筛选条件"
 msgid "Filters (active)"
 msgstr "筛选条件（使用中）"
 
-msgid "Fingerprint"
-msgstr "指纹"
-
 msgid "Fingerprint for this Device"
 msgstr "此设备的指纹"
 
 msgid "Fingerprints"
 msgstr "指纹"
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "与“%s”连接的设备的指纹"
 
 msgid "Finished"
 msgstr "已完成"
@@ -2314,6 +2305,9 @@ msgstr ""
 "要在此聊天中写消息，您需要先请求发言权。\n"
 "主持人将处理您的请求。"
 
+msgid "In this group chat"
+msgstr "在此群聊中"
+
 msgid "Incoming Call"
 msgstr "来电"
 
@@ -2404,7 +2398,7 @@ msgid "Invitees"
 msgstr "受邀者"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr "麦克风是否插好并可访问？‌"
+msgstr "麦克风是否插好并可访问？"
 
 msgid "Issue date"
 msgstr "颁发日期"
@@ -2504,9 +2498,6 @@ msgstr "离开群聊？"
 
 msgid "Leave _Permanently"
 msgstr "永久离开(_P)"
-
-msgid "Let others know if you read up to this point"
-msgstr "让其他人知道您已阅读至此"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2680,6 +2671,10 @@ msgstr "消息在服务器上归档"
 msgid "Messages from this users are blocked"
 msgstr "此用户的消息已被屏蔽"
 
+#, python-format
+msgid "Migration to version %s"
+msgstr "迁移至版本 %s"
+
 msgid "Minimize"
 msgstr "最小化"
 
@@ -2690,7 +2685,7 @@ msgid "Miscellaneous"
 msgstr "杂项"
 
 msgid "Missing dependencies for audio support"
-msgstr "‌缺少音频支持的依赖"
+msgstr "缺少音频支持的依赖"
 
 msgid "Missing necessary encryption plugin"
 msgstr "缺少必要的加密插件"
@@ -2864,7 +2859,7 @@ msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr "未找到可加密此消息的设备。正在查询设备…"
 
 msgid "No devices online"
-msgstr "没有设备在线"
+msgstr "无设备在线"
 
 msgid "No group assigned"
 msgstr "未分配分组"
@@ -2875,11 +2870,18 @@ msgstr "没有可用信息"
 msgid "No keys pressed"
 msgstr "未按下任何键"
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr "无权限导出文件至 %s"
+
 msgid "No results"
-msgstr "没有结果"
+msgstr "无结果"
 
 msgid "No results found"
 msgstr "未找到结果"
+
+msgid "No undecided fingerprints"
+msgstr "无未决定的指纹"
 
 msgid "Node"
 msgstr "节点"
@@ -2914,9 +2916,6 @@ msgstr "不可用"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "没空"
-
-msgid "Not Connected"
-msgstr "未连接"
 
 msgid "Not Decided"
 msgstr "尚未决定"
@@ -3431,6 +3430,9 @@ msgstr "注册(_G)"
 msgid "React with %s"
 msgstr "用 %s 回应"
 
+msgid "Read Receipts"
+msgstr "已读回执"
+
 msgid "Read _Wikipedia Article"
 msgstr "阅读维基百科文章(_W)"
 
@@ -3631,6 +3633,17 @@ msgstr "正在向服务器请求搜索表"
 msgid "Required"
 msgstr "必填"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+"需要：\n"
+"org.freedesktop.ScreenSaver 或\n"
+"org.gnome.Mutter.IdleMonitor 或\n"
+"libxss"
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要：gnome-keyring 或 kwallet"
 
@@ -3642,9 +3655,6 @@ msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "需要：libspelling"
-
-msgid "Requires: libxss"
-msgstr "需要：libxss"
 
 msgid "Reserved Name"
 msgstr "保留名称"
@@ -3671,19 +3681,19 @@ msgid "Reset to original name"
 msgstr "重置为原始名称"
 
 msgid "Resets value to default"
-msgstr "‌重置为默认值"
+msgstr "重置为默认值"
 
 msgid "Resource"
 msgstr "资源"
 
 msgid "Restart Gajim to finish this update"
-msgstr "‌重启 Gajim 以完成此更新"
+msgstr "重启 Gajim 以完成此更新"
 
 msgid "Restart Gajim to start debug logging"
-msgstr "重启 Gajim 以开始调试日志记录‌"
+msgstr "重启 Gajim 以开始调试日志记录"
 
 msgid "Restart Pending"
-msgstr "‌重启待处理"
+msgstr "重启待处理"
 
 msgid "Restore Closed Chat"
 msgstr "恢复已关闭的聊天"
@@ -3866,11 +3876,11 @@ msgstr "安全警告"
 
 #, python-format
 msgid "Seen by %s"
-msgstr "由 %s 看到"
+msgstr "%s 已读"
 
 #, python-format
 msgid "Seen by %s participants"
-msgstr "由 %s 参与者看到"
+msgstr "%s 位参与者已读"
 
 msgid "Select Account"
 msgstr "选择账号"
@@ -3935,11 +3945,11 @@ msgstr "发送消息回执"
 msgid "Send Messages with Control+Enter"
 msgstr "按 Ctrl+Enter 发送消息"
 
-msgid "Send Read Markers"
-msgstr "发送已读标记"
-
 msgid "Send _Report"
 msgstr "发送报告(_R)"
+
+msgid "Send and receive read receipts"
+msgstr "发送和接收已读回执"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4051,9 +4061,8 @@ msgstr "显示发送消息按钮"
 msgid "Show Status Changes"
 msgstr "显示状态更改"
 
-#, fuzzy
 msgid "Show Subject on Join"
-msgstr "显示主题"
+msgstr "加入时显示主题"
 
 msgid "Show Title Bar"
 msgstr "显示标题栏"
@@ -4096,9 +4105,8 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "即使是离开、忙碌等状态时仍显示通知"
 
-#, fuzzy
 msgid "Show notifications on the system tray icon"
-msgstr "文件传输完成时显示通知(_S)"
+msgstr "在系统托盘图标上显示通知"
 
 msgid "Show on Startup"
 msgstr "启动时显示"
@@ -4269,7 +4277,7 @@ msgid ""
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
-"保持联系：聊天和群组帮助您与亲朋好友保持联系。‌‌与志趣相投者连接共建社群。打理"
+"保持联系：聊天和群组帮助您与亲朋好友保持联系。与志趣相投者连接共建社群。打理"
 "日常琐事或筹办重要活动，群组都能轻松胜任。"
 
 msgid "Stop Sharing Online Status?"
@@ -4311,7 +4319,7 @@ msgstr "已成功移除联系人"
 
 #, python-brace-format
 msgid "Successfully build new session with {device_id}."
-msgstr "‌已成功与 {device_id} 建立新会话。"
+msgstr "已成功与 {device_id} 建立新会话。"
 
 msgid "Support"
 msgstr "支持"
@@ -4428,21 +4436,17 @@ msgstr "正在同步聊天记录…"
 msgid "System"
 msgstr "系统"
 
-#, fuzzy
 msgid "System Notifications"
-msgstr "显示通知"
+msgstr "系统通知"
 
-#, fuzzy
 msgid "System Notifications When Away"
-msgstr "离开时通知"
+msgstr "离开时的系统通知"
 
-#, fuzzy
 msgid "System Tray Icon"
-msgstr "隐藏(托盘图标)(_H)"
+msgstr "系统托盘图标"
 
-#, fuzzy
 msgid "System Tray Notifications"
-msgstr "视觉通知"
+msgstr "系统托盘通知"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -4679,6 +4683,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "将从您本地聊天记录删除此消息"
 
+msgid "This plugin is managed by your operating system"
+msgstr "此插件由您的操作系统管理"
+
 msgid "This server does not allow signup."
 msgstr "此服务器不允许注册。"
 
@@ -4851,6 +4858,10 @@ msgstr "取消屏蔽"
 msgid "Unblock Participant?"
 msgstr "取消屏蔽参与者？"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "与“%s”连接的设备的未决定的指纹"
+
 msgid "Unencrypted"
 msgstr "未加密"
 
@@ -4902,9 +4913,6 @@ msgstr "取消静音聊天"
 
 msgid "Unpin Chat"
 msgstr "取消固定聊天"
-
-msgid "Unselect Chat"
-msgstr "取消选择聊天"
 
 msgid "Unsupported certificate purpose"
 msgstr "不支持的证书用途"
@@ -5142,7 +5150,7 @@ msgstr "您"
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr "您（%s）加入了群聊"
+msgstr "您（%s）已加入群聊"
 
 msgid "You are a visitor"
 msgstr "您是参观者"
@@ -5169,9 +5177,6 @@ msgstr "您当前未加入此群聊"
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "不允许您修改管理员和所有者的从属关系"
 
-msgid "You are not connected"
-msgstr "您未连接"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5193,8 +5198,8 @@ msgstr "您现在的昵称为 %s"
 msgid "You are now {show}{status}"
 msgstr "您现在是{show}{status}"
 
-msgid "You are offline."
-msgstr "您已离线。"
+msgid "You are offline"
+msgstr "您已离线"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "您已离线。上线后即可发送消息…"
@@ -5262,7 +5267,7 @@ msgid "You have to invite people so they can join"
 msgstr "您必须邀请他人加入"
 
 msgid "You left this group chat"
-msgstr "您离开了此群聊"
+msgstr "您已离开此群聊"
 
 msgid ""
 "You may need an invite to join this group chat again, if you choose to leave "
@@ -5640,9 +5645,8 @@ msgstr "家人"
 msgid "floor"
 msgstr "楼层"
 
-#, fuzzy
 msgid "invites you to join a group chat"
-msgstr "任何人都可以加入此群聊"
+msgstr "邀请您加入群聊"
 
 msgid "is composing a message…"
 msgstr "正在撰写消息…"
@@ -6063,6 +6067,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Account Settings…"
 #~ msgstr "账号设置…"
 
+#~ msgid "Account is not connected"
+#~ msgstr "账号未连接"
+
+#~ msgid "Account is not connected."
+#~ msgstr "账号未连接。"
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "左键单击预览时的操作"
 
@@ -6130,6 +6140,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "音频输出设备"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "音频预览不可用"
 
 #~ msgid "Audio/Video"
 #~ msgstr "音频/视频"
@@ -6214,6 +6227,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Clear message entry"
 #~ msgstr "清除消息条目"
+
+#~ msgid "Click to change time display"
+#~ msgstr "点击即可更改时间显示"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6301,6 +6317,10 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Correct the last message"
 #~ msgstr "更正最后一条消息"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "更正…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "创建群聊(_G)…"
@@ -6484,6 +6504,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Filter Chats…"
 #~ msgstr "筛选聊天…"
 
+#~ msgid "Fingerprint"
+#~ msgstr "指纹"
+
 #~ msgid ""
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr "您需要安装 <tt>python-qrcode</tt> 才能通过二维码来验证。"
@@ -6568,9 +6591,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Images"
 #~ msgstr "图片"
 
-#~ msgid "Inactive"
-#~ msgstr "不活跃"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "增大用户界面字体大小"
 
@@ -6617,6 +6637,12 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Left Click Action"
 #~ msgstr "左键单击操作"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "让其他人知道您已阅读至此"
+
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "让此联系人知道您已阅读至此"
 
 #~ msgid "Local System Time"
 #~ msgstr "本地系统时间"
@@ -6678,12 +6704,18 @@ msgstr "…或将其拖放到此处"
 #~ msgid "No proxy used"
 #~ msgstr "未使用代理"
 
+#~ msgid "Not Connected"
+#~ msgstr "未连接"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "未开始"
 
 #~ msgid "Notification Area Icon"
 #~ msgstr "通知区域图标"
+
+#~ msgid "Notifications When Away"
+#~ msgstr "离开时通知"
 
 #~ msgid "Notify of events in the notification area."
 #~ msgstr "在通知区域中通知事件。"
@@ -6822,6 +6854,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "需要：libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "需要：libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -6882,6 +6917,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Send Files Directly"
 #~ msgstr "直接发送文件"
 
+#~ msgid "Send Read Markers"
+#~ msgstr "发送已读标记"
+
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr "按 Ctrl+Enter 发送消息，按 Enter 键换行。"
 
@@ -6928,8 +6966,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Show My Video Stream"
 #~ msgstr "显示我的视频流"
 
+#~ msgid "Show Notifications"
+#~ msgstr "显示通知"
+
 #~ msgid "Show Offline Contacts"
 #~ msgstr "显示离线联系人"
+
+#~ msgid "Show Subject"
+#~ msgstr "显示主题"
 
 #~ msgid "Show _Features"
 #~ msgstr "显示功能(_F)"
@@ -7080,6 +7124,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Unread Messages"
 #~ msgstr "未读消息"
 
+#~ msgid "Unselect Chat"
+#~ msgstr "取消选择聊天"
+
 #~ msgid "Unverified"
 #~ msgstr "未经验证"
 
@@ -7148,6 +7195,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "您即将退出 Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "您未连接"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "您未连接到服务器"
@@ -7227,6 +7277,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "_Save as…"
 #~ msgstr "另存为(_S)…"
+
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "文件传输完成时显示通知(_S)"
 
 #~ msgid "_Start / Join Chat…"
 #~ msgstr "开始/加入聊天(_S)…"

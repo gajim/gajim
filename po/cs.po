@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -238,6 +238,10 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr "Změněno %s"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktivní"
+
 #, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Důvod: %s"
@@ -451,14 +455,6 @@ msgstr "Účet musí být připken"
 
 msgid "Account is being created"
 msgstr "Účet se vytváří"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Účet %s je stále připojen"
-
-#, fuzzy
-msgid "Account is not connected."
-msgstr "Účet %s je stále připojen"
 
 #, fuzzy
 msgid "Account name: "
@@ -796,9 +792,6 @@ msgstr "Vstupní zařízení audio"
 
 msgid "Audio Preview"
 msgstr "Náhled pro audio"
-
-msgid "Audio preview is not available"
-msgstr "Náhled pro audio není dostupný"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1183,9 +1176,6 @@ msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Klikněte na kontakty, které byste chtěli pozvat do této skupinové konverzace."
 
-msgid "Click to change time display"
-msgstr "Kliknutím změníte zobrazení času"
-
 msgid "Click to view location"
 msgstr "Kliknutím zobrazte lokaci"
 
@@ -1391,10 +1381,6 @@ msgstr "Kopírovat informace do schránky"
 msgid "Copy to clipboard"
 msgstr "Kopírovat informace do schránky"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Opravit…"
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Nezda"
@@ -1575,10 +1561,6 @@ msgstr "Zařízení \"%s\""
 msgid "Devices"
 msgstr "Zařízení"
 
-#, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Ujistěte se prosím, že jste propojeni s účtem \"%s\"."
-
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL slovníku chybí \"%s\""
@@ -1725,6 +1707,11 @@ msgstr "Upravit jméno…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
+msgid "Edit…"
+msgstr "Upravit…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Upravit…"
 
@@ -1909,6 +1896,10 @@ msgstr "Exportovat historii konverzace"
 msgid "Export Contacts"
 msgstr "Importovat kontakty"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "Exportovat"
+
 msgid "Export Finished"
 msgstr "Export dokončen"
 
@@ -2038,15 +2029,15 @@ msgid "Filters (active)"
 msgstr "Zpráva přijata"
 
 #, fuzzy
-msgid "Fingerprint"
-msgstr "Otisky"
-
-#, fuzzy
 msgid "Fingerprint for this Device"
 msgstr "Otisky"
 
 msgid "Fingerprints"
 msgstr "Otisky"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Ujistěte se prosím, že jste propojeni s účtem \"%s\"."
 
 msgid "Finished"
 msgstr "Dokončeno"
@@ -2431,6 +2422,10 @@ msgstr ""
 "Chcete-li v této konverzaci psát zprávy, musíte nejprve požádat o svolení.\n"
 "Váš požadavek zpracuje moderátor."
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "Opustili jste tuto skupinovou konverzaci"
+
 msgid "Incoming Call"
 msgstr "Příchozí hovor"
 
@@ -2633,9 +2628,6 @@ msgstr "Opustit skupinovou konverzaci"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr "Dejte vědět ostatním, pokud jste dočetli až sem"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2816,6 +2808,10 @@ msgstr "Zprávy jsou archivovány na serveru"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Verze Pango: %s"
 
 msgid "Minimize"
 msgstr "Minimalizovat"
@@ -3028,11 +3024,18 @@ msgstr "Nejsou dostupné žádné informace"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr "Žádné výsledky"
 
 msgid "No results found"
 msgstr "Nebyly nalezeny žádné výsledky"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Uzel"
@@ -3067,9 +3070,6 @@ msgstr "Nedostupný"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Nedostupný/á"
-
-msgid "Not Connected"
-msgstr "Nepřipojeno"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3611,6 +3611,10 @@ msgstr "Re_gistrace"
 msgid "React with %s"
 msgstr "Hovor s %s"
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Odesílat potvrzení o přijetí"
+
 msgid "Read _Wikipedia Article"
 msgstr "Číst článkek na _Wikipedia"
 
@@ -3830,6 +3834,13 @@ msgstr "Žádám o registrační formulář ze serveru"
 msgid "Required"
 msgstr "Vyžadováno"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Vyžaduje gnome-keyring nebo kwallet"
 
@@ -3842,9 +3853,6 @@ msgstr "Vyžaduje: gstreamer-1.0, gst-plugins-base-1.0"
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vyžaduje: Gspell"
-
-msgid "Requires: libxss"
-msgstr "Vyžaduje: libxss"
 
 msgid "Reserved Name"
 msgstr "Rezervované jméno"
@@ -4149,11 +4157,11 @@ msgstr "Odesílat potvrzení o přijetí"
 msgid "Send Messages with Control+Enter"
 msgstr "Odesílat zprávy pomocí Ctrl+Enter"
 
-msgid "Send Read Markers"
-msgstr "Odesílat potvrzení o přečtení"
-
 msgid "Send _Report"
 msgstr "Odeslat hlášení"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4957,6 +4965,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Tato zpráva bude odstraněna z vaší místní historie konverzace"
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Tento server neumožňuje registrace."
 
@@ -5139,6 +5150,10 @@ msgstr "Odblokovat"
 msgid "Unblock Participant?"
 msgstr "Účastník"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Ujistěte se prosím, že jste propojeni s účtem \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Nešifrováno"
@@ -5194,10 +5209,6 @@ msgid "Unmute Chat"
 msgstr "Odepnout konverzaci"
 
 msgid "Unpin Chat"
-msgstr "Odepnout konverzaci"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Odepnout konverzaci"
 
 msgid "Unsupported certificate purpose"
@@ -5476,9 +5487,6 @@ msgstr "Současně nejste účastníkem této skupinové konverzace"
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "Nejste oprávněni měnit příslušnost administrátorů a vlastníků"
 
-msgid "You are not connected"
-msgstr "Nejste připojeni"
-
 #, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
@@ -5501,7 +5509,8 @@ msgstr "Jste nyní znám(a) jako %s"
 msgid "You are now {show}{status}"
 msgstr "Jste nyní {show}{status}"
 
-msgid "You are offline."
+#, fuzzy
+msgid "You are offline"
 msgstr "Jste offline."
 
 msgid "You are offline. Go online to send messages…"
@@ -6402,6 +6411,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Account Settings…"
 #~ msgstr "Nastavení účtu…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Účet %s je stále připojen"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Účet %s je stále připojen"
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Akce pro kliknutí levým tlačítkem na náhled"
 
@@ -6469,6 +6486,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Výstupní zařízení audio"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "Náhled pro audio není dostupný"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
@@ -6550,6 +6570,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Zpráva odeslána"
+
+#~ msgid "Click to change time display"
+#~ msgstr "Kliknutím změníte zobrazení času"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6641,6 +6664,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Opravit poslední zprávu"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Opravit…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Vytvořit skupinovou konverzaci…"
@@ -6817,6 +6844,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrovat konverzace…"
 
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Otisky"
+
 #~ msgid "Full Message View"
 #~ msgstr "Zobrazit celou zprávu"
 
@@ -6900,10 +6931,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Images"
 #~ msgstr "Obrázky"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktivní"
-
 #~ msgid "Insert Emoji"
 #~ msgstr "Vložit emotikon"
 
@@ -6949,6 +6976,13 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Akce kliknutí levého tlačítka"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Dejte vědět ostatním, pokud jste dočetli až sem"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Dejte vědět ostatním, pokud jste dočetli až sem"
 
 #~ msgid "Local System Time"
 #~ msgstr "Místní systémový čas"
@@ -7011,6 +7045,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "No proxy used"
 #~ msgstr "Není použita žádná proxy"
+
+#~ msgid "Not Connected"
+#~ msgstr "Nepřipojeno"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -7162,6 +7199,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Vyžaduje: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Vyžaduje: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7222,6 +7262,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Poslat soubory přímo"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Odesílat potvrzení o přečtení"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
@@ -7421,6 +7464,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Unread Messages"
 #~ msgstr "Nepřečtené zprávy"
 
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Odepnout konverzaci"
+
 #~ msgid "Unverified"
 #~ msgstr "Neověřeno"
 
@@ -7492,6 +7539,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Chystáte se ukončit Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "Nejste připojeni"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Nejste připojen(a) k serveru"

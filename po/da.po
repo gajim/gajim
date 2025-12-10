@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -230,6 +230,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Ændre _Kælenavn..."
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktiv"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -473,14 +477,6 @@ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Kontoen \"%s\" er tilsluttet til serveren"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Kontoen \"%s\" er tilsluttet til serveren"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
 #, fuzzy
@@ -863,10 +859,6 @@ msgstr "Standard Besked"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Fil: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "En tilslutning er ikke tilgængelig"
 
 msgid "Audio test"
 msgstr ""
@@ -1289,9 +1281,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Tryk for at se din avatar"
@@ -1527,10 +1516,6 @@ msgstr "_Kopier Henvisning"
 msgid "Copy to clipboard"
 msgstr "_Kopier Henvisning"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Kunne ikke laste billede"
@@ -1730,10 +1715,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Vær venligst sikker på at du er tilsluttet med \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Web søge URL'en mangler en \"%s\""
 
@@ -1885,6 +1866,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "R_ediger"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "R_ediger"
 
@@ -2090,6 +2076,10 @@ msgid "Export Contacts"
 msgstr "Inviter _Kontakter"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Eksporter"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Færdig"
 
@@ -2234,14 +2224,15 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Første Besked er Modtaget"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Vær venligst sikker på at du er tilsluttet med \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2653,6 +2644,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Du forlod de følgende gruppesamtaler:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Indkommende besked:"
 
@@ -2878,9 +2873,6 @@ msgstr "Forlad Gruppesamtaler"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3081,6 +3073,10 @@ msgstr "Session VIL IKKE blive logget"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ Version:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3307,6 +3303,10 @@ msgstr "Ingen konto tilgængelig"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Intet resultat"
@@ -3314,6 +3314,9 @@ msgstr "Intet resultat"
 #, fuzzy
 msgid "No results found"
 msgstr "Intet resultat"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Knude"
@@ -3349,10 +3352,6 @@ msgstr "Ikke Tilgængelig"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Ikke Tilgængelig"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Tilsluttet"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3947,6 +3946,10 @@ msgstr "Re_gistrer"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Første Besked er Modtaget"
+
 msgid "Read _Wikipedia Article"
 msgstr "Læs _Wikipedia Artikel"
 
@@ -4190,6 +4193,13 @@ msgstr ""
 msgid "Required"
 msgstr "Adgangskode er Påkrævet"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kræver gnome-keyring og python-gnome2-desktop, eller kwalletcli."
@@ -4204,10 +4214,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kræver Gspell"
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Biblioteket libxss kræves"
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4550,12 +4556,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Send en fil til en kontakt"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Send hold-i-live pakker"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Rapporter Fejl"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5411,6 +5416,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Din server understøtter ikke Vcard"
@@ -5606,6 +5614,10 @@ msgstr "_Fjern blokering"
 msgid "Unblock Participant?"
 msgstr "Deltager"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Vær venligst sikker på at du er tilsluttet med \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Ikke startet"
@@ -5666,10 +5678,6 @@ msgstr "Filoverførsel Forespørgsel"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Filoverførsel Forespørgsel"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Filoverførsel Forespørgsel"
 
 msgid "Unsupported certificate purpose"
@@ -5975,10 +5983,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Du er ikke tilsluttet til serveren"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -6000,8 +6004,9 @@ msgstr "Du er nu kendt som %s"
 msgid "You are now {show}{status}"
 msgstr "Du er nu kendt som %s"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Du er ikke tilsluttet til serveren"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6903,6 +6908,14 @@ msgstr ""
 #~ msgstr "Tilslutning fejlede"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktiveret"
 
@@ -6967,6 +6980,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Standard Besked"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "En tilslutning er ikke tilgængelig"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7367,10 +7384,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Billeder"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktiv"
-
 #~ msgid "Invalid File"
 #~ msgstr "Ugyldig Fil"
 
@@ -7444,6 +7457,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Tilsluttet"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7578,6 +7595,10 @@ msgstr ""
 #~ msgstr "Biblioteket libxss kræves"
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Biblioteket libxss kræves"
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "Server:"
 
@@ -7623,6 +7644,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Gem Fil som..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Send hold-i-live pakker"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7806,6 +7831,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "Ulæste hændelser"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Filoverførsel Forespørgsel"
 
 #, fuzzy
 #~ msgid "Update Check"

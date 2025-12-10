@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -225,6 +225,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Cheñch _lesanv"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Oberiant"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -462,14 +466,6 @@ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Luget eo ar gont \"%s\" d'ar servijer"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Luget eo ar gont \"%s\" d'ar servijer"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
 #, fuzzy
@@ -845,10 +841,6 @@ msgstr "Titour-stad"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Restr:"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "N'eus ket tu da gevreañ"
 
 msgid "Audio test"
 msgstr ""
@@ -1266,9 +1258,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Kopiañ chomlec'h an ere"
@@ -1505,10 +1494,6 @@ msgstr "_Kopiañ chomlec'h an ere"
 msgid "Copy to clipboard"
 msgstr "_Kopiañ chomlec'h an ere"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Dibosupl eo kargañ ar skeudenn"
@@ -1708,10 +1693,6 @@ msgid "Devices"
 msgstr "Servijer"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Gwiriekait oc'h luget gant \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Mankout a ra un \"%s\" e-barzh URL ar webklask"
 
@@ -1861,6 +1842,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Aozañ"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Aozañ"
 
@@ -2064,6 +2050,10 @@ msgid "Export Contacts"
 msgstr "Darempredoù"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Ezporzhiañ"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Echuiñ"
 
@@ -2211,14 +2201,15 @@ msgstr "Sil:"
 msgid "Filters (active)"
 msgstr "Kemennadenn gentañ"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Gwiriekait oc'h luget gant \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2625,6 +2616,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Emaoc'h er webgaoz %s dija"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Anv-arveriad-ez direizh"
 
@@ -2852,9 +2847,6 @@ msgstr "Flap a-stroll"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -3053,6 +3045,10 @@ msgstr "N'oc'h ket luget d'ar servijer"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Taolennadur: %s"
 
 #, fuzzy
 msgid "Minimize"
@@ -3281,6 +3277,10 @@ msgstr "Kont ebet hegerz"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "N'eo ket bet kavet %s"
@@ -3288,6 +3288,9 @@ msgstr "N'eo ket bet kavet %s"
 #, fuzzy
 msgid "No results found"
 msgstr "N'eo ket bet kavet %s"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3324,10 +3327,6 @@ msgstr "Dihegerz"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Dihegerz"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Kevreadenn"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3922,6 +3921,10 @@ msgstr "_Emezelañ"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Kemennadenn gentañ"
+
 msgid "Read _Wikipedia Article"
 msgstr "Lenn pennad _Wikipedia"
 
@@ -4163,6 +4166,13 @@ msgstr ""
 msgid "Required"
 msgstr "Ger-kuzh ret"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Merour an istoradur"
@@ -4177,9 +4187,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Ger-kuzh ret"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4519,12 +4526,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Usage: /%s, cache les boutons de discussion."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Kas ar pakadoù derc'hel al lugadenn vev"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Diskleriañ ar Bug"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5367,6 +5373,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5559,6 +5568,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr "Perzhiad-ez"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Gwiriekait oc'h luget gant \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "N'eo ket kroget"
@@ -5619,10 +5632,6 @@ msgstr "Goulenn treuzkas"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Goulenn treuzkas"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Goulenn treuzkas"
 
 msgid "Unsupported certificate purpose"
@@ -5923,10 +5932,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "N'oc'h ket luget d'ar servijer"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5949,7 +5954,7 @@ msgid "You are now {show}{status}"
 msgstr "Anavezet oc'h bremañ gant an anv %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "Ezlinenn"
 
 msgid "You are offline. Go online to send messages…"
@@ -6840,6 +6845,14 @@ msgstr ""
 #~ msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Oberiant"
 
@@ -6902,6 +6915,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Titour-stad"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "N'eus ket tu da gevreañ"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7260,10 +7277,6 @@ msgstr ""
 #~ msgstr "Skeudennoù"
 
 #, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Oberiant"
-
-#, fuzzy
 #~ msgid "Insert Emoji"
 #~ msgstr "Gérer les frimousses"
 
@@ -7340,6 +7353,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proksi:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Kevreadenn"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7517,6 +7534,10 @@ msgstr ""
 #~ msgstr "Enrollañ ar restr dindan..."
 
 #, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Kas ar pakadoù derc'hel al lugadenn vev"
+
+#, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
 #~ "Kas ar gemennadenn gant Ctrl+Kas ha mont d'al linenn gant Kas (emzalc'h "
@@ -7685,6 +7706,10 @@ msgstr ""
 #~ msgstr "Darvoudoù chomet dilenn"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Goulenn treuzkas"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Hizivaat MOTD"
 
@@ -7742,6 +7767,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Êtes-vous sûr de vouloir quitter les salons \"%s\" ?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "N'oc'h ket luget d'ar servijer"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "N'oc'h ket luget d'ar servijer"

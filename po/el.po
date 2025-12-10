@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -233,6 +233,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Αλλαγή _ψευδώνυμου"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Ενεργό"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -472,14 +476,6 @@ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος μ�
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
 
 #, fuzzy
@@ -853,10 +849,6 @@ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Αρχείο:"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "To Session bus δεν είναι διαθέσιμο"
 
 msgid "Audio test"
 msgstr ""
@@ -1276,9 +1268,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
@@ -1514,10 +1503,6 @@ msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 msgid "Copy to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
@@ -1717,10 +1702,6 @@ msgid "Devices"
 msgstr "Εξυπηρετητής"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Λείπει ένα \"%s\" από το URL της Δικτυακής αναζήτησης"
 
@@ -1874,6 +1855,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "Επεξεργασία"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Επεξεργασία"
 
@@ -2078,6 +2064,10 @@ msgid "Export Contacts"
 msgstr "Επαφές"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Εξαγωγή"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Τέλος"
 
@@ -2225,14 +2215,15 @@ msgstr "Φιλτράρισμα:"
 msgid "Filters (active)"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2643,6 +2634,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Βρίσκεστε ήδη στο δωμάτιο %s"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
@@ -2870,9 +2865,6 @@ msgstr "Ομαδικές συζητήσεις"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3073,6 +3065,10 @@ msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Έκδοση GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3300,6 +3296,10 @@ msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμ
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "μη υπαρκτό %s"
@@ -3307,6 +3307,9 @@ msgstr "μη υπαρκτό %s"
 #, fuzzy
 msgid "No results found"
 msgstr "μη υπαρκτό %s"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Κόμβος"
@@ -3342,10 +3345,6 @@ msgstr "Μη διαθέσιμος"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Μη διαθέσιμος"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Σύνδεση"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3942,6 +3941,10 @@ msgstr "_Εγγραφή"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Λήφθηκε το πρώτο μήνυμα"
+
 msgid "Read _Wikipedia Article"
 msgstr "Ανάγνωση άρθρου της _Wikipedia"
 
@@ -4185,6 +4188,13 @@ msgstr ""
 msgid "Required"
 msgstr "Απαιτείται κωδικός"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Διαχειριστής ιστορικού"
@@ -4199,9 +4209,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Απαιτείται κωδικός"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4545,12 +4552,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Χρήση: /%s, αποκρύπτει τα κουμπιά της κουβέντας."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Αποστολή πακέτων keep-alive"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Αναφορά σφάλματος"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5394,6 +5400,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5587,6 +5596,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr "Συμμετέχων"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Δεν έχει ξεκινήσει"
@@ -5650,10 +5663,6 @@ msgstr "Αίτηση μεταφοράς αρχείου"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Αίτηση μεταφοράς αρχείου"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Αίτηση μεταφοράς αρχείου"
 
 msgid "Unsupported certificate purpose"
@@ -5955,10 +5964,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5981,7 +5986,7 @@ msgid "You are now {show}{status}"
 msgstr "Είστε τώρα γνωστός ως %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "αποσυνδεδεμένος"
 
 msgid "You are offline. Go online to send messages…"
@@ -6888,6 +6893,14 @@ msgstr ""
 #~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Ο λογαριασμός \"%s\" είναι συνδεδεμένος με το διακομιστή"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Ενεργό"
 
@@ -6950,6 +6963,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "To Session bus δεν είναι διαθέσιμο"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7332,10 +7349,6 @@ msgstr ""
 #~ msgstr "Εικόνες"
 
 #, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Ενεργό"
-
-#, fuzzy
 #~ msgid "Insert Emoji"
 #~ msgstr "Διαχείριση Συμβόλων"
 
@@ -7412,6 +7425,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Μεσολαβητής:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Σύνδεση"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7591,6 +7608,10 @@ msgstr ""
 #~ msgstr "Αποθήκευση αρχείου ως..."
 
 #, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Αποστολή πακέτων keep-alive"
+
+#, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
 #~ "Αποστολή μηνύματος με Ctrl+Enter και εισαγωγή νέας γραμμής με το Enter "
@@ -7768,6 +7789,10 @@ msgstr ""
 #~ msgstr "Αδιάβαστα γεγονότα"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Αίτηση μεταφοράς αρχείου"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Ενημέρωση MOTD"
 
@@ -7825,6 +7850,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από τα δωμάτια \"%s\";"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"

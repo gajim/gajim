@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -247,6 +247,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "שנה שם _כינוי..."
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "פעיל"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -493,14 +497,6 @@ msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "חשבון \"%s\" מחובר כעת לשרת"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "חשבון \"%s\" מחובר כעת לשרת"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 #, fuzzy
@@ -888,10 +884,6 @@ msgstr "התקן קלט שמע"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "קובץ: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "סשנים קוליים אינם זמינים"
 
 msgid "Audio test"
 msgstr "בדיקת קול"
@@ -1321,9 +1313,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(jid)s הוזמן/ה לחדר זה"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "לחץ כדי לקבוע אווטאר"
@@ -1561,10 +1550,6 @@ msgstr "ה_עתק מיקום קישור"
 msgid "Copy to clipboard"
 msgstr "ה_עתק מיקום קישור"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "לא היתה אפשרות להטעין תמונה"
@@ -1766,10 +1751,6 @@ msgid "Devices"
 msgstr "שרת"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "לכתובת URL של חיפוש ברשת חסר \"%s\""
 
@@ -1922,6 +1903,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "ע_ריכה"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "ע_ריכה"
 
@@ -2140,6 +2126,10 @@ msgid "Export Contacts"
 msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "יצא"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_סיים"
 
@@ -2289,14 +2279,15 @@ msgstr "סינון:"
 msgid "Filters (active)"
 msgstr "הודעה ראשונה אשר התקבלה"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2722,6 +2713,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "עזבת את שיחות הקבוצה הבאות:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "צבע שם כינוי נכנס."
 
@@ -2952,9 +2947,6 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 # תרגום כתובת/תיעול שערים
 #, fuzzy
 msgid ""
@@ -3158,6 +3150,10 @@ msgstr "סשן זה יושם בארכיון על שרת"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "גרסא:"
 
 # In Hebrew: גאג'ים
 #, fuzzy
@@ -3384,6 +3380,10 @@ msgstr "אין חשבון זמין"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "אין תנובה"
@@ -3391,6 +3391,9 @@ msgstr "אין תנובה"
 #, fuzzy
 msgid "No results found"
 msgstr "אין תנובה"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "צומת"
@@ -3426,10 +3429,6 @@ msgstr "לא זמין"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "לא זמין"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "מחובר"
 
 #, fuzzy
 msgid "Not Decided"
@@ -4032,6 +4031,10 @@ msgstr "ה_רשמה"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "התקבלה הודעת הקשב"
+
 msgid "Read _Wikipedia Article"
 msgstr "עיין ערך _ויקיפדיה"
 
@@ -4282,6 +4285,13 @@ msgstr ""
 msgid "Required"
 msgstr "דרוש"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "יש צורך בהתקנת gnome-keyring וגם python-gnome2-desktop, או kwalletcli."
@@ -4296,10 +4306,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "יש צורך בהתקנת libgtkspell."
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "יש צורך בהתקנת ספריית libxss."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4650,12 +4656,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "מסירת הודעה לאיש קשר"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "ש_לח חבילות keep-alive"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_דווחו על בעיה"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5519,6 +5524,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "השרת שלך לא תומך vCard"
@@ -5717,6 +5725,10 @@ msgstr "_בטל חסימה"
 msgid "Unblock Participant?"
 msgstr "משתתף"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "לא הותחלה"
@@ -5777,10 +5789,6 @@ msgstr "בקשה לשיחה קולית"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "בקשה לשיחה קולית"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "בקשה לשיחה קולית"
 
 msgid "Unsupported certificate purpose"
@@ -6099,10 +6107,6 @@ msgstr "%s נכנס/ה לשיחת קבוצה"
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
-#, fuzzy
-msgid "You are not connected"
-msgstr "אינך מחובר לשרת"
-
 # BUG: Dot
 #, fuzzy
 msgid ""
@@ -6128,8 +6132,9 @@ msgstr "הכינוי החדש שלך הוא %s"
 msgid "You are now {show}{status}"
 msgstr "הכינוי החדש שלך הוא %s"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "אינך מחובר לשרת"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -7045,6 +7050,14 @@ msgstr ""
 #~ msgstr "תוספים"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "חשבון \"%s\" מחובר כעת לשרת"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "חשבון \"%s\" מחובר כעת לשרת"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "מופעלת"
 
@@ -7111,6 +7124,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "התקן פלט שמע"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "סשנים קוליים אינם זמינים"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7551,10 +7568,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "תמונות"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "פעיל"
-
 #~ msgid "Invalid File"
 #~ msgstr "קובץ שגוי"
 
@@ -7633,6 +7646,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "_פרוקסי:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "מחובר"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7778,6 +7795,10 @@ msgstr ""
 #~ msgstr "יש צורך בהתקנת ספריית libxss."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "יש צורך בהתקנת ספריית libxss."
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "שרת STUN:"
 
@@ -7825,6 +7846,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "שמור קובץ בשם..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "ש_לח חבילות keep-alive"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -8024,6 +8049,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "אירועים אשר לא נקראו"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "בקשה לשיחה קולית"
 
 #, fuzzy
 #~ msgid "Update Check"

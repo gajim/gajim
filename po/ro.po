@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -235,6 +235,10 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr "Schimbat de %s"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Inactiv"
+
 #, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Motiv: %s"
@@ -450,13 +454,6 @@ msgstr "Contul trebuie să fie conectat"
 
 msgid "Account is being created"
 msgstr "Contul este în curs de creare"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Contul nu este conectat."
-
-msgid "Account is not connected."
-msgstr "Contul nu este conectat."
 
 #, fuzzy
 msgid "Account name: "
@@ -795,9 +792,6 @@ msgstr "Dispozitiv de intrare audio"
 
 msgid "Audio Preview"
 msgstr "Previzualizare audio"
-
-msgid "Audio preview is not available"
-msgstr "Previzualizarea audio nu este disponibilă"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1185,9 +1179,6 @@ msgstr ""
 "Faceți clic pe contactele pe care doriți să le invitați la acest chat de "
 "grup."
 
-msgid "Click to change time display"
-msgstr "Faceți clic pentru a schimba afișarea orei"
-
 msgid "Click to view location"
 msgstr "Faceți clic pentru a vedea locația"
 
@@ -1397,10 +1388,6 @@ msgstr "Copiați în clipboard"
 msgid "Copy to clipboard"
 msgstr "Copiați în clipboard"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Corect…"
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Nu s-a putut salva fișierul"
@@ -1578,10 +1565,6 @@ msgid "Devices"
 msgstr "Dispozitive"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Dispozitive conectate cu \"%s\""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "La URL-ul dicționarului lipsește un \"%s\""
 
@@ -1729,6 +1712,11 @@ msgstr "Editați numele…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Editați-vă mesajul (Esc pentru a anula)…"
 
+msgid "Edit…"
+msgstr "Editați…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Editați…"
 
@@ -1920,6 +1908,10 @@ msgstr "Exportați istoricul de chat"
 msgid "Export Contacts"
 msgstr "Importați contacte"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "Exportați"
+
 msgid "Export Finished"
 msgstr "Export Finalizat"
 
@@ -2048,15 +2040,15 @@ msgstr "Filtru"
 msgid "Filters (active)"
 msgstr "Mesaj primit"
 
-#, fuzzy
-msgid "Fingerprint"
-msgstr "Amprentele digitale"
-
 msgid "Fingerprint for this Device"
 msgstr "Amprenta digitală pentru acest dispozitiv"
 
 msgid "Fingerprints"
 msgstr "Amprentele digitale"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Dispozitive conectate cu \"%s\""
 
 msgid "Finished"
 msgstr "Finalizat"
@@ -2444,6 +2436,10 @@ msgstr ""
 "Pentru a scrie mesaje în acest chat, trebuie să solicitați mai întâi voce.\n"
 "Un moderator vă va procesa cererea."
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "Ai părăsit acest grup de chat"
+
 msgid "Incoming Call"
 msgstr "Apel primit"
 
@@ -2647,9 +2643,6 @@ msgstr "Părăsiți grupul de chat"
 msgid "Leave _Permanently"
 msgstr "Permanent"
 
-msgid "Let others know if you read up to this point"
-msgstr "Anunță-i și pe alții dacă ai citit până la acest punct"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2828,6 +2821,10 @@ msgstr "Mesajele sunt arhivate pe server"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Versiunea Pango: %s"
 
 msgid "Minimize"
 msgstr "Minimalizați"
@@ -3040,11 +3037,18 @@ msgstr "Nu există informații disponibile"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr "Nu există rezultate"
 
 msgid "No results found"
 msgstr "Nu s-au găsit rezultate"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Nod"
@@ -3079,9 +3083,6 @@ msgstr "Nu este disponibil"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Nu este disponibil"
-
-msgid "Not Connected"
-msgstr "Nu este conectat"
 
 msgid "Not Decided"
 msgstr "Nu s-a decis"
@@ -3621,6 +3622,10 @@ msgstr "Re_gistrare"
 msgid "React with %s"
 msgstr "Reacționează cu %s"
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Trimiterea de confirmări de primire a mesajelor"
+
 msgid "Read _Wikipedia Article"
 msgstr "Citiți articolul _Wikipedia"
 
@@ -3840,6 +3845,13 @@ msgstr "Solicitarea formularului de căutare de pe server"
 msgid "Required"
 msgstr "Necesar"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Necesită: gnome-keyring sau kwallet"
 
@@ -3852,9 +3864,6 @@ msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Necesită: Gspell"
-
-msgid "Requires: libxss"
-msgstr "Necesită: libxss"
 
 msgid "Reserved Name"
 msgstr "Nume rezervat"
@@ -4157,11 +4166,11 @@ msgstr "Trimiterea de confirmări de primire a mesajelor"
 msgid "Send Messages with Control+Enter"
 msgstr "Trimiteți mesaje cu Control+Introducere"
 
-msgid "Send Read Markers"
-msgstr "Trimiteți markeri de citire"
-
 msgid "Send _Report"
 msgstr "Trimiteți _Raportul"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4976,6 +4985,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Acest mesaj va fi șters din istoricul de chat local"
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Acest server nu permite înregistrarea."
 
@@ -5161,6 +5173,10 @@ msgstr "Deblocați"
 msgid "Unblock Participant?"
 msgstr "Participantul"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Dispozitive conectate cu \"%s\""
+
 msgid "Unencrypted"
 msgstr "Necriptat"
 
@@ -5214,10 +5230,6 @@ msgstr "Dezactivați modul Silențios pentru Chat"
 
 msgid "Unpin Chat"
 msgstr "Desprindeți Chat"
-
-#, fuzzy
-msgid "Unselect Chat"
-msgstr "Dezactivați modul Silențios pentru Chat"
 
 msgid "Unsupported certificate purpose"
 msgstr "Scopul nesuportat al certificatului"
@@ -5493,9 +5505,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 "Nu aveți voie să modificați afilierea administratorilor și proprietarilor"
 
-msgid "You are not connected"
-msgstr "Nu sunteți conectat"
-
 #, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
@@ -5518,7 +5527,8 @@ msgstr "Sunteți acum cunoscut sub numele de %s"
 msgid "You are now {show}{status}"
 msgstr "Sunteți acum {show}{status}"
 
-msgid "You are offline."
+#, fuzzy
+msgid "You are offline"
 msgstr "Sunteți offline."
 
 msgid "You are offline. Go online to send messages…"
@@ -6386,6 +6396,13 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Account Settings…"
 #~ msgstr "Setări cont…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Contul nu este conectat."
+
+#~ msgid "Account is not connected."
+#~ msgstr "Contul nu este conectat."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Acțiune pentru a face clic stânga pe o previzualizare"
 
@@ -6456,6 +6473,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Dispozitiv de ieșire audio"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "Previzualizarea audio nu este disponibilă"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
@@ -6544,6 +6564,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Introducerea mesajului de ștergere"
+
+#~ msgid "Click to change time display"
+#~ msgstr "Faceți clic pentru a schimba afișarea orei"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6635,6 +6658,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Corectați ultimul mesaj"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Corect…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Creați _Group Chat…"
@@ -6817,6 +6844,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrați chat-urile…"
 
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Amprentele digitale"
+
 #~ msgid "Full Message View"
 #~ msgstr "Vizualizare completă a mesajului"
 
@@ -6905,9 +6936,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Images"
 #~ msgstr "Imagini"
 
-#~ msgid "Inactive"
-#~ msgstr "Inactiv"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "Creșteți dimensiunea Fontului Interfeței Utilizatorului"
 
@@ -6955,6 +6983,13 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Acțiunea clic stânga"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Anunță-i și pe alții dacă ai citit până la acest punct"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Anunță-i și pe alții dacă ai citit până la acest punct"
 
 #~ msgid "Local System Time"
 #~ msgstr "Ora sistemului local"
@@ -7017,6 +7052,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "No proxy used"
 #~ msgstr "Nu a fost folosit niciun proxy"
+
+#~ msgid "Not Connected"
+#~ msgstr "Nu este conectat"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -7167,6 +7205,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Necesită: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Necesită: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7227,6 +7268,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Trimiteți fișierele direct"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Trimiteți markeri de citire"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr "Trimiteți mesajul cu Ctrl+Inter și creați o nouă linie cu Enter."
@@ -7433,6 +7477,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Unread Messages"
 #~ msgstr "Mesaje necitite"
 
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Dezactivați modul Silențios pentru Chat"
+
 #~ msgid "Unverified"
 #~ msgstr "Nedeclarat"
 
@@ -7503,6 +7551,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ești pe cale să renunți la Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "Nu sunteți conectat"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Nu sunteți conectat la server"

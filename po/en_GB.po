@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -227,6 +227,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Change _Nickname..."
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Active"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -468,14 +472,6 @@ msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Account \"%s\" is connected to the server"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Account \"%s\" is connected to the server"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
@@ -858,10 +854,6 @@ msgstr "Default Message"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "File: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "A connection is not available"
 
 msgid "Audio test"
 msgstr ""
@@ -1284,9 +1276,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s has been removed from the room (%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Click to set your avatar"
@@ -1522,10 +1511,6 @@ msgstr "_Copy Link Location"
 msgid "Copy to clipboard"
 msgstr "_Copy Link Location"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Could not load image"
@@ -1725,10 +1710,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Please make sure you are connected with \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Web Search URL is missing an \"%s\""
 
@@ -1882,6 +1863,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Edit"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Edit"
 
@@ -2085,6 +2071,10 @@ msgid "Export Contacts"
 msgstr "Invite _Contacts"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Export"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Finish"
 
@@ -2229,14 +2219,15 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "First Message Received"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Please make sure you are connected with \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2647,6 +2638,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "You left the following groupchats:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Incoming message:"
 
@@ -2872,9 +2867,6 @@ msgstr "Leave Groupchats"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3075,6 +3067,10 @@ msgstr "Session WILL NOT be logged"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ Version:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3301,6 +3297,10 @@ msgstr "No account available"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "No result"
@@ -3308,6 +3308,9 @@ msgstr "No result"
 #, fuzzy
 msgid "No results found"
 msgstr "No result"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Node"
@@ -3343,10 +3346,6 @@ msgstr "Not Available"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Not Available"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Connected"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3942,6 +3941,10 @@ msgstr "Re_gister"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "First Message Received"
+
 msgid "Read _Wikipedia Article"
 msgstr "Read _Wikipedia Article"
 
@@ -4185,6 +4188,13 @@ msgstr ""
 msgid "Required"
 msgstr "Password Required"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
@@ -4199,10 +4209,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Requires libgtkspell."
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Requires libxss library."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4541,12 +4547,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Send a message to the contact"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Send keep-alive packets"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Report Bug"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5404,6 +5409,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Your server doesn't support Vcard"
@@ -5598,6 +5606,10 @@ msgstr "_Unblock"
 msgid "Unblock Participant?"
 msgstr "Participant"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Please make sure you are connected with \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Not started"
@@ -5658,10 +5670,6 @@ msgstr "File Transfer Request"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "File Transfer Request"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "File Transfer Request"
 
 msgid "Unsupported certificate purpose"
@@ -5965,10 +5973,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "You are not connected to the server"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5991,7 +5995,7 @@ msgid "You are now {show}{status}"
 msgstr "You are now known as %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "offline"
 
 msgid "You are offline. Go online to send messages…"
@@ -6894,6 +6898,14 @@ msgstr ""
 #~ msgstr "Registration failed"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Account \"%s\" is connected to the server"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Account \"%s\" is connected to the server"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Activated"
 
@@ -6955,6 +6967,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Default Message"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "A connection is not available"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7350,10 +7366,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Images"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Active"
-
 #~ msgid "Invalid File"
 #~ msgstr "Invalid File"
 
@@ -7427,6 +7439,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Connected"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7561,6 +7577,10 @@ msgstr ""
 #~ msgstr "Requires libxss library."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Requires libxss library."
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "Server:"
 
@@ -7607,6 +7627,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Send keep-alive packets"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7788,6 +7812,10 @@ msgstr ""
 #~ msgstr "Unread events"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "File Transfer Request"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Spell Checker"
 
@@ -7845,6 +7873,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Are you sure you want to quit Gajim?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "You are not connected to the server"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "You are not connected to the server"

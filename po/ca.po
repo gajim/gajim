@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -227,6 +227,10 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr "Canvia _Nick..."
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Activa"
+
 #, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Versió:"
@@ -439,14 +443,6 @@ msgstr "Entra a aquesta sala _automàticament quan em connecto"
 #, fuzzy
 msgid "Account is being created"
 msgstr "Comptes"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Entra a aquesta sala _automàticament quan em connecto"
-
-#, fuzzy
-msgid "Account is not connected."
-msgstr "Entra a aquesta sala _automàticament quan em connecto"
 
 #, fuzzy
 msgid "Account name: "
@@ -814,10 +810,6 @@ msgstr ""
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Envia _Fitxer"
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Transferència de Fitxers"
 
 msgid "Audio test"
 msgstr ""
@@ -1225,9 +1217,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Sobrenom:"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Copia la ubicació de l'enllaç"
@@ -1457,10 +1446,6 @@ msgstr "_Copia la ubicació de l'enllaç"
 msgid "Copy to clipboard"
 msgstr "_Copia la ubicació de l'enllaç"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 msgid "Could Not Save File"
 msgstr ""
 
@@ -1650,10 +1635,6 @@ msgid "Devices"
 msgstr "_Servidor:"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr ""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr ""
 
@@ -1796,6 +1777,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Edita"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Edita"
 
@@ -1986,6 +1972,10 @@ msgid "Export Contacts"
 msgstr "Convida _Contactes"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "_Exporta"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "Acaba"
 
@@ -2126,13 +2116,14 @@ msgstr "Filtra:"
 msgid "Filters (active)"
 msgstr "Envia Missatge Privat"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
+msgstr ""
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
 msgstr ""
 
 #, fuzzy
@@ -2531,6 +2522,10 @@ msgid ""
 "A moderator will process your request."
 msgstr ""
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "Grups de xat"
+
 msgid "Incoming Call"
 msgstr ""
 
@@ -2753,9 +2748,6 @@ msgstr "Grups de xat"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2942,6 +2934,10 @@ msgstr ""
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Versió:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3165,6 +3161,10 @@ msgstr "Transferència de Fitxers"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Grups de xat"
@@ -3172,6 +3172,9 @@ msgstr "Grups de xat"
 #, fuzzy
 msgid "No results found"
 msgstr "Grups de xat"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr ""
@@ -3207,10 +3210,6 @@ msgstr ""
 msgctxt "User status"
 msgid "Not Available"
 msgstr "_No Disponible"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Entrada següent"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3784,6 +3783,10 @@ msgstr ""
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Envia missatge"
+
 msgid "Read _Wikipedia Article"
 msgstr ""
 
@@ -4021,6 +4024,13 @@ msgstr ""
 msgid "Required"
 msgstr "requereix"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
@@ -4034,9 +4044,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "requereix"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4371,12 +4378,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Envia missatge"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Enviar paquets _keep-alive"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "Informa de l'error"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5187,6 +5193,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5369,6 +5378,10 @@ msgstr "_Desbloquejar"
 msgid "Unblock Participant?"
 msgstr "Accions Ocupant"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr ""
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Entrada següent"
@@ -5427,10 +5440,6 @@ msgstr "_Veu"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "_Veu"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "_Veu"
 
 msgid "Unsupported certificate purpose"
@@ -5713,10 +5722,6 @@ msgstr "Grups de xat"
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
-#, fuzzy
-msgid "You are not connected"
-msgstr "Entra a aquesta sala _automàticament quan em connecto"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5738,8 +5743,9 @@ msgstr ""
 msgid "You are now {show}{status}"
 msgstr ""
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Entra a aquesta sala _automàticament quan em connecto"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6523,6 +6529,14 @@ msgstr ""
 #~ msgstr "Connectors"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Entra a aquesta sala _automàticament quan em connecto"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Entra a aquesta sala _automàticament quan em connecto"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Activa"
 
@@ -6565,6 +6579,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Transferència de Fitxers"
 
 #, fuzzy
 #~ msgid "Author"
@@ -6785,10 +6803,6 @@ msgstr ""
 #~ msgstr "_Port:"
 
 #, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Activa"
-
-#, fuzzy
 #~ msgid "Invite Contacts…"
 #~ msgstr "Convida _Contactes"
 
@@ -6839,6 +6853,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Prox_y:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Entrada següent"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -6969,6 +6987,10 @@ msgstr ""
 #~ msgstr "Envia _Fitxer"
 
 #, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Enviar paquets _keep-alive"
+
+#, fuzzy
 #~ msgid "Send the message"
 #~ msgstr "Envia missatge"
 
@@ -7093,6 +7115,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "_Veu"
 
 #, fuzzy
 #~ msgid "Upload Files"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -233,6 +233,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Endre kallenavn"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Påslått"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -467,14 +471,6 @@ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 
 #, fuzzy
@@ -851,10 +847,6 @@ msgstr "Lydenhet for mikrofon"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Fil: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Lydøkter er ikke tilgjengelige"
 
 msgid "Audio test"
 msgstr "Lydtest"
@@ -1274,9 +1266,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(jid)s har blitt invitert til dette rommet"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klikk for å sette din avatar"
@@ -1508,10 +1497,6 @@ msgstr "_Kopier lenke-plassering"
 msgid "Copy to clipboard"
 msgstr "_Kopier lenke-plassering"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Kunne ikke åpne fil"
@@ -1710,10 +1695,6 @@ msgid "Devices"
 msgstr "Tjener"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Sjekk at du er tilkoblet \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Nettsøks-URL-en mangler en \"%s\""
 
@@ -1864,6 +1845,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Rediger"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Rediger"
 
@@ -2069,6 +2055,10 @@ msgid "Export Contacts"
 msgstr "Importer kontakter"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "_Eksporter"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Avslutt"
 
@@ -2212,14 +2202,15 @@ msgstr "Filter"
 msgid "Filters (active)"
 msgstr "Første melding motatt"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Sjekk at du er tilkoblet \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2642,6 +2633,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Du gikk ut av følgende gruppesamtaler:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Innkommende melding:"
 
@@ -2867,9 +2862,6 @@ msgstr "Forlat gruppesamtaler"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3072,6 +3064,10 @@ msgstr "Denne økta VIL bli arkivert på tjeneren"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+versjon: %s"
 
 #, fuzzy
 msgid "Minimize"
@@ -3294,6 +3290,10 @@ msgstr "Ingen konto tilgjengelig"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Inget resultat"
@@ -3301,6 +3301,9 @@ msgstr "Inget resultat"
 #, fuzzy
 msgid "No results found"
 msgstr "Inget resultat"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Node"
@@ -3336,10 +3339,6 @@ msgstr "Ikke tilgjengelig"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Ikke tilgjengelig"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Tilkoblet"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3927,6 +3926,10 @@ msgstr "Re_gistrer"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Oppmerksomhetsmelding mottatt"
+
 msgid "Read _Wikipedia Article"
 msgstr "Les_Wikipedia-artikkel"
 
@@ -4169,6 +4172,13 @@ msgstr ""
 msgid "Required"
 msgstr "Passord påkrevd"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Krever gnome-keyring og python-gnome2-desktop, eller kwalletcli."
@@ -4186,10 +4196,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Krever Gspell"
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Krever libxss-biblioteket."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4532,12 +4538,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Send en melding til kontakten"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Send hold-i-live meldinger"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "Rapporter feil"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5399,6 +5404,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Din server støtter ikke Vcard"
@@ -5596,6 +5604,10 @@ msgstr "_Frigi"
 msgid "Unblock Participant?"
 msgstr "Deltaker"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Sjekk at du er tilkoblet \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Ikke startet"
@@ -5656,10 +5668,6 @@ msgstr "Forespørsel om lydsamtale"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Forespørsel om lydsamtale"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Forespørsel om lydsamtale"
 
 msgid "Unsupported certificate purpose"
@@ -5966,10 +5974,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Du er ikke tilkoblet tjeneren"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5992,7 +5996,7 @@ msgid "You are now {show}{status}"
 msgstr "Du går nå under navnet %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "frakoblet"
 
 msgid "You are offline. Go online to send messages…"
@@ -6887,6 +6891,14 @@ msgstr ""
 #~ msgstr "Tillegg"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Påskrudd"
 
@@ -6955,6 +6967,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Lydenhet for avspilling"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Lydøkter er ikke tilgjengelige"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7374,10 +7390,6 @@ msgstr ""
 #~ msgstr "Bilder"
 
 #, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Påslått"
-
-#, fuzzy
 #~ msgid "Insert Emoji"
 #~ msgstr "Skru på ASCII-smilefjes"
 
@@ -7455,6 +7467,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Mellomtjener"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Tilkoblet"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7599,6 +7615,10 @@ msgstr ""
 #~ msgstr "Krever libxss-biblioteket."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Krever libxss-biblioteket."
+
+#, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
@@ -7653,6 +7673,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Send hold-i-live meldinger"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7847,6 +7871,10 @@ msgstr ""
 #~ msgstr "Uleste hendelser"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Forespørsel om lydsamtale"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Stavekontroll"
 
@@ -7904,6 +7932,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Bekreft lukking av Gajim."
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Du er ikke tilkoblet tjeneren"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Du er ikke tilkoblet tjeneren"

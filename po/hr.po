@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -233,6 +233,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Promijeni _Nadimak..."
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktivno"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -478,14 +482,6 @@ msgstr "Račun \"%s\" je spojen na poslužitelj"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Račun \"%s\" je spojen na poslužitelj"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Račun \"%s\" je spojen na poslužitelj"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Račun \"%s\" je spojen na poslužitelj"
 
 #, fuzzy
@@ -869,10 +865,6 @@ msgstr "Predefinirana Poruka"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Datoteka: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Veza nije dostupna"
 
 msgid "Audio test"
 msgstr ""
@@ -1295,9 +1287,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s je izbačen iz sobe (%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Kliknite za postavljanje avatara"
@@ -1533,10 +1522,6 @@ msgstr "_Kopiraj Lokaciju Linka"
 msgid "Copy to clipboard"
 msgstr "_Kopiraj Lokaciju Linka"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Nemogu učitati sliku"
@@ -1736,10 +1721,6 @@ msgid "Devices"
 msgstr "Poslužitelj"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Molim potvrdite da ste spojeni na \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL-u Web Pretrage nedostaje \"%s\""
 
@@ -1893,6 +1874,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Uredi"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Uredi"
 
@@ -2097,6 +2083,10 @@ msgid "Export Contacts"
 msgstr "Pozovi _Kontakte"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Izvoz"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Završi"
 
@@ -2241,14 +2231,15 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Prva Poruka Primljena"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Molim potvrdite da ste spojeni na \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2660,6 +2651,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Napustili ste sljedeći grupni razgovor:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Dolazna poruka:"
 
@@ -2885,9 +2880,6 @@ msgstr "Novi Grupni Razgovor"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3088,6 +3080,10 @@ msgstr "Sesija NEĆE biti sačuvana"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ Verzija:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3314,6 +3310,10 @@ msgstr "Nema dostupnih računa"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Nema rezultata"
@@ -3321,6 +3321,9 @@ msgstr "Nema rezultata"
 #, fuzzy
 msgid "No results found"
 msgstr "Nema rezultata"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Čvor"
@@ -3356,10 +3359,6 @@ msgstr "Nedostupan"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Nedostupan"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Spojen"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3955,6 +3954,10 @@ msgstr "Re_gistracija"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Prva Poruka Primljena"
+
 msgid "Read _Wikipedia Article"
 msgstr "Pročitajte članak na _Wikipedii"
 
@@ -4199,6 +4202,13 @@ msgstr ""
 msgid "Required"
 msgstr "Potrebna Lozinka"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Potrebni su gnome-keyring i python-gnome2-desktop, ili kwalletcli."
@@ -4213,10 +4223,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Potreban je libgtkspell."
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Zahtijeva biblioteku libxss."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4559,12 +4565,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Uporaba: /%s, šalje poruku kontaktu"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Šalji keep-alive pakete"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Prijavi Grešku"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5422,6 +5427,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Vaš poslužitelj ne podržava Vcard"
@@ -5617,6 +5625,10 @@ msgstr "_Odblokiraj"
 msgid "Unblock Participant?"
 msgstr "Sudionik"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Molim potvrdite da ste spojeni na \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Nije početo"
@@ -5677,10 +5689,6 @@ msgstr "Zahtjev Razmjene Datoteka"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Zahtjev Razmjene Datoteka"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Zahtjev Razmjene Datoteka"
 
 msgid "Unsupported certificate purpose"
@@ -5984,10 +5992,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Niste spojeni na poslužitelj."
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -6009,8 +6013,9 @@ msgstr "Od sada ste poznati kao %s"
 msgid "You are now {show}{status}"
 msgstr "Od sada ste poznati kao %s"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Niste spojeni na poslužitelj."
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6915,6 +6920,14 @@ msgstr ""
 #~ msgstr "Registracija nije uspijela"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Račun \"%s\" je spojen na poslužitelj"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Račun \"%s\" je spojen na poslužitelj"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Aktivno"
 
@@ -6976,6 +6989,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Predefinirana Poruka"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Veza nije dostupna"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7372,10 +7389,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Slike"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktivno"
-
 #~ msgid "Invalid File"
 #~ msgstr "Neispravna Datoteka"
 
@@ -7449,6 +7462,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Spojen"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7583,6 +7600,10 @@ msgstr ""
 #~ msgstr "Zahtijeva biblioteku libxss."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Zahtijeva biblioteku libxss."
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "Poslužitelj:"
 
@@ -7629,6 +7650,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Snimiti Datoteku kao..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Šalji keep-alive pakete"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7808,6 +7833,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "Nepročitani događaji"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Zahtjev Razmjene Datoteka"
 
 #, fuzzy
 #~ msgid "Update Check"

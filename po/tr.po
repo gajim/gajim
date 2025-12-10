@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -226,6 +226,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Takma Ad Ayarla"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktif"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -454,14 +458,6 @@ msgstr "ping:  Bağlanılan sunucuya PING at."
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "ping:  Bağlanılan sunucuya PING at."
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "ping:  Bağlanılan sunucuya PING at."
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "ping:  Bağlanılan sunucuya PING at."
 
 #, fuzzy
@@ -841,10 +837,6 @@ msgstr "Ses giriş aygıtı"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Dosya: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Klasör \"%s\" yazılabilir değil"
 
 msgid "Audio test"
 msgstr "Ses testi"
@@ -1273,9 +1265,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%s grup sohbete katıldı"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Tercihlerinizi ayarlayabileceğiniz pencereyi açar"
@@ -1512,10 +1501,6 @@ msgstr "Yer:"
 msgid "Copy to clipboard"
 msgstr "Yer:"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Resim acılamadı"
@@ -1714,10 +1699,6 @@ msgid "Devices"
 msgstr "_Sunuc:"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr ""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr ""
 
@@ -1865,6 +1846,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "Düz_en"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Düz_en"
 
@@ -2066,6 +2052,10 @@ msgid "Export Contacts"
 msgstr "Kişi Davet _Et"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Dışa Aktar"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Bitir"
 
@@ -2211,13 +2201,14 @@ msgstr "Filtre:"
 msgid "Filters (active)"
 msgstr "Üyelik ileti _kaydet"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
+msgstr ""
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
 msgstr ""
 
 #, fuzzy
@@ -2627,6 +2618,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Sobetten ayrıldınız."
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Kullanıcak takma ad"
 
@@ -2852,9 +2847,6 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -3052,6 +3044,10 @@ msgstr "%s: OID (-o) 0 olamaz\n"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "GTK+ Runtime Sürümü"
 
 #, fuzzy
 msgid "Minimize"
@@ -3277,6 +3273,10 @@ msgstr "Hiç bir hesap bulunmiyor"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "<b>Telefon numara:</b>"
@@ -3284,6 +3284,9 @@ msgstr "<b>Telefon numara:</b>"
 #, fuzzy
 msgid "No results found"
 msgstr "<b>Telefon numara:</b>"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3320,10 +3323,6 @@ msgstr "Mevcut Değil"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Mevcut Değil"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Bağlantılı"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3924,6 +3923,10 @@ msgid "React with %s"
 msgstr ""
 
 #, fuzzy
+msgid "Read Receipts"
+msgstr "Üyelik ileti _kaydet"
+
+#, fuzzy
 msgid "Read _Wikipedia Article"
 msgstr "Makale okunmuş"
 
@@ -4163,6 +4166,13 @@ msgstr ""
 msgid "Required"
 msgstr "Şifre gerekli"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Paket Yöneticisi"
@@ -4177,10 +4187,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr " (yetki gerektirir)"
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4519,12 +4525,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Dosyayı bir kişiye gönderir"
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "_Yaşamda kal paketleri gönder"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Hata Bildir"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5371,6 +5376,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Dalga %s biçimini desteklemiyor..."
@@ -5566,6 +5574,10 @@ msgstr "Engellemeyi _Kaldır"
 msgid "Unblock Participant?"
 msgstr "Katılan"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr ""
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Başlatılmadı"
@@ -5626,10 +5638,6 @@ msgstr "Dosya Gönderme Soru"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Dosya Gönderme Soru"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Dosya Gönderme Soru"
 
 #, fuzzy
@@ -5932,10 +5940,6 @@ msgstr "%s grup sohbete katıldı"
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
-#, fuzzy
-msgid "You are not connected"
-msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5957,8 +5961,9 @@ msgstr "Adınızı %s olarak değiştirdiniz"
 msgid "You are now {show}{status}"
 msgstr "Adınızı %s olarak değiştirdiniz"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6853,6 +6858,14 @@ msgstr ""
 #~ msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Etkin çıkışta"
 
@@ -6915,6 +6928,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Ses çıkış aygıtı"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Klasör \"%s\" yazılabilir değil"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7290,10 +7307,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Resimler"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktif"
-
 #~ msgid "Invalid File"
 #~ msgstr "Geçersiz Dosya"
 
@@ -7356,6 +7369,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Prox_y:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Bağlantılı"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7485,6 +7502,10 @@ msgstr ""
 #~ msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
+
+#, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
@@ -7536,6 +7557,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "_Yaşamda kal paketleri gönder"
 
 #, fuzzy
 #~ msgid "Send the message"
@@ -7698,6 +7723,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "Okunmamış iletler var"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Dosya Gönderme Soru"
 
 #, fuzzy
 #~ msgid "Update Check"

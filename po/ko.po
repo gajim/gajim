@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -221,6 +221,9 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr ""
 
+msgid "(inactive)"
+msgstr ""
+
 #, python-format
 msgid "(reason: %s)"
 msgstr ""
@@ -416,12 +419,6 @@ msgid "Account has to be connected"
 msgstr ""
 
 msgid "Account is being created"
-msgstr ""
-
-msgid "Account is not connected"
-msgstr ""
-
-msgid "Account is not connected."
 msgstr ""
 
 msgid "Account name: "
@@ -738,9 +735,6 @@ msgid "Audio Input Device"
 msgstr ""
 
 msgid "Audio Preview"
-msgstr ""
-
-msgid "Audio preview is not available"
 msgstr ""
 
 msgid "Audio test"
@@ -1104,9 +1098,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 
-msgid "Click to change time display"
-msgstr ""
-
 msgid "Click to view location"
 msgstr ""
 
@@ -1304,10 +1295,6 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 msgid "Could Not Save File"
 msgstr ""
 
@@ -1472,10 +1459,6 @@ msgid "Devices"
 msgstr ""
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr ""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr ""
 
@@ -1605,6 +1588,10 @@ msgstr ""
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
+msgid "Edit…"
+msgstr ""
+
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr ""
 
@@ -1779,6 +1766,9 @@ msgstr ""
 msgid "Export Contacts"
 msgstr ""
 
+msgid "Export Error"
+msgstr ""
+
 msgid "Export Finished"
 msgstr ""
 
@@ -1901,13 +1891,14 @@ msgstr ""
 msgid "Filters (active)"
 msgstr ""
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
+msgstr ""
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
 msgstr ""
 
 msgid "Finished"
@@ -2259,6 +2250,9 @@ msgid ""
 "A moderator will process your request."
 msgstr ""
 
+msgid "In this group chat"
+msgstr ""
+
 msgid "Incoming Call"
 msgstr ""
 
@@ -2450,9 +2444,6 @@ msgstr ""
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2619,6 +2610,10 @@ msgid "Messages are archived on the server"
 msgstr ""
 
 msgid "Messages from this users are blocked"
+msgstr ""
+
+#, python-format
+msgid "Migration to version %s"
 msgstr ""
 
 msgid "Minimize"
@@ -2812,10 +2807,17 @@ msgstr ""
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr ""
 
 msgid "No results found"
+msgstr ""
+
+msgid "No undecided fingerprints"
 msgstr ""
 
 msgid "Node"
@@ -2850,9 +2852,6 @@ msgstr ""
 
 msgctxt "User status"
 msgid "Not Available"
-msgstr ""
-
-msgid "Not Connected"
 msgstr ""
 
 msgid "Not Decided"
@@ -3361,6 +3360,9 @@ msgstr ""
 msgid "React with %s"
 msgstr ""
 
+msgid "Read Receipts"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr ""
 
@@ -3560,6 +3562,13 @@ msgstr ""
 msgid "Required"
 msgstr ""
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
@@ -3570,9 +3579,6 @@ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr ""
 
 msgid "Requires: libspelling"
-msgstr ""
-
-msgid "Requires: libxss"
 msgstr ""
 
 msgid "Reserved Name"
@@ -3858,10 +3864,10 @@ msgstr ""
 msgid "Send Messages with Control+Enter"
 msgstr ""
 
-msgid "Send Read Markers"
+msgid "Send _Report"
 msgstr ""
 
-msgid "Send _Report"
+msgid "Send and receive read receipts"
 msgstr ""
 
 #, python-format
@@ -4576,6 +4582,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -4746,6 +4755,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr ""
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr ""
+
 msgid "Unencrypted"
 msgstr ""
 
@@ -4796,9 +4809,6 @@ msgid "Unmute Chat"
 msgstr ""
 
 msgid "Unpin Chat"
-msgstr ""
-
-msgid "Unselect Chat"
 msgstr ""
 
 msgid "Unsupported certificate purpose"
@@ -5062,9 +5072,6 @@ msgstr ""
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
-msgid "You are not connected"
-msgstr ""
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5086,7 +5093,7 @@ msgstr ""
 msgid "You are now {show}{status}"
 msgstr ""
 
-msgid "You are offline."
+msgid "You are offline"
 msgstr ""
 
 msgid "You are offline. Go online to send messages…"

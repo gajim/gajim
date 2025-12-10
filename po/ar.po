@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2025-10-20 08:48+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -239,6 +239,10 @@ msgstr "علامة '@' غير موجودة في العنوان. أمتأكد م�
 msgid "(changed by %s)"
 msgstr "(غُيِّر بواسطة %s)"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "نشط"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "(السبب: %s)"
@@ -444,12 +448,6 @@ msgstr "ينبغي أن يكون الحساب متصلًا"
 
 msgid "Account is being created"
 msgstr "الحساب يُنشأ"
-
-msgid "Account is not connected"
-msgstr "الحساب ليس متصلًا"
-
-msgid "Account is not connected."
-msgstr "الحساب ليس متصلًا."
 
 msgid "Account name: "
 msgstr "اسم الحساب: "
@@ -775,9 +773,6 @@ msgstr "جهاز إدخال الصوت"
 
 msgid "Audio Preview"
 msgstr "معاينة صوتية"
-
-msgid "Audio preview is not available"
-msgstr "المعاينة الصوتية غير متاحة"
 
 msgid "Audio test"
 msgstr "اختبار الصوت"
@@ -1146,9 +1141,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "انقر على المتراسلين الذين تود دعوتهم إلى مجموعة الدردشة."
 
-msgid "Click to change time display"
-msgstr "انقر لتغيير عرض الوقت"
-
 msgid "Click to view location"
 msgstr "انقر لعرض الموضع"
 
@@ -1352,10 +1344,6 @@ msgstr "انسخ إلى الحافظة"
 msgid "Copy to clipboard"
 msgstr "انسخ إلى الحافظة"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "صحِّح…"
-
 msgid "Could Not Save File"
 msgstr "تعذَّر حفظ الملف"
 
@@ -1520,10 +1508,6 @@ msgid "Devices"
 msgstr "الأجهزة"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "الأجهزة المتصلة ب‍ «%s»"
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "مسار القاموس يفتقد إلى «%s»"
 
@@ -1661,6 +1645,11 @@ msgstr "حرِّر اسم العرض…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "حرِّر رسالتك (Esc للإلغاء)…"
 
+msgid "Edit…"
+msgstr "حرِّر…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "حرِّر…"
 
@@ -1837,6 +1826,10 @@ msgstr "تصدير تأريخ الدردشة"
 msgid "Export Contacts"
 msgstr "صدِّر المتراسلين"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "خطأ في الاستيراد"
+
 msgid "Export Finished"
 msgstr "انتهى التصدير"
 
@@ -1962,14 +1955,15 @@ msgstr "المرشحات"
 msgid "Filters (active)"
 msgstr "المرشحات (نشطة)"
 
-msgid "Fingerprint"
-msgstr "البصمة"
-
 msgid "Fingerprint for this Device"
 msgstr "بصمة هذا الجهاز"
 
 msgid "Fingerprints"
 msgstr "البصمات"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "الأجهزة المتصلة ب‍ «%s»"
 
 msgid "Finished"
 msgstr "انتهى"
@@ -2337,6 +2331,10 @@ msgstr ""
 "عليك طلب الإذن بالتحدث أولًا لتتمكن من كتابة الرسائل في هذه الدردشة.\n"
 "سيعالج أحد المشرفين طلبك."
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "لقد غادرت مجموعة الدردشة هذه"
+
 msgid "Incoming Call"
 msgstr "مكالمة واردة"
 
@@ -2528,9 +2526,6 @@ msgstr "ستغادر مجموعة الدردشة؟"
 msgid "Leave _Permanently"
 msgstr "غادِر _نهائيًا"
 
-msgid "Let others know if you read up to this point"
-msgstr "يعلِم الآخرين بأنك قرأت حتى هذه النقطة"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2702,6 +2697,10 @@ msgstr "تؤرشف الرسائل على الخادوم"
 
 msgid "Messages from this users are blocked"
 msgstr "الرسائل من هذا المستخدم محظورة"
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "إصدار Pango: %s"
 
 msgid "Minimize"
 msgstr "صغِّر"
@@ -2898,11 +2897,18 @@ msgstr "لا معلومات متاحة"
 msgid "No keys pressed"
 msgstr "لم يُنقر أي مفتاح"
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr "لا نتائج"
 
 msgid "No results found"
 msgstr "لم يُعثر على نتائج"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "عقدة"
@@ -2937,9 +2943,6 @@ msgstr "غير متاح"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "غير متاح"
-
-msgid "Not Connected"
-msgstr "غير متصل"
 
 msgid "Not Decided"
 msgstr "لم يتقرر"
@@ -3456,6 +3459,10 @@ msgstr "_سجِّل"
 msgid "React with %s"
 msgstr "تفاعل ب‍ %s"
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "إرسال إيصالات استلام الرسائل"
+
 msgid "Read _Wikipedia Article"
 msgstr "اقرأ مقال _ويكيبيديا"
 
@@ -3662,6 +3669,13 @@ msgstr "يطلب نموذج البحث من الخادوم"
 msgid "Required"
 msgstr "مطلوب"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "يتطلب: gnome-keyring أو kwallet"
 
@@ -3673,9 +3687,6 @@ msgstr "يتطلب: gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "يتطلب: libspelling"
-
-msgid "Requires: libxss"
-msgstr "يتطلب: libxss"
 
 msgid "Reserved Name"
 msgstr "الاسم المحجوز"
@@ -3966,11 +3977,11 @@ msgstr "إرسال إيصالات استلام الرسائل"
 msgid "Send Messages with Control+Enter"
 msgstr "إرسال الرسائل ب‍ Ctrl+Enter"
 
-msgid "Send Read Markers"
-msgstr "إرسال علامات القراءة"
-
 msgid "Send _Report"
 msgstr "أرسل ال_تقرير"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4721,6 +4732,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "ستُحذَف هذه الرسالة من تأريخ دردشاتك المحلي"
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "هذا الخادوم لا يسمح بالتسجيل."
 
@@ -4896,6 +4910,10 @@ msgstr "ارفع الحظر"
 msgid "Unblock Participant?"
 msgstr "سترفع الحظر عن المشارك؟"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "الأجهزة المتصلة ب‍ «%s»"
+
 msgid "Unencrypted"
 msgstr "غير معمَّى"
 
@@ -4947,9 +4965,6 @@ msgstr "ألغِ كتم الدردشة"
 
 msgid "Unpin Chat"
 msgstr "ألغِ تثبيت الدردشة"
-
-msgid "Unselect Chat"
-msgstr "ألغِ تحديد الدردشة"
 
 msgid "Unsupported certificate purpose"
 msgstr "غرض الشهادة غير مدعوم"
@@ -5216,9 +5231,6 @@ msgstr "أنت لست منضمًا حاليًا إلى مجموعة الدردش
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "لا يُسمح لك بتعديل انتساب الإداريين والملاك"
 
-msgid "You are not connected"
-msgstr "أنت غير متصل"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5240,7 +5252,8 @@ msgstr "أنت معروف الآن باسم %s"
 msgid "You are now {show}{status}"
 msgstr "أصبحت حالتك الآن {show}{status}"
 
-msgid "You are offline."
+#, fuzzy
+msgid "You are offline"
 msgstr "أنت غير متصل بالإنترنت."
 
 msgid "You are offline. Go online to send messages…"
@@ -5893,6 +5906,12 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Account Settings…"
 #~ msgstr "إعدادات الحساب…"
 
+#~ msgid "Account is not connected"
+#~ msgstr "الحساب ليس متصلًا"
+
+#~ msgid "Account is not connected."
+#~ msgstr "الحساب ليس متصلًا."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "الإجراء عند النقر بالزر الأيسر على معاينة"
 
@@ -5951,6 +5970,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "جهاز الإخراج الصوتي"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "المعاينة الصوتية غير متاحة"
 
 #~ msgid "Audio/Video"
 #~ msgstr "الصوت/المرئية"
@@ -6033,6 +6055,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Clear message entry"
 #~ msgstr "امح مدخلة الرسالة"
 
+#~ msgid "Click to change time display"
+#~ msgstr "انقر لتغيير عرض الوقت"
+
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 #~ msgstr "انقر لعرض ويكي غاجِم وكيفية تنزيل الملحقات في فلاتباك."
@@ -6114,6 +6139,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Correct the last message"
 #~ msgstr "صحِّح الرسالة الأخيرة"
 
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "صحِّح…"
+
 #~ msgid "Create _Group Chat…"
 #~ msgstr "أنشِئ م_جموعة دردشة…"
 
@@ -6177,6 +6206,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "File transfers"
 #~ msgstr "عمليات نقل الملفات"
 
+#~ msgid "Fingerprint"
+#~ msgstr "البصمة"
+
 #~ msgid "Full Message View"
 #~ msgstr "عرض الرسالة بالكامل"
 
@@ -6207,6 +6239,13 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Left Click Action"
 #~ msgstr "إجراء النقر الأيسر"
 
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "يعلِم الآخرين بأنك قرأت حتى هذه النقطة"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "يعلِم الآخرين بأنك قرأت حتى هذه النقطة"
+
 #~ msgid "Local System Time"
 #~ msgstr "توقيت النظام المحلي"
 
@@ -6224,6 +6263,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Message composition"
 #~ msgstr "إنشاء الرسالة"
+
+#~ msgid "Not Connected"
+#~ msgstr "غير متصل"
 
 #~ msgid "Notification Area Icon"
 #~ msgstr "أيقونة منطقة التنبيهات"
@@ -6255,6 +6297,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Recent history"
 #~ msgstr "التاريخ الحديث"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "يتطلب: libxss"
+
 #~ msgid "Save as…"
 #~ msgstr "احفظ باسم…"
 
@@ -6263,6 +6308,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Send Chatstate"
 #~ msgstr "أرسِل حالة الدردشة"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "إرسال علامات القراءة"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr "أرسل الرسالة عند الضغط على Ctrl+Enter وأنشئ سطرًا جديدًا ب‍ Enter."
@@ -6330,6 +6378,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Tune:"
 #~ msgstr "النغمة:"
 
+#~ msgid "Unselect Chat"
+#~ msgstr "ألغِ تحديد الدردشة"
+
 #~ msgid "Upload could not be completed."
 #~ msgstr "تعذَّر إكمال الرفع."
 
@@ -6352,6 +6403,9 @@ msgstr "…أو أفلِت هنا"
 #, fuzzy
 #~ msgid "You Have Unread Messages"
 #~ msgstr "لا تزال لديك رسائل غير مقروءة"
+
+#~ msgid "You are not connected"
+#~ msgstr "أنت غير متصل"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "حُفظت تفضيلات الأرشفة الخاصة بك بنجاح."

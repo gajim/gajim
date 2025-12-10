@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
-"PO-Revision-Date: 2025-11-02 20:52+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"PO-Revision-Date: 2025-12-05 18:53+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -228,6 +228,9 @@ msgstr "Hiányzik a „@” a címből. Biztos így helyes?"
 msgid "(changed by %s)"
 msgstr "(%s által módosítva)"
 
+msgid "(inactive)"
+msgstr "(inaktív)"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "(ok: %s)"
@@ -435,12 +438,6 @@ msgstr "A fiókot csatlakoztatni kell"
 
 msgid "Account is being created"
 msgstr "A fiók létrehozása folyamatban van"
-
-msgid "Account is not connected"
-msgstr "A fiók nincs kapcsolódva"
-
-msgid "Account is not connected."
-msgstr "A fiók nincs csatlakozva."
 
 msgid "Account name: "
 msgstr "Fióknév: "
@@ -764,9 +761,6 @@ msgstr "Bemeneti eszköz"
 
 msgid "Audio Preview"
 msgstr "Hangbemutató"
-
-msgid "Audio preview is not available"
-msgstr "A hangbemutató nem áll rendelkezésre"
 
 msgid "Audio test"
 msgstr "Hangpróba"
@@ -1141,9 +1135,6 @@ msgstr ""
 "Névjegyeik kiválasztásával egy ebbe a társalgóba szóló meghívó küldhető az "
 "érintetteknek."
 
-msgid "Click to change time display"
-msgstr "A kijelzési mód kattintással váltható"
-
 msgid "Click to view location"
 msgstr "Kattintás a hely megtekintéséhez"
 
@@ -1347,10 +1338,6 @@ msgstr "Másolás a vágólapra"
 msgid "Copy to clipboard"
 msgstr "Másolás a vágólapra"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Helyesbítés…"
-
 msgid "Could Not Save File"
 msgstr "Sikertelen mentés"
 
@@ -1516,10 +1503,6 @@ msgid "Devices"
 msgstr "Eszközök"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "„%s” eszközei"
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "A szótár URL-jében nincs „%s”"
 
@@ -1659,6 +1642,10 @@ msgstr "Üzenetszerkesztés (ESC: mégsem)…"
 
 msgid "Edit…"
 msgstr "Módosítás…"
+
+msgctxt "Message row action"
+msgid "Edit…"
+msgstr "Helyesbítés…"
 
 #, python-format
 msgid ""
@@ -1836,6 +1823,9 @@ msgstr "Üzenetek exportálása"
 msgid "Export Contacts"
 msgstr "Névjegyek exportálása"
 
+msgid "Export Error"
+msgstr "Exportálási hiba"
+
 msgid "Export Finished"
 msgstr "Az exportálás kész"
 
@@ -1960,14 +1950,15 @@ msgstr "Szűrés"
 msgid "Filters (active)"
 msgstr "Szűrés (aktív)"
 
-msgid "Fingerprint"
-msgstr "Ujjlenyomat"
-
 msgid "Fingerprint for this Device"
 msgstr "Ujjlenyomat ehhez az eszközhöz"
 
 msgid "Fingerprints"
 msgstr "Ujjlenyomatok"
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "„%s” eszközeinek ujjlenyomatai"
 
 msgid "Finished"
 msgstr "Befejeződött"
@@ -2339,6 +2330,9 @@ msgstr ""
 "Ebben a társalgóban hozzászólás előtt szót kell kérni.\n"
 "Egy moderátor fogja elbírálni a kérést."
 
+msgid "In this group chat"
+msgstr "Ebben a társalgóban"
+
 msgid "Incoming Call"
 msgstr "Bejövő hívás"
 
@@ -2530,9 +2524,6 @@ msgstr "Távozás a társalgóból"
 msgid "Leave _Permanently"
 msgstr "_Végleges távozás"
 
-msgid "Let others know if you read up to this point"
-msgstr "Értesítés küldése az üzenet elolvasásáról"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2704,6 +2695,10 @@ msgstr "Az üzeneteket a kiszolgáló tárolja"
 
 msgid "Messages from this users are blocked"
 msgstr "A felhasználó üzenetküldése tiltva van"
+
+#, python-format
+msgid "Migration to version %s"
+msgstr "Áttelepítés új verzióra: %s"
 
 msgid "Minimize"
 msgstr "Minimalizálás"
@@ -2901,11 +2896,18 @@ msgstr "Nincs információ"
 msgid "No keys pressed"
 msgstr "Nincs gombnyomás"
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr "Nincs engedély az exportáláshoz ide: %s"
+
 msgid "No results"
 msgstr "Nincs találat"
 
 msgid "No results found"
 msgstr "Nincs találat"
+
+msgid "No undecided fingerprints"
+msgstr "Nincs megerősítetlen ujjlenyomat"
 
 msgid "Node"
 msgstr "Csomópont"
@@ -2940,9 +2942,6 @@ msgstr "Tartósan távol"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Tartósan távol"
-
-msgid "Not Connected"
-msgstr "Nincs kapcsolat"
 
 msgid "Not Decided"
 msgstr "Nem eldöntött"
@@ -3461,6 +3460,9 @@ msgstr "Re_gisztrálás"
 msgid "React with %s"
 msgstr "Visszajelzés így: %s"
 
+msgid "Read Receipts"
+msgstr "Olvasásnyugták"
+
 msgid "Read _Wikipedia Article"
 msgstr "Szócikk a _Wikipédián"
 
@@ -3663,6 +3665,17 @@ msgstr "Keresési űrlap lekérése a kiszolgálóról"
 msgid "Required"
 msgstr "Kötelező"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+"Követelmény:\n"
+"org.freedesktop.ScreenSaver vagy\n"
+"org.gnome.Mutter.IdleMonitor vagy\n"
+"libxss"
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Követelmény: gnome-keyring vagy kwallet"
 
@@ -3674,9 +3687,6 @@ msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "Követelmény: libspelling"
-
-msgid "Requires: libxss"
-msgstr "Követelmény: libxss"
 
 msgid "Reserved Name"
 msgstr "Foglalt név"
@@ -3970,11 +3980,11 @@ msgstr "Üzenetnyugták küldése"
 msgid "Send Messages with Control+Enter"
 msgstr "Küldés a Ctrl+Enter billentyűkombinációval"
 
-msgid "Send Read Markers"
-msgstr "Olvasás visszajelzése"
-
 msgid "Send _Report"
 msgstr "Jelentés _küldése"
+
+msgid "Send and receive read receipts"
+msgstr "Olvasásnyugták küldése és fogadása"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4733,6 +4743,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Az üzenet törölve lesz a helyben tárolt beszélgetési előzményekből"
 
+msgid "This plugin is managed by your operating system"
+msgstr "Ezt a bővítményt az operációs rendszer kezeli"
+
 msgid "This server does not allow signup."
 msgstr "Ez a kiszolgáló nem ad lehetőséget a regisztrációra."
 
@@ -4910,6 +4923,10 @@ msgstr "Tiltás feloldása"
 msgid "Unblock Participant?"
 msgstr "Résztvevő tiltásának feloldása"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "„%s” eszközeinek megerősítetlen ujjlenyomatai"
+
 msgid "Unencrypted"
 msgstr "Nem titkosított"
 
@@ -4961,9 +4978,6 @@ msgstr "Némítás vége"
 
 msgid "Unpin Chat"
 msgstr "Kiemelés megszüntetése"
-
-msgid "Unselect Chat"
-msgstr "A beszélgetés kijelölésének megszüntetése"
 
 msgid "Unsupported certificate purpose"
 msgstr "A tanúsítvány célja nem támogatott"
@@ -5233,9 +5247,6 @@ msgstr ""
 "Nincs engedély az adminisztrátorok és tulajdonosok tagsági szintjének "
 "módosításához"
 
-msgid "You are not connected"
-msgstr "Nincs kapcsolat a kiszolgálóval"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5259,8 +5270,8 @@ msgstr "A becenevem mostantól: %s"
 msgid "You are now {show}{status}"
 msgstr "A jelenléti állapotom mostantól: {show}{status}"
 
-msgid "You are offline."
-msgstr "Nincs élő kapcsolat."
+msgid "You are offline"
+msgstr "Nincs élő kapcsolat"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "Nincs kapcsolat. Az üzenetküldéshez be kell jelentkezni…"
@@ -6135,6 +6146,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Account Settings…"
 #~ msgstr "Fiókbeállítások…"
 
+#~ msgid "Account is not connected"
+#~ msgstr "A fiók nincs kapcsolódva"
+
+#~ msgid "Account is not connected."
+#~ msgstr "A fiók nincs csatlakozva."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Az előnézet bal egérgombos művelete"
 
@@ -6202,6 +6219,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Kimeneti eszköz"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "A hangbemutató nem áll rendelkezésre"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Hang/Videó"
@@ -6291,6 +6311,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Az üzenetbeviteli mező törlése"
+
+#~ msgid "Click to change time display"
+#~ msgstr "A kijelzési mód kattintással váltható"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6382,6 +6405,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Correct the last message"
 #~ msgstr "A legutóbbi üzenet helyesbítése"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Helyesbítés…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Társal_gó létrehozása…"
@@ -6570,6 +6597,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Filter Chats…"
 #~ msgstr "A beszélgetések szűrése…"
 
+#~ msgid "Fingerprint"
+#~ msgstr "Ujjlenyomat"
+
 #~ msgid ""
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr ""
@@ -6660,9 +6690,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Images"
 #~ msgstr "Képek"
 
-#~ msgid "Inactive"
-#~ msgstr "Inaktív"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "A betűméret növelése"
 
@@ -6711,6 +6738,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Bal egérgomb művelete"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Értesítés küldése az üzenet elolvasásáról"
+
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Az ismerős értesítése az üzenet elolvasásáról"
 
 #~ msgid "Local System Time"
 #~ msgstr "Helyi rendszeridő"
@@ -6774,6 +6807,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "No proxy used"
 #~ msgstr "Nincs proxy"
+
+#~ msgid "Not Connected"
+#~ msgstr "Nincs kapcsolat"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -6921,6 +6957,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Követelmény: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Követelmény: libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -6981,6 +7020,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Közvetlen fájlküldés"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Olvasás visszajelzése"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
@@ -7184,6 +7226,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Unread Messages"
 #~ msgstr "Olvasatlan üzenetek"
 
+#~ msgid "Unselect Chat"
+#~ msgstr "A beszélgetés kijelölésének megszüntetése"
+
 #~ msgid "Unverified"
 #~ msgstr "Nem ellenőrzött"
 
@@ -7252,6 +7297,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Kilépés a programból"
+
+#~ msgid "You are not connected"
+#~ msgstr "Nincs kapcsolat a kiszolgálóval"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Nincs kapcsolat a kiszolgálóval"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -228,6 +228,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Смяна на псе_вдоним…"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Активен"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -473,14 +477,6 @@ msgstr "Акаунт „%s“ е свързан към сървъра"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Акаунт „%s“ е свързан към сървъра"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Акаунт „%s“ е свързан към сървъра"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Акаунт „%s“ е свързан към сървъра"
 
 #, fuzzy
@@ -862,10 +858,6 @@ msgstr "Стандартно съобщение"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Файл: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "В момента няма връзка"
 
 msgid "Audio test"
 msgstr ""
@@ -1287,9 +1279,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Натиснете, за да настроите аватара си"
@@ -1525,10 +1514,6 @@ msgstr "_Копиране на адреса на връзката"
 msgid "Copy to clipboard"
 msgstr "_Копиране на адреса на връзката"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Неуспех при зареждането на изображението"
@@ -1728,10 +1713,6 @@ msgid "Devices"
 msgstr "Сървър"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Уверете се, че сте свързани към „%s“."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Липсва „%s“ в адреса за търсене"
 
@@ -1885,6 +1866,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Редактиране"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Редактиране"
 
@@ -2093,6 +2079,10 @@ msgid "Export Contacts"
 msgstr "Покана на _контакти"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Изнасяне"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Приключване"
 
@@ -2237,14 +2227,15 @@ msgstr "Филтър:"
 msgid "Filters (active)"
 msgstr "Първо получено съобщение"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Уверете се, че сте свързани към „%s“."
 
 #, fuzzy
 msgid "Finished"
@@ -2663,6 +2654,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Напуснахте следните стаи:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Невалиден псевдоним"
 
@@ -2888,9 +2883,6 @@ msgstr "Излизане от стаите"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3091,6 +3083,10 @@ msgstr "НЯМА да се запазва дневник за сесията"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Версия на GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3318,6 +3314,10 @@ msgstr "Няма наличен акаунт"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "Няма резултати"
@@ -3325,6 +3325,9 @@ msgstr "Няма резултати"
 #, fuzzy
 msgid "No results found"
 msgstr "Няма резултати"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Възел"
@@ -3360,10 +3363,6 @@ msgstr "Не съм на разположение"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Не съм на разположение"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Свързан"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3958,6 +3957,10 @@ msgstr "_Регистриране"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Първо получено съобщение"
+
 msgid "Read _Wikipedia Article"
 msgstr "Четене на статия от _Уикипедия"
 
@@ -4202,6 +4205,13 @@ msgstr ""
 msgid "Required"
 msgstr "Необходима е парола"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Изисква gnome-keyring и python-gnome2-desktop."
@@ -4216,10 +4226,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Изисква python-sexy."
-
-#, fuzzy
-msgid "Requires: libxss"
-msgstr "Изисква dnsutils."
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4562,12 +4568,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Употреба: /%s, изпраща съобщение до контакта."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Изпращане на пакети за поддържане на връзката"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Докладване на грешка"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5427,6 +5432,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Сървърът ви не поддържа визитки"
@@ -5623,6 +5631,10 @@ msgstr "_Деблокиране"
 msgid "Unblock Participant?"
 msgstr "Участник"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Уверете се, че сте свързани към „%s“."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Не е започнал"
@@ -5683,10 +5695,6 @@ msgstr "Запитване за файлов трансфер"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Запитване за файлов трансфер"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Запитване за файлов трансфер"
 
 msgid "Unsupported certificate purpose"
@@ -5992,10 +6000,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Не сте свързани към сървъра."
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -6017,8 +6021,9 @@ msgstr "Вече сте познати като %s"
 msgid "You are now {show}{status}"
 msgstr "Вече сте познати като %s"
 
-msgid "You are offline."
-msgstr ""
+#, fuzzy
+msgid "You are offline"
+msgstr "Не сте свързани към сървъра."
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
@@ -6922,6 +6927,14 @@ msgstr ""
 #~ msgstr "Неуспех при свързването"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Акаунт „%s“ е свързан към сървъра"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Акаунт „%s“ е свързан към сървъра"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Активирана"
 
@@ -6984,6 +6997,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Стандартно съобщение"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "В момента няма връзка"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7380,10 +7397,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Изображения"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Активен"
-
 #~ msgid "Invalid File"
 #~ msgstr "Невалиден файл"
 
@@ -7457,6 +7470,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Сървър-посредник:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Свързан"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7592,6 +7609,10 @@ msgstr ""
 #~ msgstr "Изисква dnsutils."
 
 #, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Изисква dnsutils."
+
+#, fuzzy
 #~ msgid "STUN Server"
 #~ msgstr "Сървър:"
 
@@ -7638,6 +7659,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Запазване на файла като…"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Изпращане на пакети за поддържане на връзката"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7816,6 +7841,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unread Messages"
 #~ msgstr "Непрочетени събития"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Запитване за файлов трансфер"
 
 #, fuzzy
 #~ msgid "Update Check"

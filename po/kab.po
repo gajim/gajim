@@ -1,91 +1,97 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim package.
-# OIS <mistresssilvara@hotmail.com>, 2024.
+# Agurzil n Ǧerǧer <massiin@proton.me>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-05 13:28+0000\n"
-"PO-Revision-Date: 2024-08-20 16:17+0000\n"
-"Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
-"Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
-"ie/>\n"
-"Language: ie\n"
+"PO-Revision-Date: 2025-12-10 19:51+0000\n"
+"Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
+"Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
+">\n"
+"Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
-msgstr ""
+msgstr " (Tiɣri n uvidyu)"
 
 msgid " (Voice Call)"
-msgstr ""
+msgstr " (Tiɣri s taɣect)"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr ""
+msgstr "%(contact)s Yugi tinnubga yinek-yinem ɣer %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
-msgstr ""
+msgstr "%(contact)s Inced-ik-em-id ɣer %(chat)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "Contacte"
-msgstr[1] "Contacte"
+msgstr[0] "%(count)s Imttekki"
+msgstr[1] "%(count)s imttekkiyen"
 
 #, python-format
 msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
+"%(count)s n iznan seg %(participant)s ad yettwasenqed .\n"
+"Acuɣer i tebɣiḍ ad senqedeḍ iznan-a?"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s n wussan, %(hours)s n yisragen"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr ""
+msgstr "%(minutes)s n tesdatin %(seconds)s n tsinin"
 
 #, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr ""
+msgstr "%(name)s%(jid)s i sumer-iyi-d ad k-rnuɣ ɣer wumuɣ-inu n unermis."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
 msgstr ""
+"%(name)s%(jid)s yebɣa/tebɣa timerniwt n kra n unermis ɣer wumuɣ-ik-im n "
+"unermis."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
 msgstr ""
+"%(name)s%(jid)s yebɣa/tebɣa tukksa kra n unermis seg wumuɣ-ik-im n unermis."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
 msgstr ""
+"%(name)s%(jid)s yebɣa/tebɣa abeddel kra n unermis deg wumuɣ-ik-im n unermis."
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr ""
+msgstr "%(name)s isemmet asiweḍ-nni %(reason)s"
 
 #, python-format
 msgid "%(nick)s has been banned by %(actor)s"
-msgstr ""
+msgstr "%(nick)s Yettwagdel sɣur %(actor)s"
 
 #, python-format
 msgid "%(nick)s has been kicked by %(actor)s"
-msgstr ""
+msgstr "%(nick)s yettwet sɣur %(actor)s"
 
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
-msgstr ""
+msgstr "%(nick)s tura deg %(affiliation)s sɣur adiwenni n ugraw-agi"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -94,93 +100,93 @@ msgstr "%(nickname)s:"
 #, python-format
 msgid "%(number)s min ago"
 msgid_plural "%(number)s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s n tesdat"
+msgstr[1] "%(number)s n tesdatin"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "%(owner_or_admin_or_member)s n udiwenni n ugraw-agi"
 
 #, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr ""
+msgstr "%(progress)s%(time)s i d-yeqqimen"
 
 #, python-format
 msgid "%(received)s of %(max)s"
-msgstr ""
+msgstr "%(received)s seg %(max)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
+msgstr "Awgelhen %(type)s yermed %(authenticated)s."
 
 #, python-format
 msgid "%(user)s is now %(role)s of this group chat"
-msgstr ""
+msgstr "%(user)s tura d %(role)s n ugraw n udiwenni"
 
 #, python-format
 msgid "%(user)s now has the following hats: %(hats)s"
-msgstr ""
+msgstr "%(user)s Tura ɣur-s irazalen-a: %(hats)s"
 
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (Kečč·kem)"
 
 #, python-format
 msgid "%s and %s are typing…"
-msgstr ""
+msgstr "%s d %s ad ttarun…"
 
 #, python-format
 msgid "%s can be joined by invite only."
-msgstr ""
+msgstr "%s yezmer ad yekcem s tinnubga kan."
 
 #, python-format
 msgid "%s has been banned"
-msgstr ""
+msgstr "%s yettwagdel"
 
 #, python-format
 msgid "%s has been invited to this group chat"
-msgstr ""
+msgstr "tinnubga i %s ɣer ugraw-a n udiwenni"
 
 #, python-format
 msgid "%s has been kicked"
-msgstr ""
+msgstr "%s yettussuffeɣ"
 
 #, python-format
 msgid "%s has been removed from this group chat"
-msgstr ""
+msgstr "Tukksa n %s seg ugraw-a n udiwenni"
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
+msgstr "anekcum n %s"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
-msgstr ""
+msgstr "%s d afaylu maca ilaq ad yili d akaram"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr ""
+msgstr "nufa-d yakken %s deg tebdart n unermis"
 
 #, python-format
 msgid "%s is calling"
-msgstr ""
+msgstr "Asiwel n %s"
 
 #, python-format
 msgid "%s is not a valid loglevel"
-msgstr ""
+msgstr "%s mačči d aswir n uɣmis ameɣtu"
 
 #, python-format
 msgid "%s is typing…"
-msgstr ""
+msgstr "%s ittaru…"
 
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s n %s"
 
 #, python-format
 msgid "%s participants are typing…"
-msgstr ""
+msgstr "%s n imttekkiyen la yettarun…"
 
 #, python-format
 msgid "%s s"
@@ -188,98 +194,100 @@ msgstr ""
 
 #, python-format
 msgid "%s stopped sharing their status"
-msgstr ""
+msgstr "%s yeḥbes beṭṭu n waddad-is"
 
 #, python-format
 msgid "%s stopped the transfer"
-msgstr ""
+msgstr "%s yeḥbes asiweḍ"
 
 #, python-format
 msgid "%s wants to add you."
-msgstr ""
+msgstr "%s yebɣa ad k.kem-id-yernu."
 
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
-msgstr "%sO"
+msgstr ""
 
 #, python-format
 msgctxt "positive latitude"
 msgid "%sN"
-msgstr "%sN"
+msgstr ""
 
 #, python-format
 msgctxt "negative latitude"
 msgid "%sS"
-msgstr "%sS"
+msgstr ""
 
 #, python-format
 msgctxt "negative longitude"
 msgid "%sW"
-msgstr "%sW"
+msgstr ""
 
 msgid "'@' is missing in address. Are you sure this is correct?"
-msgstr ""
+msgstr "'@' ulac-it deg tansa. Tetḥeqqeḍ belli iṣeḥḥa waya?"
 
 #, python-format
 msgid "(changed by %s)"
-msgstr ""
+msgstr "(yettusnifel s %s)"
 
 #, fuzzy
 msgid "(inactive)"
-msgstr "Activ"
+msgstr "Urmid"
 
 #, python-format
 msgid "(reason: %s)"
-msgstr ""
+msgstr "(ssebba: %s)"
 
 msgid "(reason: affiliation changed)"
 msgstr ""
 
 msgid "(reason: group chat configuration changed to members-only)"
-msgstr ""
+msgstr "(ssebba: tawila n ugraw n udiwenni usrid tbeddel i yemttikeyen kan)"
 
 msgid "(reason: system shutdown)"
-msgstr ""
+msgstr "(ssebba: yensa unagraw)"
 
 msgid "1 Day"
-msgstr ""
+msgstr "1 Wass"
 
 msgid "1 Month"
-msgstr ""
+msgstr "1 wayyur"
 
 msgid "1 Week"
-msgstr ""
+msgstr "1 imalas"
 
 msgid "1 Year"
-msgstr ""
+msgstr "1 n useggas"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1 usrag"
 
 msgid "2 Days"
-msgstr ""
+msgstr "2 n wussan"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2 n isragen"
 
 msgid "3 Months"
-msgstr ""
+msgstr "3 n wayyuren"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 n tesdatin"
 
 msgid "6 Months"
-msgstr ""
+msgstr "6 n wayyuren"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 yisragen"
 
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
 "from <i>%(source)s</i>"
 msgstr ""
+"<b>\"%(title)s\"</b>s<i>%(artist)s</i>\n"
+"seg<i>%(source)s</i>"
 
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
@@ -293,37 +301,29 @@ msgstr "<b>0</b>"
 msgid "<b>1</b>"
 msgstr "<b>1</b>"
 
-#, fuzzy
 msgid "<b>2</b> abc"
-msgstr "<b>#</b>"
+msgstr "<b>2</b> abc"
 
-#, fuzzy
 msgid "<b>3</b> def"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>4</b> ghi"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>5</b> jkl"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>6</b> mno"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>7</b> pqrs"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>8</b> tuv"
-msgstr "<b>#</b>"
+msgstr ""
 
-#, fuzzy
 msgid "<b>9</b> wxyz"
-msgstr "<b>#</b>"
+msgstr ""
 
 msgid ""
 "<b>XMPP Address</b>\n"
@@ -335,19 +335,19 @@ msgid ""
 msgstr ""
 
 msgid "<error>"
-msgstr "<errore>"
+msgstr "<tuccḍa>"
 
 msgid "@APP_NAME@"
 msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
-msgstr ""
+msgstr "Agraw Adiwenni yesra ma drus yiwen n Bab"
 
 msgid "A feature comparison of various providers"
-msgstr ""
+msgstr "Aserwes n tmahilin yisaǧǧawen yemgaraden"
 
 msgid "A fully-featured XMPP chat client"
-msgstr ""
+msgstr "Amsaɣ ummid n udiwenni XMPP"
 
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
@@ -355,195 +355,187 @@ msgid ""
 msgstr ""
 
 msgid "A new group chat has been created"
-msgstr ""
+msgstr "Agraw amaynut n udiwenni yettwarna"
 
 msgid "A restart may be required for some settings to take effect"
-msgstr ""
+msgstr "Yezmer ad yales tanekra i kra n yiɣewwaren akken ad ddun"
 
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "Aɣewwaṛ ur icudd ara akked tbaḍnit yettwabeddel"
 
 #, python-format
 msgid "ALSA: %s"
 msgstr ""
 
 msgid "API Preferences. Possible values: \"http\", \"iq\""
-msgstr ""
+msgstr "Ismenyifen n API. Azalen i izemren ad ilin: \"http\", \"iq\""
 
 msgctxt "User status"
 msgid "A_way"
 msgstr ""
 
 msgid "Abort"
-msgstr "Interrupter"
+msgstr "Anef"
 
 msgid "Abuse"
-msgstr ""
+msgstr "Yir aseqdec"
 
 msgid "Accept"
-msgstr "Acceptar"
+msgstr "Qbel"
 
 msgid "Accept all Contact Requests"
-msgstr ""
+msgstr "Qbel akk issuter n unermis"
 
 msgid "Account"
-msgstr "Conto"
+msgstr "Amiḍan"
 
 #, python-format
 msgid ""
 "Account %(name)s is still connected\n"
 "All chat and group chat windows will be closed."
 msgstr ""
+"Amiḍan %(name)s mazal yeqqen\n"
+"Akk isfuyla n udiwenni d igrawen n udiwenni ad ttwamedlen."
 
 msgid "Account Added"
-msgstr ""
+msgstr "Amiḍan yettwarna"
 
-#, fuzzy
 msgid "Account Address"
-msgstr "Contos"
+msgstr "Tansa n umiḍan"
 
-#, fuzzy
 msgid "Account Label"
-msgstr "Conto"
+msgstr "Tabzimt n umiḍan"
 
-#, fuzzy
 msgid "Account Name..."
-msgstr "Conto"
+msgstr "Isem n umiḍan…"
 
 msgid "Account Removal Failed"
-msgstr ""
+msgstr "Tukksa n umiḍan ur teddi ara"
 
 msgid "Account Removed"
-msgstr ""
+msgstr "Yettwakkes umiḍan"
 
 msgid "Account Wizard"
-msgstr ""
+msgstr "Amarag n umiḍan"
 
-#, fuzzy
 msgid "Account address: "
-msgstr "Contos"
+msgstr "Tansa n umiḍan: "
 
 msgid "Account disabled"
-msgstr ""
+msgstr "amiḍan yensa"
 
 msgid "Account exists already"
-msgstr ""
+msgstr "Amiḍan yella yakan"
 
 msgid "Account has been added successfully"
-msgstr ""
+msgstr "Amiḍan yettwarna akken iwata"
 
 msgid "Account has to be connected"
-msgstr ""
+msgstr "Amiḍan ilaq ad yeqqen"
 
 msgid "Account is being created"
-msgstr ""
+msgstr "Amiḍan yenulfa-d"
 
-#, fuzzy
 msgid "Account name: "
-msgstr "Conto"
+msgstr "Isem n umiḍan : "
 
 #, python-format
 msgid "Account: %s"
-msgstr ""
+msgstr "Amiḍan: %s"
 
 msgid "Accounts"
-msgstr "Contos"
+msgstr "Imiḍanen"
 
 msgid "Action on Close"
-msgstr ""
+msgstr "Tigawt ɣef Mdel"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
+msgstr "Tigawt mi ara tmedleḍ asfaylu n Gajim"
 
 #, python-format
 msgid "Actions for \"%s\""
-msgstr ""
+msgstr "Tigawin i \"%s\""
 
 msgid "Activate"
-msgstr "Activar"
+msgstr "Rmed"
 
 msgid "Activated"
-msgstr "Activat"
+msgstr "Yermed"
 
 msgid "Active"
-msgstr "Activ"
+msgstr "Urmid"
 
-#, fuzzy
 msgid "Activity Feed"
-msgstr "Activat"
+msgstr "Asuddem n urmud"
 
 msgid "Add"
-msgstr "Adjunter"
+msgstr "Rnu"
 
 msgid "Add Account"
-msgstr ""
+msgstr "Rnu Amiḍan"
 
-#, fuzzy
 msgid "Add Account…"
-msgstr "Gruppes"
+msgstr "Rnu Amiḍan…"
 
 msgid "Add Contact"
-msgstr ""
+msgstr "Rnu anermis"
 
-#, fuzzy
 msgid "Add Contact to New Group?"
-msgstr "Gruppes"
+msgstr "Rnu anermis ɣer ugraw amaynut?"
 
 msgid "Add Contact…"
-msgstr ""
+msgstr "Rnu anermis…"
 
 msgid "Add Entry"
-msgstr ""
+msgstr "Rnu anekcum"
 
 msgid "Add Files…"
-msgstr ""
+msgstr "Rnu ifuyla…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Gruppes"
+msgstr "Rnu agraw…"
 
 msgid "Add Proxy"
-msgstr ""
+msgstr "Rnu apṛuksi"
 
 msgid "Add Reaction…"
-msgstr ""
+msgstr "Rnu tasedmirt…"
 
 msgid "Add Setting"
-msgstr ""
+msgstr "Rnu asbadu"
 
 msgid "Add Workspace"
-msgstr ""
+msgstr "Rnu tallunt n umahil"
 
 msgid "Add a checkmark to received messages"
-msgstr ""
+msgstr "Rnu tacreḍt n usenqed akken ad d-remseḍ iznan"
 
 msgid "Add a label to distinguish accounts in Gajim"
-msgstr ""
+msgstr "Rnu tabzimt akken ad tferzeḍ imiḍanen di Gajim"
 
 msgid "Add a name and color for your account"
-msgstr ""
+msgstr "Rnu isem d yini i umiḍan-ik•im"
 
 msgid "Add a setting you would like to change"
-msgstr ""
+msgstr "Rnu iɣewwaren i tebɣiḍ ad tbeddeleḍ"
 
 msgid "Add new Theme"
-msgstr ""
+msgstr "Rnu asentel amaynut"
 
 msgid "Add some details…"
-msgstr ""
+msgstr "Rnu kra n telqayt…"
 
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr ""
+msgstr "Rnu aselkin-agi ɣer tebdart n iselkan yettwamanen"
 
-#, fuzzy
 msgid "Add to Group"
-msgstr "Gruppes"
+msgstr "Rnu Agraw"
 
 #, python-format
 msgid "Added %(count)s contact"
 msgid_plural "Added %(count)s contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yettwarna %(count)s unermis"
+msgstr[1] "Yettwarna %(count)s inermisen"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr ""
@@ -552,42 +544,40 @@ msgid "Additionally, you will lose your owner affiliation."
 msgstr ""
 
 msgid "Address"
-msgstr "Adresse"
+msgstr "Tansa"
 
 msgctxt "Profile"
 msgid "Address"
-msgstr "Adresse"
+msgstr "Tansa"
 
 msgid "Address does not belong to a group chat server"
 msgstr ""
 
 msgid "Admin"
-msgstr "Administrator"
+msgstr ""
 
 msgid "Administration"
-msgstr "Administration"
+msgstr ""
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrator"
-msgstr "Administrator"
+msgstr ""
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrators"
-msgstr "Administratores"
+msgstr ""
 
 msgid "Advanced"
-msgstr "Avansat"
+msgstr ""
 
-#, fuzzy
 msgid "Advanced Configuration Editor"
-msgstr "Configuration"
+msgstr ""
 
 msgid "Advanced Configuration Editor (ACE)"
 msgstr ""
 
-#, fuzzy
 msgid "Advanced Settings"
-msgstr "Avansat"
+msgstr ""
 
 msgid "Advanced settings"
 msgstr ""
@@ -600,13 +590,11 @@ msgstr ""
 msgid "Adw Version: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Affiliation"
-msgstr "Administration"
+msgstr ""
 
-#, fuzzy
 msgid "Affiliations"
-msgstr "Administration"
+msgstr ""
 
 #, python-format
 msgid "Affiliations of %(nick)s to this group chat have been removed"
@@ -616,7 +604,7 @@ msgid "After"
 msgstr ""
 
 msgid "All"
-msgstr "Omni"
+msgstr ""
 
 msgid "All Accounts"
 msgstr ""
@@ -624,9 +612,8 @@ msgstr ""
 msgid "All Chat States"
 msgstr ""
 
-#, fuzzy
 msgid "All Chats"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "All files"
 msgstr ""
@@ -650,7 +637,7 @@ msgid "Alternate venue (optional)..."
 msgstr ""
 
 msgid "Always"
-msgstr "Sempre"
+msgstr ""
 
 msgid "An Error Occurred"
 msgstr ""
@@ -702,88 +689,88 @@ msgid "Anyone can join this group chat"
 msgstr ""
 
 msgid "Application verification failure"
-msgstr ""
+msgstr "Asenqed n usnas ur yeddi ara"
 
 msgid "Apply"
-msgstr "Applicar"
+msgstr "Snes"
 
 msgid "Approve"
-msgstr ""
+msgstr "Qbel"
 
 msgid "Archive"
-msgstr ""
+msgstr "Aɣbaṛ"
 
 msgid "Archive Malformed"
-msgstr ""
+msgstr "Amsal n uɣbaṛ ur yedda akken iwata"
 
 msgid "Archive corrupted"
-msgstr ""
+msgstr "Aɣbar yerreẓ"
 
 msgid "Archive empty"
-msgstr ""
+msgstr "Aɣbar d ilem"
 
 msgid "Archive is malformed"
-msgstr ""
+msgstr "Aɣbar ur yemsil ara akken iwata"
 
 msgid "Archiving"
-msgstr ""
+msgstr "Aḥraz"
 
 msgctxt "Group chat feature"
 msgid "Archiving"
-msgstr ""
+msgstr "Aḥraz"
 
 #, python-format
 msgid "Archiving – %(account)s"
-msgstr ""
+msgstr "Aḥraz - %(account)s"
 
 msgid "Ask For Status Message on…"
-msgstr ""
+msgstr "Suter izen n waddad ɣef…"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "Suter send ad tmedleḍ iccer/asfaylu n ugraw udiwenni ."
 
 msgid "Ask before connecting unencrypted"
-msgstr ""
+msgstr "Suter send tuqqna war awgelhen"
 
 msgid "Ask before quitting when Gajim’s window is closed"
-msgstr ""
+msgstr "Suter send ad teffɣeḍ ticki yemdel usfaylu n Gajim"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
+"Mudd igrawen i unermis-a. Tzemreḍ ad d-tessazedgeḍ idiwenniyen s ugraw."
 
 msgid "Attention Message Received"
-msgstr ""
+msgstr "Ɣur-k·m, Izen yettwarmes"
 
 msgid "Audio"
-msgstr "Audio"
+msgstr "Imesli"
 
 msgid "Audio File"
-msgstr ""
+msgstr "Afaylu ameslaw"
 
 msgid "Audio Input Device"
-msgstr ""
+msgstr "Ibenk n unekcum n umeslaw"
 
-#, fuzzy
 msgid "Audio Preview"
-msgstr "Cargante…"
+msgstr "Taskant n umeslaw"
 
 msgid "Audio test"
-msgstr ""
+msgstr "Asekyed n umeslaw"
 
 msgid "Authentication aborted"
-msgstr ""
+msgstr "Asesteb yettwasefsex"
 
 msgid "Authentication currently not possible"
-msgstr ""
+msgstr "Asesteb ur yezmir ara ad yili tura"
 
 msgid "Authentication failed"
-msgstr ""
+msgstr "Asesteb yecceḍ"
 
 msgid "Authentication mechanism not supported"
-msgstr ""
+msgstr "Tasemseddut n usesteb ur tettwasefrak ara"
 
 msgid "Authentication mechanism too weak"
-msgstr ""
+msgstr "Tasemseddut n usesteb ur teǧhid ara aṭas"
 
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
@@ -792,7 +779,7 @@ msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
 msgid "Authors"
-msgstr "Autores"
+msgstr ""
 
 msgid "Auto Away"
 msgstr ""
@@ -819,15 +806,14 @@ msgid "Automatically accept all contact requests"
 msgstr ""
 
 msgid "Available"
-msgstr "Disponibil"
+msgstr ""
 
 msgctxt "User status"
 msgid "Available"
-msgstr "Disponibil"
+msgstr ""
 
-#, fuzzy
 msgid "Available Features"
-msgstr "Disponibil"
+msgstr ""
 
 msgid "Avatar file size too big"
 msgstr ""
@@ -837,7 +823,7 @@ msgid "Away"
 msgstr ""
 
 msgid "Back"
-msgstr "Retro"
+msgstr ""
 
 msgid "Back in some minutes."
 msgstr ""
@@ -856,13 +842,13 @@ msgid "Ban…"
 msgstr ""
 
 msgid "Before"
-msgstr "Ante"
+msgstr ""
 
 msgid "Behaviour of Application Window"
 msgstr ""
 
 msgid "Birthday"
-msgstr "Anniversarie"
+msgstr ""
 
 msgid "Blind Trust"
 msgstr ""
@@ -871,32 +857,29 @@ msgid "Blindly trust new devices until you verify them"
 msgstr ""
 
 msgid "Block"
-msgstr "Blocar"
+msgstr "Asewḥel"
 
-#, fuzzy
 msgid "Block Contact?"
-msgstr "Contacte"
+msgstr "Sewḥel anermis?"
 
 msgid "Block Contact…"
-msgstr ""
+msgstr "Sewḥel anermis…"
 
-#, fuzzy
 msgid "Block Participant?"
-msgstr "Contacte"
+msgstr "Sewḥel imttekki?"
 
-#, fuzzy
 msgid "Blocked Contacts"
-msgstr "Contacte"
+msgstr "Inermisen iweḥlen"
 
 #, python-format
 msgid "Blocked Contacts – %(account)s"
-msgstr ""
+msgstr "Inermisen iweḥlen – %(account)s"
 
 msgid "Blocked Participants"
-msgstr ""
+msgstr "Imttekkiyen iweḥlen"
 
 msgid "Block…"
-msgstr "Blocar…"
+msgstr "Sewḥel…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -904,76 +887,75 @@ msgstr ""
 
 msgctxt "Contact subscription"
 msgid "Both"
-msgstr "Ambi"
+msgstr "I sin"
 
 msgid "Browse"
-msgstr "Trovar"
+msgstr "Snirem"
 
 msgid "Browse history by date"
-msgstr ""
+msgstr "Snirem amazray s wazemz"
 
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
-msgstr ""
+msgstr "Asnirem %(address)s s useqdec n umiḍan %(account)s"
 
 msgctxt "User status"
 msgid "Busy"
-msgstr "Ocupat"
+msgstr "Deg ccɣel"
 
 #, python-format
 msgid "By closing this chat, you will leave \"%s\"."
-msgstr ""
+msgstr "S umdal n udiwenni-agi, ad teǧǧeḍ \"%s\"."
 
 msgid "CRL has expired"
-msgstr ""
+msgstr "CRL yemmut"
 
 msgid "CRL is not yet valid"
-msgstr ""
+msgstr "CRL mačči d ameɣtu"
 
 msgid "CRL signature failure"
-msgstr ""
+msgstr "Azmul n CRL yecceḍ"
 
 msgid "C_opy"
-msgstr "C_opiar"
+msgstr ""
 
 msgid "Call"
-msgstr ""
+msgstr "Asiwel"
 
 msgid "Call Incoming"
-msgstr ""
+msgstr "Asiwel i d-ikecmen"
 
 msgid "Call Outgoing"
-msgstr ""
+msgstr "Asiwel uffiɣ"
 
 msgid "Call ended"
-msgstr ""
+msgstr "Ifuk usiwel"
 
 #, python-format
 msgid "Call with %s"
-msgstr ""
+msgstr "Asiwel d %s"
 
 msgid "Calling (Video)…"
-msgstr ""
+msgstr "Asiwel (Tavidyut)…"
 
 msgid "Calling…"
-msgstr ""
+msgstr "Asiwel…"
 
 msgid "Cancel"
-msgstr "Anullar"
+msgstr "Sefsex"
 
-#, fuzzy
 msgid "Cancel Download"
-msgstr "Descargar"
+msgstr "Sefsex asider"
 
 msgid "Certificate"
-msgstr "Certificate"
+msgstr "Aselkin"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Certificate - %(account)s"
-msgstr "Certificate"
+msgstr "Aselkin - %(account)s"
 
 msgid "Certificate Verification Failed"
-msgstr ""
+msgstr "Asenqed n uselkin Ur yeddi ara"
 
 msgid "Certificate chain too long"
 msgstr ""
@@ -1035,9 +1017,8 @@ msgid ""
 "group chat."
 msgstr ""
 
-#, fuzzy
 msgid "Chat"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Chat Banner: Background Color"
 msgstr ""
@@ -1060,83 +1041,78 @@ msgid ""
 "many other chat apps – and it's free."
 msgstr ""
 
-#, fuzzy
 msgid "Chat window"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Chats"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Chats from this account will use this workspace by default"
 msgstr ""
 
 msgid "Check For Updates"
-msgstr ""
+msgstr "Senqed ileqman"
 
 msgid "Check for Gajim updates periodically"
-msgstr ""
+msgstr "Senqed ileqman n Gajim sya ɣer da"
 
 msgid "Check for updates"
-msgstr ""
+msgstr "Senqed ileqman"
 
 msgid "Check for updates periodically"
-msgstr ""
+msgstr "Senqed ileqman sya ɣer da"
 
 msgid "Check which features are available"
-msgstr ""
+msgstr "Senqed timahilin yellan"
 
-#, fuzzy
 msgid "Choose Device"
-msgstr "Aparates"
+msgstr "Fren ibenk"
 
-#, fuzzy
 msgid "Choose Emoji"
-msgstr "Aparates"
+msgstr "Fren Imujit"
 
 msgid "Choose History Export Directory"
-msgstr ""
+msgstr "Fren akaram n usifeḍ n umazray"
 
 msgid "Choose Sound"
-msgstr ""
+msgstr "Fren imesli"
 
 msgid "Choose a color or select an image"
-msgstr ""
+msgstr "Fren ini neɣ fren tugna"
 
 msgid "Choose a group…"
-msgstr ""
+msgstr "Fren agraw…"
 
 msgid "Choose encryption"
-msgstr ""
+msgstr "Fren awgelhen"
 
 msgid "City"
-msgstr "Cité"
+msgstr "Tamdint"
 
 msgid "Clear"
-msgstr "Vacuar"
+msgstr "Sfeḍ"
 
-#, fuzzy
 msgid "Clear Devices?"
-msgstr "Aparates"
+msgstr "Sfeḍ ibenkan?"
 
-#, fuzzy
 msgid "Clear Devices…"
-msgstr "Aparates"
+msgstr "Sfeḍ ibenkan…"
 
 msgid "Clear File"
-msgstr ""
+msgstr "Sfeḍ afaylu"
 
-#, fuzzy
 msgid "Clear Input"
-msgstr "Vacuar"
+msgstr "Sfeḍ inekcam"
 
-#, fuzzy
 msgid "Clear Sound"
-msgstr "Vacuar"
+msgstr "Sfeḍ imesli"
 
 msgid ""
 "Click messages to select them\n"
 "(Ctrl + Double Click to deselect)"
 msgstr ""
+"Sit ɣef yiznan akken ad ten-tferneḍ\n"
+"(Ctrl + Sit snat tikal i ufran)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1150,11 +1126,10 @@ msgid ""
 msgstr ""
 
 msgid "Close"
-msgstr "Cluder"
+msgstr ""
 
-#, fuzzy
 msgid "Close Chat"
-msgstr "Cluder"
+msgstr ""
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1166,7 +1141,7 @@ msgid "Code snippet"
 msgstr ""
 
 msgid "Color"
-msgstr "Color"
+msgstr ""
 
 msgid "Comma-separated list of emojis for quick reaction buttons"
 msgstr ""
@@ -1178,7 +1153,7 @@ msgid "Command executed successfully"
 msgstr ""
 
 msgid "Commands"
-msgstr "Comandes"
+msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1204,13 +1179,13 @@ msgid "Composing Only"
 msgstr ""
 
 msgid "Computer"
-msgstr "Computator"
+msgstr ""
 
 msgid "Configuration"
-msgstr "Configuration"
+msgstr ""
 
 msgid "Configure"
-msgstr "Configurar"
+msgstr ""
 
 msgid "Configure logging system"
 msgstr ""
@@ -1222,7 +1197,7 @@ msgid "Confirm new password..."
 msgstr ""
 
 msgid "Connect"
-msgstr "Conexer"
+msgstr ""
 
 msgid "Connect on startup"
 msgstr ""
@@ -1237,7 +1212,7 @@ msgid "Connecting..."
 msgstr ""
 
 msgid "Connection"
-msgstr "Conexion"
+msgstr ""
 
 msgid "Connection Error"
 msgstr ""
@@ -1253,16 +1228,14 @@ msgstr ""
 msgid "Connection – %(account)s"
 msgstr ""
 
-#, fuzzy
 msgid "Contact"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Contact Connected"
 msgstr ""
 
-#, fuzzy
 msgid "Contact Details"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Contact Disconnected"
 msgstr ""
@@ -1270,9 +1243,8 @@ msgstr ""
 msgid "Contact Information"
 msgstr ""
 
-#, fuzzy
 msgid "Contact Infos"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Contact List"
 msgstr ""
@@ -1284,16 +1256,14 @@ msgstr ""
 msgid "Contact List – %(account)s"
 msgstr ""
 
-#, fuzzy
 msgid "Contact Removed"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Contact Request"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Contacts"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1317,15 +1287,14 @@ msgid "Conversations are stored on the server"
 msgstr ""
 
 msgid "Copy"
-msgstr "Copiar"
+msgstr ""
 
 msgctxt "Message row action"
 msgid "Copy"
-msgstr "Copiar"
+msgstr ""
 
-#, fuzzy
 msgid "Copy Address"
-msgstr "Adresse"
+msgstr ""
 
 msgid "Copy Text"
 msgstr ""
@@ -1368,7 +1337,7 @@ msgid "Could not update providers list"
 msgstr ""
 
 msgid "Country"
-msgstr "Land"
+msgstr ""
 
 msgid "Create Account"
 msgstr ""
@@ -1419,7 +1388,7 @@ msgid "Debug Logging"
 msgstr ""
 
 msgid "Decline"
-msgstr "Refusar"
+msgstr ""
 
 msgid "Decrease Font Size"
 msgstr ""
@@ -1455,11 +1424,10 @@ msgid "Default for new public group chats"
 msgstr ""
 
 msgid "Delete"
-msgstr "Remover"
+msgstr ""
 
-#, fuzzy
 msgid "Delete Fingerprint?"
-msgstr "Fingre-printes"
+msgstr ""
 
 msgid "Delete Message Locally?"
 msgstr ""
@@ -1468,22 +1436,20 @@ msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr ""
 
-#, fuzzy
 msgid "Delete Node?"
-msgstr "Remover"
+msgstr ""
 
-#, fuzzy
 msgid "Delete Theme?"
-msgstr "Remover"
+msgstr ""
 
 msgid "Deny"
-msgstr "Refusar"
+msgstr ""
 
 msgid "Deny all contact requests"
 msgstr ""
 
 msgid "Description"
-msgstr "Descrition"
+msgstr ""
 
 msgid "Destroy Group Chat"
 msgstr ""
@@ -1495,7 +1461,7 @@ msgid "Destroy…"
 msgstr ""
 
 msgid "Details"
-msgstr "Detallies"
+msgstr ""
 
 #, python-format
 msgid "Details - %(account)s"
@@ -1508,9 +1474,8 @@ msgstr ""
 msgid "Device \"%s\""
 msgstr ""
 
-#, fuzzy
 msgid "Devices"
-msgstr "Aparates"
+msgstr ""
 
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
@@ -1523,7 +1488,7 @@ msgid "Direct Message…"
 msgstr ""
 
 msgid "Directory"
-msgstr "Fólder"
+msgstr ""
 
 #, python-format
 msgid ""
@@ -1534,9 +1499,8 @@ msgstr ""
 msgid "Directory Not Writable"
 msgstr ""
 
-#, fuzzy
 msgid "Disable Account?"
-msgstr "Conto"
+msgstr ""
 
 msgid "Disabled"
 msgstr ""
@@ -1615,7 +1579,7 @@ msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 msgid "Download"
-msgstr "Descargar"
+msgstr ""
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -1657,7 +1621,7 @@ msgid ""
 msgstr ""
 
 msgid "Email"
-msgstr "E-post"
+msgstr ""
 
 msgid "Emoji Shortcodes"
 msgstr ""
@@ -1666,17 +1630,16 @@ msgid "Emojis"
 msgstr ""
 
 msgid "Enable"
-msgstr "Activar"
+msgstr ""
 
-#, fuzzy
 msgid "Enable Account"
-msgstr "Conto"
+msgstr ""
 
 msgid "Enable KeepassXC Integration"
 msgstr ""
 
 msgid "Enabled"
-msgstr "Activ"
+msgstr ""
 
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
@@ -1752,7 +1715,7 @@ msgid ""
 msgstr ""
 
 msgid "Error"
-msgstr "Errore"
+msgstr ""
 
 msgid "Error Loading Image"
 msgstr ""
@@ -1787,7 +1750,7 @@ msgid "Error: %s (mime types: %s)"
 msgstr ""
 
 msgid "Event"
-msgstr "Eveniment"
+msgstr ""
 
 msgid "Everyone"
 msgstr ""
@@ -1811,29 +1774,25 @@ msgid "Expiry date"
 msgstr ""
 
 msgid "Export"
-msgstr "Exportar"
+msgstr ""
 
-#, fuzzy
 msgid "Export CSV"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Export Chat History"
 msgstr ""
 
-#, fuzzy
 msgid "Export Contacts"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Export Error"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Export Finished"
 msgstr ""
 
-#, fuzzy
 msgid "Export History…"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -1844,9 +1803,8 @@ msgstr ""
 msgid "Exporting your messages..."
 msgstr ""
 
-#, fuzzy
 msgid "Export…"
-msgstr "Exportar"
+msgstr ""
 
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
@@ -1876,22 +1834,22 @@ msgstr ""
 
 msgctxt "Group chat name"
 msgid "Family"
-msgstr "Familie"
+msgstr ""
 
 msgid "Features"
-msgstr "Caracteristicas"
+msgstr ""
 
 msgid "Feedback"
 msgstr ""
 
 msgid "Female"
-msgstr "Feminin"
+msgstr ""
 
 msgid "Fetching messages…"
 msgstr ""
 
 msgid "File"
-msgstr "File"
+msgstr ""
 
 msgid "File Offered…"
 msgstr ""
@@ -1941,15 +1899,13 @@ msgid "File: %s"
 msgstr ""
 
 msgid "Filter"
-msgstr "Filtre"
+msgstr ""
 
-#, fuzzy
 msgid "Filter Chats"
-msgstr "Filtre"
+msgstr ""
 
-#, fuzzy
 msgid "Filters"
-msgstr "Filtre"
+msgstr ""
 
 msgid "Filters (active)"
 msgstr ""
@@ -1957,16 +1913,15 @@ msgstr ""
 msgid "Fingerprint for this Device"
 msgstr ""
 
-#, fuzzy
 msgid "Fingerprints"
-msgstr "Fingre-printes"
+msgstr ""
 
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr ""
 
 msgid "Finished"
-msgstr "Finit"
+msgstr ""
 
 #, python-format
 msgid ""
@@ -1988,7 +1943,7 @@ msgid "Force Bookmark 2 usage"
 msgstr ""
 
 msgid "Forever"
-msgstr "Por sempre"
+msgstr ""
 
 msgid "Forget Group Chat"
 msgstr ""
@@ -2026,11 +1981,11 @@ msgid "Free for Chat"
 msgstr ""
 
 msgid "From"
-msgstr "De"
+msgstr ""
 
 msgctxt "Contact subscription"
 msgid "From"
-msgstr "De"
+msgstr ""
 
 msgid "Full Name"
 msgstr ""
@@ -2095,14 +2050,14 @@ msgid "Gathering information…"
 msgstr ""
 
 msgid "Gender"
-msgstr "Génere"
+msgstr ""
 
 msgctxt "Profile"
 msgid "Gender"
-msgstr "Génere"
+msgstr ""
 
 msgid "General"
-msgstr "General"
+msgstr ""
 
 #, python-format
 msgid "General – %(account)s"
@@ -2124,7 +2079,7 @@ msgid "Grant Voice"
 msgstr ""
 
 msgid "Group"
-msgstr "Gruppe"
+msgstr ""
 
 msgid "Group Chat"
 msgstr ""
@@ -2178,7 +2133,7 @@ msgid "Group chat now shows unavailable members"
 msgstr ""
 
 msgid "Groups"
-msgstr "Gruppes"
+msgstr ""
 
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
@@ -2196,14 +2151,13 @@ msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
-msgstr "Celat"
+msgstr ""
 
 msgid "Hide"
-msgstr "Celar"
+msgstr ""
 
-#, fuzzy
 msgid "Hide Chat List"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Home"
 msgstr ""
@@ -2287,18 +2241,16 @@ msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 
 msgid "Image"
-msgstr "Image"
+msgstr ""
 
-#, fuzzy
 msgid "Import"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Import Contacts"
 msgstr ""
 
-#, fuzzy
 msgid "Import Contacts?"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Import Error"
 msgstr ""
@@ -2333,14 +2285,13 @@ msgid "Increase playback speed"
 msgstr ""
 
 msgid "Information"
-msgstr "Information"
+msgstr ""
 
 msgid "Insecure Connection"
 msgstr ""
 
-#, fuzzy
 msgid "Install"
-msgstr "Installat"
+msgstr ""
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
@@ -2392,9 +2343,8 @@ msgstr ""
 msgid "Invalid server response"
 msgstr ""
 
-#, fuzzy
 msgid "Invitation"
-msgstr "Administration"
+msgstr ""
 
 msgid "Invitation Declined"
 msgstr ""
@@ -2402,9 +2352,8 @@ msgstr ""
 msgid "Invite"
 msgstr ""
 
-#, fuzzy
 msgid "Invite Contacts"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Invite to this chat…"
 msgstr ""
@@ -2455,7 +2404,7 @@ msgid "JPEG files"
 msgstr ""
 
 msgid "Join"
-msgstr "Adherer"
+msgstr ""
 
 msgid "Join Group Chat"
 msgstr ""
@@ -2472,9 +2421,8 @@ msgstr ""
 msgid "Joining Group Chat…"
 msgstr ""
 
-#, fuzzy
 msgid "Joining…"
-msgstr "Cargante…"
+msgstr ""
 
 msgid "Join…"
 msgstr ""
@@ -2499,7 +2447,7 @@ msgid "Kick…"
 msgstr ""
 
 msgid "Label"
-msgstr "Etiquette"
+msgstr ""
 
 #, python-format
 msgid "Language: %s"
@@ -2532,15 +2480,14 @@ msgstr ""
 msgid "Loading Avatar Failed"
 msgstr ""
 
-#, fuzzy
 msgid "Loading Preview…"
-msgstr "Cargante…"
+msgstr ""
 
 msgid "Loading avatar image failed"
 msgstr ""
 
 msgid "Loading…"
-msgstr "Cargante…"
+msgstr ""
 
 msgid "Local Time"
 msgstr ""
@@ -2600,9 +2547,8 @@ msgstr ""
 msgid "Manage Proxies..."
 msgstr ""
 
-#, fuzzy
 msgid "Manage Shortcuts"
-msgstr "Contos"
+msgstr ""
 
 msgid "Manage Sounds"
 msgstr ""
@@ -2655,9 +2601,8 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#, fuzzy
 msgid "Message History"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Message Receipts (✔)"
 msgstr ""
@@ -2677,9 +2622,8 @@ msgid ""
 "%s"
 msgstr ""
 
-#, fuzzy
 msgid "Messages"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Messages are archived on the server"
 msgstr ""
@@ -2747,9 +2691,8 @@ msgstr ""
 msgid "Move Chat"
 msgstr ""
 
-#, fuzzy
 msgid "Move Contact to New Group?"
-msgstr "Contacte"
+msgstr ""
 
 msgid "Move to Group"
 msgstr ""
@@ -2806,16 +2749,14 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#, fuzzy
 msgid "Nickname"
-msgstr "%(nickname)s:"
+msgstr ""
 
 msgid "Nickname contains invalid characters"
 msgstr ""
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "%(nickname)s:"
+msgstr ""
 
 msgid "No"
 msgstr ""
@@ -2848,9 +2789,8 @@ msgstr ""
 msgid "No automatic preview"
 msgstr ""
 
-#, fuzzy
 msgid "No certificate available"
-msgstr "Certificate"
+msgstr ""
 
 msgid "No commands available"
 msgstr ""
@@ -3041,9 +2981,8 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr ""
 
-#, fuzzy
 msgid "Organization"
-msgstr "Administration"
+msgstr ""
 
 msgid "Organization (O): "
 msgstr ""
@@ -3253,9 +3192,8 @@ msgstr ""
 msgid "Plugin Failed"
 msgstr ""
 
-#, fuzzy
 msgid "Plugin Settings"
-msgstr "Avansat"
+msgstr ""
 
 msgid "Plugin Update"
 msgstr ""
@@ -3330,9 +3268,8 @@ msgstr ""
 msgid "Privacy – %(account)s"
 msgstr ""
 
-#, fuzzy
 msgid "Private"
-msgstr "Activar"
+msgstr ""
 
 msgid "Processing image…"
 msgstr ""
@@ -3394,13 +3331,11 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr ""
 
-#, fuzzy
 msgid "Public Information"
-msgstr "Information"
+msgstr ""
 
-#, fuzzy
 msgid "Public Key Information"
-msgstr "Information"
+msgstr ""
 
 msgid "Public Key: "
 msgstr ""
@@ -3412,9 +3347,8 @@ msgstr ""
 msgid "Purge"
 msgstr ""
 
-#, fuzzy
 msgid "Purge Chat History"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Purge all Chat History?"
 msgstr ""
@@ -3528,28 +3462,23 @@ msgstr ""
 msgid "Remove Chat History?"
 msgstr ""
 
-#, fuzzy
 msgid "Remove Contact"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Remove Contacts?"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Remove Contact…"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Remove From Contact List?"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Remove Group?"
 msgstr ""
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Remove History…"
 msgstr ""
@@ -3563,13 +3492,11 @@ msgstr ""
 msgid "Remove Setting"
 msgstr ""
 
-#, fuzzy
 msgid "Remove Theme"
-msgstr "Remover"
+msgstr ""
 
-#, fuzzy
 msgid "Remove Workspace?"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Remove from Contact List…"
 msgstr ""
@@ -3577,9 +3504,8 @@ msgstr ""
 msgid "Remove from Group"
 msgstr ""
 
-#, fuzzy
 msgid "Remove this workspace"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Remove your group chat avatar"
 msgstr ""
@@ -3593,9 +3519,8 @@ msgid_plural "Removed %(count)s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
-#, fuzzy
 msgid "Remove…"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Removing Account..."
 msgstr ""
@@ -3608,9 +3533,8 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#, fuzzy
 msgid "Rename Contact?"
-msgstr "Contacte"
+msgstr ""
 
 msgid "Rename…"
 msgstr ""
@@ -3683,17 +3607,14 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#, fuzzy
 msgid "Reset Filters"
-msgstr "Filtre"
+msgstr ""
 
-#, fuzzy
 msgid "Reset Font Size"
-msgstr "Filtre"
+msgstr ""
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "Filtre"
+msgstr ""
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -3719,9 +3640,8 @@ msgstr ""
 msgid "Restart Pending"
 msgstr ""
 
-#, fuzzy
 msgid "Restore Closed Chat"
-msgstr "Cluder"
+msgstr ""
 
 msgid "Restore last state"
 msgstr ""
@@ -3732,10 +3652,9 @@ msgstr ""
 msgid "Retract Message?"
 msgstr ""
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Retract…"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Revoke Member"
 msgstr ""
@@ -3829,9 +3748,8 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#, fuzzy
 msgid "Search Chat History"
-msgstr "Exportar"
+msgstr ""
 
 msgid "Search Filters"
 msgstr ""
@@ -3845,9 +3763,8 @@ msgstr ""
 msgid "Search Result"
 msgstr ""
 
-#, fuzzy
 msgid "Search all Chats"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Search contacts..."
 msgstr ""
@@ -3860,9 +3777,8 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-#, fuzzy
 msgid "Search in chats…"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Searching"
 msgstr ""
@@ -3905,9 +3821,8 @@ msgstr ""
 msgid "Seen by %s participants"
 msgstr ""
 
-#, fuzzy
 msgid "Select Account"
-msgstr "Conto"
+msgstr ""
 
 msgctxt "Message row action"
 msgid "Select Messages…"
@@ -4052,24 +3967,20 @@ msgstr ""
 msgid "Shortcuts"
 msgstr ""
 
-#, fuzzy
 msgid "Show Chat List"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Show Commands"
-msgstr "Comandes"
+msgstr ""
 
-#, fuzzy
 msgid "Show Contact Infos"
-msgstr "Contactes"
+msgstr ""
 
 msgid "Show Content"
 msgstr ""
 
-#, fuzzy
 msgid "Show Details"
-msgstr "Detallies"
+msgstr ""
 
 msgid "Show Inactive Devices"
 msgstr ""
@@ -4332,16 +4243,14 @@ msgstr ""
 msgid "Subscribed"
 msgstr ""
 
-#, fuzzy
 msgid "Subscription"
-msgstr "Descrition"
+msgstr ""
 
 msgid "Successfully Added Contacts"
 msgstr ""
 
-#, fuzzy
 msgid "Successfully Removed Contacts"
-msgstr "Contactes"
+msgstr ""
 
 #, python-brace-format
 msgid "Successfully build new session with {device_id}."
@@ -4358,41 +4267,32 @@ msgid ""
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 1"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 2"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 3"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 4"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 5"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 6"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 7"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 8"
-msgstr "Conversationes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Chat 9"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Switch to Next Chat"
 msgstr ""
@@ -4406,45 +4306,35 @@ msgstr ""
 msgid "Switch to Previous Unread Chat"
 msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 1"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 2"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 3"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 4"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 5"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 6"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 7"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 8"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Switch to Workspace 9"
-msgstr "Contactes"
+msgstr ""
 
-#, fuzzy
 msgid "Sync Group Chat Block List"
-msgstr "Conversationes"
+msgstr ""
 
 msgid "Sync Threshold"
 msgstr ""
@@ -4879,9 +4769,8 @@ msgstr ""
 msgid "Unable to verify the first certificate"
 msgstr ""
 
-#, fuzzy
 msgid "Unblock"
-msgstr "Blocar"
+msgstr ""
 
 msgid "Unblock Participant?"
 msgstr ""
@@ -4893,9 +4782,8 @@ msgstr ""
 msgid "Unencrypted"
 msgstr ""
 
-#, fuzzy
 msgid "Uninstall"
-msgstr "Installat"
+msgstr ""
 
 msgid "Unknown"
 msgstr ""
@@ -4999,9 +4887,8 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
-#, fuzzy
 msgid "Use Image"
-msgstr "Image"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -5156,9 +5043,8 @@ msgstr ""
 msgid "XMPP Address"
 msgstr ""
 
-#, fuzzy
 msgid "XMPP Address…"
-msgstr "Adresse"
+msgstr ""
 
 msgid "XMPP Chat Client"
 msgstr ""
@@ -5385,28 +5271,24 @@ msgstr ""
 msgid "_Accept"
 msgstr ""
 
-#, fuzzy
 msgid "_Account"
-msgstr "Conto"
+msgstr ""
 
 msgid "_Add to Trusted Certificates"
 msgstr ""
 
-#, fuzzy
 msgid "_Address"
-msgstr "Adresse"
+msgstr ""
 
-#, fuzzy
 msgid "_Advanced Settings"
-msgstr "Avansat"
+msgstr ""
 
 msgctxt "User status"
 msgid "_Available"
 msgstr ""
 
-#, fuzzy
 msgid "_Back"
-msgstr "Retro"
+msgstr ""
 
 msgid "_Block"
 msgstr ""
@@ -5421,16 +5303,14 @@ msgstr ""
 msgid "_Clear Devices"
 msgstr ""
 
-#, fuzzy
 msgid "_Close"
-msgstr "Cluder"
+msgstr ""
 
 msgid "_Command"
 msgstr ""
 
-#, fuzzy
 msgid "_Connect"
-msgstr "Conexer"
+msgstr ""
 
 msgid "_Connect Anyway"
 msgstr ""
@@ -5444,16 +5324,14 @@ msgstr ""
 msgid "_Decline"
 msgstr ""
 
-#, fuzzy
 msgid "_Default"
-msgstr "Predefinit"
+msgstr ""
 
 msgid "_Delete"
 msgstr ""
 
-#, fuzzy
 msgid "_Description"
-msgstr "Descrition"
+msgstr ""
 
 msgid "_Destroy"
 msgstr ""
@@ -5483,9 +5361,8 @@ msgstr ""
 msgid "_Hostname"
 msgstr ""
 
-#, fuzzy
 msgid "_Import"
-msgstr "Exportar"
+msgstr ""
 
 msgid "_Join"
 msgstr ""
@@ -5560,9 +5437,8 @@ msgstr ""
 msgid "_Request"
 msgstr ""
 
-#, fuzzy
 msgid "_Reset Value"
-msgstr "Filtre"
+msgstr ""
 
 msgid "_Retract"
 msgstr ""
@@ -5579,9 +5455,8 @@ msgstr ""
 msgid "_Send"
 msgstr ""
 
-#, fuzzy
 msgid "_Show Certificate"
-msgstr "Certificate"
+msgstr ""
 
 msgid "_Sign Up"
 msgstr ""
@@ -5595,9 +5470,8 @@ msgstr ""
 msgid "_Type"
 msgstr ""
 
-#, fuzzy
 msgid "_Unblock"
-msgstr "Blocar"
+msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -5608,9 +5482,8 @@ msgstr ""
 msgid "_Username"
 msgstr ""
 
-#, fuzzy
 msgid "_View Certificate"
-msgstr "Certificate"
+msgstr ""
 
 msgid "_Wiki (Online)"
 msgstr ""
@@ -5799,94 +5672,3 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
-
-#, python-format
-#~ msgid "(%(filesize_unit)s/s)"
-#~ msgstr "(%(filesize_unit)s/s)"
-
-#~ msgid "<Description>"
-#~ msgstr "<Descrition>"
-
-#~ msgid "<empty>"
-#~ msgstr "<vacui>"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Aborted"
-#~ msgstr "Interruptet"
-
-#, fuzzy
-#~ msgid "Activity"
-#~ msgstr "Activar"
-
-#~ msgid "Algorithm"
-#~ msgstr "Algoritme"
-
-#~ msgid "Audio/Video"
-#~ msgstr "Audio e video"
-
-#~ msgid "Author"
-#~ msgstr "Autor"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Marca-págines"
-
-#, fuzzy
-#~ msgid "Chat List"
-#~ msgstr "Conversationes"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Contactes"
-
-#, fuzzy
-#~ msgid "Contact information"
-#~ msgstr "Information"
-
-#~ msgid "Default"
-#~ msgstr "Predefinit"
-
-#~ msgid "Description: "
-#~ msgstr "Descrition: "
-
-#~ msgctxt "Noun"
-#~ msgid "Download"
-#~ msgstr "Descargar"
-
-#~ msgid "Error!"
-#~ msgstr "Errore!"
-
-#~ msgid "Features:"
-#~ msgstr "Caracteristicas:"
-
-#, fuzzy
-#~ msgid "Fingerprint"
-#~ msgstr "Fingre-printes"
-
-#~ msgid "Gajim"
-#~ msgstr "Gajim"
-
-#~ msgctxt "proxy configuration"
-#~ msgid "HTTP"
-#~ msgstr "HTTP"
-
-#~ msgid "Homepage"
-#~ msgstr "Hem-págine"
-
-#~ msgid "Images"
-#~ msgstr "Images"
-
-#, fuzzy
-#~ msgid "Location:"
-#~ msgstr "Conexion"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Caracteristicas"
-
-#, fuzzy
-#~ msgid "Subscription:"
-#~ msgstr "Descrition"
-
-#, fuzzy
-#~ msgid "Workspaces"
-#~ msgstr "Contactes"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -227,6 +227,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Ŝanĝi kaŝ_nomon"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Aktiva"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -465,14 +469,6 @@ msgstr "Konto \"%s\" estas konektita al la servilo"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Konto \"%s\" estas konektita al la servilo"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Konto \"%s\" estas konektita al la servilo"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Konto \"%s\" estas konektita al la servilo"
 
 #, fuzzy
@@ -845,10 +841,6 @@ msgstr "Defaŭlta statmesaĝo"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Dosiero: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Konekto mankas"
 
 msgid "Audio test"
 msgstr ""
@@ -1271,9 +1263,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klaku por starigi vian kaŝbildon"
@@ -1509,10 +1498,6 @@ msgstr "_Kopii ligilan lokon"
 msgid "Copy to clipboard"
 msgstr "_Kopii ligilan lokon"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Ne povas alŝuti bildon"
@@ -1713,10 +1698,6 @@ msgid "Devices"
 msgstr "Servilo"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Bonvolu konvinkiĝi, ke vi estas konektita kun \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Retserĉila URL ne enhavas \"%s\""
 
@@ -1866,6 +1847,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "A_dministri"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "A_dministri"
 
@@ -2069,6 +2055,10 @@ msgid "Export Contacts"
 msgstr "Kontaktoj"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Eksportado"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Finigi"
 
@@ -2216,15 +2206,15 @@ msgid "Filters (active)"
 msgstr "Unua mesaĝo ricevita"
 
 #, fuzzy
-msgid "Fingerprint"
-msgstr "Fingrospuroj"
-
-#, fuzzy
 msgid "Fingerprint for this Device"
 msgstr "Fingrospuroj"
 
 msgid "Fingerprints"
 msgstr "Fingrospuroj"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Bonvolu konvinkiĝi, ke vi estas konektita kun \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2636,6 +2626,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Vi jam estas en babilejo %s"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Malkorekta salutnomo"
 
@@ -2863,9 +2857,6 @@ msgstr "Nova babilejo"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3066,6 +3057,10 @@ msgstr "Vi nekonektitas al la servilo"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Versio de GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3293,6 +3288,10 @@ msgstr "Neniu konto disponeblas"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "%s ne trovitas"
@@ -3300,6 +3299,9 @@ msgstr "%s ne trovitas"
 #, fuzzy
 msgid "No results found"
 msgstr "%s ne trovitas"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3336,10 +3338,6 @@ msgstr "Nedisponebla"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Nedisponebla"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Konekto"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3934,6 +3932,10 @@ msgstr "Re_gistri"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Unua mesaĝo ricevita"
+
 msgid "Read _Wikipedia Article"
 msgstr "Legi _vikipedian artikolon"
 
@@ -4176,6 +4178,13 @@ msgstr ""
 msgid "Required"
 msgstr "Pasvorto necesas"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Historia administrilo"
@@ -4190,9 +4199,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Pasvorto necesas"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4533,12 +4539,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Sendi vivkontrolajn pakaĵojn"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Raporti pri eraro"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5386,6 +5391,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Via servilo ne subtenas Vizitkarton"
@@ -5580,6 +5588,10 @@ msgstr "_Grupo:"
 msgid "Unblock Participant?"
 msgstr "Partoprenanto"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Bonvolu konvinkiĝi, ke vi estas konektita kun \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Ne lanĉitas"
@@ -5640,10 +5652,6 @@ msgstr "Mendo de dosiera transmeto"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Mendo de dosiera transmeto"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Mendo de dosiera transmeto"
 
 msgid "Unsupported certificate purpose"
@@ -5944,10 +5952,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Vi nekonektitas al la servilo"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5970,7 +5974,7 @@ msgid "You are now {show}{status}"
 msgstr "Vi nomiĝas %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "senkonekta"
 
 msgid "You are offline. Go online to send messages…"
@@ -6869,6 +6873,14 @@ msgstr ""
 #~ msgstr "Konektado malsukcesis"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Konto \"%s\" estas konektita al la servilo"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Konto \"%s\" estas konektita al la servilo"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Ŝaltita"
 
@@ -6934,6 +6946,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Defaŭlta statmesaĝo"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Konekto mankas"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Aŭdo/Video"
@@ -7260,6 +7276,10 @@ msgstr ""
 #~ msgstr "Privataj interparoloj"
 
 #, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Fingrospuroj"
+
+#, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Mesaĝo sendita"
 
@@ -7325,10 +7345,6 @@ msgstr ""
 
 #~ msgid "Images"
 #~ msgstr "Bildoj"
-
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Aktiva"
 
 #~ msgid "Invalid File"
 #~ msgstr "Malkorekta dosiero"
@@ -7401,6 +7417,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Prokura servilo:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Konekto"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7590,6 +7610,10 @@ msgstr ""
 #~ msgstr "Konservi dosieron kiel..."
 
 #, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Sendi vivkontrolajn pakaĵojn"
+
+#, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
 #~ "Sendi mesaĝon per Ctrl+Enter kaj Enter faras novan lineon (defaŭlta "
@@ -7777,6 +7801,10 @@ msgstr ""
 #~ msgstr "Nelegitaj eventoj"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Mendo de dosiera transmeto"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Renovigi tagmesaĝon"
 
@@ -7834,6 +7862,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Vi nekonektitas al la servilo"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Vi nekonektitas al la servilo"

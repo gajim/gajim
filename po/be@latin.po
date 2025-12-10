@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -227,6 +227,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "(changed by %s)"
 msgstr "Źmiani _mianušku"
+
+#, fuzzy
+msgid "(inactive)"
+msgstr "Dziejny"
 
 #, fuzzy, python-format
 msgid "(reason: %s)"
@@ -465,14 +469,6 @@ msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
 msgid "Account is being created"
-msgstr "Kont \"%s\" dałučany da servera"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Kont \"%s\" dałučany da servera"
-
-#, fuzzy
-msgid "Account is not connected."
 msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
@@ -851,10 +847,6 @@ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 #, fuzzy
 msgid "Audio Preview"
 msgstr "Fajł: "
-
-#, fuzzy
-msgid "Audio preview is not available"
-msgstr "Złučeńnie niemahčymaje"
 
 msgid "Audio test"
 msgstr ""
@@ -1273,9 +1265,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 
-msgid "Click to change time display"
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klikni, kab vystavić svoj avatar"
@@ -1511,10 +1500,6 @@ msgstr "S_kapijuj adras spasyłki"
 msgid "Copy to clipboard"
 msgstr "S_kapijuj adras spasyłki"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr ""
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Niemahčyma adčytać vyjavu"
@@ -1714,10 +1699,6 @@ msgid "Devices"
 msgstr "Server"
 
 #, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Kali łaska, pravier, ci jość złučeńnie z \"%s\"."
-
-#, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "U adrasie dla web-pošuku nie staje \"%s\""
 
@@ -1871,6 +1852,11 @@ msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
+msgid "Edit…"
+msgstr "_Źmianić"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "_Źmianić"
 
@@ -2074,6 +2060,10 @@ msgid "Export Contacts"
 msgstr "Kantakty"
 
 #, fuzzy
+msgid "Export Error"
+msgstr "Ekspartuj"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Skonč"
 
@@ -2220,14 +2210,15 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
-msgid "Fingerprint"
-msgstr ""
-
 msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Kali łaska, pravier, ci jość złučeńnie z \"%s\"."
 
 #, fuzzy
 msgid "Finished"
@@ -2639,6 +2630,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "In this group chat"
+msgstr "Ty pakinuŭ nastupnyja pakoji:"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Niapravilnaje imia karystalnika"
 
@@ -2866,9 +2861,6 @@ msgstr "Pakiń pakoji"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3069,6 +3061,10 @@ msgstr "Niama złučeńnia z serveram"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Versija GTK+:"
 
 #, fuzzy
 msgid "Minimize"
@@ -3296,6 +3292,10 @@ msgstr "Konty niedastupnyja"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 #, fuzzy
 msgid "No results"
 msgstr "%s nia znojdzieny"
@@ -3303,6 +3303,9 @@ msgstr "%s nia znojdzieny"
 #, fuzzy
 msgid "No results found"
 msgstr "%s nia znojdzieny"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 #, fuzzy
 msgid "Node"
@@ -3339,10 +3342,6 @@ msgstr "Niedastupny"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Niedastupny"
-
-#, fuzzy
-msgid "Not Connected"
-msgstr "Złučeńnie"
 
 #, fuzzy
 msgid "Not Decided"
@@ -3937,6 +3936,10 @@ msgstr "_Zarehistrujsia"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Atrymanaje pieršaje paviedamleńnie"
+
 msgid "Read _Wikipedia Article"
 msgstr "Pračytać artykuł u _Wikipedii"
 
@@ -4180,6 +4183,13 @@ msgstr ""
 msgid "Required"
 msgstr "Vymahaje parolu"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kiraŭnik žurnałaŭ"
@@ -4194,9 +4204,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vymahaje parolu"
-
-msgid "Requires: libxss"
-msgstr ""
 
 #, fuzzy
 msgid "Reserved Name"
@@ -4535,12 +4542,11 @@ msgid "Send Messages with Control+Enter"
 msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
 
 #, fuzzy
-msgid "Send Read Markers"
-msgstr "Dasyłaj pravieračnyja infarmacyjnyja pakiety"
-
-#, fuzzy
 msgid "Send _Report"
 msgstr "_Paviedam pra pamyłku"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -5387,6 +5393,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr ""
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Server nie padtrymvaje Vcard"
@@ -5580,6 +5589,10 @@ msgstr ""
 msgid "Unblock Participant?"
 msgstr "Udzielnik"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "Kali łaska, pravier, ci jość złučeńnie z \"%s\"."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Nie pačata"
@@ -5640,10 +5653,6 @@ msgstr "Zapyt na pieradaču fajłu"
 
 #, fuzzy
 msgid "Unpin Chat"
-msgstr "Zapyt na pieradaču fajłu"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Zapyt na pieradaču fajłu"
 
 msgid "Unsupported certificate purpose"
@@ -5944,10 +5953,6 @@ msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
 
 #, fuzzy
-msgid "You are not connected"
-msgstr "Niama złučeńnia z serveram"
-
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5970,7 +5975,7 @@ msgid "You are now {show}{status}"
 msgstr "Ciabie ciapier viedajuć jak %s"
 
 #, fuzzy
-msgid "You are offline."
+msgid "You are offline"
 msgstr "адключаны"
 
 msgid "You are offline. Go online to send messages…"
@@ -6865,6 +6870,14 @@ msgstr ""
 #~ msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
 #~ msgid "Activity"
 #~ msgstr "Dziejny"
 
@@ -6927,6 +6940,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Złučeńnie niemahčymaje"
 
 #, fuzzy
 #~ msgid "Author"
@@ -7320,10 +7337,6 @@ msgstr ""
 #~ msgid "Images"
 #~ msgstr "Vyjavy"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Dziejny"
-
 #~ msgid "Invalid File"
 #~ msgstr "Niapravilny fajł"
 
@@ -7397,6 +7410,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No proxy used"
 #~ msgstr "Proxy:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Złučeńnie"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7572,6 +7589,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send Files Directly"
 #~ msgstr "Zapišy fajł jak..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Dasyłaj pravieračnyja infarmacyjnyja pakiety"
 
 #, fuzzy
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
@@ -7751,6 +7772,10 @@ msgstr ""
 #~ msgstr "Niepračytanyja paviedamleńni"
 
 #, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Zapyt na pieradaču fajłu"
+
+#, fuzzy
 #~ msgid "Update Check"
 #~ msgstr "Aktualizuj MOTD"
 
@@ -7808,6 +7833,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Niama złučeńnia z serveram"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Niama złučeńnia z serveram"

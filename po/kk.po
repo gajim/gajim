@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -232,6 +232,10 @@ msgstr ""
 msgid "(changed by %s)"
 msgstr "%s өзгерткен"
 
+#, fuzzy
+msgid "(inactive)"
+msgstr "Белсенді"
+
 #, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Себебі: %s"
@@ -444,13 +448,6 @@ msgstr "Тіркелгі байланысқан болуы керек"
 
 msgid "Account is being created"
 msgstr "Тіркелгі жасалуда"
-
-#, fuzzy
-msgid "Account is not connected"
-msgstr "Тіркелгісі байланыпаған."
-
-msgid "Account is not connected."
-msgstr "Тіркелгісі байланыпаған."
 
 #, fuzzy
 msgid "Account name: "
@@ -783,9 +780,6 @@ msgstr "Аудио енгізу құрылғысы"
 
 msgid "Audio Preview"
 msgstr "Аудионы алдын ала қарау"
-
-msgid "Audio preview is not available"
-msgstr "Аудионы алдын ала қарау қолжетімді емес"
 
 msgid "Audio test"
 msgstr "Аудио сынау"
@@ -1174,9 +1168,6 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Осы топтық чатқа шақырғыңыз келетін контакттарға шертіңіз."
 
-msgid "Click to change time display"
-msgstr "Уақыт көрсетуін өзгерту үшін басыңыз"
-
 msgid "Click to view location"
 msgstr "Орналасуын қарау үшін шертіңіз"
 
@@ -1381,10 +1372,6 @@ msgstr "Алмасу буферіне көшіріп алу"
 msgid "Copy to clipboard"
 msgstr "Алмасу буферіне көшіріп алу"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Түзету…"
-
 #, fuzzy
 msgid "Could Not Save File"
 msgstr "Файлды сақтау мүмкін емес"
@@ -1562,10 +1549,6 @@ msgstr "Құрылғы \"%s\""
 msgid "Devices"
 msgstr "Құрылғылар"
 
-#, fuzzy, python-format
-msgid "Devices connected with \"%s\""
-msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
-
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Сөздік URL адресінде \"%s\" жоқ"
@@ -1709,6 +1692,11 @@ msgstr "Атын түзету…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
+msgid "Edit…"
+msgstr "Түзету…"
+
+#, fuzzy
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Түзету…"
 
@@ -1898,6 +1886,10 @@ msgstr "Чаттар тарихын экспорттау"
 msgid "Export Contacts"
 msgstr "Контакттарды импорттау"
 
+#, fuzzy
+msgid "Export Error"
+msgstr "Экспорт"
+
 msgid "Export Finished"
 msgstr "Экспорт аяқталды"
 
@@ -2027,15 +2019,15 @@ msgid "Filters (active)"
 msgstr "Хабарлама алынды"
 
 #, fuzzy
-msgid "Fingerprint"
-msgstr "Баспалар"
-
-#, fuzzy
 msgid "Fingerprint for this Device"
 msgstr "Баспалар"
 
 msgid "Fingerprints"
 msgstr "Баспалар"
+
+#, fuzzy, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
 msgid "Finished"
 msgstr "Аяқталған"
@@ -2418,6 +2410,10 @@ msgstr ""
 "Бұл чатта хабарлама жазу үшін алдымен дауысты сұрау керек.\n"
 "Модератор сұрауыңызды өңдейді."
 
+#, fuzzy
+msgid "In this group chat"
+msgstr "Сіз бұл топтық чаттан шықтыңыз"
+
 msgid "Incoming Call"
 msgstr "Кіріс қоңырау"
 
@@ -2621,9 +2617,6 @@ msgstr "Топтық чаттан шығу"
 msgid "Leave _Permanently"
 msgstr ""
 
-msgid "Let others know if you read up to this point"
-msgstr "Басқаларға сіз хабарламаны оқығанын білуге мүмкін етеді"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2802,6 +2795,10 @@ msgstr "Хабарламалар серверде архивтелген"
 
 msgid "Messages from this users are blocked"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Migration to version %s"
+msgstr "Pango нұсқасы: %s"
 
 msgid "Minimize"
 msgstr "Қайыру"
@@ -3014,11 +3011,18 @@ msgstr "Қолжетімді ақпарат жоқ"
 msgid "No keys pressed"
 msgstr ""
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr ""
+
 msgid "No results"
 msgstr "Ешнәрсе табылмады"
 
 msgid "No results found"
 msgstr "Ешнәрсе табылмады"
+
+msgid "No undecided fingerprints"
+msgstr ""
 
 msgid "Node"
 msgstr "Node"
@@ -3053,9 +3057,6 @@ msgstr "Қол жетерсіз"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Қолжетімді емес"
-
-msgid "Not Connected"
-msgstr "Байланыспаған"
 
 msgid "Not Decided"
 msgstr "Әлі шешілмеген"
@@ -3595,6 +3596,10 @@ msgstr "_Тіркелу"
 msgid "React with %s"
 msgstr "%s контактімен қоңырау"
 
+#, fuzzy
+msgid "Read Receipts"
+msgstr "Жеткізу хабарламаларын жіберу"
+
 msgid "Read _Wikipedia Article"
 msgstr "_Википедия мақаласын оқу"
 
@@ -3813,6 +3818,13 @@ msgstr "Серверден іздеу формасын сұрау"
 msgid "Required"
 msgstr "Талап етіледі"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Талап етеді: gnome-keyring немесе kwallet"
 
@@ -3825,9 +3837,6 @@ msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Талап етеді: Gspell"
-
-msgid "Requires: libxss"
-msgstr "Талап етеді: libxs"
 
 msgid "Reserved Name"
 msgstr "Резервтелген аты"
@@ -4132,11 +4141,11 @@ msgstr "Жеткізу хабарламаларын жіберу"
 msgid "Send Messages with Control+Enter"
 msgstr "Control+Enter пернелері арқылы хабарламаларды жіберу"
 
-msgid "Send Read Markers"
-msgstr "Оқу маркерлерін жіберу"
-
 msgid "Send _Report"
 msgstr "_Есеп жіберу"
+
+msgid "Send and receive read receipts"
+msgstr ""
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4940,6 +4949,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Бұл хабарлама сіздің жергілікті чат тарихынан өшірілетін болады"
 
+msgid "This plugin is managed by your operating system"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Бұл сервер тіркелуге рұқсат бермейді."
 
@@ -5122,6 +5134,10 @@ msgstr "Блоктаудан босату"
 msgid "Unblock Participant?"
 msgstr "Қатысушы"
 
+#, fuzzy, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
+
 #, fuzzy
 msgid "Unencrypted"
 msgstr "Шифрленбеген"
@@ -5177,10 +5193,6 @@ msgid "Unmute Chat"
 msgstr "Чатты босату"
 
 msgid "Unpin Chat"
-msgstr "Чатты босату"
-
-#, fuzzy
-msgid "Unselect Chat"
 msgstr "Чатты босату"
 
 msgid "Unsupported certificate purpose"
@@ -5458,9 +5470,6 @@ msgstr "Қазіргі уақытта осы топтық чатқа қосыл�
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "Сізге Әкімшілер мен Иелердің қатысуын өзгерту рұқсат етілмейді"
 
-msgid "You are not connected"
-msgstr "Сіз байланыспағансыз"
-
 #, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
@@ -5483,7 +5492,8 @@ msgstr "Бұдан былай %s ретінде белгілі боласыз"
 msgid "You are now {show}{status}"
 msgstr "Сіз енді {show}{status} ретінде белгілі боласыз"
 
-msgid "You are offline."
+#, fuzzy
+msgid "You are offline"
 msgstr "Сіз желіде емессіз."
 
 msgid "You are offline. Go online to send messages…"
@@ -6327,6 +6337,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Account Settings…"
 #~ msgstr "Тіркелгі баптаулары…"
 
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Тіркелгісі байланыпаған."
+
+#~ msgid "Account is not connected."
+#~ msgstr "Тіркелгісі байланыпаған."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Алдын ала қарауды сол жақпен шерту әрекеті"
 
@@ -6396,6 +6413,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Аудио шығару құрылғысы"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "Аудионы алдын ала қарау қолжетімді емес"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Аудио/Видео"
@@ -6480,6 +6500,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Хабарламаны енгізу өрісін тазарту"
+
+#~ msgid "Click to change time display"
+#~ msgstr "Уақыт көрсетуін өзгерту үшін басыңыз"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
@@ -6569,6 +6592,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Соңғы хабарламаны түзету"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Түзету…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "_Топтық чатты жасау…"
@@ -6747,6 +6774,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Filter Chats…"
 #~ msgstr "Чаттарды сүзгілеу…"
 
+#, fuzzy
+#~ msgid "Fingerprint"
+#~ msgstr "Баспалар"
+
 #~ msgid "Full Message View"
 #~ msgstr "Толық хабарлама көрінісі"
 
@@ -6830,10 +6861,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Images"
 #~ msgstr "Суреттер"
 
-#, fuzzy
-#~ msgid "Inactive"
-#~ msgstr "Белсенді"
-
 #~ msgid "Insert Emoji"
 #~ msgstr "Эмодзи кірістіру"
 
@@ -6878,6 +6905,13 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Сол жақ шерту әрекеті"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Басқаларға сіз хабарламаны оқығанын білуге мүмкін етеді"
+
+#, fuzzy
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Басқаларға сіз хабарламаны оқығанын білуге мүмкін етеді"
 
 #~ msgid "Local System Time"
 #~ msgstr "Жергілікті жүйе уақыты"
@@ -6939,6 +6973,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "No proxy used"
 #~ msgstr "Прокси қолданылмайды"
+
+#~ msgid "Not Connected"
+#~ msgstr "Байланыспаған"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -7088,6 +7125,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Талап етеді: libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Талап етеді: libxs"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7147,6 +7187,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Файлдарды тікелей жіберу"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Оқу маркерлерін жіберу"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
@@ -7348,6 +7391,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Unread Messages"
 #~ msgstr "Оқылмаған хабарламалар"
 
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Чатты босату"
+
 #~ msgid "Unverified"
 #~ msgstr "Тексерілмеген"
 
@@ -7419,6 +7466,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Gajim-нан шығуды қаладыңыз"
+
+#~ msgid "You are not connected"
+#~ msgstr "Сіз байланыспағансыз"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Сервермен байланысты орнатқан жоқсыз"

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 19:06+0000\n"
-"PO-Revision-Date: 2025-11-02 23:18+0000\n"
+"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"PO-Revision-Date: 2025-12-05 17:19+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -241,6 +241,9 @@ msgstr "'@' est manquant dans l'adresse. Êtes-vous sûr que c'est correct ?"
 msgid "(changed by %s)"
 msgstr "(changé par %s)"
 
+msgid "(inactive)"
+msgstr "(inactive)"
+
 #, python-format
 msgid "(reason: %s)"
 msgstr "(raison : %s)"
@@ -453,12 +456,6 @@ msgstr "Le compte doit être connecté"
 
 msgid "Account is being created"
 msgstr "Le compte est en train d'être créé"
-
-msgid "Account is not connected"
-msgstr "Le compte n'est pas connecté"
-
-msgid "Account is not connected."
-msgstr "Le compte n'est pas connecté."
 
 msgid "Account name: "
 msgstr "Nom du compte : "
@@ -790,9 +787,6 @@ msgstr "Périphérique audio d’entrée"
 
 msgid "Audio Preview"
 msgstr "Aperçu de l'audio"
-
-msgid "Audio preview is not available"
-msgstr "L'aperçu audio n'est pas disponible"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1169,9 +1163,6 @@ msgstr ""
 "Cliquez sur les contacts que vous souhaitez inviter dans ce salon de "
 "discussion."
 
-msgid "Click to change time display"
-msgstr "Cliquez pour modifier l'affichage de l'heure"
-
 msgid "Click to view location"
 msgstr "Cliquer pour voir la géolocalisation"
 
@@ -1377,10 +1368,6 @@ msgstr "Copier dans le presse-papier"
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse-papier"
 
-msgctxt "Message row action"
-msgid "Correct…"
-msgstr "Corriger…"
-
 msgid "Could Not Save File"
 msgstr "Impossible d’enregistrer le fichier"
 
@@ -1550,10 +1537,6 @@ msgid "Devices"
 msgstr "Appareils"
 
 #, python-format
-msgid "Devices connected with \"%s\""
-msgstr "Appareils connectés avec \"%s\""
-
-#, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Il manque un \"%s\" dans l'URL de dictionnaire"
 
@@ -1696,6 +1679,10 @@ msgstr "Éditer le nom…"
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Éditez votre message (Échap pour annuler)…"
 
+msgid "Edit…"
+msgstr "Éditer…"
+
+msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Éditer…"
 
@@ -1881,6 +1868,9 @@ msgstr "Exporter l'historique de discussion"
 msgid "Export Contacts"
 msgstr "Exporter les contacts"
 
+msgid "Export Error"
+msgstr "Erreur d'exportation"
+
 msgid "Export Finished"
 msgstr "Export terminé"
 
@@ -2006,14 +1996,15 @@ msgstr "Filtres"
 msgid "Filters (active)"
 msgstr "Filtres (Actif)"
 
-msgid "Fingerprint"
-msgstr "Empreinte"
-
 msgid "Fingerprint for this Device"
 msgstr "Empreinte pour cet appareil"
 
 msgid "Fingerprints"
 msgstr "Empreintes"
+
+#, python-format
+msgid "Fingerprints of devices connected with \"%s\""
+msgstr "Empreintes des appareils connectés pour \"%s\""
 
 msgid "Finished"
 msgstr "Terminé"
@@ -2392,6 +2383,9 @@ msgstr ""
 "demander la parole.\n"
 "Un·e modérateur·ice traitera votre demande."
 
+msgid "In this group chat"
+msgstr "Dans ce salon de discussion"
+
 msgid "Incoming Call"
 msgstr "Appel entrant"
 
@@ -2585,9 +2579,6 @@ msgstr "Quitter le salon de discussion ?"
 msgid "Leave _Permanently"
 msgstr "Quitter _Définitivement"
 
-msgid "Let others know if you read up to this point"
-msgstr "Permet aux autres de savoir si vous avez tout lu jusqu'ici"
-
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
@@ -2761,6 +2752,10 @@ msgstr "Les messages sont archivés sur le serveur"
 
 msgid "Messages from this users are blocked"
 msgstr "Les messages de cet·te utilisateur·ice sont bloqués"
+
+#, python-format
+msgid "Migration to version %s"
+msgstr "Migration vers la version %s"
 
 msgid "Minimize"
 msgstr "Minimiser"
@@ -2959,11 +2954,18 @@ msgstr "Aucune information disponible"
 msgid "No keys pressed"
 msgstr "Aucune touche appuyée"
 
+#, python-format
+msgid "No permission to export file to %s"
+msgstr "Pas de permission d'exporter un fichier vers %s"
+
 msgid "No results"
 msgstr "Aucun résultat"
 
 msgid "No results found"
 msgstr "Aucun résultat trouvé"
+
+msgid "No undecided fingerprints"
+msgstr "Aucune empreintes sans décision de confiance"
 
 msgid "Node"
 msgstr "Nœud"
@@ -2998,9 +3000,6 @@ msgstr "Non disponible"
 msgctxt "User status"
 msgid "Not Available"
 msgstr "Non disponible"
-
-msgid "Not Connected"
-msgstr "Non connecté"
 
 msgid "Not Decided"
 msgstr "Confiance non établie"
@@ -3347,7 +3346,7 @@ msgid "Plugin already exists"
 msgstr "L'extension existe déjà"
 
 msgid "Plugin could not be loaded"
-msgstr "Le plugin n'a pas pu être chargé"
+msgstr "L'extension n'a pas pu être chargé"
 
 msgid "Plugins"
 msgstr "Extensions"
@@ -3525,6 +3524,9 @@ msgstr "_Souscrire"
 #, python-format
 msgid "React with %s"
 msgstr "Réagir avec %s"
+
+msgid "Read Receipts"
+msgstr "Accusés de lecture"
 
 msgid "Read _Wikipedia Article"
 msgstr "Lire l'Article _Wikipédia"
@@ -3732,6 +3734,17 @@ msgstr "Récupération en cours du formulaire de recherche depuis le serveur"
 msgid "Required"
 msgstr "Requis"
 
+msgid ""
+"Requires:\n"
+"org.freedesktop.ScreenSaver or\n"
+"org.gnome.Mutter.IdleMonitor or\n"
+"libxss"
+msgstr ""
+"Nécessite :\n"
+"org.freedesktop.ScreenSaver ou\n"
+"org.gnome.Mutter.IdleMonitor ou\n"
+"libxss"
+
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Nécessite gnome-keyring ou kwallet"
 
@@ -3743,9 +3756,6 @@ msgstr "Nécessite : gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "Nécessite : libspelling"
-
-msgid "Requires: libxss"
-msgstr "Nécessite : libxss"
 
 msgid "Reserved Name"
 msgstr "Nom réservé"
@@ -4037,11 +4047,11 @@ msgstr "Émettre les accusés de réception"
 msgid "Send Messages with Control+Enter"
 msgstr "Envoyer des messages avec CTRL + Entrée"
 
-msgid "Send Read Markers"
-msgstr "Envoyer les accusés de lecture"
-
 msgid "Send _Report"
 msgstr "Envoyer un _Rapport"
+
+msgid "Send and receive read receipts"
+msgstr "Envoyer et recevoir les accusés de lecture"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4816,6 +4826,9 @@ msgstr ""
 msgid "This message will be deleted from your local chat history"
 msgstr "Ce message sera supprimé de l'historique de votre discussion locale"
 
+msgid "This plugin is managed by your operating system"
+msgstr "Cette extension est gérée par votre système d'exploitation"
+
 msgid "This server does not allow signup."
 msgstr "Ce serveur n'autorise pas les inscriptions."
 
@@ -4994,6 +5007,11 @@ msgstr "Débloquer"
 msgid "Unblock Participant?"
 msgstr "Débloquer læ participant·e ?"
 
+#, python-format
+msgid "Undecided fingerprints of devices connected with \"%s\""
+msgstr ""
+"Empreintes sans décision de confiance des appareils connectés pour \"%s\""
+
 msgid "Unencrypted"
 msgstr "Non chiffré"
 
@@ -5045,9 +5063,6 @@ msgstr "Annuler la mise en sourdine"
 
 msgid "Unpin Chat"
 msgstr "Désépingler le discussion"
-
-msgid "Unselect Chat"
-msgstr "Déselectionner la discussion"
 
 msgid "Unsupported certificate purpose"
 msgstr "Objet du certificat non-supporté"
@@ -5322,9 +5337,6 @@ msgstr ""
 "Vous n'êtes pas autorisé à modifier l'affiliation des administrateur·ices et "
 "des propriétaires"
 
-msgid "You are not connected"
-msgstr "Vous n’êtes pas connecté"
-
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
@@ -5348,8 +5360,8 @@ msgstr "Vous êtes désormais connu sous le nom de %s"
 msgid "You are now {show}{status}"
 msgstr "Vous êtes désormais {show}{status}"
 
-msgid "You are offline."
-msgstr "Vous êtes hors-ligne."
+msgid "You are offline"
+msgstr "Vous êtes hors-ligne"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "Vous êtes hors-ligne. Mettez-vous en ligne pour envoyer des messages…"
@@ -6241,6 +6253,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Account Settings…"
 #~ msgstr "Paramètres de compte…"
 
+#~ msgid "Account is not connected"
+#~ msgstr "Le compte n'est pas connecté"
+
+#~ msgid "Account is not connected."
+#~ msgstr "Le compte n'est pas connecté."
+
 #~ msgid "Action for left-clicking a preview"
 #~ msgstr "Action lors d'un clic sur un aperçu"
 
@@ -6307,6 +6325,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Audio Output Device"
 #~ msgstr "Périphérique audio de sortie"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "L'aperçu audio n'est pas disponible"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Vidéo"
@@ -6398,6 +6419,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Clear message entry"
 #~ msgstr "Vide la boîte de saisie des messages"
 
+#~ msgid "Click to change time display"
+#~ msgstr "Cliquez pour modifier l'affichage de l'heure"
+
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 #~ msgstr ""
@@ -6488,6 +6512,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Correct the last message"
 #~ msgstr "Corriger le dernier message"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "Corriger…"
 
 #~ msgid "Create _Group Chat…"
 #~ msgstr "Créer un _salon de discussion…"
@@ -6679,6 +6707,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Filter Chats…"
 #~ msgstr "Filtrer les discussions…"
 
+#~ msgid "Fingerprint"
+#~ msgstr "Empreinte"
+
 #~ msgid "Full Message View"
 #~ msgstr "Message complet"
 
@@ -6767,9 +6798,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Images"
 #~ msgstr "Images"
 
-#~ msgid "Inactive"
-#~ msgstr "Inactif"
-
 #~ msgid "Increase User Interface Font Size"
 #~ msgstr "Augmenter la taille de police de l'interface"
 
@@ -6817,6 +6845,12 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Left Click Action"
 #~ msgstr "Action du clic gauche"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "Permet aux autres de savoir si vous avez tout lu jusqu'ici"
+
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "Faire savoir à ce contact si vous avez tout lu jusqu'ici"
 
 #~ msgid "Local System Time"
 #~ msgstr "Heure locale du système"
@@ -6883,6 +6917,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "No proxy used"
 #~ msgstr "Pas de serveur mandataire"
+
+#~ msgid "Not Connected"
+#~ msgstr "Non connecté"
 
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -7034,6 +7071,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Nécessite : libappindicator3"
 
+#~ msgid "Requires: libxss"
+#~ msgstr "Nécessite : libxss"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7097,6 +7137,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Send Files Directly"
 #~ msgstr "Envoyer les fichiers directement (via Jingle)"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "Envoyer les accusés de lecture"
 
 #~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
 #~ msgstr ""
@@ -7306,6 +7349,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Unread Messages"
 #~ msgstr "Messages non lus"
 
+#~ msgid "Unselect Chat"
+#~ msgstr "Déselectionner la discussion"
+
 #~ msgid "Unverified"
 #~ msgstr "Non vérifié"
 
@@ -7373,6 +7419,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Vous êtes sur le point de quitter Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "Vous n’êtes pas connecté"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "Vous n’êtes pas connecté au serveur"
