@@ -28,6 +28,7 @@ from gajim.common.modules.discovery import Discovery
 from gajim.common.modules.entity_time import EntityTime
 from gajim.common.modules.gateway import Gateway
 from gajim.common.modules.http_auth import HTTPAuth
+from gajim.common.modules.http_muc_search import HttpMucSearch
 from gajim.common.modules.httpupload import HTTPUpload
 from gajim.common.modules.ibb import IBB
 from gajim.common.modules.iq import Iq
@@ -80,6 +81,7 @@ ModulesT = (
     | EntityTime
     | Gateway
     | HTTPAuth
+    | HttpMucSearch
     | HTTPUpload
     | IBB
     | Iq
@@ -130,6 +132,7 @@ ModulesLiteralT = Literal[
     'EntityTime',
     'Gateway',
     'HTTPAuth',
+    'HttpMucSearch',
     'HTTPUpload',
     'IBB',
     'Iq',
@@ -180,6 +183,7 @@ class ModuleDict(TypedDict):
     EntityTime: EntityTime
     Gateway: Gateway
     HTTPAuth: HTTPAuth
+    HttpMucSearch: HttpMucSearch
     HTTPUpload: HTTPUpload
     IBB: IBB
     Iq: Iq

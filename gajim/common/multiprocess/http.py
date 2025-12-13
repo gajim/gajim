@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Literal
 
 import hashlib
@@ -125,6 +126,7 @@ def http_request(
     timeout: int,
     *,
     headers: dict[str, str] | None = None,
+    params: dict[str, Any] | None = None,
     content_type: str | None = None,
     input_: Path | bytes = b"",
     with_req_progress: bool = False,
@@ -236,7 +238,7 @@ def http_request(
         read_file_generator = _read_file_generator()
 
     req = client.build_request(
-        method, url=url, content=read_file_generator, headers=headers
+        method, url=url, content=read_file_generator, params=params, headers=headers
     )
     resp = client.send(req, stream=True)
 

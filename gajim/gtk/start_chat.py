@@ -31,6 +31,7 @@ from nbxmpp.structs import MuclumbusResult
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import MUC_DISCO_ERRORS
@@ -94,6 +95,7 @@ class StartChatDialog(GajimAppWindow):
         self._destroyed = False
         self._search_stopped = False
         self._search_is_changed = False
+        self._http_search_client: Client | None = None
 
         self._ui = get_builder("start_chat_dialog.ui")
         self.set_child(self._ui.stack)
@@ -215,6 +217,7 @@ class StartChatDialog(GajimAppWindow):
         del self._muc_info_box
         del self._chat_filter
         del self._accounts_store
+        del self._http_search_client
         self._new_contact_items.clear()
         self._destroyed = True
         app.cancel_tasks(self)
@@ -701,7 +704,7 @@ class StartChatDialog(GajimAppWindow):
         self._global_search_view.start_search()
 
         if app.settings.get("muclumbus_api_pref") == "http":
-            self._start_http_search(client, text)
+            self._start_http_search(app.get_client(accounts[0]), text)
         else:
             self._start_iq_search(client, text)
 
@@ -739,27 +742,27 @@ class StartChatDialog(GajimAppWindow):
 
         self._global_search_view.end_search()
 
-    @as_task
-    def _start_http_search(self, client: NBXMPPClient, text: str):
-        _task = yield  # noqa: F841
-
+    def _start_http_search(self, client: Client, text: str) -> None:
         self._keywords = text.split(" ")
-        result = yield client.get_module("Muclumbus").set_http_search(
-            app.settings.get("muclumbus_api_http_uri"), self._keywords
+        self._http_search_client = client
+        client.get_module("HttpMucSearch").search(
+            self._keywords, None, self._on_http_result
         )
 
-        self._process_search_result(result)
-
-        while not result.end:
-            result = yield client.get_module("Muclumbus").set_http_search(
-                app.settings.get("muclumbus_api_http_uri"),
-                self._keywords,
-                after=result.last,
-            )
-
+    def _on_http_result(self, result: MuclumbusResult) -> None:
+        try:
             self._process_search_result(result)
+        except CancelledError:
+            return
 
-        self._global_search_view.end_search()
+        if result.end:
+            self._global_search_view.end_search()
+            return
+
+        assert self._http_search_client is not None
+        self._http_search_client.get_module("HttpMucSearch").search(
+            self._keywords, result.last, self._on_http_result
+        )
 
     def _process_search_result(
         self, result: MuclumbusResult, parameters: bool = False

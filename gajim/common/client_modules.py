@@ -26,6 +26,7 @@ if TYPE_CHECKING:
     from gajim.common.modules.entity_time import EntityTime
     from gajim.common.modules.gateway import Gateway
     from gajim.common.modules.http_auth import HTTPAuth
+    from gajim.common.modules.http_muc_search import HttpMucSearch
     from gajim.common.modules.httpupload import HTTPUpload
     from gajim.common.modules.ibb import IBB
     from gajim.common.modules.iq import Iq
@@ -94,6 +95,8 @@ class ClientModules:
     def get_module(self, name: Literal['Gateway']) -> Gateway: ...
     @overload
     def get_module(self, name: Literal['HTTPAuth']) -> HTTPAuth: ...
+    @overload
+    def get_module(self, name: Literal['HttpMucSearch']) -> HttpMucSearch: ...
     @overload
     def get_module(self, name: Literal['HTTPUpload']) -> HTTPUpload: ...
     @overload
