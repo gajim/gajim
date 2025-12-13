@@ -1,3 +1,54 @@
+Gajim 2.4.1 (13 Dec 2025)
+
+  New
+
+  * AnimatedImage: Support avif and png
+  * Add animated GIF/WebP previews
+
+  Improvements
+
+  * Plugins: Show hint for shipped plugins (#10209)
+  * OMEMO: Improve UX of fingerprint rows
+  * HTTP: Better deal with servers not sending content-length
+  * Plugins: Better handle errors when activating plugins
+  * DBMigration: Show progress for every version
+  * SyncHistory: Don't open chats when syncing history
+  * GroupChat: Allow to send encrypted messages if we are only member
+  * Read Receipts: Don’t display read receipts when sending is disabled
+  * Message actions: Rename 'Correct…' item to 'Edit…' (#12533)
+  * Contact info: Improve layout for group chat context infos
+  * Features: Improve text for idle dependencies
+  * Description of per-contact send marker setting
+
+  Change
+
+  * Raise nbxmpp version
+  * Raise omemo-dr version
+  * Application: Don't close application on ESC (#12546)
+
+  Bug Fixes
+
+  * Re-enable drag and drop on X11 displays for suitable GTK versions (#12313)
+  * Proxies: Add back handling for username changes (#12552)
+  * DBMigration: Ensure window modality by setting transient periodically (#12520)
+  * Commands: Don’t fail to create commands with python 3.14
+  * MessageActionBox: Fix resize loop
+  * Hats: Use correct color
+  * AudioPlayer: Fix UI for RTL layout
+  * Application: Don’t allow to rebind escape action
+  * SyncHistory: Don’t use idle add to set fraction
+  * Set worker process title (#12538)
+  * Client: Don’t fail when disconnecting (#12537)
+  * HTTPDownload: Correctly close file on errors (#12536)
+  * SystemTrayIcon: Mark icon as not menu only
+  * Manage roster: Catch permission errors on export (#12532)
+  * Sync waveform and seek bar position correctly
+  * Voice Messages: Update waveform on seek during pause
+  * Voice Messages: Show Play Icon, when showing Audio Player
+  * Chatstates: Use group chat setting for PM chats
+  * ContactInfo: Show correct pages for PM chats
+  * Certificate dialog: Catch error when trying to get serial number (#12519)
+
 Gajim 2.4.0 (04 Nov 2025)
 
   New
