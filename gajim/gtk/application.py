@@ -530,7 +530,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         user_shortcuts = self.get_user_shortcuts()
         for action_name in no_rebind_allowed:
-            shortcuts.pop(action_name, None)
+            user_shortcuts.pop(action_name, None)
 
         shortcuts.update(user_shortcuts)
 
