@@ -39,20 +39,34 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         Gtk.MenuButton.__init__(self, visible=False, valign=Gtk.Align.CENTER)
         SignalManager.__init__(self)
 
-        self.set_visible(app.settings.get("show_voice_message_button"))
+        self._time_label_update_timeout_id = None
+        self._visualization_timeout_id = None
 
+        self._mic_button_long_pressed = False
+
+        self._animation_index = 0
+        self._new_recording = True
+
+        self.set_visible(app.settings.get("show_voice_message_button"))
         app.settings.bind_signal("show_voice_message_button", self, "set_visible")
 
         self._ui = get_builder("voice_message_recorder.ui")
 
-        if not app.is_installed("GST") or app.audio_player is None:
+        try:
+            self._voice_message_recorder = VoiceMessageRecorder(self._on_error_occurred)
+        except Exception:
+            log.exception("Error while initializing VoiceMessageRecorder")
+
+        if app.audio_player is None or not hasattr(self, "_voice_message_recorder"):
             self.set_sensitive(False)
             self.set_tooltip_text(_("Voice Messages are not available"))
             self.set_child(Gtk.Image.new_from_icon_name("lucide-mic-symbolic"))
             return
 
-        app.settings.connect_signal(
-            "audio_input_device", self._on_audio_input_device_changed
+        self._connect(
+            self._voice_message_recorder,
+            "notify::available",
+            self._on_recorder_available,
         )
 
         gesture_direct_record_pressed = Gtk.GestureLongPress(button=Gdk.BUTTON_PRIMARY)
@@ -70,15 +84,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         )
         self.add_controller(gesture_direct_record_released)
 
-        self._time_label_update_timeout_id = None
-        self._visualization_timeout_id = None
-
-        self._mic_button_long_pressed = False
-
-        self._animation_index = 0
-        self._new_recording = True
-
-        self._voice_message_recorder = VoiceMessageRecorder(self._on_error_occurred)
         # TODO: When creating the widget, the file path is initialized with some value,
         # which will be overwritten with the first recording.
         # This is fine in this case, b/c we generate a static ID for the audio player.
@@ -124,15 +129,11 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         action = app.window.get_action("send-file-httpupload")
         self._connect(action, "notify::enabled", self._on_send_file_action_changed)
 
-    @property
-    def audio_rec_file_path(self) -> str:
-        return self._voice_message_recorder.audio_file_uri
-
     def _on_send_file_action_changed(self, *args: Any) -> None:
         self._update_button_state()
         self._update_icons()
 
-    def _on_audio_input_device_changed(self, *args: Any) -> None:
+    def _on_recorder_available(self, *args: Any) -> None:
         self._update_button_state()
         self._update_icons()
 
@@ -159,32 +160,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
         self._ui.record_toggle_button_image.set_from_icon_name(toggle_image_name)
 
-    def _is_audio_input_device_found(self) -> bool:
-        audio_device = app.settings.get("audio_input_device")
-
-        if not self._voice_message_recorder.audio_input_device_exists(audio_device):
-            log.error('Audio device "%s" not found', audio_device)
-            return False
-
-        return True
-
-    def _is_audio_input_device_blacklisted(self) -> bool:
-        audio_device = app.settings.get("audio_input_device")
-        negative_list = ["audiotestsrc"]
-
-        for device in negative_list:
-            if device in audio_device:
-                log.error('Audio device "%s" not supported', audio_device)
-                return True
-
-        return False
-
     def _voice_messages_available(self) -> bool:
-        if (
-            self._is_audio_input_device_blacklisted()
-            or not self._is_audio_input_device_found()
-            or self._voice_message_recorder.pipeline_setup_failed
-        ):
+        if not self._voice_message_recorder.available:
             return False
 
         httpupload = app.window.get_action_enabled("send-file-httpupload")
@@ -349,12 +326,10 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             return
 
         self._stop_and_reset_recording()
-        app.window.activate_action(
-            "win.send-file", GLib.Variant("as", [self.audio_rec_file_path])
-        )
+        path = self._voice_message_recorder.audio_file_uri
+        app.window.activate_action("win.send-file", GLib.Variant("as", [path]))
 
     def _on_send_clicked(self, _button: Gtk.Button) -> None:
         self._stop_recording()
-        app.window.activate_action(
-            "win.send-file", GLib.Variant("as", [self.audio_rec_file_path])
-        )
+        path = self._voice_message_recorder.audio_file_uri
+        app.window.activate_action("win.send-file", GLib.Variant("as", [path]))

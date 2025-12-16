@@ -15,6 +15,8 @@ from collections import deque
 from collections.abc import Callable
 from pathlib import Path
 
+from gi.repository import GObject
+
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
@@ -34,30 +36,16 @@ GST_ERROR_ON_STOP = 2
 GST_ERROR_ON_MERGING = 3
 
 
-class VoiceMessageRecorder:
+class VoiceMessageRecorder(GObject.GObject):
+    __gtype_name__ = "VoiceMessageRecorder"
+
     def __init__(self, error_callback: Callable[[int, str], None]) -> None:
+        GObject.GObject.__init__(self)
         if not app.is_installed("GST"):
-            return
+            raise Exception("Missing GStreamer dependency")
 
-        # React to settings change
-        app.settings.connect_signal(
-            "audio_input_device", self._on_audio_input_device_changed
-        )
-
-        # Device from setting
-        self._audio_input_device = self._extract_first_word(
-            app.settings.get("audio_input_device")
-        )
-
-        if sys.platform == "win32" and self._audio_input_device == "autoaudiosrc":
-            self._audio_input_device = "wasapisrc"
-
-        log.debug("Audio input device: %s", self._audio_input_device)
-
+        self._available = True
         self._error_callback = error_callback
-        self._start_switch = False
-        self._audiosrc_drop = False
-        self._src_do_switch_sent = False
 
         # Recording state
         self._new_recording = True
@@ -75,9 +63,22 @@ class VoiceMessageRecorder:
         self._buffer_level = 0
         self._rec_time = {"start": 0, "total": 0}
 
-        # Gstreamer pipeline
+        app.settings.connect_signal(
+            "audio_input_device", self._on_audio_input_device_changed
+        )
+
+        # Voice message storage location
+        self._filetype = "m4a"
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        self._file_name = f"voice-message-{timestamp}.{self._filetype}"
+        self._file_path = configpaths.get_temp_dir() / self._file_name
+
+        self._init_pipeline()
+
+    def _init_pipeline(self) -> None:
+        log.debug("Setting up pipeline")
+
         self._pipeline = Gst.Pipeline.new("pipeline")
-        self._audiosrc = Gst.ElementFactory.make(self._audio_input_device)
         self._queue = Gst.ElementFactory.make("queue")
         audioconvert = Gst.ElementFactory.make("audioconvert")
         audioresample = Gst.ElementFactory.make("audioresample")
@@ -88,7 +89,6 @@ class VoiceMessageRecorder:
 
         pipeline_elements = [
             self._pipeline,
-            self._audiosrc,
             self._queue,
             audioconvert,
             audioresample,
@@ -99,14 +99,9 @@ class VoiceMessageRecorder:
         ]
 
         if any(element is None for element in pipeline_elements):
-            log.error("Could not set up full audio recording pipeline.")
-            self._pipeline_setup_failed = True
-            return
-        self._pipeline_setup_failed = False
-        log.debug("Setting up pipeline.")
+            raise Exception("Error while setting up pipeline")
 
         assert self._pipeline is not None
-        assert self._audiosrc is not None
         assert self._queue is not None
         assert audioconvert is not None
         assert audioresample is not None
@@ -115,20 +110,11 @@ class VoiceMessageRecorder:
         assert mp4mux is not None
         assert self._filesink is not None
 
-        # Voice message storage location
-        self._filetype = "m4a"
-        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        self._file_name = f"voice-message-{timestamp}.{self._filetype}"
-        self._file_path: Path = configpaths.get_temp_dir() / self._file_name
-
-        if self._audio_input_device == "wasapisrc":
-            self._audiosrc.set_property("role", "comms")
         opusenc.set_property("audio-type", "voice")
         audiolevel.set_property("message", True)
         self._filesink.set_property("location", str(self._file_path))
         self._filesink.set_property("async", False)
 
-        self._pipeline.add(self._audiosrc)
         self._pipeline.add(self._queue)
         self._pipeline.add(audioconvert)
         self._pipeline.add(audioresample)
@@ -137,7 +123,6 @@ class VoiceMessageRecorder:
         self._pipeline.add(mp4mux)
         self._pipeline.add(self._filesink)
 
-        self._audiosrc.link(self._queue)
         self._queue.link(audioconvert)
         audioconvert.link(audioresample)
         audioresample.link(audiolevel)
@@ -150,6 +135,24 @@ class VoiceMessageRecorder:
         self._bus = self._pipeline.get_bus()
         self._bus.add_signal_watch()
         self._id = self._bus.connect("message", self._on_gst_message)
+
+        self._audiosrc = self._create_new_audio_src()
+        if self._audiosrc is not None:
+            self._pipeline.add(self._audiosrc)
+            self._audiosrc.link(self._queue)
+
+        self._available = self._audiosrc is not None
+        self.notify("available")
+
+    @GObject.Property(type=bool, default=True, flags=GObject.ParamFlags.READABLE)
+    def available(self) -> bool:
+        return self._available
+
+    def _set_property_available(self, value: bool) -> None:
+        if value == self._available:
+            return
+        self._available = value
+        self.notify("available")
 
     @property
     def recording_in_progress(self) -> bool:
@@ -170,12 +173,9 @@ class VoiceMessageRecorder:
         assert uri is not None
         return uri
 
-    @property
-    def pipeline_setup_failed(self) -> bool:
-        return self._pipeline_setup_failed
-
     def cleanup(self) -> None:
-        self._file_path.unlink()
+        del self._error_callback
+        self._file_path.unlink(missing_ok=True)
         self._pipeline.get_bus().disconnect(self._id)
 
     def start_recording(self) -> None:
@@ -257,10 +257,6 @@ class VoiceMessageRecorder:
         for sample in sample_list:
             result.append((sample, sample))
         return result
-
-    def audio_input_device_exists(self, gst_cmd: str) -> bool:
-        device = self._extract_first_word(gst_cmd)
-        return Gst.ElementFactory.find(device) is not None
 
     def _is_error(self, message: Gst.Message | None) -> bool:
         if message is not None and message.type == Gst.MessageType.ERROR:
@@ -381,71 +377,54 @@ class VoiceMessageRecorder:
                     self._samples_buffer.appendleft(self._rms)
                     self._buffer_level += 1 % self._num_samples
             log.debug("gst element message: %s", message_string)
+
         elif message.type == Gst.MessageType.ERROR:
             self._handle_error_on_recording(message)
+
         elif message.type == Gst.MessageType.EOS:
             pass
-        elif message.type == Gst.MessageType.APPLICATION:
-            if structure.get_name() == "start_switch":
-                assert self._audiosrc is not None
-
-                self._start_switch = True
-                self._src_do_switch_sent = False
-                src_pad = self._audiosrc.get_static_pad("src")
-                assert src_pad is not None
-                src_pad.add_probe(Gst.PadProbeType.BLOCK, self._probe_callback)
-            elif structure.get_name() == "do_switch":
-                if self._audiosrc_drop:
-                    self._switch_sources()
 
     def _switch_sources(self) -> None:
-        assert self._audiosrc is not None
         assert self._queue is not None
 
         # Remove old src
-        self._audiosrc.set_state(Gst.State.NULL)
-        self._audiosrc.unlink(self._queue)
-        self._pipeline.remove(self._audiosrc)
-        del self._audiosrc
+        if self._audiosrc is not None:
+            self._audiosrc.set_state(Gst.State.NULL)
+            self._audiosrc.unlink(self._queue)
+            self._pipeline.remove(self._audiosrc)
 
-        # Create new audio source
-        if sys.platform == "win32" and self._audio_input_device == "autoaudiosrc":
-            self._audio_input_device = "wasapisrc"
+        self._audiosrc = self._create_new_audio_src()
+        if self._audiosrc is not None:
+            self._pipeline.add(self._audiosrc)
+            self._audiosrc.link(self._queue)
+            self._audiosrc.set_state(Gst.State.PLAYING)
 
-        self._audiosrc = Gst.ElementFactory.make(self._audio_input_device)
+        self._available = self._audiosrc is not None
+        self.notify("available")
 
-        assert self._audiosrc is not None
-        if self._audio_input_device == "wasapisrc":
-            self._audiosrc.set_property("role", "comms")
-        self._pipeline.add(self._audiosrc)
-        self._audiosrc.link(self._queue)
-        self._audiosrc.set_state(Gst.State.PLAYING)
-        self._start_switch = False
+    def _create_new_audio_src(self) -> Gst.Element | None:
+        device = self._extract_first_word(app.settings.get("audio_input_device"))
 
-    def _on_audio_input_device_changed(self, *args: Any) -> None:
-        old_device = self._audio_input_device
-        self._audio_input_device = self._extract_first_word(
-            app.settings.get("audio_input_device")
-        )
-        log.debug("Switching from %s to %s", old_device, self._audio_input_device)
-        if self.recording_in_progress:
-            self._custom_message("start_switch")
+        if sys.platform == "win32" and device == "autoaudiosrc":
+            device = "wasapisrc"
+
+        if device == "audiotestsrc":
+            log.error('Audio device "audiotestsrc" not supported')
+            return None
+
+        audiosrc = Gst.ElementFactory.make(device)
+        if audiosrc is None:
+            log.debug("Unable to create audio source for: %s", device)
         else:
-            self._switch_sources()
+            log.debug("Created audio source for: %s", device)
+            if device == "wasapisrc":
+                audiosrc.set_property("role", "comms")
 
-    def _probe_callback(
-        self, pad: Gst.Pad, info: Gst.PadProbeInfo
-    ) -> Gst.PadProbeReturn:
-        if self._start_switch:
-            if not self._src_do_switch_sent:
-                self._audiosrc_drop = True
-                self._custom_message("do_switch")
-            return Gst.PadProbeReturn.DROP
+        return audiosrc
 
-        self._src_do_switch_sent = False
-        self._audiosrc_drop = False
-        pad.remove_probe(info.id)
-        return Gst.PadProbeReturn.OK
+    def _on_audio_input_device_changed(self, device: str, *args: Any) -> None:
+        log.debug("Switching to input device: %s", device)
+        self._switch_sources()
 
     def _file_merge_required(self) -> bool:
         return self._output_file_counter > 1
