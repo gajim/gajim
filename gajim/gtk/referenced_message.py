@@ -13,11 +13,13 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
@@ -166,6 +168,9 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
             jid = self._message.remote.jid
             jid = jid.new_with(resource=self._message.resource)
             reply_to_id = self._original_message.stanza_id
+        elif self._message.type == MessageType.CHAT:
+            if self._original_message.direction == ChatDirection.OUTGOING:
+                jid = JID.from_string(app.get_jid_from_account(self._contact.account))
 
         if reply_to_id is None:
             return None
