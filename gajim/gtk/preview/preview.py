@@ -231,7 +231,10 @@ class PreviewWidget(Gtk.Box, SignalManager):
                     and contains_audio_streams(self._orig_path)
                 ):
                     widget = AudioPreviewWidget(
-                        self._filename, self._file_size, self._orig_path
+                        app.audio_player,
+                        self._filename,
+                        self._file_size,
+                        self._orig_path,
                     )
 
             if widget is not None:

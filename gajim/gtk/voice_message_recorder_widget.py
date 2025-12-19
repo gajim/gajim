@@ -89,7 +89,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         # This is fine in this case, b/c we generate a static ID for the audio player.
         # We might want to handle this a little bit more intuitive though in the future.
         self._audio_player_widget = AudioPreviewWidget(
-            "", 0, self._voice_message_recorder.audio_file_abspath
+            app.audio_player, "", 0, self._voice_message_recorder.audio_file_abspath
         )
 
         self._connect(self._ui.cancel_button, "clicked", self._on_cancel_clicked)

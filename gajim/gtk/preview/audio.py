@@ -66,6 +66,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def __init__(
         self,
+        audio_player: AudioPlayer,
         filename: str,
         file_size: int,
         orig_path: Path,
@@ -73,14 +74,14 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         Gtk.Box.__init__(self)
         SignalManager.__init__(self)
 
+        self._audio_player = audio_player
         self._orig_path = orig_path
         self._filename = filename
         self._file_size = file_size
 
         self._id = hash(self._orig_path) % 100_000
 
-        assert app.audio_player is not None
-        self._preview_state = app.audio_player.get_audio_state(self._id)
+        self._preview_state = self._audio_player.get_audio_state(self._id)
 
         # UI
         self._is_ltr = bool(self.get_direction() == Gtk.TextDirection.LTR)
@@ -174,7 +175,11 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         return self._id
 
     def do_unroot(self) -> None:
-        self._cleanup()
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        self._audio_player.stop(self._id)
+        del self._audio_player
+        app.check_finalize(self)
 
     def sample_voice_message(self, audio_path: Path) -> None:
         self._orig_path = audio_path
@@ -239,9 +244,8 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     def _on_audio_playback_changed(
         self, _obj: AudioPlayer, preview_id: int, state: int
     ) -> None:
-        assert app.audio_player is not None
         if preview_id != self.id:
-            self._disconnect_object(app.audio_player)
+            self._disconnect_object(self._audio_player)
             self._play_icon.set_from_icon_name("lucide-play-symbolic")
             return
 
@@ -266,22 +270,21 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         )
 
     def _on_play_clicked(self, _button: Gtk.Button) -> None:
-        assert app.audio_player is not None
-        if app.audio_player.preview_id != self._id or self._new_voice_message_track:
+        if self._audio_player.preview_id != self._id or self._new_voice_message_track:
             self._new_voice_message_track = False
             self._connect(
-                app.audio_player,
+                self._audio_player,
                 "audio-playback-progressed",
                 self._on_audio_playback_progressed,
             )
             self._connect(
-                app.audio_player,
+                self._audio_player,
                 "audio-playback-changed",
                 self._on_audio_playback_changed,
             )
-            app.audio_player.play_audio_file(self._orig_path, self._id)
+            self._audio_player.play_audio_file(self._orig_path, self._id)
         else:
-            app.audio_player.toggle_playback()
+            self._audio_player.toggle_playback()
 
     def _update_timestamp_label(self) -> None:
         cur = self._preview_state.position
@@ -339,15 +342,13 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         _x: float,
         _y: float,
     ) -> int:
-        assert app.audio_player is not None
-
         seek_ts = self._convert_position_to_timestamp(
             self._cursor_pos, self._seek_bar.get_width()
         )
-        if app.audio_player.preview_id != self.id:
+        if self._audio_player.preview_id != self.id:
             self._preview_state.position = seek_ts
         else:
-            app.audio_player.set_playback_position(self._id, seek_ts)
+            self._audio_player.set_playback_position(self._id, seek_ts)
 
         self._update_ui_from_state()
 
@@ -362,7 +363,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         x: float,
         _y: float,
     ) -> None:
-        assert app.audio_player is not None
         if not self._user_holds_position_slider:
             return
 
@@ -375,10 +375,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
             self._user_holds_position_slider
             and self._preview_state.pipeline_state != AudioPlayerState.PLAYING
         ):
-            if app.audio_player.preview_id != self.id:
+            if self._audio_player.preview_id != self.id:
                 self._preview_state.position = seek_ts
             else:
-                app.audio_player.set_playback_position(self._id, seek_ts)
+                self._audio_player.set_playback_position(self._id, seek_ts)
             self._update_ui_from_state()
         else:
             self._seek_ts = seek_ts
@@ -389,14 +389,13 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         _dx: float,
         dy: float,
     ) -> None:
-        assert app.audio_player is not None
         if dy > 0:
             timestamp = self._preview_state.position + self._offset_backward
         else:
             timestamp = self._preview_state.position + self._offset_forward
 
         self._set_preview_state_position(timestamp)
-        app.audio_player.set_playback_position(self.id, self._preview_state.position)
+        self._audio_player.set_playback_position(self.id, self._preview_state.position)
         self._update_ui_from_state()
 
     def _on_visualizer_button_clicked(
@@ -406,7 +405,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         x: float,
         _y: float,
     ) -> int:
-        assert app.audio_player is not None
         assert self._cursor_pos is not None
 
         timestamp = self._convert_position_to_timestamp(
@@ -415,7 +413,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
         self._set_preview_state_position(timestamp)
         self._update_ui_from_state()
-        app.audio_player.set_playback_position(self._id, timestamp)
+        self._audio_player.set_playback_position(self._id, timestamp)
 
         return Gdk.EVENT_STOP
 
@@ -427,7 +425,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._stack.set_visible_child_name("preview")
 
     def _set_playback_speed(self, speed: float) -> None:
-        assert app.audio_player is not None
         speed = max(0.25, speed)
         speed = min(speed, 2.0)
 
@@ -435,10 +432,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._speed_label.set_text(f"{speed:.2f}x")
         self._speed_bar_adj.set_value(speed)
 
-        if app.audio_player.preview_id != self.id:
+        if self._audio_player.preview_id != self.id:
             return
 
-        app.audio_player.set_playback_speed(speed)
+        self._audio_player.set_playback_speed(speed)
 
     def _on_speed_change(
         self, _range: Gtk.Range, _scroll: Gtk.ScrollType, value: float
@@ -454,15 +451,14 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._set_playback_speed(speed)
 
     def _change_playback_position_by_step(self, step: float) -> None:
-        assert app.audio_player is not None
         new_pos = self._preview_state.position + step
         new_pos = max(0.0, new_pos)
         new_pos = min(new_pos, self._preview_state.duration)
 
-        if app.audio_player.preview_id != self.id:
+        if self._audio_player.preview_id != self.id:
             self._preview_state.position = new_pos
         else:
-            app.audio_player.set_playback_position(self._id, new_pos)
+            self._audio_player.set_playback_position(self._id, new_pos)
 
         self._update_ui_from_state()
 
@@ -471,10 +467,3 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def _on_forward_clicked(self, _button: Gtk.Button) -> None:
         self._change_playback_position_by_step(self._offset_forward)
-
-    def _cleanup(self) -> None:
-        assert app.audio_player is not None
-        Gtk.Box.do_unroot(self)
-        app.audio_player.stop(self._id)
-        self._disconnect_all()
-        app.check_finalize(self)
