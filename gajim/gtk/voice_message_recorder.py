@@ -351,12 +351,6 @@ class VoiceMessageRecorder(GObject.GObject):
         self._error_callback(GST_ERROR_ON_MERGING, error_message)
         self.stop_and_reset()
 
-    def _custom_message(self, name: str) -> None:
-        custom_structure = Gst.Structure.new_empty(name)
-        custom_message = Gst.Message.new_application(None, custom_structure)
-        assert custom_message is not None
-        self._bus.post(custom_message)
-
     def _on_gst_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
         structure = message.get_structure()
         if structure is None:
@@ -386,10 +380,9 @@ class VoiceMessageRecorder(GObject.GObject):
 
     def _switch_sources(self) -> None:
         assert self._queue is not None
+        assert not self.recording_in_progress
 
-        # Remove old src
         if self._audiosrc is not None:
-            self._audiosrc.set_state(Gst.State.NULL)
             self._audiosrc.unlink(self._queue)
             self._pipeline.remove(self._audiosrc)
 
@@ -397,7 +390,6 @@ class VoiceMessageRecorder(GObject.GObject):
         if self._audiosrc is not None:
             self._pipeline.add(self._audiosrc)
             self._audiosrc.link(self._queue)
-            self._audiosrc.set_state(Gst.State.PLAYING)
 
         self._available = self._audiosrc is not None
         self.notify("available")
