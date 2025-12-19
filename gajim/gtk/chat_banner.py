@@ -66,6 +66,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
         SignalManager.__init__(self)
+        self.set_name("ChatBanner")
 
         self._client: types.Client | None = None
         self._contact: types.ChatContactT | None = None
@@ -281,8 +282,8 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
         assert self._contact
-        texture = self._contact.get_avatar(AvatarSize.CHAT, scale)
-        self._avatar_image.set_pixel_size(AvatarSize.CHAT)
+        texture = self._contact.get_avatar(AvatarSize.CHAT_BANNER, scale)
+        self._avatar_image.set_pixel_size(AvatarSize.CHAT_BANNER)
         self._avatar_image.set_from_paintable(texture)
 
     def _update_avatar_button_sensitivity(self) -> None:

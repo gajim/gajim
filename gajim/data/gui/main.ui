@@ -43,7 +43,7 @@
               <object class="GtkImage">
                 <property name="icon-name">gajim</property>
                 <property name="pixel-size">24</property>
-                <property name="margin-start">14</property>
+                <property name="margin-start">11</property>
               </object>
             </child>
             <child type="end">

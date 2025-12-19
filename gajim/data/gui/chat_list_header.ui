@@ -40,8 +40,6 @@
     <child>
       <object class="GtkSeparator">
         <property name="margin-top">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <layout>
           <property name="column">0</property>
           <property name="row">1</property>

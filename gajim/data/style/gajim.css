@@ -293,7 +293,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .sidebar-listbox-row {
-  min-width: 63px;
+  min-width: 57px;
   padding: 6px 0px 6px 0px;
 }
 
@@ -307,7 +307,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .sidebar-listbox-row .selection-bar {
-    margin-left: 6px;
+    margin-left: 4px;
     padding-left: 3px;
 }
 
@@ -520,6 +520,8 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* Banner */
+
+#ChatBanner { padding: 5px; }
 .avatar-button * {
     filter: none;
     -gtk-icon-filter: none;

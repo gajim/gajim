@@ -248,7 +248,6 @@
         </child>
         <style>
           <class name="gajim-banner"/>
-          <class name="p-6"/>
         </style>
       </object>
     </child>

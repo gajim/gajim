@@ -84,7 +84,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.append(self._chat_banner)
-        box.append(Gtk.Separator(margin_start=6, margin_end=6))
+        box.append(Gtk.Separator(margin_start=12, margin_end=12))
         box.append(self._chat_control.get_widget())
         box.append(self._message_action_box)
 

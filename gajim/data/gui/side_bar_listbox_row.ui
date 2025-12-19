@@ -5,7 +5,7 @@
     <property name="name">SideBarListBoxRow</property>
     <property name="child">
       <object class="GtkBox">
-        <property name="spacing">3</property>
+        <property name="spacing">2</property>
         <child>
           <object class="GtkBox">
             <style>
@@ -27,6 +27,7 @@
                 <property name="halign">end</property>
                 <property name="valign">start</property>
                 <property name="visible">false</property>
+                <property name="margin-end">2</property>
                 <style>
                   <class name="unread-counter" />
                 </style>
