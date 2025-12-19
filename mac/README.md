@@ -2,7 +2,7 @@
 
 To build nbxmpp and Gajim on MacOS, you can follow [the wiki page](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS).
 
-But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help creating virtual environments for nbxmpp and Gajim in Mac OS, build it, start it from the virtual environement, and also create a `.dmg` bundle.
+But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help creating virtual environments for nbxmpp and Gajim in Mac OS, build it, start it from the virtual environment, and also create a `.dmg` bundle.
 
 ## Requirements for this script
 
