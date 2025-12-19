@@ -11,9 +11,14 @@ info_plist = {
 }
 
 import sys
+import glob
+
 sys.path.insert(0, os.path.join(cwd))
-from gajim.common.modules import MODULES
-hiddenimports = ['gajim.common.modules.' + m for m in MODULES]
+
+modules = glob.glob("gajim/common/modules/*.py")
+modules_list = [os.path.basename(f)[:-3] for f in modules if not f.endswith("__init__.py")]
+hiddenimports = ['gajim.common.modules.' + m for m in modules_list]
+
 sys.path.pop(0)
 
 a = Analysis(['launch.py'],
