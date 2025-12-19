@@ -144,21 +144,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuButton" id="_share_menu_button">
-                <property name="sensitive">0</property>
-                <property name="focusable">1</property>
-                <property name="focus-on-click">0</property>
-                <property name="receives-default">1</property>
-                <property name="valign">center</property>
-                <property name="popover">_share_popover</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">lucide-share-2-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
               <object class="GtkButton">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
@@ -187,15 +172,37 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="_muc_invite_button">
-                <property name="focusable">1</property>
-                <property name="receives-default">1</property>
-                <property name="action-name">win.muc-invite</property>
-                <property name="tooltip-text" translatable="yes">Invite to this chat…</property>
-                <property name="valign">center</property>
+              <object class="GtkBox">
+                <style>
+                  <class name="linked"/>
+                </style>
                 <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">lucide-user-plus-symbolic</property>
+                  <object class="GtkMenuButton" id="_share_menu_button">
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    <property name="focus-on-click">0</property>
+                    <property name="receives-default">1</property>
+                    <property name="valign">center</property>
+                    <property name="popover">_share_popover</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">lucide-share-2-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="_muc_invite_button">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="action-name">win.muc-invite</property>
+                    <property name="tooltip-text" translatable="yes">Invite to this chat…</property>
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">lucide-user-plus-symbolic</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
