@@ -182,7 +182,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* Scrollbars */
-.no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
+.no-scroll-indicator undershoot.top, undershoot.bottom { box-shadow: none; background-image: none; }
 .scrollbar-style scrollbar trough {background-color:var(--view-bg-color); }
 .scrollbar-style scrollbar {border:none; }
 
