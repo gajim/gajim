@@ -13,6 +13,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
@@ -139,6 +140,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 ("account-connected", 85, self._on_account_state),
                 ("account-disconnected", 85, self._on_account_state),
                 ("register-actions", ged.GUI1, self._on_register_actions),
+                ("feature-discovered", ged.GUI1, self._on_feature_discovered),
             ]
         )
 
@@ -376,6 +378,16 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             return
 
         self._update_group_chat_actions(self._current_contact)
+
+    def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
+        if self._current_contact is None:
+            return
+
+        if event.account != self._current_contact.account:
+            return
+
+        if event.feature == Namespace.HTTPUPLOAD_0:
+            self._update_base_actions(self._current_contact)
 
     def _on_account_state(
         self, event: events.AccountConnected | events.AccountDisconnected

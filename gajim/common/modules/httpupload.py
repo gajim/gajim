@@ -27,6 +27,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.aes import AESKeyData
 from gajim.common.const import FTState
+from gajim.common.events import FeatureDiscovered
 from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
 from gajim.common.exceptions import FileError
@@ -75,6 +76,10 @@ class HTTPUpload(BaseModule):
                 int(self.max_file_size), GLib.FormatSizeFlags.IEC_UNITS
             )
             self._log.info("Component has a maximum file size of: %s", size)
+
+        app.ged.raise_event(
+            FeatureDiscovered(account=self._account, feature=Namespace.HTTPUPLOAD_0)
+        )
 
     def get_running_transfers(
         self, contact: types.ChatContactT
