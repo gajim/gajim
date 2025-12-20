@@ -26,13 +26,12 @@ def python_version(specifier_set: str) -> bool:
 
 def package_version(requirement: str) -> bool:
     req = Requirement(requirement)
-
     try:
         installed_version = importlib.metadata.version(req.name)
     except importlib.metadata.PackageNotFoundError:
         return False
 
-    return installed_version in req.specifier
+    return req.specifier.contains(installed_version, prereleases=True)
 
 
 @functools.lru_cache(maxsize=1)
