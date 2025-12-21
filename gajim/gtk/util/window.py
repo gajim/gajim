@@ -158,9 +158,12 @@ def resize_window(window: Gtk.Window, width: int, height: int) -> None:
 def get_app_windows(account: str) -> list[Gtk.Window]:
     windows: list[Gtk.Window] = []
     for win in app.app.get_windows():
-        if hasattr(win, "account"):
+        if hasattr(win, "wrapper"):
+            win = win.wrapper  # pyright: ignore
+
+        if hasattr(win, "account"):  # pyright: ignore
             if win.account == account:  # pyright: ignore
-                windows.append(win)
+                windows.append(win)  # pyright: ignore
     return windows
 
 
@@ -421,14 +424,19 @@ def get_app_window(
         if win.get_name() != name:
             continue
 
+        if hasattr(win, "wrapper"):
+            win = win.wrapper  # pyright: ignore
+
         if account is not None:
-            if account != win.wrapper.account:  # pyright: ignore
+            if account != win.account:  # pyright: ignore
                 continue
 
         if jid is not None:
-            if jid != win.wrapper.jid:  # pyright: ignore
+            if jid != win.jid:  # pyright: ignore
                 continue
-        return win.wrapper  # pyright: ignore
+
+        return win  # pyright: ignore
+
     return None
 
 
