@@ -9,7 +9,7 @@ from typing import Literal
 from typing import overload
 
 import logging
-import multiprocessing as mp
+import multiprocessing
 import queue
 import threading
 from collections import defaultdict
@@ -44,7 +44,8 @@ QueueT = queue.Queue[TransferState | TransferMetadata]
 class FileTransferManager:
     def __init__(self) -> None:
         self._transfers: dict[str, FileTransfer] = {}
-        self._manager = mp.Manager()
+        mp_context = multiprocessing.get_context("spawn")
+        self._manager = mp_context.Manager()
         self._queue: QueueT = self._manager.Queue()
         GLib.timeout_add(100, self._poll_queue)
 
