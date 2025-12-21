@@ -35,7 +35,7 @@ Depends:
     ${python3:Depends},
     desktop-file-utils,
     python3 (>= 3.11),
-    python3-gi (>= 3.52.0),
+    python3-gi (>= 3.53.0),
     python3-gi-cairo (>= 1.14.0~),
     python3-h2,
     python3-socksio,
