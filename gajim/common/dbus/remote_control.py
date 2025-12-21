@@ -20,6 +20,7 @@ from gajim.common.structs import OutgoingMessage
 from gajim.common.util.status import get_client_status
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_global_status_message
+from gajim.common.util.version import gi_package_version
 
 log = logging.getLogger("gajim.c.dbus.remote_control")
 
@@ -134,7 +135,12 @@ class Server:
                     arg.signature for arg in method.in_args
                 )
 
-            con.register_object(
+            if gi_package_version("GLib>=2.84.0"):
+                register_method = con.register_object_with_closures2
+            else:
+                register_method = con.register_object
+
+            register_method(
                 object_path=path,
                 interface_info=interface,
                 method_call_closure=self._on_method_call,

@@ -9,6 +9,8 @@ import logging
 from gi.repository import Gio
 from gi.repository import GLib
 
+from gajim.common.util.version import gi_package_version
+
 log = logging.getLogger("gajim.c.dbus")
 
 
@@ -25,8 +27,13 @@ class DBusService:
         self._registration_id: int | None = None
 
     def register(self):
+        if gi_package_version("GLib>=2.84.0"):
+            register_method = self._bus.register_object_with_closures2
+        else:
+            register_method = self._bus.register_object
+
         try:
-            self._registration_id = self._bus.register_object(
+            self._registration_id = register_method(
                 object_path=self._object_path,
                 interface_info=self._interface_info,
                 method_call_closure=self._on_method_call,
