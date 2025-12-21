@@ -127,13 +127,23 @@ class KeyValueViewItem(Gtk.Label):
 
     def bind(self, item: KeyValueItem) -> None:
         self.set_label(item.value)
+        self.set_tooltip_text(item.value)
 
 
 class KeyValueViewListItem(Gtk.Label):
-    def __init__(self, **kwargs: Any):
+    def __init__(self):
         Gtk.Label.__init__(
-            self, ellipsize=Pango.EllipsizeMode.MIDDLE, xalign=0, **kwargs
+            self,
+            xalign=0,
         )
 
     def bind(self, item: KeyValueItem) -> None:
         self.set_label(item.value)
+        self.set_tooltip_text(item.value)
+
+        if len(item.value) > 35:
+            self.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
+            self.set_width_chars(30)
+        else:
+            self.set_ellipsize(Pango.EllipsizeMode.NONE)
+            self.set_width_chars(-1)
