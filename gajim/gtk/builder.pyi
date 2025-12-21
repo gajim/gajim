@@ -347,25 +347,6 @@ class GroupchatConfigBuilder(Builder):
     error_image: Gtk.Image
     error_label: Gtk.Label
 
-class GroupchatCreationBuilder(Builder):
-    account_liststore: Gtk.ListStore
-    stack: Gtk.Stack
-    grid: Gtk.Grid
-    name_entry: Gtk.Entry
-    description_entry: Gtk.Entry
-    account_combo: Gtk.ComboBox
-    account_label: Gtk.Label
-    advanced_switch: Gtk.Switch
-    advanced_switch_label: Gtk.Label
-    error_label: Gtk.Label
-    info_label: Gtk.Label
-    address_entry_label: Gtk.Label
-    address_entry: Gtk.Entry
-    public_radio: Gtk.CheckButton
-    private_radio: Gtk.CheckButton
-    spinner: Adw.Spinner
-    create_button: Gtk.Button
-
 class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
     info_container: Gtk.Box
@@ -864,12 +845,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> GroupchatConfigBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["groupchat_creation.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatCreationBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["groupchat_details.ui"],

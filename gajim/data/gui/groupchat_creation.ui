@@ -1,316 +1,316 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkListStore" id="account_liststore">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkStack" id="stack">
-    <child>
-      <object class="GtkStackPage">
-        <property name="name">create</property>
-        <property name="child">
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="spacing">18</property>
+  <template class="CreateGroupchatWindow" parent="GajimAppWindow">
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar" />
+        </child>
+        <property name="content">
+          <object class="GtkStack" id="_stack">
             <child>
-              <object class="GtkGrid" id="grid">
-                <property name="margin-top">12</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Name</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">name_entry</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Description</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">description_entry</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">2</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="name_entry">
-                    <property name="focusable">1</property>
-                    <property name="hexpand">1</property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="description_entry">
-                    <property name="focusable">1</property>
-                    <property name="show-emoji-icon">1</property>
-                    <property name="enable-emoji-completion">1</property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">2</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="account_combo">
-                    <property name="visible">0</property>
-                    <property name="valign">center</property>
-                    <property name="margin-bottom">12</property>
-                    <property name="model">account_liststore</property>
-                    <property name="id-column">0</property>
+              <object class="GtkStackPage">
+                <property name="name">create</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
                     <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
+                      <object class="GtkGrid" id="_grid">
+                        <property name="margin-top">12</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">12</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">_Name</property>
+                            <property name="use-underline">1</property>
+                            <property name="mnemonic-widget">_name_entry</property>
+                            <style>
+                              <class name="dimmed"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">_Description</property>
+                            <property name="use-underline">1</property>
+                            <property name="mnemonic-widget">_description_entry</property>
+                            <style>
+                              <class name="dimmed"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="_name_entry">
+                            <property name="focusable">1</property>
+                            <property name="hexpand">1</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="_description_entry">
+                            <property name="focusable">1</property>
+                            <property name="show-emoji-icon">1</property>
+                            <property name="enable-emoji-completion">1</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GajimDropDown" id="_account_dropdown">
+                            <property name="visible">0</property>
+                            <property name="valign">center</property>
+                            <property name="margin-bottom">12</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_account_label">
+                            <property name="visible">0</property>
+                            <property name="halign">end</property>
+                            <property name="margin-bottom">12</property>
+                            <property name="label" translatable="yes">_Account</property>
+                            <property name="use-underline">1</property>
+                            <property name="mnemonic-widget">_account_dropdown</property>
+                            <style>
+                              <class name="dimmed"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="_advanced_switch">
+                            <property name="focusable">1</property>
+                            <property name="halign">end</property>
+                            <property name="margin-top">12</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">3</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_advanced_switch_label">
+                            <property name="halign">start</property>
+                            <property name="margin-top">12</property>
+                            <property name="label" translatable="yes">Advanced Settings</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">3</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_error_label">
+                            <property name="visible">0</property>
+                            <property name="wrap">1</property>
+                            <property name="max-width-chars">38</property>
+                            <style>
+                              <class name="error"/>
+                              <class name="p-12"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">8</property>
+                              <property name="column-span">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_info_label">
+                            <property name="visible">0</property>
+                            <property name="wrap">1</property>
+                            <property name="max-width-chars">38</property>
+                            <style>
+                              <class name="p-12"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">7</property>
+                              <property name="column-span">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="_address_entry_label">
+                            <property name="visible">0</property>
+                            <property name="halign">end</property>
+                            <property name="margin-top">12</property>
+                            <property name="label" translatable="yes">_Address</property>
+                            <property name="use-underline">1</property>
+                            <style>
+                              <class name="dimmed"/>
+                            </style>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">6</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="_address_entry">
+                            <property name="visible">0</property>
+                            <property name="focusable">1</property>
+                            <property name="margin-top">12</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">6</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="_public_radio">
+                            <property name="visible">0</property>
+                            <property name="margin-top">12</property>
+                            <property name="group">_private_radio</property>
+                            <property name="child">
+                              <object class="GtkBox">
+                                <property name="margin-start">6</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Public</property>
+                                    <property name="xalign">0</property>
+                                    <style>
+                                      <class name="bold"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Anyone can join</property>
+                                    <property name="wrap">1</property>
+                                    <property name="xalign">0</property>
+                                    <style>
+                                      <class name="dimmed"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">5</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="_private_radio">
+                            <property name="visible">0</property>
+                            <property name="margin-top">12</property>
+                            <property name="active">1</property>
+                            <property name="child">
+                              <object class="GtkBox">
+                                <property name="halign">start</property>
+                                <property name="margin-start">6</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Private</property>
+                                    <property name="xalign">0</property>
+                                    <style>
+                                      <class name="bold"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">You have to invite people so they can join</property>
+                                    <property name="wrap">1</property>
+                                    <property name="xalign">0</property>
+                                    <style>
+                                      <class name="dimmed"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">4</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
                     </child>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="account_label">
-                    <property name="visible">0</property>
-                    <property name="halign">end</property>
-                    <property name="margin-bottom">12</property>
-                    <property name="label" translatable="yes">_Account</property>
-                    <property name="use-underline">1</property>
-                    <property name="mnemonic-widget">account_combo</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSwitch" id="advanced_switch">
-                    <property name="focusable">1</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">12</property>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">3</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="advanced_switch_label">
-                    <property name="halign">start</property>
-                    <property name="margin-top">12</property>
-                    <property name="label" translatable="yes">Advanced Settings</property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">3</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="error_label">
-                    <property name="visible">0</property>
-                    <property name="wrap">1</property>
-                    <property name="max-width-chars">38</property>
-                    <style>
-                      <class name="error"/>
-                      <class name="p-12"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">8</property>
-                      <property name="column-span">2</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="info_label">
-                    <property name="visible">0</property>
-                    <property name="wrap">1</property>
-                    <property name="max-width-chars">38</property>
-                    <style>
-                      <class name="p-12"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">7</property>
-                      <property name="column-span">2</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="address_entry_label">
-                    <property name="visible">0</property>
-                    <property name="halign">end</property>
-                    <property name="margin-top">12</property>
-                    <property name="label" translatable="yes">_Address</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">6</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="address_entry">
-                    <property name="visible">0</property>
-                    <property name="focusable">1</property>
-                    <property name="margin-top">12</property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">6</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="public_radio">
-                    <property name="visible">0</property>
-                    <property name="margin-top">12</property>
-                    <property name="group">private_radio</property>
-                    <property name="child">
+                    <child>
                       <object class="GtkBox">
-                        <property name="margin-start">6</property>
-                        <property name="orientation">vertical</property>
+                        <property name="halign">end</property>
+                        <property name="valign">end</property>
+                        <property name="vexpand">1</property>
+                        <property name="margin-top">12</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Public</property>
-                            <property name="xalign">0</property>
-                            <style>
-                              <class name="bold"/>
-                            </style>
+                          <object class="AdwSpinner" id="_spinner">
+                            <property name="visible">0</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Anyone can join</property>
-                            <property name="wrap">1</property>
-                            <property name="xalign">0</property>
+                          <object class="GtkButton" id="_create_button">
+                            <property name="label" translatable="yes">_Create</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">end</property>
+                            <property name="use-underline">1</property>
                             <style>
-                              <class name="dimmed"/>
+                              <class name="suggested-action"/>
                             </style>
                           </object>
                         </child>
                       </object>
-                    </property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">5</property>
-                    </layout>
+                    </child>
                   </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="private_radio">
-                    <property name="visible">0</property>
-                    <property name="margin-top">12</property>
-                    <property name="active">1</property>
-                    <property name="child">
-                      <object class="GtkBox">
-                        <property name="halign">start</property>
-                        <property name="margin-start">6</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Private</property>
-                            <property name="xalign">0</property>
-                            <style>
-                              <class name="bold"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">You have to invite people so they can join</property>
-                            <property name="wrap">1</property>
-                            <property name="xalign">0</property>
-                            <style>
-                              <class name="dimmed"/>
-                            </style>
-                          </object>
-                        </child>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">no-connection</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="opacity">0.9</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="hexpand">1</property>
+                        <property name="label" translatable="yes">You are offline</property>
+                        <property name="justify">center</property>
                       </object>
-                    </property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">4</property>
-                    </layout>
+                    </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
-            <child>
-              <object class="GtkBox">
-                <property name="halign">end</property>
-                <property name="valign">end</property>
-                <property name="vexpand">1</property>
-                <property name="margin-top">12</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="AdwSpinner" id="spinner">
-                    <property name="visible">0</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="create_button">
-                    <property name="label" translatable="yes">_Create</property>
-                    <property name="focusable">1</property>
-                    <property name="halign">end</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
+            <style>
+              <class name="window-padding"/>
+            </style>
           </object>
         </property>
       </object>
-    </child>
-    <child>
-      <object class="GtkStackPage">
-        <property name="name">no-connection</property>
-        <property name="child">
-          <object class="GtkBox">
-            <property name="opacity">0.9</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="hexpand">1</property>
-                <property name="label" translatable="yes">You are offline</property>
-                <property name="justify">center</property>
-              </object>
-            </child>
-          </object>
-        </property>
-      </object>
-    </child>
-  </object>
+    </property>
+  </template>
 </interface>

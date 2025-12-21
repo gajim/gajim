@@ -7,6 +7,8 @@ from typing import Any
 import logging
 import random
 
+from gi.repository import Adw
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
@@ -25,14 +27,35 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_random_muc_localpart
 
 from gajim.gtk.alert import InformationAlertDialog
-from gajim.gtk.builder import get_builder
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.misc import ensure_not_destroyed
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.groupchat_creation")
 
 
+@Gtk.Template(string=get_ui_string("groupchat_creation.ui"))
 class CreateGroupchatWindow(GajimAppWindow, EventHelper):
+    __gtype_name__ = "CreateGroupchatWindow"
+
+    _stack: Gtk.Stack = Gtk.Template.Child()
+    _grid: Gtk.Grid = Gtk.Template.Child()
+    _name_entry: Gtk.Entry = Gtk.Template.Child()
+    _description_entry: Gtk.Entry = Gtk.Template.Child()
+    _account_dropdown: GajimDropDown = Gtk.Template.Child()
+    _account_label: Gtk.Label = Gtk.Template.Child()
+    _advanced_switch: Gtk.Switch = Gtk.Template.Child()
+    _advanced_switch_label: Gtk.Label = Gtk.Template.Child()
+    _error_label: Gtk.Label = Gtk.Template.Child()
+    _info_label: Gtk.Label = Gtk.Template.Child()
+    _address_entry_label: Gtk.Label = Gtk.Template.Child()
+    _address_entry: Gtk.Entry = Gtk.Template.Child()
+    _public_radio: Gtk.CheckButton = Gtk.Template.Child()
+    _private_radio: Gtk.CheckButton = Gtk.Template.Child()
+    _spinner: Adw.Spinner = Gtk.Template.Child()
+    _create_button: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self, account: str | None) -> None:
         GajimAppWindow.__init__(
             self,
@@ -42,15 +65,15 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         )
         EventHelper.__init__(self)
 
-        self._ui = get_builder("groupchat_creation.ui")
-        self.set_child(self._ui.stack)
-
-        self._connect(self._ui.account_combo, "changed", self._on_account_combo_changed)
         self._connect(
-            self._ui.advanced_switch, "notify::active", self._on_toggle_advanced
+            self._account_dropdown,
+            "notify::selected",
+            self._on_account_combo_changed,
         )
-        self._connect(self._ui.address_entry, "changed", self._on_address_entry_changed)
-        self._connect(self._ui.create_button, "clicked", self._on_create_clicked)
+
+        self._connect(self._advanced_switch, "notify::active", self._on_toggle_advanced)
+        self._connect(self._address_entry, "changed", self._on_address_entry_changed)
+        self._connect(self._create_button, "clicked", self._on_create_clicked)
 
         self._account = account
         self._destroyed: bool = False
@@ -66,11 +89,11 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
 
         if app.get_number_of_connected_accounts() == 0:
             # This can happen under rare circumstances
-            self._ui.stack.set_visible_child_name("no-connection")
+            self._stack.set_visible_child_name("no-connection")
             return
 
         self._update_accounts(account)
-        self._ui.create_button.grab_focus()
+        self._create_button.grab_focus()
 
     def _cleanup(self) -> None:
         self.unregister_events()
@@ -79,29 +102,26 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     def _on_account_state(self, _event: AccountConnected | AccountDisconnected) -> None:
         any_account_connected = app.get_number_of_connected_accounts() > 0
         if any_account_connected:
-            self._ui.stack.set_visible_child_name("create")
-            self._update_accounts()
+            self._stack.set_visible_child_name("create")
         else:
-            self._ui.stack.set_visible_child_name("no-connection")
+            self._stack.set_visible_child_name("no-connection")
+
+        selected_account = self._account_dropdown.get_selected_key()
+        self._update_accounts(selected_account)
 
     def _update_accounts(self, account: str | None = None) -> None:
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
-        account_liststore = self._ui.account_combo.get_model()
-        assert isinstance(account_liststore, Gtk.ListStore)
-        account_liststore.clear()
 
-        for acc in accounts:
-            account_liststore.append(acc)
+        account_data = dict(accounts)
+        self._account_dropdown.set_data(account_data)
 
-        self._ui.account_combo.set_visible(len(accounts) != 1)
-        self._ui.account_label.set_visible(len(accounts) != 1)
+        self._account_dropdown.set_visible(len(accounts) != 1)
+        self._account_label.set_visible(len(accounts) != 1)
 
-        if account is None:
-            account = accounts[0][0]
-
-        self._ui.account_combo.set_active_id(account)
-        self._account = account
-        self._fill_placeholders()
+        if not self._account_dropdown.has_key(account):
+            self._account_dropdown.select_first()
+        else:
+            self._account_dropdown.select_key(account)
 
     def _create_entry_completion(self) -> None:
         entry_completion = Gtk.EntryCompletion()
@@ -112,15 +132,15 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         entry_completion.set_inline_completion(True)
         entry_completion.set_popup_single_match(False)
 
-        self._ui.address_entry.set_completion(entry_completion)
+        self._address_entry.set_completion(entry_completion)
 
     def _fill_placeholders(self) -> None:
         placeholder = random.choice(MUC_CREATION_EXAMPLES)
         server = self._get_muc_service_jid()
 
-        self._ui.name_entry.set_placeholder_text(_("e.g. %s") % placeholder[0])
-        self._ui.description_entry.set_placeholder_text(_("e.g. %s") % placeholder[1])
-        self._ui.address_entry.set_placeholder_text(f"{placeholder[2]}@{server}")
+        self._name_entry.set_placeholder_text(_("e.g. %s") % placeholder[0])
+        self._description_entry.set_placeholder_text(_("e.g. %s") % placeholder[1])
+        self._address_entry.set_placeholder_text(f"{placeholder[2]}@{server}")
 
     def _has_muc_service(self, account: str) -> bool:
         client = app.get_client(account)
@@ -134,25 +154,25 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
             return "muc.example.org"
         return str(service_jid)
 
-    def _on_account_combo_changed(self, combo: Gtk.ComboBox) -> None:
-        self._account = combo.get_active_id()
+    def _on_account_combo_changed(
+        self, dropdown: GajimDropDown, _param: GObject.ParamSpec
+    ) -> None:
+        self._account = dropdown.get_selected_key()
+        log.debug("Set current account to: %s", self._account)
         if self._account is None:
-            model = combo.get_model()
-            assert model is not None
-            iter_ = model.get_iter_first()
-            if not iter_:
-                return
-            self._account = model[iter_][0]
+            # Happens when we update the dropdown entries after an account
+            # changes its state.
+            return
 
         self._fill_placeholders()
         self._unset_error()
         self._unset_info()
-        self._ui.address_entry.get_buffer().set_text("", 0)
+        self._address_entry.get_buffer().set_text("", 0)
 
         has_muc_service = self._has_muc_service(self._account)
 
-        self._ui.advanced_switch.set_active(not has_muc_service)
-        self._ui.advanced_switch.set_sensitive(has_muc_service)
+        self._advanced_switch.set_active(not has_muc_service)
+        self._advanced_switch.set_sensitive(has_muc_service)
 
         if not has_muc_service:
             self._set_info(
@@ -177,25 +197,25 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         return True
 
     def _set_processing_state(self, enabled: bool) -> None:
-        self._ui.spinner.set_visible(enabled)
-        self._ui.create_button.set_sensitive(not enabled)
-        self._ui.grid.set_sensitive(not enabled)
+        self._spinner.set_visible(enabled)
+        self._create_button.set_sensitive(not enabled)
+        self._grid.set_sensitive(not enabled)
 
     def _unset_info(self) -> None:
-        self._ui.info_label.set_visible(False)
+        self._info_label.set_visible(False)
 
     def _set_info(self, text: str) -> None:
-        self._ui.info_label.set_text(text)
-        self._ui.info_label.set_visible(True)
+        self._info_label.set_text(text)
+        self._info_label.set_visible(True)
 
     def _unset_error(self) -> None:
-        self._ui.error_label.set_visible(False)
-        self._ui.create_button.set_sensitive(True)
+        self._error_label.set_visible(False)
+        self._create_button.set_sensitive(True)
 
     def _set_error(self, text: str) -> None:
-        self._ui.error_label.set_text(text)
-        self._ui.error_label.set_visible(True)
-        self._ui.create_button.set_sensitive(False)
+        self._error_label.set_text(text)
+        self._error_label.set_visible(True)
+        self._create_button.set_sensitive(False)
 
     def _set_error_from_error(self, error: StanzaError) -> None:
         condition = error.condition or ""
@@ -229,10 +249,10 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     def _on_toggle_advanced(self, switch: Gtk.Switch, *args: Any) -> None:
         self._unset_error()
         active = switch.get_active()
-        self._ui.address_entry.set_visible(active)
-        self._ui.address_entry_label.set_visible(active)
-        self._ui.public_radio.set_visible(active)
-        self._ui.private_radio.set_visible(active)
+        self._address_entry.set_visible(active)
+        self._address_entry_label.set_visible(active)
+        self._public_radio.set_visible(active)
+        self._private_radio.set_visible(active)
 
     def _on_create_clicked(self, _button: Gtk.Button) -> None:
         assert self._account is not None
@@ -243,8 +263,8 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
             )
             return
 
-        room_jid = self._ui.address_entry.get_text()
-        if not self._ui.advanced_switch.get_active() or not room_jid:
+        room_jid = self._address_entry.get_text()
+        if not self._advanced_switch.get_active() or not room_jid:
             server = self._get_muc_service_jid()
             room_jid = f"{get_random_muc_localpart()}@{server}"
 
@@ -277,9 +297,9 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         self._set_processing_state(False)
 
     def _create_muc(self, room_jid: str) -> None:
-        name = self._ui.name_entry.get_text()
-        description = self._ui.description_entry.get_text()
-        is_public = self._ui.public_radio.get_active()
+        name = self._name_entry.get_text()
+        description = self._description_entry.get_text()
+        is_public = self._public_radio.get_active()
 
         config = {
             # XEP-0045 options
