@@ -18,6 +18,8 @@ GajimDropDownDataT = dict[Any, str] | list[str]
 
 
 class GajimDropDown(Gtk.DropDown):
+    __gtype_name__ = "GajimDropDown"
+
     def __init__(
         self,
         data: GajimDropDownDataT | None = None,
@@ -104,6 +106,21 @@ class GajimDropDown(Gtk.DropDown):
             assert item is not None
             if item.key == key:
                 self.set_selected(pos)
+
+    def select_first(self) -> None:
+        if self._model.get_n_items() > 0:
+            self.set_selected(0)
+
+    def has_key(self, key: Any) -> bool:
+        for pos in range(self._model.get_n_items()):
+            item = cast(KeyValueItem | None, self._model.get_item(pos))
+            assert item is not None
+            if item.key == key:
+                return True
+        return False
+
+    def get_item_count(self) -> int:
+        return self._model.get_n_items()
 
     def do_unroot(self) -> None:
         Gtk.DropDown.do_unroot(self)
