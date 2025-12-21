@@ -48,7 +48,7 @@ from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
-from gajim.gtk.util.misc import has_min_gtk_version
+from gajim.gtk.util.misc import gi_gui_package_version
 from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.chatstack")
@@ -748,7 +748,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         # DND on X11 freezes due to a GTK bug:
         # https://dev.gajim.org/gajim/gajim/-/issues/12313
         if app.is_display(Display.X11):
-            return has_min_gtk_version("4.20.1")
+            return gi_gui_package_version("Gtk>=4.20.1")
         return True
 
     def _on_file_drop(

@@ -34,6 +34,21 @@ def package_version(requirement: str) -> bool:
     return req.specifier.contains(installed_version, prereleases=True)
 
 
+def gi_package_version(requirement: str):
+    req = Requirement(requirement)
+    match req.name:
+        case "GLib":
+            version = get_glib_version()
+        case "PyGObject":
+            version = get_gobject_version()
+        case "Soup":
+            version = get_soup_version()
+        case _:
+            raise ValueError("Unknown lib name: %s" % req.name)
+
+    return req.specifier.contains(version)
+
+
 @functools.lru_cache(maxsize=1)
 def get_os_info() -> str:
     info = "N/A"

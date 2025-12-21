@@ -31,7 +31,7 @@ from gajim.common.util.uri import get_file_path_from_uri
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util.classes import SignalManager
-from gajim.gtk.util.misc import has_min_gtk_version
+from gajim.gtk.util.misc import gi_gui_package_version
 
 log = logging.getLogger("gajim.gtk.avatar_selector")
 
@@ -121,7 +121,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
     def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
         # DND on X11 freezes due to a GTK bug:
         # https://dev.gajim.org/gajim/gajim/-/issues/12313
-        if app.is_display(Display.X11) and not has_min_gtk_version("4.20.1"):
+        if app.is_display(Display.X11) and not gi_gui_package_version("Gtk>=4.20.1"):
             return False
 
         formats = drop.get_formats()

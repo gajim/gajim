@@ -23,7 +23,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-from packaging.version import Version as V
+from packaging.requirements import Requirement
 
 from gajim.common import app
 from gajim.common import types
@@ -59,16 +59,25 @@ def get_gtk_version() -> str:
     )
 
 
-def has_min_gtk_version(required_version: str) -> bool:
-    return V(required_version) >= V(get_gtk_version())
-
-
 def get_adw_version() -> str:
     return "%i.%i.%i" % (
         Adw.get_major_version(),
         Adw.get_minor_version(),
         Adw.get_micro_version(),
     )
+
+
+def gi_gui_package_version(requirement: str):
+    req = Requirement(requirement)
+    match req.name:
+        case "Gtk":
+            version = get_gtk_version()
+        case "Adw":
+            version = get_adw_version()
+        case _:
+            raise ValueError("Unknown lib name: %s" % req.name)
+
+    return req.specifier.contains(version)
 
 
 def scroll_to(widget: Gtk.ScrolledWindow, pos: Literal["top", "bottom"]) -> bool:
