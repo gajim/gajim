@@ -35,6 +35,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util.misc import at_the_end
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.util.styling import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
@@ -624,15 +625,34 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         is_at_the_end = at_the_end(self._ui.scrolled)
 
+        direction_icon = (
+            "lucide-download-symbolic"
+            if kind == "incoming"
+            else "lucide-upload-symbolic"
+        )
+        direction_style_class = (
+            "badge-stanza-incoming" if kind == "incoming" else "badge-stanza-outgoing"
+        )
+
         type_ = kind
+        type_short = "NONZA"
+        type_style_class = "badge-stanza-type-nonza"
         if stanza.startswith("<presence"):
             type_ = "presence"
+            type_short = "PRES"
+            type_style_class = "badge-stanza-type-pres"
         elif stanza.startswith("<message"):
             type_ = "message"
+            type_short = "MSG"
+            type_style_class = "badge-stanza-type-msg"
         elif stanza.startswith("<iq"):
             type_ = "iq"
-        elif stanza.startswith(("<r", "<a")):
+            type_short = "IQ"
+            type_style_class = "badge-stanza-type-iq"
+        elif stanza.startswith(("<r ", "<a ")):
             type_ = "stream"
+            type_short = "SM"
+            type_style_class = "badge-stanza-type-sm"
 
         text = "<!-- {kind} {time} ({account}) -->\n{stanza}".format(
             kind=kind.capitalize(),
@@ -642,7 +662,16 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         )
 
         self._stanza_model.append(
-            StanzaListItem(text=text, account=event.account, kind=type_)
+            StanzaListItem(
+                direction=kind,
+                direction_icon=direction_icon,
+                text=text,
+                account=event.account,
+                type_=type_,
+                type_short=type_short,
+                type_style_class=type_style_class,
+                direction_style_class=direction_style_class,
+            )
         )
 
         if is_at_the_end:
@@ -688,40 +717,49 @@ class SentSzanzas:
 class StanzaListItem(GObject.Object):
     __gtype_name__ = "Stanza"
 
+    direction = GObject.Property(type=str)
+    direction_icon = GObject.Property(type=str)
+    direction_style_class = GObject.Property(type=str)
+
     text = GObject.Property(type=str)
     account = GObject.Property(type=str)
-    kind = GObject.Property(type=str)
+    type_ = GObject.Property(type=str)
+    type_short = GObject.Property(type=str)
+    type_style_class = GObject.Property(type=str)
 
 
+@Gtk.Template.from_string(
+    string=get_ui_string("debug_console_stanza_list_view_item.ui")
+)
 class StanzaListViewItem(Gtk.Box):
     __gtype_name__ = "StanzaListViewItem"
+
+    _stanza_type_badge: Gtk.Box = Gtk.Template.Child()
+    _stanza_direction_icon: Gtk.Image = Gtk.Template.Child()
+    _stanza_source_view: GtkSource.View = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
 
         self.__bindings: list[GObject.Binding] = []
 
-        self._source_view = GtkSource.View(
-            hexpand=True,
-            editable=False,
-            cursor_visible=True,
-        )
-        self._source_view.add_css_class("debug-console-view")
-        self._buffer = self._source_view.get_buffer()
+        self._buffer = self._stanza_source_view.get_buffer()
         self._buffer.set_highlight_matching_brackets(False)
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language("xml")
-        self._source_view.get_buffer().set_language(lang)
+        self._buffer.set_language(lang)
 
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
-            self._source_view.get_buffer().set_style_scheme(style_scheme)
-
-        self.append(self._source_view)
+            self._buffer.set_style_scheme(style_scheme)
 
     def bind(self, obj: StanzaListItem) -> None:
         bind_spec = [
+            ("direction", self._stanza_direction_icon, "tooltip-text"),
+            ("direction_icon", self._stanza_direction_icon, "icon-name"),
+            ("type_short", self._stanza_type_badge, "label"),
+            ("type_", self._stanza_type_badge, "tooltip-text"),
             ("text", self._buffer, "text"),
         ]
 
@@ -730,6 +768,9 @@ class StanzaListViewItem(Gtk.Box):
                 source_prop, widget, target_prop, GObject.BindingFlags.SYNC_CREATE
             )
             self.__bindings.append(bind)
+
+        self._stanza_type_badge.add_css_class(obj.type_style_class)
+        self._stanza_direction_icon.add_css_class(obj.direction_style_class)
 
     def unbind(self) -> None:
         for bind in self.__bindings:

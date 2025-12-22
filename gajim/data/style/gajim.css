@@ -251,6 +251,46 @@ button.flat.link { padding: 0; border: 0; }
     border: 1px solid alpha(var(--accent-blue), 0.1);
     background-color: alpha(var(--accent-blue), 0.1);
 }
+.badge-stanza-type {
+    border-width: 1px;
+    border-style: solid;
+}
+.badge-stanza-incoming {
+    color: alpha(var(--accent-green), 0.8);
+    border-color: alpha(var(--accent-green), 0.2);
+    background-color: alpha(var(--accent-slate), 0.05);
+}
+.badge-stanza-outgoing {
+    color: alpha(var(--accent-blue), 0.8);
+    border-color: alpha(var(--accent-blue), 0.2);
+    background-color: alpha(var(--accent-slate), 0.05);
+}
+
+.badge-stanza-type-nonza {
+    color: alpha(var(--accent-orange), 0.8);
+    border-color: alpha(var(--accent-orange), 0.2);
+    background-color: alpha(var(--accent-orange), 0.05);
+}
+.badge-stanza-type-pres {
+    color: alpha(var(--accent-blue), 0.8);
+    border-color: alpha(var(--accent-blue), 0.2);
+    background-color: alpha(var(--accent-blue), 0.05);
+}
+.badge-stanza-type-msg {
+    color: alpha(var(--accent-teal), 0.8);
+    border-color: alpha(var(--accent-teal), 0.2);
+    background-color: alpha(var(--accent-teal), 0.05);
+}
+.badge-stanza-type-iq {
+    color: alpha(var(--accent-yellow), 0.8);
+    border-color: alpha(var(--accent-yellow), 0.2);
+    background-color: alpha(var(--accent-yellow), 0.05);
+}
+.badge-stanza-type-sm {
+    color: alpha(var(--accent-purple), 0.8);
+    border-color: alpha(var(--accent-purple), 0.2);
+    background-color: alpha(var(--accent-purple), 0.05);
+}
 
 .link-button { min-height: 0px; }
 
@@ -940,4 +980,8 @@ list.sidebar-switcher .sidebar-row-header {
 
 
 /* Debug Console */
-.debug-console-view { font-family: Monospace; }
+.debug-console-view {
+    font-family: Monospace;
+    border-radius: 6px;
+    border: 1px var(--border-color) solid;
+}
