@@ -170,6 +170,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             "input-italic",
             "input-strike",
             "input-clear",
+            "input-focus",
             "show-emoji-chooser",
             "paste-as-quote",
             "paste-as-code-block",
@@ -259,7 +260,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
 
-        if action_name == "input-clear":
+        if action_name == "input-focus":
+            self.msg_textview.grab_focus_delayed()
+
+        elif action_name == "input-clear":
             self._on_clear()
 
         elif action_name.startswith("input-"):

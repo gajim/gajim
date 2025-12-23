@@ -201,6 +201,7 @@ MAIN_WIN_ACTIONS = [
     ("input-italic", None, True),
     ("input-strike", None, True),
     ("input-clear", None, True),
+    ("input-focus", None, True),
     ("insert-emoji", "s", True),
     ("show-emoji-chooser", None, True),
     ("activate-message-selection", "u", True),
@@ -530,6 +531,9 @@ SHORTCUTS = {
     ),
     "win.input-clear": ShortcutData(
         label=_("Clear Input"), category="messages", accelerators=["<Primary>U"]
+    ),
+    "win.input-focus": ShortcutData(
+        label=_("Focus Input"), category="messages", accelerators=[]
     ),
     "win.scroll-view-up": ShortcutData(
         label=_("Scroll Up"), category="messages", accelerators=["<Shift>Page_Up"]

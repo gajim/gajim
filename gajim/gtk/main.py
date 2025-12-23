@@ -274,7 +274,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         state: Gdk.ModifierType,
     ) -> bool:
         if keyval == Gdk.KEY_space:
-            self.get_chat_stack().get_message_input().grab_focus()
+            self.activate_action("win.input-focus")
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
