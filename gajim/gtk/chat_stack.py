@@ -198,7 +198,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         return self._message_action_box
 
     def get_message_input(self) -> MessageInputTextView:
-        return self._message_action_box.msg_textview
+        return self._message_action_box.get_message_input()
 
     def show_chat(self, account: str, jid: JID) -> None:
         # Store (preserve) primary clipboard and restore it after switching
@@ -531,7 +531,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         online = app.account_is_connected(contact.account)
 
         app.window.get_action("send-message").set_enabled(
-            allow_send_message(self._message_action_box.msg_textview.has_text, contact)
+            allow_send_message(self.get_message_input().has_text, contact)
         )
 
         httpupload = app.window.get_action("send-file-httpupload")

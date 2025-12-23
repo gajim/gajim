@@ -790,9 +790,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             assert contact is not None
             client = app.get_client(contact.account)
             chat_stack = self._chat_page.get_chat_stack()
-            msg_action_box = chat_stack.get_message_action_box()
             client.get_module("Chatstate").set_mouse_activity(
-                contact, msg_action_box.msg_textview.has_text
+                contact, chat_stack.get_message_input().has_text
             )
 
     def _on_chat_selected(self, *args: Any) -> None:

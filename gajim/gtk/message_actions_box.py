@@ -103,23 +103,23 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._security_label_selector, self._ui.input_wrapper
         )
 
-        self.msg_textview = MessageInputTextView(self)
-        self._connect(self.msg_textview, "buffer-changed", self._on_buffer_changed)
-        self._connect(self.msg_textview, "paste-clipboard", self._on_paste_clipboard)
+        self._message_input = MessageInputTextView(self)
+        self._connect(self._message_input, "buffer-changed", self._on_buffer_changed)
+        self._connect(self._message_input, "paste-clipboard", self._on_paste_clipboard)
 
-        self._ui.box.append(self.msg_textview.get_completion_popover())
+        self._ui.box.append(self._message_input.get_completion_popover())
 
         controller = Gtk.EventControllerKey()
-        self._connect(controller, "key-pressed", self._on_msg_textview_key_pressed)
-        self.msg_textview.add_controller(controller)
+        self._connect(controller, "key-pressed", self._on_message_input_key_pressed)
+        self._message_input.add_controller(controller)
 
-        self._ui.input_scrolled.set_child(self.msg_textview)
+        self._ui.input_scrolled.set_child(self._message_input)
 
         self._wait_queue_resize = None
         self._vscrollbar_min_height = 0
         vadjustment = self._ui.input_scrolled.get_vadjustment()
         self._connect(vadjustment, "changed", self._on_input_scrolled_changed)
-        self._connect(self.msg_textview, "realize", self._on_view_realize)
+        self._connect(self._message_input, "realize", self._on_view_realize)
 
         self._ui.sendfile_button.set_tooltip_text(_("No File Transfer available"))
         self._ui.formattings_button.set_menu_model(get_format_menu())
@@ -200,9 +200,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
+    def get_message_input(self) -> MessageInputTextView:
+        return self._message_input
+
     def _on_input_scrolled_changed(self, adj: Gtk.Adjustment) -> None:
         scrolled = self._ui.input_scrolled
-        view = self.msg_textview
+        view = self._message_input
 
         """
         Fixes #12158. The textview would only show the last row(s),
@@ -248,8 +251,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         emoji_chooser.set_emoji_picked_func(self._on_emoji_picked)
 
     def _on_emoji_picked(self, _emoji_chooser: EmojiChooser, text: str) -> None:
-        self.msg_textview.insert_text(text)
-        GLib.idle_add(self.msg_textview.grab_focus_delayed)
+        self._message_input.insert_text(text)
+        GLib.idle_add(self._message_input.grab_focus_delayed)
 
     def _on_action(
         self, action: Gio.SimpleAction, param: GLib.Variant | None
@@ -261,7 +264,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         log.info("Activate action: %s", action_name)
 
         if action_name == "input-focus":
-            self.msg_textview.grab_focus_delayed()
+            self._message_input.grab_focus_delayed()
 
         elif action_name == "input-clear":
             self._on_clear()
@@ -270,18 +273,18 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._on_format(action_name)
 
         elif action_name == "show-emoji-chooser":
-            self.msg_textview.emit("insert-emoji")
+            self._message_input.emit("insert-emoji")
             self._ui.emoticons_button.set_active(False)
 
         elif action_name == "quote":
             assert param
-            self.msg_textview.insert_as_quote(param.get_string())
+            self._message_input.insert_as_quote(param.get_string())
 
         elif action_name == "paste-as-quote":
-            self.msg_textview.paste_as_quote()
+            self._message_input.paste_as_quote()
 
         elif action_name == "paste-as-code-block":
-            self.msg_textview.paste_as_code_block()
+            self._message_input.paste_as_code_block()
 
         elif action_name == "reply":
             assert param
@@ -293,7 +296,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         elif action_name == "mention":
             assert param
-            self.msg_textview.mention_participant(param.get_string())
+            self._message_input.mention_participant(param.get_string())
 
         elif action_name == "correct-message":
             self.toggle_message_correction()
@@ -348,7 +351,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._set_chatstate(True)
 
-        self.msg_textview.switch_contact(contact)
+        self._message_input.switch_contact(contact)
 
         self._chat_state_indicator.switch_contact(contact)
 
@@ -363,7 +366,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if self._contact is None:
             return
 
-        text = self.msg_textview.get_text()
+        text = self._message_input.get_text()
 
         reply_pk = None
         reply_data = self._reply_box.get_message_reply()
@@ -382,7 +385,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if draft is None:
             return
 
-        self.msg_textview.insert_text(draft.text)
+        self._message_input.insert_text(draft.text)
 
         if draft.reply_pk is None:
             return
@@ -412,7 +415,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._client = None
 
     def get_text(self) -> str:
-        return self.msg_textview.get_text()
+        return self._message_input.get_text()
 
     @property
     def _is_correcting(self) -> bool:
@@ -433,8 +436,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         if clear:
-            self.msg_textview.clear()
-        self.msg_textview.insert_as_quote(text)
+            self._message_input.clear()
+        self._message_input.insert_as_quote(text)
 
     def process_escape(self) -> bool:
         if not self._is_correcting and not self._reply_box.is_in_reply_mode:
@@ -448,7 +451,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._disable_reply_mode()
 
     def reset_state_after_send(self) -> None:
-        self.msg_textview.clear()
+        self._message_input.clear()
         self._cancel_action()
         assert self._contact is not None
         app.storage.drafts.set(self._contact, None)
@@ -458,7 +461,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         if self._is_correcting:
             self._set_correcting(None)
-            self.msg_textview.end_correction()
+            self._message_input.end_correction()
             self._ui.edit_box.set_visible(False)
             return
 
@@ -480,7 +483,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         message = message.get_last_correction() or message
 
-        self.msg_textview.start_correction(message)
+        self._message_input.start_correction(message)
         self._ui.edit_box.set_visible(True)
 
         referenced_message = message.get_referenced_message()
@@ -559,7 +562,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _set_chatstate(self, state: bool) -> None:
         assert self._client is not None
         if state:
-            if self.msg_textview.has_text:
+            if self._message_input.has_text:
                 self._client.get_module("Chatstate").set_chatstate(
                     self._contact, Chatstate.PAUSED
                 )
@@ -697,10 +700,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _on_format(self, name: str) -> None:
         name = name.removeprefix("input-")
-        self.msg_textview.apply_formatting(name)
+        self._message_input.apply_formatting(name)
 
     def _on_clear(self) -> None:
-        self.msg_textview.clear()
+        self._message_input.clear()
 
     def _on_send_file_enabled_changed(
         self, action: Gio.SimpleAction, _param: GObject.ParamSpec
@@ -739,7 +742,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if self._contact is None:
             return
 
-        has_text = self.msg_textview.has_text
+        has_text = self._message_input.has_text
         app.window.get_action("send-message").set_enabled(
             allow_send_message(has_text, self._contact)
         )
@@ -759,7 +762,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         client.get_module("Chatstate").set_chatstate(self._contact, Chatstate.COMPOSING)
 
-    def _on_msg_textview_key_pressed(
+    def _on_message_input_key_pressed(
         self,
         _event_controller_key: Gtk.EventControllerKey,
         keyval: int,
@@ -779,11 +782,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 return Gdk.EVENT_STOP
 
             if keyval == Gdk.KEY_z:
-                self.msg_textview.undo()
+                self._message_input.undo()
                 return Gdk.EVENT_STOP
 
             if keyval == Gdk.KEY_y:
-                self.msg_textview.redo()
+                self._message_input.redo()
                 return Gdk.EVENT_STOP
 
             if keyval == Gdk.KEY_Up:
@@ -792,24 +795,24 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             if state & Gdk.ModifierType.SHIFT_MASK:
-                self.msg_textview.insert_newline()
+                self._message_input.insert_newline()
                 return Gdk.EVENT_STOP
 
             if state & Gdk.ModifierType.CONTROL_MASK:
                 if not app.settings.get("send_on_ctrl_enter"):
-                    self.msg_textview.insert_newline()
+                    self._message_input.insert_newline()
                     return Gdk.EVENT_STOP
             else:
                 if app.settings.get("send_on_ctrl_enter"):
-                    self.msg_textview.insert_newline()
+                    self._message_input.insert_newline()
                     return Gdk.EVENT_STOP
 
             assert self._contact is not None
 
             # Reset IMContext to clear preedit state
-            self.msg_textview.reset_im_context()
+            self._message_input.reset_im_context()
 
-            message = self.msg_textview.get_text()
+            message = self._message_input.get_text()
 
             try:
                 handled = app.commands.parse(self._contact.type_string, message)
@@ -817,7 +820,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 return Gdk.EVENT_STOP
 
             if handled:
-                self.msg_textview.clear()
+                self._message_input.clear()
                 return Gdk.EVENT_STOP
 
             if not app.account_is_available(self._contact.account):
@@ -840,7 +843,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _enable_reply_mode(self, original_message: mod.Message) -> None:
         assert self._contact is not None
         self._reply_box.enable_reply_mode(self._contact, original_message)
-        self.msg_textview.grab_focus()
+        self._message_input.grab_focus()
 
     def _disable_reply_mode(self, *args: Any) -> None:
         self._reply_box.disable_reply_mode()
