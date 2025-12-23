@@ -282,7 +282,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.plugin_manager.extension_point("switch_contact", self._current_contact)
 
-        GLib.idle_add(self._message_action_box.msg_textview.grab_focus_delayed)
+        GLib.idle_add(app.window.activate_action, "win.input-focus")
 
     def _on_primary_clipboard_read_text_finished(
         self,
