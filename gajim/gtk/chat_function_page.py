@@ -291,6 +291,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
                 return
 
             self._send_files(self._widget.get_catalog())
+            app.window.activate_action("win.input-focus")
 
         elif self._mode == FunctionMode.CHANGE_NICKNAME:
             assert isinstance(self._widget, InputWidget)
