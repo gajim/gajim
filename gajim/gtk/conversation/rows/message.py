@@ -190,19 +190,19 @@ class MessageRow(BaseRow):
                 self._message_widget = GeoPreviewWidget(preview)
 
             case _:
-                if message.reply is not None:
-                    referenced_message = message.get_referenced_message()
-                    if referenced_message is None:
-                        self._ref_message_widget = ReferencedMessageNotFoundWidget()
-                    else:
-                        self._ref_message_widget = ReferencedMessageWidget(
-                            self._contact, referenced_message
-                        )
-
                 self._message_widget = MessageWidget(self._contact.account)
                 self._message_widget.add_with_styling(self.text, nickname=self.name)
                 if self._contact.is_groupchat and not self._is_outgoing:
                     self._apply_highlight(self.text)
+
+        if message.reply is not None:
+            referenced_message = message.get_referenced_message()
+            if referenced_message is None:
+                self._ref_message_widget = ReferencedMessageNotFoundWidget()
+            else:
+                self._ref_message_widget = ReferencedMessageWidget(
+                    self._contact, referenced_message
+                )
 
         if self._ref_message_widget is not None:
             box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)

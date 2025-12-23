@@ -4,6 +4,7 @@
   <template class="GeoPreviewWidget" parent="GtkBox">
     <property name="width-request">160</property>
     <property name="orientation">vertical</property>
+    <property name="halign">start</property>
     <child>
       <object class="GtkButton" id="_image_button">
         <property name="focusable">yes</property>
