@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import copy
 import logging
 import time
 from collections import defaultdict
@@ -16,6 +17,7 @@ from collections.abc import Sequence
 
 import nbxmpp
 from gi.repository import GLib
+from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
 from nbxmpp.const import StatusCode
 from nbxmpp.errors import StanzaError
@@ -25,6 +27,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import Presence
+from nbxmpp.structs import AffiliationResult
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import CommonResult
 from nbxmpp.structs import DiscoInfo
@@ -146,6 +149,7 @@ class MUC(BaseModule):
             JID, dict[str, MUCPresenceData]] = defaultdict(dict)
         self._mucs: dict[JID, MUCData] = {}
         self._muc_nicknames = {}
+        self._muc_affiliations = AffiliationManager()
         self._voice_requests: dict[
             GroupchatContact, list[VoiceRequest]] = defaultdict(list)
         self._sent_voice_requests: dict[
@@ -495,6 +499,44 @@ class MUC(BaseModule):
         app.storage.events.store(room, event)
         room.notify('room-config-finished', event)
 
+    def _request_affiliation_list(self, room_jid: JID) -> None:
+        # Don't request affiliation outcast, it is rarley needed and
+        # can be requested on demand rather than on each join
+
+        for affiliation in ('owner', 'admin', 'member'):
+            self.get_affiliation(
+                room_jid,
+                affiliation,
+                callback=self._on_affiliations_received,
+                user_data=(room_jid, affiliation)
+            )
+
+    def _on_affiliations_received(self, task: Task) -> None:
+        jid, affiliation = task.get_user_data()
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            self._log.info('Affiliation request failed: %s %s', jid, error)
+            self._muc_affiliations.remove_affiliation(jid, affiliation)
+            return
+
+        assert isinstance(result, AffiliationResult)
+        self._muc_affiliations.add_affiliation_result(affiliation, result)
+
+        room = self._get_contact(jid)
+        assert isinstance(room, GroupchatContact)
+        room.notify('room-affiliations-received', affiliation)
+
+    def get_affiliations(
+        self,
+        room_jid: JID,
+        *,
+        include_outcast: bool = False
+    ) -> dict[str, list[JID]]:
+
+        return self._muc_affiliations.get_users(
+            room_jid, include_outcast=include_outcast)
+
     def update_presence(self) -> None:
         mucs = self._get_mucs_with_state([MUCJoinedState.JOINED,
                                           MUCJoinedState.JOINING])
@@ -773,6 +815,10 @@ class MUC(BaseModule):
                 actor=properties.muc_user.actor)
 
             app.storage.events.store(occupant.room, event)
+            assert properties.muc_jid is not None
+            if presence.real_jid is not None:
+                self._muc_affiliations.change_user_affiliation(
+                    properties.muc_jid, presence.affiliation, presence.real_jid)
             signals_and_events.append(('user-affiliation-changed', event))
 
         if occupant.role != presence.role:
@@ -859,6 +905,8 @@ class MUC(BaseModule):
             affiliation=properties.muc_user.affiliation,
         )
         app.storage.events.store(room, event)
+        self._muc_affiliations.change_user_affiliation(
+            room_jid, properties.muc_user.affiliation, properties.muc_user.jid)
         room.notify('room-affiliation-changed', event)
 
     def _process_user_presence(self,
@@ -945,6 +993,7 @@ class MUC(BaseModule):
 
         if muc_data.state == MUCJoinedState.JOINING:
             self._room_join_complete(muc_data)
+            self._request_affiliation_list(muc_data.jid)
             room.notify('room-joined')
 
         raise nbxmpp.NodeProcessed
@@ -1270,3 +1319,71 @@ class MUC(BaseModule):
     def cleanup(self) -> None:
         BaseModule.cleanup(self)
         self._remove_all_timeouts()
+
+
+class AffiliationManager:
+    def __init__(self) -> None:
+        self._affiliations: dict[JID, dict[str, list[JID]]] = defaultdict(
+            lambda: defaultdict(list))
+
+    def add_affiliation_result(
+        self,
+        affiliation: str,
+        result: AffiliationResult
+    ) -> None:
+        user_jids = [jid.new_as_bare() for jid in result.users]
+        log.info("AffiliationManager: Add result: %s %s %s",
+                 result.jid, affiliation, list(map(str, user_jids)))
+        self._affiliations[result.jid][affiliation] = user_jids
+
+    def remove_affiliation(self, muc_jid: JID, affiliation: str) -> None:
+        log.info("AffiliationManager: Remove affiliation: %s %s",
+                 muc_jid, affiliation)
+        try:
+            del self._affiliations[muc_jid][affiliation]
+        except KeyError:
+            pass
+
+    def add_user_affiliation(
+        self,
+        muc_jid: JID,
+        affiliation: Affiliation,
+        user_real_jid: JID
+    ) -> None:
+        log.info("AffiliationManager: Add user: %s %s %s",
+                 muc_jid, affiliation, user_real_jid)
+        self._affiliations[muc_jid][affiliation.value].append(user_real_jid)
+
+    def remove_user_affiliation(self, muc_jid: JID, user_real_jid: JID) -> None:
+        log.info("AffiliationManager: Remove user: %s %s", muc_jid, user_real_jid)
+        for jids in self._affiliations.get(muc_jid, {}).values():
+            if user_real_jid in jids:
+                jids.remove(user_real_jid)
+                return
+
+    def change_user_affiliation(
+        self,
+        muc_jid: JID,
+        affiliation: Affiliation,
+        user_real_jid: JID
+    ) -> None:
+        log.info("AffiliationManager: Change user affiliation: %s %s %s",
+                 muc_jid, affiliation, user_real_jid)
+
+        self.remove_user_affiliation(muc_jid, user_real_jid)
+        if affiliation == Affiliation.NONE:
+            return
+
+        self.add_user_affiliation(muc_jid, affiliation, user_real_jid)
+
+    def get_users(
+        self,
+        jid: JID,
+        *,
+        include_outcast: bool = False
+    ) -> dict[str, list[JID]]:
+
+        affiliations = copy.deepcopy(self._affiliations[jid])
+        if not include_outcast:
+            affiliations.pop("outcast", None)
+        return affiliations
