@@ -25,6 +25,7 @@ from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
 from gajim.common.const import Display
 from gajim.common.ged import EventHelper
+from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -282,7 +283,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.plugin_manager.extension_point("switch_contact", self._current_contact)
 
-        GLib.idle_add(app.window.activate_action, "win.input-focus")
+        idle_add_once(app.window.activate_action, "win.input-focus")
 
     def _on_primary_clipboard_read_text_finished(
         self,

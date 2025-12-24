@@ -553,3 +553,11 @@ def warn_about_plain_connection(account: str,
 
 def get_uuid() -> str:
     return str(uuid.uuid4())
+
+
+def idle_add_once(func: Callable[..., Any], *args: Any) -> None:
+    def wrapper():
+        func(*args)
+        return False
+
+    GLib.idle_add(wrapper)
