@@ -18,8 +18,8 @@ class ChatStateIndicator(Gtk.Box):
     def __init__(self) -> None:
         Gtk.Box.__init__(
             self,
-            spacing=24,
-            margin_start=12,
+            spacing=20,
+            margin_start=14,
         )
 
         self._contact: types.ChatContactT | None = None
