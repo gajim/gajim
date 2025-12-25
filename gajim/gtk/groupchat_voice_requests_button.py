@@ -22,6 +22,8 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             self,
             tooltip_text=_("Pending Voice Requests"),
             visible=False,
+            halign=Gtk.Align.END,
+            valign=Gtk.Align.CENTER,
         )
         SignalManager.__init__(self)
 

@@ -134,10 +134,8 @@
             </child>
             <child>
               <object class="GtkBox" id="_additional_items_box">
-                <property name="halign">end</property>
-                <property name="valign">center</property>
                 <property name="margin-end">6</property>
-                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
                 <child>
                   <placeholder/>
                 </child>
