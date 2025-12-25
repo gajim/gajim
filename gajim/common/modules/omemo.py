@@ -16,24 +16,17 @@ from collections.abc import Generator
 from pathlib import Path
 
 import nbxmpp
-from nbxmpp.const import Affiliation
-from nbxmpp.const import PresenceType
 from nbxmpp.errors import is_error
-from nbxmpp.errors import StanzaError
 from nbxmpp.modules.omemo import create_omemo_message
 from nbxmpp.modules.omemo import get_key_transport_message
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
-from nbxmpp.protocol import Presence
-from nbxmpp.structs import AffiliationResult
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import OMEMOMessage
-from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.task import Task
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.exceptions import DecryptionFailed
 from omemo_dr.exceptions import DuplicateMessage
@@ -110,17 +103,13 @@ class OMEMO(BaseModule):
                           callback=self._message_received,
                           ns=Namespace.OMEMO_TEMP,
                           priority=9),
-            StanzaHandler(name='presence',
-                          callback=self._on_muc_user_presence,
-                          ns=Namespace.MUC_USER,
-                          priority=48),
         ]
 
         self._register_pubsub_handler(self._devicelist_notification_received)
         self.register_events([
             ('signed-in', ged.CORE, self._on_signed_in),
-            ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
-            ('muc-added', ged.GUI1, self._on_muc_added)
+            ('muc-disco-update', ged.PREGUI, self._on_muc_disco_update),
+            ('muc-added', ged.PREGUI, self._on_muc_added)
         ])
 
         self.allow_groupchat = True
@@ -153,7 +142,12 @@ class OMEMO(BaseModule):
 
     @event_filter(['account'])
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        self._check_if_omemo_capable(str(event.jid))
+        before = self._is_omemo_groupchat(event.jid)
+        self._check_if_omemo_capable(event.jid)
+        after = self._is_omemo_groupchat(event.jid)
+
+        if not before and after:
+            self._set_group_members(event.jid)
 
     @event_filter(['account'])
     def _on_muc_added(self, event: MucAdded) -> None:
@@ -166,16 +160,42 @@ class OMEMO(BaseModule):
         # Event is triggert on every join, avoid multiple connects
         contact.disconnect_all_from_obj(self)
         contact.connect('room-joined', self._on_room_joined)
+        contact.connect('user-affiliation-changed', self._on_affiliation_change)
+        contact.connect('room-affiliation-changed', self._on_affiliation_change)
+        contact.connect('room-affiliations-received', self._on_affiliation_change)
 
     def _on_room_joined(self,
                         contact: GroupchatContact,
                         _signal_name: str
                         ) -> None:
 
-        jid = str(contact.jid)
-        self._check_if_omemo_capable(jid)
-        if self._is_omemo_groupchat(jid):
-            self._get_affiliation_list(jid)
+        self._check_if_omemo_capable(contact.jid)
+
+    def _on_affiliation_change(
+        self,
+        contact: GroupchatContact,
+        _signal_name: str,
+        *args: Any,
+    ) -> None:
+
+        if not self._is_omemo_groupchat(contact.jid):
+            return
+
+        self._set_group_members(contact.jid)
+
+    def _set_group_members(self, muc_jid: JID) -> None:
+        self._log.info("Set group members: %s", muc_jid)
+        affiliations = self._client.get_module('MUC').get_affiliations(muc_jid)
+        members: set[JID] = set()
+        members.update(*affiliations.values())
+        str_jids = set(map(str, members))
+
+        self._backend.set_group_members(str(muc_jid), str_jids)
+
+        for jid in str_jids:
+            if not self._is_contact_in_roster(jid):
+                self._log.info('%s not in roster, query devicelist...', jid)
+                self._request_device_list_ttl(jid)
 
     def _on_republish_bundle(self,
                              _session: OMEMOSessionManager,
@@ -220,8 +240,7 @@ class OMEMO(BaseModule):
             contact: types.GroupchatContactT
         ) -> bool:
 
-        jid = str(contact.jid)
-        if not self._is_omemo_groupchat(jid):
+        if not self._is_omemo_groupchat(contact.jid):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
@@ -230,6 +249,7 @@ class OMEMO(BaseModule):
             ))
             return False
 
+        jid = str(contact.jid)
         has_trusted_keys = False
         for member_jid in self.backend.get_group_members(jid, without_self=False):
             self._request_bundles_for_new_devices(member_jid)
@@ -274,8 +294,8 @@ class OMEMO(BaseModule):
             return False
         return True
 
-    def _is_omemo_groupchat(self, room_jid: str) -> bool:
-        return room_jid in self._omemo_groupchats
+    def _is_omemo_groupchat(self, room_jid: JID) -> bool:
+        return str(room_jid) in self._omemo_groupchats
 
     def encrypt_message(self, message: OutgoingMessage) -> bool:
         if not message.has_text():
@@ -428,63 +448,6 @@ class OMEMO(BaseModule):
             return properties.muc_user.jid.bare
         return properties.from_.bare
 
-    def _on_muc_user_presence(self,
-                              _client: types.NBXMPPClient,
-                              _stanza: Presence,
-                              properties: PresenceProperties
-                              ) -> None:
-
-        if properties.type == PresenceType.ERROR:
-            return
-
-        if properties.is_muc_destroyed:
-            return
-
-        assert properties.jid is not None
-        room = properties.jid.bare
-
-        if properties.muc_user is None or properties.muc_user.jid is None:
-            # No real jid found
-            return
-
-        jid = properties.muc_user.jid.bare
-        if properties.muc_user.affiliation in (Affiliation.OUTCAST,
-                                               Affiliation.NONE):
-            self.backend.remove_group_member(room, jid)
-        else:
-            self.backend.add_group_member(room, jid)
-
-        if self._is_omemo_groupchat(room):
-            if not self._is_contact_in_roster(jid):
-                # Query Devicelists from JIDs not in our Roster
-                self._log.info('%s not in roster, query devicelist...', jid)
-                self._request_device_list_ttl(jid)
-
-    def _get_affiliation_list(self, room_jid: str) -> None:
-        for affiliation in ('owner', 'admin', 'member'):
-            self._nbxmpp('MUC').get_affiliation(
-                room_jid,
-                affiliation,
-                callback=self._on_affiliations_received,
-                user_data=room_jid)
-
-    def _on_affiliations_received(self, task: Task) -> None:
-        room_jid = task.get_user_data()
-        try:
-            result = task.finish()
-        except StanzaError as error:
-            self._log.info('Affiliation request failed: %s', error)
-            return
-
-        assert isinstance(result, AffiliationResult)
-        for user_jid in result.users:
-            jid = str(user_jid)
-            self.backend.add_group_member(room_jid, jid)
-
-            if not self._is_contact_in_roster(jid):
-                self._log.info('%s not in roster, query devicelist...', jid)
-                self._request_device_list_ttl(jid)
-
     def _is_contact_in_roster(self, jid: str) -> bool:
         if jid == self._own_jid:
             return True
@@ -497,14 +460,15 @@ class OMEMO(BaseModule):
         assert isinstance(contact, BareContact)
         return contact.subscription == 'both'
 
-    def _check_if_omemo_capable(self, jid: str) -> None:
+    def _check_if_omemo_capable(self, jid: JID) -> None:
         disco_info = app.storage.cache.get_last_disco_info(jid)
+        assert disco_info is not None
         if disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous:
             self._log.info('OMEMO room discovered: %s', jid)
-            self._omemo_groupchats.add(jid)
+            self._omemo_groupchats.add(str(jid))
         else:
             self._log.info('OMEMO room removed due to config change: %s', jid)
-            self._omemo_groupchats.discard(jid)
+            self._omemo_groupchats.discard(str(jid))
 
     def _request_bundles_for_new_devices(self, jid_: str) -> None:
         for jid in [jid_, self._own_jid]:
