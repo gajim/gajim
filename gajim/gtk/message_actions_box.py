@@ -149,6 +149,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             [
                 ("message-sent", ged.GUI2, self._on_message_sent),
                 ("register-actions", ged.GUI2, self._on_register_actions),
+                ("muc-disco-update", ged.GUI2, self._on_muc_disco_update),
             ]
         )
 
@@ -192,6 +193,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         action = app.window.get_action("send-file-httpupload")
         self._connect(action, "notify::enabled", self._on_send_file_enabled_changed)
+
+    def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
+        if self._contact is None or event.jid != self._contact.jid:
+            return
+
+        self._update_encryption_state()
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -334,19 +341,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 }
             )
 
-        encryption = contact.settings.get("encryption")
-        encryption_available = self._is_encryption_available(contact)
-        if not encryption_available and encryption:
-            # Disable encryption if chat was encrypted before, but due to
-            # changed circumstances, encryption is not applicable anymore
-            # (i.e. group chat configuration changed).
-            contact.settings.set("encryption", "")
-            encryption = ""
-
-        action = app.window.get_action("set-encryption")
-        action.set_state(GLib.Variant("s", encryption))
-        self._update_encryption_button(encryption, is_available=encryption_available)
-        self._update_encryption_details_button(encryption)
+        self._update_encryption_state()
         self._update_send_file_button_tooltip()
 
         self._set_chatstate(True)
@@ -598,6 +593,22 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._update_encryption_button(new_state, is_available=True)
         self._update_encryption_details_button(new_state)
+
+    def _update_encryption_state(self) -> None:
+        contact = self.get_current_contact()
+        encryption = contact.settings.get("encryption")
+        encryption_available = self._is_encryption_available(contact)
+        if not encryption_available and encryption:
+            # Disable encryption if chat was encrypted before, but due to
+            # changed circumstances, encryption is not applicable anymore
+            # (i.e. group chat configuration changed).
+            contact.settings.set("encryption", "")
+            encryption = ""
+
+        action = app.window.get_action("set-encryption")
+        action.set_state(GLib.Variant("s", encryption))
+        self._update_encryption_button(encryption, is_available=encryption_available)
+        self._update_encryption_details_button(encryption)
 
     def _update_encryption_button(self, encryption: str, *, is_available: bool) -> None:
         contact = self.get_current_contact()
