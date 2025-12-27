@@ -26,13 +26,16 @@ nbxmpp_git="https://dev.gajim.org/gajim/python-nbxmpp"
 # Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://dev.gajim.org/gajim/gajim/-/issues/12365)
 DEFAULT_PATH="$PATH"
 DEFAULT_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
+DEFAULT_XDG_DATA_DIRS="$XDG_DATA_DIRS"
 if [ "$(uname -m)" == "x86_64" ]
 then
 	export PATH="/usr/local/bin:$PATH"
+	export XDG_DATA_DIRS="/usr/local/share:$XDG_DATA_DIRS"
 	export DYLD_LIBRARY_PATH="/usr/local/lib:$DYLD_LIBRARY_PATH"
 elif [ "$(uname -m)" == "arm64" ]
 then
 	export PATH="/opt/homebrew/bin:$PATH"
+	export XDG_DATA_DIRS="/opt/homebrew/share:$XDG_DATA_DIRS"
 	export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 fi
 
@@ -160,6 +163,7 @@ function usage()
 main "$@"
 
 export DYLD_LIBRARY_PATH="$DEFAULT_DYLD_LIBRARY_PATH"
+export XDG_DATA_DIRS="$DEFAULT_XDG_DATA_DIRS"
 export PATH="$DEFAULT_PATH"
 
 exit 0

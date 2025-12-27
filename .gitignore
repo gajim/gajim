@@ -27,6 +27,9 @@ venv/
 .venv/
 node_modules/
 .flatpak-builder
+mac/gajim-source
+mac/nbxmpp-source
+mac/gajim-venv
 
 # IDE files
 
