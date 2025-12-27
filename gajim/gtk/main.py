@@ -808,7 +808,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         elif action == "minimize":
             self.minimize()
         else:
-            self.quit()
+            app.app.start_shutdown()
 
         return Gdk.EVENT_STOP
 
@@ -1334,13 +1334,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if not self.chat_exists(event.account, event.jid):
             self.add_chat(event.account, event.jid, "chat")
 
-    def quit(self) -> None:
+    def start_shutdown(self) -> None:
         self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
 
         if self.is_visible():
             window_width, window_height = self.get_width(), self.get_height()
             app.settings.set("mainwin_width", window_width)
             app.settings.set("mainwin_height", window_height)
-
-        app.settings.save()
-        app.app.start_shutdown()

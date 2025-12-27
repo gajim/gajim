@@ -56,6 +56,7 @@ from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.helpers import dump_json
+from gajim.common.helpers import idle_add_once
 from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -203,7 +204,8 @@ class GajimApplication(Adw.Application, CoreApplication):
         self.connect("activate", self._on_activate)
         self.connect("handle-local-options", self._handle_local_options)
         self.connect("command-line", self._command_line)
-        self.connect("shutdown", self._shutdown)
+        self.connect("shutdown", self._on_shutdown)
+        self.connect("query-end", self._on_query_end)
 
     @staticmethod
     def _get_remaining_entry():
@@ -278,13 +280,28 @@ class GajimApplication(Adw.Application, CoreApplication):
                 body_use_markup=True,
             )
 
+        self._inhibit_cookie = self.inhibit(
+            app.window, Gtk.ApplicationInhibitFlags.LOGOUT, _("Quitting…")
+        )
+
         GLib.timeout_add(100, self._auto_connect)
 
-    def _shutdown(self, _application: GajimApplication) -> None:
-        self._shutdown_core()
+    def start_shutdown(self) -> None:
+        app.window.start_shutdown()
+        CoreApplication._start_shutdown(self)
 
-    def _quit_app(self) -> None:
+    def _shutdown_complete(self) -> None:
+        CoreApplication._shutdown_complete(self)
+        self.uninhibit(self._inhibit_cookie)
         self.quit()
+
+    def _on_query_end(self, _application: GajimApplication) -> None:
+        app.log("app").info("Session end signal received")
+        # Use a idle call so Gtk can send QueryEndResponse on Linux
+        idle_add_once(self.start_shutdown)
+
+    def _on_shutdown(self, _application: GajimApplication) -> None:
+        app.log("app").info("Shutdown Application")
 
     def _command_line(
         self, _application: GajimApplication, command_line: Gio.ApplicationCommandLine
@@ -617,7 +634,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     @staticmethod
     def _on_quit_action(_action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:
-        app.window.quit()
+        app.app.start_shutdown()
 
     @staticmethod
     def _on_new_chat_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

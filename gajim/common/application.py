@@ -29,7 +29,6 @@ from gajim.common import passwords
 from gajim.common.cert_store import CertificateStore
 from gajim.common.client import Client
 from gajim.common.commands import ChatCommands
-from gajim.common.dbus import logind
 from gajim.common.events import AccountCreated
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
@@ -110,8 +109,6 @@ class CoreApplication(ged.EventHelper):
 
         if sys.platform in ('win32', 'darwin'):
             GLib.timeout_add_seconds(20, self._check_for_updates)
-        else:
-            logind.enable()
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
@@ -140,7 +137,7 @@ class CoreApplication(ged.EventHelper):
 
     @property
     def _log(self) -> logging.Logger:
-        return app.log('gajim.application')
+        return app.log('app')
 
     def _core_command_line(self, options: GLib.VariantDict) -> None:
         if options.contains('cprofile'):
@@ -218,7 +215,8 @@ class CoreApplication(ged.EventHelper):
         ps = ps.sort_stats(SortKey.TIME)
         ps.print_stats()
 
-    def start_shutdown(self) -> None:
+    def _start_shutdown(self) -> None:
+        self._log.info("Start Shutdown")
         accounts_to_disconnect: dict[str, Client] = {}
 
         for client in app.get_clients():
@@ -226,13 +224,15 @@ class CoreApplication(ged.EventHelper):
                 accounts_to_disconnect[client.account] = client
 
         if not accounts_to_disconnect:
-            self._quit_app()
+            self._shutdown_core()
+            self._shutdown_complete()
             return
 
         def _on_disconnect(event: AccountDisconnected) -> None:
             accounts_to_disconnect.pop(event.account)
             if not accounts_to_disconnect:
-                self._quit_app()
+                self._shutdown_core()
+                self._shutdown_complete()
                 return
 
         app.ged.register_event_handler('account-disconnected',
@@ -243,20 +243,21 @@ class CoreApplication(ged.EventHelper):
             client.change_status('offline', '')
 
     def _shutdown_core(self) -> None:
+        self._log.info("Shutdown core")
         # Commit any outstanding SQL transactions
         app.process_pool.shutdown(cancel_futures=True)
         app.storage.archive.cleanup_chat_history()
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
+        app.settings.save()
         app.settings.shutdown()
 
         self.end_profiling()
         app.app.systray.shutdown()
         configpaths.cleanup_temp()
-        logind.shutdown()
 
-    def _quit_app(self) -> None:
-        self._shutdown_core()
+    def _shutdown_complete(self) -> None:
+        self._log.info("Shutdown complete")
 
     @staticmethod
     def _show_warnings() -> None:

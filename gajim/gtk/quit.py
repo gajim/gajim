@@ -43,7 +43,7 @@ class QuitDialog(GajimAppWindow):
         elif action == "hide":
             app.window.hide_window()
         elif action == "quit":
-            app.window.quit()
+            app.app.start_shutdown()
 
         self.close()
 

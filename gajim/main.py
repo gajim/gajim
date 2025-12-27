@@ -155,7 +155,7 @@ def _run_app() -> None:
 
     def sigint_cb(num: int, stack: FrameType | None) -> None:
         print(" SIGINT/SIGTERM received")
-        application.quit()
+        application.start_shutdown()
 
     # ^C exits the application normally
     signal.signal(signal.SIGINT, sigint_cb)

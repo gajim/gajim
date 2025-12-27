@@ -1025,7 +1025,7 @@ class MiscellaneousGroup(GajimPreferencesGroup):
         def _on_response() -> None:
             button.set_sensitive(False)
             app.storage.archive.remove_all_history()
-            app.window.quit()
+            app.app.start_shutdown()
 
         ConfirmationAlertDialog(
             _("Purge all Chat History?"),

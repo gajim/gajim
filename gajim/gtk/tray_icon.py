@@ -144,7 +144,7 @@ class TrayIconBackend(EventHelper):
 
     @staticmethod
     def _on_quit() -> None:
-        app.window.quit()
+        app.app.start_shutdown()
 
     @staticmethod
     def _on_status_changed(status: str) -> None:
