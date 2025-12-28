@@ -74,6 +74,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._last_message_from_phone: set[BareContact] = set()
 
         self._account_badge = AccountBadge(bind_setting=True)
+        self._account_badge.set_valign(Gtk.Align.CENTER)
         self._additional_items_box.append(self._account_badge)
 
         self._voice_requests_button = VoiceRequestsButton()
