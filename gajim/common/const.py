@@ -314,25 +314,6 @@ class Draft:
     reply_pk: int | None
 
 
-MUC_CREATION_EXAMPLES = [
-    (p_('Group chat name', 'Team'),
-     p_('Group chat description', 'Project discussion'),
-     p_('Group chat address', 'team')),
-    (p_('Group chat name', 'Family'),
-     p_('Group chat description', 'Spring gathering'),
-     p_('Group chat address', 'family')),
-    (p_('Group chat name', 'Vacation'),
-     p_('Group chat description', 'Trip planning'),
-     p_('Group chat address', 'vacation')),
-    (p_('Group chat name', 'Repairs'),
-     p_('Group chat description', 'Local help group'),
-     p_('Group chat address', 'repairs')),
-    (p_('Group chat name', 'News'),
-     p_('Group chat description', 'Local news and reports'),
-     p_('Group chat address', 'news')),
-]
-
-
 MUC_DISCO_ERRORS = {
     'remote-server-not-found': _('Remote server not found'),
     'remote-server-timeout': _('Remote server timeout'),
