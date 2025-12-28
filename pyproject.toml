@@ -70,6 +70,7 @@ dev = [
     "python-gitlab",
     "ruff==0.14.8",
     "sentry-sdk",
+    "cryptography@git+https://github.com/pyca/cryptography.git"
 ]
 
 [tool.setuptools.packages.find]
