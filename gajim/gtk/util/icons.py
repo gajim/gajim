@@ -2,6 +2,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
+from typing import Any
+
 import logging
 
 import cairo
@@ -26,7 +30,7 @@ def get_icon_theme() -> Gtk.IconTheme:
     return Gtk.IconTheme.get_for_display(display)
 
 
-def find_texture_node(node: Gsk.RenderNode | None) -> Gsk.TextureNode | None:
+def find_texture_node(node: Any) -> Gsk.TextureNode | None:
     if isinstance(node, Gsk.TextureNode):
         return node
 
