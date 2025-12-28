@@ -37,3 +37,4 @@ mac/gajim-venv
 *.sublime-project
 *.sublime-workspace
 .idea
+uv.lock
