@@ -52,22 +52,24 @@ dynamic = ["version"]
 homepage = "https://gajim.org"
 repository = "https://dev.gajim.org/gajim/gajim"
 
-[project.optional-dependencies]
-dev = [
-  "ruff>=0.14.8",
-  "codespell[toml]>=2.4.1",
-  "isort>=7.0.0",
-  "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
-  "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
-  "python-gitlab",
-  "sentry-sdk",
-]
-
 [project.scripts]
 gajim-remote = "gajim.remote:run"
 
 [project.gui-scripts]
 gajim = "gajim.main:run"
+
+[dependency-groups]
+dev = [
+    "codespell==2.4.1",
+    "isort==7.0.0",
+    "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
+    "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
+    "pre-commit",
+    "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
+    "python-gitlab",
+    "ruff==0.14.8",
+    "sentry-sdk",
+]
 
 [tool.setuptools.packages.find]
 include = ["gajim*"]
