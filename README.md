@@ -76,7 +76,7 @@ The build frontend takes care of installing all python build requirements. Bewar
 ### Building the metadata files and translation
 
 ```bash
-$ ./make.py build -h
+$ uv run ./make.py build -h
 
 usage: make.py build [-h] [--dist {unix,flatpak,flatpak-nightly,win}]
 ```
@@ -85,38 +85,28 @@ Afterwards metadata files can be found in `dist/metadata` folder.
 
 ### Building the wheel
 
-This is only necessary if you need the wheel, otherwise you can skip to the Installing section.
-
 #### Using `build`
 
 ```bash
 python -m build -w
 ```
 
-#### Using `pip`
+#### Using `uv`
 
 ```bash
-pip wheel --no-deps --use-pep517 -w dist .
+uv build
 ```
 
 ## Installing
 
-### Installing with `pip`
-
 ```bash
-pip install .
-```
-
-### Installing the wheel
-
-```bash
-pip install dist/name_of_wheel.whl
+uv pip install dist/name_of_wheel.whl
 ```
 
 ### Installing the metadata files (Unix only)
 
 ```bash
-$ ./make.py install -h
+$ uv run ./make.py install -h
 
 usage: make.py install [-h] [--dist {unix,flatpak,flatpak-nightly}] [--prefix PREFIX]
 
@@ -129,8 +119,8 @@ options:
 
 ## Tests
 
-- `python -m unittest discover -s test`
-- `python -m unittest ./test/gtk/gui_file.py` (for testing GUI files)
+- `uv run pytest`
+- `uv run pytest ./test/gtk/gui_file.py` (for testing GUI files)
 
 ## Packages and install instructions
 
@@ -158,19 +148,9 @@ see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 ## Developing
 
-To create a virtualenv you can execute
+The easiest way to run the development version is to use [uv](https://docs.astral.sh/uv/)
 
-    ./scripts/dev_env.sh
-
-Be sure all install requirements are available.
-
-Afterwards activate the virtual environment with
-
-    source .venv/bin/activate
-
-It is a good practice to run the development version with a user profile. This ensures that it does not interfere with other installations.
-
-    ./launch.py --user-profile dev
+    uv run ./launch.py --user-profile dev
 
 ### Windows
 

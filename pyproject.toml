@@ -66,6 +66,7 @@ dev = [
     "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
     "pre-commit",
     "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
+    "pytest>=9.0.2",
     "python-gitlab",
     "ruff==0.14.8",
     "sentry-sdk",
