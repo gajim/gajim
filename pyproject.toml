@@ -30,7 +30,7 @@ dependencies = [
   "httpx[http2,socks]",
   "keyring",
   "nbxmpp>=7.0.0,<8.0.0",
-  "omemo-dr>=1.1.0,<2.0.0",
+  "omemo-dr>=1.2.0,<2.0.0",
   "packaging",
   "pillow>=9.1.0",
   "precis-i18n>=1.0.0",
