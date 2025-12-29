@@ -170,8 +170,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             "input-bold",
             "input-italic",
             "input-strike",
-            "input-clear",
-            "input-focus",
             "show-emoji-chooser",
             "paste-as-quote",
             "paste-as-code-block",
@@ -270,13 +268,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
 
-        if action_name == "input-focus":
-            self._message_input.grab_focus_delayed()
-
-        elif action_name == "input-clear":
-            self._on_clear()
-
-        elif action_name.startswith("input-"):
+        if action_name.startswith("input-"):
             self._on_format(action_name)
 
         elif action_name == "show-emoji-chooser":
@@ -712,9 +704,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_format(self, name: str) -> None:
         name = name.removeprefix("input-")
         self._message_input.apply_formatting(name)
-
-    def _on_clear(self) -> None:
-        self._message_input.clear()
 
     def _on_send_file_enabled_changed(
         self, action: Gio.SimpleAction, _param: GObject.ParamSpec

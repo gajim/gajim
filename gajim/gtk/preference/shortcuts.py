@@ -5,12 +5,10 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Literal
-
-from collections.abc import Callable
 
 from gi.repository import Adw
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -18,16 +16,21 @@ from gajim.common.i18n import _
 
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
-from gajim.gtk.const import SHORTCUT_CATEGORIES
-from gajim.gtk.const import SHORTCUTS
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.shortcut_manager import GajimShortcut
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
 # All keyvals:
 # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gdk/gdkkeysyms.h
+
+SHORTCUT_CATEGORIES = {
+    "general": _("General"),
+    "chats": _("Chats"),
+    "messages": _("Messages"),
+}
 
 
 class ShortcutsPage(GajimPreferencePage, SignalManager):
@@ -45,102 +48,87 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
         )
         SignalManager.__init__(self)
 
-        self._shortcut_rows: dict[str, ShortcutsManagerRow] = {}
-
-        self._user_shortcuts = app.app.get_user_shortcuts()
-
-        self._load_shortcuts()
-
-    def do_unroot(self) -> None:
-        self._disconnect_all()
-        del self._shortcut_rows
-        GajimPreferencePage.do_unroot(self)
-
-    def _load_shortcuts(self) -> None:
         preferences_groups: dict[str, GajimPreferencesGroup] = {}
         for category, title in SHORTCUT_CATEGORIES.items():
             preferences_group = GajimPreferencesGroup(key=category, title=title)
             preferences_groups[category] = preferences_group
             self.add(preferences_group)
 
-        for action_name, shortcut_data in SHORTCUTS.items():
-            if not shortcut_data.allow_rebind:
+        self._manager = app.app.get_shortcut_manager()
+        for shortcut in self._manager.iter_shortcuts():
+            if not shortcut.allow_rebind:
                 continue
 
-            row = ShortcutsManagerRow(action_name)
+            row = ShortcutsManagerRow(shortcut)
             self._connect(row, "activated", self._on_activated)
 
-            custom_accelerators = self._user_shortcuts.get(action_name)
-            if (
-                custom_accelerators is not None
-                and custom_accelerators != shortcut_data.accelerators
-            ):
-                row.set_accelerators(custom_accelerators, True)
-            else:
-                row.set_accelerators(shortcut_data.accelerators, False)
+            preferences_groups[shortcut.category].add(row)
 
-            preferences_groups[shortcut_data.category].add(row)
-            self._shortcut_rows[action_name] = row
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        GajimPreferencePage.do_unroot(self)
 
     def _on_activated(self, row: ShortcutsManagerRow) -> None:
         parent = cast(Adw.ApplicationWindow, self.get_root())
-        KeyEntryDialog(self._on_shortcut_edited, row.action_name, parent=parent)
+        dialog = KeyEntryDialog(parent=parent)
+        dialog.connect("response", self._on_shortcut_edited, row.shortcut)
 
     def _on_shortcut_edited(
         self,
-        response: Literal["reset", "apply"],
-        action_name: str,
-        new_accelerator_name: str,
+        dialog: KeyEntryDialog,
+        response_id: str,
+        shortcut: GajimShortcut,
     ) -> None:
-        row = self._shortcut_rows[action_name]
-
-        if response == "reset":
-            self._user_shortcuts.pop(action_name, None)
-            row.set_accelerators(SHORTCUTS[action_name].accelerators, False)
-            app.app.set_user_shortcuts(self._user_shortcuts)
+        if response_id == "close":
             return
 
-        new_accelerators = [new_accelerator_name]
-        if new_accelerators != SHORTCUTS[action_name].accelerators:
-            self._user_shortcuts[action_name] = new_accelerators
-            row.set_accelerators(new_accelerators, True)
-            app.app.set_user_shortcuts(self._user_shortcuts)
+        if response_id == "reset":
+            shortcut.reset()
+            self._manager.store_user_shortcuts()
+            return
+
+        shortcut.set_custom_accelerators(dialog.get_accelerators())
+        self._manager.store_user_shortcuts()
 
 
 @Gtk.Template(string=get_ui_string("shortcuts_manager_row.ui"))
-class ShortcutsManagerRow(Adw.ActionRow):
+class ShortcutsManagerRow(Adw.ActionRow, SignalManager):
     __gtype_name__ = "ShortcutsManagerRow"
 
     _accelerator_badge: Gtk.Label = Gtk.Template.Child()
     _accelerator_label: Gtk.Label = Gtk.Template.Child()
 
-    def __init__(self, action_name: str):
+    def __init__(self, shortcut: GajimShortcut) -> None:
         Adw.ActionRow.__init__(self)
+        SignalManager.__init__(self)
 
-        self._action_name = action_name
+        self._shortcut = shortcut
         self.set_activatable(True)
-        self.set_title(SHORTCUTS[self._action_name].label)
+        self.set_title(shortcut.label)
+        self._update_fields()
+
+        self._connect(self._shortcut, "notify::trigger", self._on_trigger_changed)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Adw.ActionRow.do_unroot(self)
+
+    def _update_fields(self):
+        self._accelerator_badge.set_visible(self._shortcut.has_custom_accel())
+        self._accelerator_label.set_label(self._shortcut.get_accel_label())
+
+    def _on_trigger_changed(
+        self, shortcut: GajimShortcut, _pspec: GObject.ParamSpec
+    ) -> None:
+        self._update_fields()
 
     @property
-    def action_name(self) -> str:
-        return self._action_name
-
-    def set_accelerators(self, accelerators: list[str], is_custom: bool) -> None:
-        # Process first accelerator only
-        accelerator_label = "-"
-        if accelerators:
-            success, keyval, state = Gtk.accelerator_parse(accelerators[0])
-            if success:
-                accelerator_label = Gtk.accelerator_get_label(keyval, state) or "-"
-
-        self._accelerator_label.set_label(accelerator_label)
-        self._accelerator_badge.set_visible(is_custom)
+    def shortcut(self) -> GajimShortcut:
+        return self._shortcut
 
 
 class KeyEntryDialog(AlertDialog):
-    def __init__(
-        self, callback: Callable[..., None], action_name: str, parent: Gtk.Window
-    ) -> None:
+    def __init__(self, parent: Gtk.Window) -> None:
         AlertDialog.__init__(
             self,
             heading=_("Edit Shortcut"),
@@ -156,10 +144,6 @@ class KeyEntryDialog(AlertDialog):
             parent=parent,
         )
 
-        self._callback = callback
-
-        self._action_name = action_name
-
         self._accelerator_name = ""
 
         controller = Gtk.EventControllerKey(
@@ -174,7 +158,10 @@ class KeyEntryDialog(AlertDialog):
         self._shortcut_label.add_css_class("py-6")
         self.set_extra_child(self._shortcut_label)
 
-        self.connect("response", self._on_response)
+    def get_accelerators(self) -> list[str] | None:
+        if self._accelerator_name:
+            return [self._accelerator_name]
+        return None
 
     def _on_key_pressed(
         self,
@@ -190,9 +177,3 @@ class KeyEntryDialog(AlertDialog):
         self._accelerator_name = Gtk.accelerator_name(keyval, state)
         self._shortcut_label.set_label(Gtk.accelerator_get_label(keyval, state))
         return Gdk.EVENT_STOP
-
-    def _on_response(self, _dialog: Adw.AlertDialog, response_id: str) -> None:
-        if response_id == "close":
-            return
-
-        self._callback(response_id, self._action_name, self._accelerator_name)

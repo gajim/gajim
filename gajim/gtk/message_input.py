@@ -23,6 +23,9 @@ from gi.repository import GtkSource
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import events
+from gajim.common import ged
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import get_default_lang
 from gajim.common.storage.archive import models as mod
@@ -53,7 +56,7 @@ FORMAT_CHARS: dict[str, str] = {
 log = logging.getLogger("gajim.gtk.message_input")
 
 
-class MessageInputTextView(GtkSource.View):
+class MessageInputTextView(GtkSource.View, EventHelper):
     """
     A GtkSource.View for chat message input
     """
@@ -75,6 +78,7 @@ class MessageInputTextView(GtkSource.View):
             margin_bottom=3,
             valign=Gtk.Align.CENTER,
         )
+        EventHelper.__init__(self)
 
         self._parent = parent
         self._completion_providers = [
@@ -105,12 +109,42 @@ class MessageInputTextView(GtkSource.View):
         focus_controller.connect("leave", self._on_focus_leave)
         self.add_controller(focus_controller)
 
+        manager = app.app.get_shortcut_manager()
+        manager.install_shortcuts(self, ["input", "input-global"])
+
         self.connect_after("paste-clipboard", self._after_paste_clipboard)
 
         self._speller_menu: Gio.MenuModel | None = None
         self._update_extra_menu()
 
         app.plugin_manager.gui_extension_point("message_input", self)
+
+        self.register_events(
+            [
+                ("register-actions", ged.GUI2, self._on_register_actions),
+            ]
+        )
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
+        actions = [
+            "input-focus",
+        ]
+
+        for action in actions:
+            action = app.window.get_action(action)
+            action.connect("activate", self._on_action)
+
+    def _on_action(
+        self, action: Gio.SimpleAction, param: GLib.Variant | None
+    ) -> int | None:
+        if self._contact is None:
+            return
+
+        action_name = action.get_name()
+        log.warning("Activate action: %s", action_name)
+
+        if action_name == "input-focus":
+            self.grab_focus_delayed()
 
     def get_completion_popover(self) -> CompletionPopover:
         return self._completion_popover
@@ -356,9 +390,7 @@ class MessageInputTextView(GtkSource.View):
         )
 
     def clear(self, *args: Any) -> None:
-        buf = self.get_buffer()
-        start, end = buf.get_bounds()
-        buf.delete(start, end)
+        self.activate_action("text.clear")
 
     def undo(self, *args: Any) -> None:
         buf = self.get_buffer()

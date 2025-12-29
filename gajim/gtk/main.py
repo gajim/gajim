@@ -130,12 +130,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         controller.connect("motion", self._on_window_motion_notify)
         self.add_controller(controller)
 
-        controller = Gtk.EventControllerKey(
-            propagation_phase=Gtk.PropagationPhase.BUBBLE
-        )
-        controller.connect("key-pressed", self._on_key_pressed)
-        self.add_controller(controller)
-
         self.register_events(
             [
                 ("message-received", ged.GUI1, self._on_message_received),
@@ -170,6 +164,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             client.connect_signal(
                 "resume-successful", self._on_client_resume_successful
             )
+
+        manager = app.app.get_shortcut_manager()
+        manager.install_shortcuts(self, "main-win")
 
     @property
     def about_dialog(self) -> AboutDialog:
@@ -265,19 +262,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self.activate_workspace(workspace_id)
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        state: Gdk.ModifierType,
-    ) -> bool:
-        if keyval == Gdk.KEY_space:
-            self.activate_action("win.input-focus")
-            return Gdk.EVENT_STOP
-
-        return Gdk.EVENT_PROPAGATE
 
     def _on_client_state_changed(
         self, client: Client, _signal_name: str, state: SimpleClientState

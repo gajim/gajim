@@ -55,9 +55,7 @@ from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
-from gajim.common.helpers import dump_json
 from gajim.common.helpers import idle_add_once
-from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
@@ -72,7 +70,7 @@ from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
 from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
-from gajim.gtk.const import SHORTCUTS
+from gajim.gtk.shortcut_manager import ShortcutManager
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.misc import open_uri
@@ -206,6 +204,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         self.connect("command-line", self._command_line)
         self.connect("shutdown", self._on_shutdown)
         self.connect("query-end", self._on_query_end)
+        self.connect("window_added", self._on_window_added)
 
     @staticmethod
     def _get_remaining_entry():
@@ -234,6 +233,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         icon_theme.add_search_path(str(configpaths.get("ICONS")))
 
         self.avatar_storage = AvatarStorage()
+        self._shortcut_manager = ShortcutManager()
 
         app.load_css_config()
 
@@ -258,7 +258,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         for account in accounts:
             self.add_account_actions(account)
 
-        self._load_shortcuts()
         self.update_app_actions_state()
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
@@ -285,6 +284,11 @@ class GajimApplication(Adw.Application, CoreApplication):
         )
 
         GLib.timeout_add(100, self._auto_connect)
+
+    def _on_window_added(
+        self, _application: GajimApplication, window: Gtk.Window
+    ) -> None:
+        self._shortcut_manager.install_shortcuts(window, ["app"])
 
     def start_shutdown(self) -> None:
         app.window.start_shutdown()
@@ -403,6 +407,9 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_activate(self, _application: Gtk.Application) -> None:
         app.window.show_window()
 
+    def get_shortcut_manager(self) -> ShortcutManager:
+        return self._shortcut_manager
+
     def _add_app_actions(self) -> None:
         for action in APP_ACTIONS:
             action_name, variant = action
@@ -519,40 +526,6 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         enabled_accounts = bool(app.settings.get_active_accounts())
         self.set_action_state("start-chat", enabled_accounts)
-
-    @staticmethod
-    def get_user_shortcuts() -> dict[str, list[str]]:
-        user_path = configpaths.get("MY_SHORTCUTS")
-        user_shortcuts: dict[str, list[str]] = {}
-        if user_path.exists():
-            app.log("app").info("Load user shortcuts")
-            user_shortcuts = load_json(user_path, default={})
-
-        return user_shortcuts
-
-    def set_user_shortcuts(self, user_shortcuts: dict[str, list[str]]) -> None:
-        user_path = configpaths.get("MY_SHORTCUTS")
-        dump_json(user_path, user_shortcuts)
-        self._load_shortcuts()
-
-    def _load_shortcuts(self) -> None:
-        shortcuts = {
-            action_name: data.accelerators for action_name, data in SHORTCUTS.items()
-        }
-        no_rebind_allowed = [
-            action_name
-            for action_name, data in SHORTCUTS.items()
-            if not data.allow_rebind
-        ]
-
-        user_shortcuts = self.get_user_shortcuts()
-        for action_name in no_rebind_allowed:
-            user_shortcuts.pop(action_name, None)
-
-        shortcuts.update(user_shortcuts)
-
-        for action, accelerators in shortcuts.items():
-            self.set_accels_for_action(action, accelerators)
 
     def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
         self.update_feature_actions_state(event.account)
