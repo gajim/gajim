@@ -256,6 +256,7 @@ class HTTPUpload(BaseModule):
             input_=transfer.path,
             with_progress=True,
             proxy=determine_proxy(self._account),
+            timeout=30,
             user_data=transfer,
             callback=self._on_finish,
         )
