@@ -128,6 +128,10 @@ class MessageInputTextView(GtkSource.View, EventHelper):
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         actions = [
             "input-focus",
+            "input-bold",
+            "input-italic",
+            "input-strike",
+            "input-emoji",
         ]
 
         for action in actions:
@@ -143,8 +147,18 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         action_name = action.get_name()
         log.warning("Activate action: %s", action_name)
 
-        if action_name == "input-focus":
-            self.grab_focus_delayed()
+        match action_name:
+            case "input-focus":
+                self.grab_focus_delayed()
+
+            case "input-bold" | "input-italic" | "input-strike":
+                self._apply_formatting(action_name.removeprefix("input-"))
+
+            case "input-emoji":
+                self.emit("insert-emoji")
+
+            case _:
+                pass
 
     def get_completion_popover(self) -> CompletionPopover:
         return self._completion_popover
@@ -351,7 +365,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             start, end = buf.get_bounds()
         return (start, end)
 
-    def apply_formatting(self, formatting: str) -> None:
+    def _apply_formatting(self, formatting: str) -> None:
         format_char = FORMAT_CHARS[formatting]
 
         buf = self.get_buffer()

@@ -487,12 +487,6 @@ MAIN_WIN_SHORTCUTS = GajimShortcutGroup(
             action_name="win.switch-workspace-9",
         ),
         GajimShortcut(
-            label=_("Choose Emoji"),
-            category="messages",
-            accelerators=["<Primary><Shift>M"],
-            action_name="win.show-emoji-chooser",
-        ),
-        GajimShortcut(
             label=_("Scroll Up"),
             category="messages",
             accelerators=["<Shift>Page_Up"],
@@ -528,6 +522,30 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             category="messages",
             accelerators=["<Primary>U"],
             action_name="text.clear",
+        ),
+        GajimShortcut(
+            label=_("Format Text Bold"),
+            category="messages",
+            accelerators=["<Primary>B"],
+            action_name="win.input-bold",
+        ),
+        GajimShortcut(
+            label=_("Format Text Italic"),
+            category="messages",
+            accelerators=["<Primary>I"],
+            action_name="win.input-italic",
+        ),
+        GajimShortcut(
+            label=_("Format Text Strikethrough"),
+            category="messages",
+            accelerators=None,
+            action_name="win.input-strike",
+        ),
+        GajimShortcut(
+            label=_("Open Emoji Chooser"),
+            category="messages",
+            accelerators=None,
+            action_name="win.input-emoji",
         ),
     ],
 )

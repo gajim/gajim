@@ -167,10 +167,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         actions = [
-            "input-bold",
-            "input-italic",
-            "input-strike",
-            "show-emoji-chooser",
             "paste-as-quote",
             "paste-as-code-block",
             "quote",
@@ -268,18 +264,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
 
-        if action_name.startswith("input-"):
-            self._on_format(action_name)
-
-        elif action_name == "show-emoji-chooser":
-            self._message_input.emit("insert-emoji")
-            self._ui.emoticons_button.set_active(False)
-
-        elif action_name == "quote":
-            assert param
-            self._message_input.insert_as_quote(param.get_string())
-
-        elif action_name == "paste-as-quote":
+        if action_name == "paste-as-quote":
             self._message_input.paste_as_quote()
 
         elif action_name == "paste-as-code-block":
@@ -700,10 +685,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         app.plugin_manager.extension_point(
             f"encryption_dialog{encryption}", app.window.get_control()
         )
-
-    def _on_format(self, name: str) -> None:
-        name = name.removeprefix("input-")
-        self._message_input.apply_formatting(name)
 
     def _on_send_file_enabled_changed(
         self, action: Gio.SimpleAction, _param: GObject.ParamSpec
