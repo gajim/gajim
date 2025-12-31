@@ -524,6 +524,12 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             action_name="text.clear",
         ),
         GajimShortcut(
+            label=_("Correct Message"),
+            category="messages",
+            accelerators=["<Primary>Up"],
+            action_name="win.correct-message",
+        ),
+        GajimShortcut(
             label=_("Format Text Bold"),
             category="messages",
             accelerators=["<Primary>B"],
