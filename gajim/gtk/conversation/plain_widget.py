@@ -87,11 +87,11 @@ class MessageLabel(Gtk.Label, SignalManager):
 
     def _on_secondary_clicked(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
         current_uri = self.get_current_uri()
         selected, start, end = self.get_selection_bounds()
 
@@ -104,7 +104,7 @@ class MessageLabel(Gtk.Label, SignalManager):
             action_menu = get_conv_action_context_menu(self._account, selected_text)
 
         if uri_menu is None and action_menu is None:
-            return Gdk.EVENT_PROPAGATE
+            return
 
         extra_menu = Gio.Menu()
         if uri_menu is not None:
@@ -113,7 +113,7 @@ class MessageLabel(Gtk.Label, SignalManager):
             extra_menu.append_section(None, action_menu)
 
         self.set_extra_menu(extra_menu)
-        return Gdk.EVENT_PROPAGATE
+        return
 
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:
         markup_text = ""

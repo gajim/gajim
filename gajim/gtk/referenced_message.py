@@ -140,11 +140,12 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
 
     def _on_clicked(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         app.window.activate_action(
             "win.jump-to-message",
             GLib.Variant(
@@ -155,7 +156,6 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
                 ],
             ),
         )
-        return Gdk.EVENT_STOP
 
     def get_message_reply(self) -> ReplyData | None:
         # We only show the reply menu if there is text

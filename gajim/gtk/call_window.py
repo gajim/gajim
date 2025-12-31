@@ -139,6 +139,7 @@ class CallWindow(GajimAppWindow, EventHelper):
         if button is None:
             return
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         key = button.get_name()
         app.call_manager.start_dtmf(self._account, self._resource_contact.jid, key)
 

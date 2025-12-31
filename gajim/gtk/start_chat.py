@@ -1144,18 +1144,17 @@ class ContactViewItem(Gtk.Grid, SignalManager):
 
     def _popup_menu(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
         if self._menu.get_menu_model() is None:
-            return Gdk.EVENT_PROPAGATE
+            return
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         self._menu.set_pointing_to_coord(x, y)
         self._menu.popup()
-
-        return Gdk.EVENT_STOP
 
 
 class GlobalSearch(

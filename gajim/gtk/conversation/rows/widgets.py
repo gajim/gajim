@@ -447,9 +447,10 @@ class AvatarBox(Gtk.Box, SignalManager):
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         if not isinstance(self._contact, GroupchatContact):
-            return Gdk.EVENT_STOP
+            return
 
         if gesture_click.get_current_button() == Gdk.BUTTON_PRIMARY:
             app.window.activate_action(
@@ -457,8 +458,6 @@ class AvatarBox(Gtk.Box, SignalManager):
             )
         elif gesture_click.get_current_button() == Gdk.BUTTON_SECONDARY:
             self._show_participant_menu(self._name, x, y)
-
-        return Gdk.EVENT_STOP
 
     def _show_participant_menu(self, nick: str, x: float, y: float) -> None:
         assert isinstance(self._contact, GroupchatContact)

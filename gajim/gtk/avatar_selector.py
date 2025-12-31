@@ -377,6 +377,7 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         if self._browse_pixbuf is None:
             return
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         crop = self._crop_to_widget()
 
         self._last_press_x = (x - self._image.x) / self._scale

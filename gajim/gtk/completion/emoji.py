@@ -224,16 +224,16 @@ class EmojiCompletionViewItem(
 
     def _on_button_press(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
         if not self.props.has_skin_variation:  # pyright: ignore
-            return Gdk.EVENT_PROPAGATE
+            return
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         self.set_visible_child_name("variations")
-        return Gdk.EVENT_STOP
 
     def _on_var_button_clicked(self, button: Gtk.Button) -> None:
         emoji = button.get_label()

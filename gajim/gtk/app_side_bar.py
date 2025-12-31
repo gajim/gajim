@@ -149,31 +149,28 @@ class AppSideBar(Gtk.Box, EventHelper):
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
         current_button = gesture_click.get_current_button()
         if current_button == Gdk.BUTTON_PRIMARY:
             # Left click
-
+            gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
             self._status_popover.popdown()
 
             accounts = app.settings.get_active_accounts()
             if len(accounts) == 0:
-                return Gdk.EVENT_PROPAGATE
+                return
 
             if len(accounts) == 1:
                 app.window.show_account_page(accounts[0])
                 self._bottom_listbox.select_row(self._account_row)
             else:
                 self._account_popover.popup()
-            return Gdk.EVENT_PROPAGATE
 
         if current_button == Gdk.BUTTON_SECONDARY:
             # Right click
+            gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
             self._status_popover.popup()
             self._account_popover.popdown()
-            return Gdk.EVENT_PROPAGATE
-
-        return Gdk.EVENT_PROPAGATE
 
     @Gtk.Template.Callback()
     def _on_row_activated(

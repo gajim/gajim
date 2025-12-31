@@ -112,8 +112,10 @@ class AnimatedImage(Gtk.Box, SignalManager):
             self._animated_picture.set_visible(False)
 
     def _on_click(
-        self, _gesture_click: Gtk.GestureClick, _n_press: int, _x: float, _y: float
+        self, gesture_click: Gtk.GestureClick, _n_press: int, _x: float, _y: float
     ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
+
         if self._backend.pipeline_setup_failed:
             self.emit("error")
             return

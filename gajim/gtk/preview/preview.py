@@ -290,11 +290,12 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def _on_preview_clicked(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         x: float,
         y: float,
     ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         encrypted = self._uri.startswith("aesgcm://")
         menu = get_preview_menu(self._uri, encrypted=encrypted)
         self._menu_popover.set_menu_model(menu)

@@ -213,19 +213,19 @@ class WorkspaceListBox(Gtk.ListBox):
 
     def _on_pressed(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         n_press: int,
         x: float,
         y: float,
         row: SideBarListBoxRow,
-    ) -> bool:
+    ) -> None:
         res = row.translate_coordinates(self, x, y)
         if res is None:
-            return Gdk.EVENT_PROPAGATE
+            return
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         x, y = res
         menu = get_workspace_menu(row.item_id)
         self._popover_menu.set_menu_model(menu)
         self._popover_menu.set_pointing_to_coord(x=x, y=y)
         self._popover_menu.popup()
-        return Gdk.EVENT_STOP

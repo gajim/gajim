@@ -302,16 +302,16 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def _on_timestamp_label_clicked(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         self._preview_state.is_timestamp_positive = (
             not self._preview_state.is_timestamp_positive
         )
         self._update_timestamp_label()
-        return Gdk.EVENT_STOP
 
     def _convert_position_to_timestamp(self, x: float, x_max: float) -> float:
         if x_max == 0.0:
@@ -327,13 +327,13 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def _on_seek_bar_button_pressed(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         self._user_holds_position_slider = True
-        return Gdk.EVENT_STOP
 
     def _on_seek_bar_button_released(
         self,
@@ -341,7 +341,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         _n_press: int,
         _x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
         seek_ts = self._convert_position_to_timestamp(
             self._cursor_pos, self._seek_bar.get_width()
         )
@@ -354,8 +354,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
         self._seek_ts = -1
         self._user_holds_position_slider = False
-
-        return Gdk.EVENT_STOP
 
     def _on_seek_bar_cursor_move(
         self,
@@ -400,13 +398,14 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def _on_visualizer_button_clicked(
         self,
-        _gesture_click: Gtk.GestureClick,
+        gesture_click: Gtk.GestureClick,
         _n_press: int,
         x: float,
         _y: float,
-    ) -> int:
+    ) -> None:
         assert self._cursor_pos is not None
 
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         timestamp = self._convert_position_to_timestamp(
             x, self._visualizer.get_effective_width()
         )
@@ -414,8 +413,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._set_preview_state_position(timestamp)
         self._update_ui_from_state()
         self._audio_player.set_playback_position(self._id, timestamp)
-
-        return Gdk.EVENT_STOP
 
     def _display_audio_preview(self) -> None:
         self._visualizer.set_samples(self._preview_state.samples)

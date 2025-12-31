@@ -566,11 +566,12 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         _n_press: int,
         x: float,
         y: float,
-    ) -> bool:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         assert self._contact is not None
         participant = self._contact
         if participant.is_self:
-            return Gdk.EVENT_STOP
+            return
 
         self_contact = participant.room.get_self()
         assert self_contact is not None
@@ -582,8 +583,6 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         self._popover_menu.set_menu_model(menu)
         self._popover_menu.set_pointing_to_coord(x, y)
         self._popover_menu.popup()
-
-        return Gdk.EVENT_STOP
 
     def _query_tooltip(
         self,

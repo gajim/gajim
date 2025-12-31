@@ -275,18 +275,18 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
         # Place the cursor at click position to trigger an update
         # for spelling suggestions, see:
         # https://gitlab.gnome.org/GNOME/libspelling/-/issues/5
         buf = self.get_buffer()
         if buf.get_has_selection():
             # Don't place cursor if text is selected, otherwise the selection is changed
-            return Gdk.EVENT_PROPAGATE
+            return
 
         _, iter_, _ = self.get_iter_at_position(int(x), int(y))
         buf.place_cursor(iter_)
-        return Gdk.EVENT_PROPAGATE
+        return
 
     def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:
         scrolled = self.get_parent()

@@ -533,10 +533,12 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         _n_press: int,
         x: float,
         y: float,
-    ) -> bool:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
+
         items = self._get_selected_items()
         if not items:
-            return Gdk.EVENT_STOP
+            return
 
         single_selection = len(items) == 1
         groups = self._client.get_module("Roster").get_groups()
@@ -546,8 +548,6 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         self._popover_menu.set_menu_model(menu)
         self._popover_menu.set_pointing_to_coord(x, y)
         self._popover_menu.popup()
-
-        return Gdk.EVENT_STOP
 
 
 class RosterListItem(GObject.Object):

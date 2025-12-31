@@ -288,11 +288,13 @@ class Result(Page):
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
         assert self._treeview is not None
         path = self._treeview.get_path_at_pos(int(x), int(y))
         if path is None:
-            return False
+            return
+
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
 
         path, _column, _x, _y = path
         store = self._treeview.get_model()
@@ -309,7 +311,6 @@ class Result(Page):
         self._popover_menu.set_menu_model(menu)
         self._popover_menu.set_pointing_to_coord(x, y)
         self._popover_menu.popup()
-        return Gdk.EVENT_STOP
 
     def get_visible_buttons(self) -> list[str]:
         return ["close", "new-search"]

@@ -466,15 +466,14 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         _n_press: int,
         x: float,
         y: float,
-    ) -> int:
+    ) -> None:
+        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
             app.window.activate_action(
                 "win.remove-chat", GLib.Variant("as", [self.account, str(self.jid)])
             )
         elif gesture_click.get_current_button() == Gdk.BUTTON_SECONDARY:
             self._raise_context_popover(x, y)
-
-        return Gdk.EVENT_STOP
 
     def _raise_context_popover(self, x: float, y: float):
         menu = get_chat_list_row_menu(
