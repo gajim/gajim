@@ -469,6 +469,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     ) -> None:
         gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
+            self.reset_unread()
             app.window.activate_action(
                 "win.remove-chat", GLib.Variant("as", [self.account, str(self.jid)])
             )
