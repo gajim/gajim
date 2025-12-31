@@ -452,7 +452,9 @@ class AvatarBox(Gtk.Box, SignalManager):
             return Gdk.EVENT_STOP
 
         if gesture_click.get_current_button() == Gdk.BUTTON_PRIMARY:
-            app.window.activate_action("win.mention", GLib.Variant("s", self._name))
+            app.window.activate_action(
+                "win.input-mention", GLib.Variant("s", self._name)
+            )
         elif gesture_click.get_current_button() == Gdk.BUTTON_SECONDARY:
             self._show_participant_menu(self._name, x, y)
 

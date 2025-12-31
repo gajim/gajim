@@ -167,10 +167,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         actions = [
-            "paste-as-quote",
-            "paste-as-code-block",
             "quote",
-            "mention",
             "reply",
             "correct-message",
         ]
@@ -264,23 +261,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
 
-        if action_name == "paste-as-quote":
-            self._message_input.paste_as_quote()
-
-        elif action_name == "paste-as-code-block":
-            self._message_input.paste_as_code_block()
-
-        elif action_name == "reply":
+        if action_name == "reply":
             assert param
             pk = param.get_uint32()
             original_message = app.storage.archive.get_message_with_pk(pk)
             if original_message is None:
                 return
             self._enable_reply_mode(original_message)
-
-        elif action_name == "mention":
-            assert param
-            self._message_input.mention_participant(param.get_string())
 
         elif action_name == "correct-message":
             self.toggle_message_correction()

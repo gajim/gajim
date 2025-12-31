@@ -547,6 +547,18 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             accelerators=None,
             action_name="win.input-emoji",
         ),
+        GajimShortcut(
+            label=_("Paste as Quote"),
+            category="messages",
+            accelerators=None,
+            action_name="win.input-paste-as-quote",
+        ),
+        GajimShortcut(
+            label=_("Past as Code Block"),
+            category="messages",
+            accelerators=None,
+            action_name="win.input-paste-as-code-block",
+        ),
     ],
 )
 

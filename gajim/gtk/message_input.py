@@ -132,6 +132,9 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             "input-italic",
             "input-strike",
             "input-emoji",
+            "input-paste-as-quote",
+            "input-paste-as-code-block",
+            "input-mention",
         ]
 
         for action in actions:
@@ -156,6 +159,16 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
             case "input-emoji":
                 self.emit("insert-emoji")
+
+            case "input-paste-as-quote":
+                self._paste_as_quote()
+
+            case "input-paste-as-code-block":
+                self._paste_as_code_block()
+
+            case "input-mention":
+                assert param is not None
+                self._mention_participant(param.get_string())
 
             case _:
                 pass
@@ -416,7 +429,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         if buf.get_can_redo():
             buf.redo()
 
-    def mention_participant(self, name: str) -> None:
+    def _mention_participant(self, name: str) -> None:
         gc_refer_to_nick_char = app.settings.get("gc_refer_to_nick_char")
         text = f"{name}{gc_refer_to_nick_char} "
         self.insert_text(text)
@@ -431,16 +444,16 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.insert_text(f"```\n{text}\n```")
         self.grab_focus()
 
-    def paste_as_quote(self) -> None:
+    def _paste_as_quote(self) -> None:
         clipboard = self.get_clipboard()
         clipboard.read_text_async(
-            None, self._on_clipboard_read_text_finished, "paste-as-quote"
+            None, self._on_clipboard_read_text_finished, "input-paste-as-quote"
         )
 
-    def paste_as_code_block(self) -> None:
+    def _paste_as_code_block(self) -> None:
         clipboard = self.get_clipboard()
         clipboard.read_text_async(
-            None, self._on_clipboard_read_text_finished, "paste-as-code-block"
+            None, self._on_clipboard_read_text_finished, "input-paste-as-code-block"
         )
 
     def _on_clipboard_read_text_finished(
@@ -456,9 +469,9 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             log.info("No text pasted")
             return
 
-        if action_name == "paste-as-quote":
+        if action_name == "input-paste-as-quote":
             self.insert_as_quote(text)
-        elif action_name == "paste-as-code-block":
+        elif action_name == "input-paste-as-code-block":
             self.insert_as_code_block(text)
 
 
