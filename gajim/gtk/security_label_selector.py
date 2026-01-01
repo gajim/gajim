@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 
@@ -17,17 +16,18 @@ from gajim.common.events import SecCatalogReceived
 from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.dropdown import GajimDropDown
 
-class SecurityLabelSelector(Gtk.ComboBoxText):
+
+class SecurityLabelSelector(GajimDropDown[str]):
+    __gtype_name__ = "SecurityLabelSelector"
+
     def __init__(self) -> None:
-        Gtk.ComboBoxText.__init__(self, visible=False)
+        super().__init__(fixed_width=15)
+        self.set_visible(False)
 
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
-
-        text_renderer = self.get_cells()[0]
-        text_renderer.set_property("ellipsize", Pango.EllipsizeMode.END)
-        text_renderer.set_property("max-width-chars", 20)
 
         self.set_valign(Gtk.Align.CENTER)
         self.set_tooltip_text(_("Select a security label for your message…"))
@@ -49,30 +49,30 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         )
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
-        self._update_combo_box()
+        self._update_data()
 
     def do_unroot(self) -> None:
         self.clear()
         app.ged.remove_event_handler(
             "sec-catalog-received", ged.GUI1, self._sec_labels_received
         )
-        Gtk.ComboBoxText.do_unroot(self)
+        super().do_unroot()
         app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
     ) -> None:
         if state == SimpleClientState.CONNECTED:
-            self._update_combo_box()
+            self._update_data()
 
     def _on_setting_changed(
         self, state: bool, _name: str, _account: str | None, _jid: JID | None
     ) -> None:
         if state:
-            self._update_combo_box()
+            self._update_data()
         else:
             self.set_visible(False)
-            self.remove_all()
+            self.set_data(None)
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
         if self._contact is None or self._contact.account != event.account:
@@ -81,9 +81,9 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         if event.jid != self._contact.jid:
             return
 
-        self._update_combo_box()
+        self._update_data()
 
-    def _update_combo_box(self) -> None:
+    def _update_data(self) -> None:
         assert self._contact is not None
         assert self._client is not None
 
@@ -94,12 +94,12 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
 
         catalog = self._client.get_module("SecLabels").get_catalog(self._contact.jid)
 
-        self.remove_all()
+        self.set_data(None)
 
         if catalog is not None:
-            for selector in catalog.get_label_names():
-                self.append(selector, selector)
-            self.set_active_id(catalog.default)
+            selectors = catalog.get_label_names()
+            self.set_data(selectors)
+            self.select_key(catalog.default)
 
         self.set_visible(True)
 
@@ -110,7 +110,7 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         ):
             return
 
-        selector = self.get_active_text()
+        selector = self.get_selected_key()
         if selector is None:
             return
 
@@ -132,7 +132,7 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
             if label is None:
                 continue
             if label.get_label_hash() == label_hash:
-                self.set_active_id(selector)
+                self.select_key(selector)
 
     def clear(self) -> None:
         app.settings.disconnect_signals(self)
