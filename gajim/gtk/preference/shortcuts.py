@@ -59,7 +59,7 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
             if not shortcut.allow_rebind:
                 continue
 
-            row = ShortcutsManagerRow(shortcut)
+            row = ShortcutRow(shortcut)
             self._connect(row, "activated", self._on_activated)
 
             preferences_groups[shortcut.category].add(row)
@@ -68,7 +68,7 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
         self._disconnect_all()
         GajimPreferencePage.do_unroot(self)
 
-    def _on_activated(self, row: ShortcutsManagerRow) -> None:
+    def _on_activated(self, row: ShortcutRow) -> None:
         parent = cast(Adw.ApplicationWindow, self.get_root())
         dialog = KeyEntryDialog(parent=parent)
         dialog.connect("response", self._on_shortcut_edited, row.shortcut)
@@ -91,9 +91,9 @@ class ShortcutsPage(GajimPreferencePage, SignalManager):
         self._manager.store_user_shortcuts()
 
 
-@Gtk.Template(string=get_ui_string("shortcuts_manager_row.ui"))
-class ShortcutsManagerRow(Adw.ActionRow, SignalManager):
-    __gtype_name__ = "ShortcutsManagerRow"
+@Gtk.Template(string=get_ui_string("shortcut_row.ui"))
+class ShortcutRow(Adw.ActionRow, SignalManager):
+    __gtype_name__ = "ShortcutRow"
 
     _accelerator_badge: Gtk.Label = Gtk.Template.Child()
     _accelerator_label: Gtk.Label = Gtk.Template.Child()

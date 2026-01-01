@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="ShortcutsManagerRow" parent="AdwActionRow">
+  <template class="ShortcutRow" parent="AdwActionRow">
     <child type="suffix">
       <object class="GtkBox">
         <property name="spacing">12</property>
