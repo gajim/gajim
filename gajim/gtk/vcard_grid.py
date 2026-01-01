@@ -603,73 +603,78 @@ class ValueTextView(Gtk.TextView, SignalManager):
         self._prop.value = self.get_text()
 
 
-class TypeComboBox(Gtk.ComboBoxText, SignalManager):
+class TypeDropDown(GajimDropDown[str], SignalManager):
     def __init__(self, parameters: Parameters) -> None:
-        Gtk.ComboBoxText.__init__(self)
+        super().__init__()
         SignalManager.__init__(self)
 
         self.set_valign(Gtk.Align.CENTER)
         self._parameters = parameters
-        self.append("-", "-")
-        self.append("home", _("Home"))
-        self.append("work", _("Work"))
+
+        self.set_data(
+            {
+                "-": "-",
+                "home": _("Home"),
+                "work": _("Work"),
+            }
+        )
 
         values = self._parameters.get_types()
         if "home" in values:
-            self.set_active_id("home")
+            self.select_key("home")
 
         elif "work" in values:
-            self.set_active_id("work")
+            self.select_key("work")
 
         else:
-            self.set_active_id("-")
+            self.select_key("-")
 
-        self._connect(self, "notify::active-id", self._on_active_id_changed)
+        self._connect(self, "notify::selected", self._on_selected)
 
     def do_unroot(self) -> None:
         self._disconnect_all()
-        Gtk.ComboBoxText.do_unroot(self)
+        super().do_unroot()
         app.check_finalize(self)
 
-    def _on_active_id_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:
-        type_ = self.get_active_id()
-        if type_ == "-":
+    def _on_selected(
+        self, _dropdown: GajimDropDown[str], _param: GObject.ParamSpec
+    ) -> None:
+        key = self.get_selected_key()
+        if key == "-":
             self._parameters.remove_types(["work", "home"])
 
-        elif type_ == "work":
+        elif key == "work":
             self._parameters.add_types(["work"])
             self._parameters.remove_types(["home"])
 
-        elif type_ == "home":
+        elif key == "home":
             self._parameters.add_types(["home"])
             self._parameters.remove_types(["work"])
 
     def get_text(self) -> str:
-        type_value = self.get_active_id()
-        if type_value == "-":
+        item = self.get_selected_item()
+        assert item is not None
+        if item.key == "-":
             return ""
-
-        text = self.get_active_text()
-        assert text is not None
-        return text
+        return item.value
 
 
-class GenderComboBox(Gtk.ComboBoxText):
+class GenderDropDown(GajimDropDown[str]):
     def __init__(self, prop: GenderProperty) -> None:
-        Gtk.ComboBoxText.__init__(self)
+        super().__init__()
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
 
         self._prop = prop
 
-        self.append("-", "-")
-        for key, value in SEX_VALUES.items():
-            self.append(key, value)
+        data = {"-": "-"}
+        data.update(SEX_VALUES)
+        self.set_data(data)
 
         if not prop.sex:
-            self.set_active_id("-")
+            self.select_key("-")
         else:
-            self.set_active_id(prop.sex)
+            self.select_key(prop.sex)
 
 
 class TimezoneLabel(Gtk.Label):
@@ -731,11 +736,11 @@ class VCardPropertyGui(SignalManager):
         self._read_widgets: list[Gtk.Widget] = []
 
         if prop.name in PROPERTIES_WITH_TYPE:
-            self._type_combobox = TypeComboBox(prop.parameters)
+            self._type_dropdown = TypeDropDown(prop.parameters)
             self._connect(
-                self._type_combobox, "notify::active-id", self._on_type_changed
+                self._type_dropdown, "notify::selected", self._on_type_changed
             )
-            type_ = self._type_combobox.get_active_id()
+            type_ = self._type_dropdown.get_selected_key()
             assert type_ is not None
             icon_name = self._get_icon_name(type_)
             self._type_image = Gtk.Image.new_from_icon_name(icon_name)
@@ -743,11 +748,11 @@ class VCardPropertyGui(SignalManager):
 
             if prop.name == "adr":
                 self._type_image.set_valign(Gtk.Align.START)
-                self._type_combobox.set_valign(Gtk.Align.START)
+                self._type_dropdown.set_valign(Gtk.Align.START)
 
-            self._edit_widgets.append(self._type_combobox)
+            self._edit_widgets.append(self._type_dropdown)
             self._read_widgets.append(self._type_image)
-            self._second_column.extend([self._type_combobox, self._type_image])
+            self._second_column.extend([self._type_dropdown, self._type_image])
 
     def destroy(self) -> None:
         self._disconnect_all()
@@ -761,8 +766,10 @@ class VCardPropertyGui(SignalManager):
             return "lucide-briefcase"
         return None
 
-    def _on_type_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:
-        type_ = self._type_combobox.get_active_id()
+    def _on_type_changed(
+        self, dropdown: TypeDropDown, _param: GObject.ParamSpec
+    ) -> None:
+        type_ = dropdown.get_selected_key()
         assert type_ is not None
         icon_name = self._get_icon_name(type_)
         self._type_image.set_from_icon_name(icon_name)
@@ -945,17 +952,14 @@ class GenderPropertyGui(VCardPropertyGui):
         VCardPropertyGui.__init__(self, prop)
 
         value_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        self._value_combobox = GenderComboBox(prop)
-        self._connect(
-            self._value_combobox, "notify::active-id", self._on_active_id_changed
-        )
-        self._value_combobox.set_visible(True)
+        self._value_dropdown = GenderDropDown(prop)
+        self._connect(self._value_dropdown, "notify::selected", self._on_selected)
 
         self._value_entry = IdentityEntry(prop)
         self._value_entry.set_visible(True)
         self._connect(self._value_entry, "notify::text", self._on_text_changed)
 
-        value_box.append(self._value_combobox)
+        value_box.append(self._value_dropdown)
         value_box.append(self._value_entry)
 
         label_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
@@ -978,8 +982,8 @@ class GenderPropertyGui(VCardPropertyGui):
         self._prop.identity = text
         self._identity_label.set_text(text)
 
-    def _on_active_id_changed(self, combobox: Gtk.ComboBox, _param: Any) -> None:
-        sex = combobox.get_active_id()
+    def _on_selected(self, drowdown: GenderDropDown, _param: Any) -> None:
+        sex = drowdown.get_selected_key()
         assert isinstance(self._prop, GenderProperty)
         self._prop.sex = None if sex == "-" else sex
         assert sex is not None
@@ -1011,7 +1015,7 @@ class TzPropertyGui(VCardPropertyGui):
 
         dropdown_data = {key: data[1] for key, data in ZONE_DATA.items()}
 
-        self._value_dropdown = GajimDropDown(data=dropdown_data)
+        self._value_dropdown: GajimDropDown[str] = GajimDropDown(data=dropdown_data)
         self._value_dropdown.set_enable_search(True)
         self._value_dropdown.select_key(prop.value)
 
