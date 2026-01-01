@@ -57,14 +57,18 @@ class TestChatFunctionPage(GajimAppWindow):
 
         self._main_box.append(self._chat_function_page)
 
-        drop_down = GajimDropDown([item.name for item in FunctionMode])
+        drop_down: GajimDropDown[str] = GajimDropDown(
+            [item.name for item in FunctionMode]
+        )
         drop_down.connect("notify::selected", self._on_function_mode_selected)
         drop_down.set_selected(1)
         self._main_box.append(drop_down)
 
         self.set_child(self._main_box)
 
-    def _on_function_mode_selected(self, drop_down: GajimDropDown, *args: Any) -> None:
+    def _on_function_mode_selected(
+        self, drop_down: GajimDropDown[str], *args: Any
+    ) -> None:
         selected_mode = drop_down.get_selected_item()
         assert isinstance(selected_mode, KeyValueItem)
         mode = selected_mode.key

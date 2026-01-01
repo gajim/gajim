@@ -1033,7 +1033,7 @@ class TzPropertyGui(VCardPropertyGui):
 
         self._third_column = [self._value_dropdown, self._read_box]
 
-    def _on_zone_selected(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_zone_selected(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
         assert isinstance(self._prop, TzProperty)

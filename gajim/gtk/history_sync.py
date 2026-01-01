@@ -230,7 +230,7 @@ class SelectTime(Page):
             if now - delta > current_start:
                 data.pop(days)
 
-        self._dropdown = GajimDropDown(data, fixed_width=20)
+        self._dropdown: GajimDropDown[int] = GajimDropDown(data, fixed_width=20)
         self._dropdown.set_halign(Gtk.Align.CENTER)
 
         self.append(heading)

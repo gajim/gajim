@@ -81,7 +81,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
             ChatTypeFilter.CHAT: _("Chats"),
             ChatTypeFilter.GROUPCHAT: _("Group Chats"),
         }
-        self._chat_type_drop_down = GajimDropDown(fixed_width=20, data=chat_type_data)
+        self._chat_type_drop_down: GajimDropDown[ChatTypeFilter] = GajimDropDown(
+            fixed_width=20, data=chat_type_data
+        )
         self._connect(
             self._chat_type_drop_down, "notify::selected", self._on_chat_type_selected
         )
@@ -91,7 +93,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         roster_groups_label.add_css_class("dimmed")
         popover_content.attach(roster_groups_label, 0, 2, 1, 1)
 
-        self._roster_groups_drop_down = GajimDropDown(fixed_width=20)
+        self._roster_groups_drop_down: GajimDropDown[str | None] = GajimDropDown(
+            fixed_width=20
+        )
         self._roster_groups_drop_down.set_enable_search(True)
         self._connect(
             self._roster_groups_drop_down,
@@ -104,7 +108,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         self._account_label.add_css_class("dimmed")
         popover_content.attach(self._account_label, 0, 3, 1, 1)
 
-        self._account_drop_down = GajimDropDown(fixed_width=20)
+        self._account_drop_down: GajimDropDown[str | None] = GajimDropDown(
+            fixed_width=20
+        )
         self._connect(
             self._account_drop_down,
             "notify::selected",
@@ -192,17 +198,23 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         self._filter_active_dot.set_visible(active)
         self._popover.grab_focus()
 
-    def _on_chat_type_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_chat_type_selected(
+        self, _dropdown: GajimDropDown[ChatTypeFilter], *args: Any
+    ) -> None:
         self._update()
         if not self._block_signal:
             self.emit("filter-changed")
 
-    def _on_roster_group_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_roster_group_selected(
+        self, _dropdown: GajimDropDown[str | None], *args: Any
+    ) -> None:
         self._update()
         if not self._block_signal:
             self.emit("filter-changed")
 
-    def _on_account_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_account_selected(
+        self, _dropdown: GajimDropDown[str | None], *args: Any
+    ) -> None:
         self._update()
         if not self._block_signal:
             self.emit("filter-changed")

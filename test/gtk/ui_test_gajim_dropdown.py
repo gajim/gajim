@@ -31,9 +31,7 @@ class TestGajimDropDown(GajimAppWindow):
         )
         self.set_child(box)
 
-        gajim_drop_down1 = GajimDropDown(
-            fixed_width=20,
-        )
+        gajim_drop_down1: GajimDropDown[str] = GajimDropDown(fixed_width=20)
         gajim_drop_down1.set_data(
             {
                 "key1": "Test 10000",
@@ -47,12 +45,14 @@ class TestGajimDropDown(GajimAppWindow):
         gajim_drop_down1.connect("notify::selected", self._on_item_selected)
         box.append(gajim_drop_down1)
 
-        gajim_drop_down2 = GajimDropDown(data=["key1", "key2", "key3"])
+        gajim_drop_down2: GajimDropDown[str] = GajimDropDown(
+            data=["key1", "key2", "key3"]
+        )
         gajim_drop_down2.set_selected(2)
         gajim_drop_down2.connect("notify::selected", self._on_item_selected)
         box.append(gajim_drop_down2)
 
-    def _on_item_selected(self, drop_down: GajimDropDown, *args: Any) -> None:
+    def _on_item_selected(self, drop_down: GajimDropDown[str], *args: Any) -> None:
         print("Index:", drop_down.get_selected())
         item = drop_down.get_selected_item()
         if item is not None:

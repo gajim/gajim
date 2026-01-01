@@ -107,7 +107,9 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self.window.add_controller(shortcut_controller)
 
         accounts = self._get_accounts()
-        self._account_dropdown = GajimDropDown(fixed_width=15, data=accounts)
+        self._account_dropdown: GajimDropDown[str] = GajimDropDown(
+            fixed_width=15, data=accounts
+        )
         if accounts:
             self._selected_send_account = next(iter(accounts))
 
@@ -204,7 +206,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         vadjustment = self._ui.scrolled.get_vadjustment()
         vadjustment.set_value(vadjustment.get_upper())
 
-    def _on_account_change(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_account_change(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
         self._selected_send_account = item.key

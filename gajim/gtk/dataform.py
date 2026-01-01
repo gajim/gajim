@@ -492,15 +492,16 @@ class ListSingleField(Field):
                 label = value
             data[value] = label
 
-        self._widget = GajimDropDown(data=data)
-        self._widget.set_valign(Gtk.Align.CENTER)
-        self._widget.select_key(field.value)
+        dropdown: GajimDropDown[str] = GajimDropDown(data=data)
+        dropdown.set_valign(Gtk.Align.CENTER)
+        dropdown.select_key(field.value)
+        self._widget = dropdown
         self._connect(self._widget, "notify::selected", self._changed)
 
-    def _changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _changed(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
-        self._field.value = item.props.key
+        self._field.value = item.key
         self._validate()
 
     def _setup_treeview(self, field: NBXMPPListField) -> None:

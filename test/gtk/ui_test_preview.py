@@ -70,12 +70,14 @@ class TestPreview(GajimAppWindow):
 
         self._preview_widget = None
 
-        drop_down = GajimDropDown(list(PREVIEW_TYPES.keys()))
+        drop_down: GajimDropDown[str] = GajimDropDown(list(PREVIEW_TYPES.keys()))
         drop_down.connect("notify::selected", self._on_preview_type_selected)
         drop_down.select_key(list(PREVIEW_TYPES.keys())[1])
         self._box.append(drop_down)
 
-    def _on_preview_type_selected(self, drop_down: GajimDropDown, *args: Any) -> None:
+    def _on_preview_type_selected(
+        self, drop_down: GajimDropDown[str], *args: Any
+    ) -> None:
         selected_type = drop_down.get_selected_item()
         assert isinstance(selected_type, KeyValueItem)
         uri_data = PREVIEW_TYPES[selected_type.key]

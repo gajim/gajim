@@ -187,13 +187,15 @@ class ExportSettings(Page):
         for account_data in app.get_enabled_accounts_with_labels():
             accounts_data[account_data[0]] = account_data[1]
 
-        self._accounts_dropdown = GajimDropDown(data=accounts_data, fixed_width=40)
+        self._accounts_dropdown: GajimDropDown[str] = GajimDropDown(
+            data=accounts_data, fixed_width=40
+        )
         self._ui.settings_grid.attach(self._accounts_dropdown, 1, 0, 1, 1)
         self._connect(
             self._accounts_dropdown, "notify::selected", self._on_account_changed
         )
 
-        self._chats_dropdown = GajimDropDown(fixed_width=40)
+        self._chats_dropdown: GajimDropDown[str] = GajimDropDown(fixed_width=40)
         self._update_chat_dropdown()
         self._connect(self._chats_dropdown, "notify::selected", self._on_chat_changed)
         self._ui.settings_grid.attach(self._chats_dropdown, 1, 1, 1, 1)
@@ -215,7 +217,7 @@ class ExportSettings(Page):
 
         self._set_complete()
 
-    def _on_account_changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_account_changed(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
         account = item.key
@@ -223,7 +225,7 @@ class ExportSettings(Page):
         self._update_chat_dropdown()
         self._set_complete()
 
-    def _on_chat_changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_chat_changed(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()
         if item is None:
             return
@@ -236,7 +238,7 @@ class ExportSettings(Page):
 
     def _update_chat_dropdown(self) -> None:
         if self._account is None:
-            self._chats_dropdown.set_data({})
+            self._chats_dropdown.set_data(None)
             return
 
         rows = app.storage.archive.get_conversation_jids(self._account)

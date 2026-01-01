@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Generic
+from typing import TypeVar
 
 from gi.repository import Gio
 from gi.repository import GObject
@@ -14,15 +16,15 @@ from gi.repository import Pango
 
 from gajim.common import app
 
-GajimDropDownDataT = dict[Any, str] | list[str]
+_K = TypeVar("_K")
 
 
-class GajimDropDown(Gtk.DropDown):
+class GajimDropDown(Gtk.DropDown, Generic[_K]):
     __gtype_name__ = "GajimDropDown"
 
     def __init__(
         self,
-        data: GajimDropDownDataT | None = None,
+        data: dict[Any, str] | list[str] | None = None,
         fixed_width: int = -1,
     ) -> None:
         Gtk.DropDown.__init__(self)
@@ -71,38 +73,38 @@ class GajimDropDown(Gtk.DropDown):
         _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
     ) -> None:
         view_item = cast(KeyValueViewItem, list_item.get_child())
-        obj = cast(KeyValueItem, list_item.get_item())
+        obj = cast(KeyValueItem[_K], list_item.get_item())
         view_item.bind(obj)
 
-    def set_data(self, data: GajimDropDownDataT | None) -> None:
+    def set_data(self, data: dict[Any, str] | list[str] | None) -> None:
         self._model.remove_all()
 
         if not data:
             return
 
-        items: list[KeyValueItem] = []
+        items: list[KeyValueItem[_K]] = []
         if isinstance(data, dict):
             for key, value in data.items():
                 items.append(KeyValueItem(key=key, value=value))
 
         if isinstance(data, list):
             for entry in data:
-                items.append(KeyValueItem(key=entry, value=entry))
+                items.append(KeyValueItem(key=entry, value=entry))  # pyright: ignore
 
         self._model.splice(0, 0, items)
 
-    def get_selected_key(self) -> Any | None:
+    def get_selected_key(self) -> _K | None:
         selected_item = self.get_selected_item()
         if selected_item is None:
             return None
-        return selected_item.get_property("key")
+        return selected_item.key
 
-    def get_selected_item(self) -> KeyValueItem | None:
-        return cast(KeyValueItem | None, super().get_selected_item())
+    def get_selected_item(self) -> KeyValueItem[_K] | None:
+        return cast(KeyValueItem[_K] | None, super().get_selected_item())
 
-    def select_key(self, key: Any) -> None:
+    def select_key(self, key: _K) -> None:
         for pos in range(self._model.get_n_items()):
-            item = cast(KeyValueItem | None, self._model.get_item(pos))
+            item = cast(KeyValueItem[_K] | None, self._model.get_item(pos))
             assert item is not None
             if item.key == key:
                 self.set_selected(pos)
@@ -111,9 +113,9 @@ class GajimDropDown(Gtk.DropDown):
         if self._model.get_n_items() > 0:
             self.set_selected(0)
 
-    def has_key(self, key: Any) -> bool:
+    def has_key(self, key: _K) -> bool:
         for pos in range(self._model.get_n_items()):
-            item = cast(KeyValueItem | None, self._model.get_item(pos))
+            item = cast(KeyValueItem[_K] | None, self._model.get_item(pos))
             assert item is not None
             if item.key == key:
                 return True
@@ -131,9 +133,12 @@ class GajimDropDown(Gtk.DropDown):
         app.check_finalize(self)
 
 
-class KeyValueItem(GObject.Object):
-    key = GObject.Property(type=object, flags=GObject.ParamFlags.READWRITE)
-    value = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE)
+class KeyValueItem(GObject.Object, Generic[_K]):
+    key: _K = GObject.Property(type=object, flags=GObject.ParamFlags.READWRITE)  # pyright: ignore
+    value: str = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE)  # pyright: ignore
+
+    def __init__(self, *, key: _K, value: str) -> None:
+        GObject.Object.__init__(self, key=key, value=value)
 
 
 class KeyValueViewItem(Gtk.Label):
@@ -142,7 +147,7 @@ class KeyValueViewItem(Gtk.Label):
             self, ellipsize=Pango.EllipsizeMode.MIDDLE, xalign=0, **kwargs
         )
 
-    def bind(self, item: KeyValueItem) -> None:
+    def bind(self, item: KeyValueItem[_K]) -> None:
         self.set_label(item.value)
         self.set_tooltip_text(item.value)
 
@@ -154,7 +159,7 @@ class KeyValueViewListItem(Gtk.Label):
             xalign=0,
         )
 
-    def bind(self, item: KeyValueItem) -> None:
+    def bind(self, item: KeyValueItem[_K]) -> None:
         self.set_label(item.value)
         self.set_tooltip_text(item.value)
 

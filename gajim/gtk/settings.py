@@ -743,7 +743,7 @@ class DropDownSetting(GenericSetting):
         box.set_halign(Gtk.Align.END)
         box.set_hexpand(True)
 
-        self._dropdown = GajimDropDown(data=data, fixed_width=15)
+        self._dropdown: GajimDropDown[Any] = GajimDropDown(data=data, fixed_width=15)
         self._dropdown.select_key(self.setting_value)
         self._dropdown.connect("notify::selected", self._on_selected)
         box.append(self._dropdown)
@@ -758,10 +758,10 @@ class DropDownSetting(GenericSetting):
         app.check_finalize(self._dropdown)
         del self._dropdown
 
-    def _on_selected(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_selected(self, dropdown: GajimDropDown[Any], *args: Any) -> None:
         item = dropdown.get_selected_item()
         assert item is not None
-        self.set_value(item.props.key)
+        self.set_value(item.key)
 
     def update_entries(self, data: list[str] | dict[str, str]) -> None:
         self._dropdown.disconnect_by_func(self._on_selected)

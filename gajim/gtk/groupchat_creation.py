@@ -43,7 +43,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     _grid: Gtk.Grid = Gtk.Template.Child()
     _name_entry: Gtk.Entry = Gtk.Template.Child()
     _description_entry: Gtk.Entry = Gtk.Template.Child()
-    _account_dropdown: GajimDropDown = Gtk.Template.Child()
+    _account_dropdown: GajimDropDown[str] = Gtk.Template.Child()
     _account_label: Gtk.Label = Gtk.Template.Child()
     _advanced_switch: Gtk.Switch = Gtk.Template.Child()
     _advanced_switch_label: Gtk.Label = Gtk.Template.Child()
@@ -118,10 +118,10 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         self._account_dropdown.set_visible(len(accounts) != 1)
         self._account_label.set_visible(len(accounts) != 1)
 
-        if not self._account_dropdown.has_key(account):
-            self._account_dropdown.select_first()
-        else:
+        if account is not None and self._account_dropdown.has_key(account):
             self._account_dropdown.select_key(account)
+        else:
+            self._account_dropdown.select_first()
 
     def _create_entry_completion(self) -> None:
         entry_completion = Gtk.EntryCompletion()
@@ -155,7 +155,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         return str(service_jid)
 
     def _on_account_combo_changed(
-        self, dropdown: GajimDropDown, _param: GObject.ParamSpec
+        self, dropdown: GajimDropDown[str], _param: GObject.ParamSpec
     ) -> None:
         self._account = dropdown.get_selected_key()
         log.debug("Set current account to: %s", self._account)
