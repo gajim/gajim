@@ -15,6 +15,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.util.misc import get_ui_string
@@ -26,7 +27,7 @@ log = logging.getLogger("gajim.gtk.preferences.archiving")
 class ArchivingPreferences(Gtk.Box, SignalManager):
     __gtype_name__ = "ArchivingPreferences"
 
-    _default_combo: Gtk.ComboBox = Gtk.Template.Child()
+    _default_dropdown: GajimDropDown[str] = Gtk.Template.Child()
     _pref_view: Gtk.TreeView = Gtk.Template.Child()
     _jid_cell_renderer: Gtk.CellRendererText = Gtk.Template.Child()
     _pref_toggle_cell_renderer: Gtk.CellRendererToggle = Gtk.Template.Child()
@@ -43,11 +44,13 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
         self._client = app.get_client(account)
         self._destroyed = False
 
-        default_store = Gtk.ListStore(str, str)
-        default_store.append([_("Always"), "always"])
-        default_store.append([_("Contact List"), "roster"])
-        default_store.append([_("Never"), "never"])
-        self._default_combo.set_model(default_store)
+        self._default_dropdown.set_data(
+            {
+                "always": _("Always"),
+                "roster": _("Contact List"),
+                "never": _("Never"),
+            }
+        )
 
         self._preferences_store = Gtk.ListStore(str, bool)
         self._pref_view.set_model(self._preferences_store)
@@ -82,7 +85,7 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
             log.error("Failed to store archiving preferences: %s", error)
             return
 
-        self._default_combo.set_active_id(result.default)
+        self._default_dropdown.select_key(result.default)
 
         self._preferences_store.clear()
         for jid in result.always:
@@ -132,7 +135,7 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
         self._set_mam_box_state(False)
         always: list[str] = []
         never: list[str] = []
-        default = self._default_combo.get_active_id()
+        default = self._default_dropdown.get_selected_key()
         for item in self._preferences_store:
             jid, archive = item
             if archive:
