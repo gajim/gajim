@@ -538,7 +538,7 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Format Text Italic"),
             category="messages",
-            accelerators=["<Primary>I"],
+            accelerators=None,
             action_name="win.input-italic",
         ),
         GajimShortcut(
