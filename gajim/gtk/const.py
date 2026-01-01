@@ -143,7 +143,7 @@ WINDOW_MODULES = {
     "GroupchatJoin": "gajim.gtk.groupchat_join",
     "HistoryExport": "gajim.gtk.history_export",
     "HistorySyncAssistant": "gajim.gtk.history_sync",
-    "ManageProxies": "gajim.gtk.proxies",
+    "ManageProxies": "gajim.gtk.manage_proxies",
     "ManageSounds": "gajim.gtk.manage_sounds",
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",

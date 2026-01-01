@@ -3,18 +3,36 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.alert import ConfirmationAlertDialog
-from gajim.gtk.builder import get_builder
+from gajim.gtk.dropdown import GajimDropDown
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
+@Gtk.Template(string=get_ui_string("manage_proxies.ui"))
 class ManageProxies(GajimAppWindow):
+    __gtype_name__ = "ManageProxies"
+
+    _proxies_treeview: Gtk.TreeView = Gtk.Template.Child()
+    _treeview_selection1: Gtk.TreeSelection = Gtk.Template.Child()
+    _add_proxy_button: Gtk.Button = Gtk.Template.Child()
+    _remove_proxy_button: Gtk.Button = Gtk.Template.Child()
+    _settings_grid: Gtk.Grid = Gtk.Template.Child()
+    _proxypass_entry: Gtk.Entry = Gtk.Template.Child()
+    _proxyuser_entry: Gtk.Entry = Gtk.Template.Child()
+    _useauth_checkbutton: Gtk.CheckButton = Gtk.Template.Child()
+    _proxyport_entry: Gtk.Entry = Gtk.Template.Child()
+    _proxyhost_entry: Gtk.Entry = Gtk.Template.Child()
+    _proxytype_dropdown: GajimDropDown[str] = Gtk.Template.Child()
+    _proxyname_entry: Gtk.Entry = Gtk.Template.Child()
+
     def __init__(self, transient_for: Gtk.Window | None = None) -> None:
         GajimAppWindow.__init__(
             self,
@@ -25,46 +43,47 @@ class ManageProxies(GajimAppWindow):
             modal=True,
         )
 
-        self._ui = get_builder("manage_proxies.ui")
-        self.set_child(self._ui.box)
-
-        liststore = Gtk.ListStore(str)
-        liststore.append(["HTTP"])
-        liststore.append(["SOCKS5"])
-        self._ui.proxytype_combobox.set_model(liststore)
+        self._proxytype_dropdown.set_data(
+            {
+                "http": "HTTP",
+                "socks5": "SOCKS5",
+            }
+        )
 
         self._connect(
-            self._ui.proxies_treeview,
+            self._proxies_treeview,
             "cursor-changed",
             self._on_proxies_treeview_cursor_changed,
         )
         self._connect(
-            self._ui.add_proxy_button, "clicked", self._on_add_proxy_button_clicked
+            self._add_proxy_button, "clicked", self._on_add_proxy_button_clicked
         )
         self._connect(
-            self._ui.remove_proxy_button,
+            self._remove_proxy_button,
             "clicked",
             self._on_remove_proxy_button_clicked,
         )
 
         self._connect(
-            self._ui.proxyuser_entry, "changed", self._on_proxyuser_entry_changed
+            self._proxyuser_entry, "changed", self._on_proxyuser_entry_changed
         )
         self._connect(
-            self._ui.proxypass_entry, "changed", self._on_proxypass_entry_changed
+            self._proxypass_entry, "changed", self._on_proxypass_entry_changed
         )
-        self._connect(self._ui.useauth_checkbutton, "toggled", self._on_useauth_toggled)
+        self._connect(self._useauth_checkbutton, "toggled", self._on_useauth_toggled)
         self._connect(
-            self._ui.proxyport_entry, "changed", self._on_proxyport_entry_changed
-        )
-        self._connect(
-            self._ui.proxyhost_entry, "changed", self._on_proxyhost_entry_changed
+            self._proxyport_entry, "changed", self._on_proxyport_entry_changed
         )
         self._connect(
-            self._ui.proxytype_combobox, "changed", self._on_proxytype_combobox_changed
+            self._proxyhost_entry, "changed", self._on_proxyhost_entry_changed
         )
         self._connect(
-            self._ui.proxyname_entry, "changed", self._on_proxyname_entry_changed
+            self._proxytype_dropdown,
+            "notify::selected",
+            self._on_proxytype_dropdown_selected,
+        )
+        self._connect(
+            self._proxyname_entry, "changed", self._on_proxyname_entry_changed
         )
 
         self._init_list()
@@ -76,7 +95,7 @@ class ManageProxies(GajimAppWindow):
             "key-pressed",
             self._on_proxies_treeview_key_pressed,
         )
-        self._ui.proxies_treeview.add_controller(controller)
+        self._proxies_treeview.add_controller(controller)
 
     def _cleanup(self) -> None:
         # Window callbacks for updating proxy comboboxes
@@ -88,7 +107,7 @@ class ManageProxies(GajimAppWindow):
             window_account_wizard.update_proxy_list()
 
     def _fill_proxies_treeview(self) -> None:
-        model = self._ui.proxies_treeview.get_model()
+        model = self._proxies_treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
         model.clear()
         for proxy in app.settings.get_proxies():
@@ -96,20 +115,20 @@ class ManageProxies(GajimAppWindow):
             model.set_value(iter_, 0, proxy)
 
     def _init_list(self) -> None:
-        self._ui.remove_proxy_button.set_sensitive(False)
-        self._ui.settings_grid.set_sensitive(False)
+        self._remove_proxy_button.set_sensitive(False)
+        self._settings_grid.set_sensitive(False)
         model = Gtk.ListStore(str)
-        self._ui.proxies_treeview.set_model(model)
+        self._proxies_treeview.set_model(model)
         col = Gtk.TreeViewColumn(title=_("Proxies"))
-        self._ui.proxies_treeview.append_column(col)
+        self._proxies_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, "text", 0)
         self._fill_proxies_treeview()
-        self._ui.proxytype_combobox.set_active(0)
+        self._proxytype_dropdown.select_first()
 
     def _on_add_proxy_button_clicked(self, _button: Gtk.Button) -> None:
-        model = self._ui.proxies_treeview.get_model()
+        model = self._proxies_treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
         proxies = app.settings.get_proxies()
         i = 1
@@ -120,14 +139,14 @@ class ManageProxies(GajimAppWindow):
         app.settings.add_proxy(proxy_name)
         iter_ = model.append()
         model.set_value(iter_, 0, proxy_name)
-        self._ui.proxies_treeview.set_cursor(model.get_path(iter_))
+        self._proxies_treeview.set_cursor(model.get_path(iter_))
 
     def _on_remove_proxy_button_clicked(self, _button: Gtk.Button) -> None:
         self._remove_selected_proxy()
 
     def _remove_selected_proxy(self) -> None:
         def _on_response() -> None:
-            sel = self._ui.proxies_treeview.get_selection()
+            sel = self._proxies_treeview.get_selection()
             if not sel:
                 return
             (model, iter_) = sel.get_selected()
@@ -138,9 +157,9 @@ class ManageProxies(GajimAppWindow):
             proxy = model[iter_][0]
             model.remove(iter_)
             app.settings.remove_proxy(proxy)
-            self._ui.remove_proxy_button.set_sensitive(False)
+            self._remove_proxy_button.set_sensitive(False)
             self._block_signal = True
-            self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
+            self._on_proxies_treeview_cursor_changed(self._proxies_treeview)
             self._block_signal = False
 
         ConfirmationAlertDialog(
@@ -149,29 +168,29 @@ class ManageProxies(GajimAppWindow):
             confirm_label=_("_Remove"),
             appearance="destructive",
             callback=_on_response,
-            parent=self.window,
+            parent=self,
         )
 
     def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:
         if self._block_signal:
             return
         act = checkbutton.get_active()
-        proxy = self._ui.proxyname_entry.get_text()
+        proxy = self._proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, "useauth", act)
-        self._ui.proxyuser_entry.set_sensitive(act)
-        self._ui.proxypass_entry.set_sensitive(act)
+        self._proxyuser_entry.set_sensitive(act)
+        self._proxypass_entry.set_sensitive(act)
 
     def _on_proxies_treeview_cursor_changed(self, treeview: Gtk.TreeView) -> None:
         self._block_signal = True
-        self._ui.proxyhost_entry.set_text("")
-        self._ui.proxyport_entry.set_text("")
-        self._ui.proxyuser_entry.set_text("")
-        self._ui.proxypass_entry.set_text("")
+        self._proxyhost_entry.set_text("")
+        self._proxyport_entry.set_text("")
+        self._proxyuser_entry.set_text("")
+        self._proxypass_entry.set_text("")
 
         sel = treeview.get_selection()
         if not sel:
-            self._ui.proxyname_entry.set_text("")
-            self._ui.settings_grid.set_sensitive(False)
+            self._proxyname_entry.set_text("")
+            self._settings_grid.set_sensitive(False)
             self._block_signal = False
             return
 
@@ -180,27 +199,26 @@ class ManageProxies(GajimAppWindow):
             return
 
         proxy = model[iter_][0]
-        self._ui.proxyname_entry.set_text(proxy)
+        self._proxyname_entry.set_text(proxy)
 
-        self._ui.remove_proxy_button.set_sensitive(True)
-        self._ui.proxyname_entry.set_editable(True)
+        self._remove_proxy_button.set_sensitive(True)
+        self._proxyname_entry.set_editable(True)
 
-        self._ui.settings_grid.set_sensitive(True)
+        self._settings_grid.set_sensitive(True)
 
         settings = app.settings.get_proxy_settings(proxy)
 
-        self._ui.proxyhost_entry.set_text(str(settings["host"]))
-        self._ui.proxyport_entry.set_text(str(settings["port"]))
-        self._ui.proxyuser_entry.set_text(str(settings["user"]))
-        self._ui.proxypass_entry.set_text(str(settings["pass"]))
+        self._proxyhost_entry.set_text(str(settings["host"]))
+        self._proxyport_entry.set_text(str(settings["port"]))
+        self._proxyuser_entry.set_text(str(settings["user"]))
+        self._proxypass_entry.set_text(str(settings["pass"]))
 
-        types = ["http", "socks5"]
-        self._ui.proxytype_combobox.set_active(types.index(str(settings["type"])))
+        self._proxytype_dropdown.select_key(str(settings["type"]))
 
-        self._ui.useauth_checkbutton.set_active(bool(settings["useauth"]))
-        act = self._ui.useauth_checkbutton.get_active()
-        self._ui.proxyuser_entry.set_sensitive(act)
-        self._ui.proxypass_entry.set_sensitive(act)
+        self._useauth_checkbutton.set_active(bool(settings["useauth"]))
+        act = self._useauth_checkbutton.get_active()
+        self._proxyuser_entry.set_sensitive(act)
+        self._proxypass_entry.set_sensitive(act)
 
         self._block_signal = False
 
@@ -220,7 +238,7 @@ class ManageProxies(GajimAppWindow):
     def _on_proxyname_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
-        sel = self._ui.proxies_treeview.get_selection()
+        sel = self._proxies_treeview.get_selection()
         if not sel:
             return
         (model, iter_) = sel.get_selected()
@@ -238,21 +256,23 @@ class ManageProxies(GajimAppWindow):
         assert isinstance(model, Gtk.ListStore)
         model.set_value(iter_, 0, new_name)
 
-    def _on_proxytype_combobox_changed(self, _combobox: Gtk.ComboBox) -> None:
+    def _on_proxytype_dropdown_selected(
+        self, dropdown: GajimDropDown[str], _param: GObject.ParamSpec
+    ) -> None:
         if self._block_signal:
             return
-        types = ["http", "socks5"]
-        type_ = self._ui.proxytype_combobox.get_active()
-        self._ui.proxyhost_entry.set_sensitive(True)
-        self._ui.proxyport_entry.set_sensitive(True)
-        proxy = self._ui.proxyname_entry.get_text()
-        app.settings.set_proxy_setting(proxy, "type", types[type_])
+
+        type_ = self._proxytype_dropdown.get_selected_key()
+        self._proxyhost_entry.set_sensitive(True)
+        self._proxyport_entry.set_sensitive(True)
+        proxy = self._proxyname_entry.get_text()
+        app.settings.set_proxy_setting(proxy, "type", type_)
 
     def _on_proxyhost_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
-        proxy = self._ui.proxyname_entry.get_text()
+        proxy = self._proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, "host", value)
 
     def _on_proxyport_entry_changed(self, entry: Gtk.Entry) -> None:
@@ -263,19 +283,19 @@ class ManageProxies(GajimAppWindow):
             value = int(value)
         except Exception:
             value = 0
-        proxy = self._ui.proxyname_entry.get_text()
+        proxy = self._proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, "port", value)
 
     def _on_proxyuser_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
-        proxy = self._ui.proxyname_entry.get_text()
+        proxy = self._proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, "user", value)
 
     def _on_proxypass_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
             return
         value = entry.get_text()
-        proxy = self._ui.proxyname_entry.get_text()
+        proxy = self._proxyname_entry.get_text()
         app.settings.set_proxy_setting(proxy, "pass", value)

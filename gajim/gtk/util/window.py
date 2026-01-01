@@ -39,12 +39,12 @@ if TYPE_CHECKING:
     from gajim.gtk.groupchat_join import GroupchatJoin
     from gajim.gtk.history_export import HistoryExport
     from gajim.gtk.history_sync import HistorySyncAssistant
+    from gajim.gtk.manage_proxies import ManageProxies
     from gajim.gtk.manage_sounds import ManageSounds
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
     from gajim.gtk.preference.dialog import Preferences
     from gajim.gtk.profile import ProfileWindow
-    from gajim.gtk.proxies import ManageProxies
     from gajim.gtk.quit import QuitDialog
     from gajim.gtk.remove_account import RemoveAccount
     from gajim.gtk.roster_item_exchange import RosterItemExchange
