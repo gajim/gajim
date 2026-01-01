@@ -18,6 +18,8 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.util.classes import SignalManager
+
 AppearanceT = Literal["default", "suggested", "destructive"]
 
 
@@ -74,7 +76,7 @@ class DialogCheckButton(Gtk.Box):
 ExtraWidgetT = DialogEntry | DialogCheckButton | None
 
 
-class _BaseAlertDialog(Adw.AlertDialog):
+class _BaseAlertDialog(Adw.AlertDialog, SignalManager):
     def __init__(
         self,
         heading: str,
@@ -88,6 +90,8 @@ class _BaseAlertDialog(Adw.AlertDialog):
         callback: Callable[..., None] | None = None,
         parent: Gtk.Window | None = None,
     ) -> None:
+        SignalManager.__init__(self)
+
         if parent is None:
             parent = app.app.get_active_window()
 
@@ -125,7 +129,7 @@ class _BaseAlertDialog(Adw.AlertDialog):
 
         self.set_extra_child(extra_widget)
 
-        self.connect("response", self._on_response)
+        self._connect(self, "response", self._on_response)
         self.present(parent)
 
         if extra_widget is not None:
@@ -152,6 +156,11 @@ class _BaseAlertDialog(Adw.AlertDialog):
 
     def _on_response(self, _dialog: Adw.AlertDialog, response_id: str) -> None:
         self._emit_response(response_id)
+        self._cleanup()
+
+    def _cleanup(self) -> None:
+        self._disconnect_all()
+        del self._callback
 
 
 class AlertDialog(_BaseAlertDialog):
