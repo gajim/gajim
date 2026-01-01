@@ -29,11 +29,6 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
     ) -> None:
         Gtk.DropDown.__init__(self)
 
-        self._kwargs: dict[str, Any] = {
-            "width_chars": fixed_width,
-            "max_width_chars": fixed_width,
-        }
-
         self._model = Gio.ListStore(item_type=KeyValueItem)
         list_store_expression = Gtk.PropertyExpression.new(
             KeyValueItem,
@@ -46,7 +41,6 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
         self.set_model(self._model)
 
         factory = Gtk.SignalListItemFactory()
-        factory.connect("setup", self._on_factory_setup, KeyValueViewItem, self._kwargs)
         factory.connect("bind", self._on_factory_bind)
 
         self.set_factory(factory)
@@ -57,7 +51,32 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
 
         self.set_list_factory(factory)
 
+        self._setup_signal_id = None
+        self.fixed_width = fixed_width
+
         self.set_data(data)
+
+    @GObject.Property(type=int, default=-1, flags=GObject.ParamFlags.READWRITE)
+    def fixed_width(self) -> int:  # pyright: ignore
+        return self._fixed_width
+
+    @fixed_width.setter
+    def fixed_width(self, value: int) -> None:
+        self._fixed_width = value
+
+        kwargs: dict[str, Any] = {
+            "width_chars": value,
+            "max_width_chars": value,
+        }
+
+        factory = self.get_factory()
+        assert factory is not None
+
+        if self._setup_signal_id is not None:
+            factory.disconnect(self._setup_signal_id)
+        self._setup_signal_id = factory.connect(
+            "setup", self._on_factory_setup, KeyValueViewItem, kwargs
+        )
 
     @staticmethod
     def _on_factory_setup(
