@@ -568,6 +568,7 @@ class AccountWizard(Assistant):
         self._show_error_page(_("Error"), _("Error"), error_text)
 
     def _cleanup(self, *args: Any) -> None:
+        Assistant._cleanup(self)
         self._disconnect()
         self._destroyed = True
 

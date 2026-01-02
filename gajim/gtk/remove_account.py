@@ -149,7 +149,7 @@ class RemoveAccount(Assistant):
         self._account_removed = True
 
     def _cleanup(self) -> None:
-        self.unregister_events()
+        Assistant._cleanup(self)
         self._destroyed = True
 
 

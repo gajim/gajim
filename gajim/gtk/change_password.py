@@ -83,7 +83,7 @@ class ChangePassword(Assistant):
             self.show_page("password", Gtk.StackTransitionType.SLIDE_RIGHT)
 
         elif button_name == "close":
-            self.window.close()
+            self.close()
 
     def _on_apply(self, next_stage: bool = False) -> None:
         if next_stage:
@@ -118,6 +118,7 @@ class ChangePassword(Assistant):
             self.show_page("success")
 
     def _cleanup(self) -> None:
+        Assistant._cleanup(self)
         self._destroyed = True
 
 

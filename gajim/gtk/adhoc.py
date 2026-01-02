@@ -164,6 +164,7 @@ class AdHocCommands(Assistant):
         self.show_page("end")
 
     def _cleanup(self) -> None:
+        Assistant._cleanup(self)
         self._destroyed = True
 
     def _on_button_clicked(self, _assistant: AdHocCommands, button_name: str) -> None:

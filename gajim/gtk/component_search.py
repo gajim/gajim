@@ -127,7 +127,7 @@ class ComponentSearch(Assistant):
         self.show_page("result")
 
     def _cleanup(self) -> None:
-        self.unregister_events()
+        Assistant._cleanup(self)
         self._destroyed = True
 
 

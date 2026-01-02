@@ -14,6 +14,12 @@ class TestAssistant(Assistant):
     def __init__(self):
         Assistant.__init__(self)
 
+        self.add_button("back", "Back")
+        self.add_button("close", "Close", "destructive-action")
+        self.add_button("forward", "Forward", "suggested-action", complete=True)
+
+        self.set_button_visible_func(self._visible_func)
+
         self.add_pages({"start": Start()})
 
         progress = self.add_default_page("progress")
@@ -29,12 +35,6 @@ class TestAssistant(Assistant):
         success.set_title("Success")
         success.set_heading("Success Heading")
         success.set_text("This is the success text")
-
-        self.add_button("back", "Back")
-        self.add_button("close", "Close", "destructive-action")
-        self.add_button("forward", "Forward", "suggested-action", complete=True)
-
-        self.set_button_visible_func(self._visible_func)
 
         self.connect("button-clicked", self._on_button_clicked)
         self.connect("page-changed", self._on_page_changed)
@@ -77,7 +77,7 @@ class TestAssistant(Assistant):
             return
 
         if button_name == "close":
-            self.window.close()
+            self.close()
 
     def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == "start":

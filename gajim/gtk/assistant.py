@@ -20,10 +20,10 @@ from gajim.common.ged import EventHelper
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.classes import SignalManager
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
-class Assistant(GObject.Object, GajimAppWindow, EventHelper):
+class Assistant(GajimAppWindow, EventHelper):
     __gsignals__ = {
         "button-clicked": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
@@ -45,7 +45,6 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         height: int = 400,
         transition_duration: int = 200,
     ) -> None:
-        GObject.Object.__init__(self)
         GajimAppWindow.__init__(
             self,
             name=name,
@@ -61,7 +60,11 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         self._button_visible_func = None
 
         self._ui = get_builder("assistant.ui")
-        self.set_child(self._ui.main_box)
+        self._ui.main_box.add_css_class("window-padding")
+
+        toolbar_view = Adw.ToolbarView(content=self._ui.main_box)
+        toolbar_view.add_top_bar(Adw.HeaderBar())
+        self.set_content(toolbar_view)
 
         self._ui.stack.set_transition_duration(transition_duration)
 
@@ -72,7 +75,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit("page-changed", page_name)
-        self.window.set_visible(True)
+        self.set_visible(True)
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -82,7 +85,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     def update_title(self) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
-        self.window.set_title(page_widget.title)
+        self.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
         for button, _complete in self._buttons.values():
@@ -117,7 +120,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     def set_default_button(self, button_name: str) -> None:
         button, _complete = self._buttons[button_name]
-        self.window.set_default_widget(button)
+        self.set_default_widget(button)
 
     def add_button(
         self,
@@ -127,7 +130,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         complete: bool = False,
     ) -> None:
         button = Gtk.Button(label=label, visible=False)
-        button.connect("clicked", self.__on_button_clicked)
+        self._connect(button, "clicked", self.__on_button_clicked)
         if css_class is not None:
             button.add_css_class(css_class)
         self._buttons[name] = (button, complete)

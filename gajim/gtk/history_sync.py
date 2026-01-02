@@ -23,7 +23,6 @@ from gajim.common import ged
 from gajim.common.const import ArchiveState
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import RawMamMessageReceived
-from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
@@ -35,10 +34,9 @@ from gajim.gtk.dropdown import GajimDropDown
 log = logging.getLogger("gajim.gtk.history_sync")
 
 
-class HistorySyncAssistant(Assistant, EventHelper):
+class HistorySyncAssistant(Assistant):
     def __init__(self, account: str) -> None:
         Assistant.__init__(self, name="HistorySyncAssistant", width=600)
-        EventHelper.__init__(self)
 
         self.account = account
         self._client = app.get_client(account)
