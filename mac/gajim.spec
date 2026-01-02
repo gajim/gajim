@@ -12,6 +12,27 @@ info_plist = {
 
 import sys
 import glob
+import platform
+
+# Hidden libs to add because we remove PIL._imagingft to avoid non-system versions
+hidden_libs = ['libsoup-*.dylib', 'libgtksourceview-*.dylib']
+
+# Get homebrew lib path according to system arch
+if platform.machine() == 'x86_64':
+	lib_path = '/usr/local/lib/'
+elif platform.machine() == 'arm64':
+	lib_path = '/opt/homebrew/lib/'
+
+# Select the last libs found
+hidden_binaries = []
+for lib_name in hidden_libs:
+	lib_file = glob.glob(lib_path + lib_name)[-1]
+	hidden_binaries.append((lib_file, '.'))
+
+# Collect GI-repository typelibs
+gi_typelib_files = glob.glob(lib_path + 'girepository-*/*.typelib')
+for lib_file in gi_typelib_files:
+	hidden_binaries.append((lib_file, 'gi_typelibs/'))
 
 sys.path.insert(0, os.path.join(cwd))
 
@@ -23,12 +44,12 @@ sys.path.pop(0)
 
 a = Analysis(['launch.py'],
              pathex=[cwd],
-             binaries=[],
+             binaries=hidden_binaries,
              datas=[('gajim', 'gajim')],
              hiddenimports=hiddenimports,
              hookspath=[],
              runtime_hooks=[],
-             excludes=[],
+             excludes=['PIL._imagingft'],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=block_cipher,

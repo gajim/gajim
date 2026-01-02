@@ -29,6 +29,7 @@ node_modules/
 .flatpak-builder
 mac/gajim-source
 mac/nbxmpp-source
+mac/omemo-dr-source
 mac/gajim-venv
 
 # IDE files

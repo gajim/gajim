@@ -1,27 +1,48 @@
 #!/bin/bash
 #
-# Helper script to build virtual environments for nbxmpp and Gajim on Mac OS
+# Helper script to build virtual environments for omemo-dr, nbxmpp and Gajim on Mac OS
 #
 # Requirements for this script:
 # - Brew: Follow installation instructions at https://brew.sh
 #
 # Instructions:
-# - Always check the following versions variables (check tags dates on Gitlab to make nbxmpp and Gajim versions match)
+# - Always check the following versions variables (check tags dates on Gitlab to make omemo-dr, nbxmpp and Gajim versions match)
 # - Always execute this script from the directory where it is located (./gajim-macos-helper.sh)
-# - To build (or rebuild) a new version of nbxmpp and Gajim: ./gajim-macos-helper.sh build
+# - To build (or rebuild) a new version of omemo-dr, nbxmpp and Gajim: ./gajim-macos-helper.sh build
 # - To start built version: ./gajim-macos-helper.sh start
-# - To create a dmg file (experimental): ./gajim-macos-helper.sh create-dmg
+#
+# Instructions for CI mode:
+# - To build (or rebuild) a new version of omemo-dr, nbxmpp and Gajim: ./gajim-macos-helper.sh build ci
+# - To create a dmg file: ./gajim-macos-helper.sh create-dmg ci
 #
 # Note: Bash on MacOS is stuck in version 3.2, so we avoid using recent things in this script
 
 set -e
 
 # Variables
-gajim_version="2.4.1"
-nbxmpp_version="7.0.0"
+gajim_version="master"
+nbxmpp_version="master"
+omemo_dr_version="master"
 python_version="3.13"
 gajim_git="https://dev.gajim.org/gajim/gajim"
 nbxmpp_git="https://dev.gajim.org/gajim/python-nbxmpp"
+omemo_dr_git="https://dev.gajim.org/gajim/omemo-dr"
+python_dependencies="\
+	pyobjc \
+	cryptography \
+	pillow \
+	idna \
+	precis-i18n \
+	certifi \
+	css-parser \
+	keyring \
+	packaging \
+	qrcode \
+	SQLAlchemy \
+	emoji \
+	h2 \
+	socksio \
+	httpx"
 
 # Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://dev.gajim.org/gajim/gajim/-/issues/12365)
 DEFAULT_PATH="$PATH"
@@ -38,6 +59,7 @@ then
 	export XDG_DATA_DIRS="/opt/homebrew/share:$XDG_DATA_DIRS"
 	export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 fi
+export CI_BUILD=0
 
 function install_brew_dependencies() {
 	brew install gettext python@${python_version} librsvg git
@@ -56,7 +78,7 @@ function recreate_venv() {
 	fi
 	python${python_version} -m venv ./gajim-venv
 	source ./gajim-venv/bin/activate
-	pip3 install --upgrade omemo-dr pyobjc cryptography pillow idna precis-i18n certifi css-parser keyring packaging qrcode SQLAlchemy emoji h2 socksio httpx
+	pip3 install --upgrade $python_dependencies
 	deactivate
 }
 
@@ -67,13 +89,27 @@ function clone_source() {
 	if [ -d "./nbxmpp-source" ]; then
 		rm -rf ./nbxmpp-source
 	fi
+	if [ -d "./omemo-dr-source" ]; then
+		rm -rf ./omemo-dr-source
+	fi
 	git clone ${gajim_git} ./gajim-source
 	git clone ${nbxmpp_git} ./nbxmpp-source
+	git clone ${omemo_dr_git} ./omemo-dr-source
 	cd ./nbxmpp-source/
 	git checkout ${nbxmpp_version}
 	cd ../gajim-source/
 	git checkout ${gajim_version}
+	cd ../omemo-dr-source/
+	git checkout ${omemo_dr_version}
 	cd ../
+}
+
+function install_omemo_dr() {
+	source ./gajim-venv/bin/activate
+	cd ./omemo-dr-source/
+	pip3 install .
+	cd ../
+	deactivate
 }
 
 function install_nbxmpp() {
@@ -106,6 +142,9 @@ function clean_environment() {
 	if [ -d "./nbxmpp-source" ]; then
 		rm -rf ./nbxmpp-source
 	fi
+	if [ -d "./omemo-dr-source" ]; then
+		rm -rf ./omemo-dr-source
+	fi
 	if [ -d "./gajim-venv" ]; then
 		rm -r ./gajim-venv
 	fi
@@ -113,23 +152,52 @@ function clean_environment() {
 
 function build_new_environment() {
 	install_brew_dependencies
-	recreate_venv
 	clone_source
-	install_nbxmpp
-	install_gajim
+	if [ "$CI_BUILD" == 0 ]
+	then
+		recreate_venv
+		install_omemo_dr
+		install_nbxmpp
+		install_gajim
+	elif [ "$CI_BUILD" == 1 ]
+	then
+		python${python_version} -m pip install $python_dependencies --break-system-packages
+		cd ./omemo-dr-source/
+		python${python_version} -m pip install . --break-system-packages
+		cd ../nbxmpp-source/
+		python${python_version} -m pip install . --break-system-packages
+		cd ../gajim-source/
+		python${python_version} -m pip install . --break-system-packages
+		cd ../
+	fi
 }
 
 function create_dmg() {
-	source ./gajim-venv/bin/activate
-	pip3 install --upgrade PyInstaller
-	cd ./gajim-source/
-	./mac/makebundle.py
-	cd ../
-	deactivate
+	if [ "$CI_BUILD" == 0 ]
+	then
+		source ./gajim-venv/bin/activate
+		pip3 install --upgrade PyInstaller
+		cd ./gajim-source/
+		./mac/makebundle.py
+		cd ../
+		deactivate
+	elif [ "$CI_BUILD" == 1 ]
+	then
+		python${python_version} -m pip install PyInstaller --break-system-packages
+		cd ./gajim-source/
+		./mac/makebundle.py
+		cd ../
+	fi
 }
 
 function main()
 {
+	# CI
+	if [ "$2" == "ci" ]
+	then
+		export CI_BUILD=1
+	fi
+	# Selector
 	if [ -z "$1" ]
 	then
 		usage "$0"
@@ -153,10 +221,13 @@ function usage()
 	cat <<- EOS
 		$1: MacOS Helper to build virtual environments and start Gajim
 
-		build		Build nbxmpp and Gajim virtual environments
+		build		Build omemo-dr, nbxmpp and Gajim virtual environments
 		create-dmg	Create Gajim dmg bundle
 		start		Start Gajim
-		clean		Delete nbxmpp and Gajim virtual environments
+		clean		Delete omemo-dr, nbxmpp and Gajim virtual environments
+
+		build ci	Build omemo-dr, nbxmpp and Gajim system side in CI
+		create-dmg ci	Create Gajim dmg installer system side in CI
 	EOS
 }
 
