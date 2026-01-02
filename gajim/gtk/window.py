@@ -29,8 +29,16 @@ class GajimAppWindow(Adw.ApplicationWindow, SignalManager):
         default_height: int = 0,
         transient_for: Gtk.Window | None = None,
         modal: bool = False,
+        add_window_padding: bool = False,
+        header_bar: bool = False,
     ) -> None:
         SignalManager.__init__(self)
+
+        self._add_window_padding = add_window_padding
+
+        self._header_bar = None
+        if header_bar:
+            self._header_bar = Adw.HeaderBar()
 
         window_size = app.settings.get_window_size(name)
         if window_size is not None:
@@ -62,8 +70,22 @@ class GajimAppWindow(Adw.ApplicationWindow, SignalManager):
         )
         self._connect_after(self, "close-request", self.__on_close_request)
 
+    def set_child(self, child: Gtk.Widget | None = None) -> None:
+        if child is not None and self._add_window_padding:
+            child.add_css_class("window-padding")
+
+        if self._header_bar is not None:
+            toolbar_view = Adw.ToolbarView(content=child)
+            toolbar_view.add_top_bar(self._header_bar)
+            self.set_content(toolbar_view)
+        else:
+            self.set_content(child)
+
     def get_default_controller(self) -> Gtk.EventController:
         return self.__default_controller
+
+    def get_header_bar(self) -> Adw.HeaderBar | None:
+        return self._header_bar
 
     def __on_key_pressed(
         self,
