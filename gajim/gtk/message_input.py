@@ -504,7 +504,10 @@ class TextBufferManager(GObject.Object):
     def switch_contact(self, contact: ChatContactT) -> None:
         buf = self._text_buffers.get(contact)
         if buf is None:
-            buf = GtkSource.Buffer()
+            buf = GtkSource.Buffer(
+                implicit_trailing_newline=False,
+                highlight_matching_brackets=False,
+            )
             buf.create_tag("strong", weight=Pango.Weight.BOLD)
             buf.create_tag("emphasis", style=Pango.Style.ITALIC)
             buf.create_tag("strike", strikethrough=True)
