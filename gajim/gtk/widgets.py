@@ -5,12 +5,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 import datetime as dt
 import logging
 
-from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GObject
@@ -22,135 +20,12 @@ from gajim.common.i18n import _
 from gajim.common.util.user_strings import format_idle_time
 from gajim.common.util.user_strings import get_uf_relative_time
 
-from gajim.gtk.builder import GajimBuilder
-from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import container_remove_all
 
+# Backwards compat import for Plugins
+from gajim.gtk.window import GajimAppWindow as GajimAppWindow  # noqa: PLC0414
+
 log = logging.getLogger("gajim.gtk.widgets")
-
-
-class GajimAppWindow(SignalManager):
-    def __init__(
-        self,
-        *,
-        name: str,
-        title: str | None = None,
-        default_width: int = 0,
-        default_height: int = 0,
-        transient_for: Gtk.Window | None = None,
-        modal: bool = False,
-        add_window_padding: bool = True,
-        header_bar: bool = True,
-    ) -> None:
-        SignalManager.__init__(self)
-
-        self._add_window_padding = add_window_padding
-
-        window_size = app.settings.get_window_size(name)
-        if window_size is not None:
-            default_width, default_height = window_size
-
-        self.window = Adw.ApplicationWindow(
-            application=app.app,
-            resizable=True,
-            name=name,
-            title=title,
-            default_width=default_width,
-            default_height=default_height,
-            transient_for=transient_for,
-            modal=modal,
-        )
-        # Hack to get the instance in get_app_window
-        self.window.wrapper = self  # pyright: ignore
-
-        self._header_bar = None
-        if header_bar:
-            self._header_bar = Adw.HeaderBar()
-
-        log.debug("Load Window: %s", name)
-
-        self._ui = cast(GajimBuilder, None)
-
-        self.window.add_css_class("gajim-app-window")
-
-        self.__default_controller = Gtk.EventControllerKey(
-            propagation_phase=Gtk.PropagationPhase.CAPTURE
-        )
-        self.window.add_controller(self.__default_controller)
-
-        self._connect_after(
-            self.__default_controller, "key-pressed", self.__on_key_pressed
-        )
-        self._connect_after(self.window, "close-request", self.__on_close_request)
-
-    def present(self) -> None:
-        self.window.present()
-
-    def show(self) -> None:
-        self.window.set_visible(True)
-
-    def close(self) -> None:
-        self.window.close()
-
-    def get_scale_factor(self) -> int:
-        return self.window.get_scale_factor()
-
-    def set_default_widget(self, widget: Gtk.Widget | None) -> None:
-        self.window.set_default_widget(widget)
-
-    def set_child(self, child: Gtk.Widget | None = None) -> None:
-        if child is not None and self._add_window_padding:
-            child.add_css_class("window-padding")
-
-        if self._header_bar is not None:
-            toolbar_view = Adw.ToolbarView(content=child)
-            toolbar_view.add_top_bar(self._header_bar)
-            self.window.set_content(toolbar_view)
-        else:
-            self.window.set_content(child)
-
-    def get_header_bar(self) -> Adw.HeaderBar | None:
-        return self._header_bar
-
-    def get_default_controller(self) -> Gtk.EventController:
-        return self.__default_controller
-
-    def __on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        keycode: int,
-        state: Gdk.ModifierType,
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.window.close()
-            return Gdk.EVENT_STOP
-        return Gdk.EVENT_PROPAGATE
-
-    def __on_close_request(self, _widget: Gtk.ApplicationWindow) -> bool:
-        log.debug("Initiate Cleanup: %s", self.window.get_name())
-        self._store_win_size()
-        self._disconnect_all()
-        self._cleanup()
-        app.check_finalize(self.window)
-        app.check_finalize(self)
-
-        del self.window.wrapper  # pyright: ignore
-        del self._ui
-        del self.__default_controller
-        del self.window
-
-        return Gdk.EVENT_PROPAGATE
-
-    def _store_win_size(self) -> None:
-        app.settings.set_window_size(
-            self.window.get_name(),
-            self.window.props.default_width,
-            self.window.props.default_height,
-        )
-
-    def _cleanup(self) -> None:
-        raise NotImplementedError
 
 
 class MultiLineLabel(Gtk.Label):
