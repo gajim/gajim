@@ -15,7 +15,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class RosterItemExchange(GajimAppWindow):
@@ -35,6 +35,8 @@ class RosterItemExchange(GajimAppWindow):
             self,
             name="RosterItemExchange",
             title=_("Contact List Exchange"),
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self.account = account

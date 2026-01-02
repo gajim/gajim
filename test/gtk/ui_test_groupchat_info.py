@@ -12,7 +12,7 @@ from nbxmpp.structs import MucSubject
 from gajim.common import app
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -106,6 +106,8 @@ class TestGroupchatInfo(GajimAppWindow):
             title=__class__.__name__,
             default_width=700,
             default_height=700,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
@@ -121,6 +123,9 @@ class TestGroupchatInfo(GajimAppWindow):
         self._muc_info_box.set_subject(
             MucSubject(text=subject, author="someone", timestamp=None)
         )
+
+    def _cleanup(self) -> None:
+        pass
 
 
 app.css_config = MagicMock()

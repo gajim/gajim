@@ -28,7 +28,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import get_app_window
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class StyleOption(NamedTuple):
@@ -91,6 +91,8 @@ class Themes(GajimAppWindow):
             default_height=400,
             transient_for=transient,
             modal=True,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("themes_window.ui")
@@ -268,7 +270,7 @@ class Themes(GajimAppWindow):
             confirm_label=_("_Delete"),
             appearance="destructive",
             callback=_on_response,
-            parent=self.window,
+            parent=self,
         )
 
     def _cleanup(self) -> None:

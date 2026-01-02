@@ -36,7 +36,7 @@ from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util.misc import at_the_end
 from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.util.styling import get_source_view_style_scheme
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 STANZA_PRESETS = {
     "Presence": (
@@ -70,7 +70,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             name="DebugConsoleWindow",
             default_width=800,
             default_height=600,
-            add_window_padding=False,
+            header_bar=True,
         )
 
         EventHelper.__init__(self)
@@ -97,14 +97,14 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         action = Gio.SimpleAction.new("clear-window")
         self._connect(action, "activate", self._on_clear_window)
-        self.window.add_action(action)
+        self.add_action(action)
 
         shortcut_controller = Gtk.ShortcutController()
         callback_action = Gtk.CallbackAction.new(self._on_clear_window)  # type: ignore
         shortcut_trigger = Gtk.ShortcutTrigger.parse_string("<Control>l")
-        shortcut = Gtk.Shortcut.new(shortcut_trigger, callback_action)
-        shortcut_controller.add_shortcut(shortcut)
-        self.window.add_controller(shortcut_controller)
+        self._shortcut = Gtk.Shortcut.new(shortcut_trigger, callback_action)
+        shortcut_controller.add_shortcut(self._shortcut)
+        self.add_controller(shortcut_controller)
 
         accounts = self._get_accounts()
         self._account_dropdown: GajimDropDown[str] = GajimDropDown(
@@ -186,6 +186,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._set_account("AllAccounts", "")
 
     def _cleanup(self) -> None:
+        self._shortcut.set_action(None)
         self.unregister_events()
         get_log_console_handler().set_callback(None)
 
@@ -218,7 +219,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             title = _("Account Wizard")
         else:
             title = app.get_jid_from_account(self._selected_account)
-        self.window.set_title(title)
+        self.set_title(title)
 
     def _on_account_changed(self, event: AccountEnabled | AccountDisabled) -> None:
         buf = self._ui.protocol_view.get_buffer()
@@ -542,17 +543,16 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         ]
 
         self._filter_dialog = SettingsDialog(
-            self.window,
+            self,
             _("Filter"),
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             settings,
             self._selected_account or "AllAccounts",
         )
-        self._connect(
-            self._filter_dialog.window, "close-request", self._on_filter_destroyed
-        )
+        self._filter_dialog.connect("close-request", self._on_filter_destroyed)
 
-    def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
+    def _on_filter_destroyed(self, window: Gtk.Window) -> None:
+        window.disconnect_by_func(self._on_filter_destroyed)
         self._filter_dialog = None
 
     def _on_clear_window(self, *args: Any) -> None:

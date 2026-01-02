@@ -34,7 +34,7 @@ from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.chat_page import ChatPage
 from gajim.gtk.util.misc import convert_surface_to_texture
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -53,7 +53,7 @@ class TestActivityFeed(GajimAppWindow):
             title=__class__.__name__,
             default_width=1000,
             default_height=800,
-            add_window_padding=False,
+            header_bar=True,
         )
 
         app.app = MagicMock()

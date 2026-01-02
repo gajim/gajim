@@ -9,7 +9,7 @@ from gi.repository import Pango
 
 from gajim.common.util.text import process_non_spacing_marks
 
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -24,6 +24,8 @@ class TestPangoWordWrap(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(
@@ -46,6 +48,9 @@ class TestPangoWordWrap(GajimAppWindow):
             wrap_mode=Pango.WrapMode.WORD_CHAR,
         )
         box.append(label2)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 def get_pango_wrap_mode(string: str) -> Pango.WrapMode:

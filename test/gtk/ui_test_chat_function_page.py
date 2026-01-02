@@ -17,7 +17,7 @@ from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.dropdown import KeyValueItem
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -42,6 +42,8 @@ class TestChatFunctionPage(GajimAppWindow):
             title=__class__.__name__,
             default_width=700,
             default_height=700,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._main_box = Gtk.Box(
@@ -100,6 +102,9 @@ class TestChatFunctionPage(GajimAppWindow):
 
     def _on_message(self, widget: ChatFunctionPage, message: str) -> None:
         print("Message", message)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

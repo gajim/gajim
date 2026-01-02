@@ -20,7 +20,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.db_migration")
 
@@ -35,14 +35,14 @@ class DBMigration(GajimAppWindow, EventHelper):
             title=_("Database Migration"),
             default_width=600,
             default_height=300,
-            add_window_padding=False,
             transient_for=app.window,
             modal=True,
+            header_bar=True,
         )
         EventHelper.__init__(self)
 
-        self.window.set_deletable(False)
-        self.window.set_resizable(False)
+        self.set_deletable(False)
+        self.set_resizable(False)
 
         self._ui = get_builder("db_migration.ui")
         self.set_child(self._ui.box)
@@ -71,7 +71,7 @@ class DBMigration(GajimAppWindow, EventHelper):
     def _set_transient(self) -> int:
         # Set transient on every update to make sure transient is set as
         # soon as main window is available
-        self.window.set_transient_for(app.window)
+        self.set_transient_for(app.window)
         return GLib.SOURCE_CONTINUE
 
     def _cleanup(self) -> None:
@@ -114,7 +114,7 @@ class DBMigration(GajimAppWindow, EventHelper):
         text_buffer = self._ui.error_view.get_buffer()
         start, end = text_buffer.get_bounds()
         error_text = text_buffer.get_text(start, end, True)
-        self.window.get_clipboard().set(error_text)
+        self.get_clipboard().set(error_text)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
         self.close()

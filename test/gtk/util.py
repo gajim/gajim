@@ -17,7 +17,7 @@ from gajim.common.const import CSSPriority
 from gajim.common.settings import Settings
 
 from gajim.gtk.util.icons import get_icon_theme
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 def get_gajim_dir() -> Path:
@@ -41,7 +41,7 @@ def load_style(filename: str, priority: CSSPriority) -> None:
 
 
 def get_content_widget(window: GajimAppWindow) -> Gtk.Widget:
-    dialog_host = cast(Gtk.Widget, window.window.get_child())
+    dialog_host = cast(Gtk.Widget, window.get_child())
     internal_bin = cast(Adw.Bin, dialog_host.get_first_child())
     breakpoint_bin = cast(Adw.BreakpointBin, internal_bin.get_child())
     toolbar_view = cast(Adw.ToolbarView, breakpoint_bin.get_child())

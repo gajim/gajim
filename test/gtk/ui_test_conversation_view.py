@@ -24,7 +24,7 @@ from gajim.common.util.datetime import utc_now
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.control import ChatControl
 from gajim.gtk.util.misc import convert_surface_to_texture
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -41,6 +41,8 @@ class TestConversationView(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._chat_control = ChatControl()
@@ -77,6 +79,9 @@ class TestConversationView(GajimAppWindow):
     def _on_jump_to_clicked(self, _button: Gtk.Button) -> None:
         # BASE_TIMESTAMP + 500
         self._chat_control.scroll_to_message(500, utc_now())
+
+    def _cleanup(self) -> None:
+        pass
 
 
 def add_archive_messages() -> None:

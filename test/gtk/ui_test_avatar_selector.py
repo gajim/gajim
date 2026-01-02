@@ -5,7 +5,7 @@
 from gi.repository import Gtk
 
 from gajim.gtk.avatar_selector import AvatarSelector
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -22,6 +22,8 @@ class TestAvatarSelector(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
@@ -30,6 +32,9 @@ class TestAvatarSelector(GajimAppWindow):
         avatar_selector = AvatarSelector()
         avatar_selector.prepare_crop_area(str(DEFAULT_IMAGE_FILE_PATH))
         box.append(avatar_selector)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

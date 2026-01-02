@@ -20,7 +20,7 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
 
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class Feature(NamedTuple):
@@ -34,7 +34,13 @@ class Feature(NamedTuple):
 
 class Features(GajimAppWindow):
     def __init__(self) -> None:
-        GajimAppWindow.__init__(self, name="Features", title=_("Features"))
+        GajimAppWindow.__init__(
+            self,
+            name="Features",
+            title=_("Features"),
+            add_window_padding=True,
+            header_bar=True,
+        )
 
         self.feature_listbox = Gtk.ListBox(
             selection_mode=Gtk.SelectionMode.NONE, hexpand=True

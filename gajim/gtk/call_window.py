@@ -25,7 +25,7 @@ from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.gstreamer import create_video_elements
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.call_window")
 
@@ -37,6 +37,8 @@ class CallWindow(GajimAppWindow, EventHelper):
             name="CallWindow",
             default_width=700,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         EventHelper.__init__(self)
@@ -49,7 +51,7 @@ class CallWindow(GajimAppWindow, EventHelper):
         assert isinstance(self._contact, BareContact)
         self._resource_contact = contacts_module.get_contact(resource_jid)
         assert isinstance(self._resource_contact, ResourceContact)
-        self.window.set_title(_("Call with %s") % self._contact.name)
+        self.set_title(_("Call with %s") % self._contact.name)
 
         self._video_widget_other = None
         self._video_widget_self = None
@@ -107,9 +109,7 @@ class CallWindow(GajimAppWindow, EventHelper):
     def _cleanup(self) -> None:
         assert isinstance(self._resource_contact, ResourceContact)
         app.call_manager.stop_call(self._account, self._resource_contact)
-
         self.unregister_events()
-        app.check_finalize(self)
 
     def _close_with_timeout(self, timeout: int = 3) -> None:
         self._ui.av_box.set_sensitive(False)

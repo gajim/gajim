@@ -10,7 +10,7 @@ from gi.repository import Gtk
 from gajim.common.i18n import _
 
 from gajim.gtk.preference.certificate import CertificatePage
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.certificate_dialog")
 
@@ -26,6 +26,8 @@ class CertificateDialog(GajimAppWindow):
             default_width=600,
             default_height=800,
             transient_for=transient_for,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self.account = account

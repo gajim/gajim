@@ -24,7 +24,7 @@ from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class GroupchatDetails(GajimAppWindow):
@@ -34,8 +34,6 @@ class GroupchatDetails(GajimAppWindow):
             name="GroupchatDetails",
             title=_("Group Chat Details"),
             default_height=600,
-            add_window_padding=False,
-            header_bar=False,
         )
 
         self.account = contact.account

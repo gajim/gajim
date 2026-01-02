@@ -62,10 +62,10 @@ from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import AccountBadge
-from gajim.gtk.widgets import GajimAppWindow
 from gajim.gtk.widgets import GajimPopover
 from gajim.gtk.widgets import GroupBadgeBox
 from gajim.gtk.widgets import IdleBadge
+from gajim.gtk.window import GajimAppWindow
 
 ContactT = BareContact | GroupchatContact
 L = TypeVar("L", bound=type[GObject.Object])
@@ -87,7 +87,7 @@ class StartChatDialog(GajimAppWindow):
             title=_("Start / Join Chat"),
             default_height=600,
             default_width=550,
-            add_window_padding=False,
+            header_bar=True,
         )
 
         self._parameter_form: MuclumbusResult | None = None
@@ -202,14 +202,12 @@ class StartChatDialog(GajimAppWindow):
             GLib.Variant.new_boolean(app.settings.get("sort_by_show_in_start_chat")),
         )
         self._connect(action, "change-state", self._on_sort_by_show_changed)
-        self.window.add_action(action)
+        self.add_action(action)
 
         self._ui.search_entry.grab_focus()
         log.debug("Loading dialog finished")
 
         self._chat_filter.set_filters(StartChatDialog.last_chat_filters)
-
-        self.show()
 
     def _cleanup(self, *args: Any) -> None:
         del self._nick_chooser

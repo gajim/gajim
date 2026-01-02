@@ -25,7 +25,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.avatar import convert_surface_to_texture
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -128,6 +128,8 @@ class TestGroupchatInvitation(GajimAppWindow):
             title=__class__.__name__,
             default_width=700,
             default_height=700,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
@@ -150,6 +152,9 @@ class TestGroupchatInvitation(GajimAppWindow):
         self._main_box.append(invitation_box)
 
         self.set_child(self._main_box)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 class TestContactsModule:

@@ -11,7 +11,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.chat_filter import ChatFilter
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -51,6 +51,8 @@ class TestChatFilter(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(
@@ -75,6 +77,9 @@ class TestChatFilter(GajimAppWindow):
 
     def _on_reset_clicked(self, _button: Gtk.Button) -> None:
         self._chat_filter.reset()
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

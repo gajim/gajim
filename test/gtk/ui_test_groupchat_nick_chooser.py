@@ -5,7 +5,7 @@
 from gi.repository import Gtk
 
 from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -18,6 +18,8 @@ class TestGroupChatNickChooser(GajimAppWindow):
             title=__class__.__name__,
             default_width=700,
             default_height=700,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._main_box = Gtk.Box(

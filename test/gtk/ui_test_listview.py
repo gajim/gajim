@@ -6,7 +6,7 @@ from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -27,6 +27,8 @@ class TestListView(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         nodes = {

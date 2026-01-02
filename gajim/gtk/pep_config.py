@@ -28,7 +28,7 @@ from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.styling import get_source_view_style_scheme
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.pep_config")
 
@@ -41,6 +41,8 @@ class PEPConfig(GajimAppWindow, EventHelper):
             title=_("PEP Service Configuration (%s)") % account,
             default_width=700,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         EventHelper.__init__(self)
@@ -84,7 +86,6 @@ class PEPConfig(GajimAppWindow, EventHelper):
 
     def _cleanup(self) -> None:
         self.unregister_events()
-        app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
@@ -169,7 +170,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
             confirm_label=_("_Delete"),
             appearance="destructive",
             callback=_on_response,
-            parent=self.window,
+            parent=self,
         )
 
     def _on_node_delete(self, task: Task) -> None:

@@ -483,7 +483,7 @@ class SoundsGroup(GajimPreferencesGroup):
     def _on_manage_sounds(_button: Gtk.Button) -> None:
         window = get_app_window("Preferences")
         assert window is not None
-        open_window("ManageSounds", transient_for=window.window)
+        open_window("ManageSounds", transient_for=window)
 
 
 class StatusMessageGroup(GajimPreferencesGroup):
@@ -683,7 +683,7 @@ class ThemesGroup(GajimPreferencesGroup):
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
         window = get_app_window("Preferences")
         assert window is not None
-        open_window("Themes", transient=window.window)
+        open_window("Themes", transient=window)
 
     def _on_theme_changed(self, value: str, *args: Any) -> None:
         app.ged.remove_event_handler("theme-update", ged.GUI1, self._on_theme_update)
@@ -1006,7 +1006,7 @@ class MiscellaneousGroup(GajimPreferencesGroup):
     def _on_proxy_edit(*args: Any) -> None:
         window = get_app_window("Preferences")
         assert window is not None
-        open_window("ManageProxies", transient_for=window.window)
+        open_window("ManageProxies", transient_for=window)
 
     def update_proxy_list(self) -> None:
         dropdown_row = cast(DropDownSetting, self.get_setting("global_proxy"))
@@ -1110,7 +1110,7 @@ class AdvancedGroup(GajimPreferencesGroup):
     def _on_advanced_config_editor(*args: Any) -> None:
         window = get_app_window("Preferences")
         assert window is not None
-        open_window("AdvancedConfig", transient_for=window.window)
+        open_window("AdvancedConfig", transient_for=window)
 
     @staticmethod
     def _on_debug(*args: Any) -> None:

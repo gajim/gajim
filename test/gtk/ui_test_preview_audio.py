@@ -24,7 +24,7 @@ from gajim.gtk.audio_player import AudioPlayer
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.preview.audio import AudioPreviewWidget
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -39,6 +39,8 @@ class TestAudioWidget(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._box = Gtk.Box(
@@ -80,6 +82,9 @@ class TestAudioWidget(GajimAppWindow):
             self._audio_player, paths[0].as_posix(), paths[0].stat().st_size, paths[0]
         )
         self._box.append(self._audio_widget)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

@@ -37,10 +37,9 @@ from gajim.common.util.version import get_os_version
 from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_adw_version
 from gajim.gtk.util.misc import get_gtk_version
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 try:
     import sentry_sdk
@@ -94,7 +93,7 @@ def _hook(type_: type[BaseException], value: BaseException, tb: TracebackType) -
     ExceptionDialog(type_, value, tb)
 
 
-class ExceptionDialog(GajimAppWindow, SignalManager):
+class ExceptionDialog(GajimAppWindow):
     def __init__(
         self, type_: type[BaseException], value: BaseException, tb: TracebackType
     ) -> None:
@@ -103,9 +102,8 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
             name="ExceptionDialog",
             title=_("Gajim - Error"),
             default_width=700,
-            add_window_padding=False,
+            header_bar=True,
         )
-        SignalManager.__init__(self)
 
         self._traceback_data = (type_, value, tb)
         self._sentry_available = app.is_installed("SENTRY_SDK")
@@ -266,7 +264,6 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
         return event
 
     def _cleanup(self) -> None:
-        self._disconnect_all()
         _exception_in_progress.release()
 
 

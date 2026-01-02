@@ -8,7 +8,7 @@ from gi.repository import Gtk
 
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -21,6 +21,8 @@ class TestFileChooserButton(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
@@ -39,6 +41,9 @@ class TestFileChooserButton(GajimAppWindow):
         self, _file_chooser_button: FileChooserButton, file_paths: list[Path]
     ) -> None:
         print(file_paths)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

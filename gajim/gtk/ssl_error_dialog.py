@@ -12,7 +12,7 @@ from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.window import open_window
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class SSLErrorDialog(GajimAppWindow):
@@ -28,6 +28,8 @@ class SSLErrorDialog(GajimAppWindow):
             self,
             name="SSLErrorDialog",
             title=_("SSL Certificate Verification Error"),
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("ssl_error_dialog.ui")
@@ -80,7 +82,7 @@ class SSLErrorDialog(GajimAppWindow):
         open_window(
             "CertificateDialog",
             account=self.account,
-            transient_for=self.window,
+            transient_for=self,
             cert=self._cert,
         )
 

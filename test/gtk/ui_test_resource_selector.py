@@ -14,7 +14,7 @@ from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.cache import CacheStorage
 
 from gajim.gtk.resource_selector import ResourceSelector
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -30,6 +30,8 @@ class TestResourceSelector(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(
@@ -75,6 +77,9 @@ class TestResourceSelector(GajimAppWindow):
 
     def _iter_resources(self) -> Iterator[ResourceContact]:
         yield from self._resources
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

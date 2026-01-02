@@ -35,7 +35,7 @@ from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.vcard_grid import VCardGrid
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.profile")
 
@@ -66,6 +66,8 @@ class ProfileWindow(GajimAppWindow):
             title=_("Profile"),
             default_width=700,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self.account = account
@@ -221,7 +223,7 @@ class ProfileWindow(GajimAppWindow):
             action_name = f"add-{action.lower()}"
             act = Gio.SimpleAction.new(action_name, None)
             self._connect(act, "activate", self._on_action)
-            self.window.add_action(act)
+            self.add_action(act)
 
     def _on_action(self, action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:
         name = action.get_name()

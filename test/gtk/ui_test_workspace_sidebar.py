@@ -13,7 +13,7 @@ from gajim.gtk.avatar import make_workspace_avatar
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util.styling import make_rgba
 from gajim.gtk.util.styling import rgba_to_float
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 from gajim.gtk.workspace_listbox import WorkspaceListBox
 
 from . import util
@@ -27,6 +27,8 @@ class TestWorkspaceListBox(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._box = Gtk.Box(
@@ -57,6 +59,9 @@ class TestWorkspaceListBox(GajimAppWindow):
         name = app.settings.get_workspace_setting(workspace_id, "name")
         rgba = make_rgba(DEFAULT_WORKSPACE_COLOR)
         return make_workspace_avatar(name, rgba_to_float(rgba), size, scale)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 app.window = MagicMock()

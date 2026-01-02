@@ -23,7 +23,7 @@ from gajim.common.util.standards import get_rfc5646_lang
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.util.misc import ensure_not_destroyed
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.groupchat_join")
 
@@ -36,6 +36,8 @@ class GroupchatJoin(GajimAppWindow):
             title=_("Join Group Chat"),
             default_width=500,
             default_height=550,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._destroyed = False

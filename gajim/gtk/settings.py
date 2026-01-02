@@ -39,7 +39,7 @@ from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import open_window
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.settings")
 
@@ -60,15 +60,15 @@ class SettingsDialog(GajimAppWindow):
             title=title,
             default_width=250,
             transient_for=parent,
-            add_window_padding=False,
+            header_bar=True,
         )
 
         self.account = account
         if flags == Gtk.DialogFlags.MODAL:
-            self.window.set_modal(True)
+            self.set_modal(True)
 
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
-            self.window.set_destroy_with_parent(True)
+            self.set_destroy_with_parent(True)
 
         self.listbox = SettingsBox(account, extend=extend)
         self.listbox.set_hexpand(True)

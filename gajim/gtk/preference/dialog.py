@@ -51,7 +51,7 @@ from gajim.gtk.preference.server_info import AccountProviderPage
 from gajim.gtk.preference.shortcuts import ShortcutsPage
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.preferences")
 
@@ -64,8 +64,6 @@ class Preferences(GajimAppWindow, EventHelper):
             title=_("Preferences"),
             default_width=900,
             default_height=650,
-            add_window_padding=False,
-            header_bar=False,
         )
         EventHelper.__init__(self)
 
@@ -133,7 +131,7 @@ class Preferences(GajimAppWindow, EventHelper):
 
         self.set_child(nav)
 
-        self._connect(self.window, "close-request", self._on_close_request)
+        self._connect(self, "close-request", self._on_close_request)
 
         self.register_events(
             [

@@ -65,7 +65,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.component_search import ComponentSearch
 from gajim.gtk.util.icons import icon_exists
 from gajim.gtk.util.window import open_window
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 _T = TypeVar("_T")
 _InfoCacheT = tuple[list[DiscoIdentity], list[str], list[Any]]
@@ -583,7 +583,12 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         parent: ServiceDiscoveryWindow | None = None,
     ) -> None:
         GajimAppWindow.__init__(
-            self, name="ServiceDiscoveryWindow", default_width=550, default_height=550
+            self,
+            name="ServiceDiscoveryWindow",
+            default_width=550,
+            default_height=550,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._account = account
@@ -641,7 +646,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         )
         self._connect(self._ui.browse_button, "clicked", self._on_go_button_clicked)
 
-        self._connect(self.window, "close-request", self._on_close_request)
+        self._connect(self, "close-request", self._on_close_request)
 
         self.services_scrollwin = self._ui.services_scrollwin
         self.progressbar = self._ui.services_progressbar
@@ -673,8 +678,6 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         self._initial_state()
         self.travel(jid, node)
 
-        self.show()
-
     @property
     def account(self) -> str:
         return self._account
@@ -686,7 +689,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         """
         self.progressbar.set_visible(False)
         title_text = _("Service Discovery using account %s") % self.account
-        self.window.set_title(title_text)
+        self.set_title(title_text)
         self._set_window_banner_text(_("Service Discovery"))
         self.banner_icon.clear()
         self.banner_icon.set_visible(False)  # Just clearing it doesn't work
@@ -701,7 +704,6 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
     def _cleanup(self) -> None:
         self._destroy()
-        app.check_finalize(self)
 
     def _destroy(self, chain: bool = False) -> None:
         """
@@ -715,10 +717,10 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         # self.browser._get_agent_address() would break when no browser.
         if self.browser:
-            self.window.set_visible(False)
+            self.set_visible(False)
             self.browser.cleanup()
             self.browser = None
-        self.window.close()
+        self.close()
 
         for child in self.children[:]:
             child.parent = None
@@ -779,7 +781,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
                         "There is no service at the address you entered, or it is "
                         "not responding. Check the address and try again."
                     ),
-                    parent=self.parent.window,
+                    parent=self.parent,
                 )
                 return
 
@@ -791,7 +793,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
             InformationAlertDialog(
                 _("Service Not Browsable"),
                 _("This type of service does not contain any items to browse."),
-                parent=self.window,
+                parent=self,
             )
             return
 
@@ -836,7 +838,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         try:
             jid = parse_jid(jid)
         except InvalidFormat as s:
-            InformationAlertDialog(_("Invalid Server Name"), str(s), parent=self.window)
+            InformationAlertDialog(_("Invalid Server Name"), str(s), parent=self)
             return
         if jid == self.jid:  # jid has not changed
             return
@@ -898,7 +900,7 @@ class AgentBrowser:
         """
         Set the initial window title based on agent address
         """
-        self.window.window.set_title(
+        self.window.set_title(
             _("Browsing %(address)s using account %(account)s")
             % {"address": self._get_agent_address(), "account": self.account}
         )
@@ -1169,11 +1171,11 @@ class AgentBrowser:
                 InformationAlertDialog(
                     _("Service Not Browsable"),
                     _("This service does not contain any items to browse."),
-                    parent=self.window.parent.window,
+                    parent=self.window.parent,
                 )
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
-                self.window.window.close()
+                self.window.close()
             return
 
         # We got a list of items
@@ -1444,7 +1446,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        ComponentSearch(self.account, service, self.window.window)
+        ComponentSearch(self.account, service, self.window)
 
     def cleanup(self) -> None:
         AgentBrowser.cleanup(self)

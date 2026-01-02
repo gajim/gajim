@@ -7,7 +7,7 @@ from gi.repository import Gtk
 
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -22,8 +22,6 @@ class TestSideBarSwitcher(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
-            add_window_padding=False,
-            header_bar=False,
         )
 
         stack = Gtk.Stack()
@@ -87,6 +85,9 @@ class TestSideBarSwitcher(GajimAppWindow):
         nav = Adw.NavigationSplitView(sidebar=sidebar_page, content=content_page)
 
         self.set_child(nav)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

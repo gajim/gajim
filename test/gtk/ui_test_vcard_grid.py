@@ -7,7 +7,7 @@ from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.protocol import Iq
 
 from gajim.gtk.vcard_grid import VCardGrid
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -111,6 +111,8 @@ class TestVCardGrid(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=700,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._is_editable = False
@@ -137,6 +139,9 @@ class TestVCardGrid(GajimAppWindow):
     def _on_edit_toggled(self, _button: Gtk.Button) -> None:
         self._vcard_grid.set_editable(not self._is_editable)
         self._is_editable = not self._is_editable
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

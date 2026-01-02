@@ -10,7 +10,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class QuitDialog(GajimAppWindow):
@@ -21,6 +21,8 @@ class QuitDialog(GajimAppWindow):
             title=_("Quit Gajim"),
             transient_for=app.window,
             modal=True,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("quit_dialog.ui")

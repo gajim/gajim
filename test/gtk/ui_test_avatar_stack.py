@@ -18,7 +18,7 @@ from gajim.common.util.datetime import utc_now
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.conversation.avatar_stack import AvatarStack
 from gajim.gtk.css_config import CSSConfig
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -34,6 +34,8 @@ class TestAvatarStack(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         app.app = MagicMock()
@@ -50,6 +52,9 @@ class TestAvatarStack(GajimAppWindow):
         )
         markers = [DisplayedMarkerData.from_model(ACCOUNT, m) for m in markers]
         avatar_stack.set_data(markers)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 def insert_test_markers() -> None:

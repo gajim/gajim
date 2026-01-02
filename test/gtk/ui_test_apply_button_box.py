@@ -6,7 +6,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.gtk.apply_button_box import ApplyButtonBox
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -19,6 +19,8 @@ class TestApplyButtonBox(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)

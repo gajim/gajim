@@ -11,7 +11,7 @@ from nbxmpp.simplexml import Node
 from gajim.common import app
 
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -124,6 +124,8 @@ class TestDataFormWindow(GajimAppWindow):
             title=__class__.__name__,
             default_width=1000,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
         options = {
             "left-width": 100,
@@ -131,6 +133,9 @@ class TestDataFormWindow(GajimAppWindow):
         }
         self._widget = DataFormWidget(extend_form(node=Node(node=FORM)), options)
         self.set_child(self._widget)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 app.bob_cache["sha1+8f35fef110ffc5df08d579a50083ff9308fb6242"] = b64decode(image)  # noqa: E501

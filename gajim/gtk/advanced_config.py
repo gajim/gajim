@@ -24,7 +24,7 @@ from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 @unique
@@ -53,6 +53,8 @@ class AdvancedConfig(GajimAppWindow):
             title=_("Advanced Configuration Editor (ACE)"),
             modal=True,
             transient_for=transient_for,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("advanced_configuration.ui")
@@ -77,7 +79,7 @@ class AdvancedConfig(GajimAppWindow):
         self._fill_model()
         self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
-        self.modelfilter.set_visible_func(self._visible_func)
+        self.modelfilter.set_visible_func(self._visible_func, self._ui.search_entry)
 
         renderer_text = Gtk.CellRendererText()
         renderer_text.set_property("ellipsize", Pango.EllipsizeMode.END)
@@ -113,7 +115,6 @@ class AdvancedConfig(GajimAppWindow):
         self._connect(
             self.get_default_controller(), "key-pressed", self._on_key_pressed
         )
-        self.show()
 
     def _cleanup(self) -> None:
         del self.renderer_text
@@ -263,10 +264,11 @@ class AdvancedConfig(GajimAppWindow):
 
                 self.model.append(None, [setting, value, type_, is_default])
 
+    @staticmethod
     def _visible_func(
-        self, model: Gtk.TreeModel, treeiter: Gtk.TreeIter, _data: object | None
+        model: Gtk.TreeModel, treeiter: Gtk.TreeIter, search_entry: Gtk.SearchEntry
     ) -> bool:
-        search_string = self._ui.search_entry.get_text().lower()
+        search_string = search_entry.get_text().lower()
         if not search_string:
             return True
 

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from gajim.gtk.dataform import FakeDataFormWidget
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -42,10 +42,15 @@ class TestDataFormWindow(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._widget = FakeDataFormWidget(fake_form2)
         self.set_child(self._widget)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

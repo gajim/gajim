@@ -11,7 +11,7 @@ from gajim.common import app
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.groupchat_state import GroupchatState
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -27,6 +27,8 @@ class TestGroupchatState(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._box = Gtk.Box(
@@ -54,6 +56,9 @@ class TestGroupchatState(GajimAppWindow):
         contact.is_joining = True
         contact.is_joined = False
         return contact
+
+    def _cleanup(self) -> None:
+        pass
 
 
 app.get_client = MagicMock()

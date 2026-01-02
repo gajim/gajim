@@ -15,7 +15,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.user_strings import chatstate_to_string
 
 from gajim.gtk.chat_state_indicator import ChatStateIndicator
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -30,6 +30,8 @@ class TestChatStateIndicator(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(
@@ -100,6 +102,9 @@ class TestChatStateIndicator(GajimAppWindow):
         for name in [f"user{count + 1}" for count in range(self._participants_count)]:
             participants.append(self._get_groupchat_participant(name))
         return participants
+
+    def _cleanup(self) -> None:
+        pass
 
 
 util.init_settings()

@@ -47,7 +47,7 @@ from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.vcard_grid import VCardGrid
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.contact_info")
 
@@ -73,8 +73,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
             title=_("Contact Information"),
             default_width=700,
             default_height=600,
-            add_window_padding=False,
-            header_bar=False,
         )
 
         EventHelper.__init__(self)
@@ -189,7 +187,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._client.disconnect_all_from_obj(self)
         self._disconnect_all()
         self.unregister_events()
-        app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
@@ -420,7 +417,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                     ),
                 ],
                 callback=_on_response,
-                parent=self.window,
+                parent=self,
             )
         return Gdk.EVENT_STOP
 
@@ -488,7 +485,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             confirm_label=_("_Remove"),
             appearance="destructive",
             callback=_on_response,
-            parent=self.window,
+            parent=self,
         )
         return Gdk.EVENT_STOP
 

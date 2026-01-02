@@ -20,7 +20,7 @@ from gajim.common.modules.contacts import ContactSettings
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.contact_popover import ContactPopover
 from gajim.gtk.util.misc import convert_surface_to_texture
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -35,10 +35,12 @@ class TestContactPopover(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
         contact = self._get_contact()
 
-        scale = self.window.get_scale_factor()
+        scale = self.get_scale_factor()
         image = Gtk.Image.new_from_paintable(
             contact.get_avatar(AvatarSize.ACCOUNT_PAGE, scale)
         )
@@ -93,6 +95,9 @@ class TestContactPopover(GajimAppWindow):
         vcard.add_property("email", value="mail@mail.com")
         vcard.add_property("tz", value="Europe/London", value_type="text")
         return vcard
+
+    def _cleanup(self) -> None:
+        pass
 
 
 def get_color(selector: str, *args: Any) -> str:

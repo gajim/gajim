@@ -19,7 +19,7 @@ from gajim.common.i18n import _
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 SOUNDS = {
     "attention_received": _("Attention Message Received"),
@@ -51,6 +51,8 @@ class ManageSounds(GajimAppWindow):
             default_height=400,
             transient_for=transient_for,
             modal=True,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("manage_sounds.ui")

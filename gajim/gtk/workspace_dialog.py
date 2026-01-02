@@ -16,7 +16,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util.styling import make_rgba
 from gajim.gtk.util.styling import rgba_to_float
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 
 class WorkspaceDialog(GajimAppWindow):
@@ -27,6 +27,8 @@ class WorkspaceDialog(GajimAppWindow):
             title=_("Workspace Settings"),
             default_width=500,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._workspace_id = workspace_id

@@ -29,7 +29,7 @@ from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.dropdown import KeyValueItem
 from gajim.gtk.preview.geo import GeoPreviewWidget
 from gajim.gtk.preview.preview import PreviewWidget
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -57,6 +57,8 @@ class TestPreview(GajimAppWindow):
             title=__class__.__name__,
             default_width=600,
             default_height=600,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._box = Gtk.Box(

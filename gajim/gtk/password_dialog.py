@@ -12,7 +12,7 @@ from gajim.common.events import PasswordRequired
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.password_dialog")
 
@@ -24,6 +24,8 @@ class PasswordDialog(GajimAppWindow):
             name="PasswordDialog",
             title=_("Password Required"),
             default_width=400,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         self._ui = get_builder("password_dialog.ui")

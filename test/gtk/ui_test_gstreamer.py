@@ -14,7 +14,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.gstreamer import create_video_elements
-from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.window import GajimAppWindow
 
 from . import util
 
@@ -27,6 +27,8 @@ class TestGstreamer(GajimAppWindow):
             title=__class__.__name__,
             default_width=800,
             default_height=800,
+            add_window_padding=True,
+            header_bar=True,
         )
 
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
@@ -56,6 +58,9 @@ class TestGstreamer(GajimAppWindow):
 
         picture = Gtk.Picture(hexpand=True, vexpand=True, paintable=paintable)
         box.append(picture)
+
+    def _cleanup(self) -> None:
+        pass
 
 
 Gst.init()
