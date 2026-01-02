@@ -35,7 +35,6 @@ if TYPE_CHECKING:
     from gajim.gtk.features import Features
     from gajim.gtk.groupchat_creation import CreateGroupchatWindow
     from gajim.gtk.groupchat_details import GroupchatDetails
-    from gajim.gtk.groupchat_invitation import GroupChatInvitationDialog
     from gajim.gtk.groupchat_join import GroupchatJoin
     from gajim.gtk.history_export import HistoryExport
     from gajim.gtk.history_sync import HistorySyncAssistant
@@ -68,7 +67,6 @@ if TYPE_CHECKING:
         | CreateGroupchatWindow
         | Features
         | GroupchatDetails
-        | GroupChatInvitationDialog
         | GroupchatJoin
         | HistoryExport
         | HistorySyncAssistant
@@ -102,7 +100,6 @@ if TYPE_CHECKING:
         | Literal["CreateGroupchatWindow"]
         | Literal["Features"]
         | Literal["GroupchatDetails"]
-        | Literal["GroupChatInvitationDialog"]
         | Literal["GroupchatJoin"]
         | Literal["HistoryExport"]
         | Literal["HistorySyncAssistant"]
@@ -267,14 +264,6 @@ def get_app_window(
     account: str | None = None,
     jid: str | JID | None = None,
 ) -> GroupchatDetails | None: ...
-
-
-@overload
-def get_app_window(
-    name: Literal["GroupChatInvitationDialog"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> GroupChatInvitationDialog | None: ...
 
 
 @overload
@@ -474,10 +463,6 @@ def open_window(name: Literal["Features"], **kwargs: Any) -> Features: ...
 def open_window(
     name: Literal["GroupchatDetails"], **kwargs: Any
 ) -> GroupchatDetails: ...
-@overload
-def open_window(
-    name: Literal["GroupChatInvitationDialog"], **kwargs: Any
-) -> GroupChatInvitationDialog: ...
 @overload
 def open_window(name: Literal["GroupchatJoin"], **kwargs: Any) -> GroupchatJoin: ...
 @overload

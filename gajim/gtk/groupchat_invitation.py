@@ -10,7 +10,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.events import MucInvitation
-from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.util.muc import get_group_chat_nick
@@ -20,31 +19,6 @@ from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import AccountBadge
-from gajim.gtk.widgets import GajimAppWindow
-
-
-class GroupChatInvitationDialog(GajimAppWindow):
-    def __init__(self, account: str, event: MucInvitation) -> None:
-        GajimAppWindow.__init__(
-            self,
-            name="GroupChatInvitationDialog",
-            title=_("Group Chat Invitation"),
-            default_width=450,
-            default_height=500,
-        )
-
-        self.account = account
-
-        invitation_widget = GroupChatInvitation(account, event)
-        self._connect(invitation_widget, "accepted", self._on_invitation_widget_action)
-        self._connect(invitation_widget, "declined", self._on_invitation_widget_action)
-        self.set_child(invitation_widget)
-
-    def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
-        self.close()
-
-    def _cleanup(self) -> None:
-        pass
 
 
 @Gtk.Template(string=get_ui_string("groupchat_invitation.ui"))
