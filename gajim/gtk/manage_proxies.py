@@ -98,7 +98,6 @@ class ManageProxies(GajimAppWindow):
         self._proxies_treeview.add_controller(controller)
 
     def _cleanup(self) -> None:
-        # Window callbacks for updating proxy comboboxes
         window_pref = get_app_window("Preferences")
         window_account_wizard = get_app_window("AccountWizard")
         if window_pref is not None:

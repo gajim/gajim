@@ -878,7 +878,7 @@ class AudioGroup(GajimPreferencesGroup):
 #         assert window is not None
 #         preview = window.get_video_preview()
 #         if preview is None or not preview.is_active:
-#             # changed signal gets triggered when we fill the combobox
+#             # changed signal gets triggered when we fill the dropdown
 #             return
 #         preview.refresh()
 
