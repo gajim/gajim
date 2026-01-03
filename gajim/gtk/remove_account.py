@@ -23,8 +23,8 @@ from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
 
 log = logging.getLogger("gajim.gtk.remove_account")
@@ -80,7 +80,7 @@ class RemoveAccount(Assistant):
     @overload
     def get_page(self, name: Literal["success"]) -> Success: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     @event_filter(["account"])
@@ -153,9 +153,9 @@ class RemoveAccount(Assistant):
         self._destroyed = True
 
 
-class RemoveChoice(Page):
+class RemoveChoice(AssistantPage):
     def __init__(self, account: str) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Remove Account")
 
         heading = Gtk.Label(

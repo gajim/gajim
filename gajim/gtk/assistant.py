@@ -55,7 +55,7 @@ class Assistant(GajimAppWindow, EventHelper):
 
         EventHelper.__init__(self)
 
-        self._pages: dict[str, Page] = {}
+        self._pages: dict[str, AssistantPage] = {}
         self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
         self._button_visible_func = None
 
@@ -78,13 +78,13 @@ class Assistant(GajimAppWindow, EventHelper):
         self.set_visible(True)
 
     def _update_page_complete(self, *args: Any) -> None:
-        page_widget = cast(Page, self._ui.stack.get_visible_child())
+        page_widget = cast(AssistantPage, self._ui.stack.get_visible_child())
         for button, complete in self._buttons.values():
             if complete:
                 button.set_sensitive(page_widget.complete)
 
     def update_title(self) -> None:
-        page_widget = cast(Page, self._ui.stack.get_visible_child())
+        page_widget = cast(AssistantPage, self._ui.stack.get_visible_child())
         self.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
@@ -136,7 +136,7 @@ class Assistant(GajimAppWindow, EventHelper):
         self._buttons[name] = (button, complete)
         self._ui.action_area.append(button)
 
-    def add_pages(self, pages: dict[str, Page]):
+    def add_pages(self, pages: dict[str, AssistantPage]):
         for name, widget in pages.items():
             self._pages[name] = widget
             self._connect(widget, "update-page-complete", self._update_page_complete)
@@ -151,7 +151,7 @@ class Assistant(GajimAppWindow, EventHelper):
     @overload
     def add_default_page(self, name: Literal["progress"]) -> ProgressPage: ...
 
-    def add_default_page(self, name: str) -> Page:
+    def add_default_page(self, name: str) -> AssistantPage:
         if name == "success":
             page = SuccessPage()
         elif name == "error":
@@ -180,7 +180,7 @@ class Assistant(GajimAppWindow, EventHelper):
         self._hide_buttons()
         self._ui.stack.set_visible_child_full(name, transition)
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     def _on_visible_child_name(self, stack: Gtk.Stack, _param: str) -> None:
@@ -208,7 +208,8 @@ class Assistant(GajimAppWindow, EventHelper):
         self.run_dispose()
 
 
-class Page(Gtk.Box, SignalManager):
+class AssistantPage(Gtk.Box, SignalManager):
+    __gtype_name__ = "AssistantPage"
     __gsignals__ = {
         "update-page-complete": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
@@ -240,11 +241,11 @@ class Page(Gtk.Box, SignalManager):
         self.emit("update-page-complete")
 
 
-class DefaultPage(Page):
+class DefaultPage(AssistantPage):
     def __init__(
         self, icon_name: str | None = None, icon_css_class: str | None = None
     ) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self._heading = Gtk.Label(
             max_width_chars=30,
@@ -294,9 +295,9 @@ class SuccessPage(DefaultPage):
         )
 
 
-class ProgressPage(Page):
+class ProgressPage(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self._label = Gtk.Label(
             wrap=True,

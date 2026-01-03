@@ -32,9 +32,9 @@ from gajim.common.i18n import _
 from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import DefaultPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import container_remove_all
@@ -106,7 +106,7 @@ class AdHocCommands(Assistant):
     @overload
     def get_page(self, name: Literal["executing"]) -> Executing: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     @ensure_not_destroyed
@@ -220,13 +220,13 @@ class AdHocCommands(Assistant):
         self.show_page("commands")
 
 
-class Commands(Page):
+class Commands(AssistantPage):
     __gsignals__ = {
         "execute": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self.set_valign(Gtk.Align.FILL)
         self.complete = True
@@ -287,9 +287,9 @@ class Commands(Page):
         return ["execute"]
 
 
-class Stage(Page):
+class Stage(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self.set_valign(Gtk.Align.FILL)
         self.complete = False
@@ -372,9 +372,9 @@ class Stage(Page):
         return self._last_stage_data.default.value
 
 
-class Completed(Page):
+class Completed(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self.set_valign(Gtk.Align.FILL)
         self.complete = True

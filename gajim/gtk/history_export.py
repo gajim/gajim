@@ -25,8 +25,8 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.util.uri import make_path_from_jid
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
@@ -71,7 +71,7 @@ class HistoryExport(Assistant):
     @overload
     def get_page(self, name: Literal["start"]) -> ExportSettings: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     @staticmethod
@@ -170,9 +170,9 @@ class HistoryExport(Assistant):
         return f"{timestamp} {name}: {text or ''}\n"
 
 
-class ExportSettings(Page):
+class ExportSettings(AssistantPage):
     def __init__(self, account: str | None, jid: JID | None) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self._account = account
         self._jid = jid
 

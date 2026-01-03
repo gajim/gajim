@@ -44,8 +44,8 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.builder import get_builder
@@ -128,7 +128,7 @@ class AccountWizard(Assistant):
     @overload
     def get_page(self, name: Literal["progress"]) -> ProgressPage: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     def get_current_method(self) -> Literal["login"] | Literal["signup"]:
@@ -573,13 +573,13 @@ class AccountWizard(Assistant):
         self._destroyed = True
 
 
-class Login(Page):
+class Login(AssistantPage):
     __gsignals__ = {
         "clicked": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Add Account")
 
         self._ui = get_builder("account_wizard.ui")
@@ -669,9 +669,9 @@ class Login(Page):
         )
 
 
-class Signup(Page):
+class Signup(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.complete: bool = False
         self.title: str = _("Create New Account")
 
@@ -706,7 +706,7 @@ class Signup(Page):
         self.append(self._ui.signup_grid)
 
     def do_unroot(self) -> None:
-        Page.do_unroot(self)
+        AssistantPage.do_unroot(self)
         if self._provider_list_request is not None:
             self._provider_list_request.cancel()
             self._provider_list_request = None
@@ -863,9 +863,9 @@ class Signup(Page):
         return "signup"
 
 
-class AdvancedSettings(Page):
+class AdvancedSettings(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title: str = _("Advanced settings")
         self.complete: bool = False
 
@@ -996,9 +996,9 @@ class AdvancedSettings(Page):
         return window.get_current_method()
 
 
-class SecurityWarning(Page):
+class SecurityWarning(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title: str = _("Security Warning")
         self._cert: Gio.TlsCertificate | None = None
         self._domain: str | None = None
@@ -1063,9 +1063,9 @@ class SecurityWarning(Page):
         return "back"
 
 
-class Form(Page):
+class Form(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.set_valign(Gtk.Align.FILL)
         self.complete: bool = False
         self.title: str = _("Create Account")
@@ -1132,9 +1132,9 @@ class Form(Page):
         return "signup"
 
 
-class Redirect(Page):
+class Redirect(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title: str = _("Redirect")
         self._link: str | None = None
 

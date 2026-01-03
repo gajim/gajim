@@ -26,8 +26,8 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.user_strings import get_subscription_request_msg
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util.window import open_window
@@ -87,7 +87,7 @@ class AddContact(Assistant):
     @overload
     def get_page(self, name: Literal["gateway"]) -> Gateway: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:
@@ -215,9 +215,9 @@ class AddContact(Assistant):
         self.show_page("contact", Gtk.StackTransitionType.SLIDE_LEFT)
 
 
-class Address(Page):
+class Address(AssistantPage):
     def __init__(self, account: str | None, jid: JID | None) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Add Contact")
 
         self._account = account
@@ -350,9 +350,9 @@ class Error(ErrorPage):
         return "back"
 
 
-class Contact(Page):
+class Contact(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Add Contact")
 
         self._result: DiscoInfo | BaseError | None = None
@@ -409,9 +409,9 @@ class Contact(Page):
         }
 
 
-class Gateway(Page):
+class Gateway(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Service Gateway")
 
         self._account: str | None = None
@@ -497,9 +497,9 @@ class Gateway(Page):
         )
 
 
-class GroupChat(Page):
+class GroupChat(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Join Group Chat?")
 
         self._result: DiscoInfo | None = None

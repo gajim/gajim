@@ -27,7 +27,7 @@ from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
-from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dropdown import GajimDropDown
 
@@ -105,7 +105,7 @@ class HistorySyncAssistant(Assistant):
     @overload
     def get_page(self, name: Literal["success"]) -> SuccessPage: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     @staticmethod
@@ -189,9 +189,9 @@ class HistorySyncAssistant(Assistant):
         self.get_page("progress").set_fraction()
 
 
-class SelectTime(Page):
+class SelectTime(AssistantPage):
     def __init__(self, now: datetime, current_start: datetime) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Synchronize Chat History")
 
         self.complete = False
@@ -252,9 +252,9 @@ class SelectTime(Page):
         return "synchronize"
 
 
-class Progress(Page):
+class Progress(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Synchronizing Chat History…")
 
         self._count = 0

@@ -25,8 +25,8 @@ from gajim.common.events import SearchResultReceivedEvent
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.menus import get_component_search_menu
@@ -89,7 +89,7 @@ class ComponentSearch(Assistant):
     @overload
     def get_page(self, name: Literal["error"]) -> Error: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:
@@ -141,9 +141,9 @@ class RequestForm(ProgressPage):
         return ["close"]
 
 
-class SearchForm(Page):
+class SearchForm(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Search")
 
         self.complete = False
@@ -191,9 +191,9 @@ class SearchForm(Page):
         return "search"
 
 
-class Result(Page):
+class Result(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Search Result")
 
         self._jid_col: int | None = None

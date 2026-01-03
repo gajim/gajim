@@ -21,8 +21,8 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dataform import DataFormWidget
@@ -75,7 +75,7 @@ class ServiceRegistration(Assistant):
     @overload
     def get_page(self, name: Literal["progress"]) -> ProgressPage: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     @staticmethod
@@ -150,9 +150,9 @@ class ServiceRegistration(Assistant):
         self.show_page("success")
 
 
-class Form(Page):
+class Form(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.title = _("Register")
         self.complete = False
 

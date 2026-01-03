@@ -22,8 +22,8 @@ from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import ensure_not_destroyed
@@ -70,7 +70,7 @@ class ChangePassword(Assistant):
     @overload
     def get_page(self, name: Literal["success"]) -> Success: ...
 
-    def get_page(self, name: str) -> Page:
+    def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
     def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:
@@ -122,9 +122,9 @@ class ChangePassword(Assistant):
         self._destroyed = True
 
 
-class EnterPassword(Page):
+class EnterPassword(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.complete = False
         self.title = _("Change Password")
 
@@ -207,9 +207,9 @@ class EnterPassword(Page):
         return ["apply"]
 
 
-class NextStage(Page):
+class NextStage(AssistantPage):
     def __init__(self) -> None:
-        Page.__init__(self)
+        AssistantPage.__init__(self)
         self.set_valign(Gtk.Align.FILL)
         self.complete = False
         self.title = _("Change Password")

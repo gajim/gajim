@@ -5,7 +5,7 @@
 from gi.repository import Gtk
 
 from gajim.gtk.assistant import Assistant
-from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import AssistantPage
 
 from . import util
 
@@ -93,9 +93,9 @@ class TestAssistant(Assistant):
             self.set_default_button("back")
 
 
-class Start(Page):
+class Start(AssistantPage):
     def __init__(self):
-        Page.__init__(self)
+        AssistantPage.__init__(self)
 
         self.title = "Start"
         self.complete = False
