@@ -8,10 +8,11 @@ on:
 jobs:
   arm64:
     runs-on: macos-14
+    defaults:
+      run:
+        working-directory: mac/
     steps:
       - uses: actions/checkout@v4
-      - name: Go in mac directory
-        run: cd mac/
       - name: Build Gajim
         run: bash gajim-macos-helper.sh build ci
       - name: Create Gajim dmg
@@ -20,10 +21,11 @@ jobs:
         run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-source/gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/macos/arm64/"
   x86_64:
     runs-on: macos-15-intel
+    defaults:
+      run:
+        working-directory: mac/
     steps:
       - uses: actions/checkout@v4
-      - name: Go in mac directory
-        run: cd mac/
       - name: Build Gajim
         run: bash gajim-macos-helper.sh build ci
       - name: Create Gajim dmg
