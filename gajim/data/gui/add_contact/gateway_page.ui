@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AddContactGatewayPage" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-bottom">12</property>
+            <property name="label" translatable="yes">Service Gateway</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">center</property>
+            <property name="margin-bottom">6</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkImage" id="_gateway_image"/>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_gateway_label">
+                <property name="wrap">1</property>
+                <property name="max-width-chars">50</property>
+                <property name="xalign">0</property>
+                <style>
+                  <class name="title-2"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">center</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkButton" id="_register_button">
+                <property name="label" translatable="yes">Register</property>
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_commands_button">
+                <property name="label" translatable="yes">Show Commands</property>
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

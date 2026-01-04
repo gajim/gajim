@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AddContactAddressPage" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-bottom">12</property>
+            <property name="label" translatable="yes">Add Contact</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="_account_box">
+            <property name="visible">0</property>
+            <property name="halign">center</property>
+            <property name="margin-bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Please choose an account</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GajimDropDown" id="_dropdown" />
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Please enter an XMPP address</property>
+            <style>
+              <class name="dimmed"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="_address_entry">
+            <property name="width-request">250</property>
+            <property name="focusable">1</property>
+            <property name="activates-default">1</property>
+            <property name="placeholder-text" translatable="yes">XMPP Address…</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

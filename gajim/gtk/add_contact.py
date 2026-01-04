@@ -7,9 +7,11 @@ from __future__ import annotations
 from typing import Any
 from typing import Literal
 from typing import overload
+from typing import TypedDict
 
 import logging
 
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp import Namespace
@@ -21,6 +23,7 @@ from nbxmpp.structs import DiscoInfo
 from gajim.common import app
 from gajim.common import types
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.user_strings import get_subscription_request_msg
@@ -28,11 +31,18 @@ from gajim.common.util.user_strings import get_subscription_request_msg
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.builder import get_builder
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.add_contact")
+
+
+class SubscriptionData(TypedDict):
+    message: str
+    groups: list[str]
+    auto_auth: bool
 
 
 class AddContact(Assistant):
@@ -47,7 +57,7 @@ class AddContact(Assistant):
         self.jid = jid
         self._nick = nick
 
-        self._result: DiscoInfo | StanzaError | None = None
+        self._result: DiscoInfo | BaseError | StanzaError | None = None
 
         self.add_button("next", _("Next"), complete=True, css_class="suggested-action")
         self.add_button("back", _("Back"))
@@ -56,11 +66,11 @@ class AddContact(Assistant):
 
         self.add_pages(
             {
-                "address": Address(account, jid),
-                "error": Error(),
-                "contact": Contact(),
-                "groupchat": GroupChat(),
-                "gateway": Gateway(),
+                "address": AddContactAddressPage(account, jid),
+                "error": AddContactErrorPage(),
+                "contact": AddContactContactPage(),
+                "groupchat": AddContactGroupChatPage(),
+                "gateway": AddContactGatewayPage(),
             }
         )
 
@@ -69,23 +79,22 @@ class AddContact(Assistant):
         progress.set_text(_("Trying to gather information on this address…"))
 
         self._connect(self, "button-clicked", self._on_button_clicked)
-
-        self.show_all()
-
-    @overload
-    def get_page(self, name: Literal["address"]) -> Address: ...
+        self.show_first_page()
 
     @overload
-    def get_page(self, name: Literal["error"]) -> Error: ...
+    def get_page(self, name: Literal["address"]) -> AddContactAddressPage: ...
 
     @overload
-    def get_page(self, name: Literal["contact"]) -> Contact: ...
+    def get_page(self, name: Literal["error"]) -> AddContactErrorPage: ...
 
     @overload
-    def get_page(self, name: Literal["groupchat"]) -> GroupChat: ...
+    def get_page(self, name: Literal["contact"]) -> AddContactContactPage: ...
 
     @overload
-    def get_page(self, name: Literal["gateway"]) -> Gateway: ...
+    def get_page(self, name: Literal["groupchat"]) -> AddContactGroupChatPage: ...
+
+    @overload
+    def get_page(self, name: Literal["gateway"]) -> AddContactGatewayPage: ...
 
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
@@ -105,6 +114,8 @@ class AddContact(Assistant):
             return
 
         if button_name == "add":
+            assert isinstance(self._result, DiscoInfo)
+            assert self._result.jid is not None
             client = app.get_client(account)
             if page == "contact":
                 contact_page = self.get_page("contact")
@@ -140,11 +151,11 @@ class AddContact(Assistant):
 
     @as_task
     def _disco_info(self, account: str, address: str) -> Any:
-        _task = yield  # noqa: F841
+        _task = yield  # noqa: F841, # pyright: ignore
 
         client = app.get_client(account)
 
-        result = yield client.get_module("Discovery").disco_info(address, timeout=10)
+        result = yield client.get_module("Discovery").disco_info(address, timeout=10)  # pyright: ignore
         if is_error(result):
             assert isinstance(result, BaseError)
             self._process_error(account, result)
@@ -154,7 +165,7 @@ class AddContact(Assistant):
         assert isinstance(result, DiscoInfo)
         self._process_info(account, result)
 
-    def _process_error(self, account: str, result: BaseError) -> None:
+    def _process_error(self, account: str, result: BaseError | StanzaError) -> None:
         log.debug("Error received: %s", result)
         self._result = result
 
@@ -162,10 +173,7 @@ class AddContact(Assistant):
             "service-unavailable",  # Prosody
             "subscription-required",  # ejabberd
         ]
-        if (
-            isinstance(self._result, StanzaError)
-            and result.condition in contact_conditions
-        ):
+        if isinstance(result, StanzaError) and result.condition in contact_conditions:
             # It seems to be a contact
             address_page = self.get_page("contact")
             address_page.prepare(account, result)
@@ -180,8 +188,15 @@ class AddContact(Assistant):
         log.debug("Info received: %s", result)
         self._result = result
 
+        if result.is_gateway:
+            gateway_page = self.get_page("gateway")
+            gateway_page.prepare(account, result)
+            self.show_page("gateway", Gtk.StackTransitionType.SLIDE_LEFT)
+            return
+
         if result.is_muc:
             for identity in result.identities:
+                assert result.jid is not None
                 if identity.type == "text" and result.jid.is_domain:
                     # It's a group chat component advertising
                     # category 'conference'
@@ -204,18 +219,19 @@ class AddContact(Assistant):
             self.show_page("groupchat", Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
-        if result.is_gateway:
-            gateway_page = self.get_page("gateway")
-            gateway_page.prepare(account, result)
-            self.show_page("gateway", Gtk.StackTransitionType.SLIDE_LEFT)
-            return
-
         contact_page = self.get_page("contact")
         contact_page.prepare(account, result)
         self.show_page("contact", Gtk.StackTransitionType.SLIDE_LEFT)
 
 
-class Address(AssistantPage):
+@Gtk.Template(string=get_ui_string("add_contact/address_page.ui"))
+class AddContactAddressPage(AssistantPage):
+    __gtype_name__ = "AddContactAddressPage"
+
+    _account_box: Gtk.Box = Gtk.Template.Child()
+    _dropdown: GajimDropDown[str] = Gtk.Template.Child()
+    _address_entry: Gtk.Entry = Gtk.Template.Child()
+
     def __init__(self, account: str | None, jid: JID | None) -> None:
         AssistantPage.__init__(self)
         self.title = _("Add Contact")
@@ -223,32 +239,19 @@ class Address(AssistantPage):
         self._account = account
         self._jid = jid
 
-        self._ui = get_builder("add_contact.ui")
-        self.append(self._ui.address_box)
-
-        self._connect(self._ui.account_combo, "changed", self._on_account_changed)
-        self._connect(self._ui.address_entry, "changed", self._set_complete)
+        self._connect(self._dropdown, "notify::selected", self._on_account_selected)
+        self._connect(self._address_entry, "changed", self._set_complete)
 
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
+        self._dropdown.set_data(dict(accounts))
 
-        liststore = Gtk.ListStore(str, str)
-        self._ui.account_combo.set_model(liststore)
-        for acc in accounts:
-            liststore.append(acc)
+        self._account_box.set_visible(len(accounts) > 1)
 
-        if len(accounts) > 1:
-            self._ui.account_box.set_visible(True)
-
-            if account is not None:
-                self._ui.account_combo.set_active_id(account)
-            else:
-                self._ui.account_combo.set_active(0)
-        else:
-            # Set to first (and only) item; sets self._account automatically
-            self._ui.account_combo.set_active(0)
+        if account is not None:
+            self._dropdown.select_key(account)
 
         if jid is not None:
-            self._ui.address_entry.set_text(str(jid))
+            self._address_entry.set_text(str(jid))
 
         self._set_complete()
 
@@ -260,19 +263,21 @@ class Address(AssistantPage):
 
     def get_account_and_jid(self) -> tuple[str, str]:
         assert self._account is not None
-        return self._account, self._ui.address_entry.get_text()
+        return self._account, self._address_entry.get_text()
 
     def focus(self) -> None:
-        self._ui.address_entry.grab_focus()
+        self._address_entry.grab_focus()
 
-    def _on_account_changed(self, combobox: Gtk.ComboBox) -> None:
-        account = combobox.get_active_id()
+    def _on_account_selected(
+        self, dropdown: GajimDropDown[str], _param: GObject.ParamSpec
+    ) -> None:
+        account = dropdown.get_selected_key()
         self._account = account
         self._set_complete()
 
     def _show_icon(self, show: bool) -> None:
         icon = "lucide-circle-alert-symbolic" if show else None
-        self._ui.address_entry.set_icon_from_icon_name(
+        self._address_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
 
@@ -282,11 +287,11 @@ class Address(AssistantPage):
             self.update_page_complete()
             return
 
-        address = self._ui.address_entry.get_text()
+        address = self._address_entry.get_text()
         is_self = bool(address == app.get_jid_from_account(self._account))
         if is_self:
             self._show_icon(True)
-            self._ui.address_entry.set_icon_tooltip_text(
+            self._address_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY,
                 _("You cannot add yourself to your contact list."),
             )
@@ -298,7 +303,7 @@ class Address(AssistantPage):
         for contact in client.get_module("Roster").iter_contacts():
             if address == str(contact.jid):
                 self._show_icon(True)
-                self._ui.address_entry.set_icon_tooltip_text(
+                self._address_entry.set_icon_tooltip_text(
                     Gtk.EntryIconPosition.SECONDARY,
                     _("%s is already in your contact list") % address,
                 )
@@ -320,14 +325,14 @@ class Address(AssistantPage):
                 raise ValueError
         except ValueError:
             self._show_icon(True)
-            self._ui.address_entry.set_icon_tooltip_text(
+            self._address_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY, _("Invalid Address")
             )
             return False
 
         if jid.localpart is None:
             self._show_icon(True)
-            self._ui.address_entry.set_icon_tooltip_text(
+            self._address_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY,
                 _("'@' is missing in address. Are you sure this is correct?"),
             )
@@ -337,7 +342,7 @@ class Address(AssistantPage):
         return True
 
 
-class Error(ErrorPage):
+class AddContactErrorPage(ErrorPage):
     def __init__(self) -> None:
         ErrorPage.__init__(self)
         self.set_title(_("Add Contact"))
@@ -350,7 +355,16 @@ class Error(ErrorPage):
         return "back"
 
 
-class Contact(AssistantPage):
+@Gtk.Template(string=get_ui_string("add_contact/contact_page.ui"))
+class AddContactContactPage(AssistantPage):
+    __gtype_name__ = "AddContactContactPage"
+
+    _contact_grid: Gtk.Grid = Gtk.Template.Child()
+    _status_switch: Gtk.Switch = Gtk.Template.Child()
+    _group_combo: Gtk.ComboBoxText = Gtk.Template.Child()
+    _message_entry: Gtk.Entry = Gtk.Template.Child()
+    _contact_info_button: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title = _("Add Contact")
@@ -359,15 +373,12 @@ class Contact(AssistantPage):
         self._account: str | None = None
         self._contact: types.BareContact | None = None
 
-        self._ui = get_builder("add_contact.ui")
-        self.append(self._ui.contact_grid)
-
-        entry = self._ui.group_combo.get_child()
+        entry = self._group_combo.get_child()
         assert isinstance(entry, Gtk.Entry)
         entry.set_activates_default(True)
         entry.set_placeholder_text(_("Choose a group…"))
 
-        self._connect(self._ui.contact_info_button, "clicked", self._on_info_clicked)
+        self._connect(self._contact_info_button, "clicked", self._on_info_clicked)
 
     def get_visible_buttons(self) -> list[str]:
         return ["back", "add"]
@@ -380,36 +391,47 @@ class Contact(AssistantPage):
         self._account = account
 
         client = app.get_client(account)
-        self._contact = client.get_module("Contacts").get_contact(result.jid)
+        assert result.jid is not None
+        contact = client.get_module("Contacts").get_contact(result.jid)
+        assert isinstance(contact, BareContact)
+        self._contact = contact
 
         self._update_groups(account)
-        self._ui.message_entry.set_text(get_subscription_request_msg(account))
-        self._ui.contact_grid.set_sensitive(True)
+        self._message_entry.set_text(get_subscription_request_msg(account))
+        self._contact_grid.set_sensitive(True)
 
     def _update_groups(self, account: str) -> None:
-        model = self._ui.group_combo.get_model()
+        model = self._group_combo.get_model()
         assert isinstance(model, Gtk.ListStore)
         model.clear()
         client = app.get_client(account)
         for group in client.get_module("Roster").get_groups():
-            self._ui.group_combo.append_text(group)
+            self._group_combo.append_text(group)
 
     def _on_info_clicked(self, _button: Gtk.Button) -> None:
         open_window("ContactInfo", account=self._account, contact=self._contact)
 
-    def get_subscription_data(self) -> dict[str, str | list[str] | bool]:
-        entry = self._ui.group_combo.get_child()
+    def get_subscription_data(self) -> SubscriptionData:
+        entry = self._group_combo.get_child()
         assert isinstance(entry, Gtk.Entry)
         group = entry.get_text()
         groups = [group] if group else []
         return {
-            "message": self._ui.message_entry.get_text(),
+            "message": self._message_entry.get_text(),
             "groups": groups,
-            "auto_auth": self._ui.status_switch.get_active(),
+            "auto_auth": self._status_switch.get_active(),
         }
 
 
-class Gateway(AssistantPage):
+@Gtk.Template(string=get_ui_string("add_contact/gateway_page.ui"))
+class AddContactGatewayPage(AssistantPage):
+    __gtype_name__ = "AddContactGatewayPage"
+
+    _gateway_image: Gtk.Image = Gtk.Template.Child()
+    _gateway_label: Gtk.Label = Gtk.Template.Child()
+    _register_button: Gtk.Button = Gtk.Template.Child()
+    _commands_button: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title = _("Service Gateway")
@@ -417,11 +439,8 @@ class Gateway(AssistantPage):
         self._account: str | None = None
         self._result: DiscoInfo | None = None
 
-        self._ui = get_builder("add_contact.ui")
-        self.append(self._ui.gateway_box)
-
-        self._connect(self._ui.register_button, "clicked", self._on_register_clicked)
-        self._connect(self._ui.commands_button, "clicked", self._on_command_clicked)
+        self._connect(self._register_button, "clicked", self._on_register_clicked)
+        self._connect(self._commands_button, "clicked", self._on_command_clicked)
 
     def get_visible_buttons(self) -> list[str]:
         return ["back", "add"]
@@ -439,12 +458,12 @@ class Gateway(AssistantPage):
                 icon_name = "gajim-agent-sms"
             if result.gateway_type == "irc":
                 icon_name = "gajim-agent-irc"
-            self._ui.gateway_image.set_from_icon_name(icon_name)
+            self._gateway_image.set_from_icon_name(icon_name)
             gateway_name = result.gateway_name or str(self._result.jid)
             if not result.gateway_type:
-                self._ui.gateway_label.set_text(gateway_name)
+                self._gateway_label.set_text(gateway_name)
             else:
-                self._ui.gateway_label.set_text(
+                self._gateway_label.set_text(
                     f"{gateway_name} ({result.gateway_type.upper()})"
                 )
         else:
@@ -459,33 +478,34 @@ class Gateway(AssistantPage):
                     icon_name = "gajim-agent-irc"
                     identity_name = identity.name or str(self._result.jid)
                     identity_type = identity.type
-            self._ui.gateway_image.set_from_icon_name(icon_name)
+            self._gateway_image.set_from_icon_name(icon_name)
             if not identity_type:
-                self._ui.gateway_label.set_text(identity_name)
+                self._gateway_label.set_text(identity_name)
             else:
-                self._ui.gateway_label.set_text(
+                self._gateway_label.set_text(
                     f"{identity_name} ({identity_type.upper()})"
                 )
 
         if result.supports(Namespace.REGISTER):
-            self._ui.register_button.set_sensitive(True)
-            self._ui.register_button.set_tooltip_text("")
+            self._register_button.set_sensitive(True)
+            self._register_button.set_tooltip_text("")
         else:
-            self._ui.register_button.set_sensitive(False)
-            self._ui.register_button.set_tooltip_text(
+            self._register_button.set_sensitive(False)
+            self._register_button.set_tooltip_text(
                 _("This gateway does not support direct registering.")
             )
 
         if result.supports(Namespace.COMMANDS):
-            self._ui.commands_button.set_sensitive(True)
-            self._ui.commands_button.set_tooltip_text("")
+            self._commands_button.set_sensitive(True)
+            self._commands_button.set_tooltip_text("")
         else:
-            self._ui.commands_button.set_sensitive(False)
-            self._ui.commands_button.set_tooltip_text(
+            self._commands_button.set_sensitive(False)
+            self._commands_button.set_tooltip_text(
                 _("This gateway does not support Ad-Hoc Commands.")
             )
 
     def _on_register_clicked(self, _button: Gtk.Button) -> None:
+        assert self._result is not None
         open_window(
             "ServiceRegistration", account=self._account, address=self._result.jid
         )
@@ -497,7 +517,7 @@ class Gateway(AssistantPage):
         )
 
 
-class GroupChat(AssistantPage):
+class AddContactGroupChatPage(AssistantPage):
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title = _("Join Group Chat?")
