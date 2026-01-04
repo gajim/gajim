@@ -75,8 +75,6 @@ class ComponentSearch(Assistant):
 
         self._client.get_module("Search").request_search_fields(self._jid)
 
-        self.show_all()
-
     @overload
     def get_page(self, name: Literal["prepare"]) -> RequestForm: ...
 

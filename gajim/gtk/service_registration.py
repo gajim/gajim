@@ -59,8 +59,6 @@ class ServiceRegistration(Assistant):
 
         self._connect(self, "button-clicked", self._on_button_clicked)
 
-        self.show_all()
-
         self._request_form()
 
     @overload

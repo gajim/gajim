@@ -39,7 +39,7 @@ class TestAssistant(Assistant):
         self.connect("button-clicked", self._on_button_clicked)
         self.connect("page-changed", self._on_page_changed)
 
-        self.show_all()
+        self.show_first_page()
 
     @staticmethod
     def _visible_func(_assistant: Assistant, page_name: str) -> list[str]:

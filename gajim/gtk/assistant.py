@@ -72,10 +72,9 @@ class Assistant(GajimAppWindow, EventHelper):
             self._ui.stack, "notify::visible-child-name", self._on_visible_child_name
         )
 
-    def show_all(self) -> None:
+    def show_first_page(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit("page-changed", page_name)
-        self.set_visible(True)
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(AssistantPage, self._ui.stack.get_visible_child())

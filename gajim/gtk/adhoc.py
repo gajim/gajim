@@ -83,7 +83,6 @@ class AdHocCommands(Assistant):
         self._client.get_module("AdHocCommands").request_command_list(
             self.jid, callback=self._received_command_list
         )
-        self.show_all()
 
     @overload
     def get_page(self, name: Literal["request"]) -> RequestCommandList: ...

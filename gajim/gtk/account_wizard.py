@@ -100,6 +100,7 @@ class AccountWizard(Assistant):
         self._connect(self, "page-changed", self._on_page_changed)
 
         self.update_proxy_list()
+        self.show_first_page()
 
     @overload
     def get_page(self, name: Literal["login"]) -> Login: ...

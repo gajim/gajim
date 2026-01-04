@@ -91,8 +91,6 @@ class HistorySyncAssistant(Assistant):
             success_page.set_text(_("Gajim is fully synchronized with the archive."))
             self.show_page("success")
 
-        self.show_all()
-
     def get_active_query_id(self) -> str | None:
         return self._query_id
 
