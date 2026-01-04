@@ -46,9 +46,9 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
 
         self._default_dropdown.set_data(
             {
-                "always": _("All"),
+                "always": _("All Messages"),
                 "roster": _("Messages from Contacts"),
-                "never": _("None"),
+                "never": _("No Messages"),
             }
         )
 

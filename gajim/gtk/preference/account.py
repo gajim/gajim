@@ -629,7 +629,7 @@ class AccountArchivingPreferencesGroup(GajimPreferencesGroup):
             description=_(
                 "Configure which messages will be archived on the server. "
                 "Not archiving messages on the server may prevent them from "
-                "syncing across your devices."
+                "synchronizing between your devices."
             ),
             title=_("Preferences"),
         )
