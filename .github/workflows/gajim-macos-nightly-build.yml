@@ -11,9 +11,9 @@ jobs:
       matrix:
         include:
           - os: macos-14
-            dir: arm64
+            arch: arm64
           - os: macos-15-intel
-            dir: x86_64
+            arch: x86_64
 
     runs-on: ${{ matrix.os }}
     defaults:
@@ -25,5 +25,8 @@ jobs:
         run: bash gajim-macos-helper.sh build ci
       - name: Create Gajim dmg
         run: bash gajim-macos-helper.sh create-dmg ci
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Upload dmg file via FTPS
-        run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-source/gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/macos/${{ matrix.dir }}/"
+        run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-source/gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/macos/Gajim-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.dmg"
