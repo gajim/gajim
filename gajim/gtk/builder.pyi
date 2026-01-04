@@ -96,23 +96,6 @@ class ActivitySubscriptionBuilder(Builder):
     unsubscribed_box: Gtk.Box
     unsubscribed_remove_button: Gtk.Button
 
-class AddContactBuilder(Builder):
-    address_box: Gtk.Box
-    account_box: Gtk.Box
-    account_combo: Gtk.ComboBox
-    cellrenderertext3: Gtk.CellRendererText
-    address_entry: Gtk.Entry
-    contact_grid: Gtk.Grid
-    status_switch: Gtk.Switch
-    group_combo: Gtk.ComboBoxText
-    message_entry: Gtk.Entry
-    contact_info_button: Gtk.Button
-    gateway_box: Gtk.Box
-    gateway_image: Gtk.Image
-    gateway_label: Gtk.Label
-    register_button: Gtk.Button
-    commands_button: Gtk.Button
-
 class AdvancedConfigurationBuilder(Builder):
     box: Gtk.Box
     search_entry: Gtk.SearchEntry
@@ -452,21 +435,6 @@ class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
 
-class ManageProxiesBuilder(Builder):
-    box: Gtk.Box
-    proxies_treeview: Gtk.TreeView
-    treeview_selection1: Gtk.TreeSelection
-    add_proxy_button: Gtk.Button
-    remove_proxy_button: Gtk.Button
-    settings_grid: Gtk.Grid
-    proxypass_entry: Gtk.Entry
-    proxyuser_entry: Gtk.Entry
-    useauth_checkbutton: Gtk.CheckButton
-    proxyport_entry: Gtk.Entry
-    proxyhost_entry: Gtk.Entry
-    proxytype_combobox: Gtk.ComboBox
-    proxyname_entry: Gtk.Entry
-
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
@@ -757,10 +725,6 @@ def get_builder(
 ) -> ActivitySubscriptionBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["add_contact.ui"], instance: Any = None, widgets: list[str] = ...
-) -> AddContactBuilder: ...  # noqa
-@overload
-def get_builder(
     file_name: Literal["advanced_configuration.ui"],
     instance: Any = None,
     widgets: list[str] = ...,
@@ -899,12 +863,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> HistoryExportBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["manage_proxies.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ManageProxiesBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["manage_sounds.ui"],
