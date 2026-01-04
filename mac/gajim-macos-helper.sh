@@ -245,8 +245,8 @@ function usage()
 		start			Start Gajim
 		clean			Delete omemo-dr, nbxmpp and Gajim virtual environments
 
-		build ci [version]	Build omemo-dr, nbxmpp and Gajim system side in CI (optionnal: with a specific version of Gajim)
-		create-dmg ci [version]	Create Gajim dmg installer system side in CI (optionnal: with a specific version of Gajim)
+		build ci [version]	Build omemo-dr, nbxmpp and Gajim system side in CI (optional: with a specific version of Gajim)
+		create-dmg ci [version]	Create Gajim dmg installer system side in CI (optional: with a specific version of Gajim)
 	EOS
 }
 
