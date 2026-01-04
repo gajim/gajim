@@ -50,7 +50,7 @@ DEFAULT_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
 DEFAULT_XDG_DATA_DIRS="$XDG_DATA_DIRS"
 if [ "$(uname -m)" == "x86_64" ]
 then
-	export PATH="/usr/local/bin:$PATH"
+	export PATH="/usr/local/bin:/Library/Frameworks/Python.framework/Versions/${python_version}/bin:$PATH"
 	export XDG_DATA_DIRS="/usr/local/share:$XDG_DATA_DIRS"
 	export DYLD_LIBRARY_PATH="/usr/local/lib:$DYLD_LIBRARY_PATH"
 elif [ "$(uname -m)" == "arm64" ]
