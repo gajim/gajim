@@ -560,7 +560,7 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             action_name="win.input-paste-as-quote",
         ),
         GajimShortcut(
-            label=_("Past as Code Block"),
+            label=_("Paste as Code Block"),
             category="messages",
             accelerators=None,
             action_name="win.input-paste-as-code-block",
