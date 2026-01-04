@@ -597,7 +597,7 @@ class AccountBlockedContactsGroup(GajimPreferencesGroup):
 class AccountArchivingGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
-            self, key="account-archiving", account=account, title=_("Archiving")
+            self, key="account-archiving", account=account, title=_("Archive")
         )
 
         settings = [
@@ -626,6 +626,11 @@ class AccountArchivingPreferencesGroup(GajimPreferencesGroup):
             self,
             key="account-archiving-preferences",
             account=account,
+            description=_(
+                "Configure which messages will be archived on the server. "
+                "Not archiving messages on the server may prevent them from "
+                "synchronizing between your devices."
+            ),
             title=_("Preferences"),
         )
 
