@@ -39,7 +39,6 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import ensure_not_destroyed
-from gajim.gtk.widgets import MultiLineLabel
 
 log = logging.getLogger("gajim.gtk.adhoc")
 
@@ -395,16 +394,8 @@ class Completed(AssistantPage):
         self._icon_text.append(self._label)
         self.append(self._icon_text)
 
-        self._notes = Gtk.Grid(row_spacing=6, column_spacing=12)
-        self._notes.insert_column(0)
-        self._notes.insert_column(1)
-        self._notes.set_vexpand(False)
-        self._notes.set_hexpand(True)
-        notes_box = Gtk.Box()
-        notes_box.set_halign(Gtk.Align.CENTER)
-        notes_box.set_vexpand(False)
-        notes_box.append(self._notes)
-        self.append(notes_box)
+        self._notes = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.append(self._notes)
 
     def process_stage(self, stage_data: AdHocCommand) -> None:
         self._reset_severity()
@@ -449,18 +440,23 @@ class Completed(AssistantPage):
         if notes is None:
             return
 
-        for i, note in enumerate(notes):
+        for note in notes:
+            box = Gtk.Box(margin_start=24, spacing=24)
             if len(notes) > 1:
-                icon = SeverityIcon(note.type)
-                icon.set_visible(True)
-                self._notes.attach(icon, 0, i, 1, 1)
+                box.append(SeverityIcon(note.type))
+            else:
+                box.set_halign(Gtk.Align.CENTER)
 
-            label = MultiLineLabel(label=process_non_spacing_marks(note.text))
-            label.set_justify(Gtk.Justification.CENTER)
-            label.set_vexpand(False)
-            label.set_visible(True)
-            self._notes.attach(label, 1, i, 1, 1)
+            label = Gtk.Label(
+                label=process_non_spacing_marks(note.text),
+                natural_wrap_mode=Gtk.NaturalWrapMode.WORD,
+                selectable=True,
+                wrap=True,
+                wrap_mode=Pango.WrapMode.WORD_CHAR,
+            )
+            box.append(label)
 
+            self._notes.append(box)
             self._bump_severity(note.type)
 
     def _show_icon(self, show: bool):
