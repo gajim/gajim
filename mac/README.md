@@ -34,6 +34,12 @@ The "CI mode" install all dependencies system side (without any virtual environm
 ./gajim-macos-helper.sh build ci
 ```
 
+You can also build a specific version of Gajim, `omemo-dr` and `nbxmpp` will installed via `pip` instead of git source:
+
+```
+./gajim-macos-helper.sh build ci 2.4.1
+```
+
 ### Start the Gajim version you just built
 
 To start built version, run:
@@ -55,3 +61,9 @@ To create a `.dmg` file, run:
 ```
 
 > Note: This command use PyInstaller to create a `gajim-<version>.dmg` file.
+
+You can also build a specific version of Gajim (mostly used for Gajim's CI):
+
+```
+./gajim-macos-helper.sh create-dmg ci 2.4.1
+```
