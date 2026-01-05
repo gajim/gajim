@@ -25,9 +25,9 @@ from gajim.common.events import SearchResultReceivedEvent
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import ProgressPage
+from gajim.gtk.assistant import AssistantProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.menus import get_component_search_menu
 from gajim.gtk.util.misc import ensure_not_destroyed
@@ -129,9 +129,9 @@ class ComponentSearch(Assistant):
         self._destroyed = True
 
 
-class RequestForm(ProgressPage):
+class RequestForm(AssistantProgressPage):
     def __init__(self):
-        ProgressPage.__init__(self)
+        AssistantProgressPage.__init__(self)
         self.set_title(_("Request Search Form"))
         self.set_text(_("Requesting search form from server"))
 
@@ -317,9 +317,9 @@ class Result(AssistantPage):
         return "close"
 
 
-class Error(ErrorPage):
+class Error(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
         self.set_title(_("Error"))
         self.set_heading(_("An error occurred"))
 

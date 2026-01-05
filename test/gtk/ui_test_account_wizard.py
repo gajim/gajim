@@ -11,7 +11,7 @@ from nbxmpp.client import Client as NBXMPPClient
 from gajim.common import app
 
 from gajim.gtk.account_wizard import AccountWizard
-from gajim.gtk.account_wizard import Success
+from gajim.gtk.account_wizard import WizardSuccessPage
 
 from . import util
 
@@ -28,7 +28,7 @@ def _on_login_successful(
     self._disconnect()  # type: ignore
 
 
-def _save_config(self: Success) -> None:
+def _save_config(self: WizardSuccessPage) -> None:
     assert self._account is not None  # type: ignore
     app.settings.set_account_setting(self._account, "account_color", self._color)  # type: ignore
     if self._label:  # type: ignore

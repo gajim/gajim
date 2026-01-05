@@ -142,21 +142,21 @@ class Assistant(GajimAppWindow, EventHelper):
             self._ui.stack.add_named(widget, name)
 
     @overload
-    def add_default_page(self, name: Literal["success"]) -> SuccessPage: ...
+    def add_default_page(self, name: Literal["success"]) -> AssistantSuccessPage: ...
 
     @overload
-    def add_default_page(self, name: Literal["error"]) -> ErrorPage: ...
+    def add_default_page(self, name: Literal["error"]) -> AssistantErrorPage: ...
 
     @overload
-    def add_default_page(self, name: Literal["progress"]) -> ProgressPage: ...
+    def add_default_page(self, name: Literal["progress"]) -> AssistantProgressPage: ...
 
     def add_default_page(self, name: str) -> AssistantPage:
         if name == "success":
-            page = SuccessPage()
+            page = AssistantSuccessPage()
         elif name == "error":
-            page = ErrorPage()
+            page = AssistantErrorPage()
         elif name == "progress":
-            page = ProgressPage()
+            page = AssistantProgressPage()
         else:
             raise ValueError("Unknown page: %s" % name)
 
@@ -241,6 +241,8 @@ class AssistantPage(Gtk.Box, SignalManager):
 
 
 class DefaultPage(AssistantPage):
+    __gtype_name__ = "AssistantDefaultPage"
+
     def __init__(
         self, icon_name: str | None = None, icon_css_class: str | None = None
     ) -> None:
@@ -280,21 +282,27 @@ class DefaultPage(AssistantPage):
         self.title = title
 
 
-class ErrorPage(DefaultPage):
+class AssistantErrorPage(DefaultPage):
+    __gtype_name__ = "AssistantErrorPage"
+
     def __init__(self) -> None:
         DefaultPage.__init__(
             self, icon_name="lucide-circle-x-symbolic", icon_css_class="error"
         )
 
 
-class SuccessPage(DefaultPage):
+class AssistantSuccessPage(DefaultPage):
+    __gtype_name__ = "AssistantSuccessPage"
+
     def __init__(self) -> None:
         DefaultPage.__init__(
             self, icon_name="lucide-check-symbolic", icon_css_class="success"
         )
 
 
-class ProgressPage(AssistantPage):
+class AssistantProgressPage(AssistantPage):
+    __gtype_name__ = "AssistantProgressPage"
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
 

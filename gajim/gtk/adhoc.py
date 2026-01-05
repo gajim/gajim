@@ -32,10 +32,10 @@ from gajim.common.i18n import _
 from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
+from gajim.gtk.assistant import AssistantProgressPage
 from gajim.gtk.assistant import DefaultPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import ensure_not_destroyed
@@ -478,9 +478,9 @@ class Completed(AssistantPage):
         return ["commands"]
 
 
-class Error(ErrorPage):
+class Error(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
 
         self._show_commands_button = False
         self.set_heading(_("An error occurred"))
@@ -500,16 +500,16 @@ class End(DefaultPage):
         self.title = _("Completed")
 
 
-class Executing(ProgressPage):
+class Executing(AssistantProgressPage):
     def __init__(self) -> None:
-        ProgressPage.__init__(self)
+        AssistantProgressPage.__init__(self)
         self.set_title(_("Executing…"))
         self.set_text(_("Executing…"))
 
 
-class RequestCommandList(ProgressPage):
+class RequestCommandList(AssistantProgressPage):
     def __init__(self) -> None:
-        ProgressPage.__init__(self)
+        AssistantProgressPage.__init__(self)
         self.set_title(_("Requesting Command List"))
         self.set_text(_("Requesting Command List"))
 

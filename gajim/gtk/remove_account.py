@@ -23,9 +23,9 @@ from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.assistant import AssistantSuccessPage
 
 log = logging.getLogger("gajim.gtk.remove_account")
 
@@ -213,9 +213,9 @@ class RemoveChoice(AssistantPage):
         return ["remove"]
 
 
-class Error(ErrorPage):
+class Error(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
         self.set_title(_("Account Removal Failed"))
         self.set_heading(_("Account Removal Failed"))
 
@@ -223,9 +223,9 @@ class Error(ErrorPage):
         return ["back"]
 
 
-class Success(SuccessPage):
+class Success(AssistantSuccessPage):
     def __init__(self) -> None:
-        SuccessPage.__init__(self)
+        AssistantSuccessPage.__init__(self)
         self.set_title(_("Account Removed"))
         self.set_heading(_("Account Removed"))
         self.set_text(_("Your account has has been removed successfully."))

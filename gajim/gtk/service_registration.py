@@ -21,10 +21,10 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import ProgressPage
-from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.assistant import AssistantProgressPage
+from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.dataform import DataFormWidget
 
 log = logging.getLogger("gajim.gtk.service_registration")
@@ -65,13 +65,13 @@ class ServiceRegistration(Assistant):
     def get_page(self, name: Literal["form"]) -> Form: ...
 
     @overload
-    def get_page(self, name: Literal["success"]) -> SuccessPage: ...
+    def get_page(self, name: Literal["success"]) -> AssistantSuccessPage: ...
 
     @overload
-    def get_page(self, name: Literal["error"]) -> ErrorPage: ...
+    def get_page(self, name: Literal["error"]) -> AssistantErrorPage: ...
 
     @overload
-    def get_page(self, name: Literal["progress"]) -> ProgressPage: ...
+    def get_page(self, name: Literal["progress"]) -> AssistantProgressPage: ...
 
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]

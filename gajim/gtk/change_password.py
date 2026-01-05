@@ -22,9 +22,9 @@ from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util.misc import ensure_not_destroyed
 
@@ -237,9 +237,9 @@ class NextStage(AssistantPage):
         return ["apply"]
 
 
-class Error(ErrorPage):
+class Error(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
         self.set_title(_("Password Change Failed"))
         self.set_heading(_("Password Change Failed"))
         self.set_text(_("An error occurred while trying to change your password."))
@@ -248,9 +248,9 @@ class Error(ErrorPage):
         return ["back"]
 
 
-class Success(SuccessPage):
+class Success(AssistantSuccessPage):
     def __init__(self) -> None:
-        SuccessPage.__init__(self)
+        AssistantSuccessPage.__init__(self)
         self.set_title(_("Password Changed"))
         self.set_heading(_("Password Changed"))
         self.set_text(_("Your password has successfully been changed."))

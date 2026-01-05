@@ -28,7 +28,7 @@ from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.dropdown import GajimDropDown
 
 log = logging.getLogger("gajim.gtk.history_sync")
@@ -101,7 +101,7 @@ class HistorySyncAssistant(Assistant):
     def get_page(self, name: Literal["progress"]) -> Progress: ...
 
     @overload
-    def get_page(self, name: Literal["success"]) -> SuccessPage: ...
+    def get_page(self, name: Literal["success"]) -> AssistantSuccessPage: ...
 
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]

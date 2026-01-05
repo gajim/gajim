@@ -29,8 +29,8 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.user_strings import get_subscription_request_msg
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.util.misc import get_ui_string
@@ -342,9 +342,9 @@ class AddContactAddressPage(AssistantPage):
         return True
 
 
-class AddContactErrorPage(ErrorPage):
+class AddContactErrorPage(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
         self.set_title(_("Add Contact"))
         self.set_heading(_("An Error Occurred"))
 
