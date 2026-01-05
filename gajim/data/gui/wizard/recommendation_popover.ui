@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="WizardServerRecommendationPopover" parent="GtkPopover">
+    <property name="width-request">350</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Which provider should I choose?</property>
+            <style>
+              <class name="bold"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">There are plenty of providers to choose from.
+Creating an account with one provider allows you to communicate with contacts from other providers as well.</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">36</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_visit_server_button">
+            <property name="visible">0</property>
+            <property name="label" translatable="yes">Visit Provider&apos;s Website</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="halign">center</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="label" translatable="yes">Listing of providers</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">40</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="bold"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_recommendation_link1">
+            <property name="label">&lt;a href=&apos;https://providers.xmpp.net&apos;&gt;providers.xmpp.net&lt;/a&gt;</property>
+            <property name="use-markup">1</property>
+            <property name="wrap">1</property>
+            <property name="wrap-mode">word-char</property>
+            <property name="max-width-chars">40</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="label" translatable="yes">A feature comparison of various providers</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">40</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="bold"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_recommendation_link2">
+            <property name="label">&lt;a href=&apos;https://compliance.conversations.im&apos;&gt;compliance.conversations.im&lt;/a&gt;</property>
+            <property name="use-markup">1</property>
+            <property name="wrap">1</property>
+            <property name="wrap-mode">word-char</property>
+            <property name="max-width-chars">40</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <style>
+          <class name="p-6"/>
+        </style>
+      </object>
+    </property>
+  </template>
+</interface>

@@ -25,6 +25,7 @@ from nbxmpp.const import StreamError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
 from nbxmpp.structs import ProxyData
@@ -44,14 +45,16 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
 
 from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import ErrorPage
-from gajim.gtk.assistant import ProgressPage
-from gajim.gtk.assistant import SuccessPage
-from gajim.gtk.builder import get_builder
+from gajim.gtk.assistant import AssistantProgressPage
+from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.dropdown import GajimDropDown
+from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import open_uri
 from gajim.gtk.util.styling import get_color_for_account
 from gajim.gtk.util.window import get_app_window
@@ -81,14 +84,14 @@ class AccountWizard(Assistant):
 
         self.add_pages(
             {
-                "login": Login(),
-                "signup": Signup(),
-                "advanced": AdvancedSettings(),
-                "security-warning": SecurityWarning(),
-                "form": Form(),
-                "redirect": Redirect(),
-                "success": Success(),
-                "error": Error(),
+                "login": WizardLoginPage(),
+                "signup": WizardSignupPage(),
+                "advanced": WizardAdvancedPage(),
+                "security-warning": WizardSecurityPage(),
+                "form": WizardFormPage(),
+                "redirect": WizardRedirectPage(),
+                "success": WizardSuccessPage(),
+                "error": WizardErrorPage(),
             }
         )
 
@@ -99,35 +102,34 @@ class AccountWizard(Assistant):
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
 
-        self.update_proxy_list()
         self.show_first_page()
 
     @overload
-    def get_page(self, name: Literal["login"]) -> Login: ...
+    def get_page(self, name: Literal["login"]) -> WizardLoginPage: ...
 
     @overload
-    def get_page(self, name: Literal["signup"]) -> Signup: ...
+    def get_page(self, name: Literal["signup"]) -> WizardSignupPage: ...
 
     @overload
-    def get_page(self, name: Literal["advanced"]) -> AdvancedSettings: ...
+    def get_page(self, name: Literal["advanced"]) -> WizardAdvancedPage: ...
 
     @overload
-    def get_page(self, name: Literal["security-warning"]) -> SecurityWarning: ...
+    def get_page(self, name: Literal["security-warning"]) -> WizardSecurityPage: ...
 
     @overload
-    def get_page(self, name: Literal["form"]) -> Form: ...
+    def get_page(self, name: Literal["form"]) -> WizardFormPage: ...
 
     @overload
-    def get_page(self, name: Literal["redirect"]) -> Redirect: ...
+    def get_page(self, name: Literal["redirect"]) -> WizardRedirectPage: ...
 
     @overload
-    def get_page(self, name: Literal["success"]) -> Success: ...
+    def get_page(self, name: Literal["success"]) -> WizardSuccessPage: ...
 
     @overload
-    def get_page(self, name: Literal["error"]) -> Error: ...
+    def get_page(self, name: Literal["error"]) -> WizardErrorPage: ...
 
     @overload
-    def get_page(self, name: Literal["progress"]) -> ProgressPage: ...
+    def get_page(self, name: Literal["progress"]) -> AssistantProgressPage: ...
 
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
@@ -368,6 +370,8 @@ class AccountWizard(Assistant):
         self._request_host_meta_and_connect(self._client, advanced)
 
     def _on_login_successful(self, client: NBXMPPClient, _signal_name: str) -> None:
+        assert client.domain is not None
+        assert client.password is not None
         account = self._generate_account_name(client.domain)
         proxy_name = None
         if client.proxy is not None:
@@ -388,6 +392,8 @@ class AccountWizard(Assistant):
         )
 
     def _on_anonymous_supported(self, client: NBXMPPClient, _signal_name: str) -> None:
+        assert client.domain is not None
+        assert client.password is not None
         account = self._generate_account_name(client.domain)
         proxy_name = None
         if client.proxy is not None:
@@ -410,7 +416,9 @@ class AccountWizard(Assistant):
 
     def _on_disconnected(self, client: NBXMPPClient, _signal_name: str) -> None:
         domain, error, text = client.get_error()
+        assert error is not None
         if domain == StreamError.SASL:
+            assert error is not None
             if error == "anonymous-not-supported":
                 self._show_error_page(
                     _("Anonymous login not supported"),
@@ -419,13 +427,15 @@ class AccountWizard(Assistant):
                 )
             else:
                 self._show_error_page(
-                    _("Authentication failed"), SASL_ERRORS.get(error), text or ""
+                    _("Authentication failed"), SASL_ERRORS.get(error, ""), text or ""
                 )
 
         elif domain == StreamError.BAD_CERTIFICATE:
-            self.get_page("security-warning").set_warning(
-                self._client.domain, *self._client.peer_certificate
-            )
+            assert self._client is not None
+            cert, errors = self._client.peer_certificate
+            assert cert is not None
+            assert errors is not None
+            self.get_page("security-warning").set_warning(cert, list(errors))
             self.show_page("security-warning", Gtk.StackTransitionType.SLIDE_LEFT)
 
         elif domain == StreamError.REGISTER:
@@ -453,6 +463,7 @@ class AccountWizard(Assistant):
                 "Make sure your XMPP address is correct."
             ),
         )
+        assert self._client is not None
         self._client.destroy()
         self._client = None
 
@@ -507,6 +518,7 @@ class AccountWizard(Assistant):
         self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
 
         form = self.get_page("form").get_submit_form()
+        assert self._client is not None
         self._client.get_module("Register").submit_register_form(
             form, callback=self._on_register_result
         )
@@ -541,6 +553,8 @@ class AccountWizard(Assistant):
             return
 
         username, password = self.get_page("form").get_credentials()
+        assert self._client is not None
+        assert self._client.domain is not None
         account = self._generate_account_name(self._client.domain)
 
         proxy_name = None
@@ -574,33 +588,36 @@ class AccountWizard(Assistant):
         self._destroyed = True
 
 
-class Login(AssistantPage):
+@Gtk.Template(string=get_ui_string("wizard/login_page.ui"))
+class WizardLoginPage(AssistantPage):
+    __gtype_name__ = "WizardLoginPage"
     __gsignals__ = {
         "clicked": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
+
+    _log_in_address_entry: Gtk.Entry = Gtk.Template.Child()
+    _log_in_password_entry: Gtk.Entry = Gtk.Template.Child()
+    _login_advanced_checkbutton: Gtk.CheckButton = Gtk.Template.Child()
+    _log_in_button: Gtk.Button = Gtk.Template.Child()
+    _sign_up_button: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title = _("Add Account")
 
-        self._ui = get_builder("account_wizard.ui")
         self._connect(
-            self._ui.log_in_address_entry, "activate", self._on_address_entry_activate
+            self._log_in_address_entry, "activate", self._on_address_entry_activate
         )
+        self._connect(self._log_in_address_entry, "changed", self._on_address_changed)
+        self._connect(self._log_in_password_entry, "changed", self._set_complete)
         self._connect(
-            self._ui.log_in_address_entry, "changed", self._on_address_changed
+            self._log_in_password_entry, "activate", self._on_password_entry_activate
         )
-        self._connect(self._ui.log_in_password_entry, "changed", self._set_complete)
-        self._connect(
-            self._ui.log_in_password_entry, "activate", self._on_password_entry_activate
-        )
-        self._connect(self._ui.log_in_button, "clicked", self._on_login)
-        self._connect(self._ui.sign_up_button, "clicked", self._on_signup)
-
-        self.append(self._ui.login_box)
+        self._connect(self._log_in_button, "clicked", self._on_login)
+        self._connect(self._sign_up_button, "clicked", self._on_signup)
 
     def focus(self) -> None:
-        self._ui.log_in_address_entry.grab_focus()
+        self._log_in_address_entry.grab_focus()
 
     def _on_login(self, *args: Any) -> None:
         self.emit("clicked", "login")
@@ -613,7 +630,7 @@ class Login(AssistantPage):
 
     def _show_icon(self, show: bool) -> None:
         icon = "lucide-circle-alert-symbolic" if show else None
-        self._ui.log_in_address_entry.set_icon_from_icon_name(
+        self._log_in_address_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
 
@@ -621,12 +638,12 @@ class Login(AssistantPage):
         GLib.idle_add(self._grab_password_entry_focus)
 
     def _grab_password_entry_focus(self) -> bool:
-        self._ui.log_in_password_entry.grab_focus()
+        self._log_in_password_entry.grab_focus()
         return False
 
     def _on_password_entry_activate(self, _entry: Gtk.Entry) -> None:
-        if self._ui.log_in_button.get_sensitive():
-            self._ui.log_in_button.activate()
+        if self._log_in_button.get_sensitive():
+            self._log_in_button.activate()
 
     def _validate_jid(self, address: str) -> bool:
         if not address:
@@ -639,14 +656,14 @@ class Login(AssistantPage):
                 raise ValueError
         except ValueError:
             self._show_icon(True)
-            self._ui.log_in_address_entry.set_icon_tooltip_text(
+            self._log_in_address_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY, _("Invalid Address")
             )
             return False
 
         if app.settings.account_exists(address):
             self._show_icon(True)
-            self._ui.log_in_address_entry.set_icon_tooltip_text(
+            self._log_in_address_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY,
                 _("This account has already been added"),
             )
@@ -656,21 +673,31 @@ class Login(AssistantPage):
         return True
 
     def _set_complete(self, *args: Any) -> None:
-        address = self._validate_jid(self._ui.log_in_address_entry.get_text())
-        password = self._ui.log_in_password_entry.get_text()
-        self._ui.log_in_button.set_sensitive(bool(address and password))
+        address = self._validate_jid(self._log_in_address_entry.get_text())
+        password = self._log_in_password_entry.get_text()
+        self._log_in_button.set_sensitive(bool(address and password))
 
     def is_advanced(self) -> bool:
-        return self._ui.login_advanced_checkbutton.get_active()
+        return self._login_advanced_checkbutton.get_active()
 
     def get_credentials(self) -> tuple[str, str]:
         return (
-            self._ui.log_in_address_entry.get_text(),
-            self._ui.log_in_password_entry.get_text(),
+            self._log_in_address_entry.get_text(),
+            self._log_in_password_entry.get_text(),
         )
 
 
-class Signup(AssistantPage):
+@Gtk.Template(string=get_ui_string("wizard/signup_page.ui"))
+class WizardSignupPage(AssistantPage):
+    __gtype_name__ = "WizardSignupPage"
+
+    _sign_up_advanced_checkbutton: Gtk.CheckButton = Gtk.Template.Child()
+    _sign_up_anonymously: Gtk.CheckButton = Gtk.Template.Child()
+    _sign_up_info_grid: Gtk.Grid = Gtk.Template.Child()
+    _server_comboboxtext_sign_up: Gtk.ComboBoxText = Gtk.Template.Child()
+    _update_provider_list_icon: Gtk.Image = Gtk.Template.Child()
+    _popover: WizardServerRecommendationPopover = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.complete: bool = False
@@ -679,8 +706,7 @@ class Signup(AssistantPage):
         self._servers: list[dict[str, Any]] = []
         self._provider_list_request: FileTransfer | None = None
 
-        self._ui = get_builder("account_wizard.ui")
-        entry = self._ui.server_comboboxtext_sign_up.get_child()
+        entry = self._server_comboboxtext_sign_up.get_child()
         assert isinstance(entry, Gtk.Entry)
         self._entry = entry
         self._entry.set_activates_default(True)
@@ -695,16 +721,7 @@ class Signup(AssistantPage):
         )
         self._entry.set_completion(self._entry_completion)
 
-        self._connect(
-            self._ui.recommendation_link1, "activate-link", self._on_activate_link
-        )
-        self._connect(
-            self._ui.recommendation_link2, "activate-link", self._on_activate_link
-        )
-        self._connect(self._ui.visit_server_button, "clicked", self._on_visit_server)
         self._connect(self._entry, "changed", self._set_complete)
-
-        self.append(self._ui.signup_grid)
 
     def do_unroot(self) -> None:
         AssistantPage.do_unroot(self)
@@ -720,8 +737,8 @@ class Signup(AssistantPage):
             # A request has already been started
             return
 
-        self._ui.server_comboboxtext_sign_up.set_sensitive(False)
-        self._ui.update_provider_list_icon.add_css_class("spin")
+        self._server_comboboxtext_sign_up.set_sensitive(False)
+        self._update_provider_list_icon.add_css_class("spin")
 
         self._provider_list_request = app.ftm.http_request(
             "GET",
@@ -731,23 +748,23 @@ class Signup(AssistantPage):
 
     def _on_download_provider_list_finished(self, obj: FileTransfer) -> None:
         self._provider_list_request = None
-        self._ui.server_comboboxtext_sign_up.set_sensitive(True)
-        self._ui.update_provider_list_icon.remove_css_class("spin")
+        self._server_comboboxtext_sign_up.set_sensitive(True)
+        self._update_provider_list_icon.remove_css_class("spin")
 
         try:
             result = obj.get_result()
         except Exception as error:
             log.warning("Error while downloading provider list: %s", error)
-            self._ui.update_provider_list_icon.set_from_icon_name(
+            self._update_provider_list_icon.set_from_icon_name(
                 "lucide-circle-x-symbolic"
             )
-            self._ui.update_provider_list_icon.set_tooltip_text(
+            self._update_provider_list_icon.set_tooltip_text(
                 _("Could not update providers list")
             )
             return
 
-        self._ui.update_provider_list_icon.set_from_icon_name("lucide-check-symbolic")
-        self._ui.update_provider_list_icon.set_tooltip_text(
+        self._update_provider_list_icon.set_from_icon_name("lucide-check-symbolic")
+        self._update_provider_list_icon.set_tooltip_text(
             _("Providers list is up to date")
         )
 
@@ -767,8 +784,8 @@ class Signup(AssistantPage):
         self._entry_completion.set_model(servers_model)
 
         # Sign up combobox and entry
-        self._ui.server_comboboxtext_sign_up.set_model(servers_model)
-        cell_area = self._ui.server_comboboxtext_sign_up.get_area()
+        self._server_comboboxtext_sign_up.set_model(servers_model)
+        cell_area = self._server_comboboxtext_sign_up.get_area()
         assert cell_area is not None
 
         language_renderer = Gtk.CellRendererText(xalign=1)
@@ -776,7 +793,7 @@ class Signup(AssistantPage):
         cell_area.attribute_connect(language_renderer, "text", 1)
 
         self._connect(
-            self._ui.server_comboboxtext_sign_up,
+            self._server_comboboxtext_sign_up,
             "changed",
             self._on_sign_up_server_changed,
         )
@@ -799,7 +816,7 @@ class Signup(AssistantPage):
 
         heading = Gtk.Label(label=_("Provider Infos"), halign=Gtk.Align.START)
         heading.add_css_class("bold")
-        self._ui.sign_up_info_grid.attach(heading, 0, 0, 2, 1)
+        self._sign_up_info_grid.attach(heading, 0, 0, 2, 1)
 
         provider_category = server_data["category"]
         image = Gtk.Image.new_from_icon_name("lucide-check-symbolic")
@@ -808,20 +825,20 @@ class Signup(AssistantPage):
             halign=Gtk.Align.START,
             hexpand=True,
         )
-        self._ui.sign_up_info_grid.attach(image, 0, 1, 1, 1)
-        self._ui.sign_up_info_grid.attach(label, 1, 1, 1, 1)
+        self._sign_up_info_grid.attach(image, 0, 1, 1, 1)
+        self._sign_up_info_grid.attach(label, 1, 1, 1, 1)
 
         providers_link = Gtk.LinkButton(
             label=_("More infos at providers.xmpp.net"),
             uri=f"https://providers.xmpp.net/provider/{server_data['jid']}/",
             halign=Gtk.Align.START,
         )
-        self._ui.sign_up_info_grid.attach(providers_link, 0, 2, 2, 1)
+        self._sign_up_info_grid.attach(providers_link, 0, 2, 2, 1)
 
-        self._ui.sign_up_info_grid.attach(Gtk.Separator(), 0, 3, 2, 1)
+        self._sign_up_info_grid.attach(Gtk.Separator(), 0, 3, 2, 1)
 
     def _clear_server_info_box(self) -> None:
-        container_remove_all(self._ui.sign_up_info_grid)
+        container_remove_all(self._sign_up_info_grid)
 
     def _on_visit_server(self, _button: Gtk.Button) -> int:
         server = self._entry.get_text().strip()
@@ -831,31 +848,24 @@ class Signup(AssistantPage):
 
     def _set_complete(self, *args: Any) -> None:
         try:
-            self.get_server()
+            server = self.get_server()
         except Exception:
             self.complete = False
-            self._ui.visit_server_button.set_visible(False)
+            self._popover.set_website(None)
         else:
             self.complete = True
-            self._ui.visit_server_button.set_visible(True)
+            self._popover.set_website(server)
 
         self.update_page_complete()
 
     def is_anonymous(self) -> bool:
-        return self._ui.sign_up_anonymously.get_active()
+        return self._sign_up_anonymously.get_active()
 
     def is_advanced(self) -> bool:
-        return self._ui.sign_up_advanced_checkbutton.get_active()
+        return self._sign_up_advanced_checkbutton.get_active()
 
     def get_server(self) -> str:
         return validate_domainpart(self._entry.get_text())
-
-    @staticmethod
-    def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
-        # We have to use this, because the default GTK handler
-        # is not cross-platform compatible
-        open_uri(uri)
-        return Gdk.EVENT_STOP
 
     def get_visible_buttons(self) -> list[str]:
         return ["back", "signup"]
@@ -864,44 +874,98 @@ class Signup(AssistantPage):
         return "signup"
 
 
-class AdvancedSettings(AssistantPage):
+@Gtk.Template(string=get_ui_string("wizard/recommendation_popover.ui"))
+class WizardServerRecommendationPopover(Gtk.Popover, SignalManager):
+    __gtype_name__ = "WizardServerRecommendationPopover"
+
+    _visit_server_button: Gtk.Button = Gtk.Template.Child()
+    _recommendation_link1: Gtk.Label = Gtk.Template.Child()
+    _recommendation_link2: Gtk.Label = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Popover.__init__(self)
+        SignalManager.__init__(self)
+
+        self._website = ""
+
+        self._connect(
+            self._recommendation_link1, "activate-link", self._on_activate_link
+        )
+        self._connect(
+            self._recommendation_link2, "activate-link", self._on_activate_link
+        )
+        self._connect(self._visit_server_button, "clicked", self._on_visit_server)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Popover.do_unroot(self)
+        app.check_finalize(self)
+
+    def set_website(self, website: str | None) -> None:
+        self._website = website or ""
+        self._visit_server_button.set_visible(bool(self._website))
+
+    def _on_visit_server(self, _button: Gtk.Button) -> int:
+        open_uri(f"https://{self._website}")
+        return Gdk.EVENT_STOP
+
+    @staticmethod
+    def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
+        # We have to use this, because the default GTK handler
+        # is not cross-platform compatible
+        open_uri(uri)
+        return Gdk.EVENT_STOP
+
+
+@Gtk.Template(string=get_ui_string("wizard/advanced_page.ui"))
+class WizardAdvancedPage(AssistantPage):
+    __gtype_name__ = "WizardAdvancedPage"
+
+    _custom_port_entry: Gtk.Entry = Gtk.Template.Child()
+    _custom_host_entry: Gtk.Entry = Gtk.Template.Child()
+    _proxies_dropdown: GajimDropDown[str] = Gtk.Template.Child()
+    _manage_proxies_button: Gtk.Button = Gtk.Template.Child()
+    _con_type_dropdown: GajimDropDown[str] = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title: str = _("Advanced settings")
         self.complete: bool = False
 
-        self._ui = get_builder("account_wizard.ui")
-        self._connect(self._ui.manage_proxies_button, "clicked", self._on_proxy_manager)
-        self._connect(self._ui.proxies_combobox, "changed", self._set_complete)
-        self._connect(self._ui.custom_host_entry, "changed", self._set_complete)
-        self._connect(self._ui.custom_port_entry, "changed", self._set_complete)
-        self.append(self._ui.advanced_grid)
+        self._connect(self._manage_proxies_button, "clicked", self._on_proxy_manager)
+        self._connect(self._proxies_dropdown, "notify::selected", self._set_complete)
+        self._connect(self._custom_host_entry, "changed", self._set_complete)
+        self._connect(self._custom_port_entry, "changed", self._set_complete)
+
+        self._con_type_dropdown.set_data(["START TLS", "DIRECT TLS", "PLAIN"])
+
+        self.update_proxy_list()
 
     @staticmethod
     def _on_proxy_manager(_button: Gtk.Button) -> None:
         app.app.activate_action("manage-proxies", None)
 
     def update_proxy_list(self) -> None:
-        model = Gtk.ListStore(str, str)
-        self._ui.proxies_combobox.set_model(model)
-        model.append(["", _("System")])
-        model.append(["no-proxy", _("No Proxy")])
-        proxies = app.settings.get_proxies()
-        for proxy in proxies:
-            model.append([proxy, proxy])
-        self._ui.proxies_combobox.set_active(0)
+        proxies: dict[str, str] = {
+            "": _("System"),
+            "no-proxy": _("No Proxy"),
+        }
+        for proxy in app.settings.get_proxies():
+            proxies[proxy] = proxy
+        self._proxies_dropdown.set_data(proxies)
 
     def get_proxy(self) -> str:
-        active = self._ui.proxies_combobox.get_active()
-        return self._ui.proxies_combobox.get_model()[active][0]
+        key = self._proxies_dropdown.get_selected_key()
+        assert key is not None
+        return key
 
     def get_custom_host(self) -> CustomHostT | None:
-        host = self._ui.custom_host_entry.get_text()
-        port = self._ui.custom_port_entry.get_text()
+        host = self._custom_host_entry.get_text()
+        port = self._custom_port_entry.get_text()
         if not host or not port:
             return None
 
-        con_type = self._ui.con_type_combo.get_active_text()
+        con_type = self._con_type_dropdown.get_selected_key()
 
         protocol = ConnectionProtocol.TCP
         if host.startswith(("ws://", "wss://")):
@@ -911,18 +975,18 @@ class AdvancedSettings(AssistantPage):
 
     def _show_host_icon(self, show: bool) -> None:
         icon = "lucide-circle-alert-symbolic" if show else None
-        self._ui.custom_host_entry.set_icon_from_icon_name(
+        self._custom_host_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
 
     def _show_port_icon(self, show: bool) -> None:
         icon = "lucide-circle-alert-symbolic" if show else None
-        self._ui.custom_port_entry.set_icon_from_icon_name(
+        self._custom_port_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon
         )
 
     def _validate_host(self) -> bool:
-        host = self._ui.custom_host_entry.get_text()
+        host = self._custom_host_entry.get_text()
         if host.startswith(("ws://", "wss://")):
             # We have no method for validating websocket URIs
             self._show_host_icon(False)
@@ -932,7 +996,7 @@ class AdvancedSettings(AssistantPage):
             validate_domainpart(host)
         except Exception:
             self._show_host_icon(True)
-            self._ui.custom_host_entry.set_icon_tooltip_text(
+            self._custom_host_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY, _("Invalid domain name")
             )
             return False
@@ -941,7 +1005,7 @@ class AdvancedSettings(AssistantPage):
         return True
 
     def _validate_port(self) -> bool:
-        port = self._ui.custom_port_entry.get_text()
+        port = self._custom_port_entry.get_text()
         if not port:
             self._show_port_icon(False)
             return False
@@ -950,14 +1014,14 @@ class AdvancedSettings(AssistantPage):
             port = int(port)
         except Exception:
             self._show_port_icon(True)
-            self._ui.custom_port_entry.set_icon_tooltip_text(
+            self._custom_port_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY, _("Must be a port number")
             )
             return False
 
         if port not in range(65535):
             self._show_port_icon(True)
-            self._ui.custom_port_entry.set_icon_tooltip_text(
+            self._custom_port_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY,
                 _("Port must be a number between 0 and 65535"),
             )
@@ -967,12 +1031,12 @@ class AdvancedSettings(AssistantPage):
         return True
 
     def _is_custom_host_set(self) -> bool:
-        host = bool(self._ui.custom_host_entry.get_text())
-        port = bool(self._ui.custom_port_entry.get_text())
+        host = bool(self._custom_host_entry.get_text())
+        port = bool(self._custom_port_entry.get_text())
         return host or port
 
     def _is_proxy_set(self) -> bool:
-        return self._ui.proxies_combobox.get_active() != 0
+        return self._proxies_dropdown.get_selected_key() != ""
 
     def _set_complete(self, *args: Any) -> None:
         self.complete = False
@@ -997,16 +1061,20 @@ class AdvancedSettings(AssistantPage):
         return window.get_current_method()
 
 
-class SecurityWarning(AssistantPage):
+@Gtk.Template(string=get_ui_string("wizard/security_page.ui"))
+class WizardSecurityPage(AssistantPage):
+    __gtype_name__ = "WizardSecurityPage"
+
+    _error_list: Gtk.ListBox = Gtk.Template.Child()
+    _view_cert_button: Gtk.Button = Gtk.Template.Child()
+    _trust_cert_checkbutton: Gtk.CheckButton = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title: str = _("Security Warning")
         self._cert: Gio.TlsCertificate | None = None
-        self._domain: str | None = None
 
-        self._ui = get_builder("account_wizard.ui")
-        self.append(self._ui.security_warning_box)
-        self._connect(self._ui.view_cert_button, "clicked", self._on_view_cert)
+        self._connect(self._view_cert_button, "clicked", self._on_view_cert)
 
     @property
     def cert(self) -> Gio.TlsCertificate | None:
@@ -1014,14 +1082,11 @@ class SecurityWarning(AssistantPage):
 
     def set_warning(
         self,
-        domain: str,
         cert: Gio.TlsCertificate,
         errors: list[Gio.TlsCertificateFlags],
     ) -> None:
-        # Clear list
         self._cert = cert
-        self._domain = domain
-        clear_listbox(self._ui.error_list)
+        clear_listbox(self._error_list)
 
         unknown_error = _('Unknown TLS error "%s"')
         for error in errors:
@@ -1037,9 +1102,9 @@ class SecurityWarning(AssistantPage):
             )
             box.append(image)
             box.append(label)
-            self._ui.error_list.append(box)
+            self._error_list.append(box)
 
-        self._ui.trust_cert_checkbutton.set_visible(
+        self._trust_cert_checkbutton.set_visible(
             Gio.TlsCertificateFlags.UNKNOWN_CA in errors
         )
 
@@ -1053,7 +1118,7 @@ class SecurityWarning(AssistantPage):
 
     @property
     def trust_certificate(self) -> bool:
-        return self._ui.trust_cert_checkbutton.get_active()
+        return self._trust_cert_checkbutton.get_active()
 
     def get_visible_buttons(self) -> list[str]:
         window = get_app_window("AccountWizard")
@@ -1064,7 +1129,7 @@ class SecurityWarning(AssistantPage):
         return "back"
 
 
-class Form(AssistantPage):
+class WizardFormPage(AssistantPage):
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.set_valign(Gtk.Align.FILL)
@@ -1106,10 +1171,10 @@ class Form(AssistantPage):
 
     def get_credentials(self) -> tuple[str, str]:
         assert self._current_form is not None
-        return (
-            self._current_form.get_form()["username"].value,
-            self._current_form.get_form()["password"].value,
-        )
+        form = cast(SimpleDataForm, self._current_form.get_form())
+        username = cast(str, form["username"])
+        password = cast(str, form["password"])
+        return username, password
 
     def get_submit_form(self) -> Any:
         assert self._current_form is not None
@@ -1133,20 +1198,24 @@ class Form(AssistantPage):
         return "signup"
 
 
-class Redirect(AssistantPage):
+@Gtk.Template(string=get_ui_string("wizard/redirect_page.ui"))
+class WizardRedirectPage(AssistantPage):
+    __gtype_name__ = "WizardRedirectPage"
+
+    _instructions: Gtk.Label = Gtk.Template.Child()
+    _link_button: Gtk.Button = Gtk.Template.Child()
+
     def __init__(self) -> None:
         AssistantPage.__init__(self)
         self.title: str = _("Redirect")
         self._link: str | None = None
 
-        self._ui = get_builder("account_wizard.ui")
-        self.append(self._ui.redirect_box)
-        self._connect(self._ui.link_button, "clicked", self._on_link_button)
+        self._connect(self._link_button, "clicked", self._on_link_button)
 
     def set_redirect(self, link: str, instructions: str | None) -> None:
         if instructions is None:
             instructions = _("Register on the Website")
-        self._ui.instructions.set_text(instructions)
+        self._instructions.set_text(instructions)
         self._link = link
 
     def _on_link_button(self, _button: Gtk.Button) -> None:
@@ -1157,9 +1226,16 @@ class Redirect(AssistantPage):
         return ["back"]
 
 
-class Success(SuccessPage):
+@Gtk.Template(string=get_ui_string("wizard/success_page.ui"))
+class WizardSuccessPage(AssistantSuccessPage):
+    __gtype_name__ = "WizardSuccessPage"
+
+    _account_name_entry: Gtk.Entry = Gtk.Template.Child()
+    _account_color_button: Gtk.ColorDialogButton = Gtk.Template.Child()
+    _badge_preview: Gtk.Label = Gtk.Template.Child()
+
     def __init__(self) -> None:
-        SuccessPage.__init__(self)
+        AssistantSuccessPage.__init__(self)
         self.set_title(_("Account Added"))
         self.set_heading(_("Account has been added successfully"))
 
@@ -1168,24 +1244,21 @@ class Success(SuccessPage):
         self._label: str | None = None
         self._color: str | None = None
 
-        self._ui = get_builder("account_wizard.ui")
-        self.append(self._ui.account_label_box)
-
         self._provider = self._add_css_provider()
 
-        self._connect(self._ui.account_name_entry, "changed", self._on_name_changed)
+        self._connect(self._account_name_entry, "changed", self._on_name_changed)
 
         color_dialog = Gtk.ColorDialog()
-        self._ui.account_color_button.set_dialog(color_dialog)
-        self._connect(self._ui.account_color_button, "notify::rgba", self._on_color_set)
+        self._account_color_button.set_dialog(color_dialog)
+        self._connect(self._account_color_button, "notify::rgba", self._on_color_set)
 
     def set_account(self, account: str) -> None:
         self._account = account
         self._our_jid = app.get_jid_from_account(account)
-        self._ui.badge_preview.set_text(self._our_jid)
+        self._badge_preview.set_text(self._our_jid)
         rgba = Gdk.RGBA()
         rgba.parse(get_color_for_account(self._our_jid))
-        self._ui.account_color_button.set_rgba(rgba)
+        self._account_color_button.set_rgba(rgba)
         self._color = rgba.to_string()
         self._set_badge_color(self._color)
         self._save_config()
@@ -1195,7 +1268,7 @@ class Success(SuccessPage):
         return self._account
 
     def _add_css_provider(self) -> Gtk.CssProvider:
-        context = self._ui.badge_preview.get_style_context()
+        context = self._badge_preview.get_style_context()
         provider = Gtk.CssProvider()
         context.add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
         return provider
@@ -1203,7 +1276,7 @@ class Success(SuccessPage):
     def _on_name_changed(self, entry: Gtk.Entry):
         assert self._our_jid is not None
         self._label = entry.get_text()
-        self._ui.badge_preview.set_text(self._label or self._our_jid)
+        self._badge_preview.set_text(self._label or self._our_jid)
         self._save_config()
 
     def _on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any):
@@ -1229,9 +1302,9 @@ class Success(SuccessPage):
         return ["connect"]
 
 
-class Error(ErrorPage):
+class WizardErrorPage(AssistantErrorPage):
     def __init__(self) -> None:
-        ErrorPage.__init__(self)
+        AssistantErrorPage.__init__(self)
         self.set_heading(_("An error occurred during account creation"))
 
     def get_visible_buttons(self) -> list[str]:

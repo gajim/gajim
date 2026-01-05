@@ -18,41 +18,6 @@ class GajimBuilder:
 
 class Builder(Gtk.Builder): ...
 
-class AccountWizardBuilder(Builder):
-    account_label_box: Gtk.Box
-    account_name_entry: Gtk.Entry
-    account_color_button: Gtk.ColorDialogButton
-    badge_preview: Gtk.Label
-    advanced_grid: Gtk.Grid
-    custom_port_entry: Gtk.Entry
-    custom_host_entry: Gtk.Entry
-    proxies_combobox: Gtk.ComboBox
-    manage_proxies_button: Gtk.Button
-    con_type_combo: Gtk.ComboBoxText
-    login_box: Gtk.Box
-    log_in_address_entry: Gtk.Entry
-    log_in_password_entry: Gtk.Entry
-    login_advanced_checkbutton: Gtk.CheckButton
-    log_in_button: Gtk.Button
-    sign_up_button: Gtk.Button
-    redirect_box: Gtk.Box
-    instructions: Gtk.Label
-    link_button: Gtk.Button
-    security_warning_box: Gtk.Box
-    error_list: Gtk.ListBox
-    view_cert_button: Gtk.Button
-    trust_cert_checkbutton: Gtk.CheckButton
-    server_recommendations: Gtk.Popover
-    visit_server_button: Gtk.Button
-    recommendation_link1: Gtk.Label
-    recommendation_link2: Gtk.Label
-    signup_grid: Gtk.Grid
-    sign_up_advanced_checkbutton: Gtk.CheckButton
-    sign_up_anonymously: Gtk.CheckButton
-    sign_up_info_grid: Gtk.Grid
-    server_comboboxtext_sign_up: Gtk.ComboBoxText
-    update_provider_list_icon: Gtk.Image
-
 class ActivityDefaultBuilder(Builder):
     default_page: Gtk.Box
 
@@ -693,12 +658,6 @@ class WorkspaceDialogBuilder(Builder):
     cancel_button: Gtk.Button
     save_button: Gtk.Button
 
-@overload
-def get_builder(
-    file_name: Literal["account_wizard.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> AccountWizardBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["activity_default.ui"],

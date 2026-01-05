@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="WizardSecurityPage" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+        <child>
+          <object class="GtkImage">
+            <property name="halign">center</property>
+            <property name="icon-name">lucide-lock-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">center</property>
+            <property name="label" translatable="yes">Certificate Verification Failed</property>
+            <property name="justify">center</property>
+            <property name="wrap">1</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">center</property>
+            <property name="label" translatable="yes">The following warnings came up while trying to verify the provider&apos;s certificate</property>
+            <property name="wrap">1</property>
+            <property name="max-width-chars">42</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBox" id="_error_list">
+            <property name="width-request">300</property>
+            <property name="halign">center</property>
+            <property name="selection-mode">none</property>
+            <style>
+              <class name="tls-error-list"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_view_cert_button">
+            <property name="label" translatable="yes">_Show Certificate</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="halign">center</property>
+            <property name="use-underline">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="_trust_cert_checkbutton">
+            <property name="visible">0</property>
+            <property name="label" translatable="yes">_Add to Trusted Certificates</property>
+            <property name="focusable">1</property>
+            <property name="halign">center</property>
+            <property name="use-underline">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

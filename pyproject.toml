@@ -133,7 +133,6 @@ exclude = [
   "gajim/common/structs.py",
   "gajim/common/util/av.py",
   "gajim/common/winapi/system_style.py",
-  "gajim/gtk/account_wizard.py",
   "gajim/gtk/dataform.py",
   "gajim/gtk/filetransfer.py",
   "gajim/gtk/settings.py",
