@@ -123,3 +123,10 @@ When switching to Flatpak you might want to migrate your user data (accounts, hi
 Copy `~/.local/share/gajim` -> `~/.var/app/org.gajim.Gajim/data/gajim`
 
 Copy `~/.config/gajim` -> `~/.var/app/org.gajim.Gajim/config/gajim`
+
+
+## Usage with custom installed CAs or self signed certs
+
+Gajims HTTP library uses OpenSSL as TLS backend. It cannot see installed self signed certs or CAs on the host. To make them available use `flatpak override`.
+
+e.g `flatpak override --user --filesystem=host-etc:ro --env=SSL_CERT_FILE=/run/host/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem org.gajim.Gajim`
