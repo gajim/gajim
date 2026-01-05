@@ -421,7 +421,7 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
     def _on_config_clicked(self, _button: Gtk.Button) -> None:
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
         assert plugin is not None
-        plugin.config_dialog(get_app_window("Preferences").window)  # pyright: ignore
+        plugin.config_dialog(get_app_window("Preferences"))  # pyright: ignore
 
     def _on_install_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
