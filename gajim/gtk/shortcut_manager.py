@@ -74,13 +74,19 @@ class ShortcutManager:
             group_name = [group_name]
 
         for name in group_name:
+            scope = Gtk.ShortcutScope.LOCAL
             if name.endswith("global"):
                 scope = Gtk.ShortcutScope.GLOBAL
-            else:
-                scope = Gtk.ShortcutScope.LOCAL
+
+            propagation_phase = Gtk.PropagationPhase.BUBBLE
+            if name == "app":
+                propagation_phase = Gtk.PropagationPhase.CAPTURE
 
             controller = Gtk.ShortcutController(
-                name=name, scope=scope, model=self.get_group(name)
+                name=name,
+                scope=scope,
+                model=self.get_group(name),
+                propagation_phase=propagation_phase,
             )
             widget.add_controller(controller)
 
