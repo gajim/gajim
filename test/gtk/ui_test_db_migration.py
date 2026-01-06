@@ -25,7 +25,7 @@ class DBMigrationTest:
         self._progressing = False
 
         window = DBMigration()
-        box = cast(Gtk.Box, util.get_content_widget(window))
+        box = cast(Gtk.Box, window.get_content())
         box.set_orientation(Gtk.Orientation.VERTICAL)
 
         button_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)

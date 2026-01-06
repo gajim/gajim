@@ -8,6 +8,7 @@ import logging
 import traceback
 from io import StringIO
 
+from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -20,32 +21,35 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.window import GajimAppWindow
+from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.db_migration")
 
+# Beware that many services are not initialized in Gajim when this dialog runs
+# This dialog should not access any Gajim settings, or inherit from classes
+# which access Gajim settings.
 
-class DBMigration(GajimAppWindow, EventHelper):
+
+class DBMigration(Adw.ApplicationWindow, EventHelper, SignalManager):
     def __init__(
         self,
     ) -> None:
-        GajimAppWindow.__init__(
+        Adw.ApplicationWindow.__init__(
             self,
             name="DBMigration",
             title=_("Database Migration"),
             default_width=600,
             default_height=300,
-            transient_for=app.window,
             modal=True,
-            header_bar=True,
         )
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self.set_deletable(False)
         self.set_resizable(False)
 
         self._ui = get_builder("db_migration.ui")
-        self.set_child(self._ui.box)
+        self.set_content(self._ui.box)
 
         self._connect(
             self._ui.error_copy_button, "clicked", self._on_error_copy_clicked
@@ -56,6 +60,7 @@ class DBMigration(GajimAppWindow, EventHelper):
         self._connect(
             self._ui.success_close_button, "clicked", self._on_close_button_clicked
         )
+        self._connect(self, "close-request", self._on_close_request)
 
         self.register_events(
             [
@@ -74,9 +79,12 @@ class DBMigration(GajimAppWindow, EventHelper):
         self.set_transient_for(app.window)
         return GLib.SOURCE_CONTINUE
 
-    def _cleanup(self) -> None:
-        GLib.source_remove(self._timeout_id)
+    def _on_close_request(self, _widget: Adw.ApplicationWindow) -> None:
+        log.debug("Initiate Cleanup: %s", self.get_name())
+        self._disconnect_all()
         self.unregister_events()
+        GLib.source_remove(self._timeout_id)
+        app.check_finalize(self)
 
     def _on_start(self, event: DBMigrationStart) -> None:
         self._ui.stack.set_visible_child_name("progress-page")
