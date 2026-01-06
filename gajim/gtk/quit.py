@@ -7,6 +7,7 @@ from __future__ import annotations
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
@@ -45,7 +46,10 @@ class QuitDialog(GajimAppWindow):
         elif action == "hide":
             app.window.hide_window()
         elif action == "quit":
-            app.app.start_shutdown()
+            # Call with idle because closing the Quit Dialog
+            # writes window size to settings and this can only happen
+            # when the CoreApplicaton shutdown was not called first
+            idle_add_once(app.app.start_shutdown)
 
         self.close()
 
