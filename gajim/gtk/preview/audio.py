@@ -332,7 +332,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         _x: float,
         _y: float,
     ) -> None:
-        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         self._user_holds_position_slider = True
 
     def _on_seek_bar_button_released(
