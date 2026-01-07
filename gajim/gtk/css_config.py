@@ -100,12 +100,6 @@ class CSSConfig:
             display, self._dynamic_provider, CSSPriority.APPLICATION
         )
 
-        # Font size provider for GUI font size
-        self._app_font_size_provider = Gtk.CssProvider()
-        Gtk.StyleContext.add_provider_for_display(
-            display, self._app_font_size_provider, CSSPriority.PRE_THEME
-        )
-
         # Cache of recently requested values
         self._cache: dict[str, str | Pango.FontDescription | None] = {}
 
@@ -113,6 +107,10 @@ class CSSConfig:
         self.themes: list[str] = []
 
         self._system_style = SystemStyleListener(callback=self.set_dark_theme)
+
+        gtk_settings = Gtk.Settings.get_default()
+        assert gtk_settings is not None
+        self._gtk_settings = gtk_settings
 
         self.set_dark_theme()
         self._load_css()
@@ -204,16 +202,22 @@ class CSSConfig:
         except Exception:
             log.exception("Error loading application css")
 
+    @staticmethod
+    def get_dpi_ratio() -> int:
+        # Taken from https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/inspector/visual.c
+        if sys.platform == "darwin":
+            return 72 * 1024
+        return 96 * 1024
+
     def apply_app_font_size(self) -> None:
         app_font_size = app.settings.get("app_font_size")
-        css = f"""
-        * {{
-            font-size: {app_font_size}rem;
-        }}
-        """
-        self._app_font_size_provider.load_from_bytes(
-            GLib.Bytes.new(css.encode("utf-8"))
-        )
+        if app_font_size == 1:
+            log.debug("Reset gtk-xft-dpi")
+            self._gtk_settings.reset_property("gtk-xft-dpi")
+        else:
+            dpi = app_font_size * self.get_dpi_ratio()
+            log.debug("Set gtk-xft-dpi %s", dpi)
+            self._gtk_settings.set_property("gtk-xft-dpi", dpi)
 
     def _apply_windows_css(self) -> None:
         """Apply extra CSS on Windows to fix issues, see:
