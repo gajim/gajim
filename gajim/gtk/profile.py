@@ -107,6 +107,7 @@ class ProfileWindow(GajimAppWindow):
             tooltip=_("Change your profile picture"),
             icon_name="lucide-square-pen-symbolic",
         )
+        self._avatar_edit_button.add_css_class("opaque")
         self._connect(self._avatar_edit_button, "path-picked", self._on_edit_avatar)
 
         self._avatar_edit_button.set_halign(Gtk.Align.END)

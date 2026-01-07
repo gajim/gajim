@@ -39,6 +39,9 @@
                                 <property name="tooltip-text" translatable="yes">Remove your group chat avatar</property>
                                 <property name="halign">start</property>
                                 <property name="valign">end</property>
+                                <style>
+                                  <class name="opaque"/>
+                                </style>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">lucide-trash-symbolic</property>

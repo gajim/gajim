@@ -55,6 +55,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
         self._avatar_chooser_button.set_halign(Gtk.Align.END)
         self._avatar_chooser_button.set_valign(Gtk.Align.END)
         self._avatar_chooser_button.set_visible(False)
+        self._avatar_chooser_button.add_css_class("opaque")
 
         self._ui.avatar_overlay.add_overlay(self._avatar_chooser_button)
 
