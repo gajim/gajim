@@ -154,6 +154,8 @@ class ContactNameEntry(Gtk.Box, SignalManager):
                 name = self._contact.name
 
         self._name_label.set_label(name)
+        self._name_label.set_tooltip_text(name)
+
         self._name_entry.set_text(name)
 
         self.emit("name-updated", name)
