@@ -38,7 +38,7 @@ class AboutDialog:
             application_name="Gajim",
             application_icon="gajim",
             version=get_extended_app_version(),
-            copyright="Copyright © 2003-2025 Gajim Team",
+            copyright="Copyright © 2003-2026 Gajim Team",
             license_type=Gtk.License.GPL_3_0_ONLY,
             website="https://gajim.org/",
             issue_url="https://dev.gajim.org/gajim/gajim/-/issues/",
