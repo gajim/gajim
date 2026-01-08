@@ -158,14 +158,20 @@
                         </child>
                         <child>
                           <object class="GtkEntry" id="nickname_entry">
-                            <property name="name">ContactNameEntry</property>
                             <property name="width-request">250</property>
-                            <property name="sensitive">0</property>
+                            <property name="halign">center</property>
+                            <property name="visible">0</property>
                             <property name="focusable">1</property>
                             <property name="tooltip-text" translatable="yes">Enter your nickname. This is how your name is displayed to your contacts.</property>
-                            <property name="halign">center</property>
-                            <property name="xalign">0.5</property>
                             <property name="placeholder-text" translatable="yes">Nickname</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="nickname_label">
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="title-1"/>
+                            </style>
                           </object>
                         </child>
                         <style>

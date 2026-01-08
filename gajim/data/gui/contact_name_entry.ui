@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <template class="ContactNameEntry" parent="GtkBox">
+    <property name="spacing">12</property>
+    <child>
+      <object class="GtkCenterBox">
+        <child type="center">
+          <object class="GtkLabel" id="_name_label">
+            <property name="max-width-chars">20</property>
+            <property name="ellipsize">end</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton" id="_edit_button">
+            <property name="tooltip-text" translatable="yes">Edit display name…</property>
+            <property name="margin-start">12</property>
+            <property name="visible">0</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-square-pen-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="_name_entry_box">
+        <property name="visible">0</property>
+        <style>
+          <class name="linked"/>
+        </style>
+        <child>
+          <object class="GtkEntry" id="_name_entry">
+            <property name="activates-default">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_apply_button">
+            <property name="tooltip-text" translatable="yes">Save display name</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-check-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_cancel_button">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="visible">0</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_reset_button">
+        <property name="tooltip-text" translatable="yes">Reset to original name</property>
+        <property name="visible">0</property>
+        <style>
+          <class name="destructive-action"/>
+        </style>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">lucide-rotate-ccw-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

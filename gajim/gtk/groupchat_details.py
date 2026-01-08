@@ -12,7 +12,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.contact_name_widget import ContactNameWidget
+from gajim.gtk.contact_name_entry import ContactNameEntry
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
 from gajim.gtk.groupchat_blocks import GroupchatBlocks
 from gajim.gtk.groupchat_config import GroupchatConfig
@@ -206,5 +206,5 @@ class GroupchatDetails(GajimAppWindow):
         self._ui.configuration_box.append(config)
         self._switcher.set_item_visible("config", True)
 
-    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+    def _on_contact_name_updated(self, _widget: ContactNameEntry, name: str) -> None:
         self._sidebar_page.set_title(name)

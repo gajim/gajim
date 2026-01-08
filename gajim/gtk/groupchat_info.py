@@ -27,7 +27,7 @@ from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.text import make_href_markup
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.contact_name_widget import ContactNameWidget
+from gajim.gtk.contact_name_entry import ContactNameEntry
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import container_remove_all
@@ -148,17 +148,17 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
 
         self._connect(self._ui.address_copy_button, "clicked", self._on_copy_address)
 
-        self._contact_name_widget = ContactNameWidget(edit_mode=edit_mode)
+        self._contact_name_entry = ContactNameEntry(editable=edit_mode)
         self._connect(
-            self._contact_name_widget, "name-updated", self._on_contact_name_updated
+            self._contact_name_entry, "name-updated", self._on_contact_name_updated
         )
 
-        self._ui.name_box.append(self._contact_name_widget)
+        self._ui.name_box.append(self._contact_name_entry)
 
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.ScrolledWindow.do_unroot(self)
-        del self._contact_name_widget
+        del self._contact_name_entry
         app.check_finalize(self)
 
     def get_account(self) -> str | None:
@@ -193,7 +193,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
     def set_info_from_contact(self, contact: GroupchatContact) -> None:
         self._contact = contact
 
-        self._contact_name_widget.set_contact(contact)
+        self._contact_name_entry.set_contact(contact)
 
         disco_info = contact.get_disco()
         if disco_info is not None:
@@ -220,7 +220,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
             self._ui.avatar_image.set_pixel_size(AvatarSize.GROUP_INFO)
             self._ui.avatar_image.set_from_paintable(texture)
 
-        self._contact_name_widget.update_displayed_name(name or "")
+        self._contact_name_entry.update_displayed_name(name or "")
 
         self._ui.address_row.set_subtitle(str(info.jid))
         self._ui.address_copy_button.set_sensitive(True)
@@ -262,9 +262,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self._add_features(info.features)
 
     def enable_edit_mode(self) -> None:
-        self._contact_name_widget.enable_edit_mode()
+        self._contact_name_entry.enable_edit_mode()
 
-    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+    def _on_contact_name_updated(self, _widget: ContactNameEntry, name: str) -> None:
         self.emit("name-updated", name)
 
     def _add_features(self, features: list[str]) -> None:

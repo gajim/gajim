@@ -126,6 +126,7 @@ class ProfileWindow(GajimAppWindow):
         self._new_avatar: None | bool | Avatar = False
 
         self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
+        self._ui.nickname_label.set_text(app.nicks[account])
         self._ui.nickname_entry.set_text(app.nicks[account])
 
         self._vcard_grid = VCardGrid(self.account)
@@ -241,7 +242,8 @@ class ProfileWindow(GajimAppWindow):
         self._ui.save_button.set_visible(True)
         self._ui.remove_avatar_button.set_visible(True)
         self._avatar_edit_button.set_visible(True)
-        self._ui.nickname_entry.set_sensitive(True)
+        self._ui.nickname_label.set_visible(False)
+        self._ui.nickname_entry.set_visible(True)
         self._ui.privacy_button.set_visible(True)
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
@@ -253,9 +255,11 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.set_visible(False)
         self._avatar_edit_button.set_visible(False)
         self._ui.privacy_button.set_visible(False)
-        self._ui.nickname_entry.set_sensitive(False)
-        self._ui.avatar_image.set_from_paintable(self._current_avatar)
+        self._ui.nickname_label.set_visible(True)
+        self._ui.nickname_label.set_text(app.nicks[self.account])
+        self._ui.nickname_entry.set_visible(False)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
+        self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore
         self._new_avatar = False
 
@@ -270,7 +274,8 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.set_visible(False)
         self._avatar_edit_button.set_visible(False)
         self._ui.privacy_button.set_visible(False)
-        self._ui.nickname_entry.set_sensitive(False)
+        self._ui.nickname_label.set_visible(True)
+        self._ui.nickname_entry.set_visible(False)
 
         # Switch page after setting other widget's visibility
         # This avoids a leak caused by switching stack pages

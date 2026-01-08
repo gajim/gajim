@@ -40,7 +40,7 @@ from gajim.gtk.alert import CancelDialogResponse
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.builder import get_builder
-from gajim.gtk.contact_name_widget import ContactNameWidget
+from gajim.gtk.contact_name_entry import ContactNameEntry
 from gajim.gtk.contact_settings import ContactSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
@@ -200,17 +200,15 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._ui.groups_page_stack.set_visible_child_name("offline")
             self._ui.notes_page_stack.set_visible_child_name("offline")
 
-    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+    def _on_contact_name_updated(self, _widget: ContactNameEntry, name: str) -> None:
         self._sidebar_page.set_title(name)
 
     def _fill_information_page(self) -> None:
-        contact_name_widget = ContactNameWidget(
-            contact=self.contact, edit_mode=self._is_in_roster
+        contact_name_entry = ContactNameEntry(
+            contact=self.contact, editable=self._is_in_roster
         )
-        self._connect(
-            contact_name_widget, "name-updated", self._on_contact_name_updated
-        )
-        self._ui.contact_name_controls_box.append(contact_name_widget)
+        self._connect(contact_name_entry, "name-updated", self._on_contact_name_updated)
+        self._ui.contact_name_controls_box.append(contact_name_entry)
 
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.append(self._vcard_grid)

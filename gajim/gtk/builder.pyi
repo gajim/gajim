@@ -494,6 +494,7 @@ class ProfileBuilder(Builder):
     avatar_image: Gtk.Image
     remove_avatar_button: Gtk.Button
     nickname_entry: Gtk.Entry
+    nickname_label: Gtk.Label
     cancel_button: Gtk.Button
     add_entry_button: Gtk.MenuButton
     privacy_button: Gtk.MenuButton
