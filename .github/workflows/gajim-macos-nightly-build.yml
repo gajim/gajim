@@ -1,4 +1,4 @@
-name: Gajim MacOS Nightly Build
+name: Gajim macOS Nightly Build
 
 on:
   workflow_dispatch:

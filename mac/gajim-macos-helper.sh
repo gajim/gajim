@@ -19,7 +19,7 @@
 # - To build (or rebuild) a new version of Gajim: ./gajim-macos-helper.sh build ci 2.4.1
 # - To create a dmg file: ./gajim-macos-helper.sh create-dmg ci 2.4.1
 #
-# Note: Bash on MacOS is stuck in version 3.2, so we avoid using recent things in this script
+# Note: Bash on macOS is stuck in version 3.2, so we avoid using recent things in this script
 
 set -e
 
@@ -238,7 +238,7 @@ function main()
 function usage()
 {
 	cat <<- EOS
-		$1: MacOS Helper to build virtual environments and start Gajim
+		$1: macOS Helper to build virtual environments and start Gajim
 
 		build			Build omemo-dr, nbxmpp and Gajim virtual environments
 		create-dmg		Create Gajim dmg bundle

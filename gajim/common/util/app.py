@@ -21,7 +21,7 @@ def get_extended_app_version() -> str:
     elif sys.platform == "win32":
         package = "Windows"
     elif sys.platform == "darwin":
-        package = "MacOS"
+        package = "macOS"
     else:
         package = "Unix/Linux"
 

@@ -220,7 +220,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _startup(self) -> None:
         if sys.platform in ("win32", "darwin"):
-            # Changing the PANGOCAIRO_BACKEND is necessary on Windows/MacOS
+            # Changing the PANGOCAIRO_BACKEND is necessary on Windows/macOS
             # to render colored emoji glyphs
             os.environ["PANGOCAIRO_BACKEND"] = "fontconfig"
 

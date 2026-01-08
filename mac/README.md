@@ -1,12 +1,12 @@
-# Build Gajim on MacOS
+# Build Gajim on macOS
 
-To build omemo-dr, nbxmpp and Gajim on MacOS, you can follow [the wiki page](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS).
+To build omemo-dr, nbxmpp and Gajim on macOS, you can follow [the wiki page](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS).
 
 But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help creating virtual environments for omemo-dr, nbxmpp and Gajim in Mac OS, build it, start it from the virtual environment, and also create a `.dmg` bundle.
 
 ## Requirements for this script
 
-You just need [Brew](https://brew.sh) (follow instructions on the website) and Bash (installed by default on MacOS), the script will install and do the rest.
+You just need [Brew](https://brew.sh) (follow instructions on the website) and Bash (installed by default on macOS), the script will install and do the rest.
 
 ## Usage
 
