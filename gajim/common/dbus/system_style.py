@@ -74,6 +74,8 @@ class SystemStyleListener:
             self._prefer_dark = value == 1
             self._callback()
             app.ged.raise_event(StyleChanged())
+            # Reload CSS to ensure mode-specific user colors are reloaded
+            app.css_config.reload_css()
 
     @property
     def prefer_dark(self) -> bool | None:
