@@ -37,6 +37,7 @@ from gajim.common.util.user_strings import get_retraction_text
 
 from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_list_row import ChatListRow
+from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.start_chat import ChatTypeFilter
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_listbox_row_count
@@ -78,12 +79,19 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._connect(hover_controller, "leave", self._on_cursor_leave)
         self.add_controller(hover_controller)
 
-        drop_target = Gtk.DropTarget(
+        chat_drop_target = Gtk.DropTarget(
             formats=Gdk.ContentFormats.new_for_gtype(ChatListRow),
             actions=Gdk.DragAction.MOVE,
         )
-        self._connect(drop_target, "drop", self._on_drop)
-        self.add_controller(drop_target)
+        self._connect(chat_drop_target, "drop", self._on_chat_drop)
+        self.add_controller(chat_drop_target)
+
+        file_drop_target = Gtk.DropTarget(
+            formats=Gdk.ContentFormats.new_for_gtype(PreviewWidget),
+            actions=Gdk.DragAction.COPY,
+        )
+        self._connect(file_drop_target, "drop", self._on_file_drop)
+        self.add_controller(file_drop_target)
 
         self._chat_order: list[ChatListRow] = []
 
@@ -382,11 +390,32 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._context_menu_visible = menu_is_visible
         self._schedule_sort()
 
-    def _on_drop(
+    def _on_file_drop(
         self, _drop_target: Gtk.DropTarget, value: GObject.Value, _x: float, y: float
     ) -> bool:
         target_row = self.get_row_at_y(int(y))
+        if not value or not isinstance(target_row, ChatListRow):
+            # Reject drop
+            return False
 
+        if isinstance(value, PreviewWidget):
+            # Calling highlight_dnd_targets False is necessary here because there is no
+            # drag-end signal in this case
+            app.window.highlight_dnd_targets(value, False)
+            app.window.select_chat(target_row.account, target_row.jid)
+
+            uri: list[str] = [value.get_orig_path().as_uri()]
+            app.window.activate_action("win.send-file", GLib.Variant("as", uri))
+            return True
+
+        # Reject drop
+        log.debug("Unknown item type dropped")
+        return False
+
+    def _on_chat_drop(
+        self, _drop_target: Gtk.DropTarget, value: GObject.Value, _x: float, y: float
+    ) -> bool:
+        target_row = self.get_row_at_y(int(y))
         if not value or not isinstance(target_row, ChatListRow):
             # Reject drop
             return False

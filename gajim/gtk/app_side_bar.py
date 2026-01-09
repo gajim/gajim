@@ -20,6 +20,7 @@ from gajim.common.events import RegisterActions
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
+from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_page import ChatPage
 from gajim.gtk.sidebar_listbox import SideBarListBox
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
@@ -218,7 +219,10 @@ class AppSideBar(Gtk.Box, EventHelper):
     def get_active_workspace(self) -> str | None:
         return self._workspace_listbox.get_active_workspace()
 
-    def highlight_dnd_targets(self, highlight: bool) -> None:
+    def highlight_dnd_targets(self, dragged_object: Any, highlight: bool) -> None:
+        if not isinstance(dragged_object, SideBarListBoxRow | ChatListRow):
+            return
+
         if highlight:
             self._workspace_listbox.add_css_class("dnd-target")
         else:

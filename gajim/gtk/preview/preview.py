@@ -7,6 +7,7 @@ from typing import cast
 
 import hashlib
 import logging
+from pathlib import Path
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
@@ -119,6 +120,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._http_obj = None
         self._state = PreviewState.INIT
 
+        self._drag_hotspot_x: float = 0
+        self._drag_hotspot_y: float = 0
+
+        drag_source = Gtk.DragSource(actions=Gdk.DragAction.COPY)
+        self._connect(drag_source, "prepare", self._on_drag_prepare)
+        self._connect(drag_source, "drag-begin", self._on_drag_begin)
+        self._connect(drag_source, "drag-end", self._on_drag_end)
+        self.add_controller(drag_source)
+
         self._connect(
             self._cancel_download_button, "clicked", self._on_cancel_download_clicked
         )
@@ -191,6 +201,39 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def get_text(self) -> str:
         return self._uri
+
+    def get_orig_path(self) -> Path:
+        return self._orig_path
+
+    def _on_drag_prepare(
+        self, _drag_source: Gtk.DragSource, x: float, y: float
+    ) -> Gdk.ContentProvider | None:
+        if self._state not in (PreviewState.DOWNLOADED, PreviewState.DISPLAY):
+            return None
+
+        self._drag_hotspot_x = x
+        self._drag_hotspot_y = y
+
+        value = GObject.Value()
+        value.init(PreviewWidget)
+        value.set_object(self)
+
+        return Gdk.ContentProvider.new_for_value(value)
+
+    def _on_drag_begin(self, _drag_source: Gtk.DragSource, drag: Gdk.Drag) -> None:
+        Gtk.DragIcon.set_from_paintable(
+            drag,
+            Gtk.WidgetPaintable().new(self),
+            hot_x=int(self._drag_hotspot_x),
+            hot_y=int(self._drag_hotspot_y),
+        )
+
+        app.window.highlight_dnd_targets(self, True)
+
+    def _on_drag_end(
+        self, _drag_source: Gtk.DragSource, _drag: Gdk.Drag, _delete_data: bool
+    ) -> None:
+        app.window.highlight_dnd_targets(self, False)
 
     def _should_auto_preview(self, context: str | None) -> bool:
         if self._from_us:

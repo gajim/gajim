@@ -51,6 +51,7 @@ from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_stack import MainStack
+from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.start_chat import parse_uri
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
@@ -829,15 +830,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return False
         return self._chat_page.is_chat_selected(account, jid)
 
-    def highlight_dnd_targets(self, drag_row: Any, highlight: bool) -> None:
-        if isinstance(drag_row, ChatListRow):
+    def highlight_dnd_targets(self, dragged_object: Any, highlight: bool) -> None:
+        if isinstance(dragged_object, ChatListRow | PreviewWidget):
             chat_list_stack = self._chat_page.get_chat_list_stack()
             workspace = self.get_active_workspace()
             if workspace is None:
                 return
 
-            if drag_row.is_pinned:
-                chat_list = chat_list_stack.get_chatlist(workspace)
+            chat_list = chat_list_stack.get_chatlist(workspace)
+            if isinstance(dragged_object, ChatListRow) and dragged_object.is_pinned:
                 for row in chat_list.get_chat_list_rows():
                     if not row.is_pinned:
                         continue
@@ -847,7 +848,14 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     else:
                         row.remove_css_class("dnd-target-chatlist")
 
-        self._app_side_bar.highlight_dnd_targets(highlight)
+            if isinstance(dragged_object, PreviewWidget):
+                for row in chat_list.get_chat_list_rows():
+                    if highlight:
+                        row.add_css_class("dnd-target-chatlist")
+                    else:
+                        row.remove_css_class("dnd-target-chatlist")
+
+        self._app_side_bar.highlight_dnd_targets(dragged_object, highlight)
 
     def _add_workspace(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         workspace_id = param.get_string()
