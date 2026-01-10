@@ -821,7 +821,11 @@ class ConversationView(Gtk.ScrolledWindow):
         if previous_flags & Gtk.StateFlags.PRELIGHT:
             self._message_row_actions.hide_actions()
         else:
-            success, point = row.compute_point(self, Graphene.Point.zero())
+            try:
+                success, point = row.compute_point(self, Graphene.Point.zero())
+            except GLib.Error:
+                return
+
             if not success:
                 return
 
