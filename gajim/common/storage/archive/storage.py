@@ -54,6 +54,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
 from gajim.common.storage.archive.models import Occupant
+from gajim.common.storage.archive.models import OpenGraph
 from gajim.common.storage.archive.models import Reaction
 from gajim.common.storage.archive.models import Receipt
 from gajim.common.storage.archive.models import Remote
@@ -69,7 +70,7 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 15
+CURRENT_USER_VERSION = 16
 
 
 log = logging.getLogger("gajim.c.storage.archive")
@@ -1197,6 +1198,10 @@ class MessageArchiveStorage(AlchemyStorage):
         session.execute(delete(Account).where(Account.pk == fk_account_pk))
 
         self._account_pks.pop(account)
+
+    @with_session
+    def remove_og(self, session: Session, pk: int) -> None:
+        session.execute(delete(OpenGraph).where(OpenGraph.pk == pk))
 
     @with_session
     @timeit

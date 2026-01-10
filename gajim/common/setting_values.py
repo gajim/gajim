@@ -39,6 +39,8 @@ BoolSettings = Literal[
     'enable_emoji_shortcodes',
     'enable_keepassxc_integration',
     'escape_key_closes',
+    'enable_link_preview_default',
+    'gc_enable_link_preview_default',
     'gc_notify_on_all_messages_private_default',
     'gc_notify_on_all_messages_public_default',
     'gc_print_join_left_default',
@@ -173,8 +175,10 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'enable_emoji_shortcodes': True,
     'enable_keepassxc_integration': False,
     'escape_key_closes': False,
+    'enable_link_preview_default': True,
     'file_transfers_port': 28011,
     'ft_add_hosts_to_send': '',
+    'gc_enable_link_preview_default': True,
     'gc_notify_on_all_messages_private_default': True,
     'gc_notify_on_all_messages_public_default': False,
     'gc_print_join_left_default': False,
@@ -328,6 +332,7 @@ BoolGroupChatSettings = Literal[
     'print_join_left',
     'print_status',
     'send_marker',
+    'enable_link_preview',
 ]
 
 StringGroupChatSettings = Literal[
@@ -351,6 +356,7 @@ AllGroupChatSettingsT = str | int | bool
 
 BoolContactSettings = Literal[
     'send_marker',
+    'enable_link_preview',
 ]
 
 StringContactSettings = Literal[
@@ -426,6 +432,7 @@ ACCOUNT_SETTINGS = {
     },
 
     'contact': {
+        'enable_link_preview': HAS_APP_DEFAULT,
         'encryption': HAS_ACCOUNT_DEFAULT,
         'mute_until': '',
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
@@ -434,6 +441,7 @@ ACCOUNT_SETTINGS = {
     },
 
     'group_chat': {
+        'enable_link_preview': HAS_APP_DEFAULT,
         'encryption': HAS_ACCOUNT_DEFAULT,
         'mute_until': '',
         'notify_on_all_messages': HAS_APP_DEFAULT,

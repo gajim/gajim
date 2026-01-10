@@ -5,6 +5,7 @@
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
+from gajim.common import app
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
 
@@ -65,6 +66,13 @@ class GroupChatSettings(SettingsBox):
                 SettingType.GROUP_CHAT,
                 "sync_threshold",
                 props={"data": THRESHOLD_OPTIONS},
+            ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Show Link Preview"),
+                SettingType.GROUP_CHAT,
+                "enable_link_preview",
+                callback=app.window.reload_view,
             ),
         ]
 

@@ -192,3 +192,26 @@ def get_reply(data: nbxmpp.structs.ReplyData | ReplyData | None) -> mod.Reply | 
         return None
 
     return mod.Reply(id=data.id, to=data.to)
+
+
+def get_open_graph_data(
+    open_graph: dict[str, nbxmpp.structs.OpenGraphData]
+) -> list[mod.OpenGraph]:
+
+    og_data: list[mod.OpenGraph] = []
+    for url, data in open_graph.items():
+        if not data.title:
+            continue
+
+        og_data.append(
+            mod.OpenGraph(
+                url=url,
+                type=data.type or None,
+                title=data.title,
+                site_name=data.site_name or None,
+                description=data.description or None,
+                image=data.image or None,
+            )
+        )
+
+    return og_data

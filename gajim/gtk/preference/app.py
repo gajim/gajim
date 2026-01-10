@@ -229,6 +229,14 @@ class ChatsGroup(GajimPreferencesGroup):
                 "print_status_in_chats",
                 desc=_('For example: "Julia is now online"'),
             ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Show Link Preview"),
+                SettingType.CONFIG,
+                "enable_link_preview_default",
+                desc=_("Default for new chats"),
+                callback=app.window.reload_view,
+            ),
         ]
 
         for setting in settings:
@@ -308,6 +316,14 @@ class GroupChatsGroup(GajimPreferencesGroup):
                     "button-style": "destructive-action",
                     "button-callback": self._reset_print_status,
                 },
+            ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Show Link Preview"),
+                SettingType.CONFIG,
+                "gc_enable_link_preview_default",
+                desc=_("Default for new group chats"),
+                callback=app.window.reload_view,
             ),
         ]
 

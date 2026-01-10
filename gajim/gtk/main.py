@@ -1333,3 +1333,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             window_width, window_height = self.get_width(), self.get_height()
             app.settings.set("mainwin_width", window_width)
             app.settings.set("mainwin_height", window_height)
+
+    def reload_view(self, *args: Any) -> None:
+        self.get_control().get_conversation_view().reload()

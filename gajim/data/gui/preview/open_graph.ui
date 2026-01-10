@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="OpenGraphPreviewWidget" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <property name="halign">fill</property>
+    <property name="spacing">12</property>
+    <child>
+      <object class="GtkBox" id="_content_box">
+        <property name="hexpand">true</property>
+        <child>
+          <object class="GtkImage">
+            <property name="halign">center</property>
+            <property name="icon-name">lucide-square-arrow-out-up-right-symbolic</property>
+            <property name="pixel-size">20</property>
+            <style>
+              <class name="px-9"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="_title_label">
+                <property name="halign">start</property>
+                <property name="ellipsize">end</property>
+                <property name="max-width-chars">42</property>
+                <style>
+                  <class name="bold"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_description_label">
+                <property name="halign">start</property>
+                <property name="wrap">true</property>
+                <property name="xalign">0</property>
+                <style>
+                  <class name="dimmed"/>
+                  <class name="small-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_close_button">
+        <property name="halign">end</property>
+        <property name="valign">center</property>
+        <property name="tooltip-text" translatable="yes">Close this preview</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">lucide-x-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <style>
+      <class name="preview-box"/>
+    </style>
+  </template>
+</interface>

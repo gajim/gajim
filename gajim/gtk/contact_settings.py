@@ -5,6 +5,7 @@
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
+from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.const import Setting
@@ -38,6 +39,13 @@ class ContactSettings(SettingsBox):
                 SettingType.CONTACT,
                 "send_marker",
                 desc=_("Send and receive read receipts"),
+            ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Show Link Preview"),
+                SettingType.CONTACT,
+                "enable_link_preview",
+                callback=app.window.reload_view,
             ),
         ]
 

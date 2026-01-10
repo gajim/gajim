@@ -210,6 +210,21 @@ class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     description: Mapped[str | None]
 
 
+class OpenGraph(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = "opengraph"
+
+    pk: Mapped[int] = mapped_column(init=False, primary_key=True)
+    fk_message_pk: Mapped[int] = mapped_column(
+        ForeignKey("message.pk", ondelete="CASCADE"), init=False
+    )
+    url: Mapped[str]
+    type: Mapped[str | None] = mapped_column(default=None)
+    title: Mapped[str]
+    site_name: Mapped[str | None] = mapped_column(default=None)
+    description: Mapped[str | None] = mapped_column(default=None)
+    image: Mapped[str | None] = mapped_column(default=None)
+
+
 class Reply(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = "reply"
 
@@ -864,6 +879,12 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         passive_deletes=True,
     )
     oob: Mapped[list[OOB]] = relationship(
+        lazy="selectin",
+        default_factory=list,
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    og: Mapped[list[OpenGraph]] = relationship(
         lazy="selectin",
         default_factory=list,
         cascade="all, delete",

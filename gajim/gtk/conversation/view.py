@@ -208,6 +208,11 @@ class ConversationView(Gtk.ScrolledWindow):
         self._contact = None
         self._client = None
 
+    def reload(self) -> None:
+        if self._contact is None:
+            return
+        self.switch_contact(self._contact)
+
     def switch_contact(self, contact: ChatContactT) -> None:
         self._contact = contact
         self._client = app.get_client(contact.account)

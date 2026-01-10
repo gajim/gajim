@@ -126,6 +126,8 @@ class Migration:
             self._v14()
         if user_version < 15:
             self._v15()
+        if user_version < 16:
+            self._v16()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -351,6 +353,11 @@ class Migration:
             s.commit()
 
         self._execute_multiple(["PRAGMA user_version=15"])
+
+    def _v16(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=16))
+        mod.Base.metadata.create_all(self._engine)
+        self._execute_multiple(["PRAGMA user_version=16"])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
