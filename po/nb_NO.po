@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -688,11 +688,18 @@ msgstr "Alle samtalestatuser"
 msgid "All Chats"
 msgstr "Alle samtalestatuser"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Melding"
+
 msgid "All files"
 msgstr "Alle filer"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1155,6 +1162,10 @@ msgid "Chat"
 msgstr "Samtaler"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Kontaktens melding:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt tilkoblet"
 
@@ -1209,10 +1220,6 @@ msgstr "Videoøkter er ikke tilgjengelige"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Velg arkiv"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Velg Lyd"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1286,6 +1293,9 @@ msgstr "Lukk sludring"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1347,6 +1357,12 @@ msgstr "_Sett opp"
 
 msgid "Configure logging system"
 msgstr "Sett opp loggføringssystem"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1498,6 +1514,10 @@ msgid "Copy to clipboard"
 msgstr "_Kopier lenke-plassering"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Forvalgt melding"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Kunne ikke åpne fil"
 
@@ -1622,6 +1642,10 @@ msgstr "%s har tatt del i gruppesamtalen"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Ny gruppesamtale"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Ledig for samtale"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2020,6 +2044,9 @@ msgstr "Alt"
 msgid "Everything"
 msgstr "Alt"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "Kjør kommando"
@@ -2112,10 +2139,6 @@ msgstr "Forlat gruppesamtaler"
 
 msgid "Fake audio output"
 msgstr "Falsk lydutdata"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr ""
 
 msgid "Features"
 msgstr "Funksjonalitet"
@@ -2226,6 +2249,9 @@ msgstr ""
 "        {received} meldinger lastet ned.\n"
 "        "
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Søk"
@@ -2256,6 +2282,16 @@ msgstr "Forlat gruppesamtaler"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Forlat gruppesamtaler"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Samtalehistorikk"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Formateringsfeil i CRL-ens sisteOppdatering-s-felt"
@@ -2413,10 +2449,6 @@ msgid "Group Chat Details"
 msgstr "Sludresnarveier"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Invitasjon til gruppesamtale"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Invitasjon til gruppesamtale"
 
@@ -2425,6 +2457,10 @@ msgstr "Utheving av Gruppesamtale-melding"
 
 msgid "Group Chat Message Received"
 msgstr "Gruppesamtale-melding motatt"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Sludresnarveier"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2901,15 +2937,6 @@ msgstr "Laster"
 msgid "Local Time"
 msgstr "Lokal JID:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Oppretting av gruppesludring tillates ikke."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Plassering:"
@@ -3062,6 +3089,10 @@ msgstr "Melding"
 msgid "Messages are archived on the server"
 msgstr "Denne økta VIL bli arkivert på tjeneren"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Første melding motatt"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3198,10 +3229,6 @@ msgstr "Gi kontakt nytt navn"
 msgid "New message from"
 msgstr "Ny melding fra %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3220,6 +3247,10 @@ msgstr "Ingen"
 
 msgid "No File Transfer available"
 msgstr "Ingen filoverføringer tilgjengelig"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Melding"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3436,8 +3467,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Åpne"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "Åpne"
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Åpne E-post-behandler"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Åpne E-post-behandler"
 
 #, fuzzy
@@ -3812,10 +3851,6 @@ msgstr "Profil"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3906,6 +3941,10 @@ msgstr "_Avslutt"
 
 msgid "Quit Gajim"
 msgstr "Avslutt Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Skriver"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4121,10 +4160,6 @@ msgstr "Gi kontakt nytt navn"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Brukernavn:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4480,6 +4515,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Velg kontaktene du ønsker å flette"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4670,6 +4709,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Laster"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Tillegg"
 
@@ -4775,10 +4818,6 @@ msgid "Show/Hide Window"
 msgstr "Lukker vinduet"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "Logg _inn"
 
@@ -4844,10 +4883,6 @@ msgstr "Stavekontroll"
 #, fuzzy
 msgid "Spell Checking"
 msgstr "Stavekontroll"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr ""
 
 msgid "Stage"
 msgstr ""
@@ -5137,10 +5172,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Visuelle merknader</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5509,10 +5540,6 @@ msgstr "Overfører"
 msgid "Transports"
 msgstr "Transporter"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5776,11 +5803,6 @@ msgstr "Brukere"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Plassering:"
 
 msgid "Validity"
 msgstr ""
@@ -6176,10 +6198,6 @@ msgid "_Accept"
 msgstr "_Godkjenn"
 
 #, fuzzy
-msgid "_Account"
-msgstr "_Kontoer"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Kryptert sertifikat"
 
@@ -6243,16 +6261,8 @@ msgid "_Decline"
 msgstr "_Frakoblet"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Forvalg"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Slett"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Beskrivelse"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6495,18 +6505,10 @@ msgstr "dato"
 msgid "description"
 msgstr "Beskrivelse"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 msgid "error"
 msgstr "feil"
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6546,10 +6548,6 @@ msgstr "lengdegrad"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Tor"
@@ -6571,10 +6569,6 @@ msgstr "python-nbxmpp-version: %s"
 msgid "region"
 msgstr "fylke"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "rom"
 
@@ -6588,10 +6582,6 @@ msgstr "gate"
 msgid "strike"
 msgstr "Gjennomstrek"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr "tekst"
 
@@ -6602,11 +6592,6 @@ msgid "translator-credits"
 msgstr ""
 "Allan Nordhøy <epost@anotheragency.no>\n"
 "Stian B. Barmen <stian@barmen.nu>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Plassering:"
 
 msgid "video input"
 msgstr "videoinndata"
@@ -6785,10 +6770,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Meldingsforfatting"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Første melding motatt"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -7047,6 +7028,10 @@ msgstr ""
 #~ msgid "Choose Avatar…"
 #~ msgstr "Velg arkiv"
 
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Velg Lyd"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Velg fil å sende…"
 
@@ -7075,10 +7060,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Tilkobling ikke tilgjengelig"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Kontaktens melding:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7167,10 +7148,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Forvalg"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Ledig for samtale"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7339,6 +7316,10 @@ msgstr ""
 #~ msgstr "Arkiveringsinnstillinger"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Invitasjon til gruppesamtale"
 
@@ -7413,6 +7394,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Grunn"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Oppretting av gruppesludring tillates ikke."
 
 #~ msgid "Location:"
 #~ msgstr "Plassering:"
@@ -7514,6 +7500,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "_Fortsett"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "postnummer"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7650,10 +7640,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Velg hvilken konto du ønsker å flette sammen med"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Velg kontaktene du ønsker å flette"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Advarsel: %s"
@@ -7741,6 +7727,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Viser en liste over filoverføringer mellom deg og andre"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -7902,6 +7892,11 @@ msgstr ""
 #~ msgstr "_Brukernavn:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Plassering:"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Bildetakt for video"
 
@@ -7970,6 +7965,10 @@ msgstr ""
 #~ msgstr "Dine arkiveringsinnstillinger har blitt lagret."
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "_Kontoer"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Kontoer"
 
@@ -7979,6 +7978,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML-konsoll"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Forvalg"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Beskrivelse"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -8061,6 +8068,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Inviter en bruker til et rom av en grunn"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Plassering:"
 
 #, fuzzy
 #~ msgid "yesterday "

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -693,11 +693,18 @@ msgstr "Сви статуси"
 msgid "All Chats"
 msgstr "Сви статуси"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Порука"
+
 msgid "All files"
 msgstr "Све датотеке"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1166,6 +1173,10 @@ msgid "Chat"
 msgstr "Разговори"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Порука разговора:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Контакт На Вези"
 
@@ -1219,10 +1230,6 @@ msgstr "Веза није доступна"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Одаберите слику"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Одаберите звук"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1297,6 +1304,9 @@ msgstr "Претрага"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1359,6 +1369,12 @@ msgid "Configure"
 msgstr "_Конфигуриши"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 #, fuzzy
@@ -1514,6 +1530,10 @@ msgid "Copy to clipboard"
 msgstr "_Копирај локацију везе"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Подразумевана порука"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Не могу учитати слику"
 
@@ -1639,6 +1659,10 @@ msgstr "%s се придружио групном разговору"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Нови групни разговор"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Слободан за разговор"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2041,6 +2065,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "_Изврши наредбу"
@@ -2132,10 +2159,6 @@ msgid "Failed to generate avatar."
 msgstr "Напусти групне разговоре"
 
 msgid "Fake audio output"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
 msgstr ""
 
 msgid "Features"
@@ -2244,6 +2267,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Претрага"
@@ -2274,6 +2300,16 @@ msgstr "Напусти групне разговоре"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Напусти групне разговоре"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Историјат разговора"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Грешка у формату CRL-овогпоља последњег ажурирања"
@@ -2428,10 +2464,6 @@ msgid "Group Chat Details"
 msgstr "Регистрација неуспела"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Позив на групни разговор"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Позив на групни разговор"
 
@@ -2440,6 +2472,10 @@ msgstr "Бојење Порука Са Групног Разговора"
 
 msgid "Group Chat Message Received"
 msgstr "Примљена Порука Са Групног Разговора"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Регистрација неуспела"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2911,15 +2947,6 @@ msgstr "Програмира"
 msgid "Local Time"
 msgstr "Локални џабер ИД:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Стварање групних разговора Вам није дозвољено."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Обавештење"
@@ -3070,6 +3097,10 @@ msgstr "Порука"
 msgid "Messages are archived on the server"
 msgstr "Сесија НЕЋЕ бити памћена"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Примљена Прва Порука"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3208,10 +3239,6 @@ msgstr "Преименуј контакт"
 msgid "New message from"
 msgstr "Нова порука од %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3232,6 +3259,10 @@ msgstr "Ништа"
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Преноси датотека"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Порука"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3449,8 +3480,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "OpenPGP: "
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "OpenPGP: "
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Отвори састављач е-мејла"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Отвори састављач е-мејла"
 
 #, fuzzy
@@ -3830,10 +3869,6 @@ msgstr "датотека"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3925,6 +3960,10 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Гајим"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Пише"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4142,10 +4181,6 @@ msgstr "Преименуј контакт"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Корисничко име:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4497,6 +4532,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Одаберите контакте које желите да синхронизујете"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4686,6 +4725,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Програмира"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Регистрација неуспела"
 
@@ -4794,10 +4837,6 @@ msgid "Show/Hide Window"
 msgstr "Сакрива прозор"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Гајим"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "Пријављивању"
 
@@ -4863,10 +4902,6 @@ msgstr "Провера правописа"
 #, fuzzy
 msgid "Spell Checking"
 msgstr "Провера правописа"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr ""
 
 msgid "Stage"
 msgstr ""
@@ -5158,10 +5193,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Визуална обавештења</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5521,10 +5552,6 @@ msgstr "Пренос у току"
 msgid "Transports"
 msgstr "Преноси"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5787,11 +5814,6 @@ msgstr "Корисници"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Обавештење"
 
 msgid "Validity"
 msgstr ""
@@ -6187,10 +6209,6 @@ msgid "_Accept"
 msgstr "_Налози"
 
 #, fuzzy
-msgid "_Account"
-msgstr "_Налози"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Самопотписани сертификат"
 
@@ -6255,16 +6273,8 @@ msgid "_Decline"
 msgstr "_Није на вези"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Подразумевано"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Обриши"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Опис"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6508,19 +6518,11 @@ msgstr ""
 msgid "description"
 msgstr "Опис"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 #, fuzzy
 msgid "error"
 msgstr "Грешка"
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6562,10 +6564,6 @@ msgstr "један"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "За"
@@ -6587,10 +6585,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "соба"
 
@@ -6604,10 +6598,6 @@ msgstr ""
 msgid "strike"
 msgstr "Прецртано"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -6616,11 +6606,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Б. Кокановић. <branko.kokanovic@gmail.com>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Обавештење"
 
 msgid "video input"
 msgstr ""
@@ -6799,10 +6784,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Садржај поруке"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Примљена Прва Порука"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -7055,6 +7036,10 @@ msgstr ""
 #~ msgstr "Одаберите слику"
 
 #, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Одаберите звук"
+
+#, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Одаберите датотеку за слање..."
 
@@ -7085,10 +7070,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Веза није доступна"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Порука разговора:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7179,10 +7160,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Подразумевано"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Слободан за разговор"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7341,6 +7318,10 @@ msgstr ""
 #~ msgstr "_Подешавања"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Позив на групни разговор"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Позив на групни разговор"
 
@@ -7394,6 +7375,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Разлог"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Стварање групних разговора Вам није дозвољено."
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7491,6 +7477,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "На одмору"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "<b>Поштански број:</b>"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7619,10 +7609,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Одаберите налог са којим желите да се синхронизујете"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Одаберите контакте које желите да синхронизујете"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Забрањујем %s"
@@ -7710,6 +7696,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Приказује листу преноса датотека између Вас и осталих"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Гајим"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Ста_тус"
@@ -7854,6 +7844,11 @@ msgstr ""
 #~ msgstr "_Корисничко име:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Обавештење"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Приватни Разговори"
 
@@ -7918,12 +7913,24 @@ msgstr ""
 #~ msgstr "_Подешавања"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "_Налози"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Налози"
 
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML Конзола"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Подразумевано"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Опис"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -8000,6 +8007,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Одаберите групне разговоре које желите да напустите"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Обавештење"
 
 #, fuzzy
 #~ msgid "yesterday "

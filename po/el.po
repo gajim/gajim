@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -690,11 +690,18 @@ msgstr "Όλες οι καταστάσεις"
 msgid "All Chats"
 msgstr "Όλες οι καταστάσεις"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Μήνυμα"
+
 msgid "All files"
 msgstr "Όλα τα αρχεία"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1156,6 +1163,10 @@ msgid "Chat"
 msgstr "Συζητήσεις"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Μήνυμα κατά_στασης:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Σύνδεση επαφής"
 
@@ -1209,10 +1220,6 @@ msgstr "To Session bus δεν είναι διαθέσιμο"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Επιλογή εικόνας"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Επιλογή ήχου"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1288,6 +1295,9 @@ msgstr "Αναζήτηση"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1350,6 +1360,12 @@ msgid "Configure"
 msgstr "_Συνέχεια"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 #, fuzzy
@@ -1504,6 +1520,10 @@ msgid "Copy to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
@@ -1629,6 +1649,10 @@ msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Αρχηγός ομάδας παραθύρων"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Ελεύθερος για κουβέντα"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2029,6 +2053,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "_Εκτέλεση εντολής..."
@@ -2120,10 +2147,6 @@ msgid "Failed to generate avatar."
 msgstr "Ομαδικές συζητήσεις"
 
 msgid "Fake audio output"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
 msgstr ""
 
 #, fuzzy
@@ -2235,6 +2258,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Αναζήτηση"
@@ -2265,6 +2291,16 @@ msgstr "Ομαδικές συζητήσεις"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Ομαδικές συζητήσεις"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Ιστορικό συζητήσεων"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
@@ -2419,10 +2455,6 @@ msgid "Group Chat Details"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Πρόσκληση ομαδικής κουβέντας"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
@@ -2431,6 +2463,10 @@ msgstr "Επισήμανση "
 
 msgid "Group Chat Message Received"
 msgstr "Λήφθηκε μήνυμα ομαδικής συζήτησης"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2903,15 +2939,6 @@ msgstr "Σύνθεση"
 msgid "Local Time"
 msgstr "Τοπικό jid:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Δεν επιτρέπεται η δημιουργία ομαδικών συζητήσεων."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Τροποποίηση λογαριασμού"
@@ -3063,6 +3090,10 @@ msgstr "Μήνυμα"
 msgid "Messages are archived on the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Λήφθηκε το πρώτο μήνυμα"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3202,10 +3233,6 @@ msgstr "_Μετονομασία αρχείων"
 msgid "New message from"
 msgstr "Νέο μήνυμα από %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3226,6 +3253,10 @@ msgstr "Κανένα"
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Μεταφορές αρχείων"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Μήνυμα"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3444,8 +3475,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "OpenPGP: "
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "OpenPGP: "
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Άνοιγμα προγράμματος αλληλογραφίας"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Άνοιγμα προγράμματος αλληλογραφίας"
 
 #, fuzzy
@@ -3825,10 +3864,6 @@ msgstr "αρχείο"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3921,6 +3956,10 @@ msgstr "_Έξοδος"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Δουλειά"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4136,10 +4175,6 @@ msgstr "_Μετονομασία αρχείων"
 #, fuzzy
 msgid "Rename…"
 msgstr "Όν_ομα χρήστη:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4494,6 +4529,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "το JID της επαφής με την οποία θέλετε να συνομιλήσετε"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4684,6 +4723,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Σύνθεση"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
@@ -4786,10 +4829,6 @@ msgid "Show/Hide Window"
 msgstr "Αποκρύπτει το παράθυρο"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "Σύν_δεση"
 
@@ -4853,10 +4892,6 @@ msgid "Spell Checker"
 msgstr ""
 
 msgid "Spell Checking"
-msgstr ""
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
 msgstr ""
 
 msgid "Stage"
@@ -5150,10 +5185,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5504,10 +5535,6 @@ msgstr "Μεταφέρεται"
 msgid "Transports"
 msgstr "Μεταφορές"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5772,11 +5799,6 @@ msgstr "Χρήστες"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Τροποποίηση λογαριασμού"
 
 msgid "Validity"
 msgstr ""
@@ -6168,10 +6190,6 @@ msgid "_Accept"
 msgstr "Αποδοχή"
 
 #, fuzzy
-msgid "_Account"
-msgstr "Λογαριασμοί"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
@@ -6236,16 +6254,8 @@ msgid "_Decline"
 msgstr "Απ_οσυνδεδεμένος"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Προεπιλογή"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Διαγραφή"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Περιγραφή"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6495,19 +6505,11 @@ msgstr ""
 msgid "description"
 msgstr "Περιγραφή"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 #, fuzzy
 msgid "error"
 msgstr "Σφάλμα:"
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6549,10 +6551,6 @@ msgstr "ένα"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Προς"
@@ -6575,10 +6573,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 #, fuzzy
 msgid "room"
 msgstr "Από"
@@ -6593,10 +6587,6 @@ msgstr ""
 msgid "strike"
 msgstr "Ψευδώνυμο"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -6609,11 +6599,6 @@ msgstr ""
 "Φίλιππος Παπαδόπουλος <psybases@gmail.com>\n"
 "Σταύρος Γιαννούρης <stavrosg@hellug.gr>\n"
 "Στάθης Καμπέρης <ekamperi@auth.gr>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Τροποποίηση λογαριασμού"
 
 msgid "video input"
 msgstr ""
@@ -6782,10 +6767,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "περιεχόμενα μηνύματος"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Λήφθηκε το πρώτο μήνυμα"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -7034,6 +7015,10 @@ msgstr ""
 #~ msgstr "Επιλογή εικόνας"
 
 #, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Επιλογή ήχου"
+
+#, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
@@ -7064,10 +7049,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Σύνδεση μη διαθέσιμη"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Μήνυμα κατά_στασης:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7159,10 +7140,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Προεπιλογή"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Ελεύθερος για κουβέντα"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7323,6 +7300,10 @@ msgstr ""
 #~ msgstr "_Προτιμήσεις"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Πρόσκληση ομαδικής κουβέντας"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Πρόσκληση ομαδικής κουβέντας"
 
@@ -7369,6 +7350,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Αιτία"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Δεν επιτρέπεται η δημιουργία ομαδικών συζητήσεων."
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7462,6 +7448,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Διαχειριστής"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Τ.Κ.:"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7583,10 +7573,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "το JID της επαφής με την οποία θέλετε να συνομιλήσετε"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "το JID της επαφής με την οποία θέλετε να συνομιλήσετε"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Απαγορεύοντας την πρόσβαση στον %s"
@@ -7678,6 +7664,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Δείχνει τη λίστα μεταφορών αρχείων μεταξύ εσάς και άλλων"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Κατάσ_ταση"
@@ -7820,6 +7810,11 @@ msgstr ""
 #~ msgstr "Όν_ομα χρήστη:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Τροποποίηση λογαριασμού"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Προσωπική συζήτηση"
 
@@ -7891,12 +7886,24 @@ msgstr ""
 #~ msgstr "_Προτιμήσεις"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Λογαριασμοί"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Λογαριασμοί"
 
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML Κονσόλα"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Προεπιλογή"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Περιγραφή"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7979,6 +7986,11 @@ msgstr ""
 #~ "Do you want to join?"
 #~ msgstr ""
 #~ "Παρακαλώ συμπληρώστε τα στοιχεία της επαφής που θέλετε να προσθέσετε"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 #~ msgid "yesterday "

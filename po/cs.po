@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -647,11 +647,18 @@ msgstr "Všechny stavy konverzace"
 msgid "All Chats"
 msgstr "Všechny stavy konverzace"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Zpráva"
+
 msgid "All files"
 msgstr "Všechny soubory"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1069,6 +1076,10 @@ msgstr ""
 msgid "Chat"
 msgstr "Konverzace"
 
+#, fuzzy
+msgid "Chat Address"
+msgstr "Adresy kontaktu"
+
 msgid "Chat Banner: Background Color"
 msgstr "Barva pozadí konverzace"
 
@@ -1122,10 +1133,6 @@ msgstr "Video hovory nejsou na Windows dostupné"
 
 msgid "Choose Device"
 msgstr "Vyberte zařízení"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Vyberte zvuk"
 
 msgid "Choose History Export Directory"
 msgstr "Vyberte složku pro export historie"
@@ -1196,6 +1203,10 @@ msgstr "Zavřít okno konverzace"
 msgid "Close a chat by pressing the Escape key"
 msgstr "Zavřít okno konverzace stisknutím klávesy Escape"
 
+#, fuzzy
+msgid "Close this preview"
+msgstr "Automatický náhled není dostupný"
+
 msgid "Close with Escape"
 msgstr "Zavřete stisknutím klávesy Escape"
 
@@ -1251,6 +1262,12 @@ msgstr "Nastavit"
 
 msgid "Configure logging system"
 msgstr "Upravit nastavení logovacího systému"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Potvrdit nešifrované spojení"
@@ -1382,6 +1399,10 @@ msgid "Copy to clipboard"
 msgstr "Kopírovat informace do schránky"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Přímá zpráva"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Nezda"
 
@@ -1493,6 +1514,10 @@ msgstr "Výchozí pro konverzace a soukromé skupinové konverzace"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Výchozí pro skupinové konverzace"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Výchozí pro konverzace"
 
 msgid "Default for new group chats"
 msgstr "Výchozí pro nové skupinové konverzace"
@@ -1867,6 +1892,9 @@ msgstr "Všichni"
 msgid "Everything"
 msgstr "Všechno"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr "Spustit"
 
@@ -1945,10 +1973,6 @@ msgstr "Nepodařilo se vygenerovat profilový obrázek."
 
 msgid "Fake audio output"
 msgstr "Falešný zvukový výstup"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Rodina"
 
 msgid "Features"
 msgstr "Vlastnosti serveru"
@@ -2050,6 +2074,9 @@ msgstr ""
 "Synchronizace historie konverzací byla dokončena:\n"
 "%s zpráv bylo staženo"
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Zavřít hledání"
@@ -2077,6 +2104,16 @@ msgstr "Zapomenout tuto skupinovou konverzaci"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Zapomenout tuto skupinovou konverzaci"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Konverzace: barva textu"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Chyba CRL certifikátu v poli: poslední aktualizace"
@@ -2221,9 +2258,6 @@ msgstr "Skupinová konverzace"
 msgid "Group Chat Details"
 msgstr "Detaily skupinové konverzace"
 
-msgid "Group Chat Invitation"
-msgstr "Pozvánka do skupinové konverzace"
-
 msgid "Group Chat Language"
 msgstr "Jazyk skupinové konverzace"
 
@@ -2232,6 +2266,10 @@ msgstr "Zvýraznění zprávy v diskuzi"
 
 msgid "Group Chat Message Received"
 msgstr "Přijetí zprávy v diskuzi"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Detaily skupinové konverzace"
 
 msgid "Group Chats"
 msgstr "Skupinové konverzace"
@@ -2661,14 +2699,6 @@ msgstr "Načítám…"
 msgid "Local Time"
 msgstr "Místní čas"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "Místní pomocná skupina"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Místní zprávy"
-
 #, python-format
 msgid "Location at %s"
 msgstr "Pozice na %s"
@@ -2806,6 +2836,10 @@ msgstr "Zpráva"
 msgid "Messages are archived on the server"
 msgstr "Zprávy jsou archivovány na serveru"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "První zpráva přijata"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -2931,10 +2965,6 @@ msgstr "Nová pracovní plocha"
 msgid "New message from"
 msgstr "Nová zpráva od"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "Zprávy"
-
 msgid "Next"
 msgstr "Další"
 
@@ -2954,6 +2984,10 @@ msgstr "Ne"
 
 msgid "No File Transfer available"
 msgstr "Žádný přenos souborů není dostupný"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Zpráva"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3157,7 +3191,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Otevřené"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "Otevřít"
+
 msgid "Open Email Composer"
+msgstr "Otevřít editor emailu"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "Otevřít editor emailu"
 
 msgid "Open Folder"
@@ -3501,10 +3543,6 @@ msgstr "Profil"
 msgid "Profile application with cprofile"
 msgstr "Profilová aplikace s cprofile"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "Diskuze o projektu"
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3591,6 +3629,10 @@ msgstr "Ukončit"
 
 msgid "Quit Gajim"
 msgstr "Ukončit Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Čekám…"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -3788,10 +3830,6 @@ msgstr "Odstranit kontakt"
 #, fuzzy
 msgid "Rename…"
 msgstr "Uživatelské jméno"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "Opravy"
 
 msgid "Reply…"
 msgstr ""
@@ -4108,6 +4146,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr "Zvolit rychlost přehrávání"
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "JID kontaktu, se kterým chcete komunikovat"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Vyberte svůj zvukový vstup (např. mikrofon)"
 
@@ -4278,6 +4320,10 @@ msgid "Show Joined / Left"
 msgstr "Zobrazit připojení / odchody"
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Živý náhled"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Zásuvné moduly"
 
@@ -4374,9 +4420,6 @@ msgstr "Zobrazit okno při zapnutí"
 msgid "Show/Hide Window"
 msgstr "Zobrazit/skrýt okno"
 
-msgid "Shutting down Gajim"
-msgstr "Vypínám Gajim"
-
 msgid "Sign In"
 msgstr "Přihlásit se"
 
@@ -4435,10 +4478,6 @@ msgstr "Kontrola Pravopisu"
 
 msgid "Spell Checking"
 msgstr "Kontrola pravopisu"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "Jarní setkání"
 
 msgid "Stage"
 msgstr "Etapa"
@@ -4713,10 +4752,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Vizuální upozornění"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "Tým"
 
 msgid "Telephone"
 msgstr ""
@@ -5061,10 +5096,6 @@ msgstr "Přenáším soubor…"
 msgid "Transports"
 msgstr "Transporty"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "Plánování výletu"
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5306,10 +5337,6 @@ msgstr "Uživatelé"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Dovolená"
 
 msgid "Validity"
 msgstr "Platnost"
@@ -5676,9 +5703,6 @@ msgstr "Informace"
 msgid "_Accept"
 msgstr "Přijmout"
 
-msgid "_Account"
-msgstr "Účet"
-
 msgid "_Add to Trusted Certificates"
 msgstr "Přidat mezi důvěryhodné certifikáty"
 
@@ -5730,14 +5754,8 @@ msgstr "Vytvořit"
 msgid "_Decline"
 msgstr "Odmítnout"
 
-msgid "_Default"
-msgstr "Výchozí"
-
 msgid "_Delete"
 msgstr "Smazat"
-
-msgid "_Description"
-msgstr "Popis"
 
 msgid "_Destroy"
 msgstr "Zničit"
@@ -5957,19 +5975,11 @@ msgstr "datum"
 msgid "description"
 msgstr "popis"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "např. %s"
-
 msgid "error"
 msgstr "chyba"
 
 msgid "example.org"
 msgstr "příklad.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "rodina"
 
 msgid "floor"
 msgstr "podlaha"
@@ -6007,10 +6017,6 @@ msgstr "jeden"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "zprávy"
-
 msgid "or"
 msgstr "nebo"
 
@@ -6031,10 +6037,6 @@ msgstr "Verze python-nbxmpp %s"
 msgid "region"
 msgstr "oblast"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "opravy"
-
 msgid "room"
 msgstr "místnost"
 
@@ -6047,10 +6049,6 @@ msgstr "ulice"
 msgid "strike"
 msgstr "přeškrtnuté"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr "tým"
-
 msgid "text"
 msgstr "text"
 
@@ -6061,10 +6059,6 @@ msgid "translator-credits"
 msgstr ""
 "Petr Menšík <pihhan@seznam.cz>\n"
 "scippio <scippio@berounet.cz>"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "dovolená"
 
 msgid "video input"
 msgstr "video vstup"
@@ -6277,10 +6271,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "?Message row action:Quote…"
 #~ msgstr "Citace…"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "První zpráva přijata"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6559,6 +6549,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Vyberte profilový obrázek…"
 
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Vyberte zvuk"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vyberte soubor k odeslání…"
 
@@ -6606,9 +6600,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Connection not available"
 #~ msgstr "Spojení není dostupné"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Adresy kontaktu"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Seznam kontaktů: barva pozadí"
@@ -6692,9 +6683,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Default"
 #~ msgstr "Výchozí"
-
-#~ msgid "Default for chats"
-#~ msgstr "Výchozí pro konverzace"
 
 #~ msgid "Delete Message"
 #~ msgstr "Odstranit zprávu"
@@ -6801,6 +6789,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Expires on"
 #~ msgstr "Vyprší"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Rodina"
+
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Tato"
 
@@ -6877,6 +6869,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Gajim: Kontrola aktualizací je vypnuta"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Pozvánka do skupinové konverzace"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Pozvánka do skupinové konverzace"
@@ -6987,6 +6982,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Local System Time"
 #~ msgstr "Místní systémový čas"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Místní pomocná skupina"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Místní zprávy"
+
 #~ msgid "Location:"
 #~ msgstr "Místo:"
 
@@ -7036,6 +7039,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr ""
 #~ "Nikdy nezmeškejte zprávu, mějte všechny své chatovací klienty "
 #~ "synchronizované"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "Zprávy"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Není dostupné žádné připojení"
@@ -7098,6 +7105,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Heslo obsahuje nepovolené znaky"
 
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Vložit jako útržek kódu"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pozastavit nebo pokračovat v přenosu souboru"
 
@@ -7131,6 +7142,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Progress"
 #~ msgstr "Průběh"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "Diskuze o projektu"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Počítač proxy"
@@ -7180,6 +7195,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Odstranit ze seznamu kontaktů"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "Opravy"
 
 #~ msgid "Report"
 #~ msgstr "Nahlásit"
@@ -7236,10 +7255,6 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Vybrat účet pro synchronizaci"
-
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "JID kontaktu, se kterým chcete komunikovat"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr ""
@@ -7339,6 +7354,13 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobrazí výpis přenosů souborů mezi vámi a vašimi kontakty"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Vypínám Gajim"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "Jarní setkání"
+
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
 
@@ -7410,6 +7432,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "Ověření TLS selhalo: %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "Tým"
+
 #, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
@@ -7450,6 +7476,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr "Ber * / _ páry jako možné formátovací znaky."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "Plánování výletu"
 
 #~ msgid "Tune:"
 #~ msgstr "Píseň:"
@@ -7509,6 +7539,10 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Uživatelské jméno"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Dovolená"
 
 #~ msgid "Video Framerate"
 #~ msgstr "Snímková frekvence videa"
@@ -7572,6 +7606,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Nastavení archivování bylo úspěšně uloženo."
 
+#~ msgid "_Account"
+#~ msgstr "Účet"
+
 #~ msgid "_Accounts"
 #~ msgstr "Účty"
 
@@ -7581,6 +7618,12 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "Konzole XML"
+
+#~ msgid "_Default"
+#~ msgstr "Výchozí"
+
+#~ msgid "_Description"
+#~ msgstr "Popis"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "Znovu se neptat"
@@ -7645,6 +7688,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "dark skin tone"
 #~ msgstr "tmavý motiv vzhledu"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "např. %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "rodina"
+
 #~ msgid "file transfers list"
 #~ msgstr "výpis přenosů souborů"
 
@@ -7670,8 +7721,24 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "medium-light skin tone"
 #~ msgstr "středně světlý motiv vzhledu"
 
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "zprávy"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "opravy"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "tým"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "dovolená"
 
 #, fuzzy
 #~ msgid "yesterday "

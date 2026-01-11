@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -650,11 +650,18 @@ msgstr "Todos os Estados de Bate-papo"
 msgid "All Chats"
 msgstr "Todos os Estados de Bate-papo"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Mensagem"
+
 msgid "All files"
 msgstr "Todos os arquivos"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1089,6 +1096,10 @@ msgstr ""
 msgid "Chat"
 msgstr "Bate-papos"
 
+#, fuzzy
+msgid "Chat Address"
+msgstr "Endereço do Contato"
+
 msgid "Chat Banner: Background Color"
 msgstr "Banner de Bate-papo: Cor de Fundo"
 
@@ -1141,10 +1152,6 @@ msgstr "As chamadas de vídeo não estão disponíveis no Windows"
 
 msgid "Choose Device"
 msgstr "Escolha Dispositivo"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Escolha Som"
 
 msgid "Choose History Export Directory"
 msgstr "Escolha o Diretório de Exportação do Histórico"
@@ -1218,6 +1225,10 @@ msgid "Close a chat by pressing the Escape key"
 msgstr "Feche uma conversa premindo a tecla Escape"
 
 #, fuzzy
+msgid "Close this preview"
+msgstr "Visualização automática desativada"
+
+#, fuzzy
 msgid "Close with Escape"
 msgstr "Chamada com %s"
 
@@ -1278,6 +1289,12 @@ msgstr "Configurar"
 
 msgid "Configure logging system"
 msgstr "Configurar sistema de registro"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Confirmar Conexão Não Criptografada"
@@ -1411,6 +1428,10 @@ msgid "Copy to clipboard"
 msgstr "Copiar informações para a área de transferência"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Mensagens Diretas (DM)"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Não posso acessar arquivo"
 
@@ -1524,6 +1545,10 @@ msgstr "Padrão para bate-papos e bate-papos em grupo privados"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Padrão para grupos de bate-papo"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Padrão para Bate-papos"
 
 msgid "Default for new group chats"
 msgstr "Padrão para novos grupos de bate-papos"
@@ -1914,6 +1939,9 @@ msgstr "Todos"
 msgid "Everything"
 msgstr "Tudo"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr "Executar"
 
@@ -1992,10 +2020,6 @@ msgstr "Falha ao gerar avatar."
 
 msgid "Fake audio output"
 msgstr "Saída de áudio falsa"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Familia"
 
 msgid "Features"
 msgstr "Recursos"
@@ -2098,6 +2122,9 @@ msgstr ""
 "Sincronização do histórico de bate-papo concluída:\n"
 "%s mensagens baixadas"
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Fechar Pesquisa"
@@ -2126,6 +2153,16 @@ msgstr "Esqueça este Bate-papo em Grupo"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Esqueça este Bate-papo em Grupo"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Conversa: Cor do Texto"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Erro de formato no campo lastUpdate da CRL"
@@ -2274,9 +2311,6 @@ msgstr "Conversa em Grupo"
 msgid "Group Chat Details"
 msgstr "Detalhes do Bate-papo em Grupo"
 
-msgid "Group Chat Invitation"
-msgstr "Convite de Bate-papo em Grupo"
-
 msgid "Group Chat Language"
 msgstr "Idioma do Bate-papo em Grupo"
 
@@ -2285,6 +2319,10 @@ msgstr "Destaque de Mensagem de Bate-papo em Grupo"
 
 msgid "Group Chat Message Received"
 msgstr "Mensagem de Bate-papo em Grupo Recebida"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Detalhes do Bate-papo em Grupo"
 
 msgid "Group Chats"
 msgstr "Bate-papos em Grupo"
@@ -2719,15 +2757,6 @@ msgstr "Carregando…"
 msgid "Local Time"
 msgstr "Hora Local"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "?Group chat description:Notícias e relatórios locais"
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Localização"
@@ -2869,6 +2898,10 @@ msgstr "Mensagem"
 msgid "Messages are archived on the server"
 msgstr "As mensagens são arquivadas no servidor"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "?Message state:Recebido"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -2998,10 +3031,6 @@ msgstr "Nova Área-de-Trabalho"
 msgid "New message from"
 msgstr "Nova mensagem de %s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr "Próximo(a)"
 
@@ -3020,6 +3049,10 @@ msgstr "Nenhum"
 
 msgid "No File Transfer available"
 msgstr "Nenhuma Transferência de Arquivo disponível"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Mensagem"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3234,7 +3267,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Abrir"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "Abrir"
+
 msgid "Open Email Composer"
+msgstr "Abrir Compositor de E-mail"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "Abrir Compositor de E-mail"
 
 msgid "Open Folder"
@@ -3591,11 +3632,6 @@ msgstr "Perfil"
 msgid "Profile application with cprofile"
 msgstr "Aplicação de perfil com cprofile"
 
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "?Group chat description:Discussão do projeto"
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3684,6 +3720,10 @@ msgstr "Sair"
 
 msgid "Quit Gajim"
 msgstr "Sair do Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Aguardando…"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -3881,10 +3921,6 @@ msgstr "Remover Contato"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Nome do Usuário"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4207,6 +4243,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Selecione os contatos que deseja sincronizar"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Selecione sua entrada de áudio (por exemplo, microfone)"
 
@@ -4384,6 +4424,10 @@ msgid "Show Joined / Left"
 msgstr "Mostrar Entraram / Deixaram"
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Visualização ao Vivo"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Plugins"
 
@@ -4488,9 +4532,6 @@ msgstr "Mostrar janela ao iniciar o Gajim"
 msgid "Show/Hide Window"
 msgstr "Mostrar/ocultar janela"
 
-msgid "Shutting down Gajim"
-msgstr "Desligando o Gajim"
-
 msgid "Sign In"
 msgstr "Inscrever"
 
@@ -4550,10 +4591,6 @@ msgstr "Verificador Ortográfico"
 
 msgid "Spell Checking"
 msgstr "Verificando Ortografia"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr ""
 
 msgid "Stage"
 msgstr "Palco"
@@ -4830,10 +4867,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Notificações Visuais"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5190,10 +5223,6 @@ msgstr "Transferindo Arquivo…"
 msgid "Transports"
 msgstr "Transportes"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5438,11 +5467,6 @@ msgstr "Usuários"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Localização:"
 
 msgid "Validity"
 msgstr "Validade"
@@ -5816,9 +5840,6 @@ msgstr "_Sobre"
 msgid "_Accept"
 msgstr "_Aceitar"
 
-msgid "_Account"
-msgstr "_Conta"
-
 msgid "_Add to Trusted Certificates"
 msgstr "_Adicionar a Certificados Confiáveis"
 
@@ -5872,14 +5893,8 @@ msgstr "_Criar"
 msgid "_Decline"
 msgstr "_Desistir"
 
-msgid "_Default"
-msgstr "_Padrão"
-
 msgid "_Delete"
 msgstr "_Apagar"
-
-msgid "_Description"
-msgstr "_Descrição"
 
 msgid "_Destroy"
 msgstr "_Destruir"
@@ -6101,19 +6116,11 @@ msgstr "dado"
 msgid "description"
 msgstr "descrição"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "por exemplo %s"
-
 msgid "error"
 msgstr "Erro"
 
 msgid "example.org"
 msgstr "exemplo.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr ""
 
 msgid "floor"
 msgstr "piso"
@@ -6152,10 +6159,6 @@ msgstr "long"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 msgid "or"
 msgstr "ou"
 
@@ -6176,10 +6179,6 @@ msgstr "python-nbxmpp Versão: %s"
 msgid "region"
 msgstr "região"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "sala"
 
@@ -6193,10 +6192,6 @@ msgstr "rua"
 msgid "strike"
 msgstr "Ataque"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr "texto"
 
@@ -6205,11 +6200,6 @@ msgstr "carimbo de data/hora"
 
 msgid "translator-credits"
 msgstr "créditos ao tradutor"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Localização:"
 
 msgid "video input"
 msgstr "entrada de vídeo"
@@ -6401,10 +6391,6 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Composição da mensagem"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "?Message state:Recebido"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6683,6 +6669,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Escolha Avatar…"
 
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Escolha Som"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Escolha o Arquivo para Enviar…"
 
@@ -6731,9 +6721,6 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Connection not available"
 #~ msgstr "Conexão não disponível"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Endereço do Contato"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Lista de Contatos: Cor de Fundo do Contato"
@@ -6817,9 +6804,6 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Default"
 #~ msgstr "Padrão"
-
-#~ msgid "Default for chats"
-#~ msgstr "Padrão para Bate-papos"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -6932,6 +6916,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Expires on"
 #~ msgstr "Expira em"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Familia"
+
 #, fuzzy
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Recurso não disponível no Windows"
@@ -7009,6 +6997,9 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Desabilitado em Preferências"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Convite de Bate-papo em Grupo"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Convite de Bate-papo em Grupo Recebido"
@@ -7118,6 +7109,11 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Local System Time"
 #~ msgstr "Hora de Sistema Local"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "?Group chat description:Notícias e relatórios locais"
 
 #~ msgid "Location:"
 #~ msgstr "Localização:"
@@ -7231,6 +7227,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usar/Retomar"
 
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Colar como cota"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pausar ou retomar a transferência de arquivos"
 
@@ -7262,6 +7262,11 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Progress"
 #~ msgstr "Progresso"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "?Group chat description:Discussão do projeto"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Host do Proxy"
@@ -7358,10 +7363,6 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Selecione a conta com a qual você deseja sincronizar"
-
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Selecione os contatos que deseja sincronizar"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr ""
@@ -7465,6 +7466,9 @@ msgstr "…ou solte aqui"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr ""
 #~ "Mostra uma lista de transferências de arquivos entre você e seus contatos"
+
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Desligando o Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -7635,6 +7639,11 @@ msgstr "…ou solte aqui"
 #~ msgid "User name…"
 #~ msgstr "_Nome do Usuário"
 
+#, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Localização:"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Taxa de Quadros de Vídeo"
 
@@ -7698,6 +7707,9 @@ msgstr "…ou solte aqui"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Suas preferências de arquivamento foram salvas com sucesso."
 
+#~ msgid "_Account"
+#~ msgstr "_Conta"
+
 #~ msgid "_Accounts"
 #~ msgstr "_Contas"
 
@@ -7707,6 +7719,12 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "_Console XML"
+
+#~ msgid "_Default"
+#~ msgstr "_Padrão"
+
+#~ msgid "_Description"
+#~ msgstr "_Descrição"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Não pergunte novamente"
@@ -7769,6 +7787,10 @@ msgstr "…ou solte aqui"
 #~ msgid "app.open-folder"
 #~ msgstr "Abrir pasta"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "por exemplo %s"
+
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferências de arquivos"
 
@@ -7784,6 +7806,11 @@ msgstr "…ou solte aqui"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Localização:"
 
 #, fuzzy
 #~ msgid "yesterday "

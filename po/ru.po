@@ -9,14 +9,14 @@
 # Nikolay Chizhov <admin@kgd.in>, 2022, 2023.
 # Serge Kazorin <kazorin@basealt.ru>, 2024.
 # Eric Kotato <radrussianrus@gmail.com>, 2024.
-# Alexander Smirnov <skymaverickas@gmail.com>, 2024, 2025.
+# Alexander Smirnov <skymaverickas@gmail.com>, 2024, 2025, 2026.
 # Sergey Ponomarev <stokito@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
-"PO-Revision-Date: 2025-12-06 11:19+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"PO-Revision-Date: 2026-01-10 22:19+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -639,12 +639,18 @@ msgstr "Все состояния чата"
 msgid "All Chats"
 msgstr "Все чаты"
 
+msgid "All Messages"
+msgstr "Все сообщения"
+
 msgid "All files"
 msgstr "Все файлы"
 
 #, python-format
 msgid "All hats of %s have been removed"
 msgstr "Все шляпы с %s были сняты"
+
+msgid "All of these settings are optional and can be changed later"
+msgstr "Все эти настройки являются необязательными и могут быть изменены позже"
 
 msgid "All of your hats have been removed"
 msgstr "Все ваши шляпы были сняты"
@@ -1052,6 +1058,9 @@ msgstr ""
 msgid "Chat"
 msgstr "Чат"
 
+msgid "Chat Address"
+msgstr "Адрес чата"
+
 msgid "Chat Banner: Background Color"
 msgstr "Заголовок чата: Цвет фона"
 
@@ -1104,9 +1113,6 @@ msgstr "Проверьте, какие функции доступны"
 
 msgid "Choose Device"
 msgstr "Выберите устройство"
-
-msgid "Choose Emoji"
-msgstr "Выберите эмоджи"
 
 msgid "Choose History Export Directory"
 msgstr "Выберите каталог для экспорта истории"
@@ -1175,6 +1181,9 @@ msgstr "Закрыть чат"
 msgid "Close a chat by pressing the Escape key"
 msgstr "Закрывать чат при нажатии клавиши Escape"
 
+msgid "Close this preview"
+msgstr "Закрыть предпросмотр"
+
 msgid "Close with Escape"
 msgstr "Закрывать по клавише Escape"
 
@@ -1234,6 +1243,15 @@ msgstr "Настроить"
 
 msgid "Configure logging system"
 msgstr "Настройки системы логирования"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
+"Настройте, какие сообщения будут архивироваться на сервере. Отказ от "
+"архивирования сообщений на сервере может помешать их синхронизации между "
+"вашими устройствами."
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Подтвердите незашифрованное соединение"
@@ -1359,6 +1377,9 @@ msgstr "Копировать в буфер обмена"
 msgid "Copy to clipboard"
 msgstr "Копировать в буфер обмена"
 
+msgid "Correct Message"
+msgstr "Исправить сообщение"
+
 msgid "Could Not Save File"
 msgstr "Не удалось сохранить файл"
 
@@ -1461,6 +1482,9 @@ msgstr "По умолчанию для чатов и приватных груп
 
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "По умолчанию для групповых чатов (например, контакт печатает)"
+
+msgid "Default for new chats"
+msgstr "По умолчанию для новых чатов"
 
 msgid "Default for new group chats"
 msgstr "По умолчанию для новых групповых чатов"
@@ -1818,6 +1842,9 @@ msgstr "Все"
 msgid "Everything"
 msgstr "Всё"
 
+msgid "Exceptions from the above setting"
+msgstr "Исключения из вышеуказанных настроек"
+
 msgid "Execute"
 msgstr "Выполнить"
 
@@ -1894,10 +1921,6 @@ msgstr "Не удалось сгенерировать аватар."
 
 msgid "Fake audio output"
 msgstr "Виртуальный аудио выход"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Семья"
 
 msgid "Features"
 msgstr "Возможности"
@@ -1994,8 +2017,11 @@ msgstr ""
 "Завершена синхронизация истории чата:\n"
 "%s сообщений загружено"
 
+msgid "Focus Input"
+msgstr "Сфокусироваться на вводе"
+
 msgid "Focus Search"
-msgstr "Фокус поиска"
+msgstr "Сфокусироваться на поиске"
 
 #, python-format
 msgid "Folder: %s"
@@ -2018,6 +2044,15 @@ msgstr "Забыть этот групповой чат?"
 
 msgid "Forget this Group Chat…"
 msgstr "Забыть этот групповой чат…"
+
+msgid "Format Text Bold"
+msgstr "Сделать текст жирным"
+
+msgid "Format Text Italic"
+msgstr "Сделать текст курсивом"
+
+msgid "Format Text Strikethrough"
+msgstr "Сделать текст зачёркнутым"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Ошибка CRL в поле lastUpdate"
@@ -2160,9 +2195,6 @@ msgstr "Групповой чат"
 msgid "Group Chat Details"
 msgstr "Детали группового чата"
 
-msgid "Group Chat Invitation"
-msgstr "Приглашение в групповой чат"
-
 msgid "Group Chat Language"
 msgstr "Язык группового чата"
 
@@ -2171,6 +2203,9 @@ msgstr "Вас упомянули в групповом чате"
 
 msgid "Group Chat Message Received"
 msgstr "Получено сообщение в групповом чате"
+
+msgid "Group Chat Settings"
+msgstr "Настройки группового чата"
 
 msgid "Group Chats"
 msgstr "Групповые чаты"
@@ -2586,14 +2621,6 @@ msgstr "Загрузка…"
 msgid "Local Time"
 msgstr "Местное время"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "Местная группа помощи"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Местные новостные сообщения"
-
 #, python-format
 msgid "Location at %s"
 msgstr "Местоположение на %s"
@@ -2724,6 +2751,9 @@ msgstr "Сообщения"
 msgid "Messages are archived on the server"
 msgstr "Сообщения архивируются на сервере"
 
+msgid "Messages from Contacts"
+msgstr "Сообщения от контактов"
+
 msgid "Messages from this users are blocked"
 msgstr "Сообщения от этих пользователей заблокированы"
 
@@ -2838,10 +2868,6 @@ msgstr "Новая вкладка"
 msgid "New message from"
 msgstr "Новое сообщение от"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "Новости"
-
 msgid "Next"
 msgstr "Следующий"
 
@@ -2859,6 +2885,9 @@ msgstr "Нет"
 
 msgid "No File Transfer available"
 msgstr "Передача файлов недоступна"
+
+msgid "No Messages"
+msgstr "Сообщений нет"
 
 msgid "No Messages Found"
 msgstr "Сообщений не найдено"
@@ -3058,8 +3087,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Открыть"
 
+#, python-format
+msgid "Open %s"
+msgstr "Открыть %s"
+
 msgid "Open Email Composer"
 msgstr "Открыть почтовый клиент"
+
+msgid "Open Emoji Chooser"
+msgstr "Открыть панель выбора Emoji"
 
 msgid "Open Folder"
 msgstr "Открыть папку"
@@ -3395,10 +3431,6 @@ msgstr "Профиль"
 msgid "Profile application with cprofile"
 msgstr "Профилирование приложения с помощью cprofile"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "Обсуждение проекта"
-
 msgid "Pronouns"
 msgstr "Обращение"
 
@@ -3477,6 +3509,9 @@ msgstr "Выйти"
 
 msgid "Quit Gajim"
 msgstr "Выход из Gajim"
+
+msgid "Quitting…"
+msgstr "Выход…"
 
 msgid "Quote Next Message"
 msgstr "Цитировать следующее сообщение"
@@ -3657,10 +3692,6 @@ msgstr "Переименовать контакт?"
 
 msgid "Rename…"
 msgstr "Переименовать…"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "Ремонт"
 
 msgid "Reply…"
 msgstr "Ответить…"
@@ -3967,6 +3998,11 @@ msgstr "Выберите действие, чтобы просмотреть п�
 msgid "Select playback speed"
 msgstr "Выберите скорость проигрывания"
 
+msgid "Select the account you want to use to create a new group chat"
+msgstr ""
+"Выберите какую учетную запись использовать для создания нового группового "
+"чата"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Выберите аудиовход (микрофон)"
 
@@ -4124,6 +4160,9 @@ msgstr "Показывать присоединение/выход"
 msgid "Show Joined / Left"
 msgstr "Показывать присоединение/выход"
 
+msgid "Show Link Preview"
+msgstr "Предварительный просмотр ссылки"
+
 msgid "Show Plugins"
 msgstr "Подключаемые модули"
 
@@ -4220,9 +4259,6 @@ msgstr "Показывать окно при запуске Gajim"
 msgid "Show/Hide Window"
 msgstr "Показать/скрыть окно"
 
-msgid "Shutting down Gajim"
-msgstr "Отключение Gajim"
-
 msgid "Sign In"
 msgstr "Войти"
 
@@ -4280,10 +4316,6 @@ msgstr "Проверка орфографии"
 
 msgid "Spell Checking"
 msgstr "Проверка орфографии"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "Весенняя встреча"
 
 msgid "Stage"
 msgstr "Этап"
@@ -4532,10 +4564,6 @@ msgstr "Значок системного лотка (трея)"
 
 msgid "System Tray Notifications"
 msgstr "Уведомления в системном лотке"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "Группа"
 
 msgid "Telephone"
 msgstr "Телефон"
@@ -4876,10 +4904,6 @@ msgstr "Передача файла…"
 msgid "Transports"
 msgstr "Транспорты"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "Планирование поездки"
-
 msgid "Trust Management"
 msgstr "Управление доверием"
 
@@ -5111,10 +5135,6 @@ msgstr "Пользователи"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Отдых"
 
 msgid "Validity"
 msgstr "Срок действия"
@@ -5472,9 +5492,6 @@ msgstr "_Подробности"
 msgid "_Accept"
 msgstr "_Принять"
 
-msgid "_Account"
-msgstr "_Учётная запись"
-
 msgid "_Add to Trusted Certificates"
 msgstr "_Добавить в доверенные сертификаты"
 
@@ -5525,14 +5542,8 @@ msgstr "_Создать"
 msgid "_Decline"
 msgstr "_Отклонить"
 
-msgid "_Default"
-msgstr "_По умолчанию"
-
 msgid "_Delete"
 msgstr "_Удалить"
-
-msgid "_Description"
-msgstr "_Описание"
 
 # смотря где вылазит меседж - нужно присмотреться
 msgid "_Destroy"
@@ -5743,19 +5754,11 @@ msgstr "датум"
 msgid "description"
 msgstr "описание"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "например %s"
-
 msgid "error"
 msgstr "ошибка"
 
 msgid "example.org"
 msgstr "example.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "семья"
 
 msgid "floor"
 msgstr "этаж"
@@ -5792,10 +5795,6 @@ msgstr "долгота"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "новости"
-
 msgid "or"
 msgstr "или"
 
@@ -5816,10 +5815,6 @@ msgstr "Версия python-nbxmpp: %s"
 msgid "region"
 msgstr "регион"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "ремонт"
-
 msgid "room"
 msgstr "комната"
 
@@ -5831,10 +5826,6 @@ msgstr "улица"
 
 msgid "strike"
 msgstr "зачёркнутый"
-
-msgctxt "Group chat address"
-msgid "team"
-msgstr "команда"
 
 msgid "text"
 msgstr "текст"
@@ -5851,10 +5842,6 @@ msgstr ""
 "Григорий Сарницкий (sargrigory@ya.ru)\n"
 "Николай Чижов (admin@kgd.in)\n"
 "Казорин Сергей (translation-team@basealt.ru)"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "отдых"
 
 msgid "video input"
 msgstr "видео вход"
@@ -6052,10 +6039,6 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Cодержимое сообщения"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Спрятать станзы сообщений"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6319,6 +6302,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Выберите аватар…"
 
+#~ msgid "Choose Emoji"
+#~ msgstr "Выберите эмоджи"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Выберите файл для отправки…"
 
@@ -6368,9 +6354,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Connection not available"
 #~ msgstr "Соединение недоступно"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Контактные адреса"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Список контактов: Цвет фона контакта"
@@ -6459,9 +6442,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Default"
 #~ msgstr "По умолчанию"
-
-#~ msgid "Default for chats"
-#~ msgstr "По умолчанию для чатов"
 
 #~ msgid "Delete Message"
 #~ msgstr "Удалить сообщение"
@@ -6571,6 +6551,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Expires on"
 #~ msgstr "Истекает"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Семья"
+
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Функция недоступна в Windows"
 
@@ -6647,6 +6631,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Gajim: Проверка обновлений отключена в настройках"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Приглашение в групповой чат"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Получено приглашение в групповой чат"
@@ -6765,6 +6752,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Local System Time"
 #~ msgstr "Местное системное время"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Местная группа помощи"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Местные новостные сообщения"
+
 #~ msgid "Location:"
 #~ msgstr "Местоположение:"
 
@@ -6817,6 +6812,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Меньше шансов пропустить сообщение и синхронизация всех чат-клиентов"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "Новости"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Нет подключения"
@@ -6882,6 +6881,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Пароль содержит запрещённые символы"
 
+#~ msgid "Past as Code Block"
+#~ msgstr "Вставить как блок кода"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Приостановить или возобновить передачу файлов"
 
@@ -6915,6 +6917,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Progress"
 #~ msgstr "Прогресс"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "Обсуждение проекта"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Хост прокси"
@@ -6963,6 +6969,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Удалить из списка контактов"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "Ремонт"
 
 #~ msgid "Report"
 #~ msgstr "Сообщить о проблеме"
@@ -7021,10 +7031,6 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Выберите учётную запись для объединения"
-
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Выберите контакты для синхронизации"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr "Выберите видео устройство (веб-камера, захват экрана)"
@@ -7132,6 +7138,13 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Показывает список переданных файлов между вами и вашими контактами"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Отключение Gajim"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "Весенняя встреча"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Ста_тус"
 
@@ -7205,6 +7218,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "Сбой проверки TLS: %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "Группа"
+
 #, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
@@ -7243,6 +7260,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr "Использовать пары * / _ как возможные символы форматирования."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "Планирование поездки"
 
 #~ msgid "Tune:"
 #~ msgstr "Мелодия:"
@@ -7300,6 +7321,10 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Имя пользователя"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Отдых"
 
 #~ msgid "Video Framerate"
 #~ msgstr "Частота кадров видео"
@@ -7365,6 +7390,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Ваши параметры архивирования успешно сохранены."
 
+#~ msgid "_Account"
+#~ msgstr "_Учётная запись"
+
 #~ msgid "_Accounts"
 #~ msgstr "_Учётные записи"
 
@@ -7373,6 +7401,12 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "_Debug Console"
 #~ msgstr "_Консоль отладки"
+
+#~ msgid "_Default"
+#~ msgstr "_По умолчанию"
+
+#~ msgid "_Description"
+#~ msgstr "_Описание"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Больше не спрашивать"
@@ -7440,6 +7474,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "dark skin tone"
 #~ msgstr "очень тёмный тон кожи"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "например %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "семья"
+
 #~ msgid "file transfers list"
 #~ msgstr "список передачи файлов"
 
@@ -7465,8 +7507,24 @@ msgstr "…или перетащите его сюда"
 #~ msgid "medium-light skin tone"
 #~ msgstr "светлый тон кожи"
 
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "новости"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "ремонт"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "команда"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "отдых"
 
 #, fuzzy
 #~ msgid "yesterday "

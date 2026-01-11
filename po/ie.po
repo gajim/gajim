@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -628,11 +628,18 @@ msgstr ""
 msgid "All Chats"
 msgstr "Conversationes"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Exportar"
+
 msgid "All files"
 msgstr ""
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 msgid "All of your hats have been removed"
@@ -1039,6 +1046,10 @@ msgstr ""
 msgid "Chat"
 msgstr "Conversationes"
 
+#, fuzzy
+msgid "Chat Address"
+msgstr "Contactes"
+
 msgid "Chat Banner: Background Color"
 msgstr ""
 
@@ -1087,10 +1098,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Choose Device"
-msgstr "Aparates"
-
-#, fuzzy
-msgid "Choose Emoji"
 msgstr "Aparates"
 
 msgid "Choose History Export Directory"
@@ -1159,6 +1166,9 @@ msgstr "Cluder"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1213,6 +1223,12 @@ msgid "Configure"
 msgstr "Configurar"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 msgid "Confirm Unencrypted Connection"
@@ -1345,6 +1361,10 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
+#, fuzzy
+msgid "Correct Message"
+msgstr "Exportar"
+
 msgid "Could Not Save File"
 msgstr ""
 
@@ -1446,6 +1466,9 @@ msgid "Default for chats and private group chats"
 msgstr ""
 
 msgid "Default for group chats (e.g. Contact is typing)"
+msgstr ""
+
+msgid "Default for new chats"
 msgstr ""
 
 msgid "Default for new group chats"
@@ -1795,6 +1818,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr ""
 
@@ -1873,10 +1899,6 @@ msgstr ""
 
 msgid "Fake audio output"
 msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Familie"
 
 msgid "Features"
 msgstr "Caracteristicas"
@@ -1974,6 +1996,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 msgid "Focus Search"
 msgstr ""
 
@@ -1997,6 +2022,15 @@ msgid "Forget this Group Chat?"
 msgstr ""
 
 msgid "Forget this Group Chat…"
+msgstr ""
+
+msgid "Format Text Bold"
+msgstr ""
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
 msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2132,9 +2166,6 @@ msgstr ""
 msgid "Group Chat Details"
 msgstr ""
 
-msgid "Group Chat Invitation"
-msgstr ""
-
 msgid "Group Chat Language"
 msgstr ""
 
@@ -2142,6 +2173,9 @@ msgid "Group Chat Message Highlight"
 msgstr ""
 
 msgid "Group Chat Message Received"
+msgstr ""
+
+msgid "Group Chat Settings"
 msgstr ""
 
 msgid "Group Chats"
@@ -2545,14 +2579,6 @@ msgstr "Cargante…"
 msgid "Local Time"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr ""
-
 #, python-format
 msgid "Location at %s"
 msgstr ""
@@ -2684,6 +2710,10 @@ msgstr "Exportar"
 msgid "Messages are archived on the server"
 msgstr ""
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Contactes"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -2799,10 +2829,6 @@ msgstr ""
 msgid "New message from"
 msgstr ""
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -2822,6 +2848,10 @@ msgstr ""
 
 msgid "No File Transfer available"
 msgstr ""
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Exportar"
 
 msgid "No Messages Found"
 msgstr ""
@@ -3016,7 +3046,14 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr ""
 
+#, python-format
+msgid "Open %s"
+msgstr ""
+
 msgid "Open Email Composer"
+msgstr ""
+
+msgid "Open Emoji Chooser"
 msgstr ""
 
 msgid "Open Folder"
@@ -3343,10 +3380,6 @@ msgstr ""
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3428,6 +3461,10 @@ msgstr ""
 
 msgid "Quit Gajim"
 msgstr ""
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Cargante…"
 
 msgid "Quote Next Message"
 msgstr ""
@@ -3613,10 +3650,6 @@ msgid "Rename Contact?"
 msgstr "Contacte"
 
 msgid "Rename…"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Repairs"
 msgstr ""
 
 msgid "Reply…"
@@ -3922,6 +3955,9 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+msgid "Select the account you want to use to create a new group chat"
+msgstr ""
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4080,6 +4116,10 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
+#, fuzzy
+msgid "Show Link Preview"
+msgstr "Cargante…"
+
 msgid "Show Plugins"
 msgstr ""
 
@@ -4165,9 +4205,6 @@ msgstr ""
 msgid "Show/Hide Window"
 msgstr ""
 
-msgid "Shutting down Gajim"
-msgstr ""
-
 msgid "Sign In"
 msgstr ""
 
@@ -4224,10 +4261,6 @@ msgid "Spell Checker"
 msgstr ""
 
 msgid "Spell Checking"
-msgstr ""
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
 msgstr ""
 
 msgid "Stage"
@@ -4486,10 +4519,6 @@ msgid "System Tray Icon"
 msgstr ""
 
 msgid "System Tray Notifications"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Team"
 msgstr ""
 
 msgid "Telephone"
@@ -4799,10 +4828,6 @@ msgstr ""
 msgid "Transports"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5036,10 +5061,6 @@ msgstr ""
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Vacation"
 msgstr ""
 
 msgid "Validity"
@@ -5385,10 +5406,6 @@ msgstr ""
 msgid "_Accept"
 msgstr ""
 
-#, fuzzy
-msgid "_Account"
-msgstr "Conto"
-
 msgid "_Add to Trusted Certificates"
 msgstr ""
 
@@ -5444,16 +5461,8 @@ msgstr ""
 msgid "_Decline"
 msgstr ""
 
-#, fuzzy
-msgid "_Default"
-msgstr "Predefinit"
-
 msgid "_Delete"
 msgstr ""
-
-#, fuzzy
-msgid "_Description"
-msgstr "Descrition"
 
 msgid "_Destroy"
 msgstr ""
@@ -5668,18 +5677,10 @@ msgstr ""
 msgid "description"
 msgstr ""
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 msgid "error"
 msgstr ""
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -5717,10 +5718,6 @@ msgstr ""
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 msgid "or"
 msgstr ""
 
@@ -5741,10 +5738,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr ""
 
@@ -5757,10 +5750,6 @@ msgstr ""
 msgid "strike"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -5768,10 +5757,6 @@ msgid "timestamp"
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "vacation"
 msgstr ""
 
 msgid "video input"
@@ -5835,8 +5820,8 @@ msgstr ""
 #~ msgstr "Conversationes"
 
 #, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Contactes"
+#~ msgid "Choose Emoji"
+#~ msgstr "Aparates"
 
 #, fuzzy
 #~ msgid "Contact information"
@@ -5854,6 +5839,10 @@ msgstr ""
 
 #~ msgid "Error!"
 #~ msgstr "Errore!"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Familie"
 
 #~ msgid "Features:"
 #~ msgstr "Caracteristicas:"
@@ -5890,3 +5879,15 @@ msgstr ""
 #, fuzzy
 #~ msgid "Workspaces"
 #~ msgstr "Contactes"
+
+#, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Conto"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Predefinit"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Descrition"

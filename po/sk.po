@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -693,11 +693,18 @@ msgstr "Všetky stavy"
 msgid "All Chats"
 msgstr "Všetky stavy"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Správa"
+
 msgid "All files"
 msgstr "Všetky súbory"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1164,6 +1171,10 @@ msgid "Chat"
 msgstr "Rozhovory"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Správa kontaktu:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt pripojený"
 
@@ -1217,10 +1228,6 @@ msgstr "Pripojenie nie je dostupné"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Vybrať obrázok"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Vybrať zvuk"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1295,6 +1302,9 @@ msgstr "Zavrieť"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1357,6 +1367,12 @@ msgid "Configure"
 msgstr "_Nastavovať"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 #, fuzzy
@@ -1511,6 +1527,10 @@ msgid "Copy to clipboard"
 msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Predvolená správa"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Nie je možné načítať obrázok"
 
@@ -1636,6 +1656,10 @@ msgstr "%s sa pripojil do diskusnej skupiny"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Nová diskusná skupina"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Mám čas na debatu"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2036,6 +2060,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "_Vykonať príkaz"
@@ -2127,10 +2154,6 @@ msgid "Failed to generate avatar."
 msgstr "Opustiť diskusnú skupinu"
 
 msgid "Fake audio output"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
 msgstr ""
 
 msgid "Features"
@@ -2239,6 +2262,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Hľadať"
@@ -2269,6 +2295,16 @@ msgstr "Opustiť diskusnú skupinu"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Opustiť diskusnú skupinu"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "História konverzácie"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
@@ -2423,10 +2459,6 @@ msgid "Group Chat Details"
 msgstr "Registrácia zlyhala"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Pozvánka do diskusnej skupiny"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Pozvánka do diskusnej skupiny"
 
@@ -2435,6 +2467,10 @@ msgstr "Zvýraznenie správ v diskusnej skupine"
 
 msgid "Group Chat Message Received"
 msgstr "Prijatá správa - diskusná skupina"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2903,15 +2939,6 @@ msgstr "Kódim"
 msgid "Local Time"
 msgstr "Miestne jid:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Vytváranie diskusných skupín je obmedzené."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Umiestnenie:"
@@ -3062,6 +3089,10 @@ msgstr "Správa"
 msgid "Messages are archived on the server"
 msgstr "Relácia NEBUDE zaznamenaná"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Prvá prijatá správa"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3200,10 +3231,6 @@ msgstr "Premenovať kontakt"
 msgid "New message from"
 msgstr "Správa od %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3224,6 +3251,10 @@ msgstr "Žiadny"
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Prenos súborov"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Správa"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3441,8 +3472,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "OpenGPG"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "OpenGPG"
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Otvoriť tvorbu E-mailu"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Otvoriť tvorbu E-mailu"
 
 #, fuzzy
@@ -3821,10 +3860,6 @@ msgstr "súbor"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3917,6 +3952,10 @@ msgstr "_Koniec"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Píšem"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4132,10 +4171,6 @@ msgstr "Premenovať kontakt"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Používateľské meno:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4484,6 +4519,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Vyberte kontakty, ktoré chcete synchronizovať"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4673,6 +4712,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Kódim"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Registrácia zlyhala"
 
@@ -4781,10 +4824,6 @@ msgid "Show/Hide Window"
 msgstr "Skrývanie okien"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "Prihlás_il sa"
 
@@ -4850,10 +4889,6 @@ msgstr "Kontrola pravopisu"
 #, fuzzy
 msgid "Spell Checking"
 msgstr "Kontrola pravopisu"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr ""
 
 msgid "Stage"
 msgstr ""
@@ -5145,10 +5180,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Vizuálne oznámenie</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5510,10 +5541,6 @@ msgstr "Prenášanie"
 msgid "Transports"
 msgstr "Transporty"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5776,11 +5803,6 @@ msgstr "Používatelia"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Umiestnenie:"
 
 msgid "Validity"
 msgstr ""
@@ -6174,10 +6196,6 @@ msgid "_Accept"
 msgstr "Prijať"
 
 #, fuzzy
-msgid "_Account"
-msgstr "Úč_ty"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Certifikát podpísaný sám sebou"
 
@@ -6242,16 +6260,8 @@ msgid "_Decline"
 msgstr "_Odhlásený"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Predvolené"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Odstrániť"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Popis"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6497,19 +6507,11 @@ msgstr ""
 msgid "description"
 msgstr "Popis"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 #, fuzzy
 msgid "error"
 msgstr "Chyba"
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6551,10 +6553,6 @@ msgstr "jeden"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Pre"
@@ -6576,10 +6574,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "miestnosť"
 
@@ -6593,10 +6587,6 @@ msgstr ""
 msgid "strike"
 msgstr "Preškrtnuté"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -6607,11 +6597,6 @@ msgid "translator-credits"
 msgstr ""
 "Juraj Michálek (juraj.michalek AT asinus.org)\n"
 "Pavol Klačanský <pavol@klacansky.com>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Umiestnenie:"
 
 msgid "video input"
 msgstr "video vstup"
@@ -6779,10 +6764,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Obsah správy"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Prvá prijatá správa"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -7036,6 +7017,10 @@ msgstr ""
 #~ msgstr "Vybrať obrázok"
 
 #, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Vybrať zvuk"
+
+#, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vyberte súbor na odoslanie..."
 
@@ -7066,10 +7051,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Pripojenie nie je dostupné"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Správa kontaktu:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7160,10 +7141,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Predvolené"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Mám čas na debatu"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7322,6 +7299,10 @@ msgstr ""
 #~ msgstr "_Predvoľby"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Pozvánka do diskusnej skupiny"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Pozvánka do diskusnej skupiny"
 
@@ -7374,6 +7355,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Dôvod"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Vytváranie diskusných skupín je obmedzené."
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7471,6 +7457,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Na dovolenke"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "<b>PSČ:</b>"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7594,10 +7584,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Zvoľte účet, s ktorým sa chcete synchronizovať"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Vyberte kontakty, ktoré chcete synchronizovať"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Zakazujem %s"
@@ -7689,6 +7675,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobraziť zoznam prenosov súborov medzi vami a ostatnými"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
@@ -7832,6 +7822,11 @@ msgstr ""
 #~ msgstr "_Používateľské meno:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Umiestnenie:"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Video test"
 
@@ -7896,12 +7891,24 @@ msgstr ""
 #~ msgstr "_Predvoľby"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Úč_ty"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Účty"
 
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML konzola"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Predvolené"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Popis"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7978,6 +7985,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Zvolte diskusné skupiny, ktoré chcete opustiť"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Umiestnenie:"
 
 #, fuzzy
 #~ msgid "yesterday "

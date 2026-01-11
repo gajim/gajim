@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -682,11 +682,18 @@ msgstr "Stad:"
 msgid "All Chats"
 msgstr "Stad:"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Kemennadenn"
+
 msgid "All files"
 msgstr "An holl restroù"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1147,6 +1154,10 @@ msgid "Chat"
 msgstr "Flapoù"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "_Titour-stad:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Darempred luget"
 
@@ -1199,10 +1210,6 @@ msgstr "N'eus ket tu en em lugañ"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Dibabit ur skeudenn"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Dibabit ur son"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1278,6 +1285,9 @@ msgstr "Klask"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1340,6 +1350,12 @@ msgid "Configure"
 msgstr "_Kenderc'hel"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 #, fuzzy
@@ -1495,6 +1511,10 @@ msgid "Copy to clipboard"
 msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Titour-stad"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Dibosupl eo kargañ ar skeudenn"
 
@@ -1620,6 +1640,10 @@ msgstr "Er strollad"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Flap a-stroll"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Prest da flapiñ"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2015,6 +2039,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "urzhiad"
@@ -2106,10 +2133,6 @@ msgid "Failed to generate avatar."
 msgstr "Flap a-stroll"
 
 msgid "Fake audio output"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
 msgstr ""
 
 #, fuzzy
@@ -2221,6 +2244,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Klask"
@@ -2251,6 +2277,16 @@ msgstr "Flap a-stroll"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Flap a-stroll"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Istoradur ar gaoz"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
@@ -2405,10 +2441,6 @@ msgid "Group Chat Details"
 msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Pedadenn evit ur sal-flapiñ"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Pedadenn evit ur sal-flapiñ"
 
@@ -2417,6 +2449,10 @@ msgstr "Message d'un Salon mis en Sur-brillance"
 
 msgid "Group Chat Message Received"
 msgstr "Kemennadenn digant ur sal-flapiñ"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2882,15 +2918,6 @@ msgstr "O skrivañ"
 msgid "Local Time"
 msgstr "dibaoe %s"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "La création de salon est réservée aux administrateurs."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Kemmañ ar gont"
@@ -3043,6 +3070,10 @@ msgstr "Kemennadenn"
 msgid "Messages are archived on the server"
 msgstr "N'oc'h ket luget d'ar servijer"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Kemennadenn gentañ"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3183,10 +3214,6 @@ msgstr "Darempredoù"
 msgid "New message from"
 msgstr "Kemennadenn nevez digant %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3207,6 +3234,10 @@ msgstr "Hini ebet"
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Treuzkasoù"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Kemennadenn"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3426,8 +3457,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "OpenPGP : "
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "OpenPGP : "
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Digeriñ ar bostelerez"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Digeriñ ar bostelerez"
 
 #, fuzzy
@@ -3805,10 +3844,6 @@ msgstr "restr"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3901,6 +3936,10 @@ msgstr "_Kuitaat"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "O labourat"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4116,10 +4155,6 @@ msgstr "Darempredoù"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Anv:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4468,6 +4503,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "JID an darempred ho peus c'hoant flapiñ gantañ"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4657,6 +4696,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "O skrivañ"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "échec lors de la publication de votre vCard"
 
@@ -4759,10 +4802,6 @@ msgid "Show/Hide Window"
 msgstr "A guzha ar prenestr"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "_Lugañ"
 
@@ -4826,10 +4865,6 @@ msgid "Spell Checker"
 msgstr ""
 
 msgid "Spell Checking"
-msgstr ""
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
 msgstr ""
 
 msgid "Stage"
@@ -5123,10 +5158,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Kelaouennoù dre welet</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5475,10 +5506,6 @@ msgstr "O treuzkas"
 msgid "Transports"
 msgstr "Dorioù"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5741,11 +5768,6 @@ msgstr "Arveridi"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Kemmañ ar gont"
 
 msgid "Validity"
 msgstr ""
@@ -6134,10 +6156,6 @@ msgid "_Accept"
 msgstr "Asantiñ"
 
 #, fuzzy
-msgid "_Account"
-msgstr "Kontoù"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Anv-arveriad-ez direizh"
 
@@ -6201,16 +6219,8 @@ msgid "_Decline"
 msgstr "_Ezlinenn"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Dilemel"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Dilemel"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Taolennadur"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6458,18 +6468,10 @@ msgstr ""
 msgid "description"
 msgstr "Taolennadur"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 msgid "error"
 msgstr ""
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6511,10 +6513,6 @@ msgstr "Hini ebet"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Da"
@@ -6536,10 +6534,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 #, fuzzy
 msgid "room"
 msgstr "Digant"
@@ -6554,10 +6548,6 @@ msgstr ""
 msgid "strike"
 msgstr "Lesanv"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -6568,11 +6558,6 @@ msgid "translator-credits"
 msgstr ""
 "Troet e brezhoneg gant\n"
 "Giulia Fraboulet <djoulia@gmail.com>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Kemmañ ar gont"
 
 msgid "video input"
 msgstr ""
@@ -6741,10 +6726,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "korf ar gemennadenn"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Kemennadenn gentañ"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6977,6 +6958,10 @@ msgstr ""
 #~ msgstr "Dibabit ur skeudenn"
 
 #, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Dibabit ur son"
+
+#, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Dibabit ur restr da gas..."
 
@@ -7003,10 +6988,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "N'eus ket tu en em lugañ"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "_Titour-stad:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7095,10 +7076,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Default"
 #~ msgstr "Dilemel"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Prest da flapiñ"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7251,6 +7228,10 @@ msgstr ""
 #~ msgstr "_Penndibaboù"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Pedadenn evit ur sal-flapiñ"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Pedadenn evit ur sal-flapiñ"
 
@@ -7297,6 +7278,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Abeg"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "La création de salon est réservée aux administrateurs."
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7390,6 +7376,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "_Merour-ez"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Kod postel:"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7509,10 +7499,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "JID an darempred ho peus c'hoant flapiñ gantañ"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "JID an darempred ho peus c'hoant flapiñ gantañ"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Argas %s"
@@ -7600,6 +7586,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A ziskouez ur roll eus an dreuzkasoù etrezoc'h hag ar re all"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tad"
@@ -7737,6 +7727,11 @@ msgstr ""
 #~ msgstr "_Anv:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Kemmañ ar gont"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Flap prevez"
 
@@ -7796,12 +7791,24 @@ msgstr ""
 #~ msgstr "_Penndibaboù"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Kontoù"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Kontoù"
 
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "Diskouez ar gonsol _XML"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Dilemel"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Taolennadur"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7879,6 +7886,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Kemmañ ar gont"
 
 #, fuzzy
 #~ msgid "yesterday "

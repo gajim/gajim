@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2025-10-20 08:48+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -632,12 +632,19 @@ msgstr "كل حالات الدردشات"
 msgid "All Chats"
 msgstr "كل الدردشات"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "الرسائل"
+
 msgid "All files"
 msgstr "كل الملفات"
 
 #, python-format
 msgid "All hats of %s have been removed"
 msgstr "أُزيلت كل قبعات %s"
+
+msgid "All of these settings are optional and can be changed later"
+msgstr ""
 
 msgid "All of your hats have been removed"
 msgstr "أُزيلت كل قبعاتك"
@@ -1041,6 +1048,10 @@ msgstr ""
 msgid "Chat"
 msgstr "الدردشة"
 
+#, fuzzy
+msgid "Chat Address"
+msgstr "عناوين المتراسلين"
+
 msgid "Chat Banner: Background Color"
 msgstr "لافتة الدردشة: لون الخلفية"
 
@@ -1091,9 +1102,6 @@ msgstr "تحقَّق من الميزات المتاحة"
 
 msgid "Choose Device"
 msgstr "اختر جهازًا"
-
-msgid "Choose Emoji"
-msgstr "اختر إموجي"
 
 msgid "Choose History Export Directory"
 msgstr "اختر مجلد تصدير التأريخ"
@@ -1160,6 +1168,10 @@ msgstr "أغلِق الدردشة"
 msgid "Close a chat by pressing the Escape key"
 msgstr "يغلِق الدردشة بالضغط على مفتاح ESC"
 
+#, fuzzy
+msgid "Close this preview"
+msgstr "لا معاينة تلقائية"
+
 msgid "Close with Escape"
 msgstr "الإغلاق بمفتاح ESC"
 
@@ -1219,6 +1231,12 @@ msgstr "اضبط"
 
 msgid "Configure logging system"
 msgstr "اضبط نظام السجلات"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 msgid "Confirm Unencrypted Connection"
 msgstr "تأكيد الاتصال غير المعمى"
@@ -1344,6 +1362,10 @@ msgstr "انسخ إلى الحافظة"
 msgid "Copy to clipboard"
 msgstr "انسخ إلى الحافظة"
 
+#, fuzzy
+msgid "Correct Message"
+msgstr "الرسائل المباشرة"
+
 msgid "Could Not Save File"
 msgstr "تعذَّر حفظ الملف"
 
@@ -1446,6 +1468,10 @@ msgstr "الإعداد المبدئي للدردشات الفردية والجم
 
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "الإعداد المبدئي لمجموعات الدردشة (مثال: المتراسل يكتب)"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "الإعداد المبدئي للدردشات"
 
 msgid "Default for new group chats"
 msgstr "الإعداد المبدئي لمجموعات الدردشة الجديدة"
@@ -1799,6 +1825,9 @@ msgstr "الجميع"
 msgid "Everything"
 msgstr "كل شيء"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr "نفِّذ"
 
@@ -1875,10 +1904,6 @@ msgstr "تعذَّر توليد الأفتار."
 
 msgid "Fake audio output"
 msgstr "مخرج صوتي وهمي"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "عائلة"
 
 msgid "Features"
 msgstr "الميزات"
@@ -1976,6 +2001,9 @@ msgstr ""
 "انتهت مزامنة تأريخ الدردشة:\n"
 "نُزِّلت %s رسالة"
 
+msgid "Focus Input"
+msgstr ""
+
 msgid "Focus Search"
 msgstr "ركِّز البحث"
 
@@ -2000,6 +2028,16 @@ msgstr "ستنسَ مجموعة الدردشة هذه؟"
 
 msgid "Forget this Group Chat…"
 msgstr "انسَ مجموعة الدردشة…"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "المحادثة: لون النص"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "خطأ في تنسيق حقل lastUpdate في قائمة نقض الشهادات (CRL)"
@@ -2139,9 +2177,6 @@ msgstr "مجموعة دردشة"
 msgid "Group Chat Details"
 msgstr "تفاصيل مجموعة الدردشة"
 
-msgid "Group Chat Invitation"
-msgstr "دعوة إلى مجموعة الدردشة"
-
 msgid "Group Chat Language"
 msgstr "لغة مجموعة الدردشة"
 
@@ -2150,6 +2185,10 @@ msgstr "إبراز رسائل مجموعة الدردشة"
 
 msgid "Group Chat Message Received"
 msgstr "استُلِمت رسالة مجموعة الدردشة"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "تفاصيل مجموعة الدردشة"
 
 msgid "Group Chats"
 msgstr "مجموعات الدردشة"
@@ -2557,14 +2596,6 @@ msgstr "يحمِّل…"
 msgid "Local Time"
 msgstr "الوقت المحلي"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "مجموعة مساعدة محلية"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "أخبار وتقارير محلية"
-
 #, python-format
 msgid "Location at %s"
 msgstr "الموضع في %s"
@@ -2695,6 +2726,10 @@ msgstr "الرسائل"
 msgid "Messages are archived on the server"
 msgstr "تؤرشف الرسائل على الخادوم"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "أزِل من قائمة المتراسلين…"
+
 msgid "Messages from this users are blocked"
 msgstr "الرسائل من هذا المستخدم محظورة"
 
@@ -2809,10 +2844,6 @@ msgstr "مساحة عمل جديدة"
 msgid "New message from"
 msgstr "رسالة جديدة من"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "الأخبار"
-
 msgid "Next"
 msgstr "التالي"
 
@@ -2830,6 +2861,10 @@ msgstr "لا"
 
 msgid "No File Transfer available"
 msgstr "نقل الملفات غير متاح"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "الرسائل"
 
 msgid "No Messages Found"
 msgstr "لم يُعثر على رسائل"
@@ -3027,7 +3062,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "مفتوحة"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "افتح"
+
 msgid "Open Email Composer"
+msgstr "افتح محرِّر البريد الإلكتروني"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "افتح محرِّر البريد الإلكتروني"
 
 msgid "Open Folder"
@@ -3360,10 +3403,6 @@ msgstr "اللاحة"
 msgid "Profile application with cprofile"
 msgstr "حلِّل أداء التطبيق باستخدام cprofile"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "نقاش المشروع"
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3442,6 +3481,10 @@ msgstr "اخرج"
 
 msgid "Quit Gajim"
 msgstr "اخرج من غاجم"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "في الانتظار…"
 
 msgid "Quote Next Message"
 msgstr "اقتبس الرسالة التالية"
@@ -3625,10 +3668,6 @@ msgstr "ستعيد تسمية المتراسل؟"
 
 msgid "Rename…"
 msgstr "أعِد التسمية…"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "تصليحات"
 
 msgid "Reply…"
 msgstr "رد…"
@@ -3930,6 +3969,10 @@ msgstr "حدِّد نشاطًا لرؤية التفاصيل."
 msgid "Select playback speed"
 msgstr "حدِّد سرعة التشغيل"
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "يجب أن تكون متصلاً لإنشاء مجموعة دردشة."
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "يحدِّد مدخل الصوت الخاص بك (مثلًا الميكروفون)"
 
@@ -4084,6 +4127,10 @@ msgstr "إظهار الانضمام\\المغادرة"
 msgid "Show Joined / Left"
 msgstr "إظهار من انضم \\ غادر"
 
+#, fuzzy
+msgid "Show Link Preview"
+msgstr "معاينة حيَّة"
+
 msgid "Show Plugins"
 msgstr "أظهر الملحقات"
 
@@ -4174,9 +4221,6 @@ msgstr "يظهِر النافذة عند بدء تشغيل غاجم"
 msgid "Show/Hide Window"
 msgstr "أظهر\\أخفِ النافذة"
 
-msgid "Shutting down Gajim"
-msgstr "يوقف تشغيل غاجم"
-
 msgid "Sign In"
 msgstr "الولوج"
 
@@ -4234,10 +4278,6 @@ msgstr "المدقق الإملائي"
 
 msgid "Spell Checking"
 msgstr "التدقيق الإملائي"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "تجمُّع الربيع"
 
 msgid "Stage"
 msgstr "مرحلة"
@@ -4489,10 +4529,6 @@ msgstr "أ_خفِ (أيقونة صينية النظام)"
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "تنبيهات مرئية"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "فريق"
 
 msgid "Telephone"
 msgstr ""
@@ -4824,10 +4860,6 @@ msgstr "ينقل الملف…"
 msgid "Transports"
 msgstr "وسائل النقل"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "تخطيط رحلة"
-
 msgid "Trust Management"
 msgstr "إدارة الثقة"
 
@@ -5059,10 +5091,6 @@ msgstr "المستخدمون"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "الإجازة"
 
 msgid "Validity"
 msgstr "الصلاحية"
@@ -5415,9 +5443,6 @@ msgstr "_عَنْ"
 msgid "_Accept"
 msgstr "ا_قبل"
 
-msgid "_Account"
-msgstr "ال_حساب"
-
 msgid "_Add to Trusted Certificates"
 msgstr "أ_ضِف إلى الشهادات الموثوقة"
 
@@ -5468,14 +5493,8 @@ msgstr "أ_نشئ"
 msgid "_Decline"
 msgstr "ا_رفض"
 
-msgid "_Default"
-msgstr "الم_بدئي"
-
 msgid "_Delete"
 msgstr "ا_حذف"
-
-msgid "_Description"
-msgstr "الو_صف"
 
 msgid "_Destroy"
 msgstr "_دمِّر"
@@ -5688,19 +5707,11 @@ msgstr "البيان"
 msgid "description"
 msgstr "الوصف"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "على سبيل المثال %s"
-
 msgid "error"
 msgstr "الخطأ"
 
 msgid "example.org"
 msgstr "example.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "عائلة"
 
 msgid "floor"
 msgstr "الطابق"
@@ -5738,10 +5749,6 @@ msgstr "خط الطول"
 msgid "macOS"
 msgstr "ماك أو إس"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "أخبار"
-
 msgid "or"
 msgstr "أو"
 
@@ -5762,10 +5769,6 @@ msgstr "إصدار python-nbxmpp: ‏%s"
 msgid "region"
 msgstr "المنطقة"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "إصلاحات"
-
 msgid "room"
 msgstr "الغرفة"
 
@@ -5778,10 +5781,6 @@ msgstr "الشارع"
 msgid "strike"
 msgstr "مشطوب"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr "فريق"
-
 msgid "text"
 msgstr "النص"
 
@@ -5790,10 +5789,6 @@ msgstr "البصمة الزمنية"
 
 msgid "translator-credits"
 msgstr "أحمد النجماوي <iramosu@protonmail.com>"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "إجازة"
 
 msgid "video input"
 msgstr "مدخل الفيديو"
@@ -6040,6 +6035,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Choose Avatar…"
 #~ msgstr "اختر صورة رمزية…"
 
+#~ msgid "Choose Emoji"
+#~ msgstr "اختر إموجي"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "اختر ملفًا للإرسال…"
 
@@ -6087,9 +6085,6 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Connection not available"
 #~ msgstr "الاتصال غير متوفر"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "عناوين المتراسلين"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "قائمة المتراسلين: لون خلفية المتراسل"
@@ -6164,9 +6159,6 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Decryption failed"
 #~ msgstr "تعذَّر فك التعمية"
 
-#~ msgid "Default for chats"
-#~ msgstr "الإعداد المبدئي للدردشات"
-
 #, fuzzy
 #~ msgid "Developers"
 #~ msgstr "المطورون الحاليون"
@@ -6200,6 +6192,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Error received: {}"
 #~ msgstr "استُلِم خطأ: {}"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "عائلة"
+
 #~ msgid "File size unknown"
 #~ msgstr "حجم الملف مجهول"
 
@@ -6214,6 +6210,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Gajim"
 #~ msgstr "غاجم"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "دعوة إلى مجموعة الدردشة"
 
 #~ msgid "IP / Port"
 #~ msgstr "عنوان IP \\ المنفذ"
@@ -6249,6 +6248,14 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Local System Time"
 #~ msgstr "توقيت النظام المحلي"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "مجموعة مساعدة محلية"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "أخبار وتقارير محلية"
+
 #~ msgid "Location:"
 #~ msgstr "الموضع:"
 
@@ -6263,6 +6270,10 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Message composition"
 #~ msgstr "إنشاء الرسالة"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "الأخبار"
 
 #~ msgid "Not Connected"
 #~ msgstr "غير متصل"
@@ -6288,6 +6299,14 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "تحوي كلمة السر حروفًا ممنوعة"
 
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "ألصق ككتلة ترميز"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "نقاش المشروع"
+
 #~ msgid "Proxy Host"
 #~ msgstr "مضيف الوسيط"
 
@@ -6296,6 +6315,10 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Recent history"
 #~ msgstr "التاريخ الحديث"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "تصليحات"
 
 #~ msgid "Requires: libxss"
 #~ msgstr "يتطلب: libxss"
@@ -6347,6 +6370,13 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Show previews for files"
 #~ msgstr "اعرض المعاينات للملفات"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "يوقف تشغيل غاجم"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "تجمُّع الربيع"
+
 #~ msgid "Start New Chat"
 #~ msgstr "ابدأ دردشة جديدة"
 
@@ -6366,6 +6396,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "فشل التحقق من TLS: %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "فريق"
+
 #~ msgid "This is your XMPP address"
 #~ msgstr "هذا هو عنوان XMPP الخاص بك"
 
@@ -6374,6 +6408,10 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr "عامل أزواج * \\ _ كأحرف تنسيق محتملة."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "تخطيط رحلة"
 
 #~ msgid "Tune:"
 #~ msgstr "النغمة:"
@@ -6394,6 +6432,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "User name…"
 #~ msgstr "غَيِّر اللقب…"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "الإجازة"
+
 #~ msgid "WebSocket URL"
 #~ msgstr "مسار WebSocket"
 
@@ -6410,11 +6452,20 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "حُفظت تفضيلات الأرشفة الخاصة بك بنجاح."
 
+#~ msgid "_Account"
+#~ msgstr "ال_حساب"
+
 #~ msgid "_Accounts"
 #~ msgstr "ال_حسابات"
 
 #~ msgid "_Clear"
 #~ msgstr "ام_ح"
+
+#~ msgid "_Default"
+#~ msgstr "الم_بدئي"
+
+#~ msgid "_Description"
+#~ msgstr "الو_صف"
 
 #~ msgid "_Download"
 #~ msgstr "_نزِّل"
@@ -6458,9 +6509,33 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "app.save-file-as"
 #~ msgstr "app.save-file-as"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "على سبيل المثال %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "عائلة"
+
 #~ msgid ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr ""
 #~ "دعاك إلى مجموعة دردشة.\n"
 #~ "أتنضم؟"
+
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "أخبار"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "إصلاحات"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "فريق"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "إجازة"

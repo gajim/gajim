@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -681,11 +681,18 @@ msgstr "Alle gesprekstoestanden"
 msgid "All Chats"
 msgstr "Alle gesprekstoestanden"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Bericht"
+
 msgid "All files"
 msgstr "Alle bestanden"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1151,6 +1158,10 @@ msgid "Chat"
 msgstr "Gesprekken"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Bericht van contact"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Banier achtergrondkleur"
 
@@ -1206,10 +1217,6 @@ msgstr "Videosessies zijn niet beschikbaar"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Kies archief"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Kies geluid"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1279,6 +1286,9 @@ msgstr "Gesprek sluiten"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1339,6 +1349,12 @@ msgstr "Configureren"
 
 msgid "Configure logging system"
 msgstr "Logboeksysteem configureren"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1490,6 +1506,10 @@ msgid "Copy to clipboard"
 msgstr "Info kopiëren naar klembord"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Bericht verwijderen"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Kon bestand niet openen"
 
@@ -1613,6 +1633,10 @@ msgstr "%s neemt nu deel aan het groepsgesprek"
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Nieuw groepsgesprek"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Open voor gesprek"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2020,6 +2044,9 @@ msgstr "Alles"
 msgid "Everything"
 msgstr "Alles"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr "Uitvoeren"
 
@@ -2111,10 +2138,6 @@ msgstr "Groepsgesprekken verlaten"
 
 msgid "Fake audio output"
 msgstr "Valse audio-uitvoer"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr ""
 
 msgid "Features"
 msgstr "Functies"
@@ -2226,6 +2249,9 @@ msgstr ""
 "        {received} berichten gedownload.\n"
 "        "
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Zoeken"
@@ -2256,6 +2282,16 @@ msgstr "Groepsgesprekken verlaten"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Groepsgesprekken verlaten"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Gespreksgeschiedenis"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Formatteringsfout in lastUpdate-veld van CRL"
@@ -2414,9 +2450,6 @@ msgstr "_Groupsgesprek"
 msgid "Group Chat Details"
 msgstr "Gespreksinstellingen"
 
-msgid "Group Chat Invitation"
-msgstr "Uitnodiging voor groepsgesprek"
-
 #, fuzzy
 msgid "Group Chat Language"
 msgstr "Groepsgespreksconfiguratie"
@@ -2426,6 +2459,10 @@ msgstr "Vermeld in groepsgesprek"
 
 msgid "Group Chat Message Received"
 msgstr "Bericht ontvangen in groepsgesprek"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Gespreksinstellingen"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2902,15 +2939,6 @@ msgstr "Bezig met laden"
 msgid "Local Time"
 msgstr "Lokale JID:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Aanmaken van groepsgesprekken is niet toegestaan."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Locatie:"
@@ -3064,6 +3092,11 @@ msgstr "Bericht"
 msgid "Messages are archived on the server"
 msgstr "Deze sessie ZAL gearchiveerd worden op de server"
 
+# Eerste bericht ontvangen?
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Eerste ontvangen bericht"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3199,10 +3232,6 @@ msgstr "Contact hernoemen"
 msgid "New message from"
 msgstr "Nieuw bericht van %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr "Volgende"
 
@@ -3221,6 +3250,10 @@ msgstr "Nee"
 
 msgid "No File Transfer available"
 msgstr "Geen bestandsoverdracht beschikbaar"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Bericht"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3439,7 +3472,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Openen"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "Openen"
+
 msgid "Open Email Composer"
+msgstr "E-mailopsteller openen"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "E-mailopsteller openen"
 
 #, fuzzy
@@ -3808,10 +3849,6 @@ msgstr "Profiel"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3902,6 +3939,10 @@ msgstr "_Afsluiten"
 
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Schrijven"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4116,10 +4157,6 @@ msgstr "Contact hernoemen"
 #, fuzzy
 msgid "Rename…"
 msgstr "Gebr_uikersnaam"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4475,6 +4512,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Selecteer de contacten die je wil synchroniseren"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4666,6 +4707,10 @@ msgid "Show Joined / Left"
 msgstr "Berichten over deelnemen/verlaten tonen"
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Bezig met laden"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Plug-ins"
 
@@ -4771,10 +4816,6 @@ msgid "Show/Hide Window"
 msgstr "Venster verbergen"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "_inlog"
 
@@ -4838,10 +4879,6 @@ msgstr "Spellingscontrole"
 #, fuzzy
 msgid "Spell Checking"
 msgstr "Spellingscontrole"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr ""
 
 msgid "Stage"
 msgstr ""
@@ -5130,10 +5167,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Visuele meldingen"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5497,10 +5530,6 @@ msgstr "Verzenden"
 msgid "Transports"
 msgstr "Transporten"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5761,11 +5790,6 @@ msgstr "Gebruikers"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Locatie:"
 
 msgid "Validity"
 msgstr "Geldigheid"
@@ -6166,10 +6190,6 @@ msgid "_Accept"
 msgstr "_Accepteren"
 
 #, fuzzy
-msgid "_Account"
-msgstr "_Accounts"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Versleuteld certificaat"
 
@@ -6232,16 +6252,8 @@ msgid "_Decline"
 msgstr "_Weigeren"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Standaard"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Verwijderen"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Beschrijving"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6482,20 +6494,12 @@ msgstr "datum"
 msgid "description"
 msgstr "beschrijving"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 msgid "error"
 msgstr "fout"
 
 #, fuzzy
 msgid "example.org"
 msgstr "gebruiker@voorbeeld.nl"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr ""
 
 msgid "floor"
 msgstr "verdiep"
@@ -6534,10 +6538,6 @@ msgstr "lengte"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Tor"
@@ -6559,10 +6559,6 @@ msgstr "python-nbxmpp-versie: %s"
 msgid "region"
 msgstr "regio"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "groepsgesprek"
 
@@ -6576,10 +6572,6 @@ msgstr "straat"
 msgid "strike"
 msgstr "Doorstrepen"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr "tekst"
 
@@ -6590,11 +6582,6 @@ msgid "translator-credits"
 msgstr ""
 "Nathan Follens <nthn@unseen.is>\n"
 "Stéphan Kochen <stephan@kochen.nl>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Locatie:"
 
 msgid "video input"
 msgstr "video-invoer"
@@ -6785,11 +6772,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Bericht opstellen"
-
-# Eerste bericht ontvangen?
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Eerste ontvangen bericht"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -7058,6 +7040,10 @@ msgstr ""
 #~ msgid "Choose Avatar…"
 #~ msgstr "Kies avatar…"
 
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Kies geluid"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Kies het bestand om te verzenden…"
 
@@ -7099,10 +7085,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Verbinding niet beschikbaar"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Bericht van contact"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7192,10 +7174,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Standaard"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Open voor gesprek"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7381,6 +7359,9 @@ msgstr ""
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Archiefvoorkeuren"
 
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Uitnodiging voor groepsgesprek"
+
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Uitnodiging voor groepsgesprek"
@@ -7468,6 +7449,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Let this contact know if you read up to this point"
 #~ msgstr "%s heeft tot op dit punt gelezen"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Aanmaken van groepsgesprekken is niet toegestaan."
 
 #~ msgid "Location:"
 #~ msgstr "Locatie:"
@@ -7588,6 +7574,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "He_rvatten"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Postcode"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7730,10 +7720,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Selecteer de account waarmee je wil synchroniseren"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Selecteer de contacten die je wil synchroniseren"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Waarschuwing"
@@ -7824,6 +7810,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -8000,6 +7990,11 @@ msgstr ""
 #~ msgstr "Gebr_uikersnaam"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Locatie:"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Video_framerate"
 
@@ -8073,6 +8068,10 @@ msgstr ""
 #~ msgstr "Je archiefvoorkeuren zijn opgeslagen!"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "_Accounts"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Accounts"
 
@@ -8082,6 +8081,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML-console"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Standaard"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Beschrijving"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -8164,6 +8171,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Locatie:"
 
 #, fuzzy
 #~ msgid "yesterday "

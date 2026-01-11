@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -675,11 +675,18 @@ msgstr "Visos būklės"
 msgid "All Chats"
 msgstr "Visos būklės"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Message Sent"
+
 msgid "All files"
 msgstr "All files"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1141,6 +1148,10 @@ msgid "Chat"
 msgstr "Chats"
 
 #, fuzzy
+msgid "Chat Address"
+msgstr "Būklės pranešimas:"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Contact Connected"
 
@@ -1193,10 +1204,6 @@ msgstr "Connection not available"
 #, fuzzy
 msgid "Choose Device"
 msgstr "Choose Image"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Choose Sound"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1271,6 +1278,9 @@ msgstr "Ieškoti"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+msgid "Close this preview"
+msgstr ""
+
 msgid "Close with Escape"
 msgstr ""
 
@@ -1331,6 +1341,12 @@ msgid "Configure"
 msgstr "_Konfigūruoti"
 
 msgid "Configure logging system"
+msgstr ""
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
 msgstr ""
 
 #, fuzzy
@@ -1486,6 +1502,10 @@ msgid "Copy to clipboard"
 msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Žinutė pagal nutylėjimą"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Could not load image"
 
@@ -1609,6 +1629,10 @@ msgstr ""
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "New Group Chat"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Free for chat"
 
 #, fuzzy
 msgid "Default for new group chats"
@@ -2003,6 +2027,9 @@ msgstr ""
 msgid "Everything"
 msgstr ""
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 #, fuzzy
 msgid "Execute"
 msgstr "_Vykdyti komandą"
@@ -2094,10 +2121,6 @@ msgid "Failed to generate avatar."
 msgstr "Leave Groupchats"
 
 msgid "Fake audio output"
-msgstr ""
-
-msgctxt "Group chat name"
-msgid "Family"
 msgstr ""
 
 msgid "Features"
@@ -2206,6 +2229,9 @@ msgid ""
 "%s messages downloaded"
 msgstr ""
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Ieškoti"
@@ -2236,6 +2262,16 @@ msgstr "Leave Groupchats"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Leave Groupchats"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Pokalbio istorija"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
@@ -2390,10 +2426,6 @@ msgid "Group Chat Details"
 msgstr "Registracija nesėkminga"
 
 #, fuzzy
-msgid "Group Chat Invitation"
-msgstr "Groupchat Invitation"
-
-#, fuzzy
 msgid "Group Chat Language"
 msgstr "Groupchat Invitation"
 
@@ -2402,6 +2434,10 @@ msgstr "Group Chat Message Highlight"
 
 msgid "Group Chat Message Received"
 msgstr "Group Chat Message Received"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Group Chats"
@@ -2868,15 +2904,6 @@ msgstr "Banning..."
 msgid "Local Time"
 msgstr "Vietinis jid:"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr ""
-
-#, fuzzy
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Group chat creation is restricted."
-
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Padėtis:"
@@ -3029,6 +3056,10 @@ msgstr "Message Sent"
 msgid "Messages are archived on the server"
 msgstr "You are not connected to the server"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "First Message Received"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -3167,10 +3198,6 @@ msgstr "Removes contact from roster"
 msgid "New message from"
 msgstr "New Single Message from %(nickname)s"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr ""
-
 msgid "Next"
 msgstr ""
 
@@ -3192,6 +3219,10 @@ msgstr "Joks"
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Failų siuntimai"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Message Sent"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3409,8 +3440,16 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "OpenPGP: "
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "OpenPGP: "
+
 #, fuzzy
 msgid "Open Email Composer"
+msgstr "_Atidaryti el. pašto programą"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "_Atidaryti el. pašto programą"
 
 #, fuzzy
@@ -3785,10 +3824,6 @@ msgstr "file"
 msgid "Profile application with cprofile"
 msgstr ""
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3881,6 +3916,10 @@ msgstr "_Išjungti"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Banning..."
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -4094,10 +4133,6 @@ msgstr "Removes contact from roster"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Naudotojo vardas:"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr ""
 
 msgid "Reply…"
 msgstr ""
@@ -4447,6 +4482,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Pažymėkite kontaktus kuriuos norėsite sinchronizuoti"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
@@ -4636,6 +4675,10 @@ msgid "Show Joined / Left"
 msgstr ""
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Banning..."
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Registracija nesėkminga"
 
@@ -4743,10 +4786,6 @@ msgid "Show/Hide Window"
 msgstr "Slėpti langą"
 
 #, fuzzy
-msgid "Shutting down Gajim"
-msgstr "Gajim"
-
-#, fuzzy
 msgid "Sign In"
 msgstr "Pr_isijungti"
 
@@ -4810,10 +4849,6 @@ msgid "Spell Checker"
 msgstr ""
 
 msgid "Spell Checking"
-msgstr ""
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
 msgstr ""
 
 msgid "Stage"
@@ -5106,10 +5141,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Vizualinis informavimas</b>"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr ""
 
 msgid "Telephone"
 msgstr ""
@@ -5454,10 +5485,6 @@ msgstr "Failų siuntimai"
 msgid "Transports"
 msgstr "Transports"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr ""
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5718,11 +5745,6 @@ msgstr "Users"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Padėtis:"
 
 msgid "Validity"
 msgstr ""
@@ -6112,10 +6134,6 @@ msgid "_Accept"
 msgstr "Priimti"
 
 #, fuzzy
-msgid "_Account"
-msgstr "_Prieigos"
-
-#, fuzzy
 msgid "_Add to Trusted Certificates"
 msgstr "Blogas CA sertifikatas"
 
@@ -6179,16 +6197,8 @@ msgid "_Decline"
 msgstr "A_tsijungęs"
 
 #, fuzzy
-msgid "_Default"
-msgstr "Default"
-
-#, fuzzy
 msgid "_Delete"
 msgstr "Trinti"
-
-#, fuzzy
-msgid "_Description"
-msgstr "Description"
 
 #, fuzzy
 msgid "_Destroy"
@@ -6431,19 +6441,11 @@ msgstr ""
 msgid "description"
 msgstr "Description"
 
-#, python-format
-msgid "e.g. %s"
-msgstr ""
-
 #, fuzzy
 msgid "error"
 msgstr "Avahi error"
 
 msgid "example.org"
-msgstr ""
-
-msgctxt "Group chat address"
-msgid "family"
 msgstr ""
 
 msgid "floor"
@@ -6485,10 +6487,6 @@ msgstr "vienas"
 msgid "macOS"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Kam"
@@ -6510,10 +6508,6 @@ msgstr ""
 msgid "region"
 msgstr ""
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr ""
-
 msgid "room"
 msgstr "room"
 
@@ -6527,10 +6521,6 @@ msgstr ""
 msgid "strike"
 msgstr "Perbraukimas"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr ""
-
 msgid "text"
 msgstr ""
 
@@ -6539,11 +6529,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Jeff Bailes <thepizzaking@gmail.com>"
-
-#, fuzzy
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "Padėtis:"
 
 msgid "video input"
 msgstr ""
@@ -6703,10 +6688,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "message contents"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "First Message Received"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6946,6 +6927,10 @@ msgstr ""
 #~ msgstr "Choose Image"
 
 #, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Choose Sound"
+
+#, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Choose File to Send..."
 
@@ -6971,10 +6956,6 @@ msgstr ""
 
 #~ msgid "Connection not available"
 #~ msgstr "Connection not available"
-
-#, fuzzy
-#~ msgid "Contact Addresses"
-#~ msgstr "Būklės pranešimas:"
 
 #, fuzzy
 #~ msgid "Contact List: Contact Background Color"
@@ -7065,10 +7046,6 @@ msgstr ""
 
 #~ msgid "Default"
 #~ msgstr "Default"
-
-#, fuzzy
-#~ msgid "Default for chats"
-#~ msgstr "Free for chat"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7223,6 +7200,10 @@ msgstr ""
 #~ msgstr "_Nustatymai"
 
 #, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Groupchat Invitation"
+
+#, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Groupchat Invitation"
 
@@ -7275,6 +7256,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reason"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Group chat creation is restricted."
 
 #, fuzzy
 #~ msgid "Location:"
@@ -7364,6 +7350,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administrator"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "<b>Pašto Kodas:</b>"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7476,10 +7466,6 @@ msgstr ""
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Pažymėkite kontaktus kuriuos norėsite sinchronizuoti"
 
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Pažymėkite kontaktus kuriuos norėsite sinchronizuoti"
-
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
 #~ msgstr "Saved in: %s"
@@ -7567,6 +7553,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Rodyti failų siuntimų sąrašą tarp jūsų ir kitų"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
 
 #~ msgid "Sta_tus"
 #~ msgstr "_Būklė"
@@ -7696,6 +7686,11 @@ msgstr ""
 #~ msgstr "_Naudotojo vardas:"
 
 #, fuzzy
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Padėtis:"
+
+#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Private Chat"
 
@@ -7749,12 +7744,24 @@ msgstr ""
 #~ msgstr "_Nustatymai"
 
 #, fuzzy
+#~ msgid "_Account"
+#~ msgstr "_Prieigos"
+
+#, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Prieiga"
 
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML Console"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Default"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Description"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7835,6 +7842,11 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Choose the groupchats you want to leave"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Padėtis:"
 
 #, fuzzy
 #~ msgid "yesterday "

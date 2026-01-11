@@ -6,14 +6,14 @@
 # Thérèse <gcfod@inboxen.org>, 2023.
 # nicoco <nicoco@nicoco.fr>, 2023.
 # franck-x <dev@monanderos.fr>, 2023.
-# Codimp <contact@lithio.fr>, 2024, 2025.
+# Codimp <contact@lithio.fr>, 2024, 2025, 2026.
 # Daniel Brötzmann <mailtrash@posteo.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
-"PO-Revision-Date: 2025-12-05 17:19+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"PO-Revision-Date: 2026-01-10 22:19+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -636,12 +636,18 @@ msgstr "Tous les statuts"
 msgid "All Chats"
 msgstr "Toutes les discussions"
 
+msgid "All Messages"
+msgstr "Tous les messages"
+
 msgid "All files"
 msgstr "Tous les fichiers"
 
 #, python-format
 msgid "All hats of %s have been removed"
 msgstr "Toutes les casquettes de %s ont été retirées"
+
+msgid "All of these settings are optional and can be changed later"
+msgstr "Tous ces paramètres sont optionnels et pourront être changés plus tard"
 
 msgid "All of your hats have been removed"
 msgstr "Toutes vos casquettes ont été retirées"
@@ -1059,6 +1065,9 @@ msgstr ""
 msgid "Chat"
 msgstr "Discussion"
 
+msgid "Chat Address"
+msgstr "Adresse du groupe"
+
 msgid "Chat Banner: Background Color"
 msgstr "Bannière de discussion : couleur de fond"
 
@@ -1111,9 +1120,6 @@ msgstr "Vérifier quelles fonctionnalités sont disponibles"
 
 msgid "Choose Device"
 msgstr "Choisissez un appareil"
-
-msgid "Choose Emoji"
-msgstr "Choisissez un Emoji"
 
 msgid "Choose History Export Directory"
 msgstr "Choisissez un dossier pour l'export d'historique"
@@ -1182,6 +1188,9 @@ msgstr "Fermer la discussion"
 msgid "Close a chat by pressing the Escape key"
 msgstr "Fermer la discussion en appuyant sur la touche ÉCHAP"
 
+msgid "Close this preview"
+msgstr "Fermer cette prévisualisation"
+
 msgid "Close with Escape"
 msgstr "Fermer avec ÉCHAP"
 
@@ -1243,6 +1252,15 @@ msgstr "Configurer"
 
 msgid "Configure logging system"
 msgstr "Configurer le système de log"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
+"Configure quels messages seront archivés sur le serveur. Ne pas archiver les "
+"messages sur le serveur peut les empêcher de se synchroniser entre vos "
+"appareils."
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Confirmer la connexion non-chiffrée"
@@ -1368,6 +1386,9 @@ msgstr "Copier dans le presse-papier"
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse-papier"
 
+msgid "Correct Message"
+msgstr "Éditer le message"
+
 msgid "Could Not Save File"
 msgstr "Impossible d’enregistrer le fichier"
 
@@ -1474,6 +1495,9 @@ msgid "Default for group chats (e.g. Contact is typing)"
 msgstr ""
 "Valeur par défaut pour les groupes de discussion (ex. Contact est en train "
 "d'écrire)"
+
+msgid "Default for new chats"
+msgstr "Valeur par défaut pour les nouvelles discussions"
 
 msgid "Default for new group chats"
 msgstr "Valeur par défaut pour les nouveaux salons de discussion"
@@ -1841,6 +1865,9 @@ msgstr "Tout le monde"
 msgid "Everything"
 msgstr "Tout"
 
+msgid "Exceptions from the above setting"
+msgstr "Exceptions aux paramètres ci-dessus"
+
 msgid "Execute"
 msgstr "Exécuter"
 
@@ -1917,10 +1944,6 @@ msgstr "La génération d'image de profil a échoué."
 
 msgid "Fake audio output"
 msgstr "Fausse sortie audio"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Famille"
 
 msgid "Features"
 msgstr "Fonctionnalités"
@@ -2017,6 +2040,9 @@ msgstr ""
 "Synchronisation de l'historique terminée :\n"
 "%s messages téléchargés"
 
+msgid "Focus Input"
+msgstr "Focus sur la zone de saisie"
+
 msgid "Focus Search"
 msgstr "Sélectionner la recherche"
 
@@ -2041,6 +2067,15 @@ msgstr "Oublier ce salon de discussion ?"
 
 msgid "Forget this Group Chat…"
 msgstr "Oublier ce groupe de discussion…"
+
+msgid "Format Text Bold"
+msgstr "Formater le texte en gras"
+
+msgid "Format Text Italic"
+msgstr "Formater le texte en italique"
+
+msgid "Format Text Strikethrough"
+msgstr "Formater le texte en barré"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Erreur de format dans le champ lastUpdate du CRL"
@@ -2182,9 +2217,6 @@ msgstr "Salon de discussion"
 msgid "Group Chat Details"
 msgstr "Détails du salon"
 
-msgid "Group Chat Invitation"
-msgstr "Invitation à un salon"
-
 msgid "Group Chat Language"
 msgstr "Langue parlée dans le salon de discussion"
 
@@ -2193,6 +2225,9 @@ msgstr "Message d'un salon mis en surbrillance"
 
 msgid "Group Chat Message Received"
 msgstr "Message reçu dans un salon"
+
+msgid "Group Chat Settings"
+msgstr "Paramètres du groupe de discussion"
 
 msgid "Group Chats"
 msgstr "Salons de discussion"
@@ -2611,14 +2646,6 @@ msgstr "Chargement…"
 msgid "Local Time"
 msgstr "Heure locale"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "Groupe d'entraide local"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Nouvelles et rapports locaux"
-
 #, python-format
 msgid "Location at %s"
 msgstr "Emplacement : %s"
@@ -2750,6 +2777,9 @@ msgstr "Messages"
 msgid "Messages are archived on the server"
 msgstr "Les messages sont archivés sur le serveur"
 
+msgid "Messages from Contacts"
+msgstr "Messages des contacts"
+
 msgid "Messages from this users are blocked"
 msgstr "Les messages de cet·te utilisateur·ice sont bloqués"
 
@@ -2864,10 +2894,6 @@ msgstr "Nouvel espace de travail"
 msgid "New message from"
 msgstr "Nouveau message de"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "Nouvelles"
-
 msgid "Next"
 msgstr "Suivant"
 
@@ -2885,6 +2911,9 @@ msgstr "Non"
 
 msgid "No File Transfer available"
 msgstr "Pas de transfert de fichier disponible"
+
+msgid "No Messages"
+msgstr "Aucuns messages"
 
 msgid "No Messages Found"
 msgstr "Aucun messages trouvés"
@@ -3088,8 +3117,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Ouvert"
 
+#, python-format
+msgid "Open %s"
+msgstr "Ouvrir %s"
+
 msgid "Open Email Composer"
 msgstr "Ouvrir le client mail"
+
+msgid "Open Emoji Chooser"
+msgstr "Ouvrir le sélecteur d'emoji"
 
 msgid "Open Folder"
 msgstr "Ouvrir le répertoire"
@@ -3426,10 +3462,6 @@ msgstr "Profil"
 msgid "Profile application with cprofile"
 msgstr "Profiler l'application avec cprofile"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "Discussions autour du projet"
-
 msgid "Pronouns"
 msgstr "Pronoms"
 
@@ -3508,6 +3540,9 @@ msgstr "Quitter"
 
 msgid "Quit Gajim"
 msgstr "Quitter Gajim"
+
+msgid "Quitting…"
+msgstr "Fermeture…"
 
 msgid "Quote Next Message"
 msgstr "Citer le message suivant"
@@ -3689,10 +3724,6 @@ msgstr "Renommer un contact ?"
 
 msgid "Rename…"
 msgstr "Renommer…"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "Réparations"
 
 msgid "Reply…"
 msgstr "Réponse…"
@@ -4000,6 +4031,11 @@ msgstr "Sélectionnez une activité pour voir les détails."
 msgid "Select playback speed"
 msgstr "Sélection de la vitesse de lecture"
 
+msgid "Select the account you want to use to create a new group chat"
+msgstr ""
+"Sélectionnez les compte que vous voulez utiliser pour créer un nouveau "
+"groupe de discussion"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Sélectionnez votre source audio (ex : microphone)"
 
@@ -4158,6 +4194,9 @@ msgstr "Montrer connecté·e/parti"
 msgid "Show Joined / Left"
 msgstr "Afficher connecté·e / parti"
 
+msgid "Show Link Preview"
+msgstr "Activer la prévisualisation des liens"
+
 msgid "Show Plugins"
 msgstr "Montrer les Extensions"
 
@@ -4255,9 +4294,6 @@ msgstr "Montrer la fenêtre lorsque Gajim démarre"
 msgid "Show/Hide Window"
 msgstr "Afficher/Cacher la fenêtre"
 
-msgid "Shutting down Gajim"
-msgstr "Éteindre Gajim"
-
 msgid "Sign In"
 msgstr "À la connexion"
 
@@ -4315,10 +4351,6 @@ msgstr "Correcteur d'orthographe"
 
 msgid "Spell Checking"
 msgstr "Vérification d'orthographe"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "Rassemblement de printemps"
 
 msgid "Stage"
 msgstr "Étape"
@@ -4572,10 +4604,6 @@ msgstr "Icône de la barre des tâches"
 
 msgid "System Tray Notifications"
 msgstr "Notifications dans la barre des tâches"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "Équipe"
 
 msgid "Telephone"
 msgstr "Téléphone"
@@ -4921,10 +4949,6 @@ msgstr "Transfert de fichier en cours…"
 msgid "Transports"
 msgstr "Passerelles"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "Planification du voyage"
-
 msgid "Trust Management"
 msgstr "Gestion de la confiance"
 
@@ -5159,10 +5183,6 @@ msgstr "Utilisateurs/trices"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2 : %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Vacances"
 
 msgid "Validity"
 msgstr "Validité"
@@ -5533,9 +5553,6 @@ msgstr "À _propos"
 msgid "_Accept"
 msgstr "_Accepter"
 
-msgid "_Account"
-msgstr "_Comptes"
-
 msgid "_Add to Trusted Certificates"
 msgstr "Ajouter aux certificats de _confiance"
 
@@ -5586,15 +5603,8 @@ msgstr "_Créer"
 msgid "_Decline"
 msgstr "_Refuser"
 
-msgid "_Default"
-msgstr "Par _défaut"
-
 msgid "_Delete"
 msgstr "_Supprimer"
-
-# ccount). Description column
-msgid "_Description"
-msgstr "_Description"
 
 msgid "_Destroy"
 msgstr "_Détruire"
@@ -5804,19 +5814,11 @@ msgstr "donnée"
 msgid "description"
 msgstr "description"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "par ex. %s"
-
 msgid "error"
 msgstr "erreur"
 
 msgid "example.org"
 msgstr "exemple.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "famille"
 
 msgid "floor"
 msgstr "étage"
@@ -5853,10 +5855,6 @@ msgstr "lon"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "nouvelles"
-
 msgid "or"
 msgstr "ou bien"
 
@@ -5877,10 +5875,6 @@ msgstr "Version de python-nbxmpp : %s"
 msgid "region"
 msgstr "région"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "réparations"
-
 msgid "room"
 msgstr "salon de discussion"
 
@@ -5892,10 +5886,6 @@ msgstr "rue"
 
 msgid "strike"
 msgstr "Barré"
-
-msgctxt "Group chat address"
-msgid "team"
-msgstr "équipe"
 
 msgid "text"
 msgstr "texte"
@@ -5910,10 +5900,6 @@ msgstr ""
 "Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "ButterflyOfFire <butterflyoffire@protonmail.com>\n"
 "Codimp https://lithio.fr"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "vacances"
 
 msgid "video input"
 msgstr "Entrée vidéo"
@@ -6130,10 +6116,6 @@ msgstr "... ou bien déposez ici"
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Composition d'un message"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Reçu"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6404,6 +6386,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Choisissez une image de profil…"
 
+#~ msgid "Choose Emoji"
+#~ msgstr "Choisissez un Emoji"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Choisissez un fichier à envoyer…"
 
@@ -6455,9 +6440,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Connection not available"
 #~ msgstr "Connexion non disponible"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Adresses de contact"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Liste de contacts : couleur de fond des contacts"
@@ -6546,9 +6528,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Default"
 #~ msgstr "Par défaut"
-
-#~ msgid "Default for chats"
-#~ msgstr "Valeur par défaut pour les discussions"
 
 #~ msgid "Delete Message"
 #~ msgstr "Supprimer le message"
@@ -6664,6 +6643,10 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Expires on"
 #~ msgstr "Expire le"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Famille"
+
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Fonctionnalité indisponible sous Windows"
 
@@ -6740,6 +6723,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr ""
 #~ "Gajim : vérification des mises à jour désactivée dans les préférences"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Invitation à un salon"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Invitation à un salon reçue"
@@ -6855,6 +6841,14 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Local System Time"
 #~ msgstr "Heure locale du système"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Groupe d'entraide local"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Nouvelles et rapports locaux"
+
 #~ msgid "Location:"
 #~ msgstr "Emplacement :"
 
@@ -6908,6 +6902,10 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Ne ratez jamais un message, gardez tous vos clients de messagerie "
 #~ "synchronisés"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "Nouvelles"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Aucune connexion disponible"
@@ -6970,6 +6968,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Le mot de passe contient des caractères interdits"
 
+#~ msgid "Past as Code Block"
+#~ msgstr "Coller en tant que bloc de code"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Mettre en pause ou reprendre le transfert de fichier"
 
@@ -7005,6 +7006,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Progress"
 #~ msgstr "Progression"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "Discussions autour du projet"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Hôte du serveur mandataire"
@@ -7054,6 +7059,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Enlever de la liste des contacts"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "Réparations"
 
 #~ msgid "Report"
 #~ msgstr "Signaler"
@@ -7112,9 +7121,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Sélectionnez le compte avec lequel vous voulez vous synchroniser"
-
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Sélectionnez les contacts que vous voulez synchroniser"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr ""
@@ -7220,6 +7226,13 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Affiche une liste des transferts de fichiers entre vous et les autres"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Éteindre Gajim"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "Rassemblement de printemps"
+
 #~ msgid "Sta_tus"
 #~ msgstr "É_tat"
 
@@ -7295,6 +7308,10 @@ msgstr "... ou bien déposez ici"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "La vérification TLS a échoué : %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "Équipe"
+
 #, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
@@ -7335,6 +7352,10 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr ""
 #~ "Traiter les paires de * / _ comme des éventuels caractères de formatage."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "Planification du voyage"
 
 #~ msgid "Tune:"
 #~ msgstr "Musique :"
@@ -7389,6 +7410,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "User name…"
 #~ msgstr "Nom d'utilisateur·ice…"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Vacances"
 
 #~ msgid "Video Framerate"
 #~ msgstr "Fréquence de rafraîchissement vidéo"
@@ -7457,6 +7482,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Vos préférences d'archivage ont été sauvegardées avec succès."
 
+#~ msgid "_Account"
+#~ msgstr "_Comptes"
+
 #~ msgid "_Accounts"
 #~ msgstr "_Comptes"
 
@@ -7465,6 +7493,13 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "_Debug Console"
 #~ msgstr "Console de _Débogage"
+
+#~ msgid "_Default"
+#~ msgstr "Par _défaut"
+
+# ccount). Description column
+#~ msgid "_Description"
+#~ msgstr "_Description"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Ne plus me poser la question"
@@ -7527,6 +7562,14 @@ msgstr "... ou bien déposez ici"
 #~ msgid "dark skin tone"
 #~ msgstr "peau foncée"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "par ex. %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "famille"
+
 #~ msgid "file transfers list"
 #~ msgstr "liste des transferts de fichier"
 
@@ -7552,8 +7595,24 @@ msgstr "... ou bien déposez ici"
 #~ msgid "medium-light skin tone"
 #~ msgstr "peau moyennement claire"
 
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "nouvelles"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "réparations"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "équipe"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "vacances"
 
 #, fuzzy
 #~ msgid "yesterday "

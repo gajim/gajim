@@ -1,13 +1,13 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010, 2022, 2023, 2024.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
-"PO-Revision-Date: 2024-06-18 16:17+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"PO-Revision-Date: 2025-12-31 16:19+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
 ">\n"
@@ -34,11 +34,11 @@ msgstr "%(contact)s сіздің %(chat)s чатына шақыруыңызды 
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s сізді %(chat)s ішіне қосылуға шақырды"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "Қатысушы"
-msgstr[1] "Қатысушы"
+msgstr[0] "%(count)s Қатысушы"
+msgstr[1] "%(count)s Қатысушы"
 
 #, python-format
 msgid ""
@@ -636,11 +636,18 @@ msgstr "Барлық чат күйлері"
 msgid "All Chats"
 msgstr "Барлық чат күйлері"
 
+#, fuzzy
+msgid "All Messages"
+msgstr "Хабарлама"
+
 msgid "All files"
 msgstr "Барлық файлдар"
 
 #, python-format
 msgid "All hats of %s have been removed"
+msgstr ""
+
+msgid "All of these settings are optional and can be changed later"
 msgstr ""
 
 #, fuzzy
@@ -1063,6 +1070,10 @@ msgstr ""
 msgid "Chat"
 msgstr "Чаттар"
 
+#, fuzzy
+msgid "Chat Address"
+msgstr "Контакт адрестері"
+
 msgid "Chat Banner: Background Color"
 msgstr "Чат баннері: Фон түсі"
 
@@ -1115,10 +1126,6 @@ msgstr "Видео қоңыраулар Windows жүйесінде қол жет
 
 msgid "Choose Device"
 msgstr "Құрылғыны таңдау"
-
-#, fuzzy
-msgid "Choose Emoji"
-msgstr "Дыбысты таңдаңыз"
 
 msgid "Choose History Export Directory"
 msgstr "Тарихты экспорттау бумасын таңдау"
@@ -1188,6 +1195,10 @@ msgstr "Чатты жабу"
 msgid "Close a chat by pressing the Escape key"
 msgstr "Escape пернесін басу арқылы чатты жабыңыз"
 
+#, fuzzy
+msgid "Close this preview"
+msgstr "Автоматты алдын ала қарау жоқ"
+
 msgid "Close with Escape"
 msgstr "Escape арқылы жабу"
 
@@ -1243,6 +1254,12 @@ msgstr "Баптау"
 
 msgid "Configure logging system"
 msgstr "Журналдау жүйесін баптау"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Шифрленбеген байланысты растаңыз"
@@ -1373,6 +1390,10 @@ msgid "Copy to clipboard"
 msgstr "Алмасу буферіне көшіріп алу"
 
 #, fuzzy
+msgid "Correct Message"
+msgstr "Тікелей хабарламалар"
+
+#, fuzzy
 msgid "Could Not Save File"
 msgstr "Файлды сақтау мүмкін емес"
 
@@ -1481,6 +1502,10 @@ msgstr "Чаттар және жеке топтық чаттар үшін үнс
 #, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Топтық чаттар үшін үнсіз келісім бойынша"
+
+#, fuzzy
+msgid "Default for new chats"
+msgstr "Чаттар үшін үнсіз келісім бойынша"
 
 msgid "Default for new group chats"
 msgstr "Жаңа топтық чаттар үшін үнсіз келісім бойынша"
@@ -1857,6 +1882,9 @@ msgstr "Әркім"
 msgid "Everything"
 msgstr "Барлығы"
 
+msgid "Exceptions from the above setting"
+msgstr ""
+
 msgid "Execute"
 msgstr "Орындау"
 
@@ -1935,10 +1963,6 @@ msgstr "Аватарды жасау сәтсіз аяқталды."
 
 msgid "Fake audio output"
 msgstr "Жалған аудио шығысы"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Отбасы"
 
 msgid "Features"
 msgstr "Мүмкіндіктері"
@@ -2040,6 +2064,9 @@ msgstr ""
 "Сөйлесу тарихын синхрондау аяқталды:\n"
 "%s хабарлама жүктеп алынды"
 
+msgid "Focus Input"
+msgstr ""
+
 #, fuzzy
 msgid "Focus Search"
 msgstr "Іздеуді жабу"
@@ -2067,6 +2094,16 @@ msgstr "Бұл топтық чатты ұмыту"
 #, fuzzy
 msgid "Forget this Group Chat…"
 msgstr "Бұл топтық чатты ұмыту"
+
+#, fuzzy
+msgid "Format Text Bold"
+msgstr "Сөйлесу: Мәтін түсі"
+
+msgid "Format Text Italic"
+msgstr ""
+
+msgid "Format Text Strikethrough"
+msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "CRL lastUpdate өрісіндегі пішім қатесі"
@@ -2211,9 +2248,6 @@ msgstr "Топтық чат"
 msgid "Group Chat Details"
 msgstr "Топтық чат мәліметтері"
 
-msgid "Group Chat Invitation"
-msgstr "Топ чатына шақыру"
-
 msgid "Group Chat Language"
 msgstr "Топтық чат тілі"
 
@@ -2222,6 +2256,10 @@ msgstr "Сізді біреу бөлмеде еске алған"
 
 msgid "Group Chat Message Received"
 msgstr "Бөлмеде хабарлама алынды"
+
+#, fuzzy
+msgid "Group Chat Settings"
+msgstr "Топтық чат мәліметтері"
 
 msgid "Group Chats"
 msgstr "Топтық чаттар"
@@ -2649,14 +2687,6 @@ msgstr "Жүктеу…"
 msgid "Local Time"
 msgstr "Жергілікті уақыт"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "Жергілікті көмек тобы"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Жергілікті жаңалықтар мен репортаждар"
-
 #, python-format
 msgid "Location at %s"
 msgstr "%s ішіндегі орнласу"
@@ -2793,6 +2823,10 @@ msgstr "Хабарлама"
 msgid "Messages are archived on the server"
 msgstr "Хабарламалар серверде архивтелген"
 
+#, fuzzy
+msgid "Messages from Contacts"
+msgstr "Бірінші хабарлама алынды"
+
 msgid "Messages from this users are blocked"
 msgstr ""
 
@@ -2918,10 +2952,6 @@ msgstr "Жаңа жұмыс кеңістігі"
 msgid "New message from"
 msgstr "Келесіден жаңа хабарлама"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "Жаңалықтар"
-
 msgid "Next"
 msgstr "Келесі"
 
@@ -2941,6 +2971,10 @@ msgstr "Жоқ"
 
 msgid "No File Transfer available"
 msgstr "Қолжетімді файлдармен алмасу жоқ"
+
+#, fuzzy
+msgid "No Messages"
+msgstr "Хабарлама"
 
 #, fuzzy
 msgid "No Messages Found"
@@ -3143,7 +3177,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Ашық"
 
+#, fuzzy, python-format
+msgid "Open %s"
+msgstr "Ашу"
+
 msgid "Open Email Composer"
+msgstr "Эл. пошта құрастырушысын ашу"
+
+#, fuzzy
+msgid "Open Emoji Chooser"
 msgstr "Эл. пошта құрастырушысын ашу"
 
 msgid "Open Folder"
@@ -3488,10 +3530,6 @@ msgstr "Профиль"
 msgid "Profile application with cprofile"
 msgstr "Қолданбаны cprofile көмегімен профильдеу"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "Жобаны талқылау"
-
 msgid "Pronouns"
 msgstr ""
 
@@ -3576,6 +3614,10 @@ msgstr "Шығу"
 
 msgid "Quit Gajim"
 msgstr "Gajim жұмысын аяқтау"
+
+#, fuzzy
+msgid "Quitting…"
+msgstr "Күтуде…"
 
 #, fuzzy
 msgid "Quote Next Message"
@@ -3772,10 +3814,6 @@ msgstr "Контактты өшіру"
 #, fuzzy
 msgid "Rename…"
 msgstr "_Пайдаланушы аты"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "Жөндеулер"
 
 msgid "Reply…"
 msgstr ""
@@ -4092,6 +4130,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr "Ойнату жылдамдығын таңдау"
 
+#, fuzzy
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Синхрондау үшін контакттарды таңдаңыз"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Аудио кірісті таңдаңыз (мысалы, микрофон)"
 
@@ -4260,6 +4302,10 @@ msgid "Show Joined / Left"
 msgstr "Кіру/шығуды көрсету"
 
 #, fuzzy
+msgid "Show Link Preview"
+msgstr "Тікелей алдын ала қарау"
+
+#, fuzzy
 msgid "Show Plugins"
 msgstr "Плагиндер"
 
@@ -4362,9 +4408,6 @@ msgstr "Gajim іске қосу кезінде терезені көрсету"
 msgid "Show/Hide Window"
 msgstr "Терезені көрсету/жасыру"
 
-msgid "Shutting down Gajim"
-msgstr "Gajim сөндірілуде"
-
 msgid "Sign In"
 msgstr "Кіру"
 
@@ -4423,10 +4466,6 @@ msgstr "Емлені тексеру"
 
 msgid "Spell Checking"
 msgstr "Емлені тексеру"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "Көктемгі жиын"
 
 msgid "Stage"
 msgstr "Қадам"
@@ -4701,10 +4740,6 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Визуалды хабарламалар"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "Топ"
 
 msgid "Telephone"
 msgstr ""
@@ -5045,10 +5080,6 @@ msgstr "Файлды тасымалдау…"
 msgid "Transports"
 msgstr "Қызметтер"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "Сапарды жоспарлау"
-
 msgid "Trust Management"
 msgstr ""
 
@@ -5290,10 +5321,6 @@ msgstr "Пайдаланушылар"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Демалыс"
 
 msgid "Validity"
 msgstr "Жарамдылығы"
@@ -5659,9 +5686,6 @@ msgstr "Осы тур_алы"
 msgid "_Accept"
 msgstr "Қ_абылдау"
 
-msgid "_Account"
-msgstr "_Тіркелгі"
-
 msgid "_Add to Trusted Certificates"
 msgstr "Сенімді сертификаттарға қ_осу"
 
@@ -5713,14 +5737,8 @@ msgstr "Жа_сау"
 msgid "_Decline"
 msgstr "Тай_дыру"
 
-msgid "_Default"
-msgstr "_Стандартты"
-
 msgid "_Delete"
 msgstr "Ө_шіру"
-
-msgid "_Description"
-msgstr "Си_паттамасы"
 
 msgid "_Destroy"
 msgstr "Жо_ю"
@@ -5940,19 +5958,11 @@ msgstr "деректер"
 msgid "description"
 msgstr "сипаттамасы"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "мысалы, %s"
-
 msgid "error"
 msgstr "қате"
 
 msgid "example.org"
 msgstr "example.org"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "отбасы"
 
 msgid "floor"
 msgstr "қабат"
@@ -5990,10 +6000,6 @@ msgstr "бойлық"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "жаңалықтар"
-
 msgid "or"
 msgstr "немесе"
 
@@ -6014,10 +6020,6 @@ msgstr "python-nbxmpp нұсқасы: %s"
 msgid "region"
 msgstr "аймақ"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "жөндеу"
-
 msgid "room"
 msgstr "бөлме"
 
@@ -6030,10 +6032,6 @@ msgstr "көше"
 msgid "strike"
 msgstr "сызылған"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr "топ"
-
 msgid "text"
 msgstr "мәтін"
 
@@ -6042,10 +6040,6 @@ msgstr "уақыт белгісі"
 
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "демалыс"
 
 msgid "video input"
 msgstr "видео кірісі"
@@ -6241,10 +6235,6 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "?Message row action:Correct…"
 #~ msgstr "Хабарлама құрамасы"
-
-#, fuzzy
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Бірінші хабарлама алынды"
 
 #, fuzzy
 #~ msgid "?Message row action:Select Messages…"
@@ -6486,6 +6476,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Аватарды таңдау…"
 
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Дыбысты таңдаңыз"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Жіберу үшін файлды таңдау…"
 
@@ -6535,9 +6529,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Connection not available"
 #~ msgstr "Байланыс қолжетерсіз"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Контакт адрестері"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Контакттар тізімі: Контакт фонының түсі"
@@ -6620,9 +6611,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Default"
 #~ msgstr "Бастапқысы"
-
-#~ msgid "Default for chats"
-#~ msgstr "Чаттар үшін үнсіз келісім бойынша"
 
 #~ msgid "Delete Message"
 #~ msgstr "Хабарламаны өшіру"
@@ -6731,6 +6719,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Expires on"
 #~ msgstr "Аяқталу мерзімі"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Отбасы"
+
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Бұл мүмкіндік Windows-та қолжетімді емес"
 
@@ -6807,6 +6799,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Gajim: Жаңартуларға тексеру мүмкіндігі баптауларда сөндірілген"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Топ чатына шақыру"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Топтық чатқа шақыру алынды"
@@ -6916,6 +6911,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Local System Time"
 #~ msgstr "Жергілікті жүйе уақыты"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Жергілікті көмек тобы"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Жергілікті жаңалықтар мен репортаждар"
+
 #~ msgid "Location:"
 #~ msgstr "Орналасу:"
 
@@ -6964,6 +6967,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Ешбір хабарды жіберіп алмаңыз, барлық сөйлесу клиенттеріңізді синхрондаңыз"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "Жаңалықтар"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Байланыс қолжетімді емес"
@@ -7026,6 +7033,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Парольде рұқсат етілмеген таңбалар бар"
 
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "Код блогы ретінде кірістіру"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Файлдармен алмасуды аялдату немесе жалғастыру"
 
@@ -7059,6 +7070,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Progress"
 #~ msgstr "Барысы"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "Жобаны талқылау"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Прокси хосты"
@@ -7107,6 +7122,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Контакттар тізімінен өшіру"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "Жөндеулер"
 
 #~ msgid "Report"
 #~ msgstr "Есеп жіберу"
@@ -7162,10 +7181,6 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Синхрондау үшін тіркелгіні таңдаңыз"
-
-#, fuzzy
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "Синхрондау үшін контакттарды таңдаңыз"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr ""
@@ -7263,6 +7278,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Сіз бен сіздің контакттарыңыз арасындағы файл алмасуларды көрсетеді"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim сөндірілуде"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "Көктемгі жиын"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Қалы_п-күй"
 
@@ -7337,6 +7359,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "TLS тексеруі сәтсіз аяқталды: %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "Топ"
+
 #, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
@@ -7377,6 +7403,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr "* / _ жұптарын мүмкін пішімдеу таңбалары ретінде қарастыру."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "Сапарды жоспарлау"
 
 #~ msgid "Tune:"
 #~ msgstr "Өлең:"
@@ -7436,6 +7466,10 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Пайдаланушы аты"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Демалыс"
 
 #~ msgid "Video Framerate"
 #~ msgstr "Видеоның кадр/сек қасиеті"
@@ -7500,6 +7534,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Сіздің архивтеу баптауларыңыз сәтті сақталды."
 
+#~ msgid "_Account"
+#~ msgstr "_Тіркелгі"
+
 #~ msgid "_Accounts"
 #~ msgstr "Ті_ркелгілер"
 
@@ -7509,6 +7546,12 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "_Debug Console"
 #~ msgstr "XML ко_нсолі"
+
+#~ msgid "_Default"
+#~ msgstr "_Стандартты"
+
+#~ msgid "_Description"
+#~ msgstr "Си_паттамасы"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "Келесіде сұра_мау"
@@ -7573,6 +7616,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "dark skin tone"
 #~ msgstr "күңгірт тері"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "мысалы, %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "отбасы"
+
 #~ msgid "file transfers list"
 #~ msgstr "файлдармен алмасу тізімі"
 
@@ -7598,8 +7649,24 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "medium-light skin tone"
 #~ msgstr "орташа ақшыл тері"
 
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "жаңалықтар"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "жөндеу"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "топ"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "демалыс"
 
 #, fuzzy
 #~ msgid "yesterday "

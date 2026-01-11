@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # Gabriel Papp <gabriel.papp@gmx.com>, 2010.
-# Róbert Somogyvári <cr04ch@disroot.org>, 2022, 2023, 2024, 2025.
+# Róbert Somogyvári <cr04ch@disroot.org>, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 13:28+0000\n"
-"PO-Revision-Date: 2025-12-05 18:53+0000\n"
+"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"PO-Revision-Date: 2026-01-11 18:10+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -618,12 +618,18 @@ msgstr "Minden értesítés"
 msgid "All Chats"
 msgstr "Minden beszélgetés"
 
+msgid "All Messages"
+msgstr "Minden üzenet"
+
 msgid "All files"
 msgstr "Minden fájl"
 
 #, python-format
 msgid "All hats of %s have been removed"
 msgstr "%s összes hatásköre törölve lett"
+
+msgid "All of these settings are optional and can be changed later"
+msgstr "Ezek a beállítások opcionálisak, és később is módosíthatóak"
 
 msgid "All of your hats have been removed"
 msgstr "Minden hatásköröm törölve lett"
@@ -1032,6 +1038,9 @@ msgstr ""
 msgid "Chat"
 msgstr "Beszélgetések"
 
+msgid "Chat Address"
+msgstr "A társalgó címe"
+
 msgid "Chat Banner: Background Color"
 msgstr "A beszélgetés felső sávja: háttérszín"
 
@@ -1083,9 +1092,6 @@ msgstr "A rendelkezésre álló funkciók áttekintése"
 
 msgid "Choose Device"
 msgstr "Eszköz választása"
-
-msgid "Choose Emoji"
-msgstr "Emodzsi kiválasztása"
 
 msgid "Choose History Export Directory"
 msgstr "Az exportálás célkönyvtárának kiválasztása"
@@ -1154,6 +1160,9 @@ msgstr "A beszélgetés bezárása"
 msgid "Close a chat by pressing the Escape key"
 msgstr "Az ESC billentyű bezárja a beszélgetést"
 
+msgid "Close this preview"
+msgstr "Az előnézet bezárása"
+
 msgid "Close with Escape"
 msgstr "Bezárás ESC billentyűvel"
 
@@ -1213,6 +1222,14 @@ msgstr "Beállítások"
 
 msgid "Configure logging system"
 msgstr "A naplózási szint megadása"
+
+msgid ""
+"Configure which messages will be archived on the server. Not archiving "
+"messages on the server may prevent them from synchronizing between your "
+"devices."
+msgstr ""
+"Az üzenetek kiszolgálón való archiválásának beállítása. Az archiválás "
+"kikapcsolása gátolhatja az üzenetek eszközök közötti szinkronizálását."
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Titkosítás nélküli kapcsolat jóváhagyása"
@@ -1338,6 +1355,9 @@ msgstr "Másolás a vágólapra"
 msgid "Copy to clipboard"
 msgstr "Másolás a vágólapra"
 
+msgid "Correct Message"
+msgstr "Üzenet helyesbítése"
+
 msgid "Could Not Save File"
 msgstr "Sikertelen mentés"
 
@@ -1441,6 +1461,9 @@ msgstr ""
 
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "A társalgókban alapértelmezett (pl. az ismerős üzenetet fogalmaz)"
+
+msgid "Default for new chats"
+msgstr "Alapértelmezés az új beszélgetésekhez"
 
 msgid "Default for new group chats"
 msgstr "Alapértelmezett érték az új társalgókban"
@@ -1796,6 +1819,9 @@ msgstr "Mindenki"
 msgid "Everything"
 msgstr "Korlátlan"
 
+msgid "Exceptions from the above setting"
+msgstr "Kivételek a fenti beállításból"
+
 msgid "Execute"
 msgstr "Végrehajtás"
 
@@ -1871,10 +1897,6 @@ msgstr "Nem sikerült létrehozni a profilképet."
 
 msgid "Fake audio output"
 msgstr "Álkimenet"
-
-msgctxt "Group chat name"
-msgid "Family"
-msgstr "Család"
 
 msgid "Features"
 msgstr "Funkciók"
@@ -1971,6 +1993,9 @@ msgstr ""
 "Az előzmények szinkronizálása befejeződött:\n"
 "%s üzenet lett letöltve"
 
+msgid "Focus Input"
+msgstr "Fókusz a beviteli mezőre"
+
 msgid "Focus Search"
 msgstr "A keresőmező fókuszba helyezése"
 
@@ -1995,6 +2020,15 @@ msgstr "Társalgó eltávolítása"
 
 msgid "Forget this Group Chat…"
 msgstr "Társalgó eltávolítása…"
+
+msgid "Format Text Bold"
+msgstr "Félkövér betűs szöveg"
+
+msgid "Format Text Italic"
+msgstr "Dőlt betűs szöveg"
+
+msgid "Format Text Strikethrough"
+msgstr "Áthúzott szöveg"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "A CRL lastUpdate mezője formailag hibás"
@@ -2136,9 +2170,6 @@ msgstr "Társalgók"
 msgid "Group Chat Details"
 msgstr "A társalgó adatai"
 
-msgid "Group Chat Invitation"
-msgstr "Meghívás társalgóba"
-
 msgid "Group Chat Language"
 msgstr "A társalgó nyelve"
 
@@ -2147,6 +2178,9 @@ msgstr "Kiemelt üzenet érkezett egy társalgóba"
 
 msgid "Group Chat Message Received"
 msgstr "Üzenet érkezett egy társalgóba"
+
+msgid "Group Chat Settings"
+msgstr "Tulajdonságok"
 
 msgid "Group Chats"
 msgstr "Társalgók"
@@ -2555,14 +2589,6 @@ msgstr "Betöltés…"
 msgid "Local Time"
 msgstr "Helyi idő"
 
-msgctxt "Group chat description"
-msgid "Local help group"
-msgstr "Helyi segítőcsoport"
-
-msgctxt "Group chat description"
-msgid "Local news and reports"
-msgstr "Helyi hírek és értesítések"
-
 #, python-format
 msgid "Location at %s"
 msgstr "Hely: %s"
@@ -2693,6 +2719,9 @@ msgstr "Üzenetek"
 msgid "Messages are archived on the server"
 msgstr "Az üzeneteket a kiszolgáló tárolja"
 
+msgid "Messages from Contacts"
+msgstr "Üzenetek az ismerősöktől"
+
 msgid "Messages from this users are blocked"
 msgstr "A felhasználó üzenetküldése tiltva van"
 
@@ -2807,10 +2836,6 @@ msgstr "Új munkaterület"
 msgid "New message from"
 msgstr "Új üzenet tőle:"
 
-msgctxt "Group chat name"
-msgid "News"
-msgstr "Hírek"
-
 msgid "Next"
 msgstr "Következő"
 
@@ -2828,6 +2853,9 @@ msgstr "Nem"
 
 msgid "No File Transfer available"
 msgstr "Nem lehet fájlt küldeni"
+
+msgid "No Messages"
+msgstr "Semelyik üzenet"
 
 msgid "No Messages Found"
 msgstr "Nincsenek üzenetek"
@@ -3027,8 +3055,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Nyitott"
 
+#, python-format
+msgid "Open %s"
+msgstr "Megnyitás: %s"
+
 msgid "Open Email Composer"
 msgstr "Levelező _megnyitása"
+
+msgid "Open Emoji Chooser"
+msgstr "Emodzsiválasztó megnyitása"
 
 msgid "Open Folder"
 msgstr "Mappa megnyitása"
@@ -3361,10 +3396,6 @@ msgstr "Profil"
 msgid "Profile application with cprofile"
 msgstr "Az alkalmazás profilozása cProfile-lal"
 
-msgctxt "Group chat description"
-msgid "Project discussion"
-msgstr "Projektmegbeszélés"
-
 msgid "Pronouns"
 msgstr "Személyes névmás"
 
@@ -3443,6 +3474,9 @@ msgstr "Kilépés"
 
 msgid "Quit Gajim"
 msgstr "Kilépés a programból"
+
+msgid "Quitting…"
+msgstr "Kilépés…"
 
 msgid "Quote Next Message"
 msgstr "A következő üzenet idézése"
@@ -3621,10 +3655,6 @@ msgstr "Névjegy átnevezése"
 
 msgid "Rename…"
 msgstr "Átnevezés…"
-
-msgctxt "Group chat name"
-msgid "Repairs"
-msgstr "Javítások"
 
 msgid "Reply…"
 msgstr "Válasz…"
@@ -3933,6 +3963,9 @@ msgstr "Részletes információ a tevékenység kiválasztásával."
 msgid "Select playback speed"
 msgstr "A lejátszási sebesség beállítása"
 
+msgid "Select the account you want to use to create a new group chat"
+msgstr "Az új társalgó létrehozásához használni kívánt fiók"
+
 msgid "Select your audio input (e.g. microphone)"
 msgstr "A hangbemeneti eszköz (pl. mikrofon) kiválasztása"
 
@@ -4088,6 +4121,9 @@ msgstr "Be- és kilépések jelzése"
 msgid "Show Joined / Left"
 msgstr "Be- és kilépések jelzése"
 
+msgid "Show Link Preview"
+msgstr "A hivatkozások előnézetének megjelenítése"
+
 msgid "Show Plugins"
 msgstr "Bővítmények"
 
@@ -4182,9 +4218,6 @@ msgstr "A programablak legyen látható a Gajim indításakor"
 msgid "Show/Hide Window"
 msgstr "Ablak elrejtése/felfedése"
 
-msgid "Shutting down Gajim"
-msgstr "A Gajim bezárása"
-
 msgid "Sign In"
 msgstr "Bejelentkezéskor"
 
@@ -4242,10 +4275,6 @@ msgstr "Helyesírás-ellenőrző"
 
 msgid "Spell Checking"
 msgstr "Helyesírás ellenőrzése"
-
-msgctxt "Group chat description"
-msgid "Spring gathering"
-msgstr "Tavaszi találkozó"
 
 msgid "Stage"
 msgstr "Parancsbeállítások"
@@ -4494,10 +4523,6 @@ msgstr "Rendszertálcaikon"
 
 msgid "System Tray Notifications"
 msgstr "Tálcaikon-értesítések"
-
-msgctxt "Group chat name"
-msgid "Team"
-msgstr "Csapat"
 
 msgid "Telephone"
 msgstr "Telefon"
@@ -4837,10 +4862,6 @@ msgstr "Fájl átvitele…"
 msgid "Transports"
 msgstr "Közvetített kapcsolatok"
 
-msgctxt "Group chat description"
-msgid "Trip planning"
-msgstr "Útiterv"
-
 msgid "Trust Management"
 msgstr "Megbízható eszközök"
 
@@ -5072,10 +5093,6 @@ msgstr "Felhasználók"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgctxt "Group chat name"
-msgid "Vacation"
-msgstr "Szünidő"
 
 msgid "Validity"
 msgstr "Érvényesség"
@@ -5435,9 +5452,6 @@ msgstr "_Névjegy"
 msgid "_Accept"
 msgstr "_Elfogadás"
 
-msgid "_Account"
-msgstr "_Fiók"
-
 msgid "_Add to Trusted Certificates"
 msgstr "_A tanúsítvány megbízhatónak jelölése"
 
@@ -5488,14 +5502,8 @@ msgstr "_Létrehozás"
 msgid "_Decline"
 msgstr "_Elutasítás"
 
-msgid "_Default"
-msgstr "Alapé_rtelmezett"
-
 msgid "_Delete"
 msgstr "_Törlés"
-
-msgid "_Description"
-msgstr "_Leírás"
 
 msgid "_Destroy"
 msgstr "Meg_szüntetés"
@@ -5705,19 +5713,11 @@ msgstr "irányjel"
 msgid "description"
 msgstr "leírás"
 
-#, python-format
-msgid "e.g. %s"
-msgstr "pl. %s"
-
 msgid "error"
 msgstr "hiba"
 
 msgid "example.org"
 msgstr "pelda.hu"
-
-msgctxt "Group chat address"
-msgid "family"
-msgstr "család"
 
 msgid "floor"
 msgstr "emelet"
@@ -5754,10 +5754,6 @@ msgstr "hosszúság"
 msgid "macOS"
 msgstr "macOS"
 
-msgctxt "Group chat address"
-msgid "news"
-msgstr "hírek"
-
 msgid "or"
 msgstr "vagy"
 
@@ -5778,10 +5774,6 @@ msgstr "python-nbxmpp verzió: %s"
 msgid "region"
 msgstr "régió"
 
-msgctxt "Group chat address"
-msgid "repairs"
-msgstr "javítások"
-
 msgid "room"
 msgstr "szoba"
 
@@ -5794,10 +5786,6 @@ msgstr "utca"
 msgid "strike"
 msgstr "Áthúzott"
 
-msgctxt "Group chat address"
-msgid "team"
-msgstr "csapat"
-
 msgid "text"
 msgstr "szöveg"
 
@@ -5809,10 +5797,6 @@ msgstr ""
 "cr04ch <cr04ch AT disroot.org>\n"
 "Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Göller Bertalan <>"
-
-msgctxt "Group chat address"
-msgid "vacation"
-msgstr "szünidő"
 
 msgid "video input"
 msgstr "videobemenet"
@@ -6027,9 +6011,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "?Message row action:Quote…"
 #~ msgstr "Idézés…"
-
-#~ msgid "?Message row action:Retract…"
-#~ msgstr "Visszavonás…"
 
 #~ msgid "?Message row action:Select Messages…"
 #~ msgstr "Üzenetek kijelölése…"
@@ -6297,6 +6278,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Choose Avatar…"
 #~ msgstr "Profilkép kiválasztása…"
 
+#~ msgid "Choose Emoji"
+#~ msgstr "Emodzsi kiválasztása"
+
 #~ msgid "Choose File to Send…"
 #~ msgstr "Küldendő fájl kiválasztása…"
 
@@ -6348,9 +6332,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Connection not available"
 #~ msgstr "Nincs kapcsolat"
-
-#~ msgid "Contact Addresses"
-#~ msgstr "Kapcsolatfelvétel"
 
 #~ msgid "Contact List: Contact Background Color"
 #~ msgstr "Névjegyek: névjegy háttérszíne"
@@ -6439,9 +6420,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Default"
 #~ msgstr "Alapértelmezett"
-
-#~ msgid "Default for chats"
-#~ msgstr "Alapértelmezett érték a beszélgetésekhez"
 
 #~ msgid "Delete Message"
 #~ msgstr "Üzenet törlése"
@@ -6553,6 +6531,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Expires on"
 #~ msgstr "Vége"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "Család"
+
 #~ msgid "Feature not available on Windows"
 #~ msgstr "A funkció Windows rendszeren nem érhető el"
 
@@ -6634,6 +6616,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Gajim: Update check disabled in preferences"
 #~ msgstr "Gajim: a frissítések keresése ki van kapcsolva"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Meghívás társalgóba"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Egy társalgóba szóló meghívó érkezett"
@@ -6748,6 +6733,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Local System Time"
 #~ msgstr "Helyi rendszeridő"
 
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Helyi segítőcsoport"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Helyi hírek és értesítések"
+
 #~ msgid "Location:"
 #~ msgstr "Tartózkodási hely:"
 
@@ -6798,6 +6791,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr "A csevegőklienseket szinkronban tartva egy üzenet sem vész el"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "Hírek"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Nincs kapcsolat"
@@ -6860,6 +6857,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "A jelszó tiltott karaktereket tartalmaz"
 
+#~ msgid "Past as Code Block"
+#~ msgstr "Beillesztés forráskódként"
+
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "A fájlátvitel szüneteltetése vagy folytatása"
 
@@ -6891,6 +6891,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Progress"
 #~ msgstr "Állapot"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "Projektmegbeszélés"
 
 #~ msgid "Proxy Host"
 #~ msgstr "Proxy gépneve"
@@ -6940,6 +6944,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Remove from contact list"
 #~ msgstr "Törlés a névjegyekből"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "Javítások"
 
 #~ msgid "Report"
 #~ msgstr "Jelentés"
@@ -6996,9 +7004,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "A szinkronizálandó fiók kiválasztása"
-
-#~ msgid "Select the contacts you want to synchronize"
-#~ msgstr "A szinkronizálandó névjegyek kijelölése"
 
 #~ msgid "Select your video input device (e.g. webcam, screen capture)"
 #~ msgstr ""
@@ -7100,6 +7105,13 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A küldött és fogadott fájlok megjelenítése"
 
+#~ msgid "Shutting down Gajim"
+#~ msgstr "A Gajim bezárása"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "Tavaszi találkozó"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Jelenléti állapo_t"
 
@@ -7174,6 +7186,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "TLS verification failed: %s"
 #~ msgstr "A TLS-ellenőrzés sikertelen: %s"
 
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "Csapat"
+
 #, python-format
 #~ msgid ""
 #~ "The file %s has been received, but it seems to have been damaged along "
@@ -7212,6 +7228,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Treat * / _ pairs as possible formatting characters."
 #~ msgstr "A * / _ karakterpárok formázási jelként kezelése."
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "Útiterv"
 
 #~ msgid "Tune:"
 #~ msgstr "Zene:"
@@ -7267,6 +7287,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Átnevezés…"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Vacation"
+#~ msgstr "Szünidő"
 
 #~ msgid "Video Framerate"
 #~ msgstr "Képkockasebesség"
@@ -7334,6 +7358,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Az archiválási beállítások mentése sikerült."
 
+#~ msgid "_Account"
+#~ msgstr "_Fiók"
+
 #~ msgid "_Accounts"
 #~ msgstr "_Fiókok"
 
@@ -7342,6 +7369,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "_Debug Console"
 #~ msgstr "_Hibakeresés"
+
+#~ msgid "_Default"
+#~ msgstr "Alapé_rtelmezett"
+
+#~ msgid "_Description"
+#~ msgstr "_Leírás"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Ne kérdezze újra"
@@ -7400,6 +7433,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "dark skin tone"
 #~ msgstr "sötét bőrtónus"
 
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "pl. %s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "család"
+
 #~ msgid "file transfers list"
 #~ msgstr "fájlátvitelek"
 
@@ -7425,8 +7466,24 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "medium-light skin tone"
 #~ msgstr "közepesen világos bőrtónus"
 
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "hírek"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "javítások"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "csapat"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "szünidő"
 
 #~ msgid "yesterday "
 #~ msgstr "tegnap "
