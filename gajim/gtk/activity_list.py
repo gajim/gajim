@@ -26,6 +26,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.muc import get_groupchat_name
@@ -47,11 +48,13 @@ EventT = (
     | events.UnsubscribedPresenceReceived
     | events.GajimUpdateAvailable
     | events.AllowGajimUpdateCheck
+    | events.ResponseReaction
 )
 
 EventNotifications = (
     events.MucInvitation,
     events.SubscribePresenceReceived,
+    events.ResponseReaction,
 )
 
 
@@ -114,6 +117,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("unsubscribed-presence-received", ged.GUI1, self._on_event),
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
+                ("response-reaction", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
             ]
         )
@@ -132,6 +136,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             events.UnsubscribedPresenceReceived: Unsubscribed,
             events.GajimUpdateAvailable: GajimUpdate,
             events.AllowGajimUpdateCheck: GajimUpdatePermission,
+            events.ResponseReaction: ResponseReaction,
         }
 
     def do_unroot(self) -> None:
@@ -258,9 +263,18 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         list_item_cls = self._event_item_map[type(event)]
         item = list_item_cls.from_event(event)  # pyright: ignore
 
+        notify = True
+        if isinstance(event, events.ResponseReaction):
+            if event.is_groupchat:
+                notify = app.settings.get_app_setting("gc_notify_on_reaction")
+            else:
+                notify = app.settings.get_app_setting("notify_on_reaction")
+
+            item.read = not notify
+
         self._add(item)
 
-        if isinstance(event, EventNotifications):
+        if isinstance(event, EventNotifications) and notify:
             app.ged.raise_event(
                 events.Notification(
                     context_id=event.context_id,
@@ -668,6 +682,31 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         )
 
 
+class ResponseReaction(ActivityListItem[events.ResponseReaction]):
+    @classmethod
+    def from_event(cls, event: events.ResponseReaction) -> ResponseReaction:
+        client = app.get_client(event.account)
+        contact = client.get_module("Contacts").get_contact(event.jid)
+
+        scale = app.window.get_scale_factor()
+        assert isinstance(contact, BareContact | GroupchatParticipant)
+        texture = contact.get_avatar(AvatarSize.ROSTER, scale)
+
+        return cls(
+            context_id=event.context_id,
+            account=event.account,
+            account_visible=True,
+            activity_type=0,
+            activity_type_icon="lucide-reply-symbolic",
+            avatar=texture,
+            title=event.title,
+            timestamp=utc_now(),
+            subject=event.subject,
+            read=False,
+            event=event,
+        )
+
+
 ActivityListItemT = (
     GajimUpdate
     | GajimUpdatePermission
@@ -677,4 +716,5 @@ ActivityListItemT = (
     | Unsubscribed
     | MucInvitation
     | MucInvitationDeclined
+    | ResponseReaction
 )
