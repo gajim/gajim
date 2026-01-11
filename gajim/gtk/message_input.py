@@ -148,7 +148,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             return
 
         action_name = action.get_name()
-        log.warning("Activate action: %s", action_name)
+        log.info("Activate action: %s", action_name)
 
         match action_name:
             case "input-focus":
