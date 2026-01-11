@@ -130,7 +130,6 @@ class ChatPage(Gtk.Paned):
     def _on_chat_selected(
         self, _chat_list_stack: ChatListStack, workspace_id: str, account: str, jid: JID
     ) -> None:
-        self._list_stack.set_visible_child_name("chat-list-stack")
         self._chat_stack.show_chat(account, jid)
 
         if (

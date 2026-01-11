@@ -462,6 +462,50 @@ class VisualNotificationsGroup(GajimPreferencesGroup):
             self.add_setting(setting)
 
 
+class NotificationsChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="notifications-chats",
+            title=_("Chats"),
+        )
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Notify of Reactions"),
+                SettingType.CONFIG,
+                "notify_on_reaction",
+                desc=_("Notify me when someone reacts to my message in a chat"),
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class NotificationsGroupChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="notifications-group-chats",
+            title=_("Group Chats"),
+        )
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Notify of Reactions"),
+                SettingType.CONFIG,
+                "gc_notify_on_reaction",
+                desc=_("Notify me when someone reacts to my message in a group chat"),
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
 class SoundsGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(
@@ -1176,6 +1220,8 @@ class VisualNotificationsPage(GajimPreferencePage):
             groups=[
                 VisualNotificationsGroup,
                 SoundsGroup,
+                NotificationsChatsGroup,
+                NotificationsGroupChatsGroup,
             ],
         )
 

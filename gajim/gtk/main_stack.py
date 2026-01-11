@@ -9,8 +9,12 @@ from typing import cast
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
+from gajim.common import app
+from gajim.common import events
+
 from gajim.gtk.account_page import AccountPage
 from gajim.gtk.activity_list import ActivityListView
+from gajim.gtk.activity_list import ResponseReaction
 from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_page import ChatPage
@@ -81,6 +85,17 @@ class MainStack(Gtk.Stack):
         self, listview: ActivityListView, position: int
     ) -> None:
         item = listview.get_listitem(position)
+        if isinstance(item, ResponseReaction):
+            event = cast(events.ResponseReaction, item.event)
+
+            chat_list_stack = self._chat_page.get_chat_list_stack()
+            chat_list = chat_list_stack.find_chat(event.account, event.jid)
+            if chat_list is not None:
+                chat_list.select_chat(event.account, event.jid)
+                control = app.window.get_control()
+                control.scroll_to_message(event.message_pk, event.message_ts)
+            return
+
         self.get_activity_page().process_row_activated(item)
 
     def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
