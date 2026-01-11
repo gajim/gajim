@@ -373,6 +373,20 @@ class ReactionUpdated(ApplicationEvent):
     reaction_id: str
 
 
+
+@dataclass
+class ResponseReaction(ApplicationEvent):
+    name: str = field(init=False, default='response-reaction')
+    account: str
+    jid: JID
+    is_groupchat: bool
+    reaction_id: str
+    message_pk: int
+    message_ts: datetime.datetime
+    title: str
+    subject: str
+
+
 @dataclass
 class HttpAuth(ApplicationEvent):
     name: str = field(init=False, default='http-auth')
