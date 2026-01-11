@@ -241,7 +241,7 @@ def get_encryption_menu() -> GajimMenu:
 
 def get_message_input_extra_context_menu() -> Gio.Menu:
     menuitems: MenuItemListT = [
-        (_("Clear"), "text.clear", None),
+        (_("Clear"), "win.input-clear", None),
         (_("Paste as Code Block"), "win.input-paste-as-code-block", None),
         (_("Paste as Quote"), "win.input-paste-as-quote", None),
     ]

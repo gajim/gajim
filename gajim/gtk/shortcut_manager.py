@@ -527,7 +527,7 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             label=_("Clear Input"),
             category="messages",
             accelerators=["<Primary>U"],
-            action_name="text.clear",
+            action_name="win.input-clear",
         ),
         GajimShortcut(
             label=_("Correct Message"),

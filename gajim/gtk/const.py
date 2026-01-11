@@ -195,6 +195,7 @@ APP_ACTIONS = [
 
 MAIN_WIN_ACTIONS = [
     # action name, variant type, enabled
+    ("input-clear", None, True),
     ("input-bold", None, True),
     ("input-italic", None, True),
     ("input-strike", None, True),

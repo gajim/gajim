@@ -127,6 +127,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         actions = [
+            "input-clear",
             "input-focus",
             "input-bold",
             "input-italic",
@@ -151,6 +152,9 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         log.info("Activate action: %s", action_name)
 
         match action_name:
+            case "input-clear":
+                self.clear()
+
             case "input-focus":
                 self.grab_focus_delayed()
 
@@ -417,7 +421,12 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         )
 
     def clear(self, *args: Any) -> None:
-        self.activate_action("text.clear")
+        buf = self.get_buffer()
+        buf.delete(*buf.get_bounds())
+
+        # Action only available in Gtk 4.19
+        # Use this as soon we set it as min Gtk
+        # self.activate_action("text.clear")
 
     def undo(self, *args: Any) -> None:
         buf = self.get_buffer()
