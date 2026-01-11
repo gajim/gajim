@@ -129,6 +129,10 @@ class Reactions(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=properties.reactions.id,
+                    reaction_occupant_id=occupant_id,
+                    emojis=None,
+                    message=None,
+                    is_mam_message=properties.is_mam_message
                 )
             )
             raise NodeProcessed
@@ -157,11 +161,29 @@ class Reactions(BaseModule):
         self._log.info('Received reactions: %s', reaction)
         app.storage.archive.upsert_row2(reaction)
 
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            message = app.storage.archive.get_message_with_stanza_id(
+                self._account,
+                remote_jid,
+                properties.reactions.id
+            )
+        else:
+            message = app.storage.archive.get_message_with_id(
+                self._account,
+                remote_jid,
+                properties.reactions.id
+            )
+
+
         app.ged.raise_event(
             ReactionUpdated(
                 account=self._account,
                 jid=remote_jid,
                 reaction_id=properties.reactions.id,
+                reaction_occupant_id=occupant_id,
+                emojis=valid,
+                message=message,
+                is_mam_message=properties.is_mam_message
             )
         )
 

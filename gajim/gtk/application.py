@@ -773,6 +773,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         elif params.type in (
             "subscription-request",
             "muc-invitation",
+            "reaction-updated",
         ):
             app.window.show_activity_page(params.context_id)
 

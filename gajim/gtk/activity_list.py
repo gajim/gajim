@@ -27,7 +27,10 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.user_strings import get_uf_relative_time
@@ -52,11 +55,13 @@ EventT = (
     | events.UnsubscribedPresenceReceived
     | events.GajimUpdateAvailable
     | events.AllowGajimUpdateCheck
+    | events.ReactionUpdated
 )
 
 EventNotifications = (
     events.MucInvitation,
     events.SubscribePresenceReceived,
+    events.ReactionUpdated,
 )
 
 
@@ -121,6 +126,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("unsubscribed-presence-received", ged.GUI1, self._on_event),
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
+                ("reaction-updated", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
                 ("timezone-changed", ged.GUI2, self._on_timezone_changed),
             ]
@@ -140,6 +146,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             events.UnsubscribedPresenceReceived: Unsubscribed,
             events.GajimUpdateAvailable: GajimUpdate,
             events.AllowGajimUpdateCheck: GajimUpdatePermission,
+            events.ReactionUpdated: ResponseReaction,
         }
 
     def do_unroot(self) -> None:
@@ -240,6 +247,18 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self, listview: ActivityListView, position: int
     ) -> None:
         item = listview.get_listitem(position)
+
+        if isinstance(item, ResponseReaction):
+            event = cast(events.ReactionUpdated, item.event)
+            assert event.message is not None
+
+            message_type = MessageType(event.message.type).to_str()
+            app.window.add_chat(event.account, event.jid, message_type, select=True)
+
+            control = app.window.get_control()
+            control.scroll_to_message(event.message.pk, event.message.timestamp)
+            return
+
         self._activity_page.process_row_activated(item)
 
     def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
@@ -308,12 +327,41 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         return self._current_filter_text in item.search_text
 
     def _on_event(self, event: EventT) -> None:
+        notify = True
+        if isinstance(event, events.ReactionUpdated):
+            if event.message is None:
+                # We don't have the message which has been reacted to: bail out
+                return
+
+            if event.message.direction != ChatDirection.OUTGOING:
+                # Not a reaction to one of our (outgoing) messages
+                return
+
+            if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+                client = app.get_client(event.account)
+                muc_contact = client.get_module("Contacts").get_contact(event.jid)
+                assert isinstance(muc_contact, GroupchatContact)
+                assert event.reaction_occupant_id is not None
+                contact = muc_contact.get_occupant(event.reaction_occupant_id)
+                assert contact is not None
+                if contact.is_self:
+                    # We reacted to our own message
+                    return
+
+                notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
+            else:
+                notify = app.settings.get_app_setting("notify_on_reaction_default")
+
+            if event.is_mam_message or app.window.is_chat_active(
+                event.account, event.jid
+            ):
+                notify = False
+
         list_item_cls = self._event_item_map[type(event)]
         item = list_item_cls.from_event(event)  # pyright: ignore
-
         self._add(item)
 
-        if isinstance(event, EventNotifications):
+        if isinstance(event, EventNotifications) and notify:
             app.ged.raise_event(
                 events.Notification(
                     context_id=event.context_id,
@@ -746,6 +794,54 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         )
 
 
+class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
+    @classmethod
+    def from_event(cls, event: events.ReactionUpdated) -> ResponseReaction:
+        client = app.get_client(event.account)
+        assert event.message is not None
+        if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            muc_contact = client.get_module("Contacts").get_contact(event.jid)
+            assert isinstance(muc_contact, GroupchatContact)
+            assert event.reaction_occupant_id is not None
+            contact = muc_contact.get_occupant(event.reaction_occupant_id)
+        else:
+            contact = client.get_module("Contacts").get_contact(event.jid)
+
+        scale = app.window.get_scale_factor()
+        assert isinstance(contact, BareContact | GroupchatParticipant)
+        texture = contact.get_avatar(AvatarSize.ROSTER, scale)
+
+        if isinstance(contact, GroupchatParticipant):
+            title = _("Reaction from %s") % f"{contact.name} ({contact.room.name})"
+        else:
+            title = _("Reaction from %s") % contact.name
+
+        assert event.message is not None
+        assert event.emojis is not None
+        emojis = " ".join(event.emojis)
+
+        subject = _(
+            "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+        ) % {
+            "contact": contact.name,
+            "reaction": emojis,
+            "message": event.message.text or "",
+        }
+        return cls(
+            context_id=event.context_id,
+            account=event.account,
+            account_visible=True,
+            activity_type=0,
+            activity_type_icon="lucide-reply-symbolic",
+            avatar=texture,
+            title=title,
+            timestamp=utc_now(),
+            subject=subject,
+            read=False,
+            event=event,
+        )
+
+
 ActivityListItemT = (
     GajimUpdate
     | GajimUpdatePermission
@@ -756,4 +852,5 @@ ActivityListItemT = (
     | MucInvitation
     | MucInvitationDeclined
     | TimezoneChanged
+    | ResponseReaction
 )
