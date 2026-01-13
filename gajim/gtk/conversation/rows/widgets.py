@@ -164,6 +164,7 @@ class MessageRowActions(Gtk.Box):
     def switch_contact(self, contact: ChatContactT) -> None:
         self._message_row = None
         self._contact = contact
+        self.set_visible(False)
 
     def _hide_with_timeout(self) -> None:
         if self._timeout_id is not None:
