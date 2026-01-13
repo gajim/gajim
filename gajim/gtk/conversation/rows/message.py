@@ -101,10 +101,6 @@ class MessageRow(BaseRow):
 
         self._bottom_box = Gtk.Box(spacing=6)
 
-        # halign START prevents the avatar popover menu from moving grid content,
-        # see https://dev.gajim.org/gajim/gajim/-/issues/12588
-        self.grid.set_halign(Gtk.Align.START)
-
         self.grid.attach(self._avatar_box, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
