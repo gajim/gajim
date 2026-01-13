@@ -61,6 +61,7 @@ gajim = "gajim.main:run"
 [dependency-groups]
 dev = [
     "codespell==2.4.1",
+    "cryptography@git+https://github.com/pyca/cryptography.git",
     "isort==7.0.0",
     "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
     "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
@@ -68,9 +69,9 @@ dev = [
     "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
     "pytest>=9.0.2",
     "python-gitlab",
+    "ruamel.yaml",
     "ruff==0.14.8",
     "sentry-sdk",
-    "cryptography@git+https://github.com/pyca/cryptography.git"
 ]
 
 [tool.setuptools.packages.find]
