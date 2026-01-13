@@ -465,6 +465,9 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
             reader = csv.reader(csvfile, strict=True)
             try:
                 for row in reader:
+                    if len(row) != 3:
+                        continue
+
                     if row[CSVColumn.JID] in jids:
                         continue
 
