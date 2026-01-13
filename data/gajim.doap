@@ -35,6 +35,7 @@
     <programming-language>Python</programming-language>
     <os>Linux</os>
     <os>Windows</os>
+    <os>macOS</os>
 
     <repository>
       <GitRepository>
