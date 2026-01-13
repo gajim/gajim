@@ -31,11 +31,13 @@
   </developer>
   <update_contact>gajim-devel_AT_gajim.org</update_contact>
   <url type="homepage">https://gajim.org/</url>
-  <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
+  <url type="vcs-browser">https://dev.gajim.org/gajim/gajim</url>
+  <url type="bugtracker">https://dev.gajim.org/gajim/gajim/-/issues</url>
   <url type="faq">https://dev.gajim.org/gajim/gajim/-/wikis/help/gajimfaq</url>
   <url type="help">https://dev.gajim.org/gajim/gajim/-/wikis/help/Help</url>
   <url type="donation">https://gajim.org/#donate</url>
   <url type="translate">https://dev.gajim.org/gajim/gajim/-/wikis/development/devtranslate</url>
+  <url type="contribute">https://dev.gajim.org/gajim/gajim/-/wikis/development/IWantToStartHacking</url>
   <translation type="gettext">gajim</translation>
   <content_rating type="oars-1.1">
     <content_attribute id="social-chat">intense</content_attribute>
