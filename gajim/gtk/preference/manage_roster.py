@@ -463,13 +463,22 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         items: list[ImportedItem] = []
         with path.open(encoding="utf-8") as csvfile:
             reader = csv.reader(csvfile, strict=True)
-            for row in reader:
-                if row[CSVColumn.JID] in jids:
-                    continue
+            try:
+                for row in reader:
+                    if row[CSVColumn.JID] in jids:
+                        continue
 
-                item = self._validate_imported_item(row)
-                if item is not None:
-                    items.append(item)
+                    item = self._validate_imported_item(row)
+                    if item is not None:
+                        items.append(item)
+            except Exception:
+                log.error("Could not read file %s to import roster contacts", path.name)
+                InformationAlertDialog(
+                    _("Import Error"),
+                    _("Could not read content of %s. Only CSV files can be imported.")
+                    % path.name,
+                )
+                return
 
         if not items:
             InformationAlertDialog(_("Import Error"), _("No contacts found to import"))
