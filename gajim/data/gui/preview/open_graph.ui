@@ -21,6 +21,7 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkLabel" id="_title_label">
                 <property name="halign">start</property>
