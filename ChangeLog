@@ -1,3 +1,58 @@
+Gajim 2.4.2 (13 Jan 2026)
+
+  New
+
+  * Support link previews (open graph)
+  * Allow drag and drop for previews (forwarding) (#10799)
+  * Shortcuts: Make shortcut for correcting messages configurable
+  * Shortcuts: Add shortcuts for "Paste as Quote" and "Paste as Code Block"
+  * Shortcuts: Add shortcuts for text formatting actions
+  * Shortcuts: Add new shortcut for focusing the message input
+
+  Improvements
+
+  * Contact name entry: Improve editing flow and fix layout issue (#12582)
+  * Group Chat Creation: Improve layout (#12573)
+  * Preferences: Rework archiving page for more clarity
+  * HTTPUpload: Raise timeout
+  * ChatStateIndicator: Align with message row elements
+  * Main: Group share and invite buttons
+  * Chat: Don't draw shadow at the top
+  * Main: Make small design improvements
+
+  Change
+
+  * Raise omemo-dr version
+  * Raise PyGObject version
+
+  Bug Fixes
+
+  * ManageRoster: Narrow down row format to prevent errors (#12595)
+  * ManageRoster: Catch errors when trying to import unsuitable files (#12594)
+  * MessageRowActions: Always hide when switching contacts (#12591)
+  * ConversationView: Catch exception when computing row actions update (#12587)
+  * Reload user styles after dark/light mode switch (#12426)
+  * Contact popover: Fix XMPP address icon
+  * AboutDialog: Show correct installation
+  * Contact details: Make avatar management buttons opaque (#12574)
+  * MessageInput: Fix case where emojis were missing from the emoji chooser (#12390)
+  * AdHoc: Fix label wrapping of notes in rare cases
+  * MessageInput: Don't highlight brackets (#12578)
+  * Reset unread count after closing chat with mouse middle button
+  * OMEMO: React to group chat config change
+  * ChatBanner: Fix voice request button layout
+  * FileTransfer: Focus input after sending file
+  * Chat: Fix showing reply if message contains previewable content (#12571)
+  * Dropdowns: Add item tooltip and make popover bigger
+  * Compare version requirements correctly
+  * Use spawn context for multiprocessing Manager
+  * HTTPUpload: Fix file transfer only available after chat switch
+  * Accept pre-releases in version check (#12561)
+  * VoiceMessageRecorderWidget: Don't fail on switching input device
+  * Fix reply-to JID for self-messages in direct chats (XEP-0461)
+  * Don’t fail to start Gajim when not all Gst dependencies are installed (#12563#12564)
+  * Main: Correctly bind ESC key
+
 Gajim 2.4.1 (13 Dec 2025)
 
   New

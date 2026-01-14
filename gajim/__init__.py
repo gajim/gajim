@@ -3,7 +3,7 @@ from pathlib import Path
 
 from .config import *  # noqa: F403
 
-__version__ = "2.4.1"
+__version__ = "2.4.2"
 
 portable_path = Path(sys.executable).parent / "is_portable"
 IS_PORTABLE = portable_path.exists()
