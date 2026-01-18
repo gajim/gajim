@@ -15,16 +15,12 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common import types
 from gajim.common.events import ReactionUpdated
-from gajim.common.events import ResponseReaction
-from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
-from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.structs import MessageType
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.text import convert_to_codepoints
@@ -133,6 +129,10 @@ class Reactions(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=properties.reactions.id,
+                    emojis=None,
+                    message_type=m_type,
+                    message=None,
+                    full_jid=properties.jid
                 )
             )
             raise NodeProcessed
@@ -161,63 +161,28 @@ class Reactions(BaseModule):
         self._log.info('Received reactions: %s', reaction)
         app.storage.archive.upsert_row2(reaction)
 
-        app.ged.raise_event(
-            ReactionUpdated(
-                account=self._account,
-                jid=remote_jid,
-                reaction_id=properties.reactions.id,
-            )
-        )
-
-        # Check if it's a reaction to one of our messages
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
-            is_groupchat = True
             message = app.storage.archive.get_message_with_stanza_id(
                 self._account,
                 remote_jid,
                 properties.reactions.id
             )
-            contact = self._client.get_module('Contacts').get_contact(
-                properties.jid, groupchat=True
-            )
-            assert isinstance(contact, GroupchatParticipant)
-            title = _("Reaction from %s") % f"{contact.name} ({contact.room.name})"
         else:
-            is_groupchat = False
             message = app.storage.archive.get_message_with_id(
                 self._account,
                 remote_jid,
                 properties.reactions.id
             )
-            contact = self._client.get_module('Contacts').get_contact(
-                properties.jid.bare
-            )
-            assert isinstance(contact, BareContact)
-            title = _("Reaction from %s") % contact.name
-
-        assert message is not None
-
-        text = _(
-            "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
-        ) % {
-            "contact": contact.name,
-            "reaction": " ".join(reaction.emojis),
-            "message": message.text or ""
-        }
-
-        if message.direction == ChatDirection.INCOMING:
-            raise NodeProcessed
 
         app.ged.raise_event(
-            ResponseReaction(
+            ReactionUpdated(
                 account=self._account,
                 jid=remote_jid,
-                is_groupchat=is_groupchat,
                 reaction_id=properties.reactions.id,
-                message_pk=message.pk,
-                message_ts=message.timestamp,
-                title=title,
-                subject=text,
+                emojis=reaction.emojis,
+                message_type=m_type,
+                message=message,
+                full_jid=properties.jid
             )
         )
 

@@ -5,10 +5,12 @@
 from __future__ import annotations
 
 from typing import cast
+from typing import Literal
 
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
+from gajim.common import app
 from gajim.common import events
 
 from gajim.gtk.account_page import AccountPage
@@ -85,14 +87,21 @@ class MainStack(Gtk.Stack):
     ) -> None:
         item = listview.get_listitem(position)
         if isinstance(item, ResponseReaction):
-            event = cast(events.ResponseReaction, item.event)
+            event = cast(events.ReactionUpdated, item.event)
+            assert event.message is not None
 
             chat_list_stack = self._chat_page.get_chat_list_stack()
             chat_list = chat_list_stack.find_chat(event.account, event.jid)
-            if chat_list is not None:
+            if chat_list is None:
+                message_type = cast(
+                    Literal["chat", "groupchat", "pm"], str(event.message_type).lower()
+                )
+                app.window.add_chat(event.account, event.jid, message_type, select=True)
+            else:
                 chat_list.select_chat(event.account, event.jid)
-                control = self._chat_page.get_control()
-                control.scroll_to_message(event.message_pk, event.message_ts)
+
+            control = self._chat_page.get_control()
+            control.scroll_to_message(event.message.pk, event.message.timestamp)
             return
 
         self.get_activity_page().process_row_activated(item)
