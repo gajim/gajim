@@ -497,7 +497,7 @@ class NotificationsGroupChatsGroup(GajimPreferencesGroup):
                 SettingKind.SWITCH,
                 _("Notify of Reactions"),
                 SettingType.CONFIG,
-                "gc_notify_on_reaction",
+                "gc_notify_on_reaction_default",
                 desc=_("Notify me when someone reacts to my message in a group chat"),
             ),
         ]

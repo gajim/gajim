@@ -266,7 +266,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         notify = True
         if isinstance(event, events.ResponseReaction):
             if event.is_groupchat:
-                notify = app.settings.get_app_setting("gc_notify_on_reaction")
+                notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
             else:
                 notify = app.settings.get_app_setting("notify_on_reaction")
 
