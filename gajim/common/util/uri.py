@@ -181,6 +181,7 @@ def parse_uri(uri: str) -> UriT:
 def filesystem_path_from_uri(uri: str) -> Path | None:
     puri = parse_uri(uri)
     if not isinstance(puri, FileUri):
+        log.warning("Not a FileUri: %s", puri)
         return None
 
     if puri.netloc and puri.netloc.lower() != "localhost" and sys.platform != "win32":
@@ -211,6 +212,7 @@ def get_file_path_from_uri(uri: str) -> Path | None:
         return None
 
     if not is_file:
+        log.warning("Path is not a file: %s", path)
         return None
 
     return path
