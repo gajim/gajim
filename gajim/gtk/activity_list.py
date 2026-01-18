@@ -28,6 +28,8 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.user_strings import get_uf_relative_time
@@ -48,13 +50,13 @@ EventT = (
     | events.UnsubscribedPresenceReceived
     | events.GajimUpdateAvailable
     | events.AllowGajimUpdateCheck
-    | events.ResponseReaction
+    | events.ReactionUpdated
 )
 
 EventNotifications = (
     events.MucInvitation,
     events.SubscribePresenceReceived,
-    events.ResponseReaction,
+    events.ReactionUpdated,
 )
 
 
@@ -117,7 +119,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("unsubscribed-presence-received", ged.GUI1, self._on_event),
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
-                ("response-reaction", ged.GUI1, self._on_event),
+                ("reaction-updated", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
             ]
         )
@@ -136,7 +138,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             events.UnsubscribedPresenceReceived: Unsubscribed,
             events.GajimUpdateAvailable: GajimUpdate,
             events.AllowGajimUpdateCheck: GajimUpdatePermission,
-            events.ResponseReaction: ResponseReaction,
+            events.ReactionUpdated: ResponseReaction,
         }
 
     def do_unroot(self) -> None:
@@ -260,18 +262,26 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         return self._current_filter_text in item.search_text
 
     def _on_event(self, event: EventT) -> None:
-        list_item_cls = self._event_item_map[type(event)]
-        item = list_item_cls.from_event(event)  # pyright: ignore
-
         notify = True
-        if isinstance(event, events.ResponseReaction):
-            if event.is_groupchat:
+        if isinstance(event, events.ReactionUpdated):
+            if event.message is None:
+                # We don't have the message which has been reacted to: bail out
+                return
+
+            if event.message.direction != ChatDirection.OUTGOING:
+                # Not a reaction to one of our (outgoing) messages
+                return
+
+            if app.window.is_chat_active(event.account, event.jid):
+                return
+
+            if event.message_type in (MessageType.GROUPCHAT, MessageType.PM):
                 notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
             else:
                 notify = app.settings.get_app_setting("notify_on_reaction")
 
-            item.read = not notify
-
+        list_item_cls = self._event_item_map[type(event)]
+        item = list_item_cls.from_event(event)  # pyright: ignore
         self._add(item)
 
         if isinstance(event, EventNotifications) and notify:
@@ -682,16 +692,35 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         )
 
 
-class ResponseReaction(ActivityListItem[events.ResponseReaction]):
+class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
     @classmethod
-    def from_event(cls, event: events.ResponseReaction) -> ResponseReaction:
+    def from_event(cls, event: events.ReactionUpdated) -> ResponseReaction:
         client = app.get_client(event.account)
-        contact = client.get_module("Contacts").get_contact(event.jid)
+        if event.message_type in (MessageType.GROUPCHAT, MessageType.PM):
+            contact = client.get_module("Contacts").get_contact(event.full_jid)
+        else:
+            contact = client.get_module("Contacts").get_contact(event.jid)
 
         scale = app.window.get_scale_factor()
         assert isinstance(contact, BareContact | GroupchatParticipant)
         texture = contact.get_avatar(AvatarSize.ROSTER, scale)
 
+        if isinstance(contact, GroupchatParticipant):
+            title = _("Reaction from %s") % f"{contact.name} ({contact.room.name})"
+        else:
+            title = _("Reaction from %s") % contact.name
+
+        assert event.message is not None
+        assert event.emojis is not None
+        emojis = event.emojis.replace(";", " ")
+
+        subject = _(
+            "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+        ) % {
+            "contact": contact.name,
+            "reaction": emojis,
+            "message": event.message.text or "",
+        }
         return cls(
             context_id=event.context_id,
             account=event.account,
@@ -699,9 +728,9 @@ class ResponseReaction(ActivityListItem[events.ResponseReaction]):
             activity_type=0,
             activity_type_icon="lucide-reply-symbolic",
             avatar=texture,
-            title=event.title,
+            title=title,
             timestamp=utc_now(),
-            subject=event.subject,
+            subject=subject,
             read=False,
             event=event,
         )
