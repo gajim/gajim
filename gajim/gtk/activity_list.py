@@ -272,13 +272,13 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 # Not a reaction to one of our (outgoing) messages
                 return
 
-            if app.window.is_chat_active(event.account, event.jid):
-                return
-
             if event.message_type in (MessageType.GROUPCHAT, MessageType.PM):
                 notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
             else:
-                notify = app.settings.get_app_setting("notify_on_reaction")
+                notify = app.settings.get_app_setting("notify_on_reaction_default")
+
+            if app.window.is_chat_active(event.account, event.jid):
+                notify = False
 
         list_item_cls = self._event_item_map[type(event)]
         item = list_item_cls.from_event(event)  # pyright: ignore
@@ -712,7 +712,7 @@ class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
 
         assert event.message is not None
         assert event.emojis is not None
-        emojis = event.emojis.replace(";", " ")
+        emojis = " ".join(event.emojis)
 
         subject = _(
             "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
