@@ -272,7 +272,17 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 # Not a reaction to one of our (outgoing) messages
                 return
 
-            if event.message_type in (MessageType.GROUPCHAT, MessageType.PM):
+            if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+                client = app.get_client(event.account)
+                muc_contact = client.get_module("Contacts").get_contact(event.jid)
+                assert isinstance(muc_contact, GroupchatContact)
+                assert event.reaction_occupant_id is not None
+                contact = muc_contact.get_occupant(event.reaction_occupant_id)
+                assert contact is not None
+                if contact.is_self:
+                    # We reacted to our own message
+                    return
+
                 notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
             else:
                 notify = app.settings.get_app_setting("notify_on_reaction_default")
@@ -696,8 +706,12 @@ class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
     @classmethod
     def from_event(cls, event: events.ReactionUpdated) -> ResponseReaction:
         client = app.get_client(event.account)
-        if event.message_type in (MessageType.GROUPCHAT, MessageType.PM):
-            contact = client.get_module("Contacts").get_contact(event.full_jid)
+        assert event.message is not None
+        if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            muc_contact = client.get_module("Contacts").get_contact(event.jid)
+            assert isinstance(muc_contact, GroupchatContact)
+            assert event.reaction_occupant_id is not None
+            contact = muc_contact.get_occupant(event.reaction_occupant_id)
         else:
             contact = client.get_module("Contacts").get_contact(event.jid)
 
