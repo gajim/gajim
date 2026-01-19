@@ -430,10 +430,9 @@ class Message(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=reactions_id,
+                    reaction_occupant_id=None,
                     emojis=None,
-                    message_type=message.type,
                     message=None,
-                    full_jid=remote_jid
                 )
             )
             return

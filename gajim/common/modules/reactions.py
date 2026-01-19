@@ -129,10 +129,9 @@ class Reactions(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=properties.reactions.id,
+                    reaction_occupant_id=occupant_id,
                     emojis=None,
-                    message_type=m_type,
                     message=None,
-                    full_jid=properties.jid
                 )
             )
             raise NodeProcessed
@@ -174,15 +173,15 @@ class Reactions(BaseModule):
                 properties.reactions.id
             )
 
+
         app.ged.raise_event(
             ReactionUpdated(
                 account=self._account,
                 jid=remote_jid,
                 reaction_id=properties.reactions.id,
+                reaction_occupant_id=occupant_id,
                 emojis=valid,
-                message_type=m_type,
                 message=message,
-                full_jid=properties.jid
             )
         )
 
