@@ -94,7 +94,7 @@ class MainStack(Gtk.Stack):
             chat_list = chat_list_stack.find_chat(event.account, event.jid)
             if chat_list is None:
                 message_type = cast(
-                    Literal["chat", "groupchat", "pm"], str(event.message_type).lower()
+                    Literal["chat", "groupchat", "pm"], str(event.message.type).lower()
                 )
                 app.window.add_chat(event.account, event.jid, message_type, select=True)
             else:
