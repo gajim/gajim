@@ -179,7 +179,7 @@ class Reactions(BaseModule):
                 account=self._account,
                 jid=remote_jid,
                 reaction_id=properties.reactions.id,
-                emojis=reaction.emojis,
+                emojis=valid,
                 message_type=m_type,
                 message=message,
                 full_jid=properties.jid
