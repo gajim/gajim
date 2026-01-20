@@ -13,6 +13,7 @@ import typing
 from typing import Any
 
 import json
+import platform
 import pprint
 import sys
 import threading
@@ -232,9 +233,10 @@ class ExceptionDialog(GajimAppWindow):
         sentry_sdk.set_context(
             "software",
             {
+                "python": platform.python_version(),
                 "python-nbxmpp": nbxmpp.__version__,
                 "GTK": get_gtk_version(),
-                "GObject": get_gobject_version(),
+                "PyGObject": get_gobject_version(),
                 "GLib": get_glib_version(),
                 "Adw": get_adw_version(),
                 "libsoup": get_soup_version(),
