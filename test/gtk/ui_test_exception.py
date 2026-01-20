@@ -4,6 +4,9 @@
 
 import sys
 from types import TracebackType
+from unittest.mock import MagicMock
+
+from gajim.common import app
 
 from gajim.gtk.exception import ExceptionDialog
 
@@ -29,6 +32,8 @@ tb = _create_traceback("Test")
 assert isinstance(tb, TracebackType)
 
 util.init_settings()
+
+app.is_installed = MagicMock(return_value=True)
 
 window = ExceptionDialog(BaseException, Exception(), tb)
 window.show()

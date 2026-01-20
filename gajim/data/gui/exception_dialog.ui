@@ -42,7 +42,7 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="spacing">18</property>
             <child>
               <object class="GtkImage">
                 <property name="valign">start</property>
@@ -78,7 +78,7 @@ Please help us fixing this issue by sending this report.</property>
               <object class="GtkScrolledWindow">
                 <property name="height-request">200</property>
                 <property name="focusable">1</property>
-                <property name="margin-top">6</property>
+                <property name="has-frame">1</property>
                 <property name="child">
                   <object class="GtkTextView" id="exception_view">
                     <property name="focusable">1</property>
@@ -97,15 +97,13 @@ Please help us fixing this issue by sending this report.</property>
             </child>
             <child>
               <object class="GtkBox" id="user_feedback_box">
-                <property name="visible">0</property>
-                <property name="halign">center</property>
-                <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
+                <property name="visible">1</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">What happened</property>
-                    <property name="wrap">1</property>
+                    <property name="label" translatable="yes">Here you can add some feedback which helps reproducing this problem.</property>
                     <style>
                       <class name="dimmed"/>
                     </style>
@@ -115,9 +113,9 @@ Please help us fixing this issue by sending this report.</property>
                   <object class="GtkEntry" id="user_feedback_entry">
                     <property name="width-request">400</property>
                     <property name="focusable">1</property>
-                    <property name="halign">start</property>
+                    <property name="hexpand">1</property>
                     <property name="activates-default">1</property>
-                    <property name="placeholder-text" translatable="yes">Add some details…</property>
+                    <property name="placeholder-text" translatable="yes">Steps to reproduce the problem…</property>
                   </object>
                 </child>
               </object>
