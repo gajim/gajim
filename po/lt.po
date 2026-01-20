@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -563,10 +563,6 @@ msgstr ""
 #, fuzzy
 msgid "Add new Theme"
 msgstr "Kurti naują pranešimą"
-
-#, fuzzy
-msgid "Add some details…"
-msgstr "_Įtraukti asmenį..."
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr ""
@@ -1519,6 +1515,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Could not load image"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2497,6 +2497,9 @@ msgstr ""
 
 #, python-format
 msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4940,6 +4943,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "informavimui mane, apie būklę"
@@ -5829,9 +5835,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "Hide this menu"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6813,6 +6816,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -528,9 +528,6 @@ msgstr "添加要更改的設定"
 
 msgid "Add new Theme"
 msgstr "添加新主題"
-
-msgid "Add some details…"
-msgstr "新增一些詳情…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "將此證書添加到_trusted證書清單中"
@@ -1408,6 +1405,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "無法讀取圖片"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2395,6 +2396,9 @@ msgstr "通知"
 #, fuzzy, python-format
 msgid "Hello, I am $name. %s"
 msgstr "您好，我是$name"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4847,6 +4851,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "向我傳送狀態"
@@ -5750,9 +5757,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "隱藏本選單"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6781,6 +6785,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "外掛程式"
+
+#~ msgid "Add some details…"
+#~ msgstr "新增一些詳情…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "新增到聯絡人清單…"

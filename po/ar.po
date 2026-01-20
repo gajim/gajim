@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-10-20 08:48+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -534,9 +534,6 @@ msgstr "أضِف إعدادًا تود تغييره"
 
 msgid "Add new Theme"
 msgstr "أضِف سمة جديدة"
-
-msgid "Add some details…"
-msgstr "أضِف بعض التفاصيل…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "أضِف هذه الشهادة لقائمة الشهادات المو_ثوقة"
@@ -1378,6 +1375,10 @@ msgstr "تعذَّر العثور على أي رسائل لهذا المشارك
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "تعذر فتح الملف (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "تعذَّر حفظ الملف في المجلد المحدد."
@@ -2239,6 +2240,9 @@ msgstr "توثيق HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "مرحبًا، أنا $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4358,6 +4362,9 @@ msgstr ""
 "وعائلتك. ابنِ مجتمعات من خلال التواصل مع الأشخاص الذين يشاركونك نفس "
 "الاهتمامات. استخدم المجموعات لتنظيم الأمور الصغيرة أو الحدث الكبير القادم."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "ستوقف مشاركة حالة الاتصال؟"
 
@@ -5165,9 +5172,6 @@ msgstr "مرحبًا"
 msgid "What does this mean?"
 msgstr "ماذا يعني هذا؟"
 
-msgid "What happened"
-msgstr "ماذا حدث"
-
 msgid "Where participants should go"
 msgstr "إلى أين يجب أن يذهب المشاركون"
 
@@ -5923,6 +5927,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Add reaction"
 #~ msgstr "أضِف تفاعلًا"
 
+#~ msgid "Add some details…"
+#~ msgstr "أضِف بعض التفاصيل…"
+
 #~ msgid "Add to Contact List…"
 #~ msgstr "أضِف لقائمة المُتراسلين…"
 
@@ -6438,6 +6445,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "مسار WebSocket"
+
+#~ msgid "What happened"
+#~ msgstr "ماذا حدث"
 
 #~ msgid "Workspaces"
 #~ msgstr "مساحات العمل"

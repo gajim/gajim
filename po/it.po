@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-12-21 21:19+0000\n"
 "Last-Translator: Roberto Resoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -555,9 +555,6 @@ msgstr "Aggiungi un'opzione che vorresti cambiare"
 
 msgid "Add new Theme"
 msgstr "Aggiungi Tema"
-
-msgid "Add some details…"
-msgstr "Aggiungi dettagli…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Aggiungi questo certificato alla lista di quelli _affidabili"
@@ -1415,6 +1412,10 @@ msgstr "Impossibile trovare messaggi per questo partecipante."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Impossibile aprire il file (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Impossibile salvare il file nella cartella selezionata."
@@ -2297,6 +2298,9 @@ msgstr "Verifica HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Ciao, sono $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4458,6 +4462,9 @@ msgstr ""
 "stessi interessi. Usa i gruppi per organizzare le piccole cose o il prossimo "
 "grande evento."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "Smettere di condividere lo status online?"
 
@@ -5311,9 +5318,6 @@ msgstr "Benvenuto"
 
 msgid "What does this mean?"
 msgstr "Che cosa significa?"
-
-msgid "What happened"
-msgstr "Cosa è successo"
 
 msgid "Where participants should go"
 msgstr "Dove dovrebbero andare i partecipanti"
@@ -6278,6 +6282,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "Add reaction"
 #~ msgstr "Aggiungi reazione"
+
+#~ msgid "Add some details…"
+#~ msgstr "Aggiungi dettagli…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Aggiungi alla Lista Contatti…"
@@ -7470,6 +7477,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "URL WebSocket"
+
+#~ msgid "What happened"
+#~ msgstr "Cosa è successo"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

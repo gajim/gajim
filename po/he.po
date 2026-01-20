@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -602,10 +602,6 @@ msgstr ""
 #, fuzzy
 msgid "Add new Theme"
 msgstr "יצירת פוסט חדש"
-
-#, fuzzy
-msgid "Add some details…"
-msgstr "הוסף _איש קשר..."
 
 #, fuzzy
 msgid "Add this certificate to the list of _trusted certificates"
@@ -1584,6 +1580,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "לא היתה אפשרות להטעין תמונה"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2600,6 +2600,9 @@ msgstr "התראה"
 #, fuzzy, python-format
 msgid "Hello, I am $name. %s"
 msgstr "שלום, שמי $name."
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -5098,6 +5101,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "לשלוח אלי מצב"
@@ -6014,9 +6020,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "הסתר תפריט זה"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -7054,6 +7057,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "קיצורי מקש"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "הוסף _איש קשר..."
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

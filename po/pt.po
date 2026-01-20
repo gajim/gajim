@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -550,9 +550,6 @@ msgstr "Adicionar uma configuração que você gostaria de alterar"
 
 msgid "Add new Theme"
 msgstr "Adicionar novo tema"
-
-msgid "Add some details…"
-msgstr "Adicione alguns detalhes…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Adicione este certificado à lista de certificados _confiáveis"
@@ -1444,6 +1441,10 @@ msgstr "Não foi possível encontrar qualquer mensagem para este participante."
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Não posso Abrir Arquivo"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2374,6 +2375,9 @@ msgstr "Verificação HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Olá, eu sou $nome. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4671,6 +4675,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Parar de compartilhar o status on-line?"
@@ -5547,9 +5554,6 @@ msgstr "Bem-vindo"
 
 msgid "What does this mean?"
 msgstr "O que isto significa?"
-
-msgid "What happened"
-msgstr "O que está acontecendo"
 
 msgid "Where participants should go"
 msgstr "Onde os participantes devem ir"
@@ -6537,6 +6541,9 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Adicionar Configurações"
+
+#~ msgid "Add some details…"
+#~ msgstr "Adicione alguns detalhes…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Adicionar à Lista de Contatos…"
@@ -7656,6 +7663,9 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "As chamadas de vídeo não estão disponíveis no Windows"
+
+#~ msgid "What happened"
+#~ msgstr "O que está acontecendo"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

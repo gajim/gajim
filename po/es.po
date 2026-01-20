@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-11 18:10+0000\n"
-"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-18 18:19+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -537,9 +537,6 @@ msgstr "Añade una configuración que te gustaría cambiar"
 
 msgid "Add new Theme"
 msgstr "Añadir nuevo tema"
-
-msgid "Add some details…"
-msgstr "Añadir algunos detalles…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Añadir este certificado a la lista de certificados de confianza"
@@ -1239,7 +1236,7 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
-"Configurar que mensajes se archivarán en el servidor. No archivar mensajes "
+"Configurar qué mensajes se archivarán en el servidor. No archivar mensajes "
 "en el servidor puede evitar que se sincronicen entre tus dispositivos."
 
 msgid "Confirm Unencrypted Connection"
@@ -1381,6 +1378,12 @@ msgstr "No se pudo encontrar ningún mensaje de este participante."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "No se pudo abrir el fichero (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+"No se ha podido leer el contenido de %s. Solo se pueden importar ficheros "
+"CSV."
 
 msgid "Could not save file to selected directory."
 msgstr "No se pudo guardar el fichero en el directorio seleccionado."
@@ -2246,6 +2249,9 @@ msgstr "Verificacion de HTTPS"
 msgid "Hello, I am $name. %s"
 msgstr "Hola, soy $name. %s"
 
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
+
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr "Oculto"
@@ -2874,7 +2880,7 @@ msgid "No File Transfer available"
 msgstr "No hay transferencia de ficheros disponible"
 
 msgid "No Messages"
-msgstr "No hay mensajes"
+msgstr "Ningún mensaje"
 
 msgid "No Messages Found"
 msgstr "No se han encontrado mensajes"
@@ -4385,6 +4391,9 @@ msgstr ""
 "tus mismos intereses. Usa los grupos para organizar pequeños detalles o tu "
 "próximo gran evento."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "¿Dejar de compartir estado?"
 
@@ -5195,9 +5204,6 @@ msgstr "Te damos la bienvenida"
 
 msgid "What does this mean?"
 msgstr "¿Qué significa esto?"
-
-msgid "What happened"
-msgstr "Qué ha pasado"
 
 msgid "Where participants should go"
 msgstr "Donde debería ir los participantes"
@@ -6178,6 +6184,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Add reaction"
 #~ msgstr "Añadir reacción"
+
+#~ msgid "Add some details…"
+#~ msgstr "Añadir algunos detalles…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Añadir a la lista de contactos…"
@@ -7349,6 +7358,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "URL de WebSocket"
+
+#~ msgid "What happened"
+#~ msgstr "Qué ha pasado"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "¿Por que quieres moderar estos mensajes?"

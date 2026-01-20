@@ -1,15 +1,15 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
-# Mako N <mako@pasero.net>, 2022, 2023, 2024, 2025.
+# Mako N <mako@pasero.net>, 2022, 2023, 2024, 2025, 2026.
 # 翻訳者X <columbidae@memail.com>, 2024.
 # 翻訳者X <tairanto2@wail.ch>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2025-12-22 02:19+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-17 10:19+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -533,9 +533,6 @@ msgstr "変更したい設定を追加してください"
 msgid "Add new Theme"
 msgstr "新しいテーマを追加"
 
-msgid "Add some details…"
-msgstr "詳細を追加…"
-
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "この証明書を、信頼された証明書一覧に加えます (_T)"
 
@@ -625,9 +622,8 @@ msgstr "すべてのチャット状態"
 msgid "All Chats"
 msgstr "すべてのチャット"
 
-#, fuzzy
 msgid "All Messages"
-msgstr "メッセージ"
+msgstr "すべてのメッセージ"
 
 msgid "All files"
 msgstr "すべてのファイル"
@@ -637,7 +633,7 @@ msgid "All hats of %s have been removed"
 msgstr "%s さんのすべての係 (hat) は除去されました"
 
 msgid "All of these settings are optional and can be changed later"
-msgstr ""
+msgstr "これらの設定はすべてオプションであり、後で変更できます"
 
 msgid "All of your hats have been removed"
 msgstr "あなたのすべての係 (hat) は除去されました"
@@ -1167,9 +1163,8 @@ msgstr "チャットを閉じる"
 msgid "Close a chat by pressing the Escape key"
 msgstr "エスケープキーを押して会話を閉じます"
 
-#, fuzzy
 msgid "Close this preview"
-msgstr "自動プレビューは無効"
+msgstr "このプレビューを閉じる"
 
 msgid "Close with Escape"
 msgstr "エスケープで閉じる"
@@ -1236,6 +1231,8 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+"どのメッセージをサーバーに保管するかを調整します。サーバー上にメッセージを保"
+"管しないと、デバイス間でメッセージを同期できない可能性があります。"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "非暗号化接続を確認"
@@ -1363,9 +1360,8 @@ msgstr "クリップボードにコピー"
 msgid "Copy to clipboard"
 msgstr "クリップボードにコピー"
 
-#, fuzzy
 msgid "Correct Message"
-msgstr "ダイレクトメッセージ"
+msgstr "メッセージを訂正"
 
 msgid "Could Not Save File"
 msgstr "ファイルを保存できませんでした"
@@ -1379,6 +1375,11 @@ msgstr "この参加者宛てのメッセージは見つかりませんでした
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "ファイルを開けませんでした (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+"%s の内容を読み込めませんでした。インポートできるのは CSV ファイルのみです。"
 
 msgid "Could not save file to selected directory."
 msgstr "選択されたディレクトリにファイルを保存できませんでした。"
@@ -1470,9 +1471,8 @@ msgstr "チャットと非公開談話室でのデフォルト"
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "談話室でのデフォルト (例: 相手先は入力中)"
 
-#, fuzzy
 msgid "Default for new chats"
-msgstr "チャットのデフォルト"
+msgstr "新しいチャットのデフォルト"
 
 msgid "Default for new group chats"
 msgstr "新しい談話室のデフォルト"
@@ -1718,7 +1718,7 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr "さまざまな通知の音を鳴らします"
 
 msgid "Enables Gajim to provide a Audio preview"
-msgstr "音声・ビデオチャットのプレビューを可能にします"
+msgstr "音声のプレビューを可能にします"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "メッセージ作成時にスペルチェックを行います"
@@ -1827,7 +1827,7 @@ msgid "Everything"
 msgstr "すべての期間"
 
 msgid "Exceptions from the above setting"
-msgstr ""
+msgstr "上の設定の例外"
 
 msgid "Execute"
 msgstr "実行"
@@ -2002,10 +2002,10 @@ msgstr ""
 "%s件のメッセージをダウンロードしました"
 
 msgid "Focus Input"
-msgstr ""
+msgstr "入力欄へ"
 
 msgid "Focus Search"
-msgstr "チャットを検索"
+msgstr "検索欄へ"
 
 #, python-format
 msgid "Folder: %s"
@@ -2030,15 +2030,14 @@ msgstr "この談話室を忘れますか ?"
 msgid "Forget this Group Chat…"
 msgstr "この談話室を忘れる…"
 
-#, fuzzy
 msgid "Format Text Bold"
-msgstr "会話: 文字色"
+msgstr "テキストを太字に装飾"
 
 msgid "Format Text Italic"
-msgstr ""
+msgstr "テキストをイタリックに装飾"
 
 msgid "Format Text Strikethrough"
-msgstr ""
+msgstr "テキストに抹消線を装飾"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "証明書失効リストの最終更新の書式のエラー"
@@ -2194,9 +2193,8 @@ msgstr "談話室のメッセージの強調"
 msgid "Group Chat Message Received"
 msgstr "談話室のメッセージを受信した"
 
-#, fuzzy
 msgid "Group Chat Settings"
-msgstr "談話室の詳細"
+msgstr "談話室の設定"
 
 msgid "Group Chats"
 msgstr "談話室"
@@ -2247,6 +2245,9 @@ msgstr "HTTPS の検証"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "こんにちは。私は $name. %s です"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -2746,9 +2747,8 @@ msgstr "メッセージ"
 msgid "Messages are archived on the server"
 msgstr "メッセージはサーバーに保管されます"
 
-#, fuzzy
 msgid "Messages from Contacts"
-msgstr "受信済"
+msgstr "相手先からのメッセージ"
 
 msgid "Messages from this users are blocked"
 msgstr "このユーザーからのメッセージは遮断されます"
@@ -2884,9 +2884,8 @@ msgstr "しない"
 msgid "No File Transfer available"
 msgstr "ファイル転送は利用できません"
 
-#, fuzzy
 msgid "No Messages"
-msgstr "メッセージ"
+msgstr "メッセージはありません"
 
 msgid "No Messages Found"
 msgstr "メッセージは見つかりませんでした"
@@ -2967,7 +2966,7 @@ msgid "No results found"
 msgstr "見つかりません"
 
 msgid "No undecided fingerprints"
-msgstr ""
+msgstr "未定の指紋はありません"
 
 msgid "Node"
 msgstr "ノード"
@@ -3004,7 +3003,7 @@ msgid "Not Available"
 msgstr "不在"
 
 msgid "Not Decided"
-msgstr "決定されていない"
+msgstr "未定"
 
 msgid "Not Joined"
 msgstr "参加していません"
@@ -3088,16 +3087,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "公開"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Open %s"
-msgstr "開く"
+msgstr "%s を開く"
 
 msgid "Open Email Composer"
 msgstr "メール作成画面を開く"
 
-#, fuzzy
 msgid "Open Emoji Chooser"
-msgstr "メール作成画面を開く"
+msgstr "絵文字選択画面を開く"
 
 # #(Mako)Containing をどうする
 msgid "Open Folder"
@@ -3513,9 +3511,8 @@ msgstr "終了"
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
 
-#, fuzzy
 msgid "Quitting…"
-msgstr "待機中…"
+msgstr "停止します…"
 
 msgid "Quote Next Message"
 msgstr "次のメッセージを引用"
@@ -4003,9 +4000,8 @@ msgstr "詳細を見るには動向を選んでください。"
 msgid "Select playback speed"
 msgstr "再生速度を選択"
 
-#, fuzzy
 msgid "Select the account you want to use to create a new group chat"
-msgstr "同期したい相手先を選択してください"
+msgstr "新しい談話室の作成に使用するアカウントを選択してください"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "音声入力を選択してください (例: マイクロフォン)"
@@ -4161,9 +4157,8 @@ msgstr "入室/退出を表示する"
 msgid "Show Joined / Left"
 msgstr "入室/退出を表示する"
 
-#, fuzzy
 msgid "Show Link Preview"
-msgstr "ライブプレビュー"
+msgstr "リンクのプレビューを表示"
 
 msgid "Show Plugins"
 msgstr "プラグインを表示"
@@ -4399,6 +4394,9 @@ msgstr ""
 "ループを使って、ちょっとした用事から次の大きなイベントまで、様々なことを整理"
 "しましょう。"
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "在席状況を知らせるのをやめますか ?"
 
@@ -4427,7 +4425,6 @@ msgstr "申し込み"
 msgid "Subscribed"
 msgstr "継読中"
 
-#, fuzzy
 msgid "Subscription"
 msgstr "在席通知の承認"
 
@@ -4989,9 +4986,9 @@ msgstr "遮断の解除"
 msgid "Unblock Participant?"
 msgstr "参加者の遮断を解除しますか ?"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Undecided fingerprints of devices connected with \"%s\""
-msgstr "\"%s\" に係属するデバイス"
+msgstr "\"%s\" に係属するデバイスの未定の指紋"
 
 msgid "Unencrypted"
 msgstr "暗号化しない"
@@ -5212,9 +5209,6 @@ msgstr "ようこそ"
 
 msgid "What does this mean?"
 msgstr "これはどういう意味ですか ?"
-
-msgid "What happened"
-msgstr "どうしましたか"
 
 msgid "Where participants should go"
 msgstr "参加者が向かうべきは"
@@ -6172,6 +6166,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Add reaction"
 #~ msgstr "リアクションを追加"
+
+#~ msgid "Add some details…"
+#~ msgstr "詳細を追加…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "相手先一覧に追加…"
@@ -7313,6 +7310,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket の URL"
+
+#~ msgid "What happened"
+#~ msgstr "どうしましたか"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "なぜこれらのメッセージを抑制したいのですか ?"

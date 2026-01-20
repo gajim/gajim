@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -573,10 +573,6 @@ msgstr ""
 #, fuzzy
 msgid "Add new Theme"
 msgstr "Стварыць новы допіс"
-
-#, fuzzy
-msgid "Add some details…"
-msgstr "_Дадаць чалавека..."
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr ""
@@ -1533,6 +1529,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Немагчыма загрузіць малюнак"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2522,6 +2522,9 @@ msgstr "Змяненне рахунка"
 
 #, python-format
 msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4977,6 +4980,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "адпраўляць мне паведамленні аб змене стану"
@@ -5874,9 +5880,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "Схаваць гэтае меню"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6874,6 +6877,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Памылка злучэння"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "_Дадаць чалавека..."
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

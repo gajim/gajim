@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-12-31 16:19+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -539,9 +539,6 @@ msgstr "Өзгерткіңіз келетін баптауды қосыңыз"
 
 msgid "Add new Theme"
 msgstr "Жаңа теманы қосу"
-
-msgid "Add some details…"
-msgstr "Қосымша ақпаратты қосу…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Бұл сертификатты сені_мділер тізіміне қосу"
@@ -1406,6 +1403,10 @@ msgstr ""
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Файлды ашу мүмкін емес (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Файлды көрсетілген бумада сақтау мүмкін емес."
@@ -2311,6 +2312,9 @@ msgstr "HTTPS тексеру"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Сәлем, мен - $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4545,6 +4549,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Желідегі онлайн қалып-күймен бөлісуді тоқтату керек пе?"
@@ -5399,9 +5406,6 @@ msgstr "Қош келдіңіз"
 
 msgid "What does this mean?"
 msgstr "Бұл нені білдіреді?"
-
-msgid "What happened"
-msgstr "Не болды"
 
 msgid "Where participants should go"
 msgstr "Қатысушылар қайда бару керек"
@@ -6349,6 +6353,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Add reaction"
 #~ msgstr "Реакцияны қосу"
+
+#~ msgid "Add some details…"
+#~ msgstr "Қосымша ақпаратты қосу…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Контакттар тізіміне қосу…"
@@ -7483,6 +7490,9 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+
+#~ msgid "What happened"
+#~ msgstr "Не болды"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-11 21:19+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-19 19:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
 ">\n"
@@ -521,9 +521,6 @@ msgstr "Rnu iɣewwaren i tebɣiḍ ad tbeddeleḍ"
 
 msgid "Add new Theme"
 msgstr "Rnu asentel amaynut"
-
-msgid "Add some details…"
-msgstr "Rnu kra n telqayt…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Rnu aselkin-agi ɣer tebdart n iselkan yettwamanen"
@@ -1347,6 +1344,10 @@ msgstr "Ur izmir ara ad d-yaf iznan i umttekki-agi."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Ur izmir ara ad d-yeldi afaylu (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Ur izmir ara ad isekles afaylu ɣer ukaram yettwafernen."
@@ -2188,6 +2189,9 @@ msgstr "Asenqed n HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Azul, nekk d $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -3245,53 +3249,53 @@ msgid ""
 msgstr ""
 
 msgid "Please use these settings with caution!"
-msgstr ""
+msgstr "Ttxil-k·m, seqdec iɣewwaṛen-agi s leḥder!"
 
 msgid "Plugin Failed"
-msgstr ""
+msgstr "Azegrir ur yeddi ara"
 
 msgid "Plugin Settings"
-msgstr ""
+msgstr "Iɣewwaṛen n uzegrir"
 
 msgid "Plugin Update"
-msgstr ""
+msgstr "Aleqqem n uzegrir"
 
 msgid "Plugin already exists"
-msgstr ""
+msgstr "Azegrir yella yakan"
 
 msgid "Plugin could not be loaded"
-msgstr ""
+msgstr "Azegrir ur yezmir ara ad d-yali"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Izegrar"
 
 msgid "Plugins Updated Successfully"
-msgstr ""
+msgstr "Izegrar ttwaleqmen akken iwata"
 
 msgid "Port"
-msgstr ""
+msgstr "Asagen"
 
 msgid "Port must be a number between 0 and 65535"
-msgstr ""
+msgstr "Asagen ilaq ad yili d amḍan gar 0 akked 65535"
 
 msgid "Post Office Box"
-msgstr ""
+msgstr "Tanaka n tnarit n lbusṭa"
 
 msgid "Postal Code"
-msgstr ""
+msgstr "Tangalt n lbusṭa"
 
 msgid "Prefer direct messages in private group chats "
-msgstr ""
+msgstr "smenyif iznan usriden deg ugraw udiwenni uslig. "
 
 msgctxt "Configuration"
 msgid "Preference Name"
-msgstr ""
+msgstr "Isem n usmenyaf"
 
 msgid "Preferences"
-msgstr ""
+msgstr "Ismenyifen"
 
 msgid "Presets"
-msgstr ""
+msgstr "Iɣewwaṛen uzwiren"
 
 msgid ""
 "Press the keys you want to associate with this action. To disable this "
@@ -3299,44 +3303,44 @@ msgid ""
 msgstr ""
 
 msgid "Preview Size"
-msgstr ""
+msgstr "Tiddi n teskant"
 
 msgid "Preview all Image URLs"
-msgstr ""
+msgstr "Sken akk tansiwin URL n tugna"
 
 msgid "Preview in Public Group Chats"
-msgstr ""
+msgstr "Taskant deg ugraw udiwenni Azayez"
 
 msgid "Preview new messages in notification popup?"
-msgstr ""
+msgstr "Sken iznan imaynuten deg usfaylu n telɣut?"
 
 msgid "Previous"
-msgstr ""
+msgstr "Uzwir"
 
 msgid "Print XML stanzas and other debug information"
-msgstr ""
+msgstr "Siggez talɣut n uselken XML akked useɣti-nniḍen"
 
 msgid "Priority"
-msgstr ""
+msgstr "Tazwart"
 
 msgid "Privacy"
-msgstr ""
+msgstr "Tabaḍnit"
 
 #, python-format
 msgid "Privacy – %(account)s"
-msgstr ""
+msgstr "Tabaḍnit – %(account)s"
 
 msgid "Private"
-msgstr ""
+msgstr "Uslig"
 
 msgid "Processing image…"
-msgstr ""
+msgstr "Asesfer n tugna…"
 
 msgid "Profile"
-msgstr ""
+msgstr "Amaɣnu"
 
 msgid "Profile application with cprofile"
-msgstr ""
+msgstr "Asnas n umaɣnu s cprofile"
 
 msgid "Pronouns"
 msgstr ""
@@ -3435,153 +3439,153 @@ msgstr ""
 
 #, python-format
 msgid "React with %s"
-msgstr ""
+msgstr "Tiririt s %s"
 
 msgid "Read Receipts"
-msgstr ""
+msgstr "Asentem n tɣuri"
 
 msgid "Read _Wikipedia Article"
-msgstr ""
+msgstr "Ɣeṛ amagrad Wikipedia"
 
 msgid "Read more about blind trust"
-msgstr ""
+msgstr "Issin ugar ɣef teflest taderɣalt"
 
 msgid "Reason"
-msgstr ""
+msgstr "Tamentilt"
 
 msgid "Reason (optional)"
-msgstr ""
+msgstr "Tamentilt (afrayan)"
 
 msgid "Reason (optional)..."
-msgstr ""
+msgstr "Tamentilt (afrayan)…"
 
 msgid "Reason for destruction"
-msgstr ""
+msgstr "Tamentilt i uhuddu"
 
 msgid "Received"
-msgstr ""
+msgstr "Yettwarmes"
 
 msgctxt "Message state"
 msgid "Received"
-msgstr ""
+msgstr "Yettwarmes"
 
 msgid "Recognize your account by color"
-msgstr ""
+msgstr "Ales asuddes n umiḍan-ik·im s yini"
 
 msgid "Record"
-msgstr ""
+msgstr "Sekles"
 
 msgid "Record Voice Message… (hold button to record directly)"
-msgstr ""
+msgstr "Sekles izen n taɣect.. (ṭṭef taqeffalt akken ad teskelseḍ srid)"
 
 msgid "Redirect"
-msgstr ""
+msgstr "Ales awelleh"
 
 msgid "Register"
-msgstr ""
+msgstr "Ajerred"
 
 msgid "Register on the Website"
-msgstr ""
+msgstr "Jerred deg usmel web"
 
 msgid "Registering…"
-msgstr ""
+msgstr "Ajerred…"
 
 msgid "Registration failed"
-msgstr ""
+msgstr "Ajerred yecceḍ"
 
 msgid "Registration successful"
-msgstr ""
+msgstr "Ajerred yedda akken iwata"
 
 msgid "Reject file transfer"
-msgstr ""
+msgstr "Agi asiweḍ n ufaylu"
 
 msgid "Reload"
-msgstr ""
+msgstr "Ales asali"
 
 msgid "Remember Last Status"
-msgstr ""
+msgstr "Cfu ɣef waddad aneggaru"
 
 msgid "Remote server not found"
-msgstr ""
+msgstr "Aqeddac anmeggag ur yettwaf ara"
 
 msgid "Remote server timeout"
-msgstr ""
+msgstr "Ifukk wakud n uraǧu n uqeddac anmeggag"
 
 msgid "Remove"
-msgstr ""
+msgstr "Kkes"
 
 #, python-format
 msgid "Remove %s contacts from your contact list?"
-msgstr ""
+msgstr "Kkes %s n yinermisen seg umuɣ-inek·inem n unermis?"
 
 msgid "Remove Account"
-msgstr ""
+msgstr "Kkes amiḍan"
 
 msgid "Remove Chat History?"
-msgstr ""
+msgstr "Kkes amazray n udiwenni usrid?"
 
 msgid "Remove Contact"
-msgstr ""
+msgstr "Kkes anermis"
 
 msgid "Remove Contacts?"
-msgstr ""
+msgstr "Kkes inermisen?"
 
 msgid "Remove Contact…"
-msgstr ""
+msgstr "Kkes anermis…"
 
 msgid "Remove From Contact List?"
-msgstr ""
+msgstr "Kkes seg tebdart n yinermisen?"
 
 msgid "Remove Group?"
-msgstr ""
+msgstr "Kkes agraw?"
 
 msgid "Remove Group…"
-msgstr ""
+msgstr "Kkes agraw…"
 
 msgid "Remove History…"
-msgstr ""
+msgstr "Kkes amazray…"
 
 msgid "Remove Proxy"
-msgstr ""
+msgstr "Kkes Apṛuksi"
 
 msgid "Remove Proxy?"
-msgstr ""
+msgstr "Kkes Apṛuksi?"
 
 msgid "Remove Setting"
-msgstr ""
+msgstr "Kkes asbadu"
 
 msgid "Remove Theme"
-msgstr ""
+msgstr "Kkes asentel"
 
 msgid "Remove Workspace?"
-msgstr ""
+msgstr "Kkes tallunt n umahil?"
 
 msgid "Remove from Contact List…"
-msgstr ""
+msgstr "Kkes seg tebdart n inermisen…"
 
 msgid "Remove from Group"
-msgstr ""
+msgstr "Kkes seg ugraw"
 
 msgid "Remove this workspace"
-msgstr ""
+msgstr "Kkes tallunt-agi n umahil"
 
 msgid "Remove your group chat avatar"
-msgstr ""
+msgstr "Kkes avaṭar-ik-im n ugraw n udiwenni"
 
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Kkes tawlaft-ik·im n umaɣnu"
 
 #, python-format
 msgid "Removed %(count)s contact"
 msgid_plural "Removed %(count)s contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yettwakkes %(count)s n unermis"
+msgstr[1] "Yettwakkes %(count)s n yinermisen"
 
 msgid "Remove…"
-msgstr ""
+msgstr "Kkes…"
 
 msgid "Removing Account..."
-msgstr ""
+msgstr "Tukksa n umiḍan…"
 
 msgid ""
 "Removing the account will delete most related data. If you want to "
@@ -3740,171 +3744,179 @@ msgid "SSL Certificate Verification Error"
 msgstr ""
 
 msgid "SSL certificate error"
-msgstr ""
+msgstr "Tuccḍa n uselkin SSL"
 
 msgid "STUN server to use when using Jingle"
-msgstr ""
+msgstr "Aqeddac STUN ara yettwasqedcen mi ara tesqedceḍ Jingle"
 
 msgid "SVG files"
-msgstr ""
+msgstr "Ifuyla SVG"
 
 msgid "Sales"
-msgstr ""
+msgstr "Iznuzuyen"
 
 msgid "Save"
-msgstr ""
+msgstr "Sekles"
 
 msgid "Save Password"
-msgstr ""
+msgstr "Sekles awal uffir"
 
 msgid "Save as..."
-msgstr ""
+msgstr "Sekles am..."
 
 msgid "Save display name"
-msgstr ""
+msgstr "Sekles isem n ubeqqeḍ"
 
 msgid "Saving Avatar Failed"
-msgstr ""
+msgstr "Asekles n uvaṭar ur yeddi ara"
 
 msgid "Saving avatar image failed"
-msgstr ""
+msgstr "Asekles n tugna n uvaṭar ur yeddi ara"
 
 msgid "Say hi to your new contact…"
-msgstr ""
+msgstr "Ini-as azul i unermis-ik·im amaynut…"
 
 msgid "Scan QR Code"
-msgstr ""
+msgstr "Semḍen tangalt QR"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr ""
+msgstr "Semḍen tangalt-a QR akken ad tedduḍ ɣer %s."
 
 #, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr ""
+msgstr "Semḍen tangalt-a QR akken ad tebduḍ adiwenni akked %s."
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
-msgstr ""
+msgstr "Aḍummu %(current)d / %(total)d …"
 
 msgid "Scroll Down"
-msgstr ""
+msgstr "Drurem d akessar"
 
 msgid "Scroll Up"
-msgstr ""
+msgstr "Drurem d asawen"
 
 msgid "Scroll to this message"
-msgstr ""
+msgstr "Drurem ɣer yizen-agi"
 
 msgid "Scroll up to load more chat history…"
-msgstr ""
+msgstr "Drurem d asawen i usali n umazray n udiwenni…"
 
 msgid "Search"
-msgstr ""
+msgstr "Nadi"
 
 msgid "Search Chat History"
-msgstr ""
+msgstr "Nadi amazray n udiwenni usrid"
 
 msgid "Search Filters"
-msgstr ""
+msgstr "Nadi tistayin"
 
 msgid "Search Filters (Active)"
-msgstr ""
+msgstr "Nadi tistayin (Irmed)"
 
 msgid "Search Participants…"
-msgstr ""
+msgstr "Nadi Imttekkiyen…"
 
 msgid "Search Result"
-msgstr ""
+msgstr "Agmuḍ n unadi"
 
 msgid "Search all Chats"
-msgstr ""
+msgstr "Nadi akk idiwenniyen"
 
 msgid "Search contacts..."
-msgstr ""
+msgstr "Nadi inermisen..."
 
 msgid "Search for Gajim updates periodically?"
-msgstr ""
+msgstr "Nadi ileqman Gajim sya ɣer da?"
 
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+"Nadi agraw n idiwenniyen s umata\n"
+"(ttekki ɣef Uɣal akken ad tebduḍ anadi)"
 
 msgid "Search in chats…"
-msgstr ""
+msgstr "Nadi deg idiwenniyen…"
 
 msgid "Searching"
-msgstr ""
+msgstr "Anadi"
 
 msgid "Searching…"
-msgstr ""
+msgstr "Anadi…"
 
 #, python-format
 msgid ""
 "Searching…\n"
 "%s results"
 msgstr ""
+"Anadi…\n"
+"%s Igumaḍ"
 
 msgid "Search…"
-msgstr ""
+msgstr "Nadi…"
 
 msgid "Secure Password Storage"
-msgstr ""
+msgstr "Asekles n wawal uffir aɣelsan"
 
 msgid ""
 "Secured conversations: State of the art end-to-end encryption for your "
 "conversations. Share messages, pictures, and files with your contacts – and "
 "only with them."
 msgstr ""
+"Idiwenniyen s tɣellist: Awgelhen seg yixef ɣer yixef i idiwenniyen-ik·im. "
+"Bḍu iznan, tiwlafin, akked yifuyla akked yinermisen-ik·im - akked kan yid-"
+"sen."
 
 msgid "Security"
-msgstr ""
+msgstr "Taɣellist"
 
 msgid "Security Labels"
-msgstr ""
+msgstr "Tibzimin n teɣlist"
 
 msgid "Security Warning"
-msgstr ""
+msgstr "Alɣu n teɣlist"
 
 #, python-format
 msgid "Seen by %s"
-msgstr ""
+msgstr "yettwaẓer sɣur %s"
 
 #, python-format
 msgid "Seen by %s participants"
-msgstr ""
+msgstr "yettwaẓer sɣur %s imttekkiyen"
 
 msgid "Select Account"
-msgstr ""
+msgstr "Fren amiḍan"
 
 msgctxt "Message row action"
 msgid "Select Messages…"
-msgstr ""
+msgstr "Fren iznan…"
 
 msgid "Select a security label for your message…"
-msgstr ""
+msgstr "Fren tabzimt n tɣellist i yizen-ik·im…"
 
 msgid "Select an activity to see details."
-msgstr ""
+msgstr "Fren armud akken ad twaliḍ talqayt."
 
 msgid "Select playback speed"
-msgstr ""
+msgstr "Fren arured n tɣuri"
 
 msgid "Select the account you want to use to create a new group chat"
 msgstr ""
+"Fren amiḍan i tebɣiḍ ad tesqedceḍ iwakken ad ternuḍ agraw amaynut n udiwenni"
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
+msgstr "Fren asekcem-inek·inem ameslaw (amedya: amikrufun)"
 
 msgid "Selected image could not be loaded."
-msgstr ""
+msgstr "Tugna yettwafernen ur tezmir ara ad tali."
 
 msgid "Self signed certificate"
-msgstr ""
+msgstr "Aselkin ilelli yettwazemlen"
 
 msgid "Self signed certificate in certificate chain"
-msgstr ""
+msgstr "Aselkin ilelli yettwazmel deg uzrar n uselkin"
 
 msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
@@ -4062,38 +4074,42 @@ msgid "Show Status Changes"
 msgstr ""
 
 msgid "Show Subject on Join"
-msgstr ""
+msgstr "Sken asentel deg utekki"
 
 msgid "Show Title Bar"
-msgstr ""
+msgstr "Sken afeggag n uzwel"
 
 msgid "Show Transfers"
-msgstr ""
+msgstr "Sken isiweḍen"
 
 msgid "Show Voice Message Button"
-msgstr ""
+msgstr "Sken taqeffalt n yizen n taɣect"
 
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
 msgstr ""
+"Sken adiwenni n usentem i usewḥel n unermis? Azrir ilem ur d-yeskanay ara "
+"yakk adiwenni."
 
 msgid "Show a list of emojis"
-msgstr ""
+msgstr "Sken tabdart n yimujiten"
 
 msgid "Show all reactions"
-msgstr ""
+msgstr "Sken akk tirrin"
 
 msgid "Show all warnings"
-msgstr ""
+msgstr "Sken akk ilɣuyen"
 
 msgid "Show in Taskbar"
-msgstr ""
+msgstr "Sken deg ufeggag n twuriwin"
 
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr ""
+"Sken tibzimin i d-yemmalen tabaḍnit n yiznan, ma yella aqeddac yessefrak "
+"XEP-0258"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4101,35 +4117,39 @@ msgid ""
 msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
-msgstr ""
+msgstr "Sken-d ilɣa xas ma ulac-ik·im, tceɣleḍ, atg."
 
 msgid "Show notifications on the system tray icon"
-msgstr ""
+msgstr "Sken ilɣa ɣef tignit n tfeggagt n tmahilin n unagraw"
 
 msgid "Show on Startup"
-msgstr ""
+msgstr "Sken deg tnekra"
 
 msgid "Show only critical errors"
-msgstr ""
+msgstr "Sken kan tuccḍiwin iweɛren"
 
 msgid ""
 "Show previews automatically in public group chats (may disclose your data)"
 msgstr ""
+"Sken taskant s wudem awurman deg ugraw n idiwenniyen uzayez (yezmer ad d-"
+"yesken isefka-ik·im)"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr ""
+"Sken taskant i tansiwin URL igebren tugniwin (yezmer lḥal ad yili d war "
+"aɣelsan)"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
 msgid "Show the application's version"
-msgstr ""
+msgstr "Sken lqem n usnas"
 
 msgid "Show the window’s title bar"
-msgstr ""
+msgstr "Sken afeggag n uzwel n usfaylu"
 
 msgid "Show window in the taskbar"
-msgstr ""
+msgstr "Sken asfaylu deg ufeggag n twuri"
 
 msgid "Show window when starting Gajim"
 msgstr ""
@@ -4193,80 +4213,85 @@ msgid "Spell Checker"
 msgstr ""
 
 msgid "Spell Checking"
-msgstr ""
+msgstr "Asenqed n tira"
 
 msgid "Stage"
-msgstr ""
+msgstr "tannant"
 
 msgid "Start / Join Chat"
-msgstr ""
+msgstr "Bdu / Ddu ɣer udiwenni usrid"
 
 msgid "Start Chat"
-msgstr ""
+msgstr "Bdu adiwenni"
 
 msgid "Start Chatting…"
-msgstr ""
+msgstr "Bdu asqerdec…"
 
 msgid "Start Chat…"
-msgstr ""
+msgstr "Bdu adiwenni…"
 
 msgid "Start Search..."
-msgstr ""
+msgstr "Bdu anadi..."
 
 msgid "Start a new chat"
-msgstr ""
+msgstr "Bdu adiwenni amaynut"
 
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
 msgstr ""
+"Bdu adiwenni amaynut, ddu ɣer ugraw udiwenni neɣ nadi ɣef ugraw udiwenni s "
+"wudem amatu. Tzemreḍ daɣen ad tsekcmeḍ tansa XMPP."
 
 msgid "Start/Stop recording"
-msgstr ""
+msgstr "Bdu/Ḥbes asekles"
 
 msgid "Start/stop playback"
-msgstr ""
+msgstr "Bdu/seḥbes taɣuri"
 
 msgid "State"
-msgstr ""
+msgstr "Awanek"
 
 msgid "Status"
-msgstr ""
+msgstr "Addad"
 
 msgid "Status Message"
-msgstr ""
+msgstr "Izen n waddad"
 
 msgid "Status Message: Text Color"
-msgstr ""
+msgstr "Izen n waddad: Ini n uḍris"
 
 msgid "Status Message: Text Font"
-msgstr ""
+msgstr "Izen n waddad: Tasefsit n uḍris"
 
 msgid "Status Messages in Participants List"
-msgstr ""
+msgstr "Iznan n waddad deg tebdart n imttekkiyen"
 
 msgid "Status is not shared"
-msgstr ""
+msgstr "Addad ur yettwabḍan ara"
 
 msgid "Status is shared"
-msgstr ""
+msgstr "Addad yettwabḍan"
 
 msgid "Status: Away Color"
-msgstr ""
+msgstr "Addad : ini ulac"
 
 msgid "Status: DND Color"
-msgstr ""
+msgstr "Addad: Ini DND"
 
 msgid "Status: Offline Color"
-msgstr ""
+msgstr "Addad: Ini n war tuqqna"
 
 msgid "Status: Online Color"
-msgstr ""
+msgstr "Addad: Ini n uẓeṭṭa"
 
 msgid ""
 "Stay in contact: Chats and groups help you keep in touch with your friends "
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
+msgid "Steps to reproduce the problem…"
 msgstr ""
 
 msgid "Stop Sharing Online Status?"
@@ -5044,9 +5069,6 @@ msgstr ""
 msgid "What does this mean?"
 msgstr ""
 
-msgid "What happened"
-msgstr ""
-
 msgid "Where participants should go"
 msgstr ""
 
@@ -5681,6 +5703,9 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "Add some details…"
+#~ msgstr "Rnu kra n telqayt…"
 
 #~ msgid "Choose Emoji"
 #~ msgstr "Fren Imujit"

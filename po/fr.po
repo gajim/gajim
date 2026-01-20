@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-10 22:19+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-13 21:51+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
-"\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -542,9 +542,6 @@ msgstr "Ajouter un paramètre que vous souhaiteriez modifier"
 
 msgid "Add new Theme"
 msgstr "Ajouter un nouveau thème"
-
-msgid "Add some details…"
-msgstr "Ajouter quelques détails…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Ajouter ce certificat à la liste des certificats de confiance"
@@ -1401,6 +1398,12 @@ msgstr "Impossible de trouver des messages pour ce participant."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Impossible d’ouvrir le fichier (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+"Impossible de lire le contenu de %s. Seuls les fichiers CSV peuvent êtres "
+"importés."
 
 msgid "Could not save file to selected directory."
 msgstr ""
@@ -2278,6 +2281,9 @@ msgstr "Vérification HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Bonjour, je m'appelle %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4433,6 +4439,9 @@ msgstr ""
 "connectant aux personnes qui ont les mêmes intérêts. Utilisez les groupes "
 "pour organiser les petites choses ou le prochain grand événement."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "Ne plus partager le status ?"
 
@@ -5256,9 +5265,6 @@ msgstr "Bienvenue"
 
 msgid "What does this mean?"
 msgstr "Qu'est-ce que ça signifie ?"
-
-msgid "What happened"
-msgstr "Ce qu'il s'est passé"
 
 msgid "Where participants should go"
 msgstr "Où est-ce que les participant·es devraient aller"
@@ -6255,6 +6261,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Add reaction"
 #~ msgstr "Ajouter une réaction"
+
+#~ msgid "Add some details…"
+#~ msgstr "Ajouter quelques détails…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Ajouter à la liste de contacts …"
@@ -7429,6 +7438,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "URL de la WebSocket"
+
+#~ msgid "What happened"
+#~ msgstr "Ce qu'il s'est passé"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Pourquoi souhaitez-vous modérer ces messages ?"

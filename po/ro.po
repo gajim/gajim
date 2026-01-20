@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -545,9 +545,6 @@ msgstr "Adăugați o setare pe care doriți să o modificați"
 
 msgid "Add new Theme"
 msgstr "Adăugați o nouă temă"
-
-msgid "Add some details…"
-msgstr "Adăugați câteva detalii…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Adăugați acest certificat la lista de certificate de _încredere"
@@ -1422,6 +1419,10 @@ msgstr ""
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Nu s-a putut salva fișierul în directorul selectat."
@@ -2332,6 +2333,9 @@ msgstr "Verificarea HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Bună ziua, eu sunt $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4570,6 +4574,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Nu mai împărtășiți statutul online?"
@@ -5432,9 +5439,6 @@ msgstr "Site web"
 
 msgid "What does this mean?"
 msgstr "Ce înseamnă acest lucru?"
-
-msgid "What happened"
-msgstr "Ce s-a întâmplat"
 
 msgid "Where participants should go"
 msgstr "Unde ar trebui să meargă participanții"
@@ -6409,6 +6413,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Add reaction"
 #~ msgstr "Adăugați reacția"
+
+#~ msgid "Add some details…"
+#~ msgstr "Adăugați câteva detalii…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Adăugați la lista de contacte…"
@@ -7569,6 +7576,9 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Apelurile video nu sunt disponibile pe Windows"
+
+#~ msgid "What happened"
+#~ msgstr "Ce s-a întâmplat"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-12-23 17:19+0000\n"
 "Last-Translator: Nomadic Entity <noiteluna@noleron.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -531,9 +531,6 @@ msgstr "Додайте параметр, який потрібно змінит�
 
 msgid "Add new Theme"
 msgstr "Додати нову тему"
-
-msgid "Add some details…"
-msgstr "Додати подробиці…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Додати цей сертифікат до переліку _довірених сертифікатів"
@@ -1379,6 +1376,10 @@ msgstr "Не вдалося знайти жодного повідомлення
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Не вдалося відкрити файл (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Не вдалося зберегти файл до вибраного каталогу."
@@ -2245,6 +2246,9 @@ msgstr "Перевірка HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Привіт, я $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4391,6 +4395,9 @@ msgstr ""
 "інтересами. Використовуйте групи для організації дрібних справ або наступної "
 "великої події."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "Припинити ділитися статусом в Інтернеті?"
 
@@ -5209,10 +5216,6 @@ msgstr "Ласкаво просимо"
 
 msgid "What does this mean?"
 msgstr "Що це означає?"
-
-#, fuzzy
-msgid "What happened"
-msgstr "Що сталося?"
 
 msgid "Where participants should go"
 msgstr "Куди учасникам варто поїхати"
@@ -6188,6 +6191,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Додати налаштування"
+
+#~ msgid "Add some details…"
+#~ msgstr "Додати подробиці…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Додати до реєстру…"
@@ -7221,6 +7227,10 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Відео сесія недоступна"
+
+#, fuzzy
+#~ msgid "What happened"
+#~ msgstr "Що сталося?"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-06 13:19+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-12 21:19+0000\n"
 "Last-Translator: Turingon <kopse@e.email>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
 "eo/>\n"
@@ -381,16 +381,16 @@ msgid "A_way"
 msgstr "Fora_"
 
 msgid "Abort"
-msgstr "Nuligu"
+msgstr "Nuligi"
 
 msgid "Abuse"
-msgstr "Misuzu"
+msgstr "Misuzi"
 
 msgid "Accept"
-msgstr "Akceptu"
+msgstr "Akcepti"
 
 msgid "Accept all Contact Requests"
-msgstr "Akceptu ĉiujn kontaktopetojn"
+msgstr "Akcepti ĉiujn kontaktopetojn"
 
 msgid "Account"
 msgstr "Konto"
@@ -428,7 +428,7 @@ msgid "Account address: "
 msgstr "Konto-adreso: "
 
 msgid "Account disabled"
-msgstr "Konto malebligata"
+msgstr "Konto malebligita"
 
 msgid "Account exists already"
 msgstr "Konto ankoraŭ ekzistas"
@@ -463,7 +463,7 @@ msgid "Actions for \"%s\""
 msgstr "Agoj por \"%s\""
 
 msgid "Activate"
-msgstr "Enŝaltu"
+msgstr "Enŝalti"
 
 msgid "Activated"
 msgstr "Enŝaltita"
@@ -475,67 +475,64 @@ msgid "Activity Feed"
 msgstr "Agadejo"
 
 msgid "Add"
-msgstr "Aldonu"
+msgstr "Aldoni"
 
 msgid "Add Account"
-msgstr "Aldonu konton"
+msgstr "Aldoni konton"
 
 msgid "Add Account…"
-msgstr "Aldonu konton…"
+msgstr "Aldoni konton…"
 
 msgid "Add Contact"
-msgstr "Aldonu kontakton"
+msgstr "Aldoni kontakton"
 
 msgid "Add Contact to New Group?"
-msgstr "Ĉu aldonu kontakton al nova grupo?"
+msgstr "Ĉu aldoni kontakton al nova grupo?"
 
 msgid "Add Contact…"
-msgstr "Aldonu kontakton…"
+msgstr "Aldoni kontakton…"
 
 msgid "Add Entry"
-msgstr "Aldonu enigon"
+msgstr "Aldoni enigon"
 
 msgid "Add Files…"
-msgstr "Aldonu dosieron…"
+msgstr "Aldoni dosieron…"
 
 msgid "Add Group…"
-msgstr "Aldonu grupon…"
+msgstr "Aldoni grupon…"
 
 msgid "Add Proxy"
-msgstr "Aldonu prokuron"
+msgstr "Aldoni prokuron"
 
 msgid "Add Reaction…"
-msgstr "Aldonu reagon…"
+msgstr "Aldoni reagon…"
 
 msgid "Add Setting"
-msgstr "Aldonu agordon"
+msgstr "Aldoni agordon"
 
 msgid "Add Workspace"
-msgstr "Aldonu laborspacon"
+msgstr "Aldoni laborspacon"
 
 msgid "Add a checkmark to received messages"
-msgstr "Montru ĉekomarkon por ricevitaj mesaĝoj"
+msgstr "Montri ĉekmarkon por ricevitaj mesaĝoj"
 
 msgid "Add a label to distinguish accounts in Gajim"
-msgstr "Aldonu etikedon por distingi kontojn"
+msgstr "Aldoni etikedon por distingi kontojn"
 
 msgid "Add a name and color for your account"
-msgstr "Aldonu nomon kaj koloron por via konto"
+msgstr "Aldoni nomon kaj koloron por via konto"
 
 msgid "Add a setting you would like to change"
-msgstr "Aldonu agordon, kiun vi volas ŝanĝi"
+msgstr "Aldoni agordon, kiun vi volas ŝanĝi"
 
 msgid "Add new Theme"
-msgstr "Aldonu novan etoson"
-
-msgid "Add some details…"
-msgstr "Aldonu kelkajn detalojn…"
+msgstr "Aldoni novan etoson"
 
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr "Aldonu ĉi tiun atestilon al la listo de _fidindaj atestiloj"
+msgstr "Aldoni ĉi tiun atestilon al la listo de _fidindaj atestiloj"
 
 msgid "Add to Group"
-msgstr "Aldonu al grupo"
+msgstr "Aldoni al grupo"
 
 #, python-format
 msgid "Added %(count)s contact"
@@ -632,7 +629,7 @@ msgid "All hats of %s have been removed"
 msgstr "Ĉiuj ĉapeloj de %s estis forigitaj"
 
 msgid "All of these settings are optional and can be changed later"
-msgstr ""
+msgstr "Tiuj agordoj estas laŭvola kaj ŝanĝebla poste"
 
 msgid "All of your hats have been removed"
 msgstr "Ĉiuj viaj ĉapeloj estis forigitaj"
@@ -644,8 +641,8 @@ msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
-"Permesu Gajimon elsendi utilajn informojn per D-buso. Ĝi ankaŭ permesas "
-"aliajn aplikaĵojn regi Gajimon malproksime."
+"Permesi Gajim elsendi utilajn informojn per D-buso. Ankaŭ permesas aliajn "
+"aplikaĵojn regi Gajimon malproksime."
 
 msgid "Alternate venue (optional)..."
 msgstr "Alternativa babilejo (opcia)..."
@@ -709,10 +706,10 @@ msgid "Application verification failure"
 msgstr "Aplikaĵokontrolo fiaskis"
 
 msgid "Apply"
-msgstr "Apliku"
+msgstr "Apliki"
 
 msgid "Approve"
-msgstr "Aprobu"
+msgstr "Aprobi"
 
 msgid "Archive"
 msgstr "Arĥivo"
@@ -744,17 +741,17 @@ msgid "Ask For Status Message on…"
 msgstr "Demandi statmesaĝon kiam…"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr "Demandu antaŭ fermi babilejan langeton/fenestron."
+msgstr "Demandi antaŭ fermi babilejan langeton/fenestron."
 
 msgid "Ask before connecting unencrypted"
-msgstr "Demandu antaŭ kontekti neĉifrite"
+msgstr "Demandi antaŭ kontekti neĉifrite"
 
 msgid "Ask before quitting when Gajim’s window is closed"
-msgstr "Demandu antaŭ forlasi kiam la fenestro estas malfermita"
+msgstr "Demandi antaŭ forlasi kiam la fenestro estas malfermita"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
-"Aldonu grupojn al ĉi tiu kontakto. Vi povas filtri babilejojn laŭ grupo."
+"Aldoni grupojn al ĉi tiu kontakto. Vi povas filtri babilejojn laŭ grupo."
 
 msgid "Attention Message Received"
 msgstr "Atentomesaĝo ricevita"
@@ -849,14 +846,14 @@ msgid "Back soon"
 msgstr "Revenos baldaŭ"
 
 msgid "Ban"
-msgstr "Forbaru"
+msgstr "Forbari"
 
 #, python-format
 msgid "Ban %s"
-msgstr "Forbaru %s"
+msgstr "Forbari %s"
 
 msgid "Ban…"
-msgstr "Forbaru…"
+msgstr "Forbari…"
 
 msgid "Before"
 msgstr "Antaŭ"
@@ -874,16 +871,16 @@ msgid "Blindly trust new devices until you verify them"
 msgstr "Blinde fidi novajn aparatojn ĝis vi kontrolos ilin"
 
 msgid "Block"
-msgstr "Bloku"
+msgstr "Bloki"
 
 msgid "Block Contact?"
-msgstr "Ĉu bloku kontakton?"
+msgstr "Ĉu bloki kontakton?"
 
 msgid "Block Contact…"
-msgstr "Bloku kontakton…"
+msgstr "Bloki kontakton…"
 
 msgid "Block Participant?"
-msgstr "Ĉu bloku partoprenanton?"
+msgstr "Ĉu bloki partoprenanton?"
 
 msgid "Blocked Contacts"
 msgstr "Blokitaj kontaktoj"
@@ -896,7 +893,7 @@ msgid "Blocked Participants"
 msgstr "Blokitaj partoprenantoj"
 
 msgid "Block…"
-msgstr "Bloku…"
+msgstr "Bloki…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -907,10 +904,10 @@ msgid "Both"
 msgstr "Ambaŭ"
 
 msgid "Browse"
-msgstr "Traserĉu"
+msgstr "Traserĉi"
 
 msgid "Browse history by date"
-msgstr "Traserĉu konversacihistorion laŭ dato"
+msgstr "Traserĉi konversacihistorion laŭ dato"
 
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
@@ -934,10 +931,10 @@ msgid "CRL signature failure"
 msgstr "CRL subskriberaro"
 
 msgid "C_opy"
-msgstr "Kopiu"
+msgstr "Kopii"
 
 msgid "Call"
-msgstr "Voku"
+msgstr "Voki"
 
 msgid "Call Incoming"
 msgstr "Alvenanta voko"
@@ -959,10 +956,10 @@ msgid "Calling…"
 msgstr "Vokante…"
 
 msgid "Cancel"
-msgstr "Nuligu"
+msgstr "Nuligi"
 
 msgid "Cancel Download"
-msgstr "Nuligu elŝutadon"
+msgstr "Nuligi elŝutadon"
 
 msgid "Certificate"
 msgstr "Atestilo"
@@ -996,19 +993,19 @@ msgid "Certificate signature failure"
 msgstr "Atestilosubskriberaro"
 
 msgid "Change"
-msgstr "Ŝanĝu"
+msgstr "Ŝanĝi"
 
 msgid "Change Nickname"
-msgstr "Ŝanĝu kromnomon"
+msgstr "Ŝanĝi kromnomon"
 
 msgid "Change Nickname…"
-msgstr "Ŝanĝu kromnomon…"
+msgstr "Ŝanĝi kromnomon…"
 
 msgid "Change Password"
-msgstr "Ŝanĝu pasvorton"
+msgstr "Ŝanĝi pasvorton"
 
 msgid "Change Subject"
-msgstr "Ŝanĝu temon"
+msgstr "Ŝanĝi temon"
 
 msgid "Change your account’s password, etc."
 msgstr "Ŝanĝi la pasvorton de via konto, ktp."
@@ -1017,10 +1014,10 @@ msgid "Change your profile picture"
 msgstr "Ŝanĝu profilbildon"
 
 msgid "Change your status to \"Away\" after a certain amount of time"
-msgstr "Ŝanĝu vian staton al \"fora\" post iom da tempo"
+msgstr "Ŝanĝi vian staton al \"fora\" post iom da tempo"
 
 msgid "Change your status to \"Not Available\" after a certain amount of time"
-msgstr "Ŝanĝu vian staton al \"neatingebla\" post iom da tempo"
+msgstr "Ŝanĝi vian staton al \"neatingebla\" post iom da tempo"
 
 #, python-format
 msgid "Changed by %s"
@@ -1039,9 +1036,8 @@ msgstr ""
 msgid "Chat"
 msgstr "Babilejo"
 
-#, fuzzy
 msgid "Chat Address"
-msgstr "_Statmesaĝo:"
+msgstr "Babilejadreso"
 
 msgid "Chat Banner: Background Color"
 msgstr "Babilejstandardo: Fonkoloro"
@@ -1078,58 +1074,58 @@ msgid "Chats from this account will use this workspace by default"
 msgstr "Babiljejoj el ĉi tiu konto uzos ĉi tiun laborspacon defaŭlte"
 
 msgid "Check For Updates"
-msgstr "Kontrolu ĝisdatigojn"
+msgstr "Kontroli ĝisdatigojn"
 
 msgid "Check for Gajim updates periodically"
-msgstr "Kontrolu Gajim-ĝisdatigojn regule"
+msgstr "Kontroli Gajim-ĝisdatigojn regule"
 
 msgid "Check for updates"
-msgstr "Kontrolu ĝisdatigojn"
+msgstr "Kontroli ĝisdatigojn"
 
 msgid "Check for updates periodically"
-msgstr "Kontrolu ĝisdatigojn regule"
+msgstr "Kontroli ĝisdatigojn regule"
 
 msgid "Check which features are available"
-msgstr "Kontrolu, kiuj funkcioj disponeblas"
+msgstr "Kontroli, kiuj funkcioj disponeblas"
 
 msgid "Choose Device"
-msgstr "Elektu aparaton"
+msgstr "Elekti aparaton"
 
 msgid "Choose History Export Directory"
-msgstr "Elektu eksportodosierujon"
+msgstr "Elekti eksportodosierujon"
 
 msgid "Choose Sound"
-msgstr "Elektu sonon"
+msgstr "Elekti sonon"
 
 msgid "Choose a color or select an image"
-msgstr "Elektu koloron aŭ bildon"
+msgstr "Elekti koloron aŭ bildon"
 
 msgid "Choose a group…"
-msgstr "Elektu grupon…"
+msgstr "Elekti grupon…"
 
 msgid "Choose encryption"
-msgstr "Elektu ĉifradon"
+msgstr "Elekti ĉifradon"
 
 msgid "City"
 msgstr "Urbo"
 
 msgid "Clear"
-msgstr "Malplenigu"
+msgstr "Malplenigi"
 
 msgid "Clear Devices?"
-msgstr "Ĉu forigu aparatojn?"
+msgstr "Ĉu forigi aparatojn?"
 
 msgid "Clear Devices…"
 msgstr "Forigante aparatojn…"
 
 msgid "Clear File"
-msgstr "Malelektu dosieron"
+msgstr "Malelekti dosieron"
 
 msgid "Clear Input"
-msgstr "Malplenigu enigokampon"
+msgstr "Malplenigi enigkampon"
 
 msgid "Clear Sound"
-msgstr "Forigu sonon"
+msgstr "Forigi sonon"
 
 msgid ""
 "Click messages to select them\n"
@@ -1152,20 +1148,19 @@ msgstr ""
 "Spacapartigitaj, minusklaj, sen dupunktoj."
 
 msgid "Close"
-msgstr "Fermu"
+msgstr "Fermi"
 
 msgid "Close Chat"
-msgstr "Fermu babilejon"
+msgstr "Fermi babilejon"
 
 msgid "Close a chat by pressing the Escape key"
-msgstr "Fermu babilejon per premi eskapklavon"
+msgstr "Fermi babilejon per premi eskapklavon"
 
-#, fuzzy
 msgid "Close this preview"
-msgstr "Fermu per eskapklavon"
+msgstr "Fermi antaŭvidon"
 
 msgid "Close with Escape"
-msgstr "Fermu per eskapklavon"
+msgstr "Fermi per eskapklavon"
 
 msgid "Code snippet"
 msgstr "Kodofragmento"
@@ -1204,7 +1199,7 @@ msgstr ""
 "certigi la sekurecon de via fin-al-fina ĉifrita babilejo."
 
 msgid "Complete"
-msgstr "Kompletigu"
+msgstr "Kompletigi"
 
 msgid "Completed"
 msgstr "Kompletita"
@@ -1219,16 +1214,18 @@ msgid "Configuration"
 msgstr "Babilejagordo"
 
 msgid "Configure"
-msgstr "Agordu"
+msgstr "Agordi"
 
 msgid "Configure logging system"
-msgstr "Agordu protokoladsistemon"
+msgstr "Agordi protokoladsistemon"
 
 msgid ""
 "Configure which messages will be archived on the server. Not archiving "
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+"Agordu kiuj mesaĝoj estu arĥivota en servilo. Ne arĥivante mesaĝojn en "
+"servilo eble malhelpos sinkronigi ilin inter viaj aparatoj."
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Konfirmu neĉifritan konekton"
@@ -1237,10 +1234,10 @@ msgid "Confirm new password..."
 msgstr "Konfirmu novan pasvorton..."
 
 msgid "Connect"
-msgstr "Konektu"
+msgstr "Konekti"
 
 msgid "Connect on startup"
-msgstr "Konektu dum aplikaĵlanĉo"
+msgstr "Konekti dum aplikaĵlanĉo"
 
 msgid "Connecting"
 msgstr "Konektante"
@@ -1327,35 +1324,35 @@ msgid "Conversations are stored on the server"
 msgstr "Konversacioj estas konservitaj en la servilo"
 
 msgid "Copy"
-msgstr "Kopiu"
+msgstr "Kopii"
 
 msgctxt "Message row action"
 msgid "Copy"
-msgstr "Kopiu"
+msgstr "Kopii"
 
 msgid "Copy Address"
-msgstr "Kopiu adreson"
+msgstr "Kopii adreson"
 
 msgid "Copy Text"
-msgstr "Kopiu tekston"
+msgstr "Kopii tekston"
 
 msgid "Copy XMPP Address"
-msgstr "Kopiu XMPP-adreson"
+msgstr "Kopii XMPP-adreson"
 
 msgid "Copy XMPP Address/Email"
-msgstr "Kopiu XMPP-retpoŝtadreson"
+msgstr "Kopii XMPP-retpoŝtadreson"
 
 msgid "Copy code snippet"
-msgstr "Kopiu kodofragmenton"
+msgstr "Kopii kodofragmenton"
 
 msgid "Copy to Clipboard"
-msgstr "Kopiu al tondujo"
+msgstr "Kopii al tondujo"
 
 msgid "Copy to clipboard"
-msgstr "Kopiu al tondujo"
+msgstr "Kopii al tondujo"
 
 msgid "Correct Message"
-msgstr "Ĝustigu mesaĝon"
+msgstr "Ĝustigi mesaĝon"
 
 msgid "Could Not Save File"
 msgstr "Ne povis konservi dosieron"
@@ -1370,6 +1367,10 @@ msgstr "Ne povis trovi iujn ajn mesaĝojn de ĉi tiu partoprenanto."
 msgid "Could not open file (%s)"
 msgstr "Ne povis malfermi dosieron (%s)"
 
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+
 msgid "Could not save file to selected directory."
 msgstr "Ne povis konservi dosieron en elektita dosierujo."
 
@@ -1383,19 +1384,19 @@ msgid "Country"
 msgstr "Lando"
 
 msgid "Create Account"
-msgstr "Kreu konton"
+msgstr "Krei konton"
 
 msgid "Create Group Chat"
-msgstr "Kreu babilejon"
+msgstr "Krei babilejon"
 
 msgid "Create Group Chat…"
-msgstr "Kreu babilejon…"
+msgstr "Krei babilejon…"
 
 msgid "Create New Account"
-msgstr "Kreu novan konton"
+msgstr "Krei novan konton"
 
 msgid "Create New Group Chat"
-msgstr "Kreu novan babilejon"
+msgstr "Krei novan babilejon"
 
 msgid "Creating Account..."
 msgstr "Kreante konton..."
@@ -1431,13 +1432,13 @@ msgid "Debug Logging"
 msgstr "Sencimiga protokolado"
 
 msgid "Decline"
-msgstr "Rifuzu"
+msgstr "Rifuzi"
 
 msgid "Decrease Font Size"
-msgstr "Malpligrandigu la tipargrandecon"
+msgstr "Malpligrandigi la tipargrandecon"
 
 msgid "Decrease playback speed"
-msgstr "Malpligrandigu la reludigrapidon"
+msgstr "Malpligrandigi la reludigrapidon"
 
 msgid "Default Encryption"
 msgstr "Defaŭlta ĉifrado"
@@ -1460,9 +1461,8 @@ msgstr "Defaŭlto por babilejoj kaj privataj babilejoj"
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "Defaŭlto por babilejoj (ekz. kontakto tajpas)"
 
-#, fuzzy
 msgid "Default for new chats"
-msgstr "Babilema"
+msgstr "Defaŭlto por novaj babilejoj"
 
 msgid "Default for new group chats"
 msgstr "Defaŭlto por novaj babilejoj"
@@ -1471,41 +1471,41 @@ msgid "Default for new public group chats"
 msgstr "Defaŭlto por novaj babilejoj"
 
 msgid "Delete"
-msgstr "Forigu"
+msgstr "Forigi"
 
 msgid "Delete Fingerprint?"
-msgstr "Forigu Fingrospuron?"
+msgstr "Forigi fingrospuron?"
 
 msgid "Delete Message Locally?"
-msgstr "Forigu mesaĝon loke?"
+msgstr "Forigi mesaĝon loke?"
 
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
-msgstr "Forigu mesaĝon loke…"
+msgstr "Forigi mesaĝon loke…"
 
 msgid "Delete Node?"
-msgstr "Forigu PEP-nodon?"
+msgstr "Ĉu forigi PEP-nodon?"
 
 msgid "Delete Theme?"
-msgstr "Forigu etoson?"
+msgstr "Forigi etoson?"
 
 msgid "Deny"
-msgstr "Rifuzu"
+msgstr "Rifuzi"
 
 msgid "Deny all contact requests"
-msgstr "Rifuzu ĉiujn kontaktopetojn"
+msgstr "Rifuzi ĉiujn kontaktopetojn"
 
 msgid "Description"
 msgstr "Priskribo"
 
 msgid "Destroy Group Chat"
-msgstr "Dissolvu babilejon"
+msgstr "Dissolvi babilejon"
 
 msgid "Destroy This Chat"
-msgstr "Dissolvu ĉi tiun babilejon"
+msgstr "Dissolvi ĉi tiun babilejon"
 
 msgid "Destroy…"
-msgstr "Dissolvu…"
+msgstr "Dissolvi…"
 
 msgid "Details"
 msgstr "Detalaĵoj"
@@ -1549,7 +1549,7 @@ msgid "Directory Not Writable"
 msgstr "Dosierujo ne skribeblas"
 
 msgid "Disable Account?"
-msgstr "Ĉu malaktivigu konton?"
+msgstr "Ĉu malaktivigi konton?"
 
 msgid "Disabled"
 msgstr "Malŝaltita"
@@ -1564,13 +1564,13 @@ msgstr ""
 "Kunhavigu informojn pri plurmedioj ludataj en via sistemo kun aliaj klientoj."
 
 msgid "Disclose information about the operating system you currently use"
-msgstr "Informu aliajn klientojn, kiun operaciumon vi uzas"
+msgstr "Informi aliajn klientojn, kiun operaciumon vi uzas"
 
 msgid "Disclose the time of your last activity"
-msgstr "Informu aliajn klientojn pri la horo de via lasta agado"
+msgstr "Informi aliajn klientojn pri la horo de via lasta agado"
 
 msgid "Discover Services…"
-msgstr "Serĉu servojn…"
+msgstr "Traserĉi servojn…"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2241,6 +2241,9 @@ msgstr "Konta korektado"
 
 #, python-format
 msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4694,6 +4697,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "sendi staton al mi"
@@ -5591,9 +5597,6 @@ msgstr "Bonvenon"
 #, fuzzy
 msgid "What does this mean?"
 msgstr "Kaŝi tiun ĉi menuon"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6595,6 +6598,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Konektado malsukcesis"
+
+#~ msgid "Add some details…"
+#~ msgstr "Aldoni kelkajn detalojn…"
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

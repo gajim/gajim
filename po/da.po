@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -581,10 +581,6 @@ msgstr ""
 #, fuzzy
 msgid "Add new Theme"
 msgstr "Lav en ny post"
-
-#, fuzzy
-msgid "Add some details…"
-msgstr "_Tilføj Kontakt..."
 
 #, fuzzy
 msgid "Add this certificate to the list of _trusted certificates"
@@ -1550,6 +1546,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Kunne ikke laste billede"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2537,6 +2537,9 @@ msgstr "Påmindelse"
 
 #, python-format
 msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4993,6 +4996,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "at sende mig status"
@@ -5899,9 +5905,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "Skjul denne menu"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6911,6 +6914,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Tilslutning fejlede"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "_Tilføj Kontakt..."
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -527,9 +527,6 @@ msgid "Add a setting you would like to change"
 msgstr ""
 
 msgid "Add new Theme"
-msgstr ""
-
-msgid "Add some details…"
 msgstr ""
 
 msgid "Add this certificate to the list of _trusted certificates"
@@ -1376,6 +1373,10 @@ msgstr ""
 
 #, python-format
 msgid "Could not open file (%s)"
+msgstr ""
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
 msgstr ""
 
 msgid "Could not save file to selected directory."
@@ -2226,6 +2227,9 @@ msgstr ""
 
 #, python-format
 msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -4337,6 +4341,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr ""
 
@@ -5134,9 +5141,6 @@ msgid "Welcome"
 msgstr ""
 
 msgid "What does this mean?"
-msgstr ""
-
-msgid "What happened"
 msgstr ""
 
 msgid "Where participants should go"

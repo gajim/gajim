@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-10 23:18+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-20 21:29+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -546,9 +546,6 @@ msgstr "Füge eine Einstellung hinzu, die du ändern möchtest"
 
 msgid "Add new Theme"
 msgstr "Neues Design hinzufügen"
-
-msgid "Add some details…"
-msgstr "Füge ein paar Details hinzu…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Dieses Zertifikat der Liste _vertrauenswürdiger Zertifikate hinzufügen"
@@ -1395,6 +1392,12 @@ msgstr "Konnte keine Nachrichten für diesen Teilnehmer finden."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+"Konnte Inhalt von %s nicht lesen. Es können ausschließlich CSV-Dateien "
+"importiert werden."
 
 msgid "Could not save file to selected directory."
 msgstr "Die Datei konnte im gewählten Verzeichnis nicht abgespeichert werden."
@@ -2268,6 +2271,10 @@ msgstr "HTTPS-Verifizierung"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Hallo, Ich bin $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
+"Hier kannst du Feedback geben, das uns hilft das Problem zu reproduzieren."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4412,6 +4419,9 @@ msgstr ""
 "mit Menschen verbindest, die die gleichen Interessen haben. Nutze Gruppen, "
 "um kleine Dinge oder das nächste große Ereignis zu organisieren."
 
+msgid "Steps to reproduce the problem…"
+msgstr "Schritte um das Problem zu reproduzieren…"
+
 msgid "Stop Sharing Online Status?"
 msgstr "Online-Status nicht mehr teilen?"
 
@@ -5250,9 +5260,6 @@ msgstr "Willkommen"
 
 msgid "What does this mean?"
 msgstr "Was heißt das?"
-
-msgid "What happened"
-msgstr "Was passiert ist"
 
 msgid "Where participants should go"
 msgstr "Alternativer Gruppenchat für die Teilnehmer"
@@ -6243,6 +6250,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Add reaction"
 #~ msgstr "Reaktion hinzufügen"
+
+#~ msgid "Add some details…"
+#~ msgstr "Füge ein paar Details hinzu…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Kontakt hinzufügen…"
@@ -7412,6 +7422,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket URL"
+
+#~ msgid "What happened"
+#~ msgstr "Was passiert ist"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Warum willst du diese Nachrichten moderieren?"

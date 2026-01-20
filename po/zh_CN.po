@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-11 03:19+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-14 04:19+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -530,9 +530,6 @@ msgstr "添加要更改的设置"
 
 msgid "Add new Theme"
 msgstr "添加新主题"
-
-msgid "Add some details…"
-msgstr "添加一些详情…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "将此证书添加到受信任的证书列表(_T)"
@@ -1359,6 +1356,10 @@ msgstr "无法找到此参与者的任何消息。"
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "无法打开文件（%s）"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr "无法读取 %s 的内容。只能导入 CSV 文件。"
 
 msgid "Could not save file to selected directory."
 msgstr "无法将文件保存到所选目录。"
@@ -2210,6 +2211,9 @@ msgstr "HTTPS 验证"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "您好，我是 $name。%s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4309,6 +4313,9 @@ msgstr ""
 "保持联系：聊天和群组帮助您与亲朋好友保持联系。与志趣相投者连接共建社群。打理"
 "日常琐事或筹办重要活动，群组都能轻松胜任。"
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "停止分享在线状态？"
 
@@ -5101,9 +5108,6 @@ msgstr "欢迎"
 
 msgid "What does this mean?"
 msgstr "这是什么意思？"
-
-msgid "What happened"
-msgstr "发生了什么"
 
 msgid "Where participants should go"
 msgstr "参与者应前往何处"
@@ -6068,6 +6072,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Add reaction"
 #~ msgstr "添加回应"
+
+#~ msgid "Add some details…"
+#~ msgstr "添加一些详情…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "添加到联系人列表…"
@@ -7204,6 +7211,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket URL"
+
+#~ msgid "What happened"
+#~ msgstr "发生了什么"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "为什么要撤回这些消息？"

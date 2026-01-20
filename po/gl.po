@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2025-11-18 17:19+0000\n"
 "Last-Translator: \"[1D*nxLf\\\"@373\" <correoxm@disroot.org>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -532,9 +532,6 @@ msgstr "Engade un axuste que queiras cambiar"
 
 msgid "Add new Theme"
 msgstr "Engadir un novo decorado"
-
-msgid "Add some details…"
-msgstr "Engade algúns detalles…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Engade este certificado á lista de certificados de confianza"
@@ -1378,6 +1375,10 @@ msgstr "Non se atopan mensaxes para esta conta participante."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Non se puido abrir o ficheiro (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 msgid "Could not save file to selected directory."
 msgstr "Non se puido gardar o ficheiro no cartafol seleccionado."
@@ -2255,6 +2256,9 @@ msgstr "Verificación HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Ola, son $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4631,6 +4635,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "para me enviar o estado"
@@ -5524,9 +5531,6 @@ msgstr ""
 #, fuzzy
 msgid "What does this mean?"
 msgstr "Ocultar este menú"
-
-msgid "What happened"
-msgstr ""
 
 #, fuzzy
 msgid "Where participants should go"
@@ -6533,6 +6537,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Fallou a conexión"
+
+#~ msgid "Add some details…"
+#~ msgstr "Engade algúns detalles…"
 
 #, fuzzy
 #~ msgid "Add to Contact List…"

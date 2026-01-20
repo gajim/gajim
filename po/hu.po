@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
-"PO-Revision-Date: 2026-01-11 18:10+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"PO-Revision-Date: 2026-01-14 06:19+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -524,9 +524,6 @@ msgstr "Módosítandó tulajdonság hozzáadása"
 
 msgid "Add new Theme"
 msgstr "Új téma"
-
-msgid "Add some details…"
-msgstr "Részletezés…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "A _tanúsítvány felvétele a megbízható tanúsítványok közé"
@@ -1370,6 +1367,11 @@ msgstr "Ettől a résztvevőtől nem található egy üzenet sem."
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Nem sikerült megnyitni a fájlt (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
+"Nem sikerült adatokat olvasni a fájlból (%s). Csak CSV-fájl importálható."
 
 msgid "Could not save file to selected directory."
 msgstr "A fájlt nem lehet a kiválasztott könyvtárba menteni."
@@ -2231,6 +2233,9 @@ msgstr "HTTPS ellenőrzése"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Szia! $name vagyok. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4356,6 +4361,9 @@ msgstr ""
 "emberekkel. A csoportokkal apró ügyek vagy nagy események megszervezésére is "
 "megoldható."
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "Jelenléti állapot közlésének tiltása"
 
@@ -5166,9 +5174,6 @@ msgstr "Üdvözlet!"
 
 msgid "What does this mean?"
 msgstr "Mit jelent ez?"
-
-msgid "What happened"
-msgstr "Esetleírás"
 
 msgid "Where participants should go"
 msgstr "Egy társalgó, ahová a résztvevők átköltözhetnek"
@@ -6147,6 +6152,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Add reaction"
 #~ msgstr "Új visszajelzés"
+
+#~ msgid "Add some details…"
+#~ msgstr "Részletezés…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Hozzáadás a névjegyekhez…"
@@ -7306,6 +7314,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket URL"
+
+#~ msgid "What happened"
+#~ msgstr "Esetleírás"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Mi az oka az üzenetek moderálásának?"

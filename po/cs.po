@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 20:45+0000\n"
+"POT-Creation-Date: 2026-01-20 20:43+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -547,9 +547,6 @@ msgstr "Přidat nastavení, které byste chtěli změnit"
 
 msgid "Add new Theme"
 msgstr "Přidat nový motiv vzhledu"
-
-msgid "Add some details…"
-msgstr "Přidat detaily…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr ""
@@ -1415,6 +1412,10 @@ msgstr ""
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Nelze získat přístup k souboru (%s)"
+
+#, python-format
+msgid "Could not read content of %s. Only CSV files can be imported."
+msgstr ""
 
 #, fuzzy
 msgid "Could not save file to selected directory."
@@ -2321,6 +2322,9 @@ msgstr "Ověření HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Ahoj, já jsem $name. %s"
+
+msgid "Here you can add some feedback which helps reproducing this problem."
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -4557,6 +4561,9 @@ msgid ""
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
 
+msgid "Steps to reproduce the problem…"
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Přestat sdílet stav připojení?"
@@ -5415,9 +5422,6 @@ msgstr "Vítejte"
 
 msgid "What does this mean?"
 msgstr "Co to znamená?"
-
-msgid "What happened"
-msgstr "Co se stalo"
 
 msgid "Where participants should go"
 msgstr "Kam mají účastníci jít"
@@ -6425,6 +6429,9 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Přidat nastavení"
+
+#~ msgid "Add some details…"
+#~ msgstr "Přidat detaily…"
 
 #~ msgid "Add to Contact List…"
 #~ msgstr "Přidat kontakt do seznamu…"
@@ -7556,6 +7563,9 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Video hovory nejsou na Windows dostupné"
+
+#~ msgid "What happened"
+#~ msgstr "Co se stalo"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
