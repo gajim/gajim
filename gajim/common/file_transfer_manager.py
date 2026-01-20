@@ -111,7 +111,11 @@ class FileTransferManager:
 
         decryption_data = None
         if urlparts.scheme == "aesgcm":
-            decryption_data = get_aes_key_data(urlparts.fragment)
+            try:
+                decryption_data = get_aes_key_data(urlparts.fragment)
+            except ValueError as error:
+                log.exception(error)
+
             # Don’t send fragment to the server, it would leak the AES key
             urlparts = urlparts._replace(scheme="https", fragment="")
 
