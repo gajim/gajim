@@ -416,7 +416,6 @@ class AccountWizard(Assistant):
 
     def _on_disconnected(self, client: NBXMPPClient, _signal_name: str) -> None:
         domain, error, text = client.get_error()
-        assert error is not None
         if domain == StreamError.SASL:
             assert error is not None
             if error == "anonymous-not-supported":
@@ -447,7 +446,7 @@ class AccountWizard(Assistant):
                 )
 
         else:
-            self._show_error_page(_("Error"), _("Error"), text or error)
+            self._show_error_page(_("Error"), _("Error"), text or error or "")
 
         self.get_page("form").remove_form()
         assert self._client is not None
