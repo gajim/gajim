@@ -114,9 +114,10 @@ class AddContact(Assistant):
             return
 
         if button_name == "add":
-            assert isinstance(self._result, DiscoInfo)
-            assert self._result.jid is not None
+            assert isinstance(self._result, DiscoInfo | StanzaError)
+            assert isinstance(self._result.jid, JID)
             client = app.get_client(account)
+
             if page == "contact":
                 contact_page = self.get_page("contact")
                 data = contact_page.get_subscription_data()
@@ -127,10 +128,16 @@ class AddContact(Assistant):
                     auto_auth=data["auto_auth"],
                     name=self._nick,
                 )
-            else:
+
+            elif page == "gateway":
+                assert isinstance(self._result, DiscoInfo)
                 client.get_module("Presence").subscribe(
                     self._result.jid, name=self._result.gateway_name, auto_auth=True
                 )
+
+            else:
+                raise ValueError("No handler for page: %s" % page)
+
             app.window.add_chat(account, self._result.jid, "chat", select=True)
             self.close()
             return
