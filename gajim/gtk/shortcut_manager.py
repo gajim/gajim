@@ -79,7 +79,7 @@ class ShortcutManager:
                 scope = Gtk.ShortcutScope.GLOBAL
 
             propagation_phase = Gtk.PropagationPhase.BUBBLE
-            if name == "app":
+            if name in ("app", "main-win"):
                 propagation_phase = Gtk.PropagationPhase.CAPTURE
 
             controller = Gtk.ShortcutController(
