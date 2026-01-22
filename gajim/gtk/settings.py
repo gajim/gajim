@@ -12,6 +12,7 @@ from typing import get_args
 
 import logging
 from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 
 from gi.repository import Adw
@@ -608,18 +609,28 @@ class ColorSetting(GenericSetting):
         app.css_config.refresh()
 
 
+@dataclass
+class SpinRange:
+    lower: float
+    upper: float
+    step: float
+    digits: int = 3
+
+
 class SpinSetting(GenericSetting):
     def __init__(
-        self, *args: Any, range_: tuple[float, float, float], **kwargs: Any
+        self, *args: Any, range_: tuple[float, float, float] | SpinRange, **kwargs: Any
     ) -> None:
         GenericSetting.__init__(self, *args, **kwargs)
 
-        lower, upper, step = range_
+        if not isinstance(range_, SpinRange):
+            range_ = SpinRange(*range_)
+
         adjustment = Gtk.Adjustment(
             value=0,
-            lower=lower,
-            upper=upper,
-            step_increment=step,
+            lower=range_.lower,
+            upper=range_.upper,
+            step_increment=range_.step,
             page_increment=10,
             page_size=0,
         )
@@ -632,12 +643,10 @@ class SpinSetting(GenericSetting):
             update_policy=Gtk.SpinButtonUpdatePolicy.IF_VALID,
             valign=Gtk.Align.CENTER,
             width_chars=5,
+            digits=range_.digits,
         )
 
         assert isinstance(self.setting_value, int | float | str)
-        if isinstance(self.setting_value, float):
-            self.spin.set_digits(3)
-
         self.spin.set_value(float(self.setting_value))
 
         self._connect(self.spin, "notify::value", self._on_value_change)

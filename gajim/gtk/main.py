@@ -539,12 +539,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         app_font_size = app.settings.get("app_font_size")
         new_app_font_size = app_font_size
         if action_name == "increase-app-font-size":
-            new_app_font_size = app_font_size + 0.125
+            new_app_font_size = app_font_size + 0.10
         elif action_name == "decrease-app-font-size":
-            new_app_font_size = app_font_size - 0.125
+            new_app_font_size = app_font_size - 0.10
 
         # Clamp font size
-        new_app_font_size = max(min(1.5, new_app_font_size), 1.0)
+        new_app_font_size = max(min(3.0, new_app_font_size), 0.5)
 
         if new_app_font_size == app_font_size:
             return

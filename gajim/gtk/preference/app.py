@@ -34,6 +34,7 @@ from gajim.gtk.plugins import Plugins
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.settings import SpinRange
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.window import get_app_window
@@ -648,7 +649,7 @@ class ThemesGroup(GajimPreferencesGroup):
                 _("User Interface Font Size"),
                 SettingType.CONFIG,
                 "app_font_size",
-                props={"range_": (1.0, 1.5, 0.125)},
+                props={"range_": SpinRange(0.5, 3.0, 0.10, 2)},
                 callback=self._on_app_font_size_changed,
             ),
             Setting(
