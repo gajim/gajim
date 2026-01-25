@@ -44,7 +44,6 @@ class AvatarStack(Gtk.MenuButton):
     def do_unroot(self) -> None:
         self.set_create_popup_func(None)
         Gtk.MenuButton.do_unroot(self)
-        app.check_finalize(self)
 
     def set_data(self, markers: list[DisplayedMarkerData]) -> None:
         self._markers = markers.copy()

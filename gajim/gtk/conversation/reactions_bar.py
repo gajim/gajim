@@ -78,7 +78,6 @@ class ReactionsBar(Gtk.Box, SignalManager):
         del self._message_row
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def _on_client_state_changed(self, *args: Any) -> None:
         self.set_sensitive(self._get_reactions_enabled())

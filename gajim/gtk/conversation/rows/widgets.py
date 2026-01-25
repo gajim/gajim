@@ -431,7 +431,6 @@ class AvatarBox(Gtk.Box, SignalManager):
     def do_unroot(self):
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def set_from_paintable(self, texture: Gdk.Texture | None) -> None:
         self._image.set_from_paintable(texture)

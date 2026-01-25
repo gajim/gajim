@@ -55,6 +55,7 @@ from gajim.gtk.conversation.rows.muc_subject import MUCSubject
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
+from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import iterate_listbox_children
 
 log = logging.getLogger("gajim.gtk.conversation_view")
@@ -268,6 +269,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         # Performance: Disable sort function before removing all rows
         self._list_box.set_sort_func(None)
+        check_finalize(self._list_box, only_children=True)
         self._list_box.remove_all()
 
         self._list_box.set_sort_func(self._sort_func)
@@ -539,7 +541,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer_row = FileTransferRow(self.contact.account, transfer)
-        transfer_row.connect("remove", self._on_remove_row)
+        transfer_row.connect("remove", self._remove_row)
         self._insert_message(transfer_row)
 
     def add_jingle_file_transfer(
@@ -705,13 +707,13 @@ class ConversationView(Gtk.ScrolledWindow):
         if occupant_id == str(ChatDirection.INCOMING):
             # Single Chat
             del self._dm_rows[current_marker.id]
-            self._list_box.remove(row)
+            self._remove_row(row)
 
         else:
             row.remove_marker(current_marker)
             if not row.has_markers():
                 del self._dm_rows[current_marker.id]
-                self._list_box.remove(row)
+                self._remove_row(row)
 
     def _add_or_update_displayed_marker_row(
         self, timestamp: datetime, markers: list[DisplayedMarkerData]
@@ -803,9 +805,6 @@ class ConversationView(Gtk.ScrolledWindow):
             row.set_merged(merge)
             return
 
-    def _on_remove_row(self, row: BaseRow) -> None:
-        self._list_box.remove(row)
-
     def _on_message_row_state_flags_changed(
         self, row: MessageRow, previous_flags: Gtk.StateFlags
     ) -> None:
@@ -843,7 +842,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._remove_from_maps(row)
         index = row.get_index()
-        self._list_box.remove(row)
+        self._remove_row(row)
         decendant_row = self._list_box.get_row_at_index(index)
         if isinstance(decendant_row, MessageRow):
             # Unset possible merged state if we delete a 'top level' message.
@@ -956,10 +955,14 @@ class ConversationView(Gtk.ScrolledWindow):
     def iter_rows(self) -> Generator[BaseRow, None, None]:
         yield from cast(list[BaseRow], iterate_listbox_children(self._list_box))
 
+    def _remove_row(self, row: BaseRow) -> None:
+        check_finalize(row)
+        self._list_box.remove(row)
+
     def _remove_rows_by_type(self, row_type: str) -> None:
         for row in self.iter_rows():
             if row.type == row_type:
-                self._list_box.remove(row)
+                self._remove_row(row)
 
     def update_call_rows(self) -> None:
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):

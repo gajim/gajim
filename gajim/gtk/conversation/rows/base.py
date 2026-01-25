@@ -60,4 +60,3 @@ class BaseRow(Gtk.ListBoxRow, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.ListBoxRow.do_unroot(self)
-        app.check_finalize(self)

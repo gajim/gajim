@@ -197,7 +197,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         del self._menu_popover
         del self._http_obj
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def get_text(self) -> str:
         return self._uri

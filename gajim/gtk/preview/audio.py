@@ -179,7 +179,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._disconnect_all()
         self._audio_player.stop(self._id)
         del self._audio_player
-        app.check_finalize(self)
 
     def sample_voice_message(self, audio_path: Path) -> None:
         self._orig_path = audio_path

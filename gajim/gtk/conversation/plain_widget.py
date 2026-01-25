@@ -13,7 +13,6 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.common import app
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
@@ -83,7 +82,6 @@ class MessageLabel(Gtk.Label, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Label.do_unroot(self)
-        app.check_finalize(self)
 
     def _on_secondary_clicked(
         self,

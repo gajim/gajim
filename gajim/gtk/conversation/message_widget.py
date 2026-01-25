@@ -8,7 +8,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.styling import ParsingResult
 from gajim.common.styling import PlainBlock
@@ -43,7 +42,6 @@ class MessageWidget(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def get_content(self) -> ContentT | None:
         return self._content

@@ -59,7 +59,6 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def _add_content(self, message: mod.Message) -> None:
         main_box = Gtk.Box(

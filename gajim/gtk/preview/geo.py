@@ -8,7 +8,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.util.preview import GeoPreview
 
@@ -48,7 +47,6 @@ class GeoPreviewWidget(Gtk.Box, SignalManager):
         self._disconnect_all()
         del self._menu_popover
         Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
 
     def _on_preview_clicked(
         self,

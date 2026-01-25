@@ -203,10 +203,6 @@ class GajimPopover(Gtk.PopoverMenu):
         rectangle = GdkRectangle(x=int(x), y=int(y))
         self.set_pointing_to(rectangle)
 
-    def do_unroot(self) -> None:
-        Gtk.PopoverMenu.do_unroot(self)
-        app.check_finalize(self)
-
 
 class TimeLabel(Gtk.Label):
     __gtype_name__ = "TimeLabel"
@@ -217,9 +213,8 @@ class TimeLabel(Gtk.Label):
         app.pulse_manager.add_callback(self.pulse)
 
     def do_unroot(self) -> None:
-        Gtk.Label.do_unroot(self)
         app.pulse_manager.remove_callback(self.pulse)
-        app.check_finalize(self)
+        Gtk.Label.do_unroot(self)
 
     def set_timestamp(self, timestamp: dt.datetime) -> None:
         self._timestamp = timestamp

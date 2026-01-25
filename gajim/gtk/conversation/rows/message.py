@@ -50,6 +50,7 @@ from gajim.gtk.preview.open_graph import OpenGraphPreviewWidget
 from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
+from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_avatar_for_message
 from gajim.gtk.util.misc import get_contact_name_for_message
@@ -110,9 +111,6 @@ class MessageRow(BaseRow):
 
         self._redraw_content()
 
-    def do_unroot(self) -> None:
-        BaseRow.do_unroot(self)
-
     @classmethod
     def from_db_row(cls, contact: ChatContactT, message: Message) -> MessageRow:
         return cls(contact, message)
@@ -140,6 +138,8 @@ class MessageRow(BaseRow):
         self.remove_css_class("retracted-message")
         self.remove_css_class("gajim-mention-highlight")
 
+        check_finalize(self._meta_box, only_children=True)
+        check_finalize(self._bottom_box, only_children=True)
         container_remove_all(self._meta_box)
         container_remove_all(self._bottom_box)
 
