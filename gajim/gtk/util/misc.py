@@ -6,13 +6,19 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 
 import datetime
+import gc
 import logging
+import os
+import pprint
 import sys
+import weakref
 import xml.etree.ElementTree as ET
 from collections.abc import Iterator
+from functools import partial
 from functools import wraps
 from pathlib import Path
 
@@ -21,6 +27,7 @@ from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from packaging.requirements import Requirement
@@ -298,6 +305,26 @@ def iterate_children(widget: Gtk.Widget) -> Iterator[Gtk.Widget]:
         yield child
 
 
+def iterate_widget_tree(
+    widget: Gtk.Widget, parent: str | None = None
+) -> Iterator[tuple[Gtk.Widget, str | None]]:
+    yield widget, parent
+
+    if parent is None:
+        parent = widget.__class__.__name__
+    else:
+        parent += f" -> {widget.__class__.__name__}"
+
+    child = widget.get_first_child()
+    if child is None:
+        return
+
+    yield from iterate_widget_tree(child, parent)
+
+    while child := child.get_next_sibling():
+        yield from iterate_widget_tree(child, parent)
+
+
 def convert_surface_to_texture(surface: cairo.ImageSurface) -> Gdk.Texture:
     memoryv = surface.get_data()
     assert memoryv is not None
@@ -411,3 +438,108 @@ def remove_css_class(widget: Gtk.Widget, css_class_name: str) -> None:
     for css_class in list(widget.get_css_classes()):
         if css_class_name in css_class:
             widget.remove_css_class(css_class)
+
+
+class ObjTracker:
+    def __init__(self) -> None:
+        self._gobjects: list[str] = []
+        self._pyobjects: dict[str, Any] = {}
+
+    def track(self, obj: GObject.Object, path: str | None) -> None:
+        if path is None:
+            full_path = f"({id(obj)}) {obj.__class__.__name__}"
+        else:
+            full_path = f"({id(obj)}) {path} -> {obj.__class__.__name__}"
+
+        obj.weak_ref(partial(self._gobjects.remove, full_path))
+        self._gobjects.append(full_path)
+
+        finalizer = weakref.finalize(obj, partial(self._pyobjects.pop, full_path))
+        self._pyobjects[full_path] = finalizer
+
+    def iter_pyobjects(self) -> Iterator[tuple[str, Any]]:
+        yield from self._pyobjects.items()
+
+    def iter_gobjects(self) -> Iterator[str]:
+        yield from self._gobjects
+
+    def pyobj_finalized(self) -> bool:
+        return not bool(self._pyobjects)
+
+    def gobj_finalized(self) -> bool:
+        return not bool(self._gobjects)
+
+    def get_pyobject_leaks(self) -> str:
+        def is_finalizer_ref(ref: Any) -> bool:
+            try:
+                return isinstance(ref[2][0], str)
+            except Exception:
+                return False
+
+        log_string = ""
+        for path, finalizer in self.iter_pyobjects():
+            tup = finalizer.peek()
+            if tup is None:
+                continue
+
+            log_string += f"{path} not finalized\n"
+            log_string += "References:"
+
+            for ref in gc.get_referrers(tup[0]):
+                if is_finalizer_ref(ref):
+                    continue
+                if isinstance(ref, dict):
+                    ref = cast(Any, ref)
+                    log_string += f"{pprint.pformat(ref)}\n"
+                else:
+                    log_string += f"{ref}\n"
+
+        return log_string
+
+    def get_gobject_leaks(self) -> str:
+        return "\n".join(self.iter_gobjects())
+
+
+def check_finalize(obj: GObject.Object) -> None:
+    if "GAJIM_LEAK" not in os.environ:
+        return
+
+    logger = logging.getLogger("gajim.leak")
+    parent_obj = obj.__class__.__name__
+
+    if isinstance(obj, Gtk.Widget):
+        objs = iterate_widget_tree(obj)
+    else:
+        objs = [(obj, None)]
+
+    tracker = ObjTracker()
+
+    for _obj, path in objs:
+        tracker.track(_obj, path)
+
+    del objs
+    gc.collect()
+
+    def check_finalized():
+        gc.collect()
+        gc.collect()
+
+        if tracker.pyobj_finalized():
+            logger.info("%s (Python Object) successful finalized", parent_obj)
+        else:
+            logger.warning(
+                "%s (Python Object) failed to finalize\n%s",
+                parent_obj,
+                tracker.get_pyobject_leaks(),
+            )
+
+        if tracker.gobj_finalized():
+            logger.info("%s (GObject) successful finalized", parent_obj)
+        else:
+            logger.warning(
+                "%s (GObject) failed to finalize\n%s",
+                parent_obj,
+                tracker.get_gobject_leaks(),
+            )
+
+    GLib.timeout_add_seconds(2, check_finalized)

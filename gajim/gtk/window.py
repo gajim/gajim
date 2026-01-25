@@ -13,6 +13,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import check_finalize
 
 log = logging.getLogger("gajim.gtk.window")
 
@@ -104,7 +105,7 @@ class GajimAppWindow(Adw.ApplicationWindow, SignalManager):
         self._store_win_size()
         self._disconnect_all()
         self._cleanup()
-        app.check_finalize(self)
+        check_finalize(self)
 
         del self.__default_controller
 
