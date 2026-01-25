@@ -95,6 +95,10 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         self._create_button.grab_focus()
 
     def _cleanup(self) -> None:
+        # https://gitlab.gnome.org/GNOME/gtk/-/issues/7992
+        self._name_entry_row.props.enable_emoji_completion = False
+        self._description_entry_row.props.enable_emoji_completion = False
+
         self.unregister_events()
         self._destroyed = True
 
