@@ -72,7 +72,6 @@ class WorkspaceDialog(GajimAppWindow):
 
         self._update_avatar()
 
-        self._connect(self._ui.entry, "notify::text", self._on_text_changed)
         self._connect(
             self._ui.remove_workspace_button, "clicked", self._on_remove_workspace
         )
@@ -180,4 +179,5 @@ class WorkspaceDialog(GajimAppWindow):
         self.close()
 
     def _cleanup(self) -> None:
-        pass
+        # https://gitlab.gnome.org/GNOME/gtk/-/issues/7992
+        self._ui.entry.props.enable_emoji_completion = False
