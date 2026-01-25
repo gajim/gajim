@@ -36,8 +36,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
 
         self._connect(self, "notify::visible-child-name", self._on_child_name_changed)
 
-    def do_unroot(self) -> None:
-        Gtk.Stack.do_unroot(self)
+    def run_destroy(self) -> None:
         self._disconnect_all()
         del self._stack
         self._menu.clear()

@@ -144,6 +144,7 @@ class Preferences(GajimAppWindow, EventHelper):
         self.unregister_events()
         self._need_relogin.clear()
         self._account_menu_items.clear()
+        self._side_bar_switcher.run_destroy()
         del self._side_bar_switcher
         del self._nav_view
 

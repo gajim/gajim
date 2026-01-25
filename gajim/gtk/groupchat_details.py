@@ -128,6 +128,7 @@ class GroupchatDetails(GajimAppWindow):
             self._switcher.activate_item("information")
 
     def _cleanup(self) -> None:
+        self._switcher.run_destroy()
         del self._switcher
         del self._groupchat_manage
         del self._groupchat_info

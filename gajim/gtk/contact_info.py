@@ -178,10 +178,13 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self._save_annotation()
 
-        for device_grid in self._devices.values():
-            self._ui.devices_page.remove(device_grid)
+        for device_info in self._devices.values():
+            device_info.run_destroy()
+            self._ui.devices_page.remove(device_info)
+
         self._devices.clear()
 
+        self._switcher.run_destroy()
         del self._switcher
 
         self._client.disconnect_all_from_obj(self)
@@ -548,9 +551,8 @@ class DeviceInfo(Adw.PreferencesGroup):
 
         self._waiting_for_info = 2
 
-    def do_unroot(self) -> None:
-        Adw.PreferencesGroup.do_unroot(self)
-        del self._contact
+    def run_destroy(self) -> None:
+        app.check_finalize(self)
 
     def set_entity_time(self, entity_time: str | None) -> None:
         if entity_time is not None:
