@@ -13,12 +13,14 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.menus import get_preview_menu
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import GajimPopover
 
 
 @Gtk.Template.from_string(string=get_ui_string("preview/open_graph.ui"))
-class OpenGraphPreviewWidget(Gtk.Box):
+class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
     __gtype_name__ = "OpenGraphPreviewWidget"
 
     _content_box: Gtk.Box = Gtk.Template.Child()
@@ -28,6 +30,7 @@ class OpenGraphPreviewWidget(Gtk.Box):
 
     def __init__(self, og_data: mod.OpenGraph) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
         self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
 
         self._uri = og_data.url
@@ -44,14 +47,14 @@ class OpenGraphPreviewWidget(Gtk.Box):
         self.append(self._menu_popover)
 
         gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
-        gesture_primary_click.connect("pressed", self._on_primary_clicked)
+        self._connect(gesture_primary_click, "pressed", self._on_primary_clicked)
         self._content_box.add_controller(gesture_primary_click)
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_secondary_click.connect("pressed", self._on_secondary_clicked)
+        self._connect(gesture_secondary_click, "pressed", self._on_secondary_clicked)
         self._content_box.add_controller(gesture_secondary_click)
 
-        self._close_button.connect("clicked", self._on_close_clicked)
+        self._connect(self._close_button, "clicked", self._on_close_clicked)
         self._pk = og_data.pk
 
     def _on_primary_clicked(
@@ -78,7 +81,12 @@ class OpenGraphPreviewWidget(Gtk.Box):
         self._menu_popover.popup()
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
+        app.storage.archive.remove_og(self._pk)
         parent = self.get_parent()
         assert isinstance(parent, Gtk.Box)
         parent.remove(self)
-        app.storage.archive.remove_og(self._pk)
+        check_finalize(self)
+
+    def do_unroot(self) -> None:
+        del self._menu_popover
+        self._disconnect_all()
