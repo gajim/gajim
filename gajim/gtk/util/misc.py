@@ -306,9 +306,10 @@ def iterate_children(widget: Gtk.Widget) -> Iterator[Gtk.Widget]:
 
 
 def iterate_widget_tree(
-    widget: Gtk.Widget, parent: str | None = None
+    widget: Gtk.Widget, parent: str | None = None, only_children: bool = False
 ) -> Iterator[tuple[Gtk.Widget, str | None]]:
-    yield widget, parent
+    if not only_children:
+        yield widget, parent
 
     if parent is None:
         parent = widget.__class__.__name__
@@ -445,6 +446,9 @@ class ObjTracker:
         self._gobjects: list[str] = []
         self._pyobjects: dict[str, Any] = {}
 
+    def get_count(self) -> int:
+        return len(self._gobjects)
+
     def track(self, obj: GObject.Object, path: str | None) -> None:
         if path is None:
             full_path = f"({id(obj)}) {obj.__class__.__name__}"
@@ -500,7 +504,7 @@ class ObjTracker:
         return "\n".join(self.iter_gobjects())
 
 
-def check_finalize(obj: GObject.Object) -> None:
+def check_finalize(obj: GObject.Object, only_children: bool = False) -> None:
     if "GAJIM_LEAK" not in os.environ:
         return
 
@@ -508,7 +512,7 @@ def check_finalize(obj: GObject.Object) -> None:
     parent_obj = obj.__class__.__name__
 
     if isinstance(obj, Gtk.Widget):
-        objs = iterate_widget_tree(obj)
+        objs = iterate_widget_tree(obj, only_children=only_children)
     else:
         objs = [(obj, None)]
 
@@ -516,29 +520,38 @@ def check_finalize(obj: GObject.Object) -> None:
 
     for _obj, path in objs:
         tracker.track(_obj, path)
-
     del objs
-    gc.collect()
+
+    obj_count = tracker.get_count()
+    if not obj_count:
+        return
 
     def check_finalized():
         gc.collect()
-        gc.collect()
 
         if tracker.pyobj_finalized():
-            logger.info("%s (Python Object) successful finalized", parent_obj)
+            logger.info(
+                "%s (Python Object) successful finalized (total: %s)",
+                parent_obj,
+                obj_count,
+            )
         else:
             logger.warning(
-                "%s (Python Object) failed to finalize\n%s",
+                "%s (Python Object) failed to finalize (total: %s)\n%s",
                 parent_obj,
+                obj_count,
                 tracker.get_pyobject_leaks(),
             )
 
         if tracker.gobj_finalized():
-            logger.info("%s (GObject) successful finalized", parent_obj)
+            logger.info(
+                "%s (GObject) successful finalized (total: %s)", parent_obj, obj_count
+            )
         else:
             logger.warning(
-                "%s (GObject) failed to finalize\n%s",
+                "%s (GObject) failed to finalize (total: %s)\n%s",
                 parent_obj,
+                obj_count,
                 tracker.get_gobject_leaks(),
             )
 
