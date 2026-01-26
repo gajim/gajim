@@ -374,6 +374,7 @@ class ReactionUpdated(ApplicationEvent):
     reaction_occupant_id: str | None
     emojis: set[str] | None
     message: mod.Message | None
+    is_mam_message: bool
 
 
 @dataclass
