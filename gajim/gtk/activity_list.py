@@ -287,7 +287,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             else:
                 notify = app.settings.get_app_setting("notify_on_reaction_default")
 
-            if app.window.is_chat_active(event.account, event.jid):
+            if event.is_mam_message or app.window.is_chat_active(
+                event.account, event.jid
+            ):
                 notify = False
 
         list_item_cls = self._event_item_map[type(event)]

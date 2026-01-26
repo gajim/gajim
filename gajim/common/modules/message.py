@@ -433,6 +433,7 @@ class Message(BaseModule):
                     reaction_occupant_id=None,
                     emojis=None,
                     message=None,
+                    is_mam_message=False
                 )
             )
             return
