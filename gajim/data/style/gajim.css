@@ -325,6 +325,7 @@ button.flat.link { padding: 0; border: 0; }
 
 .sidebar-row-image {
     border: 2px solid transparent;
+    border-radius: 12px;
 }
 
 .dnd-target .sidebar-row-image {
@@ -347,7 +348,7 @@ button.flat.link { padding: 0; border: 0; }
 
 .workspace-listbox-row image {
     -gtk-icon-size: 36px;
-    padding: 0px 6px 0px 0px;
+    padding: 0;
 }
 
 /* ActivityPage */
