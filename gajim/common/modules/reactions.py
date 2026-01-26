@@ -132,6 +132,7 @@ class Reactions(BaseModule):
                     reaction_occupant_id=occupant_id,
                     emojis=None,
                     message=None,
+                    is_mam_message=properties.is_mam_message
                 )
             )
             raise NodeProcessed
@@ -182,6 +183,7 @@ class Reactions(BaseModule):
                 reaction_occupant_id=occupant_id,
                 emojis=valid,
                 message=message,
+                is_mam_message=properties.is_mam_message
             )
         )
 
