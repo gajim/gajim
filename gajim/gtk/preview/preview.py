@@ -120,9 +120,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._http_obj = None
         self._state = PreviewState.INIT
 
-        self._drag_hotspot_x: float = 0
-        self._drag_hotspot_y: float = 0
-
         drag_source = Gtk.DragSource(actions=Gdk.DragAction.COPY)
         self._connect(drag_source, "prepare", self._on_drag_prepare)
         self._connect(drag_source, "drag-begin", self._on_drag_begin)
@@ -210,9 +207,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         if self._state not in (PreviewState.DOWNLOADED, PreviewState.DISPLAY):
             return None
 
-        self._drag_hotspot_x = x
-        self._drag_hotspot_y = y
-
         value = GObject.Value()
         value.init(PreviewWidget)
         value.set_object(self)
@@ -223,8 +217,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
         Gtk.DragIcon.set_from_paintable(
             drag,
             Gtk.WidgetPaintable().new(self),
-            hot_x=int(self._drag_hotspot_x),
-            hot_y=int(self._drag_hotspot_y),
+            hot_x=0,
+            hot_y=0,
         )
 
         app.window.highlight_dnd_targets(self, True)
