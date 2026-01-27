@@ -712,6 +712,7 @@ class LoginGroup(GajimPreferencesGroup):
                 SettingKind.DIALOG,
                 _("Change Password"),
                 SettingType.DIALOG,
+                enabled_func=(lambda: app.account_is_connected(account)),
                 props={"dialog": "ChangePassword"},
             ),
             Setting(
