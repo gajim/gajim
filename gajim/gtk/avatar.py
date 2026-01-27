@@ -553,8 +553,9 @@ class AvatarStorage(metaclass=Singleton):
             real_remote = None
         else:
             key = occupant.id
-            assert occupant.nickname is not None
-            nickname = occupant.nickname
+            # There are edge cases with MUC PMs where we don't
+            # have a nickname stored for an occupant
+            nickname = occupant.nickname or "Unknown"
             avatar_sha = occupant.avatar_sha
             real_remote = occupant.real_remote
 

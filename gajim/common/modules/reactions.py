@@ -103,6 +103,7 @@ class Reactions(BaseModule):
                 remote_jid=remote_jid,
                 own_bare_jid=own_bare_jid,
                 direction=direction,
+                m_type=m_type,
                 timestamp=timestamp,
                 contact=contact,
                 properties=properties,

@@ -17,6 +17,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
 
+from gajim.common import app
 from gajim.common.const import EME_MESSAGES
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -87,6 +88,7 @@ def get_occupant_info(
     remote_jid: JID,
     own_bare_jid: JID,
     direction: ChatDirection,
+    m_type: MessageType,
     timestamp: datetime,
     contact: GroupchatParticipant,
     properties: MessageProperties,
@@ -105,8 +107,15 @@ def get_occupant_info(
     if occupant_id is None:
         return None
 
-    resource = properties.jid.resource
-    assert resource is not None
+    if m_type == MessageType.PM and direction == ChatDirection.OUTGOING:
+        # Outgoing PMs which we receive as carbons or via MAM
+        # have our bound jid in the from attribute, not the joined MUC
+        # resource. This means for these kind of messages the nickname
+        # cannot be determined
+        resource = None
+    else:
+        resource = properties.jid.resource
+        assert resource is not None
 
     occupant = mod.Occupant(
         account_=account,
@@ -126,7 +135,7 @@ def get_occupant_info(
 
 
 def get_occupant_id(
-    contact: GroupchatParticipant, properties: MessageProperties
+    contact: GroupchatParticipant, properties: MessageProperties,
 ) -> str | None:
 
     if not properties.occupant_id:
@@ -150,20 +159,40 @@ def convert_message_type(type_: MessageType) -> Literal['chat', 'groupchat']:
     return 'groupchat'
 
 
-def get_nickname_from_message(message: mod.Message) -> str:
-    if message.resource is None:
+def get_nickname_from_message(account: str, message: mod.Message) -> tuple[str, str]:
+    # This method is tailored for the ChatListRow
+    def _get_nickname() -> str:
+        if occupant := message.occupant:
+            if nickname := occupant.nickname:
+                return nickname
+
+        if message.resource is not None:
+            return message.resource
+
         nickname = message.remote.jid.localpart
         assert nickname is not None
         return nickname
 
-    if message.occupant is not None:
-        nickname = message.occupant.nickname
-        assert nickname is not None
-        return nickname
+    match message.type:
+        case MessageType.CHAT:
+            if message.direction == ChatDirection.INCOMING:
+                return "", ""
 
-    nickname = message.resource
-    assert nickname is not None
-    return nickname
+            # FIXME: app.nicks is not correctly filled on start
+            return _("Me"), app.nicks[account]
+
+        case MessageType.PM:
+            if message.direction == ChatDirection.INCOMING:
+                return "", ""
+            return _("Me"), _get_nickname()
+
+        case MessageType.GROUPCHAT:
+            if message.direction == ChatDirection.INCOMING:
+                return _get_nickname(), ""
+            return _("Me"), _get_nickname()
+
+        case _:
+            raise ValueError(f"Unknown type: {message.type}")
 
 
 def get_security_label(

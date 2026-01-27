@@ -27,8 +27,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.storage.archive import models as mod
-from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 from gajim.common.util.muc import get_groupchat_name
@@ -168,22 +166,9 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 assert message_text is not None
 
             # Nickname
-            nickname = None
-            if (
-                message.type == MessageType.CHAT
-                and message.direction == ChatDirection.OUTGOING
-            ):
-                self.set_nick(_("Me"))
-                nickname = app.nicks[self.contact.account]
-
-            elif message.type in (MessageType.GROUPCHAT, MessageType.PM):
-                nickname = get_nickname_from_message(message) or None
-                if message.direction == ChatDirection.OUTGOING:
-                    self.set_nick(_("Me"))
-                else:
-                    self.set_nick(nickname)
-
-            self.set_message_text(message_text, nickname=nickname, oob=message.oob)
+            nickname, text_nick = get_nickname_from_message(self.account, message)
+            self.set_nick(nickname)
+            self.set_message_text(message_text, nickname=text_nick, oob=message.oob)
 
             self.set_timestamp(message.timestamp)
 

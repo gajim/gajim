@@ -162,7 +162,7 @@ class BlockListItem(GObject.Object):
     def __init__(self, occupant: Occupant) -> None:
         super().__init__(
             id=occupant.id,
-            nickname=occupant.nickname,
+            nickname=occupant.nickname or "Unknown",
         )
 
     def __repr__(self) -> str:

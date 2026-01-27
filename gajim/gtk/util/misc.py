@@ -156,9 +156,16 @@ def get_contact_name_for_message(
         return resource
 
     elif db_row.type == MessageType.PM:
-        resource = db_row.resource
-        assert resource is not None
-        return resource
+        if occupant := db_row.occupant:
+            if name := occupant.nickname:
+                return name
+
+        if db_row.resource is None:
+            if db_row.direction == ChatDirection.OUTGOING:
+                return _("Me")
+            # This should never happen better degrade gracefully
+            return "Unknown"
+        return db_row.resource
 
     else:
         raise ValueError

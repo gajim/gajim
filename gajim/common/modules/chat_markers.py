@@ -154,6 +154,7 @@ class ChatMarkers(BaseModule):
                 remote_jid=remote_jid,
                 own_bare_jid=self._get_own_bare_jid(),
                 direction=ChatDirection.INCOMING,
+                m_type=m_type,
                 timestamp=timestamp,
                 contact=contact,
                 properties=properties,

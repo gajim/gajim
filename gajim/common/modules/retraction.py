@@ -108,6 +108,7 @@ class Retraction(BaseModule):
                 remote_jid,
                 self._get_own_bare_jid(),
                 direction,
+                m_type,
                 timestamp,
                 contact,
                 properties,

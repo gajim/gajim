@@ -30,7 +30,6 @@ from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive.models import Message
 from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.user_strings import get_moderation_text
 from gajim.common.util.user_strings import get_retraction_text
@@ -569,16 +568,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._schedule_sort()
 
     @staticmethod
-    def _get_nick_for_received_message(account: str, message: Message) -> str:
-        if message.direction == ChatDirection.OUTGOING:
-            return _("Me")
-
-        if message.type in (MessageType.GROUPCHAT, MessageType.PM):
-            return get_nickname_from_message(message)
-
-        return ""
-
-    @staticmethod
     def _add_unread(row: ChatListRow, event: events.MessageReceived) -> None:
         message = event.message
         if message.direction == ChatDirection.OUTGOING:
@@ -617,12 +606,12 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
         assert message.id is not None
 
-        nick = self._get_nick_for_received_message(event.account, message)
+        nick, text_nick = get_nickname_from_message(event.account, message)
         row.set_nick(nick)
         row.set_timestamp(message.timestamp)
         row.set_stanza_id(message.stanza_id)
         row.set_message_id(message.id)
-        row.set_message_text(message.text, nickname=nick, oob=message.oob)
+        row.set_message_text(message.text, nickname=text_nick, oob=message.oob)
 
         self._add_unread(row, event)
         row.changed()
@@ -639,9 +628,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if event.correction_id == row.message_id:
             text = event.message.text
             assert text is not None
-            row.set_message_text(
-                text, self._get_nick_for_received_message(event.account, event.message)
-            )
+            _, text_nick = get_nickname_from_message(event.account, event.message)
+            row.set_message_text(text, nickname=text_nick)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         row = self._chats.get((event.account, event.jid))

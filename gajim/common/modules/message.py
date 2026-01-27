@@ -177,6 +177,14 @@ class Message(BaseModule):
                                         stanza_id=stanza_id))
                 return
 
+        resource = jid.resource
+        if m_type == MessageType.PM and direction == ChatDirection.OUTGOING:
+            # Outgoing PMs which we receive as carbons or via MAM
+            # have our bound jid in the from attribute, not the joined MUC
+            # resource. This means for these kind of messages the nickname
+            # cannot be determined
+            resource = None
+
         occupant = None
         if (m_type in (MessageType.GROUPCHAT, MessageType.PM)
                 and not jid.is_bare):
@@ -190,6 +198,7 @@ class Message(BaseModule):
                 remote_jid,
                 self._get_own_bare_jid(),
                 direction,
+                m_type,
                 timestamp,
                 contact,
                 properties
@@ -228,7 +237,7 @@ class Message(BaseModule):
             direction=direction,
             timestamp=timestamp,
             state=MessageState.ACKNOWLEDGED,
-            resource=jid.resource,
+            resource=resource,
             text=message_text,
             id=message_id,
             stanza_id=stanza_id,
@@ -370,7 +379,14 @@ class Message(BaseModule):
 
             resource = muc_data.nick
             real_jid = self._client.get_own_jid().new_as_bare()
-            occupant_id = muc_data.occupant_id or real_jid
+            if message.type == MessageType.PM:
+                # Use real jid as occupant-id because sent MUC PMs which we
+                # receive via carbons or MAM do not have the occupant-id
+                # which would lead to outgoing message being stored with
+                # different occupant-ids
+                occupant_id = real_jid
+            else:
+                occupant_id = muc_data.occupant_id or real_jid
 
             occupant = mod.Occupant(
                 account_=self._account,
