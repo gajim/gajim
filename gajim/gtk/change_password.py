@@ -145,40 +145,41 @@ class EnterPassword(AssistantPage):
             margin_bottom=12,
         )
 
-        self._password1_entry = Gtk.Entry()
-        self._password1_entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
-        self._password1_entry.set_visibility(False)
-        self._password1_entry.set_invisible_char("•")
-        self._password1_entry.set_valign(Gtk.Align.END)
-        self._password1_entry.set_placeholder_text(_("Enter new password..."))
+        self._password1_entry = Gtk.PasswordEntry(
+            show_peek_icon=True,
+            placeholder_text=_("Enter new password..."),
+            valign=Gtk.Align.END,
+        )
         self._connect(self._password1_entry, "changed", self._on_changed)
-        self._password2_entry = Gtk.Entry()
-        self._password2_entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
-        self._password2_entry.set_visibility(False)
-        self._password2_entry.set_invisible_char("•")
-        self._password2_entry.set_activates_default(True)
-        self._password2_entry.set_valign(Gtk.Align.START)
-        self._password2_entry.set_placeholder_text(_("Confirm new password..."))
+
+        self._password2_entry = Gtk.PasswordEntry(
+            activates_default=True,
+            show_peek_icon=True,
+            placeholder_text=_("Confirm new password..."),
+            valign=Gtk.Align.START,
+        )
         self._connect(self._password2_entry, "changed", self._on_changed)
+
+        box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
+        self._warning_label = Gtk.Label(max_width_chars=50)
+        self._icon = Gtk.Image(icon_name="lucide-circle-alert-symbolic", visible=False)
+        box.append(self._icon)
+        box.append(self._warning_label)
 
         self.append(heading)
         self.append(label)
         self.append(self._password1_entry)
         self.append(self._password2_entry)
+        self.append(box)
         self._hide_warning()
 
     def _hide_warning(self) -> None:
-        self._password1_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, None
-        )
+        self._icon.set_visible(False)
+        self._warning_label.set_text("")
 
     def _show_warning(self, text: str) -> None:
-        self._password1_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, "lucide-circle-alert-symbolic"
-        )
-        self._password1_entry.set_icon_tooltip_text(
-            Gtk.EntryIconPosition.SECONDARY, text
-        )
+        self._icon.set_visible(True)
+        self._warning_label.set_text(text)
 
     def _on_changed(self, _entry: Gtk.Entry) -> None:
         password1 = self._password1_entry.get_text()
