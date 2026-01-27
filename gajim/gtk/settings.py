@@ -22,7 +22,6 @@ from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import passwords
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
@@ -410,8 +409,6 @@ class GenericSetting(Adw.ActionRow, SignalManager):
             return app.settings.get(value)
 
         if type_ == SettingType.ACCOUNT_CONFIG:
-            if value == "password":
-                return passwords.get_password(account)
             return app.settings.get_account_setting(account, value)
 
         if type_ == SettingType.ACTION:
@@ -427,11 +424,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
             app.settings.set(self.value, state)
 
         elif self.type_ == SettingType.ACCOUNT_CONFIG:
-            if self.value == "password":
-                assert isinstance(state, str)
-                passwords.save_password(self.account, state)
-            else:
-                app.settings.set_account_setting(self.account, self.value, state)
+            app.settings.set_account_setting(self.account, self.value, state)
 
         elif self.type_ == SettingType.CONTACT:
             app.settings.set_contact_setting(self.account, self.jid, self.value, state)
@@ -549,9 +542,6 @@ class EntrySetting(GenericSetting):
         )
         self.entry.set_valign(Gtk.Align.CENTER)
         self.entry.set_alignment(1)
-
-        if self.value == "password":
-            self.entry.set_visibility(False)
 
         self.setting_box.prepend(self.entry)
 

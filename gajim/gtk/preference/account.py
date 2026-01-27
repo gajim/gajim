@@ -698,13 +698,6 @@ class LoginGroup(GajimPreferencesGroup):
 
         settings = [
             Setting(
-                SettingKind.ENTRY,
-                _("Password"),
-                SettingType.ACCOUNT_CONFIG,
-                "password",
-                bind="account::savepass",
-            ),
-            Setting(
                 SettingKind.SWITCH,
                 _("Save Password"),
                 SettingType.ACCOUNT_CONFIG,
