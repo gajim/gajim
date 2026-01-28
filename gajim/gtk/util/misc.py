@@ -191,8 +191,10 @@ def get_avatar_for_message(
             )
 
         case MessageType.CHAT:
-            assert isinstance(contact, BareContact)
-            return contact.get_avatar(size, scale, add_show=False)
+            if isinstance(contact, BareContact):
+                return contact.get_avatar(size, scale, add_show=False)
+            log.warning("Unexpected contact type %r, unable to get avatar", contact)
+            return None
 
         case _:
             raise ValueError(f"Unhandled type: {db_row.type}")
