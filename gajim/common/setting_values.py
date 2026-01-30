@@ -500,33 +500,6 @@ PLUGIN_SETTINGS = {
 }
 
 
-STATUS_PRESET_SETTINGS = {
-    'message': '',
-}
-
-
-STATUS_PRESET_EXAMPLES = {
-    _('Sleeping'): {
-        'message': _('ZZZZzzzzzZZZZZ')
-    },
-    _('Back soon'): {
-        'message': _('Back in some minutes.')
-    },
-    _('Eating'): {
-        'message': _('I’m eating.')
-    },
-    _('Movie'): {
-        'message': _('I’m watching a movie.')
-    },
-    _('Working'): {
-        'message': _('I’m working.')
-    },
-    _('Out'): {
-        'message': _('I’m out enjoying life.')
-    }
-}
-
-
 PROXY_SETTINGS = {
     'type': 'socks5',
     'host': '',

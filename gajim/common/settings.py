@@ -54,8 +54,6 @@ from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.setting_values import PLUGIN_SETTINGS
 from gajim.common.setting_values import PROXY_EXAMPLES
 from gajim.common.setting_values import PROXY_SETTINGS
-from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
-from gajim.common.setting_values import STATUS_PRESET_SETTINGS
 from gajim.common.setting_values import StringAccountSettings
 from gajim.common.setting_values import StringContactSettings
 from gajim.common.setting_values import StringGroupChatSettings
@@ -87,15 +85,13 @@ CREATE_SQL = '''
 
     INSERT INTO settings(name, settings) VALUES ('app', '{{}}');
     INSERT INTO settings(name, settings) VALUES ('soundevents', '{{}}');
-    INSERT INTO settings(name, settings) VALUES ('status_presets', '{status}');
     INSERT INTO settings(name, settings) VALUES ('proxies', '{proxies}');
     INSERT INTO settings(name, settings) VALUES ('plugins', '{{}}');
     INSERT INTO settings(name, settings) VALUES ('workspaces', '{workspaces}');
     INSERT INTO settings(name, settings) VALUES ('window_sizes', '{{}}');
 
     PRAGMA user_version={version};
-    '''.format(status=json.dumps(STATUS_PRESET_EXAMPLES),  # noqa: UP032
-               proxies=json.dumps(PROXY_EXAMPLES),
+    '''.format(proxies=json.dumps(PROXY_EXAMPLES),  # noqa: UP032
                workspaces=json.dumps(INITAL_WORKSPACE),
                version=CURRENT_USER_VERSION)
 
@@ -116,7 +112,6 @@ class SettingsDictT(TypedDict):
     plugins: dict[str, dict[str, Any]]
     workspaces: dict[str, dict[str, WorkspaceSettings]]
     soundevents: dict[str, dict[str, Any]]
-    status_presets: dict[str, dict[str, str]]
     proxies: dict[str, dict[str, Any]]
     window_sizes: dict[str, tuple[int, int]]
 
@@ -1072,45 +1067,6 @@ class Settings:
         user_settings = self._settings['soundevents'].get(event_name, {})
         settings.update(user_settings)
         return settings
-
-    def set_status_preset_setting(self,
-                                  status_preset: str,
-                                  setting: str,
-                                  value: str) -> None:
-
-        if setting not in STATUS_PRESET_SETTINGS:
-            raise ValueError(f'Invalid status preset setting: {setting}')
-
-        if not isinstance(value, str):
-            raise TypeError(f'Invalid type for {setting}: '
-                            f'{value} {type(value)}')
-
-        presets = self._settings['status_presets']
-        if status_preset not in presets:
-            presets[status_preset] = {setting: value}
-        else:
-            presets[status_preset][setting] = value
-
-        self._commit_settings('status_presets')
-
-    def get_status_preset_settings(self, status_preset: str) -> dict[str, str]:
-        if status_preset not in self._settings['status_presets']:
-            raise ValueError(f'Invalid status preset name: {status_preset}')
-
-        settings = STATUS_PRESET_SETTINGS.copy()
-        user_settings = self._settings['status_presets'][status_preset]
-        settings.update(user_settings)
-        return settings
-
-    def get_status_presets(self) -> list[str]:
-        return list(self._settings['status_presets'].keys())
-
-    def remove_status_preset(self, status_preset: str) -> None:
-        if status_preset not in self._settings['status_presets']:
-            raise ValueError(f'Unknown status preset: {status_preset}')
-
-        del self._settings['status_presets'][status_preset]
-        self._commit_settings('status_presets')
 
     def set_proxy_setting(self,
                           proxy_name: str,
