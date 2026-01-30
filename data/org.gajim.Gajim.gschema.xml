@@ -1,0 +1,243 @@
+<schemalist>
+  <schema id="org.gajim.Gajim" path="/org/gajim/Gajim/">
+    <child name="app" schema="org.gajim.Gajim.App"/>
+    <child name="account" schema="org.gajim.Gajim.Account"/>
+    <child name="contact" schema="org.gajim.Gajim.Contact"/>
+    <child name="group" schema="org.gajim.Gajim.Group"/>
+    <child name="workspace" schema="org.gajim.Gajim.Workspace"/>
+    <child name="proxy" schema="org.gajim.Gajim.Proxy"/>
+    <child name="sound" schema="org.gajim.Gajim.Sound"/>
+    <child name="plugin" schema="org.gajim.Gajim.Plugin"/>
+  </schema>
+
+  <schema id="org.gajim.Gajim.App" path="/org/gajim/Gajim/app/">
+    <key name="action-on-close" type="s"><default>"hide"</default></key>
+    <key name="additional-uri-schemes" type="s"><default>""</default></key>
+    <key name="always-english-wikipedia" type="b"><default>false</default></key>
+    <key name="always-english-wiktionary" type="b"><default>true</default></key>
+    <key name="app-font-size" type="d"><default>1</default></key>
+    <key name="ask-online-status" type="b"><default>false</default></key>
+    <key name="audio-input-device" type="s"><default>"autoaudiosrc ! volume name=gajim_vol"</default></key>
+    <key name="audio-input-volume" type="i"><default>50</default></key>
+    <key name="audio-output-device" type="s"><default>"autoaudiosink</default></key>
+    <key name="audio-output-volume" type="i"><default>50</default></key>
+    <key name="autoaway" type="b"><default>true</default></key>
+    <key name="autoaway-message" type="s"><default>""</default></key>
+    <key name="autoawaytime" type="i"><default>5</default></key>
+    <key name="autoxa" type="b"><default>true</default></key>
+    <key name="autoxa-message" type="s"><default>""</default></key>
+    <key name="autoxatime" type="i"><default>15</default></key>
+    <key name="chat-handle-position" type="i"><default>350</default></key>
+    <key name="chat-merge-consecutive-nickname" type="b"><default>true</default></key>
+    <key name="check-for-update" type="b"><default>true</default></key>
+    <key name="confirm-block" type="s"><default>""</default></key>
+    <key name="confirm-close-muc" type="b"><default>true</default></key>
+    <key name="confirm-on-window-delete" type="b"><default>true</default></key>
+    <key name="dark-theme" type="i"><default>2</default></key>
+    <key name="date-format" type="s"><default>"%x"</default></key>
+    <key name="date-time-format" type="s"><default>"%c"</default></key>
+    <key name="dev-force-bookmark-2" type="b"><default>false</default></key>
+    <key name="dictionary-url" type="s"><default>"WIKTIONARY"</default></key>
+    <key name="enable-emoji-shortcodes" type="b"><default>true</default></key>
+    <key name="enable-keepassxc-integration" type="b"><default>false</default></key>
+    <key name="enable-link-preview-default" type="b"><default>true</default></key>
+    <key name="escape-key-closes" type="b"><default>false</default></key>
+    <key name="file-transfers-port" type="i"><default>28011</default></key>
+    <key name="ft-add-hosts-to-send" type="s"><default>""</default></key>
+    <key name="gc-enable-link-preview-default" type="b"><default>true</default></key>
+    <key name="gc-notify-on-all-messages-private-default" type="b"><default>true</default></key>
+    <key name="gc-notify-on-all-messages-public-default" type="b"><default>false</default></key>
+    <key name="gc-print-join-left-default" type="b"><default>false</default></key>
+    <key name="gc-print-status-default" type="b"><default>false</default></key>
+    <key name="gc-refer-to-nick-char" type="s"><default>","</default></key>
+    <key name="gc-sync-threshold-private-default" type="i"><default>0</default></key>
+    <key name="gc-sync-threshold-public-default" type="i"><default>1</default></key>
+    <key name="global-proxy" type="s"><default>""</default></key>
+    <key name="groupchat-roster-width" type="i"><default>250</default></key>
+    <key name="hide-groupchat-occupants-list" type="b"><default>false</default></key>
+    <key name="ignore-incoming-attention" type="b"><default>false</default></key>
+    <key name="is-window-visible" type="b"><default>true</default></key>
+    <key name="last-save-dir" type="s"><default>""</default></key>
+    <key name="last-send-dir" type="s"><default>""</default></key>
+    <key name="last-sounds-dir" type="s"><default>""</default></key>
+    <key name="last-update-check" type="s"><default>""</default></key>
+    <key name="latest-disco-addresses" type="s"><default>""</default></key>
+    <key name="mainwin-height" type="i"><default>500</default></key>
+    <key name="mainwin-width" type="i"><default>1000</default></key>
+    <key name="muc-highlight-words" type="s"><default>""</default></key>
+    <key name="muc-prefer-direct-msg" type="b"><default>true</default></key>
+    <key name="muclumbus-api-http-uri" type="s"><default>"https://search.jabber.network/api/1.0/search"</default></key>
+    <key name="muclumbus-api-jid" type="s"><default>"api@search.jabber.network"</default></key>
+    <key name="muclumbus-api-pref" type="s"><default>"http"</default></key>
+    <key name="notification-preview-message" type="b"><default>true</default></key>
+    <key name="notify-on-all-muc-messages" type="b"><default>false</default></key>
+    <key name="notify-on-file-complete" type="b"><default>true</default></key>
+    <key name="plugins-auto-update" type="b"><default>false</default></key>
+    <key name="plugins-notify-after-update" type="b"><default>true</default></key>
+    <key name="plugins-repository-enabled" type="b"><default>true</default></key>
+    <key name="plugins-update-check" type="b"><default>true</default></key>
+    <key name="positive-184-ack" type="b"><default>false</default></key>
+    <key name="preview-allow-all-images" type="b"><default>false</default></key>
+    <key name="preview-anonymous-muc" type="b"><default>false</default></key>
+    <key name="preview-max-file-size" type="i"><default>10485760</default></key>
+    <key name="preview-size" type="i"><default>400</default></key>
+    <key name="preview-verify-https" type="b"><default>true</default></key>
+    <key name="print-status-in-chats" type="b"><default>false</default></key>
+    <key name="providers-list-url" type="s"><default>"https://data.xmpp.net/providers/v2/providers-B.json"</default></key>
+    <key name="quick-reaction-emojis" type="s"><default>"👍,❤,🤣"</default></key>
+    <key name="remote-control" type="b"><default>false</default></key>
+    <key name="roster-theme" type="s"><default>"default"</default></key>
+    <key name="search-engine" type="s"><default>"https://duckduckgo.com/?q=%s"</default></key>
+    <key name="send-on-ctrl-enter" type="b"><default>false</default></key>
+    <key name="show-header-bar" type="b"><default>true</default></key>
+    <key name="show-help-start-chat" type="b"><default>true</default></key>
+    <key name="show-in-taskbar" type="b"><default>true</default></key>
+    <key name="show-main-window-on-startup" type="s"><default>"always"</default></key>
+    <key name="show-notifications" type="b"><default>true</default></key>
+    <key name="show-notifications-away" type="b"><default>false</default></key>
+    <key name="show-send-message-button" type="b"><default>false</default></key>
+    <key name="show-status-msgs-in-roster" type="b"><default>true</default></key>
+    <key name="show-subject-on-join" type="b"><default>true</default></key>
+    <key name="show-trayicon" type="b"><default>true</default></key>
+    <key name="show-voice-message-button" type="b"><default>true</default></key>
+    <key name="sort-by-show-in-muc" type="b"><default>false</default></key>
+    <key name="sort-by-show-in-start-chat" type="b"><default>true</default></key>
+    <key name="sounddnd" type="b"><default>false</default></key>
+    <key name="sounds-on" type="b"><default>true</default></key>
+    <key name="speller-language" type="s"><default>""</default></key>
+    <key name="stun-server" type="s"><default>""</default></key>
+    <key name="time-format" type="s"><default>"%H:%M"</default></key>
+    <key name="trayicon-notification-on-events" type="b"><default>true</default></key>
+    <key name="use-keyring" type="b"><default>true</default></key>
+    <key name="use-kib-mib" type="b"><default>false</default></key>
+    <key name="use-speller" type="b"><default>true</default></key>
+    <key name="use-stun-server" type="b"><default>false</default></key>
+    <key name="use-urgency-hint" type="b"><default>true</default></key>
+    <key name="video-framerate" type="s"><default>""</default></key>
+    <key name="video-input-device" type="s"><default>"autovideosrc"</default></key>
+    <key name="video-see-self" type="b"><default>true</default></key>
+    <key name="video-size" type="s"><default>""</default></key>
+    <key name="workspace-order" type="as"><default>[]</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Account">
+    <key name="account-color" type="s"><default>"rgb(85, 85, 85)"</default></key>
+    <key name="account-label" type="s"><default>""</default></key>
+    <key name="active" type="b"><default>false</default></key>
+    <key name="address" type="s"><default>""</default></key>
+    <key name="anonymous-auth" type="b"><default>false</default></key>
+    <key name="answer-receipts" type="b"><default>true</default></key>
+    <key name="attached-gpg-keys" type="s"><default>""</default></key>
+    <key name="autoauth" type="b"><default>false</default></key>
+    <key name="autoconnect" type="b"><default>true</default></key>
+    <key name="autojoin-sync" type="b"><default>true</default></key>
+    <key name="avatar-sha" type="s"><default>""</default></key>
+    <key name="chat-history-max-age" type="i"><default>-1</default></key>
+    <key name="client-cert" type="s"><default>""</default></key>
+    <key name="client-cert-encrypted" type="b"><default>false</default></key>
+    <key name="confirm-unencrypted-connection" type="b"><default>true</default></key>
+    <key name="custom-host" type="s"><default>""</default></key>
+    <key name="custom-port" type="i"><default>5222</default></key>
+    <key name="custom-type" type="s"><default>"START TLS"</default></key>
+    <key name="default-workspace" type="s"><default>""</default></key>
+    <key name="enable-gssapi" type="b"><default>false</default></key>
+    <key name="enable-security-labels" type="b"><default>false</default></key>
+    <key name="encryption-default" type="s"><default>""</default></key>
+    <key name="file-transfer-proxies" type="s"><default>""</default></key>
+    <key name="filetransfer-preference" type="s"><default>"httpupload"</default></key>
+    <key name="ft-send-local-ips" type="b"><default>true</default></key>
+    <key name="gc-send-chatstate-default" type="s"><default>"composing_only"</default></key>
+    <key name="gc-send-marker-private-default" type="b"><default>true</default></key>
+    <key name="gc-send-marker-public-default" type="b"><default>false</default></key>
+    <key name="http-auth" type="s"><default>"ask"</default></key>
+    <key name="ignore-unknown-contacts" type="b"><default>false</default></key>
+    <key name="last-status" type="s"><default>"online"</default></key>
+    <key name="last-status-msg" type="s"><default>""</default></key>
+    <key name="omemo-blind-trust" type="b"><default>true</default></key>
+    <key name="password" type="s"><default>""</default></key>
+    <key name="proxy" type="s"><default>""</default></key>
+    <key name="publish-location" type="b"><default>false</default></key>
+    <key name="publish-tune" type="b"><default>false</default></key>
+    <key name="request-user-data" type="b"><default>true</default></key>
+    <key name="resource" type="s"><default>"gajim.$rand"</default></key>
+    <key name="restore-last-status" type="b"><default>false</default></key>
+    <key name="roster-version" type="s"><default>""</default></key>
+    <key name="savepass" type="b"><default>true</default></key>
+    <key name="send-chatstate-default" type="s"><default>"composing_only"</default></key>
+    <key name="send-idle-time" type="b"><default>true</default></key>
+    <key name="send-marker-default" type="b"><default>true</default></key>
+    <key name="send-os-info" type="b"><default>true</default></key>
+    <key name="subscription-request-msg" type="s"><default>""</default></key>
+    <key name="sync-muc-blocks" type="b"><default>true</default></key>
+    <key name="sync-with-global-status" type="b"><default>true</default></key>
+    <key name="test-ft-proxies-on-startup" type="b"><default>false</default></key>
+    <key name="use-custom-host" type="b"><default>false</default></key>
+    <key name="use-ft-proxies" type="b"><default>false</default></key>
+    <key name="use-plain-connection" type="b"><default>false</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Contact">
+    <!-- HAS APP DEFAULT -->
+    <key name="enable-link-preview" type="b"><default>false</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="encryption" type="s"><default>""</default></key>
+    <key name="mute-until" type="s"><default>""</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="send-chatstate" type="s"><default>""</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="send-marker" type="b"><default>""</default></key>
+    <key name="speller-language" type="s"><default>""</default></key>
+  </schema>
+  <schema id="org.gajim.Gajim.Group">
+    <!-- HAS APP DEFAULT -->
+    <key name="enable-link-preview" type="b"><default>false</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="encryption" type="s"><default>""</default></key>
+    <key name="mute-until" type="s"><default>""</default></key>
+    <!-- HAS APP DEFAULT -->
+    <key name="notify-on-all-messages" type="b"><default>false</default></key>
+    <!-- HAS APP DEFAULT -->
+    <key name="print-join-left" type="b"><default>false</default></key>
+    <!-- HAS APP DEFAULT -->
+    <key name="print-status" type="b"><default>false</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="send-chatstate" type="s"><default>""</default></key>
+    <!-- HAS ACCOUNT DEFAULT -->
+    <key name="send-marker" type="b"><default>false</default></key>
+    <key name="speller-language" type="s"><default>""</default></key>
+    <!-- HAS APP DEFAULT -->
+    <key name="sync-threshold" type=""><default>false</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Workspace">
+    <key name="name" type="s"><default>"My Workspace"</default></key>
+    <key name="color" type="s"><default>""</default></key>
+    <key name="avatar-sha" type="s"><default>""</default></key>
+    <key name="chats" type="a(sssbi)"><default>[]</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Proxy">
+    <key name="type" type="s"><default>"socks5"</default></key>
+    <key name="host" type="s"><default>""</default></key>
+    <key name="port" type="i"><default>0</default></key>
+    <key name="useauth" type="b"><default>false</default></key>
+    <key name="user" type="s"><default>""</default></key>
+    <key name="pass" type="s"><default>""</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Sound" path="/org/gajim/Gajim/sound/">
+    <key name="message-received-enabled" type="b"><default>true</default></key>
+    <key name="message-received-file-path" type="s"><default>"message1.wav"</default></key>
+    <key name="message-sent-enabled" type="b"><default>false</default></key>
+    <key name="message-sent-file-path" type="s"><default>"sent.wav"</default></key>
+    <key name="group-highlight-enabled" type="b"><default>true</default></key>
+    <key name="group-highlight-file-path" type="s"><default>"gc_message1.wav"</default></key>
+    <key name="group-message-received" type="b"><default>true</default></key>
+    <key name="group-message-received" type="s"><default>"message2.wav"</default></key>
+  </schema>
+
+  <schema id="org.gajim.Gajim.Plugin" path="/org/gajim/Gajim/plugins/">
+    <key name="active-plugins" type="as"><default>[]</default></key>
+  </schema>
+
+</schemalist>
