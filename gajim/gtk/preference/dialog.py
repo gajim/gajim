@@ -8,7 +8,6 @@ from typing import Any
 from typing import cast
 
 import logging
-import time
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -86,7 +85,7 @@ class Preferences(GajimAppWindow, EventHelper):
             default_height=650,
         )
         EventHelper.__init__(self)
-        s = time.time()
+
         self._need_relogin: dict[str, list[AllSettingsT]] = {}
         self._account_menu_items: dict[str, SideBarMenuItem] = {}
 
@@ -160,7 +159,6 @@ class Preferences(GajimAppWindow, EventHelper):
                 ("account-removed", ged.GUI2, self._on_account_state_changed),
             ]
         )
-        print(time.time() - s)
 
     def _cleanup(self) -> None:
         self.unregister_events()
