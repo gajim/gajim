@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import cast
 
 from gi.repository import Adw
@@ -15,11 +16,101 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.util.classes import SignalManager
+
+
+class SideBarMenuItem(Gtk.ListBoxRow):
+    def __init__(
+        self,
+        key: str,
+        title: str,
+        group: str | None = None,
+        icon_name: str | None = None,
+        action: str | None = None,
+        action_param: GLib.Variant | None = None,
+        children: list[SideBarMenuItem] | None = None,
+        visible: bool = True,
+        user_data: Any = None,
+    ) -> None:
+        Gtk.ListBoxRow.__init__(self)
+
+        self.key = key
+        self.title = title
+        self.children = children
+        self.group = group
+        self.action = action
+        self.action_param = action_param
+        self.user_data = user_data
+
+        box = Gtk.Box(spacing=12)
+        if icon_name is not None:
+            image = Gtk.Image.new_from_icon_name(icon_name)
+            box.append(image)
+
+        self._label = Gtk.Label(
+            label=title,
+            xalign=0,
+            hexpand=True,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=20,
+        )
+        box.append(self._label)
+
+        self._suffix_image = Gtk.Image.new_from_icon_name(
+            "lucide-chevron-right-symbolic"
+        )
+        self._suffix_image.set_visible(bool(self.children))
+        box.append(self._suffix_image)
+
+        self.set_child(box)
+        self.set_visible(visible)
+
+    @classmethod
+    def from_pref_page(
+        cls,
+        *,
+        page: type[GajimPreferencePage] | GajimPreferencePage,
+        tag_prefix: str = "",
+        user_data: Any = None,
+    ) -> SideBarMenuItem:
+        return cls(
+            key=f"{tag_prefix}{page.key}",
+            title=page.label,
+            icon_name=page.icon_name,
+            user_data=user_data,
+        )
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        if self.children is not None:
+            self.children.clear()
+        app.check_finalize(self)
+
+    def append_menu(self, menu: SideBarMenuItem) -> None:
+        if self.children is None:
+            self.children = []
+        self.children.append(menu)
+        self._suffix_image.set_visible(bool(self.children))
+
+    def set_label(self, label: str) -> None:
+        self._label.set_label(label)
+
+
+class ItemHeader(Gtk.Box):
+    def __init__(self, label_text: str) -> None:
+        Gtk.Box.__init__(self, hexpand=True)
+        self.add_css_class("sidebar-row-header")
+        label = Gtk.Label(label=label_text)
+        self.append(label)
 
 
 class SideBarSwitcher(Gtk.Stack, SignalManager):
     __gtype_name__ = "SideBarSwitcher"
+
+    __gsignals__ = {
+        "prepare": (GObject.SignalFlags.RUN_LAST, None, (SideBarMenuItem,)),
+    }
 
     width = GObject.Property(type=int, default=-1)
 
@@ -228,6 +319,8 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
     def _on_item_activated(
         self, _listbox: SideBarSwitcher, item: SideBarMenuItem
     ) -> None:
+        self.emit("prepare", item)
+
         if item.action is not None:
             app.app.activate_action(item.action, item.action_param)
             return
@@ -258,71 +351,3 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
                 return
 
             navigation_page.set_title(item.title)
-
-
-class SideBarMenuItem(Gtk.ListBoxRow):
-    def __init__(
-        self,
-        key: str,
-        title: str,
-        group: str | None = None,
-        icon_name: str | None = None,
-        action: str | None = None,
-        action_param: GLib.Variant | None = None,
-        children: list[SideBarMenuItem] | None = None,
-        visible: bool = True,
-    ) -> None:
-        Gtk.ListBoxRow.__init__(self)
-
-        self.key = key
-        self.title = title
-        self.children = children
-        self.group = group
-        self.action = action
-        self.action_param = action_param
-
-        box = Gtk.Box(spacing=12)
-        if icon_name is not None:
-            image = Gtk.Image.new_from_icon_name(icon_name)
-            box.append(image)
-
-        self._label = Gtk.Label(
-            label=title,
-            xalign=0,
-            hexpand=True,
-            ellipsize=Pango.EllipsizeMode.END,
-            max_width_chars=20,
-        )
-        box.append(self._label)
-
-        self._suffix_image = Gtk.Image.new_from_icon_name(
-            "lucide-chevron-right-symbolic"
-        )
-        self._suffix_image.set_visible(bool(self.children))
-        box.append(self._suffix_image)
-
-        self.set_child(box)
-        self.set_visible(visible)
-
-    def do_unroot(self) -> None:
-        Gtk.ListBoxRow.do_unroot(self)
-        if self.children is not None:
-            self.children.clear()
-        app.check_finalize(self)
-
-    def append_menu(self, menu: SideBarMenuItem) -> None:
-        if self.children is None:
-            self.children = []
-        self.children.append(menu)
-        self._suffix_image.set_visible(bool(self.children))
-
-    def set_label(self, label: str) -> None:
-        self._label.set_label(label)
-
-
-class ItemHeader(Gtk.Box):
-    def __init__(self, label_text: str) -> None:
-        Gtk.Box.__init__(self, hexpand=True)
-        self.add_css_class("sidebar-row-header")
-        label = Gtk.Label(label=label_text)
-        self.append(label)
