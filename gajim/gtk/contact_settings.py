@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -11,13 +10,18 @@ from gajim.common.i18n import _
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.settings import SettingsBox
+from gajim.gtk.settings import GajimPreferencesGroup
 
 
-class ContactSettings(SettingsBox):
+class ContactSettings(GajimPreferencesGroup):
     def __init__(self, account: str, jid: JID) -> None:
-        SettingsBox.__init__(self, account, str(jid))
-        self.set_selection_mode(Gtk.SelectionMode.NONE)
+        GajimPreferencesGroup.__init__(
+            self,
+            key="main",
+            account=account,
+            jid=str(jid),
+            title=_("Privacy"),
+        )
 
         chat_state = {
             "disabled": _("Disabled"),
@@ -51,4 +55,3 @@ class ContactSettings(SettingsBox):
 
         for setting in settings:
             self.add_setting(setting)
-        self.update_states()

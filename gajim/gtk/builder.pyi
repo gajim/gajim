@@ -148,12 +148,12 @@ class ContactInfoBuilder(Builder):
     vcard_box: Gtk.Box
     settings_scrolled: Gtk.ScrolledWindow
     settings_box: Gtk.Box
+    subscription_box: Gtk.Box
     subscription_listbox: Gtk.ListBox
     from_subscription_switch: Gtk.Switch
     to_subscription_stack: Gtk.Stack
     request_stack: Gtk.Stack
     to_subscription_button: Gtk.Button
-    contact_settings_box: Adw.PreferencesGroup
     remove_history_button: Gtk.Button
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Adw.Clamp

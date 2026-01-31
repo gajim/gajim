@@ -286,7 +286,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
             # All settings for PM are derived from the groupchat settings
             # so we dont need to show them
             contact_settings = ContactSettings(self.account, self._bare_contact.jid)
-            self._ui.contact_settings_box.add(contact_settings)
+            self._ui.settings_box.insert_child_after(
+                contact_settings, self._ui.subscription_box
+            )
 
         params = AccountJidParam(account=self.account, jid=self.contact.jid)
         self._ui.remove_history_button.set_action_target_value(params.to_variant())
