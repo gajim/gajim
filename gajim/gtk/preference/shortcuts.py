@@ -19,7 +19,6 @@ from gajim.gtk.alert import DialogResponse
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.shortcut_manager import GajimShortcut
-from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -34,17 +33,15 @@ SHORTCUT_CATEGORIES = {
 
 
 class ShortcutsPage(GajimPreferencePage, SignalManager):
+    key = "shortcuts"
+    icon_name = "lucide-keyboard-symbolic"
+    label = _("Shortcuts")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="shortcuts",
             title=_("Shortcuts"),
             groups=[],
-            menu=SideBarMenuItem(
-                "shortcuts",
-                _("Shortcuts"),
-                icon_name="lucide-keyboard-symbolic",
-            ),
         )
         SignalManager.__init__(self)
 

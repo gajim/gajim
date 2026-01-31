@@ -35,7 +35,6 @@ from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.settings import SpinRange
-from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -1135,23 +1134,26 @@ class AdvancedGroup(GajimPreferencesGroup):
 
 
 class GeneralPage(GajimPreferencePage):
+    key = "general"
+    icon_name = "lucide-app-window-symbolic"
+    label = _("General")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="general",
             title=_("General"),
             groups=[WindowBehaviourGroup],
-            menu=SideBarMenuItem(
-                "general", _("General"), icon_name="lucide-app-window-symbolic"
-            ),
         )
 
 
 class ChatsPage(GajimPreferencePage):
+    key = "chats"
+    icon_name = "lucide-message-circle-symbolic"
+    label = _("Chats")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="chats",
             title=_("Chats"),
             groups=[
                 GeneralGroup,
@@ -1159,73 +1161,68 @@ class ChatsPage(GajimPreferencePage):
                 GroupChatsGroup,
                 FilePreviewGroup,
             ],
-            menu=SideBarMenuItem(
-                "chats", _("Chats"), icon_name="lucide-message-circle-symbolic"
-            ),
         )
 
 
 class VisualNotificationsPage(GajimPreferencePage):
+    key = "visual-notifications"
+    icon_name = "lucide-bell-symbolic"
+    label = _("Notifications")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="visual-notifications",
             title=_("Visual Notifications"),
             groups=[
                 VisualNotificationsGroup,
                 SoundsGroup,
             ],
-            menu=SideBarMenuItem(
-                "visual-notifications",
-                _("Notifications"),
-                icon_name="lucide-bell-symbolic",
-            ),
         )
 
 
 class StatusPage(GajimPreferencePage):
+    key = "status"
+    icon_name = "lucide-megaphone-symbolic"
+    label = _("Status")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="status",
             title=_("Status"),
             groups=[
                 StatusMessageGroup,
                 AutomaticStatusGroup,
             ],
-            menu=SideBarMenuItem(
-                "status", _("Status"), icon_name="lucide-megaphone-symbolic"
-            ),
         )
 
 
 class StylePage(GajimPreferencePage):
+    key = "style"
+    icon_name = "lucide-palette-symbolic"
+    label = _("Style")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="style",
             title=_("Style"),
             groups=[ThemesGroup],
-            menu=SideBarMenuItem(
-                "style", _("Style"), icon_name="lucide-palette-symbolic"
-            ),
         )
 
 
 class AudioVideoPage(GajimPreferencePage):
+    key = "audio-video"
+    icon_name = "lucide-mic-symbolic"
+    label = _("Audio")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="audio-video",
             title=_("Audio"),
             groups=[
                 # ServerGroup,
                 AudioGroup,
                 # VideoGroup,
             ],
-            menu=SideBarMenuItem(
-                "audio-video", _("Audio"), icon_name="lucide-mic-symbolic"
-            ),
         )
 
         banner = Adw.Banner(
@@ -1238,52 +1235,54 @@ class AudioVideoPage(GajimPreferencePage):
 
 
 class PluginsPage(GajimPreferencePage):
+    key = "plugins"
+    icon_name = "lucide-package-symbolic"
+    label = _("Plugins")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="plugins",
             title=_("Plugins"),
             groups=[
                 PluginSettingsGroup,
                 Plugins,
             ],
-            menu=SideBarMenuItem(
-                "plugins", _("Plugins"), icon_name="lucide-package-symbolic"
-            ),
         )
 
 
 class AdvancedPage(GajimPreferencePage):
+    key = "advanced"
+    icon_name = "lucide-wrench-symbolic"
+    label = _("Advanced")
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="advanced",
             title=_("Advanced"),
             groups=[
                 MiscellaneousGroup,
                 AdvancedGroup,
             ],
-            menu=SideBarMenuItem(
-                "advanced", _("Advanced"), icon_name="lucide-wrench-symbolic"
-            ),
         )
 
 
 class AutoAwayPage(GajimPreferencePage):
+    key = "auto-away"
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="auto-away",
             title=_("Auto Away"),
             groups=[AutoAwayGroup],
         )
 
 
 class AutoExtendedAwayPage(GajimPreferencePage):
+    key = "auto-extended-awayy"
+
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            key="auto-extended-away",
             title=_("Auto Not Available"),
             groups=[AutoExtendedAwayGroup],
         )

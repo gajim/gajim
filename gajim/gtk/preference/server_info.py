@@ -33,7 +33,6 @@ from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.settings import SubPageSetting
-from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import open_uri
@@ -381,12 +380,14 @@ class FeatureRow(Adw.ActionRow):
 
 
 class AccountProviderContactsPage(GajimPreferencePage):
+    key = "provider-contacts"
+
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
             title=_("Provider Contacts - %(account)s") % {"account": account},
-            key=f"{account}-provider-contacts",
             groups=[],
+            tag_prefix=f"{account}-",
         )
 
         if not app.account_is_available(account):
@@ -397,17 +398,16 @@ class AccountProviderContactsPage(GajimPreferencePage):
 
 
 class AccountProviderPage(GajimPreferencePage):
+    key = "provider"
+    icon_name = "lucide-server-symbolic"
+    label = _("Service Provider")
+
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
             title=_("Provider - %(account)s") % {"account": account},
-            key=f"{account}-provider",
             groups=[],
-            menu=SideBarMenuItem(
-                f"{account}-provider",
-                _("Service Provider"),
-                icon_name="lucide-server-symbolic",
-            ),
+            tag_prefix=f"{account}-",
         )
 
         if not app.account_is_available(account):

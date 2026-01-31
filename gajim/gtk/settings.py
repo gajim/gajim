@@ -35,7 +35,6 @@ from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.preference.widgets import CopyButton
-from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import open_window
@@ -169,22 +168,23 @@ class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
 
 
 class GajimPreferencePage(Adw.NavigationPage):
+    key: str = ""
+    icon_name: str = ""
+    label: str = ""
+
     def __init__(
         self,
-        key: str,
         title: str,
         groups: list[Any],
-        menu: SideBarMenuItem | None = None,
+        tag_prefix: str = "",
     ) -> None:
-        Adw.NavigationPage.__init__(self, tag=key, title=title)
+        Adw.NavigationPage.__init__(self, tag=f"{tag_prefix}{self.key}", title=title)
 
         self._pref_page = Adw.PreferencesPage()
         toolbar = Adw.ToolbarView(content=self._pref_page)
         toolbar.add_top_bar(Adw.HeaderBar())
         self.set_child(toolbar)
 
-        self.key = key
-        self.menu = menu
         self._groups: list[GajimPreferencesGroup] = []
 
         for group in groups:
