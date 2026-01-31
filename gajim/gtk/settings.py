@@ -59,7 +59,6 @@ class SettingsDialog(GajimAppWindow):
             title=title,
             default_width=250,
             transient_for=parent,
-            header_bar=True,
         )
 
         self.account = account
@@ -69,23 +68,22 @@ class SettingsDialog(GajimAppWindow):
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
             self.set_destroy_with_parent(True)
 
-        self.listbox = SettingsBox(account, extend=extend)
-        self.listbox.set_hexpand(True)
-        self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.listbox.add_css_class("m-18")
+        self._nav = Adw.NavigationView()
+        self._group = GajimPreferencesGroup("main")
+        page = GajimPreferencePage(title, groups=[self._group])
+        self._nav.add(page)
 
         for setting in settings:
-            self.listbox.add_setting(setting)
-        self.listbox.update_states()
+            self._group.add_setting(setting)
 
-        self.set_child(self.listbox)
+        self.set_child(self._nav)
         self.show()
 
     def _cleanup(self) -> None:
-        del self.listbox
+        del self._group
 
     def get_setting(self, name: str):
-        return self.listbox.get_setting(name)
+        return self._group.get_setting(name)
 
 
 class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
@@ -188,9 +186,10 @@ class GajimPreferencePage(Adw.NavigationPage):
         self._groups: list[GajimPreferencesGroup] = []
 
         for group in groups:
-            preference_group = group()
-            self._groups.append(preference_group)
-            self._pref_page.add(preference_group)
+            if not isinstance(group, GajimPreferencesGroup):
+                group = group()
+            self._groups.append(group)
+            self._pref_page.add(group)
 
     def do_unroot(self) -> None:
         Adw.NavigationPage.do_unroot(self)
