@@ -33,7 +33,6 @@ thoughts or discuss the news with your groups.
 - [PyGObject](https://pypi.org/project/PyGObject/) (>=3.53.0)
 - [Python](https://www.python.org/) (>=3.11)
 - [qrcode](https://pypi.org/project/qrcode/) (>=7.3.1)
-- [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [socksio](https://pypi.org/project/socksio/)
 - [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) (>=2.0.0)
 - [sqlite](https://www.sqlite.org/) (>=3.35.0)
