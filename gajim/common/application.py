@@ -13,7 +13,6 @@ import sys
 from datetime import datetime
 from pstats import SortKey
 
-from gi.repository import Gio
 from gi.repository import GLib
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -101,11 +100,6 @@ class CoreApplication(ged.EventHelper):
         if app.is_installed("GST"):
             from gajim.gtk.audio_player import AudioPlayer
             app.audio_player = AudioPlayer()
-
-        self._network_monitor = Gio.NetworkMonitor.get_default()
-        self._network_monitor.connect('notify::network-available',
-                                      self._network_status_changed)
-        self._network_state = self._network_monitor.get_network_available()
 
         if sys.platform in ('win32', 'darwin'):
             GLib.timeout_add_seconds(20, self._check_for_updates)
@@ -277,24 +271,6 @@ class CoreApplication(ged.EventHelper):
 
         warnings.showwarning = warn_with_traceback
         warnings.filterwarnings(action='always')
-
-    def _network_status_changed(self,
-                                monitor: Gio.NetworkMonitor,
-                                _network_available: bool
-                                ) -> None:
-        connected = monitor.get_network_available()
-        if connected == self._network_state:
-            return
-
-        self._network_state = connected
-        if connected:
-            self._log.info('Network connection available')
-        else:
-            self._log.info('Network connection lost')
-            for client in app.get_clients():
-                if (client.state.is_connected or
-                        client.state.is_available):
-                    client.disconnect(gracefully=False, reconnect=True)
 
     def _check_for_updates(self) -> None:
         if not app.settings.get('check_for_update'):

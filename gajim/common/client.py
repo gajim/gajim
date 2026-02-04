@@ -99,6 +99,7 @@ class Client(Observable, ClientModules):
         self._reconnect_timer_source = None
         self._destroy_client = False
         self._remove_account = False
+        self._connectivity = Gio.NetworkConnectivity.FULL
 
         self._destroyed = False
 
@@ -113,6 +114,10 @@ class Client(Observable, ClientModules):
                                                     self._idle_state_changed)
             self._screensaver_handler_id = app.app.connect(
                 'notify::screensaver-active', self._screensaver_state_changed)
+
+        monitor = Gio.NetworkMonitor.get_default()
+        self._network_monitor_id = monitor.connect(
+            'notify::connectivity', self._network_status_changed)
 
     def _set_state(self, state: ClientState) -> None:
         self._log.info('State: %s', repr(state))
@@ -214,6 +219,52 @@ class Client(Observable, ClientModules):
 
         if not app.settings.get_account_setting(self._account, 'autojoin_sync'):
             self.join_mucs()
+
+    def _network_status_changed(self,
+                                monitor: Gio.NetworkMonitor,
+                                _network_available: bool
+                                ) -> None:
+
+        if monitor.get_connectivity() == Gio.NetworkConnectivity.FULL:
+            return
+
+        reachable = self.remote_is_reachable()
+        self._log.info('Network status changed, reachable: %s', reachable)
+
+        if reachable:
+            return
+
+        if (self._state.is_connected or self._state.is_available):
+            self.disconnect(gracefully=False, reconnect=True)
+
+    def remote_is_reachable(self) -> bool:
+        if self._client is None:
+            return True
+
+        address = self._client.remote_address
+        if address is None:
+            # Address is None when websocket is used
+            self._log.info(
+                "Unable to determine if host is reachable, remote address unknown")
+            return True
+
+        monitor = Gio.NetworkMonitor.get_default()
+        try:
+            address, port = address.rsplit(":", maxsplit=1)
+            return monitor.can_reach(
+                Gio.InetSocketAddress.new_from_string(address, int(port))
+            )
+        except GLib.Error as error:
+            quark = GLib.quark_try_string('g-io-error-quark')
+            if error.matches(quark, Gio.IOErrorEnum.HOST_UNREACHABLE):
+                return False
+
+            log.exception("Unable to determine if host is reachable")
+            return True
+
+        except Exception:
+            log.exception("Unable to determine if host is reachable")
+            return True
 
     def disconnect(self,
                    gracefully: bool,
@@ -713,6 +764,10 @@ class Client(Observable, ClientModules):
         if Monitor.is_available():
             Monitor.disconnect(self._idle_handler_id)
             app.app.disconnect(self._screensaver_handler_id)
+
+        monitor = Gio.NetworkMonitor.get_default()
+        monitor.disconnect(self._network_monitor_id)
+
         if self._client is not None:
             self._client.destroy()
         modules.unregister_modules(self)
