@@ -301,6 +301,7 @@ class Linux(NotificationBackend):
         "incoming-call",
         "incoming-message",
         "subscription-request",
+        "reaction-updated",
     ]
 
     def __init__(self):
