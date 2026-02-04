@@ -2,6 +2,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
+from typing import Literal
+
 from enum import IntEnum
 
 
@@ -16,8 +20,11 @@ class MessageType(IntEnum):
     PM = 3
 
     @classmethod
-    def from_str(cls, string: str):
+    def from_str(cls, string: str) -> MessageType:
         return cls[string.upper()]
+
+    def to_str(self) -> Literal["chat", "groupchat", "pm"]:
+        return self.name.lower()  # type: ignore
 
 
 class ChatDirection(IntEnum):
