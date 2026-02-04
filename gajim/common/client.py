@@ -47,6 +47,7 @@ from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
+from gajim.common.modules.util import LogAdapter
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import get_idle_status_message
@@ -54,7 +55,7 @@ from gajim.common.util.text import to_one_line
 
 from gajim.gtk.util.window import open_window
 
-log = logging.getLogger('gajim.client')
+log = logging.getLogger('gajim.c.client')
 
 
 IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
@@ -71,7 +72,8 @@ def call_counter(func: Any):
 
 class Client(Observable, ClientModules):
     def __init__(self, account: str) -> None:
-        Observable.__init__(self, log)
+        self._log = LogAdapter(log, {'account': account})
+        Observable.__init__(self, self._log)
         ClientModules.__init__(self, account)
         self._client = None
         self._account = account
@@ -113,7 +115,7 @@ class Client(Observable, ClientModules):
                 'notify::screensaver-active', self._screensaver_state_changed)
 
     def _set_state(self, state: ClientState) -> None:
-        log.info('State: %s', repr(state))
+        self._log.info('State: %s', repr(state))
         self._state = state
 
     @property
@@ -159,7 +161,7 @@ class Client(Observable, ClientModules):
         self._remove_account = value
 
     def _create_client(self) -> None:
-        log.info('Create new nbxmpp client')
+        self._log.info('Create new nbxmpp client')
 
         if self._client is not None:
             self._client.destroy()
@@ -189,7 +191,7 @@ class Client(Observable, ClientModules):
                           _client: NBXMPPClient,
                           _signal_name: str) -> None:
 
-        log.info('Resume failed')
+        self._log.info('Resume failed')
         self.notify('resume-failed')
 
     def _on_resume_successful(self,
@@ -235,19 +237,19 @@ class Client(Observable, ClientModules):
             return
 
         if self._state.is_disconnecting:
-            log.warning('Disconnect already in progress')
+            self._log.warning('Disconnect already in progress')
             return
 
         self._set_state(ClientState.DISCONNECTING)
 
-        log.info('Starting to disconnect %s', self._account)
+        self._log.info('Starting to disconnect')
         self._client.disconnect(immediate=not gracefully)
 
     def _on_disconnected(self,
                          _client: NBXMPPClient,
                          _signal_name: str) -> None:
 
-        log.info('Disconnect %s', self._account)
+        self._log.info('Disconnect')
         self._set_state(ClientState.DISCONNECTED)
 
         domain, error, text = self._client.get_error()
@@ -413,7 +415,7 @@ class Client(Observable, ClientModules):
                 to_one_line(message))
 
         if self._state.is_disconnecting:
-            log.warning("Can't change status while disconnect is in progress")
+            self._log.warning("Can't change status while disconnect is in progress")
             return
 
         if self._state.is_disconnected:
@@ -467,7 +469,7 @@ class Client(Observable, ClientModules):
 
     @call_counter
     def connect_machine(self) -> None:
-        log.info('Connect machine state: %s', self._connect_machine_calls)
+        self._log.info('Connect machine state: %s', self._connect_machine_calls)
         if self._connect_machine_calls == 1:
             self.get_module('Roster').request_roster()
         elif self._connect_machine_calls == 2:
@@ -503,7 +505,7 @@ class Client(Observable, ClientModules):
 
     def send_message(self, message: OutgoingMessage) -> None:
         if not self._state.is_available:
-            log.warning('Trying to send message while offline')
+            self._log.warning('Trying to send message while offline')
             return
 
         stanza = build_message_stanza(message, self.get_own_jid())
@@ -518,7 +520,7 @@ class Client(Observable, ClientModules):
             try:
                 self.get_module('OMEMO').encrypt_message(message)
             except Exception:
-                log.exception('Error')
+                self._log.exception('Error')
                 text = message.get_text(with_fallback=False)
                 assert text is not None
                 app.ged.raise_event(
@@ -551,7 +553,7 @@ class Client(Observable, ClientModules):
         ignored_tls_errors: IgnoredTlsErrorsT = None
     ) -> None:
 
-        log.info('Connect')
+        self._log.info('Connect')
 
         if self._state not in (ClientState.DISCONNECTED,
                                ClientState.RECONNECT_SCHEDULED):
@@ -608,9 +610,10 @@ class Client(Observable, ClientModules):
             try:
                 result = obj.get_result()
             except Exception as error:
-                log.warning('Error while requesting host-meta data: %s', error)
+                self._log.warning('Error while requesting host-meta data: %s', error)
             else:
-                log.info("Received host meta data with length: %s", len(result.content))
+                self._log.info("Received host meta data with length: %s",
+                               len(result.content))
                 self._client.set_host_meta_data(result.content)
 
             self._client.connect()
@@ -625,7 +628,7 @@ class Client(Observable, ClientModules):
 
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
-        log.info('Reconnect to %s in 3s', self._account)
+        self._log.info('Reconnect in 3s')
         self._reconnect_timer_source = GLib.timeout_add_seconds(
             3, self.connect)
 
