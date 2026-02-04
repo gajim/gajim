@@ -5,13 +5,13 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Literal
 
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common.storage.archive.const import MessageType
 
 from gajim.gtk.account_page import AccountPage
 from gajim.gtk.activity_list import ActivityListView
@@ -93,9 +93,7 @@ class MainStack(Gtk.Stack):
             chat_list_stack = self._chat_page.get_chat_list_stack()
             chat_list = chat_list_stack.find_chat(event.account, event.jid)
             if chat_list is None:
-                message_type = cast(
-                    Literal["chat", "groupchat", "pm"], str(event.message.type).lower()
-                )
+                message_type = MessageType(event.message.type).to_str()
                 app.window.add_chat(event.account, event.jid, message_type, select=True)
             else:
                 chat_stack = self._chat_page.get_chat_stack()
