@@ -98,6 +98,8 @@ class MainStack(Gtk.Stack):
                 )
                 app.window.add_chat(event.account, event.jid, message_type, select=True)
             else:
+                chat_stack = self._chat_page.get_chat_stack()
+                chat_stack.show_chat(event.account, event.jid)
                 chat_list.select_chat(event.account, event.jid)
 
             control = self._chat_page.get_control()
