@@ -828,6 +828,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         formats = clipboard.get_formats()
         mime_types = formats.get_mime_types()
 
+        log.debug(
+            "Clipboard paste received, mime-types: %s, gtypes: %s",
+            mime_types,
+            formats.get_gtypes(),
+        )
+
         if mime_types is None:
             log.warning("Could not determine clipboard mime types")
             return
