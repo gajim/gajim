@@ -293,7 +293,7 @@ class WindowsToastNotification(NotificationBackend):
         return toast_buttons
 
 
-class Linux(NotificationBackend):
+class GioNotification(NotificationBackend):
     _action_types = [
         "connection-failed",
         "server-shutdown",
@@ -349,7 +349,12 @@ class Linux(NotificationBackend):
         )
 
         action = f"app.{event.account}-open-event"
-        notification.add_button_with_target(_("Open"), action, params.to_variant())
+
+        if sys.platform != "darwin":
+            # The MacOS backend only supports one button, we can do without
+            # the "Open" button
+            notification.add_button_with_target(_("Open"), action, params.to_variant())
+
         notification.set_default_action_and_target(action, params.to_variant())
 
         if event.type == "incoming-message":
@@ -478,9 +483,7 @@ def get_notification_backend() -> NotificationBackend:
                 )
         return DummyBackend()
 
-    if sys.platform == "darwin":
-        return DummyBackend()
-    return Linux()
+    return GioNotification()
 
 
 def init() -> None:
