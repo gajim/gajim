@@ -762,10 +762,8 @@ button.flat.link { padding: 0; border: 0; }
 /* Conversation meta elements */
 .conversation-meta {
     opacity: 0.6;
-    font-size: 90%;
 }
 .conversation-nickname {
-    font-size: 90%;
     font-weight: bold;
 }
 
