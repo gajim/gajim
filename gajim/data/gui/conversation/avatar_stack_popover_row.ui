@@ -28,7 +28,6 @@
               <object class="GtkLabel" id="_timestamp_label">
                 <property name="halign">start</property>
                 <style>
-                  <class name="caption"/>
                   <class name="dimmed"/>
                 </style>
               </object>

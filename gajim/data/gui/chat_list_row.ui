@@ -78,7 +78,6 @@
                   <object class="GtkLabel" id="timestamp_label">
                     <property name="valign">end</property>
                     <style>
-                      <class name="small-label"/>
                       <class name="dimmed"/>
                     </style>
                   </object>
@@ -97,7 +96,7 @@
                     <property name="single-line-mode">1</property>
                     <property name="xalign">0</property>
                     <style>
-                      <class name="small-label"/>
+                      <class name="document"/>
                       <class name="dimmed"/>
                     </style>
                   </object>
@@ -115,7 +114,7 @@
                     <property name="single-line-mode">1</property>
                     <property name="xalign">0</property>
                     <style>
-                      <class name="small-label"/>
+                      <class name="document"/>
                     </style>
                   </object>
                 </child>

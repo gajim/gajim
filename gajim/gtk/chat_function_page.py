@@ -88,7 +88,6 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
             wrap=True,
             wrap_mode=Pango.WrapMode.WORD,
         )
-        self._subheading.add_css_class("small-label")
         self._subheading.add_css_class("pb-18")
         self.append(self._subheading)
 

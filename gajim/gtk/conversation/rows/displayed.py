@@ -31,7 +31,6 @@ class DisplayedRow(BaseRow):
         self._avatar_stack = AvatarStack(self._account)
 
         self._timestamp_label = TimeLabel()
-        self._timestamp_label.add_css_class("caption")
         self._timestamp_label.add_css_class("dimmed")
 
         self.grid.attach(self._timestamp_label, 0, 0, 1, 1)

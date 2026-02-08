@@ -43,7 +43,6 @@
                 <property name="margin-start">6</property>
                 <style>
                   <class name="dimmed"/>
-                  <class name="small-label"/>
                 </style>
               </object>
             </child>
@@ -57,7 +56,6 @@
             <property name="ellipsize">3</property>
             <style>
               <class name="dimmed"/>
-              <class name="small-label"/>
             </style>
           </object>
         </child>

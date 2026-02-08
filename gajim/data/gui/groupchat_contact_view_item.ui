@@ -34,7 +34,6 @@
             <property name="ellipsize">3</property>
             <style>
               <class name="dimmed"/>
-              <class name="small-label"/>
             </style>
           </object>
         </child>

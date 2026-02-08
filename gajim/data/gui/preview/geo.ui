@@ -31,7 +31,6 @@
         <property name="halign">center</property>
         <style>
           <class name="dimmed"/>
-          <class name="small-label"/>
         </style>
       </object>
     </child>
@@ -42,7 +41,6 @@
         <property name="halign">center</property>
         <style>
           <class name="dimmed"/>
-          <class name="small-label"/>
         </style>
       </object>
     </child>
