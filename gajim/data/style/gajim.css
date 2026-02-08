@@ -779,9 +779,6 @@ button.flat.link { padding: 0; border: 0; }
     border-color: alpha(var(--accent-bg-color), 0.9);
     background: alpha(var(--accent-bg-color), 0.1);
 }
-.reaction label {
-    font-size: 90%;
-}
 .reaction-add-show-all > button {
     border: 1px solid var(--border-color);
     border-radius: 18px;
