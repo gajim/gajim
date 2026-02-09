@@ -1,10 +1,15 @@
+:root {
+  font-family: 'Segoe UI';
+  font-size: 10pt;
+  --document-font-family: 'Segoe UI';
+  --document-font-size: 11pt;
+  --monospace-font-family: monospace;
+  --monospace-font-size: 10pt;
+}
 .csd {
   box-shadow: 0 3px 9px 1px alpha(black, 0.2), 0 0 0 1px alpha(black, 0.18);
 }
 .csd:backdrop {
   box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px alpha(black, 0.1),
     0 0 0 1px alpha(black, 0.06);
-}
-.monospace {
-  font-family: monospace;
 }
