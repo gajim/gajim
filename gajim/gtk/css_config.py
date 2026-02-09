@@ -124,9 +124,7 @@ class CSSConfig:
         )
 
         self.apply_app_font_size()
-
-        if sys.platform == "win32":
-            self._apply_windows_css()
+        self._apply_platform_css()
 
     @property
     def prefer_dark(self) -> bool:
@@ -219,11 +217,12 @@ class CSSConfig:
             log.debug("Set gtk-xft-dpi %s", dpi)
             self._gtk_settings.set_property("gtk-xft-dpi", dpi)
 
-    def _apply_windows_css(self) -> None:
-        """Apply extra CSS on Windows to fix issues, see:
+    def _apply_platform_css(self) -> None:
+        """Apply extra CSS on Windows and macOS to fix issues, see:
         https://gitlab.gnome.org/GNOME/libadwaita/-/issues/1053
         """
-        self._load_css_from_file("windows.css", CSSPriority.APPLICATION)
+        if sys.platform in ("win32", "darwin"):
+            self._load_css_from_file(f"{sys.platform}.css", CSSPriority.APPLICATION)
 
     @staticmethod
     def _pango_to_css_weight(number: int) -> int:

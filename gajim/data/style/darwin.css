@@ -1,0 +1,13 @@
+:root {
+  font-size: 13pt;
+  --document-font-size: 14pt;
+  --monospace-font-family: monospace;
+  --monospace-font-size: 13pt;
+}
+.csd {
+  box-shadow: none;
+  border-radius: 0;
+}
+.csd:backdrop {
+  box-shadow: none;
+}
