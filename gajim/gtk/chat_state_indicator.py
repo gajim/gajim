@@ -34,7 +34,6 @@ class ChatStateIndicator(Gtk.Box):
             ellipsize=Pango.EllipsizeMode.END,
         )
         self._label.add_css_class("dimmed")
-        self._label.add_css_class("small-label")
         self.append(self._label)
 
     def do_unroot(self) -> None:

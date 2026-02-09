@@ -29,7 +29,6 @@
           <object class="GtkLabel" id="our_fingerprint_2">
             <style>
               <class name="monospace"/>
-              <class name="small-label"/>
             </style>
           </object>
         </child>

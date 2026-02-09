@@ -64,7 +64,6 @@ class MUCSubject(BaseRow):
             wrap_mode=Pango.WrapMode.WORD_CHAR,
             xalign=0,
         )
-        meta.add_css_class("small-label")
         subject_box.append(meta)
 
         message_widget = MessageWidget(account)

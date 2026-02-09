@@ -66,6 +66,7 @@ class MessageLabel(Gtk.Label, SignalManager):
 
         self._account = account
 
+        self.add_css_class("document")
         self.add_css_class("gajim-conversation-text")
 
         self._connect(self, "activate-link", self._on_activate_link)

@@ -225,7 +225,6 @@ class AccountProviderContactsGroup(GajimPreferencesGroup):
         )
 
         label.add_css_class("link-button")
-        label.add_css_class("small-label")
         self._connect(label, "activate-link", self._on_activate_link)
         return label
 

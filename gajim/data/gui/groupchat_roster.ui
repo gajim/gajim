@@ -10,7 +10,6 @@
           <object class="GtkLabel" id="participants_count_label">
             <style>
               <class name="bold"/>
-              <class name="small-label"/>
             </style>
           </object>
         </child>

@@ -39,7 +39,6 @@
                 <property name="xalign">0</property>
                 <style>
                   <class name="dimmed"/>
-                  <class name="small-label"/>
                 </style>
               </object>
             </child>

@@ -17,7 +17,6 @@ button.flat.link { padding: 0; border: 0; }
 .small-label {
     font-size: 90%;
 }
-.smaller {font-size: smaller;}
 .draft {
     font-style: italic;
     color: var(--warning-color);
@@ -505,9 +504,6 @@ button.flat.link { padding: 0; border: 0; }
 .search-view-row-grid textview text {
 	background: transparent;
 }
-.search-view-row-grid label {
-    font-size: 90%;
-}
 .search-view-counter label {
     font-style: italic;
     color: color-mix(in srgb, var(--window-fg-color) 50%, transparent);
@@ -516,7 +512,6 @@ button.flat.link { padding: 0; border: 0; }
     padding: 12px 6px 6px 6px;
 }
 .search-view-header label {
-    font-size: 90%;
     color: alpha(var(--view-fg-color), 0.7);
 }
 
@@ -667,9 +662,6 @@ button.flat.link { padding: 0; border: 0; }
     border-radius: 6px;
     padding: 12px;
 }
-.conversation-call-box label {
-    font-size: 90%;
-}
 
 /* QuoteWidget */
 .conversation-quote {
@@ -702,7 +694,6 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .code-widget .view {
-    font-size: 90%;
     padding: 6px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -762,10 +753,8 @@ button.flat.link { padding: 0; border: 0; }
 /* Conversation meta elements */
 .conversation-meta {
     opacity: 0.6;
-    font-size: 90%;
 }
 .conversation-nickname {
-    font-size: 90%;
     font-weight: bold;
 }
 
@@ -789,9 +778,6 @@ button.flat.link { padding: 0; border: 0; }
  .reaction-from-us {
     border-color: alpha(var(--accent-bg-color), 0.9);
     background: alpha(var(--accent-bg-color), 0.1);
-}
-.reaction label {
-    font-size: 90%;
 }
 .reaction-add-show-all > button {
     border: 1px solid var(--border-color);
@@ -833,7 +819,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* DataFormWidget */
-.field-fixed { font-size: 1.33rem; font-weight: bold; padding-top:5px;}
+.field-fixed { font-weight: bold; padding-top:5px;}
 .data-form-widget grid { margin: 0px 18px 18px 18px; }
 .data-form-widget treeview { padding: 5px; }
 .data-form-widget scrolledwindow { border: 1px solid; border-color: color-mix(in srgb, currentColor 15%, transparent); }
@@ -905,7 +891,6 @@ list.sidebar-switcher .sidebar-row-header {
 .omemo-blind-color { color: var(--success-color); }
 .omemo-untrusted-color { color: var(--error-color); }
 .omemo-device-row .title .title {
-    font-size: small;
     font-family: monospace;
 }
 

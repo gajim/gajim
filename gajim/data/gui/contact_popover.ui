@@ -44,7 +44,6 @@
                     <property name="max-width-chars">25</property>
                     <style>
                       <class name="bold"/>
-                      <class name="small-label"/>
                       <class name="dimmed"/>
                     </style>
                   </object>
@@ -58,7 +57,6 @@
                     <property name="max-width-chars">25</property>
                     <style>
                       <class name="bold"/>
-                      <class name="small-label"/>
                       <class name="dimmed"/>
                     </style>
                   </object>
@@ -121,7 +119,6 @@
               </object>
             </child>
             <style>
-              <class name="small-label"/>
               <class name="bg-transparent"/>
             </style>
           </object>
