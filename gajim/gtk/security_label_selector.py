@@ -90,6 +90,7 @@ class SecurityLabelSelector(GajimDropDown[str]):
         if not app.settings.get_account_setting(
             self._contact.account, "enable_security_labels"
         ):
+            self.set_visible(False)
             return
 
         catalog = self._client.get_module("SecLabels").get_catalog(self._contact.jid)
