@@ -64,9 +64,6 @@
                         <property name="ellipsize">end</property>
                         <property name="single-line-mode">1</property>
                         <property name="xalign">0</property>
-                        <style>
-                          <class name="document"/>
-                        </style>
                       </object>
                     </child>
                   </object>
