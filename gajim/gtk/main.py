@@ -719,8 +719,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def _on_handle_uri(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         uris = param.unpack()
+        log.debug("Try to handle uris: %s", uris)
         if not uris:
             return
+
+        self.present()
 
         uri = parse_uri(uris[0])
         match uri:
