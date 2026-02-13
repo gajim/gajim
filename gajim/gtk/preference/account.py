@@ -38,6 +38,7 @@ from gajim.gtk.preference.widgets import PlaceholderBox
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.settings import GajimPreferencesGroup
 from gajim.gtk.settings import SignalManager
+from gajim.gtk.settings import SpinRange
 from gajim.gtk.structs import ExportHistoryParam
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
@@ -759,7 +760,7 @@ class HostnameGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "custom_port",
                 bind="account::use_custom_host",
-                props={"range_": (0, 65535, 1)},
+                props={"range_": SpinRange(0, 65535, 1, 0)},
             ),
             Setting(
                 SettingKind.DROPDOWN,

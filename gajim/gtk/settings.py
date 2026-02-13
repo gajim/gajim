@@ -541,7 +541,7 @@ class SpinRange:
     lower: float
     upper: float
     step: float
-    digits: int = 3
+    digits: int = 0
 
 
 class SpinSetting(GenericSetting):

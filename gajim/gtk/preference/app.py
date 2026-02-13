@@ -384,7 +384,7 @@ class FilePreviewGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "preview_size",
                 desc=_("Size of preview images in pixels"),
-                props={"range_": (100, 1000, 1)},
+                props={"range_": SpinRange(100, 1000, 50, 0)},
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -577,7 +577,7 @@ class AutoAwayGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "autoawaytime",
                 desc=_("Minutes until your status gets changed"),
-                props={"range_": (1, 720, 1)},
+                props={"range_": SpinRange(1, 720, 1, 0)},
                 bind="autoaway",
             ),
             Setting(
@@ -610,7 +610,7 @@ class AutoExtendedAwayGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "autoxatime",
                 desc=_("Minutes until your status gets changed"),
-                props={"range_": (1, 720, 1)},
+                props={"range_": SpinRange(1, 720, 1, 0)},
                 bind="autoxa",
             ),
             Setting(
