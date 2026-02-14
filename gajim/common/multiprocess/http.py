@@ -111,7 +111,10 @@ def get_header_values(headers: httpx.Headers) -> tuple[int | None, str | None]:
     return content_length, content_type
 
 
-def get_chunk_size(content_length: int | None) -> int:
+def get_chunk_size(content_length: int | None, max_download_size: int = 0) -> int:
+    if max_download_size > 0:
+        return max_download_size
+
     if content_length is None:
         return MIN_CHUNK_SIZE
     return max(math.ceil(content_length / 100), MIN_CHUNK_SIZE)
@@ -133,6 +136,7 @@ def http_request(
     output: Path | None = None,
     with_resp_progress: bool = False,
     max_content_length: int = DEFAULT_MAX_CONTENT_LENGTH,
+    max_download_size: int = 0,
     allowed_content_types: Iterable[str] | None = None,
     hash_algo: str = "sha256",
     hash_value: str | None = None,
@@ -300,7 +304,7 @@ def http_request(
     max_bytes_downloaded = content_length or NO_CONTENT_LENGTH_MAX_DOWNLOAD
 
     with file_method() as output_file:
-        chunk_size = get_chunk_size(content_length)
+        chunk_size = get_chunk_size(content_length, max_download_size)
         for data in resp.iter_bytes(chunk_size=chunk_size):
             if event.is_set():
                 raise CancelledError
@@ -324,6 +328,9 @@ def http_request(
                         progress=resp.num_bytes_downloaded,
                     )
                 )
+
+            if resp.num_bytes_downloaded >= max_download_size:
+                break
 
         data = decryptor.finalize()
         output_file.write(data)
