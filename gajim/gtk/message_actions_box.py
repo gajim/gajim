@@ -848,7 +848,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             # Prevent TextView from pasting the URIs as text:
             textview.stop_emission_by_name("paste-clipboard")
             clipboard.read_async(
-                ["text/uri-list"], 0, None, self._on_clipboard_read_value_finished
+                ["text/uri-list", "text/plain;charset=utf-8"],
+                0,
+                None,
+                self._on_clipboard_read_value_finished,
             )
             return
 
