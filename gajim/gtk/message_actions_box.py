@@ -847,8 +847,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if "text/uri-list" in mime_types:
             # Prevent TextView from pasting the URIs as text:
             textview.stop_emission_by_name("paste-clipboard")
-            clipboard.read_value_async(
-                Gdk.FileList, 0, None, self._on_clipboard_read_value_finished
+            clipboard.read_async(
+                ["text/uri-list"], 0, None, self._on_clipboard_read_value_finished
             )
             return
 
@@ -860,7 +860,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         result: Gio.AsyncResult,
     ) -> None:
         try:
-            file_list = clipboard.read_value_finish(result)
+            file_list = clipboard.read_finish(result)
         except Exception as e:
             formats = clipboard.get_formats()
             mime_types = formats.get_mime_types()
@@ -869,6 +869,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 _("Error: %s (mime types: %s)") % (e, mime_types),
             )
             return
+
+        inputs = file_list[0]
+
+        x = inputs.read_bytes(8192)
+        print(len(x.get_data()), x.get_data())
+        return
 
         if file_list is None or not isinstance(file_list, Gdk.FileList):
             log.info("No URIs pasted")
