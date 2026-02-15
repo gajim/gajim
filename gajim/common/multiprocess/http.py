@@ -204,7 +204,7 @@ def http_request(
         while data := input_file.read(chunk_size):
             if event.is_set():
                 input_file.close()
-                raise CancelledError
+                raise CancelledError("HTTP Request was cancelled")
 
             req_hash_obj.update(data)
             data = encryptor.encrypt(data)
@@ -247,7 +247,7 @@ def http_request(
     resp = client.send(req, stream=True)
 
     if event.is_set():
-        raise CancelledError
+        raise CancelledError("HTTP Request was cancelled")
 
     try:
         resp.raise_for_status()
@@ -307,7 +307,7 @@ def http_request(
         chunk_size = get_chunk_size(content_length, max_download_size)
         for data in resp.iter_bytes(chunk_size=chunk_size):
             if event.is_set():
-                raise CancelledError
+                raise CancelledError("HTTP Request was cancelled")
 
             if (
                 max_bytes_downloaded >= 0
