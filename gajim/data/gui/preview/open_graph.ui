@@ -3,7 +3,8 @@
   <requires lib="gtk" version="4.0"/>
   <template class="OpenGraphPreviewWidget" parent="GtkBox">
     <property name="orientation">horizontal</property>
-    <property name="halign">fill</property>
+    <property name="halign">start</property>
+    <property name="width-request">450</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="_content_box">
@@ -19,6 +20,11 @@
           </object>
         </child>
         <child>
+          <object class="AdwSpinner" id="_loading_spinner">
+            <property name="visible">false</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="valign">center</property>
@@ -26,7 +32,7 @@
               <object class="GtkLabel" id="_title_label">
                 <property name="halign">start</property>
                 <property name="ellipsize">end</property>
-                <property name="max-width-chars">42</property>
+                <property name="max-width-chars">38</property>
                 <style>
                   <class name="bold"/>
                 </style>
@@ -36,7 +42,10 @@
               <object class="GtkLabel" id="_description_label">
                 <property name="halign">start</property>
                 <property name="wrap">true</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="max-width-chars">42</property>
                 <property name="xalign">0</property>
+                <property name="visible">false</property>
                 <style>
                   <class name="dimmed"/>
                 </style>
@@ -60,6 +69,7 @@
     </child>
     <style>
       <class name="preview-box"/>
+      <class name="open-graph-preview"/>
     </style>
   </template>
 </interface>

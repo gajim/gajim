@@ -18,6 +18,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
+from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -47,6 +48,7 @@ from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.message_url_previews import MessageURLPreviews
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util.classes import SignalManager
@@ -102,6 +104,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._ui.action_box.reorder_child_after(
             self._security_label_selector, self._ui.input_wrapper
         )
+
+        self._message_url_previews = MessageURLPreviews()
+        self._ui.link_previews_box.append(self._message_url_previews)
 
         self._message_input = MessageInputTextView(self)
         self._connect(self._message_input, "buffer-changed", self._on_buffer_changed)
@@ -310,6 +315,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._set_chatstate(True)
 
+        self._message_url_previews.switch_contact(contact)
         self._message_input.switch_contact(contact)
 
         self._chat_state_indicator.switch_contact(contact)
@@ -333,7 +339,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             reply_pk = reply_data.pk
 
         draft = None
-        if text or reply_pk is not None:
+        if any([text, reply_pk]):
             draft = Draft(text, reply_pk)
 
         app.storage.drafts.set(self._contact, draft)
@@ -411,6 +417,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def reset_state_after_send(self) -> None:
         self._message_input.clear()
+        self._message_url_previews.clear()
         self._cancel_action()
         assert self._contact is not None
         app.storage.drafts.set(self._contact, None)
@@ -715,6 +722,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             allow_send_message(has_text, self._contact)
         )
 
+        self._message_url_previews.generate_url_previews(self._message_input.get_text())
+
         encryption_name = self._contact.settings.get("encryption")
 
         if has_text and encryption_name:
@@ -822,6 +831,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return None
 
         return message_reply
+
+    def get_open_graph_data(self) -> dict[str, OpenGraphData] | None:
+        return self._message_url_previews.get_open_graph_data()
 
     def _on_paste_clipboard(self, textview: MessageInputTextView) -> None:
         clipboard = self.get_clipboard()

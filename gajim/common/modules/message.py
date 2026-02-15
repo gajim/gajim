@@ -470,6 +470,10 @@ class Message(BaseModule):
         if message.oob_url is not None:
             oob_data.append(mod.OOB(url=message.oob_url, description=None))
 
+        open_graph_data: list[mod.OpenGraph] = []
+        if message.open_graph_data:
+            open_graph_data = get_open_graph_data(message.open_graph_data)
+
         message_data = mod.Message(
             account_=self._account,
             remote_jid_=remote_jid,
@@ -486,6 +490,7 @@ class Message(BaseModule):
             correction_id=message.correct_id,
             encryption_=encryption_data,
             oob=oob_data,
+            og=open_graph_data,
             reply=reply,
             security_label_=securitylabel_data,
             occupant_=occupant,
@@ -547,6 +552,12 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
                         message.reply_data.fallback_start,
                         message.reply_data.fallback_end)
 
+    # OGP link previews
+    if message.open_graph_data is not None:
+        for about_url, open_graph_data in message.open_graph_data.items():
+            stanza.addOpenGraph(about_url, open_graph_data)
+
+    # XEP-0258
     if message.sec_label:
         stanza.addChild(node=message.sec_label.to_node())
 

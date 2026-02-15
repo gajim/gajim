@@ -910,6 +910,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         label = self._message_action_box.get_seclabel()
         correct_id = self._message_action_box.get_correction_id()
         reply_data = self._message_action_box.get_message_reply()
+        open_graph_data = self._message_action_box.get_open_graph_data()
 
         chatstate = client.get_module("Chatstate").get_active_chatstate(contact)
 
@@ -922,6 +923,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             control=self._chat_control,
             correct_id=correct_id,
             reply_data=reply_data,
+            open_graph_data=open_graph_data,
         )
 
         client.send_message(message_)

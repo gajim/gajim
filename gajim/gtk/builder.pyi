@@ -411,6 +411,7 @@ class ManageSoundsBuilder(Builder):
 class MessageActionsBoxBuilder(Builder):
     box: Gtk.Box
     chat_state_box: Gtk.Box
+    link_previews_box: Gtk.Box
     reply_box: Gtk.Box
     state_box: Gtk.Box
     state_box_image: Gtk.Image

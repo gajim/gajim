@@ -25,6 +25,7 @@ from nbxmpp.protocol import Message
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import HatData
 from nbxmpp.structs import MucSubject
+from nbxmpp.structs import OpenGraphData
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.util import generate_id
 
@@ -88,6 +89,7 @@ class OutgoingMessage:
     control: Any | None = None
     correct_id: str | None = None
     reply_data: ReplyData | None = None
+    open_graph_data: dict[str, OpenGraphData] | None = None
     reaction_data: tuple[str, set[str]] | None = None
     retraction_id: str | None = None
     oob_url: str | None = None

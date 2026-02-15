@@ -13,6 +13,7 @@ from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -225,7 +226,17 @@ class MessageRow(BaseRow):
                 halign=Gtk.Align.START,
             )
             for og in message.og:
-                og_box.append(OpenGraphPreviewWidget(og))
+                open_graph_data = OpenGraphData(
+                    title=og.title,
+                    description=og.description,
+                    url=og.url,
+                    type=og.type,
+                    site_name=og.site_name,
+                    image=og.image,
+                )
+                og_box.append(
+                    OpenGraphPreviewWidget(og.url, og_data=open_graph_data, pk=og.pk)
+                )
 
             box.append(og_clamp)
 
