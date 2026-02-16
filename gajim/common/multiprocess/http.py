@@ -121,13 +121,13 @@ def get_chunk_size(content_length: int | None, max_download_size: int = 0) -> in
 
 
 def http_request(
-    queue: queue.Queue[TransferState | TransferMetadata],
     event: threading.Event,
     ft_id: str,
     method: Literal["GET", "POST", "PUT"],
     url: str,
     timeout: int,
     *,
+    queue: queue.Queue[TransferState | TransferMetadata] | None = None,
     headers: dict[str, str] | None = None,
     params: dict[str, Any] | None = None,
     content_type: str | None = None,
@@ -159,7 +159,8 @@ def http_request(
         follow_redirects=True,
     )
 
-    queue.put(TransferState(id=ft_id, state=FTState.STARTED))
+    if queue is not None:
+        queue.put(TransferState(id=ft_id, state=FTState.STARTED))
 
     if isinstance(input_, bytes):
         req_content_size = len(input_)
@@ -195,7 +196,7 @@ def http_request(
     req_hash_obj = hashlib.new(hash_algo)
 
     def _read_file_generator() -> Iterable[bytes]:
-        if with_req_progress:
+        if with_req_progress and queue is not None:
             queue.put(TransferState(id=ft_id, state=FTState.IN_PROGRESS))
 
         chunk_size = get_chunk_size(req_content_size)
@@ -209,7 +210,7 @@ def http_request(
             req_hash_obj.update(data)
             data = encryptor.encrypt(data)
             uploaded += len(data)
-            if with_req_progress:
+            if with_req_progress and queue is not None:
                 queue.put(
                     TransferState(
                         id=ft_id,
@@ -224,7 +225,7 @@ def http_request(
         uploaded += len(data)
         req_hash_obj.update(data)
 
-        if with_req_progress:
+        if with_req_progress and queue is not None:
             queue.put(
                 TransferState(
                     id=ft_id,
@@ -257,11 +258,12 @@ def http_request(
 
     content_length, content_type = get_header_values(resp.headers)
 
-    queue.put(
-        TransferMetadata(
-            id=ft_id, content_length=content_length, content_type=content_type
+    if queue is not None:
+        queue.put(
+            TransferMetadata(
+                id=ft_id, content_length=content_length, content_type=content_type
+            )
         )
-    )
 
     if content_length == 0:
         return HTTPResult(
@@ -292,7 +294,7 @@ def http_request(
     else:
         file_method = partial(output.open, mode="wb")
 
-    if with_resp_progress:
+    if with_resp_progress and queue is not None:
         queue.put(
             TransferState(
                 id=ft_id, state=FTState.IN_PROGRESS, total=content_length, progress=0
@@ -319,7 +321,7 @@ def http_request(
 
             resp_hash_obj.update(data)
             output_file.write(decryptor.decrypt(data))
-            if with_resp_progress:
+            if with_resp_progress and queue is not None:
                 queue.put(
                     TransferState(
                         id=ft_id,

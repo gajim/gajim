@@ -125,12 +125,12 @@ class FileTransferManager:
         try:
             future = app.process_pool.submit(
                 http_request,
-                self._queue,
                 event,
                 id_,
                 method,
                 urlparts.geturl(),
                 timeout,
+                queue=self._queue,
                 headers=headers,
                 params=params,
                 content_type=content_type,
