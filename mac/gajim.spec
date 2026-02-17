@@ -8,6 +8,9 @@ icon = os.path.join(cwd, "mac", "Gajim.icns")
 info_plist = {
     "CFBundleDisplayName": "Gajim",
     "NSHighResolutionCapable": True,
+    "CFBundleURLTypes": [{"CFBundleURLName": "XMPP URI",
+                          "CFBundleURLSchemes": ["xmpp"]}],
+    "NSUIElement": True
 }
 
 import sys
