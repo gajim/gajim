@@ -302,7 +302,6 @@ def http_request(
         )
 
     resp_hash_obj = hashlib.new(hash_algo)
-
     max_bytes_downloaded = content_length or NO_CONTENT_LENGTH_MAX_DOWNLOAD
 
     with file_method() as output_file:
@@ -331,7 +330,7 @@ def http_request(
                     )
                 )
 
-            if resp.num_bytes_downloaded >= max_download_size:
+            if resp.num_bytes_downloaded >= max_download_size > 0:
                 break
 
         data = decryptor.finalize()
