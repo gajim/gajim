@@ -142,14 +142,8 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         assert self._orig_path is not None
 
         try:
-            future = app.process_pool.submit(
-                extract_video_thumbnail_and_properties,
-                self._orig_path,
-                self._thumb_path,
-                app.settings.get("preview_size"),
-            )
-            future.add_done_callback(
-                partial(GLib.idle_add, self._create_thumbnail_finished)
+            extract_video_thumbnail_and_properties(
+                self._orig_path, self._thumb_path, app.settings.get("preview_size")
             )
         except Exception as error:
             log.warning("Creating thumbnail failed for: %s %s", self._orig_path, error)
