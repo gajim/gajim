@@ -9,14 +9,26 @@
     <child>
       <object class="GtkBox" id="_content_box">
         <property name="hexpand">true</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="_placeholder_image">
             <property name="halign">center</property>
             <property name="icon-name">lucide-square-arrow-out-up-right-symbolic</property>
             <property name="pixel-size">20</property>
             <style>
-              <class name="px-9"/>
+              <class name="ps-9" />
             </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwClamp" id="_picture_clamp">
+            <property name="visible">false</property>
+            <property name="maximum-size">100</property>
+            <child>
+              <object class="GtkPicture" id="_picture">
+                <property name="content-fit">cover</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -28,6 +40,9 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="valign">center</property>
+            <style>
+              <class name="py-9"/>
+            </style>
             <child>
               <object class="GtkLabel" id="_title_label">
                 <property name="halign">start</property>

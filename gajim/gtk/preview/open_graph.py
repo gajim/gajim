@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import base64
+
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -13,6 +15,8 @@ from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.util.image import get_texture_from_data
+from gajim.common.util.text import to_one_line
 
 from gajim.gtk.menus import get_preview_menu
 from gajim.gtk.util.classes import SignalManager
@@ -29,6 +33,9 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
     }
 
     _content_box: Gtk.Box = Gtk.Template.Child()
+    _placeholder_image: Gtk.Image = Gtk.Template.Child()
+    _picture_clamp: Adw.Clamp = Gtk.Template.Child()
+    _picture: Gtk.Picture = Gtk.Template.Child()
     _loading_spinner: Adw.Spinner = Gtk.Template.Child()
     _title_label: Gtk.Label = Gtk.Template.Child()
     _description_label: Gtk.Label = Gtk.Template.Child()
@@ -79,8 +86,20 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
         if minimal:
             return
 
+        if image_string := og_data.image:
+            if image_string.startswith("data:image"):
+                decoded_data = base64.b64decode(image_string.split(",")[1])
+                texture = get_texture_from_data(decoded_data)
+                self._picture.set_paintable(texture)
+                self._picture_clamp.set_visible(True)
+                self._placeholder_image.set_visible(False)
+
         if description := og_data.description:
-            self._description_label.set_text(f"{description[:100]}…")
+            if len(description) > 100:
+                self._description_label.set_text(f"{to_one_line(description)[:100]}...")
+                self._description_label.set_tooltip_text(description)
+            else:
+                self._description_label.set_text(to_one_line(description))
             self._description_label.set_visible(True)
 
     def get_open_graph(self) -> OpenGraphData | None:
