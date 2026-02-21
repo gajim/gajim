@@ -14,12 +14,12 @@ from functools import partial
 
 from gi.repository import GLib
 from gi.repository import Gtk
-from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common.helpers import determine_proxy
 from gajim.common.multiprocess.http import CancelledError
 from gajim.common.multiprocess.url_preview import generate_url_preview
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.regex import URL_REGEX
 from gajim.common.types import ChatContactT
 

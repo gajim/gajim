@@ -4,8 +4,7 @@
 
 import unittest
 
-from nbxmpp.structs import OpenGraphData
-
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.open_graph_parser import OpenGraphParser
 
 EXAMPLE_1 = """
@@ -61,8 +60,6 @@ class OpenGraphParserTest(unittest.TestCase):
         expected_result = OpenGraphData(
             title="Gajim",
             description="Free and fully featured chat app for XMPP",
-            type="website",
-            url="https://gajim.org/",
             image="https://gajim.org/img/og-image.png",
         )
 

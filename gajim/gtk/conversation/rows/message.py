@@ -13,7 +13,6 @@ from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -23,6 +22,7 @@ from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -226,16 +226,9 @@ class MessageRow(BaseRow):
                 halign=Gtk.Align.START,
             )
             for og in message.og:
-                open_graph_data = OpenGraphData(
-                    title=og.title,
-                    description=og.description,
-                    url=og.url,
-                    type=og.type,
-                    site_name=og.site_name,
-                    image=og.image,
-                )
+                og_data = OpenGraphData.from_model(og)
                 og_box.append(
-                    OpenGraphPreviewWidget(og.url, og_data=open_graph_data, pk=og.pk)
+                    OpenGraphPreviewWidget(og.about, og_data=og_data, pk=og.pk)
                 )
 
             box.append(og_clamp)

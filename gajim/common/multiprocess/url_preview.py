@@ -4,18 +4,18 @@
 
 from __future__ import annotations
 
-import base64
 import io
 import threading
 
-from nbxmpp.structs import OpenGraphData
 from nbxmpp.util import utf8_decode
 from PIL import Image
 
 from gajim.common.multiprocess.http import http_request
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.open_graph_parser import OpenGraphParser
+from gajim.common.open_graph_parser import OpenGraphThumbnail
 
-MAX_THUMBNAIL_SIZE = 256
+THUMBNAIL_SIZE = 128
 
 
 def generate_url_preview(
@@ -36,27 +36,30 @@ def generate_url_preview(
     html_content, _ = utf8_decode(result.content)
 
     open_graph_parser = OpenGraphParser()
-    open_graph_data = open_graph_parser.parse(html_content)
-    if open_graph_data and open_graph_data.image:
-        image_url = open_graph_data.image
+    og_data = open_graph_parser.parse(html_content)
+    if og_data is None or not og_data.image:
+        return og_data
 
+    try:
         image_result = http_request(
             event=event,
             ft_id="preview",
             method="GET",
-            url=image_url,
+            url=og_data.image,
             timeout=5,
-            max_download_size=1024 * 150,
             proxy=proxy,
         )
-        try:
-            image = Image.open(io.BytesIO(image_result.content))
-            image.thumbnail((MAX_THUMBNAIL_SIZE, MAX_THUMBNAIL_SIZE))
-            image_buffer = io.BytesIO()
-            image.save(image_buffer, format="PNG")
-            base64_data = base64.b64encode(image_buffer.getvalue()).decode("ascii")
-            open_graph_data.image = f"data:image/png;base64,{base64_data}"
-        except Exception:
-            pass
 
-    return open_graph_data
+        og_data.thumbnail = _make_thumbnail(image_result.content)
+    except Exception:
+        pass
+
+    return og_data
+
+
+def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
+    image = Image.open(io.BytesIO(content))
+    image.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE))
+    thumbnail = io.BytesIO()
+    image.save(thumbnail, format="PNG")
+    return OpenGraphThumbnail.from_bytes(thumbnail.getvalue())

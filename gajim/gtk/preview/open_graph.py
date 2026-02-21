@@ -4,17 +4,15 @@
 
 from __future__ import annotations
 
-import base64
-
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.util.image import get_texture_from_data
 from gajim.common.util.text import to_one_line
 
@@ -86,13 +84,11 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
         if minimal:
             return
 
-        if image_string := og_data.image:
-            if image_string.startswith("data:image"):
-                decoded_data = base64.b64decode(image_string.split(",")[1])
-                texture = get_texture_from_data(decoded_data)
-                self._picture.set_paintable(texture)
-                self._picture_clamp.set_visible(True)
-                self._placeholder_image.set_visible(False)
+        if thumbnail := og_data.thumbnail:
+            texture = get_texture_from_data(thumbnail.data)
+            self._picture.set_paintable(texture)
+            self._picture_clamp.set_visible(True)
+            self._placeholder_image.set_visible(False)
 
         if description := og_data.description:
             if len(description) > 100:

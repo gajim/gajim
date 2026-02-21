@@ -43,21 +43,15 @@ class OpenGraphTest(unittest.TestCase):
 
     def test_insert_opengraph(self):
         og_data1 = OpenGraph(
-            url="http://testurl1",
+            about="http://testurl1",
             title="Page Title",
             description="Page Description",
-            image="https://link.to.example.com/image.png",
-            type="website",
-            site_name="Some Website",
         )
 
         og_data2 = OpenGraph(
-            url="http://testurl2",
+            about="http://testurl2",
             title="Page Title2",
             description="Page Description2",
-            image="https://link.to.example.com/image2.png",
-            type="website2",
-            site_name="Some Website2",
         )
 
         message_data = Message(
@@ -86,11 +80,11 @@ class OpenGraphTest(unittest.TestCase):
         og1 = message.og[0]
         og2 = message.og[1]
 
-        self.assertEqual(og1.url, "http://testurl1")
-        self.assertEqual(og1.type, "website")
+        self.assertEqual(og1.about, "http://testurl1")
+        self.assertEqual(og1.title, "Page Title")
 
-        self.assertEqual(og2.url, "http://testurl2")
-        self.assertEqual(og2.type, "website2")
+        self.assertEqual(og2.about, "http://testurl2")
+        self.assertEqual(og2.title, "Page Title2")
 
 
 if __name__ == "__main__":

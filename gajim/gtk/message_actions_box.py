@@ -18,7 +18,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
-from nbxmpp.structs import OpenGraphData
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -37,6 +36,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT

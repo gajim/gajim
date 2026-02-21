@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Literal
 
+import base64
 from datetime import datetime
 from datetime import UTC
 
@@ -21,12 +22,14 @@ from gajim.common import app
 from gajim.common.const import EME_MESSAGES
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 from gajim.common.structs import ReplyData
+from gajim.common.util.uri import DataUri
 
 UNKNOWN_MESSAGE = _('Message content unknown')
 
@@ -223,8 +226,8 @@ def get_reply(data: nbxmpp.structs.ReplyData | ReplyData | None) -> mod.Reply | 
     return mod.Reply(id=data.id, to=data.to)
 
 
-def get_open_graph_data(
-    open_graph: dict[str, nbxmpp.structs.OpenGraphData]
+def get_open_graph(
+    open_graph: dict[str, nbxmpp.structs.OpenGraphData] | dict[str, OpenGraphData]
 ) -> list[mod.OpenGraph]:
 
     og_data: list[mod.OpenGraph] = []
@@ -232,15 +235,42 @@ def get_open_graph_data(
         if not data.title:
             continue
 
+        if isinstance(data, OpenGraphData):
+            image_type, image_bytes = None, None
+            if thumbnail := data.thumbnail:
+                image_type, image_bytes = thumbnail.type, thumbnail.data
+        else:
+            image_type, image_bytes = get_thumbnail(data.image)
+
         og_data.append(
             mod.OpenGraph(
-                url=url,
-                type=data.type or None,
+                about=url,
                 title=data.title,
-                site_name=data.site_name or None,
                 description=data.description or None,
-                image=data.image or None,
+                image_type=image_type,
+                image_bytes=image_bytes,
             )
         )
 
     return og_data
+
+
+def get_thumbnail(image_uri: str | None) -> tuple[str, bytes] | tuple[None, None]:
+    if not image_uri:
+        return None, None
+
+    def _parse() -> tuple[str, bytes]:
+        datauri = DataUri.from_string(image_uri)
+        if not datauri.is_base64:
+            raise ValueError
+
+        image_bytes = base64.b64decode(datauri.data)
+        if not image_bytes:
+            raise ValueError
+
+        return datauri.media_type, image_bytes
+
+    try:
+        return _parse()
+    except Exception:
+        return None, None

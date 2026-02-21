@@ -32,7 +32,7 @@ from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
-from gajim.common.modules.message_util import get_open_graph_data
+from gajim.common.modules.message_util import get_open_graph
 from gajim.common.modules.message_util import get_reply
 from gajim.common.modules.message_util import get_security_label
 from gajim.common.modules.misc import parse_oob
@@ -228,7 +228,7 @@ class Message(BaseModule):
         if properties.correction is not None:
             correction_id = properties.correction.id
 
-        og_data = get_open_graph_data(properties.open_graph)
+        og_data = get_open_graph(properties.open_graph)
 
         message_data = mod.Message(
             account_=self._account,
@@ -472,7 +472,7 @@ class Message(BaseModule):
 
         open_graph_data: list[mod.OpenGraph] = []
         if message.open_graph_data:
-            open_graph_data = get_open_graph_data(message.open_graph_data)
+            open_graph_data = get_open_graph(message.open_graph_data)
 
         message_data = mod.Message(
             account_=self._account,
@@ -555,7 +555,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     # OGP link previews
     if message.open_graph_data is not None:
         for about_url, open_graph_data in message.open_graph_data.items():
-            stanza.addOpenGraph(about_url, open_graph_data)
+            stanza.addOpenGraph(about_url, open_graph_data.to_nbxmpp())
 
     # XEP-0258
     if message.sec_label:

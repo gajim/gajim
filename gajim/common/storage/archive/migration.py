@@ -128,6 +128,8 @@ class Migration:
             self._v15()
         if user_version < 16:
             self._v16()
+        if user_version < 17:
+            self._v17()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -358,6 +360,20 @@ class Migration:
         app.ged.raise_event(DBMigrationStart(version=16))
         mod.Base.metadata.create_all(self._engine)
         self._execute_multiple(["PRAGMA user_version=16"])
+
+    def _v17(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=17))
+        self._execute_multiple(
+            [
+                'ALTER TABLE opengraph DROP COLUMN "image"',
+                'ALTER TABLE opengraph DROP COLUMN "site_name"',
+                'ALTER TABLE opengraph DROP COLUMN "type"',
+                'ALTER TABLE opengraph RENAME COLUMN "url" TO "about"',
+                'ALTER TABLE opengraph ADD COLUMN "image_type" TEXT',
+                'ALTER TABLE opengraph ADD COLUMN "image_bytes" BLOB',
+                "PRAGMA user_version=17",
+            ]
+        )
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
