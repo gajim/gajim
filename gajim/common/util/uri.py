@@ -117,10 +117,72 @@ class FileUri(Uri):
         return cls(scheme=urlparts.scheme, uri=uri, netloc=urlparts.netloc, path=path)
 
 
-UriT = Uri | InvalidUri | XmppIri | MailUri | GeoUri | FileUri
+@dataclass
+class DataUri(Uri):
+    media_type: str
+    parameters: dict[str, str]
+    is_base64: bool
+    data: str
+
+    @classmethod
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> DataUri:
+        if urlparts.scheme != "data":
+            raise ValueError("Invalid scheme: %s" % urlparts.scheme)
+
+        try:
+            metadata, data = urlparts.path.split(",", maxsplit=1)
+        except Exception:
+            raise ValueError("Invalid data uri: %s" % uri)
+
+        media_type = "text/plain"
+        is_base64 = False
+        parameters: dict[str, str] = {}
+
+        for index, part in enumerate(metadata.split(";")):
+            if not part:
+                continue
+
+            if index == 0:
+                if "/" in part:
+                    media_type = part
+                    continue
+
+            if "=" in part:
+                key, value = part.split("=")
+                parameters[key] = value
+                continue
+
+            if part == "base64":
+                is_base64 = True
+                break
+
+            log.warning("Ignore data uri part '%s', in %s", part, uri)
+
+        return cls(
+            scheme="data",
+            uri=uri,
+            media_type=media_type,
+            parameters=parameters,
+            is_base64=is_base64,
+            data=data,
+        )
+
+    @classmethod
+    def from_string(cls, uri: str) -> DataUri:
+        urlparts = urlparse(uri)
+        return DataUri.from_urlparts(urlparts, uri)
 
 
-SCHEME_CLASS_MAP = {"xmpp": XmppIri, "mailto": MailUri, "geo": GeoUri, "file": FileUri}
+UriT = Uri | InvalidUri | XmppIri | MailUri | GeoUri | FileUri | DataUri
+
+
+SCHEME_CLASS_MAP = {
+    "xmpp": XmppIri,
+    "mailto": MailUri,
+    "geo": GeoUri,
+    "file": FileUri,
+    "data": DataUri,
+}
 
 
 def is_known_uri_scheme(scheme: str) -> bool:
