@@ -15,7 +15,7 @@ from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.open_graph_parser import OpenGraphParser
 from gajim.common.open_graph_parser import OpenGraphThumbnail
 
-THUMBNAIL_SIZE = 128
+THUMBNAIL_SIZE = 256
 
 
 def generate_url_preview(
@@ -61,5 +61,5 @@ def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
     image = Image.open(io.BytesIO(content))
     image.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE))
     thumbnail = io.BytesIO()
-    image.save(thumbnail, format="PNG", optimize=True)
-    return OpenGraphThumbnail.from_bytes(thumbnail.getvalue())
+    image.save(thumbnail, format="JPEG", optimize=True)
+    return OpenGraphThumbnail.from_bytes(thumbnail.getvalue(), "image/jpeg")

@@ -33,9 +33,7 @@ class OpenGraphThumbnail:
     data: bytes
 
     @classmethod
-    def from_bytes(
-        cls, data: bytes, media_type: str = "image/png"
-    ) -> OpenGraphThumbnail:
+    def from_bytes(cls, data: bytes, media_type: str) -> OpenGraphThumbnail:
         base64_data = base64.b64encode(data).decode()
         uri = f"data:{media_type};base64,{base64_data}"
         return cls(uri=uri, type=media_type, data=data)
