@@ -60,6 +60,9 @@ def generate_url_preview(
 def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
     image = Image.open(io.BytesIO(content))
     image.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE))
+    if image.mode in ("RGBA", "P"):
+        image = image.convert("RGB")
+
     thumbnail = io.BytesIO()
     image.save(thumbnail, format="JPEG", optimize=True)
     return OpenGraphThumbnail.from_bytes(thumbnail.getvalue(), "image/jpeg")
