@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -923,12 +923,6 @@ msgstr "Manęs nėra"
 msgid "Back"
 msgstr "Back soon"
 
-msgid "Back in some minutes."
-msgstr "Back in some minutes."
-
-msgid "Back soon"
-msgstr "Back soon"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Banas"
@@ -1512,6 +1506,10 @@ msgstr "Could not load image"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Could not load image"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Could not load image"
@@ -1837,9 +1835,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Sends file to a contact"
-
-msgid "Eating"
-msgstr "Eating"
 
 #, fuzzy
 msgid "Edit"
@@ -2778,22 +2773,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "I'm working."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "I'm out enjoying life."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "I'm watching a movie."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "I'm working."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3147,9 +3126,6 @@ msgstr "_Rodyti įvykį kontaktų sąraše"
 msgid "Move to Group"
 msgstr "_Trinti"
 
-msgid "Movie"
-msgstr "Movie"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Custom port must be a port number."
@@ -3499,9 +3475,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Others"
-
-msgid "Out"
-msgstr "Out"
 
 msgid "Out of memory"
 msgstr ""
@@ -4809,9 +4782,6 @@ msgstr "Nickname not allowed: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Sleeping"
-
 #, fuzzy
 msgid "Software"
 msgstr "Serverio teikiamos paslaugos"
@@ -5861,9 +5831,6 @@ msgstr ""
 msgid "Work"
 msgstr "Darbas"
 
-msgid "Working"
-msgstr "Working"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Išplėstiniai veiksmai"
@@ -6118,9 +6085,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "All files"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6885,6 +6849,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Automatinis prsijungimas"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Back in some minutes."
+
+#~ msgid "Back soon"
+#~ msgstr "Back soon"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Ban List"
@@ -7110,6 +7080,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Sends file to a contact"
 
+#~ msgid "Eating"
+#~ msgstr "Eating"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Vardas:"
@@ -7260,6 +7233,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "It is not possible to send empty files"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "I'm working."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "I'm out enjoying life."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "I'm watching a movie."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "I'm working."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reason"
@@ -7304,6 +7293,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Removes contact from roster"
+
+#~ msgid "Movie"
+#~ msgstr "Movie"
 
 #, fuzzy
 #~ msgid "No Connection Available"
@@ -7357,6 +7349,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administrator"
+
+#~ msgid "Out"
+#~ msgstr "Out"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7565,6 +7560,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Sleeping"
+
 #~ msgid "Sta_tus"
 #~ msgstr "_Būklė"
 
@@ -7716,6 +7714,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Do you accept this request?"
+
+#~ msgid "Working"
+#~ msgstr "Working"
 
 #, fuzzy
 #~ msgid "Workspaces"

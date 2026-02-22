@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -932,12 +932,6 @@ msgstr "Ezvezant"
 msgid "Back"
 msgstr "Distro 'benn nebeut"
 
-msgid "Back in some minutes."
-msgstr "Distro 'vin a-benn un nebeut munutennoù.."
-
-msgid "Back soon"
-msgstr "Distro 'benn nebeut"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Argas"
@@ -1521,6 +1515,10 @@ msgstr "Dibosupl eo kargañ ar skeudenn"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Dibosupl eo kargañ ar skeudenn"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Dibosupl eo kargañ ar skeudenn"
@@ -1847,9 +1845,6 @@ msgstr "Stad:"
 #, fuzzy
 msgid "Drop files here"
 msgstr "Kas ur restr d'un darempred"
-
-msgid "Eating"
-msgstr "O tebriñ"
 
 #, fuzzy
 msgid "Edit"
@@ -2792,22 +2787,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "O labourat 'maon."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Er-maez emaon o profitañ eus ar vuhez"
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "O sellout ouzh ur film 'maon."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "O labourat 'maon."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3162,9 +3141,6 @@ msgstr "Diskouez er _roll hepken"
 msgid "Move to Group"
 msgstr "_Dilemel"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Ar porzh personelaet a rank bezañ un niverenn borzh"
@@ -3516,9 +3492,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Traoù all"
-
-msgid "Out"
-msgstr "Er-maez"
 
 msgid "Out of memory"
 msgstr ""
@@ -4825,9 +4798,6 @@ msgstr "N'eus ket bet kavet al lesanv : %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "O kousket"
-
 #, fuzzy
 msgid "Software"
 msgstr "Perzhioù ar servijerien"
@@ -5884,9 +5854,6 @@ msgstr ""
 msgid "Work"
 msgstr "Labour"
 
-msgid "Working"
-msgstr "O labourat"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Actions a_vancées"
@@ -6140,9 +6107,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "An holl restroù"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6924,6 +6888,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "E_barzhiñ"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Distro 'vin a-benn un nebeut munutennoù.."
+
+#~ msgid "Back soon"
+#~ msgstr "Distro 'benn nebeut"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Roll argas"
@@ -7137,6 +7107,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Kas ur restr d'un darempred"
 
+#~ msgid "Eating"
+#~ msgstr "O tebriñ"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Anv:"
@@ -7282,6 +7255,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "N'eus ket tu da gas restroù goullo"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "O labourat 'maon."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Er-maez emaon o profitañ eus ar vuhez"
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "O sellout ouzh ur film 'maon."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "O labourat 'maon."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Abeg"
@@ -7335,6 +7324,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Darempredoù"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "N'eus ket tu en em lugañ"
@@ -7383,6 +7375,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "_Merour-ez"
+
+#~ msgid "Out"
+#~ msgstr "Er-maez"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7598,6 +7593,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "O kousket"
+
 #~ msgid "Sta_tus"
 #~ msgstr "S_tad"
 
@@ -7757,6 +7755,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
+
+#~ msgid "Working"
+#~ msgstr "O labourat"
 
 #, fuzzy
 #~ msgid "Workspaces"

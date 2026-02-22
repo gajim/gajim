@@ -4,13 +4,13 @@
 # Sally <sallyahaj@yahoo.com>, 2023.
 # Daniel Brötzmann <mailtrash@posteo.de>, 2023.
 # Ahmed Mohammed <iramosu@protonmail.com>, 2024, 2025.
-# Ahmed Najmawi <iramosu@protonmail.com>, 2025.
+# Ahmed Najmawi <iramosu@protonmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2025-10-20 08:48+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-17 18:19+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
 ">\n"
@@ -239,9 +239,8 @@ msgstr "علامة '@' غير موجودة في العنوان. أمتأكد م�
 msgid "(changed by %s)"
 msgstr "(غُيِّر بواسطة %s)"
 
-#, fuzzy
 msgid "(inactive)"
-msgstr "نشط"
+msgstr "(غير نشط)"
 
 #, python-format
 msgid "(reason: %s)"
@@ -629,9 +628,8 @@ msgstr "كل حالات الدردشات"
 msgid "All Chats"
 msgstr "كل الدردشات"
 
-#, fuzzy
 msgid "All Messages"
-msgstr "الرسائل"
+msgstr "كل الرسائل"
 
 msgid "All files"
 msgstr "كل الملفات"
@@ -641,7 +639,7 @@ msgid "All hats of %s have been removed"
 msgstr "أُزيلت كل قبعات %s"
 
 msgid "All of these settings are optional and can be changed later"
-msgstr ""
+msgstr "جميع هذه الإعدادات اختيارية ويمكن تغييرها لاحقًا"
 
 msgid "All of your hats have been removed"
 msgstr "أُزيلت كل قبعاتك"
@@ -849,12 +847,6 @@ msgstr "غائب"
 msgid "Back"
 msgstr "عُد"
 
-msgid "Back in some minutes."
-msgstr "عائد بعد دقائق."
-
-msgid "Back soon"
-msgstr "عائد قريبًا"
-
 msgid "Ban"
 msgstr "امنع"
 
@@ -1045,9 +1037,8 @@ msgstr ""
 msgid "Chat"
 msgstr "الدردشة"
 
-#, fuzzy
 msgid "Chat Address"
-msgstr "عناوين المتراسلين"
+msgstr "عنوان الدردشة"
 
 msgid "Chat Banner: Background Color"
 msgstr "لافتة الدردشة: لون الخلفية"
@@ -1165,9 +1156,8 @@ msgstr "أغلِق الدردشة"
 msgid "Close a chat by pressing the Escape key"
 msgstr "يغلِق الدردشة بالضغط على مفتاح ESC"
 
-#, fuzzy
 msgid "Close this preview"
-msgstr "لا معاينة تلقائية"
+msgstr "أغلق هذه المعاينة"
 
 msgid "Close with Escape"
 msgstr "الإغلاق بمفتاح ESC"
@@ -1359,9 +1349,8 @@ msgstr "انسخ إلى الحافظة"
 msgid "Copy to clipboard"
 msgstr "انسخ إلى الحافظة"
 
-#, fuzzy
 msgid "Correct Message"
-msgstr "الرسائل المباشرة"
+msgstr "صحِّح الرسالة"
 
 msgid "Could Not Save File"
 msgstr "تعذَّر حفظ الملف"
@@ -1371,6 +1360,10 @@ msgstr "تعذَّر الوصول إلى الملف"
 
 msgid "Could not find any messages for this participant."
 msgstr "تعذَّر العثور على أي رسائل لهذا المشارك."
+
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "تعذَّر تحديث قائمة الموفرين"
 
 #, python-format
 msgid "Could not open file (%s)"
@@ -1470,9 +1463,8 @@ msgstr "الإعداد المبدئي للدردشات الفردية والجم
 msgid "Default for group chats (e.g. Contact is typing)"
 msgstr "الإعداد المبدئي لمجموعات الدردشة (مثال: المتراسل يكتب)"
 
-#, fuzzy
 msgid "Default for new chats"
-msgstr "الإعداد المبدئي للدردشات"
+msgstr "الإعداد المبدئي للدردشات الجديدة"
 
 msgid "Default for new group chats"
 msgstr "الإعداد المبدئي لمجموعات الدردشة الجديدة"
@@ -1656,12 +1648,8 @@ msgstr "مسودة: %s"
 msgid "Drop files here"
 msgstr "أفلِت الملفات هنا"
 
-msgid "Eating"
-msgstr "يأكل"
-
-#, fuzzy
 msgid "Edit"
-msgstr "_حرِّر"
+msgstr "حرِّر"
 
 msgid "Edit Shortcut"
 msgstr "حرِّر الاختصار"
@@ -1675,7 +1663,6 @@ msgstr "حرِّر رسالتك (Esc للإلغاء)…"
 msgid "Edit…"
 msgstr "حرِّر…"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Edit…"
 msgstr "حرِّر…"
@@ -1856,7 +1843,6 @@ msgstr "تصدير تأريخ الدردشة"
 msgid "Export Contacts"
 msgstr "صدِّر المتراسلين"
 
-#, fuzzy
 msgid "Export Error"
 msgstr "خطأ في الاستيراد"
 
@@ -1958,9 +1944,8 @@ msgstr "الملف فارغ"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "الملف كبير جدًا، والحد الأقصى لحجم الملف المسموح به هو: %s"
 
-#, fuzzy
 msgid "File saved"
-msgstr "الملف: %s"
+msgstr "حُفظ الملف"
 
 msgid "File too big"
 msgstr "الملف كبير جدًا"
@@ -1987,9 +1972,9 @@ msgstr "بصمة هذا الجهاز"
 msgid "Fingerprints"
 msgstr "البصمات"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Fingerprints of devices connected with \"%s\""
-msgstr "الأجهزة المتصلة ب‍ «%s»"
+msgstr ""
 
 msgid "Finished"
 msgstr "انتهى"
@@ -2030,9 +2015,8 @@ msgstr "ستنسَ مجموعة الدردشة هذه؟"
 msgid "Forget this Group Chat…"
 msgstr "انسَ مجموعة الدردشة…"
 
-#, fuzzy
 msgid "Format Text Bold"
-msgstr "المحادثة: لون النص"
+msgstr ""
 
 msgid "Format Text Italic"
 msgstr ""
@@ -2187,9 +2171,8 @@ msgstr "إبراز رسائل مجموعة الدردشة"
 msgid "Group Chat Message Received"
 msgstr "استُلِمت رسالة مجموعة الدردشة"
 
-#, fuzzy
 msgid "Group Chat Settings"
-msgstr "تفاصيل مجموعة الدردشة"
+msgstr "إعدادات مجموعة الدردشة"
 
 msgid "Group Chats"
 msgstr "مجموعات الدردشة"
@@ -2374,9 +2357,8 @@ msgstr ""
 "عليك طلب الإذن بالتحدث أولًا لتتمكن من كتابة الرسائل في هذه الدردشة.\n"
 "سيعالج أحد المشرفين طلبك."
 
-#, fuzzy
 msgid "In this group chat"
-msgstr "لقد غادرت مجموعة الدردشة هذه"
+msgstr "في مجموعة الدردشة هذه"
 
 msgid "Incoming Call"
 msgstr "مكالمة واردة"
@@ -2490,18 +2472,6 @@ msgstr "صادرة إلى\n"
 
 msgid "Issues detected"
 msgstr "اكتُشفت مشاكل"
-
-msgid "I’m eating."
-msgstr "أنا آكل."
-
-msgid "I’m out enjoying life."
-msgstr "أنا بالخارج أستمتع بالحياة."
-
-msgid "I’m watching a movie."
-msgstr "أنا أشاهد فيلمًا."
-
-msgid "I’m working."
-msgstr "أنا أعمل."
 
 msgid "JID"
 msgstr "معرِّف Jabber"
@@ -2730,16 +2700,15 @@ msgstr "الرسائل"
 msgid "Messages are archived on the server"
 msgstr "تؤرشف الرسائل على الخادوم"
 
-#, fuzzy
 msgid "Messages from Contacts"
-msgstr "أزِل من قائمة المتراسلين…"
+msgstr ""
 
 msgid "Messages from this users are blocked"
 msgstr "الرسائل من هذا المستخدم محظورة"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Migration to version %s"
-msgstr "إصدار Pango: %s"
+msgstr ""
 
 msgid "Minimize"
 msgstr "صغِّر"
@@ -2803,9 +2772,6 @@ msgstr "ستنقل المتراسل إلى مجموعة جديدة؟"
 msgid "Move to Group"
 msgstr "انقل إلى مجموعة"
 
-msgid "Movie"
-msgstr "فيلم"
-
 msgid "Must be a port number"
 msgstr "يجب أن يكون رقم منفذ"
 
@@ -2866,9 +2832,8 @@ msgstr "لا"
 msgid "No File Transfer available"
 msgstr "نقل الملفات غير متاح"
 
-#, fuzzy
 msgid "No Messages"
-msgstr "الرسائل"
+msgstr "لا رسائل"
 
 msgid "No Messages Found"
 msgstr "لم يُعثر على رسائل"
@@ -3066,16 +3031,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "مفتوحة"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Open %s"
-msgstr "افتح"
+msgstr ""
 
 msgid "Open Email Composer"
 msgstr "افتح محرِّر البريد الإلكتروني"
 
-#, fuzzy
 msgid "Open Emoji Chooser"
-msgstr "افتح محرِّر البريد الإلكتروني"
+msgstr "افتح منتقِ الإموجي"
 
 msgid "Open Folder"
 msgstr "افتح المجلد"
@@ -3099,7 +3063,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "المؤسسة"
 
-#, fuzzy
 msgid "Organization"
 msgstr "المؤسسة"
 
@@ -3115,9 +3078,6 @@ msgstr "أجهزة أخرى متصلة بحسابك"
 
 msgid "Others"
 msgstr "آخرون"
-
-msgid "Out"
-msgstr "خارج"
 
 msgid "Out of memory"
 msgstr "نفدت الذاكرة"
@@ -3408,7 +3368,7 @@ msgid "Profile application with cprofile"
 msgstr "حلِّل أداء التطبيق باستخدام cprofile"
 
 msgid "Pronouns"
-msgstr ""
+msgstr "الضمائر"
 
 msgid "Protocol"
 msgstr "البروتوكول"
@@ -3486,9 +3446,8 @@ msgstr "اخرج"
 msgid "Quit Gajim"
 msgstr "اخرج من غاجم"
 
-#, fuzzy
 msgid "Quitting…"
-msgstr "في الانتظار…"
+msgstr ""
 
 msgid "Quote Next Message"
 msgstr "اقتبس الرسالة التالية"
@@ -3506,9 +3465,8 @@ msgstr "_سجِّل"
 msgid "React with %s"
 msgstr "تفاعل ب‍ %s"
 
-#, fuzzy
 msgid "Read Receipts"
-msgstr "إرسال إيصالات استلام الرسائل"
+msgstr ""
 
 msgid "Read _Wikipedia Article"
 msgstr "اقرأ مقال _ويكيبيديا"
@@ -3718,6 +3676,10 @@ msgid ""
 "org.gnome.Mutter.IdleMonitor or\n"
 "libxss"
 msgstr ""
+"يتطلب:\n"
+"org.freedesktop.ScreenSaver أو\n"
+"org.gnome.Mutter.IdleMonitor أو\n"
+"libxss"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "يتطلب: gnome-keyring أو kwallet"
@@ -3949,13 +3911,13 @@ msgstr "تسميات الأمان"
 msgid "Security Warning"
 msgstr "تحذير أمني"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s"
-msgstr " بواسطة %s"
+msgstr "قُرئ بواسطة %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s participants"
-msgstr "المشاركون"
+msgstr ""
 
 msgid "Select Account"
 msgstr "اختر الحساب"
@@ -3973,9 +3935,8 @@ msgstr "حدِّد نشاطًا لرؤية التفاصيل."
 msgid "Select playback speed"
 msgstr "حدِّد سرعة التشغيل"
 
-#, fuzzy
 msgid "Select the account you want to use to create a new group chat"
-msgstr "يجب أن تكون متصلاً لإنشاء مجموعة دردشة."
+msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "يحدِّد مدخل الصوت الخاص بك (مثلًا الميكروفون)"
@@ -4131,9 +4092,8 @@ msgstr "إظهار الانضمام\\المغادرة"
 msgid "Show Joined / Left"
 msgstr "إظهار من انضم \\ غادر"
 
-#, fuzzy
 msgid "Show Link Preview"
-msgstr "معاينة حيَّة"
+msgstr ""
 
 msgid "Show Plugins"
 msgstr "أظهر الملحقات"
@@ -4144,9 +4104,8 @@ msgstr "إظهار زر إرسال الرسالة"
 msgid "Show Status Changes"
 msgstr "إظهار تغييرات الحالة"
 
-#, fuzzy
 msgid "Show Subject on Join"
-msgstr "إظهار الموضوع"
+msgstr ""
 
 msgid "Show Title Bar"
 msgstr "إظهار شريط العنوان"
@@ -4190,9 +4149,8 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "يظهر التنبيهات حتى لو كنت في حالة «بعيد»، أو «مشغول»، أو إلخ."
 
-#, fuzzy
 msgid "Show notifications on the system tray icon"
-msgstr "يظهر التنبيهات حتى لو كنت في حالة «بعيد»، أو «مشغول»، أو إلخ."
+msgstr ""
 
 msgid "Show on Startup"
 msgstr "أظهر عند بدء التشغيل"
@@ -4242,9 +4200,6 @@ msgstr "التسجيل غير مسموح به"
 
 msgid "Size of preview images in pixels"
 msgstr "حجم صور المعاينة بالبكسل"
-
-msgid "Sleeping"
-msgstr "نائم"
 
 msgid "Software"
 msgstr "البرمجية"
@@ -4521,24 +4476,20 @@ msgstr "يزامن تأريخ الدردشات…"
 msgid "System"
 msgstr "النظام"
 
-#, fuzzy
 msgid "System Notifications"
-msgstr "إظهار التنبيهات"
+msgstr "تنبيهات النظام"
 
-#, fuzzy
 msgid "System Notifications When Away"
-msgstr "التنبيهات عند حالة «بعيد»"
+msgstr ""
 
-#, fuzzy
 msgid "System Tray Icon"
-msgstr "أ_خفِ (أيقونة صينية النظام)"
+msgstr "أيقونة صينية النظام"
 
-#, fuzzy
 msgid "System Tray Notifications"
-msgstr "تنبيهات مرئية"
+msgstr "تنبيهات صينية النظام"
 
 msgid "Telephone"
-msgstr ""
+msgstr "الهاتف"
 
 msgid "Tell your contacts if you received a message"
 msgstr "يخبِر متراسليك إذا استلمت رسالة"
@@ -4776,7 +4727,7 @@ msgid "This message will be deleted from your local chat history"
 msgstr "ستُحذَف هذه الرسالة من تأريخ دردشاتك المحلي"
 
 msgid "This plugin is managed by your operating system"
-msgstr ""
+msgstr "يُدار هذا الملحق بواسطة نظام تشغيلك"
 
 msgid "This server does not allow signup."
 msgstr "هذا الخادوم لا يسمح بالتسجيل."
@@ -4831,7 +4782,6 @@ msgstr "الوقت حتى الغياب"
 msgid "Time Until Not Available"
 msgstr "الوقت حتى تغيَّر الحالة"
 
-#, fuzzy
 msgid "Time Zone"
 msgstr "المنطقة الزمنية"
 
@@ -4949,9 +4899,9 @@ msgstr "ارفع الحظر"
 msgid "Unblock Participant?"
 msgstr "سترفع الحظر عن المشارك؟"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Undecided fingerprints of devices connected with \"%s\""
-msgstr "الأجهزة المتصلة ب‍ «%s»"
+msgstr ""
 
 msgid "Unencrypted"
 msgstr "غير معمَّى"
@@ -5196,9 +5146,6 @@ msgstr "ويندوز"
 msgid "Work"
 msgstr "عمل"
 
-msgid "Working"
-msgstr "يعمل"
-
 msgid "Workspace Settings"
 msgstr "إعدادات مساحة العمل"
 
@@ -5284,9 +5231,8 @@ msgstr "أنت معروف الآن باسم %s"
 msgid "You are now {show}{status}"
 msgstr "أصبحت حالتك الآن {show}{status}"
 
-#, fuzzy
 msgid "You are offline"
-msgstr "أنت غير متصل بالإنترنت."
+msgstr "أنت غير متصل بالإنترنت"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "أنت غير متصل بالإنترنت. اتصل بالإنترنت لإرسال الرسائل…"
@@ -5431,9 +5377,6 @@ msgstr "تقدِّم خدمتك الميزات التالية"
 
 msgid "ZIP files"
 msgstr "ملفات ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[اقرأ المزيد]"
@@ -5720,9 +5663,8 @@ msgstr "example.org"
 msgid "floor"
 msgstr "الطابق"
 
-#, fuzzy
 msgid "invites you to join a group chat"
-msgstr "يمكن لأي أحد الانضمام لمجموعة الدردشة هذه"
+msgstr ""
 
 msgid "is composing a message…"
 msgstr "يكتب رسالة…"
@@ -5997,6 +5939,12 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "التحقق الإملائي الآلي لرسائلك"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "عائد بعد دقائق."
+
+#~ msgid "Back soon"
+#~ msgstr "عائد قريبًا"
+
 #~ msgid "Blocking List"
 #~ msgstr "قائمة الحظر"
 
@@ -6193,6 +6141,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Downloading…"
 #~ msgstr "ينزِّل…"
 
+#~ msgid "Eating"
+#~ msgstr "يأكل"
+
 #~ msgid "Encrypted Certificate"
 #~ msgstr "شهادة معمَّاة"
 
@@ -6242,6 +6193,18 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Insert Emoji"
 #~ msgstr "أدرِج إموجي"
 
+#~ msgid "I’m eating."
+#~ msgstr "أنا آكل."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "أنا بالخارج أستمتع بالحياة."
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "أنا أشاهد فيلمًا."
+
+#~ msgid "I’m working."
+#~ msgstr "أنا أعمل."
+
 #~ msgid "Left Click Action"
 #~ msgstr "إجراء النقر الأيسر"
 
@@ -6278,6 +6241,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Message composition"
 #~ msgstr "إنشاء الرسالة"
 
+#~ msgid "Movie"
+#~ msgstr "فيلم"
+
 #~ msgctxt "Group chat name"
 #~ msgid "News"
 #~ msgstr "الأخبار"
@@ -6299,6 +6265,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Open search bar"
 #~ msgstr "افتح شريط البحث"
+
+#~ msgid "Out"
+#~ msgstr "خارج"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "ملفات PKCS12"
@@ -6380,6 +6349,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "يوقف تشغيل غاجم"
 
+#~ msgid "Sleeping"
+#~ msgstr "نائم"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "تجمُّع الربيع"
@@ -6449,6 +6421,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "What happened"
 #~ msgstr "ماذا حدث"
 
+#~ msgid "Working"
+#~ msgstr "يعمل"
+
 #~ msgid "Workspaces"
 #~ msgstr "مساحات العمل"
 
@@ -6461,6 +6436,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "حُفظت تفضيلات الأرشفة الخاصة بك بنجاح."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "ال_حساب"

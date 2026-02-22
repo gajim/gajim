@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -940,12 +940,6 @@ msgstr "Απομακρυσμένος"
 msgid "Back"
 msgstr "Πίσω σύντομα"
 
-msgid "Back in some minutes."
-msgstr "Πίσω σε λίγα λεπτά."
-
-msgid "Back soon"
-msgstr "Πίσω σύντομα"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Απαγόρευση πρόσβασης"
@@ -1530,6 +1524,10 @@ msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
@@ -1860,9 +1858,6 @@ msgstr "Κατάσταση: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Αποστολή αρχείου σε μία επαφή"
-
-msgid "Eating"
-msgstr "Τρώω"
 
 #, fuzzy
 msgid "Edit"
@@ -2810,22 +2805,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Δουλεύω."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Είμαι έξω απολαμβάνοντας την πραγματική ζωή."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Βλέπω μια ταινία."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Δουλεύω."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3182,9 +3161,6 @@ msgstr "_Προβολή τίτλου στο κουμπί"
 msgid "Move to Group"
 msgstr "Διαγραφή ομάδας"
 
-msgid "Movie"
-msgstr "Ταινία"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Ο προσαρμοσμένος αριθμός θύρας του μεσολαβητή πρέπει να είναι αριθμός."
@@ -3535,9 +3511,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Άλλα"
-
-msgid "Out"
-msgstr "Έξω"
 
 msgid "Out of memory"
 msgstr ""
@@ -4852,9 +4825,6 @@ msgstr "Δεν επιτρέπεται το ψευδώνυμο: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Κοιμάμαι"
-
 #, fuzzy
 msgid "Software"
 msgstr "Χαρακτηριστικά διακομιστή"
@@ -5915,9 +5885,6 @@ msgstr ""
 msgid "Work"
 msgstr "Δουλειά"
 
-msgid "Working"
-msgstr "Δουλειά"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Προχωρημένες ενέργειες"
@@ -6174,9 +6141,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Όλα τα αρχεία"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6972,6 +6936,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Αυτόματη είσοδος"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Πίσω σε λίγα λεπτά."
+
+#~ msgid "Back soon"
+#~ msgstr "Πίσω σύντομα"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Λίστα Ban"
@@ -7205,6 +7175,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Αποστολή αρχείου σε μία επαφή"
 
+#~ msgid "Eating"
+#~ msgstr "Τρώω"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Όνομα:"
@@ -7354,6 +7327,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Δεν είναι δυνατό να στείλετε άδεια αρχεία"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Δουλεύω."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Είμαι έξω απολαμβάνοντας την πραγματική ζωή."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Βλέπω μια ταινία."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Δουλεύω."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Αιτία"
@@ -7407,6 +7396,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "_Μετονομασία αρχείων"
 
+#~ msgid "Movie"
+#~ msgstr "Ταινία"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Σύνδεση μη διαθέσιμη"
@@ -7455,6 +7447,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Διαχειριστής"
+
+#~ msgid "Out"
+#~ msgstr "Έξω"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7676,6 +7671,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Κοιμάμαι"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Κατάσ_ταση"
 
@@ -7840,6 +7838,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#~ msgid "Working"
+#~ msgstr "Δουλειά"
 
 #, fuzzy
 #~ msgid "Workspaces"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -937,12 +937,6 @@ msgstr "Borte"
 msgid "Back"
 msgstr "Straks tilbake"
 
-msgid "Back in some minutes."
-msgstr "Tilbake om noen minutter."
-
-msgid "Back soon"
-msgstr "Straks tilbake"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Bannlys"
@@ -1524,6 +1518,10 @@ msgstr "Kunne ikke åpne fil"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Kunne ikke åpne fil"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Kunne ikke åpne fil"
@@ -1849,9 +1847,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Sender fil til en kontakt"
-
-msgid "Eating"
-msgstr "Spiser"
 
 #, fuzzy
 msgid "Edit"
@@ -2808,22 +2803,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Jeg jobber."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Ute og lever livet."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Ser på en film."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Jeg jobber."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3180,9 +3159,6 @@ msgstr "Merknadsfarge for kontaktavlogging"
 msgid "Move to Group"
 msgstr "Fjern gruppe"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Egendefinert port må være et portnummer"
@@ -3526,9 +3502,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Andre"
-
-msgid "Out"
-msgstr "Ute"
 
 msgid "Out of memory"
 msgstr "Tom for minne"
@@ -4841,9 +4814,6 @@ msgstr "Ulovlig tegn"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Sover"
-
 #, fuzzy
 msgid "Software"
 msgstr "Tjenerprogramvare"
@@ -5922,9 +5892,6 @@ msgstr ""
 msgid "Work"
 msgstr "Jobb"
 
-msgid "Working"
-msgstr "Jobber"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Avanserte Handlinger"
@@ -6182,9 +6149,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Zip-filer"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6987,6 +6951,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Stavekontroll av skrevne meldinger."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Tilbake om noen minutter."
+
+#~ msgid "Back soon"
+#~ msgstr "Straks tilbake"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Liste over bannlyste"
@@ -7212,6 +7182,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Sender fil til en kontakt"
 
+#~ msgid "Eating"
+#~ msgstr "Spiser"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Fornavn"
@@ -7395,6 +7368,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Det er ikke mulig å sende tomme filer"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Jeg jobber."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Ute og lever livet."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Ser på en film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Jeg jobber."
+
 #~ msgid "Last but not least"
 #~ msgstr "Sist men ikke minst"
 
@@ -7449,6 +7438,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Gi kontakt nytt navn"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Tilkobling ikke tilgjengelig"
@@ -7500,6 +7492,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "På ferie"
+
+#~ msgid "Out"
+#~ msgstr "Ute"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PCKS12-filer"
@@ -7739,6 +7734,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Sover"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7922,6 +7920,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ønsker du å slette valgt melding?"
+
+#~ msgid "Working"
+#~ msgstr "Jobber"
 
 #, fuzzy
 #~ msgid "Workspaces"

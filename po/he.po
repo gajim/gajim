@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -975,12 +975,6 @@ msgstr "נעדר"
 msgid "Back"
 msgstr "אשוב בקרוב"
 
-msgid "Back in some minutes."
-msgstr "אני אחזור בעוד כמה דקות."
-
-msgid "Back soon"
-msgstr "אשוב בקרוב"
-
 #, fuzzy
 msgid "Ban"
 msgstr "א_סור"
@@ -1577,6 +1571,10 @@ msgstr "לא היתה אפשרות להטעין תמונה"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "לא היתה אפשרות להטעין תמונה"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "לא היתה אפשרות להטעין תמונה"
@@ -1909,9 +1907,6 @@ msgstr "מצב: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "cli"
-
-msgid "Eating"
-msgstr "אוכל"
 
 #, fuzzy
 msgid "Edit"
@@ -2891,22 +2886,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "אני בעבודה."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "יצאתי החוצה ליהנות מן החיים."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "אני צופה בסרט."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "אני בעבודה."
-
 msgid "JID"
 msgstr "‏JID"
 
@@ -3270,9 +3249,6 @@ msgstr "צבע התראה של התנתקות איש קשר"
 msgid "Move to Group"
 msgstr "הסרת קבוצה"
 
-msgid "Movie"
-msgstr "סרט"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "פורט מותאם מוכרח להיות מספר פורט."
@@ -3619,9 +3595,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "אחרים"
-
-msgid "Out"
-msgstr "בחוץ"
 
 # זיכרון אזל
 msgid "Out of memory"
@@ -4965,10 +4938,6 @@ msgstr "תו לא מורשה"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-# יושן
-msgid "Sleeping"
-msgstr "ישן"
-
 #, fuzzy
 msgid "Software"
 msgstr "תגובת שרת: %s"
@@ -6047,9 +6016,6 @@ msgstr ""
 msgid "Work"
 msgstr "עבודה"
 
-msgid "Working"
-msgstr "עובד"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "קיצורי מקש"
@@ -6326,9 +6292,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "קבצי Zip"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -7147,6 +7110,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "בדיקת איות בעת הלחנת הודעות."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "אני אחזור בעוד כמה דקות."
+
+#~ msgid "Back soon"
+#~ msgstr "אשוב בקרוב"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "רשימת אסירה"
@@ -7379,6 +7348,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "cli"
 
+#~ msgid "Eating"
+#~ msgstr "אוכל"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "שם פרטי:"
@@ -7571,6 +7543,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "אין זה אפשרי לשלוח קבצים ריקים"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "אני בעבודה."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "יצאתי החוצה ליהנות מן החיים."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "אני צופה בסרט."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "אני בעבודה."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "סיבה"
@@ -7627,6 +7615,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "שינוי שם איש קשר"
 
+#~ msgid "Movie"
+#~ msgstr "סרט"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "חיבור לא זמין"
@@ -7678,6 +7669,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "בחופשה"
+
+#~ msgid "Out"
+#~ msgstr "בחוץ"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "קבצי PKCS12"
@@ -7917,6 +7911,10 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "‫Gajim"
 
+# יושן
+#~ msgid "Sleeping"
+#~ msgstr "ישן"
+
 #~ msgid "Sta_tus"
 #~ msgstr "_מצב"
 
@@ -8104,6 +8102,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
+
+#~ msgid "Working"
+#~ msgstr "עובד"
 
 #, fuzzy
 #~ msgid "Workspaces"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -944,12 +944,6 @@ msgstr "Away"
 msgid "Back"
 msgstr "Back soon"
 
-msgid "Back in some minutes."
-msgstr "Back in some minutes."
-
-msgid "Back soon"
-msgstr "Back soon"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Ban"
@@ -1538,6 +1532,10 @@ msgstr "Could not load image"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Could not load image"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Could not load image"
@@ -1868,9 +1866,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Sends file to a contact"
-
-msgid "Eating"
-msgstr "Eating"
 
 #, fuzzy
 msgid "Edit"
@@ -2812,22 +2807,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "I'm working."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "I'm out enjoying life."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "I'm watching a movie."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "I'm working."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3183,9 +3162,6 @@ msgstr "_Show event in roster"
 msgid "Move to Group"
 msgstr "Remove Group"
 
-msgid "Movie"
-msgstr "Movie"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Custom port must be a port number."
@@ -3534,9 +3510,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Others"
-
-msgid "Out"
-msgstr "Out"
 
 msgid "Out of memory"
 msgstr "Out of memory"
@@ -4852,9 +4825,6 @@ msgstr "Character not allowed"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Sleeping"
-
 #, fuzzy
 msgid "Software"
 msgstr "Servers Features"
@@ -5923,9 +5893,6 @@ msgstr ""
 msgid "Work"
 msgstr "Work"
 
-msgid "Working"
-msgstr "Working"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Advanced Actions"
@@ -6181,9 +6148,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "All files"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6984,6 +6948,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Spellchecking of composed messages."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Back in some minutes."
+
+#~ msgid "Back soon"
+#~ msgstr "Back soon"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Ban List"
@@ -7214,6 +7184,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Sends file to a contact"
 
+#~ msgid "Eating"
+#~ msgstr "Eating"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "First Name:"
@@ -7368,6 +7341,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "It is not possible to send empty files"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "I'm working."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "I'm out enjoying life."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "I'm watching a movie."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "I'm working."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reason"
@@ -7421,6 +7410,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Rename Contact"
 
+#~ msgid "Movie"
+#~ msgstr "Movie"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Connection not available"
@@ -7473,6 +7465,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "On Vacation"
+
+#~ msgid "Out"
+#~ msgstr "Out"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7697,6 +7692,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Sleeping"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7863,6 +7861,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Do you really want to delete the selected message?"
+
+#~ msgid "Working"
+#~ msgstr "Working"
 
 #, fuzzy
 #~ msgid "Workspaces"

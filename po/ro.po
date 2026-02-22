@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -871,12 +871,6 @@ msgstr "Departe"
 msgid "Back"
 msgstr "Înapoi"
 
-msgid "Back in some minutes."
-msgstr "Mă întorc în câteva minute."
-
-msgid "Back soon"
-msgstr "Înapoi în curând"
-
 msgid "Ban"
 msgstr "Interzis"
 
@@ -1416,6 +1410,10 @@ msgstr "Nu s-a putut accesa fișierul"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Datei konnte nicht geöffnet werden (%s)"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
@@ -1719,9 +1717,6 @@ msgstr "Schiță: %s"
 
 msgid "Drop files here"
 msgstr "Aruncați fișierele aici"
-
-msgid "Eating"
-msgstr "Mâncând"
 
 #, fuzzy
 msgid "Edit"
@@ -2605,18 +2600,6 @@ msgstr "Eliberat pentru\n"
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr "Mănânc."
-
-msgid "I’m out enjoying life."
-msgstr "Am ieșit să mă bucur de viață."
-
-msgid "I’m watching a movie."
-msgstr "Mă uit la un film."
-
-msgid "I’m working."
-msgstr "Lucrez."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2932,9 +2915,6 @@ msgstr "Lista de contacte: Font de grup"
 #, fuzzy
 msgid "Move to Group"
 msgstr "Eliminați grupul"
-
-msgid "Movie"
-msgstr "Film"
 
 msgid "Must be a port number"
 msgstr "Trebuie să fie un număr de port"
@@ -3256,9 +3236,6 @@ msgstr "Alte dispozitive conectate cu contul dumneavoastră"
 
 msgid "Others"
 msgstr "Alții"
-
-msgid "Out"
-msgstr "Afară"
 
 msgid "Out of memory"
 msgstr "În afara memoriei"
@@ -4456,9 +4433,6 @@ msgstr "Înscrierea nu este permisă"
 msgid "Size of preview images in pixels"
 msgstr "Dimensiunea imaginilor de previzualizare în pixeli"
 
-msgid "Sleeping"
-msgstr "Dormit"
-
 msgid "Software"
 msgstr "Software-ul"
 
@@ -5466,9 +5440,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Muncă"
 
-msgid "Working"
-msgstr "De lucru"
-
 msgid "Workspace Settings"
 msgstr "Setări ale spațiului de lucru"
 
@@ -5714,9 +5685,6 @@ msgstr ""
 
 msgid "ZIP files"
 msgstr "Fișiere ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZîZîZîZîzîzîzîzîzîZîZîZîZîZ"
 
 msgid "[read more]"
 msgstr "[citește mai mult]"
@@ -6496,6 +6464,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Verificarea ortografică automată a mesajelor dumneavoastră"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Mă întorc în câteva minute."
+
+#~ msgid "Back soon"
+#~ msgstr "Înapoi în curând"
+
 #~ msgid "Blocking List"
 #~ msgstr "Lista de blocare"
 
@@ -6752,6 +6726,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Trimiteți cu ușurință imagini, clipuri video sau alte fișiere către "
 #~ "prieteni și grupuri"
 
+#~ msgid "Eating"
+#~ msgstr "Mâncând"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Editați numele…"
 
@@ -6963,6 +6940,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Nu este posibil să se trimită fișiere goale"
 
+#~ msgid "I’m eating."
+#~ msgstr "Mănânc."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Am ieșit să mă bucur de viață."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6970,6 +6953,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Îmi sincronizez contactele din contul meu de la \"%s\". Puteți să "
 #~ "adăugați această adresă la lista de contacte?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Mă uit la un film."
+
+#~ msgid "I’m working."
+#~ msgstr "Lucrez."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Păstrați și gestionați tot istoricul de chat"
@@ -7050,6 +7039,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Move Contact"
 #~ msgstr "Eliminați contactul"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Nu pierdeți niciodată un mesaj, păstrați toți clienții de chat "
@@ -7110,6 +7102,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organizați-vă chat-urile cu spații de lucru"
+
+#~ msgid "Out"
+#~ msgstr "Afară"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Fișiere PKCS12"
@@ -7374,6 +7369,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Închiderea Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Dormit"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Reuniunea de primăvară"
@@ -7584,6 +7582,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "De ce doriți să moderați acest mesaj?"
 
+#~ msgid "Working"
+#~ msgstr "De lucru"
+
 #~ msgid "Workspaces"
 #~ msgstr "Spațiul de lucru"
 
@@ -7632,6 +7633,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Preferințele dumneavoastră de arhivare au fost salvate cu succes."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZîZîZîZîzîzîzîzîzîZîZîZîZîZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Cont"

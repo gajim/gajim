@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2026-01-13 21:51+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-17 23:19+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -863,12 +863,6 @@ msgstr "Absent⋅e"
 msgid "Back"
 msgstr "Précédent"
 
-msgid "Back in some minutes."
-msgstr "De retour dans quelques minutes."
-
-msgid "Back soon"
-msgstr "Bientôt de retour"
-
 msgid "Ban"
 msgstr "Bannir"
 
@@ -1395,6 +1389,9 @@ msgstr "Impossible d’accéder au fichier"
 msgid "Could not find any messages for this participant."
 msgstr "Impossible de trouver des messages pour ce participant."
 
+msgid "Could not generate link preview"
+msgstr "Impossible de générer la prévisualisation du lien"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Impossible d’ouvrir le fichier (%s)"
@@ -1690,9 +1687,6 @@ msgstr "Brouillon : %s"
 
 msgid "Drop files here"
 msgstr "Déposez les fichiers ici"
-
-msgid "Eating"
-msgstr "Mange"
 
 msgid "Edit"
 msgstr "Éditer"
@@ -2284,6 +2278,8 @@ msgstr "Bonjour, je m'appelle %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
+"Ici vous pouvez ajouter des informations pouvant aider à reproduire ce "
+"problème."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -2541,18 +2537,6 @@ msgstr "Émis pour\n"
 
 msgid "Issues detected"
 msgstr "Problèmes détectés"
-
-msgid "I’m eating."
-msgstr "Je suis entrain de manger."
-
-msgid "I’m out enjoying life."
-msgstr "Je suis sorti profiter de la vie."
-
-msgid "I’m watching a movie."
-msgstr "Je regarde un film."
-
-msgid "I’m working."
-msgstr "Je travaille."
 
 msgid "JID"
 msgstr "Adresse XMPP"
@@ -2854,9 +2838,6 @@ msgstr "Déplacer un contact vers un nouveau groupe ?"
 
 msgid "Move to Group"
 msgstr "Déplacer vers un groupe"
-
-msgid "Movie"
-msgstr "Film"
 
 msgid "Must be a port number"
 msgstr "Doit être un numéro de port"
@@ -3170,9 +3151,6 @@ msgstr "Autres appareils connectés à votre compte"
 
 msgid "Others"
 msgstr "Autres"
-
-msgid "Out"
-msgstr "Dehors"
 
 msgid "Out of memory"
 msgstr "Mémoire insuffisante"
@@ -4318,9 +4296,6 @@ msgstr "L'inscription n'est pas autorisée"
 msgid "Size of preview images in pixels"
 msgstr "Taille de l'image d'aperçu (en pixels)"
 
-msgid "Sleeping"
-msgstr "Dort"
-
 msgid "Software"
 msgstr "Logiciel"
 
@@ -4440,7 +4415,7 @@ msgstr ""
 "pour organiser les petites choses ou le prochain grand événement."
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "Étapes pour reproduire le problème…"
 
 msgid "Stop Sharing Online Status?"
 msgstr "Ne plus partager le status ?"
@@ -5292,9 +5267,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Emploi"
 
-msgid "Working"
-msgstr "Travaille"
-
 msgid "Workspace Settings"
 msgstr "Paramètres d'espace de travail"
 
@@ -5543,9 +5515,6 @@ msgstr "Votre service propose les fonctionnalités suivantes"
 
 msgid "ZIP files"
 msgstr "Fichier ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZzzzzz"
 
 msgid "[read more]"
 msgstr "[lire plus]"
@@ -6341,6 +6310,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Vérification orthographique automatique de vos messages"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "De retour dans quelques minutes."
+
+#~ msgid "Back soon"
+#~ msgstr "Bientôt de retour"
+
 #~ msgid "Blocking List"
 #~ msgstr "Liste des bannis"
 
@@ -6603,6 +6578,9 @@ msgstr "... ou bien déposez ici"
 #~ "Envoyez facilement des photos, vidéos ou autres fichiers à des amis et "
 #~ "des groupes"
 
+#~ msgid "Eating"
+#~ msgstr "Mange"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Éditer le nom…"
 
@@ -6817,6 +6795,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Il n'est pas possible d'envoyer un fichier vide"
 
+#~ msgid "I’m eating."
+#~ msgstr "Je suis entrain de manger."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Je suis sorti profiter de la vie."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6824,6 +6808,12 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Je suis en train de synchroniser mes contacts depuis mon compte sur "
 #~ "\"%s\". Pouvez-vous ajouter cette adresse à votre liste de contacts ?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Je regarde un film."
+
+#~ msgid "I’m working."
+#~ msgstr "Je travaille."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Sauvegardez et gérez votre historique de conversation"
@@ -6907,6 +6897,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Move Contact"
 #~ msgstr "Déplacer un contact"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Ne ratez jamais un message, gardez tous vos clients de messagerie "
@@ -6967,6 +6960,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organisez vos discussions avec des espaces de travail"
+
+#~ msgid "Out"
+#~ msgstr "Dehors"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Fichier PKCS12"
@@ -7238,6 +7234,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Éteindre Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Dort"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Rassemblement de printemps"
@@ -7445,6 +7444,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Pourquoi souhaitez-vous modérer ces messages ?"
 
+#~ msgid "Working"
+#~ msgstr "Travaille"
+
 #~ msgid "Workspaces"
 #~ msgstr "Espaces de travail"
 
@@ -7493,6 +7495,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Vos préférences d'archivage ont été sauvegardées avec succès."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZzzzzz"
 
 #~ msgid "_Account"
 #~ msgstr "_Comptes"

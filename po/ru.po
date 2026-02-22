@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2026-01-14 14:19+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-17 23:19+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -858,12 +858,6 @@ msgstr "Отошёл"
 msgid "Back"
 msgstr "Назад"
 
-msgid "Back in some minutes."
-msgstr "Вернусь через несколько минут."
-
-msgid "Back soon"
-msgstr "Скоро буду"
-
 msgid "Ban"
 msgstr "Забанить"
 
@@ -1386,6 +1380,9 @@ msgstr "Не удалось получить доступ к файлу"
 msgid "Could not find any messages for this participant."
 msgstr "Не удалось найти сообщений для этого участника."
 
+msgid "Could not generate link preview"
+msgstr "Сделать предварительный просмотр ссылки не удалось"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Не удалось открыть файл (%s)"
@@ -1672,9 +1669,6 @@ msgstr "Черновик: %s"
 
 msgid "Drop files here"
 msgstr "Перетащите файлы сюда"
-
-msgid "Eating"
-msgstr "Принимаю пищу"
 
 msgid "Edit"
 msgstr "Правка"
@@ -2262,6 +2256,7 @@ msgstr "Привет, я $name. %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
+"Здесь вы можете оставить отзыв, который поможет воспроизвести эту проблему."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -2516,18 +2511,6 @@ msgstr "Выдано для\n"
 
 msgid "Issues detected"
 msgstr "Обнаружены проблемы"
-
-msgid "I’m eating."
-msgstr "Я кушаю."
-
-msgid "I’m out enjoying life."
-msgstr "Я наслаждаюсь жизнью."
-
-msgid "I’m watching a movie."
-msgstr "Я смотрю фильм."
-
-msgid "I’m working."
-msgstr "Я работаю."
 
 msgid "JID"
 msgstr "JID"
@@ -2828,9 +2811,6 @@ msgstr "Переместить контакт в новую группу?"
 
 msgid "Move to Group"
 msgstr "Переместить в группу"
-
-msgid "Movie"
-msgstr "Кино"
 
 msgid "Must be a port number"
 msgstr "Здесь должен быть номер порта"
@@ -3140,9 +3120,6 @@ msgstr "Другие устройства, подключённые к ваше�
 
 msgid "Others"
 msgstr "Другие"
-
-msgid "Out"
-msgstr "Вышел"
 
 msgid "Out of memory"
 msgstr "Недостаточно памяти"
@@ -4283,9 +4260,6 @@ msgstr "Регистрация не разрешена"
 msgid "Size of preview images in pixels"
 msgstr "Размер предпросмотра изображения в пикселах"
 
-msgid "Sleeping"
-msgstr "Сплю"
-
 msgid "Software"
 msgstr "Приложение"
 
@@ -4404,7 +4378,7 @@ msgstr ""
 "следующего крупного мероприятия."
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "Что нужно сделать для воспроизведения проблемы…"
 
 msgid "Stop Sharing Online Status?"
 msgstr "Прекратить отправку сетевого статуса?"
@@ -5242,9 +5216,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Работа"
 
-msgid "Working"
-msgstr "Работаю"
-
 msgid "Workspace Settings"
 msgstr "Настройки вкладки"
 
@@ -5482,9 +5453,6 @@ msgstr "Ваш сервер предоставляет следующие фун
 
 msgid "ZIP files"
 msgstr "ZIP-файлы"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[подробнее]"
@@ -6259,6 +6227,12 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Автоматическая проверка орфографии сообщений"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Вернусь через несколько минут."
+
+#~ msgid "Back soon"
+#~ msgstr "Скоро буду"
+
 #~ msgid "Blocking List"
 #~ msgstr "Чёрный список"
 
@@ -6517,6 +6491,9 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Простая отправка изображений, видео и других файлов друзьям и группам"
 
+#~ msgid "Eating"
+#~ msgstr "Принимаю пищу"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Редактировать имя…"
 
@@ -6727,6 +6704,12 @@ msgstr "…или перетащите его сюда"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Нельзя отправлять пустые файлы"
 
+#~ msgid "I’m eating."
+#~ msgstr "Я кушаю."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Я наслаждаюсь жизнью."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6734,6 +6717,12 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Я синхронизирую контакты из своей учетной записи «%s». Не могли бы вы "
 #~ "добавить этот адрес в свой список контактов?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Я смотрю фильм."
+
+#~ msgid "I’m working."
+#~ msgstr "Я работаю."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Хранение и управление историей всех своих чатов"
@@ -6818,6 +6807,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Move Contact"
 #~ msgstr "Удаление контакта"
 
+#~ msgid "Movie"
+#~ msgstr "Кино"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Меньше шансов пропустить сообщение и синхронизация всех чат-клиентов"
@@ -6880,6 +6872,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Организация чатов в виде вкладок"
+
+#~ msgid "Out"
+#~ msgstr "Вышел"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Файлы PKCS12"
@@ -7150,6 +7145,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Отключение Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Сплю"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Весенняя встреча"
@@ -7358,6 +7356,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Зачем модерировать это сообщение?"
 
+#~ msgid "Working"
+#~ msgstr "Работаю"
+
 #~ msgid "Workspaces"
 #~ msgstr "Вкладки"
 
@@ -7401,6 +7402,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Ваши параметры архивирования успешно сохранены."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Учётная запись"

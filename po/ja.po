@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2026-01-17 10:19+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -846,12 +846,6 @@ msgstr "離席中"
 msgid "Back"
 msgstr "戻る"
 
-msgid "Back in some minutes."
-msgstr "数分後に戻ります。"
-
-msgid "Back soon"
-msgstr "すぐに戻ります"
-
 msgid "Ban"
 msgstr "締め出し"
 
@@ -1372,6 +1366,10 @@ msgstr "ファイルにアクセスできませんでした"
 msgid "Could not find any messages for this participant."
 msgstr "この参加者宛てのメッセージは見つかりませんでした。"
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "プロバイダー一覧を更新できませんでした"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "ファイルを開けませんでした (%s)"
@@ -1656,9 +1654,6 @@ msgstr "下書き: %s"
 
 msgid "Drop files here"
 msgstr "ここにファイルをドロップ"
-
-msgid "Eating"
-msgstr "食事"
 
 msgid "Edit"
 msgstr "編集"
@@ -2502,18 +2497,6 @@ msgstr "証明対象\n"
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr "食事中です。"
-
-msgid "I’m out enjoying life."
-msgstr "出かけています。"
-
-msgid "I’m watching a movie."
-msgstr "ただいま映画鑑賞中です。"
-
-msgid "I’m working."
-msgstr "仕事中です。"
-
 msgid "JID"
 msgstr "JID"
 
@@ -2818,9 +2801,6 @@ msgstr "相手先を新しいグループに移動しますか ?"
 
 msgid "Move to Group"
 msgstr "グループに移動"
-
-msgid "Movie"
-msgstr "映画"
 
 msgid "Must be a port number"
 msgstr "ポート番号が必要です"
@@ -3136,9 +3116,6 @@ msgstr "アカウントに係属する他のデバイス"
 
 msgid "Others"
 msgstr "その他"
-
-msgid "Out"
-msgstr "外出中"
 
 msgid "Out of memory"
 msgstr "メモリが足りません"
@@ -4274,9 +4251,6 @@ msgstr "登録は許可されていません"
 msgid "Size of preview images in pixels"
 msgstr "プレビュー画像のサイズ (単位: ピクセル)"
 
-msgid "Sleeping"
-msgstr "睡眠中"
-
 msgid "Software"
 msgstr "ソフトウェア"
 
@@ -5235,9 +5209,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "仕事"
 
-msgid "Working"
-msgstr "仕事中"
-
 msgid "Workspace Settings"
 msgstr "作業空間の設定"
 
@@ -5475,9 +5446,6 @@ msgstr "サーバーは以下の機能を提供します"
 
 msgid "ZIP files"
 msgstr "ZIP ファイル"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[続きを読む]"
@@ -6247,6 +6215,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "入力メッセージの自動スペルチェック"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "数分後に戻ります。"
+
+#~ msgid "Back soon"
+#~ msgstr "すぐに戻ります"
+
 #~ msgid "Blocking List"
 #~ msgstr "追放者の一覧"
 
@@ -6496,6 +6470,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Easily send pictures, videos or other files to friends and groups"
 #~ msgstr "友人やグループへの画像・動画やその他のファイルの簡単な送信"
 
+#~ msgid "Eating"
+#~ msgstr "食事"
+
 #~ msgid "Edit Name…"
 #~ msgstr "名前を編集…"
 
@@ -6697,6 +6674,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "空のファイルを転送することはできません"
 
+#~ msgid "I’m eating."
+#~ msgstr "食事中です。"
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "出かけています。"
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6704,6 +6687,12 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "私はアカウントの相手先を \"%s\" に同期しています。このアドレスをあなたの相"
 #~ "手先一覧に追加していただけますか ?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "ただいま映画鑑賞中です。"
+
+#~ msgid "I’m working."
+#~ msgstr "仕事中です。"
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "すべての会話履歴の保存と管理"
@@ -6786,6 +6775,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Move Contact"
 #~ msgstr "相手先を移動"
 
+#~ msgid "Movie"
+#~ msgstr "映画"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr "他のクライアントと同期し、メッセージを取りこぼしません"
 
@@ -6848,6 +6840,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "チャットを作業空間にまとめる"
+
+#~ msgid "Out"
+#~ msgstr "外出中"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12 形式のファイル"
@@ -7111,6 +7106,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim を終了しています"
 
+#~ msgid "Sleeping"
+#~ msgstr "睡眠中"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "春の集い"
@@ -7317,6 +7315,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "なぜこれらのメッセージを抑制したいのですか ?"
 
+#~ msgid "Working"
+#~ msgstr "仕事中"
+
 #~ msgid "Workspaces"
 #~ msgstr "作業空間"
 
@@ -7360,6 +7361,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "書庫の設定を保存しました。"
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "アカウント (_A)"

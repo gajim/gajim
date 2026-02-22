@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-11-14 00:19+0000\n"
 "Last-Translator: نادکارو <nadkaro@riseup.net>\n"
 "Language-Team: Persian <https://translate.gajim.org/projects/gajim/master/fa/"
@@ -816,12 +816,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-msgid "Back in some minutes."
-msgstr ""
-
-msgid "Back soon"
-msgstr ""
-
 msgid "Ban"
 msgstr ""
 
@@ -1324,6 +1318,9 @@ msgstr ""
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+msgid "Could not generate link preview"
+msgstr ""
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr ""
@@ -1598,9 +1595,6 @@ msgid "Draft: %s"
 msgstr ""
 
 msgid "Drop files here"
-msgstr ""
-
-msgid "Eating"
 msgstr ""
 
 msgid "Edit"
@@ -2407,18 +2401,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr ""
-
-msgid "I’m out enjoying life."
-msgstr ""
-
-msgid "I’m watching a movie."
-msgstr ""
-
-msgid "I’m working."
-msgstr ""
-
 msgid "JID"
 msgstr ""
 
@@ -2712,9 +2694,6 @@ msgid "Move Contact to New Group?"
 msgstr ""
 
 msgid "Move to Group"
-msgstr ""
-
-msgid "Movie"
 msgstr ""
 
 msgid "Must be a port number"
@@ -3018,9 +2997,6 @@ msgid "Other devices connected with your account"
 msgstr ""
 
 msgid "Others"
-msgstr ""
-
-msgid "Out"
 msgstr ""
 
 msgid "Out of memory"
@@ -4118,9 +4094,6 @@ msgstr ""
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr ""
-
 msgid "Software"
 msgstr ""
 
@@ -5033,9 +5006,6 @@ msgstr ""
 msgid "Work"
 msgstr ""
 
-msgid "Working"
-msgstr ""
-
 msgid "Workspace Settings"
 msgstr ""
 
@@ -5259,9 +5229,6 @@ msgid "Your service offers the following features"
 msgstr ""
 
 msgid "ZIP files"
-msgstr ""
-
-msgid "ZZZZzzzzzZZZZZ"
 msgstr ""
 
 msgid "[read more]"

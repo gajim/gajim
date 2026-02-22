@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -944,12 +944,6 @@ msgstr "Preč"
 msgid "Back"
 msgstr "Hneď som späť"
 
-msgid "Back in some minutes."
-msgstr "Som späť za pár minút."
-
-msgid "Back soon"
-msgstr "Hneď som späť"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Zakázať"
@@ -1537,6 +1531,10 @@ msgstr "Nie je možné načítať obrázok"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Nie je možné načítať obrázok"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Nie je možné načítať obrázok"
@@ -1867,9 +1865,6 @@ msgstr "Stav: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Poslať súbor kontaktu"
-
-msgid "Eating"
-msgstr "Jem"
 
 #, fuzzy
 msgid "Edit"
@@ -2813,22 +2808,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Pracujem."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Som vonku a užívam si život."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Pozerám film."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Pracujem."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3180,9 +3159,6 @@ msgstr "_Zobraziť udalosť v zozname"
 msgid "Move to Group"
 msgstr "Odstrániť skupinu"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Vlastný port musí byť číslo portu."
@@ -3531,9 +3507,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Ostatný"
-
-msgid "Out"
-msgstr "Vonku"
 
 msgid "Out of memory"
 msgstr ""
@@ -4847,9 +4820,6 @@ msgstr "Znak nie je povolený"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Spím"
-
 #, fuzzy
 msgid "Software"
 msgstr "Vlastnosti servera"
@@ -5922,9 +5892,6 @@ msgstr ""
 msgid "Work"
 msgstr "Práca"
 
-msgid "Working"
-msgstr "Pracujem"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Pokročilé akcie"
@@ -6180,9 +6147,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Všetky súbory"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6975,6 +6939,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Kontrolovať pravopis vo vytvorených správach."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Som späť za pár minút."
+
+#~ msgid "Back soon"
+#~ msgstr "Hneď som späť"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Čierna listina"
@@ -7205,6 +7175,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Poslať súbor kontaktu"
 
+#~ msgid "Eating"
+#~ msgstr "Jem"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Prvé meno:"
@@ -7359,6 +7332,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Nie je možné poslať prázdne súbory"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Pracujem."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Som vonku a užívam si život."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Pozerám film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Pracujem."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Dôvod"
@@ -7412,6 +7401,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Premenovať kontakt"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Pripojenie nie je dostupné"
@@ -7464,6 +7456,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Na dovolenke"
+
+#~ msgid "Out"
+#~ msgstr "Vonku"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7687,6 +7682,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Spím"
+
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
 
@@ -7852,6 +7850,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Skutočne si želáte zmazať vybraných správ?"
+
+#~ msgid "Working"
+#~ msgstr "Pracujem"
 
 #, fuzzy
 #~ msgid "Workspaces"

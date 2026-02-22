@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -936,12 +936,6 @@ msgstr "Сышоў"
 msgid "Back"
 msgstr "Хутка буду"
 
-msgid "Back in some minutes."
-msgstr "Хутка буду."
-
-msgid "Back soon"
-msgstr "Хутка буду"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Забараніць казанне"
@@ -1526,6 +1520,10 @@ msgstr "Немагчыма загрузіць малюнак"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Немагчыма загрузіць малюнак"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Немагчыма загрузіць малюнак"
@@ -1856,9 +1854,6 @@ msgstr "Стан: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Адправіць файл чалавеку"
-
-msgid "Eating"
-msgstr "Ежа"
 
 #, fuzzy
 msgid "Edit"
@@ -2805,22 +2800,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Працую."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Я цешуся з жыцця."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Гляджу фільм."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Працую."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3177,9 +3156,6 @@ msgstr "_Паказваць падзею ў галоўным вакне"
 msgid "Move to Group"
 msgstr "Выдаліць групу"
 
-msgid "Movie"
-msgstr "Фільм"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Адмысловы порт павінны быць нумарам порта."
@@ -3530,9 +3506,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Іншыя"
-
-msgid "Out"
-msgstr "Сышоў"
 
 msgid "Out of memory"
 msgstr ""
@@ -4846,9 +4819,6 @@ msgstr "Такая мянушка не дазволеная: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Сон"
-
 #, fuzzy
 msgid "Software"
 msgstr "Здольнасці сервера"
@@ -5906,9 +5876,6 @@ msgstr ""
 msgid "Work"
 msgstr "Праца"
 
-msgid "Working"
-msgstr "Працую"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Адмысловыя дзеянні"
@@ -6164,9 +6131,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Усе файлы"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6954,6 +6918,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Аўтаматычна далучацца"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Хутка буду."
+
+#~ msgid "Back soon"
+#~ msgstr "Хутка буду"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Чорны спіс"
@@ -7185,6 +7155,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Адправіць файл чалавеку"
 
+#~ msgid "Eating"
+#~ msgstr "Ежа"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Імя:"
@@ -7340,6 +7313,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Немагчыма адправіць пусты файл"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Працую."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Я цешуся з жыцця."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Гляджу фільм."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Працую."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Прычына"
@@ -7393,6 +7382,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Змяніць імя чалавека"
 
+#~ msgid "Movie"
+#~ msgstr "Фільм"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Няма злучэння"
@@ -7445,6 +7437,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Адміністратар"
+
+#~ msgid "Out"
+#~ msgstr "Сышоў"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7661,6 +7656,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Сон"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Ст_ан"
 
@@ -7825,6 +7823,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
+
+#~ msgid "Working"
+#~ msgstr "Працую"
 
 #, fuzzy
 #~ msgid "Workspaces"

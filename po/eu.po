@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -936,12 +936,6 @@ msgstr "Kanpoan"
 msgid "Back"
 msgstr "Laster etorriko naiz"
 
-msgid "Back in some minutes."
-msgstr "Minutu batzuk barru berriro hemen."
-
-msgid "Back soon"
-msgstr "Laster etorriko naiz"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Debekatu"
@@ -1528,6 +1522,10 @@ msgstr "Ezin izan da irudia kargatu"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Ezin izan da irudia kargatu"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Ezin izan da irudia kargatu"
@@ -1855,9 +1853,6 @@ msgstr "Egoera: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Fitxero bat bidali kontaktu bati"
-
-msgid "Eating"
-msgstr "Jaten"
 
 #, fuzzy
 msgid "Edit"
@@ -2804,22 +2799,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Lanean ari naiz."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Kanpoan naiz bizitza disfrutatzen."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Filma bat ikustean ari naiz."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Lanean ari naiz."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3176,9 +3155,6 @@ msgstr "_Ikusarazi gertaera zerrendan"
 msgid "Move to Group"
 msgstr "Ezabatu Taldea"
 
-msgid "Movie"
-msgstr "Filmea"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Bezeroaren portua portu zenbaki bat izan behar da."
@@ -3529,9 +3505,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Besteak"
-
-msgid "Out"
-msgstr "kanpoan"
 
 msgid "Out of memory"
 msgstr ""
@@ -4847,9 +4820,6 @@ msgstr "Baimenik gabeko izengoitia: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Lotan"
-
 #, fuzzy
 msgid "Software"
 msgstr "Zerbitzariaren Ezaugarriak:"
@@ -5910,9 +5880,6 @@ msgstr ""
 msgid "Work"
 msgstr "Lana"
 
-msgid "Working"
-msgstr "Lanean"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Ekintza Aurreratuak"
@@ -6166,9 +6133,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Fitxategi guztiak"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6955,6 +6919,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Automatikoki sartu"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Minutu batzuk barru berriro hemen."
+
+#~ msgid "Back soon"
+#~ msgstr "Laster etorriko naiz"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Debekatutako Zerrenda"
@@ -7188,6 +7158,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Fitxero bat bidali kontaktu bati"
 
+#~ msgid "Eating"
+#~ msgstr "Jaten"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Lehen Izena:"
@@ -7343,6 +7316,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Ez da posible hutsik dauden artxiboak bidaltzea"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Lanean ari naiz."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Kanpoan naiz bizitza disfrutatzen."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Filma bat ikustean ari naiz."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Lanean ari naiz."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Arrazoia"
@@ -7393,6 +7382,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Berridatzi Kontaktua"
+
+#~ msgid "Movie"
+#~ msgstr "Filmea"
 
 #, fuzzy
 #~ msgid "No Connection Available"
@@ -7446,6 +7438,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administratzailea"
+
+#~ msgid "Out"
+#~ msgstr "kanpoan"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7663,6 +7658,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Lotan"
+
 #~ msgid "Sta_tus"
 #~ msgstr "E_goera"
 
@@ -7827,6 +7825,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
+#~ msgid "Working"
+#~ msgstr "Lanean"
 
 #, fuzzy
 #~ msgid "Workspaces"

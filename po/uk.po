@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-12-23 17:19+0000\n"
 "Last-Translator: Nomadic Entity <noiteluna@noleron.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -848,12 +848,6 @@ msgstr "На дорозі по чай"
 msgid "Back"
 msgstr "Назад"
 
-msgid "Back in some minutes."
-msgstr "Повернуся за декілька хвилин."
-
-msgid "Back soon"
-msgstr "Скоро повернуся"
-
 msgid "Ban"
 msgstr "Заборона"
 
@@ -1373,6 +1367,10 @@ msgstr "Не вдалося звернутись до файлу"
 msgid "Could not find any messages for this participant."
 msgstr "Не вдалося знайти жодного повідомлення для цього учасника."
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Не вдалося оновити список постачальників"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Не вдалося відкрити файл (%s)"
@@ -1658,9 +1656,6 @@ msgstr "Чернетка: %s"
 
 msgid "Drop files here"
 msgstr "Скидайте файли сюди"
-
-msgid "Eating"
-msgstr "Їм"
 
 msgid "Edit"
 msgstr "Правка"
@@ -2499,18 +2494,6 @@ msgstr "Видано на ім'я\n"
 msgid "Issues detected"
 msgstr "Виявлені проблеми"
 
-msgid "I’m eating."
-msgstr "Я їм."
-
-msgid "I’m out enjoying life."
-msgstr "Я насолоджуюся життям."
-
-msgid "I’m watching a movie."
-msgstr "Я дивлюся кіно."
-
-msgid "I’m working."
-msgstr "Я працюю."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2810,9 +2793,6 @@ msgstr "Перенести контакт до нової групи?"
 
 msgid "Move to Group"
 msgstr "Перейти до групи"
-
-msgid "Movie"
-msgstr "Відео"
 
 msgid "Must be a port number"
 msgstr "Повинен бути номер порту"
@@ -3126,9 +3106,6 @@ msgstr "Інші пристрої, пов'язані з вашим акаунт�
 
 msgid "Others"
 msgstr "Інші"
-
-msgid "Out"
-msgstr "Відійшов(шла)"
 
 msgid "Out of memory"
 msgstr "Не вистачає пам'яті"
@@ -4275,9 +4252,6 @@ msgstr "Реєстрація заборонена"
 msgid "Size of preview images in pixels"
 msgstr "Розмір зображень попереднього перегляду в пікселях"
 
-msgid "Sleeping"
-msgstr "Сплю"
-
 msgid "Software"
 msgstr "Програмне забезпечення"
 
@@ -5242,9 +5216,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Робота"
 
-msgid "Working"
-msgstr "Працюю"
-
 msgid "Workspace Settings"
 msgstr "Налаштування робочого простору"
 
@@ -5485,9 +5456,6 @@ msgstr "Ваш сервіс пропонує наступні можливост
 
 msgid "ZIP files"
 msgstr "ZIP-файли"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZZZZZZZZZZZ"
 
 msgid "[read more]"
 msgstr "[читати далі]"
@@ -6269,6 +6237,12 @@ msgstr "...або киньте сюди."
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Перевірка правопису повідомлень, які ви створюєте."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Повернуся за декілька хвилин."
+
+#~ msgid "Back soon"
+#~ msgstr "Скоро повернуся"
+
 #~ msgid "Blocking List"
 #~ msgstr "Список блокування"
 
@@ -6503,6 +6477,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Easily send pictures, videos or other files to friends and groups"
 #~ msgstr "Легко надсилайте картинки, відео та інші файли друзям або групам"
 
+#~ msgid "Eating"
+#~ msgstr "Їм"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Змінити ім'я…"
 
@@ -6692,6 +6669,18 @@ msgstr "...або киньте сюди."
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Надсилання порожніх файлів не передбачено"
 
+#~ msgid "I’m eating."
+#~ msgstr "Я їм."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Я насолоджуюся життям."
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Я дивлюся кіно."
+
+#~ msgid "I’m working."
+#~ msgstr "Я працюю."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Підстава"
@@ -6755,6 +6744,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Move Contact"
 #~ msgstr "Перейменувати контакт"
 
+#~ msgid "Movie"
+#~ msgstr "Відео"
+
 #~ msgctxt "Group chat name"
 #~ msgid "News"
 #~ msgstr "Новини"
@@ -6808,6 +6800,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "У відпустці"
+
+#~ msgid "Out"
+#~ msgstr "Відійшов(шла)"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Файли PKCS12"
@@ -7046,6 +7041,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Вимкнення Гаджіма"
 
+#~ msgid "Sleeping"
+#~ msgstr "Сплю"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Весняний збір"
@@ -7236,6 +7234,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ви справді бажаєте вилучити виділене повідомлення?"
 
+#~ msgid "Working"
+#~ msgstr "Працюю"
+
 #, fuzzy
 #~ msgid "Workspaces"
 #~ msgstr "Перейменувати контакт"
@@ -7284,6 +7285,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Налаштування архівації збережено!"
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZZZZZZZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Обліковий запис"

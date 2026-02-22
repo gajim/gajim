@@ -1,16 +1,16 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010, 2022, 2023, 2024, 2025.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2025-12-31 16:19+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-18 18:19+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
-">\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
+"\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,6 +45,8 @@ msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
+"%(participant)s жіберген %(count)s хабарлама модерацияланады.\n"
+"Неліктен бұл хабарламаларды модерациялағыңыз келеді?"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -82,27 +84,27 @@ msgstr ""
 msgid "%(name)s cancelled the transfer (%(reason)s)"
 msgstr "%(name)s файлдармен алмасуы тоқтатты (%(reason)s)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been banned by %(actor)s"
-msgstr "{nick} банға салынды {actor}{reason}"
+msgstr "%(actor)s %(nick)s дегенді бандады"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been kicked by %(actor)s"
-msgstr "{nick} бөлмеден қуылды {actor}{reason}"
+msgstr "%(actor)s %(nick)s дегенді шығарып жіберді"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
-msgstr "%s бұл топтық чатқа шақырылды"
+msgstr "%(nick)s енді осы топтық чаттың %(affiliation)s мәртебесіне ие"
 
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(number)s min ago"
 msgid_plural "%(number)s mins ago"
-msgstr[0] "%s мин бұрын"
-msgstr[1] "%s мин бұрын"
+msgstr[0] "%(number)s мин бұрын"
+msgstr[1] "%(number)s мин бұрын"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -120,13 +122,13 @@ msgstr "%(received)s алынды, барлығы %(max)s"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s түрдегі шифрлеу белсенді %(authenticated)s."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(user)s is now %(role)s of this group chat"
-msgstr "%(owner_or_admin_or_member)s осы чат бөлмесінде"
+msgstr "%(user)s енді осы топтық чаттың %(role)s рөліне ие"
 
 #, python-format
 msgid "%(user)s now has the following hats: %(hats)s"
-msgstr ""
+msgstr "%(user)s енді келесі рөлдерге ие: %(hats)s"
 
 #, python-format
 msgctxt "own nickname in group chat"
@@ -141,21 +143,21 @@ msgstr "%s және %s теруде…"
 msgid "%s can be joined by invite only."
 msgstr "%s тек шақыру бойынша қосыла алады."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has been banned"
-msgstr "%s қосылды"
+msgstr "%s бандалды"
 
 #, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%s бұл топтық чатқа шақырылды"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has been kicked"
-msgstr "%s қосылды"
+msgstr "%s шығарып жіберілді"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has been removed from this group chat"
-msgstr "%s бұл топтық чатқа шақырылды"
+msgstr "%s осы топтық чаттан өшірілді"
 
 #, python-format
 msgid "%s has joined"
@@ -183,7 +185,7 @@ msgstr "%s теруде…"
 
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s / %s"
 
 #, python-format
 msgid "%s participants are typing…"
@@ -201,9 +203,9 @@ msgstr "%s қалып-күйін бөлісуді тоқтатты"
 msgid "%s stopped the transfer"
 msgstr "%s файлдармен алмасуды тоқтатқан"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s wants to add you."
-msgstr "%s сізге файлды жібергісі келеді"
+msgstr "%s сізді қосқысы келеді."
 
 #, python-format
 msgctxt "positive longitude"
@@ -226,30 +228,27 @@ msgid "%sW"
 msgstr "%sW"
 
 msgid "'@' is missing in address. Are you sure this is correct?"
-msgstr ""
+msgstr "Адресте '@' таңбасы жоқ. Бұл дұрыс екеніне сенімдісіз бе?"
 
-#, fuzzy, python-format
+#, python-format
 msgid "(changed by %s)"
-msgstr "%s өзгерткен"
+msgstr "(%s өзгерткен)"
 
-#, fuzzy
 msgid "(inactive)"
-msgstr "Белсенді"
+msgstr "(белсенді емес)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "(reason: %s)"
-msgstr "Себебі: %s"
+msgstr "(себебі: %s)"
 
-#, fuzzy
 msgid "(reason: affiliation changed)"
-msgstr ": Қатысуы өзгертілген"
+msgstr "(себебі: қатысу мәртебесі өзгерді)"
 
-#, fuzzy
 msgid "(reason: group chat configuration changed to members-only)"
-msgstr ": Топтық чатқа қатысу \"тек мүшелер үшін\" деп өзгертілген"
+msgstr "(себебі: топтық чат баптаулары \"тек мүшелер үшін\" болып өзгертілді)"
 
 msgid "(reason: system shutdown)"
-msgstr ""
+msgstr "(себебі: жүйе жұмысын тоқтатты)"
 
 msgid "1 Day"
 msgstr "1 күн"
@@ -347,14 +346,13 @@ msgid "<error>"
 msgstr "<error>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Топтық чатқа кемінде бір иесі қажет"
 
-#, fuzzy
 msgid "A feature comparison of various providers"
-msgstr "Әр түрлі серверлердің ерекшеліктерін салыстыру"
+msgstr "Түрлі провайдерлердің мүмкіндіктерін салыстыру"
 
 msgid "A fully-featured XMPP chat client"
 msgstr "Толық мүмкіндіктері бар XMPP чат клиенті"
@@ -401,22 +399,22 @@ msgstr "Барлық байланыс сұрауларын қабылдау"
 msgid "Account"
 msgstr "Тіркелгі"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Account %(name)s is still connected\n"
 "All chat and group chat windows will be closed."
-msgstr "Барлық чаттар мен топ чаттары терезелері жабылады."
+msgstr ""
+"%(name)s тіркелгісі әлі де қосулы\n"
+"Барлық чат және топтық чат терезелері жабылады."
 
 msgid "Account Added"
 msgstr "Тіркелгі қосылды"
 
-#, fuzzy
 msgid "Account Address"
-msgstr "Тіркелгі қосылды"
+msgstr "Тіркелгі адресі"
 
-#, fuzzy
 msgid "Account Label"
-msgstr "Тіркелгі сөндірілді"
+msgstr "Тіркелгі белгісі"
 
 msgid "Account Name..."
 msgstr "Тіркелгі атауы..."
@@ -430,9 +428,8 @@ msgstr "Тіркелгі өшірілді"
 msgid "Account Wizard"
 msgstr "Тіркелгі шебері"
 
-#, fuzzy
 msgid "Account address: "
-msgstr "Тіркелгі қосылды"
+msgstr "Тіркелгі адресі: "
 
 msgid "Account disabled"
 msgstr "Тіркелгі сөндірілді"
@@ -449,9 +446,8 @@ msgstr "Тіркелгі байланысқан болуы керек"
 msgid "Account is being created"
 msgstr "Тіркелгі жасалуда"
 
-#, fuzzy
 msgid "Account name: "
-msgstr "Тіркелгі атауы..."
+msgstr "Тіркелгі аты: "
 
 #, python-format
 msgid "Account: %s"
@@ -466,9 +462,9 @@ msgstr "Жабу кезіндегі әрекет"
 msgid "Action when closing Gajim’s window"
 msgstr "Gajim терезесін жабу кезіндегі әрекет"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Actions for \"%s\""
-msgstr "\"%s\" үшін әре_кет"
+msgstr "\"%s\" үшін әрекеттер"
 
 msgid "Activate"
 msgstr "Белсендіру"
@@ -479,9 +475,8 @@ msgstr "Белсенді"
 msgid "Active"
 msgstr "Белсенді"
 
-#, fuzzy
 msgid "Activity Feed"
-msgstr "Белсенді"
+msgstr "Белсенділік таспасы"
 
 msgid "Add"
 msgstr "Қосу"
@@ -489,16 +484,14 @@ msgstr "Қосу"
 msgid "Add Account"
 msgstr "Тіркелгі қосу"
 
-#, fuzzy
 msgid "Add Account…"
-msgstr "_Тіркелгіні қосу…"
+msgstr "Тіркелгіні қосу…"
 
 msgid "Add Contact"
 msgstr "Контакт қосу"
 
-#, fuzzy
 msgid "Add Contact to New Group?"
-msgstr "Контакт қосу"
+msgstr "Контактіні жаңа топқа қосу керек пе?"
 
 msgid "Add Contact…"
 msgstr "Контактты қосу…"
@@ -509,7 +502,6 @@ msgstr "Жазба қосу"
 msgid "Add Files…"
 msgstr "Файлдарды қосу…"
 
-#, fuzzy
 msgid "Add Group…"
 msgstr "Топты қосу…"
 
@@ -529,7 +521,7 @@ msgid "Add a checkmark to received messages"
 msgstr "Алынған хабарларға белгіше қою"
 
 msgid "Add a label to distinguish accounts in Gajim"
-msgstr ""
+msgstr "Gajim ішінде тіркелгілерді ажырату үшін белгі қосыңыз"
 
 msgid "Add a name and color for your account"
 msgstr "Тіркелгіңізге атау мен түс қосу"
@@ -543,21 +535,20 @@ msgstr "Жаңа теманы қосу"
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Бұл сертификатты сені_мділер тізіміне қосу"
 
-#, fuzzy
 msgid "Add to Group"
-msgstr "Топты қосу…"
+msgstr "Топқа қосу"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Added %(count)s contact"
 msgid_plural "Added %(count)s contacts"
-msgstr[0] "%s контакт қосылды"
-msgstr[1] "%s контакт қосылды"
+msgstr[0] "%(count)s контакт қосылды"
+msgstr[1] "%(count)s контакт қосылды"
 
 msgid "Additionally, you will lose your administrator affiliation."
-msgstr ""
+msgstr "Сонымен қатар, сіз әкімші мәртебесінен айырыласыз."
 
 msgid "Additionally, you will lose your owner affiliation."
-msgstr ""
+msgstr "Сонымен қатар, сіз иесі мәртебесінен айырыласыз."
 
 msgid "Address"
 msgstr "Адресі"
@@ -586,9 +577,8 @@ msgstr "Әкімшілер"
 msgid "Advanced"
 msgstr "Кеңейтілген"
 
-#, fuzzy
 msgid "Advanced Configuration Editor"
-msgstr "Кеңейтілген баптаулар түзетушісі… "
+msgstr "Кеңейтілген баптаулар редакторы"
 
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "Кеңейтілген баптаулар түзетушісі (КБТ)"
@@ -601,11 +591,11 @@ msgstr "Кеңейтілген баптаулар"
 
 #, python-format
 msgid "Advanced – %(account)s"
-msgstr ""
+msgstr "Кеңейтілген – %(account)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Adw Version: %s"
-msgstr "GTK нұсқасы: %s"
+msgstr "Adw нұсқасы: %s"
 
 msgid "Affiliation"
 msgstr "Қатысуы"
@@ -616,9 +606,10 @@ msgstr "Қатысулар"
 #, python-format
 msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
+"%(nick)s пайдаланушысының осы топтық чаттағы қатысу мәртебелері өшірілді"
 
 msgid "After"
-msgstr ""
+msgstr "Кейін"
 
 msgid "All"
 msgstr "Барлығы"
@@ -629,27 +620,25 @@ msgstr "Барлық тіркелгілер"
 msgid "All Chat States"
 msgstr "Барлық чат күйлері"
 
-#, fuzzy
 msgid "All Chats"
-msgstr "Барлық чат күйлері"
+msgstr "Барлық чаттар"
 
-#, fuzzy
 msgid "All Messages"
-msgstr "Хабарлама"
+msgstr "Барлық хабарламалар"
 
 msgid "All files"
 msgstr "Барлық файлдар"
 
 #, python-format
 msgid "All hats of %s have been removed"
-msgstr ""
+msgstr "%s пайдаланушысының барлық рөлдері өшірілді"
 
 msgid "All of these settings are optional and can be changed later"
 msgstr ""
+"Бұл баптаулардың барлығы міндетті емес және оларды кейінірек өзгертуге болады"
 
-#, fuzzy
 msgid "All of your hats have been removed"
-msgstr "Жаңа чат бөлмесі жасалған"
+msgstr "Сіздің барлық рөлдеріңіз (hats) өшірілді"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
@@ -695,12 +684,16 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"\"{group}\" тобында {occupant_jid} пайдаланушысына {affiliation_or_role} "
+"мәртебесін беру кезінде қате кетті"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
-msgstr "%(path)s жерінде файлды жасау кезінде қате орын алды: %(error)s"
+msgstr ""
+"{occupant_jid} пайдаланушысына {affiliation_or_role} мәртебесін беру кезінде "
+"қате кетті: {error}"
 
 msgid "And more..."
 msgstr "Көбірек..."
@@ -729,9 +722,8 @@ msgstr "Рұқсат ету"
 msgid "Archive"
 msgstr "Архив"
 
-#, fuzzy
 msgid "Archive Malformed"
-msgstr "Архив қате"
+msgstr "Архив пішімі қате"
 
 msgid "Archive corrupted"
 msgstr "Архив зақымдалған"
@@ -742,7 +734,6 @@ msgstr "Архив бос"
 msgid "Archive is malformed"
 msgstr "Архив қате"
 
-#, fuzzy
 msgid "Archiving"
 msgstr "Архивтеу"
 
@@ -752,7 +743,7 @@ msgstr "Архивтеу"
 
 #, python-format
 msgid "Archiving – %(account)s"
-msgstr ""
+msgstr "Архивтеу – %(account)s"
 
 msgid "Ask For Status Message on…"
 msgstr "Қалып-күй хабарламасын сұрап отыру…"
@@ -760,15 +751,15 @@ msgstr "Қалып-күй хабарламасын сұрап отыру…"
 msgid "Ask before closing a group chat tab/window."
 msgstr "Топ чат беті/терезесін жабу алдында сұрау."
 
-#, fuzzy
 msgid "Ask before connecting unencrypted"
-msgstr "Шифрленбеген байланыс алдында растау сұхбатын көрсету"
+msgstr "Шифрленбеген қосылу алдында сұрау"
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Gajim терезесі жабылған кезде шығу алдында сұрау"
 
 msgid "Assign groups to this contact. You can filter chats by group."
 msgstr ""
+"Бұл контактіге топтарды тағайындаңыз. Чаттарды топтар бойынша сүзуге болады."
 
 msgid "Attention Message Received"
 msgstr "Назар аудару туралы хабарлама алынды"
@@ -847,9 +838,8 @@ msgctxt "User status"
 msgid "Available"
 msgstr "Қол жетімді"
 
-#, fuzzy
 msgid "Available Features"
-msgstr "Қолжетерлік"
+msgstr "Қолжетімді мүмкіндіктер"
 
 msgid "Avatar file size too big"
 msgstr "Аватар файлының өлшемі тым үлкен"
@@ -860,12 +850,6 @@ msgstr "Кетіп қалған"
 
 msgid "Back"
 msgstr "Артқа"
-
-msgid "Back in some minutes."
-msgstr "Бірнеше минутта ораламын."
-
-msgid "Back soon"
-msgstr "Жақында ораламын"
 
 msgid "Ban"
 msgstr "Банға салу"
@@ -878,7 +862,7 @@ msgid "Ban…"
 msgstr "Банға салу…"
 
 msgid "Before"
-msgstr ""
+msgstr "Дейін"
 
 msgid "Behaviour of Application Window"
 msgstr "Қолданба терезесінің мінез-құлығы"
@@ -890,33 +874,29 @@ msgid "Blind Trust"
 msgstr "Соқыр сенім"
 
 msgid "Blindly trust new devices until you verify them"
-msgstr ""
+msgstr "Жаңа құрылғыларды тексергенге дейін оларға сенім білдіру"
 
 msgid "Block"
 msgstr "Блоктау"
 
-#, fuzzy
 msgid "Block Contact?"
-msgstr "Контактіні блоктау"
+msgstr "Контактіні блоктау керек пе?"
 
 msgid "Block Contact…"
 msgstr "Контактты блоктау…"
 
-#, fuzzy
 msgid "Block Participant?"
-msgstr "Қатысушы"
+msgstr "Қатысушыны блоктау керек пе?"
 
-#, fuzzy
 msgid "Blocked Contacts"
-msgstr "Контактіні блоктау"
+msgstr "Блокталған контактілер"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Blocked Contacts – %(account)s"
-msgstr "Контактты блоктау…"
+msgstr "Блокталған контактілер – %(account)s"
 
-#, fuzzy
 msgid "Blocked Participants"
-msgstr "Қатысушылар"
+msgstr "Блокталған қатысушылар"
 
 msgid "Block…"
 msgstr "Блоктау…"
@@ -943,9 +923,9 @@ msgctxt "User status"
 msgid "Busy"
 msgstr "Бос емес"
 
-#, fuzzy, python-format
+#, python-format
 msgid "By closing this chat, you will leave \"%s\"."
-msgstr "Бұл терезені жапсаңыз, \"%s\" ішінен шығасыз."
+msgstr "Бұл чатты жабу арқылы сіз \"%s\" тобынан шығасыз."
 
 msgid "CRL has expired"
 msgstr "CRL мерзімі біткен"
@@ -990,11 +970,9 @@ msgstr "Жүктеп алудан бас тарту"
 msgid "Certificate"
 msgstr "Сертификат"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Certificate - %(account)s"
-msgstr ""
-"Келесінің сертификаты \n"
-"%s"
+msgstr "Сертификат - %(account)s"
 
 msgid "Certificate Verification Failed"
 msgstr "Сертификатты тексеру сәтсіз аяқталды"
@@ -1063,13 +1041,11 @@ msgstr ""
 "Топтық чатта ник аттарын автотолықтыру (tab пернесі) қолдану кезінде ник "
 "атының артына қосылатын таңба."
 
-#, fuzzy
 msgid "Chat"
-msgstr "Чаттар"
+msgstr "Чат"
 
-#, fuzzy
 msgid "Chat Address"
-msgstr "Контакт адрестері"
+msgstr "Чат адресі"
 
 msgid "Chat Banner: Background Color"
 msgstr "Чат баннері: Фон түсі"
@@ -1083,19 +1059,21 @@ msgstr "Чат баннері: Мәтін қарібі"
 msgid "Chat Details and Settings"
 msgstr "Чат ақпараты және баптаулары"
 
-#, fuzzy
 msgid "Chat Type"
-msgstr "Түрі"
+msgstr "Чат түрі"
 
 msgid ""
 "Chat freely: Take your chats where you want. Use a provider of your choice "
 "and synchronize chats between all your devices. Gajim is interoperable with "
 "many other chat apps – and it's free."
 msgstr ""
+"Еркін сөйлесіңіз: чаттарыңызды қалаған жерде жүргізіңіз. Өз қалауыңыз "
+"бойынша провайдерді қолданыңыз және чаттарды барлық құрылғыларыңыз арасында "
+"синхрондаңыз. Gajim көптеген басқа чат қолданбаларымен үйлесімді және ол "
+"тегін."
 
-#, fuzzy
 msgid "Chat window"
-msgstr "Беттері бар чат терезесі"
+msgstr "Чат терезесі"
 
 msgid "Chats"
 msgstr "Чаттар"
@@ -1117,9 +1095,8 @@ msgstr "Жаңартуларды тексеру"
 msgid "Check for updates periodically"
 msgstr "Жаңартуларды мерзімді түрде тексеру"
 
-#, fuzzy
 msgid "Check which features are available"
-msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+msgstr "Қандай мүмкіндіктер қолжетімді екенін тексеру"
 
 msgid "Choose Device"
 msgstr "Құрылғыны таңдау"
@@ -1145,9 +1122,8 @@ msgstr "Қала"
 msgid "Clear"
 msgstr "Тазарту"
 
-#, fuzzy
 msgid "Clear Devices?"
-msgstr "Құрылғылар тізімін тазарту"
+msgstr "Құрылғыларды тазарту керек пе?"
 
 msgid "Clear Devices…"
 msgstr "Құрылғылар тізімін тазарту…"
@@ -1155,9 +1131,8 @@ msgstr "Құрылғылар тізімін тазарту…"
 msgid "Clear File"
 msgstr "Файлды тазарту"
 
-#, fuzzy
 msgid "Clear Input"
-msgstr "Дыбысты тазарту"
+msgstr "Енгізуді тазарту"
 
 msgid "Clear Sound"
 msgstr "Дыбысты тазарту"
@@ -1185,16 +1160,14 @@ msgstr ""
 msgid "Close"
 msgstr "Жабу"
 
-#, fuzzy
 msgid "Close Chat"
 msgstr "Чатты жабу"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr "Escape пернесін басу арқылы чатты жабыңыз"
 
-#, fuzzy
 msgid "Close this preview"
-msgstr "Автоматты алдын ала қарау жоқ"
+msgstr "Бұл алдын ала қарауды жабу"
 
 msgid "Close with Escape"
 msgstr "Escape арқылы жабу"
@@ -1207,6 +1180,7 @@ msgstr "Түс"
 
 msgid "Comma-separated list of emojis for quick reaction buttons"
 msgstr ""
+"Жылдам реакция батырмаларына арналған үтірмен ажыратылған эмодзилер тізімі"
 
 msgid "Command List"
 msgstr "Командалар"
@@ -1225,11 +1199,15 @@ msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat with %s."
 msgstr ""
+"%s пайдаланушысымен ұшына дейін шифрленген чаттың қауіпсіздігін қамтамасыз "
+"ету үшін бұл кодты контактінің экранында көрсетілген кодпен салыстырыңыз."
 
 msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat."
 msgstr ""
+"Ұшына дейін шифрленген чаттың қауіпсіздігін қамтамасыз ету үшін бұл кодты "
+"контактінің экранында көрсетілген кодпен салыстырыңыз."
 
 msgid "Complete"
 msgstr "Аяқталған"
@@ -1257,6 +1235,9 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+"Серверде қандай хабарламалар архивтелетінін баптаңыз. Хабарламаларды "
+"серверде архивтемеу оларды құрылғыларыңыз арасында синхрондауға кедергі "
+"болуы мүмкін."
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Шифрленбеген байланысты растаңыз"
@@ -1294,7 +1275,7 @@ msgstr "%s торабымен байланысты орнату мүмкін е�
 
 #, python-format
 msgid "Connection – %(account)s"
-msgstr ""
+msgstr "Қосылым – %(account)s"
 
 msgid "Contact"
 msgstr "Контакт"
@@ -1302,9 +1283,8 @@ msgstr "Контакт"
 msgid "Contact Connected"
 msgstr "Контакт байланысқан"
 
-#, fuzzy
 msgid "Contact Details"
-msgstr "Контакттар тізімі"
+msgstr "Контакт мәліметтері"
 
 msgid "Contact Disconnected"
 msgstr "Контакт байланыспаған"
@@ -1321,17 +1301,15 @@ msgstr "Контакттар тізімі"
 msgid "Contact List Exchange"
 msgstr "Контакт тізімдерімен алмасу"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Contact List – %(account)s"
-msgstr "Контакттар тізімі: Контакт қарібі"
+msgstr "Контактілер тізімі – %(account)s"
 
-#, fuzzy
 msgid "Contact Removed"
-msgstr "Тіркелгі өшірілді"
+msgstr "Контакт өшірілді"
 
-#, fuzzy
 msgid "Contact Request"
-msgstr "Контакттар тізімі"
+msgstr "Контактіге сұраным"
 
 msgid "Contacts"
 msgstr "Контакттар"
@@ -1379,18 +1357,15 @@ msgstr "XMPP/эл. пошта адресін көшіру"
 msgid "Copy code snippet"
 msgstr "Код үзіндісін көшіріп алу"
 
-#, fuzzy
 msgid "Copy to Clipboard"
-msgstr "Алмасу буферіне көшіріп алу"
+msgstr "Алмасу буферіне көшіру"
 
 msgid "Copy to clipboard"
 msgstr "Алмасу буферіне көшіріп алу"
 
-#, fuzzy
 msgid "Correct Message"
-msgstr "Тікелей хабарламалар"
+msgstr "Хабарламаны түзету"
 
-#, fuzzy
 msgid "Could Not Save File"
 msgstr "Файлды сақтау мүмкін емес"
 
@@ -1398,7 +1373,10 @@ msgid "Could not access file"
 msgstr "Файлға қатынау мүмкін емес"
 
 msgid "Could not find any messages for this participant."
-msgstr ""
+msgstr "Бұл қатысушы үшін ешқандай хабарлама табылмады."
+
+msgid "Could not generate link preview"
+msgstr "Сілтеменің алдын-ала қарауын жасау мүмкін емес"
 
 #, python-format
 msgid "Could not open file (%s)"
@@ -1406,18 +1384,16 @@ msgstr "Файлды ашу мүмкін емес (%s)"
 
 #, python-format
 msgid "Could not read content of %s. Only CSV files can be imported."
-msgstr ""
+msgstr "%s мазмұнын оқу мүмкін емес. Тек CSV файлдарын импорттауға болады."
 
 msgid "Could not save file to selected directory."
 msgstr "Файлды көрсетілген бумада сақтау мүмкін емес."
 
-#, fuzzy
 msgid "Could not select file or folder"
-msgstr "Файлды сақтау мүмкін емес"
+msgstr "Файлды немесе буманы таңдау мүмкін емес"
 
-#, fuzzy
 msgid "Could not update providers list"
-msgstr "Файлды ашу мүмкін емес (%s)"
+msgstr "Провайдерлер тізімін жаңарту мүмкін емес"
 
 msgid "Country"
 msgstr "Ел"
@@ -1434,9 +1410,8 @@ msgstr "Топтық чатты жасау…"
 msgid "Create New Account"
 msgstr "Жаңа тіркелгі жасау"
 
-#, fuzzy
 msgid "Create New Group Chat"
-msgstr "Топтық чатты жасау"
+msgstr "Жаңа топтық чатты жасау"
 
 msgid "Creating Account..."
 msgstr "Тіркелгіні жасау..."
@@ -1445,13 +1420,13 @@ msgid "Credentials expired"
 msgstr "Тіркелгі деректерінің мерзімі аяқталды"
 
 msgid "Custom"
-msgstr ""
+msgstr "Пайдаланушылық"
 
 msgid "D-Bus Interface"
 msgstr "D-Bus интерфейсі"
 
 msgid "Danger Zone"
-msgstr ""
+msgstr "Қауіпті аймақ"
 
 msgid "Dark Theme"
 msgstr "Қараңғы тема"
@@ -1474,16 +1449,14 @@ msgstr "Жөндеу журналы"
 msgid "Decline"
 msgstr "Тайдыру"
 
-#, fuzzy
 msgid "Decrease Font Size"
-msgstr "D-Bus интерфейсі"
+msgstr "Қаріп өлшемін кішірейту"
 
 msgid "Decrease playback speed"
 msgstr "Ойнату жылдамдығын азайту"
 
-#, fuzzy
 msgid "Default Encryption"
-msgstr "Жария шифрлеу кілті"
+msgstr "Әдепкі шифрлеу"
 
 msgid "Default Sync Threshold"
 msgstr "Әдепкі синхрондау шегі"
@@ -1495,18 +1468,16 @@ msgid "Default device"
 msgstr "Негізгі құрылғы"
 
 msgid "Default for chats (e.g. Contact is typing)"
-msgstr ""
+msgstr "Чаттар үшін әдепкі (мысалы, контакт хабарлама жазуда)"
 
 msgid "Default for chats and private group chats"
 msgstr "Чаттар және жеке топтық чаттар үшін үнсіз келісім бойынша"
 
-#, fuzzy
 msgid "Default for group chats (e.g. Contact is typing)"
-msgstr "Топтық чаттар үшін үнсіз келісім бойынша"
+msgstr "Топтық чаттар үшін әдепкі (мысалы, контакт хабарлама жазуда)"
 
-#, fuzzy
 msgid "Default for new chats"
-msgstr "Чаттар үшін үнсіз келісім бойынша"
+msgstr "Жаңа чаттар үшін әдепкі"
 
 msgid "Default for new group chats"
 msgstr "Жаңа топтық чаттар үшін үнсіз келісім бойынша"
@@ -1517,56 +1488,49 @@ msgstr "Жаңа жария топтық чаттар үшін үнсіз кел
 msgid "Delete"
 msgstr "Өшіру"
 
-#, fuzzy
 msgid "Delete Fingerprint?"
-msgstr "Баспалар"
+msgstr "Саусақ ізін өшіру керек пе?"
 
-#, fuzzy
 msgid "Delete Message Locally?"
-msgstr "Хабарламаны жергілікті түрде өшіру…"
+msgstr "Хабарламаны жергілікті түрде өшіру керек пе?"
 
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr "Хабарламаны жергілікті түрде өшіру…"
 
-#, fuzzy
 msgid "Delete Node?"
-msgstr "PEP торабын өшіру керек пе?"
+msgstr "Түйінді өшіру керек пе?"
 
-#, fuzzy
 msgid "Delete Theme?"
-msgstr "Теманы өшіру"
+msgstr "Теманы өшіру керек пе?"
 
 msgid "Deny"
 msgstr "Тайдыру"
 
-#, fuzzy
 msgid "Deny all contact requests"
-msgstr "Барлық байланыс сұрауларын қабылдау"
+msgstr "Барлық контакт сұранымдарынан бас тарту"
 
 msgid "Description"
 msgstr "Сипаттамасы"
 
-#, fuzzy
 msgid "Destroy Group Chat"
-msgstr "Топтық чатты жою…"
+msgstr "Топтық чатты жою"
 
 msgid "Destroy This Chat"
 msgstr "Бұл чатты жою"
 
-#, fuzzy
 msgid "Destroy…"
-msgstr "Жо_ю"
+msgstr "Жою…"
 
 msgid "Details"
 msgstr "Көбірек"
 
 #, python-format
 msgid "Details - %(account)s"
-msgstr ""
+msgstr "Мәліметтер - %(account)s"
 
 msgid "Details about the certificate used by this connection"
-msgstr ""
+msgstr "Осы қосылым қолданатын сертификат туралы мәліметтер"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1582,26 +1546,25 @@ msgstr "Сөздік URL адресінде \"%s\" жоқ"
 msgid "Direct Messages"
 msgstr "Тікелей хабарламалар"
 
-#, fuzzy
 msgid "Direct Message…"
-msgstr "Тікелей хабарламалар"
+msgstr "Тікелей хабарлама…"
 
 msgid "Directory"
 msgstr "Бума"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Directory \"%s\" is not writable. You do not have the proper permissions to "
 "create files in this directory."
-msgstr "Сізде бұл бумада файлдарды жасауға тиісті рұқсаттарыңыз жоқ."
+msgstr ""
+"\"%s\" бумасы жазу үшін қолжетімсіз. Бұл бумада файлдарды жасау үшін тиісті "
+"рұқсаттарыңыз жоқ."
 
-#, fuzzy
 msgid "Directory Not Writable"
-msgstr "\"%s\" бумасы жазу үшін қолжетімді емес"
+msgstr "Бума жазуға жабық"
 
-#, fuzzy
 msgid "Disable Account?"
-msgstr "Тіркелгіні сөндіру"
+msgstr "Тіркелгіні сөндіру керек пе?"
 
 msgid "Disabled"
 msgstr "Сөндірулі"
@@ -1639,13 +1602,12 @@ msgstr ""
 "Ескерту: мұны болдырмау мүмкін емес!\n"
 "Gajim одан кейін жабылады."
 
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to block %(name)s?"
-msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+msgstr "%(name)s блоктауды қалайсыз ба?"
 
-#, fuzzy
 msgid "Do you want to delete this PEP node?"
-msgstr "Бұл PEP торабын шынымен өшіргіңіз келе ме?"
+msgstr "Бұл PEP торабын өшіруді қалайсыз ба?"
 
 msgid "Do you want to delete this theme?"
 msgstr "Бұл теманы өшіргіңіз келе ме?"
@@ -1653,38 +1615,38 @@ msgstr "Бұл теманы өшіргіңіз келе ме?"
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "Ағымдағы орнатылған нұсқаны үстінен жазуды қалайсыз ба?"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to remove \"%(group)s\"?"
-msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+msgstr "\"%(group)s\" өшіруді қалайсыз ба?"
 
-#, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
-msgstr "Осы чат үшін чат тарихын шынымен өшіргіңіз келе ме?"
+msgstr "Бұл чаттың барлық хабарламалар тарихын өшіруді қалайсыз ба?"
 
-#, fuzzy
 msgid "Do you want to remove this chat including its chat history?"
-msgstr "Осы чат үшін чат тарихын шынымен өшіргіңіз келе ме?"
+msgstr "Бұл чатты оның тарихымен бірге өшіруді қалайсыз ба?"
 
-#, fuzzy
 msgid "Do you want to remove this proxy?"
-msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+msgstr "Бұл проксиді өшіруді қалайсыз ба?"
 
 msgid ""
 "Do you want to retract this message?\n"
 "Please note that retracting a message does not guarantee that your provider "
 "or your contact’s device will remove it."
 msgstr ""
+"Бұл хабарламаны кері қайтаруды қалайсыз ба?\n"
+"Хабарламаны кері қайтару сіздің провайдеріңіз немесе контактіңіздің "
+"құрылғысы оны өшіретініне кепілдік бермейтінін ескеріңіз."
 
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to unblock %(name)s?"
-msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+msgstr "%(name)s блоктан шығаруды қалайсыз ба?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> жүйесінде тіркелгіңізді тіркеуден шығарғыңыз келе ме?"
 
 msgid "Doing so will permanently delete this Fingerprint"
-msgstr ""
+msgstr "Бұл әрекет осы саусақ ізін біржола өшіреді"
 
 msgid "Download"
 msgstr "Жүктеп алу"
@@ -1700,28 +1662,21 @@ msgstr "Шимай қағаз: %s"
 msgid "Drop files here"
 msgstr "Файлдарды осында тартып әкеліңіз"
 
-msgid "Eating"
-msgstr "Тамақ ішуде"
-
-#, fuzzy
 msgid "Edit"
-msgstr "Тү_зету"
+msgstr "Түзету"
 
-#, fuzzy
 msgid "Edit Shortcut"
-msgstr "_Пернетақта жарлықтары"
+msgstr "Жарлықты түзету"
 
-#, fuzzy
 msgid "Edit display name…"
-msgstr "Атын түзету…"
+msgstr "Көрсетілетін атын түзету…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "Хабарламаны түзету (бас тарту үшін Esc)…"
 
 msgid "Edit…"
 msgstr "Түзету…"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Edit…"
 msgstr "Түзету…"
@@ -1741,14 +1696,13 @@ msgid "Emoji Shortcodes"
 msgstr "Смайликтер үшін қысқа пернелер жарлықтары"
 
 msgid "Emojis"
-msgstr ""
+msgstr "Эмодзилер"
 
 msgid "Enable"
 msgstr "Қосу"
 
-#, fuzzy
 msgid "Enable Account"
-msgstr "Тіркелгіні сөндіру"
+msgstr "Тіркелгіні іске қосу"
 
 msgid "Enable KeepassXC Integration"
 msgstr "KeepassXC интеграциясын іске қосу"
@@ -1787,26 +1741,24 @@ msgstr "Шифрленген (%s)"
 msgid "Encrypting file…"
 msgstr "Файлды шифрлеу…"
 
-#, fuzzy
 msgid "Encryption (OMEMO)"
-msgstr "Шифрлеу қатесі"
+msgstr "Шифрлау (OMEMO)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Encryption (OMEMO) – %(account)s"
-msgstr "Шифрлеу қатесі"
+msgstr "Шифрлау (OMEMO) – %(account)s"
 
-#, fuzzy
 msgid "Encryption Error"
-msgstr "Шифрлеу қатесі"
+msgstr "Шифрлау қатесі"
 
 msgid "Encryption error"
 msgstr "Шифрлеу қатесі"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "Жеке чаттарда шифрлау қолжетімсіз"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
-msgstr ""
+msgstr "Контакт үшін бөлек орнатылмаса, қолданылатын шифрлау әдісі"
 
 msgid "Encryption required"
 msgstr "Шифрлеу талап етіледі"
@@ -1815,18 +1767,16 @@ msgid "End call"
 msgstr "Қоңырауды аяқтау"
 
 msgid "Endpoint for retrieving a list of providers for sign up"
-msgstr ""
+msgstr "Тіркелу үшін провайдерлер тізімін алу нүктесі"
 
 msgid "Enter a password to join this chat"
 msgstr "Осы чатқа қосылу үшін парольді енгізіңіз"
 
-#, fuzzy
 msgid "Enter group name"
-msgstr "Жаңа лақап атыңызды енгізіңіз"
+msgstr "Топ атын енгізіңіз"
 
-#, fuzzy
 msgid "Enter new contact name"
-msgstr "Жаңа лақап атыңызды енгізіңіз"
+msgstr "Жаңа контакт атын енгізіңіз"
 
 msgid "Enter new password..."
 msgstr "Жаңа парольді енгізіңіз..."
@@ -1846,7 +1796,7 @@ msgid "Error Loading Image"
 msgstr "Суретті жүктеу қатесі"
 
 msgid "Error in audio data stream."
-msgstr ""
+msgstr "Аудио деректер ағынындағы қате."
 
 msgid "Error opening file"
 msgstr "Файлды ашу қатесі"
@@ -1870,9 +1820,9 @@ msgstr "Аватарды жүктеп салу кезіндегі қате"
 msgid "Error: %s"
 msgstr "Қате: %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %s (mime types: %s)"
-msgstr "Қате хабарламасы: %s"
+msgstr "Қате: %s (mime түрлері: %s)"
 
 msgid "Event"
 msgstr "Оқиға"
@@ -1884,7 +1834,7 @@ msgid "Everything"
 msgstr "Барлығы"
 
 msgid "Exceptions from the above setting"
-msgstr ""
+msgstr "Жоғарыдағы баптаудан ерекшеліктер"
 
 msgid "Execute"
 msgstr "Орындау"
@@ -1899,32 +1849,28 @@ msgid "Expires on: "
 msgstr "Аяқталу мерзімі: "
 
 msgid "Expiry date"
-msgstr ""
+msgstr "Мерзімі аяқталу күні"
 
 msgid "Export"
 msgstr "Экспорт"
 
-#, fuzzy
 msgid "Export CSV"
-msgstr "Экспорт"
+msgstr "CSV экспорттау"
 
 msgid "Export Chat History"
 msgstr "Чаттар тарихын экспорттау"
 
-#, fuzzy
 msgid "Export Contacts"
-msgstr "Контакттарды импорттау"
+msgstr "Контактілерді экспорттау"
 
-#, fuzzy
 msgid "Export Error"
-msgstr "Экспорт"
+msgstr "Экспорттау қатесі"
 
 msgid "Export Finished"
 msgstr "Экспорт аяқталды"
 
-#, fuzzy
 msgid "Export History…"
-msgstr "Чаттар тарихын экспорттау"
+msgstr "Тарихты экспорттау…"
 
 msgid "Export your chat history from Gajim"
 msgstr "Gajim ішінен чаттар тарихын экспорттау"
@@ -1935,14 +1881,16 @@ msgstr "Тарихты экспорттау…"
 msgid "Exporting your messages..."
 msgstr "Хабарларыңыз экспортталуда..."
 
-#, fuzzy
 msgid "Export…"
-msgstr "Экспорт"
+msgstr "Экспорттау…"
 
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
 msgstr ""
+"Өзіңізді көрсетіңіз: кейде сөздер жеткіліксіз болады. Толықтай өзіңізді "
+"білдіру үшін реакцияларды, жауаптарды қолданыңыз, дауыстық хабарламаларды "
+"жазыңыз және күй жаңартуларын жіберіңіз."
 
 msgid "Extended Address"
 msgstr "Кеңейтілген адрес"
@@ -2017,13 +1965,11 @@ msgstr "Файл бос"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Файл тым үлкен, максималды рұқсат етілген файл өлшемі: %s"
 
-#, fuzzy
 msgid "File saved"
-msgstr "Файл аты: "
+msgstr "Файл сақталды"
 
-#, fuzzy
 msgid "File too big"
-msgstr "Аватар файлының өлшемі тым үлкен"
+msgstr "Файл тым үлкен"
 
 #, python-format
 msgid "File: %s"
@@ -2035,24 +1981,21 @@ msgstr "Сүзгі"
 msgid "Filter Chats"
 msgstr "Чаттарды сүзгілеу"
 
-#, fuzzy
 msgid "Filters"
-msgstr "Сүзгі"
+msgstr "Сүзгілер"
 
-#, fuzzy
 msgid "Filters (active)"
-msgstr "Хабарлама алынды"
+msgstr "Сүзгілер (белсенді)"
 
-#, fuzzy
 msgid "Fingerprint for this Device"
-msgstr "Баспалар"
+msgstr "Бұл құрылғы үшін саусақ ізі"
 
 msgid "Fingerprints"
 msgstr "Баспалар"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Fingerprints of devices connected with \"%s\""
-msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
+msgstr "\"%s\" арқылы қосылған құрылғылардың саусақ іздері"
 
 msgid "Finished"
 msgstr "Аяқталған"
@@ -2066,15 +2009,14 @@ msgstr ""
 "%s хабарлама жүктеп алынды"
 
 msgid "Focus Input"
-msgstr ""
+msgstr "Енгізу өрісіне фокустау"
 
-#, fuzzy
 msgid "Focus Search"
-msgstr "Іздеуді жабу"
+msgstr "Іздеуге фокустау"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Folder: %s"
-msgstr "Файл: %s"
+msgstr "Бума: %s"
 
 msgid "For example: \"Julia is now online\""
 msgstr "Мысалы: \"Дариға қазір онлайн\""
@@ -2088,23 +2030,20 @@ msgstr "Мәңгі"
 msgid "Forget Group Chat"
 msgstr "Топтық чатты ұмыту"
 
-#, fuzzy
 msgid "Forget this Group Chat?"
-msgstr "Бұл топтық чатты ұмыту"
+msgstr "Бұл топтық чатты ұмыту керек пе?"
 
-#, fuzzy
 msgid "Forget this Group Chat…"
-msgstr "Бұл топтық чатты ұмыту"
+msgstr "Бұл топтық чатты ұмыту…"
 
-#, fuzzy
 msgid "Format Text Bold"
-msgstr "Сөйлесу: Мәтін түсі"
+msgstr "Мәтінді жуан қылып пішімдеу"
 
 msgid "Format Text Italic"
-msgstr ""
+msgstr "Мәтінді көлбеу қылып пішімдеу"
 
 msgid "Format Text Strikethrough"
-msgstr ""
+msgstr "Мәтінді сызылған қылып пішімдеу"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "CRL lastUpdate өрісіндегі пішім қатесі"
@@ -2126,7 +2065,7 @@ msgstr "10 секунд алға"
 
 #, python-format
 msgid "Found %s contacts to import"
-msgstr ""
+msgstr "Импорттау үшін %s контакт табылды"
 
 msgctxt "User status"
 msgid "Free for Chat"
@@ -2170,9 +2109,8 @@ msgstr "Gajim темалары"
 msgid "Gajim Update"
 msgstr "Gajim жаңартуы"
 
-#, fuzzy
 msgid "Gajim Update Check"
-msgstr "Gajim жаңартуы"
+msgstr "Gajim жаңартуын тексеру"
 
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
@@ -2190,13 +2128,11 @@ msgstr ""
 "Gajim қатеге тап болды.\n"
 "Осы есепті жіберу арқылы бізге осы мәселені шешуге көмектесіңіз."
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
-msgstr "Gajim архивпен толығымен синхрондалған."
+msgstr "Gajim архивпен толық синхрондалған."
 
-#, fuzzy
 msgid "Gajim is quitting…"
-msgstr "%s теруде…"
+msgstr "Gajim жұмысын аяқтауда…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2223,7 +2159,7 @@ msgstr "Жалпы"
 
 #, python-format
 msgid "General – %(account)s"
-msgstr ""
+msgstr "Жалпы – %(account)s"
 
 msgid "Global Group Chat Search"
 msgstr "Глобалды топтық чаттарды іздеу"
@@ -2258,9 +2194,8 @@ msgstr "Сізді біреу бөлмеде еске алған"
 msgid "Group Chat Message Received"
 msgstr "Бөлмеде хабарлама алынды"
 
-#, fuzzy
 msgid "Group Chat Settings"
-msgstr "Топтық чат мәліметтері"
+msgstr "Топтық чат баптаулары"
 
 msgid "Group Chats"
 msgstr "Топтық чаттар"
@@ -2274,9 +2209,8 @@ msgstr "Топтық чатты іздеу арқылы табуға болад�
 msgid "Group chat does not exist"
 msgstr "Топтық чат жоқ"
 
-#, fuzzy
 msgid "Group chat has been destroyed"
-msgstr "Топтық чат өшірілген%s"
+msgstr "Топтық чат жойылды"
 
 msgid "Group chat is closed"
 msgstr "Топтық чат жабық"
@@ -2315,6 +2249,7 @@ msgstr "Сәлем, мен - $name. %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
+"Мұнда сіз осы мәселені қайталауға көмектесетін кері байланысты қоса аласыз."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -2323,7 +2258,6 @@ msgstr "Жасырын"
 msgid "Hide"
 msgstr "Жасыру"
 
-#, fuzzy
 msgid "Hide Chat List"
 msgstr "Чаттар тізімін жасыру"
 
@@ -2335,7 +2269,7 @@ msgstr "Хост аты"
 
 #, python-format
 msgid "Hostname – %(account)s"
-msgstr ""
+msgstr "Хост аты – %(account)s"
 
 #, python-format
 msgid ""
@@ -2343,16 +2277,18 @@ msgid ""
 "Software: %(software)s\n"
 "Uptime: %(uptime)s\n"
 msgstr ""
+"Хост аты: %(hostname)s\n"
+"Бағдарламалық қамтама: %(software)s\n"
+"Жұмыс уақыты: %(uptime)s\n"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
-msgstr "Сөйлесулер тарихы артқа қаншалықты синхрондалу керек?"
+msgstr "Чат тарихы қанша уақыт артқа синхрондалуы керек?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim сіздің чат тарихын қанша уақыт сақтауы керек"
 
 msgid "How to install plugins with Flatpak"
-msgstr ""
+msgstr "Flatpak көмегімен плагиндерді қалай орнатуға болады"
 
 msgid "I can see contact's online status"
 msgstr "Мен контактінің желідегі күйін көре аламын"
@@ -2363,9 +2299,8 @@ msgstr "Мен сізді өзімнің контакттар тізіміне �
 msgid "I would like to add you to my roster."
 msgstr "Мен сізді өзімнің контакттар тізіміме қосқым келеді."
 
-#, fuzzy
 msgid "ID"
-msgstr "JID"
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC стандарты КиБ = 1024 байт, ал КБ = 1000 байтқа тең деп айтады."
@@ -2384,6 +2319,8 @@ msgid ""
 "Identifier for this device. Don’t change this unless you know what you are "
 "doing."
 msgstr ""
+"Бұл құрылғының идентификаторы. Не істеп жатқаныңызды білмесеңіз, оны "
+"өзгертпеңіз."
 
 msgid "Idle Time"
 msgstr "Белсенді емес уақыты"
@@ -2420,30 +2357,26 @@ msgstr "Контакт тізіміңізде емес контакттарда�
 msgid "Image"
 msgstr "Сурет"
 
-#, fuzzy
 msgid "Import"
-msgstr "Экспорт"
+msgstr "Импорттау"
 
 msgid "Import Contacts"
 msgstr "Контакттарды импорттау"
 
-#, fuzzy
 msgid "Import Contacts?"
-msgstr "Контакттарды импорттау"
+msgstr "Контактілерді импорттау керек пе?"
 
 msgid "Import Error"
-msgstr ""
+msgstr "Импорттау қатесі"
 
-#, fuzzy
 msgid "Import from Account"
-msgstr "Бірнеше тіркелгілерге қолдау көрсету"
+msgstr "Тіркелгіден импорттау"
 
-#, fuzzy
 msgid "Import from File"
-msgstr "Файлдан орнату…"
+msgstr "Файлдан импорттау"
 
 msgid "Import…"
-msgstr ""
+msgstr "Импорттау…"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2452,9 +2385,8 @@ msgstr ""
 "Бұл чатта хабарлама жазу үшін алдымен дауысты сұрау керек.\n"
 "Модератор сұрауыңызды өңдейді."
 
-#, fuzzy
 msgid "In this group chat"
-msgstr "Сіз бұл топтық чаттан шықтыңыз"
+msgstr "Бұл топтық чатта"
 
 msgid "Incoming Call"
 msgstr "Кіріс қоңырау"
@@ -2462,9 +2394,8 @@ msgstr "Кіріс қоңырау"
 msgid "Incoming Call (Video)"
 msgstr "Кіріс қоңырау (Видео)"
 
-#, fuzzy
 msgid "Increase Font Size"
-msgstr "D-Bus интерфейсі"
+msgstr "Қаріп өлшемін үлкейту"
 
 msgid "Increase playback speed"
 msgstr "Ойнату жылдамдығын арттыру"
@@ -2475,9 +2406,8 @@ msgstr "Ақпарат"
 msgid "Insecure Connection"
 msgstr "Қауіпсіз емес байланыс"
 
-#, fuzzy
 msgid "Install"
-msgstr "Орнатылған"
+msgstr "Орнату"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
@@ -2490,9 +2420,8 @@ msgstr "Плагинді ZIP-файлдан орнату"
 msgid "Install a keyring to store passwords on your system."
 msgstr "Жүйеде парольдерді сақтау үшін кілттер бауын орнатыңыз."
 
-#, fuzzy
 msgid "Install from Archive"
-msgstr "Плагинді ZIP-файлдан орнату"
+msgstr "Архивтен орнату"
 
 msgid "Installation failed"
 msgstr "Орнату сәтсіз аяқталды"
@@ -2516,9 +2445,8 @@ msgstr "Жарамсыз торап"
 msgid "Invalid Server Name"
 msgstr "Сервердің аты қате"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "Жарамсыз аты"
+msgstr "Қате станза"
 
 msgid "Invalid XMPP Address"
 msgstr "XMPP адресі жарамсыз"
@@ -2530,17 +2458,14 @@ msgstr "Жарамсыз адрес: %s"
 msgid "Invalid domain name"
 msgstr "Жарамсыз домен атауы"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "Сервердің аты қате"
+msgstr "Сервердің қате жауабы"
 
-#, fuzzy
 msgid "Invitation"
-msgstr "Шақыруды көрсету"
+msgstr "Шақыру"
 
-#, fuzzy
 msgid "Invitation Declined"
-msgstr "Топтық чатқа шақыру тайдырылды"
+msgstr "Шақырудан бас тартылды"
 
 msgid "Invite"
 msgstr "Шақыру"
@@ -2548,9 +2473,8 @@ msgstr "Шақыру"
 msgid "Invite Contacts"
 msgstr "Контакттарды шақыру"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "Алдыңғы чатқа ауысу"
+msgstr "Осы чатқа шақыру…"
 
 msgid "Invitees"
 msgstr "Шақырылғандар"
@@ -2558,9 +2482,8 @@ msgstr "Шақырылғандар"
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Микрофон қосулы және қолжетімді ме?"
 
-#, fuzzy
 msgid "Issue date"
-msgstr "Кімге берілген"
+msgstr "Берілген күні"
 
 msgid "Issued by"
 msgstr "Кім берген"
@@ -2578,19 +2501,7 @@ msgid "Issued to\n"
 msgstr "Кім үшін шығарылған\n"
 
 msgid "Issues detected"
-msgstr ""
-
-msgid "I’m eating."
-msgstr "Мен тамақ ішіп отырмын."
-
-msgid "I’m out enjoying life."
-msgstr "Мен өмірмен рахаттанып отырмын."
-
-msgid "I’m watching a movie."
-msgstr "Мен кино көрудемін."
-
-msgid "I’m working."
-msgstr "Мен жұмыс істеп отырмын."
+msgstr "Мәселелер табылды"
 
 msgid "JID"
 msgstr "JID"
@@ -2646,18 +2557,17 @@ msgstr "Белгі"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "Тіл: %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Last seen: %s"
-msgstr "Себебі: %s"
+msgstr "Соңғы рет көрінген: %s"
 
-#, fuzzy
 msgid "Leave Group Chat?"
-msgstr "Топтық чаттан шығу"
+msgstr "Топтық чаттан шығу керек пе?"
 
 msgid "Leave _Permanently"
-msgstr ""
+msgstr "Біржола _шығу"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2666,9 +2576,8 @@ msgstr ""
 "Жергілікті интерфейстерге қоса, (үтірмен ажыратылған) хост аттары, (адрес/"
 "порттар бағдарлауы кезінде) Файлдармен алмасу үшін оларды жібереміз."
 
-#, fuzzy
 msgid "Listing of providers"
-msgstr "Серверлер тізімі"
+msgstr "Провайдерлер тізімі"
 
 msgid "Live Preview"
 msgstr "Тікелей алдын ала қарау"
@@ -2709,7 +2618,7 @@ msgstr "Авторизация"
 
 #, python-format
 msgid "Login – %(account)s"
-msgstr ""
+msgstr "Кіру – %(account)s"
 
 msgid "Look it up in _Dictionary"
 msgstr "_Сөздіктен іздеу"
@@ -2738,23 +2647,20 @@ msgstr "Проксилерді басқару"
 msgid "Manage Proxies..."
 msgstr "Проксилерді басқару..."
 
-#, fuzzy
 msgid "Manage Shortcuts"
-msgstr "Дыбыстарды басқару"
+msgstr "Жарлықтарды басқару"
 
 msgid "Manage Sounds"
 msgstr "Дыбыстарды басқару"
 
-#, fuzzy
 msgid "Manage Trust"
-msgstr "Дыбыстарды басқару"
+msgstr "Сенімді басқару"
 
 msgid "Manage and configure Gajim plugins"
-msgstr ""
+msgstr "Gajim плагиндерін басқару және баптау"
 
-#, fuzzy
 msgid "Manage your Devices…"
-msgstr "Проксилерді басқару"
+msgstr "Құрылғыларды басқару…"
 
 msgid "Manually set the hostname for the server"
 msgstr "Сервердің хост атын қолмен орнату"
@@ -2795,9 +2701,8 @@ msgstr "Атап өту: Хабарлама фонының түсі"
 msgid "Message"
 msgstr "Хабарлама"
 
-#, fuzzy
 msgid "Message History"
-msgstr "Хабарлама жіберілді"
+msgstr "Хабарламалар тарихы"
 
 msgid "Message Receipts (✔)"
 msgstr "Жеткізу туралы хабарландырулар (✔)"
@@ -2808,9 +2713,8 @@ msgstr "Хабарлама алынды"
 msgid "Message Sent"
 msgstr "Хабарлама жіберілді"
 
-#, fuzzy
 msgid "Message content unknown"
-msgstr "Хабарлама жіберілді"
+msgstr "Хабарлама мазмұны белгісіз"
 
 #, python-format
 msgid ""
@@ -2820,23 +2724,21 @@ msgstr ""
 "Хабарлама түзетілді. Түпнұсқа хабарлама:\n"
 "%s"
 
-#, fuzzy
 msgid "Messages"
-msgstr "Хабарлама"
+msgstr "Хабарламалар"
 
 msgid "Messages are archived on the server"
 msgstr "Хабарламалар серверде архивтелген"
 
-#, fuzzy
 msgid "Messages from Contacts"
-msgstr "Бірінші хабарлама алынды"
+msgstr "Контактілерден келген хабарламалар"
 
 msgid "Messages from this users are blocked"
-msgstr ""
+msgstr "Бұл пайдаланушылардан келетін хабарламалар блокталған"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Migration to version %s"
-msgstr "Pango нұсқасы: %s"
+msgstr "%s нұсқасына көшу"
 
 msgid "Minimize"
 msgstr "Қайыру"
@@ -2847,34 +2749,29 @@ msgstr "Қалып-күйіңіздің өзгеруіне дейінгі мин
 msgid "Miscellaneous"
 msgstr "Әртүрлі"
 
-#, fuzzy
 msgid "Missing dependencies for audio support"
-msgstr "Аудио/видео үшін тәуелділіктер жоқ"
+msgstr "Аудио қолдауы үшін тәуелділіктер жетіспейді"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Қажетті шифрлеу плагині жоқ"
 
-#, fuzzy
 msgid "Moderate Message?"
-msgstr "Хабарламаны кері қайтарып алу"
+msgstr "Хабарламаны модерациялау керек пе?"
 
-#, fuzzy
 msgid "Moderate Messages?"
-msgstr "Хабарламаны кері қайтарып алу"
+msgstr "Хабарламаларды модерациялау керек пе?"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Moderate all messages…"
-msgstr "Хабарламаны қайтарып алу керек пе?"
+msgstr "Барлық хабарламаларды модерациялау…"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
 msgstr "Модерацияланады"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr "Модерацияланады"
+msgstr "Модерациялау…"
 
 msgid "Moderation"
 msgstr "Модерация"
@@ -2891,32 +2788,25 @@ msgid "Modify"
 msgstr "Түзету"
 
 msgid "More infos at providers.xmpp.net"
-msgstr ""
+msgstr "Толығырақ ақпарат providers.xmpp.net сайтында"
 
-#, fuzzy
 msgid "Move"
-msgstr "Чатты жылжыту"
+msgstr "Жылжыту"
 
 msgid "Move Chat"
 msgstr "Чатты жылжыту"
 
-#, fuzzy
 msgid "Move Contact to New Group?"
-msgstr "Контакттар тізімі: Топ қарібі"
+msgstr "Контактіні жаңа топқа жылжыту керек пе?"
 
-#, fuzzy
 msgid "Move to Group"
-msgstr "Топты өшіру"
-
-msgid "Movie"
-msgstr "Кино"
+msgstr "Топқа жылжыту"
 
 msgid "Must be a port number"
 msgstr "Порт нөмірі болуы тиіс"
 
-#, fuzzy
 msgid "Mute Chat"
-msgstr "Чатты жылжыту"
+msgstr "Чат дыбысын өшіру"
 
 msgid "Mute Sounds"
 msgstr "Дыбыстарды сөндіру"
@@ -2930,9 +2820,8 @@ msgstr "Аты"
 msgid "Name <b>default</b> is not allowed"
 msgstr "<b>default</b> аты рұқсат етілмеген"
 
-#, fuzzy
 msgid "Needs libspelling to be installed"
-msgstr "gspell орнатылғанын талап етеді"
+msgstr "libspelling орнатылуы қажет"
 
 msgid "Never"
 msgstr "Ешқашан"
@@ -2943,9 +2832,8 @@ msgstr "Жаңа контакт"
 msgid "New Group"
 msgstr "Жаңа топ"
 
-#, fuzzy
 msgid "New Group…"
-msgstr "Жаңа топ"
+msgstr "Жаңа топ…"
 
 msgid "New Search"
 msgstr "Жаңа іздеу"
@@ -2962,13 +2850,11 @@ msgstr "Келесі"
 msgid "Nickname"
 msgstr "Ник аты"
 
-#, fuzzy
 msgid "Nickname contains invalid characters"
-msgstr "Парольде рұқсат етілмеген таңбалар бар"
+msgstr "Никнеймде жарамсыз таңбалар бар"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "Ник аты"
+msgstr "Никнейм…"
 
 msgid "No"
 msgstr "Жоқ"
@@ -2976,13 +2862,11 @@ msgstr "Жоқ"
 msgid "No File Transfer available"
 msgstr "Қолжетімді файлдармен алмасу жоқ"
 
-#, fuzzy
 msgid "No Messages"
-msgstr "Хабарлама"
+msgstr "Хабарламалар жоқ"
 
-#, fuzzy
 msgid "No Messages Found"
-msgstr "Ешнәрсе табылмады"
+msgstr "Хабарламалар табылмады"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -2991,9 +2875,8 @@ msgstr "Пароль керек емес"
 msgid "No Proxy"
 msgstr "Прокси жоқ"
 
-#, fuzzy
 msgid "No Results Found"
-msgstr "Ешнәрсе табылмады"
+msgstr "Нәтижелер табылмады"
 
 msgid "No Sync"
 msgstr "Синхрондалмаған"
@@ -3007,9 +2890,8 @@ msgstr "Қосымша талаптар жоқ"
 msgid "No automatic preview"
 msgstr "Автоматты алдын ала қарау жоқ"
 
-#, fuzzy
 msgid "No certificate available"
-msgstr "Сертификат"
+msgstr "Сертификат қолжетімді емес"
 
 msgid "No commands available"
 msgstr "Қолжетімді командалар жоқ"
@@ -3025,7 +2907,7 @@ msgstr ""
 "XMPP адресін де енгізуге болады"
 
 msgid "No contacts found to import"
-msgstr ""
+msgstr "Импорттау үшін контактілер табылмады"
 
 msgid ""
 "No contacts left.\n"
@@ -3035,23 +2917,23 @@ msgstr ""
 "Сондай-ақ, XMPP адресін теруге болады."
 
 msgid "No devices found to encrypt this message to. Querying for devices now…"
-msgstr ""
+msgstr "Бұл хабарламаны шифрлау үшін құрылғылар табылмады. Құрылғыларды іздеу…"
 
 msgid "No devices online"
 msgstr "Желіде құрылғылар жоқ"
 
 msgid "No group assigned"
-msgstr ""
+msgstr "Топ тағайындалмаған"
 
 msgid "No info available"
 msgstr "Қолжетімді ақпарат жоқ"
 
 msgid "No keys pressed"
-msgstr ""
+msgstr "Пернелер басылмаған"
 
 #, python-format
 msgid "No permission to export file to %s"
-msgstr ""
+msgstr "Файлды %s ішіне экспорттауға рұқсат жоқ"
 
 msgid "No results"
 msgstr "Ешнәрсе табылмады"
@@ -3060,7 +2942,7 @@ msgid "No results found"
 msgstr "Ешнәрсе табылмады"
 
 msgid "No undecided fingerprints"
-msgstr ""
+msgstr "Шешілмеген саусақ іздері жоқ"
 
 msgid "Node"
 msgstr "Node"
@@ -3099,9 +2981,8 @@ msgstr "Қолжетімді емес"
 msgid "Not Decided"
 msgstr "Әлі шешілмеген"
 
-#, fuzzy
 msgid "Not Joined"
-msgstr "Байланыспаған"
+msgstr "Қосылмаған"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3126,9 +3007,8 @@ msgstr "Естеліктер"
 msgid "Note to myself"
 msgstr "Өзіме естелік"
 
-#, fuzzy
 msgid "Note: Anonymous accounts are not possible with all providers"
-msgstr "Ескерту: Анонимді тіркелгілер барлық серверлерде рұқсат етіле бермейді"
+msgstr "Ескертпе: Анонимді тіркелгілер барлық провайдерлерде қолжетімді емес"
 
 msgid "Notes"
 msgstr "Естеліктер"
@@ -3181,16 +3061,15 @@ msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Ашық"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Open %s"
-msgstr "Ашу"
+msgstr "%s ашу"
 
 msgid "Open Email Composer"
 msgstr "Эл. пошта құрастырушысын ашу"
 
-#, fuzzy
 msgid "Open Emoji Chooser"
-msgstr "Эл. пошта құрастырушысын ашу"
+msgstr "Эмодзи таңдау терезесін ашу"
 
 msgid "Open Folder"
 msgstr "Буманы ашу"
@@ -3214,7 +3093,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Ұйым"
 
-#, fuzzy
 msgid "Organization"
 msgstr "Ұйым"
 
@@ -3226,13 +3104,10 @@ msgid "Other"
 msgstr "Басқа"
 
 msgid "Other devices connected with your account"
-msgstr ""
+msgstr "Тіркелгіңізге қосылған басқа құрылғылар"
 
 msgid "Others"
 msgstr "Басқалар"
-
-msgid "Out"
-msgstr "Жоқ"
 
 msgid "Out of memory"
 msgstr "Жады жеткіліксіз"
@@ -3257,9 +3132,8 @@ msgstr "Иелері"
 msgid "PEP Configuration"
 msgstr "PEP баптауы"
 
-#, fuzzy
 msgid "PEP Node Not Removed"
-msgstr "PEP торабы өшірілген жоқ"
+msgstr "PEP торабы өшірілмеді"
 
 #, python-format
 msgid "PEP Service Configuration (%s)"
@@ -3277,7 +3151,7 @@ msgid "PNG files"
 msgstr "PNG файлдары"
 
 msgid "Packages"
-msgstr ""
+msgstr "Дестелер"
 
 #, python-format
 msgid "Pango Version: %s"
@@ -3294,9 +3168,8 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Қатысушылар"
 
-#, fuzzy
 msgid "Participants Count"
-msgstr "Қатысушылар"
+msgstr "Қатысушылар саны"
 
 msgid "Participants asking for voice:"
 msgstr "Дауыс сұрайтын қатысушылар:"
@@ -3342,9 +3215,8 @@ msgstr "Код блогы ретінде кірістіру"
 msgid "Paste as Quote"
 msgstr "Дәйексөз ретінде кірістіру"
 
-#, fuzzy
 msgid "Pasting Content Failed"
-msgstr "Парольді өзгерту сәтсіз аяқталды"
+msgstr "Мазмұнды кірістіру сәтсіз аяқталды"
 
 msgid "Path length constraint exceeded"
 msgstr "Жол ұзындық шектеуі асырылған"
@@ -3356,10 +3228,10 @@ msgid "Pending Voice Requests"
 msgstr "Кезектегі дыбыс чатына сұраным"
 
 msgid "Permanently"
-msgstr ""
+msgstr "Тұрақты түрде"
 
 msgid "Permanently remove this group chat from the server"
-msgstr ""
+msgstr "Бұл топтық чатты серверден біржола өшіру"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3426,36 +3298,32 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
-#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
-"Тіркелгілеріңіздің біреуін таңдаңыз.\n"
-"Gajim таңдалған тіркелгідегі барлық хабарларды сіз таңдаған бумаға "
-"экспорттайды."
+"Тіркелгілеріңіздің бірін таңдаңыз.\n"
+"Gajim таңдалған тіркелгі мен чаттардағы барлық хабарламаларды сіз таңдаған "
+"бумаға экспорттайды."
 
 msgid "Please use these settings with caution!"
 msgstr "Бұл баптауларды абайлап пайдаланыңыз!"
 
-#, fuzzy
 msgid "Plugin Failed"
-msgstr "Плагин сәтсіз"
+msgstr "Плагин қатесі"
 
 msgid "Plugin Settings"
 msgstr "Плагин баптаулары"
 
-#, fuzzy
 msgid "Plugin Update"
-msgstr "Плагиндер жаңартулары"
+msgstr "Плагинді жаңарту"
 
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
 
-#, fuzzy
 msgid "Plugin could not be loaded"
-msgstr "Таңдалған суретті жүктеу мүмкін емес."
+msgstr "Плагинді жүктеу мүмкін емес"
 
 msgid "Plugins"
 msgstr "Плагиндер"
@@ -3492,6 +3360,8 @@ msgid ""
 "Press the keys you want to associate with this action. To disable this "
 "shortcut, click apply."
 msgstr ""
+"Осы әрекетке тағайындағыңыз келетін пернелерді басыңыз. Бұл жарлықты сөндіру "
+"үшін \"іске асыру\" батырмасын шертіңіз."
 
 msgid "Preview Size"
 msgstr "Алдын ала қарау өлшемі"
@@ -3519,14 +3389,13 @@ msgstr "Жекелік"
 
 #, python-format
 msgid "Privacy – %(account)s"
-msgstr ""
+msgstr "Жекелік – %(account)s"
 
 msgid "Private"
 msgstr "Жеке"
 
-#, fuzzy
 msgid "Processing image…"
-msgstr "Суретті өңдеу кезінде қате"
+msgstr "Суретті өңдеу…"
 
 msgid "Profile"
 msgstr "Профиль"
@@ -3535,36 +3404,34 @@ msgid "Profile application with cprofile"
 msgstr "Қолданбаны cprofile көмегімен профильдеу"
 
 msgid "Pronouns"
-msgstr ""
+msgstr "Есімдіктер"
 
 msgid "Protocol"
-msgstr ""
+msgstr "Хаттама"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Provider - %(account)s"
-msgstr "Сервер ақпараты"
+msgstr "Провайдер - %(account)s"
 
 #, python-format
 msgid "Provider Category: %s"
-msgstr ""
+msgstr "Провайдер санаты: %s"
 
 #, python-format
 msgid "Provider Contacts - %(account)s"
-msgstr ""
+msgstr "Провайдер контактілері - %(account)s"
 
-#, fuzzy
 msgid "Provider Infos"
-msgstr "Сервер ақпараты"
+msgstr "Провайдер туралы ақпарат"
 
 msgid "Providers list is up to date"
-msgstr ""
+msgstr "Провайдерлер тізімі жаңартылған"
 
 msgid "Prox_y"
 msgstr "Прокс_и"
 
-#, fuzzy
 msgid "Proxies"
-msgstr "Проксилерді басқару"
+msgstr "Проксилер"
 
 msgid "Proxy"
 msgstr "Прокси"
@@ -3583,9 +3450,8 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Жария шифрлеу кілті"
 
-#, fuzzy
 msgid "Public Information"
-msgstr "Ашық кілт ақпараты"
+msgstr "Жария ақпарат"
 
 msgid "Public Key Information"
 msgstr "Ашық кілт ақпараты"
@@ -3597,17 +3463,14 @@ msgstr "Ашық кілт: "
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
 
-#, fuzzy
 msgid "Purge"
-msgstr "Та_зарту"
+msgstr "Тазарту"
 
-#, fuzzy
 msgid "Purge Chat History"
-msgstr "Чат тарихын өшіру…"
+msgstr "Чат тарихын тазарту"
 
-#, fuzzy
 msgid "Purge all Chat History?"
-msgstr "Барлық чат журналын тазарту"
+msgstr "Барлық чат тарихын тазарту керек пе?"
 
 #, python-format
 msgid "PyGObject Version: %s"
@@ -3619,38 +3482,33 @@ msgstr "Шығу"
 msgid "Quit Gajim"
 msgstr "Gajim жұмысын аяқтау"
 
-#, fuzzy
 msgid "Quitting…"
-msgstr "Күтуде…"
+msgstr "Шығу…"
 
-#, fuzzy
 msgid "Quote Next Message"
-msgstr "Келесі хабарламаны дәйексөз қылу"
+msgstr "Келесі хабарламадан дәйексөз алу"
 
-#, fuzzy
 msgid "Quote Previous Message"
-msgstr "Алдыңғы хабарламаны дәйексөз қылу"
+msgstr "Алдыңғы хабарламадан дәйексөз алу"
 
-#, fuzzy
 msgid "Re-Login Now?"
 msgstr "Қазір қайта кіру керек пе?"
 
 msgid "Re_gister"
 msgstr "_Тіркелу"
 
-#, fuzzy, python-format
+#, python-format
 msgid "React with %s"
-msgstr "%s контактімен қоңырау"
+msgstr "%s арқылы реакция білдіру"
 
-#, fuzzy
 msgid "Read Receipts"
-msgstr "Жеткізу хабарламаларын жіберу"
+msgstr "Оқылғандығы туралы есептер"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Википедия мақаласын оқу"
 
 msgid "Read more about blind trust"
-msgstr ""
+msgstr "Blind trust туралы толығырақ оқу"
 
 msgid "Reason"
 msgstr "Себебі"
@@ -3664,9 +3522,8 @@ msgstr "Себебі (міндетті емес)..."
 msgid "Reason for destruction"
 msgstr "Бұзылу себебі"
 
-#, fuzzy
 msgid "Received"
-msgstr "Алынған"
+msgstr "Алынды"
 
 msgctxt "Message state"
 msgid "Received"
@@ -3676,10 +3533,10 @@ msgid "Recognize your account by color"
 msgstr "Тіркелгіңізді түспен ерекшелеу"
 
 msgid "Record"
-msgstr ""
+msgstr "Жазу"
 
 msgid "Record Voice Message… (hold button to record directly)"
-msgstr ""
+msgstr "Дауыстық хабарламаны жазу… (тікелей жазу үшін батырманы басып тұрыңыз)"
 
 msgid "Redirect"
 msgstr "Қайта бағдарлау"
@@ -3702,9 +3559,8 @@ msgstr "Тіркелу сәтті аяқталды"
 msgid "Reject file transfer"
 msgstr "Файлдармен алмасуды тайдыру"
 
-#, fuzzy
 msgid "Reload"
-msgstr "Жүктеп салу"
+msgstr "Қайта жүктеу"
 
 msgid "Remember Last Status"
 msgstr "Соңғы қалып-күйді есте сақтау"
@@ -3718,9 +3574,9 @@ msgstr "Қашықтағы сервердің тайм-ауты"
 msgid "Remove"
 msgstr "Өшіру"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Remove %s contacts from your contact list?"
-msgstr "Контактты контакттар тізімінен өшіру"
+msgstr "Контактілер тізімінен %s контактіні өшіру керек пе?"
 
 msgid "Remove Account"
 msgstr "Тіркелгіні өшіру"
@@ -3728,29 +3584,23 @@ msgstr "Тіркелгіні өшіру"
 msgid "Remove Chat History?"
 msgstr "Чат тарихын өшіру керек пе?"
 
-#, fuzzy
 msgid "Remove Contact"
-msgstr "Контактты өшіру"
+msgstr "Контактіні өшіру"
 
-#, fuzzy
 msgid "Remove Contacts?"
-msgstr "Контактты өшіру"
+msgstr "Контактілерді өшіру керек пе?"
 
-#, fuzzy
 msgid "Remove Contact…"
-msgstr "Контактты өшіру"
+msgstr "Контактіні өшіру…"
 
-#, fuzzy
 msgid "Remove From Contact List?"
-msgstr "Контакттар тізімінен өшіру"
+msgstr "Контактілер тізімінен өшіру керек пе?"
 
-#, fuzzy
 msgid "Remove Group?"
-msgstr "Топты өшіру"
+msgstr "Топты өшіру керек пе?"
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "Топты өшіру"
+msgstr "Топты өшіру…"
 
 msgid "Remove History…"
 msgstr "Тарихты өшіру…"
@@ -3758,9 +3608,8 @@ msgstr "Тарихты өшіру…"
 msgid "Remove Proxy"
 msgstr "Проксиді өшіру"
 
-#, fuzzy
 msgid "Remove Proxy?"
-msgstr "Проксиді өшіру"
+msgstr "Проксиді өшіру керек пе?"
 
 msgid "Remove Setting"
 msgstr "Баптауды өшіру"
@@ -3768,33 +3617,29 @@ msgstr "Баптауды өшіру"
 msgid "Remove Theme"
 msgstr "Теманы өшіру"
 
-#, fuzzy
 msgid "Remove Workspace?"
-msgstr "Жұмыс кеңістігін өшіру"
+msgstr "Жұмыс орнын өшіру керек пе?"
 
-#, fuzzy
 msgid "Remove from Contact List…"
-msgstr "Контакттар тізімінен өшіру"
+msgstr "Контактілер тізімінен өшіру…"
 
-#, fuzzy
 msgid "Remove from Group"
-msgstr "Топты өшіру"
+msgstr "Топтан өшіру"
 
 msgid "Remove this workspace"
 msgstr "Бұл жұмыс кеңістігін өшіру"
 
-#, fuzzy
 msgid "Remove your group chat avatar"
-msgstr "Профиль суретіңізді өшіру"
+msgstr "Топтық чат аватарын өшіру"
 
 msgid "Remove your profile picture"
 msgstr "Профиль суретіңізді өшіру"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Removed %(count)s contact"
 msgid_plural "Removed %(count)s contacts"
-msgstr[0] "%s контакт өшірілді"
-msgstr[1] "%s контакт өшірілді"
+msgstr[0] "%(count)s контакт өшірілді"
+msgstr[1] "%(count)s контакт өшірілді"
 
 msgid "Remove…"
 msgstr "Өшіру…"
@@ -3806,25 +3651,23 @@ msgid ""
 "Removing the account will delete most related data. If you want to "
 "disconnect the account for a short time, use the status selector."
 msgstr ""
+"Тіркелгіні өшіру оған қатысты көптеген деректерді өшіреді. Егер сіз "
+"тіркелгіні қысқа уақытқа ажыратқыңыз келсе, күй таңдауын қолданыңыз."
 
-#, fuzzy
 msgid "Rename"
-msgstr "_Пайдаланушы аты"
+msgstr "Атын өзгерту"
 
-#, fuzzy
 msgid "Rename Contact?"
-msgstr "Контактты өшіру"
+msgstr "Контакт атын өзгерту керек пе?"
 
-#, fuzzy
 msgid "Rename…"
-msgstr "_Пайдаланушы аты"
+msgstr "Атын өзгерту…"
 
 msgid "Reply…"
-msgstr ""
+msgstr "Жауап беру…"
 
-#, fuzzy
 msgid "Request"
-msgstr "_Сұрау"
+msgstr "Сұраным"
 
 msgid "Request Search Form"
 msgstr "Іздеу формасын сұрау"
@@ -3835,9 +3678,8 @@ msgstr "Дауыс беру құқығын сұрау"
 msgid "Request contact information (Tune, Location)"
 msgstr "Контакт ақпаратын сұрау (дыбыс, орналасуы)"
 
-#, fuzzy
 msgid "Request pending"
-msgstr "Талап етеді: Gspell"
+msgstr "Сұраным күтілуде"
 
 msgid "Request to see this contact's online status"
 msgstr "Бұл контакттың қалып-күйін көруді сұрау"
@@ -3866,6 +3708,10 @@ msgid ""
 "org.gnome.Mutter.IdleMonitor or\n"
 "libxss"
 msgstr ""
+"Келесілер қажет:\n"
+"org.freedesktop.ScreenSaver немесе\n"
+"org.gnome.Mutter.IdleMonitor немесе\n"
+"libxss"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Талап етеді: gnome-keyring немесе kwallet"
@@ -3876,9 +3722,8 @@ msgstr "Талап етеді: gsound"
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
 
-#, fuzzy
 msgid "Requires: libspelling"
-msgstr "Талап етеді: Gspell"
+msgstr "libspelling қажет"
 
 msgid "Reserved Name"
 msgstr "Резервтелген аты"
@@ -3886,17 +3731,14 @@ msgstr "Резервтелген аты"
 msgid "Reset"
 msgstr "Тастау"
 
-#, fuzzy
 msgid "Reset Filters"
-msgstr "Қалқымалы кеңестерді тастау"
+msgstr "Сүзгілерді тастау"
 
-#, fuzzy
 msgid "Reset Font Size"
-msgstr "D-Bus интерфейсі"
+msgstr "Қаріп өлшемін тастау"
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "Қалқымалы кеңестерді тастау"
+msgstr "Кеңестерді тастау"
 
 msgid "Reset all chats to the current default value"
 msgstr "Барлық чаттарды ағымдағы әдепкі мәнге тастау"
@@ -3905,7 +3747,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "Барлық топтық чаттарды ағымдағы әдепкі мәнге тастау"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "Бастапқы атына қайтару"
 
 msgid "Resets value to default"
 msgstr "Мәнді әдепкіге тастайды"
@@ -3913,21 +3755,17 @@ msgstr "Мәнді әдепкіге тастайды"
 msgid "Resource"
 msgstr "Ресурс"
 
-#, fuzzy
 msgid "Restart Gajim to finish this update"
-msgstr "Өзгерістер күшіне енуі үшін Gajim қайта іске қосу"
+msgstr "Бұл жаңартуды аяқтау үшін Gajim бағдарламасын қайта іске қосыңыз"
 
-#, fuzzy
 msgid "Restart Gajim to start debug logging"
-msgstr "Өзгерістер күшіне енуі үшін Gajim қайта іске қосу"
+msgstr "Жөндеу журналын бастау үшін Gajim бағдарламасын қайта іске қосыңыз"
 
-#, fuzzy
 msgid "Restart Pending"
-msgstr "Талап етеді: Gspell"
+msgstr "Күтілетін қайта іске қосу"
 
-#, fuzzy
 msgid "Restore Closed Chat"
-msgstr "Чатты қалпына келтіру"
+msgstr "Жабылған чатты қалпына келтіру"
 
 msgid "Restore last state"
 msgstr "Соңғы қалып-күйді қалпына келтіру"
@@ -3935,9 +3773,8 @@ msgstr "Соңғы қалып-күйді қалпына келтіру"
 msgid "Restore status and status message of your last session"
 msgstr "Соңғы сеанстың күйін мен күй хабарын қалпына келтіру"
 
-#, fuzzy
 msgid "Retract Message?"
-msgstr "Хабарламаны кері қайтарып алу"
+msgstr "Хабарламаны кері қайтару керек пе?"
 
 msgctxt "Message row action"
 msgid "Retract…"
@@ -3959,9 +3796,9 @@ msgctxt "Profile"
 msgid "Role"
 msgstr "Ролі"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Roles of %s have been removed in this group chat"
-msgstr "%s бұл топтық чатқа шақырылды"
+msgstr "Осы топтық чатта %s рөлдері өшірілді"
 
 msgid "SHA-1:"
 msgstr "SHA-1:"
@@ -3994,7 +3831,7 @@ msgid "Save as..."
 msgstr "Қалайша сақтау..."
 
 msgid "Save display name"
-msgstr ""
+msgstr "Көрінетін атын сақтау"
 
 msgid "Saving Avatar Failed"
 msgstr "Аватарды сақтау сәтсіз аяқталды"
@@ -4006,31 +3843,28 @@ msgid "Say hi to your new contact…"
 msgstr "Жаңа контактыңызға сәлем айтыңыз…"
 
 msgid "Scan QR Code"
-msgstr ""
+msgstr "QR кодын сканерлеу"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr ""
+msgstr "%s тобына қосылу үшін осы QR кодын сканерлеңіз."
 
-#, fuzzy, python-format
+#, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr "Өзіңізді өз контакттар тізіміңізге қоса алмайсыз."
+msgstr "%s пайдаланушысымен чатты бастау үшін осы QR кодын сканерлеңіз."
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканерлеуде %(current)d / %(total)d ..."
 
-#, fuzzy
 msgid "Scroll Down"
 msgstr "Төмен айналдыру"
 
-#, fuzzy
 msgid "Scroll Up"
 msgstr "Жоғары айналдыру"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "Қалып-күй хабарламасын орнату"
+msgstr "Осы хабарламаға дейін айналдыру"
 
 msgid "Scroll up to load more chat history…"
 msgstr "Қосымша сөйлесу тарихын жүктеу үшін жоғары айналдырыңыз…"
@@ -4038,21 +3872,17 @@ msgstr "Қосымша сөйлесу тарихын жүктеу үшін жо�
 msgid "Search"
 msgstr "Іздеу"
 
-#, fuzzy
 msgid "Search Chat History"
-msgstr "Чат тарихын сақтау"
+msgstr "Чат тарихынан іздеу"
 
-#, fuzzy
 msgid "Search Filters"
-msgstr "Хабарлама жіберілді"
+msgstr "Іздеу сүзгілері"
 
-#, fuzzy
 msgid "Search Filters (Active)"
-msgstr "Хабарлама алынды"
+msgstr "Іздеу сүзгілері (белсенді)"
 
-#, fuzzy
 msgid "Search Participants…"
-msgstr "Қатысушылар"
+msgstr "Қатысушыларды іздеу…"
 
 msgid "Search Result"
 msgstr "Іздеу нәтижесі"
@@ -4073,9 +3903,8 @@ msgstr ""
 "Топтық чаттарды глобалдық деңгейде іздеу\n"
 "(іздеуді бастау үшін Enter батырмасын басыңыз)"
 
-#, fuzzy
 msgid "Search in chats…"
-msgstr "Қатысушылар"
+msgstr "Чаттардан іздеу…"
 
 msgid "Searching"
 msgstr "Іздеу"
@@ -4083,11 +3912,13 @@ msgstr "Іздеу"
 msgid "Searching…"
 msgstr "Іздеу…"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Searching…\n"
 "%s results"
-msgstr "Іздеу…"
+msgstr ""
+"Іздеу…\n"
+"%s нәтиже"
 
 msgid "Search…"
 msgstr "Іздеу…"
@@ -4100,6 +3931,9 @@ msgid ""
 "conversations. Share messages, pictures, and files with your contacts – and "
 "only with them."
 msgstr ""
+"Қорғалған сөйлесулер: Сөйлесулеріңізге арналған заманауи ұштан-ұшқа дейінгі "
+"шифрлау. Контактілеріңізбен хабарламалармен, суреттермен және файлдармен "
+"бөлісіңіз – тек олармен ғана."
 
 msgid "Security"
 msgstr "Қауіпсіздік"
@@ -4110,13 +3944,13 @@ msgstr "Қауіпсіздік белгілері"
 msgid "Security Warning"
 msgstr "Қауіпсіздік ескертуі"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s"
-msgstr "%s өзгерткен"
+msgstr "%s көрді"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Seen by %s participants"
-msgstr "Қатысушылар"
+msgstr "%s қатысушы көрді"
 
 msgid "Select Account"
 msgstr "Тіркелгіні таңдау"
@@ -4129,14 +3963,13 @@ msgid "Select a security label for your message…"
 msgstr "Хабарламаңыз үшін қауіпсіздік белгісін таңдау…"
 
 msgid "Select an activity to see details."
-msgstr ""
+msgstr "Мәліметтерді көру үшін әрекетті таңдаңыз."
 
 msgid "Select playback speed"
 msgstr "Ойнату жылдамдығын таңдау"
 
-#, fuzzy
 msgid "Select the account you want to use to create a new group chat"
-msgstr "Синхрондау үшін контакттарды таңдаңыз"
+msgstr "Жаңа топтық чат жасау үшін қолданылатын тіркелгіні таңдаңыз"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Аудио кірісті таңдаңыз (мысалы, микрофон)"
@@ -4154,13 +3987,11 @@ msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
 msgstr "Жартылай анонимді"
 
-#, fuzzy
 msgid "Send Chat Indicators"
-msgstr "Чат маркерлерін жіберу"
+msgstr "Чат индикаторларын жіберу"
 
-#, fuzzy
 msgid "Send Chat Indicators in Group Chats"
-msgstr "Топтық чаттарда чат күйін жіберу"
+msgstr "Топтық чаттарда чат индикаторларын жіберу"
 
 msgid "Send Chat State"
 msgstr "Чат қалып-күйін жіберу"
@@ -4191,7 +4022,7 @@ msgid "Send _Report"
 msgstr "_Есеп жіберу"
 
 msgid "Send and receive read receipts"
-msgstr ""
+msgstr "Оқылғандығы туралы есептерді жіберу және алу"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4222,32 +4053,26 @@ msgstr "%s тіркелгісі үшін қызметтерді қарап шы�
 msgid "Service Gateway"
 msgstr "Қызмет шлюзі"
 
-#, fuzzy
 msgid "Service Not Browsable"
-msgstr "Қызмет қарау үшін қол жетерсіз"
+msgstr "Қызмет шолу үшін қолжетімсіз"
 
-#, fuzzy
 msgid "Service Not Found"
-msgstr "Қашықтағы сервер табылмады"
+msgstr "Қызмет табылмады"
 
-#, fuzzy
 msgid "Service Provider"
-msgstr "Қызметтерді қарап шығу"
+msgstr "Қызмет провайдері"
 
-#, fuzzy
 msgid "Set Trust"
-msgstr "Дыбыстарды басқару"
+msgstr "Сенімді орнату"
 
-#, fuzzy
 msgid "Set a subject for this chat"
-msgstr "Алдыңғы чатқа ауысу"
+msgstr "Бұл чат үшін тақырыпты орнату"
 
 msgid "Set configuration directory"
 msgstr "Баптау бумасын орнату"
 
-#, fuzzy
 msgid "Set date…"
-msgstr "Модерацияланады"
+msgstr "Күнді орнату…"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4259,13 +4084,11 @@ msgstr "Параметр жүйемен бұғатталған"
 msgid "Settings"
 msgstr "Баптаулар"
 
-#, fuzzy
 msgid "Share Contact…"
-msgstr "Контактты қосу…"
+msgstr "Контактіні бөлісу…"
 
-#, fuzzy
 msgid "Share Group Chat…"
-msgstr "Топтық чатты жасау…"
+msgstr "Топтық чатты бөлісу…"
 
 msgid "Share Status"
 msgstr "Қалып-күймен бөлісу"
@@ -4276,11 +4099,9 @@ msgstr "Видеомен бөлісу"
 msgid "Share my online status"
 msgstr "Менің қалып-күйіммен бөлісу"
 
-#, fuzzy
 msgid "Shortcuts"
-msgstr "_Пернетақта жарлықтары"
+msgstr "Жарлықтар"
 
-#, fuzzy
 msgid "Show Chat List"
 msgstr "Чаттар тізімін көрсету"
 
@@ -4305,13 +4126,11 @@ msgstr "Кіру/шығуды көрсету"
 msgid "Show Joined / Left"
 msgstr "Кіру/шығуды көрсету"
 
-#, fuzzy
 msgid "Show Link Preview"
-msgstr "Тікелей алдын ала қарау"
+msgstr "Сілтемені алдын ала қарауды көрсету"
 
-#, fuzzy
 msgid "Show Plugins"
-msgstr "Плагиндер"
+msgstr "Плагиндерді көрсету"
 
 msgid "Show Send Message Button"
 msgstr "Хабарламаны жіберу батырмасын көрсету"
@@ -4319,13 +4138,11 @@ msgstr "Хабарламаны жіберу батырмасын көрсету"
 msgid "Show Status Changes"
 msgstr "Қалып-күй өзгерісін көрсету"
 
-#, fuzzy
 msgid "Show Subject on Join"
-msgstr "Тақырыпты көрсету"
+msgstr "Қосылған кезде тақырыпты көрсету"
 
-#, fuzzy
 msgid "Show Title Bar"
-msgstr "Тапсырмалар панелінде көрсету"
+msgstr "Тақырып жолағын көрсету"
 
 msgid "Show Transfers"
 msgstr "Алмасуларды көрсету"
@@ -4372,9 +4189,8 @@ msgstr ""
 "Қалып-күйіңіз \"Кетіп қалған\", \"Бос емес\", т.с.с. болса да, "
 "хабарландыруларды көрсету."
 
-#, fuzzy
 msgid "Show notifications on the system tray icon"
-msgstr "Файлдармен алмасу аяқталғанда е_скерту"
+msgstr "Жүйелік трей таңбашасында хабарландыруларды көрсету"
 
 msgid "Show on Startup"
 msgstr "Іске қосылғанда көрсету"
@@ -4399,9 +4215,8 @@ msgstr "Қысқа кодтарға арналған ұсыныстарды кө
 msgid "Show the application's version"
 msgstr "Қолданба нұсқасын көрсету"
 
-#, fuzzy
 msgid "Show the window’s title bar"
-msgstr "Терезені тапсырмалар панелінде көрсету"
+msgstr "Терезенің тақырып жолағын көрсету"
 
 msgid "Show window in the taskbar"
 msgstr "Терезені тапсырмалар панелінде көрсету"
@@ -4421,18 +4236,14 @@ msgstr "Тіркелу"
 msgid "Sign up Anonymously"
 msgstr "Анонимді түрде тіркелу"
 
-#, fuzzy
 msgid "Sign up for a new account with a provider of your choice"
-msgstr "Жаңа тіркелгіге өз таңдауыңыз бойынша серверге тіркелу"
+msgstr "Өзіңіз таңдаған провайдерде жаңа тіркелгі жасау"
 
 msgid "Signup not allowed"
 msgstr "Тіркелу рұқсат етілмейді"
 
 msgid "Size of preview images in pixels"
 msgstr "Алдын ала қарау суреттердің пиксельдегі өлшемі"
-
-msgid "Sleeping"
-msgstr "Ұйқыда"
 
 msgid "Software"
 msgstr "Бағд. қамтама"
@@ -4523,13 +4334,11 @@ msgstr "Қалып-күй хабарламасы: Мәтін қарібі"
 msgid "Status Messages in Participants List"
 msgstr "Қатысушылар тізіміндегі қалып-күй хабарламалары"
 
-#, fuzzy
 msgid "Status is not shared"
-msgstr "Күй хабарламасы"
+msgstr "Күй бөлісілмеген"
 
-#, fuzzy
 msgid "Status is shared"
-msgstr "Күй хабарламасы"
+msgstr "Күй бөлісілген"
 
 msgid "Status: Away Color"
 msgstr "Қалып-күй: \"Кетіп қалған\" үшін түс"
@@ -4548,13 +4357,16 @@ msgid ""
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
+"Байланыста болыңыз: Чаттар мен топтар достарыңызбен және отбасыңызбен "
+"байланыста болуға көмектеседі. Ортақ қызығушылықтары бар адамдармен "
+"байланысу арқылы қоғамдастықтар құрыңыз. Кішігірім нәрселерді немесе келесі "
+"үлкен оқиғаны ұйымдастыру үшін топтарды пайдаланыңыз."
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "Мәселені қайталау қадамдары…"
 
-#, fuzzy
 msgid "Stop Sharing Online Status?"
-msgstr "Желідегі онлайн қалып-күймен бөлісуді тоқтату керек пе?"
+msgstr "Желідегі күймен бөлісуді тоқтату керек пе?"
 
 msgid "Street"
 msgstr "Көше"
@@ -4566,13 +4378,13 @@ msgid "Subject"
 msgstr "Тақырып"
 
 msgid "Subject Alt Names: "
-msgstr ""
+msgstr "Тақырыптың балама атаулары: "
 
 msgid "Subject issuer mismatch"
 msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
 msgid "Subject last changed by"
-msgstr ""
+msgstr "Тақырыпты соңғы рет өзгерткен"
 
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -4581,21 +4393,18 @@ msgstr "Жазылу"
 msgid "Subscribed"
 msgstr "Жазылған"
 
-#, fuzzy
 msgid "Subscription"
-msgstr "Жазылу:"
+msgstr "Жазылым"
 
-#, fuzzy
 msgid "Successfully Added Contacts"
-msgstr "Контакттарды таңдау"
+msgstr "Контактілер сәтті қосылды"
 
-#, fuzzy
 msgid "Successfully Removed Contacts"
-msgstr "Контактты өшіру"
+msgstr "Контактілер сәтті өшірілді"
 
 #, python-brace-format
 msgid "Successfully build new session with {device_id}."
-msgstr ""
+msgstr "{device_id} құрылғысымен жаңа сеанс сәтті құрылды."
 
 msgid "Support"
 msgstr "Қолдау"
@@ -4607,98 +4416,81 @@ msgid ""
 "Alternatively, you can either minimize Gajim’s window, or hide it "
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
+"Gajim-нен шығуға сенімдісіз бе?\n"
+"Шықсаңыз, хабарламаларды жібере және ала алмайсыз.\n"
+"\n"
+"Оның орнына Gajim терезесін жиырып қоюға немесе оны толығымен жасыруға "
+"болады. Терезені қалпына келтіру үшін Gajim жүйелік трей таңбашасын "
+"пайдаланыңыз."
 
-#, fuzzy
 msgid "Switch to Chat 1"
-msgstr "Келесі чатқа ауысу"
+msgstr "1-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 2"
-msgstr "Келесі чатқа ауысу"
+msgstr "2-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 3"
-msgstr "Келесі чатқа ауысу"
+msgstr "3-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 4"
-msgstr "Келесі чатқа ауысу"
+msgstr "4-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 5"
-msgstr "Келесі чатқа ауысу"
+msgstr "5-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 6"
-msgstr "Келесі чатқа ауысу"
+msgstr "6-шы чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 7"
-msgstr "Келесі чатқа ауысу"
+msgstr "7-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 8"
-msgstr "Келесі чатқа ауысу"
+msgstr "8-ші чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Chat 9"
-msgstr "Келесі чатқа ауысу"
+msgstr "9-шы чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Next Chat"
 msgstr "Келесі чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Next Unread Chat"
 msgstr "Келесі оқылмаған чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Previous Chat"
 msgstr "Алдыңғы чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Previous Unread Chat"
 msgstr "Алдыңғы оқылмаған чатқа ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 1"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "1-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 2"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "2-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 3"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "3-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 4"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "4-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 5"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "5-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 6"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "6-шы жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 7"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "7-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 8"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "8-ші жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Switch to Workspace 9"
-msgstr "Жұмыс кеңістігін ауыстыру"
+msgstr "9-шы жұмыс кеңістігіне ауысу"
 
-#, fuzzy
 msgid "Sync Group Chat Block List"
-msgstr "Чат тарихын синхрондау"
+msgstr "Топтық чаттардың бұғаттау тізімін синхрондау"
 
 msgid "Sync Threshold"
 msgstr "Синхрондау табалдырық мәні"
@@ -4709,23 +4501,20 @@ msgstr "Синхрондау"
 msgid "Synchronize Chat History"
 msgstr "Чат тарихын синхрондау"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "Тарихты синхрондау…"
 
 msgid "Synchronize group chat block list with other devices"
-msgstr ""
+msgstr "Топтық чаттың бұғаттау тізімін басқа құрылғылармен синхрондау"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "Бұл топтық чатқа кез келген адам қосыла алады"
+msgstr "Қосылған топтық чаттарды синхрондау"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "Қосылған топтық чаттарды басқа құрылғылармен синхрондау."
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
-msgstr "Барлық тіркелгілердің қалып-күйін синхрондау"
+msgstr "Барлық тіркелгілердің күйін синхрондау"
 
 msgid "Synchronizing Chat History…"
 msgstr "Чат тарихын синхрондау…"
@@ -4733,23 +4522,20 @@ msgstr "Чат тарихын синхрондау…"
 msgid "System"
 msgstr "Жүйе"
 
-#, fuzzy
 msgid "System Notifications"
-msgstr "Хабарламаларды көрсету"
+msgstr "Жүйелік хабарландырулар"
 
-#, fuzzy
 msgid "System Notifications When Away"
-msgstr "\"Кетіп қалған\" кезіндегі хабарландырулар"
+msgstr "\"Кетіп қалған\" күйіндегі жүйелік хабарландырулар"
 
 msgid "System Tray Icon"
-msgstr ""
+msgstr "Жүйелік трей таңбашасы"
 
-#, fuzzy
 msgid "System Tray Notifications"
-msgstr "Визуалды хабарламалар"
+msgstr "Жүйелік трей хабарландырулары"
 
 msgid "Telephone"
-msgstr ""
+msgstr "Телефон"
 
 msgid "Tell your contacts if you received a message"
 msgstr "Хабарлама алғаныңызды контактілерге білдірту"
@@ -4768,9 +4554,8 @@ msgstr "Мәтін файлы"
 msgid "Thanks"
 msgstr "Алғыс"
 
-#, fuzzy
 msgid "Thanks to all the package maintainers."
-msgstr "барлық дестелер жинаушыларға алғыс айтамыз."
+msgstr "Барлық десте сүйемелдеушілеріне алғыс білдіреміз."
 
 msgid "The certificate does not match the expected identity of the site"
 msgstr "Сертификат сайттың күтілетін сәйкестігіне сәйкес келмейді"
@@ -4794,18 +4579,16 @@ msgstr ""
 "Контакт қалып-күйіңізді бөлісуді тоқтатқаныңыз туралы хабарланады. Бұның "
 "басқа жанама әсерлері болуы мүмкін екенін ескеріңіз."
 
-#, fuzzy
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
-msgstr "Сервер сертификатын тексеру кезінде келесі ескертулер пайда болды"
+msgstr "Провайдер сертификатын тексеру кезінде келесі ескертулер пайда болды"
 
 msgid "The last message was written on a mobile client"
 msgstr "Соңғы хабарлама мобильді клиентте жазылған"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+msgstr "Сілтеме жасалған хабарлама қолжетімсіз."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Сервер сізге осы топтық чатта никті таңдаған немесе сіздікін өзгерткен"
@@ -4829,19 +4612,18 @@ msgid "Themes"
 msgstr "Темалар"
 
 msgid "There are connectivity issues"
-msgstr ""
+msgstr "Байланыс мәселелері бар"
 
 msgid "There are devices for which you have not made a trust decision yet."
-msgstr ""
+msgstr "Сіз әлі сенім туралы шешім қабылдамаған құрылғылар бар."
 
-#, fuzzy
 msgid ""
 "There are plenty of providers to choose from.\n"
 "Creating an account with one provider allows you to communicate with "
 "contacts from other providers as well."
 msgstr ""
-"Таңдау үшін көптеген серверлер бар.\n"
-"Бір серверде тіркелгі жасау басқа серверлердегі контактілермен де "
+"Таңдауға болатын көптеген провайдерлер бар.\n"
+"Бір провайдерден тіркелгі жасау басқа провайдерлердегі контактілермен де "
 "байланысуға мүмкіндік береді."
 
 msgid "There are updates for Gajim’s plugins"
@@ -4849,11 +4631,10 @@ msgstr "Gajim плагин модульдеріне арналған жаңар�
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr ""
+msgstr "Хабарламаларды алу кезінде қате орын алды: %s"
 
-#, fuzzy
 msgid "There is an update available for this plugin"
-msgstr "Gajim плагин модульдеріне арналған жаңартулар бар"
+msgstr "Бұл плагин үшін жаңарту қолжетімді"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Таңдалған шифрлеу үшін қол жетімді шифрлеу әдісі жоқ."
@@ -4874,15 +4655,16 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Сіздің XMPP серверінің SSL сертификатын растауда қате орын алған (%s)."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "There was an error while trying to save the file.\n"
 "Error: %s."
-msgstr "Сіздің XMPP серверінің SSL сертификатын растауда қате орын алған (%s)."
+msgstr ""
+"Файлды сақтау кезінде қате орын алды.\n"
+"Қате: %s."
 
-#, fuzzy
 msgid "This Device"
-msgstr "Құрылғыны таңдау"
+msgstr "Бұл құрылғы"
 
 msgid "This account has already been added"
 msgstr "Бұл тіркелгі бұрыннан қосылған болып тұр"
@@ -4897,14 +4679,14 @@ msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
+"Бұл чаттың конфигурациясы OMEMO шифрлауы үшін жарамсыз. Бұл чатта OMEMO "
+"пайдалану үшін ол анонимді емес және тек мүшелерге арналған болуы керек."
 
-#, fuzzy
 msgid "This contact does not share their status with you"
-msgstr "Өздерінің қалып-күйіңізбен сізбен бөлісуді тоқтатқан"
+msgstr "Бұл контакт сізбен өз күйімен бөліспейді"
 
-#, fuzzy
 msgid "This contact is a bot"
-msgstr "Контакттар тізімі"
+msgstr "Бұл контакт — бот"
 
 msgid "This device is not compatible."
 msgstr "Бұл құрылғы үйлесімді емес."
@@ -4928,6 +4710,8 @@ msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"Бұл топтық чат тек мүшелерге арналған, бірақ сіз мүшелер тізімінде жоқсыз. "
+"Өкілетті тұлға сізді шақыруы керек."
 
 msgid "This group chat is restricted to members only"
 msgstr "Бұл топтық чат тек мүшелерге ғана қолжетімді"
@@ -4939,7 +4723,7 @@ msgid "This group chat will be destroyed once the last participant left"
 msgstr "Бұл топтық чат соңғы қатысушы кеткеннен кейін жойылады"
 
 msgid "This information will be publicly visible."
-msgstr ""
+msgstr "Бұл ақпарат көпшілікке көрінетін болады."
 
 msgid "This is a public group chat. Encryption is not available."
 msgstr "Бұл жария топтық чат. Шифрлеу қолжетімсіз."
@@ -4951,17 +4735,16 @@ msgstr ""
 "Бұл тема қазір қолданылуда.\n"
 "Бұл теманы өшіруді қалайсыз ба?"
 
-#, fuzzy
 msgid "This message has been moderated"
-msgstr "Бұл хабарламаны %s кері қайтарып алды."
+msgstr "Бұл хабарлама модерацияланды"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated by %s"
-msgstr "Бұл хабарламаны %s кері қайтарып алды."
+msgstr "Бұл хабарламаны %s модерациялады"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This message has been retracted on {date}"
-msgstr "Бұл хабарламаны %s кері қайтарып алды."
+msgstr "Бұл хабарлама {date} күні қайтарып алынды"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4974,9 +4757,9 @@ msgstr ""
 "Бұл хабарлама ескірген OpenPGP көмегімен шифрленген және шифрын шешу мүмкін "
 "емес. Бұл хабарламаларды өңдеу үшін PGP плагинін орнатуға болады."
 
-#, fuzzy
 msgid "This message was encrypted with OMEMO, but not for your device."
-msgstr "Бұл хабарлама OTR арқылы шифрленген және шифрын шешу мүмкін емес."
+msgstr ""
+"Бұл хабарлама OMEMO көмегімен шифрланған, бірақ сіздің құрылғыңыз үшін емес."
 
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Бұл хабарлама OTR арқылы шифрленген және шифрын шешу мүмкін емес."
@@ -4992,7 +4775,7 @@ msgid "This message will be deleted from your local chat history"
 msgstr "Бұл хабарлама сіздің жергілікті чат тарихынан өшірілетін болады"
 
 msgid "This plugin is managed by your operating system"
-msgstr ""
+msgstr "Бұл плагин амалдық жүйеңізбен басқарылады"
 
 msgid "This server does not allow signup."
 msgstr "Бұл сервер тіркелуге рұқсат бермейді."
@@ -5016,17 +4799,14 @@ msgstr "Бұл қызмет әлі толық ақпаратпен жауап б
 msgid "This type of service does not contain any items to browse."
 msgstr "Қызметтің осы түрінде қарауға болатын ешнәрсе жоқ."
 
-#, fuzzy
 msgid "This will clear the devices store for your account."
-msgstr "Бұл сіздің тіркелгіңізді Gajim ішінен өшіреді."
+msgstr "Бұл сіздің тіркелгіңіз үшін құрылғылар қоймасын тазартады."
 
-#, fuzzy
 msgid "This will purge all locally stored chat history"
-msgstr "Бұл хабарлама сіздің жергілікті чат тарихынан өшірілетін болады"
+msgstr "Бұл жергілікті сақталған барлық чаттар тарихын жояды"
 
-#, fuzzy
 msgid "This will remove the account and delete all data"
-msgstr "Бұл сіздің тіркелгіңізді Gajim ішінен өшіреді."
+msgstr "Бұл тіркелгіні өшіреді және барлық деректерді өшіреді"
 
 msgid "This will remove your account from Gajim."
 msgstr "Бұл сіздің тіркелгіңізді Gajim ішінен өшіреді."
@@ -5050,14 +4830,12 @@ msgstr "\"Кетіп қалған\" қалып-күйді орнатуға де�
 msgid "Time Until Not Available"
 msgstr "\"Қолжетімсіз\" қалып-күйді орнатуға дейінгі уақыт"
 
-#, fuzzy
 msgid "Time Zone"
-msgstr "Уақыт"
+msgstr "Уақыт белдеуі"
 
-#, fuzzy
 msgctxt "Profile"
 msgid "Timezone"
-msgstr "Уақыт"
+msgstr "Уақыт белдеуі"
 
 msgctxt "Profile"
 msgid "Title"
@@ -5074,6 +4852,8 @@ msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr ""
+"Шифрланған хабарламаны жіберу үшін сіз контактіңіздің құрылғысына сену-"
+"сенбеуді шешуіңіз керек."
 
 msgid "Toggle Chat List"
 msgstr "Чаттар тізімін көрсету/жасыру"
@@ -5088,7 +4868,7 @@ msgid "Transports"
 msgstr "Қызметтер"
 
 msgid "Trust Management"
-msgstr ""
+msgstr "Сенімді басқару"
 
 msgid "Trust Not Decided"
 msgstr "Сенім шешімі әлі қабылдандаған"
@@ -5097,7 +4877,7 @@ msgid "Try Again"
 msgstr "Қайтадан көру"
 
 msgid "Try a different search"
-msgstr ""
+msgstr "Басқа іздеуді байқап көріңіз"
 
 msgid "Trying to change password..."
 msgstr "Парольді өзгерту талабын жасау..."
@@ -5127,9 +4907,8 @@ msgstr "Түрі"
 msgid "Type to search for values..."
 msgstr "Мәндерді іздеу үшін теріңіз..."
 
-#, fuzzy
 msgid "Typing Only"
-msgstr "Тек жазу"
+msgstr "Тек теру"
 
 msgid "URI"
 msgstr "URI"
@@ -5158,9 +4937,8 @@ msgstr "Жергілікті шығарушы сертификатын алу м
 msgid "Unable to properly remove the plugin"
 msgstr "Плагинді дұрыс өшіру мүмкін емес"
 
-#, fuzzy
 msgid "Unable to save profile"
-msgstr "Файлға қатынау мүмкін емес"
+msgstr "Профильді сақтау мүмкін емес"
 
 msgid "Unable to verify the first certificate"
 msgstr "Бірінші сертификатты тексеру мүмкін емес"
@@ -5168,21 +4946,18 @@ msgstr "Бірінші сертификатты тексеру мүмкін ем
 msgid "Unblock"
 msgstr "Блоктаудан босату"
 
-#, fuzzy
 msgid "Unblock Participant?"
-msgstr "Қатысушы"
+msgstr "Қатысушыны бұғаттаудан шығару керек пе?"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Undecided fingerprints of devices connected with \"%s\""
-msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
+msgstr "\"%s\"-пен байланысқан құрылғылардың шешілмеген саусақ іздері"
 
-#, fuzzy
 msgid "Unencrypted"
-msgstr "Шифрленбеген"
+msgstr "Шифрланбаған"
 
-#, fuzzy
 msgid "Uninstall"
-msgstr "Плагинді өшіру"
+msgstr "Өшіру"
 
 msgid "Unknown"
 msgstr "Белгісіз"
@@ -5194,9 +4969,8 @@ msgstr "Белгісіз"
 msgid "Unknown Artist"
 msgstr "Белгісіз орындаушы"
 
-#, fuzzy
 msgid "Unknown Error"
-msgstr "Белгісіз SSL қатесі \"%s\""
+msgstr "Белгісіз қате"
 
 #, python-format
 msgid "Unknown SSL error \"%s\""
@@ -5216,9 +4990,8 @@ msgstr "Белгісіз атауы"
 msgid "Unknown command: %s"
 msgstr "Белгісіз команда: %s"
 
-#, fuzzy
 msgid "Unknown error."
-msgstr "Белгісіз SSL қатесі \"%s\""
+msgstr "Белгісіз қате."
 
 msgid "Unknown language"
 msgstr "Белгісіз тіл"
@@ -5226,9 +4999,8 @@ msgstr "Белгісіз тіл"
 msgid "Unknown validation error"
 msgstr "Белгісіз растау қатесі"
 
-#, fuzzy
 msgid "Unmute Chat"
-msgstr "Чатты босату"
+msgstr "Чат дыбысын қосу"
 
 msgid "Unpin Chat"
 msgstr "Чатты босату"
@@ -5251,9 +5023,9 @@ msgstr "Аватарды жаңарту"
 msgid "Update automatically"
 msgstr "Автоматты түрде жаңарту"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Update available: Version %s"
-msgstr "Жаңарту қолжетімді"
+msgstr "Жаңарту қолжетімді: %s нұсқасы"
 
 msgid "Update plugins automatically"
 msgstr "Плагиндерід автоматты жаңарту"
@@ -5264,13 +5036,11 @@ msgstr "Жаңартулар"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Жаңартулар Gajim келесі жолы іске қосылғанда орнатылады"
 
-#, fuzzy
 msgid "Updating Plugin…"
-msgstr "Плагиндерді ашу…"
+msgstr "Плагинді жаңарту…"
 
-#, fuzzy
 msgid "Updating provider list…"
-msgstr "Файлды ашу мүмкін емес (%s)"
+msgstr "Провайдерлер тізімін жаңарту…"
 
 msgid "Upload File…"
 msgstr "Файлды жүктеп жіберу…"
@@ -5287,6 +5057,7 @@ msgstr "HTTP File Upload арқылы жүктеп салу…"
 
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
+"Хабарламаны \"/\" (қиғаш сызық) белгісінен бастау үшін \"//\" пайдаланыңыз."
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI қолдану"
@@ -5301,7 +5072,7 @@ msgid "Use Unencrypted Connection"
 msgstr "Шифрленбеген байланысты қолдану"
 
 msgid "Use a profile to run multiple Gajim instances"
-msgstr ""
+msgstr "Бірнеше Gajim данасын іске қосу үшін профильді пайдаланыңыз"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Серверге шифрленбеген байланысты пайдалану"
@@ -5320,7 +5091,7 @@ msgid "User %s not found"
 msgstr "%s пайдаланушысы табылмады"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "Пайдаланушы интерфейсі қаріпінің өлшемі"
 
 msgid "Users"
 msgstr "Пайдаланушылар"
@@ -5351,9 +5122,8 @@ msgstr "Видео"
 msgid "Video test"
 msgstr "Видео сынау"
 
-#, fuzzy
 msgid "Visit Provider's Website"
-msgstr "Сервер веб-сайтын шолу"
+msgstr "Провайдердің веб-сайтына кіру"
 
 msgid "Visit Website"
 msgstr "Веб-сайтты шолу"
@@ -5369,27 +5139,23 @@ msgstr "Келушілер"
 msgid "Visual Notifications"
 msgstr "Визуалды хабарламалар"
 
-#, fuzzy
 msgid "Voice Message"
-msgstr "Хабарламаны жіберу"
+msgstr "Дауыстық хабарлама"
 
-#, fuzzy
 msgid "Voice Messages are not available"
-msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+msgstr "Дауыстық хабарламалар қолжетімді емес"
 
 msgid "Voice message could not be saved. Please try again."
-msgstr ""
+msgstr "Дауыстық хабарламаны сақтау мүмкін болмады. Қайталап көріңіз."
 
-#, fuzzy
 msgid "WAV Sounds"
-msgstr "Wav дыбыстары"
+msgstr "WAV дыбыстары"
 
 msgid "Waiting…"
 msgstr "Күтуде…"
 
-#, fuzzy
 msgid "Warning"
-msgstr "Қауіпсіздік ескертуі"
+msgstr "Ескерту"
 
 #, python-format
 msgid "Web Search URL is missing a \"%s\""
@@ -5417,13 +5183,11 @@ msgstr ""
 "Жүктеп алу алдында жарамды сертификатты тексеру керек пе (бұны сөндіру "
 "қауіпсіз емес)"
 
-#, fuzzy
 msgid "Which provider should I choose?"
-msgstr "Қай серверді таңдауым керек?"
+msgstr "Қай провайдерді таңдауым керек?"
 
-#, fuzzy
 msgid "Why do you want to moderate this message?"
-msgstr "Бұл хабарламаны неліктен қайтарып алғыңыз келеді?"
+msgstr "Бұл хабарламаны неге модерациялағыңыз келеді?"
 
 msgid "Width of group chat roster in pixel"
 msgstr "Топтық чат тізімінің пиксельдегі ені"
@@ -5433,9 +5197,6 @@ msgstr "Windows"
 
 msgid "Work"
 msgstr "Жұмыс"
-
-msgid "Working"
-msgstr "Жұмыс істеудемін"
 
 msgid "Workspace Settings"
 msgstr "Жұмыс кеңістігінің баптаулары"
@@ -5491,9 +5252,9 @@ msgstr ""
 "орнатуды қаладыңыз. Бұл дегеніміз, сіздің барлық сөйлесулеріңіз шифрленбеген "
 "түрде жүреді. Шифрлеусіз байланысу қатаң түрде ҰСЫНЫЛМАЙДЫ."
 
-#, fuzzy, python-format
+#, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
-msgstr "Сіз %(name)s (%(jid)s) контакттар тізіміңізден өшіруді қаладыңыз.\n"
+msgstr "Сіз %(name)s (%(jid)s) контактілер тізімінен өшіруге дайынсыз."
 
 msgid "You are currently not joined this group chat"
 msgstr "Қазіргі уақытта осы топтық чатқа қосылмағансыз"
@@ -5501,19 +5262,19 @@ msgstr "Қазіргі уақытта осы топтық чатқа қосыл�
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "Сізге Әкімшілер мен Иелердің қатысуын өзгерту рұқсат етілмейді"
 
-#, fuzzy
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
-msgstr "Байланысты орнатпасаңыз, қолжетерлік қызметтерді қарай алмайсыз"
+msgstr ""
+"Сіз серверге қосылмағансыз. Қосылымсыз қолжетімді сервистерді шола алмайсыз"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You are now %(affiliation)s of this group chat"
-msgstr "Сіз бұл топтық чаттан шықтыңыз"
+msgstr "Сіз енді осы топтық чатта %(affiliation)s мәртебесіне иесіз"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You are now %(role)s of this group chat"
-msgstr "Сіз бұл топтық чаттан шықтыңыз"
+msgstr "Сіз енді осы топтық чатта %(role)s рөліне иесіз"
 
 #, python-format
 msgid "You are now known as %s"
@@ -5523,9 +5284,8 @@ msgstr "Бұдан былай %s ретінде белгілі боласыз"
 msgid "You are now {show}{status}"
 msgstr "Сіз енді {show}{status} ретінде белгілі боласыз"
 
-#, fuzzy
 msgid "You are offline"
-msgstr "Сіз желіде емессіз."
+msgstr "Желіде емессіз"
 
 msgid "You are offline. Go online to send messages…"
 msgstr "Сіз желіде емессіз. Хабарламаларды жіберу үшін желіге қосылыңыз…"
@@ -5550,45 +5310,41 @@ msgid "You cannot see this contact's online status"
 msgstr "Бұл контакттың желідегі қалып-күйін көре алмайсыз"
 
 msgid "You can’t send private messages to contacts if they are offline."
-msgstr ""
+msgstr "Контактілер желіде болмаса, оларға жеке хабарлама жібере алмайсыз."
 
 msgid "You don't share your status with this contact"
-msgstr ""
+msgstr "Осы контактімен күйіңізді бөліспейсіз"
 
-#, fuzzy
 msgid "You have been banned"
-msgstr "Сізді банға салды{actor}{reason}"
+msgstr "Сіз бұғатталдыңыз"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You have been banned by %s"
-msgstr "Сіз %s чатына шақырылдыңыз"
+msgstr "Сізді %s бұғаттады"
 
 #, python-format
 msgid "You have been invited to %s"
 msgstr "Сіз %s чатына шақырылдыңыз"
 
-#, fuzzy
 msgid "You have been kicked"
-msgstr "Сізді қуып шықты{actor}{reason}"
+msgstr "Сізді шығарып жіберді"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You have been kicked by %s"
-msgstr "Сіз %s чатына шақырылдыңыз"
+msgstr "Сізді %s шығарып жіберді"
 
-#, fuzzy
 msgid "You have been removed from this group chat"
-msgstr "Сізді чат бөлімінен шығарып жіберді{actor}{reason}"
+msgstr "Сіз осы топтық чаттан өшірілдіңіз"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You have been removed from this group chat by %s"
-msgstr "Сізді чат бөлімінен шығарып жіберді{actor}{reason}"
+msgstr "Сізді осы топтық чаттан %s өшірді"
 
 msgid "You have insufficient permissions"
 msgstr "Сізде рұқсаттар жеткіліксіз"
 
-#, fuzzy
 msgid "You have left due to an error"
-msgstr "Сіз қате салдарынан шықтыңыз{reason}"
+msgstr "Қате себебінен шығып кеттіңіз"
 
 msgid "You have to be connected to create a group chat."
 msgstr "Топтық чат жасау үшін желіге қосылуыңыз керек."
@@ -5603,13 +5359,15 @@ msgid ""
 "You may need an invite to join this group chat again, if you choose to leave "
 "it permanently."
 msgstr ""
+"Егер топтан біржола шығуды шешсеңіз, оған қайта қосылу үшін сізге шақыру "
+"қажет болуы мүмкін."
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Баптауларды өзгерту үшін сізге иесінің рұқсаттары қажет"
 
 #, python-format
 msgid "You now have the following hats: %s"
-msgstr ""
+msgstr "Сізде енді мынадай белгілер бар: %s"
 
 msgid "You requested to see this contact's online status"
 msgstr "Сіз бұл контакттың желідегі қалып-күйін көруді сұрадыңыз"
@@ -5631,19 +5389,20 @@ msgid "Your account has has been removed successfully."
 msgstr "Сіздің тіркелгіңіз сәтті өшірілді."
 
 msgid "Your affiliations to this group chat have been removed"
-msgstr ""
+msgstr "Осы топтық чаттағы мәртебелеріңіз өшірілді"
 
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
-msgstr "Сіздің тіркелгіңіз сәтті өшірілді."
+msgstr "Чат тарихының дерекқоры сәтті көшірілді."
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"Чат тарихы көшірілуде.\n"
+"Бұл біраз уақыт алуы мүмкін…"
 
 msgid "Your connection to the server is secured by this certificate"
-msgstr ""
+msgstr "Сервермен қосылымыңыз осы сертификатпен қорғалған"
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Хабарламаңыз байланыс орнатпағанша жіберілмейді."
@@ -5660,23 +5419,20 @@ msgstr "Сіздің пароліңіз сәтті өзгертілді."
 msgid "Your public key or authentication certificate"
 msgstr "Сізідң ашық кілтіңіз немесе аутентификация сертификатыңыз"
 
-#, fuzzy
 msgid "Your roles in this group chat have been removed"
-msgstr "Жаңа чат бөлмесі жасалған"
+msgstr "Осы топтық чаттағы рөлдеріңіз өшірілді"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
 "of a different server."
 msgstr ""
+"Серверіңіз топтық чат қызметін ұсынбайды. Басқа сервер адресін көрсетіңіз."
 
 msgid "Your service offers the following features"
-msgstr ""
+msgstr "Сервисіңіз келесі мүмкіндіктерді ұсынады"
 
 msgid "ZIP files"
 msgstr "ZIP файлдары"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[көбірек оқу]"
@@ -5716,9 +5472,8 @@ msgstr "_Бос емес"
 msgid "_Cancel"
 msgstr "_Бас тарту"
 
-#, fuzzy
 msgid "_Clear Devices"
-msgstr "Құрылғыны таңдау"
+msgstr "Құрылғыларды _тазарту"
 
 msgid "_Close"
 msgstr "Жа_бу"
@@ -5764,7 +5519,7 @@ msgid "_Free for Chat"
 msgstr "Чат үшін б_ос"
 
 msgid "_Hide (Tray Icon)"
-msgstr ""
+msgstr "_Жасыру (трей таңбашасы)"
 
 msgid "_Host"
 msgstr "_Хост"
@@ -5772,16 +5527,14 @@ msgstr "_Хост"
 msgid "_Hostname"
 msgstr "_Хост аты"
 
-#, fuzzy
 msgid "_Import"
-msgstr "Экспорт"
+msgstr "_Импорттау"
 
 msgid "_Join"
 msgstr "_Кіру"
 
-#, fuzzy
 msgid "_Join Support Chat"
-msgstr "Қолдау чатына қосылу"
+msgstr "Қолдау чатына қ_осылу"
 
 msgid "_Keyboard Shortcuts"
 msgstr "_Пернетақта жарлықтары"
@@ -5795,13 +5548,11 @@ msgstr "_Кету"
 msgid "_Log In"
 msgstr "_Кіру"
 
-#, fuzzy
 msgid "_Minimize"
-msgstr "Қайыру"
+msgstr "_Жию"
 
-#, fuzzy
 msgid "_Moderate"
-msgstr "Модерацияланады"
+msgstr "_Модерациялау"
 
 msgid "_Name"
 msgstr "_Аты"
@@ -5822,16 +5573,14 @@ msgstr "Желі_де емес"
 msgid "_Overwrite"
 msgstr "Үстінен жа_зу"
 
-#, fuzzy
 msgid "_Please choose a provider"
-msgstr "Серверді _таңдаңыз"
+msgstr "_Провайдерді таңдаңыз"
 
 msgid "_Port"
 msgstr "_Порт"
 
-#, fuzzy
 msgid "_Privacy Policy (Online)"
-msgstr "_Вики (Онлайн)"
+msgstr "_Жекелік саясаты (онлайн)"
 
 msgid "_Purge"
 msgstr "Та_зарту"
@@ -5843,7 +5592,7 @@ msgid "_Re-Login"
 msgstr "Қа_йта кіру"
 
 msgid "_Remember my decision"
-msgstr ""
+msgstr "Шешімімді _сақтау"
 
 msgid "_Remove"
 msgstr "Өші_ру"
@@ -5851,9 +5600,8 @@ msgstr "Өші_ру"
 msgid "_Report Spam"
 msgstr "Спам туралы есеп жібе_ру"
 
-#, fuzzy
 msgid "_Request"
-msgstr "_Сұрау"
+msgstr "_Сұрату"
 
 msgid "_Reset Value"
 msgstr "Мәнді та_стау"
@@ -5888,9 +5636,8 @@ msgstr "Жаз_ылу"
 msgid "_Type"
 msgstr "_Түрі"
 
-#, fuzzy
 msgid "_Unblock"
-msgstr "Блоктаудан босату"
+msgstr "Бұғаттаудан _шығару"
 
 msgid "_Unregister account from service"
 msgstr "Қызметтен тіркелгі _тіркелуін алып тастау"
@@ -5898,16 +5645,14 @@ msgstr "Қызметтен тіркелгі _тіркелуін алып тас�
 msgid "_Unsubscribe"
 msgstr "Жа_зылудан бас тарту"
 
-#, fuzzy
 msgid "_Username"
-msgstr "_Пайдаланушы аты"
+msgstr "Пайдаланушы _аты"
 
 msgid "_View Certificate"
 msgstr "Серти_фикатты қарау"
 
-#, fuzzy
 msgid "_Wiki (Online)"
-msgstr "_Вики (Онлайн)"
+msgstr "_Вики (онлайн)"
 
 msgid "accuracy"
 msgstr "дәлдігі"
@@ -5971,9 +5716,8 @@ msgstr "example.org"
 msgid "floor"
 msgstr "қабат"
 
-#, fuzzy
 msgid "invites you to join a group chat"
-msgstr "Бұл топтық чатқа кез келген адам қосыла алады"
+msgstr "сізді топтық чатқа шақырады"
 
 msgid "is composing a message…"
 msgstr "хабарлама жазып тұр…"
@@ -5984,16 +5728,16 @@ msgstr "басқа нәрсемен айналысуда"
 msgid "italic"
 msgstr "курсив"
 
-#, fuzzy, python-format
+#, python-format
 msgid "last seen: %s"
-msgstr "Себебі: %s"
+msgstr "соңғы рет көрген: %s"
 
 msgid "lat"
 msgstr "ендік"
 
-#, fuzzy, python-format
+#, python-format
 msgid "libsoup Version: %s"
-msgstr "GLib нұсқасы: %s"
+msgstr "libsoup нұсқасы: %s"
 
 msgid "locality"
 msgstr "елді мекен"
@@ -6435,6 +6179,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Хабарларыңыздың емлені автоматты түрде тексеру"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Бірнеше минутта ораламын."
+
+#~ msgid "Back soon"
+#~ msgstr "Жақында ораламын"
+
 #~ msgid "Blocking List"
 #~ msgstr "Блоктізім"
 
@@ -6681,6 +6431,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ "Достарыңыз бен топтарыңызға суреттер, видеолар немесе басқа файлдарды "
 #~ "оңай жіберіңіз"
 
+#~ msgid "Eating"
+#~ msgstr "Тамақ ішуде"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Атын түзету…"
 
@@ -6884,6 +6637,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Бос файлдарды жіберу мүмкін емес"
 
+#~ msgid "I’m eating."
+#~ msgstr "Мен тамақ ішіп отырмын."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Мен өмірмен рахаттанып отырмын."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6891,6 +6650,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr ""
 #~ "Мен \"%s\" тіркелгімдегі контактілерімді синхрондаудамын. Осы адресті "
 #~ "сіздің контакттар тізіміне қоса аласыз ба?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Мен кино көрудемін."
+
+#~ msgid "I’m working."
+#~ msgstr "Мен жұмыс істеп отырмын."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Барлық сөйлесу тарихын сақтау және басқару"
@@ -6971,6 +6736,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Move Contact"
 #~ msgstr "Контактты өшіру"
 
+#~ msgid "Movie"
+#~ msgstr "Кино"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Ешбір хабарды жіберіп алмаңыз, барлық сөйлесу клиенттеріңізді синхрондаңыз"
@@ -7030,6 +6798,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Чаттарыңызды жұмыс кеңістіктері арқылы ұйымдастырыңыз"
+
+#~ msgid "Out"
+#~ msgstr "Жоқ"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12 файлдары"
@@ -7288,6 +7059,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim сөндірілуде"
 
+#~ msgid "Sleeping"
+#~ msgstr "Ұйқыда"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Көктемгі жиын"
@@ -7498,6 +7272,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Бұл хабарламаны неліктен қайтарып алғыңыз келеді?"
 
+#~ msgid "Working"
+#~ msgstr "Жұмыс істеудемін"
+
 #~ msgid "Workspaces"
 #~ msgstr "Жұмыс кеңістіктері"
 
@@ -7543,6 +7320,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Сіздің архивтеу баптауларыңыз сәтті сақталды."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Тіркелгі"

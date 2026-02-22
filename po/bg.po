@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -948,12 +948,6 @@ msgstr "Отсъствам"
 msgid "Back"
 msgstr "Връщам се скоро"
 
-msgid "Back in some minutes."
-msgstr "Ще се върна след малко."
-
-msgid "Back soon"
-msgstr "Връщам се скоро"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Забраняване на достъпа"
@@ -1541,6 +1535,10 @@ msgstr "Неуспех при зареждането на изображение
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Неуспех при зареждането на изображението"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Неуспех при зареждането на изображението"
@@ -1871,9 +1869,6 @@ msgstr "Състояние: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Изпращане на файл до контакт"
-
-msgid "Eating"
-msgstr "Хапвам"
 
 #, fuzzy
 msgid "Edit"
@@ -2828,22 +2823,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Работя."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Наслаждавам се на живота навън."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Гледам филм."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Работя."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3200,9 +3179,6 @@ msgstr "Показване на събитието в спис_ъка"
 msgid "Move to Group"
 msgstr "Премахване на група"
 
-msgid "Movie"
-msgstr "Филм"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Портът по избор трябва все пак да е номер на порт."
@@ -3551,9 +3527,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Други"
-
-msgid "Out"
-msgstr "Навън"
 
 msgid "Out of memory"
 msgstr "Изчерпана памет"
@@ -4873,9 +4846,6 @@ msgstr "Псевдонимът не е позволен: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Спя"
-
 #, fuzzy
 msgid "Software"
 msgstr "Функционалности на сървърите"
@@ -5949,9 +5919,6 @@ msgstr ""
 msgid "Work"
 msgstr "Работа"
 
-msgid "Working"
-msgstr "Работя"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Действия за напреднали"
@@ -6208,9 +6175,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Всички файлове"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -7014,6 +6978,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Проверка на изходящите съобщения за правописни грешки."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Ще се върна след малко."
+
+#~ msgid "Back soon"
+#~ msgstr "Връщам се скоро"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Списък с отлъчени"
@@ -7244,6 +7214,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Изпращане на файл до контакт"
 
+#~ msgid "Eating"
+#~ msgstr "Хапвам"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Собствено име:"
@@ -7399,6 +7372,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Не е възможно да бъдат изпращани празни файлове"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Работя."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Наслаждавам се на живота навън."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Гледам филм."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Работя."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Причина"
@@ -7452,6 +7441,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Преименуване на контакт"
 
+#~ msgid "Movie"
+#~ msgstr "Филм"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "В момента няма връзка"
@@ -7504,6 +7496,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "В отпуск"
+
+#~ msgid "Out"
+#~ msgstr "Навън"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7727,6 +7722,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Спя"
+
 #~ msgid "Sta_tus"
 #~ msgstr "С_ъстояние"
 
@@ -7894,6 +7892,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Наистина ли искате да изтриете избраното съобщение?"
+
+#~ msgid "Working"
+#~ msgstr "Работя"
 
 #, fuzzy
 #~ msgid "Workspaces"

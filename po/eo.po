@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2026-01-12 21:19+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-13 20:05+0000\n"
 "Last-Translator: Turingon <kopse@e.email>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
 "eo/>\n"
@@ -839,12 +839,6 @@ msgstr "Fora_"
 msgid "Back"
 msgstr "Reen"
 
-msgid "Back in some minutes."
-msgstr "Revenos post kelkaj minutoj."
-
-msgid "Back soon"
-msgstr "Revenos baldaŭ"
-
 msgid "Ban"
 msgstr "Forbari"
 
@@ -1363,6 +1357,10 @@ msgstr "Ne povis aliri dosieron"
 msgid "Could not find any messages for this participant."
 msgstr "Ne povis trovi iujn ajn mesaĝojn de ĉi tiu partoprenanto."
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Ne povis ĝisdatigi provizantoliston"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Ne povis malfermi dosieron (%s)"
@@ -1647,9 +1645,6 @@ msgstr "Malneto: %s"
 
 msgid "Drop files here"
 msgstr "Klakdisligi dosierojn tien ĉi"
-
-msgid "Eating"
-msgstr "Manĝas"
 
 msgid "Edit"
 msgstr "Redakti"
@@ -2179,9 +2174,8 @@ msgstr "Emfazado de mesaĝoj en babilejo"
 msgid "Group Chat Message Received"
 msgstr "Ricevis mesaĝon en babilejo"
 
-#, fuzzy
 msgid "Group Chat Settings"
-msgstr "Babilejdetaloj"
+msgstr "Babilejagordoj"
 
 msgid "Group Chats"
 msgstr "Babilejoj"
@@ -2190,84 +2184,71 @@ msgid "Group chat already exists"
 msgstr "Babilejo jam ekzistas"
 
 msgid "Group chat can be found via search"
-msgstr ""
+msgstr "Babilejo trovebla per serĉo"
 
-#, fuzzy
 msgid "Group chat does not exist"
-msgstr "Tiu babilejo ne ekzistas."
+msgstr "Babilejo ne ekzistas"
 
-#, fuzzy
 msgid "Group chat has been destroyed"
-msgstr "Permeso estas forigita"
+msgstr "Babilejo forigita"
 
-#, fuzzy
 msgid "Group chat is closed"
-msgstr "Babilejoj"
+msgstr "Babilejo fermita"
 
-#, fuzzy
 msgid "Group chat is now fully anonymous"
-msgstr "Babilejoj"
+msgstr "Babilejo nun estas plene sennomeca"
 
-#, fuzzy
 msgid "Group chat is now non-anonymous"
-msgstr "Babilejoj"
+msgstr "Babilejo nun estas nesennomeca"
 
-#, fuzzy
 msgid "Group chat is now semi-anonymous"
-msgstr "Emfazado de mesaĝoj en babilejo"
+msgstr "Babilejo nun estas duonsennomeca"
 
-#, fuzzy
 msgid "Group chat now does not show unavailable members"
-msgstr "Tiu babilejo ne ekzistas."
+msgstr "Babilejo ne montras maldisponeblajn anojn"
 
 msgid "Group chat now shows unavailable members"
 msgstr "Babilejo nun montras maldisponeblajn anojn"
 
-#, fuzzy
 msgid "Groups"
-msgstr "Grupo"
+msgstr "Grupoj"
 
-#, fuzzy, python-format
+#, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
-msgstr "HTTP (%s) Aŭtentokontrolo por %s (id: %s)"
+msgstr "HTTP (%(method)s) aŭtentokontrolo por %(url)s (identilo: %(id)s)"
 
-#, fuzzy
 msgid "HTTP Authorization Request"
-msgstr "Permeso estas sendita"
+msgstr "HTTP-aŭtentigpeto"
 
-#, fuzzy
 msgid "HTTPS Verification"
-msgstr "Konta korektado"
+msgstr "HTTPS-Kontrolado"
 
 #, python-format
 msgid "Hello, I am $name. %s"
-msgstr ""
+msgstr "Saluton, mi estas $name. %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Hidden"
-msgstr ""
+msgstr "Kaŝita"
 
 msgid "Hide"
-msgstr ""
+msgstr "Kaŝi"
 
-#, fuzzy
 msgid "Hide Chat List"
-msgstr "Partoprenanto"
+msgstr "Kaŝi Babilejlisto"
 
-#, fuzzy
 msgid "Home"
-msgstr "Hejmpaĝo:"
+msgstr "Hejmo"
 
-#, fuzzy
 msgid "Hostname"
-msgstr "Servilnomo: "
+msgstr "Gastigantonomo"
 
 #, python-format
 msgid "Hostname – %(account)s"
-msgstr ""
+msgstr "Gastigantonomo - %(account)s"
 
 #, python-format
 msgid ""
@@ -2275,155 +2256,141 @@ msgid ""
 "Software: %(software)s\n"
 "Uptime: %(uptime)s\n"
 msgstr ""
+"Gastigantonomo: %(hostname)s\n"
+"Programaro: %(software)s\n"
+"Funkcitempo: %(uptime)s\n"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
-msgstr "Kion vi volas fari?"
+msgstr "Kiom antaŭe la babilhistorio devus esti sinkronigita?"
 
 msgid "How long Gajim should keep your chat history"
-msgstr ""
+msgstr "Kiom longe Gajim konservu vian babilejhistorion"
 
 msgid "How to install plugins with Flatpak"
-msgstr ""
+msgstr "Kiel instali etendaĵojn per Flatpak"
 
-#, fuzzy
 msgid "I can see contact's online status"
-msgstr "Peti por vidi lian/ŝian staton"
+msgstr "Mi videblas la staton de la kontakto"
 
 msgid "I would like to add you to my contact list."
-msgstr "Mi petas vin permesi aldoni vin en mian kontaktliston."
+msgstr "Mi petas vin permesi aldoni vin en mia kontaktolisto."
 
 msgid "I would like to add you to my roster."
 msgstr "Mi volus aldoni vin al mia kontaktlisto."
 
-#, fuzzy
 msgid "ID"
-msgstr "JID"
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
-msgstr "IEC normo diras: KiB = 1024 bajtoj, KB = 1000 bajtoj."
+msgstr "IEC normo estas: KiB = 1024 bajtoj, KB = 1000 bajtoj."
 
-#, fuzzy
 msgctxt "Profile"
 msgid "IM Address"
-msgstr "Adreso"
+msgstr "IM Adreso"
 
 msgid "Id"
-msgstr "Id"
+msgstr "ID"
 
-#, fuzzy
 msgid "Identified Error"
-msgstr "Malkorekta salutnomo"
+msgstr "Identigita eraro"
 
 msgid ""
 "Identifier for this device. Don’t change this unless you know what you are "
 "doing."
-msgstr ""
+msgstr "Identilo por ĉi tiu aparato. Ne ŝanĝu ĝin krom se vi spertas."
 
-#, fuzzy
 msgid "Idle Time"
-msgstr " ekde %s"
+msgstr "Neaktiveco"
 
-#, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
-"Se \"True\" kaj instalitas GTK+ kaj PyGTK versioj almenaŭ 2.8, fari la "
-"fenestran briladon (la defaŭlta konduto de plimulto da fenestragordiloj) "
-"kiam estas atendantaj eventoj."
+"Se enŝaltita, Gajim ekbriligas la fenestron (la defaŭlta konduto en plej "
+"multaj fenestriloj) dum novaj eventoj."
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr ""
+msgstr "Se enŝaltita, Gajim oferas elŝuti etendaĵojn el gajim.org"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
-msgstr ""
+msgstr "Se enŝaltita, Gajim malatentos mesaĝojn, kiuj provas atentigi vin."
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
+"Se enŝaltita, Gajim provos uzi STUN-servilon dum uzado de Jingle, specifita "
+"en \"stun_server\" agordo aŭ uzata de la XMPP-servilo."
 
-#, fuzzy
 msgid "Ignore Unknown Contacts"
-msgstr "Kontaktoj"
+msgstr "Malatenti nekonatajn kontaktojn"
 
-#, fuzzy
 msgid "Ignore everything from contacts not in your contact list"
-msgstr "_Ignori eventojn de kontaktoj kiuj mankas en kontaktlisto"
+msgstr "Malatenti ĉiujn, kiu ne estas en via kontaktolisto"
 
-#, fuzzy
 msgid "Image"
-msgstr "Bildoj"
+msgstr "Bildo"
 
-#, fuzzy
 msgid "Import"
-msgstr "Eksportado"
+msgstr "Enporti"
 
-#, fuzzy
 msgid "Import Contacts"
-msgstr "Kontaktoj"
+msgstr "Enporti kontaktojn"
 
-#, fuzzy
 msgid "Import Contacts?"
-msgstr "Kontaktoj"
+msgstr "Ĉu enporti kontaktojn?"
 
 msgid "Import Error"
-msgstr ""
+msgstr "Enporteraro"
 
-#, fuzzy
 msgid "Import from Account"
-msgstr "Forigado de konto %s"
+msgstr "Enporti el konto"
 
 msgid "Import from File"
-msgstr ""
+msgstr "Enporti el dosiero"
 
 msgid "Import…"
-msgstr ""
+msgstr "Enporti…"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
 "A moderator will process your request."
 msgstr ""
+"Por skribi en ĉi tiu babilejo, vi bezonas skribrajtojn.\n"
+"Moderigisto prilaboros vian peton."
 
-#, fuzzy
 msgid "In this group chat"
-msgstr "Vi jam estas en babilejo %s"
+msgstr "En ĉi tiu babilejo"
 
-#, fuzzy
 msgid "Incoming Call"
-msgstr "Malkorekta salutnomo"
+msgstr "Alvenanta voko"
 
 msgid "Incoming Call (Video)"
-msgstr ""
+msgstr "Alvenanta voko (Filmeto)"
 
-#, fuzzy
 msgid "Increase Font Size"
-msgstr "_Salutnomo:"
+msgstr "Pligrandigi tipargrandecon"
 
 msgid "Increase playback speed"
-msgstr ""
+msgstr "Pligrandigi la reludigrapidon"
 
-#, fuzzy
 msgid "Information"
-msgstr "Kontakta informo"
+msgstr "Informo"
 
-#, fuzzy
 msgid "Insecure Connection"
-msgstr "Konekto"
+msgstr "Nesekura konekto"
 
-#, fuzzy
 msgid "Install"
-msgstr "Malrapidas"
+msgstr "Instali"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
-msgstr ""
+msgstr "Instali <tt>sentry-sdk</tt> por faciligi erarreportadon."
 
 msgid "Install Plugin from ZIP-File"
-msgstr ""
+msgstr "Instali etendaĵon el ZIP-dosiero"
 
 msgid "Install a keyring to store passwords on your system."
-msgstr ""
+msgstr "Instali ŝlosilringon por konservi pasvortojn en via sistemo."
 
 msgid "Install from Archive"
 msgstr ""
@@ -2436,45 +2403,38 @@ msgctxt "Configuration type"
 msgid "Integer"
 msgstr ""
 
-#, fuzzy
 msgid "Invalid Address"
-msgstr "Malkorekta dosiero"
+msgstr "Nevalida adreso"
 
 #, fuzzy
 msgid "Invalid CA certificate"
 msgstr "Malkorekta salutnomo"
 
-#, fuzzy
 msgid "Invalid Name"
-msgstr "Malkorekta salutnomo"
+msgstr "Nevalida nomo"
 
-#, fuzzy
 msgid "Invalid Node"
-msgstr "Malkorekta dosiero"
+msgstr "Nevalida nodo"
 
-#, fuzzy
 msgid "Invalid Server Name"
-msgstr "Malkorekta salutnomo"
+msgstr "Nevalida servilnomo"
 
 #, fuzzy
 msgid "Invalid Stanza"
-msgstr "Malkorekta salutnomo"
+msgstr "Nevalida Stanza"
 
-#, fuzzy
 msgid "Invalid XMPP Address"
-msgstr "Malkorekta dosiero"
+msgstr "Nevalida XMPP-adreso"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid address: %s"
-msgstr "Malkorekta dosiero"
+msgstr "Nevalida adreso: %s"
 
-#, fuzzy
 msgid "Invalid domain name"
-msgstr "Malkorekta kontnomo"
+msgstr "Nevalida domajnnomo"
 
-#, fuzzy
 msgid "Invalid server response"
-msgstr "Malkorekta salutnomo"
+msgstr "Nevalida servilrespondo"
 
 #, fuzzy
 msgid "Invitation"
@@ -2492,9 +2452,8 @@ msgstr "In_viti al"
 msgid "Invite Contacts"
 msgstr "Kontaktoj"
 
-#, fuzzy
 msgid "Invite to this chat…"
-msgstr "Kontaktoj"
+msgstr "Inviti al ĉi tiu babilejo…"
 
 #, fuzzy
 msgid "Invitees"
@@ -2524,22 +2483,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Mi laboras."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Mi eliris por amuziĝi."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Mi spektas filmon."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Mi laboras."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2554,29 +2497,23 @@ msgstr "_Aliĝi"
 msgid "Join Group Chat"
 msgstr "Eniri babilejen"
 
-#, fuzzy
 msgid "Join Group Chat as…"
-msgstr "Eniri babilejen"
+msgstr "Eniri babilejon kiel…"
 
-#, fuzzy
 msgid "Join Group Chat?"
-msgstr "Eniri babilejen"
+msgstr "Ĉu eniri babilejon?"
 
-#, fuzzy
 msgid "Join Groupchat…"
-msgstr "Eniri babilejen"
+msgstr "Eniri babilejon…"
 
-#, fuzzy
 msgid "Joining Group Chat…"
-msgstr "Eniri babilejen"
+msgstr "Eniriante babilejon…"
 
-#, fuzzy
 msgid "Joining…"
-msgstr "Malpermesas..."
+msgstr "Aliĝante…"
 
-#, fuzzy
 msgid "Join…"
-msgstr "Malpermesas..."
+msgstr "Aliĝi…"
 
 msgid "Just now"
 msgstr ""
@@ -2862,15 +2799,13 @@ msgstr "Moderiganto"
 msgid "Moderation"
 msgstr "Moderiganto"
 
-#, fuzzy
 msgctxt "Group chat contact role"
 msgid "Moderator"
-msgstr "Moderiganto"
+msgstr "Moderigisto"
 
-#, fuzzy
 msgctxt "Group chat contact role"
 msgid "Moderators"
-msgstr "Moderigantoj"
+msgstr "Moderigistoj"
 
 #, fuzzy
 msgid "Modify"
@@ -2894,9 +2829,6 @@ msgstr "Montri eventon en _kontaktlisto"
 #, fuzzy
 msgid "Move to Group"
 msgstr "Forigi grupon"
-
-msgid "Movie"
-msgstr "Kino"
 
 #, fuzzy
 msgid "Must be a port number"
@@ -2956,7 +2888,7 @@ msgid "Nickname"
 msgstr "Kaŝnomo"
 
 msgid "Nickname contains invalid characters"
-msgstr ""
+msgstr "Kromnomo havas nevalidajn signojn"
 
 #, fuzzy
 msgid "Nickname…"
@@ -3181,7 +3113,7 @@ msgid "Only Admins and Owners can modify the affiliation"
 msgstr "Nur administristoj kaj posedantoj povas modifi la anecon"
 
 msgid "Only moderators can see your XMPP address"
-msgstr ""
+msgstr "Nur moderigistoj videblas vian XMPP-adreson"
 
 #, fuzzy
 msgid "Open"
@@ -3248,9 +3180,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Aliaj"
-
-msgid "Out"
-msgstr "Eliris"
 
 msgid "Out of memory"
 msgstr ""
@@ -3942,9 +3871,8 @@ msgid ""
 "libxss"
 msgstr ""
 
-#, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
-msgstr "Historia administrilo"
+msgstr "Postulas: gnome-keyring aŭ kwallet"
 
 #, fuzzy
 msgid "Requires: gsound"
@@ -4562,9 +4490,6 @@ msgstr "Kaŝnomo malpermesita: %s"
 
 msgid "Size of preview images in pixels"
 msgstr ""
-
-msgid "Sleeping"
-msgstr "Dormas"
 
 #, fuzzy
 msgid "Software"
@@ -5476,7 +5401,7 @@ msgid "Use Image"
 msgstr "Elektu bildon"
 
 msgid "Use System Keyring"
-msgstr ""
+msgstr "Uzi sisteman ŝlosilringon"
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
@@ -5498,7 +5423,7 @@ msgid "Use proxy auth_entication"
 msgstr "Uzi aŭtentokontrolon"
 
 msgid "Use your system’s keyring to store passwords"
-msgstr ""
+msgstr "Uzi vian sisteman ŝlosilringon por konservi pasvortojn"
 
 #, fuzzy, python-format
 msgid "User %s not found"
@@ -5622,9 +5547,6 @@ msgstr "Windows"
 
 msgid "Work"
 msgstr "Laboro"
-
-msgid "Working"
-msgstr "Laboras"
 
 #, fuzzy
 msgid "Workspace Settings"
@@ -5879,9 +5801,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Ĉiuj dosieroj"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6676,6 +6595,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Aŭtomate aliĝi"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Revenos post kelkaj minutoj."
+
+#~ msgid "Back soon"
+#~ msgstr "Revenos baldaŭ"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Listo de malpermesoj"
@@ -6907,6 +6832,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Sendi dosieron al kontakto"
 
+#~ msgid "Eating"
+#~ msgstr "Manĝas"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Nomo:"
@@ -7069,6 +6997,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Neeblas sendi senenhavajn dosierojn"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Mi laboras."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Mi eliris por amuziĝi."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Mi spektas filmon."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Mi laboras."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Kialo"
@@ -7119,6 +7063,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Renomigado de kontakto"
+
+#~ msgid "Movie"
+#~ msgstr "Kino"
 
 #, fuzzy
 #~ msgid "No Connection Available"
@@ -7172,6 +7119,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administristo"
+
+#~ msgid "Out"
+#~ msgstr "Eliris"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7399,6 +7349,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Dormas"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_to"
 
@@ -7573,6 +7526,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
+
+#~ msgid "Working"
+#~ msgstr "Laboras"
 
 #, fuzzy
 #~ msgid "Workspaces"

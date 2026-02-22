@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -932,12 +932,6 @@ msgstr "Afwezig"
 msgid "Back"
 msgstr "Zo terug"
 
-msgid "Back in some minutes."
-msgstr "In een paar minuten terug."
-
-msgid "Back soon"
-msgstr "Zo terug"
-
 #, fuzzy
 msgid "Ban"
 msgstr "Ver_bannen"
@@ -1516,6 +1510,10 @@ msgstr "Kon bestand niet openen"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Kon bestand niet openen"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Kon bestand niet openen"
@@ -1845,9 +1843,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Stuurt een bestand naar een contact"
-
-msgid "Eating"
-msgstr "Eten"
 
 #, fuzzy
 msgid "Edit"
@@ -2811,22 +2806,6 @@ msgstr "Uitgegeven aan"
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Ik ben aan het werk."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Ik ben buiten van het leven aan het genieten."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Ik been een film aan het kijken."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Ik ben aan het werk."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3183,9 +3162,6 @@ msgstr "Contactrijlettertype"
 msgid "Move to Group"
 msgstr "Groep verwijderen"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Aangepaste poort moet een geldig poortnummer zijn."
@@ -3531,9 +3507,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Overigen"
-
-msgid "Out"
-msgstr "Uit"
 
 msgid "Out of memory"
 msgstr "Geheugentekort"
@@ -4839,9 +4812,6 @@ msgstr "Spaties zijn niet toegestaan"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Slapen"
-
 #, fuzzy
 msgid "Software"
 msgstr "Serversoftware"
@@ -5908,9 +5878,6 @@ msgstr "venster1"
 msgid "Work"
 msgstr "Werk"
 
-msgid "Working"
-msgstr "Werken"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Gea_vanceerde Acties"
@@ -6174,9 +6141,6 @@ msgstr ""
 
 msgid "ZIP files"
 msgstr "ZIP-bestanden"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6992,6 +6956,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Automatische spellingscontrole voor je berichten"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "In een paar minuten terug."
+
+#~ msgid "Back soon"
+#~ msgstr "Zo terug"
+
 #~ msgid "Blocking List"
 #~ msgstr "Blokkeringslijst"
 
@@ -7241,6 +7211,9 @@ msgstr ""
 #~ msgid "Easily send pictures, videos or other files to friends and groups"
 #~ msgstr "Stuur foto’s, video’s of andere bestanden naar vrienden en groepen"
 
+#~ msgid "Eating"
+#~ msgstr "Eten"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Voornaam"
@@ -7443,6 +7416,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Het is onmogelijk lege bestanden te sturen"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Ik ben aan het werk."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Ik ben buiten van het leven aan het genieten."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Ik been een film aan het kijken."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Ik ben aan het werk."
+
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Bewaar en beheer je gespreksgeschiedenis"
 
@@ -7511,6 +7500,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Contact hernoemen"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr "Mis nooit een bericht, en hou al je chatcliënten gesynchroniseerd"
 
@@ -7574,6 +7566,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organiseer je gesprekken met tabbladen"
+
+#~ msgid "Out"
+#~ msgstr "Uit"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12-bestanden"
@@ -7822,6 +7817,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Slapen"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -8020,6 +8018,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Wil je dit bericht voorgoed verwijderen"
+
+#~ msgid "Working"
+#~ msgstr "Werken"
 
 #, fuzzy
 #~ msgid "Workspaces"

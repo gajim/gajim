@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -837,12 +837,6 @@ msgstr "離開"
 msgid "Back"
 msgstr "回來"
 
-msgid "Back in some minutes."
-msgstr "幾分鐘就回來。"
-
-msgid "Back soon"
-msgstr "馬上回來"
-
 msgid "Ban"
 msgstr "封鎖"
 
@@ -1402,6 +1396,10 @@ msgstr "無法讀取圖片"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "無法讀取圖片"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "無法讀取圖片"
@@ -1728,9 +1726,6 @@ msgstr "狀態: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "向聯絡人傳送檔案"
-
-msgid "Eating"
-msgstr "吃東西"
 
 #, fuzzy
 msgid "Edit"
@@ -2681,22 +2676,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "我正在工作。"
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "我正在享受戶外生活。"
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "我正在看電影。"
-
-#, fuzzy
-msgid "I’m working."
-msgstr "我正在工作。"
-
 msgid "JID"
 msgstr "JID"
 
@@ -3052,9 +3031,6 @@ msgstr "聯絡人"
 msgid "Move to Group"
 msgstr "移除群組"
 
-msgid "Movie"
-msgstr "電影"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "自訂連接埠必須為連接埠號碼。"
@@ -3401,9 +3377,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "其他"
-
-msgid "Out"
-msgstr "外出"
 
 msgid "Out of memory"
 msgstr "記憶體耗盡"
@@ -4716,9 +4689,6 @@ msgstr "不允許的字元"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "正在睡覺"
-
 #, fuzzy
 msgid "Software"
 msgstr "伺服器回應: %s"
@@ -5784,9 +5754,6 @@ msgstr ""
 msgid "Work"
 msgstr "工作"
 
-msgid "Working"
-msgstr "工作"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "外掛程式"
@@ -6042,9 +6009,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Zip 檔案"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6863,6 +6827,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "自動檢查您的訊息的拼寫"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "幾分鐘就回來。"
+
+#~ msgid "Back soon"
+#~ msgstr "馬上回來"
+
 #~ msgid "Blocking List"
 #~ msgstr "封鎖名單"
 
@@ -7087,6 +7057,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "向聯絡人傳送檔案"
 
+#~ msgid "Eating"
+#~ msgstr "吃東西"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "名稱:"
@@ -7269,6 +7242,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "無法傳送空檔案"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "我正在工作。"
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "我正在享受戶外生活。"
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "我正在看電影。"
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "我正在工作。"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "原因"
@@ -7327,6 +7316,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "重新命名聯絡人"
 
+#~ msgid "Movie"
+#~ msgstr "電影"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "連線無法使用"
@@ -7378,6 +7370,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "渡假"
+
+#~ msgid "Out"
+#~ msgstr "外出"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12 檔案"
@@ -7611,6 +7606,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "正在睡覺"
+
 #~ msgid "Sta_tus"
 #~ msgstr "狀態(_T)"
 
@@ -7781,6 +7779,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "您確定要刪除所選取的訊息?"
+
+#~ msgid "Working"
+#~ msgstr "工作"
 
 #, fuzzy
 #~ msgid "Workspaces"

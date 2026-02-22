@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2026-01-19 19:19+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-22 20:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
 ">\n"
@@ -678,19 +678,19 @@ msgid ""
 msgstr ""
 
 msgid "And more..."
-msgstr ""
+msgstr "I wugar..."
 
 msgid "Anonymous login not supported"
-msgstr ""
+msgstr "Anekcum udrig ur yettusefrak ara"
 
 msgid "Any participant is allowed to see your full XMPP Address"
-msgstr ""
+msgstr "Yal imtteki yettusirgen ad iwali tansa-k·m XMPP"
 
 msgid "Anyone can join"
-msgstr ""
+msgstr "Yal yiwen yezmer ad yernu"
 
 msgid "Anyone can join this group chat"
-msgstr ""
+msgstr "Yal yiwen yezmer ad yernu ɣer ugraw-agi"
 
 msgid "Application verification failure"
 msgstr "Asenqed n usnas ur yeddi ara"
@@ -783,7 +783,7 @@ msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
 msgid "Authors"
-msgstr ""
+msgstr "Imeskaren"
 
 msgid "Auto Away"
 msgstr ""
@@ -792,67 +792,61 @@ msgid "Auto Not Available"
 msgstr ""
 
 msgid "Autodetect"
-msgstr ""
+msgstr "Tifin tawurmant"
 
 msgid "Automatic Status"
-msgstr ""
+msgstr "Addad awurman"
 
 msgid "Automatic Status Change"
-msgstr ""
+msgstr "Asenfel awurman n waddad"
 
 msgid "Automatic preview disabled"
-msgstr ""
+msgstr "Taskant tawurmant tensa"
 
 msgid "Automatic preview disabled (file too big)"
-msgstr ""
+msgstr "Taskant tawurmant tensa (Afaylu meqqer aṭas)"
 
 msgid "Automatically accept all contact requests"
-msgstr ""
+msgstr "Aqbal awurman n isuturen n unermis"
 
 msgid "Available"
-msgstr ""
+msgstr "Yella"
 
 msgctxt "User status"
 msgid "Available"
-msgstr ""
+msgstr "Yewjed"
 
 msgid "Available Features"
-msgstr ""
+msgstr "Timahilin iwejden"
 
 msgid "Avatar file size too big"
-msgstr ""
+msgstr "Tiddi ufaylu n uvaṭar meqqer aṭas"
 
 msgctxt "User status"
 msgid "Away"
 msgstr ""
 
 msgid "Back"
-msgstr ""
-
-msgid "Back in some minutes."
-msgstr ""
-
-msgid "Back soon"
-msgstr ""
+msgstr "Uɣal"
 
 msgid "Ban"
-msgstr ""
+msgstr "Gdel"
 
 #, python-format
 msgid "Ban %s"
-msgstr ""
+msgstr "Gdel %s"
 
 msgid "Ban…"
-msgstr ""
+msgstr "Gdel…"
 
 msgid "Before"
-msgstr ""
+msgstr "Send"
 
 msgid "Behaviour of Application Window"
-msgstr ""
+msgstr "Tiddin n usfaylu n usnas"
 
 msgid "Birthday"
-msgstr ""
+msgstr "Amulli"
 
 msgid "Blind Trust"
 msgstr ""
@@ -887,7 +881,7 @@ msgstr "Sewḥel…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
-msgstr ""
+msgstr "Abulan"
 
 msgctxt "Contact subscription"
 msgid "Both"
@@ -897,7 +891,7 @@ msgid "Browse"
 msgstr "Snirem"
 
 msgid "Browse history by date"
-msgstr "Snirem amazray s wazemz"
+msgstr "Snirem azray s wazemz"
 
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
@@ -921,7 +915,7 @@ msgid "CRL signature failure"
 msgstr "Azmul n CRL yecceḍ"
 
 msgid "C_opy"
-msgstr ""
+msgstr "Nɣel (_o)"
 
 msgid "Call"
 msgstr "Asiwel"
@@ -965,56 +959,56 @@ msgid "Certificate chain too long"
 msgstr ""
 
 msgid "Certificate has expired"
-msgstr ""
+msgstr "Aselkin iɛedda-t wakud"
 
 msgid "Certificate is not yet valid"
-msgstr ""
+msgstr "Aselkin ur yelli dayen d ameɣtu"
 
 msgid "Certificate not trusted"
-msgstr ""
+msgstr "Aselkin ur yettwaman ara"
 
 msgid "Certificate rejected"
-msgstr ""
+msgstr "Aselkin yettwagi"
 
 msgid "Certificate revoked"
-msgstr ""
+msgstr "Aselkin yettwaḥwi"
 
 msgid "Certificate signature failure"
-msgstr ""
+msgstr "Tuccḍa n uzmul n uselkin"
 
 msgid "Change"
-msgstr ""
+msgstr "Snifel"
 
 msgid "Change Nickname"
-msgstr ""
+msgstr "Snifel meffer isem"
 
 msgid "Change Nickname…"
-msgstr ""
+msgstr "Snifel meffer isem…"
 
 msgid "Change Password"
-msgstr ""
+msgstr "Snifel awal n uɛeddi"
 
 msgid "Change Subject"
-msgstr ""
+msgstr "Snifel asentel"
 
 msgid "Change your account’s password, etc."
-msgstr ""
+msgstr "Snifel awal n uɛeddi n umiḍan-ik·im, atg."
 
 msgid "Change your profile picture"
-msgstr ""
+msgstr "Snifel tugna n umaɣnu-ik·im"
 
 msgid "Change your status to \"Away\" after a certain amount of time"
-msgstr ""
+msgstr "Snifel addad-ik·im ɣer \"Iɣab\" seld kra n wakud"
 
 msgid "Change your status to \"Not Available\" after a certain amount of time"
-msgstr ""
+msgstr "Snifel addad-ik·im ɣer \"Ulac-it\" seld kra n wakud"
 
 #, python-format
 msgid "Changed by %s"
-msgstr ""
+msgstr "Yettusnifel sɣur %s"
 
 msgid "Changing Password..."
-msgstr ""
+msgstr "Asnifel n Wawal n uɛeddi…"
 
 msgid ""
 "Character to add after nickname when using nickname completion (tab) in "
@@ -1022,26 +1016,25 @@ msgid ""
 msgstr ""
 
 msgid "Chat"
-msgstr ""
+msgstr "Adiwenni"
 
-#, fuzzy
 msgid "Chat Address"
-msgstr "Tansa"
+msgstr "Tansa Udiwenni"
 
 msgid "Chat Banner: Background Color"
-msgstr ""
+msgstr "Azamul Udiwenni: Ini Ugilal"
 
 msgid "Chat Banner: Foreground Color"
-msgstr ""
+msgstr "Azamul udiwenni: Ini n uɣawas amezwaru"
 
 msgid "Chat Banner: Text Font"
-msgstr ""
+msgstr "Azamul Udiwenni: Tasefsit n uḍris"
 
 msgid "Chat Details and Settings"
-msgstr ""
+msgstr "Telqayt Udiwenni akked Iɣewwaṛen"
 
 msgid "Chat Type"
-msgstr ""
+msgstr "Anaw Udiwenni"
 
 msgid ""
 "Chat freely: Take your chats where you want. Use a provider of your choice "
@@ -1050,13 +1043,13 @@ msgid ""
 msgstr ""
 
 msgid "Chat window"
-msgstr ""
+msgstr "Asfaylu n udiwenni"
 
 msgid "Chats"
-msgstr ""
+msgstr "Idiwenniyen"
 
 msgid "Chats from this account will use this workspace by default"
-msgstr ""
+msgstr "Idiwenniyen seg umiḍan-agi ad sqedcen tallunt n umahil s wudem amezwer"
 
 msgid "Check For Updates"
 msgstr "Senqed ileqman"
@@ -1077,7 +1070,7 @@ msgid "Choose Device"
 msgstr "Fren ibenk"
 
 msgid "Choose History Export Directory"
-msgstr "Fren akaram n usifeḍ n umazray"
+msgstr "Fren akaram n usifeḍ n uzray"
 
 msgid "Choose Sound"
 msgstr "Fren imesli"
@@ -1120,10 +1113,10 @@ msgstr ""
 "(Ctrl + Sit snat tikal i ufran)"
 
 msgid "Click on contacts you would like to invite to this group chat."
-msgstr ""
+msgstr "Sit ɣef yinermisen i tebɣiḍ ad d-tɛerḍeḍ ɣer ugraw-agi n udiwenni."
 
 msgid "Click to view location"
-msgstr ""
+msgstr "Sit akken ad twaliḍ ideg"
 
 msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
@@ -1131,37 +1124,37 @@ msgid ""
 msgstr ""
 
 msgid "Close"
-msgstr ""
+msgstr "Mdel"
 
 msgid "Close Chat"
-msgstr ""
+msgstr "Mdel Adiwenni"
 
 msgid "Close a chat by pressing the Escape key"
-msgstr ""
+msgstr "Mdel adiwenni s usiti ɣef tqeffalt Escape"
 
 msgid "Close this preview"
-msgstr ""
+msgstr "Mdel taskant-agi"
 
 msgid "Close with Escape"
-msgstr ""
+msgstr "Mdel s Escape"
 
 msgid "Code snippet"
-msgstr ""
+msgstr "Aḥric seg Tangalt"
 
 msgid "Color"
-msgstr ""
+msgstr "Ini"
 
 msgid "Comma-separated list of emojis for quick reaction buttons"
 msgstr ""
 
 msgid "Command List"
-msgstr ""
+msgstr "Tabdart n tiludna"
 
 msgid "Command executed successfully"
-msgstr ""
+msgstr "Taladna tettwaselkem akken iwata"
 
 msgid "Commands"
-msgstr ""
+msgstr "Tiludna"
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1178,22 +1171,22 @@ msgid ""
 msgstr ""
 
 msgid "Complete"
-msgstr ""
+msgstr "Immed"
 
 msgid "Completed"
-msgstr ""
+msgstr "Yemmed"
 
 msgid "Composing Only"
 msgstr ""
 
 msgid "Computer"
-msgstr ""
+msgstr "Aselkim"
 
 msgid "Configuration"
 msgstr "Tawila"
 
 msgid "Configure"
-msgstr ""
+msgstr "Swel"
 
 msgid "Configure logging system"
 msgstr "Swel anagraw n uɣmis"
@@ -1252,13 +1245,13 @@ msgid "Contact Details"
 msgstr "Talqayt n unermis"
 
 msgid "Contact Disconnected"
-msgstr ""
+msgstr "Anermis yenser"
 
 msgid "Contact Information"
 msgstr "Talɣut n unermis"
 
 msgid "Contact Infos"
-msgstr ""
+msgstr "Talɣut n unermis"
 
 msgid "Contact List"
 msgstr "Tabdart n inermisen"
@@ -1268,16 +1261,16 @@ msgstr ""
 
 #, python-format
 msgid "Contact List – %(account)s"
-msgstr ""
+msgstr "Tabdert inermisen - %(account)s"
 
 msgid "Contact Removed"
 msgstr "Anermis ittwakkes"
 
 msgid "Contact Request"
-msgstr ""
+msgstr "Asuter n unermis"
 
 msgid "Contacts"
-msgstr ""
+msgstr "Inermisen"
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1286,60 +1279,62 @@ msgid "Conversation: Nickname Color (Outgoing)"
 msgstr ""
 
 msgid "Conversation: Text Color"
-msgstr ""
+msgstr "Aselket: Ini n Uḍris"
 
 msgid "Conversation: Text Font"
-msgstr ""
+msgstr "Aselket: Tasefsit n uḍris"
 
 msgid "Conversations"
-msgstr ""
+msgstr "Iselkten"
 
 msgid "Conversations are not stored on the server"
-msgstr ""
+msgstr "Iselkten ur ttwaseklasen ara ɣef uqeddac"
 
 msgid "Conversations are stored on the server"
-msgstr ""
+msgstr "Iselkten ttwaseklasen deg uqeddac"
 
 msgid "Copy"
-msgstr ""
+msgstr "Nɣel"
 
 msgctxt "Message row action"
 msgid "Copy"
-msgstr ""
+msgstr "Nɣel"
 
 msgid "Copy Address"
-msgstr ""
+msgstr "Nɣel Tansa"
 
 msgid "Copy Text"
-msgstr ""
+msgstr "Nɣel Aḍris"
 
 msgid "Copy XMPP Address"
-msgstr ""
+msgstr "Nɣel Tansa XMPP"
 
 msgid "Copy XMPP Address/Email"
-msgstr ""
+msgstr "Nɣel Tansa/Imayl XMPP"
 
 msgid "Copy code snippet"
-msgstr ""
+msgstr "Nɣel tacriḥt n tengalt"
 
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "Nɣel ɣer Tecfawit"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Nɣel ɣer tecfawit"
 
-#, fuzzy
 msgid "Correct Message"
-msgstr "Iznan usriden"
+msgstr "Seɣti izen"
 
 msgid "Could Not Save File"
-msgstr ""
+msgstr "Ur izmir ara ad isekles afaylu"
 
 msgid "Could not access file"
 msgstr "Ur izmir ara ad yekcem ɣer ufaylu"
 
 msgid "Could not find any messages for this participant."
 msgstr "Ur izmir ara ad d-yaf iznan i umttekki-agi."
+
+msgid "Could not generate link preview"
+msgstr "Ulamek asirew n teskant n useɣwen"
 
 #, python-format
 msgid "Could not open file (%s)"
@@ -1348,6 +1343,7 @@ msgstr "Ur izmir ara ad d-yeldi afaylu (%s)"
 #, python-format
 msgid "Could not read content of %s. Only CSV files can be imported."
 msgstr ""
+"Ur izmir ara ad iɣer agbur n %s. Ḥaca ifuyla CSV i yezemren ad ttwaketren."
 
 msgid "Could not save file to selected directory."
 msgstr "Ur izmir ara ad isekles afaylu ɣer ukaram yettwafernen."
@@ -1401,71 +1397,71 @@ msgid "Database migration failed"
 msgstr "Inig n taffa n isefka ur yeddi ara"
 
 msgid "Deactivated"
-msgstr ""
+msgstr "Yettwasens"
 
 msgid "Debug Console"
-msgstr ""
+msgstr "Tadiwent n useɣti"
 
 msgid "Debug Logging"
-msgstr ""
+msgstr "Aɣmis n useɣti"
 
 msgid "Decline"
-msgstr ""
+msgstr "Agi"
 
 msgid "Decrease Font Size"
-msgstr ""
+msgstr "Senɣes teɣzi n tsefsit"
 
 msgid "Decrease playback speed"
-msgstr ""
+msgstr "Ssenqes arured n tɣuri"
 
 msgid "Default Encryption"
-msgstr ""
+msgstr "Awgelhen Amezwer"
 
 msgid "Default Sync Threshold"
-msgstr ""
+msgstr "Amnaṛ n umtawi amezwer"
 
 msgid "Default Workspace"
-msgstr ""
+msgstr "Tallunt n umahil tamezwert"
 
 msgid "Default device"
-msgstr ""
+msgstr "Ibenk amezwer"
 
 msgid "Default for chats (e.g. Contact is typing)"
-msgstr ""
+msgstr "Amezwer i idiwenniyen (amedya. Anermes atan yettu)"
 
 msgid "Default for chats and private group chats"
-msgstr ""
+msgstr "Amezwer i idiwenniyen akked idiwenniyen n ugraw uslig"
 
 msgid "Default for group chats (e.g. Contact is typing)"
-msgstr ""
+msgstr "Amezwer i idiwenniyen n ugraw (amedya. Anermis la yettaru)"
 
 msgid "Default for new chats"
-msgstr ""
+msgstr "Amezwer i idiwenniyen imaynuten"
 
 msgid "Default for new group chats"
-msgstr ""
+msgstr "Amezwer i idiwenniyen n ugraw imaynuten"
 
 msgid "Default for new public group chats"
-msgstr ""
+msgstr "Amezwer i idiwenniyen n ugraw uzayer imaynuten"
 
 msgid "Delete"
-msgstr ""
+msgstr "Kkes"
 
 msgid "Delete Fingerprint?"
-msgstr ""
+msgstr "Kkes Adsil umḍin?"
 
 msgid "Delete Message Locally?"
-msgstr ""
+msgstr "Kkes izen s wudem adigan?"
 
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
-msgstr ""
+msgstr "Kkes izen s wudem adigan…"
 
 msgid "Delete Node?"
-msgstr ""
+msgstr "Kkes tikerrist?"
 
 msgid "Delete Theme?"
-msgstr ""
+msgstr "Kkes Asentel?"
 
 msgid "Deny"
 msgstr "Agwi"
@@ -1554,7 +1550,7 @@ msgid "Do you accept this request (account: %s)?"
 msgstr ""
 
 msgid "Do you accept this request?"
-msgstr ""
+msgstr "Ad tqebleḍ asuter-a?"
 
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
@@ -1564,7 +1560,7 @@ msgstr ""
 
 #, python-format
 msgid "Do you want to block %(name)s?"
-msgstr ""
+msgstr "Tebɣiḍ ad tesweḥleḍ %(name)s?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr ""
@@ -1618,9 +1614,6 @@ msgstr "Arewway: %s"
 
 msgid "Drop files here"
 msgstr "Sers ifuyla dagi"
-
-msgid "Eating"
-msgstr "Učči"
 
 msgid "Edit"
 msgstr "Ẓreg"
@@ -1812,7 +1805,7 @@ msgid "Export CSV"
 msgstr "Sifed CSV"
 
 msgid "Export Chat History"
-msgstr "Sifeḍ amazray n udiwenni usrid"
+msgstr "Sifeḍ azray n udiwenni usrid"
 
 msgid "Export Contacts"
 msgstr "Sifeḍ inermisen"
@@ -1824,13 +1817,13 @@ msgid "Export Finished"
 msgstr "Ifukk usifeḍ"
 
 msgid "Export History…"
-msgstr "Sifeḍ amazray…"
+msgstr "Sifeḍ azray…"
 
 msgid "Export your chat history from Gajim"
-msgstr "Sifeḍ amazray-ik·im n udiwenni usrid seg Gajim"
+msgstr "Sifeḍ azray-ik·im n udiwenni usrid seg Gajim"
 
 msgid "Exporting History..."
-msgstr "Asifeḍ n umazray…"
+msgstr "Asifeḍ n uzray…"
 
 msgid "Exporting your messages..."
 msgstr "Asifeḍ n yiznan-ik·im…"
@@ -1927,35 +1920,37 @@ msgid "File: %s"
 msgstr ""
 
 msgid "Filter"
-msgstr ""
+msgstr "Tastayt"
 
 msgid "Filter Chats"
-msgstr ""
+msgstr "Sti Idiwenniyen"
 
 msgid "Filters"
-msgstr ""
+msgstr "Tistayin"
 
 msgid "Filters (active)"
-msgstr ""
+msgstr "Tistayin (yermden)"
 
 msgid "Fingerprint for this Device"
-msgstr ""
+msgstr "Adsil umḍin i yibenk-a"
 
 msgid "Fingerprints"
-msgstr ""
+msgstr "idsilen umḍinen"
 
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
-msgstr ""
+msgstr "Idsilen umḍinen n yibenkan yeqqnen ɣer \"%s\""
 
 msgid "Finished"
-msgstr ""
+msgstr "Ifukk"
 
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
+"Ifukk umtawi n uzray n udiwenni:\n"
+"%s n yeznan i d-yettwasidren"
 
 msgid "Focus Input"
 msgstr "Asaḍas n unekcum"
@@ -1986,13 +1981,13 @@ msgid "Forget this Group Chat…"
 msgstr "Ttu agraw-agi udiwenni…"
 
 msgid "Format Text Bold"
-msgstr ""
+msgstr "Msel aḍris s wudem azuran"
 
 msgid "Format Text Italic"
-msgstr ""
+msgstr "Msel aḍris s wudem yeknan"
 
 msgid "Format Text Strikethrough"
-msgstr ""
+msgstr "Msel aḍris yettwajeṛṛeḍ"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Tuccḍa deg wurti CRL n uleqqem aneggaru"
@@ -2035,7 +2030,7 @@ msgid "Full Name"
 msgstr "Isem ummid"
 
 msgid "Fully-featured XMPP chat client"
-msgstr ""
+msgstr "Amsaɣ ummid XMPP n udiwenni"
 
 #, python-format
 msgid "GLib Version: %s"
@@ -2071,64 +2066,68 @@ msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
+"Gajim yemlal-d tuccḍa.\n"
+"Ma ulac aɣilif, mudd-aɣ-d afus ad nṣeggem ugur-a s tuzzna n uneqqis."
 
 msgid "Gajim is fully synchronized with the archive."
-msgstr ""
+msgstr "Gajim ittemtawi akken iwata akked uɣbaṛ."
 
 msgid "Gajim is quitting…"
-msgstr ""
+msgstr "Gajim deg tuffɣa…"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
+"Gajim ur yezmir ara ad yaweḍ ɣer uqeddac. Wali ma yella tansa-k·m XMPP d "
+"tameɣtut."
 
 msgid "Gajim will now exit"
-msgstr ""
+msgstr "Gajim tura ad yeffeɣ"
 
 msgid "Gathering information…"
-msgstr ""
+msgstr "Alqaḍ n telɣa…"
 
 msgid "Gender"
-msgstr ""
+msgstr "Tawsit"
 
 msgctxt "Profile"
 msgid "Gender"
-msgstr ""
+msgstr "Tawsit"
 
 msgid "General"
-msgstr ""
+msgstr "Amatu"
 
 #, python-format
 msgid "General – %(account)s"
-msgstr ""
+msgstr "Amatu - %(account)s"
 
 msgid "Global Group Chat Search"
-msgstr ""
+msgstr "Anadi amatu n udiwenni n ugraw"
 
 msgid "Global Proxy"
-msgstr ""
+msgstr "Apṛuksi Amatu"
 
 msgid "Global Status"
-msgstr ""
+msgstr "Addad Amatu"
 
 msgid "Go"
-msgstr ""
+msgstr "Ddu"
 
 msgid "Grant Voice"
 msgstr ""
 
 msgid "Group"
-msgstr ""
+msgstr "Agraw"
 
 msgid "Group Chat"
-msgstr ""
+msgstr "Agraw Udiwenni"
 
 msgid "Group Chat Details"
-msgstr ""
+msgstr "Telqayt n Ugraw Udiwenni"
 
 msgid "Group Chat Language"
-msgstr ""
+msgstr "Tutlayt n Ugraw Udiwenni"
 
 msgid "Group Chat Message Highlight"
 msgstr ""
@@ -2224,10 +2223,10 @@ msgstr ""
 "Akud n useddu: %(uptime)s\n"
 
 msgid "How far back should the chat history be synchronized?"
-msgstr "Alamma anda ara yemtawi umezruy n udiwenni?"
+msgstr "Alamma anda ara yemtawi uzruy n udiwenni?"
 
 msgid "How long Gajim should keep your chat history"
-msgstr "Acḥal n wakud Gajim yessefk ad yeṭṭef amazray-ik·im n udiwenni usrid"
+msgstr "Acḥal n wakud Gajim yessefk ad yeṭṭef azray-ik·im n udiwenni usrid"
 
 msgid "How to install plugins with Flatpak"
 msgstr "Amek ara tesbeddeḍ izegrar s Flatpak"
@@ -2432,18 +2431,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr ""
-
-msgid "I’m out enjoying life."
-msgstr ""
-
-msgid "I’m watching a movie."
-msgstr ""
-
-msgid "I’m working."
-msgstr ""
-
 msgid "JID"
 msgstr ""
 
@@ -2478,7 +2465,7 @@ msgid "Just now"
 msgstr ""
 
 msgid "Keep Chat History"
-msgstr "Eǧǧ amazray n udiwenni usrid"
+msgstr "Eǧǧ azray n udiwenni usrid"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Aseqdec n tsarut ur yegbir ara azmul n uselkin"
@@ -2691,7 +2678,7 @@ msgid "Miscellaneous"
 msgstr "Ayen-nniḍen"
 
 msgid "Missing dependencies for audio support"
-msgstr "Ulac tugal i tallalt n umeslaw"
+msgstr "Ulac iḍaraɛen i usefrek n umeslaw"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Azegrir n uwgelhen ulac-it"
@@ -2742,9 +2729,6 @@ msgstr "Smutti anermis ɣer ugraw amaynut?"
 
 msgid "Move to Group"
 msgstr "Smutti ɣer ugraw"
-
-msgid "Movie"
-msgstr "Asaru"
 
 msgid "Must be a port number"
 msgstr "Ilaq ad yili d uṭṭun n tewwurt"
@@ -3053,9 +3037,6 @@ msgid "Other devices connected with your account"
 msgstr ""
 
 msgid "Others"
-msgstr ""
-
-msgid "Out"
 msgstr ""
 
 msgid "Out of memory"
@@ -3522,7 +3503,7 @@ msgid "Remove Account"
 msgstr "Kkes amiḍan"
 
 msgid "Remove Chat History?"
-msgstr "Kkes amazray n udiwenni usrid?"
+msgstr "Kkes azray n udiwenni usrid?"
 
 msgid "Remove Contact"
 msgstr "Kkes anermis"
@@ -3543,7 +3524,7 @@ msgid "Remove Group…"
 msgstr "Kkes agraw…"
 
 msgid "Remove History…"
-msgstr "Kkes amazray…"
+msgstr "Kkes azray…"
 
 msgid "Remove Proxy"
 msgstr "Kkes Apṛuksi"
@@ -3801,13 +3782,13 @@ msgid "Scroll to this message"
 msgstr "Drurem ɣer yizen-agi"
 
 msgid "Scroll up to load more chat history…"
-msgstr "Drurem d asawen i usali n umazray n udiwenni…"
+msgstr "Drurem d asawen i usali n uzray n udiwenni…"
 
 msgid "Search"
 msgstr "Nadi"
 
 msgid "Search Chat History"
-msgstr "Nadi amazray n udiwenni usrid"
+msgstr "Nadi azray n udiwenni usrid"
 
 msgid "Search Filters"
 msgstr "Nadi tistayin"
@@ -3973,74 +3954,74 @@ msgid "Serial Number: "
 msgstr ""
 
 msgid "Server Shutdown"
-msgstr ""
+msgstr "Yexsi uqeddac"
 
 msgid "Service"
-msgstr ""
+msgstr "Ameẓlu"
 
 msgid "Service Discovery"
-msgstr ""
+msgstr "Tifin umeẓlu"
 
 #, python-format
 msgid "Service Discovery using account %s"
-msgstr ""
+msgstr "Tifin umeẓlu s useqdec n umiḍan %s"
 
 msgid "Service Gateway"
-msgstr ""
+msgstr "Tanezgert umeẓlu"
 
 msgid "Service Not Browsable"
-msgstr ""
+msgstr "Ameẓlu n war asnirem"
 
 msgid "Service Not Found"
-msgstr ""
+msgstr "Ameẓlu ur yettwaf ara"
 
 msgid "Service Provider"
-msgstr ""
+msgstr "Asaǧǧaw n umeẓlu"
 
 msgid "Set Trust"
-msgstr ""
+msgstr "Sbadu taflest"
 
 msgid "Set a subject for this chat"
-msgstr ""
+msgstr "Sbadu asentel i udiwenni-agi"
 
 msgid "Set configuration directory"
-msgstr ""
+msgstr "Sbadu akaram n twila"
 
 msgid "Set date…"
-msgstr ""
+msgstr "Sbadu azemz…"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 
 msgid "Setting is locked by the system"
-msgstr ""
+msgstr "Asbadu yettwasekkeṛ sɣur unagraw"
 
 msgid "Settings"
-msgstr ""
+msgstr "iɣewwaṛen"
 
 msgid "Share Contact…"
-msgstr ""
+msgstr "Bḍu Anermis…"
 
 msgid "Share Group Chat…"
-msgstr ""
+msgstr "Bḍu Agraw Udiwenni…"
 
 msgid "Share Status"
-msgstr ""
+msgstr "Bḍu Addad"
 
 msgid "Share Video"
-msgstr ""
+msgstr "Bḍu Avidyu"
 
 msgid "Share my online status"
-msgstr ""
+msgstr "Bḍu addad-iw ɣef uẓeṭṭa"
 
 msgid "Shortcuts"
-msgstr ""
+msgstr "Inegzumen"
 
 msgid "Show Chat List"
-msgstr ""
+msgstr "Sken tabdart n udiwenni"
 
 msgid "Show Commands"
-msgstr ""
+msgstr "Sken tiludna"
 
 msgid "Show Contact Infos"
 msgstr ""
@@ -4055,23 +4036,22 @@ msgid "Show Inactive Devices"
 msgstr ""
 
 msgid "Show Join/Leave"
-msgstr ""
+msgstr "Sken Anekcum/Tuffɣa"
 
 msgid "Show Joined / Left"
 msgstr ""
 
-#, fuzzy
 msgid "Show Link Preview"
-msgstr "Taskant s wudem usrid"
+msgstr "Sken taskant n useɣwen"
 
 msgid "Show Plugins"
-msgstr ""
+msgstr "Sken izegrar"
 
 msgid "Show Send Message Button"
-msgstr ""
+msgstr "Sken taqeffalt n wazen n yizen"
 
 msgid "Show Status Changes"
-msgstr ""
+msgstr "Sken asnifel n waddad"
 
 msgid "Show Subject on Join"
 msgstr "Sken asentel deg utekki"
@@ -4164,53 +4144,50 @@ msgid "Sign Up"
 msgstr ""
 
 msgid "Sign up Anonymously"
-msgstr ""
+msgstr "Jerred s wudem udrig"
 
 msgid "Sign up for a new account with a provider of your choice"
-msgstr ""
+msgstr "Jerred amiḍan amaynut s usaǧǧaw n ufran-ik·im"
 
 msgid "Signup not allowed"
-msgstr ""
+msgstr "Ajerred ur yettusireg ara"
 
 msgid "Size of preview images in pixels"
-msgstr ""
-
-msgid "Sleeping"
-msgstr ""
+msgstr "Tiddi n tugniwin n teskant s ipiksilen"
 
 msgid "Software"
-msgstr ""
+msgstr "Aseɣẓan"
 
 msgid "Something went wrong. Video feature disabled."
-msgstr ""
+msgstr "Yella wacu ur neddi ara. Tamahilt n tvidyut tensa."
 
 msgid "Sorry, that should not have happened"
-msgstr ""
+msgstr "Suref-aɣ, ur yelli ara yessefk ad yeḍru waya"
 
 msgid "Sort Participant List by Status"
-msgstr ""
+msgstr "Smizzwer Tabdart n Imttekkiyen s Waddad"
 
 msgid "Sort by Status"
-msgstr ""
+msgstr "Smizzwer s Waddad"
 
 msgid "Sounds"
-msgstr ""
+msgstr "Imesla"
 
 msgid "Sounds When Away"
-msgstr ""
+msgstr "Imesla ticki ur telliḍ ara"
 
 msgid "Spaces are not allowed"
-msgstr ""
+msgstr "Tallunin ur ttwasirgent ara"
 
 msgid "Spam"
-msgstr ""
+msgstr "Ispamen"
 
 #, python-format
 msgid "Speed: %s"
-msgstr ""
+msgstr "Arured: %s"
 
 msgid "Spell Checker"
-msgstr ""
+msgstr "Aseɣtay n teɣdirawt"
 
 msgid "Spell Checking"
 msgstr "Asenqed n tira"
@@ -4292,48 +4269,48 @@ msgid ""
 msgstr ""
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "Isurifen i wales n ufares n wugur…"
 
 msgid "Stop Sharing Online Status?"
-msgstr ""
+msgstr "Ḥbes beṭṭu n waddad ɣef uẓeṭṭa?"
 
 msgid "Street"
-msgstr ""
+msgstr "Azzniq"
 
 msgid "Style"
-msgstr ""
+msgstr "Aɣanib"
 
 msgid "Subject"
-msgstr ""
+msgstr "Amgay"
 
 msgid "Subject Alt Names: "
-msgstr ""
+msgstr "Ismawen imlellayen n umgay: "
 
 msgid "Subject issuer mismatch"
-msgstr ""
+msgstr "Amazan n umyag ur imṣada ara"
 
 msgid "Subject last changed by"
-msgstr ""
+msgstr "Amyag aneggaru yettwabeddel sɣur"
 
 msgctxt "Contact subscription"
 msgid "Subscribe"
-msgstr ""
+msgstr "lteɣ"
 
 msgid "Subscribed"
-msgstr ""
+msgstr "Yettwalteɣ"
 
 msgid "Subscription"
-msgstr ""
+msgstr "Ameltaɣ"
 
 msgid "Successfully Added Contacts"
-msgstr ""
+msgstr "Inermisen ttwarnan akken iwata"
 
 msgid "Successfully Removed Contacts"
-msgstr ""
+msgstr "Inermisen ttwakksen akken iwata"
 
 #, python-brace-format
 msgid "Successfully build new session with {device_id}."
-msgstr ""
+msgstr "Rnu tiɣimit tamaynutt s {device_id}."
 
 msgid "Support"
 msgstr ""
@@ -4347,73 +4324,73 @@ msgid ""
 msgstr ""
 
 msgid "Switch to Chat 1"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 1"
 
 msgid "Switch to Chat 2"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 2"
 
 msgid "Switch to Chat 3"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 3"
 
 msgid "Switch to Chat 4"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 4"
 
 msgid "Switch to Chat 5"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 5"
 
 msgid "Switch to Chat 6"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 6"
 
 msgid "Switch to Chat 7"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 7"
 
 msgid "Switch to Chat 8"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 8"
 
 msgid "Switch to Chat 9"
-msgstr ""
+msgstr "Ddu ɣer udiwenni usrid 9"
 
 msgid "Switch to Next Chat"
-msgstr ""
+msgstr "Ddu ɣer udiwenni uḍfir"
 
 msgid "Switch to Next Unread Chat"
-msgstr ""
+msgstr "Ddu ɣer udiwenni uḍfir ur nettwaɣri ara"
 
 msgid "Switch to Previous Chat"
-msgstr ""
+msgstr "Ddu ɣer udiwenni uzwir"
 
 msgid "Switch to Previous Unread Chat"
-msgstr ""
+msgstr "Ddu ɣer udiwenni uzwir ur nettwaɣri ara"
 
 msgid "Switch to Workspace 1"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil 1"
 
 msgid "Switch to Workspace 2"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 2"
 
 msgid "Switch to Workspace 3"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 3"
 
 msgid "Switch to Workspace 4"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 4"
 
 msgid "Switch to Workspace 5"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 5"
 
 msgid "Switch to Workspace 6"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 6"
 
 msgid "Switch to Workspace 7"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 7"
 
 msgid "Switch to Workspace 8"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 8"
 
 msgid "Switch to Workspace 9"
-msgstr ""
+msgstr "Ddu ɣer tallunt n umahil tis 9"
 
 msgid "Sync Group Chat Block List"
-msgstr ""
+msgstr "Mtawi tabdart n ugraw n usiwḥel"
 
 msgid "Sync Threshold"
 msgstr ""
@@ -4484,16 +4461,16 @@ msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
 msgid "The certificate has been revoked"
-msgstr ""
+msgstr "Aselkin yettwakkes"
 
 msgid "The certificate has expired"
-msgstr ""
+msgstr "Aselkin yemmut"
 
 msgid "The certificate’s activation time is in the future"
-msgstr ""
+msgstr "Azemz n usermed n uselkin atan deg yimal"
 
 msgid "The certificate’s algorithm is insecure"
-msgstr ""
+msgstr "Alguritm n uselkin mačči d aɣelsan"
 
 msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
@@ -4506,37 +4483,37 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
+msgstr "Izen aneggaru yettwaru ɣef umsaɣ aziraz"
 
 msgid "The referenced message is not available."
-msgstr ""
+msgstr "Izen n temselɣut ulac-it."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
 
 msgid "The server rejected the registration without an error message"
-msgstr ""
+msgstr "Aqeddac yugi ajerred war tuccḍa n yizen"
 
 msgid "The server returned an insecure transport (HTTP)."
-msgstr ""
+msgstr "Aqeddac yerra-d amesni araɣelsan (HTTP)."
 
 msgid "The server was shut down."
-msgstr ""
+msgstr "Aqeddac yella yexsi."
 
 msgid "The signing certificate authority is not known"
-msgstr ""
+msgstr "Adabu n uzmul n uselkin ur yettwassen ara"
 
 msgid "Theme"
-msgstr ""
+msgstr "Asentel"
 
 msgid "Themes"
-msgstr ""
+msgstr "Isental"
 
 msgid "There are connectivity issues"
-msgstr ""
+msgstr "Llan wuguren n tuqqna"
 
 msgid "There are devices for which you have not made a trust decision yet."
-msgstr ""
+msgstr "Llan ibenkan ur tefkiḍ ara yakan aɣtas n teflest deg-sen."
 
 msgid ""
 "There are plenty of providers to choose from.\n"
@@ -4545,103 +4522,115 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
-msgstr ""
+msgstr "Llan yileqman i yizegrar n Gajim"
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr ""
+msgstr "Teḍra-d tuccḍa deg waggay n yiznan: %s"
 
 msgid "There is an update available for this plugin"
-msgstr ""
+msgstr "Yella lqem i iwejden i uzegrir-agi"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
 
 msgid "There is no more history"
-msgstr ""
+msgstr "Ulac ugar n uzray"
 
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr ""
+"Ulac ameẓlu deg tansa i d-teskecmeḍ, neɣ ur d-yettarra ara. Senqed tansa "
+"sakin ɛreḍ tikelt nniḍen."
 
 #, python-format
 msgid ""
 "There was an error while attempting to verify the SSL certificate of your "
 "XMPP server (%s)."
 msgstr ""
+"Teḍra-d tuccḍa deg uneɛruḍ n usenqad n uselkin SSL n uqeddac-ik·im XMPP (%s)."
 
 #, python-format
 msgid ""
 "There was an error while trying to save the file.\n"
 "Error: %s."
 msgstr ""
+"Teḍra-d tuccḍa deg usekles n ufaylu.\n"
+"Tuccḍa: %s."
 
 msgid "This Device"
-msgstr ""
+msgstr "Ibenk-agi"
 
 msgid "This account has already been added"
-msgstr ""
+msgstr "Amiḍan-agi yettwarna yakan"
 
 msgid "This address does not seem to offer any gateway service."
-msgstr ""
+msgstr "Tansa-agi ur d-tettban ara tettak-d kra umeẓlu n tnezgert."
 
 msgid "This address is not reachable."
-msgstr ""
+msgstr "Tansa-agi ur tettwawaḍ ara."
 
 msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
+"Tawila-agi n udiwenni usrid ur twulem ara i uwgelhen akked OMEMO. I wakken "
+"ad t-sqedcen deg udiwenni-agi, ilaq ad yili war udrig arnu s wudem n "
+"iɛeggalen kan."
 
 msgid "This contact does not share their status with you"
-msgstr ""
+msgstr "Anermis-agi ur ibeṭṭu ara addad-is yid-k"
 
 msgid "This contact is a bot"
-msgstr ""
+msgstr "Anermis-agi d aṛubut"
 
 msgid "This device is not compatible."
-msgstr ""
+msgstr "Ibenk-a ur imṣada ara."
 
 msgid "This gateway does not support Ad-Hoc Commands."
-msgstr ""
+msgstr "Tanezgert-agi ur tesefrak ara tiludna Ad-Hoc."
 
 msgid "This gateway does not support direct registering."
-msgstr ""
+msgstr "Tanezgert-agi ur tesefrak ara ajerred usrid."
 
 msgid "This group chat can not be found via search"
-msgstr ""
+msgstr "Agraw-agi n udiwenni ur yettwaf ara s unadi"
 
 msgid "This group chat does not require a password upon entry"
-msgstr ""
+msgstr "Agraw-agi n udiwenni ur yesra ara awal uffir ɣef unekcum"
 
 msgid "This group chat does require a password upon entry"
-msgstr ""
+msgstr "Agraw-agi n udiwenni usrid yesra awal uffir ɣef unekcum"
 
 msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"Agraw-agi n udiwenni i yiɛeggalen kan, maca ur telliḍ ara deg tebdart n "
+"yiɛeggalen. Yessefk ad k·kem-id-yeɛreḍ umdan yesɛan ttesriḥ."
 
 msgid "This group chat is restricted to members only"
-msgstr ""
+msgstr "Agraw-agi n udiwenni yettunefk i yiɛeggalen kan"
 
 msgid "This group chat persists even if there are no participants"
-msgstr ""
+msgstr "Agraw-agi udiwenni ad yeqqim ɣas akken ulac imtekkiyen"
 
 msgid "This group chat will be destroyed once the last participant left"
-msgstr ""
+msgstr "Agraw-agi udiwenni ad yettwahudd ticki imtekki aneggaru yeffeɣ"
 
 msgid "This information will be publicly visible."
-msgstr ""
+msgstr "Talɣut-a ad d-tban s wudem azayez."
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr ""
+msgstr "Wagi d agraw udiwenni azayez. Awgelhen mačči d ayen yellan."
 
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
 msgstr ""
+"Wagi d asentel i tesseqdaceḍ akka tura.\n"
+"Tebɣiḍ ad tekkseḍ asentel-agi?"
 
 msgid "This message has been moderated"
 msgstr ""
@@ -4652,76 +4641,85 @@ msgstr ""
 
 #, python-brace-format
 msgid "This message has been retracted on {date}"
-msgstr ""
+msgstr "Izen-agi yettwajbed di {date}"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
+"Izen-agi yettwawgelhen s %s yerna ur yezmir ara ad yettwakkes uwgelhen-is."
 
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
+"Izen-agi yettwawgelhen s uwgelhen aqbur n OpenPGP yerna ur yezmir ara ad "
+"yettwazmek. Tzemreḍ ad tesbeddeḍ azegrir PGP akken ad tesferkeḍ iznan-agi."
 
 msgid "This message was encrypted with OMEMO, but not for your device."
-msgstr ""
+msgstr "Izen-agi yettwawgelhen s OMEMO, maca mačči i yibenk-ik·im."
 
 msgid "This message was encrypted with OTR and could not be decrypted."
-msgstr ""
+msgstr "Izen-agi yettwawgelhen s OTR yerna ur yezmir ara ad yettwazmek."
 
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
+"Izen-agi yettwawgelhen s OpenPGP i XMPP yerna ur yezmir ara ad yettwazmek. "
+"Tzemreḍ ad tesbeddeḍ azegrir OpenPGP akken ad tesferkeḍ iznan-agi."
 
 msgid "This message will be deleted from your local chat history"
-msgstr ""
+msgstr "Izen-agi ad yettwakkes seg uzray-ik·im adigan"
 
 msgid "This plugin is managed by your operating system"
-msgstr ""
+msgstr "Azegrir-agi yessefrak-it unagraw n wammud-ik·im"
 
 msgid "This server does not allow signup."
-msgstr ""
+msgstr "Aqeddac-agi ur isirig ara ajerred."
 
 msgid "This server does not support anonymous login."
-msgstr ""
+msgstr "Aqeddac-agi ur yessefrak ara tuqqna tudrigt."
 
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely a legacy service or broken."
 msgstr ""
+"Ameẓlu-agi ur izmir ara ad d-yerr s telɣut leqqayen.\n"
+"Yezmer ad yili d ameẓlu aqbur neɣ yerreẓ."
 
 msgid "This service does not contain any items to browse."
-msgstr ""
+msgstr "Ameẓlu-a ur yesɛi ara akk iferdisen ara tesnirmeḍ."
 
 msgid "This service has not yet responded with detailed information"
-msgstr ""
+msgstr "Ameẓlu-agi urɛad yerra-d s telɣut leqqayen"
 
 msgid "This type of service does not contain any items to browse."
-msgstr ""
+msgstr "Anaw-agi n umeẓlu ur yesɛi ara kra n iferdisen ara tesnirmeḍ."
 
 msgid "This will clear the devices store for your account."
-msgstr ""
+msgstr "Aya ad yesfeḍ taḥanut n yibenkan i umiḍan-ik·im."
 
 msgid "This will purge all locally stored chat history"
-msgstr ""
+msgstr "Aya ad ikkes akk azray n udiwenni adigan ikelsen"
 
 msgid "This will remove the account and delete all data"
-msgstr ""
+msgstr "Ayagi ad yekkes amiḍan sakin ad yekkes akk isefka"
 
 msgid "This will remove your account from Gajim."
-msgstr ""
+msgstr "Ayagi ad yekkes amiḍan-ik·im seg Gajim."
 
 msgid "This will reset all introduction hints"
-msgstr ""
+msgstr "Aya ad yales i wakk isemtar n usekcem"
 
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
 "workspace. Remove anyway?"
 msgstr ""
+"Tallunt-a n umahil tegber idiwenniyen. Akk idiwenniyen ad ttusmuttin ɣer "
+"tallunt n umahil i d-itteddun. Kkes akken yebɣu yili?"
 
 msgid "Three Months"
-msgstr ""
+msgstr "Kraḍ n wayyuren"
 
 msgid "Time Until Away"
 msgstr ""
@@ -4768,83 +4766,83 @@ msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
-msgstr ""
+msgstr "Taflest ur tettwaslek ara"
 
 msgid "Try Again"
-msgstr ""
+msgstr "Ɛreḍ tikelt nniḍen"
 
 msgid "Try a different search"
-msgstr ""
+msgstr "Ɛreḍ anadi nniḍen"
 
 msgid "Trying to change password..."
-msgstr ""
+msgstr "Ɛṛeḍ ad tbeddeleḍ awal uffir…"
 
 msgid "Trying to create account..."
-msgstr ""
+msgstr "Ɛreḍ ad d-tesnulfuḍ amiḍan…"
 
 msgid "Trying to gather information on this address…"
-msgstr ""
+msgstr "Ɛreḍ ad d-tawiḍ isallen ɣef tansa-a…"
 
 msgid "Trying to remove account..."
-msgstr ""
+msgstr "Ɛreḍ ad tekkseḍ amiḍan…"
 
 msgid "Turn Camera off"
-msgstr ""
+msgstr "Sexsi takamiṛat"
 
 msgid "Turn Camera on"
-msgstr ""
+msgstr "Rmed takamiṛat"
 
 msgid "Type"
-msgstr ""
+msgstr "Aru"
 
 msgctxt "Configuration"
 msgid "Type"
-msgstr ""
+msgstr "Anaw"
 
 msgid "Type to search for values..."
-msgstr ""
+msgstr "Aru i unadi n wazalen…"
 
 msgid "Typing Only"
-msgstr ""
+msgstr "Tira kan"
 
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Unable to decode issuer public key"
-msgstr ""
+msgstr "Ulamek ukestengel n tsarut tazayezt n umazan"
 
 msgid "Unable to decrypt CRL's signature"
-msgstr ""
+msgstr "D awezɣi tukksa n uwgelhen n uzmul CRL"
 
 msgid "Unable to decrypt certificate's signature"
-msgstr ""
+msgstr "D awezɣi tukksa n uwgelhen n uzmul uselkin"
 
 msgid "Unable to get certificate CRL"
-msgstr ""
+msgstr "Ur izmir ara ad yawi tabdart n iselkinen yettwaḥwin"
 
 msgid "Unable to get issuer certificate"
-msgstr ""
+msgstr "Ur izmir ara ad d-yawi aselkin n umazan"
 
 msgid "Unable to get local issuer certificate"
-msgstr ""
+msgstr "Ur izmir ara ad d-yawi aselkin n umazan adigan"
 
 msgid "Unable to properly remove the plugin"
-msgstr ""
+msgstr "Ur yezmir ara ad yekkes akk azegrir"
 
 msgid "Unable to save profile"
-msgstr ""
+msgstr "Ur izmir ara ad isekles amaɣnu"
 
 msgid "Unable to verify the first certificate"
-msgstr ""
+msgstr "Ur yezmir ara ad isenqed aselkin amezwaru"
 
 msgid "Unblock"
-msgstr ""
+msgstr "Kkes asekkeṛ"
 
 msgid "Unblock Participant?"
-msgstr ""
+msgstr "Kkes asekkeṛ ɣef imttekki?"
 
 #, python-format
 msgid "Undecided fingerprints of devices connected with \"%s\""
@@ -4891,158 +4889,158 @@ msgid "Unknown error."
 msgstr ""
 
 msgid "Unknown language"
-msgstr ""
+msgstr "Tutlayt ur nettwassen ara"
 
 msgid "Unknown validation error"
-msgstr ""
+msgstr "Tuccḍa n usentem d tarussint"
 
 msgid "Unmute Chat"
-msgstr ""
+msgstr "Kkes asgugem i udiwenni"
 
 msgid "Unpin Chat"
-msgstr ""
+msgstr "Bru-as i udiwenni"
 
 msgid "Unsupported certificate purpose"
-msgstr ""
+msgstr "Iswi n uselkin ur yettwasefrak ara"
 
 msgid "Until Gajim is Closed"
-msgstr ""
+msgstr "Alamma yemdel Gajim"
 
 msgid "Untrusted"
-msgstr ""
+msgstr "Ur yettwaman ara"
 
 msgid "Update"
-msgstr ""
+msgstr "Leqqem"
 
 msgid "Update Avatar"
-msgstr ""
+msgstr "Leqqem avaṭar"
 
 msgid "Update automatically"
-msgstr ""
+msgstr "Leqqem s wudem awurman"
 
 #, python-format
 msgid "Update available: Version %s"
-msgstr ""
+msgstr "Aleqqem yewjed: Lqem %s"
 
 msgid "Update plugins automatically"
-msgstr ""
+msgstr "Leqqem izegrar s wudem awurman"
 
 msgid "Updates"
-msgstr ""
+msgstr "Ileqman"
 
 msgid "Updates will be installed next time Gajim is started"
-msgstr ""
+msgstr "Ileqman ad ttwasbedden deg tnekra n Gajim i d-iteddun"
 
 msgid "Updating Plugin…"
-msgstr ""
+msgstr "Aleqqem n uzegrir…"
 
 msgid "Updating provider list…"
-msgstr ""
+msgstr "Aleqqem n tebdart n yisaǧǧawen…"
 
 msgid "Upload File…"
-msgstr ""
+msgstr "Sali afaylu…"
 
 msgid "Uploading Avatar Failed"
-msgstr ""
+msgstr "Asali n uvaṭar ur yeddi ara"
 
 #, python-format
 msgid "Uploading avatar image failed: %s"
-msgstr ""
+msgstr "Asali n tugna n avaṭar ur yeddi ara: %s"
 
 msgid "Uploading via HTTP File Upload…"
-msgstr ""
+msgstr "Asali s wudem n HTTP File Upload…"
 
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
-msgstr ""
+msgstr "Seqdec GSSAPI"
 
 msgid "Use Image"
-msgstr ""
+msgstr "Seqdec Tugna"
 
 msgid "Use System Keyring"
-msgstr ""
+msgstr "seqdec azebg n tsura n unagraw"
 
 msgid "Use Unencrypted Connection"
-msgstr ""
+msgstr "Seqdec tuqqna war awgelhen"
 
 msgid "Use a profile to run multiple Gajim instances"
-msgstr ""
+msgstr "Seqdec amaɣnu i uselkem n wagut n tummanin n Gajim"
 
 msgid "Use an unencrypted connection to the server"
-msgstr ""
+msgstr "Seqdec tuqqna war awgelhen ɣer uqeddac"
 
 msgid "Use defined profile in configuration directory"
-msgstr ""
+msgstr "Seqdec amaɣnu yettusbadun deg ukaram n twila"
 
 msgid "Use proxy auth_entication"
-msgstr ""
+msgstr "Seqdec asesteb n upṛuksi"
 
 msgid "Use your system’s keyring to store passwords"
-msgstr ""
+msgstr "Seqdec azebg n tsura n unagraw-ik·im i waḥraz n wawalen uffiren"
 
 #, python-format
 msgid "User %s not found"
-msgstr ""
+msgstr "Aseqdac %s ur yettwaf ara"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "Tiddi n tsefsit n ugrudem n useqdac"
 
 msgid "Users"
-msgstr ""
+msgstr "Iseqdacen"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
+msgstr "V4L2: %s"
 
 msgid "Validity"
-msgstr ""
+msgstr "Aɣbal"
 
 msgid "Validity\n"
-msgstr ""
+msgstr "Aɣbal\n"
 
 msgctxt "Configuration"
 msgid "Value"
-msgstr ""
+msgstr "Azal"
 
 msgid "Verified"
-msgstr ""
+msgstr "Yettwasenqed"
 
 msgid "Version"
-msgstr ""
+msgstr "Lqem"
 
 msgid "Video"
-msgstr ""
+msgstr "Tavidyut"
 
 msgid "Video test"
-msgstr ""
+msgstr "Akayad n uvidyu"
 
 msgid "Visit Provider's Website"
-msgstr ""
+msgstr "Rzu ɣer usmel web n usaǧǧaw"
 
 msgid "Visit Website"
-msgstr ""
+msgstr "Rzu ɣer usmel Web"
 
 msgctxt "Group chat contact role"
 msgid "Visitor"
-msgstr ""
+msgstr "Anerzaf"
 
 msgctxt "Group chat contact role"
 msgid "Visitors"
-msgstr ""
+msgstr "Imerza"
 
 msgid "Visual Notifications"
-msgstr ""
+msgstr "Ilɣa s wudem tmeẓri"
 
 msgid "Voice Message"
-msgstr ""
+msgstr "Izen n taɣect"
 
 msgid "Voice Messages are not available"
-msgstr ""
+msgstr "Iznan n taɣect ulac-iten"
 
 msgid "Voice message could not be saved. Please try again."
-msgstr ""
+msgstr "Izen n taɣect ulamek ara yettwasekles. Ttxil-k·m, ɛreḍ tikelt nniḍen."
 
 msgid "WAV Sounds"
 msgstr ""
@@ -5092,52 +5090,49 @@ msgstr ""
 msgid "Work"
 msgstr ""
 
-msgid "Working"
-msgstr ""
-
 msgid "Workspace Settings"
 msgstr ""
 
 msgid "Workspace settings…"
-msgstr ""
+msgstr "Iɣewwaṛen n tallunt n umahil…"
 
 msgid "X11"
-msgstr ""
+msgstr "X11"
 
 msgid "XMPP Address"
-msgstr ""
+msgstr "Tansa XMPP"
 
 msgid "XMPP Address…"
-msgstr ""
+msgstr "Tansa XMPP…"
 
 msgid "XMPP Chat Client"
-msgstr ""
+msgstr "Amsaɣ n udiwenni XMPP"
 
 msgid "YYYY-MM-DD"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Ih"
 
 msgid "Yesterday"
-msgstr ""
+msgstr "Iḍelli"
 
 #, python-format
 msgid "Yesterday (%s)"
-msgstr ""
+msgstr "Iḍelli (%s)"
 
 msgid "You"
-msgstr ""
+msgstr "Kečč·mm"
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr ""
+msgstr "Teskecmeḍ (%s) ɣer ugraw n udiwenni usrid"
 
 msgid "You are a visitor"
-msgstr ""
+msgstr "Kečč·mm d amerzu"
 
 msgid "You are a visitor."
-msgstr ""
+msgstr "Kečč·mm d amerzu."
 
 #, python-format
 msgid ""
@@ -5145,13 +5140,16 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
+"Ala tettedduḍ ad teqqneḍ ɣer umiḍan %(account)s %(server)s s useqdec n "
+"tarrayt n tuqqna taraɣelsant. yebɣa ad d-yini belli idiwenniyen ur "
+"ttwegelhan ara. Tuqqna war awgelhen macci d ayen yelhan."
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
-msgstr ""
+msgstr "Ala tettedduḍ ad tekkseḍ %(name)s %(jid)s seg tebdart n unermis-ik·im."
 
 msgid "You are currently not joined this group chat"
-msgstr ""
+msgstr "Ulac-ik·em akka tura deg ugraw-agi n udiwenni usrid"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5160,64 +5158,69 @@ msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
 msgstr ""
+"Ur teqqineḍ ara ɣer uqeddac. S war tuqqna, ur tezmireḍ ara ad tesnirmeḍ "
+"imeẓla yellan"
 
 #, python-format
 msgid "You are now %(affiliation)s of this group chat"
-msgstr ""
+msgstr "Aql-ik·em tura d %(affiliation)s n ugraw-a n udiwenni usrid"
 
 #, python-format
 msgid "You are now %(role)s of this group chat"
-msgstr ""
+msgstr "Aql-ik·em tura d %(role)s n ugraw-a n udiwenni usrid"
 
 #, python-format
 msgid "You are now known as %s"
-msgstr ""
+msgstr "Tettwasneḍ tura s %s"
 
 #, python-brace-format
 msgid "You are now {show}{status}"
-msgstr ""
+msgstr "Aql-ik·em tura {show}{status}"
 
 msgid "You are offline"
-msgstr ""
+msgstr "Aql-ik·em deg uskar aruqqin"
 
 msgid "You are offline. Go online to send messages…"
 msgstr ""
+"Aql-ik·em deg uskar aruqqin. Ddu ɣer uskar uqqin akken ad tazneḍ iznan…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
-msgstr ""
+msgstr "Tzemreḍ ad tettekkiḍ deg ugraw-agi n udiwenni usrid: %s"
 
 msgid "You can not join a group chat unless you are connected."
-msgstr ""
+msgstr "Ur tezmireḍ ara ad tettekkiḍ deg ugraw n udiwenni usrid alama teqqneḍ."
 
 msgid "You can see the contact's online status"
-msgstr ""
+msgstr "Tzemreḍ ad twaliḍ addad n unermes ɣef uẓeṭṭa"
 
 msgid "You cancelled the transfer"
-msgstr ""
+msgstr "Tesfexeḍ asiweḍ"
 
 msgid "You cannot add yourself to your contact list."
-msgstr ""
+msgstr "Ur tezmireḍ ara ad ternuḍ iman-ik·im ɣer tebdart n unermis-ik·im."
 
 msgid "You cannot see this contact's online status"
-msgstr ""
+msgstr "Ur tezmireḍ ara ad twaliḍ addad n unermes-agi ɣef uẓeṭṭa"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+"Ur tezmireḍ ara ad tazneḍ iznan usligen ɣer inermisen ma ulac-iten deg uskar "
+"aruqqin."
 
 msgid "You don't share your status with this contact"
-msgstr ""
+msgstr "Ur beṭṭu ara addad-ik·im akked unermis-agi"
 
 msgid "You have been banned"
-msgstr ""
+msgstr "Tettwagedleḍ"
 
 #, python-format
 msgid "You have been banned by %s"
-msgstr ""
+msgstr "Tettwagedleḍ sɣur %s"
 
 #, python-format
 msgid "You have been invited to %s"
-msgstr ""
+msgstr "Tettwaɛeṛḍeḍ ɣer %s"
 
 msgid "You have been kicked"
 msgstr ""
@@ -5231,22 +5234,22 @@ msgstr ""
 
 #, python-format
 msgid "You have been removed from this group chat by %s"
-msgstr ""
+msgstr "Tettwakkseḍ seg ugraw-agi n udiwenni sɣur %s"
 
 msgid "You have insufficient permissions"
-msgstr ""
+msgstr "Xuṣṣen-ak·am tsirag"
 
 msgid "You have left due to an error"
-msgstr ""
+msgstr "Truḥeḍ sebba n tuccḍa"
 
 msgid "You have to be connected to create a group chat."
-msgstr ""
+msgstr "Ilaq ad teqqneḍ iwakken ad d-tesnulfuḍ agraw n udiwenni."
 
 msgid "You have to invite people so they can join"
-msgstr ""
+msgstr "Yessefk ad d-tɛerḍeḍ imdanen akken ad d-kecmen"
 
 msgid "You left this group chat"
-msgstr ""
+msgstr "Teǧǧiḍ agraw-a n udiwenni"
 
 msgid ""
 "You may need an invite to join this group chat again, if you choose to leave "
@@ -5254,54 +5257,58 @@ msgid ""
 msgstr ""
 
 msgid "You need Owner permission to change the configuration"
-msgstr ""
+msgstr "Teḥwajem Tisirag n umli akken ad tbeddeleḍ tawila"
 
 #, python-format
 msgid "You now have the following hats: %s"
-msgstr ""
+msgstr "Tura ɣur-k·m tacacit-agi: %s"
 
 msgid "You requested to see this contact's online status"
-msgstr ""
+msgstr "Tsutred-d ad twaliḍ addad n unermis-a ɣef uẓeṭṭa"
 
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
 msgstr ""
+"Ad d-tbaneḍ deg uskar aruqqin i unermis-agi, ur d-tettaṭṭafeḍ ara iznan "
+"nniḍen."
 
 msgid "Your Nickname"
-msgstr ""
+msgstr "Meffer isem-ik·im"
 
 msgid "Your XMPP address (e.g. user@example.org)"
-msgstr ""
+msgstr "Tansa-k·m XMPP (e.g. user@example.org)"
 
 msgid "Your account has has been removed successfully."
-msgstr ""
+msgstr "Amiḍan-ik·im yettwakkes akken iwata."
 
 msgid "Your affiliations to this group chat have been removed"
 msgstr ""
 
 msgid "Your chat history database has been migrated successfully."
-msgstr ""
+msgstr "Tunigin n uzray udiwenni n taffa n yisefka-k·m yedda akken iwata."
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"Azray-ik·im udiwenni atan yettinig.\n"
+"Aya yezmer ad yeṭṭef cwiṭ…"
 
 msgid "Your connection to the server is secured by this certificate"
-msgstr ""
+msgstr "Tuqqna ɣer uqeddac-ik·im yella-d s wudem aɣelsan sɣur aselkin-agi"
 
 msgid "Your message can not be sent until you are connected."
-msgstr ""
+msgstr "Izen-ik·im ur yezmir ara ad yettwazen alama teqqneḍ."
 
 msgid "Your messages have been exported successfully"
-msgstr ""
+msgstr "Iznan-ik·im ttwasifḍen akken iwata"
 
 msgid "Your password"
-msgstr ""
+msgstr "Awal-ik·im uffir"
 
 msgid "Your password has successfully been changed."
-msgstr ""
+msgstr "Awal-ik·im uffir ibeddel akken iwata."
 
 msgid "Your public key or authentication certificate"
 msgstr ""
@@ -5318,9 +5325,6 @@ msgid "Your service offers the following features"
 msgstr ""
 
 msgid "ZIP files"
-msgstr ""
-
-msgid "ZZZZzzzzzZZZZZ"
 msgstr ""
 
 msgid "[read more]"
@@ -5365,99 +5369,99 @@ msgid "_Clear Devices"
 msgstr ""
 
 msgid "_Close"
-msgstr ""
+msgstr "_Mdel"
 
 msgid "_Command"
-msgstr ""
+msgstr "_Taladna"
 
 msgid "_Connect"
-msgstr ""
+msgstr "_Qqen"
 
 msgid "_Connect Anyway"
-msgstr ""
+msgstr "_Qqen akken yebɣu yili"
 
 msgid "_Copy Link"
-msgstr ""
+msgstr "_Nɣel aseɣwen"
 
 msgid "_Create"
-msgstr ""
+msgstr "_Snulfu-d"
 
 msgid "_Decline"
-msgstr ""
+msgstr "_Agi"
 
 msgid "_Delete"
-msgstr ""
+msgstr "_Kkes"
 
 msgid "_Destroy"
-msgstr ""
+msgstr "_Hudd"
 
 msgid "_Disable Account"
-msgstr ""
+msgstr "_Sens Amiḍan"
 
 msgid "_Do not ask me again"
-msgstr ""
+msgstr "_Ur iyi-d-ssutur ara tikkelt-nniḍen"
 
 msgid "_Edit"
-msgstr ""
+msgstr "_Ẓreg"
 
 msgid "_Features"
-msgstr ""
+msgstr "_Timahilin"
 
 msgctxt "User status"
 msgid "_Free for Chat"
-msgstr ""
+msgstr "_D ilelli i udiwenni"
 
 msgid "_Hide (Tray Icon)"
-msgstr ""
+msgstr "_Ffer (Tignit n ufeggag n waddad)"
 
 msgid "_Host"
-msgstr ""
+msgstr "_Asenneftaɣ"
 
 msgid "_Hostname"
-msgstr ""
+msgstr "_Isem n usenneftaɣ"
 
 msgid "_Import"
-msgstr ""
+msgstr "_Kter"
 
 msgid "_Join"
-msgstr ""
+msgstr "_Ddu ɣer"
 
 msgid "_Join Support Chat"
-msgstr ""
+msgstr "_Ddu ɣer udiwenni n tallelt"
 
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "_Inegzumen n unasiw"
 
 msgid "_Later"
-msgstr ""
+msgstr "_Aredqal"
 
 msgid "_Leave"
-msgstr ""
+msgstr "_Eǧǧ"
 
 msgid "_Log In"
-msgstr ""
+msgstr "_Kcem ɣer"
 
 msgid "_Minimize"
-msgstr ""
+msgstr "_Semẓi"
 
 msgid "_Moderate"
 msgstr ""
 
 msgid "_Name"
-msgstr ""
+msgstr "_Isem"
 
 msgid "_No"
-msgstr ""
+msgstr "_Ala"
 
 msgctxt "User status"
 msgid "_Not Available"
-msgstr ""
+msgstr "_Ur yella ara"
 
 msgid "_OK"
-msgstr ""
+msgstr "_IH"
 
 msgid "_Offline"
-msgstr ""
+msgstr "_Aruqqin"
 
 msgid "_Overwrite"
 msgstr ""
@@ -5550,86 +5554,86 @@ msgid "alt"
 msgstr ""
 
 msgid "and NOT authenticated"
-msgstr ""
+msgstr "UR yettwasesteb ara"
 
 msgid "and authenticated"
-msgstr ""
+msgstr "yerna yettwasesteb"
 
 msgid "area"
-msgstr ""
+msgstr "Taɣzut"
 
 msgid "audio input"
-msgstr ""
+msgstr "anekcum n umeslaw"
 
 msgid "audio output"
-msgstr ""
+msgstr "tuffɣa n umeslaw"
 
 msgid "bearing"
 msgstr ""
 
 msgid "bold"
-msgstr ""
+msgstr "zur"
 
 msgid "building"
-msgstr ""
+msgstr "azadaɣ"
 
 #, python-format
 msgid "cairo Version: %s"
-msgstr ""
+msgstr "Lqem n cairo: %s"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
-msgstr ""
+msgstr "tigejdit"
 
 msgid "country"
-msgstr ""
+msgstr "tamurt"
 
 msgid "countrycode"
-msgstr ""
+msgstr "tangalt n tamurt"
 
 msgid "datum"
-msgstr ""
+msgstr "asefku"
 
 msgid "description"
-msgstr ""
+msgstr "aglam"
 
 msgid "error"
-msgstr ""
+msgstr "tuccḍa"
 
 msgid "example.org"
-msgstr ""
+msgstr "amedya.org"
 
 msgid "floor"
-msgstr ""
+msgstr "annag"
 
 msgid "invites you to join a group chat"
-msgstr ""
+msgstr "inced-ik·im-id ad tettekkiḍ deg ugraw n udiwenni"
 
 msgid "is composing a message…"
-msgstr ""
+msgstr "la d-yettheggi/d-tettheggi izen…"
 
 msgid "is doing something else"
-msgstr ""
+msgstr "atan deg cɣel nniḍen"
 
 msgid "italic"
-msgstr ""
+msgstr "yeknan"
 
 #, python-format
 msgid "last seen: %s"
-msgstr ""
+msgstr "taskant taneggarut: %s"
 
 msgid "lat"
 msgstr ""
 
 #, python-format
 msgid "libsoup Version: %s"
-msgstr ""
+msgstr "Leqem libsoup: %s"
 
 msgid "locality"
-msgstr ""
+msgstr "tamnaṭ"
 
 msgid "lon"
 msgstr ""
@@ -5641,10 +5645,10 @@ msgid "or"
 msgstr ""
 
 msgid "paused composing a message"
-msgstr ""
+msgstr "ibedd tira n izen"
 
 msgid "postalcode"
-msgstr ""
+msgstr "angal n lbusṭa"
 
 #, python-format
 msgid "pycairo Version: %s"
@@ -5710,6 +5714,9 @@ msgstr ""
 #~ msgid "Choose Emoji"
 #~ msgstr "Fren Imujit"
 
+#~ msgid "Eating"
+#~ msgstr "Učči"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Local help group"
 #~ msgstr "Agraw n tallelt adigan"
@@ -5717,3 +5724,6 @@ msgstr ""
 #~ msgctxt "Group chat description"
 #~ msgid "Local news and reports"
 #~ msgstr "Isallen akked ineqqisen idiganen"
+
+#~ msgid "Movie"
+#~ msgstr "Asaru"

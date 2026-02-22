@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -895,12 +895,6 @@ msgstr "Absent"
 msgid "Back"
 msgstr ""
 
-msgid "Back in some minutes."
-msgstr ""
-
-msgid "Back soon"
-msgstr ""
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Bandeja"
@@ -1471,6 +1465,9 @@ msgstr ""
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+msgid "Could not generate link preview"
+msgstr ""
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr ""
@@ -1781,9 +1778,6 @@ msgstr "Estat"
 #, fuzzy
 msgid "Drop files here"
 msgstr "Mostra els contactes desconnectats"
-
-msgid "Eating"
-msgstr ""
 
 #, fuzzy
 msgid "Edit"
@@ -2698,18 +2692,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr ""
-
-msgid "I’m out enjoying life."
-msgstr ""
-
-msgid "I’m watching a movie."
-msgstr ""
-
-msgid "I’m working."
-msgstr ""
-
 msgid "JID"
 msgstr ""
 
@@ -3051,9 +3033,6 @@ msgstr "Fila del contacte"
 msgid "Move to Group"
 msgstr "Esborra"
 
-msgid "Movie"
-msgstr ""
-
 msgid "Must be a port number"
 msgstr ""
 
@@ -3394,9 +3373,6 @@ msgid "Other devices connected with your account"
 msgstr ""
 
 msgid "Others"
-msgstr ""
-
-msgid "Out"
 msgstr ""
 
 msgid "Out of memory"
@@ -4668,9 +4644,6 @@ msgstr ""
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr ""
-
 #, fuzzy
 msgid "Software"
 msgstr "Servidor:"
@@ -5679,9 +5652,6 @@ msgstr ""
 msgid "Work"
 msgstr ""
 
-msgid "Working"
-msgstr ""
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Connectors"
@@ -5928,9 +5898,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Perfil"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""

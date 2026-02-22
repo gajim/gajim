@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-11-18 17:19+0000\n"
 "Last-Translator: \"[1D*nxLf\\\"@373\" <correoxm@disroot.org>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -847,12 +847,6 @@ msgstr "Ausente"
 msgid "Back"
 msgstr "Agora volvo"
 
-msgid "Back in some minutes."
-msgstr "Volvo nuns minutos."
-
-msgid "Back soon"
-msgstr "Volvo axiña"
-
 msgid "Ban"
 msgstr "Vetar"
 
@@ -1372,6 +1366,10 @@ msgstr "Non se puido acceder ao ficheiro"
 msgid "Could not find any messages for this participant."
 msgstr "Non se atopan mensaxes para esta conta participante."
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Non se actualizou a lista de provedores"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Non se puido abrir o ficheiro (%s)"
@@ -1658,9 +1656,6 @@ msgstr "Borrador: %s"
 
 msgid "Drop files here"
 msgstr "Solta aquí os ficheiros"
-
-msgid "Eating"
-msgstr "A comer"
 
 msgid "Edit"
 msgstr "Editar"
@@ -2512,18 +2507,6 @@ msgstr "Proporcionado para\n"
 msgid "Issues detected"
 msgstr "Incidencias detectadas"
 
-msgid "I’m eating."
-msgstr "Estou comendo."
-
-msgid "I’m out enjoying life."
-msgstr "Estou fóra a gozar da vida."
-
-msgid "I’m watching a movie."
-msgstr "Estou a ver un filme."
-
-msgid "I’m working."
-msgstr "Estou a traballar."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2839,9 +2822,6 @@ msgstr "_Mostrar o evento na listaxe de contactos"
 #, fuzzy
 msgid "Move to Group"
 msgstr "Eliminar o grupo"
-
-msgid "Movie"
-msgstr "Filme"
 
 #, fuzzy
 msgid "Must be a port number"
@@ -3192,9 +3172,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Outros"
-
-msgid "Out"
-msgstr "Fóra"
 
 msgid "Out of memory"
 msgstr ""
@@ -4501,9 +4478,6 @@ msgstr "Alcume non permitido: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "A durmir"
-
 #, fuzzy
 msgid "Software"
 msgstr "Características dos servidores"
@@ -5557,9 +5531,6 @@ msgstr ""
 msgid "Work"
 msgstr "Traballo"
 
-msgid "Working"
-msgstr "A traballar"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Accións A_vanzadas"
@@ -5813,9 +5784,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Todos os ficheiros"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6608,6 +6576,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Autoconectar"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Volvo nuns minutos."
+
+#~ msgid "Back soon"
+#~ msgstr "Volvo axiña"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Listaxe de expulsión"
@@ -6847,6 +6821,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Enviarlle un ficheiro a un contacto"
 
+#~ msgid "Eating"
+#~ msgstr "A comer"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Nome:"
@@ -7009,6 +6986,18 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Non se pode enviar ficheiros baleiros"
 
+#~ msgid "I’m eating."
+#~ msgstr "Estou comendo."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Estou fóra a gozar da vida."
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Estou a ver un filme."
+
+#~ msgid "I’m working."
+#~ msgstr "Estou a traballar."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Motivo"
@@ -7072,6 +7061,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Renomear o contacto"
 
+#~ msgid "Movie"
+#~ msgstr "Filme"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Conexión non dispoñíbel"
@@ -7128,6 +7120,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administrador"
+
+#~ msgid "Out"
+#~ msgstr "Fóra"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7352,6 +7347,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "A durmir"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Es_tado"
 
@@ -7515,6 +7513,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
+
+#~ msgid "Working"
+#~ msgstr "A traballar"
 
 #, fuzzy
 #~ msgid "Workspaces"

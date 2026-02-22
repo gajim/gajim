@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -936,12 +936,6 @@ msgstr "Adyjšoŭ"
 msgid "Back"
 msgstr "Chutka viarnusia"
 
-msgid "Back in some minutes."
-msgstr "Viarnusia praz paru chvilinaŭ."
-
-msgid "Back soon"
-msgstr "Chutka viarnusia"
-
 #, fuzzy
 msgid "Ban"
 msgstr "Za_blakuj"
@@ -1527,6 +1521,10 @@ msgstr "Niemahčyma adčytać vyjavu"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Niemahčyma adčytać vyjavu"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Niemahčyma adčytać vyjavu"
@@ -1857,9 +1855,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Dasyłaje kantaktu fajł"
-
-msgid "Eating"
-msgstr "Jem"
 
 #, fuzzy
 msgid "Edit"
@@ -2806,22 +2801,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Ja pracuju."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Vyjšaŭ ciešycca z žyćcia."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Hladžu film."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Ja pracuju."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3178,9 +3157,6 @@ msgstr "_Pakazvaj padzieju ŭ śpisie kantaktaŭ"
 msgid "Move to Group"
 msgstr "Vydal hrupu"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Abrany port musić być numeram portu."
@@ -3531,9 +3507,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Inšyja"
-
-msgid "Out"
-msgstr "Vyjšaŭ"
 
 msgid "Out of memory"
 msgstr ""
@@ -4847,9 +4820,6 @@ msgstr "Mianuška nie dazvolenaja: %s"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Splu"
-
 #, fuzzy
 msgid "Software"
 msgstr "Zdolnaści serveraŭ"
@@ -5905,9 +5875,6 @@ msgstr ""
 msgid "Work"
 msgstr "Praca"
 
-msgid "Working"
-msgstr "Pracuju"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Admysłovyja dziejańni"
@@ -6162,9 +6129,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Usie fajły"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6953,6 +6917,12 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Aŭtamatyčna dałučajsia"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Viarnusia praz paru chvilinaŭ."
+
+#~ msgid "Back soon"
+#~ msgstr "Chutka viarnusia"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Śpis zablakavanych kantaktaŭ"
@@ -7184,6 +7154,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Dasyłaje kantaktu fajł"
 
+#~ msgid "Eating"
+#~ msgstr "Jem"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Imia:"
@@ -7339,6 +7312,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Niemahčyma dasyłać pustyja fajły"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Ja pracuju."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Vyjšaŭ ciešycca z žyćcia."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Hladžu film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Ja pracuju."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Pryčyna"
@@ -7392,6 +7381,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Źmiani nazvu kantaktu"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Złučeńnia niama"
@@ -7444,6 +7436,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Administratar"
+
+#~ msgid "Out"
+#~ msgstr "Vyjšaŭ"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7659,6 +7654,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Splu"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7823,6 +7821,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
+
+#~ msgid "Working"
+#~ msgstr "Pracuju"
 
 #, fuzzy
 #~ msgid "Workspaces"

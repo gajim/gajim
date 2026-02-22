@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -869,12 +869,6 @@ msgstr "Pryč"
 msgid "Back"
 msgstr "Zpět"
 
-msgid "Back in some minutes."
-msgstr "Jsem zpátky za pár minut."
-
-msgid "Back soon"
-msgstr "Hned jsem zpět"
-
 msgid "Ban"
 msgstr "Zabanovat"
 
@@ -1409,6 +1403,10 @@ msgstr "Nezda"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Nelze získat přístup k souboru (%s)"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Nelze získat přístup k souboru (%s)"
@@ -1714,9 +1712,6 @@ msgstr "Koncept: %s"
 
 msgid "Drop files here"
 msgstr "Sem přetáhněte soubory"
-
-msgid "Eating"
-msgstr "Jím"
 
 #, fuzzy
 msgid "Edit"
@@ -2590,18 +2585,6 @@ msgstr "Vystaveno\n"
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr "Jím."
-
-msgid "I’m out enjoying life."
-msgstr "Užívám si života venku."
-
-msgid "I’m watching a movie."
-msgstr "Dívám se na film."
-
-msgid "I’m working."
-msgstr "Pracuji."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2920,9 +2903,6 @@ msgstr "Seznam kontaktů: písmo skupinových konverzací"
 #, fuzzy
 msgid "Move to Group"
 msgstr "Odstranit skupinu"
-
-msgid "Movie"
-msgstr "Film"
 
 msgid "Must be a port number"
 msgstr "Musí být číslo portu"
@@ -3244,9 +3224,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Ostatní"
-
-msgid "Out"
-msgstr "Venku"
 
 msgid "Out of memory"
 msgstr "Nedostatek paměti"
@@ -4443,9 +4420,6 @@ msgstr "Registrace není povolena"
 msgid "Size of preview images in pixels"
 msgstr "Velikost náhledů v pixelech"
 
-msgid "Sleeping"
-msgstr "Spím"
-
 msgid "Software"
 msgstr "Software"
 
@@ -5449,9 +5423,6 @@ msgstr "Okna"
 msgid "Work"
 msgstr "Práce"
 
-msgid "Working"
-msgstr "Pracuji"
-
 msgid "Workspace Settings"
 msgstr "Nastavení pracovní plochy"
 
@@ -5691,9 +5662,6 @@ msgstr ""
 
 msgid "ZIP files"
 msgstr "Soubory ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[více]"
@@ -6508,6 +6476,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Automatická kontrola pravopisu"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Jsem zpátky za pár minut."
+
+#~ msgid "Back soon"
+#~ msgstr "Hned jsem zpět"
+
 #~ msgid "Blocking List"
 #~ msgstr "Seznam blokovaných kontaktů"
 
@@ -6752,6 +6726,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr ""
 #~ "Snadno posílejte obrázky, videa nebo jiné soubory přátelům a skupinám"
 
+#~ msgid "Eating"
+#~ msgstr "Jím"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Upravit jméno…"
 
@@ -6954,6 +6931,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Není možné posílat prázdné soubory"
 
+#~ msgid "I’m eating."
+#~ msgstr "Jím."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Užívám si života venku."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6961,6 +6944,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr ""
 #~ "Synchronizuji své kontakty z mého účtu na \"%s\". Mohli byste prosím "
 #~ "přidat tuto adresu do svého seznamu kontaktů?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Dívám se na film."
+
+#~ msgid "I’m working."
+#~ msgstr "Pracuji."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Uchovávejte a spravujte celou historii konverzace"
@@ -7042,6 +7031,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Move Contact"
 #~ msgstr "Odstranit kontakt"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Nikdy nezmeškejte zprávu, mějte všechny své chatovací klienty "
@@ -7102,6 +7094,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organizujte své konverzace pomocí pracovních ploch"
+
+#~ msgid "Out"
+#~ msgstr "Venku"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Soubory PKCS12"
@@ -7364,6 +7359,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Vypínám Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Spím"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Jarní setkání"
@@ -7571,6 +7569,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Proč si přejete stáhnout tuto zprávu?"
 
+#~ msgid "Working"
+#~ msgstr "Pracuji"
+
 #~ msgid "Workspaces"
 #~ msgstr "Pracovní plochy"
 
@@ -7615,6 +7616,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Nastavení archivování bylo úspěšně uloženo."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "Účet"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -928,14 +928,6 @@ msgid "Back"
 msgstr "Geri Düğme"
 
 #, fuzzy
-msgid "Back in some minutes."
-msgstr "Bekleme süresi (dakikalar)"
-
-#, fuzzy
-msgid "Back soon"
-msgstr "Geri Düğme"
-
-#, fuzzy
 msgid "Ban"
 msgstr "Geçersiz Liste İsmi"
 
@@ -1528,6 +1520,10 @@ msgstr "Resim acılamadı"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Resim acılamadı"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Resim acılamadı"
@@ -1851,9 +1847,6 @@ msgstr "Durum:"
 #, fuzzy
 msgid "Drop files here"
 msgstr "Dosyayı bir kişiye gönderir"
-
-msgid "Eating"
-msgstr "Yemelik"
 
 #, fuzzy
 msgid "Edit"
@@ -2793,22 +2786,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr " Çalışılıyorum"
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "%(nickname)s Çıktı"
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Bir filim bakiyorum."
-
-#, fuzzy
-msgid "I’m working."
-msgstr " Çalışılıyorum"
-
 msgid "JID"
 msgstr "JID"
 
@@ -3160,9 +3137,6 @@ msgstr "Kişi sırası"
 msgid "Move to Group"
 msgstr "Grubu Sil"
 
-msgid "Movie"
-msgstr "Filim"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "url portu bir sayı olmalı\n"
@@ -3512,9 +3486,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Diğer"
-
-msgid "Out"
-msgstr "Dış"
 
 #, fuzzy
 msgid "Out of memory"
@@ -4828,10 +4799,6 @@ msgid "Size of preview images in pixels"
 msgstr ""
 
 #, fuzzy
-msgid "Sleeping"
-msgstr "Uyuyan bir kapibara."
-
-#, fuzzy
 msgid "Software"
 msgstr "MUC sunucusu"
 
@@ -5894,9 +5861,6 @@ msgstr ""
 msgid "Work"
 msgstr "İş"
 
-msgid "Working"
-msgstr " Çalışılıyor"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "İlerlemiş aksiyonlar"
@@ -6149,9 +6113,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Tüm dosyalar"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6950,6 +6911,14 @@ msgstr ""
 #~ msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 
 #, fuzzy
+#~ msgid "Back in some minutes."
+#~ msgstr "Bekleme süresi (dakikalar)"
+
+#, fuzzy
+#~ msgid "Back soon"
+#~ msgstr "Geri Düğme"
+
+#, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Geçersiz Liste İsmi"
 
@@ -7168,6 +7137,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Dosyayı bir kişiye gönderir"
 
+#~ msgid "Eating"
+#~ msgstr "Yemelik"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "İlk Ad:"
@@ -7306,6 +7278,22 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Kişi Davet _Et"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr " Çalışılıyorum"
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "%(nickname)s Çıktı"
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Bir filim bakiyorum."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr " Çalışılıyorum"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Neden"
@@ -7350,6 +7338,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Kişiyi yeniden adlandır"
+
+#~ msgid "Movie"
+#~ msgstr "Filim"
 
 #, fuzzy
 #~ msgid "No Connection Available"
@@ -7399,6 +7390,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Telefondayım"
+
+#~ msgid "Out"
+#~ msgstr "Dış"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7619,6 +7613,10 @@ msgstr ""
 #~ msgstr "Gajim"
 
 #, fuzzy
+#~ msgid "Sleeping"
+#~ msgstr "Uyuyan bir kapibara."
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Stalled"
 #~ msgstr " [ %i%% ] (askıda)"
@@ -7776,6 +7774,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
+
+#~ msgid "Working"
+#~ msgstr " Çalışılıyor"
 
 #, fuzzy
 #~ msgid "Workspaces"

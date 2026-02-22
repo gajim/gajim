@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -869,12 +869,6 @@ msgstr "Ausente"
 msgid "Back"
 msgstr "Voltar"
 
-msgid "Back in some minutes."
-msgstr "Volto em alguns minutos."
-
-msgid "Back soon"
-msgstr "Volto logo"
-
 msgid "Ban"
 msgstr "Banir"
 
@@ -1406,6 +1400,10 @@ msgstr "Não foi possível acessar o arquivo"
 msgid "Could not find any messages for this participant."
 msgstr "Não foi possível encontrar nenhuma mensagem para este participante."
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Não foi possível atualizaar lista de provedores"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Não foi possível abrir arquivo (%s)"
@@ -1697,9 +1695,6 @@ msgstr "Rascunho: %s"
 
 msgid "Drop files here"
 msgstr "Solte arquivos aqui"
-
-msgid "Eating"
-msgstr "Comendo"
 
 #, fuzzy
 msgid "Edit"
@@ -2548,18 +2543,6 @@ msgstr "Emitido para\n"
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr "Estou comendo."
-
-msgid "I’m out enjoying life."
-msgstr "Estou fora curtindo a vida."
-
-msgid "I’m watching a movie."
-msgstr "Estou assistindo um filme."
-
-msgid "I’m working."
-msgstr "Estou trabalhando."
-
 msgid "JID"
 msgstr "JID"
 
@@ -2864,9 +2847,6 @@ msgstr "Mover Contato para Novo Grupo?"
 
 msgid "Move to Group"
 msgstr "Mover para Grupo"
-
-msgid "Movie"
-msgstr "Filme"
 
 msgid "Must be a port number"
 msgstr "Precisa ser um número de porta"
@@ -3181,9 +3161,6 @@ msgstr "Outros dispositivos conectados com sua conta"
 
 msgid "Others"
 msgstr "Outros"
-
-msgid "Out"
-msgstr "Estou fora"
 
 msgid "Out of memory"
 msgstr "Memória insuficiente"
@@ -4340,9 +4317,6 @@ msgstr "Registro não permitido"
 msgid "Size of preview images in pixels"
 msgstr "Tamanho de prévia de imagens em pixels"
 
-msgid "Sleeping"
-msgstr "Dormindo"
-
 msgid "Software"
 msgstr "Software do Servidor"
 
@@ -5339,9 +5313,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Trabalho"
 
-msgid "Working"
-msgstr "Trabalhando"
-
 msgid "Workspace Settings"
 msgstr "Configurações de Área de Trabalho"
 
@@ -5586,9 +5557,6 @@ msgstr "Agora você tem os seguintes chapéus: %s"
 
 msgid "ZIP files"
 msgstr "Ficheiros ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzzZZZZ"
 
 msgid "[read more]"
 msgstr "[saiba mais]"
@@ -6378,6 +6346,12 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Verificação ortográfica automática para suas mensagens"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Volto em alguns minutos."
+
+#~ msgid "Back soon"
+#~ msgstr "Volto logo"
+
 #~ msgid "Blocking List"
 #~ msgstr "Bloqueando Lista"
 
@@ -6633,6 +6607,9 @@ msgstr "...ou solte-o aqui"
 #~ msgstr ""
 #~ "Envie facilmente fotos, vídeos ou outros arquivos para amigos e grupos"
 
+#~ msgid "Eating"
+#~ msgstr "Comendo"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Editar Nome…"
 
@@ -6844,6 +6821,18 @@ msgstr "...ou solte-o aqui"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Não é possível enviar arquivos vazios"
 
+#~ msgid "I’m eating."
+#~ msgstr "Estou comendo."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Estou fora curtindo a vida."
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Estou assistindo um filme."
+
+#~ msgid "I’m working."
+#~ msgstr "Estou trabalhando."
+
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Mantenha e gerencie todo o seu histórico de bate-papo"
 
@@ -6926,6 +6915,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Move Contact"
 #~ msgstr "Remover Contato"
 
+#~ msgid "Movie"
+#~ msgstr "Filme"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Nunca perca uma mensagem, mantenha todos os seus clientes de bate-papo "
@@ -6992,6 +6984,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organize suas conversas com guias"
+
+#~ msgid "Out"
+#~ msgstr "Estou fora"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "Arquivos PKCS12"
@@ -7253,6 +7248,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Encerrando o Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Dormindo"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Encontro de primavera"
@@ -7458,6 +7456,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Você quer excluir permanentemente esta mensagem?"
 
+#~ msgid "Working"
+#~ msgstr "Trabalhando"
+
 #~ msgid "Workspaces"
 #~ msgstr "Áreas de Trabalho"
 
@@ -7505,6 +7506,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Suas preferências de arquivamento foram salvas com sucesso."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzzZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Conta"

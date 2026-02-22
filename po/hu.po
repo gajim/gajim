@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2026-01-14 06:19+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-02-18 07:53+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -836,12 +836,6 @@ msgstr "Távol"
 msgid "Back"
 msgstr "Vissza"
 
-msgid "Back in some minutes."
-msgstr "Pár perc múlva itt vagyok."
-
-msgid "Back soon"
-msgstr "Közeli visszatérés"
-
 msgid "Ban"
 msgstr "Kitiltás"
 
@@ -1364,6 +1358,9 @@ msgstr "A fájl nem nyitható meg"
 msgid "Could not find any messages for this participant."
 msgstr "Ettől a résztvevőtől nem található egy üzenet sem."
 
+msgid "Could not generate link preview"
+msgstr "Nem sikerült létrehozni a hivatkozás előnézetét"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Nem sikerült megnyitni a fájlt (%s)"
@@ -1649,9 +1646,6 @@ msgstr "Piszkozat: %s"
 
 msgid "Drop files here"
 msgstr "Ide ejthetők a fájlok"
-
-msgid "Eating"
-msgstr "Étkezés"
 
 msgid "Edit"
 msgstr "Szerkesztés"
@@ -2235,7 +2229,7 @@ msgid "Hello, I am $name. %s"
 msgstr "Szia! $name vagyok. %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
-msgstr ""
+msgstr "Itt lehet a hiba reprodukálását segítő visszajelzést adni."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
@@ -2484,18 +2478,6 @@ msgstr "Tulajdonos\n"
 
 msgid "Issues detected"
 msgstr "Probléma észlelhető"
-
-msgid "I’m eating."
-msgstr "Eszek."
-
-msgid "I’m out enjoying life."
-msgstr "Kint vagyok a szabadban, élvezem az életet."
-
-msgid "I’m watching a movie."
-msgstr "Filmet nézek."
-
-msgid "I’m working."
-msgstr "Dolgozom."
 
 msgid "JID"
 msgstr "JID"
@@ -2795,9 +2777,6 @@ msgstr "Névjegy áthelyezése új csoportba"
 
 msgid "Move to Group"
 msgstr "Áthelyezés csoportba"
-
-msgid "Movie"
-msgstr "Filmnézés"
 
 msgid "Must be a port number"
 msgstr "A port számát kell megadni"
@@ -3107,9 +3086,6 @@ msgstr "A jelenlegi fiókhoz tartozó további eszközök"
 
 msgid "Others"
 msgstr "Egyéb"
-
-msgid "Out"
-msgstr "Szabadban"
 
 msgid "Out of memory"
 msgstr "Elfogyott a memória"
@@ -4241,9 +4217,6 @@ msgstr "A regisztráció tiltott"
 msgid "Size of preview images in pixels"
 msgstr "Az előnézeti képek pixelben megadott mérete"
 
-msgid "Sleeping"
-msgstr "Alvás"
-
 msgid "Software"
 msgstr "Szoftver"
 
@@ -4362,7 +4335,7 @@ msgstr ""
 "megoldható."
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "A hiba reprodukálásának lépései…"
 
 msgid "Stop Sharing Online Status?"
 msgstr "Jelenléti állapot közlésének tiltása"
@@ -5200,9 +5173,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Munkahelyi"
 
-msgid "Working"
-msgstr "Munkavégzés"
-
 msgid "Workspace Settings"
 msgstr "Munkaterület beállításai"
 
@@ -5441,9 +5411,6 @@ msgstr "A kiszolgáló az alábbi funkciókat biztosítja"
 
 msgid "ZIP files"
 msgstr "ZIP-fájlok"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[bővebben]"
@@ -6233,6 +6200,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Az üzenetek automatikus helyesírás-ellenőrzése"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Pár perc múlva itt vagyok."
+
+#~ msgid "Back soon"
+#~ msgstr "Közeli visszatérés"
+
 #~ msgid "Blocking List"
 #~ msgstr "Tiltólista"
 
@@ -6493,6 +6466,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Könnyen küldhetők képek, videók vagy más fájlok a barátoknak vagy "
 #~ "csoportoknak"
 
+#~ msgid "Eating"
+#~ msgstr "Étkezés"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Név módosítása…"
 
@@ -6708,6 +6684,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Üres fájlokat nem lehet küldeni"
 
+#~ msgid "I’m eating."
+#~ msgstr "Eszek."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Kint vagyok a szabadban, élvezem az életet."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6715,6 +6697,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "Szinkronizálom a(z) „%s” kiszolgálón lévő fiókom névjegyeit. Hozzáadnád "
 #~ "ezt a címet a névjegyeidhez?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Filmet nézek."
+
+#~ msgid "I’m working."
+#~ msgstr "Dolgozom."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "A beszélgetési előzmények tárolása és kezelése"
@@ -6797,6 +6785,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Move Contact"
 #~ msgstr "Névjegy áthelyezése"
 
+#~ msgid "Movie"
+#~ msgstr "Filmnézés"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr "A csevegőklienseket szinkronban tartva egy üzenet sem vész el"
 
@@ -6855,6 +6846,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "A beszélgetések munkaterületekre rendszerezhetőek"
+
+#~ msgid "Out"
+#~ msgstr "Szabadban"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12-fájlok"
@@ -7116,6 +7110,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "A Gajim bezárása"
 
+#~ msgid "Sleeping"
+#~ msgstr "Alvás"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Tavaszi találkozó"
@@ -7321,6 +7318,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Mi az oka az üzenetek moderálásának?"
 
+#~ msgid "Working"
+#~ msgstr "Munkavégzés"
+
 #~ msgid "Workspaces"
 #~ msgstr "Munkaterületek"
 
@@ -7368,6 +7368,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Az archiválási beállítások mentése sikerült."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Fiók"

@@ -17,14 +17,14 @@
 # Roberto Resoli <roberto@resolutions.it>, 2025.
 # lorenzo sintoni <lorenzo@mail.bobadin.icu>, 2025.
 # ? <scompo@gmail.com>, 2025.
-# Mauro Scomparin <scompo@gmail.com>, 2025.
+# Mauro Scomparin <scompo@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
-"PO-Revision-Date: 2025-12-21 21:19+0000\n"
-"Last-Translator: Roberto Resoli <roberto@resolutions.it>\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"PO-Revision-Date: 2026-01-29 15:19+0000\n"
+"Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
 ">\n"
 "Language: it\n"
@@ -876,12 +876,6 @@ msgstr "Assente"
 msgid "Back"
 msgstr "Indietro"
 
-msgid "Back in some minutes."
-msgstr "Torno tra qualche minuto."
-
-msgid "Back soon"
-msgstr "Torno subito"
-
 msgid "Ban"
 msgstr "Bandisci"
 
@@ -1409,6 +1403,10 @@ msgstr "Impossibile accedere al file"
 msgid "Could not find any messages for this participant."
 msgstr "Impossibile trovare messaggi per questo partecipante."
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Impossibile aggiornare la lista dei server"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Impossibile aprire il file (%s)"
@@ -1697,9 +1695,6 @@ msgstr "Bozza: %s"
 
 msgid "Drop files here"
 msgstr "Trascina qui i file"
-
-msgid "Eating"
-msgstr "Mangio"
 
 #, fuzzy
 msgid "Edit"
@@ -2457,7 +2452,7 @@ msgid "Insecure Connection"
 msgstr "Connessione Non Sicura"
 
 msgid "Install"
-msgstr "Installate"
+msgstr "Installare"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
@@ -2551,18 +2546,6 @@ msgstr "Rilasciato a:\n"
 
 msgid "Issues detected"
 msgstr "Problemi rilevati"
-
-msgid "I’m eating."
-msgstr "Sto mangiando."
-
-msgid "I’m out enjoying life."
-msgstr "Sono fuori a divertirmi."
-
-msgid "I’m watching a movie."
-msgstr "Sto guardando un film."
-
-msgid "I’m working."
-msgstr "Sto lavorando."
 
 msgid "JID"
 msgstr "JID"
@@ -2867,9 +2850,6 @@ msgstr "Sposta il contatto nel nuovo Gruppo?"
 msgid "Move to Group"
 msgstr "Sposta nel Gruppo"
 
-msgid "Movie"
-msgstr "Film"
-
 msgid "Must be a port number"
 msgstr "La porta deve essere un numero"
 
@@ -3129,15 +3109,15 @@ msgid "Only moderators can see your XMPP address"
 msgstr "Il tuo indirizzo XMPP è visibile solo ai moderatori"
 
 msgid "Open"
-msgstr "Aperta"
+msgstr "Apri"
 
 msgctxt "Group chat feature"
 msgid "Open"
 msgstr "Aperta"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Open %s"
-msgstr "Aperta"
+msgstr "Apri %s"
 
 msgid "Open Email Composer"
 msgstr "Apri Compositore Email"
@@ -3184,9 +3164,6 @@ msgstr "Altri dispositivi collegati col tuo account"
 
 msgid "Others"
 msgstr "Altri"
-
-msgid "Out"
-msgstr "Fuori"
 
 msgid "Out of memory"
 msgstr "Memoria esaurita"
@@ -3838,9 +3815,8 @@ msgstr "Risorsa"
 msgid "Restart Gajim to finish this update"
 msgstr "Riavvia Gajim per concludere questo aggiornamento"
 
-#, fuzzy
 msgid "Restart Gajim to start debug logging"
-msgstr "Riavvia Gajim per concludere questo aggiornamento"
+msgstr "Riavvia Gajim per abilitare la registrazione dei messaggi di debug"
 
 msgid "Restart Pending"
 msgstr "Richiede: Gspell"
@@ -4340,9 +4316,6 @@ msgstr "Iscrizione non consentita"
 
 msgid "Size of preview images in pixels"
 msgstr "Dimensione in pixel delle immagini di anteprima"
-
-msgid "Sleeping"
-msgstr "Dormo"
 
 msgid "Software"
 msgstr "Software Server"
@@ -5345,9 +5318,6 @@ msgstr "Windows"
 msgid "Work"
 msgstr "Lavoro"
 
-msgid "Working"
-msgstr "Lavoro"
-
 msgid "Workspace Settings"
 msgstr "Impostazioni Avanzate"
 
@@ -5591,9 +5561,6 @@ msgstr "Il tuo server offre le seguenti funzionalità"
 
 msgid "ZIP files"
 msgstr "File ZIP"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
 msgstr "[leggi di più]"
@@ -6364,6 +6331,12 @@ msgstr "…o trascinalo qui"
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Supporto per il controllo ortografico dei messaggi"
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Torno tra qualche minuto."
+
+#~ msgid "Back soon"
+#~ msgstr "Torno subito"
+
 #~ msgid "Blocking List"
 #~ msgstr "Lista Utenti Bloccati"
 
@@ -6621,6 +6594,9 @@ msgstr "…o trascinalo qui"
 #~ msgid "Easily send pictures, videos or other files to friends and groups"
 #~ msgstr "Invia facilmente immagini, video o altri file ad amici e gruppi"
 
+#~ msgid "Eating"
+#~ msgstr "Mangio"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Modifica nome…"
 
@@ -6829,6 +6805,12 @@ msgstr "…o trascinalo qui"
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Non è possibile inviare file vuoti"
 
+#~ msgid "I’m eating."
+#~ msgstr "Sto mangiando."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Sono fuori a divertirmi."
+
 #, python-format
 #~ msgid ""
 #~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
@@ -6836,6 +6818,12 @@ msgstr "…o trascinalo qui"
 #~ msgstr ""
 #~ "Sto sincronizzando i miei contatti dal mio account a \"%s\". Potresti "
 #~ "aggiungere questo indirizzo al tuo elenco di contatti?"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "Sto guardando un film."
+
+#~ msgid "I’m working."
+#~ msgstr "Sto lavorando."
 
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Archivia e gestisci la cronologia delle tue conversazioni"
@@ -6917,6 +6905,9 @@ msgstr "…o trascinalo qui"
 #~ msgid "Move Contact"
 #~ msgstr "Rimuovi Contatto"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #~ msgid "Never miss a message, keep all your chat clients synchronized"
 #~ msgstr ""
 #~ "Non perdere alcun messaggio, mantenendo sincronizzati tutti i tuoi client"
@@ -6984,6 +6975,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organizza le conversazioni tramite schede"
+
+#~ msgid "Out"
+#~ msgstr "Fuori"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "File PKCS12"
@@ -7267,6 +7261,9 @@ msgstr "…o trascinalo qui"
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Dormo"
+
 #~ msgctxt "Group chat description"
 #~ msgid "Spring gathering"
 #~ msgstr "Raduno primaverile"
@@ -7485,6 +7482,9 @@ msgstr "…o trascinalo qui"
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Eliminare definitivamente questo messaggio?"
 
+#~ msgid "Working"
+#~ msgstr "Lavoro"
+
 #~ msgid "Workspaces"
 #~ msgstr "Aggiungi spazio di lavoro"
 
@@ -7530,6 +7530,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "Your archiving preferences have successfully been saved."
 #~ msgstr "Le preferenze di archiviazione sono state salvate."
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
 
 #~ msgid "_Account"
 #~ msgstr "_Account"

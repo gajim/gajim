@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -880,12 +880,6 @@ msgstr "Borta"
 msgid "Back"
 msgstr "Tillbaka"
 
-msgid "Back in some minutes."
-msgstr "Tillbaka om några minuter."
-
-msgid "Back soon"
-msgstr "Snart tillbaka"
-
 msgid "Ban"
 msgstr "Bannlys"
 
@@ -1449,6 +1443,10 @@ msgstr "Kunde inte komma åt filen"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Kunde inte öppna filen (%s)"
+
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Kunde inte öppna filen (%s)"
@@ -1759,9 +1757,6 @@ msgstr "Utkast: %s"
 
 msgid "Drop files here"
 msgstr "Släpp filer här"
-
-msgid "Eating"
-msgstr "Äter"
 
 #, fuzzy
 msgid "Edit"
@@ -2669,20 +2664,6 @@ msgstr "Utfärdat till\n"
 msgid "Issues detected"
 msgstr ""
 
-msgid "I’m eating."
-msgstr "Jag äter."
-
-msgid "I’m out enjoying life."
-msgstr "Jag är ute och njuter av livet."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Jag tittar på film."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Jag arbetar."
-
 msgid "JID"
 msgstr "JID"
 
@@ -3001,9 +2982,6 @@ msgstr "_Visa händelse i kontaktlista"
 #, fuzzy
 msgid "Move to Group"
 msgstr "Ta bort grupp"
-
-msgid "Movie"
-msgstr "Film"
 
 #, fuzzy
 msgid "Must be a port number"
@@ -3340,9 +3318,6 @@ msgstr "Andra enheter anslutna till ditt konto"
 
 msgid "Others"
 msgstr "Andra"
-
-msgid "Out"
-msgstr "Ute"
 
 msgid "Out of memory"
 msgstr "Slut på minne"
@@ -4624,9 +4599,6 @@ msgstr "Tecknet tillåts inte"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Sover"
-
 #, fuzzy
 msgid "Software"
 msgstr "Serverfunktioner"
@@ -5693,9 +5665,6 @@ msgstr ""
 msgid "Work"
 msgstr "Jobb"
 
-msgid "Working"
-msgstr "Arbetar"
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Avancerade åtgärder"
@@ -5953,9 +5922,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Alla filer"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -6783,6 +6749,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Stavningskontrollerar meddelanden."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Tillbaka om några minuter."
+
+#~ msgid "Back soon"
+#~ msgstr "Snart tillbaka"
+
 #~ msgid "Blocking List"
 #~ msgstr "Blockeringslista"
 
@@ -7009,6 +6981,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Skicka enkelt bilder, videoklipp eller andra filer till vänner och grupper"
 
+#~ msgid "Eating"
+#~ msgstr "Äter"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Redigera namn…"
 
@@ -7170,6 +7145,20 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Det är inte möjligt att skicka tomma filer"
 
+#~ msgid "I’m eating."
+#~ msgstr "Jag äter."
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Jag är ute och njuter av livet."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Jag tittar på film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Jag arbetar."
+
 #~ msgid "Keep and manage all your chat history"
 #~ msgstr "Behåll och hantera all din chatthistorik"
 
@@ -7253,6 +7242,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Byt namn på kontakt"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Anslutningen är inte tillgänglig"
@@ -7303,6 +7295,9 @@ msgstr ""
 
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organisera dina chattar med arbetsytor"
+
+#~ msgid "Out"
+#~ msgstr "Ute"
 
 #~ msgid "PKCS12 Files"
 #~ msgstr "PKCS12-filer"
@@ -7547,6 +7542,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Sover"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7713,6 +7711,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Vill du verkligen ta bort det valda meddelandet?"
+
+#~ msgid "Working"
+#~ msgstr "Arbetar"
 
 #, fuzzy
 #~ msgid "Workspaces"

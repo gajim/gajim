@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 20:43+0000\n"
+"POT-Creation-Date: 2026-02-17 19:59+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -953,12 +953,6 @@ msgstr "Odsutan"
 msgid "Back"
 msgstr "Vraćam se brzo"
 
-msgid "Back in some minutes."
-msgstr "Vraćam se za par minuta."
-
-msgid "Back soon"
-msgstr "Vraćam se brzo"
-
 #, fuzzy
 msgid "Ban"
 msgstr "_Zabrani"
@@ -1547,6 +1541,10 @@ msgstr "Ne mogu učitati sliku"
 msgid "Could not find any messages for this participant."
 msgstr ""
 
+#, fuzzy
+msgid "Could not generate link preview"
+msgstr "Ne mogu učitati sliku"
+
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Ne mogu učitati sliku"
@@ -1877,9 +1875,6 @@ msgstr "Status: "
 #, fuzzy
 msgid "Drop files here"
 msgstr "Šalje datoteku kontaktu"
-
-msgid "Eating"
-msgstr "Jedem"
 
 #, fuzzy
 msgid "Edit"
@@ -2824,22 +2819,6 @@ msgstr ""
 msgid "Issues detected"
 msgstr ""
 
-#, fuzzy
-msgid "I’m eating."
-msgstr "Radim."
-
-#, fuzzy
-msgid "I’m out enjoying life."
-msgstr "Napolju sam, uživam u životu."
-
-#, fuzzy
-msgid "I’m watching a movie."
-msgstr "Gledam film."
-
-#, fuzzy
-msgid "I’m working."
-msgstr "Radim."
-
 msgid "JID"
 msgstr "DŽID"
 
@@ -3194,9 +3173,6 @@ msgstr "Prikaži događaj u listi kontakata"
 msgid "Move to Group"
 msgstr "Ukloni grupu"
 
-msgid "Movie"
-msgstr "Film"
-
 #, fuzzy
 msgid "Must be a port number"
 msgstr "Vaš port mora biti broj porta."
@@ -3545,9 +3521,6 @@ msgstr ""
 
 msgid "Others"
 msgstr "Ostali"
-
-msgid "Out"
-msgstr "Napolju"
 
 msgid "Out of memory"
 msgstr "Nemam više memorije"
@@ -4868,9 +4841,6 @@ msgstr "Karakter nije dozvoljen"
 msgid "Size of preview images in pixels"
 msgstr ""
 
-msgid "Sleeping"
-msgstr "Spavam"
-
 #, fuzzy
 msgid "Software"
 msgstr "Mogućnosti servera"
@@ -5940,9 +5910,6 @@ msgstr ""
 msgid "Work"
 msgstr "Posao"
 
-msgid "Working"
-msgstr "Radim."
-
 #, fuzzy
 msgid "Workspace Settings"
 msgstr "Napredne Akcije"
@@ -6198,9 +6165,6 @@ msgstr ""
 #, fuzzy
 msgid "ZIP files"
 msgstr "Sve datoteke"
-
-msgid "ZZZZzzzzzZZZZZ"
-msgstr ""
 
 msgid "[read more]"
 msgstr ""
@@ -7001,6 +6965,12 @@ msgstr ""
 #~ msgid "Automatic spell-checking for your messages"
 #~ msgstr "Provera pravopisa sastavljenih poruka."
 
+#~ msgid "Back in some minutes."
+#~ msgstr "Vraćam se za par minuta."
+
+#~ msgid "Back soon"
+#~ msgstr "Vraćam se brzo"
+
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Lista zabrana"
@@ -7231,6 +7201,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Šalje datoteku kontaktu"
 
+#~ msgid "Eating"
+#~ msgstr "Jedem"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Ime:"
@@ -7386,6 +7359,22 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Nije moguće poslati praznu datoteku"
 
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Radim."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Napolju sam, uživam u životu."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Gledam film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Radim."
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Razlog"
@@ -7439,6 +7428,9 @@ msgstr ""
 #~ msgid "Move Contact"
 #~ msgstr "Preimenuj kontakt"
 
+#~ msgid "Movie"
+#~ msgstr "Film"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Veza nije dostupna"
@@ -7491,6 +7483,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organization (O)"
 #~ msgstr "Na odmoru"
+
+#~ msgid "Out"
+#~ msgstr "Napolju"
 
 #, fuzzy
 #~ msgid "Past as Code Block"
@@ -7714,6 +7709,9 @@ msgstr ""
 #~ msgid "Shutting down Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Sleeping"
+#~ msgstr "Spavam"
+
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
 
@@ -7880,6 +7878,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Da li zaista želite da izbrišete označenu poruku?"
+
+#~ msgid "Working"
+#~ msgstr "Radim."
 
 #, fuzzy
 #~ msgid "Workspaces"
