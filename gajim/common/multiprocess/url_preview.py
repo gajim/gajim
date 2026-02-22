@@ -61,5 +61,5 @@ def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
     image = Image.open(io.BytesIO(content))
     image.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE))
     thumbnail = io.BytesIO()
-    image.save(thumbnail, format="PNG")
+    image.save(thumbnail, format="PNG", optimize=True)
     return OpenGraphThumbnail.from_bytes(thumbnail.getvalue())

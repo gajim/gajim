@@ -92,7 +92,7 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
 
         if description := og_data.description:
             if len(description) > 100:
-                self._description_label.set_text(f"{to_one_line(description)[:100]}...")
+                self._description_label.set_text(f"{to_one_line(description)[:100]}…")
                 self._description_label.set_tooltip_text(description)
             else:
                 self._description_label.set_text(to_one_line(description))
