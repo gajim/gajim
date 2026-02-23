@@ -17,6 +17,8 @@ from ctypes import create_string_buffer
 from ctypes.util import find_library
 from types import FrameType
 
+os.environ["GST_DEBUG"] = "5"
+
 from packaging.version import Version as V
 
 _MIN_NBXMPP_VER = "7.0.0"
