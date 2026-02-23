@@ -8,7 +8,6 @@ import typing
 
 import logging
 from concurrent.futures import Future
-from functools import partial
 from pathlib import Path
 
 from gi.repository import Gdk
@@ -123,16 +122,13 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
     def _create_image_thumbnail(self) -> None:
         assert self._thumb_path is not None
         assert self._orig_path is not None
+        log.debug("Start image thumbnail creation for %s", self._orig_path)
         try:
-            future = app.process_pool.submit(
-                create_thumbnail,
+            create_thumbnail(
                 self._orig_path,
                 self._thumb_path,
                 app.settings.get("preview_size") * app.window.get_scale_factor(),
                 self._mime_type,
-            )
-            future.add_done_callback(
-                partial(GLib.idle_add, self._create_thumbnail_finished)
             )
         except Exception as error:
             log.warning("Creating thumbnail failed for: %s %s", self._orig_path, error)
@@ -140,7 +136,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
 
     def _create_video_thumbnail(self) -> None:
         assert self._orig_path is not None
-
+        log.debug("Start video thumbnail creation for %s", self._orig_path)
         try:
             extract_video_thumbnail_and_properties(
                 self._orig_path, self._thumb_path, app.settings.get("preview_size")
