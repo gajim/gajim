@@ -217,12 +217,11 @@ class OpenGraph(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     fk_message_pk: Mapped[int] = mapped_column(
         ForeignKey("message.pk", ondelete="CASCADE"), init=False
     )
-    url: Mapped[str]
-    type: Mapped[str | None] = mapped_column(default=None)
+    about: Mapped[str]
     title: Mapped[str]
-    site_name: Mapped[str | None] = mapped_column(default=None)
     description: Mapped[str | None] = mapped_column(default=None)
-    image: Mapped[str | None] = mapped_column(default=None)
+    image_type: Mapped[str | None] = mapped_column(default=None)
+    image_bytes: Mapped[bytes | None] = mapped_column(default=None)
 
 
 class Reply(MappedAsDataclass, Base, UtilMixin, kw_only=True):

@@ -749,10 +749,14 @@ button.flat.link { padding: 0; border: 0; }
 .preview-video-overlay {
     background-color: black;
 }
+.open-graph-preview {
+    padding: 0;
+}
 .open-graph-preview button {
     min-width: 25px;
     min-height: 25px;
     padding: 0px;
+    margin-right: 9px;
 }
 
 /* Conversation meta elements */

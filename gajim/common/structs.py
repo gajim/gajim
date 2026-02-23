@@ -25,13 +25,13 @@ from nbxmpp.protocol import Message
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import HatData
 from nbxmpp.structs import MucSubject
-from nbxmpp.structs import OpenGraphData
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.util import generate_id
 
 from gajim.common import types
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
+from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
 from gajim.common.util.datetime import utc_now
