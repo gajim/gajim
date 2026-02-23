@@ -24,7 +24,7 @@
 set -e
 
 # Variables
-gajim_version="master"
+gajim_version="macos"
 nbxmpp_version="master"
 omemo_dr_version="master"
 python_version="3.13"
