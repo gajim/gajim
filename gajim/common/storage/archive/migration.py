@@ -103,6 +103,7 @@ class Migration:
     def __init__(self, archive: AlchemyStorage, user_version: int) -> None:
         self._archive = archive
         self._engine = archive.get_engine()
+        self._start_version = user_version
 
         self._account_pks: dict[JID, int] = {}
         self._remote_pks: dict[JID, int] = {}
@@ -363,17 +364,20 @@ class Migration:
 
     def _v17(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=17))
-        self._execute_multiple(
-            [
-                'ALTER TABLE opengraph DROP COLUMN "image"',
-                'ALTER TABLE opengraph DROP COLUMN "site_name"',
-                'ALTER TABLE opengraph DROP COLUMN "type"',
-                'ALTER TABLE opengraph RENAME COLUMN "url" TO "about"',
-                'ALTER TABLE opengraph ADD COLUMN "image_type" TEXT',
-                'ALTER TABLE opengraph ADD COLUMN "image_bytes" BLOB',
-                "PRAGMA user_version=17",
-            ]
-        )
+        if self._start_version == 16:
+            # if the start version is < 16, the version 16 migration will
+            # create the current table, no need to alter it
+            self._execute_multiple(
+                [
+                    'ALTER TABLE opengraph DROP COLUMN "image"',
+                    'ALTER TABLE opengraph DROP COLUMN "site_name"',
+                    'ALTER TABLE opengraph DROP COLUMN "type"',
+                    'ALTER TABLE opengraph RENAME COLUMN "url" TO "about"',
+                    'ALTER TABLE opengraph ADD COLUMN "image_type" TEXT',
+                    'ALTER TABLE opengraph ADD COLUMN "image_bytes" BLOB',
+                ]
+            )
+        self._execute_multiple(["PRAGMA user_version=17"])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
