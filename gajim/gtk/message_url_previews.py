@@ -20,7 +20,7 @@ from gajim.common.helpers import determine_proxy
 from gajim.common.multiprocess.http import CancelledError
 from gajim.common.multiprocess.url_preview import generate_url_preview
 from gajim.common.open_graph_parser import OpenGraphData
-from gajim.common.regex import URL_REGEX
+from gajim.common.regex import IRI_RX
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.preview.open_graph import OpenGraphPreviewWidget
@@ -111,7 +111,7 @@ class MessageURLPreviews(Gtk.Box):
         self._preview_timeout_id = None
 
         # We use lists here to preserve a stable and consistent order
-        matches = itertools.islice(re.finditer(URL_REGEX, text), MAX_URL_PREVIEWS)
+        matches = itertools.islice(re.finditer(IRI_RX, text), MAX_URL_PREVIEWS)
         urls = [match.group() for match in matches]
 
         # Remove dismissed urls if they are not present in the text anymore
