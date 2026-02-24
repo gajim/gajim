@@ -475,7 +475,7 @@ ARTISTS = [
 
 MAINTAINERS = [
     'Philipp Hörist (philipp AT hoerist.com)',
-    'Daniel Brötzmann (wurstsalat AT posteo.de)',
+    'Daniel Brötzmann (cal0pteryx AT posteo.de)',
 ]
 
 
