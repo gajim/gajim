@@ -268,7 +268,7 @@ def get_thumbnail(image_uri: str | None) -> tuple[str, bytes] | tuple[None, None
         if not image_bytes:
             raise ValueError
 
-        if not datauri.media_type not in ("image/png", "image/jpeg"):
+        if datauri.media_type not in ("image/png", "image/jpeg", "image/webp"):
             raise ValueError
 
         if len(image_bytes) > 50_000:
