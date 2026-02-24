@@ -20,6 +20,7 @@ from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
 from gajim.common.const import EME_MESSAGES
+from gajim.common.const import IMAGE_MIME_TYPES
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.open_graph_parser import OpenGraphData
@@ -268,7 +269,7 @@ def get_thumbnail(image_uri: str | None) -> tuple[str, bytes] | tuple[None, None
         if not image_bytes:
             raise ValueError
 
-        if datauri.media_type not in ("image/png", "image/jpeg", "image/webp"):
+        if datauri.media_type not in IMAGE_MIME_TYPES:
             raise ValueError
 
         if len(image_bytes) > 50_000:
