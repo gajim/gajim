@@ -87,6 +87,9 @@ class OpenGraphParser(HTMLParser):
             return
 
         match dict(attrs):
+            case {"property": "og:image", "content": content} if content:
+                self._attributes["image"] = content
+
             case {"property": prop, "content": content} if (
                 prop in ALLOWED_OG_PROPERTIES and content
             ):
