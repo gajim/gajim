@@ -57,11 +57,11 @@ modules:
   - name: python3-pycparser
     buildsystem: simple
     build-commands:
-      - pip3 install pycparser-2.23-py3-none-any.whl
+      - pip3 install pycparser-3.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/a0/e3/59cd50310fc9b59512193629e1984c1f95e5c8ae6e5d8c69532ccc65a7fe/pycparser-2.23-py3-none-any.whl
-        sha256: e5c6e8d3fbad53479cab09ac03729e0a9faf2bee3db8208a550daf5af81a5934
+        url: https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl
+        sha256: b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992
 
   - name: python3-cffi
     buildsystem: simple
@@ -222,11 +222,11 @@ modules:
   - name: python3-pybind11
     buildsystem: simple
     build-commands:
-      - pip3 install pybind11-3.0.1-py3-none-any.whl
+      - pip3 install pybind11-3.0.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cd/8a/37362fc2b949d5f733a8b0f2ff51ba423914cabefe69f1d1b6aab710f5fe/pybind11-3.0.1-py3-none-any.whl
-        sha256: aa8f0aa6e0a94d3b64adfc38f560f33f15e589be2175e103c0a33c6bce55ee89
+        url: https://files.pythonhosted.org/packages/88/c5/e98d9c51f3d5300d5e40ad9037dd6b3b60736fd02ab68dcc98c96be7592d/pybind11-3.0.2-py3-none-any.whl
+        sha256: f8a6500548919cc33bcd220d5f984688326f574fa97f1107f2f4fdb4c6fb019f
 
   - name: python3-pillow
     buildsystem: simple
@@ -234,8 +234,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/d0/02/d52c733a2452ef1ffcc123b68e6606d07276b0e358db70eabad7e40042b7/pillow-12.1.0.tar.gz
-        sha256: 5c5ae0a06e9ea030ab786b0251b32c7e4ce10e58d983c0d5c56029455180b5b9
+        url: https://files.pythonhosted.org/packages/1f/42/5c74462b4fd957fcd7b13b04fb3205ff8349236ea74c7c375766d6c82288/pillow-12.1.1.tar.gz
+        sha256: 9ad8fa5937ab05218e2b6a4cff30295ad35afd2f83ac592e68c0d871bb0fdbc4
 
   # httpx dependencies
   - name: python3-truststore
@@ -297,11 +297,11 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2026.1.4-py3-none-any.whl
+      - pip3 install certifi-2026.2.25-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e6/ad/3cc14f097111b4de0040c83a525973216457bbeeb63739ef1ed275c1c021/certifi-2026.1.4-py3-none-any.whl
-        sha256: 9943707519e4add1115f44c2bc244f782c0249876bf51b6599fee1ffbedd685c
+        url: https://files.pythonhosted.org/packages/9a/3c/c17fb3ca2d9c3acff52e30b309f538586f9f5b9c9cf454f3845fc9af4881/certifi-2026.2.25-py3-none-any.whl
+        sha256: 027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa
 
   - name: python3-h11
     buildsystem: simple
@@ -362,11 +362,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.49.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.53.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/88/43/1c586f9f413765201234541857cb82fda076f4b0f7bad4a0ec248da39cf3/sentry_sdk-2.49.0-py2.py3-none-any.whl
-        sha256: 6ea78499133874445a20fe9c826c9e960070abeb7ae0cdf930314ab16bb97aa0
+        url: https://files.pythonhosted.org/packages/47/d4/2fdf854bc3b9c7f55219678f812600a20a138af2dd847d99004994eada8f/sentry_sdk-2.53.0-py2.py3-none-any.whl
+        sha256: 46e1ed8d84355ae54406c924f6b290c3d61f4048625989a723fd622aab838899
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -383,17 +383,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/c7/e5/40dbda2736893e3e53d25838e0f19a2b417dfc122b9989c91918db30b5d3/greenlet-3.3.0.tar.gz
-        sha256: a82bb225a4e9e4d653dd2fb7b8b2d36e4fb25bc0165422a11e48b88e9e6f78fb
+        url: https://files.pythonhosted.org/packages/a3/51/1664f6b78fc6ebbd98019a1fd730e83fa78f2db7058f72b1463d3612b8db/greenlet-3.3.2.tar.gz
+        sha256: 2eaf067fc6d886931c7962e8c6bede15d2f01965560f3359b27c80bde2d151f2
 
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install sqlalchemy-2.0.45-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.47-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/bf/e1/3ccb13c643399d22289c6a9786c1a91e3dcbb68bce4beb44926ac2c557bf/sqlalchemy-2.0.45-py3-none-any.whl
-        sha256: 5225a288e4c8cc2308dbdd874edad6e7d0fd38eac1e9e5f23503425c8eee20d0
+        url: https://files.pythonhosted.org/packages/15/9f/7c378406b592fcf1fc157248607b495a40e3202ba4a6f1372a2ba6447717/sqlalchemy-2.0.47-py3-none-any.whl
+        sha256: e2647043599297a1ef10e720cf310846b7f31b6c841fee093d2b09d81215eb93
 
   - name: python3-emoji
     buildsystem: simple
@@ -437,11 +437,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.33.4-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.33.5-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/75/b1/1dc83c2c661b4c62d56cc081706ee33a4fc2835bd90f965baa2663ef7676/protobuf-6.33.4-py3-none-any.whl
-        sha256: 1fe3730068fcf2e595816a6c34fe66eeedd37d51d0400b72fabc848811fdc1bc
+        url: https://files.pythonhosted.org/packages/57/bf/2086963c69bdac3d7cff1cc7ff79b8ce5ea0bec6797a017e1be338a46248/protobuf-6.33.5-py3-none-any.whl
+        sha256: 69915a973dd0f60f31a08b8318b73eab2bd6a392c79184b3612226b0a3f8ec02
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -459,17 +459,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/b7/bf/95eed332e3911e2b113ceef5e6b0da807b22e45dbf897d8371e83b0a4958/gssapi-1.10.1.tar.gz
-        sha256: 7b54335dc9a3c55d564624fb6e25fcf9cfc0b80296a5c51e9c7cf9781c7d295b
+        url: https://files.pythonhosted.org/packages/23/52/c1e90623c259a42ab0587078bb04f959867b970add46ff66750ead8fc7c5/gssapi-1.11.1.tar.gz
+        sha256: 2049ee4b1d0c363163a1344b7282a363f9f4094e51d2c36de0cf01d4735e0ae2
 
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-7.0.0-py3-none-any.whl
+      - pip3 install nbxmpp-7.1.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/d0/7b/46c71fc0a0189937b9ea2b192d9271a2e6ada0bc8ee50e331d19ff8b8f8c/nbxmpp-7.0.0-py3-none-any.whl
-        sha256: 6e45b9e71c82341ecacf5fe38398770d8b218827e66cfb5adea6397a7e23443a
+        url: https://files.pythonhosted.org/packages/d1/a8/0b09aa5513be31e2297d1c01d0483262f6ec167c7be21a640a11ee528bea/nbxmpp-7.1.0-py3-none-any.whl
+        sha256: 2357cb9185b2e97f21c8293b5041bddfd29411c34ebc7b4a4b58e802c122f2ae
 
   - name: gajim
     buildsystem: simple
