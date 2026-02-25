@@ -21,7 +21,7 @@ thoughts or discuss the news with your groups.
 - [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.17.5)
 - [GtkSourceView5](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [keyring](https://pypi.org/project/keyring/)
-- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.0.0)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.1.0)
 - [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.2.0)
 - [packaging](https://pypi.org/project/packaging/)
 - [httpx](https://pypi.org/project/httpx/)

@@ -29,7 +29,7 @@ dependencies = [
   "emoji>=2.6.0",
   "httpx[http2,socks]",
   "keyring",
-  "nbxmpp>=7.0.0,<8.0.0",
+  "nbxmpp>=7.1.0,<8.0.0",
   "omemo-dr>=1.2.0,<2.0.0",
   "packaging",
   "pillow>=9.1.0",
