@@ -7,6 +7,7 @@ from typing import cast
 
 import hashlib
 import logging
+import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -252,13 +253,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
             widget = None
             if is_image(self._mime_type) or is_video(self._mime_type):
                 assert self._mime_type is not None
-                widget = ImagePreviewWidget(
-                    self._filename,
-                    self._file_size,
-                    self._mime_type,
-                    self._orig_path,
-                    self._thumb_path,
-                )
+                if sys.platform != "darwin":
+                    # https://dev.gajim.org/gajim/gajim/-/issues/12625
+                    widget = ImagePreviewWidget(
+                        self._filename,
+                        self._file_size,
+                        self._mime_type,
+                        self._orig_path,
+                        self._thumb_path,
+                    )
 
             elif is_audio(self._mime_type):
                 if (
