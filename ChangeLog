@@ -1,3 +1,45 @@
+Gajim 2.4.4 (25 Feb 2026)
+
+  New
+
+  * Display images in link previews
+  * Generate Open Graph link previews
+  * MacOS: Add system notifications
+
+  Improvements
+
+  * Main: Remove Gajim icon
+  * MacOS: Add handler for xmpp URIs
+  * MacOS: Raise font size and window shadows
+  * Windows: Raise font size and use Segoe UI
+  * Reduce usage of small font size
+  * Client: Better determine if remote host is reachable
+  * Preferences: Improve performance for users with many accounts
+  * ChangePassword: Use Gtk.PasswordEntry
+  * Preferences: Remove password entry
+
+  Change
+
+  * Raise nbxmpp to 7.1.0
+
+  Bug Fixes
+
+  * MacOS: Disable video thumbnail generation
+  * Settings: Use correct fractional digits for spin settings
+  * MacOS: Show window control buttons
+  * Main: Bring window to front when application is triggered via link (#12621)
+  * SecurityLabels: Hide dropdown correctly if not supported
+  * ConversationView: Degrade gracefully on unexpected state when retrieving avatar
+  * Preferences: Disable password change row when account is disconnected
+  * Groupchat: Show correct nickname in private messages (#12612)
+  * Workspace sidebar: Fix drag highlight styling
+  * Preview: Set drag hotspot to upper left corner for better UX (#12599)
+  * OpenGraphPreview: Fix memory leak
+  * CreateGroupchatWindow: Fix Gtk.Entry leak
+  * WorkspaceDialog: Fix a memory leak
+  * Shortcuts: Always accept window shortcuts (#12608)
+  * Settings: Allow to scale font correctly
+
 Gajim 2.4.3 (20 Jan 2026)
 
   Improvements
