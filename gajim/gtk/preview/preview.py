@@ -251,17 +251,19 @@ class PreviewWidget(Gtk.Box, SignalManager):
         # all other widget states remain as in PreviewState.DOWNLOADED
         if state == PreviewState.DISPLAY:
             widget = None
-            if is_image(self._mime_type) or is_video(self._mime_type):
+            if is_video(self._mime_type) and sys.platform == "darwin":
+                # https://dev.gajim.org/gajim/gajim/-/issues/12625
+                pass
+
+            elif is_image(self._mime_type) or is_video(self._mime_type):
                 assert self._mime_type is not None
-                if sys.platform != "darwin":
-                    # https://dev.gajim.org/gajim/gajim/-/issues/12625
-                    widget = ImagePreviewWidget(
-                        self._filename,
-                        self._file_size,
-                        self._mime_type,
-                        self._orig_path,
-                        self._thumb_path,
-                    )
+                widget = ImagePreviewWidget(
+                    self._filename,
+                    self._file_size,
+                    self._mime_type,
+                    self._orig_path,
+                    self._thumb_path,
+                )
 
             elif is_audio(self._mime_type):
                 if (
