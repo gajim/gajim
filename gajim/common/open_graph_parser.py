@@ -119,7 +119,10 @@ class OpenGraphParser(HTMLParser):
         except EOF:
             pass
 
-        if "title" not in self._attributes and self._fallback_title:
+        if "title" not in self._attributes:
+            if not self._fallback_title:
+                return None
+
             self._attributes["title"] = self._fallback_title
 
         if "description" not in self._attributes and self._fallback_description:
