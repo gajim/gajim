@@ -82,8 +82,10 @@ iquery         = fr'(?:{ipchar_loose}|[/?{iprivate}])*'
 ifragment      = fr'(?:{ipchar}|[/?])*'
 scheme         = fr'(?P<scheme>{ALPHA}[a-zA-Z0-9+.-]*)'
 IRI            = fr'{scheme}:{ihier_part}(?:\?{iquery})?(?:#{ifragment})?'
+HTTPS_URL       = fr'https://{ihier_part}(?:\?{iquery})?(?:#{ifragment})?'
 
 IRI_RX = re.compile(IRI)
+HTTPS_URL_RX = re.compile(HTTPS_URL)
 
 # <https://rfc-editor.org/rfc/rfc7564#section-4.2>
 class PRECIS:
