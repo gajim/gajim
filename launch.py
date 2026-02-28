@@ -12,7 +12,15 @@ if __name__ == "__main__":
 
     try:
         res = subprocess.check_output(
-            ["git", "-C", f"{Path(__file__).parent}", "rev-parse", "--short=12", "HEAD"]
+            [
+                "git",
+                "-C",
+                f"{Path(__file__).parent}",
+                "rev-parse",
+                "--short=12",
+                "HEAD",
+            ],
+            stderr=subprocess.DEVNULL,
         )
         gajim.__version__ += f"+{res.decode().strip()}"
     except Exception:
