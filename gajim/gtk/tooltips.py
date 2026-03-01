@@ -25,6 +25,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.user_strings import get_uf_affiliation
 
@@ -37,12 +38,14 @@ log = logging.getLogger("gajim.gtk.tooltips")
 
 class GCTooltip:
     def __init__(self) -> None:
-        self._contact: GroupchatParticipant | None = None
+        self._contact: GroupchatParticipant | GroupchatOfflineParticipant | None = None
 
     def clear_tooltip(self) -> None:
         self._contact = None
 
-    def get_tooltip(self, contact: GroupchatParticipant) -> tuple[bool, Gtk.Grid]:
+    def get_tooltip(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> tuple[bool, Gtk.Grid]:
         if not hasattr(self, "_ui"):
             self._ui = get_builder("groupchat_roster_tooltip.ui")
 
@@ -60,7 +63,9 @@ class GCTooltip:
         for widget in iterate_children(self._ui.tooltip_grid):
             widget.set_visible(False)
 
-    def _populate_grid(self, contact: GroupchatParticipant) -> None:
+    def _populate_grid(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> None:
         """
         Populate the Tooltip Grid with data of from the contact
         """

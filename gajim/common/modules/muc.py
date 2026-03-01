@@ -903,6 +903,7 @@ class MUC(BaseModule):
             timestamp=utc_now(),
             nick=nick,
             affiliation=properties.muc_user.affiliation,
+            jid=properties.muc_user.jid
         )
         app.storage.events.store(room, event)
         self._muc_affiliations.change_user_affiliation(

@@ -859,6 +859,7 @@ class MUCAffiliationChanged(ApplicationEvent):
     timestamp: datetime.datetime
     nick: str
     affiliation: Affiliation
+    jid: JID
 
 
 @dataclass

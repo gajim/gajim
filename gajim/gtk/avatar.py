@@ -26,6 +26,9 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.classes import Singleton
 from gajim.common.util.image import get_pixbuf_from_file
@@ -445,7 +448,10 @@ class AvatarStorage(metaclass=Singleton):
     def get_texture(
         self,
         contact: (
-            types.BareContact | types.GroupchatContact | types.GroupchatParticipant
+            BareContact
+            | GroupchatContact
+            | GroupchatParticipant
+            | GroupchatOfflineParticipant
         ),
         size: int,
         scale: int,

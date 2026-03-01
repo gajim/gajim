@@ -16,8 +16,10 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import i18n
 from gajim.common import types
 from gajim.common.const import AvatarSize
@@ -25,6 +27,7 @@ from gajim.common.events import MUCNicknameChanged
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.status import compare_show
 from gajim.common.util.user_strings import get_uf_affiliation
@@ -41,7 +44,6 @@ from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.groupchat_roster")
 
-binds = 0
 AffiliationRoleSortOrder = {
     "owner": 0,
     "admin": 1,
@@ -50,7 +52,6 @@ AffiliationRoleSortOrder = {
     "visitor": 4,
 }
 
-
 CONTACT_SIGNALS = {
     "user-affiliation-changed",
     "user-joined",
@@ -58,14 +59,22 @@ CONTACT_SIGNALS = {
     "user-nickname-changed",
     "user-role-changed",
     "user-status-show-changed",
+    "room-affiliation-changed",
+    "room-affiliations-received",
 }
 
 
-def get_group_from_contact(contact: types.GroupchatParticipant) -> tuple[str, str]:
+def get_group_from_contact(
+    contact: GroupchatParticipant | GroupchatOfflineParticipant,
+) -> tuple[str, str]:
     if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
         return contact.affiliation.value, get_uf_affiliation(
             contact.affiliation, plural=True
         )
+
+    if contact.role == Role.NONE:
+        return Role.PARTICIPANT.value, get_uf_role(Role.PARTICIPANT, plural=True)
+
     return contact.role.value, get_uf_role(contact.role, plural=True)
 
 
@@ -178,6 +187,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                 "user-affiliation-changed": self._on_contact_changed,
                 "user-role-changed": self._on_contact_changed,
                 "user-status-show-changed": self._on_contact_changed,
+                "room-affiliation-changed": self._on_room_affiliation_changed,
+                "room-affiliations-received": self._on_room_affiliations_received,
             }
         )
 
@@ -188,6 +199,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         # since it may change during iteration, see #11970
         for participant in list(self._contact.get_participants()):
             self._add_contact(participant)
+
+        for member in self._contact.get_offline_members():
+            self._add_contact(member)
 
         self._contact_view.bind_model()
         self.notify("total-count")
@@ -260,44 +274,106 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._scroll_id = GLib.timeout_add(100, _scroll_to)
 
     def _add_contact(
-        self, contact: types.GroupchatParticipant, notify: bool = False
+        self,
+        contact: GroupchatParticipant | GroupchatOfflineParticipant,
+        notify: bool = False,
     ) -> None:
         item = GroupchatContactListItem(contact=contact)
         self._contact_view.add(item)
         if notify:
             self.notify("total-count")
 
+    def _add_offline_contact(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> None:
+        if contact.real_jid is None or contact.affiliation == Affiliation.NONE:
+            return
+
+        if isinstance(contact, GroupchatParticipant):
+            contact = GroupchatOfflineParticipant.from_participant(contact)
+
+        item = GroupchatContactListItem(contact=contact)
+
+        log.info("Add offline contact %s", contact)
+        self._contact_view.add(item)
+
     def _remove_contact(
-        self, contact: types.GroupchatParticipant, notify: bool = False
+        self,
+        contact: GroupchatParticipant | GroupchatOfflineParticipant,
+        notify: bool = False,
     ) -> None:
         self._contact_view.remove(contact)
         if notify:
             self.notify("total-count")
 
+    def _remove_offline_contact(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> None:
+        if contact.real_jid is None:
+            return
+
+        if isinstance(contact, GroupchatParticipant):
+            contact = GroupchatOfflineParticipant.from_participant(contact)
+
+        log.info("Remove offline contact %s", contact)
+        self._contact_view.remove(contact)
+
     def _on_contact_changed(
         self,
         _contact: types.GroupchatContact,
         signal_name: str,
-        user_contact: types.GroupchatParticipant,
+        user_contact: GroupchatParticipant,
         *args: Any,
     ) -> None:
         if signal_name == "user-joined":
+            self._remove_offline_contact(user_contact)
             self._add_contact(user_contact, notify=True)
 
         elif signal_name == "user-left":
+            self._add_offline_contact(user_contact)
             self._remove_contact(user_contact, notify=True)
 
         else:
             self._remove_contact(user_contact)
             self._add_contact(user_contact)
 
+    def _on_room_affiliation_changed(
+        self,
+        contact: types.GroupchatContact,
+        signal_name: str,
+        event: events.MUCAffiliationChanged,
+    ) -> None:
+        log.info("Affiliation changed %s -> %s", event.jid, event.affiliation)
+        assert self._contact is not None
+        user_contact = GroupchatOfflineParticipant(
+            contact.account, event.jid, self._contact, event.affiliation.value
+        )
+        self._remove_offline_contact(user_contact)
+        if event.affiliation not in (Affiliation.OUTCAST, Affiliation.NONE):
+            self._add_offline_contact(user_contact)
+
+    def _on_room_affiliations_received(
+        self,
+        _contact: types.GroupchatContact,
+        signal_name: str,
+        affiliation: str,
+    ) -> None:
+        log.info("Received affiliation %s", affiliation)
+        self._contact_view.remove_offline_members(affiliation)
+
+        assert self._contact is not None
+        for contact in self._contact.get_offline_members(affiliation):
+            self._add_offline_contact(contact)
+
+        self.notify("total-count")
+
     def _on_user_nickname_changed(
         self,
         _contact: types.GroupchatContact,
         _signal_name: str,
         _event: MUCNicknameChanged,
-        old_contact: types.GroupchatParticipant,
-        new_contact: types.GroupchatParticipant,
+        old_contact: GroupchatParticipant,
+        new_contact: GroupchatParticipant,
     ) -> None:
         self._remove_contact(old_contact)
         self._add_contact(new_contact)
@@ -425,14 +501,27 @@ class GroupchatContactListView(Gtk.ListView):
     def add(self, item: GroupchatContactListItem) -> None:
         self._model.append(item)
 
-    def remove(self, contact: GroupchatParticipant) -> None:
-        for item in self._model:
+    def remove_offline_members(self, affiliation: str) -> None:
+        for i in reversed(range(len(self._model))):
+            item = self._model.get_item(i)
+            assert isinstance(item, GroupchatContactListItem)
+
+            if not isinstance(item.contact, GroupchatOfflineParticipant):
+                continue
+
+            if item.contact.affiliation.value == affiliation:
+                self._model.remove(i)
+
+    def remove(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> None:
+        for i in reversed(range(len(self._model))):
+            item = self._model.get_item(i)
             assert isinstance(item, GroupchatContactListItem)
             if item.contact != contact:
                 continue
-            success, pos = self._model.find(item)
-            if success:
-                self._model.remove(pos)
+
+            self._model.remove(i)
             break
 
     def remove_all(self) -> None:
@@ -448,13 +537,17 @@ class GroupchatContactListView(Gtk.ListView):
 class GroupchatContactListItem(GObject.Object):
     __gtype_name__ = "GroupchatContactListItem"
 
-    contact = GObject.Property(type=object)
-    nick = GObject.Property(type=str)
-    group = GObject.Property(type=str)
-    group_label = GObject.Property(type=str)
-    status = GObject.Property(type=str)
+    contact: GroupchatParticipant | GroupchatOfflineParticipant = GObject.Property(
+        type=object
+    )  # pyright: ignore
+    nick: str = GObject.Property(type=str)  # pyright: ignore
+    group: str = GObject.Property(type=str)  # pyright: ignore
+    group_label: str = GObject.Property(type=str)  # pyright: ignore
+    status: str = GObject.Property(type=str)  # pyright: ignore
 
-    def __init__(self, contact: GroupchatParticipant) -> None:
+    def __init__(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant
+    ) -> None:
         nick = contact.name
         if contact.is_self:
             nick = p_("own nickname in group chat", "%s (You)" % nick)
@@ -490,7 +583,7 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         SignalManager.__init__(self)
 
         self.__bindings: list[GObject.Binding] = []
-        self._contact: GroupchatParticipant | None = None
+        self._contact: GroupchatParticipant | GroupchatOfflineParticipant | None = None
 
         self._tooltip = GCTooltip()
         self._connect(self, "query-tooltip", self._query_tooltip)
@@ -553,11 +646,15 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
     def _on_status_change(self, label: Gtk.Label, *args: Any) -> None:
         label.set_visible(bool(label.get_label()))
 
-    def _update_avatar(self, contact: GroupchatParticipant, *args: Any) -> None:
+    def _update_avatar(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant, *args: Any
+    ) -> None:
         paintable = contact.get_avatar(AvatarSize.ROSTER, app.window.get_scale_factor())
         self._avatar.set_from_paintable(paintable)
 
-    def _update_hats(self, contact: GroupchatParticipant, *args: Any) -> None:
+    def _update_hats(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant, *args: Any
+    ) -> None:
         self._hat_image.set_visible(bool(contact.hats))
 
     def _popup_menu(

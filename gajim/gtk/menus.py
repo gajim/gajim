@@ -23,6 +23,7 @@ from gajim.common.i18n import p_
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
@@ -170,7 +171,7 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
     occupant_param = None
     if contact.occupant_id is not None:
         occupant_param = OccupantParam(
-            contact.account, contact.room.jid, contact.resource, contact.occupant_id
+            contact.account, contact.room.jid, contact.name, contact.occupant_id
         )
 
     if contact.is_blocked:
@@ -530,7 +531,8 @@ def get_workspace_params(
 
 
 def get_groupchat_admin_menu(
-    self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
+    self_contact: GroupchatParticipant,
+    contact: GroupchatParticipant | GroupchatOfflineParticipant,
 ) -> GajimMenu:
     menu = GajimMenu()
 
@@ -567,13 +569,16 @@ def get_groupchat_admin_menu(
 
 
 def get_groupchat_mod_menu(
-    self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
+    self_contact: GroupchatParticipant,
+    contact: GroupchatParticipant | GroupchatOfflineParticipant,
 ) -> GajimMenu:
     menu = GajimMenu()
 
     if not contact.is_available:
         menu.add_item(_("Not Available"), "dummy", None)
         return menu
+
+    assert isinstance(contact, GroupchatParticipant)
 
     contact_name = str(contact.name)
 
@@ -598,13 +603,15 @@ def get_groupchat_mod_menu(
 
 def get_groupchat_participant_menu(
     account: str,
-    self_contact: types.GroupchatParticipant,
-    contact: types.GroupchatParticipant,
+    self_contact: GroupchatParticipant,
+    contact: GroupchatParticipant | GroupchatOfflineParticipant,
 ) -> GajimMenu:
     group_chat = self_contact.room
     disco = group_chat.get_disco()
     assert disco is not None
     muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
+
+    dm_params = None
     if (
         disco.muc_is_nonanonymous
         and muc_prefer_direct_msg
@@ -613,7 +620,8 @@ def get_groupchat_participant_menu(
         dm_params = AddChatActionParams(
             account=account, jid=contact.real_jid, type="chat", select=True
         )
-    else:
+
+    elif isinstance(contact, GroupchatParticipant):
         dm_params = AddChatActionParams(
             account=account, jid=contact.jid, type="pm", select=True
         )
@@ -621,15 +629,20 @@ def get_groupchat_participant_menu(
     value = str(contact.name)
 
     general_items: MenuItemListT = [
-        (_("Direct Message…"), "win.add-chat", dm_params),
         (_("Details"), "win.muc-contact-info", value),
         (_("Execute Command…"), "win.muc-execute-command", value),
     ]
 
+    if dm_params is not None:
+        general_items.insert(
+            0,
+            (_("Direct Message…"), "win.add-chat", dm_params),
+        )
+
     occupant_param = None
     if contact.occupant_id is not None:
         occupant_param = OccupantParam(
-            account, contact.room.jid, contact.resource, contact.occupant_id
+            account, contact.room.jid, contact.name, contact.occupant_id
         )
 
     if contact.is_blocked:

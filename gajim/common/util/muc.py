@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import typing
+
 import random
 
 from nbxmpp.const import Affiliation
@@ -15,10 +17,14 @@ from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
 
+if typing.TYPE_CHECKING:
+    from gajim.common.modules.contacts import GroupchatOfflineParticipant
+    from gajim.common.modules.contacts import GroupchatParticipant
+
 
 def is_affiliation_change_allowed(
-    self_contact: types.GroupchatParticipant,
-    contact: types.GroupchatParticipant,
+    self_contact: GroupchatParticipant,
+    contact: GroupchatParticipant | GroupchatOfflineParticipant,
     target_aff: str | Affiliation,
 ) -> bool:
     if isinstance(target_aff, str):
@@ -42,14 +48,14 @@ def is_affiliation_change_allowed(
 
 
 def is_role_change_allowed(
-    self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
+    self_contact: GroupchatParticipant, contact: GroupchatParticipant
 ) -> bool:
     if self_contact.role < Role.MODERATOR:
         return False
     return self_contact.affiliation >= contact.affiliation
 
 
-def is_moderation_allowed(self_contact: types.GroupchatParticipant) -> bool:
+def is_moderation_allowed(self_contact: GroupchatParticipant) -> bool:
     return self_contact.role >= Role.MODERATOR
 
 

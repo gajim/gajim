@@ -11,6 +11,7 @@ from typing import overload
 import operator
 from collections.abc import Iterator
 from datetime import datetime
+from datetime import timedelta
 from datetime import UTC
 
 from gi.repository import Gdk
@@ -256,7 +257,7 @@ class Contacts(BaseModule):
 
 class CommonContact(Observable):
     def __init__(self,
-                 logger: LogAdapter,
+                 logger: LogAdapter | None,
                  jid: JID,
                  account: str
                  ) -> None:
@@ -888,6 +889,26 @@ class GroupchatContact(CommonContact):
             return None
         return self.get_resource(nick)
 
+    def get_offline_members(
+        self,
+        affiliation: str | None = None
+    ) -> Iterator[GroupchatOfflineParticipant]:
+        participant_real_jids = {
+            c.real_jid for c in self.get_participants()
+            if c.real_jid is not None
+        }
+        affiliations = self.get_module('MUC').get_affiliations(self._jid)
+
+        for name, jids in affiliations.items():
+            if affiliation is not None and name != affiliation:
+                continue
+
+            for jid in jids:
+                if jid in participant_real_jids:
+                    continue
+                yield GroupchatOfflineParticipant(
+                    self._account, jid, self, name)
+
     @property
     def nickname(self) -> str | None:
         muc_data = self.get_module('MUC').get_muc_data(self._jid)
@@ -1119,6 +1140,113 @@ class GroupchatParticipant(CommonContact):
     @property
     def reactions_per_user(self) -> int | None:
         return self.room.reactions_per_user
+
+
+class GroupchatOfflineParticipant(CommonContact):
+    def __init__(
+        self,
+        account: str,
+        jid: JID,
+        room: GroupchatContact,
+        affiliation: str
+    ) -> None:
+        CommonContact.__init__(self, None, jid, account)
+
+        self._affiliation = Affiliation[affiliation.upper()]
+        self._room = room
+        self._client = app.get_client(self._account)
+        self._occupant = app.storage.archive.get_occupant_by_jid(
+            account, self._room.jid, jid, max_age=timedelta(minutes=60))
+
+    @classmethod
+    def from_participant(
+        cls,
+        contact: GroupchatParticipant
+    ) -> GroupchatOfflineParticipant:
+        assert contact.real_jid is not None
+        return cls(
+            contact.account,
+            contact.real_jid,
+            contact.room,
+            contact.affiliation.value
+        )
+
+    @property
+    def room(self) -> GroupchatContact:
+        return self._room
+
+    @property
+    def affiliation(self) -> Affiliation:
+        return self._affiliation
+
+    @property
+    def role(self) -> Role:
+        return Role.NONE
+
+    @property
+    def is_available(self) -> bool:
+        return False
+
+    @property
+    def name(self) -> str:
+        if self._occupant is not None:
+            if nickname := self._occupant.nickname:
+                return nickname
+        return str(self.jid)
+
+    @property
+    def real_jid(self) -> JID:
+        return self.jid
+
+    @property
+    def hats(self) -> None:
+        return None
+
+    @property
+    def status(self) -> str:
+        return ""
+
+    @property
+    def show(self) -> PresenceShowExt:
+        return PresenceShowExt.OFFLINE
+
+    @property
+    def occupant_id(self) -> str | None:
+        if self._occupant is not None:
+            return self._occupant.id
+        return None
+
+    @property
+    def is_self(self) -> bool:
+        return False
+
+    @property
+    def avatar_sha(self) -> str | None:
+        if self._occupant is not None:
+            if sha := self._occupant.avatar_sha:
+                return sha
+        return None
+
+    def get_avatar(self,
+                   size: int,
+                   scale: int,
+                   add_show: bool = True,
+                   style: str = 'circle'
+                   ) -> Gdk.Texture:
+
+        return app.app.avatar_storage.get_texture(
+            self, size, scale, self.show.value, style=style)
+
+    def get_real_contact(self) -> BareContact:
+        contact = self._client.get_module('Contacts').get_contact(self._jid)
+        assert isinstance(contact, BareContact)
+        return contact
+
+    @property
+    def is_blocked(self) -> bool:
+        client = app.get_client(self._account)
+        return client.get_module('MucBlocking').is_blocked(
+            self._room.jid, self.occupant_id)
 
 
 def can_add_to_roster(contact: BareContact) -> bool:

@@ -11,6 +11,7 @@ from typing import Literal
 import calendar
 import datetime as dt
 import logging
+import operator
 import pprint
 import shutil
 from collections.abc import Iterator
@@ -93,6 +94,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._account_pks: dict[str, int] = {}
         self._jid_pks: dict[JID, int] = {}
+        self._occupant_cache: dict[tuple[str, JID, JID], tuple[Occupant, datetime]] = {}
 
     def init(self) -> None:
         super().init()
@@ -1310,3 +1312,43 @@ class MessageArchiveStorage(AlchemyStorage):
 
         res = cast(CursorResult[Any], session.execute(stmt))
         return res.rowcount
+
+    @with_session
+    @timeit
+    def get_occupant_by_jid(
+        self,
+        session: Session,
+        account: str,
+        room_jid: JID,
+        occupant_jid: JID,
+        *,
+        max_age: timedelta = timedelta(),
+    ) -> Occupant | None:
+        cache_key = (account, room_jid, occupant_jid)
+
+        if cache_result := self._occupant_cache.get(cache_key):
+            occupant, cache_dt = cache_result
+            if utc_now() - cache_dt < max_age:
+                log.debug("Return result from cache")
+                return occupant
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, room_jid)
+        fk_real_remote_pk = self._get_jid_pk(session, occupant_jid)
+
+        stmt = select(Occupant).where(
+            Occupant.fk_remote_pk == fk_remote_pk,
+            Occupant.fk_account_pk == fk_account_pk,
+            Occupant.fk_real_remote_pk == fk_real_remote_pk,
+        )
+
+        self._explain(session, stmt)
+        res = session.scalars(stmt).all()
+        if not res:
+            log.debug("Unable to find occupant for jid %s", occupant_jid)
+            return None
+
+        # Return latest occupant in case of multiple rows
+        occupant = sorted(res, key=operator.attrgetter("updated_at"))[-1]
+        self._occupant_cache[cache_key] = (occupant, utc_now())
+        return occupant
