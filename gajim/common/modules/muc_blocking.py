@@ -175,7 +175,6 @@ class MucBlocking(BaseModule):
             return
 
         extensions = create_extensions_node(bookmark.extensions, current_blocks)
-        print(extensions)
         self._client.get_module("Bookmarks").modify(jid, extensions=extensions)
 
     def merge_blocks(self) -> None:
