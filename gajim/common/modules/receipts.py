@@ -115,4 +115,4 @@ class Receipts(BaseModule):
         if item is None:
             return False
 
-        return item.subscription in ('from', 'both')
+        return item.subscription in ('from', 'both') or item.approved == 'true'

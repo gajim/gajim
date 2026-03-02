@@ -624,7 +624,13 @@ class BareContact(CommonContact):
 
     @property
     def is_subscribed(self) -> bool:
-        return self.subscription in ('from', 'both')
+        item = self.get_module('Roster').get_item(self._jid)
+        if item is None:
+            return False
+
+        if self.subscription in ('from', 'both'):
+            return True
+        return item.approved == "true"
 
     @property
     def is_blocked(self) -> bool:
