@@ -62,6 +62,15 @@ class AccountJidParam(VariantMixin):
 
 
 @dataclass
+class AddContactParam(VariantMixin):
+    account: Optional[str] = None  # noqa: UP007, UP045
+    jid: Optional[JID] = None  # noqa: UP007, UP045
+    nickname: Optional[str] = None  # noqa: UP007, UP045
+    group: Optional[str] = None  # noqa: UP007, UP045
+    preauth: Optional[str] = None  # noqa: UP007, UP045
+
+
+@dataclass
 class OccupantParam(VariantMixin):
     account: str
     jid: JID

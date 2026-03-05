@@ -57,6 +57,7 @@ from gajim.gtk.start_chat import parse_uri
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
+from gajim.gtk.structs import AddContactParam
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
@@ -758,7 +759,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     )
 
             case "roster":
-                self.activate_action("app.add-contact", GLib.Variant("s", jid_str))
+                param = AddContactParam(
+                    jid=xmpp_iri.jid,
+                    nickname=xmpp_iri.params.get("name"),
+                    group=xmpp_iri.params.get("group"),
+                    preauth=xmpp_iri.params.get("preauth"),
+                )
+                self.activate_action("app.add-contact", param.to_variant())
 
             case "message" | "":
                 body = xmpp_iri.params.get("body")

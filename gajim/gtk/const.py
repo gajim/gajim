@@ -164,7 +164,7 @@ APP_ACTIONS = [
     ("about", None),
     ("accounts", "s"),
     ("add-account", None),
-    ("add-contact", "s"),
+    ("add-contact", "a{sv}"),
     ("content", None),
     ("copy-text", "s"),
     ("create-groupchat", "s"),

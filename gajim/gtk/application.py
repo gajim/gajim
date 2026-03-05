@@ -476,7 +476,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _connect_account_actions(self, account: str) -> None:
         actions = [
-            ("add-contact", self._on_add_contact_account_action),
+            ("add-contact", self._on_add_contact_action),
             ("services", self._on_services_action),
             ("profile", self._on_profile_action),
             ("pep-config", self._on_pep_config_action),
@@ -579,13 +579,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     # Action Callbacks
 
     @staticmethod
-    def _on_add_contact_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        jid = param.get_string() or None
-        if jid is not None:
-            jid = JID.from_string(jid)
-        open_window("AddContact", account=None, jid=jid)
-
-    @staticmethod
     def _on_preferences_action(
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
@@ -636,10 +629,10 @@ class GajimApplication(Adw.Application, CoreApplication):
         open_window("CreateGroupchatWindow", account=account or None)
 
     @structs.actionmethod
-    def _on_add_contact_account_action(
-        self, _action: Gio.SimpleAction, params: structs.AccountJidParam
+    def _on_add_contact_action(
+        self, _action: Gio.SimpleAction, params: structs.AddContactParam
     ) -> None:
-        open_window("AddContact", account=params.account, jid=params.jid)
+        open_window("AddContact", params=params)
 
     @staticmethod
     def _on_add_account_action(
@@ -675,12 +668,12 @@ class GajimApplication(Adw.Application, CoreApplication):
         contact = client.get_module("Contacts").get_contact(params.jid)
         assert isinstance(contact, BareContact)
         if not contact.is_in_roster:
-            open_window(
-                "AddContact",
+            add_contact_params = structs.AddContactParam(
                 account=params.account,
                 jid=params.jid,
-                nick=params.nickname or contact.name,
+                nickname=params.nickname or contact.name,
             )
+            open_window("AddContact", params=add_contact_params)
 
     @staticmethod
     @structs.actionfunction
