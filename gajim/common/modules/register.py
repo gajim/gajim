@@ -20,6 +20,7 @@ class Register(BaseModule):
         'unregister',
         'change_password',
         'change_password_with_form',
+        'send_preauth',
         'request_register_form',
         'submit_register_form',
     ]

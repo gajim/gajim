@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="WizardInvitePage" parent="AssistantPage">
+    <child>
+      <object class="GtkGrid">
+        <property name="halign">center</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-bottom">12</property>
+            <property name="label" translatable="yes">Sign Up</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_invite_label">
+            <property name="use-markup">1</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="_sign_up_advanced_checkbutton">
+            <property name="label" translatable="yes">_Advanced Settings</property>
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="yes">Proxy, custom hostname and port</property>
+            <property name="halign">start</property>
+            <property name="use-underline">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">5</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
