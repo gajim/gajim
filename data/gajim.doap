@@ -633,6 +633,14 @@
     </implements>
     <implements>
       <xmpp:SupportedXep>
+        <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0379.html"/>
+        <xmpp:status>partial</xmpp:status>
+        <xmpp:version>0.3.3</xmpp:version>
+        <xmpp:note>Handle uri and send subscription request with preauth token</xmpp:note>
+      </xmpp:SupportedXep>
+    </implements>
+    <implements>
+      <xmpp:SupportedXep>
         <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0380.html"/>
         <xmpp:status>complete</xmpp:status>
         <xmpp:version>0.1</xmpp:version>
