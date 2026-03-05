@@ -404,15 +404,23 @@ def get_resource(account: str) -> str | None:
     return resource
 
 
-def to_user_string(error: CommonError | StanzaError) -> str:
-    text = error.get_text(get_rfc5646_lang())
-    if text:
-        return text
+def to_user_string(error: CommonError | StanzaError | Exception) -> str:
+    match error:
+        case CommonError() | StanzaError():
+            text = error.get_text(get_rfc5646_lang())
+            if text:
+                return text
 
-    condition = error.condition
-    if error.app_condition is not None:
-        return f"{condition} ({error.app_condition})"
-    return condition
+            condition = error.condition or "Unknown condition"
+            if error.app_condition is not None:
+                return f"{condition} ({error.app_condition})"
+            return condition
+
+        case Exception():
+            return str(error)
+
+        case _:
+            raise ValueError(f"Unhandled error type: {error}")
 
 
 class Observable:
@@ -593,12 +601,12 @@ def idle_add_once(func: Callable[..., Any], *args: Any) -> None:
     GLib.idle_add(wrapper)
 
 
-def timeout_add_once(ms: int, func: Callable[..., Any], *args: Any) -> None:
+def timeout_add_once(timeout_msec: int, func: Callable[..., Any], *args: Any) -> None:
     def wrapper():
         func(*args)
         return False
 
-    GLib.timeout_add(ms, wrapper)
+    GLib.timeout_add(timeout_msec, wrapper)
 
 
 def timeout_add_seconds_once(sec: int, func: Callable[..., Any], *args: Any) -> None:
