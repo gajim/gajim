@@ -373,15 +373,23 @@ def get_resource(account: str) -> str | None:
     return resource
 
 
-def to_user_string(error: CommonError | StanzaError) -> str:
-    text = error.get_text(get_rfc5646_lang())
-    if text:
-        return text
+def to_user_string(error: CommonError | StanzaError | Exception) -> str:
+    match error:
+        case CommonError() | StanzaError():
+            text = error.get_text(get_rfc5646_lang())
+            if text:
+                return text
 
-    condition = error.condition
-    if error.app_condition is not None:
-        return f'{condition} ({error.app_condition})'
-    return condition
+            condition = error.condition or "Unknown condition"
+            if error.app_condition is not None:
+                return f'{condition} ({error.app_condition})'
+            return condition
+
+        case Exception():
+            return str(error)
+
+        case _:
+            raise ValueError(f"Unhandled error type: {error}")
 
 
 class Observable:

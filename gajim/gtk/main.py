@@ -54,6 +54,7 @@ from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_stack import MainStack
 from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.start_chat import parse_uri
+from gajim.gtk.structs import AccountInviteData
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
@@ -741,14 +742,46 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def open_xmpp_iri(self, xmpp_iri: XmppIri) -> None:
         accounts = app.settings.get_active_accounts()
-        if not accounts:
-            log.warning("No accounts active, unable to handle uri")
-            return
-
         jid_str = str(xmpp_iri.jid)
 
         match xmpp_iri.action:
-            case "join":
+            case "register":
+                invite = AccountInviteData(
+                    domain=xmpp_iri.jid.domain,
+                    username=xmpp_iri.jid.localpart,
+                    token=xmpp_iri.params.get("preauth"),
+                )
+                if wizard := get_app_window("AccountWizard"):
+                    wizard.set_invite_data(invite)
+                else:
+                    open_window("AccountWizard", inivte=invite)
+
+            case "roster":
+                if accounts:
+                    param = AddContactParam(
+                        jid=xmpp_iri.jid,
+                        nickname=xmpp_iri.params.get("name"),
+                        group=xmpp_iri.params.get("group"),
+                        preauth=xmpp_iri.params.get("preauth"),
+                    )
+                    self.activate_action("app.add-contact", param.to_variant())
+
+                elif xmpp_iri.params.get("ibr") != "y":
+                    log.warning("Unable to handle roster action, ibr != y")
+                    return
+
+                invite = AccountInviteData(
+                    domain=xmpp_iri.jid.domain,
+                    username=None,
+                    token=xmpp_iri.params.get("preauth"),
+                )
+
+                if wizard := get_app_window("AccountWizard"):
+                    wizard.set_invite_data(invite)
+                else:
+                    open_window("AccountWizard", inivte=invite)
+
+            case "join" if accounts:
                 if len(accounts) == 1:
                     self.activate_action(
                         "app.open-chat", GLib.Variant("as", [accounts[0], jid_str])
@@ -758,16 +791,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                         "app.start-chat", GLib.Variant("as", [jid_str, ""])
                     )
 
-            case "roster":
-                param = AddContactParam(
-                    jid=xmpp_iri.jid,
-                    nickname=xmpp_iri.params.get("name"),
-                    group=xmpp_iri.params.get("group"),
-                    preauth=xmpp_iri.params.get("preauth"),
-                )
-                self.activate_action("app.add-contact", param.to_variant())
-
-            case "message" | "":
+            case "message" | "" if accounts:
                 body = xmpp_iri.params.get("body")
                 app.window.start_chat_from_jid(accounts[0], jid_str, body or None)
 

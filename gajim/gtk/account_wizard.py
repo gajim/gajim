@@ -22,9 +22,7 @@ from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Mode
 from nbxmpp.const import StreamError
-from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
-from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
@@ -40,6 +38,7 @@ from gajim.common.events import StanzaSent
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
+from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
@@ -51,6 +50,7 @@ from gajim.gtk.assistant import AssistantProgressPage
 from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.dropdown import GajimDropDown
+from gajim.gtk.structs import AccountInviteData
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import container_remove_all
@@ -66,15 +66,22 @@ log = logging.getLogger("gajim.gtk.account_wizard")
 
 
 class AccountWizard(Assistant):
-    def __init__(self) -> None:
+    def __init__(self, invite: AccountInviteData | None = None) -> None:
         Assistant.__init__(self, name="AccountWizard", height=500)
         self._client: NBXMPPClient | None = None
-        self._method: Literal["login"] | Literal["signup"] = "login"
+        self._flow: Literal["login", "signup", "signup_with_invite"] = "login"
         self._destroyed: bool = False
+        self._invite: AccountInviteData | None = None
 
         self.add_button("back", _("Back"))
         self.add_button(
             "signup", _("Sign Up"), complete=True, css_class="suggested-action"
+        )
+        self.add_button(
+            "signup_with_invite",
+            _("Sign Up"),
+            complete=True,
+            css_class="suggested-action",
         )
         self.add_button("connect", _("Connect"), css_class="suggested-action")
         self.add_button("next", _("Next"), css_class="suggested-action")
@@ -86,6 +93,7 @@ class AccountWizard(Assistant):
             {
                 "login": WizardLoginPage(),
                 "signup": WizardSignupPage(),
+                "signup_with_invite": WizardInvitePage(),
                 "advanced": WizardAdvancedPage(),
                 "security-warning": WizardSecurityPage(),
                 "form": WizardFormPage(),
@@ -102,13 +110,19 @@ class AccountWizard(Assistant):
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
 
-        self.show_first_page()
+        if invite is None:
+            self.show_first_page()
+        else:
+            self.set_invite_data(invite)
 
     @overload
     def get_page(self, name: Literal["login"]) -> WizardLoginPage: ...
 
     @overload
     def get_page(self, name: Literal["signup"]) -> WizardSignupPage: ...
+
+    @overload
+    def get_page(self, name: Literal["signup_with_invite"]) -> WizardInvitePage: ...
 
     @overload
     def get_page(self, name: Literal["advanced"]) -> WizardAdvancedPage: ...
@@ -134,8 +148,17 @@ class AccountWizard(Assistant):
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
 
-    def get_current_method(self) -> Literal["login"] | Literal["signup"]:
-        return self._method
+    def get_current_flow(self) -> Literal["login", "signup", "signup_with_invite"]:
+        return self._flow
+
+    def set_invite_data(self, invite: AccountInviteData | None) -> None:
+        self._invite = invite
+        if invite is None:
+            return
+
+        self.get_page("signup_with_invite").set_invite_data(invite)
+        self.get_page("form").set_invite_data(invite)
+        self.show_page("signup_with_invite")
 
     def _on_button_clicked(self, _page: Gtk.Widget, button_name: str) -> None:
         if button_name == "login":
@@ -210,6 +233,31 @@ class AccountWizard(Assistant):
                 )
                 self._submit_form()
 
+        elif button_name == "signup_with_invite":
+            if page == "signup_with_invite":
+                if self.get_page("signup_with_invite").is_advanced():
+                    self.show_page("advanced", Gtk.StackTransitionType.SLIDE_LEFT)
+
+                else:
+                    self._register_with_server()
+
+            elif page == "advanced":
+                self._register_with_server()
+
+            elif page == "security-warning":
+                if self.get_page("security-warning").trust_certificate:
+                    cert = self.get_page("security-warning").cert
+                    assert cert is not None
+                    app.cert_store.add_certificate(cert)
+
+                self._register_with_server(ignore_all_errors=True)
+
+            elif page == "form":
+                self._show_progress_page(
+                    _("Creating Account..."), _("Trying to create account...")
+                )
+                self._submit_form()
+
         elif button_name == "connect":
             if page == "success":
                 account = self.get_page("success").account
@@ -224,29 +272,32 @@ class AccountWizard(Assistant):
             elif page in ("advanced", "error", "security-warning"):
                 if (
                     page == "error"
-                    and self._method == "signup"
+                    and self._flow in ("signup", "signup_with_invite")
                     and self.get_page("form").has_form
                 ):
                     self.show_page("form", Gtk.StackTransitionType.SLIDE_RIGHT)
                 else:
-                    self.show_page(self._method, Gtk.StackTransitionType.SLIDE_RIGHT)
+                    self.show_page(self._flow, Gtk.StackTransitionType.SLIDE_RIGHT)
 
             elif page == "form":
-                self.show_page("signup", Gtk.StackTransitionType.SLIDE_RIGHT)
+                self.show_page(self._flow, Gtk.StackTransitionType.SLIDE_RIGHT)
                 self.get_page("form").remove_form()
                 self._disconnect()
 
             elif page == "redirect":
-                self.show_page("login", Gtk.StackTransitionType.SLIDE_RIGHT)
+                self.show_page(self._flow, Gtk.StackTransitionType.SLIDE_RIGHT)
 
     def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == "signup":
-            self._method = page_name
+            self._flow = page_name
             self.get_page("signup").focus()
 
         elif page_name == "login":
-            self._method = page_name
+            self._flow = page_name
             self.get_page("login").focus()
+
+        elif page_name == "signup_with_invite":
+            self._flow = page_name
 
         elif page_name == "form":
             self.get_page("form").focus()
@@ -357,9 +408,10 @@ class AccountWizard(Assistant):
 
     def _register_with_server(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_("Connecting..."), _("Connecting to server..."))
-        domain = self.get_page("signup").get_server()
-        advanced = self.get_page("signup").is_advanced()
 
+        assert self._flow != "login"
+        domain = self.get_page(self._flow).get_server()
+        advanced = self.get_page(self._flow).is_advanced()
         address = JID(localpart=None, domain=domain, resource=None)
 
         self._client = self._get_base_client(
@@ -387,8 +439,14 @@ class AccountWizard(Assistant):
         self._disconnect()
 
     def _on_connected(self, client: NBXMPPClient, _signal_name: str) -> None:
+        if self._invite is not None and self._invite.token:
+            client.get_module("Register").send_preauth(
+                self._invite.token, timeout=10, callback=self._on_preauth
+            )
+            return
+
         client.get_module("Register").request_register_form(
-            callback=self._on_register_form
+            timeout=10, callback=self._on_register_form
         )
 
     def _on_anonymous_supported(self, client: NBXMPPClient, _signal_name: str) -> None:
@@ -485,11 +543,25 @@ class AccountWizard(Assistant):
             i += 1
         return domain
 
+    def _on_preauth(self, task: Task) -> None:
+        try:
+            task.finish()
+        except Exception as error:
+            self._show_error_page(_("Error"), _("Error"), to_user_string(error))
+            self._disconnect()
+
+        if self._client is None:
+            return
+
+        self._client.get_module("Register").request_register_form(
+            timeout=10, callback=self._on_register_form
+        )
+
     def _on_register_form(self, task: Task) -> None:
         try:
             result = cast(RegisterData, task.finish())
-        except (StanzaError, MalformedStanzaError) as error:
-            self._show_error_page(_("Error"), _("Error"), error.get_text())
+        except Exception as error:
+            self._show_error_page(_("Error"), _("Error"), to_user_string(error))
             self._disconnect()
             return
 
@@ -519,7 +591,7 @@ class AccountWizard(Assistant):
         form = self.get_page("form").get_submit_form()
         assert self._client is not None
         self._client.get_module("Register").submit_register_form(
-            form, callback=self._on_register_result
+            form, timeout=10, callback=self._on_register_result
         )
 
     def _on_register_result(self, task: Task) -> None:
@@ -545,7 +617,7 @@ class AccountWizard(Assistant):
                 self._disconnect()
             return
 
-        except (StanzaError, MalformedStanzaError) as error:
+        except Exception as error:
             self._set_error_text(error)
             self.get_page("form").remove_form()
             self._disconnect()
@@ -571,10 +643,8 @@ class AccountWizard(Assistant):
         self.get_page("form").remove_form()
         self._disconnect()
 
-    def _set_error_text(
-        self, error: StanzaError | RegisterStanzaError | MalformedStanzaError
-    ) -> None:
-        error_text = error.get_text()
+    def _set_error_text(self, error: Exception) -> None:
+        error_text = to_user_string(error)
         if not error_text:
             error_text = _(
                 "The server rejected the registration without an error message"
@@ -873,6 +943,42 @@ class WizardSignupPage(AssistantPage):
         return "signup"
 
 
+@Gtk.Template(string=get_ui_string("wizard/invite_page.ui"))
+class WizardInvitePage(AssistantPage):
+    __gtype_name__ = "WizardInvitePage"
+
+    _invite_label: Gtk.Label = Gtk.Template.Child()
+    _sign_up_advanced_checkbutton: Gtk.CheckButton = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        AssistantPage.__init__(self)
+        self.complete: bool = True
+        self.title: str = _("Create New Account")
+
+        self._invite: AccountInviteData | None = None
+
+        self.update_page_complete()
+
+    def set_invite_data(self, invite: AccountInviteData) -> None:
+        self._invite = invite
+        self._invite_label.set_text(
+            _("You received an invitation to %s") % invite.domain
+        )
+
+    def get_server(self) -> str:
+        assert self._invite is not None
+        return self._invite.domain
+
+    def is_advanced(self) -> bool:
+        return self._sign_up_advanced_checkbutton.get_active()
+
+    def get_visible_buttons(self) -> list[str]:
+        return ["signup_with_invite"]
+
+    def get_default_button(self) -> str:
+        return "signup_with_invite"
+
+
 @Gtk.Template(string=get_ui_string("wizard/recommendation_popover.ui"))
 class WizardServerRecommendationPopover(Gtk.Popover, SignalManager):
     __gtype_name__ = "WizardServerRecommendationPopover"
@@ -1052,12 +1158,12 @@ class WizardAdvancedPage(AssistantPage):
     def get_visible_buttons(self) -> list[str]:
         window = get_app_window("AccountWizard")
         assert window is not None
-        return ["back", window.get_current_method()]
+        return ["back", window.get_current_flow()]
 
     def get_default_button(self) -> str:
         window = get_app_window("AccountWizard")
         assert window is not None
-        return window.get_current_method()
+        return window.get_current_flow()
 
 
 @Gtk.Template(string=get_ui_string("wizard/security_page.ui"))
@@ -1122,7 +1228,7 @@ class WizardSecurityPage(AssistantPage):
     def get_visible_buttons(self) -> list[str]:
         window = get_app_window("AccountWizard")
         assert window is not None
-        return ["back", window.get_current_method()]
+        return ["back", window.get_current_flow()]
 
     def get_default_button(self) -> str:
         return "back"
@@ -1134,7 +1240,9 @@ class WizardFormPage(AssistantPage):
         self.set_valign(Gtk.Align.FILL)
         self.complete: bool = False
         self.title: str = _("Create Account")
+
         self._current_form: DataFormWidget | None = None
+        self._invite: AccountInviteData | None = None
 
         heading = Gtk.Label(
             label=_("Create Account"),
@@ -1145,6 +1253,9 @@ class WizardFormPage(AssistantPage):
         )
         heading.add_css_class("title-1")
         self.append(heading)
+
+    def set_invite_data(self, invite: AccountInviteData) -> None:
+        self._invite = invite
 
     @property
     def has_form(self) -> bool:
@@ -1162,7 +1273,15 @@ class WizardFormPage(AssistantPage):
     def add_form(self, form: Any) -> None:
         self.remove_form()
 
-        options = {"hide-fallback-fields": True, "entry-activates-default": True}
+        options: dict[str, Any] = {
+            "hide-fallback-fields": True,
+            "entry-activates-default": True,
+        }
+
+        if self._invite is not None and self._invite.username:
+            options["init-values"] = {"username": self._invite.username}
+            options["read-only-fields"] = ["username"]
+
         self._current_form = DataFormWidget(form, options)
         self._connect(self._current_form, "is-valid", self._on_is_valid)
         self._current_form.validate()
@@ -1191,10 +1310,14 @@ class WizardFormPage(AssistantPage):
         self._current_form.focus_first_entry()
 
     def get_visible_buttons(self) -> list[str]:
-        return ["back", "signup"]
+        window = get_app_window("AccountWizard")
+        assert window is not None
+        return ["back", window.get_current_flow()]
 
     def get_default_button(self) -> str:
-        return "signup"
+        window = get_app_window("AccountWizard")
+        assert window is not None
+        return window.get_current_flow()
 
 
 @Gtk.Template(string=get_ui_string("wizard/redirect_page.ui"))

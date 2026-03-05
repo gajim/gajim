@@ -40,6 +40,8 @@ from gajim.gtk.widgets import MultiLineLabel
 #  hide-fallback-fields         Hide fallback fields in IBR form (ejabberd)
 #  left-width                   Width for labels
 #  read-only                    Read only mode for fields
+#  read-only-fields             List of fields which should be read only
+#  init-values                  Dict {field var: value} with initial values
 #  entry-activates-default      Form entry activates the default widget
 
 
@@ -320,7 +322,15 @@ class Field(GObject.GObject, SignalManager):
         self._field = field
         self._form_grid = form_grid
         self._validate_source_id: int | None = None
+
         self._read_only = options.get("read-only", False)
+        if self._field.var in options.get("read-only-fields", []):
+            self._read_only = True
+
+        init_values = options.get("init-values", {})
+        if value := init_values.get(self._field.var):
+            if self._field.type_ == "text-single":
+                self._field.value = value
 
         self._label = Gtk.Label(
             label=field.label,
