@@ -267,6 +267,7 @@ class Presence(BaseModule):
         name: str | None = None,
         groups: list[str] | set[str] | None = None,
         auto_auth: bool = False,
+        preauth: str | None = None,
     ) -> None:
         pre_approval = self._server_has_pre_approval()
 
@@ -283,7 +284,7 @@ class Presence(BaseModule):
                 self._jids_for_auto_auth.add(jid)
 
         self._nbxmpp("BasePresence").subscribe(
-            jid, status=msg, nick=app.nicks[self._account]
+            jid, status=msg, nick=app.nicks[self._account], preauth=preauth
         )
 
     def get_presence(

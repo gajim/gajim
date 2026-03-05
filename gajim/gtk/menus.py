@@ -39,6 +39,7 @@ from gajim.common.util.uri import XmppIri
 from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
+from gajim.gtk.structs import AddContactParam
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ExportHistoryParam
@@ -120,6 +121,7 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
 
     params = AccountJidParam(account=account, jid=contact.jid)
     export_params = ExportHistoryParam(account=account, jid=contact.jid)
+    contact_params = AddContactParam(account=account, jid=contact.jid)
 
     menu = GajimMenu()
 
@@ -132,7 +134,7 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     # menu.add_item(_("Start Video Call…"), "win.start-video-call")
 
     if can_add_to_roster(contact):
-        menu.add_item(_("Add Contact…"), f"app.{account}-add-contact", params)
+        menu.add_item(_("Add Contact…"), f"app.{account}-add-contact", contact_params)
 
     if contact.is_in_roster:
         roster_add_params = GLib.Variant("as", [account, str(contact.jid)])
@@ -182,7 +184,7 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 
     real_contact = contact.get_real_contact()
     if real_contact is not None and can_add_to_roster(real_contact):
-        params = AccountJidParam(account=contact.account, jid=real_contact.jid)
+        params = AddContactParam(account=contact.account, jid=real_contact.jid)
         menu.add_item(_("Add Contact…"), f"app.{contact.account}-add-contact", params)
 
     return menu
@@ -324,7 +326,7 @@ def _xmpp_uri_context_menu(uri: XmppIri, account: str) -> UriMenuItemsT:
     ]
     query_type = XmppUriQuery.from_str_or_none(uri.action)
     if query_type in (XmppUriQuery.NONE, XmppUriQuery.MESSAGE):
-        params = AccountJidParam(account=account, jid=uri.jid)
+        params = AddContactParam(account=account, jid=uri.jid)
         menu_items.extend(
             [
                 ("open-chat", [account, str(uri.jid)], _("Start Chat…")),
@@ -350,7 +352,7 @@ def _ambiguous_addr_context_menu(uri: MailUri, account: str) -> UriMenuItemsT:
 
     # addr could be a non valid jid
     try:
-        params = AccountJidParam(account=account, jid=JID.from_string(uri.addr))
+        params = AddContactParam(account=account, jid=JID.from_string(uri.addr))
     except Exception:
         params = None
 
@@ -431,7 +433,7 @@ def get_start_chat_button_menu() -> GajimMenu:
     menuitems: MenuItemListT = [
         (_("Start Chat…"), "app.start-chat", value),
         (_("Create Group Chat…"), "app.create-groupchat", ""),
-        (_("Add Contact…"), "app.add-contact", ""),
+        (_("Add Contact…"), "app.add-contact", AddContactParam()),
     ]
 
     return GajimMenu.from_list(menuitems)
@@ -498,7 +500,7 @@ def get_chat_list_row_menu(
         real_contact = None
 
     if real_contact is not None and can_add_to_roster(real_contact):
-        params = AccountJidParam(account=account, jid=real_contact.jid)
+        params = AddContactParam(account=account, jid=real_contact.jid)
         menu.add_item(_("Add Contact…"), f"app.{account}-add-contact", params)
 
     if app.window.get_chat_unread_count(account, jid, include_silent=True):
@@ -661,7 +663,7 @@ def get_groupchat_participant_menu(
 
     real_contact = contact.get_real_contact()
     if real_contact is not None and can_add_to_roster(real_contact):
-        params = AccountJidParam(account=account, jid=real_contact.jid)
+        params = AddContactParam(account=account, jid=real_contact.jid)
         action = f"app.{account}-add-contact"
         general_items.insert(1, (_("Add Contact…"), action, params.to_variant()))
 

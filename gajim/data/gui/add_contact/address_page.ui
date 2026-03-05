@@ -37,19 +37,37 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">Please enter an XMPP address</property>
+          <object class="GtkLabel" id="_add_contact_label">
+            <property name="label"></property>
+            <property name="visible">false</property>
+            <property name="wrap">True</property>
+            <property name="wrap-mode">word</property>
             <style>
-              <class name="dimmed"/>
+              <class name="body"/>
             </style>
           </object>
         </child>
         <child>
-          <object class="GtkEntry" id="_address_entry">
-            <property name="width-request">250</property>
-            <property name="focusable">1</property>
-            <property name="activates-default">1</property>
-            <property name="placeholder-text" translatable="yes">XMPP Address…</property>
+          <object class="GtkBox" id="_address_box">
+            <property name="halign">center</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Please enter an XMPP address</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="_address_entry">
+                <property name="width-request">250</property>
+                <property name="focusable">1</property>
+                <property name="activates-default">1</property>
+                <property name="placeholder-text" translatable="yes">XMPP Address…</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
