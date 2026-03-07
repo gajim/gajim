@@ -750,7 +750,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 if wizard := get_app_window("AccountWizard"):
                     wizard.set_invite_data(invite)
                 else:
-                    open_window("AccountWizard", inivte=invite)
+                    open_window("AccountWizard", invite=invite)
 
             case "roster":
                 if accounts:
@@ -775,7 +775,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 if wizard := get_app_window("AccountWizard"):
                     wizard.set_invite_data(invite)
                 else:
-                    open_window("AccountWizard", inivte=invite)
+                    open_window("AccountWizard", invite=invite)
 
             case "join" if accounts:
                 if len(accounts) == 1:

@@ -56,6 +56,7 @@ from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.helpers import idle_add_once
+from gajim.common.helpers import timeout_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
@@ -328,7 +329,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         )
 
         if remaining is not None:
-            self.activate_action("handle-uri", remaining)
+            timeout_add_once(200, self.activate_action, "handle-uri", remaining)
             return 0
 
         if not options.contains("is-first-startup"):
