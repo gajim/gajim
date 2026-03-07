@@ -761,8 +761,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                         preauth=xmpp_iri.params.get("preauth"),
                     )
                     self.activate_action("app.add-contact", param.to_variant())
+                    return
 
-                elif xmpp_iri.params.get("ibr") != "y":
+                if xmpp_iri.params.get("ibr") != "y":
                     log.warning("Unable to handle roster action, ibr != y")
                     return
 
