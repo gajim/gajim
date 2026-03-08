@@ -140,6 +140,7 @@ StringSettings = Literal[
     'video_framerate',
     'video_input_device',
     'video_size',
+    'xmpp_link_uri',
 ]
 
 AllSettings = Literal[BoolSettings, IntSettings, FloatSettings, StringSettings]
@@ -253,6 +254,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'video_see_self': True,
     'video_size': '',
     'workspace_order': [],
+    'xmpp_link_uri': 'https://xmpp.link/#${address}',
 }
 
 BoolAccountSettings = Literal[
@@ -623,5 +625,6 @@ ADVANCED_SETTINGS = {
         'use_urgency_hint': _(
             'If enabled, Gajim makes the window flash (the default behaviour '
             'in most Window Managers) when holding pending events.'),
+        'xmpp_link_uri': _('URI to the service providing the xmpp landing page'),
     },
 }

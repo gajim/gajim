@@ -10,6 +10,7 @@ import logging
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from string import Template
 from urllib.parse import ParseResult
 from urllib.parse import unquote
 from urllib.parse import urlparse
@@ -354,3 +355,15 @@ def get_geo_choords(uri: str) -> Coords | None:
     except Exception as err:
         log.info("Bad geo URI %s: %s", uri, err)
         return None
+
+
+def get_xmpp_link_uri(jid: JID, *, groupchat: bool) -> str | None:
+    url = app.settings.get("xmpp_link_uri")
+    if not url:
+        return None
+
+    address = str(jid)
+    if groupchat:
+        address += "?join"
+
+    return Template(url).safe_substitute({"address": address})
