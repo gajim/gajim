@@ -539,6 +539,7 @@ class Client(Observable, ClientModules):
         self.get_module('Annotations').request_annotations()
         self.get_module('Blocking').get_blocking_list()
         self.get_module('VCard4').subscribe_to_node()
+        self.get_module('AdHocCommands').request_commands()
 
         if app.settings.get_account_setting(self._account, 'publish_tune'):
             self.get_module('UserTune').set_enabled(True)
