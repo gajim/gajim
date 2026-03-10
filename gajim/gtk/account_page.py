@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import logging
+
 from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -24,6 +26,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.util.decorators import event_filter
 from gajim.common.util.user_strings import get_time_zone_string
 
+from gajim.gtk.address_share_popover import AddressSharePopover
 from gajim.gtk.menus import get_account_menu
 from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.status_message_row import StatusMessageSelectorRow
@@ -31,11 +34,14 @@ from gajim.gtk.status_selector import StatusSelector
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
+log = logging.getLogger("gajim.gtk.account_page")
+
 
 @Gtk.Template(string=get_ui_string("account_page.ui"))
 class AccountPage(Gtk.Box, SignalManager):
     __gtype_name__ = "AccountPage"
 
+    _share_popover: AddressSharePopover = Gtk.Template.Child()
     _avatar_image: Gtk.Image = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
     _account_label: Gtk.Label = Gtk.Template.Child()
@@ -44,6 +50,7 @@ class AccountPage(Gtk.Box, SignalManager):
     _menu_button: Gtk.MenuButton = Gtk.Template.Child()
 
     _our_jid_row: Adw.ActionRow = Gtk.Template.Child()
+    _share_menu_button: Gtk.MenuButton = Gtk.Template.Child()
 
     _status_selector: StatusSelector = Gtk.Template.Child()
     _status_message_row: StatusMessageSelectorRow = Gtk.Template.Child()
@@ -80,10 +87,17 @@ class AccountPage(Gtk.Box, SignalManager):
             "clicked",
             self._on_profile_tel_copy_clicked,
         )
+        self._connect(
+            self._share_menu_button,
+            "notify::active",
+            self._on_share_clicked,
+        )
 
         app.ged.register_event_handler(
             "vcard4-received", ged.GUI2, self._on_vcard_received
         )
+
+        self._share_menu_button.set_sensitive(True)
 
     def set_account(self, account: str | None) -> None:
         if self._account == account:
@@ -140,6 +154,10 @@ class AccountPage(Gtk.Box, SignalManager):
 
     def _on_profile_tel_copy_clicked(self, _button: CopyButton) -> None:
         app.window.get_clipboard().set(self._profile_tel)
+
+    def _on_share_clicked(self, button: Gtk.MenuButton, *args: Any) -> None:
+        if not button.get_active():
+            return
 
     def _on_menu_popup(self, menu_button: Gtk.MenuButton) -> None:
         assert self._account is not None
@@ -212,6 +230,7 @@ class AccountPage(Gtk.Box, SignalManager):
             return
 
         assert self._contact is not None
+        self._share_popover.set_contact(self._contact)
 
         account_label = app.settings.get_account_setting(self._account, "account_label")
 

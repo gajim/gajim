@@ -14,12 +14,10 @@ from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
-from gajim.common.const import XmppUriQuery
 from gajim.common.events import AccountEnabled
 from gajim.common.events import BookmarksReceived
 from gajim.common.events import MessageReceived
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -27,8 +25,8 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.text import make_href_markup
-from gajim.common.util.uri import get_xmpp_link_uri
 
+from gajim.gtk.address_share_popover import AddressSharePopover
 from gajim.gtk.contact_popover import ContactPopover
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
 from gajim.gtk.menus import get_groupchat_menu
@@ -44,12 +42,7 @@ from gajim.gtk.widgets import AccountBadge
 class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     __gtype_name__ = "ChatBanner"
 
-    _share_popover: Gtk.Popover = Gtk.Template.Child()
-    _share_instructions: Gtk.Label = Gtk.Template.Child()
-    _qr_code_image: Gtk.Image = Gtk.Template.Child()
-    _copy_web_address_button: Gtk.Button = Gtk.Template.Child()
-    _jid_label: Gtk.Label = Gtk.Template.Child()
-    _copy_jid_button: Gtk.Button = Gtk.Template.Child()
+    _share_popover: AddressSharePopover = Gtk.Template.Child()
     _avatar_button: Gtk.MenuButton = Gtk.Template.Child()
     _avatar_image: Gtk.Image = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
@@ -87,10 +80,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         hide_roster = app.settings.get("hide_groupchat_occupants_list")
         self._set_toggle_roster_button_icon(hide_roster)
 
-        self._connect(self._copy_jid_button, "clicked", self._on_copy_jid_clicked)
-        self._connect(
-            self._copy_web_address_button, "clicked", self._on_copy_web_address_clicked
-        )
         self._connect(
             self._toggle_roster_button, "clicked", self._on_toggle_roster_clicked
         )
@@ -349,56 +338,10 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         else:
             self._share_menu_button.set_tooltip_text(_("Share Contact…"))
         self._share_menu_button.set_sensitive(not self._contact.is_pm_contact)
-        self._jid_label.set_text(str(self._contact.jid))
-
-    def _get_share_uri(self) -> str:
-        assert self._client is not None
-        assert self._contact is not None
-        jid = self._contact.get_address()
-        if self._contact.is_groupchat:
-            return jid.to_iri(XmppUriQuery.JOIN.value)
-        else:
-            return self._client.get_module("OMEMO").compose_trust_uri(jid)
-
-    def _get_web_share_url(self) -> str | None:
-        assert self._client is not None
-        assert self._contact is not None
-        jid = self._contact.get_address()
-        return get_xmpp_link_uri(jid, groupchat=self._contact.is_groupchat)
 
     def _on_share_activated(self, _button: Gtk.MenuButton, *args: Any) -> None:
         assert self._contact is not None
-        if isinstance(self._contact, GroupchatContact):
-            share_text = _("Scan this QR code to join %s.")
-            if self._contact.muc_context == "private":
-                share_text = _("%s can be joined by invite only.")
-        else:
-            share_text = _("Scan this QR code to start a chat with %s.")
-        self._share_instructions.set_text(share_text % self._contact.name)
-
-        if (
-            isinstance(self._contact, GroupchatContact)
-            and self._contact.muc_context == "private"
-        ):
-            # Don't display QR code for private MUCs (they require an invite)
-            self._qr_code_image.set_visible(False)
-            return
-
-        # Generate QR code on demand (i.e. not when switching chats)
-        web_url = self._get_web_share_url()
-        self._qr_code_image.set_from_paintable(
-            generate_qr_code(web_url) if web_url else None
-        )
-        self._qr_code_image.set_visible(bool(web_url))
-
-    def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
-        self.get_clipboard().set(self._get_share_uri())
-        self._share_popover.popdown()
-
-    def _on_copy_web_address_clicked(self, _button: Gtk.Button) -> None:
-        if url := self._get_web_share_url():
-            self.get_clipboard().set(url)
-        self._share_popover.popdown()
+        self._share_popover.set_contact(self._contact)
 
     def _on_toggle_roster_clicked(self, _button: Gtk.Button) -> None:
         state = app.settings.get("hide_groupchat_occupants_list")
