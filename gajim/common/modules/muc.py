@@ -538,8 +538,12 @@ class MUC(BaseModule):
             room_jid, include_outcast=include_outcast)
 
     def update_presence(self) -> None:
-        mucs = self._get_mucs_with_state([MUCJoinedState.JOINED,
-                                          MUCJoinedState.JOINING])
+        # Only update joined MUCs, ejabberd seems to have a bug
+        # that when we send a presence after the initial join presence
+        # it will overwrite our join presence with it.
+        # This can lead to receiving MUC history because only the join
+        # presence has <history maxchars="0" />
+        mucs = self._get_mucs_with_state([MUCJoinedState.JOINED])
 
         status, message, idle = self._con.get_presence_state()
         for muc_data in mucs:
