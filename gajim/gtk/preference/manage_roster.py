@@ -407,7 +407,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
             self._import(Path(path))
 
         dialog = Gtk.FileDialog(
-            default_filter=Gtk.FileFilter(name="csv", patterns=["*.csv"]),
+            default_filter=Gtk.FileFilter(name=_("CSV files"), suffixes=["csv"]),
             title=_("Import Contacts"),
             accept_label=_("Import"),
             modal=True,
@@ -436,7 +436,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         filename = f"{self.account}-{now.strftime('%Y-%m-%d')}.csv"
 
         dialog = Gtk.FileDialog(
-            default_filter=Gtk.FileFilter(name="csv", patterns=["*.csv"]),
+            default_filter=Gtk.FileFilter(name=_("CSV files"), suffixes=["csv"]),
             title=_("Export CSV"),
             accept_label=_("Export"),
             initial_file=Gio.File.new_for_path(filename),

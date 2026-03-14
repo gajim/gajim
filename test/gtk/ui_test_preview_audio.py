@@ -58,8 +58,8 @@ class TestAudioWidget(GajimAppWindow):
             label="Select Audio File",
             filters=[
                 Filter(name="All files", patterns=["*"]),
-                Filter(name="WAV Sounds", patterns=["*.wav"]),
-                Filter(name="MP3 Sounds", patterns=["*.mp3"], default=True),
+                Filter(name="WAV Sounds", suffixes=["wav"]),
+                Filter(name="MP3 Sounds", suffixes=["mp3"], default=True),
             ],
             path=DEFAULT_AUDIO_FILE_PATH,
         )

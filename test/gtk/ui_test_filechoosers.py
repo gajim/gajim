@@ -31,7 +31,7 @@ class TestFileChooserButton(GajimAppWindow):
         file_chooser_button = FileChooserButton(
             filters=[
                 Filter(name="All files", patterns=["*"]),
-                Filter(name="Wav Sounds", patterns=["*.wav"]),
+                Filter(name="WAV Sounds", suffixes=["wav"]),
             ]
         )
         file_chooser_button.connect("path-picked", self._on_file_picked)

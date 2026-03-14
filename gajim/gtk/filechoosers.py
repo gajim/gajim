@@ -33,7 +33,8 @@ log = logging.getLogger("gajim.gtk.filechoosers")
 
 class Filter(NamedTuple):
     name: str
-    patterns: list[str]
+    patterns: list[str] | None = None
+    suffixes: list[str] | None = None
     default: bool = False
 
 
@@ -119,7 +120,9 @@ class FileChooserButton(Gtk.Button, SignalManager):
 
         file_filter_model = Gio.ListStore()
         for f in self._filters:
-            file_filter = Gtk.FileFilter(name=f.name, patterns=f.patterns)
+            file_filter = Gtk.FileFilter(
+                name=f.name, patterns=f.patterns or [], suffixes=f.suffixes or []
+            )
             file_filter_model.append(file_filter)
             if f.default:
                 dialog.set_default_filter(file_filter)
@@ -214,6 +217,6 @@ class FileChooserButton(Gtk.Button, SignalManager):
 class AvatarFileChooserButton(FileChooserButton):
     _cls_filters = [
         Filter(name=_("PNG files"), patterns=["*.png"], default=True),
-        Filter(name=_("JPEG files"), patterns=["*.jp*g"]),
-        Filter(name=_("SVG files"), patterns=["*.svg"]),
+        Filter(name=_("JPEG files"), suffixes=["jpg", "jpeg"]),
+        Filter(name=_("SVG files"), suffixes=["svg"]),
     ]

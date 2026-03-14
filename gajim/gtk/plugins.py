@@ -49,7 +49,7 @@ class Plugins(GajimPreferencesGroup):
         self._file_chooser_button = FileChooserButton(
             filters=[
                 Filter(name=_("All files"), patterns=["*"]),
-                Filter(name=_("ZIP files"), patterns=["*.zip"], default=True),
+                Filter(name=_("ZIP files"), suffixes=["zip"], default=True),
             ],
             label=_("Install from Archive"),
             tooltip=_("Install Plugin from ZIP-File"),

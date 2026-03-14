@@ -67,7 +67,7 @@ class ManageSounds(GajimAppWindow):
         self._file_chooser_button = FileChooserButton(
             filters=[
                 Filter(name=_("All files"), patterns=["*"]),
-                Filter(name=_("WAV Sounds"), patterns=["*.wav"], default=True),
+                Filter(name=_("WAV Sounds"), suffixes=["wav"], default=True),
             ],
             label=_("Choose Sound"),
             initial_path=last_path,
