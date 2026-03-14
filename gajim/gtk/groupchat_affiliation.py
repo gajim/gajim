@@ -48,7 +48,7 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
 
         self._client = client
         self._contact = contact
-        self._current_rows: set[AffiliationRow] = set()
+        self._current_rows: dict[str, AffiliationRow] = {}
 
         self_contact = contact.get_self()
         assert self_contact is not None
@@ -236,7 +236,8 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
         if self._own_affiliation not in ("admin", "owner"):
             return
         new_rows = self._get_new_rows()
-        self._apply_button.set_button_state(new_rows != self._current_rows)
+        changed = set(new_rows.values()) != set(self._current_rows.values())
+        self._apply_button.set_button_state(changed)
 
     def _allowed_to_edit(self, affiliation: str) -> tuple[bool, bool]:
         if self._own_affiliation == "owner":
@@ -248,53 +249,70 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
             return False, True
         return False, False
 
-    def _get_new_rows(self) -> set[AffiliationRow]:
-        rows: set[AffiliationRow] = set()
+    def _get_new_rows(self) -> dict[str, AffiliationRow]:
+        rows: dict[str, AffiliationRow] = {}
 
         for row in self._store:
             if not row[Column.JID]:
                 continue
 
-            rows.add(
-                AffiliationRow(
-                    jid=row[Column.JID],
-                    nick=row[Column.NICK],
-                    affiliation=row[Column.AFFILIATION],
-                )
+            rows[row[Column.JID]] = AffiliationRow(
+                jid=row[Column.JID],
+                nick=row[Column.NICK],
+                affiliation=row[Column.AFFILIATION],
             )
+
         return rows
 
     def _get_diff(self) -> list[AffiliationRow]:
         new_rows = self._get_new_rows()
 
-        before = {row.jid for row in self._current_rows}
-        after = {row.jid for row in new_rows}
+        before = set(self._current_rows.keys())
+        after = set(new_rows.keys())
 
         removed = before - after
-        removed_rows = [row for row in self._current_rows if row.jid in removed]
+        removed_rows = [
+            row for row in self._current_rows.values() if row.jid in removed
+        ]
         removed_rows = [row._replace(affiliation="none") for row in removed_rows]
 
         added = after - before
-        added_rows = [row for row in new_rows if row.jid in added]
+        added_rows = [row for jid, row in new_rows.items() if jid in added]
 
         same = after - removed - added
-        same_rows = {row for row in new_rows if row.jid in same}
-        modified_rows = list(same_rows - self._current_rows)
+        same_rows = {row for jid, row in new_rows.items() if jid in same}
+        changed_rows = list(same_rows - set(self._current_rows.values()))
+
+        # Find which nickname reservation have been unset and replace the
+        # value with an empty string. Only the empty string tells the server
+        # to unset the nickname reservation.
+        modified_rows: list[AffiliationRow] = []
+        for changed in changed_rows:
+            before = self._current_rows[changed.jid]
+            if changed.nick is None and before.nick is not None:
+                # Nick was unset
+                modified_rows.append(changed._replace(nick=""))
+                continue
+
+            modified_rows.append(changed)
 
         return removed_rows + added_rows + modified_rows
 
     def _set_affiliations(self) -> None:
         diff_rows = self._get_diff()
 
-        affiliations = {}
+        affiliations: dict[str, dict[str, str]] = {}
         for row in diff_rows:
             affiliations[row.jid] = {"affiliation": row.affiliation}
-            if row.nick:
+            if row.nick is not None:
                 affiliations[row.jid]["nick"] = row.nick
 
-        self._client.get_module("MUC").set_affiliation(
-            self._contact.jid, affiliations, callback=self._on_affiliation_finished
-        )
+        for jid, data in affiliations.items():
+            # Send only one change at a time to work around a old prosody bug
+            # https://issues.prosody.im/345
+            self._client.get_module("MUC").set_affiliation(
+                self._contact.jid, {jid: data}, callback=self._on_affiliation_finished
+            )
 
     def _on_affiliation_finished(self, task: Task) -> None:
         try:
@@ -323,7 +341,7 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
 
         for jid, attrs in result.users.items():
             affiliation_edit, jid_edit = self._allowed_to_edit(affiliation)
-            nick = attrs.get("nick")
+            nick = attrs.get("nick") or None
 
             jid = str(jid)
             self._store.append(
@@ -337,8 +355,8 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
                 ]
             )
 
-            self._current_rows.add(
-                AffiliationRow(jid=jid, nick=nick, affiliation=affiliation)
+            self._current_rows[jid] = AffiliationRow(
+                jid=jid, nick=nick, affiliation=affiliation
             )
 
     @staticmethod
