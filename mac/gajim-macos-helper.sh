@@ -67,6 +67,7 @@ export CI_BUILD=0
 export CI_GAJIM_RELEASE=0
 
 function install_brew_dependencies() {
+	brew update
 	brew install gettext python@${python_version} librsvg git
 	brew unlink python && brew link python@${python_version}
 	brew install gtk4 libadwaita pygobject3 adwaita-icon-theme libsoup@3 gst-python gtksourceview5 gstreamer
