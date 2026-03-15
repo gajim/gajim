@@ -10,8 +10,6 @@ from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.gtk.account_page import AccountPage
-from gajim.gtk.activity_list import ActivityListView
-from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_page import ChatPage
 
@@ -30,10 +28,6 @@ class MainStack(Gtk.Stack):
         self._chat_page.connect("chat-selected", self._on_chat_selected)
         self.add_named(self._chat_page, "chats")
         self.add_named(AccountPage(), "account")
-
-        activity_list = self._chat_page.get_activity_list()
-        activity_list.connect("activate", self._on_activity_item_activate)
-        activity_list.connect("unselected", self._on_activity_item_unselected)
 
     def _get_account_page(self) -> AccountPage:
         return cast(AccountPage, self.get_child_by_name("account"))
@@ -54,12 +48,6 @@ class MainStack(Gtk.Stack):
         self.set_visible_child_name("chats")
         self._chat_page.show_activity_page(context_id)
 
-    def get_activity_page(self) -> ActivityPage:
-        chat_stack = self._chat_page.get_chat_stack()
-        activity_page = chat_stack.get_child_by_name("activity")
-        assert isinstance(activity_page, ActivityPage)
-        return activity_page
-
     def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
         self.set_visible_child_name("chats")
@@ -76,15 +64,6 @@ class MainStack(Gtk.Stack):
         chat_page = self.get_child_by_name("chats")
         assert isinstance(chat_page, ChatPage)
         return chat_page
-
-    def _on_activity_item_activate(
-        self, listview: ActivityListView, position: int
-    ) -> None:
-        item = listview.get_listitem(position)
-        self.get_activity_page().process_row_activated(item)
-
-    def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
-        self.get_activity_page().show_default_page()
 
     def _on_chat_selected(
         self, _chat_list: ChatList, _workspace_id: str, _account: str, _jid: JID

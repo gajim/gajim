@@ -337,6 +337,14 @@ class VCard4Received(ApplicationEvent):
 
 
 @dataclass
+class TimezoneChanged(ApplicationEvent):
+    name: str = field(init=False, default='timezone-changed')
+    account: str
+    vcard: str | None
+    local: str | None
+
+
+@dataclass
 class MucUserBlockChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-block-changed')
     account: str

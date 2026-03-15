@@ -263,6 +263,7 @@ BoolAccountSettings = Literal[
     'autoconnect',
     'autojoin_sync',
     'client_cert_encrypted',
+    'confirm_timezone_change',
     'confirm_unencrypted_connection',
     'enable_gssapi',
     'enable_security_labels',
@@ -281,10 +282,11 @@ BoolAccountSettings = Literal[
     'sync_muc_blocks',
     'sync_with_global_status',
     'test_ft_proxies_on_startup',
+    'update_timezone',
     'use_custom_host',
     'use_ft_proxies',
     'use_plain_connection',
-    'omemo_blind_trust'
+    'omemo_blind_trust',
 ]
 
 
@@ -384,6 +386,7 @@ ACCOUNT_SETTINGS = {
         'chat_history_max_age': -1,
         'client_cert': '',
         'client_cert_encrypted': False,
+        'confirm_timezone_change': True,
         'confirm_unencrypted_connection': True,
         'custom_host': '',
         'custom_port': 5222,
@@ -419,6 +422,7 @@ ACCOUNT_SETTINGS = {
         'sync_muc_blocks': True,
         'sync_with_global_status': True,
         'test_ft_proxies_on_startup': False,
+        'update_timezone': True,
         'use_custom_host': False,
         'use_ft_proxies': False,
         'use_plain_connection': False,
