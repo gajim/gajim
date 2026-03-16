@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Literal
+from typing import TYPE_CHECKING
 
 import datetime
 import gc
@@ -54,6 +55,10 @@ from gajim.common.util.uri import UriT
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.const import GDK_MEMORY_DEFAULT
+
+if sys.platform == "darwin" or TYPE_CHECKING:
+    from AppKit import NSWorkspace
+    from Foundation import NSURL
 
 log = logging.getLogger("gajim.gtk.util")
 
@@ -437,7 +442,14 @@ def open_file(path: Path, *, show_in_folder: bool = False) -> None:
     launcher = Gtk.FileLauncher(file=Gio.File.new_for_path(str(path_absolute)))
     try:
         if show_in_folder:
-            launcher.open_containing_folder(app.window)
+            if (
+                sys.platform == "darwin"
+            ):  # Implemented as workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/8070
+                assert NSWorkspace is not None and NSURL is not None
+                url = NSURL.fileURLWithPath_(str(path_absolute))
+                NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs_([url])
+            else:
+                launcher.open_containing_folder(app.window)
         else:
             launcher.launch(app.window)
     except Exception as error:
