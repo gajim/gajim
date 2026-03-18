@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: '49'
+runtime-version: '50'
 sdk: org.gnome.Sdk
 command: gajim
 finish-args:
@@ -86,22 +86,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-45.0.7-cp311-abi3-manylinux_2_34_aarch64.whl
+      - pip3 install cryptography-46.0.5-cp311-abi3-manylinux_2_34_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.7-cp311-abi3-manylinux_2_34_aarch64.whl
-        sha256: 8978132287a9d3ad6b54fcd1e08548033cc09dc6aacacb6c004c73c3eb5d3ac3
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-46.0.5-cp311-abi3-manylinux_2_34_aarch64.whl
+        sha256: e9251e3be159d1020c4030bd2e5f84d6a43fe54b6c19c12f51cde9542a2817b2
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-45.0.7-cp311-abi3-manylinux_2_34_x86_64.whl
+      - pip3 install cryptography-46.0.5-cp311-abi3-manylinux_2_34_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.7-cp311-abi3-manylinux_2_34_x86_64.whl
-        sha256: b6a0e535baec27b528cb07a119f321ac024592388c5681a5ced167ae98e9fff3
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-46.0.5-cp311-abi3-manylinux_2_34_x86_64.whl
+        sha256: 4c3341037c136030cb46e4b1e17b7418ea4cbd9dd207e4a6f3b2b24e0d4ac731
 
   - name: python3-jeepney
     buildsystem: simple
@@ -146,11 +146,11 @@ modules:
   - name: python3-jaraco.context
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco_context-6.1.0-py3-none-any.whl
+      - pip3 install jaraco_context-6.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/8d/48/aa685dbf1024c7bd82bede569e3a85f82c32fd3d79ba5fea578f0159571a/jaraco_context-6.1.0-py3-none-any.whl
-        sha256: a43b5ed85815223d0d3cfdb6d7ca0d2bc8946f28f30b6f3216bda070f68badda
+        url: https://files.pythonhosted.org/packages/f4/49/c152890d49102b280ecf86ba5f80a8c111c3a155dafa3bd24aeb64fde9e1/jaraco_context-6.1.1-py3-none-any.whl
+        sha256: 0df6a0287258f3e364072c3e40d5411b20cafa30cb28c4839d24319cecf9f808
 
   - name: python3-jaraco.functools
     buildsystem: simple
@@ -206,8 +206,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.9.tar.xz
-        sha256: d093fd35ae0f1c98fb58876505287fc0a885e47da9d2411d6d7cd595f34d4ebf
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.10.tar.xz
+        sha256: 56e3f01a3a18b575beea4c34349f99cdaba316e1f7c271b1231f7bcf5d9af73b
 
   - name: farstream
     rm-configure: true
@@ -362,11 +362,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.53.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.55.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/47/d4/2fdf854bc3b9c7f55219678f812600a20a138af2dd847d99004994eada8f/sentry_sdk-2.53.0-py2.py3-none-any.whl
-        sha256: 46e1ed8d84355ae54406c924f6b290c3d61f4048625989a723fd622aab838899
+        url: https://files.pythonhosted.org/packages/9a/66/20465097782d7e1e742d846407ea7262d338c6e876ddddad38ca8907b38f/sentry_sdk-2.55.0-py2.py3-none-any.whl
+        sha256: 97026981cb15699394474a196b88503a393cbc58d182ece0d3abe12b9bd978d4
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -389,11 +389,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install sqlalchemy-2.0.47-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.48-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/15/9f/7c378406b592fcf1fc157248607b495a40e3202ba4a6f1372a2ba6447717/sqlalchemy-2.0.47-py3-none-any.whl
-        sha256: e2647043599297a1ef10e720cf310846b7f31b6c841fee093d2b09d81215eb93
+        url: https://files.pythonhosted.org/packages/46/2c/9664130905f03db57961b8980b05cab624afd114bf2be2576628a9f22da4/sqlalchemy-2.0.48-py3-none-any.whl
+        sha256: a66fe406437dd65cacd96a72689a3aaaecaebbcd62d81c5ac1c0fdbeac835096
 
   - name: python3-emoji
     buildsystem: simple
@@ -437,11 +437,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.33.5-py3-none-any.whl
+      - pip3 install --no-deps protobuf-7.34.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/57/bf/2086963c69bdac3d7cff1cc7ff79b8ce5ea0bec6797a017e1be338a46248/protobuf-6.33.5-py3-none-any.whl
-        sha256: 69915a973dd0f60f31a08b8318b73eab2bd6a392c79184b3612226b0a3f8ec02
+        url: https://files.pythonhosted.org/packages/a4/e7/14dc9366696dcb53a413449881743426ed289d687bcf3d5aee4726c32ebb/protobuf-7.34.0-py3-none-any.whl
+        sha256: e3b914dd77fa33fa06ab2baa97937746ab25695f389869afdf03e81f34e45dc7
 
   - name: python3-omemo-dr
     buildsystem: simple
