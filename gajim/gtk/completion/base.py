@@ -41,7 +41,7 @@ class BaseCompletionProvider:
     trigger_char = ""
     name = ""
 
-    def get_model(self) -> tuple[Gio.ListModel, type[BaseCompletionViewItem[Any]]]:
+    def get_model(self) -> tuple[Gio.ListModel[Any], type[BaseCompletionViewItem[Any]]]:
         raise NotImplementedError
 
     def check(self, candidate: str, start_iter: Gtk.TextIter) -> bool:

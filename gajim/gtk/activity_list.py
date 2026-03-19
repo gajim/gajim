@@ -70,7 +70,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
         self.add_css_class("activity-list-view")
 
-        self._model = Gio.ListStore(item_type=ActivityListItem)
+        self._model: Gio.ListStore[ActivityListItem[Any]] = Gio.ListStore(
+            item_type=ActivityListItem
+        )
 
         factory = Gtk.SignalListItemFactory()
         self._connect(factory, "setup", self._on_factory_setup)
@@ -155,7 +157,6 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
     def select_with_context_id(self, context_id: str) -> None:
         for position, item in enumerate(self._model):
-            item = cast(ActivityListItem[Any], item)
             if item.context_id == context_id:
                 self._selection_model.set_selected(position)
                 return
@@ -178,10 +179,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
         self._model.remove(position)
 
-    def _update_time(self) -> int:
+    def _update_time(self) -> bool:
         now = utc_now()
         for item in self._model:
-            item = cast(ActivityListItem[Any], item)
             delta = now - item.timestamp
             if delta > dt.timedelta(days=8):
                 # Items older than 8 days show an absolute timestamp

@@ -29,7 +29,9 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
     ) -> None:
         Gtk.DropDown.__init__(self)
 
-        self._model = Gio.ListStore(item_type=KeyValueItem)
+        self._model: Gio.ListStore[KeyValueItem[_K]] = Gio.ListStore(
+            item_type=KeyValueItem
+        )
         list_store_expression = Gtk.PropertyExpression.new(
             KeyValueItem,
             None,
@@ -123,7 +125,7 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
 
     def select_key(self, key: _K) -> None:
         for pos in range(self._model.get_n_items()):
-            item = cast(KeyValueItem[_K] | None, self._model.get_item(pos))
+            item = self._model.get_item(pos)
             assert item is not None
             if item.key == key:
                 self.set_selected(pos)
@@ -134,7 +136,7 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
 
     def has_key(self, key: _K) -> bool:
         for pos in range(self._model.get_n_items()):
-            item = cast(KeyValueItem[_K] | None, self._model.get_item(pos))
+            item = self._model.get_item(pos)
             assert item is not None
             if item.key == key:
                 return True

@@ -38,8 +38,7 @@ test-pyright:
   script:
     - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip install git+https://dev.gajim.org/gajim/omemo-dr.git
-    # - pip install git+https://github.com/pygobject/pygobject-stubs.git
-    - pip install pygobject-stubs==2.14.0
+    - pip install pygobject-stubs==2.17.0
     - pyright --version
     - pyright
   interruptible: true

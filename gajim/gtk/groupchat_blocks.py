@@ -110,7 +110,6 @@ class GroupchatBlocks(Gtk.Box, SignalManager):
 
     def _remove(self, item: BlockListItem) -> None:
         for index, item_ in enumerate(self._model):
-            item_ = cast(BlockListItem, item_)
             if item_.id == item.id:
                 self._model.remove(index)
                 return

@@ -96,7 +96,11 @@ class CommandsCompletionProvider(BaseCompletionProvider):
             model=filter_model, size=MAX_COMPLETION_ENTRIES
         )
 
-    def get_model(self) -> tuple[Gio.ListModel, type[CommandsCompletionViewItem]]:
+    def get_model(
+        self,
+    ) -> tuple[
+        Gio.ListModel[CommandsCompletionListItem], type[CommandsCompletionViewItem]
+    ]:
         return self._model, CommandsCompletionViewItem
 
     def check(self, candidate: str, start_iter: Gtk.TextIter) -> bool:

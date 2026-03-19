@@ -105,7 +105,11 @@ class NicknameCompletionProvider(BaseCompletionProvider):
             model=filter_model, size=MAX_COMPLETION_ENTRIES
         )
 
-    def get_model(self) -> tuple[Gio.ListModel, type[NicknameCompletionViewItem]]:
+    def get_model(
+        self,
+    ) -> tuple[
+        Gio.ListModel[NicknameCompletionListItem], type[NicknameCompletionViewItem]
+    ]:
         return self._model, NicknameCompletionViewItem
 
     def check(self, candidate: str, start_iter: Gtk.TextIter) -> bool:

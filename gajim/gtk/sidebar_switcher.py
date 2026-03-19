@@ -287,7 +287,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
 
         GLib.idle_add(self._activate_item, menu_item)
 
-    def _activate_item(self, item: SideBarMenuItem) -> int:
+    def _activate_item(self, item: SideBarMenuItem) -> bool:
         item.emit("activate")
         return GLib.SOURCE_REMOVE
 

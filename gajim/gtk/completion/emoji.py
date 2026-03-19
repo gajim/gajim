@@ -107,7 +107,9 @@ def try_load_raw_emoji_data(locale: str) -> GLib.Bytes | None:
         return None
 
 
-def parse_emoji_data(bytes_data: GLib.Bytes, loc: str) -> Gio.ListStore:
+def parse_emoji_data(
+    bytes_data: GLib.Bytes, loc: str
+) -> Gio.ListStore[EmojiCompletionListItem]:
     variant = GLib.Variant.new_from_bytes(
         # Reference for the data format:
         # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/emoji/convert-emoji.c#L25
@@ -286,11 +288,13 @@ class EmojiCompletionProvider(BaseCompletionProvider):
             model=self._filter_model, size=MAX_COMPLETION_ENTRIES
         )
 
-    def get_model(self) -> tuple[Gio.ListModel, type[EmojiCompletionViewItem]]:
+    def get_model(
+        self,
+    ) -> tuple[Gio.ListModel[EmojiCompletionListItem], type[EmojiCompletionViewItem]]:
         return self._model, EmojiCompletionViewItem
 
     @staticmethod
-    def _load_emoji_data() -> Gio.ListStore:
+    def _load_emoji_data() -> Gio.ListStore[EmojiCompletionListItem]:
         app_locale = get_default_lang()
         log.info("Loading emoji data; application locale is %s", app_locale)
         short_locale = get_short_lang_code(app_locale)

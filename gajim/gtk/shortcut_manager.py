@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Literal
 from typing import TypedDict
 
@@ -53,7 +52,6 @@ class ShortcutManager:
 
         for shortcut_group in self._shortcut_groups.values():
             for shortcut in shortcut_group:
-                shortcut = cast(GajimShortcut, shortcut)
                 user_accelerators = user_shortcuts.get(shortcut.action_name)
                 if user_accelerators is None:
                     continue
@@ -65,7 +63,7 @@ class ShortcutManager:
 
     def iter_shortcuts(self) -> Iterator[GajimShortcut]:
         for shortcut_group in self._shortcut_groups.values():
-            yield from shortcut_group  # pyright: ignore
+            yield from shortcut_group
 
     def install_shortcuts(
         self, widget: Gtk.Widget, group_name: list[GroupsT] | GroupsT
@@ -217,7 +215,7 @@ class GajimShortcut(Gtk.Shortcut):
 
 class GajimShortcutGroup(Gio.ListStore):
     def __init__(self, name: str, shortcuts: list[GajimShortcut]) -> None:
-        Gio.ListStore.__init__(self, item_type=GajimShortcut)
+        super().__init__(item_type=GajimShortcut)
 
         self._name = name
         self._shortcuts: dict[str, GajimShortcut] = {}

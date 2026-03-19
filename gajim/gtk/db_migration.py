@@ -73,7 +73,7 @@ class DBMigration(Adw.ApplicationWindow, EventHelper, SignalManager):
 
         self._timeout_id = GLib.timeout_add(100, self._set_transient)
 
-    def _set_transient(self) -> int:
+    def _set_transient(self) -> bool:
         # Set transient on every update to make sure transient is set as
         # soon as main window is available
         self.set_transient_for(app.window)

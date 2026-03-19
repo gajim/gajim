@@ -118,7 +118,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
     def _on_clicked(self, _button: FileChooserButton) -> None:
         dialog = Gtk.FileDialog()
 
-        file_filter_model = Gio.ListStore()
+        file_filter_model = Gio.ListStore(item_type=Gtk.FileFilter)
         for f in self._filters:
             file_filter = Gtk.FileFilter(
                 name=f.name, patterns=f.patterns or [], suffixes=f.suffixes or []

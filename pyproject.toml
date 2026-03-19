@@ -60,19 +60,24 @@ gajim = "gajim.main:run"
 
 [dependency-groups]
 dev = [
+    "pygobject>=3.56.1",
     "codespell==2.4.1",
     "cryptography@git+https://github.com/pyca/cryptography.git",
     "isort==7.0.0",
     "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
     "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
     "pre-commit",
-    "pygobject-stubs==2.16.0",
+    "pygobject-stubs==2.17.0",
     "pytest>=9.0.2",
     "python-gitlab",
     "ruamel.yaml",
     "ruff==0.14.8",
     "sentry-sdk",
 ]
+
+# [tool.uv.sources]
+# pygobject-stubs = { path = "../pygobject-stubs" }
+# nbxmpp = { path = "../python-nbxmpp" }
 
 [tool.setuptools.packages.find]
 include = ["gajim*"]
@@ -139,6 +144,7 @@ exclude = [
   "gajim/gtk/settings.py",
   "gajim/gtk/start_chat.py",
   "gajim/gtk/types.py",
+  "gajim/gtk/shortcut_manager.py",
   "scripts/update_flatpak_manifest.py",
   "test/common/test_uri_util.py",
   "test/gui/test_menus.py",

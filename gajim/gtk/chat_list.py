@@ -540,7 +540,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             GLib.source_remove(self._scheduled_sort_id)
         self._scheduled_sort_id = None
 
-    def _execute_scheduled_sort(self) -> int:
+    def _execute_scheduled_sort(self) -> bool:
         log.debug("Execute scheduled sort")
         if not self._rows_need_sort:
             log.debug("Abort scheduled sort, reason: no rows changed")
