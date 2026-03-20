@@ -703,8 +703,10 @@ class LoginGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "savepass",
                 enabled_func=(
-                    lambda: not app.settings.get("use_keyring")
-                    or passwords.is_keyring_available()
+                    lambda: (
+                        not app.settings.get("use_keyring")
+                        or passwords.is_keyring_available()
+                    )
                 ),
                 callback=self._on_save_password,
             ),

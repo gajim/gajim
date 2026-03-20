@@ -165,7 +165,7 @@ END
 """
 
     def to_ver_list(v: str) -> str:
-        v = v.split("-")[0]
+        v = v.split("-", maxsplit=1)[0]
         return ",".join(map(str, (list(map(int, v.split("."))) + [0] * 4)[:4]))
 
     file_version_list = to_ver_list(file_version)

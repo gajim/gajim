@@ -1,13 +1,13 @@
 repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.14.8
+    rev: v0.15.7
     hooks:
       - id: ruff-check
         exclude: ".githooks/"
       - id: ruff-format
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
     - id: codespell
       pass_filenames: false
@@ -15,7 +15,7 @@ repos:
         - tomli
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.406
+    rev: v1.1.407
     hooks:
     - id: pyright
       pass_filenames: false
@@ -28,7 +28,7 @@ repos:
       stages: [manual]
 
   - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 8.0.1
     hooks:
       - id: isort
 

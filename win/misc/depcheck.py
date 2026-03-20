@@ -104,7 +104,7 @@ def find_lib(root: str, name: str) -> bool:
         return True
     elif os.path.exists(os.path.join(system_search_path, name)):
         return True
-    elif name in ["gdiplus.dll"]:
+    elif name == "gdiplus.dll":
         return True
     elif name.startswith("msvcr"):
         return True

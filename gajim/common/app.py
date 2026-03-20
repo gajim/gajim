@@ -342,7 +342,7 @@ def get_room_and_nick_from_fjid(jid: str) -> list[str]:
 
 
 def get_jid_without_resource(jid: str) -> str:
-    return jid.split('/')[0]
+    return jid.split('/', maxsplit=1)[0]
 
 
 def get_number_of_connected_accounts(

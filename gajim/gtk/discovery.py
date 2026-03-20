@@ -320,7 +320,7 @@ class ServicesCache:
                 break
         else:
             # Loop fell through, default to unknown
-            service_name = addr.split(".")[0]
+            service_name = addr.split(".", maxsplit=1)[0]
 
         # Or load it
         icon_name = f"gajim-agent-{service_name}"
