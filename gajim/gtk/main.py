@@ -10,6 +10,7 @@ from typing import Literal
 from typing import TYPE_CHECKING
 
 import logging
+import sys
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -235,6 +236,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.mark_workspace_as_read(workspace_id)
 
     def _prepare_window(self) -> None:
+        if sys.platform == "win32":
+            self._header_bar.set_decoration_layout("icon:minimize,maximize,close")
+
         window_width = app.settings.get("mainwin_width")
         window_height = app.settings.get("mainwin_height")
         resize_window(self, window_width, window_height)
