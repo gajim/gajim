@@ -454,6 +454,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return False
 
         is_groupchat = row.type == "groupchat"
+        is_pm = row.type == "pm"
         if self._current_filter.type == ChatTypeFilter.CHAT and is_groupchat:
             return False
 
@@ -462,7 +463,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
         group = self._current_filter.group
         if group is not None:
-            if is_groupchat:
+            if is_groupchat or is_pm:
                 return False
 
             assert isinstance(row.contact, BareContact)
@@ -471,6 +472,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
         if not self._current_filter_text:
             return True
+
         text = self._current_filter_text.lower()
         return text in row.contact_name.lower()
 
