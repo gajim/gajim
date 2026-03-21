@@ -10,9 +10,10 @@ Download [msys2](https://www.msys2.org/) (`msys2-x86_64-xxx.exe`) and follow the
 * Execute `C:\msys64\msys2_shell.cmd -mingw64`
 * Run `pacman -S git` to install git
 * Run `git clone https://dev.gajim.org/USERNAME/gajim.git`
-* Run `cd gajim/win` to end up where this README exists.
-* Execute `./dev_env.sh` to install all the needed dependencies.
-* Now go to the git root dir `cd ..`
+* Run `cd gajim`
+* Create a virtual environment with access to MSYS packages: `python -m venv .venv --system-site-packages`
+* Activate the newly created environment: `source .venv/bin/activate`
+* Execute `./win/dev_env.sh` to install all the needed dependencies
 * Launch Gajim `./launch.py`
 
 ### GTK Inspector
