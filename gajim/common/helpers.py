@@ -47,6 +47,7 @@ from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from qrcode.image.pil import PilImage as QrcPilImage
@@ -109,6 +110,19 @@ def sanitize_filename(filename: str) -> str:
     filename = filename[:final_length]
 
     return f'{filename}{extension}'
+
+
+def make_path_from_jid(base_path: Path, jid: JID) -> Path:
+    assert jid.domain is not None
+    domain = jid.domain[:50]
+
+    if jid.localpart is None:
+        return base_path / domain
+
+    path = base_path / domain / sanitize_filename(jid.localpart[:50])
+    if jid.resource is not None:
+        return path / sanitize_filename(jid.resource[:30])
+    return path
 
 
 def generate_qr_code(content: str) -> Gdk.Texture:

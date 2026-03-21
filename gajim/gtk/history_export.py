@@ -17,12 +17,12 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.helpers import make_path_from_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
-from gajim.common.util.uri import make_path_from_jid
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantErrorPage

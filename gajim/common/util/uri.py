@@ -280,19 +280,6 @@ def get_file_path_from_uri(uri: str) -> Path | None:
     return path
 
 
-def make_path_from_jid(base_path: Path, jid: JID) -> Path:
-    assert jid.domain is not None
-    domain = jid.domain[:50]
-
-    if jid.localpart is None:
-        return base_path / domain
-
-    path = base_path / domain / jid.localpart[:50]
-    if jid.resource is not None:
-        return path / jid.resource[:30]
-    return path
-
-
 def geo_provider_from_location(lat: str, lon: str) -> str:
     return f"https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16"
 
