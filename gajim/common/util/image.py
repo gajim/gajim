@@ -123,12 +123,22 @@ def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
 
 
 def image_size(image_path: Path) -> tuple[int, int]:
-    with Image.open(image_path) as image:
-        width, height = image.size
-        return width, height
+    try:
+        with Image.open(image_path) as image:
+            width, height = image.size
+            return width, height
+    except Exception:
+        log.warning("Could not determine image size for %s", image_path, exc_info=True)
+        return 0, 0
 
 
 def is_image_animated(image_path: Path) -> bool:
-    with Image.open(image_path) as image:
-        n_frames: int = getattr(image, "n_frames", 1)
-        return getattr(image, "is_animated", False) and n_frames > 1
+    try:
+        with Image.open(image_path) as image:
+            n_frames: int = getattr(image, "n_frames", 1)
+            return getattr(image, "is_animated", False) and n_frames > 1
+    except Exception:
+        log.warning(
+            "Could not determine if image is animated: %s", image_path, exc_info=True
+        )
+        return False
