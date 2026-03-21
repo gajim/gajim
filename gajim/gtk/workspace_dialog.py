@@ -104,7 +104,9 @@ class WorkspaceDialog(GajimAppWindow):
         self._avatar_selector.reset()
         if switch.get_active():
             self._ui.style_stack.set_visible_child_name("image")
-            if self._workspace_id is not None:
+            if self._workspace_id is not None and app.settings.workspace_exists(
+                self._workspace_id
+            ):
                 self._avatar_sha = app.settings.get_workspace_setting(
                     self._workspace_id, "avatar_sha"
                 )
@@ -152,7 +154,9 @@ class WorkspaceDialog(GajimAppWindow):
             if data is not None:
                 self._avatar_sha = app.app.avatar_storage.save_avatar(data)
 
-        if self._workspace_id is not None:
+        if self._workspace_id is not None and app.settings.workspace_exists(
+            self._workspace_id
+        ):
             app.settings.set_workspace_setting(self._workspace_id, "name", name)
             app.settings.set_workspace_setting(
                 self._workspace_id, "color", rgba.to_string()

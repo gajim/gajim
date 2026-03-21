@@ -1205,6 +1205,9 @@ class Settings:
         workspaces.sort(key=sort_workspaces)
         return workspaces
 
+    def workspace_exists(self, workspace_id: str) -> bool:
+        return workspace_id in app.settings.get_workspaces()
+
     def add_workspace(self, name: str) -> str:
         id_ = str(uuid.uuid4())
         self._settings['workspaces'][id_] = {
