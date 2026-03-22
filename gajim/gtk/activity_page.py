@@ -13,6 +13,7 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
@@ -374,7 +375,7 @@ class TimezoneChangedPage(BaseActivityPage):
 
         self._event = item.get_event()
 
-        self._ui.old_timezone_label.set_text(self._event.vcard or "")
+        self._ui.old_timezone_label.set_text(self._event.vcard or _("None"))
         self._ui.new_timezone_label.set_text(self._event.local or "")
 
         self.append(self._ui.change_timezone_page)
