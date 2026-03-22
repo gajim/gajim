@@ -710,16 +710,18 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
 class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
     @classmethod
     def from_event(cls, event: events.TimezoneChanged) -> TimezoneChanged:
+        scale = app.window.get_scale_factor()
+        texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
         return cls(
             context_id=event.context_id,
             account="",
             account_visible=True,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
-            avatar=None,
-            title=_("Timezone Missing"),
+            avatar=texture,
+            title=_("Timezone Changed"),
             timestamp=utc_now(),
-            subject=_("Do you want to add a timezone?"),
+            subject=_("Update your timezone?"),
             read=False,
             event=event,
         )

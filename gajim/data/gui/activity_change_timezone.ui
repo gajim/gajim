@@ -2,57 +2,94 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="change_timezone_page">
-    <property name="can-focus">False</property>
+    <property name="can-focus">0</property>
     <property name="orientation">vertical</property>
+    <property name="halign">center</property>
     <child>
       <object class="GtkLabel">
-        <property name="can-focus">False</property>
+        <property name="can-focus">0</property>
         <property name="margin-bottom">6</property>
-        <property name="label" translatable="yes">Timezone changed</property>
+        <property name="label" translatable="yes">Timezone Changed</property>
         <style>
           <class name="title-1"/>
         </style>
       </object>
     </child>
     <child>
+      <object class="GtkLabel">
+        <property name="wrap">1</property>
+        <property name="max-width-chars">50</property>
+        <property name="label" translatable="yes">You are in a different timezone. Gajim can automatically update your profile with your new timezone.</property>
+        <style>
+          <class name="dimmed" />
+        </style>
+      </object>
+    </child>
+    <child>
       <object class="GtkBox">
-        <property name="can-focus">False</property>
+        <property name="can-focus">0</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <property name="margin-top">18</property>
         <child>
-          <object class="GtkLabel" id="old_timezone_label">
-            <property name="can-focus">False</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
+          <object class="GtkBox">
+            <property name="can-focus">0</property>
+            <property name="spacing">12</property>
+            <property name="halign">center</property>
             <style>
-              <class name="title-2"/>
+              <class name="mb-12" />
+              <class name="p-18" />
+              <class name="card" />
             </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel" id="new_timezone_label">
-            <property name="can-focus">False</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-            <style>
-              <class name="title-2"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="update_button">
-            <property name="label" translatable="yes">Update</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="ignore_button">
-            <property name="label" translatable="yes">Ignore</property>
+            <child>
+              <object class="GtkLabel" id="old_timezone_label">
+                <property name="can-focus">0</property>
+                <property name="wrap">1</property>
+                <style>
+                  <class name="title-4"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-arrow-right-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="new_timezone_label">
+                <property name="can-focus">0</property>
+                <property name="wrap">1</property>
+                <style>
+                  <class name="title-4"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkCheckButton" id="ask_button">
-            <property name="label" translatable="yes">Do not ask again</property>
+            <property name="label" translatable="yes">Remember my decision</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="can-focus">0</property>
+            <property name="spacing">12</property>
+              <child>
+                <object class="GtkButton" id="ignore_button">
+                  <property name="label" translatable="yes">Ignore</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkButton" id="update_button">
+                  <property name="label" translatable="yes">Update Timezone</property>
+                  <property name="halign">end</property>
+                  <property name="hexpand">1</property>
+                  <style>
+                    <class name="suggested-action" />
+                  </style>
+                </object>
+              </child>
           </object>
         </child>
       </object>
