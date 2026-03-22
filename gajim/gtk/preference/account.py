@@ -301,7 +301,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
                 _("Update Timezone"),
                 SettingType.ACCOUNT_CONFIG,
                 "update_timezone",
-                desc=_("Update the system timezone automatically in your profile"),
+                desc=_("Update your profile's timezone automatically"),
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -309,7 +309,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "confirm_timezone_change",
                 bind="account::update_timezone",
-                desc=_("Ask for confirmation before updating the timezone"),
+                desc=_("Ask before updating the timezone"),
             ),
             Setting(
                 SettingKind.SWITCH,

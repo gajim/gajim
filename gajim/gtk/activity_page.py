@@ -387,7 +387,7 @@ class TimezoneChangedPage(BaseActivityPage):
 
         self._event = item.get_event()
 
-        self._ui.old_timezone_label.set_text(self._event.vcard or _("None"))
+        self._ui.old_timezone_label.set_text(self._event.vcard or _("No Timezone"))
         self._ui.new_timezone_label.set_text(self._event.local or "")
 
         self.add_widget(self._ui.change_timezone_page)
