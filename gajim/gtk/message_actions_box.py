@@ -874,20 +874,31 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         try:
             file_list = clipboard.read_value_finish(result)
         except Exception as e:
-            formats = clipboard.get_formats()
-            mime_types = formats.get_mime_types()
-            InformationAlertDialog(
-                _("Pasting Content Failed"),
-                _("Error: %s (mime types: %s)") % (e, mime_types),
-            )
+            log.info("FileList read failed, trying text fallback: %s", e)
+            clipboard.read_text_async(None, self._on_clipboard_text_fallback_finished)
             return
 
         if file_list is None or not isinstance(file_list, Gdk.FileList):
-            log.info("No URIs pasted")
+            log.info("Unexpected type received %r, trying text fallback", file_list)
+            clipboard.read_text_async(None, self._on_clipboard_text_fallback_finished)
             return
 
         uris = [file.get_uri() for file in file_list.get_files()]
         app.window.activate_action("win.send-file", GLib.Variant("as", uris))
+
+    def _on_clipboard_text_fallback_finished(
+        self,
+        clipboard: Gdk.Clipboard,
+        result: Gio.AsyncResult,
+    ) -> None:
+        try:
+            text = clipboard.read_text_finish(result)
+        except Exception as e:
+            log.warning("Text fallback paste also failed: %s", e)
+            return
+
+        if text:
+            self._message_input.get_buffer().insert_at_cursor(text)
 
     def _on_clipboard_read_texture_finished(
         self,
