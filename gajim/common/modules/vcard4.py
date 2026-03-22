@@ -182,6 +182,7 @@ class VCard4(BaseModule):
         if jid.bare_match(self._get_own_bare_jid()):
             self._own_vcard = vcard
             app.ged.raise_event(VCard4Received(self._account, self._own_vcard))
+            self._check_for_timezone_change()
 
         if weak_callable is None:
             return
