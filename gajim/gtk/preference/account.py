@@ -305,14 +305,6 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Confirm Timezone Update"),
-                SettingType.ACCOUNT_CONFIG,
-                "confirm_timezone_change",
-                bind="account::update_timezone",
-                desc=_("Ask before updating the timezone"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
                 _("Sync Group Chat Block List"),
                 SettingType.ACCOUNT_CONFIG,
                 "sync_muc_blocks",

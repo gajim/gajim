@@ -13,7 +13,9 @@ from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
@@ -34,6 +36,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import open_uri
 
 
@@ -110,7 +113,7 @@ class BaseActivityPage(Gtk.Box, SignalManager):
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
         del self._ui
-        app.check_finalize(self)
+        check_finalize(self)
 
 
 class DefaultPage(BaseActivityPage):
@@ -383,29 +386,30 @@ class TimezoneChangedPage(BaseActivityPage):
 
         self._connect(self._ui.update_button, "clicked", self._on_update)
         self._connect(self._ui.ignore_button, "clicked", self._on_ignore)
-        self._connect(self._ui.ask_button, "notify::active", self._on_ask_active)
 
         self._event = item.get_event()
+        self._client = app.get_client(self._event.account)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._ui.old_timezone_label.set_text(self._event.vcard or _("No Timezone"))
         self._ui.new_timezone_label.set_text(self._event.local or "")
 
         self.add_widget(self._ui.change_timezone_page)
+        self._set_sensitive(self._client.state.is_available)
 
-    def _on_ask_active(
-        self, button: Gtk.CheckButton, param: GObject.GParamSpec
-    ) -> None:
-        app.settings.set_account_setting(
-            self._event.account, "confirm_timezone_change", not button.get_active()
-        )
+    def _set_sensitive(self, sensitive: bool) -> None:
+        self._ui.update_button.set_sensitive(sensitive)
+        self._ui.ignore_button.set_sensitive(sensitive)
 
     def _on_update(self, _button: Gtk.Button) -> None:
-        client = app.get_client(self._event.account)
-        if not client.state.is_available:
-            return
-
-        client.get_module("VCard4").update_timezone()
+        self._client.get_module("VCard4").update_timezone()
         self.emit("request-remove")
 
     def _on_ignore(self, _button: Gtk.Button) -> None:
+        self._client.get_module("VCard4").ignore_timezone_change()
         self.emit("request-remove")
+
+    def _on_client_state_changed(
+        self, client: Client, _signal_name: str, state: SimpleClientState
+    ) -> None:
+        self._set_sensitive(state.is_connected)

@@ -67,11 +67,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkCheckButton" id="ask_button">
-            <property name="label" translatable="yes">Remember my decision</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkBox">
             <property name="can-focus">0</property>
             <property name="spacing">12</property>
