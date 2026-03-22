@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import sys
 
+from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -85,10 +86,21 @@ class BaseActivityPage(Gtk.Box, SignalManager):
     }
 
     def __init__(self, item: ActivityListItemT | None = None) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        Gtk.Box.__init__(self)
         SignalManager.__init__(self)
+        self.add_css_class("mt-18")
+
         self._ui = None
         self._item = item
+
+        clamp = Adw.Clamp(hexpand=True)
+        self.append(clamp)
+
+        self._content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        clamp.set_child(self._content_box)
+
+    def add_widget(self, widget: Gtk.Widget) -> None:
+        self._content_box.append(widget)
 
     def get_item(self) -> ActivityListItemT:
         assert self._item is not None
@@ -105,7 +117,7 @@ class DefaultPage(BaseActivityPage):
     def __init__(self) -> None:
         BaseActivityPage.__init__(self)
         self._ui = get_builder("activity_default.ui")
-        self.append(self._ui.default_page)
+        self.add_widget(self._ui.default_page)
 
 
 class GajimUpdatePermissionPage(BaseActivityPage):
@@ -124,7 +136,7 @@ class GajimUpdatePermissionPage(BaseActivityPage):
             self._on_enable_update_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_enable_update_clicked(
         self, _button: Gtk.Button, item: GajimUpdatePermission
@@ -149,7 +161,7 @@ class GajimUpdatePage(BaseActivityPage):
             self._on_download_update_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_download_update_clicked(
         self, _button: Gtk.Button, item: GajimUpdate
@@ -185,7 +197,7 @@ class GajimPluginUpdatePage(BaseActivityPage):
             self._on_update_plugins_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_update_plugins_clicked(
         self, _button: Gtk.Button, item: GajimPluginUpdate
@@ -219,7 +231,7 @@ class GajimPluginUpdateFinishedPage(BaseActivityPage):
             self._on_open_plugins,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_open_plugins(
         self, _button: Gtk.Button, item: GajimPluginUpdateFinished
@@ -274,7 +286,7 @@ class SubscribePage(BaseActivityPage):
             get_subscription_menu(event.account, jid)
         )
 
-        self.append(self._ui.subscription_page)
+        self.add_widget(self._ui.subscription_page)
 
     def _on_click(self, button: Gtk.Button, item: Subscribe) -> None:
         item.state["state"] = "completed"
@@ -313,7 +325,7 @@ class UnsubscribedPage(BaseActivityPage):
             self._ui.unsubscribed_remove_button, "clicked", self._on_clicked, item
         )
 
-        self.append(self._ui.subscription_page)
+        self.add_widget(self._ui.subscription_page)
 
     def _on_clicked(self, _button: Gtk.Button, item: Unsubscribed) -> None:
         item.state["state"] = "completed"
@@ -336,7 +348,7 @@ class InvitationPage(BaseActivityPage):
             self._connect(invitation_widget, "accepted", self._on_clicked, item)
 
         self._ui.muc_invitation_box.append(invitation_widget)
-        self.append(self._ui.muc_invitation_page)
+        self.add_widget(self._ui.muc_invitation_page)
 
     def _on_clicked(
         self, invitation_widget: GroupChatInvitation, item: MucInvitation
@@ -361,7 +373,7 @@ class InvitationDeclinedPage(BaseActivityPage):
 
         texture = contact.get_avatar(AvatarSize.ACCOUNT_PAGE, self.get_scale_factor())
         self._ui.invitation_image.set_from_paintable(texture)
-        self.append(self._ui.muc_invitation_page)
+        self.add_widget(self._ui.muc_invitation_page)
 
 
 class TimezoneChangedPage(BaseActivityPage):
@@ -378,7 +390,7 @@ class TimezoneChangedPage(BaseActivityPage):
         self._ui.old_timezone_label.set_text(self._event.vcard or _("None"))
         self._ui.new_timezone_label.set_text(self._event.local or "")
 
-        self.append(self._ui.change_timezone_page)
+        self.add_widget(self._ui.change_timezone_page)
 
     def _on_ask_active(
         self, button: Gtk.CheckButton, param: GObject.GParamSpec
