@@ -196,13 +196,12 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             old_item = self._model.get_item(i)
             assert old_item is not None
 
-            if not old_item.read:
-                self._decrease_unread_count()
-
             if (
                 isinstance(old_item, type(new_item))
                 and old_item.account == new_item.account
             ):
+                if not old_item.read:
+                    self._decrease_unread_count()
                 self._model.remove(i)
 
     def _remove_by_type(self, item_type: type[ActivityListItemT]) -> None:
@@ -210,10 +209,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             item = self._model.get_item(i)
             assert item is not None
 
-            if not item.read:
-                self._decrease_unread_count()
-
             if isinstance(item, item_type):
+                if not item.read:
+                    self._decrease_unread_count()
                 self._model.remove(i)
 
     def _remove(self, item: ActivityListItemT) -> None:
