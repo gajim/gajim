@@ -94,8 +94,6 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_time)
 
-        self._items: dict[str, ActivityListItem[Any]] = {}
-
         self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
 
         self._filter_model = Gtk.FilterListModel(
@@ -170,9 +168,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
     def _on_activity_page_removed(
         self, page: ActivityPage, item: ActivityListItemT
     ) -> None:
-        found, position = self._model.find(item)
-        if found:
-            self._remove(position, item.read)
+        self._remove(item)
 
     def select_with_context_id(self, context_id: str) -> None:
         for position, item in enumerate(self._model):
@@ -184,6 +180,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self._selection_model.unselect_all()
 
     def _add(self, item: ActivityListItemT, *, prepend: bool = True) -> None:
+        if item.unique:
+            self._remove_same_items(item)
+
         if prepend:
             self._model.insert(0, item)
         else:
@@ -192,11 +191,39 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         if not item.read:
             self._increase_unread_count()
 
-    def _remove(self, position: int, read: bool) -> None:
-        if not read:
-            self._decrease_unread_count()
+    def _remove_same_items(self, new_item: ActivityListItemT) -> None:
+        for i in reversed(range(len(self._model))):
+            old_item = self._model.get_item(i)
+            assert old_item is not None
+
+            if not old_item.read:
+                self._decrease_unread_count()
+
+            if (
+                isinstance(old_item, type(new_item))
+                and old_item.account == new_item.account
+            ):
+                self._model.remove(i)
+
+    def _remove_by_type(self, item_type: type[ActivityListItemT]) -> None:
+        for i in reversed(range(len(self._model))):
+            item = self._model.get_item(i)
+            assert item is not None
+
+            if not item.read:
+                self._decrease_unread_count()
+
+            if isinstance(item, item_type):
+                self._model.remove(i)
+
+    def _remove(self, item: ActivityListItemT) -> None:
+        found, position = self._model.find(item)
+        if not found:
+            return
 
         self._model.remove(position)
+        if not item.read:
+            self._decrease_unread_count()
 
     def _update_time(self) -> bool:
         now = utc_now()
@@ -309,18 +336,12 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         item = GajimPluginUpdate.from_event(
             events.PluginUpdatesAvailable(manifests=manifests)
         )
-        self._items["plugin-updates-available"] = item
         self._add(item)
 
     def _on_plugin_auto_update_finished(
         self, _repository: PluginRepository, _signal_name: str
     ) -> None:
-        item = self._items.get("plugin-updates-available")
-        if item is not None:
-            found, position = self._model.find(item)
-            if found:
-                self._remove(position, item.read)
-
+        self._remove_by_type(GajimPluginUpdate)
         item = GajimPluginUpdateFinished.from_event()
         self._add(item)
 
@@ -332,15 +353,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 self._model.remove(pos)
 
     def _on_timezone_changed(self, event: events.TimezoneChanged) -> None:
-        item = self._items.get("vcard-timezone-changed")
-        if item is not None:
-            found, position = self._model.find(item)
-            if found:
-                self._remove(position, item.read)
-
-        item = TimezoneChanged.from_event(event)
-        self._items["vcard-timezone-changed"] = item
-        self._add(item)
+        self._add(TimezoneChanged.from_event(event))
 
 
 class ActivityListItem(Generic[E], GObject.Object):
@@ -359,6 +372,7 @@ class ActivityListItem(Generic[E], GObject.Object):
     search_text = GObject.Property(type=str)
     event = GObject.Property(type=object)
     state = GObject.Property(type=object)
+    unique = GObject.Property(type=bool, default=False)
 
     def __init__(
         self,
@@ -373,6 +387,7 @@ class ActivityListItem(Generic[E], GObject.Object):
         subject: str,
         read: bool,
         event: E,
+        unique: bool = False,
     ) -> None:
         self._timestamp_string = get_uf_relative_time(timestamp)
 
@@ -390,6 +405,7 @@ class ActivityListItem(Generic[E], GObject.Object):
             search_text=f"{title} {subject}",
             event=event,
             state={},
+            unique=unique,
         )
 
     @GObject.Property(type=str, flags=GObject.ParamFlags.READABLE)
@@ -504,6 +520,7 @@ class GajimUpdate(ActivityListItem[events.GajimUpdateAvailable]):
             subject=_("Gajim %s is available") % event.version,
             read=False,
             event=event,
+            unique=True,
         )
 
 
@@ -525,6 +542,7 @@ class GajimUpdatePermission(ActivityListItem[events.AllowGajimUpdateCheck]):
             subject=_("Search for Gajim updates periodically?"),
             read=False,
             event=event,
+            unique=True,
         )
 
 
@@ -546,6 +564,7 @@ class GajimPluginUpdate(ActivityListItem[events.PluginUpdatesAvailable]):
             subject=_("There are updates for Gajim’s plugins"),
             read=False,
             event=event,
+            unique=True,
         )
 
 
@@ -567,6 +586,7 @@ class GajimPluginUpdateFinished(ActivityListItem[None]):
             subject=_("Updates will be installed next time Gajim is started"),
             read=False,
             event=None,
+            unique=True,
         )
 
 
@@ -714,7 +734,7 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
         return cls(
             context_id=event.context_id,
-            account="",
+            account=event.account,
             account_visible=True,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -724,6 +744,7 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
             subject=_("Update your timezone?"),
             read=False,
             event=event,
+            unique=True,
         )
 
 
