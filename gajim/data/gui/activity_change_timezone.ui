@@ -9,7 +9,7 @@
       <object class="GtkLabel">
         <property name="can-focus">0</property>
         <property name="margin-bottom">6</property>
-        <property name="label" translatable="yes">Timezone Changed</property>
+        <property name="label" translatable="yes">Timezone Update</property>
         <style>
           <class name="title-1"/>
         </style>
@@ -19,7 +19,7 @@
       <object class="GtkLabel">
         <property name="wrap">1</property>
         <property name="max-width-chars">50</property>
-        <property name="label" translatable="yes">You are in a different timezone. Gajim can automatically update your profile with your new timezone.</property>
+        <property name="label" translatable="yes">Gajim can automatically update your profile with your current timezone. This may help your contacts when they try to reach you.</property>
         <style>
           <class name="dimmed" />
         </style>

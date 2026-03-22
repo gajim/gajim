@@ -739,7 +739,7 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
-            title=_("Timezone Changed"),
+            title=_("Timezone Update"),
             timestamp=utc_now(),
             subject=_("Update your timezone?"),
             read=False,
