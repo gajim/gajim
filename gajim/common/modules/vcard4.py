@@ -121,6 +121,9 @@ class VCard4(BaseModule):
     def ignore_timezone_change(self) -> None:
         self._ignore_timezone_change = True
 
+    def is_timezone_published(self) -> bool:
+        return get_timezone_from_vcard(self._own_vcard) is not None
+
     def subscribe_to_node(self) -> None:
         self._log.info("Subscribe to node")
         self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB)
