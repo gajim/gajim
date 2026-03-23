@@ -25,6 +25,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.activity_list import ActivityListView
+from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_header import ChatListHeader
 from gajim.gtk.chat_list_stack import ChatListStack
@@ -71,7 +72,11 @@ class ChatPage(Gtk.Paned):
 
         self._chat_list_stack.set_search_entry(search_entry)
         self._chat_list_stack.set_chat_filter(chat_filter)
+
+        activity_page = self._chat_stack.get_child_by_name("activity")
+        assert isinstance(activity_page, ActivityPage)
         self._activity_list.set_search_entry(search_entry)
+        self._activity_list.set_page(activity_page)
 
         self._add_actions()
 

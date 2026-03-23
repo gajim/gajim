@@ -281,10 +281,11 @@ BoolAccountSettings = Literal[
     'sync_muc_blocks',
     'sync_with_global_status',
     'test_ft_proxies_on_startup',
+    'update_timezone',
     'use_custom_host',
     'use_ft_proxies',
     'use_plain_connection',
-    'omemo_blind_trust'
+    'omemo_blind_trust',
 ]
 
 
@@ -419,6 +420,7 @@ ACCOUNT_SETTINGS = {
         'sync_muc_blocks': True,
         'sync_with_global_status': True,
         'test_ft_proxies_on_startup': False,
+        'update_timezone': True,
         'use_custom_host': False,
         'use_ft_proxies': False,
         'use_plain_connection': False,

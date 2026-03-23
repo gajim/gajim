@@ -6,16 +6,22 @@ from __future__ import annotations
 
 import sys
 
+from gi.repository import Adw
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk import structs
+from gajim.gtk.activity_list import ActivityListItem
 from gajim.gtk.activity_list import ActivityListItemT
 from gajim.gtk.activity_list import GajimPluginUpdate
 from gajim.gtk.activity_list import GajimPluginUpdateFinished
@@ -24,15 +30,21 @@ from gajim.gtk.activity_list import GajimUpdatePermission
 from gajim.gtk.activity_list import MucInvitation
 from gajim.gtk.activity_list import MucInvitationDeclined
 from gajim.gtk.activity_list import Subscribe
+from gajim.gtk.activity_list import TimezoneChanged
 from gajim.gtk.activity_list import Unsubscribed
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import open_uri
 
 
 class ActivityPage(Gtk.Stack):
+    __gsignals__ = {
+        "page-removed": (GObject.SignalFlags.RUN_LAST, None, (ActivityListItem,)),
+    }
+
     def __init__(self) -> None:
         Gtk.Stack.__init__(self, hexpand=True)
         self.add_css_class("activity-page")
@@ -47,6 +59,7 @@ class ActivityPage(Gtk.Stack):
             Unsubscribed: UnsubscribedPage,
             MucInvitation: InvitationPage,
             MucInvitationDeclined: InvitationDeclinedPage,
+            TimezoneChanged: TimezoneChangedPage,
         }
 
     def show_default_page(self) -> None:
@@ -58,29 +71,56 @@ class ActivityPage(Gtk.Stack):
             self.remove(child)
 
         page = self._pages[type(item)](item)  # pyright: ignore
+        page.connect("request-remove", self._on_request_remove)
 
         self.add_named(page, "activity")
         self.set_visible_child_name("activity")
 
+    def _on_request_remove(self, page: BaseActivityPage) -> None:
+        self.show_default_page()
+        item = page.get_item()
+        self.remove(page)
+        self.emit("page-removed", item)
+
 
 class BaseActivityPage(Gtk.Box, SignalManager):
-    def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
+    __gsignals__ = {
+        "request-remove": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
+    def __init__(self, item: ActivityListItemT | None = None) -> None:
+        Gtk.Box.__init__(self)
         SignalManager.__init__(self)
+        self.add_css_class("mt-18")
+
         self._ui = None
+        self._item = item
+
+        clamp = Adw.Clamp(hexpand=True)
+        self.append(clamp)
+
+        self._content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        clamp.set_child(self._content_box)
+
+    def add_widget(self, widget: Gtk.Widget) -> None:
+        self._content_box.append(widget)
+
+    def get_item(self) -> ActivityListItemT:
+        assert self._item is not None
+        return self._item
 
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
         del self._ui
-        app.check_finalize(self)
+        check_finalize(self)
 
 
 class DefaultPage(BaseActivityPage):
     def __init__(self) -> None:
         BaseActivityPage.__init__(self)
         self._ui = get_builder("activity_default.ui")
-        self.append(self._ui.default_page)
+        self.add_widget(self._ui.default_page)
 
 
 class GajimUpdatePermissionPage(BaseActivityPage):
@@ -99,7 +139,7 @@ class GajimUpdatePermissionPage(BaseActivityPage):
             self._on_enable_update_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_enable_update_clicked(
         self, _button: Gtk.Button, item: GajimUpdatePermission
@@ -124,7 +164,7 @@ class GajimUpdatePage(BaseActivityPage):
             self._on_download_update_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_download_update_clicked(
         self, _button: Gtk.Button, item: GajimUpdate
@@ -160,7 +200,7 @@ class GajimPluginUpdatePage(BaseActivityPage):
             self._on_update_plugins_clicked,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_update_plugins_clicked(
         self, _button: Gtk.Button, item: GajimPluginUpdate
@@ -194,7 +234,7 @@ class GajimPluginUpdateFinishedPage(BaseActivityPage):
             self._on_open_plugins,
             item,
         )
-        self.append(self._ui.gajim_update_page)
+        self.add_widget(self._ui.gajim_update_page)
 
     def _on_open_plugins(
         self, _button: Gtk.Button, item: GajimPluginUpdateFinished
@@ -249,7 +289,7 @@ class SubscribePage(BaseActivityPage):
             get_subscription_menu(event.account, jid)
         )
 
-        self.append(self._ui.subscription_page)
+        self.add_widget(self._ui.subscription_page)
 
     def _on_click(self, button: Gtk.Button, item: Subscribe) -> None:
         item.state["state"] = "completed"
@@ -288,7 +328,7 @@ class UnsubscribedPage(BaseActivityPage):
             self._ui.unsubscribed_remove_button, "clicked", self._on_clicked, item
         )
 
-        self.append(self._ui.subscription_page)
+        self.add_widget(self._ui.subscription_page)
 
     def _on_clicked(self, _button: Gtk.Button, item: Unsubscribed) -> None:
         item.state["state"] = "completed"
@@ -311,7 +351,7 @@ class InvitationPage(BaseActivityPage):
             self._connect(invitation_widget, "accepted", self._on_clicked, item)
 
         self._ui.muc_invitation_box.append(invitation_widget)
-        self.append(self._ui.muc_invitation_page)
+        self.add_widget(self._ui.muc_invitation_page)
 
     def _on_clicked(
         self, invitation_widget: GroupChatInvitation, item: MucInvitation
@@ -336,4 +376,40 @@ class InvitationDeclinedPage(BaseActivityPage):
 
         texture = contact.get_avatar(AvatarSize.ACCOUNT_PAGE, self.get_scale_factor())
         self._ui.invitation_image.set_from_paintable(texture)
-        self.append(self._ui.muc_invitation_page)
+        self.add_widget(self._ui.muc_invitation_page)
+
+
+class TimezoneChangedPage(BaseActivityPage):
+    def __init__(self, item: TimezoneChanged) -> None:
+        BaseActivityPage.__init__(self, item)
+        self._ui = get_builder("activity_change_timezone.ui")
+
+        self._connect(self._ui.update_button, "clicked", self._on_update)
+        self._connect(self._ui.ignore_button, "clicked", self._on_ignore)
+
+        self._event = item.get_event()
+        self._client = app.get_client(self._event.account)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
+
+        self._ui.old_timezone_label.set_text(self._event.vcard or _("No Timezone"))
+        self._ui.new_timezone_label.set_text(self._event.local or "")
+
+        self.add_widget(self._ui.change_timezone_page)
+        self._set_sensitive(self._client.state.is_available)
+
+    def _set_sensitive(self, sensitive: bool) -> None:
+        self._ui.update_button.set_sensitive(sensitive)
+        self._ui.ignore_button.set_sensitive(sensitive)
+
+    def _on_update(self, _button: Gtk.Button) -> None:
+        self._client.get_module("VCard4").update_timezone()
+        self.emit("request-remove")
+
+    def _on_ignore(self, _button: Gtk.Button) -> None:
+        self._client.get_module("VCard4").ignore_timezone_change()
+        self.emit("request-remove")
+
+    def _on_client_state_changed(
+        self, client: Client, _signal_name: str, state: SimpleClientState
+    ) -> None:
+        self._set_sensitive(state.is_connected)

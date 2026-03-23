@@ -298,6 +298,13 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             ),
             Setting(
                 SettingKind.SWITCH,
+                _("Update Timezone"),
+                SettingType.ACCOUNT_CONFIG,
+                "update_timezone",
+                desc=_("Update your profile's timezone automatically"),
+            ),
+            Setting(
+                SettingKind.SWITCH,
                 _("Sync Group Chat Block List"),
                 SettingType.ACCOUNT_CONFIG,
                 "sync_muc_blocks",

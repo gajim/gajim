@@ -18,6 +18,14 @@ class GajimBuilder:
 
 class Builder(Gtk.Builder): ...
 
+class ActivityChangeTimezoneBuilder(Builder):
+    change_timezone_page: Gtk.Box
+    old_timezone_label: Gtk.Label
+    new_timezone_label: Gtk.Label
+    update_button: Gtk.Button
+    ignore_button: Gtk.Button
+    ask_button: Gtk.CheckButton
+
 class ActivityDefaultBuilder(Builder):
     default_page: Gtk.Box
 
@@ -660,6 +668,12 @@ class WorkspaceDialogBuilder(Builder):
     cancel_button: Gtk.Button
     save_button: Gtk.Button
 
+@overload
+def get_builder(
+    file_name: Literal["activity_change_timezone.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityChangeTimezoneBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["activity_default.ui"],

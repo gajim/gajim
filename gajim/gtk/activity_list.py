@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Any
 from typing import cast
 from typing import Generic
@@ -35,6 +36,10 @@ from gajim.plugins.repository import PluginRepository
 
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
+
+if typing.TYPE_CHECKING:
+    from gajim.gtk.activity_page import ActivityPage
+
 
 log = logging.getLogger("gajim.gtk.activity_list")
 
@@ -105,6 +110,8 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self._connect(
             self._selection_model, "notify::selected-item", self._on_selection_changed
         )
+        self._connect(self, "activate", self._on_activity_item_activate)
+        self._connect(self, "unselected", self._on_activity_item_unselected)
 
         self.set_model(self._selection_model)
 
@@ -117,6 +124,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
+                ("timezone-changed", ged.GUI2, self._on_timezone_changed),
             ]
         )
 
@@ -155,6 +163,17 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         del self._custom_filter
         app.check_finalize(self)
 
+    def set_page(self, page: ActivityPage) -> None:
+        self._activity_page = page
+        self._activity_page.connect("page-removed", self._on_activity_page_removed)
+
+    def _on_activity_page_removed(
+        self, page: ActivityPage, item: ActivityListItemT
+    ) -> None:
+        found, position = self._model.find(item)
+        if found:
+            self._remove(position, item.read)
+
     def select_with_context_id(self, context_id: str) -> None:
         for position, item in enumerate(self._model):
             if item.context_id == context_id:
@@ -191,6 +210,15 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             item.update_time()
 
         return GLib.SOURCE_CONTINUE
+
+    def _on_activity_item_activate(
+        self, listview: ActivityListView, position: int
+    ) -> None:
+        item = listview.get_listitem(position)
+        self._activity_page.process_row_activated(item)
+
+    def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
+        self._activity_page.show_default_page()
 
     def _increase_unread_count(self) -> None:
         self.set_property("unread-count", self.unread_count + 1)
@@ -302,6 +330,17 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             item = cast(ActivityListItem[Any], self._model.get_item(pos))
             if item.account == event.account:
                 self._model.remove(pos)
+
+    def _on_timezone_changed(self, event: events.TimezoneChanged) -> None:
+        item = self._items.get("vcard-timezone-changed")
+        if item is not None:
+            found, position = self._model.find(item)
+            if found:
+                self._remove(position, item.read)
+
+        item = TimezoneChanged.from_event(event)
+        self._items["vcard-timezone-changed"] = item
+        self._add(item)
 
 
 class ActivityListItem(Generic[E], GObject.Object):
@@ -668,6 +707,26 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         )
 
 
+class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
+    @classmethod
+    def from_event(cls, event: events.TimezoneChanged) -> TimezoneChanged:
+        scale = app.window.get_scale_factor()
+        texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
+        return cls(
+            context_id=event.context_id,
+            account=event.account,
+            account_visible=True,
+            activity_type=0,
+            activity_type_icon="lucide-info-symbolic",
+            avatar=texture,
+            title=_("Timezone Update"),
+            timestamp=utc_now(),
+            subject=_("Update your timezone?"),
+            read=False,
+            event=event,
+        )
+
+
 ActivityListItemT = (
     GajimUpdate
     | GajimUpdatePermission
@@ -677,4 +736,5 @@ ActivityListItemT = (
     | Unsubscribed
     | MucInvitation
     | MucInvitationDeclined
+    | TimezoneChanged
 )
