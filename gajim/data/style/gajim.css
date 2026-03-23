@@ -217,7 +217,8 @@ button.flat.link { padding: 0; border: 0; }
     border-radius: 10px;
 }
 .unread-counter-silent {
-    background-color: var(--light-5);
+    color: var(--dark-5);
+    background-color: var(--light-3);
 }
 
 .badge {
