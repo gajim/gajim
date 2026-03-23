@@ -18,7 +18,6 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
-from gajim.common.iana import get_zone_data
 
 
 def format_idle_time(idle_time: dt.datetime) -> str:
@@ -187,9 +186,7 @@ def get_time_zone_string(prop: TzProperty) -> str:
 
     t_format = app.settings.get("time_format")
     remote_dt_str = dt.datetime.now(tz=tzinfo).strftime(t_format)
-    data = get_zone_data(prop.value)
-
-    return f"{remote_dt_str} ({data.full_name})"
+    return f"{remote_dt_str} ({prop.value})"
 
 
 def chatstate_to_string(chatstate: Chatstate | None) -> str:

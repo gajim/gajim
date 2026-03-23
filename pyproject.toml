@@ -90,8 +90,8 @@ gajim = ["py.typed"]
 version = {attr = "gajim.__version__"}
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec"
-ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin"
+skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana"
+ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin,FLE"
 
 [tool.pyright]
 pythonVersion = "3.11"
@@ -294,7 +294,6 @@ exclude = [
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
-"gajim/common/iana.py" = ["E501"]
 "gajim/common/storage/omemo.py" = ["N803"]
 "gajim/common/storage/*" = ["E501"]
 "gajim/common/modules/chatstates.py" = ["E501"]
@@ -332,7 +331,6 @@ exclude = [
   "gajim/common/ged.py",
   "gajim/common/helpers.py",
   "gajim/common/i18n.py",
-  "gajim/common/iana.py",
   "gajim/common/idle.py",
   "gajim/common/jingle_content.py",
   "gajim/common/jingle_ft.py",

@@ -55,7 +55,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.iana import get_zone_data
-from gajim.common.iana import ZONE_DATA
+from gajim.common.iana.time_zones import ZONES
 from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import parse_uri
@@ -706,7 +706,7 @@ class TimezoneLabel(Gtk.Label):
             super().set_text(remote_dt_str)
         else:
             data = get_zone_data(self._prop.value)
-            super().set_text(data.full_name)
+            super().set_text(self._prop.value if data is None else data.key)
 
 
 class RemoveButton(Gtk.Button):
@@ -1013,9 +1013,7 @@ class TzPropertyGui(VCardPropertyGui):
     def __init__(self, prop: TzProperty, account: str) -> None:
         VCardPropertyGui.__init__(self, prop)
 
-        dropdown_data = {key: data[1] for key, data in ZONE_DATA.items()}
-
-        self._value_dropdown: GajimDropDown[str] = GajimDropDown(data=dropdown_data)
+        self._value_dropdown: GajimDropDown[str] = GajimDropDown(data=ZONES)
         self._value_dropdown.set_enable_search(True)
         self._value_dropdown.select_key(prop.value)
 

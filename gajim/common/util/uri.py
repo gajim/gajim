@@ -18,8 +18,8 @@ from gi.repository import Gio
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import iana
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
+from gajim.common.iana.uri_schemes import URI_SCHEMES
 from gajim.common.regex import IRI_RX
 
 log = logging.getLogger("gajim.c.util.uri")
@@ -191,7 +191,7 @@ def is_known_uri_scheme(scheme: str) -> bool:
     """
     if not scheme:
         return False
-    if scheme in iana.URI_SCHEMES:
+    if scheme in URI_SCHEMES:
         return True
     if scheme in NONREGISTERED_URI_SCHEMES:
         return True

@@ -894,7 +894,7 @@ GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'
 GAJIM_SUPPORT_JID = 'gajim@conference.gajim.org'
 
 
-# Clickable URI schemes not (yet) registered with IANA (see ./iana.py)
+# Clickable URI schemes not (yet) registered with IANA (see ./iana/uri_schemes.py)
 NONREGISTERED_URI_SCHEMES = {
     'gemini',
 }
