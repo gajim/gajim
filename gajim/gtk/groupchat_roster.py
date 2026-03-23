@@ -247,6 +247,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                 select=True,
             )
         else:
+            if isinstance(item.contact, GroupchatOfflineParticipant):
+                return
             dm_params = AddChatActionParams(
                 account=self._contact.account,
                 jid=participant_contact.jid,
