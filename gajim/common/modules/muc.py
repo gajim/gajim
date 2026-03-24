@@ -62,6 +62,12 @@ from gajim.common.util.muc import get_group_chat_nick
 log = logging.getLogger('gajim.c.m.muc')
 
 
+REJOIN_STATUS_CODES = {
+    StatusCode.REMOVED_SERVICE_SHUTDOWN,
+    StatusCode.REMOVED_ERROR
+}
+
+
 class MUC(BaseModule):
 
     _nbxmpp_extends = 'MUC'
@@ -739,8 +745,8 @@ class MUC(BaseModule):
             app.storage.events.store(room, event)
             room.notify('room-kicked', event)
 
-            status_codes = properties.muc_status_codes or []
-            if StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
+            status_codes = properties.muc_status_codes or set()
+            if REJOIN_STATUS_CODES & status_codes:
                 self._start_rejoin_timeout(room_jid)
             return
 
