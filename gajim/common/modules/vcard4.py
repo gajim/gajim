@@ -126,9 +126,11 @@ class VCard4(BaseModule):
 
     def subscribe_to_node(self) -> None:
         self._log.info("Subscribe to node")
-        self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB)
 
         jid = self._get_own_bare_jid()
+        # JID is necessary because ejabberd servers react weird to subscribe
+        # to own nodes if 'to' attribute is not set
+        self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB, jid)
 
         self._nbxmpp('VCard4').request_vcard(
             jid,
