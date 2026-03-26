@@ -27,7 +27,6 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
@@ -338,15 +337,16 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 return
 
             if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
-                client = app.get_client(event.account)
-                muc_contact = client.get_module("Contacts").get_contact(event.jid)
-                assert isinstance(muc_contact, GroupchatContact)
-                assert event.reaction_occupant_id is not None
-                contact = muc_contact.get_occupant(event.reaction_occupant_id)
-                assert contact is not None
-                if contact.is_self:
-                    # We reacted to our own message
-                    return
+                # TODO
+                # client = app.get_client(event.account)
+                # muc_contact = client.get_module("Contacts").get_contact(event.jid)
+                # assert isinstance(muc_contact, GroupchatContact)
+                # assert event.reaction_occupant_id is not None
+                # contact = muc_contact.get_occupant(event.reaction_occupant_id)
+                # assert contact is not None
+                # if contact.is_self:
+                #     # We reacted to our own message
+                #     return
 
                 notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
             else:
@@ -798,23 +798,23 @@ class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
     @classmethod
     def from_event(cls, event: events.ReactionUpdated) -> ResponseReaction:
         client = app.get_client(event.account)
+        scale = app.window.get_scale_factor()
         assert event.message is not None
         if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
-            muc_contact = client.get_module("Contacts").get_contact(event.jid)
-            assert isinstance(muc_contact, GroupchatContact)
-            assert event.reaction_occupant_id is not None
-            contact = muc_contact.get_occupant(event.reaction_occupant_id)
+            assert event.reaction_occupant is not None
+            texture = app.app.avatar_storage.get_occupant_texture(
+                event.jid, event.reaction_occupant, AvatarSize.ROSTER, scale
+            )
+            nickname = event.reaction_occupant.nickname
+            # TODO
+            # title = _("Reaction from %s") % f"{nickname} ({contact.room.name})"
+            title = _("Reaction from %s") % nickname
         else:
             contact = client.get_module("Contacts").get_contact(event.jid)
-
-        scale = app.window.get_scale_factor()
-        assert isinstance(contact, BareContact | GroupchatParticipant)
-        texture = contact.get_avatar(AvatarSize.ROSTER, scale)
-
-        if isinstance(contact, GroupchatParticipant):
-            title = _("Reaction from %s") % f"{contact.name} ({contact.room.name})"
-        else:
-            title = _("Reaction from %s") % contact.name
+            assert isinstance(contact, BareContact)
+            texture = contact.get_avatar(AvatarSize.ROSTER, scale)
+            nickname = contact.name
+            title = _("Reaction from %s") % nickname
 
         assert event.message is not None
         assert event.emojis is not None
@@ -823,7 +823,7 @@ class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
         subject = _(
             "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
         ) % {
-            "contact": contact.name,
+            "contact": nickname,
             "reaction": emojis,
             "message": event.message.text or "",
         }

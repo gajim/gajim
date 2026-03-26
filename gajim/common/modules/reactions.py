@@ -129,7 +129,7 @@ class Reactions(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=properties.reactions.id,
-                    reaction_occupant_id=occupant_id,
+                    reaction_occupant=occupant,
                     emojis=None,
                     message=None,
                     is_mam_message=properties.is_mam_message
@@ -180,7 +180,7 @@ class Reactions(BaseModule):
                 account=self._account,
                 jid=remote_jid,
                 reaction_id=properties.reactions.id,
-                reaction_occupant_id=occupant_id,
+                reaction_occupant=occupant,
                 emojis=valid,
                 message=message,
                 is_mam_message=properties.is_mam_message

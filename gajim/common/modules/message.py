@@ -430,7 +430,7 @@ class Message(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=reactions_id,
-                    reaction_occupant_id=None,
+                    reaction_occupant=None,
                     emojis=None,
                     message=None,
                     is_mam_message=False
