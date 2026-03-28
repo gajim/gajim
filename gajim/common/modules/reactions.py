@@ -174,7 +174,6 @@ class Reactions(BaseModule):
                 properties.reactions.id
             )
 
-
         app.ged.raise_event(
             ReactionUpdated(
                 account=self._account,

@@ -57,12 +57,6 @@ EventT = (
     | events.ReactionUpdated
 )
 
-EventNotifications = (
-    events.MucInvitation,
-    events.SubscribePresenceReceived,
-    events.ReactionUpdated,
-)
-
 
 class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
     __gtype_name__ = "ActivityListView"
@@ -246,7 +240,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self, listview: ActivityListView, position: int
     ) -> None:
         item = listview.get_listitem(position)
-        item.process_activated()
+        item.activated()
         self._activity_page.process_row_activated(item)
 
     def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
@@ -316,14 +310,17 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
     def _on_event(self, event: EventT) -> None:
         list_item_cls = self._event_item_map[type(event)]
+        if not list_item_cls.can_create(event):  # pyright: ignore
+            return
+
         item = list_item_cls.from_event(event)  # pyright: ignore
         self._add(item)
 
-        if isinstance(event, EventNotifications) and item.should_notify():
+        if item.should_notify():
             app.ged.raise_event(
                 events.Notification(
-                    context_id=event.context_id,
-                    account=event.account,
+                    context_id=item.context_id,
+                    account=item.account,
                     jid=None,
                     type=event.name,
                     title=item.title,
@@ -423,11 +420,15 @@ class ActivityListItem(Generic[E], GObject.Object):
     def get_event(self) -> E:
         return self.event
 
-    def process_activated(self) -> None:
+    def activated(self) -> None:
         return
 
     def should_notify(self) -> bool:
         return False
+
+    @staticmethod
+    def can_create(event: E) -> bool:
+        return True
 
     def __repr__(self) -> str:
         return f"ActivityListItem: {self.account} - {self.activity_type}"
@@ -633,6 +634,9 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
             event=event,
         )
 
+    def should_notify(self) -> bool:
+        return True
+
 
 class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
     @classmethod
@@ -702,6 +706,9 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
             read=False,
             event=event,
         )
+
+    def should_notify(self) -> bool:
+        return True
 
 
 class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
@@ -805,7 +812,11 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
             event=event,
         )
 
-    def process_activated(self) -> None:
+    @staticmethod
+    def can_create(event: events.ReactionUpdated) -> bool:
+        return event.message is not None
+
+    def activated(self) -> None:
         assert self.event.message is not None
 
         message_type = MessageType(self.event.message.type).to_str()
