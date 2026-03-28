@@ -818,14 +818,7 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
 
     def activated(self) -> None:
         assert self.event.message is not None
-
-        message_type = MessageType(self.event.message.type).to_str()
-        app.window.add_chat(
-            self.event.account, self.event.jid, message_type, select=True
-        )
-
-        control = app.window.get_control()
-        control.scroll_to_message(self.event.message.pk, self.event.message.timestamp)
+        app.window.scroll_to_message(self.event.account, self.event.message)
 
     def should_notify(self) -> bool:
         if self.event.message is None:
