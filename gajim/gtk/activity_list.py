@@ -145,7 +145,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             events.UnsubscribedPresenceReceived: Unsubscribed,
             events.GajimUpdateAvailable: GajimUpdate,
             events.AllowGajimUpdateCheck: GajimUpdatePermission,
-            events.ReactionUpdated: ResponseReaction,
+            events.ReactionUpdated: Reaction,
         }
 
     def do_unroot(self) -> None:
@@ -246,18 +246,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self, listview: ActivityListView, position: int
     ) -> None:
         item = listview.get_listitem(position)
-
-        if isinstance(item, ResponseReaction):
-            event = cast(events.ReactionUpdated, item.event)
-            assert event.message is not None
-
-            message_type = MessageType(event.message.type).to_str()
-            app.window.add_chat(event.account, event.jid, message_type, select=True)
-
-            control = app.window.get_control()
-            control.scroll_to_message(event.message.pk, event.message.timestamp)
-            return
-
+        item.process_activated()
         self._activity_page.process_row_activated(item)
 
     def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
@@ -326,42 +315,11 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         return self._current_filter_text in item.search_text
 
     def _on_event(self, event: EventT) -> None:
-        notify = True
-        if isinstance(event, events.ReactionUpdated):
-            if event.message is None:
-                # We don't have the message which has been reacted to: bail out
-                return
-
-            if event.message.direction != ChatDirection.OUTGOING:
-                # Not a reaction to one of our (outgoing) messages
-                return
-
-            if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
-                # TODO
-                # client = app.get_client(event.account)
-                # muc_contact = client.get_module("Contacts").get_contact(event.jid)
-                # assert isinstance(muc_contact, GroupchatContact)
-                # assert event.reaction_occupant_id is not None
-                # contact = muc_contact.get_occupant(event.reaction_occupant_id)
-                # assert contact is not None
-                # if contact.is_self:
-                #     # We reacted to our own message
-                #     return
-
-                notify = app.settings.get_app_setting("gc_notify_on_reaction_default")
-            else:
-                notify = app.settings.get_app_setting("notify_on_reaction_default")
-
-            if event.is_mam_message or app.window.is_chat_active(
-                event.account, event.jid
-            ):
-                notify = False
-
         list_item_cls = self._event_item_map[type(event)]
         item = list_item_cls.from_event(event)  # pyright: ignore
         self._add(item)
 
-        if isinstance(event, EventNotifications) and notify:
+        if isinstance(event, EventNotifications) and item.should_notify():
             app.ged.raise_event(
                 events.Notification(
                     context_id=event.context_id,
@@ -464,6 +422,12 @@ class ActivityListItem(Generic[E], GObject.Object):
 
     def get_event(self) -> E:
         return self.event
+
+    def process_activated(self) -> None:
+        return
+
+    def should_notify(self) -> bool:
+        return False
 
     def __repr__(self) -> str:
         return f"ActivityListItem: {self.account} - {self.activity_type}"
@@ -794,9 +758,9 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         )
 
 
-class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
+class Reaction(ActivityListItem[events.ReactionUpdated]):
     @classmethod
-    def from_event(cls, event: events.ReactionUpdated) -> ResponseReaction:
+    def from_event(cls, event: events.ReactionUpdated) -> Reaction:
         client = app.get_client(event.account)
         scale = app.window.get_scale_factor()
         assert event.message is not None
@@ -841,6 +805,46 @@ class ResponseReaction(ActivityListItem[events.ReactionUpdated]):
             event=event,
         )
 
+    def process_activated(self) -> None:
+        assert self.event.message is not None
+
+        message_type = MessageType(self.event.message.type).to_str()
+        app.window.add_chat(
+            self.event.account, self.event.jid, message_type, select=True
+        )
+
+        control = app.window.get_control()
+        control.scroll_to_message(self.event.message.pk, self.event.message.timestamp)
+
+    def should_notify(self) -> bool:
+        if self.event.message is None:
+            # We don't have the message which has been reacted to: bail out
+            return False
+
+        if self.event.message.direction != ChatDirection.OUTGOING:
+            # Not a reaction to one of our (outgoing) messages
+            return False
+
+        if self.event.is_mam_message or app.window.is_chat_active(
+            self.account, self.event.jid
+        ):
+            return False
+
+        if self.event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            # TODO
+            # client = app.get_client(self.account)
+            # muc_contact = client.get_module("Contacts").get_contact(self.jid)
+            # assert isinstance(muc_contact, GroupchatContact)
+            # assert self.reaction_occupant_id is not None
+            # contact = muc_contact.get_occupant(self.reaction_occupant_id)
+            # assert contact is not None
+            # if contact.is_self:
+            #     # We reacted to our own message
+            #     return
+
+            return app.settings.get_app_setting("gc_notify_on_reaction_default")
+        return app.settings.get_app_setting("notify_on_reaction_default")
+
 
 ActivityListItemT = (
     GajimUpdate
@@ -852,5 +856,5 @@ ActivityListItemT = (
     | MucInvitation
     | MucInvitationDeclined
     | TimezoneChanged
-    | ResponseReaction
+    | Reaction
 )

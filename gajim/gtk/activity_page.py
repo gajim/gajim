@@ -70,7 +70,12 @@ class ActivityPage(Gtk.Stack):
         if child is not None:
             self.remove(child)
 
-        page = self._pages[type(item)](item)  # pyright: ignore
+        try:
+            page = self._pages[type(item)](item)  # pyright: ignore
+        except Exception:
+            # Not every item has a corresponding page
+            return
+
         page.connect("request-remove", self._on_request_remove)
 
         self.add_named(page, "activity")
