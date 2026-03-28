@@ -777,15 +777,14 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
                 event.jid, event.occupant, AvatarSize.ROSTER, scale
             )
             nickname = event.occupant.nickname
-            # TODO
-            # title = _("Reaction from %s") % f"{nickname} ({contact.room.name})"
-            title = _("Reaction from %s") % nickname
+
         else:
             contact = client.get_module("Contacts").get_contact(event.jid)
             assert isinstance(contact, BareContact)
             texture = contact.get_avatar(AvatarSize.ROSTER, scale)
             nickname = contact.name
-            title = _("Reaction from %s") % nickname
+
+        title = _("Reaction from %s") % nickname
 
         assert event.message is not None
         assert event.emojis is not None
