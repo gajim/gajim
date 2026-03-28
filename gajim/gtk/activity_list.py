@@ -772,19 +772,25 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
         scale = app.window.get_scale_factor()
         assert event.message is not None
         if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            muc_jid = event.message.remote.jid
+            if event.message.type == MessageType.PM:
+                muc_jid.new_as_bare()
+
+            groupchat_name = get_groupchat_name(client, muc_jid)
+
             assert event.occupant is not None
             texture = app.app.avatar_storage.get_occupant_texture(
                 event.jid, event.occupant, AvatarSize.ROSTER, scale
             )
             nickname = event.occupant.nickname
+            title = _("Reaction from %s (%s)") % (nickname, groupchat_name)
 
         else:
             contact = client.get_module("Contacts").get_contact(event.jid)
             assert isinstance(contact, BareContact)
             texture = contact.get_avatar(AvatarSize.ROSTER, scale)
             nickname = contact.name
-
-        title = _("Reaction from %s") % nickname
+            title = _("Reaction from %s") % nickname
 
         assert event.message is not None
         assert event.emojis is not None
