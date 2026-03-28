@@ -28,6 +28,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.user_strings import get_uf_relative_time
@@ -52,11 +54,7 @@ EventT = (
     | events.UnsubscribedPresenceReceived
     | events.GajimUpdateAvailable
     | events.AllowGajimUpdateCheck
-)
-
-EventNotifications = (
-    events.MucInvitation,
-    events.SubscribePresenceReceived,
+    | events.ReactionUpdated
 )
 
 
@@ -121,6 +119,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("unsubscribed-presence-received", ged.GUI1, self._on_event),
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
+                ("reaction-updated", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
                 ("timezone-changed", ged.GUI2, self._on_timezone_changed),
             ]
@@ -140,6 +139,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             events.UnsubscribedPresenceReceived: Unsubscribed,
             events.GajimUpdateAvailable: GajimUpdate,
             events.AllowGajimUpdateCheck: GajimUpdatePermission,
+            events.ReactionUpdated: Reaction,
         }
 
     def do_unroot(self) -> None:
@@ -240,6 +240,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         self, listview: ActivityListView, position: int
     ) -> None:
         item = listview.get_listitem(position)
+        item.activated()
         self._activity_page.process_row_activated(item)
 
     def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
@@ -309,15 +310,17 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
     def _on_event(self, event: EventT) -> None:
         list_item_cls = self._event_item_map[type(event)]
-        item = list_item_cls.from_event(event)  # pyright: ignore
+        if not list_item_cls.can_create(event):  # pyright: ignore
+            return
 
+        item = list_item_cls.from_event(event)  # pyright: ignore
         self._add(item)
 
-        if isinstance(event, EventNotifications):
+        if item.should_notify():
             app.ged.raise_event(
                 events.Notification(
-                    context_id=event.context_id,
-                    account=event.account,
+                    context_id=item.context_id,
+                    account=item.account,
                     jid=None,
                     type=event.name,
                     title=item.title,
@@ -357,20 +360,20 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 class ActivityListItem(Generic[E], GObject.Object):
     __gtype_name__ = "ActivityListItem"
 
-    context_id = GObject.Property(type=str)
-    account = GObject.Property(type=str)
-    account_visible = GObject.Property(type=bool, default=False)
-    activity_type = GObject.Property(type=int)
-    activity_type_icon = GObject.Property(type=str)
-    avatar = GObject.Property(type=Gdk.Paintable)
-    timestamp = GObject.Property(type=object)
-    title = GObject.Property(type=str)
-    subject = GObject.Property(type=str)
-    read = GObject.Property(type=bool, default=False)
-    search_text = GObject.Property(type=str)
-    event = GObject.Property(type=object)
+    context_id: str = GObject.Property(type=str)  # pyright: ignore
+    account: str = GObject.Property(type=str)  # pyright: ignore
+    account_visible: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
+    activity_type: int = GObject.Property(type=int)  # pyright: ignore
+    activity_type_icon: str = GObject.Property(type=str)  # pyright: ignore
+    avatar: Gdk.Paintable = GObject.Property(type=Gdk.Paintable)  # pyright: ignore
+    timestamp: dt.datetime = GObject.Property(type=object)  # pyright: ignore
+    title: str = GObject.Property(type=str)  # pyright: ignore
+    subject: str = GObject.Property(type=str)  # pyright: ignore
+    read: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
+    search_text: str = GObject.Property(type=str)  # pyright: ignore
+    event: E = GObject.Property(type=object)  # pyright: ignore
     state = GObject.Property(type=object)
-    unique = GObject.Property(type=bool, default=False)
+    unique: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
 
     def __init__(
         self,
@@ -416,6 +419,16 @@ class ActivityListItem(Generic[E], GObject.Object):
 
     def get_event(self) -> E:
         return self.event
+
+    def activated(self) -> None:
+        return
+
+    def should_notify(self) -> bool:
+        return False
+
+    @staticmethod
+    def can_create(event: E) -> bool:
+        return True
 
     def __repr__(self) -> str:
         return f"ActivityListItem: {self.account} - {self.activity_type}"
@@ -621,6 +634,9 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
             event=event,
         )
 
+    def should_notify(self) -> bool:
+        return True
+
 
 class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
     @classmethod
@@ -691,6 +707,9 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
             event=event,
         )
 
+    def should_notify(self) -> bool:
+        return True
+
 
 class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
     @classmethod
@@ -746,6 +765,79 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         )
 
 
+class Reaction(ActivityListItem[events.ReactionUpdated]):
+    @classmethod
+    def from_event(cls, event: events.ReactionUpdated) -> Reaction:
+        client = app.get_client(event.account)
+        scale = app.window.get_scale_factor()
+        assert event.message is not None
+        if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            assert event.occupant is not None
+            texture = app.app.avatar_storage.get_occupant_texture(
+                event.jid, event.occupant, AvatarSize.ROSTER, scale
+            )
+            nickname = event.occupant.nickname
+
+        else:
+            contact = client.get_module("Contacts").get_contact(event.jid)
+            assert isinstance(contact, BareContact)
+            texture = contact.get_avatar(AvatarSize.ROSTER, scale)
+            nickname = contact.name
+
+        title = _("Reaction from %s") % nickname
+
+        assert event.message is not None
+        assert event.emojis is not None
+        emojis = " ".join(event.emojis)
+
+        subject = _(
+            "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+        ) % {
+            "contact": nickname,
+            "reaction": emojis,
+            "message": event.message.text or "",
+        }
+        return cls(
+            context_id=event.context_id,
+            account=event.account,
+            account_visible=True,
+            activity_type=0,
+            activity_type_icon="lucide-reply-symbolic",
+            avatar=texture,
+            title=title,
+            timestamp=utc_now(),
+            subject=subject,
+            read=False,
+            event=event,
+        )
+
+    @staticmethod
+    def can_create(event: events.ReactionUpdated) -> bool:
+        return (
+            event.message is not None
+            # Message is in the database
+            and event.message.direction == ChatDirection.OUTGOING
+            # Message we sent out
+            and event.direction == ChatDirection.INCOMING
+            # A reaction we received from someone else
+        )
+
+    def activated(self) -> None:
+        assert self.event.message is not None
+        app.window.scroll_to_message(self.event.account, self.event.message)
+
+    def should_notify(self) -> bool:
+        assert self.event.message is not None
+        if self.event.is_mam_message or app.window.is_chat_active(
+            self.account, self.event.jid
+        ):
+            return False
+
+        if self.event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            return app.settings.get_app_setting("gc_notify_on_reaction_default")
+        return app.settings.get_app_setting("notify_on_reaction_default")
+
+
 ActivityListItemT = (
     GajimUpdate
     | GajimUpdatePermission
@@ -756,4 +848,5 @@ ActivityListItemT = (
     | MucInvitation
     | MucInvitationDeclined
     | TimezoneChanged
+    | Reaction
 )

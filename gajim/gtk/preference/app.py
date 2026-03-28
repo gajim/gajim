@@ -419,12 +419,12 @@ class FilePreviewGroup(GajimPreferencesGroup):
             self.add_setting(setting)
 
 
-class VisualNotificationsGroup(GajimPreferencesGroup):
+class SystemNotificationsGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(
             self,
-            key="visual-notifications",
-            title=_("Visual Notifications"),
+            key="system-notifications",
+            title=_("System"),
         )
 
         settings = [
@@ -455,6 +455,50 @@ class VisualNotificationsGroup(GajimPreferencesGroup):
                 "show_notifications_away",
                 desc=_("Show notifications even if you are Away, Busy, etc."),
                 bind="show_notifications",
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class NotificationsChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="notifications-chats",
+            title=_("Chats"),
+        )
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Reactions"),
+                SettingType.CONFIG,
+                "notify_on_reaction_default",
+                desc=_("Notify me when someone reacts to my message in a chat"),
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class NotificationsGroupChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="notifications-group-chats",
+            title=_("Group Chats"),
+        )
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Reactions"),
+                SettingType.CONFIG,
+                "gc_notify_on_reaction_default",
+                desc=_("Notify me when someone reacts to my message in a group chat"),
             ),
         ]
 
@@ -1165,16 +1209,18 @@ class ChatsPage(GajimPreferencePage):
 
 
 class VisualNotificationsPage(GajimPreferencePage):
-    key = "visual-notifications"
+    key = "system-notifications"
     icon_name = "lucide-bell-symbolic"
     label = _("Notifications")
 
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Visual Notifications"),
+            title=_("Notifications"),
             groups=[
-                VisualNotificationsGroup,
+                SystemNotificationsGroup,
+                NotificationsChatsGroup,
+                NotificationsGroupChatsGroup,
                 SoundsGroup,
             ],
         )

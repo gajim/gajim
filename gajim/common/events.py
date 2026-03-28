@@ -34,6 +34,7 @@ from gajim.common.const import JingleState
 from gajim.common.file_props import FileProp
 from gajim.common.helpers import get_uuid
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import Encoder
 
@@ -378,7 +379,12 @@ class ReactionUpdated(ApplicationEvent):
     name: str = field(init=False, default='reaction-updated')
     account: str
     jid: JID
-    reaction_id: str
+    id: str
+    direction: ChatDirection
+    occupant: mod.Occupant | None
+    emojis: set[str] | None
+    message: mod.Message | None
+    is_mam_message: bool
 
 
 @dataclass

@@ -35,6 +35,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import XmppIri
 
@@ -1029,6 +1030,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._app_side_bar.select_chat()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
+
+    def scroll_to_message(self, account: str, message: Message) -> None:
+        message_type = MessageType(message.type).to_str()
+        app.window.add_chat(account, message.remote.jid, message_type, select=True)
+
+        control = self._chat_page.get_control()
+        control.scroll_to_message(message.pk, message.timestamp)
 
     def select_next_chat(
         self, direction: Direction, unread_first: bool = False
