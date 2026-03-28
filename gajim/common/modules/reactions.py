@@ -128,8 +128,9 @@ class Reactions(BaseModule):
                 ReactionUpdated(
                     account=self._account,
                     jid=remote_jid,
-                    reaction_id=properties.reactions.id,
-                    reaction_occupant=occupant,
+                    id=properties.reactions.id,
+                    direction=direction,
+                    occupant=occupant,
                     emojis=None,
                     message=None,
                     is_mam_message=properties.is_mam_message
@@ -178,8 +179,9 @@ class Reactions(BaseModule):
             ReactionUpdated(
                 account=self._account,
                 jid=remote_jid,
-                reaction_id=properties.reactions.id,
-                reaction_occupant=occupant,
+                id=properties.reactions.id,
+                direction=direction,
+                occupant=occupant,
                 emojis=valid,
                 message=message,
                 is_mam_message=properties.is_mam_message

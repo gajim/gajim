@@ -429,8 +429,9 @@ class Message(BaseModule):
                 ReactionUpdated(
                     account=self._account,
                     jid=remote_jid,
-                    reaction_id=reactions_id,
-                    reaction_occupant=None,
+                    id=reactions_id,
+                    direction=direction,
+                    occupant=occupant,
                     emojis=None,
                     message=None,
                     is_mam_message=False

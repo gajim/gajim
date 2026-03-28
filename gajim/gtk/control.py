@@ -414,7 +414,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.update_reactions(event.reaction_id)
+        self._scrolled_view.update_reactions(event.id)
 
     def _on_message_error(self, event: events.MessageError) -> None:
         if not self._is_event_processable(event):

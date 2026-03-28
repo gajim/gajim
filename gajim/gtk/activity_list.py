@@ -360,20 +360,20 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 class ActivityListItem(Generic[E], GObject.Object):
     __gtype_name__ = "ActivityListItem"
 
-    context_id = GObject.Property(type=str)
-    account = GObject.Property(type=str)
-    account_visible = GObject.Property(type=bool, default=False)
-    activity_type = GObject.Property(type=int)
-    activity_type_icon = GObject.Property(type=str)
-    avatar = GObject.Property(type=Gdk.Paintable)
-    timestamp = GObject.Property(type=object)
-    title = GObject.Property(type=str)
-    subject = GObject.Property(type=str)
-    read = GObject.Property(type=bool, default=False)
-    search_text = GObject.Property(type=str)
-    event = GObject.Property(type=object)
+    context_id: str = GObject.Property(type=str)  # pyright: ignore
+    account: str = GObject.Property(type=str)  # pyright: ignore
+    account_visible: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
+    activity_type: int = GObject.Property(type=int)  # pyright: ignore
+    activity_type_icon: str = GObject.Property(type=str)  # pyright: ignore
+    avatar: Gdk.Paintable = GObject.Property(type=Gdk.Paintable)  # pyright: ignore
+    timestamp: dt.datetime = GObject.Property(type=object)  # pyright: ignore
+    title: str = GObject.Property(type=str)  # pyright: ignore
+    subject: str = GObject.Property(type=str)  # pyright: ignore
+    read: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
+    search_text: str = GObject.Property(type=str)  # pyright: ignore
+    event: E = GObject.Property(type=object)  # pyright: ignore
     state = GObject.Property(type=object)
-    unique = GObject.Property(type=bool, default=False)
+    unique: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
 
     def __init__(
         self,
@@ -772,11 +772,11 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
         scale = app.window.get_scale_factor()
         assert event.message is not None
         if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
-            assert event.reaction_occupant is not None
+            assert event.occupant is not None
             texture = app.app.avatar_storage.get_occupant_texture(
-                event.jid, event.reaction_occupant, AvatarSize.ROSTER, scale
+                event.jid, event.occupant, AvatarSize.ROSTER, scale
             )
-            nickname = event.reaction_occupant.nickname
+            nickname = event.occupant.nickname
             # TODO
             # title = _("Reaction from %s") % f"{nickname} ({contact.room.name})"
             title = _("Reaction from %s") % nickname
@@ -814,38 +814,27 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
 
     @staticmethod
     def can_create(event: events.ReactionUpdated) -> bool:
-        return event.message is not None
+        return (
+            event.message is not None
+            # Message is in the database
+            and event.message.direction == ChatDirection.OUTGOING
+            # Message we sent out
+            and event.direction == ChatDirection.INCOMING
+            # A reaction we received from someone else
+        )
 
     def activated(self) -> None:
         assert self.event.message is not None
         app.window.scroll_to_message(self.event.account, self.event.message)
 
     def should_notify(self) -> bool:
-        if self.event.message is None:
-            # We don't have the message which has been reacted to: bail out
-            return False
-
-        if self.event.message.direction != ChatDirection.OUTGOING:
-            # Not a reaction to one of our (outgoing) messages
-            return False
-
+        assert self.event.message is not None
         if self.event.is_mam_message or app.window.is_chat_active(
             self.account, self.event.jid
         ):
             return False
 
         if self.event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
-            # TODO
-            # client = app.get_client(self.account)
-            # muc_contact = client.get_module("Contacts").get_contact(self.jid)
-            # assert isinstance(muc_contact, GroupchatContact)
-            # assert self.reaction_occupant_id is not None
-            # contact = muc_contact.get_occupant(self.reaction_occupant_id)
-            # assert contact is not None
-            # if contact.is_self:
-            #     # We reacted to our own message
-            #     return
-
             return app.settings.get_app_setting("gc_notify_on_reaction_default")
         return app.settings.get_app_setting("notify_on_reaction_default")
 
