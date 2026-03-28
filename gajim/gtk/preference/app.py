@@ -1278,7 +1278,7 @@ class AutoAwayPage(GajimPreferencePage):
 
 
 class AutoExtendedAwayPage(GajimPreferencePage):
-    key = "auto-extended-awayy"
+    key = "auto-extended-away"
 
     def __init__(self) -> None:
         GajimPreferencePage.__init__(
