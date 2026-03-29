@@ -199,7 +199,7 @@ function create_dmg() {
 		deactivate
 	elif [ "$CI_BUILD" == 1 ]
 	then
-		python${python_version} -m pip install PyInstaller --break-system-packages
+		python${python_version} -m pip install git+https://github.com/pyinstaller/pyinstaller.git --break-system-packages
 		cd ./gajim-source/
 		./mac/makebundle.py
 		cd ../
