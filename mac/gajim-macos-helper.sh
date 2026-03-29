@@ -24,7 +24,7 @@
 set -e
 
 # Variables
-gajim_version="master"
+gajim_version="mac-ci"
 nbxmpp_version="master"
 omemo_dr_version="master"
 python_version="3.13"
@@ -192,7 +192,7 @@ function create_dmg() {
 	if [ "$CI_BUILD" == 0 ]
 	then
 		source ./gajim-venv/bin/activate
-		pip3 install --upgrade PyInstaller
+		pip3 install --upgrade git+https://github.com/pyinstaller/pyinstaller.git
 		cd ./gajim-source/
 		./mac/makebundle.py
 		cd ../
