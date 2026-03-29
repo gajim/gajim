@@ -192,14 +192,14 @@ function create_dmg() {
 	if [ "$CI_BUILD" == 0 ]
 	then
 		source ./gajim-venv/bin/activate
-		pip3 install --upgrade PyInstaller
+		pip3 install --upgrade git+https://github.com/pyinstaller/pyinstaller.git
 		cd ./gajim-source/
 		./mac/makebundle.py
 		cd ../
 		deactivate
 	elif [ "$CI_BUILD" == 1 ]
 	then
-		python${python_version} -m pip install PyInstaller --break-system-packages
+		python${python_version} -m pip install git+https://github.com/pyinstaller/pyinstaller.git --break-system-packages
 		cd ./gajim-source/
 		./mac/makebundle.py
 		cd ../
