@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -34,6 +34,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact has invited you to group chat %(room_jid)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -1042,6 +1046,10 @@ msgstr "CRL is not yet valid"
 msgid "CRL signature failure"
 msgstr "CRL signature failure"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Send _File"
+
 msgid "C_opy"
 msgstr ""
 
@@ -2042,10 +2050,6 @@ msgstr "Error while adding service. %s"
 msgid "Error: %s"
 msgstr "Error: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Error message: %s"
-
 msgid "Event"
 msgstr "Event"
 
@@ -2384,6 +2388,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2627,6 +2636,9 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
+msgstr ""
+
+msgid "Ignore"
 msgstr ""
 
 #, fuzzy
@@ -3261,6 +3273,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Time"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3407,6 +3423,12 @@ msgid "Notifications"
 msgstr "Notifications"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3955,6 +3977,18 @@ msgstr "Re_gister"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Actions for \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Actions for \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Notification"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5486,6 +5520,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Time"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Time"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5695,6 +5733,10 @@ msgid "Update Avatar"
 msgstr "Choose Image"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Time"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Choose Image"
 
@@ -5703,6 +5745,13 @@ msgid "Update available: Version %s"
 msgstr "No account available"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Choose Image"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5822,10 +5871,6 @@ msgstr "Visitor"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Visitors"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Visual Notifications</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7211,6 +7256,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Error"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Error message: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Error: cannot open %s for reading"
@@ -7838,11 +7887,6 @@ msgstr ""
 #~ msgstr "_Username:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Notification"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Private Chat"
 
@@ -7857,6 +7901,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Connection not available"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Visual Notifications</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

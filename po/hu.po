@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2026-02-18 07:53+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-28 23:19+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -32,6 +32,11 @@ msgstr "%(contact)s elutasította a társalgóba (%(chat)s) szóló meghívást"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s egy %(chat)s nevű társalgóba szóló meghívót küldött"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
+"%(contact)s %(reaction)s visszajelzést küldött az üzenetre: „%(message)s”"
 
 #, python-format
 msgid "%(count)s Participant"
@@ -921,6 +926,9 @@ msgstr "A CRL még nem érvényes"
 msgid "CRL signature failure"
 msgstr "CRL-aláírási hiba"
 
+msgid "CSV files"
+msgstr "CSV-fájlok"
+
 msgid "C_opy"
 msgstr "Más_olás"
 
@@ -1802,10 +1810,6 @@ msgstr "A profilkép feltöltése nem sikerült"
 msgid "Error: %s"
 msgstr "Hiba: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Hiba: %s (MIME-típusok: %s)"
-
 msgid "Event"
 msgstr "Esemény"
 
@@ -2104,6 +2108,13 @@ msgstr ""
 "megvitatására."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+"Lehetőség van a profil időzónájának automatikus beállítására. Ez segítheti "
+"az ismerősöket a kapcsolatfelvételben."
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2324,6 +2335,9 @@ msgstr ""
 "A Jingle használata STUN-kiszolgáló segítségével. Vagy a „stun_server” "
 "beállításban megadott, vagy az XMPP-kiszolgáló által felajánlott lesz "
 "használva."
+
+msgid "Ignore"
+msgstr "Mellőzés"
 
 msgid "Ignore Unknown Contacts"
 msgstr "Idegenek mellőzése"
@@ -2860,6 +2874,9 @@ msgstr "Nincs szinkronizálás"
 msgid "No Threshold"
 msgstr "Korlátlan"
 
+msgid "No Timezone"
+msgstr "Nincs időzóna"
+
 msgid "No additional requirements"
 msgstr "Nincs további követelmény"
 
@@ -2998,6 +3015,12 @@ msgstr "Értesítések"
 
 msgid "Notify after update"
 msgstr "Értesítés frissítés után"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr "Értesítés az üzeneteimre küldött visszajelzésekről a beszélgetésekben"
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr "Értesítés az üzeneteimre küldött visszajelzésekről a társalgókban"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Üzenet megjelenítése az automatikus frissítés végeztével"
@@ -3474,6 +3497,17 @@ msgstr "Re_gisztrálás"
 #, python-format
 msgid "React with %s"
 msgstr "Visszajelzés így: %s"
+
+#, python-format
+msgid "Reaction from %s"
+msgstr "%s visszajelzése"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Műveletek ehhez: „%s”"
+
+msgid "Reactions"
+msgstr "Visszajelzések"
 
 msgid "Read Receipts"
 msgstr "Olvasásnyugták"
@@ -4812,6 +4846,9 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Időzóna"
 
+msgid "Timezone Update"
+msgstr "Időzóna frissítése"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Beosztás"
@@ -4996,6 +5033,9 @@ msgstr "Frissítés"
 msgid "Update Avatar"
 msgstr "Profilkép cseréje"
 
+msgid "Update Timezone"
+msgstr "Időzóna frissítése"
+
 msgid "Update automatically"
 msgstr "Automatikus frissítés"
 
@@ -5005,6 +5045,12 @@ msgstr "Frissítés érhető el: %s verzió"
 
 msgid "Update plugins automatically"
 msgstr "A bővítmények automatikus frissítése"
+
+msgid "Update your profile's timezone automatically"
+msgstr "A profil időzónájának automatikus beállítása"
+
+msgid "Update your timezone?"
+msgstr "Frissíthető az időzóna?"
 
 msgid "Updates"
 msgstr "Frissítések"
@@ -5110,9 +5156,6 @@ msgstr "Látogató"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Látogatók"
-
-msgid "Visual Notifications"
-msgstr "Vizuális értesítések"
 
 msgid "Voice Message"
 msgstr "Hangüzenet"
@@ -6506,6 +6549,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr "Hiba!"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Hiba: %s (MIME-típusok: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Hiba: %s nem olvasható"
 
@@ -7293,10 +7340,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "User name…"
 #~ msgstr "Átnevezés…"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Szünidő"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Képkockasebesség"
 
@@ -7308,6 +7351,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Video calls are not supported"
 #~ msgstr "A videóhívás nem támogatott"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Vizuális értesítések"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket URL"

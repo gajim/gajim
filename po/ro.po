@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -33,6 +33,10 @@ msgstr "%(contact)s a refuzat invitația dumneavoastră la %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s v-a invitat la %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -959,6 +963,10 @@ msgstr "CRL nu este încă valabilă"
 
 msgid "CRL signature failure"
 msgstr "Eșecul semnăturii CRL"
+
+#, fuzzy
+msgid "CSV files"
+msgstr "Fișiere SVG"
 
 msgid "C_opy"
 msgstr "C_opie"
@@ -1887,10 +1895,6 @@ msgstr "Eroare la încărcarea avatarului"
 msgid "Error: %s"
 msgstr "Eroare: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Mesaj de eroare: %s"
-
 msgid "Event"
 msgstr "Eveniment"
 
@@ -2200,6 +2204,11 @@ msgstr ""
 "imagini și gânduri sau discutați știrile cu grupurile dumneavoastră."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2429,6 +2438,9 @@ msgstr ""
 "Dacă este activată, Gajim va încerca să utilizeze un server STUN atunci când "
 "utilizează Jingle. Cel din opțiunea \"stun_server\" sau cel furnizat de "
 "serverul XMPP."
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "Ignoră contactele necunoscute"
@@ -3005,6 +3017,10 @@ msgstr "Fără sincronizare"
 msgid "No Threshold"
 msgstr "Fără prag"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Timp"
+
 msgid "No additional requirements"
 msgstr "Nu există cerințe suplimentare"
 
@@ -3147,6 +3163,12 @@ msgstr "Notificări"
 
 msgid "Notify after update"
 msgstr "Notificare după actualizare"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Anunțați-mă când actualizarea automată a fost efectuată cu succes"
@@ -3644,6 +3666,18 @@ msgstr "Re_gistrare"
 #, python-format
 msgid "React with %s"
 msgstr "Reacționează cu %s"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Acțiuni pentru \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Acțiuni pentru \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Vacanță"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5069,6 +5103,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Timp"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Timp"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Titlu"
@@ -5258,6 +5296,10 @@ msgstr "Actualizare"
 msgid "Update Avatar"
 msgstr "Actualizare Avatar"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "Timp"
+
 msgid "Update automatically"
 msgstr "Actualizare automată"
 
@@ -5267,6 +5309,13 @@ msgstr "Actualizare disponibilă"
 
 msgid "Update plugins automatically"
 msgstr "Actualizarea automată a plugin-urilor"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Actualizarea automată a plugin-urilor"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "Actualizări"
@@ -5375,9 +5424,6 @@ msgstr "Vizitator"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Vizitatori"
-
-msgid "Visual Notifications"
-msgstr "Notificări vizuale"
 
 msgid "Voice Message"
 msgstr "Mesaj vocal"
@@ -6764,6 +6810,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Error!"
 #~ msgstr "Eroare!"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Mesaj de eroare: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Eroare: nu se poate deschide %s pentru citire"
@@ -7558,10 +7608,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "User name…"
 #~ msgstr "_Utilizator"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Vacanță"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Framerate video"
 
@@ -7574,6 +7620,9 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Apelurile video nu sunt disponibile pe Windows"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Notificări vizuale"
 
 #~ msgid "What happened"
 #~ msgstr "Ce s-a întâmplat"

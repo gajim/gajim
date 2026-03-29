@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -32,6 +32,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact zaprasiŭ ciabie ŭ pakoj %(room_jid)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -1032,6 +1036,10 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Vyšli _fajł"
+
 msgid "C_opy"
 msgstr ""
 
@@ -2031,10 +2039,6 @@ msgstr "Pamyłka dadańnia servisu. %s"
 msgid "Error: %s"
 msgstr "Tekst pamyłki: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Tekst pamyłki: %s"
-
 msgid "Event"
 msgstr "Padzieja"
 
@@ -2375,6 +2379,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2619,6 +2628,9 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
+msgstr ""
+
+msgid "Ignore"
 msgstr ""
 
 #, fuzzy
@@ -3256,6 +3268,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Čas"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3404,6 +3420,12 @@ msgid "Notifications"
 msgstr "Madyfikacyja kontu"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3950,6 +3972,18 @@ msgstr "_Zarehistrujsia"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Dziejańni dla \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Dziejańni dla \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5470,6 +5504,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Čas"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Čas"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5678,6 +5716,10 @@ msgid "Update Avatar"
 msgstr "Abiary vyjavu"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Čas"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Abiary vyjavu"
 
@@ -5686,6 +5728,13 @@ msgid "Update available: Version %s"
 msgstr "Konty niedastupnyja"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Abiary vyjavu"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5805,10 +5854,6 @@ msgstr "Naviednik"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Naviedniki"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Vizualnyja nahadvańni</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7181,6 +7226,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Pamyłka Avahi"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Tekst pamyłki: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Pamyłka: niemahčyma adčytać %s"
@@ -7798,11 +7847,6 @@ msgstr ""
 #~ msgstr "_Imia karystalnika:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Madyfikacyja kontu"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Прыватная размова"
 
@@ -7817,6 +7861,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Złučeńnia niama"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Vizualnyja nahadvańni</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2026-02-17 23:19+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-28 16:19+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -42,6 +42,10 @@ msgstr "%(contact)s отклонил Ваше приглашение в %(chat)s
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s пригласил Вас в %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr "%(contact)s отреагировал %(reaction)s на ваше сообщение '%(message)s'"
 
 #, python-format
 msgid "%(count)s Participant"
@@ -943,6 +947,9 @@ msgstr "CRL ещё не действителен"
 msgid "CRL signature failure"
 msgstr "Ошибка подписи CRL"
 
+msgid "CSV files"
+msgstr "CSV файлы"
+
 msgid "C_opy"
 msgstr "К_опировать"
 
@@ -1826,10 +1833,6 @@ msgstr "Ошибка загрузки аватара"
 msgid "Error: %s"
 msgstr "Ошибка: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Ошибка: %s (тип MIME: %s)"
-
 msgid "Event"
 msgstr "Событие"
 
@@ -2129,6 +2132,14 @@ msgstr ""
 "группах."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+"Gajim может автоматически обновлять ваш профиль с учетом вашего текущего "
+"часового пояса. Это может помочь вашим контактам, когда они пытаются "
+"связаться с вами."
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2356,6 +2367,9 @@ msgstr ""
 "При включении параметра Gajim попытается использовать STUN-сервер при "
 "использовании Jingle, который указан опцией 'stun_server', либо "
 "предоставленный XMPP-сервером."
+
+msgid "Ignore"
+msgstr "Игнорировать"
 
 msgid "Ignore Unknown Contacts"
 msgstr "Игнорировать неизвестные контакты"
@@ -2894,6 +2908,9 @@ msgstr "Не синхронизировано"
 msgid "No Threshold"
 msgstr "Без порога"
 
+msgid "No Timezone"
+msgstr "Не указан часовой пояс"
+
 msgid "No additional requirements"
 msgstr "Никаких дополнительных требований"
 
@@ -3033,6 +3050,13 @@ msgstr "Уведомления"
 
 msgid "Notify after update"
 msgstr "Оповещать после обновления"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr "Уведомлять меня, когда кто-то отреагировал на моё сообщение в чате"
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
+"Уведомлять меня, когда кто-то отреагировал на моё сообщение в групповом чате"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Оповещать при успешно выполнении автоматического обновления"
@@ -3511,6 +3535,17 @@ msgstr "За_регистрироваться"
 #, python-format
 msgid "React with %s"
 msgstr "Добавить реакцию %s"
+
+#, python-format
+msgid "Reaction from %s"
+msgstr "Реакция от %s"
+
+#, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Реакция от %s (%s)"
+
+msgid "Reactions"
+msgstr "Реакции"
 
 msgid "Read Receipts"
 msgstr "Сообщения о доставке"
@@ -4857,6 +4892,9 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Часовой пояс"
 
+msgid "Timezone Update"
+msgstr "Обновление часового пояса"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Отображаемое имя"
@@ -5040,6 +5078,9 @@ msgstr "Обновить"
 msgid "Update Avatar"
 msgstr "Обновить аватар"
 
+msgid "Update Timezone"
+msgstr "Обновить часовой пояс"
+
 msgid "Update automatically"
 msgstr "Обновлять автоматически"
 
@@ -5049,6 +5090,12 @@ msgstr "Доступно обновление: Версия %s"
 
 msgid "Update plugins automatically"
 msgstr "Обновлять модули автоматически"
+
+msgid "Update your profile's timezone automatically"
+msgstr "Автоматическое обновление часового пояса в профиле"
+
+msgid "Update your timezone?"
+msgstr "Обовить ваш часовой пояс?"
 
 msgid "Updates"
 msgstr "Обновления"
@@ -5154,9 +5201,6 @@ msgstr "Посетитель"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Посетители"
-
-msgid "Visual Notifications"
-msgstr "Визуальные уведомления"
 
 msgid "Voice Message"
 msgstr "Отправить голосовое сообщение"
@@ -6528,6 +6572,10 @@ msgstr "…или перетащите его сюда"
 #~ msgstr "Ошибка!"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Ошибка: %s (тип MIME: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Ошибка: не удалось открыть %s для чтения"
 
@@ -7329,10 +7377,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "User name…"
 #~ msgstr "_Имя пользователя"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Отдых"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Частота кадров видео"
 
@@ -7345,6 +7389,9 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Видеочаты недоступны в ОС Windows"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Визуальные уведомления"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket URL"

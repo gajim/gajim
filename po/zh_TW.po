@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -36,6 +36,10 @@ msgstr "%(contact)s拒絕了您對 %(chat)s的邀請"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s 邀請您參加聊天室 %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -922,6 +926,10 @@ msgstr "CRL 尚未生效"
 
 msgid "CRL signature failure"
 msgstr "CRL 簽署失敗"
+
+#, fuzzy
+msgid "CSV files"
+msgstr "傳送檔案(_F)"
 
 msgid "C_opy"
 msgstr "複製"
@@ -1904,10 +1912,6 @@ msgstr "加入服務錯誤。 %s"
 msgid "Error: %s"
 msgstr "錯誤: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "錯誤訊息: %s"
-
 msgid "Event"
 msgstr "事件"
 
@@ -2247,6 +2251,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2494,6 +2503,9 @@ msgid ""
 msgstr ""
 "如果為真，Gajim 在使用 jingle 時會嘗試使用 STUN 伺服器。伺服器可以由"
 "\"stun_server\"選項給出，或由 jabber 伺服器給出。"
+
+msgid "Ignore"
+msgstr ""
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -3128,6 +3140,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "時間"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3274,6 +3290,12 @@ msgid "Notifications"
 msgstr "通知"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3821,6 +3843,18 @@ msgstr "註冊(_G)"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "“%s” 的操作"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "“%s” 的操作"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "位置: %s"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5346,6 +5380,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "時間"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "時間"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5555,6 +5593,10 @@ msgid "Update Avatar"
 msgstr "選擇歸檔檔案"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "時間"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "選擇歸檔檔案"
 
@@ -5563,6 +5605,13 @@ msgid "Update available: Version %s"
 msgstr "沒有有效帳號"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "選擇歸檔檔案"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5683,10 +5732,6 @@ msgstr "訪客"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "訪客"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>可視化提示</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7097,6 +7142,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "錯誤"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "錯誤訊息: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "錯誤: 無法按讀開啟檔案 %s"
@@ -7756,11 +7805,6 @@ msgstr ""
 #~ msgstr "使用者名稱(_U):"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "位置: %s"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "視訊圖框速率"
 
@@ -7775,6 +7819,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "連線無法使用"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>可視化提示</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -40,6 +40,10 @@ msgstr "%(contact)s recusou o convite para %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s convidou você para %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -957,6 +961,10 @@ msgstr "CRL ainda não é válido"
 msgid "CRL signature failure"
 msgstr "Assinatura CRL falhou"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Arquivos SVG"
+
 msgid "C_opy"
 msgstr "C_opiar"
 
@@ -1857,10 +1865,6 @@ msgstr "Erro ao enviar avatar"
 msgid "Error: %s"
 msgstr "Erro: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Erro: %s (tipos MIME: %s)"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -2161,6 +2165,11 @@ msgstr ""
 "facilmente ou discuta as notícias com seus grupos."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2381,6 +2390,9 @@ msgid ""
 msgstr ""
 "Se habilitado, Gajim tentará usar um servidor STUN ao usar Jingle. O da "
 "opção \"stun_server\", ou o dado pelo servidor XMPP."
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "Ignorar contatos desconhecidos"
@@ -2932,6 +2944,10 @@ msgstr "Sem Sincronia"
 msgid "No Threshold"
 msgstr "Sem Limite"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Tempo"
+
 msgid "No additional requirements"
 msgstr "Sem requisitos adicionais"
 
@@ -3072,6 +3088,12 @@ msgstr "Notificações"
 
 msgid "Notify after update"
 msgstr "Notificar após atualizar"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Notificar quando a atualização automática foi bem-sucedida"
@@ -3558,6 +3580,18 @@ msgstr "Re_gistrar"
 #, python-format
 msgid "React with %s"
 msgstr "Reagir com %s"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "Ações para \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Ações para \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Férias"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -4948,6 +4982,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Tempo"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Tempo"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Título"
@@ -5135,6 +5173,10 @@ msgstr "Atualizar"
 msgid "Update Avatar"
 msgstr "Atualizar Avatar"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "Tempo"
+
 msgid "Update automatically"
 msgstr "Atualizar automaticamente"
 
@@ -5144,6 +5186,13 @@ msgstr "Atualização disponível"
 
 msgid "Update plugins automatically"
 msgstr "Atualizar plugins automaticamente"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Atualizar plugins automaticamente"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "Atualizações"
@@ -5250,9 +5299,6 @@ msgstr "Visitante"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Visitantes"
-
-msgid "Visual Notifications"
-msgstr "Notificações Visuais"
 
 msgid "Voice Message"
 msgstr "Mensagem de Voz"
@@ -6642,6 +6688,10 @@ msgstr "...ou solte-o aqui"
 #~ msgstr "Erro!"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Erro: %s (tipos MIME: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Erro: impossível abrir %s para leitura"
 
@@ -7432,10 +7482,6 @@ msgstr "...ou solte-o aqui"
 #~ msgid "User name…"
 #~ msgstr "Nome de _Usuário"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Férias"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Taxa de Quadros do Vídeo"
 
@@ -7448,6 +7494,9 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Conexão não disponível"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Notificações Visuais"
 
 #~ msgid "What happened"
 #~ msgstr "O que aconteceu"

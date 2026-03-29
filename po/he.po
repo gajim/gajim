@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -36,6 +36,10 @@ msgstr "%(jid)s סרב/ה את ההזמנה: %(reason)s"
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact הזמינך לשיחת קבוצה %(room_jid)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -1074,6 +1078,10 @@ msgstr "‏CRL אינה תקפה עדיין"
 msgid "CRL signature failure"
 msgstr "כשל חתימת CRL"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "שליחת קבצים"
+
 msgid "C_opy"
 msgstr ""
 
@@ -2095,10 +2103,6 @@ msgstr "שגיאה בעת הוספת שירות. %s"
 msgid "Error: %s"
 msgstr "שגיאה: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "הודעת שגיאה: %s"
-
 msgid "Event"
 msgstr "אירוע"
 
@@ -2447,6 +2451,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2704,6 +2713,9 @@ msgstr ""
 "כאשר מופעלת, Gajim ינסה לעשות שימש בשרת STUN כאשר jingle הינו מצוי בשימוש. "
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
+
+msgid "Ignore"
+msgstr ""
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -3346,6 +3358,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "זמן"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3492,6 +3508,12 @@ msgid "Notifications"
 msgstr "התראות"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -4047,6 +4069,18 @@ msgstr "ה_רשמה"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_פעולות עבור \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_פעולות עבור \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "מיקום: "
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5603,6 +5637,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "זמן"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "זמן"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5816,6 +5854,10 @@ msgid "Update Avatar"
 msgstr "בחירת ארכיון"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "זמן"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "בחירת ארכיון"
 
@@ -5824,6 +5866,13 @@ msgid "Update available: Version %s"
 msgstr "אין חשבון זמין"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "בחירת ארכיון"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5945,10 +5994,6 @@ msgstr "מבקר"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "מבקרים"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>התראות חזותיות</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7391,6 +7436,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "שגיאה"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "הודעת שגיאה: %s"
+
 # cli
 #, fuzzy, python-format
 #~ msgid "Error: cannot open %s for reading"
@@ -8079,11 +8128,6 @@ msgstr ""
 #~ msgstr "שם _משתמש:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "מיקום: "
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "תדר וידאו"
 
@@ -8098,6 +8142,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "סשנים חזותיים אינם זמינים"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>התראות חזותיות</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

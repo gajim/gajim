@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2026-02-13 20:05+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-02 21:19+0000\n"
 "Last-Translator: Turingon <kopse@e.email>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
 "eo/>\n"
@@ -33,6 +33,10 @@ msgstr "%(contact)s malakceptis vian inviton al %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s invitis vin al %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, python-format
 msgid "%(count)s Participant"
@@ -80,7 +84,7 @@ msgstr ""
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr "%(name)s nuligis la transmeton (%(reason)s)"
+msgstr "%(name)s nuligis la transigon (%(reason)s)"
 
 #, python-format
 msgid "%(nick)s has been banned by %(actor)s"
@@ -199,7 +203,7 @@ msgstr "%s ĉesis kunhavi sian staton"
 
 #, python-format
 msgid "%s stopped the transfer"
-msgstr "%s haltigis la transmeton"
+msgstr "%s haltigis la transigon"
 
 #, python-format
 msgid "%s wants to add you."
@@ -923,6 +927,10 @@ msgstr "CRL ne ankoraŭ validas"
 
 msgid "CRL signature failure"
 msgstr "CRL subskriberaro"
+
+#, fuzzy
+msgid "CSV files"
+msgstr "Sendi dosieron"
 
 msgid "C_opy"
 msgstr "Kopii"
@@ -1802,10 +1810,6 @@ msgstr "Eraro dum alŝutadi avataron"
 msgid "Error: %s"
 msgstr "Eraro: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Eraro: %s (mimo-tipoj: %s)"
-
 msgid "Event"
 msgstr "Evento"
 
@@ -1919,22 +1923,22 @@ msgid "File Size Limit"
 msgstr "Limo de dosiergrandeco"
 
 msgid "File Transfer"
-msgstr "Dosiertransmeto"
+msgstr "Dosiertransigo"
 
 msgid "File Transfer Cancelled"
-msgstr "Dosiertransmeto ĉesigita"
+msgstr "Dosiertransigo ĉesigita"
 
 msgid "File Transfer Completed"
-msgstr "Dosiera transmeto plenumis"
+msgstr "Dosiertransigo plenumis"
 
 msgid "File Transfer Stopped"
-msgstr "Dosiera transmeto haltitas"
+msgstr "Dosiertransigo haltitas"
 
 msgid "File Verification Failed"
 msgstr "Dosierkontrolo malsukcesis"
 
 msgid "File corrupted during transfer"
-msgstr "Dosiero koruptita dum transmeto"
+msgstr "Dosiero koruptita dum transigo"
 
 msgid "File does not exist"
 msgstr "Dosiero ne ekzistas"
@@ -2101,6 +2105,11 @@ msgstr ""
 "Gajim estas facile uzebla kaj plenfunkcia XMPP-kliento. Simple babilu kun "
 "viaj amikoj aŭ familio, facile kunhavu bildojn kaj pensojn aŭ diskutu la "
 "novaĵojn kun viaj grupoj."
+
+msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
 
 msgid ""
 "Gajim encountered an error.\n"
@@ -2322,6 +2331,9 @@ msgstr ""
 "Se enŝaltita, Gajim provos uzi STUN-servilon dum uzado de Jingle, specifita "
 "en \"stun_server\" agordo aŭ uzata de la XMPP-servilo."
 
+msgid "Ignore"
+msgstr ""
+
 msgid "Ignore Unknown Contacts"
 msgstr "Malatenti nekonatajn kontaktojn"
 
@@ -2393,22 +2405,20 @@ msgid "Install a keyring to store passwords on your system."
 msgstr "Instali ŝlosilringon por konservi pasvortojn en via sistemo."
 
 msgid "Install from Archive"
-msgstr ""
+msgstr "Instali per ZIP-dosiero"
 
-#, fuzzy
 msgid "Installation failed"
-msgstr "Konektado malsukcesis"
+msgstr "Instalado malsukcesis"
 
 msgctxt "Configuration type"
 msgid "Integer"
-msgstr ""
+msgstr "Entjero"
 
 msgid "Invalid Address"
 msgstr "Nevalida adreso"
 
-#, fuzzy
 msgid "Invalid CA certificate"
-msgstr "Malkorekta salutnomo"
+msgstr "Nevalida CA-atestilo"
 
 msgid "Invalid Name"
 msgstr "Nevalida nomo"
@@ -2419,9 +2429,8 @@ msgstr "Nevalida nodo"
 msgid "Invalid Server Name"
 msgstr "Nevalida servilnomo"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "Nevalida Stanza"
+msgstr "Nevalida stanco"
 
 msgid "Invalid XMPP Address"
 msgstr "Nevalida XMPP-adreso"
@@ -2436,66 +2445,59 @@ msgstr "Nevalida domajnnomo"
 msgid "Invalid server response"
 msgstr "Nevalida servilrespondo"
 
-#, fuzzy
 msgid "Invitation"
-msgstr "Konta korektado"
+msgstr "Invito"
 
-#, fuzzy
 msgid "Invitation Declined"
-msgstr "Babileja invitilo"
+msgstr "Invito malakceptita"
 
-#, fuzzy
 msgid "Invite"
-msgstr "In_viti al"
+msgstr "Inviti"
 
-#, fuzzy
 msgid "Invite Contacts"
-msgstr "Kontaktoj"
+msgstr "Inviti kontakton"
 
 msgid "Invite to this chat…"
 msgstr "Inviti al ĉi tiu babilejo…"
 
-#, fuzzy
 msgid "Invitees"
-msgstr "In_viti al"
+msgstr "Invititoj"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
+msgstr "Ĉu mikrofono estas konektita kaj atingebla?"
 
 msgid "Issue date"
-msgstr ""
+msgstr "Eldonita je"
 
 msgid "Issued by"
-msgstr ""
+msgstr "Eldonita de"
 
 msgid "Issued by\n"
-msgstr ""
+msgstr "Eldonita de\n"
 
 msgid "Issued on: "
-msgstr ""
+msgstr "Eldonita je: "
 
 msgid "Issued to"
-msgstr ""
+msgstr "Eldonita al"
 
 msgid "Issued to\n"
-msgstr ""
+msgstr "Eldonita al\n"
 
 msgid "Issues detected"
-msgstr ""
+msgstr "Eraroj detektitaj"
 
 msgid "JID"
 msgstr "JID"
 
-#, fuzzy
 msgid "JPEG files"
-msgstr "Ĉiuj dosieroj"
+msgstr "JPEG-dosieroj"
 
-#, fuzzy
 msgid "Join"
-msgstr "_Aliĝi"
+msgstr "Aliĝi"
 
 msgid "Join Group Chat"
-msgstr "Eniri babilejen"
+msgstr "Eniri babilejon"
 
 msgid "Join Group Chat as…"
 msgstr "Eniri babilejon kiel…"
@@ -2516,111 +2518,97 @@ msgid "Join…"
 msgstr "Aliĝi…"
 
 msgid "Just now"
-msgstr ""
+msgstr "Ĵus nun"
 
-#, fuzzy
 msgid "Keep Chat History"
-msgstr "Antaŭ nelonge:"
+msgstr "Teni mesaĝhistorion"
 
 msgid "Key usage does not include certificate signing"
-msgstr ""
+msgstr "Ŝlosiluzado ne inkluzivas atestilsubskribadon"
 
-#, fuzzy
 msgid "Kick"
-msgstr "_Elpeli"
+msgstr "Elpeli"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Kick %s"
-msgstr "Elpelatas %s"
+msgstr "Elpeli %s"
 
-#, fuzzy
 msgid "Kick…"
-msgstr "_Elpeli"
+msgstr "Elpeli…"
 
 msgid "Label"
-msgstr ""
+msgstr "Etikedo"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "Lingvo: %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Last seen: %s"
-msgstr "Kialo"
+msgstr "Laste vidita: %s"
 
-#, fuzzy
 msgid "Leave Group Chat?"
-msgstr "Nova babilejo"
+msgstr "Forlasi babilejon?"
 
 msgid "Leave _Permanently"
-msgstr ""
+msgstr "Foriri _porĉiame"
 
-#, fuzzy
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
 msgstr ""
-"Redifinas la retadreson, kiun ni sendas por dosiertransmeto okaze de "
-"adrestradukado."
+"Listo de sendgastigantoj (kome apartigitaj) krom lokaj interfacoj por "
+"dosiertransigoj (se adrestradukado/pordoplusendado)."
 
 msgid "Listing of providers"
-msgstr ""
+msgstr "Provizantolisto"
 
 msgid "Live Preview"
-msgstr ""
+msgstr "Enviva antaŭvido"
 
-#, fuzzy
 msgid "Load Image"
-msgstr "Elektu bildon"
+msgstr "Ŝargi bildon"
 
-#, fuzzy
 msgid "Loading Avatar Failed"
-msgstr "Publicado de vizitkarto malsukcesis"
+msgstr "Ŝarĝante profilbildon malsukcesis"
 
-#, fuzzy
 msgid "Loading Preview…"
-msgstr "Tajpas mesaĝon"
+msgstr "Ŝarĝante antaŭvidon…"
 
-#, fuzzy
 msgid "Loading avatar image failed"
-msgstr "Sendado de privata mesaĝo malsukcesis"
+msgstr "Ŝarĝante profilbildon fiaskis"
 
-#, fuzzy
 msgid "Loading…"
-msgstr "Tajpas mesaĝon"
+msgstr "Ŝarĝante…"
 
-#, fuzzy
 msgid "Local Time"
-msgstr "Loka JID:"
+msgstr "Loka tempo"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Location at %s"
-msgstr "Konta korektado"
+msgstr "Loko ĉe %s"
 
-#, fuzzy
 msgid "Log"
-msgstr "E_nsaluti"
+msgstr "Protokolo"
 
-#, fuzzy
 msgid "Log In"
-msgstr "E_nsaluti"
+msgstr "Ensaluti"
 
 msgid "Log in with your credentials"
-msgstr ""
+msgstr "Ensaluti per viaj akreditaĵoj"
 
 msgid "Login"
-msgstr ""
+msgstr "Ensaluti"
 
 #, python-format
 msgid "Login – %(account)s"
-msgstr ""
+msgstr "Ensaluti – %(account)s"
 
 msgid "Look it up in _Dictionary"
-msgstr "Serĉi tion en _vortaro"
+msgstr "Serĉi en _vortaro"
 
-#, fuzzy
 msgid "Make Admin"
-msgstr "_Estro"
+msgstr "Fariĝi estron"
 
 #, fuzzy
 msgid "Make Member"
@@ -2767,18 +2755,16 @@ msgid "Miscellaneous"
 msgstr "<b>Cetero</b>"
 
 msgid "Missing dependencies for audio support"
-msgstr ""
+msgstr "Mankas dependecoj por aŭdisubteno"
 
 msgid "Missing necessary encryption plugin"
-msgstr ""
+msgstr "Mankas necesa ĉifradetendaĵo"
 
-#, fuzzy
 msgid "Moderate Message?"
-msgstr "Statmesaĝo"
+msgstr "Ĉu moderigi mesaĝon?"
 
-#, fuzzy
 msgid "Moderate Messages?"
-msgstr "Statmesaĝo"
+msgstr "Ĉu moderigi mesaĝojn?"
 
 #, fuzzy
 msgctxt "Message row action"
@@ -2898,9 +2884,8 @@ msgstr "Kaŝnomo"
 msgid "No"
 msgstr "Neniu"
 
-#, fuzzy
 msgid "No File Transfer available"
-msgstr "Dosieraj transmetoj"
+msgstr "Neniu dosiertransigo havebla"
 
 #, fuzzy
 msgid "No Messages"
@@ -2928,6 +2913,10 @@ msgstr ""
 
 msgid "No Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "No Timezone"
+msgstr "Tempo"
 
 msgid "No additional requirements"
 msgstr ""
@@ -3077,6 +3066,12 @@ msgid "Notifications"
 msgstr "Konta korektado"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3622,6 +3617,18 @@ msgstr "Re_gistri"
 msgid "React with %s"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "Agoj por \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Agoj por \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Konta korektado"
+
 #, fuzzy
 msgid "Read Receipts"
 msgstr "Unua mesaĝo ricevita"
@@ -3686,9 +3693,8 @@ msgstr "Konektado malsukcesis"
 msgid "Registration successful"
 msgstr "Vizitkarto estas sukcese publicita"
 
-#, fuzzy
 msgid "Reject file transfer"
-msgstr "Dosieraj transmetoj"
+msgstr "Malakcepti dosiertransigon"
 
 #, fuzzy
 msgid "Reload"
@@ -4383,9 +4389,8 @@ msgstr "Temo"
 msgid "Show Title Bar"
 msgstr "Montri Trans_portilojn"
 
-#, fuzzy
 msgid "Show Transfers"
-msgstr "Montri Trans_portilojn"
+msgstr "Montri transigojn"
 
 #, fuzzy
 msgid "Show Voice Message Button"
@@ -5142,6 +5147,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Tempo"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Tempo"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5168,9 +5177,8 @@ msgstr "Partoprenanto"
 msgid "Toggle participants list"
 msgstr "Partoprenanto"
 
-#, fuzzy
 msgid "Transferring File…"
-msgstr "Transdonas"
+msgstr "Dosiertransigante…"
 
 msgid "Transports"
 msgstr "Transportiloj"
@@ -5351,6 +5359,10 @@ msgid "Update Avatar"
 msgstr "Nedisponebla"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Tempo"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Nedisponebla"
 
@@ -5359,6 +5371,13 @@ msgid "Update available: Version %s"
 msgstr "Nedisponebla"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Nedisponebla"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5478,10 +5497,6 @@ msgstr "Vizitanto"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Vizitantoj"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Bildavizoj</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -5657,9 +5672,8 @@ msgstr "Vi ne povas aliĝi al babilejo dum vi estas senkonekta."
 msgid "You can see the contact's online status"
 msgstr "_Permesi al tiu kontakto vidi mian staton"
 
-#, fuzzy
 msgid "You cancelled the transfer"
-msgstr "Nuligas la indikitan dosiertransmeton"
+msgstr "Vi nuligis la dosiertransigon"
 
 #, fuzzy
 msgid "You cannot add yourself to your contact list."
@@ -6855,6 +6869,10 @@ msgstr ""
 #~ msgstr "Eraro !"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Eraro: %s (mimo-tipoj: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Eraro: ne povas malfermi %s por legi"
 
@@ -7503,11 +7521,6 @@ msgstr ""
 #~ msgstr "_Salutnomo:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Konta korektado"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Privata interparolo"
 
@@ -7522,6 +7535,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Konekto mankas"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Bildavizoj</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

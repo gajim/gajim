@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2025-12-23 17:19+0000\n"
 "Last-Translator: Nomadic Entity <noiteluna@noleron.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -36,6 +36,10 @@ msgstr "%(contact)s відхилили запрошення до %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s запрошує Вас до %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, python-format
 msgid "%(count)s Participant"
@@ -933,6 +937,10 @@ msgstr "Строк дії CRL ще не почався"
 msgid "CRL signature failure"
 msgstr "Помилка під час роботи з підписом списку відкликаних сертифікатів"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Файли SVG"
+
 msgid "C_opy"
 msgstr "К_опіювати"
 
@@ -1813,10 +1821,6 @@ msgstr "Помилка завантаження аватари"
 msgid "Error: %s"
 msgstr "Помилка: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Помилка: %s (типи мімів: %s)"
-
 msgid "Event"
 msgstr "Подія"
 
@@ -2116,6 +2120,11 @@ msgstr ""
 "фотографіями та думками або обговорюйте новини з вашими групами."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2339,6 +2348,9 @@ msgstr ""
 "Якщо увімкнено, Gajim намагатиметься використовувати STUN-сервер під час "
 "використання Jingle. Той, що вказано у параметрі \"stun_server\", або той, "
 "що надається XMPP-сервером."
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "Ігнорувати невідомі контакти"
@@ -2877,6 +2889,10 @@ msgstr "Без синхронізації"
 msgid "No Threshold"
 msgstr "Без порогу"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Часовий пояс"
+
 msgid "No additional requirements"
 msgstr "Немає додаткових вимог"
 
@@ -3017,6 +3033,12 @@ msgstr "Сповіщення"
 
 msgid "Notify after update"
 msgstr "Повідомити після оновлення"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Повідомте мене, коли автоматичне оновлення буде успішним"
@@ -3501,6 +3523,18 @@ msgstr "За_реєструватися"
 #, python-format
 msgid "React with %s"
 msgstr "Реагувати за допомогою %s"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "Дії для «%s»"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Дії для «%s»"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Відпустка"
 
 msgid "Read Receipts"
 msgstr "Позначки про прочитане"
@@ -4854,6 +4888,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Часовий пояс"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Часовий пояс"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Назва"
@@ -5038,6 +5076,10 @@ msgstr "Оновлення"
 msgid "Update Avatar"
 msgstr "Оновити аватар"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "Часовий пояс"
+
 msgid "Update automatically"
 msgstr "Оновлення автоматично"
 
@@ -5047,6 +5089,13 @@ msgstr "Доступне оновлення: Версія %s"
 
 msgid "Update plugins automatically"
 msgstr "Автоматичне оновлення плагінів"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Автоматичне оновлення плагінів"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "Оновлення"
@@ -5152,9 +5201,6 @@ msgstr "Відвідувач"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Відвідувачі"
-
-msgid "Visual Notifications"
-msgstr "Візуальні сповіщення"
 
 msgid "Voice Message"
 msgstr "Голосове повідомлення"
@@ -6515,6 +6561,10 @@ msgstr "...або киньте сюди."
 #~ msgstr "Помилка!"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Помилка: %s (типи мімів: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Помилка: не вдалося відкрити %s для читання"
 
@@ -7206,10 +7256,6 @@ msgstr "...або киньте сюди."
 #~ msgid "User name…"
 #~ msgstr "_Користувач:"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Відпустка"
-
 #, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Частота кадрів відео"
@@ -7225,6 +7271,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Відео сесія недоступна"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Візуальні сповіщення"
 
 #, fuzzy
 #~ msgid "What happened"

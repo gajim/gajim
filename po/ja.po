@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2026-01-17 10:19+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -35,6 +35,10 @@ msgstr "%(contact)s は %(chat)s への招待を断りました"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s はあなたを %(chat)s に招待しました"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, python-format
 msgid "%(count)s Participant"
@@ -931,6 +935,10 @@ msgstr "証明書失効リストは検証されていません"
 msgid "CRL signature failure"
 msgstr "証明書失効リストの署名の失敗"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "SVG ファイル"
+
 msgid "C_opy"
 msgstr "コピー (_O)"
 
@@ -1808,10 +1816,6 @@ msgstr "アバターのアップロード中のエラー"
 msgid "Error: %s"
 msgstr "エラー: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "エラー: %s (MIME タイプ: %s)"
-
 msgid "Event"
 msgstr "イベント"
 
@@ -2117,6 +2121,11 @@ msgstr ""
 "ニュースについて議論したりもできます。"
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2340,6 +2349,9 @@ msgstr ""
 "有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。"
 "サーバーは \"stun_server\" オプションか、または XMPP サーバーによって与えられ"
 "ます。"
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "未知の相手先を無視"
@@ -2886,6 +2898,10 @@ msgstr "非同期"
 msgid "No Threshold"
 msgstr "制限なし"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "タイムゾーン"
+
 msgid "No additional requirements"
 msgstr "追加要件なし"
 
@@ -3026,6 +3042,12 @@ msgstr "通知"
 
 msgid "Notify after update"
 msgstr "更新後に通知する"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "自動更新に成功したら通知します"
@@ -3506,6 +3528,18 @@ msgstr "登録 (_G)"
 #, python-format
 msgid "React with %s"
 msgstr "%s でリアクション"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "\"%s\" に対する操作"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "\"%s\" に対する操作"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "休暇"
 
 msgid "Read Receipts"
 msgstr "既読通知"
@@ -4846,6 +4880,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "タイムゾーン"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "タイムゾーン"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "肩書"
@@ -5031,6 +5069,10 @@ msgstr "更新"
 msgid "Update Avatar"
 msgstr "アバターを更新"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "タイムゾーン"
+
 msgid "Update automatically"
 msgstr "自動で更新する"
 
@@ -5040,6 +5082,13 @@ msgstr "利用可能な更新: バージョン %s"
 
 msgid "Update plugins automatically"
 msgstr "プラグインを自動で更新します"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "プラグインを自動で更新します"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "更新"
@@ -5146,9 +5195,6 @@ msgstr "傍聴者"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "傍聴者"
-
-msgid "Visual Notifications"
-msgstr "目への通知"
 
 msgid "Voice Message"
 msgstr "音声メッセージ"
@@ -6505,6 +6551,10 @@ msgstr "…またはここにドロップ"
 #~ msgstr "エラー !"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "エラー: %s (MIME タイプ: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "エラー: 読み込みモードで %s を開けません"
 
@@ -7290,10 +7340,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "User name…"
 #~ msgstr "名前を変更…"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "休暇"
-
 #~ msgid "Video Framerate"
 #~ msgstr "ビデオのフレームレート"
 
@@ -7305,6 +7351,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Video calls are not supported"
 #~ msgstr "ビデオ通話に対応していません"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "目への通知"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "WebSocket の URL"

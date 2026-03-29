@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2026-02-18 18:19+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-18 03:19+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
-"\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
+">\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,6 +33,10 @@ msgstr "%(contact)s сіздің %(chat)s чатына шақыруыңызды 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s сізді %(chat)s ішіне қосылуға шақырды"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, python-format
 msgid "%(count)s Participant"
@@ -936,6 +940,9 @@ msgstr "CRL мерзімі әлі басталмаған"
 msgid "CRL signature failure"
 msgstr "CRL қолтаңба қатесі"
 
+msgid "CSV files"
+msgstr "CSV файлдары"
+
 msgid "C_opy"
 msgstr "Кө_шіріп алу"
 
@@ -1820,10 +1827,6 @@ msgstr "Аватарды жүктеп салу кезіндегі қате"
 msgid "Error: %s"
 msgstr "Қате: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Қате: %s (mime түрлері: %s)"
-
 msgid "Event"
 msgstr "Оқиға"
 
@@ -2122,6 +2125,11 @@ msgstr ""
 "ойларыңызбен оңай бөлісіңіз немесе топтарыңызбен жаңалықтарды талқылаңыз."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2347,6 +2355,9 @@ msgstr ""
 "Іске қосулы түрса, Jingle қолдану кезде Gajim STUN серверін қолдануға "
 "тырысады. Ол сервер \"stun_server\" опциясында көрсетіледі немесе оны XMPP "
 "сервердің өзі береді."
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "Белгісіз контактілерді елемеу"
@@ -2884,6 +2895,10 @@ msgstr "Синхрондалмаған"
 msgid "No Threshold"
 msgstr "Табалдырық мәні жоқ"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Уақыт белдеуі"
+
 msgid "No additional requirements"
 msgstr "Қосымша талаптар жоқ"
 
@@ -3021,6 +3036,12 @@ msgstr "Хабарламалар"
 
 msgid "Notify after update"
 msgstr "Жаңартудан кейін хабарлау"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Автоматты жаңарту сәтті өткенде маған хабарлау"
@@ -3500,6 +3521,18 @@ msgstr "_Тіркелу"
 #, python-format
 msgid "React with %s"
 msgstr "%s арқылы реакция білдіру"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "\"%s\" үшін әрекеттер"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "\"%s\" үшін әрекеттер"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Демалыс"
 
 msgid "Read Receipts"
 msgstr "Оқылғандығы туралы есептер"
@@ -4837,6 +4870,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Уақыт белдеуі"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Уақыт белдеуі"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Лауазым"
@@ -5020,6 +5057,10 @@ msgstr "Жаңарту"
 msgid "Update Avatar"
 msgstr "Аватарды жаңарту"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "Уақыт белдеуі"
+
 msgid "Update automatically"
 msgstr "Автоматты түрде жаңарту"
 
@@ -5029,6 +5070,13 @@ msgstr "Жаңарту қолжетімді: %s нұсқасы"
 
 msgid "Update plugins automatically"
 msgstr "Плагиндерід автоматты жаңарту"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Плагиндерід автоматты жаңарту"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "Жаңартулар"
@@ -5135,9 +5183,6 @@ msgstr "Келуші"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Келушілер"
-
-msgid "Visual Notifications"
-msgstr "Визуалды хабарламалар"
 
 msgid "Voice Message"
 msgstr "Дауыстық хабарлама"
@@ -6470,6 +6515,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr "Қате!"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Қате: %s (mime түрлері: %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
@@ -7248,10 +7297,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "User name…"
 #~ msgstr "_Пайдаланушы аты"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Демалыс"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Видеоның кадр/сек қасиеті"
 
@@ -7264,6 +7309,9 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Визуалды хабарламалар"
 
 #~ msgid "What happened"
 #~ msgstr "Не болды"

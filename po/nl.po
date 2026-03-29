@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -36,6 +36,10 @@ msgstr "%(jid)s heeft de uitnodiging geweigerd: %(reason)s"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
 "<b>%(contact)s</b> heeft u uitgenodigd in groepsgesprek <b>%(room_jid)s</b>"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -1028,6 +1032,10 @@ msgstr "CRL is nog niet geldig"
 
 msgid "CRL signature failure"
 msgstr "CRL-handtekeningsfout"
+
+#, fuzzy
+msgid "CSV files"
+msgstr "SVG-bestanden"
 
 msgid "C_opy"
 msgstr ""
@@ -2025,10 +2033,6 @@ msgstr "Fout bij toevoegen van transportcontact"
 msgid "Error: %s"
 msgstr "Fout: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Foutbericht: %s"
-
 msgid "Event"
 msgstr "Gebeurtenis"
 
@@ -2372,6 +2376,11 @@ msgstr ""
 "praat over het nieuws met je groepen."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2625,6 +2634,9 @@ msgstr ""
 "Indien ingeschakeld zal Gajim een STUN-server proberen gebruiken bij gebruik "
 "van Jingle, ofwel die in de optie ‘stun_server’, ofwel die gegeven door de "
 "XMPP-server."
+
+msgid "Ignore"
+msgstr ""
 
 #, fuzzy
 msgid "Ignore Unknown Contacts"
@@ -3257,6 +3269,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr "Geen drempelwaarde"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Duur"
+
 msgid "No additional requirements"
 msgstr "Geen extra vereisten"
 
@@ -3402,6 +3418,12 @@ msgid "Notifications"
 msgstr "Meldingen"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3938,6 +3960,18 @@ msgstr "Re_gistreren"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Acties voor ‘%s’"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Acties voor ‘%s’"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Locatie:"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5472,6 +5506,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Duur"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Duur"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5681,6 +5719,10 @@ msgid "Update Avatar"
 msgstr "Avatar uploaden…"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Duur"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Avatar uploaden…"
 
@@ -5689,6 +5731,13 @@ msgid "Update available: Version %s"
 msgstr "Geen account beschikbaar"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Avatar uploaden…"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5806,9 +5855,6 @@ msgstr "Bezoeker"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Bezoekers"
-
-msgid "Visual Notifications"
-msgstr "Visuele meldingen"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7250,6 +7296,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Fout!"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Foutbericht: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Fout: kan %s niet voor lezen openen"
@@ -7995,11 +8045,6 @@ msgstr ""
 #~ msgstr "Gebr_uikersnaam"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Locatie:"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Video_framerate"
 
@@ -8014,6 +8059,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Videosessies zijn niet beschikbaar"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Visuele meldingen"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

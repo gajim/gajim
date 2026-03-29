@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact Вас је позвао на групни разговор у собу %(room_jid)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%(count)s Participant"
@@ -1043,6 +1047,10 @@ msgstr "CRL није још валидан"
 msgid "CRL signature failure"
 msgstr "Грешка у CRL сертификата"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Пошаљи _датотеку"
+
 msgid "C_opy"
 msgstr ""
 
@@ -2047,10 +2055,6 @@ msgstr "Грешка приликом додавања сервиса. %s"
 msgid "Error: %s"
 msgstr "Грешка: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Порука грешке: %s"
-
 msgid "Event"
 msgstr "догађај"
 
@@ -2389,6 +2393,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2633,6 +2642,9 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
+msgstr ""
+
+msgid "Ignore"
 msgstr ""
 
 #, fuzzy
@@ -3266,6 +3278,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Време"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3412,6 +3428,12 @@ msgid "Notifications"
 msgstr "Обавештења"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3959,6 +3981,18 @@ msgstr "Ре_гистрација"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Акције за налог \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Акције за налог \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Обавештење"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5494,6 +5528,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Време"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Време"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5704,6 +5742,10 @@ msgid "Update Avatar"
 msgstr "Одаберите слику"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Време"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Одаберите слику"
 
@@ -5712,6 +5754,13 @@ msgid "Update available: Version %s"
 msgstr "Нема доступних налога"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Одаберите слику"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5831,10 +5880,6 @@ msgstr "Посетилац"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Posjetitelji"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Визуална обавештења</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7221,6 +7266,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Грешка"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Порука грешке: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Грешка: није могуће отворити %s за читање"
@@ -7849,11 +7898,6 @@ msgstr ""
 #~ msgstr "_Корисничко име:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Обавештење"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Приватни Разговори"
 
@@ -7868,6 +7912,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Веза није доступна"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Визуална обавештења</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

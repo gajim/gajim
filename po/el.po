@@ -5,122 +5,132 @@
 # Stavros Giannouris <stavrosg2002@freemai.gr>, 2005, 2006.
 # Filippos Papadopoulos <filip@cs.uoi.gr>, 2005.
 # Stathis Kamperis <ekamperi@auth.gr>, 2005
-#
+# Suiberis <suiberis@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2022-02-11 17:45+0000\n"
-"Last-Translator: Gregory K <gk@makemagic.gr>\n"
-"Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
-">\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-29 09:19+0000\n"
+"Last-Translator: Suiberis <suiberis@proton.me>\n"
+"Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 5.0\n"
 "X-Poedit-Language: Greek\n"
 "X-Poedit-Country: GREECE\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,623\n"
 
-#, fuzzy
 msgid " (Video Call)"
-msgstr "Προσωπική συζήτηση"
+msgstr " (Βιντεοκλήση)"
 
-#, fuzzy
 msgid " (Voice Call)"
-msgstr "Αίτηση μεταφοράς αρχείου"
+msgstr " (Φωνητική κλήση)"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
+msgstr "Ο χρήστης %(contact)s απέρριψε την πρόσκλησή σας για %(chat)s"
+
+#, python-format
+msgid "%(contact)s invited you to %(chat)s"
+msgstr "Ο χρήστης %(contact)s σας προσκάλεσε σε %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%(contact)s invited you to %(chat)s"
-msgstr "Ο/Η %(contact_jid)s σας προσκάλεσε στο %(room_jid)s"
-
-#, fuzzy, python-format
+#, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] "Συμμετέχων"
-msgstr[1] "Συμμετέχων"
+msgstr[0] "%(count)s Συμμετέχων"
+msgstr[1] "%(count)s Συμμετέχοντες"
 
 #, python-format
 msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
+"%(count)s μηνύματα από %(participant)s θα ελεγχθούν.\n"
+"Γιατί θέλετε να ελέγξετε αυτά τα μηνύματα;"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s ημέρες, %(hours)s ώρες"
+
+#, fuzzy, python-format
+msgid "%(minutes)s min %(seconds)s s"
+msgstr "%(minutes) λεπτά %(seconds) δευτερόλεπτα"
 
 #, python-format
-msgid "%(minutes)s min %(seconds)s s"
-msgstr ""
-
-#, fuzzy, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr "Επιθυμώ να σε προσθέσω στη λίστα επαφών μου."
+msgstr "Ο/Η %(name)s %(jid)s μου πρότεινε να σε προσθέσω στη λίστα επαφών μου."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
+msgstr ""
+"Ο χρήστης %(name)s (%(jid)s) θα ήθελε να προσθέσει ορισμένες επαφές στη "
+"λίστα επαφών σας."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
+msgstr ""
+"Ο χρήστης %(name)s (%(jid)s) θα ήθελε να διαγράψει ορισμένες επαφές από τη "
+"λίστα επαφών σας."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
-msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
+msgstr ""
+"Ο χρήστης %(name)s (%(jid)s) θα ήθελε να τροποποιήσει ορισμένες επαφές στη "
+"λίστα επαφών σας."
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr ""
+msgstr "Ο χρήστης %(name)s ακύρωσε τη μεταφορά (%(reason)s)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been banned by %(actor)s"
-msgstr "Ο %(nick)s έχει απαγορευτεί: %(reason)s"
+msgstr "Ο %(nick)s έχει αποκλειστεί από τον %(actor)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s has been kicked by %(actor)s"
-msgstr "Ο %(nick)s πετάχτηκε έξω: %(reason)s"
+msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(actor)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
-msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
+msgstr "Ο %(nick)s είναι πλέον %(affiliation)s σε αυτήν την ομαδική συνομιλία"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s:"
-msgstr "Ψευδώνυμο:"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(number)s min ago"
 msgid_plural "%(number)s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s λεπτό πριν"
+msgstr[1] "%(number)s λεπτά πριν"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "%(owner_or_admin_or_member)s αυτής της ομαδικής συνομιλίας"
 
 #, fuzzy, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr "Η μεταφορά του αρχείου %(filename)s από τον/την %(name)s σταμάτησε."
+msgstr "%(progress)s %% (%(time) που απομένει)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(received)s of %(max)s"
-msgstr "Η μεταφορά του αρχείου %(filename)s από τον/την %(name)s σταμάτησε."
+msgstr "%(received)s από %(max)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
+msgstr "Η κρυπτογράφηση %(type)s είναι ενεργή %(authenticated)s."
 
 #, fuzzy, python-format
 msgid "%(user)s is now %(role)s of this group chat"
@@ -1035,6 +1045,10 @@ msgstr ""
 
 msgid "CRL signature failure"
 msgstr ""
+
+#, fuzzy
+msgid "CSV files"
+msgstr "Αποστολή αρχείου"
 
 msgid "C_opy"
 msgstr ""
@@ -2035,10 +2049,6 @@ msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας.
 msgid "Error: %s"
 msgstr "Μήνυμα σφάλματος: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Μήνυμα σφάλματος: %s"
-
 msgid "Event"
 msgstr "Γεγονός"
 
@@ -2380,6 +2390,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2624,6 +2639,9 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
+msgstr ""
+
+msgid "Ignore"
 msgstr ""
 
 #, fuzzy
@@ -3260,6 +3278,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Χρόνος"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3407,6 +3429,12 @@ msgid "Notifications"
 msgstr "Τροποποίηση λογαριασμού"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3955,6 +3983,18 @@ msgstr "_Εγγραφή"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "Α_ναζήτηση για:"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "Α_ναζήτηση για:"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5476,6 +5516,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Χρόνος"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Χρόνος"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5688,6 +5732,10 @@ msgid "Update Avatar"
 msgstr "Επιλογή εικόνας"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Χρόνος"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Επιλογή εικόνας"
 
@@ -5696,6 +5744,13 @@ msgid "Update available: Version %s"
 msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Επιλογή εικόνας"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5815,10 +5870,6 @@ msgstr "Επισκέπτης"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Επισκέπτες"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -6237,7 +6288,7 @@ msgid "_Do not ask me again"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
 msgid "_Edit"
-msgstr "Ε_πεξεργασία"
+msgstr "_Επεξεργασία"
 
 #, fuzzy
 msgid "_Features"
@@ -6309,7 +6360,7 @@ msgid "_OK"
 msgstr "_Εντάξει"
 
 msgid "_Offline"
-msgstr "Απ_οσυνδεδεμένος"
+msgstr "_Αποσυνδεδεμένος"
 
 msgid "_Overwrite"
 msgstr ""
@@ -7202,6 +7253,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Σφάλμα:"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Μήνυμα σφάλματος: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Σφάλμα: το αρχείο %s δε μπορεί να ανοιχθεί για ανάγνωση"
@@ -7815,11 +7870,6 @@ msgstr ""
 #~ msgstr "Όν_ομα χρήστη:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Τροποποίηση λογαριασμού"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Προσωπική συζήτηση"
 
@@ -7834,6 +7884,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "To Session bus δεν είναι διαθέσιμο"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"

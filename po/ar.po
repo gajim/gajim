@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2026-02-17 18:19+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -35,6 +35,10 @@ msgstr "رفض %(contact)s دعوتك إلى %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "دعاك %(contact)s إلى %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr ""
 
 #, python-format
 msgid "%(count)s Participant"
@@ -932,6 +936,10 @@ msgstr "قائمة نقض الشهادات (CRL) ليست صالحة بعد"
 msgid "CRL signature failure"
 msgstr "تعذَّر توقيع قائمة نقض الشهادات (CRL)"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "ملفات SVG"
+
 msgid "C_opy"
 msgstr "ا_نسخ"
 
@@ -1800,10 +1808,6 @@ msgstr "خطأ أثناء رفع الأفتار"
 msgid "Error: %s"
 msgstr "خطأ: %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "خطأ: %s (أنواع mime: %s)"
-
 msgid "Event"
 msgstr "حدث"
 
@@ -2101,6 +2105,11 @@ msgstr ""
 "والأفكار بسهولة، أو ناقش الأخبار مع مجموعاتك."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2319,6 +2328,9 @@ msgid ""
 msgstr ""
 "إذا فعِّل هذا الخيار، فسيحاول غاجم استعمال خادوم STUN عند استخدام Jingle. إما "
 "الخادوم المحدد في خيار \"stun_server\"، أو الذي يوفره خادوم XMPP."
+
+msgid "Ignore"
+msgstr ""
 
 msgid "Ignore Unknown Contacts"
 msgstr "تجاهل المتراسلين المجهولين"
@@ -2854,6 +2866,10 @@ msgstr "لا مزامنة"
 msgid "No Threshold"
 msgstr "لا يوجد حد أدنى"
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "المنطقة الزمنية"
+
 msgid "No additional requirements"
 msgstr "لا متطلبات إضافية"
 
@@ -2991,6 +3007,12 @@ msgstr "التنبيهات"
 
 msgid "Notify after update"
 msgstr "التنبيه بعد التحديث"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
 
 msgid "Notify me when the automatic update was successful"
 msgstr "ينبِّه عند نجاح التحديث التلقائي"
@@ -3464,6 +3486,18 @@ msgstr "_سجِّل"
 #, python-format
 msgid "React with %s"
 msgstr "تفاعل ب‍ %s"
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "إجراءات لِ‍«%s»"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "إجراءات لِ‍«%s»"
+
+#, fuzzy
+msgid "Reactions"
+msgstr "الإجازة"
 
 msgid "Read Receipts"
 msgstr ""
@@ -4789,6 +4823,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "المنطقة الزمنية"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "المنطقة الزمنية"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "العنوان"
@@ -4970,6 +5008,10 @@ msgstr "حدِّث"
 msgid "Update Avatar"
 msgstr "حدِّث الأفتار"
 
+#, fuzzy
+msgid "Update Timezone"
+msgstr "المنطقة الزمنية"
+
 msgid "Update automatically"
 msgstr "التحديث تلقائيًا"
 
@@ -4979,6 +5021,13 @@ msgstr "التحديث متوفِّر: الإصدار %s"
 
 msgid "Update plugins automatically"
 msgstr "يحدِّث الملحقات تلقائيًا"
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "يحدِّث الملحقات تلقائيًا"
+
+msgid "Update your timezone?"
+msgstr ""
 
 msgid "Updates"
 msgstr "التحديثات"
@@ -5084,9 +5133,6 @@ msgstr "زائر"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "الزوَّار"
-
-msgid "Visual Notifications"
-msgstr "تنبيهات مرئية"
 
 msgid "Voice Message"
 msgstr "رسالة صوتية"
@@ -6150,6 +6196,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Error received: {}"
 #~ msgstr "استُلِم خطأ: {}"
 
+#, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "خطأ: %s (أنواع mime: %s)"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "عائلة"
@@ -6411,9 +6461,8 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "User name…"
 #~ msgstr "غَيِّر اللقب…"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "الإجازة"
+#~ msgid "Visual Notifications"
+#~ msgstr "تنبيهات مرئية"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "مسار WebSocket"

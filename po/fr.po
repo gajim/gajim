@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
-"PO-Revision-Date: 2026-02-17 23:19+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"PO-Revision-Date: 2026-03-28 16:19+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -39,6 +39,10 @@ msgstr "%(contact)s a décliné votre invitation sur %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s vous a invité dans le salon %(chat)s"
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
+msgstr "%(contact)s a réagi avec %(reaction)s à ton message '%(message)s'"
 
 #, python-format
 msgid "%(count)s Participant"
@@ -950,6 +954,9 @@ msgstr "CRL n'est pas encore valide"
 msgid "CRL signature failure"
 msgstr "Échec de la signature CRL"
 
+msgid "CSV files"
+msgstr "Fichiers CSV"
+
 msgid "C_opy"
 msgstr "C_opie"
 
@@ -1849,10 +1856,6 @@ msgstr "Erreur durant l'envois de l'image de profil"
 msgid "Error: %s"
 msgstr "Erreur : %s"
 
-#, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Erreur : %s (types mime : %s)"
-
 msgid "Event"
 msgstr "Événement"
 
@@ -2151,6 +2154,14 @@ msgstr ""
 "photos et des idées, ou discutez des actualités avec votre entourage."
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+"Gajim peut automatiquement mettre à jour votre profil avec votre fuseau "
+"horaire actuel. Cela peut aider vos contacts quand ils tentent de vous "
+"joindre."
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2380,6 +2391,9 @@ msgstr ""
 "Si activé, Gajim essaiera d'utiliser un serveur STUN lors de l'utilisation "
 "de Jingle. Celui défini dans l'option \"stun_server\", ou celui fourni par "
 "le serveur XMPP."
+
+msgid "Ignore"
+msgstr "Ignorer"
 
 msgid "Ignore Unknown Contacts"
 msgstr "Ignorer les contacts inconnus"
@@ -2921,6 +2935,9 @@ msgstr "Aucune synchronisation"
 msgid "No Threshold"
 msgstr "Pas de seuil"
 
+msgid "No Timezone"
+msgstr "Aucun fuseau horaire"
+
 msgid "No additional requirements"
 msgstr "Pas d'exigences additionnelles"
 
@@ -3062,6 +3079,13 @@ msgstr "Notifications"
 
 msgid "Notify after update"
 msgstr "Notifier après mise à jour"
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr "Me notifier quand quelqu'un réagi à mon message dans une discussion"
+
+msgid "Notify me when someone reacts to my message in a group chat"
+msgstr ""
+"Me notifier quand quelqu'un réagi à mon message dans une discussion de groupe"
 
 msgid "Notify me when the automatic update was successful"
 msgstr "Me notifier lorsqu'une mise à jour automatique a réussi"
@@ -3543,6 +3567,17 @@ msgstr "_Souscrire"
 #, python-format
 msgid "React with %s"
 msgstr "Réagir avec %s"
+
+#, python-format
+msgid "Reaction from %s"
+msgstr "Réaction de %s"
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Actions pour \"%s\""
+
+msgid "Reactions"
+msgstr "Réactions"
 
 msgid "Read Receipts"
 msgstr "Accusés de lecture"
@@ -4901,6 +4936,9 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Fuseau horaire"
 
+msgid "Timezone Update"
+msgstr "Mise à jour du fuseau horaire"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr "Titre"
@@ -5087,6 +5125,9 @@ msgstr "_Mettre à jour"
 msgid "Update Avatar"
 msgstr "Mettre à jour l'image de profil"
 
+msgid "Update Timezone"
+msgstr "Mettre à jour le fuseau horaire"
+
 msgid "Update automatically"
 msgstr "Mettre à jour automatiquement"
 
@@ -5096,6 +5137,12 @@ msgstr "Mise à jour disponible : Version %s"
 
 msgid "Update plugins automatically"
 msgstr "Mettre à jour les extensions automatiquement"
+
+msgid "Update your profile's timezone automatically"
+msgstr "Met à jour le fuseau horaire de votre profil automatiquement"
+
+msgid "Update your timezone?"
+msgstr "Mettre votre fuseau horaire à jour ?"
 
 msgid "Updates"
 msgstr "Mises à jour"
@@ -5203,9 +5250,6 @@ msgstr "Visiteur/teuse"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Visiteurs/teuses"
-
-msgid "Visual Notifications"
-msgstr "Notifications visuelles"
 
 msgid "Voice Message"
 msgstr "Message Vocal"
@@ -6621,6 +6665,10 @@ msgstr "... ou bien déposez ici"
 #~ msgstr "Erreur !"
 
 #, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Erreur : %s (types mime : %s)"
+
+#, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Erreur : impossible d'ouvrir %s en lecture"
 
@@ -7419,10 +7467,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "User name…"
 #~ msgstr "Nom d'utilisateur·ice…"
 
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Vacances"
-
 #~ msgid "Video Framerate"
 #~ msgstr "Fréquence de rafraîchissement vidéo"
 
@@ -7434,6 +7478,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Video calls are not supported"
 #~ msgstr "Les appels vidéo ne sont pas supportés"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Notifications visuelles"
 
 #~ msgid "WebSocket URL"
 #~ msgstr "URL de la WebSocket"

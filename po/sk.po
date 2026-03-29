@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-17 19:59+0000\n"
+"POT-Creation-Date: 2026-03-28 13:34+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -32,6 +32,10 @@ msgstr ""
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
+msgstr ""
+
+#, python-format
+msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1041,6 +1045,10 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr "Zlyhanie CRL podpisu"
 
+#, fuzzy
+msgid "CSV files"
+msgstr "Poslať _súbor"
+
 msgid "C_opy"
 msgstr ""
 
@@ -2042,10 +2050,6 @@ msgstr "Chyba pri pridávaní služby. %s"
 msgid "Error: %s"
 msgstr "Chyba: %s"
 
-#, fuzzy, python-format
-msgid "Error: %s (mime types: %s)"
-msgstr "Chybová správa: %s"
-
 msgid "Event"
 msgstr "Udalosť"
 
@@ -2384,6 +2388,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Gajim can automatically update your profile with your current timezone. This "
+"may help your contacts when they try to reach you."
+msgstr ""
+
+msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
@@ -2628,6 +2637,9 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
+msgstr ""
+
+msgid "Ignore"
 msgstr ""
 
 #, fuzzy
@@ -3258,6 +3270,10 @@ msgstr ""
 msgid "No Threshold"
 msgstr ""
 
+#, fuzzy
+msgid "No Timezone"
+msgstr "Čas"
+
 msgid "No additional requirements"
 msgstr ""
 
@@ -3404,6 +3420,12 @@ msgid "Notifications"
 msgstr "Oznámenia"
 
 msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a chat"
+msgstr ""
+
+msgid "Notify me when someone reacts to my message in a group chat"
 msgstr ""
 
 msgid "Notify me when the automatic update was successful"
@@ -3951,6 +3973,18 @@ msgstr "Re_gistrácia"
 #, python-format
 msgid "React with %s"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Reaction from %s"
+msgstr "_Akcie pre \"%s\""
+
+#, fuzzy, python-format
+msgid "Reaction from %s (%s)"
+msgstr "_Akcie pre \"%s\""
+
+#, fuzzy
+msgid "Reactions"
+msgstr "Umiestnenie:"
 
 #, fuzzy
 msgid "Read Receipts"
@@ -5483,6 +5517,10 @@ msgctxt "Profile"
 msgid "Timezone"
 msgstr "Čas"
 
+#, fuzzy
+msgid "Timezone Update"
+msgstr "Čas"
+
 msgctxt "Profile"
 msgid "Title"
 msgstr ""
@@ -5693,6 +5731,10 @@ msgid "Update Avatar"
 msgstr "Vybrať obrázok"
 
 #, fuzzy
+msgid "Update Timezone"
+msgstr "Čas"
+
+#, fuzzy
 msgid "Update automatically"
 msgstr "Vybrať obrázok"
 
@@ -5701,6 +5743,13 @@ msgid "Update available: Version %s"
 msgstr "Žiadne účty nie sú dostupné"
 
 msgid "Update plugins automatically"
+msgstr ""
+
+#, fuzzy
+msgid "Update your profile's timezone automatically"
+msgstr "Vybrať obrázok"
+
+msgid "Update your timezone?"
 msgstr ""
 
 msgid "Updates"
@@ -5821,10 +5870,6 @@ msgstr "Návštevník"
 msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Návštevníci"
-
-#, fuzzy
-msgid "Visual Notifications"
-msgstr "<b>Vizuálne oznámenie</b>"
 
 #, fuzzy
 msgid "Voice Message"
@@ -7202,6 +7247,10 @@ msgstr ""
 #~ msgid "Error!"
 #~ msgstr "Chyba"
 
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Chybová správa: %s"
+
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Chyba: nie je možné otvoriť %s na čítanie"
@@ -7827,11 +7876,6 @@ msgstr ""
 #~ msgstr "_Používateľské meno:"
 
 #, fuzzy
-#~ msgctxt "Group chat name"
-#~ msgid "Vacation"
-#~ msgstr "Umiestnenie:"
-
-#, fuzzy
 #~ msgid "Video Framerate"
 #~ msgstr "Video test"
 
@@ -7846,6 +7890,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Pripojenie nie je dostupné"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Vizuálne oznámenie</b>"
 
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
