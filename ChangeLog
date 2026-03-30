@@ -1,3 +1,36 @@
+Gajim 2.4.5 (30 Mar 2026)
+
+  New
+
+  * Show notifications for reactions
+  * Bring back Entity Time (XEP-0202) support
+  * App: Add automatic timezone update
+  * GroupChat: Show offline members in the contact list
+
+  Improvements
+
+  * GroupChat: Automatically rejoin groupchat when kicked due to an error
+  * Unread counter: Improve contrast
+
+  Bug Fixes
+
+  * Preferences: Don't fail when showing the auto not available page
+  * GroupchatRoster: Don't fail when trying to open chat with offline member
+  * MacOS: Fix copy/paste when clipboard contains text/uri-list
+  * Windows: Show Gajim icon in header bar
+  * Chat list filter: Fix group filter for PMs (#12674)
+  * Workspaces: Check if workspace exists before saving (#12673)
+  * Image preview: Guard for exceptions while determining size/type (#12672)
+  * HistoryExport: Sanitize filenames
+  * MacOS: Fix clicking folder open button does nothing
+  * GroupChat: Fix problem with duplicated messages
+  * FileChooser: Match files always case-insensitive
+  * GroupChat: Make removing nickname reservation work (#12193)
+  * App: Don't print errors when checking for version
+  * Preview: Don't display preview if a site has no title
+  * Preview: Trigger only https urls with a specific length
+  * MacOS: Fix showing image previews (#12645)
+
 Gajim 2.4.4 (25 Feb 2026)
 
   New
