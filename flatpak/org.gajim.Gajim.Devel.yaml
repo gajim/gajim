@@ -241,118 +241,6 @@ modules:
         url: https://files.pythonhosted.org/packages/1f/42/5c74462b4fd957fcd7b13b04fb3205ff8349236ea74c7c375766d6c82288/pillow-12.1.1.tar.gz
         sha256: 9ad8fa5937ab05218e2b6a4cff30295ad35afd2f83ac592e68c0d871bb0fdbc4
 
-  # httpx dependencies
-  - name: python3-truststore
-    buildsystem: simple
-    build-commands:
-      - pip3 install truststore-0.10.4-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl
-        sha256: adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
-
-  # h2 dependencies
-  - name: python3-hpack
-    buildsystem: simple
-    build-commands:
-      - pip3 install hpack-4.1.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/07/c6/80c95b1b2b94682a72cbdbfb85b81ae2daffa4291fbfa1b1464502ede10d/hpack-4.1.0-py3-none-any.whl
-        sha256: 157ac792668d995c657d93111f46b4535ed114f0c9c8d672271bbec7eae1b496
-
-  - name: python3-hyperframe
-    buildsystem: simple
-    build-commands:
-      - pip3 install hyperframe-6.1.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/48/30/47d0bf6072f7252e6521f3447ccfa40b421b6824517f82854703d0f5a98b/hyperframe-6.1.0-py3-none-any.whl
-        sha256: b03380493a519fce58ea5af42e4a42317bf9bd425596f7a0835ffce80f1a42e5
-
-  - name: python3-h2
-    buildsystem: simple
-    build-commands:
-      - pip3 install h2-4.3.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/69/b2/119f6e6dcbd96f9069ce9a2665e0146588dc9f88f29549711853645e736a/h2-4.3.0-py3-none-any.whl
-        sha256: c438f029a25f7945c69e0ccf0fb951dc3f73a5f6412981daee861431b70e2bdd
-
-  # anyio dependency
-  - name: python3-sniffio
-    buildsystem: simple
-    build-commands:
-      - pip3 install sniffio-1.3.1-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl
-        sha256: 2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2
-
-  - name: python3-anyio
-    buildsystem: simple
-    build-commands:
-      - pip3 install anyio-4.13.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/da/42/e921fccf5015463e32a3cf6ee7f980a6ed0f395ceeaa45060b61d86486c2/anyio-4.13.0-py3-none-any.whl
-        sha256: 08b310f9e24a9594186fd75b4f73f4a4152069e3853f1ed8bfbf58369f4ad708
-
-  - name: python3-certifi
-    buildsystem: simple
-    build-commands:
-      - pip3 install certifi-2026.2.25-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/9a/3c/c17fb3ca2d9c3acff52e30b309f538586f9f5b9c9cf454f3845fc9af4881/certifi-2026.2.25-py3-none-any.whl
-        sha256: 027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa
-
-  - name: python3-h11
-    buildsystem: simple
-    build-commands:
-      - pip3 install h11-0.16.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl
-        sha256: 63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86
-
-  - name: python3-httpcore
-    buildsystem: simple
-    build-commands:
-      - pip3 install httpcore-1.0.9-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl
-        sha256: 2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55
-
-  # sockio dependency
-  - name: python3-flit-core
-    buildsystem: simple
-    build-commands:
-      - pip3 install --no-build-isolation .
-    sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/69/59/b6fc2188dfc7ea4f936cd12b49d707f66a1cb7a1d2c16172963534db741b/flit_core-3.12.0.tar.gz
-        sha256: 18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2
-
-  - name: python3-socksio
-    buildsystem: simple
-    build-commands:
-      - pip3 install --no-build-isolation .
-    sources:
-      - type: git
-        url: https://github.com/sethmlarson/socksio.git
-        commit: b326406915fd98a8185c1c160165c5b8963b30c1
-
-  - name: python3-httpx
-    buildsystem: simple
-    build-commands:
-      - pip3 install httpx-0.28.1-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl
-        sha256: d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad
-
   # sentry-sdk dependency
   - name: python3-urllib3
     buildsystem: simple
@@ -454,6 +342,35 @@ modules:
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/omemo-dr.git
+
+  # niquests
+  - name: python3-niquests
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
+        --prefix=${FLATPAK_DEST} "niquests" --no-build-isolation
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/e7/a1/67fe25fac3c7642725500a3f6cfe5821ad557c3abb11c9d20d12c7008d3e/charset_normalizer-3.4.7.tar.gz
+        sha256: ae89db9e5f98a11a4bf50407d4363e7b09b31e55bc117b4f7d80aab97ba009e5
+      - type: file
+        url: https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl
+        sha256: 63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86
+      - type: file
+        url: https://files.pythonhosted.org/packages/1b/ed/466eb2a162d9cfaa8452e9a05d24b4fc11d4cf84cf27f5a71457dc590323/jh2-5.0.10.tar.gz
+        sha256: 2c737a47bee50dc727f7a766185e110befdceba5efb1c4fa240b1e4399291487
+      - type: file
+        url: https://files.pythonhosted.org/packages/18/bc/4de83b7e1be6eeec21267adc7e5385a0b3c7ca2631cf399f7fad59ffe0bd/niquests-3.18.4-py3-none-any.whl
+        sha256: 4098d29516936f58d35c348abda23a632e21d1f38de78e60d68d013254c12f88
+      - type: file
+        url: https://files.pythonhosted.org/packages/93/2d/fe3fb2cb618191dcaa0f9fbeb98498641a8148cfa0a5086b7298d9b7b7ac/qh3-1.7.1.tar.gz
+        sha256: 4ce90c54ab94521840248522de2b6620f302cde8ff317333f40f405907e6b6ad
+      - type: file
+        url: https://files.pythonhosted.org/packages/9a/73/7850f76a7fef998bf45165dcbeb39b2dab1f85e205aa12105c41597e8a24/urllib3_future-2.19.901-py3-none-any.whl
+        sha256: 4590bb7a3a015bc1e04ea8e92e26b66dec7e2d7791d75b07cf8d81d032e602e5
+      - type: file
+        url: https://files.pythonhosted.org/packages/e3/d9/e81c8de18b3edd22e1884ed6b8cfc2ce260addb110fd519781ea54274e38/wassima-2.0.5-py3-none-any.whl
+        sha256: e60b567b26b87c83ff310a191d9c584113f13c0bcea0564f92e7630b17da319b
 
   # nbxmpp dependency (optional)
   - name: python3-gssapi
