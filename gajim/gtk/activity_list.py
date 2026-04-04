@@ -784,7 +784,10 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
                 event.jid, event.occupant, AvatarSize.ROSTER, scale
             )
             nickname = event.occupant.nickname
-            title = _("Reaction from %s (%s)") % (nickname, groupchat_name)
+            title = _("Reaction from %(nickname)s (%(chat)s)") % {
+                "nickname": nickname,
+                "chat": groupchat_name,
+            }
 
         else:
             contact = client.get_module("Contacts").get_contact(event.jid)
