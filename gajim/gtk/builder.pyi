@@ -22,9 +22,8 @@ class ActivityChangeTimezoneBuilder(Builder):
     change_timezone_page: Gtk.Box
     old_timezone_label: Gtk.Label
     new_timezone_label: Gtk.Label
-    update_button: Gtk.Button
     ignore_button: Gtk.Button
-    ask_button: Gtk.CheckButton
+    update_button: Gtk.Button
 
 class ActivityDefaultBuilder(Builder):
     default_page: Gtk.Box

@@ -18,6 +18,7 @@ class ChatListHeader(Gtk.Grid):
     __gtype_name__ = "ChatListHeader"
 
     _header_bar_label: Gtk.Label = Gtk.Template.Child()
+    _workspace_settings_button: Gtk.Button = Gtk.Template.Child()
     _chat_page_header: Gtk.Box = Gtk.Template.Child()
     _search_entry: Gtk.SearchEntry = Gtk.Template.Child()
     _chat_filter: ChatFilter = Gtk.Template.Child()
@@ -41,6 +42,7 @@ class ChatListHeader(Gtk.Grid):
         is_chat = mode == "chat"
         self._start_chat_menu_button.set_visible(is_chat)
         self._chat_filter.set_visible(is_chat)
+        self._workspace_settings_button.set_visible(is_chat)
 
         if is_chat:
             self._search_entry.set_text("")
