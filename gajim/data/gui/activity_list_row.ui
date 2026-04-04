@@ -88,9 +88,6 @@
                 <property name="ellipsize">end</property>
                 <property name="single-line-mode">1</property>
                 <property name="xalign">0</property>
-                <style>
-                  <class name="dimmed"/>
-                </style>
               </object>
             </child>
           </object>
