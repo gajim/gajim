@@ -565,6 +565,11 @@ def warn_about_plain_connection(account: str,
     return any(type_.is_plain and warn for type_ in connection_types)
 
 
+def multiple_accounts_active() -> bool:
+    active_accounts_count = len(app.settings.get_active_accounts())
+    return active_accounts_count > 1
+
+
 def get_uuid() -> str:
     return str(uuid.uuid4())
 
