@@ -69,10 +69,6 @@ class Features(GajimAppWindow):
 
     def _get_features(self) -> list[Feature]:
         # av_available = app.is_installed("AV") and sys.platform != "win32"
-        notification_sounds_available: bool = app.is_installed(
-            "GSOUND"
-        ) or sys.platform in ("win32", "darwin")
-        notification_sounds_enabled: bool = app.settings.get("sounds_on")
         spell_check_enabled: bool = app.settings.get("use_speller")
 
         auto_status = [app.settings.get("autoaway"), app.settings.get("autoxa")]
@@ -111,14 +107,6 @@ class Features(GajimAppWindow):
                 ),
                 _("No additional requirements"),
                 auto_status_enabled,
-            ),
-            Feature(
-                _("Notification Sounds"),
-                notification_sounds_available,
-                _("Enables Gajim to play sounds for various notifications"),
-                _("Requires: gsound"),
-                _("No additional requirements"),
-                notification_sounds_enabled,
             ),
             Feature(
                 _("Secure Password Storage"),

@@ -111,8 +111,6 @@ pulse_manager = cast('PulseManager', None)
 
 gupnp_igd = None
 
-gsound_ctx = None
-
 process_pool = cast(ProcessPoolExecutor, None)
 
 _dependencies = {
@@ -121,7 +119,6 @@ _dependencies = {
     'AV': False,
     'GEOCLUE': False,
     'UPNP': False,
-    'GSOUND': False,
     'SPELLING': False,
     'IDLE': False,
     'SENTRY_SDK': False,
@@ -263,20 +260,6 @@ def detect_dependencies() -> None:
         if idle.Monitor.is_available():
             _dependencies['IDLE'] = True
     except Exception:
-        pass
-
-    # GSOUND
-    try:
-        gi.require_version('GSound', '1.0')
-        from gi.repository import GSound
-        global gsound_ctx  # pylint: disable=global-statement
-        gsound_ctx = GSound.Context()
-        try:
-            gsound_ctx.init()
-            _dependencies['GSOUND'] = True
-        except GLib.Error as error:
-            log('gajim').warning('GSound init failed: %s', error)
-    except (ImportError, ValueError):
         pass
 
     # LIBSPELLING

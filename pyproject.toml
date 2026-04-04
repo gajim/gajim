@@ -90,7 +90,7 @@ gajim = ["py.typed"]
 version = {attr = "gajim.__version__"}
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana"
+skip = "*__pycache__*,_build_root,build,debian_build,dist,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana"
 ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin,FLE"
 
 [tool.pyright]

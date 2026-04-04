@@ -190,16 +190,6 @@ modules:
         url: https://files.pythonhosted.org/packages/c3/9b/b68be6845faedb6fa33c4ffda7741467a8e8aabff82c6a941a0ba2785c3d/precis_i18n-1.1.2-py3-none-any.whl
         sha256: 8e6cce33bdd8cb6289b9e85cdd7be74c30a1111cadb9d759492349c8c10b0840
 
-  # GSound dependency
-  - shared-modules/libcanberra/libcanberra.json
-
-  - name: gsound
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://download.gnome.org/sources/gsound/1.0/gsound-1.0.3.tar.xz
-        sha256: ca2d039e1ebd148647017a7f548862350bc9af01986d39f10cfdc8e95f07881a
-
   - name: libspelling
     buildsystem: meson
     cleanup:

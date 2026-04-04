@@ -5,16 +5,12 @@
 from __future__ import annotations
 
 import typing
-from typing import Any
 
 import logging
 import sys
 from pathlib import Path
 
-from gi.repository import Gio
-from gi.repository import GLib
-
-from gajim.common import app
+from gi.repository import Gtk
 
 if sys.platform == 'win32' or typing.TYPE_CHECKING:
     import winsound
@@ -89,60 +85,27 @@ class PlatformMacOS(PlaySound):
 class PlatformUnix(PlaySound):
 
     def __init__(self) -> None:
-        self._cancellable: Gio.Cancellable | None = None
+        self._media_file: Gtk.MediaFile | None = None
 
     def play(self, path: Path, loop: bool = False) -> None:
-        if not app.is_installed('GSOUND'):
-            return
-
         if self.loop_in_progress():
             return
 
-        attrs = {'media.filename': str(path)}
+        self._media_file = Gtk.MediaFile.new_for_filename(str(path))
 
-        if loop:
-            self._play_loop(attrs)
-        else:
-            try:
-                app.gsound_ctx.play_simple(attrs, self._cancellable)
-            except GLib.Error as error:
-                log.error('Could not play sound: %s', error.message)
-                self._cancellable = None
+        if self._media_file.is_seekable():
+            self._media_file.set_loop(loop)
 
-    def _play_loop(self, attrs: dict[str, str]) -> None:
-        self._cancellable = Gio.Cancellable()
-        try:
-            app.gsound_ctx.play_full(attrs,
-                                     self._cancellable,
-                                     self._on_play_finished,
-                                     attrs)
-        except GLib.Error as error:
-            log.error('Could not play sound: %s', error.message)
-            self._cancellable = None
-
-    def _on_play_finished(self,
-                          _context: Any,
-                          res: Gio.AsyncResult,
-                          user_data: dict[str, str]) -> None:
-        try:
-            app.gsound_ctx.play_full_finish(res)
-        except GLib.Error as error:
-            quark = GLib.quark_try_string('g-io-error-quark')
-            if error.matches(quark, Gio.IOErrorEnum.CANCELLED):
-                self._cancellable = None
-                return
-            log.error('Could not play sound: %s', error.message)
-
-        self._play_loop(user_data)
+        self._media_file.play()
 
     def stop(self) -> None:
-        if self._cancellable is None or self._cancellable.is_cancelled():
+        if self._media_file is None:
             return
-        self._cancellable.cancel()
-        self._cancellable = None
+
+        self._media_file.clear()
 
     def loop_in_progress(self) -> bool:
-        return self._cancellable is not None
+        return self._media_file is not None and self._media_file.get_loop()
 
 
 def _init_platform() -> PlaySound:
