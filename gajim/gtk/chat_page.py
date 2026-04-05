@@ -100,6 +100,7 @@ class ChatPage(Gtk.Paned):
             ("focus-search", None, self._on_focus_search),
             ("remove-chat", "as", self._remove_chat),
             ("search-history", None, self._on_search_history),
+            ("mark-all-activities-as-read", None, self._mark_all_activities_as_read),
         ]
 
         for action in actions:
@@ -179,6 +180,11 @@ class ChatPage(Gtk.Paned):
 
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
+
+    def _mark_all_activities_as_read(
+        self, _action: Gio.SimpleAction, _param: Literal[None]
+    ) -> None:
+        self._activity_list.mark_all_items_as_read()
 
     @Gtk.Template.Callback()
     def _on_chat_list_changed(self, chat_list_stack: ChatListStack, *args: Any) -> None:

@@ -9,6 +9,7 @@ from typing import Literal
 from gi.repository import Gtk
 
 from gajim.gtk.chat_filter import ChatFilter
+from gajim.gtk.menus import get_activity_feed_menu
 from gajim.gtk.menus import get_start_chat_button_menu
 from gajim.gtk.util.misc import get_ui_string
 
@@ -19,6 +20,7 @@ class ChatListHeader(Gtk.Grid):
 
     _header_bar_label: Gtk.Label = Gtk.Template.Child()
     _workspace_settings_button: Gtk.Button = Gtk.Template.Child()
+    _activity_feed_menu_button: Gtk.MenuButton = Gtk.Template.Child()
     _chat_page_header: Gtk.Box = Gtk.Template.Child()
     _search_entry: Gtk.SearchEntry = Gtk.Template.Child()
     _chat_filter: ChatFilter = Gtk.Template.Child()
@@ -28,6 +30,7 @@ class ChatListHeader(Gtk.Grid):
         Gtk.Grid.__init__(self)
 
         self._start_chat_menu_button.set_menu_model(get_start_chat_button_menu())
+        self._activity_feed_menu_button.set_menu_model(get_activity_feed_menu())
 
     def get_chat_filter(self) -> ChatFilter:
         return self._chat_filter
@@ -43,6 +46,7 @@ class ChatListHeader(Gtk.Grid):
         self._start_chat_menu_button.set_visible(is_chat)
         self._chat_filter.set_visible(is_chat)
         self._workspace_settings_button.set_visible(is_chat)
+        self._activity_feed_menu_button.set_visible(not is_chat)
 
         if is_chat:
             self._search_entry.set_text("")

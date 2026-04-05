@@ -19,6 +19,16 @@
           </object>
         </child>
         <child>
+          <object class="GtkMenuButton" id="_activity_feed_menu_button">
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-ellipsis-vertical-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="GtkButton" id="_workspace_settings_button">
             <property name="tooltip-text" translatable="yes">Workspace settings…</property>
             <property name="valign">center</property>

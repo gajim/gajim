@@ -416,6 +416,14 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_activity_feed_menu() -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_("Mark all activities as read"), "win.mark-all-activities-as-read", None),
+    ]
+
+    return GajimMenu.from_list(menuitems)
+
+
 def get_start_chat_button_menu() -> GajimMenu:
     value = GLib.Variant("as", ["", ""])
 

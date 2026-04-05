@@ -22,10 +22,12 @@ from gajim.common.i18n import _
 
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_page import ChatPage
+from gajim.gtk.menus import get_activity_feed_menu
 from gajim.gtk.sidebar_listbox import SideBarListBox
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.status_selector import StatusSelectorPopover
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.widgets import GajimPopover
 from gajim.gtk.workspace_listbox import WorkspaceListBox
 
 
@@ -43,6 +45,9 @@ class AppSideBar(Gtk.Box, EventHelper):
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+
+        self._activity_feed_popover_menu = GajimPopover(menu=get_activity_feed_menu())
+        self.append(self._activity_feed_popover_menu)
 
         self._account_popover = AccountPopover()
         self._account_popover.set_parent(self._account_row)
@@ -174,11 +179,25 @@ class AppSideBar(Gtk.Box, EventHelper):
             self._account_popover.popdown()
 
     @Gtk.Template.Callback()
-    def _on_row_activated(
-        self, listbox: SideBarListBox, row: SideBarListBoxRow
+    def _on_activity_feed_button_press(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
     ) -> None:
-        if row.item_id == "activity":
+        current_button = gesture_click.get_current_button()
+        if current_button == Gdk.BUTTON_PRIMARY:
+            # Left click
+            gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
+            self._activity_row.activate()
             app.window.show_activity_page()
+
+        if current_button == Gdk.BUTTON_SECONDARY:
+            # Right click
+            gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
+            self._activity_feed_popover_menu.set_pointing_to_coord(x, y)
+            self._activity_feed_popover_menu.popup()
 
     @staticmethod
     def _transform_to_icon_name(

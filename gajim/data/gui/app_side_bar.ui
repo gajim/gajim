@@ -8,12 +8,17 @@
     <property name="spacing">6</property>
     <child>
       <object class="SideBarListBox" id="_top_listbox">
-        <signal name="row-activated" handler="_on_row_activated" />
         <child>
           <object class="SideBarListBoxRow" id="_activity_row">
             <property name="item-id">activity</property>
             <property name="icon-name">lucide-bell-symbolic</property>
             <property name="tooltip-text" translatable="yes">Activity Feed</property>
+            <child>
+              <object class='GtkGestureClick'>
+                <property name='button'>0</property>
+                <signal name="pressed" handler="_on_activity_feed_button_press" />
+              </object>
+            </child>
           </object>
         </child>
       </object>
