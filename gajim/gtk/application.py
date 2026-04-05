@@ -258,6 +258,8 @@ class GajimApplication(Adw.Application, CoreApplication):
         for account in accounts:
             self.add_account_actions(account)
 
+        self._active_accounts_count = len(app.settings.get_active_accounts())
+
         self.update_app_actions_state()
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
@@ -548,9 +550,17 @@ class GajimApplication(Adw.Application, CoreApplication):
         # Action must be added before account window is updated
         self.add_account_actions(account)
 
+    @property
+    def multi_account_mode(self) -> bool:
+        # Store count in variable to reduce db queries
+        return self._active_accounts_count > 1
+
     def enable_account(self, account: str) -> None:
         CoreApplication.enable_account(self, account)
+
         self.update_app_actions_state()
+
+        self._active_accounts_count = len(app.settings.get_active_accounts())
 
     def disable_account(self, account: str) -> None:
         for win in get_app_windows(account):
@@ -563,6 +573,8 @@ class GajimApplication(Adw.Application, CoreApplication):
         CoreApplication.disable_account(self, account)
 
         self.update_app_actions_state()
+
+        self._active_accounts_count = len(app.settings.get_active_accounts())
 
     def remove_account(self, account: str) -> None:
         CoreApplication.remove_account(self, account)

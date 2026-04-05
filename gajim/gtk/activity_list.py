@@ -24,7 +24,6 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import multiple_accounts_active
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -632,7 +631,7 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
@@ -662,7 +661,7 @@ class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
@@ -705,7 +704,7 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
@@ -741,7 +740,7 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
             avatar=texture,
@@ -761,7 +760,7 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
@@ -818,7 +817,7 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            account_visible=multiple_accounts_active(),
+            account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-reply-symbolic",
             avatar=texture,
