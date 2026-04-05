@@ -56,6 +56,9 @@ ${MINGW_PACKAGE_PREFIX}-python-six \
 ${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
 ${MINGW_PACKAGE_PREFIX}-sqlite3 \
 ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
+${MINGW_PACKAGE_PREFIX}-rust \
+${MINGW_PACKAGE_PREFIX}-clang \
+${MINGW_PACKAGE_PREFIX}-nasm
 "
 
 PYTHON_REQUIREMENTS="\
