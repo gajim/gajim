@@ -37,6 +37,9 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
+from gajim.common.const import LINUX_EXECUTABLE_EXTENSIONS
+from gajim.common.const import MACOS_EXECUTABLE_EXTENSIONS
+from gajim.common.const import WINDOWS_EXECUTABLE_EXTENSIONS
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -54,6 +57,7 @@ from gajim.common.util.uri import Uri
 from gajim.common.util.uri import UriT
 from gajim.common.util.uri import XmppIri
 
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.const import GDK_MEMORY_DEFAULT
 
 if sys.platform == "darwin" or TYPE_CHECKING:
@@ -431,6 +435,21 @@ def open_uri_externally(uri: str) -> None:
         )
 
 
+def is_file_extension_executable(path: Path) -> bool:
+    if not path.suffix:
+        return False
+
+    match sys.platform:
+        case "win32":
+            return path.suffix[1:] in WINDOWS_EXECUTABLE_EXTENSIONS
+        case "darwin":
+            return path.suffix[1:] in MACOS_EXECUTABLE_EXTENSIONS
+        case "linux":
+            return path.suffix[1:] in LINUX_EXECUTABLE_EXTENSIONS
+        case _:
+            return False
+
+
 @catch_exceptions
 def open_file(path: Path, *, show_in_folder: bool = False) -> None:
     if not path.exists():
@@ -438,6 +457,9 @@ def open_file(path: Path, *, show_in_folder: bool = False) -> None:
         return
 
     path_absolute = path.resolve()
+
+    def _on_open_confirm() -> None:
+        launcher.launch(app.window)
 
     launcher = Gtk.FileLauncher(file=Gio.File.new_for_path(str(path_absolute)))
     try:
@@ -451,7 +473,18 @@ def open_file(path: Path, *, show_in_folder: bool = False) -> None:
             else:
                 launcher.open_containing_folder(app.window)
         else:
-            launcher.launch(app.window)
+            if is_file_extension_executable(path_absolute):
+                ConfirmationAlertDialog(
+                    _("Open File?"),
+                    _(
+                        "Opening this file may be harmful for your computer. Do you really want to open this file?"
+                    ),
+                    confirm_label=_("_Open"),
+                    appearance="destructive",
+                    callback=_on_open_confirm,
+                )
+            else:
+                launcher.launch(app.window)
     except Exception as error:
         log.warning("Unable to open file: %s", error)
 

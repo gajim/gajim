@@ -998,6 +998,54 @@ VIDEO_MIME_TYPES = {
     'video/x-msvideo',
 }
 
+# Executable files extensions:
+# List from https://source.chromium.org/chromium/chromium/src/+/main:components/safe_browsing/content/resources/download_file_types.asciipb
+WINDOWS_EXECUTABLE_EXTENSIONS = {
+    "app",
+    "bat",
+    "bgi",
+    "com",
+    "cpi",
+    "cpl",
+    "dll",
+    "drv",
+    "exe",
+    "fon",
+    "hta",
+    "iqy",
+    "js",
+    "msc",
+    "pif",
+    "sys",
+}
+MACOS_EXECUTABLE_EXTENSIONS = {
+    "cdr",
+    "dart",
+    "dc42",
+    "diskcopy42",
+    "dmg",
+    "dmgpart",
+    "dvdr",
+    "dylib",
+    "img",
+    "imgparg",
+    "ndif",
+    "service",
+    "smi",
+    "sparsebundle",
+    "sparseimage",
+    "toast",
+    "udif",
+}
+LINUX_EXECUTABLE_EXTENSIONS = {
+    "deb",
+    "pet",
+    "pkg",
+    "pup",
+    "rpm",
+    "slp",
+}
+
 
 def get_pixbuf_mime_types() -> set[str]:
     pixbuf_mime_types: set[str] = set()
