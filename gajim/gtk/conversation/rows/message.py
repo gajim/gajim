@@ -55,6 +55,7 @@ from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_avatar_for_message
 from gajim.gtk.util.misc import get_contact_name_for_message
+from gajim.gtk.widgets import HatBadge
 
 log = logging.getLogger("gajim.gtk.conversation.rows.message")
 
@@ -155,6 +156,15 @@ class MessageRow(BaseRow):
         self._avatar_box.set_name(self.name)
 
         self._meta_box.append(NicknameLabel(self.name, self._is_outgoing))
+
+        if isinstance(self._contact, GroupchatContact) and message.occupant is not None:
+            participant = self._contact.get_occupant(message.occupant.id)
+            if participant is not None and participant.hats is not None:
+                for hat in participant.hats.get_hats()[:2]:
+                    # Limit to 2 hats
+                    hat_badge = HatBadge(hat)
+                    self._meta_box.append(hat_badge)
+
         self._meta_box.append(DateTimeLabel(self.timestamp))
 
         self._message_icons = MessageIcons()
