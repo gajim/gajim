@@ -10,10 +10,12 @@ from typing import Literal
 
 import calendar
 import datetime as dt
+import itertools
 import logging
 import operator
 import pprint
 import shutil
+from collections.abc import Iterable
 from collections.abc import Iterator
 from collections.abc import Sequence
 from datetime import datetime
@@ -26,7 +28,6 @@ from sqlalchemy import delete
 from sqlalchemy import func
 from sqlalchemy import Row
 from sqlalchemy import select
-from sqlalchemy import union_all
 from sqlalchemy import update
 from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import CursorResult
@@ -550,10 +551,13 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         account: str,
         jid: JID,
-        before: bool,
         timestamp: datetime,
         n_lines: int,
-    ) -> Sequence[Message]:
+        *,
+        direction: Literal["before", "after"],
+        order: Literal["asc", "desc"] = "asc",
+        include_timestamp: bool = False,
+    ) -> tuple[Iterable[Message], bool]:
         """
         Load n messages from jid before or after timestamp
 
@@ -561,12 +565,16 @@ class MessageArchiveStorage(AlchemyStorage):
             The account
         :param jid:
             The jid for which we request the conversation
-        :param before:
-            The search direction
         :param timestamp:
             The point in time from where to search
         :param nlines:
             The maximal count of Message returned
+        :param direction:
+            The search direction
+        :param order:
+            How the result is ordered
+        :param include_timestamp:
+            If messages with the same timestamp are returned
         """
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -578,25 +586,41 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.correction_id.is_(None),
         )
 
-        if before:
-            stmt = stmt.where(Message.timestamp < timestamp).order_by(
-                sa.desc(Message.timestamp), sa.desc(Message.pk)
-            )
-        else:
-            stmt = stmt.where(Message.timestamp > timestamp).order_by(
-                Message.timestamp, Message.pk
-            )
+        if direction == "before":
+            if include_timestamp:
+                where = stmt.where(Message.timestamp <= timestamp)
+            else:
+                where = stmt.where(Message.timestamp < timestamp)
+            stmt = where.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
 
-        stmt = stmt.limit(n_lines)
+        else:
+            if include_timestamp:
+                where = stmt.where(Message.timestamp >= timestamp)
+            else:
+                where = stmt.where(Message.timestamp > timestamp)
+            stmt = where.order_by(Message.timestamp, Message.pk)
+
+        stmt = stmt.limit(n_lines + 1)
 
         self._explain(session, stmt)
-        return session.scalars(stmt).all()
+        result = session.scalars(stmt).all()
+        complete = len(result) != n_lines + 1
+
+        # Remove last result line which was used to check if query was complete
+        if not complete:
+            result = result[:-1]
+
+        match order, direction:
+            case ("desc", "before") | ("asc", "after"):
+                return result, complete
+            case ("desc", "after") | ("asc", "before"):
+                return reversed(result), complete
 
     @with_session
     @timeit
     def get_conversation_around_timestamp(
         self, session: Session, account: str, jid: JID, timestamp: datetime
-    ) -> list[Message]:
+    ) -> tuple[Iterable[Message], bool, bool]:
         """
         Loads messages around a primary key
 
@@ -608,38 +632,24 @@ class MessageArchiveStorage(AlchemyStorage):
             The timestamp in the conversation
         """
 
-        fk_account_pk = self._get_account_pk(session, account)
-        fk_remote_pk = self._get_jid_pk(session, jid)
-
-        base_stmt = select(Message.pk).where(
-            Message.fk_remote_pk == fk_remote_pk,
-            Message.fk_account_pk == fk_account_pk,
-            Message.correction_id.is_(None),
+        messages_before, before_complete = self.get_conversation_before_after(
+            account,
+            jid,
+            timestamp,
+            50,
+            direction="before",
+            order="asc",
+            include_timestamp=True,
+        )
+        messages_after, after_complete = self.get_conversation_before_after(
+            account, jid, timestamp, 50, direction="after"
         )
 
-        preceding_query = (
-            base_stmt.where(
-                Message.timestamp <= timestamp,
-            )
-            .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
-            .limit(50)
-            .subquery()
+        return (
+            itertools.chain(messages_before, messages_after),
+            before_complete,
+            after_complete,
         )
-
-        following_query = (
-            base_stmt.where(
-                Message.timestamp > timestamp,
-            )
-            .order_by(sa.asc(Message.timestamp), sa.asc(Message.pk))
-            .limit(50)
-            .subquery()
-        )
-
-        u_stmt = union_all(select(preceding_query), select(following_query))
-        stmt = select(Message).where(Message.pk.in_(u_stmt.scalar_subquery()))
-
-        self._explain(session, stmt)
-        return list(session.scalars(stmt).all())
 
     @with_session
     @timeit

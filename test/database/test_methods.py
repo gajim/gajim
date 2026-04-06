@@ -142,17 +142,28 @@ class MethodsTest(unittest.TestCase):
         remote_jid = JID.from_string("remote1@jid.org")
         self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
-        messages = self._archive.get_conversation_before_after(
-            "testacc1", remote_jid, True, datetime.now(dt.UTC), 10
+        messages, _complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime.now(dt.UTC),
+            10,
+            direction="before",
+            order="desc",
         )
 
+        messages = list(messages)
         self.assertEqual(messages[0].id, "messageid9")
         self.assertEqual(messages[1].id, "messageid8")
 
-        messages = self._archive.get_conversation_before_after(
-            "testacc1", remote_jid, False, datetime.fromtimestamp(0, dt.UTC), 10
+        messages, _complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime.fromtimestamp(0, dt.UTC),
+            10,
+            direction="after",
         )
 
+        messages = list(messages)
         self.assertEqual(messages[0].id, "messageid0")
         self.assertEqual(messages[1].id, "messageid1")
 

@@ -11,6 +11,7 @@ from typing import Literal
 import logging
 from collections import defaultdict
 from collections.abc import Generator
+from collections.abc import Iterable
 from datetime import datetime
 
 from gi.repository import Gio
@@ -28,6 +29,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import Direction
+from gajim.common.helpers import timeout_add_once
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.chat_markers import DisplayedMarkerData
 from gajim.common.modules.contacts import BareContact
@@ -37,6 +39,7 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
+from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import get_start_of_day
 
@@ -66,12 +69,14 @@ class ConversationView(Gtk.ScrolledWindow):
         "request-history": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            (bool,),
+            (str,),
         ),
         "autoscroll-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
-    def __init__(self, message_row_actions: MessageRowActions) -> None:
+    def __init__(
+        self, message_row_actions: MessageRowActions, storage: MessageArchiveStorage
+    ) -> None:
         Gtk.ScrolledWindow.__init__(self)
 
         self.set_overlay_scrolling(False)
@@ -92,6 +97,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self.get_hscrollbar().set_visible(False)
 
         self._message_row_actions = message_row_actions
+        self._storage = storage
 
         self._contact: ChatContactT | None = None
         self._client = None
@@ -163,7 +169,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 
         if pk is not None:
-            row = self.get_row_by_pk(pk)
+            row = self._get_row_by_pk(pk)
             self._list_box.select_row(row)
 
         for row in self.iter_rows():
@@ -219,7 +225,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._client = app.get_client(contact.account)
 
         self._enable_signal_handlers(False)
-        self._block_signals = True
+        self.block_signals(True)
         self._reset()
 
         self.disable_row_selection()
@@ -251,7 +257,7 @@ class ConversationView(Gtk.ScrolledWindow):
             jid=contact.jid,
         )
 
-        self._block_signals = False
+        self.block_signals(False)
         self._enable_signal_handlers(True)
 
     def get_autoscroll(self) -> bool:
@@ -337,8 +343,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         if upper == adj.get_page_size():
             # There is no scrollbar
-            if not self._block_signals:
-                self._emit("request-history", True)
+            self._emit("request-history", "before")
             self._lower_complete = True
             self._autoscroll = True
             self._emit("autoscroll-changed", self._autoscroll)
@@ -377,8 +382,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._request_history_at_upper = adj.get_upper()
             # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
             self.set_kinetic_scrolling(False)
-            if not self._block_signals:
-                self._emit("request-history", True)
+            self._emit("request-history", "before")
             self._requesting = "before"
 
         elif adj.get_upper() - (adj.get_value() + adj.get_page_size()) < distance:
@@ -387,8 +391,7 @@ class ConversationView(Gtk.ScrolledWindow):
                 return
             # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
             self.set_kinetic_scrolling(False)
-            if not self._block_signals:
-                self._emit("request-history", False)
+            self._emit("request-history", "after")
             self._requesting = "after"
 
     @property
@@ -573,6 +576,18 @@ class ConversationView(Gtk.ScrolledWindow):
     def add_command_output(self, text: str, is_error: bool) -> None:
         command_output_row = CommandOutputRow(self.contact.account, text, is_error)
         self._insert_message(command_output_row)
+
+    def add_messages(self, messages: Iterable[mod.Message]) -> None:
+        for message in messages:
+            if message.filetransfers:
+                self.add_jingle_file_transfer(message=message)
+                return
+
+            if message.call is not None:
+                self.add_call_message(message=message)
+                return
+
+            self.add_message(message)
 
     def add_message(self, message: mod.Message) -> None:
         message_row = MessageRow.from_db_row(self.contact, message)
@@ -836,7 +851,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._message_row_actions.update(point.y, row)
 
     def remove_message(self, pk: int) -> None:
-        row = self.get_row_by_pk(pk)
+        row = self._get_row_by_pk(pk)
         if row is None:
             return
 
@@ -860,7 +875,7 @@ class ConversationView(Gtk.ScrolledWindow):
                 del self._stanza_id_row_map[key]
 
     def acknowledge_message(self, event: events.MessageAcknowledged) -> None:
-        row = self.get_row_by_pk(event.pk)
+        row = self._get_row_by_pk(event.pk)
         if row is None:
             return
 
@@ -869,7 +884,36 @@ class ConversationView(Gtk.ScrolledWindow):
         row.set_acknowledged(event.pk)
         self._check_for_merge(row)
 
-    def scroll_to_message_and_highlight(self, pk: int) -> None:
+    def scroll_to_message(
+        self, account: str, jid: JID, timestamp: datetime, pk: int
+    ) -> None:
+
+        row = self._get_row_by_pk(pk)
+        if row is not None:
+            self._scroll_and_highlight(pk)
+            return
+
+        messages, before_complete, after_complete = (
+            self._storage.get_conversation_around_timestamp(account, jid, timestamp)
+        )
+
+        self.reset()
+        self._enable_signal_handlers(False)
+        self.block_signals(True)
+
+        self.add_messages(messages)
+
+        self.set_history_complete(True, before_complete)
+        self.set_history_complete(False, after_complete)
+
+        timeout_add_once(200, self._scroll_delayed, pk)
+
+    def _scroll_delayed(self, pk: int) -> None:
+        self._scroll_and_highlight(pk)
+        timeout_add_once(50, self._enable_signal_handlers, True)
+        timeout_add_once(50, self.block_signals, False)
+
+    def _scroll_and_highlight(self, pk: int) -> None:
         highlight_row = None
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if row.pk == pk:
@@ -912,7 +956,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def _get_message_row_by_direction(
         self, pk: int, direction: Direction | None = None
     ) -> MessageRow | None:
-        row = self.get_row_by_pk(pk)
+        row = self._get_row_by_pk(pk)
         if row is None:
             return None
 
@@ -943,7 +987,7 @@ class ConversationView(Gtk.ScrolledWindow):
             return None
         return self._get_message_row_by_direction(pk, direction=Direction.NEXT)
 
-    def get_row_by_pk(self, pk: int) -> MessageRow | None:
+    def _get_row_by_pk(self, pk: int) -> MessageRow | None:
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if not isinstance(row, MessageRow):
                 continue
