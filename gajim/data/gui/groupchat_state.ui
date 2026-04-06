@@ -12,6 +12,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">You left this group chat</property>
+                <property name="hexpand">1</property>
                 <property name="wrap">1</property>
                 <property name="max-width-chars">32</property>
               </object>
@@ -110,6 +111,8 @@
                 <property name="wrap">1</property>
                 <property name="max-width-chars">50</property>
                 <property name="xalign">0</property>
+                <property name="hexpand">1</property>
+                <property name="halign">start</property>
               </object>
             </child>
             <child>
