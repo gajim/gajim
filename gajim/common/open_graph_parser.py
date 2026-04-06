@@ -14,6 +14,8 @@ from html.parser import HTMLParser
 
 import nbxmpp.structs
 
+from gajim.common.util.text import to_one_line
+
 if typing.TYPE_CHECKING:
     from gajim.common.storage.archive import models as mod
 
@@ -93,19 +95,19 @@ class OpenGraphParser(HTMLParser):
             case {"property": prop, "content": content} if (
                 prop in ALLOWED_OG_PROPERTIES and content
             ):
-                self._attributes[prop.removeprefix("og:")] = content[
-                    :MAX_ATTRIBUTE_SIZE
-                ]
+                self._attributes[prop.removeprefix("og:")] = self._cleanup(
+                    content[:MAX_ATTRIBUTE_SIZE]
+                )
 
             case {"name": "description", "content": content} if content:
-                self._fallback_description = content[:MAX_ATTRIBUTE_SIZE]
+                self._fallback_description = self._cleanup(content[:MAX_ATTRIBUTE_SIZE])
 
             case _:
                 pass
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "title":
-            self._fallback_title = self._current_data
+            self._fallback_title = self._cleanup(self._current_data)
 
         elif tag == "head":
             raise EOF
@@ -132,6 +134,9 @@ class OpenGraphParser(HTMLParser):
             return None
 
         return OpenGraphData(**self._attributes)
+
+    def _cleanup(self, text: str) -> str:
+        return to_one_line(text).strip()
 
 
 class EOF(Exception):

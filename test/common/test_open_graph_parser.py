@@ -40,9 +40,11 @@ EXAMPLE_1 = """
 EXAMPLE_2 = """
 <title>title</title>
 <meta name="description" content="description" />
-<meta property="og:title" content="og title" />
+<meta property="og:title" content="      
+
+og title     " />
 <meta property="og:description" content="og description" />
-"""
+"""  # noqa: W291
 
 EXAMPLE_3 = """
 <title>title</title>
