@@ -6,6 +6,7 @@
     <property name="halign">start</property>
     <property name="width-request">450</property>
     <property name="spacing">12</property>
+    <property name="overflow">hidden</property>
     <child>
       <object class="GtkBox" id="_content_box">
         <property name="hexpand">true</property>
