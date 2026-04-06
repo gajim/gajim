@@ -11,9 +11,11 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp.structs import Hat
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -81,6 +83,32 @@ class GroupBadgeBox(Gtk.Box):
             self.append(GroupBadge(group))
 
 
+class HatBadge(Gtk.Box):
+    def __init__(self, hat: Hat) -> None:
+        Gtk.Box.__init__(self, spacing=6, halign=Gtk.Align.START)
+        self.add_css_class("badge")
+        self.add_css_class("badge-hat")
+        if hat.hue is not None:
+            css_provider = Gtk.CssProvider()
+            css_provider.load_from_string(
+                f".badge-hat {{background-color: hsl({hat.hue}, 100%, 25%);}}"
+            )
+            context = self.get_style_context()
+            context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+        image = Gtk.Image.new_from_icon_name("lucide-tag-symbolic")
+        image.set_pixel_size(12)
+        self.append(image)
+
+        label = Gtk.Label(
+            label=GLib.markup_escape_text(hat.title),
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=20,
+            halign=Gtk.Align.START,
+        )
+        self.append(label)
+
+
 class IdleBadge(Gtk.Label):
     __gtype_name__ = "IdleBadge"
 
@@ -94,7 +122,7 @@ class IdleBadge(Gtk.Label):
         )
         self.set_size_request(50, -1)
         self.add_css_class("dimmed")
-        self.add_css_class("small-label")
+        self.add_css_class("caption")
 
     @GObject.Property(type=object)
     def idle(self) -> str:  # pyright: ignore

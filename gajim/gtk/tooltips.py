@@ -18,9 +18,7 @@ from __future__ import annotations
 
 import logging
 
-from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -32,6 +30,7 @@ from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import iterate_children
+from gajim.gtk.widgets import HatBadge
 
 log = logging.getLogger("gajim.gtk.tooltips")
 
@@ -100,30 +99,7 @@ class GCTooltip:
 
             for hat in contact.hats.get_hats()[:5]:
                 # Limit to 5 hats
-                hat_badge = Gtk.Box(spacing=6, halign=Gtk.Align.START)
-                hat_badge.add_css_class("badge")
-                hat_badge.add_css_class("badge-hat")
-                if hat.hue is not None:
-                    css_provider = Gtk.CssProvider()
-                    css_provider.load_from_string(
-                        f".badge-hat {{background-color: hsl({hat.hue}, 100%, 25%);}}"
-                    )
-                    context = hat_badge.get_style_context()
-                    context.add_provider(
-                        css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-                    )
-
-                hat_badge_icon = Gtk.Image.new_from_icon_name("lucide-tag-symbolic")
-                hat_badge.append(hat_badge_icon)
-
-                hat_badge_label = Gtk.Label(
-                    label=GLib.markup_escape_text(hat.title),
-                    ellipsize=Pango.EllipsizeMode.END,
-                    max_width_chars=20,
-                    halign=Gtk.Align.START,
-                )
-                hat_badge.append(hat_badge_label)
-
+                hat_badge = HatBadge(hat)
                 self._ui.hats_box.append(hat_badge)
                 self._ui.hats_box.set_visible(True)
 

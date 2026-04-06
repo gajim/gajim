@@ -14,9 +14,6 @@ button.flat.link { padding: 0; border: 0; }
 /* ========================================================================= */
 /* Text style */
 .bold { font-weight: bold; }
-.small-label {
-    font-size: 90%;
-}
 .draft {
     font-style: italic;
     color: var(--warning-color);
@@ -233,7 +230,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 .badge-hat {
   background-color: var(--accent-teal);
-  font-size: 100%;
+  font-size: 90%;
 }
 .badge-update {
     background-color: var(--accent-slate);
