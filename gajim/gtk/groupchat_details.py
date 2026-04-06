@@ -50,19 +50,27 @@ class GroupchatDetails(GajimAppWindow):
             self._ui.main_stack,
             [
                 SideBarMenuItem(
-                    "information", _("Information"), icon_name="lucide-user-symbolic"
+                    "information",
+                    _("Information"),
+                    group=_("Personal Settings"),
+                    icon_name="lucide-user-symbolic",
                 ),
                 SideBarMenuItem(
-                    "settings", _("Settings"), icon_name="lucide-settings-symbolic"
+                    "settings",
+                    _("Settings"),
+                    group=_("Personal Settings"),
+                    icon_name="lucide-settings-symbolic",
                 ),
                 SideBarMenuItem(
                     "encryption-omemo",
                     _("Encryption (OMEMO)"),
+                    group=_("Personal Settings"),
                     icon_name="lucide-lock-symbolic",
                 ),
                 SideBarMenuItem(
                     "blocks",
                     _("Blocked Participants"),
+                    group=_("Personal Settings"),
                     icon_name="lucide-user-round-x-symbolic",
                 ),
                 SideBarMenuItem(
