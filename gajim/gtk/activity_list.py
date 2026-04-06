@@ -177,9 +177,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 return
 
     def mark_all_items_as_read(self) -> None:
-        for i in range(len(self._model)):
-            item = self._model.get_item(i)
-            assert item is not None
+        for item in self._model:
             item.read = True
 
         self.set_property("unread-count", 0)
