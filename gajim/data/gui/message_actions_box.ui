@@ -182,7 +182,7 @@
             <property name="action-name">win.send-message</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">gajim-send-message-symbolic</property>
+                <property name="icon-name">lucide-send-horizontal-symbolic</property>
               </object>
             </child>
           </object>
