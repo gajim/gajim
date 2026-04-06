@@ -111,6 +111,7 @@ class VoiceMessageRecorder(GObject.GObject):
         assert self._filesink is not None
 
         opusenc.set_property("audio-type", "voice")
+        opusenc.set_property("bitrate", 32000)
         audiolevel.set_property("message", True)
         self._filesink.set_property("location", str(self._file_path))
         self._filesink.set_property("async", False)
@@ -445,7 +446,7 @@ class VoiceMessageRecorder(GObject.GObject):
                 "queue",
                 "audioconvert",
                 "audioresample",
-                "opusenc audio-type=voice",
+                "opusenc audio-type=voice bitrate=32000",
                 "mp4mux ",
                 f"filesink location={self._file_path.as_posix()} {sources}",
             ]
