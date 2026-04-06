@@ -14,8 +14,8 @@
             <property name="icon-name">lucide-bell-symbolic</property>
             <property name="tooltip-text" translatable="yes">Activity Feed</property>
             <child>
-              <object class='GtkGestureClick'>
-                <property name='button'>0</property>
+              <object class="GtkGestureClick">
+                <property name="button">0</property>
                 <signal name="pressed" handler="_on_activity_feed_button_press" />
               </object>
             </child>
@@ -64,8 +64,8 @@
             <property name="item-id">account</property>
             <property name="tooltip-text" translatable="yes">Accounts</property>
             <child>
-              <object class='GtkGestureClick'>
-                <property name='button'>0</property>
+              <object class="GtkGestureClick">
+                <property name="button">0</property>
                 <signal name="pressed" handler="_on_account_button_press" />
               </object>
             </child>
