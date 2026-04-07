@@ -76,10 +76,16 @@ log = logging.getLogger('gajim.c.helpers')
 
 def sanitize_filename(filename: str) -> str:
     '''
-    Sanitize filename of elements not allowed on Windows
-    https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+    Sanitize filename of:
+     - characters used to obfuscate file names/extensions
+     - elements not allowed on Windows
+       https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
     Limit filename length to 50 chars on all systems
     '''
+
+    # Remove right-to-left override U+202E (commonly used to spoof extensions)
+    filename = "".join(char for char in filename if ord(char) != 8238)
+
     if sys.platform == 'win32':
         blacklist = ['\\', '/', ':', '*', '?', '？', '"', '<', '>', '|', '\0']
         reserved_filenames = [
