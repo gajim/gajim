@@ -5,8 +5,8 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="chat_state_box">
-        <property name="orientation">vertical</property>
+      <object class="GtkBox" id="hint_box">
+        <property name="spacing">12</property>
         <child>
           <placeholder/>
         </child>

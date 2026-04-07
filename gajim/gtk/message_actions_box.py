@@ -51,6 +51,7 @@ from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.message_url_previews import MessageURLPreviews
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
+from gajim.gtk.timezone_hint import TimezoneHint
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
 from gajim.gtk.util.window import open_window
@@ -79,8 +80,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._ui.state_box_image.set_size_request(AvatarSize.CHAT, -1)
         self._ui.edit_box_image.set_size_request(AvatarSize.CHAT, -1)
 
+        self._timezone_hint = TimezoneHint()
+        self._ui.hint_box.append(self._timezone_hint)
+
         self._chat_state_indicator = ChatStateIndicator()
-        self._ui.chat_state_box.append(self._chat_state_indicator)
+        self._ui.hint_box.append(self._chat_state_indicator)
 
         # For message replies
         self._reply_box = ReplyBox()
@@ -318,6 +322,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._message_url_previews.switch_contact(contact)
         self._message_input.switch_contact(contact)
 
+        self._timezone_hint.switch_contact(contact)
         self._chat_state_indicator.switch_contact(contact)
 
         self._ui.edit_box.set_visible(self._is_correcting)

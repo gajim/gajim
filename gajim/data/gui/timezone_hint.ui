@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <template class="TimezoneHint" parent="GtkBox">
+    <property name="spacing">12</property>
+    <style>
+      <class name="ms-12" />
+    </style>
+    <child>
+      <object class="GtkImage">
+        <property name="icon-name">lucide-clock-symbolic</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="_hint_label">
+        <property name="max-width-chars">50</property>
+        <property name="ellipsize">end</property>
+      </object>
+    </child>
+  </template>
+</interface>
