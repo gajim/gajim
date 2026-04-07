@@ -63,6 +63,10 @@ class SanitizeTest(unittest.TestCase):
             sanitize_filename("X" * 100 + "." + "X" * 400 + ".pdf").endswith(".pdf")
         )
 
+    def test_right_to_left_codepoint(self):
+        file_name = "test_‮_fdp.exe"  # noqa: PLE2502
+        self.assertEqual(sanitize_filename(file_name), "test__fdp.exe")
+
 
 if __name__ == "__main__":
     unittest.main()
