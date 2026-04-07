@@ -82,7 +82,8 @@ def format_geo_coords(coords: Coords) -> str:
 def filename_from_uri(uri: str) -> str:
     urlparts = urlparse(unquote(uri))
     path = Path(urlparts.path)
-    return path.name
+    # Remove right-to-left override U+202E (commonly used to spoof extensions)
+    return path.name.replace("\u202e", "")
 
 
 def contains_audio_streams(file_path: Path) -> bool:

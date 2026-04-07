@@ -84,7 +84,7 @@ def sanitize_filename(filename: str) -> str:
     '''
 
     # Remove right-to-left override U+202E (commonly used to spoof extensions)
-    filename = "".join(char for char in filename if ord(char) != 8238)
+    filename = filename.replace("\u202E", "")
 
     if sys.platform == 'win32':
         blacklist = ['\\', '/', ':', '*', '?', '？', '"', '<', '>', '|', '\0']
