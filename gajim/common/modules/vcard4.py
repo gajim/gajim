@@ -9,8 +9,8 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
+import datetime as dt
 import inspect
-import time
 import weakref
 
 from nbxmpp.errors import StanzaError
@@ -31,8 +31,7 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.util.datetime import get_local_timezone
 from gajim.common.util.datetime import get_timezone_from_vcard
-
-MAX_CACHE_SECONDS = 60
+from gajim.common.util.datetime import utc_now
 
 
 class VCard4(BaseModule):
@@ -44,7 +43,7 @@ class VCard4(BaseModule):
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
-        self._vcard_cache: dict[JID, tuple[float, VCard]] = {}
+        self._vcard_cache: dict[JID, tuple[dt.datetime, VCard]] = {}
         self._ignore_timezone_change = False
         self._own_vcard: VCard = VCard()
         self._register_pubsub_handler(self._vcard_event_received)
@@ -144,14 +143,14 @@ class VCard4(BaseModule):
         return self._own_vcard
 
     def request_vcard(
-        self, jid: JID, callback: Any, use_cache: bool = False
+        self, jid: JID, callback: Any, max_cache_seconds: int = 0
     ) -> None | VCard:
-        if use_cache:
-            self._expire_cache()
+        if max_cache_seconds > 0:
             cached_result = self._vcard_cache.get(jid)
             if cached_result is not None:
-                _, vcard = cached_result
-                return vcard
+                request_dt, vcard = cached_result
+                if dt.timedelta(seconds=max_cache_seconds) > utc_now() - request_dt:
+                    return vcard
 
         if inspect.ismethod(callback):
             weak_callable = weakref.WeakMethod(callback)
@@ -167,12 +166,6 @@ class VCard4(BaseModule):
             user_data=(jid, weak_callable),
         )
 
-    def _expire_cache(self) -> None:
-        for jid, data in list(self._vcard_cache.items()):
-            cache_time, _ = data
-            if time.time() - MAX_CACHE_SECONDS > cache_time:
-                self._vcard_cache.pop(jid)
-
     def _on_vcard_received(self, task: Task) -> None:
         try:
             vcard = cast(VCard | None, task.finish())
@@ -186,7 +179,7 @@ class VCard4(BaseModule):
             vcard = VCard()
         else:
             self._log.info('Received VCard for %s', jid)
-            self._vcard_cache[jid] = (time.time(), vcard)
+            self._vcard_cache[jid] = (utc_now(), vcard)
 
         if jid.bare_match(self._get_own_bare_jid()):
             self._own_vcard = vcard

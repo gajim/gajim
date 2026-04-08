@@ -103,7 +103,9 @@ class ContactPopover(Gtk.Popover, SignalManager):
 
         client = app.get_client(contact.account)
         vcard = client.get_module("VCard4").request_vcard(
-            jid=self._contact.jid, callback=self._on_vcard_received, use_cache=True
+            jid=self._contact.jid,
+            callback=self._on_vcard_received,
+            max_cache_seconds=60,
         )
         if vcard is not None:
             self._set_vcard_rows(vcard)
