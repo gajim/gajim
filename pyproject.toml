@@ -63,7 +63,6 @@ dev = [
     "pygobject>=3.56.1",
     "codespell==2.4.2",
     "cryptography@git+https://github.com/pyca/cryptography.git",
-    "isort==8.0.1",
     "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
     "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
     "pre-commit",
@@ -187,7 +186,7 @@ select = [
     # "FLY",   # flynt
     "FURB",  # refurb 
     "G",     # flake8-logging-format
-    # "I",     # isort
+    "I",     # isort
     "ICN",   # flake8-import-conventions
     # "INP",   # flake8-no-pep420
     "INT",   # flake8-gettext
@@ -313,6 +312,22 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 [tool.ruff.lint.mccabe]
 max-complexity = 15
 
+[tool.ruff.lint.isort]
+case-sensitive = false
+order-by-type = false
+force-single-line = true
+section-order = [
+  "future",
+  "typing",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder"
+]
+
+[tool.ruff.lint.isort.sections]
+typing = ["_typeshed", "typing", "typing_extensions"]
+
 [tool.ruff.format]
 
 exclude = [
@@ -402,21 +417,3 @@ exclude = [
   "gajim/common/task_manager.py",
   "gajim/common/types.py",
 ]
-
-[tool.isort]
-profile = "black"
-force_alphabetical_sort_within_sections = true
-force_single_line = true
-group_by_package = true
-known_typing = ["typing"]
-known_gtk = ["gajim.gtk"]
-sections = [
-  "FUTURE",
-  "TYPING",
-  "STDLIB",
-  "THIRDPARTY",
-  "FIRSTPARTY",
-  "GTK",
-  "LOCALFOLDER"
-]
-skip_gitignore = true

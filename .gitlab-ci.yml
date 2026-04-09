@@ -67,17 +67,6 @@ test-ruff-format:
     - ruff format --diff
   interruptible: true
 
-test-isort:
-  image: gajim-test
-  stage: test
-  rules:
-    - changes:
-      - "**/*.py"
-  script:
-    - isort --version
-    - isort --check .
-  interruptible: true
-
 test-unittest:
   image: gajim-test
   stage: test

@@ -5,6 +5,8 @@ repos:
       - id: ruff-check
         exclude: ".githooks/"
       - id: ruff-format
+      - id: ruff-check
+        args: [--select, I, --fix]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
@@ -26,11 +28,6 @@ repos:
         - ruamel.yaml
         - sentry-sdk
       stages: [manual]
-
-  - repo: https://github.com/pycqa/isort
-    rev: 8.0.1
-    hooks:
-      - id: isort
 
   - repo: https://github.com/fsfe/reuse-tool
     rev: v5.0.2
