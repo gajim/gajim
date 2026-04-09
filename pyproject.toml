@@ -322,10 +322,12 @@ section-order = [
   "standard-library",
   "third-party",
   "first-party",
+  "gtk",
   "local-folder"
 ]
 
 [tool.ruff.lint.isort.sections]
+gtk = ["gajim.gtk"]
 typing = ["_typeshed", "typing", "typing_extensions"]
 
 [tool.ruff.format]

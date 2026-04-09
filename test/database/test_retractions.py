@@ -7,7 +7,6 @@ from __future__ import annotations
 import unittest
 from datetime import datetime
 from datetime import UTC
-from test.database.util import mk_utc_dt
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -22,6 +21,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import Occupant
 from gajim.common.storage.archive.models import Retraction
 from gajim.common.storage.archive.storage import MessageArchiveStorage
+from test.database.util import mk_utc_dt
 
 
 class RetractionTest(unittest.TestCase):
