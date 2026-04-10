@@ -108,6 +108,7 @@ class VCard4(BaseModule):
     def update_timezone(self) -> None:
         local_timezone = get_local_timezone()
         if local_timezone is None:
+            self._log.warning("Unable to determine timezone for update")
             return
 
         for prop in self._own_vcard.get_properties():
