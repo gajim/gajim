@@ -24,7 +24,6 @@ from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
-from gajim.common.util.version import package_version
 
 from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.util.classes import SignalManager
@@ -111,12 +110,8 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
             if dotted_string == "2.5.4.10":
                 self._ib_organization = str(attribute.value)
 
-        if package_version("cryptography>=42.0.0"):
-            self._issued = str(cert.not_valid_before_utc.strftime("%c %Z"))
-            self._expires = str(cert.not_valid_after_utc.strftime("%c %Z"))
-        else:
-            self._issued = str(cert.not_valid_before.strftime("%c %Z"))
-            self._expires = str(cert.not_valid_after.strftime("%c %Z"))
+        self._issued = str(cert.not_valid_before_utc.strftime("%c %Z"))
+        self._expires = str(cert.not_valid_after_utc.strftime("%c %Z"))
 
         sha1_bytes = cert.fingerprint(hashes.SHA1())
         self._sha1 = format_bytes_as_hex(sha1_bytes, 2)

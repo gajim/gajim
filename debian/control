@@ -16,7 +16,7 @@ Build-Depends:
     python3-omemo-dr (>=20251230),
     python3-setuptools,
     python3-packaging,
-    python3-cryptography (>=3.4.8),
+    python3-cryptography (>=43.0.0),
     python3-pil (>=9.1.0),
     python3-sqlalchemy (>=2.0.19),
     python3-emoji (>=2.6.0),

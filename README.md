@@ -14,7 +14,7 @@ thoughts or discuss the news with your groups.
 
 - [libadwaita](https://gitlab.gnome.org/GNOME/libadwaita) (>=1.7.0)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
-- [cryptography](https://pypi.org/project/cryptography/) (>=3.4.8)
+- [cryptography](https://pypi.org/project/cryptography/) (>=43.0.0)
 - [css-parser](https://pypi.org/project/css-parser/)
 - [emoji](https://pypi.org/project/emoji/) (>=2.6.0)
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.80.0)
