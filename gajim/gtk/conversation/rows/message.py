@@ -133,6 +133,10 @@ class MessageRow(BaseRow):
         return self._merged
 
     @property
+    def has_mention(self) -> bool:
+        return self._mention_indicator.get_visible()
+
+    @property
     def occupant_id(self) -> str | None:
         if self._message.occupant is None:
             return None
@@ -347,14 +351,11 @@ class MessageRow(BaseRow):
         if self._contact.nickname is None:
             return
 
-        if message_needs_highlight(
+        needs_highlight = message_needs_highlight(
             text, self._contact.nickname, self._client.get_own_jid().bare
-        ):
-            self._mention_indicator.set_visible(True)
-            self._message_icons.set_mention_icon_visibe(True)
-        else:
-            self._mention_indicator.set_visible(False)
-            self._message_icons.set_mention_icon_visibe(False)
+        )
+        self._mention_indicator.set_visible(needs_highlight)
+        self._message_icons.set_mention_icon_visibe(needs_highlight)
 
     def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
@@ -392,23 +393,7 @@ class MessageRow(BaseRow):
         return self._has_receipt == message.has_receipt
 
     def is_same_mention_state(self, message: MessageRow) -> bool:
-        if not isinstance(self._contact, GroupchatContact):
-            return True
-
-        if self._contact.nickname is None:
-            return True
-
-        if self._message.text is None:
-            return True
-
-        own_bare_jid = self._client.get_own_jid().bare
-        this_message_needs_highlight = message_needs_highlight(
-            self._message.text, self._contact.nickname, own_bare_jid
-        )
-        other_message_needs_highlight = message_needs_highlight(
-            message.text, self._contact.nickname, own_bare_jid
-        )
-        return this_message_needs_highlight == other_message_needs_highlight
+        return self.has_mention is message.has_mention
 
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
