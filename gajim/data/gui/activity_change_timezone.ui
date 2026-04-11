@@ -71,8 +71,8 @@
             <property name="can-focus">0</property>
             <property name="spacing">12</property>
               <child>
-                <object class="GtkButton" id="ignore_button">
-                  <property name="label" translatable="yes">Ignore</property>
+                <object class="GtkButton" id="disable_button">
+                  <property name="label" translatable="yes">Disable Update</property>
                 </object>
               </child>
               <child>

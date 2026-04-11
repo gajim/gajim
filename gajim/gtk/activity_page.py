@@ -390,7 +390,7 @@ class TimezoneChangedPage(BaseActivityPage):
         self._ui = get_builder("activity_change_timezone.ui")
 
         self._connect(self._ui.update_button, "clicked", self._on_update)
-        self._connect(self._ui.ignore_button, "clicked", self._on_ignore)
+        self._connect(self._ui.disable_button, "clicked", self._on_disable)
 
         self._event = item.get_event()
         self._client = app.get_client(self._event.account)
@@ -404,14 +404,15 @@ class TimezoneChangedPage(BaseActivityPage):
 
     def _set_sensitive(self, sensitive: bool) -> None:
         self._ui.update_button.set_sensitive(sensitive)
-        self._ui.ignore_button.set_sensitive(sensitive)
+        self._ui.disable_button.set_sensitive(sensitive)
 
     def _on_update(self, _button: Gtk.Button) -> None:
         self._client.get_module("VCard4").update_timezone()
         self.emit("request-remove")
 
-    def _on_ignore(self, _button: Gtk.Button) -> None:
+    def _on_disable(self, _button: Gtk.Button) -> None:
         self._client.get_module("VCard4").ignore_timezone_change()
+        app.settings.set_account_setting(self._event.account, "update_timezone", False)
         self.emit("request-remove")
 
     def _on_client_state_changed(
