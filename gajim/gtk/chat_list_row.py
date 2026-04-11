@@ -369,10 +369,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         app.storage.cache.reset_unread_count(self.account, self.jid)
 
-        # Add class again in case we were mentioned previously
-        if isinstance(self.contact, GroupchatContact) and not self.contact.can_notify():
-            self._ui.unread_label.add_css_class("unread-counter-silent")
-
     def toggle_pinned(self) -> None:
         self._pinned = not self._pinned
 
