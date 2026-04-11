@@ -355,12 +355,14 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 text, self.contact.nickname, self._client.get_own_jid().bare
             ):
                 self._needs_muc_highlight = True
-                self._ui.unread_label.remove_css_class("unread-counter-silent")
+                self._ui.mention_indicator.set_visible(True)
 
         self.emit("unread-changed")
 
     def reset_unread(self) -> None:
         self._needs_muc_highlight = False
+        self._ui.mention_indicator.set_visible(False)
+
         self._unread_count = 0
         self._update_unread()
         self.emit("unread-changed")

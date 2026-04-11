@@ -115,6 +115,15 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkImage" id="mention_indicator">
+                    <property name="visible">0</property>
+                    <property name="icon-name">lucide-at-sign-symbolic</property>
+                    <style>
+                      <class name="conversation-mention-fg-color"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkLabel" id="unread_label">
                     <property name="visible">0</property>
                     <style>

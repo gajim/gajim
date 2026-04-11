@@ -11,9 +11,6 @@
 .gajim-status-message {
     color: rgb(140, 175, 210);
 }
-.gajim-mention-highlight {
-    background: rgb(100, 50, 10);
-}
 .gajim-user-disconnected {
     color: rgb(230, 170, 170);
 }

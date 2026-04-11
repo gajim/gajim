@@ -767,6 +767,12 @@ button.flat.link { padding: 0; border: 0; }
 .conversation-nickname {
     font-weight: bold;
 }
+.conversation-mention-fg-color {
+    color: var(--accent-orange);
+}
+.conversation-mention-bg-color {
+    background-color: var(--accent-orange);
+}
 
 /* Message row actions */
 .row-actions-button-box {

@@ -55,11 +55,6 @@ CSS_STYLE_OPTIONS: list[StyleOption] = [
         StyleAttr.COLOR,
     ),
     StyleOption(
-        _("Mention: Message Background Color"),
-        ".gajim-mention-highlight",
-        StyleAttr.BACKGROUND,
-    ),
-    StyleOption(
         _("Status Message: Text Color"), ".gajim-status-message", StyleAttr.COLOR
     ),
     StyleOption(

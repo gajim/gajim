@@ -138,6 +138,7 @@ class ChatListRowBuilder(Builder):
     nick_label: Gtk.Label
     message_icon: Gtk.Image
     message_label: Gtk.Label
+    mention_indicator: Gtk.Image
     unread_label: Gtk.Label
     revealer: Gtk.Revealer
     close_button: Gtk.Button
