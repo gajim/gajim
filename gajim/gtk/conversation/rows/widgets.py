@@ -343,12 +343,18 @@ class MessageIcons(Gtk.Box):
         self._error_image.add_css_class("warning")
         self._error_image.set_visible(False)
 
+        self._mention_image = Gtk.Image.new_from_icon_name("lucide-at-sign-symbolic")
+        self._mention_image.add_css_class("conversation-mention-fg-color")
+        self._mention_image.set_tooltip_text(_("You have been mentioned"))
+        self._mention_image.set_visible(False)
+
         self.append(self._encryption_image)
         self.append(self._security_label)
         self.append(self._correction_image)
         self.append(self._message_state_image)
         self.append(self._marker_image)
         self.append(self._error_image)
+        self.append(self._mention_image)
 
     def set_encryption_icon_visible(self, visible: bool) -> None:
         self._encryption_image.set_visible(visible)
@@ -398,6 +404,9 @@ class MessageIcons(Gtk.Box):
 
     def set_error_tooltip(self, text: str) -> None:
         self._error_image.set_tooltip_text(text)
+
+    def set_mention_icon_visibe(self, visible: bool) -> None:
+        self._mention_image.set_visible(visible)
 
 
 class AvatarBox(Gtk.Box, SignalManager):
@@ -479,3 +488,11 @@ class AvatarBox(Gtk.Box, SignalManager):
         self._menu_popover.set_menu_model(menu)
         self._menu_popover.set_pointing_to_coord(x, y)
         self._menu_popover.popup()
+
+
+class MentionIndicator(Gtk.Box):
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self, visible=False)
+        self.add_css_class("conversation-mention-bg-color")
+        self.add_css_class("ps-3")
+        self.add_css_class("card")

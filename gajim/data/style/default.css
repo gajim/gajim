@@ -19,9 +19,6 @@
     background-color: rgb(10, 50, 70);
     color: rgb(170, 180, 200);
 }
-.gajim-mention-highlight {
-    background: rgb(255, 215, 194);
-}
 .gajim-user-disconnected {
     color: rgb(230, 170, 170);
 }

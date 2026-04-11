@@ -42,6 +42,7 @@ from gajim.gtk.conversation.reactions_bar import ReactionsBar
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import AvatarBox
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import MentionIndicator
 from gajim.gtk.conversation.rows.widgets import MessageIcons
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import GajimMenu
@@ -96,6 +97,8 @@ class MessageRow(BaseRow):
 
         self._avatar_box = AvatarBox(contact)
 
+        self._mention_indicator = MentionIndicator()
+
         self._ref_message_widget = None
 
         self._meta_box = Gtk.Box(spacing=6)
@@ -104,11 +107,12 @@ class MessageRow(BaseRow):
         self._bottom_box = Gtk.Box(spacing=6)
 
         self.grid.attach(self._avatar_box, 0, 0, 1, 2)
-        self.grid.attach(self._meta_box, 1, 0, 1, 1)
-        self.grid.attach(self._bottom_box, 1, 1, 1, 1)
+        self.grid.attach(self._mention_indicator, 1, 0, 1, 2)
+        self.grid.attach(self._meta_box, 2, 0, 1, 1)
+        self.grid.attach(self._bottom_box, 2, 1, 1, 1)
 
         self._reactions_bar = ReactionsBar(self, self._contact)
-        self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+        self.grid.attach(self._reactions_bar, 2, 2, 1, 1)
 
         self._redraw_content()
 
@@ -129,6 +133,10 @@ class MessageRow(BaseRow):
         return self._merged
 
     @property
+    def has_mention(self) -> bool:
+        return self._mention_indicator.get_visible()
+
+    @property
     def occupant_id(self) -> str | None:
         if self._message.occupant is None:
             return None
@@ -137,7 +145,6 @@ class MessageRow(BaseRow):
     def _redraw_content(self) -> None:
         self.set_merged(False)
         self.remove_css_class("retracted-message")
-        self.remove_css_class("gajim-mention-highlight")
 
         check_finalize(self._meta_box, only_children=True)
         check_finalize(self._bottom_box, only_children=True)
@@ -344,10 +351,11 @@ class MessageRow(BaseRow):
         if self._contact.nickname is None:
             return
 
-        if message_needs_highlight(
+        needs_highlight = message_needs_highlight(
             text, self._contact.nickname, self._client.get_own_jid().bare
-        ):
-            self.add_css_class("gajim-mention-highlight")
+        )
+        self._mention_indicator.set_visible(needs_highlight)
+        self._message_icons.set_mention_icon_visibe(needs_highlight)
 
     def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
@@ -384,6 +392,9 @@ class MessageRow(BaseRow):
             return True
         return self._has_receipt == message.has_receipt
 
+    def is_same_mention_state(self, message: MessageRow) -> bool:
+        return self.has_mention is message.has_mention
+
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
             return False
@@ -400,6 +411,8 @@ class MessageRow(BaseRow):
         if not self.is_same_securitylabels(message):
             return False
         if not self.has_same_receipt_status(message):
+            return False
+        if not self.is_same_mention_state(message):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
