@@ -5751,30 +5751,3 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "Add some details…"
-#~ msgstr "Rnu kra n telqayt…"
-
-#~ msgid "Choose Emoji"
-#~ msgstr "Fren Imujit"
-
-#~ msgid "Eating"
-#~ msgstr "Učči"
-
-#, python-format
-#~ msgid "Error: %s (mime types: %s)"
-#~ msgstr "Tuccḍa: %s (anawen n mim:%s)"
-
-#~ msgctxt "Group chat description"
-#~ msgid "Local help group"
-#~ msgstr "Agraw n tallelt adigan"
-
-#~ msgctxt "Group chat description"
-#~ msgid "Local news and reports"
-#~ msgstr "Isallen akked ineqqisen idiganen"
-
-#~ msgid "Movie"
-#~ msgstr "Asaru"
-
-#~ msgid "Visual Notifications"
-#~ msgstr "Ilɣa s wudem tmeẓri"
