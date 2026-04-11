@@ -11,14 +11,6 @@
 .gajim-status-message {
     color: rgb(100, 130, 160);
 }
-.gajim-subject-message {
-    color: rgb(40, 70, 100);
-    background: rgb(225, 235, 250);
-}
-.gajim-call-message {
-    color: rgb(70, 70, 70);
-    background: rgb(230, 230, 230);
-}
 .gajim-command-error {
     background-color: rgb(10, 50, 70);
     color: rgb(220, 80, 80);

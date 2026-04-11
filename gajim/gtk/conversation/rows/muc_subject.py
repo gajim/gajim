@@ -40,8 +40,9 @@ class MUCSubject(BaseRow):
 
         subject_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         subject_box.set_halign(Gtk.Align.START)
+        subject_box.add_css_class("card")
+        subject_box.add_css_class("p-12")
         subject_box.add_css_class("conversation-subject-box")
-        subject_box.add_css_class("gajim-subject-message")
 
         title = Gtk.Label(label=_("Subject"))
         title.set_halign(Gtk.Align.START)

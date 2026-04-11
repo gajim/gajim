@@ -11,14 +11,6 @@
 .gajim-status-message {
     color: rgb(140, 175, 210);
 }
-.gajim-subject-message {
-    color: rgb(205, 225, 255);
-    background: rgb(40, 60, 80);
-}
-.gajim-call-message {
-    color: rgb(205, 225, 255);
-    background: rgb(40, 60, 80);
-}
 .gajim-mention-highlight {
     background: rgb(100, 50, 10);
 }

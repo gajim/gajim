@@ -161,8 +161,9 @@ class CallRow(BaseRow):
     def _add_incoming_call_widget(self) -> None:
         self._call_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self._call_box.set_size_request(350, -1)
+        self._call_box.add_css_class("card")
+        self._call_box.add_css_class("p-12")
         self._call_box.add_css_class("conversation-call-box")
-        self._call_box.add_css_class("gajim-call-message")
 
         scale = self.get_scale_factor()
         avatar = self._contact.get_avatar(AvatarSize.CALL, scale, add_show=False)

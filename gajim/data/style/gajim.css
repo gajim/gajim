@@ -655,10 +655,13 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* Row widgets ============================================================ */
-.conversation-subject-box,
+.conversation-subject-box {
+    color: mix(var(--accent-blue), var(--view-fg-color), 0.7);
+    background-color: alpha(var(--accent-blue), 0.15);
+}
 .conversation-call-box {
-    border-radius: 6px;
-    padding: 12px;
+    color: mix(var(--accent-slate), var(--view-fg-color), 0.7);
+    background-color: alpha(var(--accent-slate), 0.15);
 }
 
 /* QuoteWidget */
