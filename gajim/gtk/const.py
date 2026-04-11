@@ -291,10 +291,12 @@ ACCOUNT_ACTIONS = [
     ("subscription-accept", "a{sv}"),
     ("subscription-deny", "a{sv}"),
     ("subscription-deny-all", None),
+    ("ignore-timezone-updates", "s"),
 ]
 
 
 ALWAYS_ACCOUNT_ACTIONS = {
+    "ignore-timezone-updates",
     "open-event",
 }
 

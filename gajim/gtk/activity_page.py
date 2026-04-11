@@ -34,7 +34,9 @@ from gajim.gtk.activity_list import TimezoneChanged
 from gajim.gtk.activity_list import Unsubscribed
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
+from gajim.gtk.menus import GajimMenu
 from gajim.gtk.menus import get_subscription_menu
+from gajim.gtk.menus import MenuItemListT
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import open_uri
@@ -393,6 +395,16 @@ class TimezoneChangedPage(BaseActivityPage):
         self._connect(self._ui.ignore_button, "clicked", self._on_ignore)
 
         self._event = item.get_event()
+
+        menu_items: MenuItemListT = [
+            (
+                _("Don't ask me again"),
+                f"app.{self._event.account}-ignore-timezone-updates",
+                GLib.Variant("s", self._event.account),
+            ),
+        ]
+        self._ui.ignore_button.set_menu_model(GajimMenu.from_list(menu_items))
+
         self._client = app.get_client(self._event.account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 

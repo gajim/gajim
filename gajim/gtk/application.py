@@ -489,6 +489,7 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("execute-command", self._on_execute_command),
             ("subscription-accept", self._on_subscription_accept),
             ("subscription-deny", self._on_subscription_deny),
+            ("ignore-timezone-updates", self._on_ignore_timezone_updates),
         ]
 
         for action_name, func in actions:
@@ -701,6 +702,13 @@ class GajimApplication(Adw.Application, CoreApplication):
     ) -> None:
         client = app.get_client(params.account)
         client.get_module("Presence").unsubscribed(params.jid)
+
+    @staticmethod
+    def _on_ignore_timezone_updates(
+        _action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        account = param.get_string()
+        app.settings.set_account_setting(account, "update_timezone", False)
 
     @staticmethod
     def _on_pep_config_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
