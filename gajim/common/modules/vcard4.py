@@ -44,7 +44,6 @@ class VCard4(BaseModule):
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self._vcard_cache: dict[JID, tuple[dt.datetime, VCard]] = {}
-        self._ignore_timezone_change = False
         self._own_vcard: VCard = VCard()
         self._register_pubsub_handler(self._vcard_event_received)
 
@@ -81,9 +80,6 @@ class VCard4(BaseModule):
         if not app.settings.get_account_setting(self._account, "update_timezone"):
             return
 
-        if self._ignore_timezone_change:
-            return
-
         vcard_timezone = get_timezone_from_vcard(self._own_vcard)
         local_timezone = get_local_timezone()
         if local_timezone is None:
@@ -117,9 +113,6 @@ class VCard4(BaseModule):
         self._own_vcard.add_property("tz", value_type="text", value=local_timezone)
         self._log.info("Update timezone to: %s", local_timezone)
         self.set_vcard(self._own_vcard)
-
-    def ignore_timezone_change(self) -> None:
-        self._ignore_timezone_change = True
 
     def is_timezone_published(self) -> bool:
         return get_timezone_from_vcard(self._own_vcard) is not None

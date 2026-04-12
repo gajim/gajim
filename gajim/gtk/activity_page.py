@@ -411,7 +411,6 @@ class TimezoneChangedPage(BaseActivityPage):
         self.emit("request-remove")
 
     def _on_disable(self, _button: Gtk.Button) -> None:
-        self._client.get_module("VCard4").ignore_timezone_change()
         app.settings.set_account_setting(self._event.account, "update_timezone", False)
         self.emit("request-remove")
 
