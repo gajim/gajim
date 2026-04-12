@@ -118,6 +118,8 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._current_upper: float = 0
         self._autoscroll: bool = True
+        self._wait_for_map_after_scroll = False
+        self._pk_for_scroll: int | None = None
         self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
@@ -142,6 +144,8 @@ class ConversationView(Gtk.ScrolledWindow):
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
         )
+
+        self._list_box.connect("map", self._on_map)
 
     @GObject.Property(
         type=bool,
@@ -295,6 +299,9 @@ class ConversationView(Gtk.ScrolledWindow):
     def _reset(self) -> None:
         self._current_upper = 0
         self._autoscroll = True
+        self._wait_for_map_after_scroll = False
+        self._pk_for_scroll = None
+
         self._request_history_at_upper = None
         self._upper_complete = False
         self._lower_complete = True
@@ -928,22 +935,42 @@ class ConversationView(Gtk.ScrolledWindow):
             self._scroll_and_highlight(pk)
             return
 
+        # The ListBox needs to be invisible, so we can set it visible again
+        # after adding the messages. This allows us to receive the ::map signal
+        # which tells us that layouting is done, and scrolling to a message
+        # will work.
+        self._list_box.set_visible(False)
+
         messages, before_complete, after_complete = (
             self._storage.get_conversation_around_timestamp(account, jid, timestamp)
         )
 
         self.reset()
+
         self._enable_signal_handlers(False)
         self.block_signals(True)
+        self._wait_for_map_after_scroll = True
+        self._pk_for_scroll = pk
 
         self.add_messages(messages)
 
         self.set_history_complete(True, before_complete)
         self.set_history_complete(False, after_complete)
 
-        timeout_add_once(500, self._scroll_delayed, pk)
+        self._list_box.set_visible(True)
 
-    def _scroll_delayed(self, pk: int) -> None:
+    def _on_map(self, widget: Gtk.ListBox) -> None:
+        if not self._wait_for_map_after_scroll:
+            return
+
+        assert self._pk_for_scroll is not None
+        idle_add_once(self._scroll_after_map, self._pk_for_scroll)
+
+        self._wait_for_map_after_scroll = False
+        self._pk_for_scroll = None
+
+    def _scroll_after_map(self, pk: int) -> None:
+        log.debug("Scroll after map")
         self._scroll_and_highlight(pk)
         self._autoscroll = self._determine_autoscroll()
         timeout_add_once(50, self._enable_signal_handlers, True)
