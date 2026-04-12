@@ -71,7 +71,6 @@ class ConversationView(Gtk.ScrolledWindow):
             None,
             (str,),
         ),
-        "autoscroll-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
     def __init__(
@@ -118,6 +117,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._current_upper: float = 0
         self._autoscroll: bool = True
+        self._at_bottom = True
         self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
@@ -142,6 +142,26 @@ class ConversationView(Gtk.ScrolledWindow):
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
         )
+
+    @GObject.Property(
+        type=bool,
+        default=True,
+        flags=GObject.ParamFlags.READABLE | GObject.ParamFlags.EXPLICIT_NOTIFY,
+    )
+    def at_bottom(self) -> bool:
+        return self._at_bottom
+
+    def _update_at_bottom(self) -> None:
+        if self._at_bottom is self._autoscroll:
+            return
+
+        self._at_bottom = self._autoscroll
+
+        if self._block_signals:
+            return
+
+        log.debug("emit at-bottom, %s", self._at_bottom)
+        GLib.idle_add(self.notify, "at-bottom")
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
@@ -260,9 +280,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self.block_signals(False)
         self._enable_signal_handlers(True)
 
-    def get_autoscroll(self) -> bool:
-        return self._autoscroll
-
     def block_signals(self, value: bool) -> None:
         self._block_signals = value
 
@@ -330,6 +347,14 @@ class ConversationView(Gtk.ScrolledWindow):
         upper = adj.get_upper()
         diff = upper - self._current_upper
 
+        # log.debug(
+        #     f"upper changed: " \
+        #     f"upper={upper=}, " \
+        #     f"page_size={adj.get_page_size()}, " \
+        #     f"{self._current_upper=}, " \
+        #     f"{self._autoscroll=}"
+        # )
+
         if diff != 0:
             self._current_upper = upper
             if self._autoscroll:
@@ -346,7 +371,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._emit("request-history", "before")
             self._lower_complete = True
             self._autoscroll = True
-            self._emit("autoscroll-changed", self._autoscroll)
+            self._update_at_bottom()
 
         self._requesting = None
 
@@ -356,10 +381,18 @@ class ConversationView(Gtk.ScrolledWindow):
         if self._requesting is not None:
             return
 
-        bottom = adj.get_upper() - adj.get_page_size()
+        # log.debug(
+        #     f"value changed: " \
+        #     f"upper={adj.get_upper()}"
+        #     f"value={adj.get_value()}, " \
+        #     f"page_size={adj.get_page_size()}, " \
+        #     f"{self._upper_complete=}, " \
+        #     f"{self._lower_complete=}, " \
+        #     f"{self._autoscroll=}"
+        # )
 
-        self._autoscroll = bottom - adj.get_value() < 1
-        self._emit("autoscroll-changed", self._autoscroll)
+        self._autoscroll = self._determine_autoscroll()
+        self._update_at_bottom()
 
         if self._upper_complete:
             self._request_history_at_upper = None
@@ -376,6 +409,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         distance = adj.get_page_size()
         if adj.get_value() < distance:
+            # log.debug("Scrollbar near top")
             # Load messages when we are near the top
             if self._upper_complete:
                 return
@@ -386,6 +420,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._requesting = "before"
 
         elif adj.get_upper() - (adj.get_value() + adj.get_page_size()) < distance:
+            # log.debug("Scrollbar near bottom")
             # ..or near the bottom
             if self._lower_complete:
                 return
@@ -884,6 +919,11 @@ class ConversationView(Gtk.ScrolledWindow):
         row.set_acknowledged(event.pk)
         self._check_for_merge(row)
 
+    def _determine_autoscroll(self) -> bool:
+        adj = self.get_vadjustment()
+        bottom = adj.get_upper() - adj.get_page_size()
+        return bottom - adj.get_value() < 1
+
     def scroll_to_message(
         self, account: str, jid: JID, timestamp: datetime, pk: int
     ) -> None:
@@ -910,8 +950,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _scroll_delayed(self, pk: int) -> None:
         self._scroll_and_highlight(pk)
+        self._autoscroll = self._determine_autoscroll()
         timeout_add_once(50, self._enable_signal_handlers, True)
         timeout_add_once(50, self.block_signals, False)
+        timeout_add_once(100, self._update_at_bottom)
 
     def _scroll_and_highlight(self, pk: int) -> None:
         highlight_row = None

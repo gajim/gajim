@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 
 import datetime as dt
@@ -15,6 +16,7 @@ from collections.abc import Iterable
 
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import Affiliation
@@ -71,7 +73,7 @@ class ChatControl(EventHelper):
         self._scrolled_view = ConversationView(
             self._message_row_actions, app.storage.archive
         )
-        self._scrolled_view.connect("autoscroll-changed", self._on_autoscroll_changed)
+        self._scrolled_view.connect("notify::at-bottom", self._on_at_bottom_changed)
         self._scrolled_view.connect("request-history", self._request_history)
         self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
@@ -176,7 +178,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.reset()
 
     def view_is_at_bottom(self) -> bool:
-        return self._scrolled_view.get_autoscroll()
+        return self._scrolled_view.get_property("at-bottom")
 
     def set_prepare_for_scroll(self) -> None:
         # This var is for telling the control to not load messages
@@ -472,10 +474,11 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.update_blocked_muc_users()
 
-    def _on_autoscroll_changed(
-        self, _widget: ConversationView, autoscroll: bool
+    def _on_at_bottom_changed(
+        self, view: ConversationView, param: GObject.ParamSpec
     ) -> None:
-        if not autoscroll:
+        at_bottom = cast(bool, view.get_property("at-bottom"))
+        if not at_bottom:
             self._jump_to_end_button.toggle(True)
             return
 
