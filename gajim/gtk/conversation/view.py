@@ -29,6 +29,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import Direction
+from gajim.common.helpers import idle_add_once
 from gajim.common.helpers import timeout_add_once
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.chat_markers import DisplayedMarkerData
@@ -150,18 +151,6 @@ class ConversationView(Gtk.ScrolledWindow):
     )
     def at_bottom(self) -> bool:
         return self._at_bottom
-
-    def _update_at_bottom(self) -> None:
-        if self._at_bottom is self._autoscroll:
-            return
-
-        self._at_bottom = self._autoscroll
-
-        if self._block_signals:
-            return
-
-        log.debug("emit at-bottom, %s", self._at_bottom)
-        GLib.idle_add(self.notify, "at-bottom")
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
@@ -286,7 +275,14 @@ class ConversationView(Gtk.ScrolledWindow):
     def _emit(self, signal_name: str, *args: Any) -> None:
         if not self._block_signals:
             log.debug("emit %s, %s", signal_name, args)
-            GLib.idle_add(self.emit, signal_name, *args)
+            idle_add_once(self.emit, signal_name, *args)
+
+    def _notify(self, property_: str) -> None:
+        if self._block_signals:
+            return
+
+        log.debug("notify property '%s'", property_)
+        self.notify(property_)
 
     def _reset_list_box(self) -> None:
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
@@ -300,6 +296,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def _reset(self) -> None:
         self._current_upper = 0
         self._autoscroll = True
+        self._at_bottom = True
         self._request_history_at_upper = None
         self._upper_complete = False
         self._lower_complete = True
@@ -339,7 +336,7 @@ class ConversationView(Gtk.ScrolledWindow):
             # scroll to end
             value = adj.get_upper() - adj.get_page_size()
 
-        GLib.idle_add(adj.set_value, value)
+        idle_add_once(adj.set_value, value)
 
     def _on_adj_upper_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
@@ -371,7 +368,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._emit("request-history", "before")
             self._lower_complete = True
             self._autoscroll = True
-            self._update_at_bottom()
+            self._notify("at-bottom")
 
         self._requesting = None
 
@@ -392,7 +389,7 @@ class ConversationView(Gtk.ScrolledWindow):
         # )
 
         self._autoscroll = self._determine_autoscroll()
-        self._update_at_bottom()
+        self._notify("at-bottom")
 
         if self._upper_complete:
             self._request_history_at_upper = None
@@ -953,7 +950,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._autoscroll = self._determine_autoscroll()
         timeout_add_once(50, self._enable_signal_handlers, True)
         timeout_add_once(50, self.block_signals, False)
-        timeout_add_once(100, self._update_at_bottom)
+        timeout_add_once(60, self._notify, "at-bottom")
 
     def _scroll_and_highlight(self, pk: int) -> None:
         highlight_row = None
@@ -981,7 +978,7 @@ class ConversationView(Gtk.ScrolledWindow):
         highlight_row.remove_css_class("conversation-row-highlight")
         highlight_row.add_css_class("conversation-row-highlight")
 
-        GLib.timeout_add(1500, self._remove_highligh_class, highlight_row)
+        timeout_add_once(1500, self._remove_highligh_class, highlight_row)
 
     def _remove_highligh_class(self, highlight_row: BaseRow) -> None:
         highlight_row.remove_css_class("conversation-row-highlight")
