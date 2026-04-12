@@ -50,7 +50,8 @@ from gajim.gtk.groupchat_state import GroupchatState
 
 HistoryRowT = events.ApplicationEvent | Message
 
-REQUEST_LINES_COUNT = 20
+INITIAL_REQUEST_MESSAGE_COUNT = 50
+REQUEST_MESSAGE_COUNT = 20
 
 log = logging.getLogger("gajim.gtk.control")
 
@@ -554,7 +555,10 @@ class ChatControl(EventHelper):
         self._scrolled_view.add_message(message)
 
     def _request_messages(
-        self, direction: Literal["after", "before"]
+        self,
+        direction: Literal["after", "before"],
+        *,
+        initial: bool,
     ) -> tuple[Iterable[Message], bool]:
         if direction == "before":
             row = self._scrolled_view.get_first_row()
@@ -573,13 +577,16 @@ class ChatControl(EventHelper):
             self._contact.account,
             self._contact.jid,
             timestamp,
-            REQUEST_LINES_COUNT,
+            INITIAL_REQUEST_MESSAGE_COUNT if initial else REQUEST_MESSAGE_COUNT,
             direction=direction,
             order=order,
         )
 
     def _request_events(
-        self, direction: Literal["after", "before"]
+        self,
+        direction: Literal["after", "before"],
+        *,
+        initial: bool,
     ) -> tuple[list[events.ApplicationEvent], bool]:
         if direction == "before":
             row = self._scrolled_view.get_first_event_row()
@@ -593,11 +600,14 @@ class ChatControl(EventHelper):
 
         assert self._contact is not None
         return app.storage.events.load(
-            self._contact, direction, timestamp, REQUEST_LINES_COUNT
+            self._contact,
+            direction,
+            timestamp,
+            INITIAL_REQUEST_MESSAGE_COUNT if initial else REQUEST_MESSAGE_COUNT,
         )
 
     def _request_history(
-        self, _widget: Any, direction: Literal["after", "before"]
+        self, _widget: Any, direction: Literal["after", "before"], initial: bool = False
     ) -> None:
         if self._contact is None:
             log.warning("_request_history() called without active contact")
@@ -605,8 +615,8 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.block_signals(True)
 
-        messages, messages_complete = self._request_messages(direction)
-        event_rows, events_complete = self._request_events(direction)
+        messages, messages_complete = self._request_messages(direction, initial=initial)
+        event_rows, events_complete = self._request_events(direction, initial=initial)
         rows = self._sort_request_rows(messages, event_rows, direction == "before")
 
         assert self._contact is not None
