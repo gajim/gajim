@@ -118,7 +118,6 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._current_upper: float = 0
         self._autoscroll: bool = True
-        self._at_bottom = True
         self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
@@ -150,7 +149,7 @@ class ConversationView(Gtk.ScrolledWindow):
         flags=GObject.ParamFlags.READABLE | GObject.ParamFlags.EXPLICIT_NOTIFY,
     )
     def at_bottom(self) -> bool:
-        return self._at_bottom
+        return self._autoscroll
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
@@ -296,7 +295,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _reset(self) -> None:
         self._current_upper = 0
         self._autoscroll = True
-        self._at_bottom = True
         self._request_history_at_upper = None
         self._upper_complete = False
         self._lower_complete = True
