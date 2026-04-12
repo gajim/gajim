@@ -60,13 +60,14 @@ gajim = "gajim.main:run"
 
 [dependency-groups]
 dev = [
-  "pygobject>=3.56.1",
   "codespell==2.4.2",
   "cryptography@git+https://github.com/pyca/cryptography.git",
+  "distro",
   "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
   "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
   "pre-commit",
   "pygobject-stubs==2.17.0",
+  "pygobject>=3.56.1",
   "pytest>=9.0.2",
   "python-gitlab",
   "ruamel.yaml",

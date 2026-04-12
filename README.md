@@ -50,6 +50,7 @@ thoughts or discuss the news with your groups.
 - [GUPnP-IGD](https://gitlab.gnome.org/GNOME/gupnp) for better NAT traversing
 - [NetworkManager](https://gitlab.freedesktop.org/NetworkManager/NetworkManager) for network lose detection
 - [GeoClue](https://gitlab.freedesktop.org/geoclue/geoclue) for sharing your location
+- [distro](https://pypi.org/project/distro/) to get accurate information about the used operating system (name, version)
 
 #### Rich Previews (Images and Voice Messages)
 
