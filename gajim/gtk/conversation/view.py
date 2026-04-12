@@ -943,7 +943,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self.set_history_complete(True, before_complete)
         self.set_history_complete(False, after_complete)
 
-        timeout_add_once(200, self._scroll_delayed, pk)
+        timeout_add_once(500, self._scroll_delayed, pk)
 
     def _scroll_delayed(self, pk: int) -> None:
         self._scroll_and_highlight(pk)
