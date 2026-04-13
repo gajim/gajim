@@ -22,6 +22,7 @@ from .plugins_i18n import _ as p_
 BLOCKED_PLUGINS = [
     "appindicator_integration",
     "omemo",
+    "openpgp",
     "plugin_installer",
     "syntax_highlight",
     "url_image_preview",

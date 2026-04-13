@@ -75,7 +75,7 @@
                 <child>
                   <object class="AdwActionRow" id="our_fingerprint_row">
                     <style>
-                      <class name="omemo-device-row"/>
+                      <class name="crypto-device-row"/>
                     </style>
                     <child type="suffix">
                       <object class="GtkBox">

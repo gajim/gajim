@@ -554,14 +554,25 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if current_state == new_state:
             return
 
-        if new_state and new_state != "OMEMO":
-            plugin = app.plugin_manager.encryption_plugins.get(new_state)
-            if plugin is None:
-                # TODO: Add GUI error here
-                return
+        match new_state:
+            case "" | "OMEMO":
+                pass
 
-            if not plugin.activate_encryption(app.window.get_control()):
-                return
+            case "OpenPGP":
+                assert self._client is not None
+                if not self._client.get_module("OpenPGP").secret_key_exists():
+                    assert self._contact is not None
+                    open_window("OpenPGPWizard", account=self._contact.account)
+                    return
+
+            case _:
+                plugin = app.plugin_manager.encryption_plugins.get(new_state)
+                if plugin is None:
+                    # TODO: Add GUI error here
+                    return
+
+                if not plugin.activate_encryption(app.window.get_control()):
+                    return
 
         contact = self.get_current_contact()
         contact.settings.set("encryption", new_state)
@@ -626,7 +637,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         }
 
         if encryption:
-            if encryption == "OMEMO":
+            if encryption in ("OMEMO", "OpenPGP"):
                 encryption_state["authenticated"] = True
             else:
                 # Only fire extension_point for plugins (i.e. not OMEMO)

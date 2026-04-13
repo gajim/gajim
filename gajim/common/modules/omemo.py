@@ -12,7 +12,9 @@ from typing import Any
 from typing import cast
 from typing import Literal
 
+import datetime as dt
 from collections.abc import Generator
+from dataclasses import dataclass
 from pathlib import Path
 
 import nbxmpp
@@ -35,6 +37,7 @@ from omemo_dr.exceptions import MessageNotForDevice
 from omemo_dr.exceptions import SelfMessage
 from omemo_dr.identitykey import IdentityKey
 from omemo_dr.session_manager import OMEMOSessionManager
+from omemo_dr.structs import IdentityInfo
 from omemo_dr.structs import OMEMOBundle
 from omemo_dr.structs import OMEMOConfig
 
@@ -43,6 +46,7 @@ from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import EncryptionInfoMsg
+from gajim.common.const import Trust
 from gajim.common.const import Trust as GajimTrust
 from gajim.common.const import XmppUriQuery
 from gajim.common.events import EncryptionInfo
@@ -55,8 +59,10 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
+from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
+from gajim.common.modules.util import PublicKeyData
 from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.decorators import cache_with_ttl
@@ -85,7 +91,35 @@ ALLOWED_TAGS = [
 DeviceIdT = int
 IdentityT = tuple[DeviceIdT, IdentityKey]
 
-class OMEMO(BaseModule):
+
+@dataclass
+class OMEMOPublicKeyData(PublicKeyData):
+    device_id: int
+    public_key: IdentityKey
+
+    @classmethod
+    def from_identity_info(cls, info: IdentityInfo) -> OMEMOPublicKeyData:
+        last_seen = None
+        if info.last_seen is not None:
+            last_seen = dt.datetime.fromtimestamp(info.last_seen, dt.UTC)
+
+        return cls(
+            active=info.active,
+            address=JID.from_string(info.address),
+            label=info.label,
+            last_seen=last_seen,
+            fingerprint=info.public_key.get_fingerprint(),
+            trust=GajimTrust[info.trust.name],
+            device_id=info.device_id,
+            public_key=info.public_key,
+        )
+
+    def pretty_fingerprint(self) -> str:
+        return self.public_key.get_fingerprint(formatted=True)
+
+
+
+class OMEMO(BaseModule, CryptoModule):
 
     _nbxmpp_extends = 'OMEMO'
     _nbxmpp_methods = [
@@ -208,6 +242,54 @@ class OMEMO(BaseModule):
     @property
     def backend(self) -> OMEMOSessionManager:
         return self._backend
+
+    def get_our_public_key(self) -> OMEMOPublicKeyData:
+        device_id, identity_key = self._backend.get_our_identity()
+
+        return OMEMOPublicKeyData(
+            active=True,
+            address=self._get_own_bare_jid(),
+            label=None,
+            last_seen=None,
+            fingerprint=identity_key.get_fingerprint(),
+            trust=Trust.VERIFIED,
+            device_id=device_id,
+            public_key=identity_key
+        )
+
+    def get_public_keys(
+        self,
+        jid: JID,
+        *,
+        is_groupchat: bool
+    ) -> list[OMEMOPublicKeyData]:
+        identity_infos = self._backend.get_identity_infos(
+            str(jid),
+            only_active=is_groupchat,
+            trust=OMEMOTrust.UNDECIDED if is_groupchat else None,
+        )
+
+        return [OMEMOPublicKeyData.from_identity_info(info) for info in identity_infos]
+
+    def set_public_key_trust(
+        self,
+        public_key_data: PublicKeyData,
+        trust: Trust
+    ) -> None:
+        public_key_data = cast(OMEMOPublicKeyData, public_key_data)
+        self._backend.set_trust(
+            str(public_key_data.address),
+            public_key_data.public_key,
+            OMEMOTrust[trust.name]
+        )
+
+    def remove_public_key(self, public_key_data: PublicKeyData) -> None:
+        public_key_data = cast(OMEMOPublicKeyData, public_key_data)
+        self._backend.delete_session(
+            str(public_key_data.address),
+            public_key_data.device_id,
+            delete_identity=True
+        )
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)
@@ -532,7 +614,7 @@ class OMEMO(BaseModule):
         self._log.info('Publishing own devicelist: %s', devicelist_)
         self._nbxmpp('OMEMO').set_devicelist(devicelist_)
 
-    def clear_devicelist(self) -> None:
+    def clear_keylist(self) -> None:
         self.backend.update_devicelist(
             self._own_jid, [self.backend.get_our_device()])
         self.set_devicelist()
@@ -606,18 +688,18 @@ class OMEMO(BaseModule):
         ]
         if self._client.is_own_jid(jid):
             verified_identities.insert(0, self._backend.get_our_identity())
-        return compose_trust_uri(jid, verified_identities)
+
+        query = (
+            XmppUriQuery.MESSAGE.value,
+            [
+                (f'omemo-sid-{sid}', ik.get_fingerprint()) for sid,
+                ik in verified_identities
+            ]
+        ) if verified_identities else None
+        uri = jid.new_as_bare().to_iri(query)
+        return uri
 
     def cleanup(self) -> None:
         BaseModule.cleanup(self)
         self._backend.destroy()
         del self._backend
-
-
-def compose_trust_uri(jid: JID, devices: list[IdentityT]) -> str:
-    query = (
-        XmppUriQuery.MESSAGE.value,
-        [(f'omemo-sid-{sid}', ik.get_fingerprint()) for sid, ik in devices]
-    ) if devices else None
-    uri = jid.new_as_bare().to_iri(query)
-    return uri

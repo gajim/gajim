@@ -29,7 +29,7 @@ from gajim.gtk.certificate_dialog import CertificatePage
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.crypto_trust_manager import CryptoTrustManager
 from gajim.gtk.preference.archiving import ArchivingPreferences
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
 from gajim.gtk.preference.manage_roster import ManageRoster
@@ -410,8 +410,43 @@ class AccountOmemoTrustGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(self, key="account-omemo-trust", account=account)
 
-        omemo_trust_manager = OMEMOTrustManager(account)
-        self.add(omemo_trust_manager)
+        crypto_trust_manager = CryptoTrustManager("OMEMO", account)
+        self.add(crypto_trust_manager)
+
+
+class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-settings", account=account
+        )
+
+        self.set_title(_("Trust Management"))
+        wiki_url = "https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO"
+        link_text = _("Read more about blind trust")
+        self.set_description(f'<a href="{wiki_url}">{link_text}</a>')
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Blind Trust"),
+                SettingType.ACCOUNT_CONFIG,
+                "openpgp_blind_trust",
+                desc=_("Blindly trust new devices until you verify them"),
+            )
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class AccountOpenPGPTrustGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-trust", account=account
+        )
+
+        crypto_trust_manager = CryptoTrustManager("OpenPGP", account)
+        self.add(crypto_trust_manager)
 
 
 class AccountConnectionGroup(GajimPreferencesGroup):
@@ -833,6 +868,23 @@ class AccountOmemoPage(GajimPreferencePage):
 
         self.add(AccountOmemoSettingsGroup(account))
         self.add(AccountOmemoTrustGroup(account))
+
+
+class AccountOpenPGPPage(GajimPreferencePage):
+    key = "encryption-openpgp"
+    icon_name = "lucide-lock-symbolic"
+    label = _("Encryption (OpenPGP)")
+
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            title=_("Encryption (OpenPGP) – %(account)s") % {"account": account},
+            groups=[],
+            tag_prefix=f"{account}-",
+        )
+
+        self.add(AccountOpenPGPSettingsGroup(account))
+        self.add(AccountOpenPGPTrustGroup(account))
 
 
 class AccountConnectionDetailsPage(GajimPreferencePage):
