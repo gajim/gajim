@@ -44,6 +44,7 @@ from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.events.storage import EventStorage
+from gajim.common.storage.openpgp.storage import OpenPGPStorage
 from gajim.common.task_manager import PulseManager
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.text import from_one_line
@@ -81,6 +82,9 @@ class CoreApplication(ged.EventHelper):
 
             app.storage.archive = MessageArchiveStorage()
             app.storage.archive.init()
+
+            app.storage.openpgp = OpenPGPStorage()
+            app.storage.openpgp.init()
         except Exception as error:
             app.ged.raise_event(DBMigrationError(exception=error))
             log.exception('Failed to init storage')

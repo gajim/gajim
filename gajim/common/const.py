@@ -862,6 +862,7 @@ COMMON_FEATURES = [
     Namespace.MESSAGE_MODERATE,
     Namespace.REPLY,
     Namespace.OMEMO_TEMP_DL + '+notify',
+    Namespace.OPENPGP_PK + '+notify',
     Namespace.STYLING,
     Namespace.REACTIONS,
     Namespace.MDS + '+notify',

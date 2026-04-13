@@ -445,6 +445,16 @@ modules:
       - type: git
         url: https://dev.gajim.org/gajim/omemo-dr.git
 
+  # pysequoia dependencies
+  - name: python3-pysequoia
+    buildsystem: simple
+    build-commands:
+    - pip3 install --no-build-isolation .
+    sources:
+    - type: archive
+      url: https://files.pythonhosted.org/packages/b8/61/126fd5e906d9ee8e7b563e404ad03376befddb0c74a452bfbd8213e8351f/pysequoia-0.1.32.tar.gz
+      sha256: baa5892b3e68dbf4492fcd4b5beb10bdeed8080ca5e8f57725606a824b65753f
+
   # nbxmpp dependency (optional)
   - name: python3-gssapi
     buildsystem: simple

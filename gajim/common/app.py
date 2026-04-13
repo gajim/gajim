@@ -54,6 +54,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.draft import DraftStorage
     from gajim.common.storage.events.storage import EventStorage
+    from gajim.common.storage.openpgp.storage import OpenPGPStorage
     from gajim.common.task_manager import PulseManager
     from gajim.common.task_manager import TaskManager
 
@@ -84,6 +85,7 @@ class Storage:
         self.archive: MessageArchiveStorage = None
         self.events: EventStorage = None
         self.drafts: DraftStorage = None
+        self.openpgp: OpenPGPStorage = None
 
 
 storage = Storage()

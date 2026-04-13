@@ -40,6 +40,7 @@ if TYPE_CHECKING:
     from gajim.gtk.history_sync import HistorySyncAssistant
     from gajim.gtk.manage_proxies import ManageProxies
     from gajim.gtk.manage_sounds import ManageSounds
+    from gajim.gtk.openpgp_wizard import OpenPGPWizard
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
     from gajim.gtk.preference.dialog import Preferences
@@ -72,6 +73,7 @@ if TYPE_CHECKING:
         | HistorySyncAssistant
         | ManageProxies
         | ManageSounds
+        | OpenPGPWizard
         | PasswordDialog
         | PEPConfig
         | Preferences
@@ -105,6 +107,7 @@ if TYPE_CHECKING:
         | Literal["HistorySyncAssistant"]
         | Literal["ManageProxies"]
         | Literal["ManageSounds"]
+        | Literal["OpenPGPWizard"]
         | Literal["PasswordDialog"]
         | Literal["PEPConfig"]
         | Literal["Preferences"]
@@ -308,6 +311,14 @@ def get_app_window(
 
 @overload
 def get_app_window(
+    name: Literal["OpenPGPWizard"],
+    account: str | None = None,
+    jid: str | JID | None = None,
+) -> OpenPGPWizard | None: ...
+
+
+@overload
+def get_app_window(
     name: Literal["PasswordDialog"],
     account: str | None = None,
     jid: str | JID | None = None,
@@ -475,6 +486,8 @@ def open_window(
 def open_window(name: Literal["ManageProxies"], **kwargs: Any) -> ManageProxies: ...
 @overload
 def open_window(name: Literal["ManageSounds"], **kwargs: Any) -> ManageSounds: ...
+@overload
+def open_window(name: Literal["OpenPGPWizard"], **kwargs: Any) -> OpenPGPWizard: ...
 @overload
 def open_window(name: Literal["PasswordDialog"], **kwargs: Any) -> PasswordDialog: ...
 @overload

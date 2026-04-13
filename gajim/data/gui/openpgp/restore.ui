@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="OpenPGPWizardRestore" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Password</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry">
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -29,6 +29,7 @@ thoughts or discuss the news with your groups.
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [Pillow](https://pypi.org/project/Pillow/) (>=9.1.0)
 - [precis_i18n](https://pypi.org/project/precis-i18n/)
+- [pysequoia](https://pypi.org/project/pysequoia/) (>=0.1.32)
 - [pycairo](https://pypi.org/project/pycairo/)
 - [PyGObject](https://pypi.org/project/PyGObject/) (>=3.53.0)
 - [Python](https://www.python.org/) (>=3.11)

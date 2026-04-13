@@ -39,6 +39,7 @@ if TYPE_CHECKING:
     from gajim.common.modules.muc import MUC
     from gajim.common.modules.muc_blocking import MucBlocking
     from gajim.common.modules.omemo import OMEMO
+    from gajim.common.modules.openpgp import OpenPGP
     from gajim.common.modules.pep import PEP
     from gajim.common.modules.ping import Ping
     from gajim.common.modules.presence import Presence
@@ -121,6 +122,8 @@ class ClientModules:
     def get_module(self, name: Literal['MucBlocking']) -> MucBlocking: ...
     @overload
     def get_module(self, name: Literal['OMEMO']) -> OMEMO: ...
+    @overload
+    def get_module(self, name: Literal['OpenPGP']) -> OpenPGP: ...
     @overload
     def get_module(self, name: Literal['PEP']) -> PEP: ...
     @overload

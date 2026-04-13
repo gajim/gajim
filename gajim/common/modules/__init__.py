@@ -41,6 +41,7 @@ from gajim.common.modules.moderations import Moderations
 from gajim.common.modules.muc import MUC
 from gajim.common.modules.muc_blocking import MucBlocking
 from gajim.common.modules.omemo import OMEMO
+from gajim.common.modules.openpgp import OpenPGP
 from gajim.common.modules.pep import PEP
 from gajim.common.modules.ping import Ping
 from gajim.common.modules.presence import Presence
@@ -94,6 +95,7 @@ ModulesT = (
     | MUC
     | MucBlocking
     | OMEMO
+    | OpenPGP
     | PEP
     | Ping
     | Presence
@@ -145,6 +147,7 @@ ModulesLiteralT = Literal[
     'MUC',
     'MucBlocking',
     'OMEMO',
+    'OpenPGP',
     'PEP',
     'Ping',
     'Presence',
@@ -196,6 +199,7 @@ class ModuleDict(TypedDict):
     MUC: MUC
     MucBlocking: MucBlocking
     OMEMO: OMEMO
+    OpenPGP: OpenPGP
     PEP: PEP
     Ping: Ping
     Presence: Presence

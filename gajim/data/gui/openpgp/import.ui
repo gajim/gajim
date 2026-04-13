@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="OpenPGPWizardImport" parent="AssistantPage">
+    <child>
+          <object class="GtkTextView" id="_import_textview">
+            <property name="monospace">1</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+          </object>
+    </child>
+  </template>
+</interface>
