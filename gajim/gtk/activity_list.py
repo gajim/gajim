@@ -18,6 +18,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import events
@@ -181,6 +182,26 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
             item.read = True
 
         self.set_property("unread-count", 0)
+
+    def mark_items_as_read(
+        self,
+        item_type: type[ActivityListItemT],
+        account: str | None = None,
+        jid: JID | None = None,
+    ) -> None:
+        for item in self._model:
+            if not isinstance(item, item_type):
+                continue
+
+            if account is not None and item.account != account:
+                continue
+
+            if jid is not None and item.jid != jid:
+                continue
+
+            if not item.read:
+                self._decrease_unread_count()
+                item.read = True
 
     def unselect(self) -> None:
         self._selection_model.unselect_all()
@@ -368,6 +389,7 @@ class ActivityListItem(Generic[E], GObject.Object):
 
     context_id: str = GObject.Property(type=str)  # pyright: ignore
     account: str = GObject.Property(type=str)  # pyright: ignore
+    jid: JID = GObject.Property(type=str)  # pyright: ignore
     account_visible: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
     activity_type: int = GObject.Property(type=int)  # pyright: ignore
     activity_type_icon: str = GObject.Property(type=str)  # pyright: ignore
@@ -385,6 +407,7 @@ class ActivityListItem(Generic[E], GObject.Object):
         self,
         context_id: str,
         account: str,
+        jid: JID | None,
         account_visible: bool,
         activity_type: int,
         activity_type_icon: str,
@@ -401,6 +424,7 @@ class ActivityListItem(Generic[E], GObject.Object):
         super().__init__(
             context_id=context_id,
             account=account,
+            jid=jid,
             account_visible=account_visible,
             activity_type=activity_type,
             activity_type_icon=activity_type_icon,
@@ -456,6 +480,7 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
         SignalManager.__init__(self)
 
         self._account = ""
+        self._jid = None
         self._account_css_class = ""
         self._read = False
         self.__bindings: list[GObject.Binding] = []
@@ -478,6 +503,14 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
         self._account_css_class = app.css_config.get_dynamic_class(account)
         self._account_identifier.add_css_class(self._account_css_class)
 
+    @GObject.Property(type=str)
+    def jid(self) -> JID | None:  # pyright: ignore
+        return self._jid
+
+    @jid.setter
+    def jid(self, jid: JID) -> None:
+        self._jid = jid
+
     @GObject.Property(type=bool, default=False)
     def read(self) -> bool:  # pyright: ignore
         return self._read
@@ -493,6 +526,7 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
     def bind(self, obj: ActivityListItem[E]) -> None:
         bind_spec = [
             ("account", self, "account"),
+            ("jid", self, "jid"),
             ("account_visible", self._account_identifier, "visible"),
             ("activity_type_icon", self._activity_type_image, "icon_name"),
             ("avatar", self._avatar_image, "paintable"),
@@ -528,6 +562,7 @@ class GajimUpdate(ActivityListItem[events.GajimUpdateAvailable]):
         return cls(
             context_id=event.context_id,
             account="",
+            jid=None,
             account_visible=False,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -550,6 +585,7 @@ class GajimUpdatePermission(ActivityListItem[events.AllowGajimUpdateCheck]):
         return cls(
             context_id=event.context_id,
             account="",
+            jid=None,
             account_visible=False,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -572,6 +608,7 @@ class GajimPluginUpdate(ActivityListItem[events.PluginUpdatesAvailable]):
         return cls(
             context_id=event.context_id,
             account="",
+            jid=None,
             account_visible=False,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -594,6 +631,7 @@ class GajimPluginUpdateFinished(ActivityListItem[None]):
         return cls(
             context_id="",
             account="",
+            jid=None,
             account_visible=False,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -629,6 +667,7 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=JID.from_string(event.jid),
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
@@ -659,6 +698,7 @@ class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=JID.from_string(event.jid),
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
@@ -702,6 +742,7 @@ class MucInvitation(ActivityListItem[events.MucInvitation]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=event.from_,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
@@ -738,6 +779,7 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=event.from_,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
@@ -758,6 +800,7 @@ class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=None,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
@@ -818,6 +861,7 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
         return cls(
             context_id=event.context_id,
             account=event.account,
+            jid=event.jid,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-reply-symbolic",

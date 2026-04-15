@@ -40,6 +40,7 @@ from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.about import AboutDialog
+from gajim.gtk.activity_list import Reaction
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import CancelDialogResponse
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -1104,6 +1105,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
+
+        # Mark reaction notifications from contact as read
+        activity_list = self._chat_page.get_activity_list()
+        activity_list.mark_items_as_read(Reaction, account, jid)
 
         if not unread_count or is_sync:
             # Read marker must be sent only once
