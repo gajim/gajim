@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
 "PO-Revision-Date: 2026-02-22 20:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
@@ -1533,6 +1533,10 @@ msgstr "Akaram ur yettwaru ara"
 msgid "Disable Account?"
 msgstr "Sens amiḍan?"
 
+#, fuzzy
+msgid "Disable Update"
+msgstr "Yettwasens"
+
 msgid "Disabled"
 msgstr "Yettwasens"
 
@@ -1672,9 +1676,6 @@ msgstr "Yettwarmed"
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
-msgstr ""
-
-msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide a Audio preview"
@@ -2289,9 +2290,6 @@ msgid ""
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
-msgid "Ignore"
-msgstr ""
-
 msgid "Ignore Unknown Contacts"
 msgstr ""
 
@@ -2441,6 +2439,10 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
+msgstr ""
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
 msgid "JID"
@@ -2605,6 +2607,9 @@ msgstr ""
 msgid "Manually set the hostname for the server"
 msgstr ""
 
+msgid "Mark all activities as read"
+msgstr ""
+
 msgid "Mark as Read"
 msgstr ""
 
@@ -2633,9 +2638,6 @@ msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Members Only"
-msgstr ""
-
-msgid "Mention: Message Background Color"
 msgstr ""
 
 msgid "Message"
@@ -2958,9 +2960,6 @@ msgstr "Tamawt: Imiḍan udrigen ur zmiren ara ad ilin akked meṛṛa imefkiyen
 msgid "Notes"
 msgstr "Tizmilin"
 
-msgid "Notification Sounds"
-msgstr "Imesli n tilɣa"
-
 msgid "Notifications"
 msgstr "Ilɣa"
 
@@ -3022,6 +3021,10 @@ msgstr ""
 msgid "Open Emoji Chooser"
 msgstr ""
 
+#, fuzzy
+msgid "Open File?"
+msgstr "Sfeḍ afaylu"
+
 msgid "Open Folder"
 msgstr ""
 
@@ -3035,6 +3038,11 @@ msgid "Open folder"
 msgstr ""
 
 msgid "OpenGL accelerated"
+msgstr ""
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
 msgstr ""
 
 msgid "Operating System"
@@ -3187,6 +3195,10 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr ""
+
+#, fuzzy
+msgid "Personal Settings"
+msgstr "Iɣewwaṛen n uzegrir"
 
 msgid "Personal notes about this contact"
 msgstr ""
@@ -3444,11 +3456,11 @@ msgid "React with %s"
 msgstr "Tiririt s %s"
 
 #, fuzzy, python-format
-msgid "Reaction from %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
 msgstr "Tigawin i \"%s\""
 
 #, fuzzy, python-format
-msgid "Reaction from %s (%s)"
+msgid "Reaction from %s"
 msgstr "Tigawin i \"%s\""
 
 #, fuzzy
@@ -3662,9 +3674,6 @@ msgid ""
 msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
-msgstr ""
-
-msgid "Requires: gsound"
 msgstr ""
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
@@ -5273,6 +5282,10 @@ msgstr ""
 msgid "You have been kicked by %s"
 msgstr ""
 
+#, fuzzy
+msgid "You have been mentioned"
+msgstr "Tettwagedleḍ"
+
 msgid "You have been removed from this group chat"
 msgstr ""
 
@@ -5506,6 +5519,9 @@ msgstr "_IH"
 
 msgid "_Offline"
 msgstr "_Aruqqin"
+
+msgid "_Open"
+msgstr ""
 
 msgid "_Overwrite"
 msgstr ""
@@ -5751,3 +5767,37 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "Add some details…"
+#~ msgstr "Rnu kra n telqayt…"
+
+#~ msgid "Choose Emoji"
+#~ msgstr "Fren Imujit"
+
+#~ msgid "Eating"
+#~ msgstr "Učči"
+
+#, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Tuccḍa: %s (anawen n mim:%s)"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "Agraw n tallelt adigan"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Isallen akked ineqqisen idiganen"
+
+#~ msgid "Movie"
+#~ msgstr "Asaru"
+
+#~ msgid "Notification Sounds"
+#~ msgstr "Imesli n tilɣa"
+
+#, fuzzy, python-format
+#~ msgid "Reaction from %s (%s)"
+#~ msgstr "Tigawin i \"%s\""
+
+#~ msgid "Visual Notifications"
+#~ msgstr "Ilɣa s wudem tmeẓri"

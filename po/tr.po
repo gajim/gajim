@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1756,6 +1756,10 @@ msgstr "Klasör \"%s\" yazılabilir değil"
 msgid "Disable Account?"
 msgstr "XMPP hesabı %s@%s"
 
+#, fuzzy
+msgid "Disable Update"
+msgstr "Geçersizleşti"
+
 msgid "Disabled"
 msgstr "Geçersizleşti"
 
@@ -1913,9 +1917,6 @@ msgstr "Etkin"
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
-msgstr ""
-
-msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide a Audio preview"
@@ -2617,9 +2618,6 @@ msgid ""
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
-msgid "Ignore"
-msgstr ""
-
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Kişi Davet _Et"
@@ -2796,6 +2794,10 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
+msgstr ""
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
 msgid "JID"
@@ -2986,6 +2988,9 @@ msgstr "Vekil Sunuc Profili İşlet"
 msgid "Manually set the hostname for the server"
 msgstr ""
 
+msgid "Mark all activities as read"
+msgstr ""
+
 msgid "Mark as Read"
 msgstr ""
 
@@ -3019,10 +3024,6 @@ msgstr "Üye"
 msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Üye"
-
-#, fuzzy
-msgid "Mention: Message Background Color"
-msgstr "Öntanımlı değerlerine geri al"
 
 msgid "Message"
 msgstr "İleti"
@@ -3390,10 +3391,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#, fuzzy
-msgid "Notification Sounds"
-msgstr "Bildirimler"
-
 msgid "Notifications"
 msgstr "Bildirimler"
 
@@ -3464,6 +3461,10 @@ msgid "Open Emoji Chooser"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
+msgid "Open File?"
+msgstr "Gmail Gelen Kutusunu _Aç"
+
+#, fuzzy
 msgid "Open Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
@@ -3480,6 +3481,11 @@ msgid "Open folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
 msgid "OpenGL accelerated"
+msgstr ""
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
 msgstr ""
 
 #, fuzzy
@@ -3654,6 +3660,10 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr ""
+
+#, fuzzy
+msgid "Personal Settings"
+msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3958,11 +3968,11 @@ msgid "React with %s"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Reaction from %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
 msgstr "%s hesapına"
 
 #, fuzzy, python-format
-msgid "Reaction from %s (%s)"
+msgid "Reaction from %s"
 msgstr "%s hesapına"
 
 #, fuzzy
@@ -4219,10 +4229,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Paket Yöneticisi"
-
-#, fuzzy
-msgid "Requires: gsound"
-msgstr "Dbus Denetim Altyapısı"
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr ""
@@ -6052,6 +6058,10 @@ msgid "You have been kicked by %s"
 msgstr "%s grup sohbete katıldı"
 
 #, fuzzy
+msgid "You have been mentioned"
+msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
 msgid "You have been removed from this group chat"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
@@ -6327,6 +6337,10 @@ msgstr "_Tamam"
 msgid "_Offline"
 msgstr "Bağlı _değil"
 
+#, fuzzy
+msgid "_Open"
+msgstr "OpenPGP:"
+
 msgid "_Overwrite"
 msgstr ""
 
@@ -6599,3 +6613,1373 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "-e  --ed  Bir ed betiği çıktılar."
+
+#, fuzzy, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%(nick)s durumu şimdi %(status)s"
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s bulunamadı"
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
+
+#, fuzzy, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Açıklama"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "?Ask (for Subscription):Hiç biri"
+
+#, fuzzy
+#~ msgid "?Gender:None"
+#~ msgstr "Gönderen"
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "?Group Chat Contact Affiliation:Hiç biri"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat address:news"
+#~ msgstr "_Yeni Bir Grup Sohbeti"
+
+#, fuzzy
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat address:team"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "Grup sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "Grup Sohbetler"
+
+#, fuzzy
+#~ msgid "?Group chat name:Team"
+#~ msgstr "?Group Chat Contact Role:Hiç biri"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "?Message row action:Copy"
+#~ msgstr "İletin içindekiler"
+
+#, fuzzy
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "İletin içindekiler"
+
+#, fuzzy
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "İletin içindekiler"
+
+#, fuzzy
+#~ msgid "?Message state:Received"
+#~ msgstr "Üyelik ileti _kaydet"
+
+#, fuzzy
+#~ msgid "?Noun:Download"
+#~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "?Noun:Upload"
+#~ msgstr "Gönder"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "?Subscription we already have:Hiç biri"
+
+#, fuzzy
+#~ msgid "?config description:None"
+#~ msgstr "?Ask (for Subscription):Hiç biri"
+
+#, fuzzy
+#~ msgid "?config:Value"
+#~ msgstr "_Yerleştir"
+
+#, fuzzy
+#~ msgid "?profile:Address"
+#~ msgstr "_Adres:"
+
+#, fuzzy
+#~ msgid "?profile:Full Name"
+#~ msgstr "<b>Bütün isim</b>"
+
+#, fuzzy
+#~ msgid "?profile:Note"
+#~ msgstr "dosya"
+
+#, fuzzy
+#~ msgid "?profile:Role"
+#~ msgstr "dosya"
+
+#, fuzzy
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Completed"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Not started"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Status: "
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?transfer type:Type: "
+#~ msgstr "Dosya Gönderme Tamamlandı"
+
+#, fuzzy
+#~ msgid "?user status:Available"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#, fuzzy
+#~ msgid "?user status:_Available"
+#~ msgstr "?transfer status:Duraklanıldı"
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "Bir çalışan, tamamlanmış ile durdurulmuş dosya aktarma listesi"
+
+#, fuzzy, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Etkin çıkışta"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Yeni posta yarat"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
+#~ msgid "Add to Contact List…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Kişisel ilanlar sayfayı yazımla"
+
+#, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "Durumu a_yarla"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "Durumu a_yarla"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Gruplar"
+
+#, fuzzy
+#~ msgid "Archiving Preferences"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
+
+#, fuzzy
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Ses / Video"
+
+#, fuzzy
+#~ msgid "Audio Output Device"
+#~ msgstr "Ses çıkış aygıtı"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Klasör \"%s\" yazılabilir değil"
+
+#, fuzzy
+#~ msgid "Audio/Video"
+#~ msgstr "Ses / Video"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "AU ayırıcı"
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Yeni bir oda yaratılmıştır"
+
+#, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Uzun süreli uzakta"
+
+#, fuzzy
+#~ msgid "Autojoin"
+#~ msgstr "Kendiliğinden Katıl"
+
+#, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
+
+#, fuzzy
+#~ msgid "Back in some minutes."
+#~ msgstr "Bekleme süresi (dakikalar)"
+
+#, fuzzy
+#~ msgid "Back soon"
+#~ msgstr "Geri Düğme"
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "Geçersiz Liste İsmi"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Sohbet için Hazır"
+
+#, fuzzy
+#~ msgid "Bookmarks"
+#~ msgstr "_Yer imi"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "_Yer imi"
+
+#, fuzzy
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr "Seçilmiş dosya aktarımı iptal ediyor"
+
+#, fuzzy, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "\"%s\" mevcut dosyanın üzerine yazılamıyor"
+
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "sertifika hükümsüz kılınmış"
+
+#, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Konuk Değiştiriliyor"
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "Kişiler"
+
+#, fuzzy
+#~ msgid "Checking file…"
+#~ msgstr "Profil gönderiliyor…"
+
+#, fuzzy
+#~ msgid "Choose Archive"
+#~ msgstr "Resim seç"
+
+#, fuzzy
+#~ msgid "Choose Avatar…"
+#~ msgstr "Resim seç"
+
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Ses seç"
+
+#, fuzzy
+#~ msgid "Choose File to Send…"
+#~ msgstr "%s size bir dosya göndermek istiyor:"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Kişiyi listeye ekle"
+
+#, fuzzy
+#~ msgid "Clear message entry"
+#~ msgstr "Ileti alınıyor"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "%(nickname)s Girdi"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Yeni posta yarat"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Tamamlanıldı"
+
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Bağlantı"
+
+#, fuzzy
+#~ msgid "Connection not available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Kişi listesindeki olayları göster"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Kişi sırası"
+
+#, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Üyelikten çıkarıldı"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Kişisel Bilgisi"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kişiler"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Sohbet"
+
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kişisel Bilgisi"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "Yer:"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "Oda JID"
+
+#, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "Yer:"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "durum ileti"
+
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Tam-Ekrandan Çık"
+
+#, fuzzy
+#~ msgid "Create new group chat"
+#~ msgstr "Tam-Ekrandan Çık"
+
+#~ msgid "Create new post"
+#~ msgstr "Yeni posta yarat"
+
+#, fuzzy
+#~ msgid "Current Developers"
+#~ msgstr "Şu Anki Geliştiriciler"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#~ msgid "Default"
+#~ msgstr "Öntanımlı"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Öntanımlı İlet"
+
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Üyelik İsteği"
+
+#~ msgid "Description: "
+#~ msgstr "Açıklama: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Şu Anki Geliştiriciler"
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "GG Numara:"
+
+#, fuzzy
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "Dosya Gönderme Tamamlandı"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "Download File"
+#~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Kodlamada"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#~ msgid "Eating"
+#~ msgstr "Yemelik"
+
+#, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "İlk Ad:"
+
+#, fuzzy
+#~ msgid "Edit Profile…"
+#~ msgstr "Profil gönderiliyor…"
+
+#, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Kişisel ilanlar sayfayı yazımla"
+
+#, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "sertifika hükümsüz kılınmış"
+
+#, fuzzy
+#~ msgid "Error received: {}"
+#~ msgstr "Komuta satrında hata: %s\n"
+
+#, fuzzy
+#~ msgid "Error!"
+#~ msgstr "Hata"
+
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Ileti alınıyor"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Hata: %s okumak için açılamıyor"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Özellikler:"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "Dosya Aktarımları"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "Dosya Gönderim Hatası"
+
+#, fuzzy
+#~ msgid "File Transfer Failed"
+#~ msgstr "Dosya Gönderme Tamamlandı"
+
+#~ msgid "File Transfers"
+#~ msgstr "Dosya Aktarımları"
+
+#, fuzzy
+#~ msgid "File error"
+#~ msgstr "Dosya okunurken hata:"
+
+#, fuzzy
+#~ msgid "File transfer stopped"
+#~ msgstr "Dosya Gönderme Tamamlandı"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Dosya Aktarımları"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Dosya adı: %s"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Dosya Gönderim Hatası"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Kişisel Sohbetler"
+
+#, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Ileti alınıyor"
+
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
+#~ msgid "Gajim can not read this file"
+#~ msgstr "%s sunucu konfigurasyon dosyasına \"%s\" erişilemiyor: %s\n"
+
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Grup sohbetler"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Menüyi gizle"
+
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "<b>Ana Sayfa:</b>"
+
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Porta:"
+
+#~ msgid "Images"
+#~ msgstr "Resimler"
+
+#~ msgid "Invalid File"
+#~ msgstr "Geçersiz Dosya"
+
+#, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Kişi Davet _Et"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Kişi Davet _Et"
+
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr " Çalışılıyorum"
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "%(nickname)s Çıktı"
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Bir filim bakiyorum."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr " Çalışılıyorum"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Neden"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "grup %s yok - root kullanılacak\n"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "Yer:"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "%s hesaptan"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Kişiler"
+
+#, fuzzy
+#~ msgid "Mention: Message Background Color"
+#~ msgstr "Öntanımlı değerlerine geri al"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "İletler"
+
+#, fuzzy
+#~ msgid "Message composition"
+#~ msgstr "İletin içindekiler"
+
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "durum ileti"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "%s hesaptan"
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Kişiyi yeniden adlandır"
+
+#~ msgid "Movie"
+#~ msgstr "Filim"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Bildirimler"
+
+#, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Prox_y:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Bağlantılı"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Başlatılmadı"
+
+#, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Bildirimler"
+
+#, fuzzy
+#~ msgid "Notification Sounds"
+#~ msgstr "Bildirimler"
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Durum"
+
+#, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
+
+#, fuzzy
+#~ msgid "Open Path"
+#~ msgstr "OpenPGP:"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
+
+#, fuzzy
+#~ msgid "Organization (O)"
+#~ msgstr "Telefondayım"
+
+#~ msgid "Out"
+#~ msgstr "Dış"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "<b>Posta Kodu:</b>"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Dosya transferi iptal et"
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Bütün Bekleyen _Olayları Göster"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Plugin manager"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Tercihler"
+
+#~ msgid "Progress"
+#~ msgstr "İlerleme"
+
+#, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Vekil _Makine:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Prox_y:"
+
+#, fuzzy
+#~ msgid "Re-Login"
+#~ msgstr "%(nick)s durumu şimdi %(status)s"
+
+#, fuzzy, python-format
+#~ msgid "Reaction from %s (%s)"
+#~ msgstr "%s hesapına"
+
+#, fuzzy
+#~ msgid "Really block this contact?"
+#~ msgstr "Bu bağlantı için her zaman kabul et"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "Son Kullanılan:"
+
+#~ msgid "Recipient: "
+#~ msgstr "Alıcı:"
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Alıcı: %s"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Son Kullanılan:"
+
+#, fuzzy
+#~ msgid "Remove Group..."
+#~ msgstr "Grubu Sil"
+
+#, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Bildirim"
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "_XML Konsolu Göster"
+
+#, fuzzy
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr "Dosya aktarımları listeden sil."
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Kişiyi listeden sil"
+
+#, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Kişiyi listeden sil"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Hata Bildir"
+
+#, fuzzy
+#~ msgid "Requires: gsound"
+#~ msgstr "Dbus Denetim Altyapısı"
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Python Programlama Dili"
+
+#, fuzzy
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
+
+#, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Çıktı dosyası için paylaşımlı kitaplık `%s' gerekli\n"
+
+#, fuzzy
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STUN Sunuc:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Save File as…"
+#~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Sahip"
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "_Dosya Gönder…"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "(Burada %d seçtiğiniz varsayılıyor)\n"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "ben burdaysam"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Gönder"
+
+#, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Son durum: %s"
+
+#, fuzzy
+#~ msgid "Send File Directly…"
+#~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "_Yaşamda kal paketleri gönder"
+
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Mesajı gönder"
+
+#~ msgid "Sender: "
+#~ msgstr "Gönderen"
+
+#, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG Numara:"
+
+#, fuzzy
+#~ msgid "Server"
+#~ msgstr "_Sunuc:"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "_Sunuc:"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "MUC sunucusu"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "MUC sunucusu"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "MUC sunucusu"
+
+#, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "durum ileti"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "Yer:"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "_Çevredışı Kişileri Göster"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Özellikler:"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "_XML Konsolu Göster"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Klasör \"%s\" yazılabilir değil"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Sleeping"
+#~ msgstr "Uyuyan bir kapibara."
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr " [ %i%% ] (askıda)"
+
+#, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "Start Video Call…"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Durum satırı okunamadı"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Durum ileti:"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Durum:"
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
+#~ msgstr "Durum:"
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "Dosya Aktarımları"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Üyelik İsteği"
+
+#, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Üyelik:"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "Synchronise"
+#~ msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "GTK+ Runtime Sürümü"
+
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "<b>Bir hata oluştu:</b>"
+
+#~ msgid "The service could not be found"
+#~ msgstr "Hizmet bulunamadı"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "AIM Adres:"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "_XML Konsolu Göster"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Dosya Aktarımları"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Transfer ediliyor"
+
+#, fuzzy, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "%d paket kaldırılacak\n"
+
+#, fuzzy
+#~ msgid "Tune:"
+#~ msgstr "Albüm Ayarı"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Tip"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "Okunmamış iletler var"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Dosya Gönderme Soru"
+
+#, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Tamamlanmamış yazım denetimi kaydı"
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Hizmet bulunamadı"
+
+#, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN Sunuc:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Dosya aktarım vekil sunucları kullan"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Kullanıcı ismi"
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Kullanıcı ismi"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Video testi"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Video giriş aygıtı"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Video testi"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Görsel Bildirimler</b>"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
+
+#~ msgid "Working"
+#~ msgstr " Çalışılıyor"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Kişiyi yeniden adlandır"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Okunmamış iletler var"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
+
+#, fuzzy
+#~ msgid "You are not connected to the server"
+#~ msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
+
+#, fuzzy
+#~ msgid "You still have running file transfers"
+#~ msgstr "%s size bir dosya göndermek istiyor:"
+
+#, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Hesap"
+
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Hesaplar"
+
+#~ msgid "_Clear"
+#~ msgstr "_Temizle"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "_XML Konsolu Göster"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Öntanımlı"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Açıklama"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgid "_Download"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgid "_Download Again"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "Dosya Aktarımları"
+
+#, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Yardım"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "%s hesaptan"
+
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "Yeni posta"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
+
+#, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Sahip"
+
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "_Start Chat..."
+#~ msgstr "Sohbet _Başla"
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "_XML Konsolu Göster"
+
+#~ msgid "_Undo"
+#~ msgstr "_Geri Al"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Görünüm"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Gmail Gelen Kutusunu _Aç"
+
+#~ msgid "file transfers list"
+#~ msgstr "dosya aktarımların listesi"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Yer:"
+
+#, fuzzy, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "%s grup sohbete katıldı"

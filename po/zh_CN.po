@@ -16,10 +16,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
-"PO-Revision-Date: 2026-03-28 16:19+0000\n"
-"Last-Translator: Footboard3754 "
-"<Footboard3754@users.noreply.translate.gajim.org>\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"PO-Revision-Date: 2026-04-12 05:20+0000\n"
+"Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
+"org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -649,7 +649,7 @@ msgid ""
 msgstr "允许 Gajim 通过 D-Bus 广播有用信息，它还允许其他应用程序远程控制 Gajim"
 
 msgid "Alternate venue (optional)..."
-msgstr "替代地址（选填）…"
+msgstr "备用群聊（选填）…"
 
 msgid "Always"
 msgstr "始终"
@@ -1543,6 +1543,9 @@ msgstr "目录不可写入"
 msgid "Disable Account?"
 msgstr "禁用账号？"
 
+msgid "Disable Update"
+msgstr "禁用更新"
+
 msgid "Disabled"
 msgstr "已禁用"
 
@@ -1690,9 +1693,6 @@ msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "允许 Gajim 检测您计算机的空闲时间，以便自动设置您的状态"
-
-msgid "Enables Gajim to play sounds for various notifications"
-msgstr "允许 Gajim 播放各种通知提示音"
 
 msgid "Enables Gajim to provide a Audio preview"
 msgstr "允许 Gajim 提供音频预览"
@@ -2310,9 +2310,6 @@ msgstr ""
 "启用后，Gajim 在使用 Jingle 时将尝试使用 STUN 服务器。“stun_server”选项中配置"
 "的服务器，或由 XMPP 服务器给出的服务器。"
 
-msgid "Ignore"
-msgstr "忽略"
-
 msgid "Ignore Unknown Contacts"
 msgstr "忽略未知联系人"
 
@@ -2465,6 +2462,10 @@ msgstr "颁发给\n"
 
 msgid "Issues detected"
 msgstr "检测到的问题"
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
+msgstr "%(name)s 那边现在是 <b>%(time)s</b>"
 
 msgid "JID"
 msgstr "JID"
@@ -2628,6 +2629,9 @@ msgstr "管理您的设备…"
 msgid "Manually set the hostname for the server"
 msgstr "手动设置服务器的主机名"
 
+msgid "Mark all activities as read"
+msgstr "将所有活动标记为已读"
+
 msgid "Mark as Read"
 msgstr "标记为已读"
 
@@ -2657,9 +2661,6 @@ msgstr "成员"
 msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "仅成员"
-
-msgid "Mention: Message Background Color"
-msgstr "提及：消息背景颜色"
 
 msgid "Message"
 msgstr "消息"
@@ -2979,9 +2980,6 @@ msgstr "注意：并非所有提供者都支持匿名账号"
 msgid "Notes"
 msgstr "备注"
 
-msgid "Notification Sounds"
-msgstr "通知提示音"
-
 msgid "Notifications"
 msgstr "通知"
 
@@ -3043,6 +3041,9 @@ msgstr "打开电子邮件编辑器"
 msgid "Open Emoji Chooser"
 msgstr "打开表情符号选择器"
 
+msgid "Open File?"
+msgstr "打开文件？"
+
 msgid "Open Folder"
 msgstr "打开文件夹"
 
@@ -3057,6 +3058,11 @@ msgstr "打开文件夹"
 
 msgid "OpenGL accelerated"
 msgstr "OpenGL 加速"
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
+msgstr "打开此文件可能对您的计算机有害。确定要打开此文件吗？"
 
 msgid "Operating System"
 msgstr "操作系统"
@@ -3206,6 +3212,9 @@ msgstr "从服务器永久移除此群聊"
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr "持久"
+
+msgid "Personal Settings"
+msgstr "个人设置"
 
 msgid "Personal notes about this contact"
 msgstr "关于此联系人的个人备注"
@@ -3467,12 +3476,12 @@ msgid "React with %s"
 msgstr "使用 %s 回应"
 
 #, python-format
-msgid "Reaction from %s"
-msgstr "回应来自 %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
+msgstr "回应来自 %(nickname)s（%(chat)s）"
 
 #, python-format
-msgid "Reaction from %s (%s)"
-msgstr "回应来自 %s（%s）"
+msgid "Reaction from %s"
+msgstr "回应来自 %s"
 
 msgid "Reactions"
 msgstr "回应"
@@ -3689,9 +3698,6 @@ msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要：gnome-keyring 或 kwallet"
-
-msgid "Requires: gsound"
-msgstr "需要：gsound"
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
@@ -5280,6 +5286,9 @@ msgstr "您已被踢出"
 msgid "You have been kicked by %s"
 msgstr "您已被 %s 踢出"
 
+msgid "You have been mentioned"
+msgstr "您已被提及"
+
 msgid "You have been removed from this group chat"
 msgstr "您已被移出此群聊"
 
@@ -5511,6 +5520,9 @@ msgstr "确定(_O)"
 
 msgid "_Offline"
 msgstr "离线(_O)"
+
+msgid "_Open"
+msgstr "打开(_O)"
 
 msgid "_Overwrite"
 msgstr "覆盖(_O)"
@@ -5758,3 +5770,1713 @@ msgstr "{nick} 现在{show}{status}"
 
 msgid "…or drop it here"
 msgstr "…或将其拖放到此处"
+
+#~ msgid ""
+#~ "\n"
+#~ "If you choose to leave it permanently, you may need to be invited to be "
+#~ "able to join this group chat again"
+#~ msgstr ""
+#~ "\n"
+#~ "如果您选择永久离开，可能需要别人邀请您才能再次加入此群聊"
+
+#, python-brace-format
+#~ msgid " by {actor}"
+#~ msgstr " {actor}"
+
+#, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "%s (未同步)"
+
+#, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s 请求您分享状态"
+
+#, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s 个群聊已找到"
+
+#, python-format
+#~ msgid "%s has read up to this point"
+#~ msgstr "%s 已阅读至此"
+
+#, python-format
+#~ msgid ""
+#~ "%s is online with multiple devices.\n"
+#~ "Choose the device you would like to send the files to."
+#~ msgstr ""
+#~ "%s 有多台设备在线。\n"
+#~ "选择您想发送文件的设备。"
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
+
+#, python-format
+#~ msgid "** %s lost all their hats!"
+#~ msgstr "** %s 失去了全部头衔！"
+
+#, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr "**{actor} 已将 {nick} 的从属关系设为{affiliation}{reason}"
+
+#, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr "**{actor} 已将 {nick} 的角色设为{role}{reason}"
+
+#, python-format
+#~ msgid "** The hats of %s are now %s"
+#~ msgstr "** %s 的头衔现在是 %s"
+
+#~ msgid "** You lost all your hats!"
+#~ msgstr "** 您失去了全部头衔！"
+
+#, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr "**{actor} 已将您的从属关系设为{affiliation}{reason}"
+
+#, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "**{actor} 已将您的角色设为{role}{reason}"
+
+#~ msgid "** Your hats are now "
+#~ msgstr "** 您的头衔现在是 "
+
+#, fuzzy
+#~ msgctxt "Profile"
+#~ msgid ":Note"
+#~ msgstr "备注"
+
+#~ msgid "<Description>"
+#~ msgstr "<描述>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<插件名称>"
+
+#~ msgid "<empty>"
+#~ msgstr "<空白>"
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "无"
+
+#~ msgid "?Gender:None"
+#~ msgstr "无"
+
+#~ msgid "?Gender:Other"
+#~ msgstr "其它"
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "无"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "无"
+
+#~ msgid "?Group chat address:family"
+#~ msgstr "家庭"
+
+#~ msgid "?Group chat address:news"
+#~ msgstr "新闻"
+
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "维修"
+
+#~ msgid "?Group chat address:team"
+#~ msgstr "团队"
+
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "假期"
+
+#~ msgid "?Group chat description:Local help group"
+#~ msgstr "本地帮助小组"
+
+#~ msgid "?Group chat description:Spring gathering"
+#~ msgstr "春季集会"
+
+#~ msgid "?Group chat description:Trip planning"
+#~ msgstr "旅行计划"
+
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "归档中"
+
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "隐藏"
+
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "仅限成员"
+
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "已审核"
+
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "无需密码"
+
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "非匿名"
+
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "尚未审核"
+
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "开放"
+
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "需要密码"
+
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "永久"
+
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "公共"
+
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "半匿名"
+
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "临时"
+
+#~ msgid "?Group chat name:Family"
+#~ msgstr "家庭"
+
+#~ msgid "?Group chat name:News"
+#~ msgstr "新闻"
+
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "维修"
+
+#~ msgid "?Group chat name:Team"
+#~ msgstr "团队"
+
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "假期"
+
+#~ msgid "?Message row action:Copy"
+#~ msgstr "复制"
+
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "修订…"
+
+#~ msgid "?Message row action:Quote…"
+#~ msgstr "引用…"
+
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "多选…"
+
+#~ msgid "?Message state:Received"
+#~ msgstr "已收到"
+
+#~ msgid "?Noun:Download"
+#~ msgstr "下载"
+
+#~ msgid "?Noun:Upload"
+#~ msgstr "上传"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "无"
+
+#~ msgid "?config description:None"
+#~ msgstr "无"
+
+#~ msgid "?config type:Boolean"
+#~ msgstr "布尔型"
+
+#~ msgid "?config type:Integer"
+#~ msgstr "整数型"
+
+#~ msgid "?config type:Text"
+#~ msgstr "文本型"
+
+#~ msgid "?config:Type"
+#~ msgstr "类型"
+
+#~ msgid "?config:Value"
+#~ msgstr "值"
+
+#~ msgid "?profile:Address"
+#~ msgstr "地址"
+
+#~ msgid "?profile:Full Name"
+#~ msgstr "全名"
+
+#~ msgid "?profile:Gender"
+#~ msgstr "性别"
+
+#~ msgid "?profile:IM Address"
+#~ msgstr "IM 地址"
+
+#~ msgid "?profile:Note"
+#~ msgstr "备注"
+
+#~ msgid "?profile:Organisation"
+#~ msgstr "组织"
+
+#~ msgid "?profile:Role"
+#~ msgstr "角色"
+
+#~ msgid "?profile:Title"
+#~ msgstr "抬头"
+
+#~ msgid "?switch:Off"
+#~ msgstr "关闭"
+
+#~ msgid "?switch:On"
+#~ msgstr "开启"
+
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "中止"
+
+#~ msgid "?transfer status:Completed"
+#~ msgstr "已完成"
+
+#~ msgid "?transfer status:Not started"
+#~ msgstr "未开始"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "暂停"
+
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "停滞"
+
+#~ msgid "?transfer status:Status: "
+#~ msgstr "状态: "
+
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "已传输: "
+
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "正在传输"
+
+#~ msgid "?transfer type:Type: "
+#~ msgstr "类型: "
+
+#~ msgid "?user status:Available"
+#~ msgstr "在线"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "在线(_A)"
+
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr "一个同名文件已经存在且您没有权限覆盖它。"
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "当前活动、已完成和已停止的文件传输列表"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Aborted"
+#~ msgstr "已中止"
+
+#, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "账号 %s 仍连接"
+
+#~ msgid "Account Settings…"
+#~ msgstr "账号设置…"
+
+#~ msgid "Account is not connected"
+#~ msgstr "账号未连接"
+
+#~ msgid "Account is not connected."
+#~ msgstr "账号未连接。"
+
+#~ msgid "Action for left-clicking a preview"
+#~ msgstr "左键单击预览时的操作"
+
+#~ msgid "Activity"
+#~ msgstr "活动"
+
+#~ msgid "Add _Contact…"
+#~ msgstr "添加联系人(_C)…"
+
+#~ msgid "Add new line"
+#~ msgstr "换行"
+
+#~ msgid "Add reaction"
+#~ msgstr "添加回应"
+
+#~ msgid "Add some details…"
+#~ msgstr "添加一些详情…"
+
+#~ msgid "Add to Contact List…"
+#~ msgstr "添加到联系人列表…"
+
+#~ msgid "Add to new Group"
+#~ msgstr "添加到新分组"
+
+#~ msgid "Adjust to Status"
+#~ msgstr "根据状态调整"
+
+#~ msgid "Adjust to status"
+#~ msgstr "根据状态调整"
+
+#~ msgid "Algorithm"
+#~ msgstr "算法"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "群组"
+
+#~ msgid "Allows opening file:/ URIs when clicked."
+#~ msgstr "允许单击打开 file:/ URI。"
+
+#~ msgid "Another process is using this file."
+#~ msgstr "另一个进程正在使用此文件。"
+
+#~ msgid "Archiving Preferences"
+#~ msgstr "归档首选项"
+
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "归档首选项错误"
+
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "归档首选项已保存"
+
+#, python-format
+#~ msgid "Archiving Preferences for %s"
+#~ msgstr "%s 的归档首选项"
+
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "是否确定要离开此群聊？"
+
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "是否确定要退出 Gajim？"
+
+#~ msgid "Artists"
+#~ msgstr "艺术家"
+
+#~ msgid "Audio / Video Calls"
+#~ msgstr "音频/视频通话"
+
+#~ msgid "Audio Output Device"
+#~ msgstr "音频输出设备"
+
+#~ msgid "Audio preview is not available"
+#~ msgstr "音频预览不可用"
+
+#~ msgid "Audio/Video"
+#~ msgstr "音频/视频"
+
+#~ msgid "Author"
+#~ msgstr "作者"
+
+#~ msgid "Authorization Request"
+#~ msgstr "授权请求"
+
+#~ msgid "Auto Away Settings"
+#~ msgstr "自动离开设置"
+
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "自动延长离开设置"
+
+#~ msgid "Autojoin"
+#~ msgstr "自动加入"
+
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "自动拼写检查您的消息"
+
+#~ msgid "Back in some minutes."
+#~ msgstr "稍后回来。"
+
+#~ msgid "Back soon"
+#~ msgstr "马上回来"
+
+#~ msgid "Blocking List"
+#~ msgstr "屏蔽列表"
+
+#, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "%s 的屏蔽列表"
+
+#~ msgid "Bookmarks"
+#~ msgstr "书签"
+
+#, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "用于 %s 的书签"
+
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr "取消选定文件传输并移除未完成文件"
+
+#, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "无法覆盖现有文件“%s”"
+
+#~ msgid "Certificate Settings"
+#~ msgstr "证书设置"
+
+#~ msgid "Ch_ange Subject"
+#~ msgstr "更改主题(_A)"
+
+#~ msgid "Chat List"
+#~ msgstr "聊天列表"
+
+#~ msgid "Chat history"
+#~ msgstr "聊天记录"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天。"
+
+#~ msgid "Checking file…"
+#~ msgstr "正在检查文件…"
+
+#~ msgid "Choose Archive"
+#~ msgstr "选择存档文件"
+
+#~ msgid "Choose Avatar…"
+#~ msgstr "选择头像…"
+
+#~ msgid "Choose Emoji"
+#~ msgstr "选择表情符号"
+
+#~ msgid "Choose File to Send…"
+#~ msgstr "选择要发送的文件…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "选择联系人分组"
+
+#~ msgid "Cipher Suite"
+#~ msgstr "密码套件"
+
+#~ msgid "Clear Devices Now?"
+#~ msgstr "现在清除设备？"
+
+#~ msgid "Clear message entry"
+#~ msgstr "清除消息条目"
+
+#~ msgid "Click to change time display"
+#~ msgstr "点击即可更改时间显示"
+
+#~ msgid ""
+#~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+#~ msgstr "点击即可查看 Gajim 的维基页面，了解如何在 Flatpak 中安装插件。"
+
+#~ msgid "Client Certificate"
+#~ msgstr "客户端证书"
+
+#, python-format
+#~ msgid "Code snippet (%s)"
+#~ msgstr "代码片段 (%s)"
+
+#~ msgid "Common Name (CN)"
+#~ msgstr "通用名称 (CN)"
+
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "补全命令或昵称"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "已完成"
+
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr "通过传输连接到其他聊天软件（Facebook、IRC…）"
+
+#~ msgid "Connection Settings"
+#~ msgstr "连接设置"
+
+#~ msgid "Connection not available"
+#~ msgstr "连接不可用"
+
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "联系人列表：联系人背景颜色"
+
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "联系人列表：联系人字体"
+
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "联系人列表：联系人前景颜色"
+
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "联系人列表：分组背景颜色"
+
+#~ msgid "Contact List: Group Font"
+#~ msgstr "联系人列表：分组字体"
+
+#~ msgid "Contact List: Group Foreground Color"
+#~ msgstr "联系人列表：分组前景颜色"
+
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "联系人已取消订阅"
+
+#~ msgid "Contact information"
+#~ msgstr "联系人信息"
+
+#~ msgid "Contact list"
+#~ msgstr "联系人列表"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "对话：URL 颜色"
+
+#~ msgid "Copy Certificate Information"
+#~ msgstr "复制证书信息"
+
+#~ msgid "Copy Email Address"
+#~ msgstr "复制电子邮件地址"
+
+#~ msgid "Copy Link"
+#~ msgstr "复制链接"
+
+#~ msgid "Copy Link Location"
+#~ msgstr "复制链接位置"
+
+#~ msgid "Copy Location"
+#~ msgstr "复制位置"
+
+#~ msgid "Copy Path"
+#~ msgstr "复制路径"
+
+#~ msgid "Copy info to clipboard"
+#~ msgstr "复制信息到剪贴板"
+
+#~ msgid "Correct the last message"
+#~ msgstr "更正最后一条消息"
+
+#~ msgctxt "Message row action"
+#~ msgid "Correct…"
+#~ msgstr "更正…"
+
+#~ msgid "Create _Group Chat…"
+#~ msgstr "创建群聊(_G)…"
+
+#~ msgid "Create new group chat"
+#~ msgstr "创建新群聊"
+
+#~ msgid "Create new post"
+#~ msgstr "创建新消息"
+
+#~ msgid "Creating thumbnail failed"
+#~ msgstr "创建缩略图失败"
+
+#~ msgid "Current Developers"
+#~ msgstr "当前开发人员"
+
+#~ msgid "DNS"
+#~ msgstr "DNS"
+
+#~ msgid "Decline Invitation"
+#~ msgstr "拒绝邀请"
+
+#~ msgid "Decrease User Interface Font Size"
+#~ msgstr "减小用户界面字体大小"
+
+#~ msgid "Decryption failed"
+#~ msgstr "解密失败"
+
+#~ msgid "Default"
+#~ msgstr "默认"
+
+#~ msgid "Delete Message"
+#~ msgstr "删除消息"
+
+#~ msgid "Delete message locally?"
+#~ msgstr "在本地删除消息？"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "拒绝所有订阅请求"
+
+#~ msgid "Description: "
+#~ msgstr "描述： "
+
+#~ msgid "Developers"
+#~ msgstr "开发者"
+
+#~ msgid "Dial Number"
+#~ msgstr "拨打此号码"
+
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "直接传输（未加密）"
+
+#~ msgid "Disclose the local system time of the device Gajim runs on"
+#~ msgstr "公开 Gajim 运行的设备的本地系统时间"
+
+#~ msgid "Discussion Logs"
+#~ msgstr "讨论日志"
+
+#~ msgid "Dismiss"
+#~ msgstr "关闭"
+
+#~ msgid "Domain"
+#~ msgstr "域名"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "不再显示此消息"
+
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "下载"
+
+#~ msgid "Download File"
+#~ msgstr "下载文件"
+
+#~ msgid "Download Update"
+#~ msgstr "下载更新"
+
+#~ msgid "Download and Install"
+#~ msgstr "下载并安装"
+
+#, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "下载失败（%s）"
+
+#~ msgid "Downloading…"
+#~ msgstr "正在下载…"
+
+#~ msgid "Drop files or contacts"
+#~ msgstr "拖放文件或联系人"
+
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr "轻松向朋友和群组发送图片、视频或其他文件"
+
+#~ msgid "Eating"
+#~ msgstr "用餐中"
+
+#~ msgid "Edit Name…"
+#~ msgstr "编辑名称…"
+
+#~ msgid "Edit Profile…"
+#~ msgstr "编辑简介…"
+
+#~ msgid "Edit workspace…"
+#~ msgstr "编辑工作区…"
+
+#~ msgid "Enables Gajim to play sounds for various notifications"
+#~ msgstr "允许 Gajim 播放各种通知提示音"
+
+#~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "允许 Gajim 提供音频和视频聊天"
+
+#~ msgid "Enables Gajim to provide a notification area icon"
+#~ msgstr "允许 Gajim 提供系统通知区域图标"
+
+#~ msgid ""
+#~ "Enables Gajim to request your router to forward ports for file transfers"
+#~ msgstr "允许 Gajim 为了文件传输请求您的路由器进行端口转发"
+
+#~ msgid "Enables libappindicator, an alternative tray icon provider"
+#~ msgstr "启用 libappindicator，托盘图标替代提供方案"
+
+#~ msgid "Encrypted Certificate"
+#~ msgstr "加密证书"
+
+#~ msgid "Error received: {}"
+#~ msgstr "收到错误：{}"
+
+#~ msgid "Error while merging recordings, please try again."
+#~ msgstr "合并录音时出错，请重试。"
+
+#~ msgid "Error!"
+#~ msgstr "错误！"
+
+#, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "错误：%s（MIME 类型：%s）"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "错误：无法打开 %s 进行读取"
+
+#~ msgid "Even more features via plugins"
+#~ msgstr "通过插件实现更多功能"
+
+#~ msgid "Expires on"
+#~ msgstr "截止日期"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Family"
+#~ msgstr "家人"
+
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Windows 系统无法使用此功能"
+
+#~ msgid "Features:"
+#~ msgstr "功能："
+
+#~ msgid "File Offered"
+#~ msgstr "文件已提供"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "文件传输错误"
+
+#~ msgid "File Transfer Failed"
+#~ msgstr "文件传输失败"
+
+#~ msgid "File Transfers"
+#~ msgstr "文件传输"
+
+#~ msgid "File error"
+#~ msgstr "文件错误"
+
+#~ msgid "File size unknown"
+#~ msgstr "文件大小未知"
+
+#~ msgid "File too big, will use direct transfer (not encrypted)"
+#~ msgstr "文件太大，将使用直接传输（未加密）"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "文件传输已停止"
+
+#~ msgid "File transfers"
+#~ msgstr "文件传输"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "文件名：%s"
+
+#~ msgid "Filetransfer Preference"
+#~ msgstr "文件传输首选项"
+
+#~ msgid "Filter Chats…"
+#~ msgstr "筛选聊天…"
+
+#~ msgid "Fingerprint"
+#~ msgstr "指纹"
+
+#~ msgid ""
+#~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
+#~ msgstr "您需要安装 <tt>python-qrcode</tt> 才能通过二维码来验证。"
+
+#~ msgid "Full Message View"
+#~ msgstr "完整消息视图"
+
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim 团队"
+
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim 无法读取此文件"
+
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
+
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim：无可用更新（上次检查：%s）"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim：无可用更新（上次检查：从未）"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim：在首选项中已禁用更新检查"
+
+#~ msgid "Group Chat Invitation"
+#~ msgstr "群聊邀请"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "收到的群聊邀请"
+
+#~ msgid "Group chat support"
+#~ msgstr "群聊支持"
+
+#~ msgctxt "proxy configuration"
+#~ msgid "HTTP"
+#~ msgstr "HTTP"
+
+#~ msgid "Helps to establish calls through firewalls"
+#~ msgstr "帮助穿透防火墙以建立通话"
+
+#~ msgid "Hide this menu"
+#~ msgstr "隐藏本菜单"
+
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "隐藏/显示主窗口菜单"
+
+#~ msgid "Homepage"
+#~ msgstr "主页"
+
+#~ msgid "IP / Port"
+#~ msgstr "IP/端口"
+
+#, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr "空闲自：%s"
+
+#~ msgid ""
+#~ "If enabled, Gajim will save the main window position when hiding it, and "
+#~ "restore it when showing the window again."
+#~ msgstr ""
+#~ "如果启用，Gajim 将保存主窗口时的位置，然后在下次展示窗口列表时重新恢复。"
+
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "启用后，您可在账号窗口中将账号优先级设置为负值。请注意！若以负优先级登录"
+#~ "时，将无法接收来自服务器的任何消息‌。"
+
+#~ msgid ""
+#~ "If you quit now, the file(s) being transferred will be lost.\n"
+#~ "Do you still want to quit?"
+#~ msgstr ""
+#~ "如果现在退出，将丢失正在传输的文件。\n"
+#~ "仍要退出？"
+
+#~ msgid "Ignore"
+#~ msgstr "忽略"
+
+#~ msgid "Images"
+#~ msgstr "图片"
+
+#~ msgid "Increase User Interface Font Size"
+#~ msgstr "增大用户界面字体大小"
+
+#~ msgid "Insert Emoji"
+#~ msgstr "插入表情符号"
+
+#~ msgid "Invalid File"
+#~ msgstr "无效文件"
+
+#~ msgid "Invite Contacts…"
+#~ msgstr "邀请联系人…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "邀请新联系人"
+
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "邀请朋友加入群聊或自己加入群聊"
+
+#~ msgid "Issued on"
+#~ msgstr "颁发日期"
+
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "无法发送空文件"
+
+#~ msgid "I’m eating."
+#~ msgstr "我正在用餐。"
+
+#~ msgid "I’m out enjoying life."
+#~ msgstr "我正在享受户外生活。"
+
+#, python-format
+#~ msgid ""
+#~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
+#~ "add this address to your contact list?"
+#~ msgstr ""
+#~ "我正在同步来自“%s”账号的联系人。可以请您将此地址添加到您的联系人列表吗？"
+
+#~ msgid "I’m watching a movie."
+#~ msgstr "我正在看电影。"
+
+#~ msgid "I’m working."
+#~ msgstr "我正在工作。"
+
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "保留和管理您的所有聊天记录"
+
+#~ msgid "Key Size"
+#~ msgstr "密钥长度"
+
+#~ msgid "Last but not least"
+#~ msgstr "最后但同样重要的是"
+
+#, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "最后上线 %s"
+
+#~ msgid "Left Click Action"
+#~ msgstr "左键单击操作"
+
+#~ msgid "Let others know if you read up to this point"
+#~ msgstr "让其他人知道您已阅读至此"
+
+#~ msgid "Let this contact know if you read up to this point"
+#~ msgstr "让此联系人知道您已阅读至此"
+
+#~ msgid "Local System Time"
+#~ msgstr "本地系统时间"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local help group"
+#~ msgstr "本地互助组"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "本地新闻和报道"
+
+#~ msgid "Location:"
+#~ msgstr "位置信息："
+
+#~ msgid "Login Settings"
+#~ msgstr "登录设置"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr "直接从聊天窗口在维基百科、词典或其他搜索引擎上查找内容"
+
+#~ msgid "Maintainers"
+#~ msgstr "维护者"
+
+#~ msgid "Manage Accounts…"
+#~ msgstr "管理账号…"
+
+#~ msgid "Manage Contact List"
+#~ msgstr "管理联系人列表"
+
+#~ msgid "Mention: Message Background Color"
+#~ msgstr "提及：消息背景颜色"
+
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "消息更正: 背景颜色"
+
+#~ msgid "Message composition"
+#~ msgstr "消息撰写"
+
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "仅当启用了存储聊天记录并且对方在您的联系人列表时，消息才可供稍后阅读。"
+
+#, python-format
+#~ msgid "Moderate %(count)s messages from %(participant)s?"
+#~ msgstr "撤回来自 %(participant)s 的 %(count)s 条消息？"
+
+#~ msgid "Moderate message?"
+#~ msgstr "撤回消息？"
+
+#~ msgid "Modify Gateway…"
+#~ msgstr "修改网关…"
+
+#~ msgid "Move Contact"
+#~ msgstr "移动联系人"
+
+#~ msgid "Movie"
+#~ msgstr "电影"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "绝不错过任何消息，与您的所有的聊天客户端保持同步"
+
+#~ msgctxt "Group chat name"
+#~ msgid "News"
+#~ msgstr "新闻"
+
+#~ msgid "No Connection Available"
+#~ msgstr "无可用连接"
+
+#~ msgid "No Notifications"
+#~ msgstr "没有通知"
+
+#~ msgid "No proxy used"
+#~ msgstr "未使用代理"
+
+#~ msgid "Not Connected"
+#~ msgstr "未连接"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "未开始"
+
+#~ msgid "Notification Area Icon"
+#~ msgstr "通知区域图标"
+
+#~ msgid "Notification Sounds"
+#~ msgstr "通知提示音"
+
+#~ msgid "Notifications When Away"
+#~ msgstr "离开时通知"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "在通知区域中通知事件。"
+
+#~ msgid "Online Status"
+#~ msgstr "在线状态"
+
+#~ msgid "Open Link"
+#~ msgstr "打开链接"
+
+#~ msgid "Open Link in Browser"
+#~ msgstr "在浏览器中打开链接"
+
+#~ msgid "Open Path"
+#~ msgstr "打开路径"
+
+#~ msgid "Open _Folder"
+#~ msgstr "打开文件夹(_F)"
+
+#~ msgid "Open search bar"
+#~ msgstr "打开搜索栏"
+
+#~ msgid "Organization (O)"
+#~ msgstr "组织 (O)"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "组织单元 (OU)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "组织单元 (OU): "
+
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "用工作区整理您的聊天"
+
+#~ msgid "Out"
+#~ msgstr "外出"
+
+#~ msgid "PKCS12 Files"
+#~ msgstr "PKCS12 文件"
+
+#~ msgid "Pa_use/Resume"
+#~ msgstr "暂停(_U)/继续"
+
+#~ msgid "Password contains prohibited characters"
+#~ msgstr "密码包含禁用字符"
+
+#~ msgid "Past as Code Block"
+#~ msgstr "粘贴为代码块"
+
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "暂停或恢复文件传输"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Paused"
+#~ msgstr "已暂停"
+
+#~ msgid "Pending Event"
+#~ msgstr "待处理事件"
+
+#~ msgid "Pl_ugins"
+#~ msgstr "插件(_U)"
+
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "请使用 yyyy-mm-dd 格式"
+
+#~ msgid "Plugin manager"
+#~ msgstr "插件管理器"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "插件：无可用更新"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "插件：在首选项中已禁用更新检查"
+
+#~ msgid ""
+#~ "Preferred file transfer mechanism for file drag&drop on a chat window"
+#~ msgstr "在聊天窗口中拖放文件的首选文件传输机制"
+
+#~ msgid "Progress"
+#~ msgstr "进度"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Project discussion"
+#~ msgstr "项目讨论"
+
+#~ msgid "Proxy Host"
+#~ msgstr "代理主机"
+
+#~ msgid "Proxy Type"
+#~ msgstr "代理类型"
+
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "引用…"
+
+#~ msgid "Re-Login"
+#~ msgstr "重新登录"
+
+#, python-format
+#~ msgid "Reaction from %s (%s)"
+#~ msgstr "回应来自 %s（%s）"
+
+#~ msgid "Really block this contact?"
+#~ msgstr "确定屏蔽此联系人？"
+
+#~ msgid "Recent history"
+#~ msgstr "近期历史"
+
+#~ msgid "Recipient: "
+#~ msgstr "接收者： "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "接收者：%s"
+
+#~ msgid "Remove Chat History"
+#~ msgstr "移除聊天记录"
+
+#~ msgid "Remove Group..."
+#~ msgstr "移除分组…"
+
+#~ msgid "Remove Notification"
+#~ msgstr "移除通知"
+
+#~ msgid "Remove Transport"
+#~ msgstr "移除传输"
+
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr "从列表移除已完成、已取消和失败的文件传输"
+
+#~ msgid "Remove contact from contact list"
+#~ msgstr "从联系人列表移除联系人"
+
+#~ msgid "Remove from contact list"
+#~ msgstr "从联系人列表移除"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Repairs"
+#~ msgstr "修理"
+
+#~ msgid "Report"
+#~ msgstr "报告"
+
+#~ msgid ""
+#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+#~ "ugly-1.0, gst-libav"
+#~ msgstr ""
+#~ "需要：farstream-0.2、gstreamer-1.0、gst-plugins-base-1.0、gst-plugins-"
+#~ "ugly-1.0、gst-libav"
+
+#~ msgid "Requires: gsound"
+#~ msgstr "需要：gsound"
+
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "需要：gupnpigd-1.0"
+
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "需要：libappindicator3"
+
+#~ msgid "Requires: libxss"
+#~ msgstr "需要：libxss"
+
+#~ msgid "SHA-1"
+#~ msgstr "SHA-1"
+
+#~ msgid "SHA-256"
+#~ msgstr "SHA-256"
+
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#~ msgid "STUN Server"
+#~ msgstr "STUN 服务器"
+
+#~ msgid "STUN Server Settings"
+#~ msgstr "STUN 服务器设置"
+
+#~ msgid "Save File as…"
+#~ msgstr "另存文件为…"
+
+#~ msgid "Save as…"
+#~ msgstr "另存为…"
+
+#~ msgid "Search your conversation"
+#~ msgstr "搜索您的对话"
+
+#~ msgid "Select File…"
+#~ msgstr "选择文件…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "选择音频输出（例如扬声器、耳机）"
+
+#~ msgid "Select an emoji"
+#~ msgstr "选择表情符号"
+
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "选择您想要与之同步的账号"
+
+#~ msgid "Select your video input device (e.g. webcam, screen capture)"
+#~ msgstr "选择视频输入设备（例如网络摄像头、屏幕捕获）"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "选定的安全标签：%s"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "发送(_S)"
+
+#~ msgid "Send Chatstate"
+#~ msgstr "发送聊天状态"
+
+#~ msgid "Send File Directly…"
+#~ msgstr "直接发送文件…"
+
+#~ msgid "Send Files Directly"
+#~ msgstr "直接发送文件"
+
+#~ msgid "Send Read Markers"
+#~ msgstr "发送已读标记"
+
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr "按 Ctrl+Enter 发送消息，按 Enter 键换行。"
+
+#~ msgid "Send the message"
+#~ msgstr "发送消息"
+
+#~ msgid "Sender: "
+#~ msgstr "发送者： "
+
+#~ msgid "Serial Number"
+#~ msgstr "序列号"
+
+#~ msgid "Server"
+#~ msgstr "服务器"
+
+#~ msgid "Server Info"
+#~ msgstr "服务器信息"
+
+#~ msgid "Server Software"
+#~ msgstr "服务器软件"
+
+#, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "服务器软件：%s\n"
+
+#~ msgid "Server Uptime"
+#~ msgstr "服务器运行时间"
+
+#~ msgid "Set status message"
+#~ msgstr "设置状态消息"
+
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr "设置活动或音乐来向朋友展示您的感受"
+
+#~ msgid "Show"
+#~ msgstr "显示"
+
+#~ msgid "Show Gajim"
+#~ msgstr "显示 Gajim"
+
+#~ msgid "Show Location"
+#~ msgstr "显示位置"
+
+#~ msgid "Show My Video Stream"
+#~ msgstr "显示我的视频流"
+
+#~ msgid "Show Notifications"
+#~ msgstr "显示通知"
+
+#~ msgid "Show Offline Contacts"
+#~ msgstr "显示离线联系人"
+
+#~ msgid "Show Subject"
+#~ msgstr "显示主题"
+
+#~ msgid "Show _Features"
+#~ msgstr "显示功能(_F)"
+
+#~ msgid "Show a live preview to test your video source"
+#~ msgstr "显示实时预览以测试您的视频源"
+
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"
+
+#~ msgid "Show debug console"
+#~ msgstr "显示调试控制台"
+
+#~ msgid "Show previews for files"
+#~ msgstr "显示文件预览"
+
+#~ msgid "Show the header bar"
+#~ msgstr "显示标题栏"
+
+#~ msgid "Show your own video stream in calls"
+#~ msgstr "在通话中显示您自己的视频流"
+
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr "显示您与您的联系人之间的传输文件列表"
+
+#~ msgid "Shutting down Gajim"
+#~ msgstr "正在关闭 Gajim"
+
+#~ msgid "Sleeping"
+#~ msgstr "正在睡觉"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Spring gathering"
+#~ msgstr "春聚"
+
+#~ msgid "Sta_tus"
+#~ msgstr "状态(_T)"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "已停滞"
+
+#~ msgid "Start New Chat"
+#~ msgstr "开始新聊天"
+
+#~ msgid "Start Video Call…"
+#~ msgstr "开始视频通话…"
+
+#~ msgid "Start Voice Call…"
+#~ msgstr "开始语音通话…"
+
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "所有账号的状态和状态消息"
+
+#~ msgid "Status message…"
+#~ msgstr "状态消息…"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "状态： "
+
+#, python-format
+#~ msgid "Status: %s"
+#~ msgstr "状态：%s"
+
+#~ msgid "Stop File Transfers"
+#~ msgstr "停止文件传输"
+
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "已停止与您分享状态"
+
+#~ msgid "Subject Alt Names"
+#~ msgstr "主题备用名称"
+
+#~ msgid "Submit"
+#~ msgstr "提交"
+
+#~ msgid "Subscription Request"
+#~ msgstr "订阅请求"
+
+#~ msgid "Subscription:"
+#~ msgstr "订阅："
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "支持多个账号"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "支持服务发现，包括节点和用户搜索"
+
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "切换至第一至第九聊天"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "切换至第一至第九工作区"
+
+#~ msgid "Synchronise"
+#~ msgstr "同步"
+
+#~ msgid "Synchronize Accounts"
+#~ msgstr "同步账号"
+
+#~ msgid "TLS Version"
+#~ msgstr "TLS 版本"
+
+#, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "TLS 验证失败：%s"
+
+#~ msgctxt "Group chat name"
+#~ msgid "Team"
+#~ msgstr "团队"
+
+#, python-format
+#~ msgid ""
+#~ "The file %s has been received, but it seems to have been damaged along "
+#~ "the way.\n"
+#~ "Do you want to download it again?"
+#~ msgstr ""
+#~ "文件 %s 已经收到，但似乎在传送中损坏了。\n"
+#~ "是否要重新下载？"
+
+#~ msgid "The service could not be found"
+#~ msgstr "未找到此服务"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "此账号没有连接到服务器"
+
+#~ msgid "This is your XMPP address"
+#~ msgstr "这是您的 XMPP 地址"
+
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "切换菜单栏"
+
+#~ msgid "Topic"
+#~ msgstr "话题"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "已传输： "
+
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "传输中"
+
+#, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "传输“%s”将会移除"
+
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "将成对出现的 * / _ 视为可能的格式控制字符。"
+
+#~ msgctxt "Group chat description"
+#~ msgid "Trip planning"
+#~ msgstr "旅行计划"
+
+#~ msgid "Tune:"
+#~ msgstr "音乐："
+
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "类型： "
+
+#~ msgid "UPnP-IGD Port Forwarding"
+#~ msgstr "UPnP-IGD 端口转发"
+
+#~ msgid "Unread Messages"
+#~ msgstr "未读消息"
+
+#~ msgid "Unselect Chat"
+#~ msgstr "取消选择聊天"
+
+#~ msgid "Unverified"
+#~ msgstr "未经验证"
+
+#~ msgid "Update Check"
+#~ msgstr "检查更新"
+
+#~ msgid "Upload Files"
+#~ msgstr "上传文件"
+
+#~ msgid "Upload could not be completed."
+#~ msgstr "无法完成上传。"
+
+#~ msgid "Use STUN Server"
+#~ msgstr "使用 STUN 服务器"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "使用文件传输代理"
+
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "使用筛选器缩小搜索范围：\n"
+#~ "发送者：“用户名”搜索词\n"
+#~ "之前：“yyyy-mm-dd”搜索词\n"
+#~ "之后：“yyyy-mm-dd”搜索词"
+
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "使用您喜欢的表情图标，设置您的个人资料照片"
+
+#~ msgid "User Interface"
+#~ msgstr "用户界面"
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "重命名…"
+
+#~ msgid "Video Framerate"
+#~ msgstr "视频帧速率"
+
+#~ msgid "Video Input Device"
+#~ msgstr "视频输入设备"
+
+#~ msgid "Video Resolution"
+#~ msgstr "视频分辨率"
+
+#~ msgid "Video calls are not supported"
+#~ msgstr "不支持视频通话"
+
+#~ msgid "Visual Notifications"
+#~ msgstr "视觉通知"
+
+#~ msgid "WebSocket URL"
+#~ msgstr "WebSocket URL"
+
+#~ msgid "What happened"
+#~ msgstr "发生了什么"
+
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "为什么要撤回这些消息？"
+
+#~ msgid "Working"
+#~ msgstr "工作中"
+
+#~ msgid "Workspaces"
+#~ msgstr "工作区"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML 控制台可用来查看协议层情况"
+
+#~ msgid "You Have Unread Messages"
+#~ msgstr "您有未读消息"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "您即将退出 Gajim"
+
+#~ msgid "You are not connected"
+#~ msgstr "您未连接"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "您未连接到服务器"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr "只有连接后才能与账号同步。"
+
+#, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "您没有此目录的权限。\n"
+#~ "错误：%s。"
+
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "您没有权限在这个目录里创建文件。"
+
+#~ msgid "You dropped something Gajim could not process: %s"
+#~ msgstr "您拖放了 Gajim 无法处理的对象: %s"
+
+#~ msgid "You still have running file transfers"
+#~ msgstr "您仍有正在运行的文件传输"
+
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr "您将无法再与使用此传输的联系人收发消息。"
+
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "您的归档首选项已成功保存。"
+
+#~ msgid "ZZZZzzzzzZZZZZ"
+#~ msgstr "ZZZZzzzzzZZZZZ"
+
+#~ msgid "_Account"
+#~ msgstr "账号(_A)"
+
+#~ msgid "_Accounts"
+#~ msgstr "账号(_A)"
+
+#~ msgid "_Clear"
+#~ msgstr "清除(_C)"
+
+#~ msgid "_Debug Console"
+#~ msgstr "调试控制台(_D)"
+
+#~ msgid "_Default"
+#~ msgstr "默认(_D)"
+
+#~ msgid "_Description"
+#~ msgstr "描述(_D)"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "不再询问(_D)"
+
+#~ msgid "_Download"
+#~ msgstr "下载(_D)"
+
+#~ msgid "_Download Again"
+#~ msgstr "重新下载(_D)"
+
+#~ msgid "_File Transfer"
+#~ msgstr "文件传输(_F)"
+
+#~ msgid "_Help"
+#~ msgstr "帮助(_H)"
+
+#~ msgid "_Login"
+#~ msgstr "登录(_L)"
+
+#~ msgid "_Manage Account…"
+#~ msgstr "管理账号(_M)…"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "修改账号(_M)…"
+
+#~ msgid "_New post"
+#~ msgstr "新帖子(_N)"
+
+#~ msgid "_Open Folder"
+#~ msgstr "打开文件夹(_O)"
+
+#~ msgid "_Preferences"
+#~ msgstr "首选项(_P)"
+
+#~ msgid "_Save as…"
+#~ msgstr "另存为(_S)…"
+
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "文件传输完成时显示通知(_S)"
+
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "开始/加入聊天(_S)…"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "开始聊天(_S)…"
+
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "切换菜单栏(_T)"
+
+#~ msgid "_Undo"
+#~ msgstr "撤销(_U)"
+
+#~ msgid "_View"
+#~ msgstr "查看(_V)"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "打开文件夹"
+
+#~ msgid "dark skin tone"
+#~ msgstr "较深肤色"
+
+#, python-format
+#~ msgid "e.g. %s"
+#~ msgstr "例如：%s"
+
+#~ msgctxt "Group chat address"
+#~ msgid "family"
+#~ msgstr "家人"
+
+#~ msgid "file transfers list"
+#~ msgstr "文件传输列表"
+
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr ""
+#~ "邀请您加入群聊。\n"
+#~ "是否要加入？"
+
+#~ msgid "help"
+#~ msgstr "帮助"
+
+#~ msgid "light skin tone"
+#~ msgstr "较浅肤色"
+
+#~ msgid "medium skin tone"
+#~ msgstr "中等肤色"
+
+#~ msgid "medium-dark skin tone"
+#~ msgstr "中等-深肤色"
+
+#~ msgid "medium-light skin tone"
+#~ msgstr "中等-浅肤色"
+
+#~ msgctxt "Group chat address"
+#~ msgid "news"
+#~ msgstr "新闻"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"
+
+#~ msgctxt "Group chat address"
+#~ msgid "repairs"
+#~ msgstr "修理"
+
+#~ msgctxt "Group chat address"
+#~ msgid "team"
+#~ msgstr "团队"
+
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "假期"
+
+#~ msgid "yesterday "
+#~ msgstr "昨天 "
+
+#, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "{by} 从群聊移除了 {nick}{reason}"

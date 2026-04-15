@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
 "PO-Revision-Date: 2025-11-14 00:19+0000\n"
 "Last-Translator: نادکارو <nadkaro@riseup.net>\n"
 "Language-Team: Persian <https://translate.gajim.org/projects/gajim/master/fa/"
@@ -1514,6 +1514,9 @@ msgstr ""
 msgid "Disable Account?"
 msgstr ""
 
+msgid "Disable Update"
+msgstr ""
+
 msgid "Disabled"
 msgstr ""
 
@@ -1653,9 +1656,6 @@ msgstr ""
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
-msgstr ""
-
-msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide a Audio preview"
@@ -2258,9 +2258,6 @@ msgid ""
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
-msgid "Ignore"
-msgstr ""
-
 msgid "Ignore Unknown Contacts"
 msgstr ""
 
@@ -2410,6 +2407,10 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
+msgstr ""
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
 msgid "JID"
@@ -2572,6 +2573,9 @@ msgstr ""
 msgid "Manually set the hostname for the server"
 msgstr ""
 
+msgid "Mark all activities as read"
+msgstr ""
+
 msgid "Mark as Read"
 msgstr ""
 
@@ -2600,9 +2604,6 @@ msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Members Only"
-msgstr ""
-
-msgid "Mention: Message Background Color"
 msgstr ""
 
 msgid "Message"
@@ -2917,9 +2918,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-msgid "Notification Sounds"
-msgstr ""
-
 msgid "Notifications"
 msgstr ""
 
@@ -2981,6 +2979,9 @@ msgstr ""
 msgid "Open Emoji Chooser"
 msgstr ""
 
+msgid "Open File?"
+msgstr ""
+
 msgid "Open Folder"
 msgstr ""
 
@@ -2994,6 +2995,11 @@ msgid "Open folder"
 msgstr ""
 
 msgid "OpenGL accelerated"
+msgstr ""
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
 msgstr ""
 
 msgid "Operating System"
@@ -3141,6 +3147,9 @@ msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
+msgstr ""
+
+msgid "Personal Settings"
 msgstr ""
 
 msgid "Personal notes about this contact"
@@ -3398,11 +3407,11 @@ msgid "React with %s"
 msgstr ""
 
 #, python-format
-msgid "Reaction from %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
 msgstr ""
 
 #, python-format
-msgid "Reaction from %s (%s)"
+msgid "Reaction from %s"
 msgstr ""
 
 msgid "Reactions"
@@ -3615,9 +3624,6 @@ msgid ""
 msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
-msgstr ""
-
-msgid "Requires: gsound"
 msgstr ""
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
@@ -5177,6 +5183,9 @@ msgstr ""
 msgid "You have been kicked by %s"
 msgstr ""
 
+msgid "You have been mentioned"
+msgstr ""
+
 msgid "You have been removed from this group chat"
 msgstr ""
 
@@ -5405,6 +5414,9 @@ msgid "_OK"
 msgstr ""
 
 msgid "_Offline"
+msgstr ""
+
+msgid "_Open"
 msgstr ""
 
 msgid "_Overwrite"

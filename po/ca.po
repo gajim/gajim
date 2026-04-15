@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -1693,6 +1693,10 @@ msgstr "_No Disponible"
 msgid "Disable Account?"
 msgstr "Compte"
 
+#, fuzzy
+msgid "Disable Update"
+msgstr "Inhabilitat"
+
 msgid "Disabled"
 msgstr "Inhabilitat"
 
@@ -1842,9 +1846,6 @@ msgstr ""
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
-msgstr ""
-
-msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide a Audio preview"
@@ -2523,9 +2524,6 @@ msgid ""
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
-msgid "Ignore"
-msgstr ""
-
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Convida _Contactes"
@@ -2702,6 +2700,10 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
+msgstr ""
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
 msgid "JID"
@@ -2887,6 +2889,9 @@ msgstr "Gestió de perfils de proxy"
 msgid "Manually set the hostname for the server"
 msgstr ""
 
+msgid "Mark all activities as read"
+msgstr ""
+
 msgid "Mark as Read"
 msgstr ""
 
@@ -2919,9 +2924,6 @@ msgstr "_Membre"
 msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "_Membre"
-
-msgid "Mention: Message Background Color"
-msgstr ""
 
 #, fuzzy
 msgid "Message"
@@ -3282,10 +3284,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#, fuzzy
-msgid "Notification Sounds"
-msgstr "Afegeix _Notificació Especial..."
-
 msgid "Notifications"
 msgstr ""
 
@@ -3353,6 +3351,10 @@ msgid "Open Emoji Chooser"
 msgstr "_Obre Editor de Correu"
 
 #, fuzzy
+msgid "Open File?"
+msgstr "_Obre Carpeta Contenidora"
+
+#, fuzzy
 msgid "Open Folder"
 msgstr "_Obre Carpeta Contenidora"
 
@@ -3368,6 +3370,11 @@ msgid "Open folder"
 msgstr "_Obre Carpeta Contenidora"
 
 msgid "OpenGL accelerated"
+msgstr ""
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
 msgstr ""
 
 #, fuzzy
@@ -3533,6 +3540,10 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr ""
+
+#, fuzzy
+msgid "Personal Settings"
+msgstr "Connectors"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3824,11 +3835,11 @@ msgid "React with %s"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Reaction from %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
 msgstr "_Minimitza en tancar"
 
 #, fuzzy, python-format
-msgid "Reaction from %s (%s)"
+msgid "Reaction from %s"
 msgstr "_Minimitza en tancar"
 
 #, fuzzy
@@ -4081,10 +4092,6 @@ msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: gsound"
-msgstr "requereix"
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
 msgstr ""
@@ -5839,6 +5846,10 @@ msgid "You have been kicked by %s"
 msgstr "Sobrenom:"
 
 #, fuzzy
+msgid "You have been mentioned"
+msgstr "Sobrenom:"
+
+#, fuzzy
 msgid "You have been removed from this group chat"
 msgstr "Sobrenom:"
 
@@ -6104,6 +6115,10 @@ msgstr ""
 msgid "_Offline"
 msgstr "Desconnectat"
 
+#, fuzzy
+msgid "_Open"
+msgstr "_Copia la ubicació de l'enllaç"
+
 msgid "_Overwrite"
 msgstr ""
 
@@ -6367,3 +6382,896 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Avançat"
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat address:news"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat address:team"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "?config description:None"
+#~ msgstr "Descripció:"
+
+#, fuzzy
+#~ msgid "?config:Value"
+#~ msgstr "_Configura"
+
+#, fuzzy
+#~ msgid "?profile:Address"
+#~ msgstr "_Copia adreça JID/Email"
+
+#, fuzzy
+#~ msgid "?profile:Full Name"
+#~ msgstr "Nom:"
+
+#, fuzzy
+#~ msgid "?profile:Note"
+#~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "?profile:Role"
+#~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Completed"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Not started"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Paused"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Status: "
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "?user status:_Disponible"
+
+#, fuzzy
+#~ msgid "?user status:Available"
+#~ msgstr "?user status:_Disponible"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "?user status:_Disponible"
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr ""
+#~ "Una llista de les transferències de fitxers actives, completades i "
+#~ "aturades"
+
+#, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Entra a aquesta sala _automàticament quan em connecto"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Entra a aquesta sala _automàticament quan em connecto"
+
+#, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Activa"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Activa"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+#~ msgid "Add to Contact List…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "Adjust to Status"
+#~ msgstr "Ajustar a estat"
+
+#, fuzzy
+#~ msgid "Adjust to status"
+#~ msgstr "Ajustar a estat"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Autors:"
+
+#, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Autojoin"
+#~ msgstr "Entra automàticament"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Adreces d'interès"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "Adreces d'interès"
+
+#, fuzzy
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr ""
+#~ "Cancel.la la transferència seleccionada i esborra els fitxers incomplets."
+
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "El Certificat està xifrat"
+
+#, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Canvia Tema..."
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Connexió"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Mostra el perfil del contacte (Ctrl+I)"
+
+#, fuzzy
+#~ msgid "Client Certificate"
+#~ msgstr "Certificat de client"
+
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Connexió"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Fila del contacte"
+
+#, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
+#~ msgid "Contact information"
+#~ msgstr "Afegeix un contacte nou"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Històric de converses"
+
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "El Certificat està xifrat"
+
+#, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "_Copia adreça JID/Email"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Copy Link Location"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "Create new group chat"
+#~ msgstr "Grups de xat"
+
+#~ msgid "Create new post"
+#~ msgstr "Crea nou missatge"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "_No Disponible"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Missatges preconfigurats:"
+
+#, fuzzy
+#~ msgid "Download File"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Mostra els contactes desconnectats"
+
+#, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Nom:"
+
+#, fuzzy
+#~ msgid "Edit Profile…"
+#~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Certificat de client"
+
+#, fuzzy
+#~ msgid "Expires on"
+#~ msgstr "expira"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Característiques"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "File transfers"
+#~ msgstr "Transferències de fitxers"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Envia Missatge Privat"
+
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Grups de xat"
+
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Pàgina d'inici:"
+
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "_Port:"
+
+#, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Convida _Contactes"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Convida _Contactes"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Versió:"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "_Modifica Compte..."
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "missatge"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "_Modifica Compte..."
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Afegeix un contacte nou"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "_No Disponible"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Prox_y:"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Entrada següent"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Entrada següent"
+
+#, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+#~ msgid "Notification Sounds"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Estat"
+
+#, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Obri l'enllaç al navegador"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "_Obre Carpeta Contenidora"
+
+#, fuzzy
+#~ msgid "Organization (O)"
+#~ msgstr "Operacions d'Administració"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Cancel.la la transferència de fitxer."
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Events _Personals"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "Port del servidor intermediari:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Prox_y:"
+
+#, fuzzy, python-format
+#~ msgid "Reaction from %s (%s)"
+#~ msgstr "_Minimitza en tancar"
+
+#, fuzzy
+#~ msgid "Recent history"
+#~ msgstr "Historial"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Historial"
+
+#, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "Mostra Transports"
+
+#, fuzzy
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr ""
+#~ "Esborra de la llista les transferències completades, cancel.lades o "
+#~ "fallides"
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Esborra transferència de fitxer de la llista."
+
+#, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Esborra transferència de fitxer de la llista."
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Informa de l'error"
+
+#, fuzzy
+#~ msgid "Requires: gsound"
+#~ msgstr "requereix"
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "requereix"
+
+#, fuzzy
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Servidor MUC"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Connectors"
+
+#, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Desa la contrasenya"
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "Envia _Fitxer"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "Envia"
+
+#, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Inactiva"
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Envia _Fitxer"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Enviar paquets _keep-alive"
+
+#, fuzzy
+#~ msgid "Send the message"
+#~ msgstr "Envia missatge"
+
+#, fuzzy
+#~ msgid "Server"
+#~ msgstr "_Servidor:"
+
+#, fuzzy
+#~ msgid "Server Info"
+#~ msgstr "Servidor:"
+
+#, fuzzy
+#~ msgid "Server Software"
+#~ msgstr "Servidor:"
+
+#, fuzzy
+#~ msgid "Server Uptime"
+#~ msgstr "Servidor:"
+
+#, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Mostra els contactes desconnectats"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Característiques"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr ""
+#~ "Mostra una llista de transferències de fitxers entre tu i els altres"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Instal·lat"
+
+#, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Comença Xat"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Comença Xat"
+
+#, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Sincronit_za l'estat del compte amb l'estat global"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Estat"
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
+#~ msgstr "Estat"
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "Transferències de fitxers"
+
+#, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Descripció:"
+
+#, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Sinc_ronitza l'estat del compte amb l'estat global"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "Versió:"
+
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Certificat de client"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Copia adreça JID/Email"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Mostra Transports"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Envia _Fitxer"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "_Tipus:"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "_Veu"
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Envia _Fitxer"
+
+#, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Servidor MUC"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Fer ús de proxis per a transferència de fitxers"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Nom d'usuari:"
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Nom d'usuari:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Afegeix un contacte nou"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+#~ msgid "_Account"
+#~ msgstr "Compte"
+
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Comptes"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Per defecte:"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Descripció:"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "_Help"
+#~ msgstr "Ajuda"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Modifica Compte..."
+
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "Afegeix un contacte nou"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "_Obre Carpeta Contenidora"
+
+#, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Desa la contrasenya"
+
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Inicia Xat"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "Inicia Xat..."
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Mostra Transports"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Veure"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "_Obre Carpeta Contenidora"
+
+#~ msgid "file transfers list"
+#~ msgstr "llista de trasferència de fitxers"

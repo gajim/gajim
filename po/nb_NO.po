@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 13:34+0000\n"
+"POT-Creation-Date: 2026-04-11 19:55+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -1754,6 +1754,10 @@ msgstr "Mappa \"%s\" er ikke skrivbar"
 msgid "Disable Account?"
 msgstr "Ugyldig konto"
 
+#, fuzzy
+msgid "Disable Update"
+msgstr "Avskrudd"
+
 msgid "Disabled"
 msgstr "Avskrudd"
 
@@ -1915,10 +1919,6 @@ msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "Evnen til å måle uvirksom tid for å kunne sette auto-status."
-
-#, fuzzy
-msgid "Enables Gajim to play sounds for various notifications"
-msgstr "Evne til å starte lyd- og video-samtaler."
 
 #, fuzzy
 msgid "Enables Gajim to provide a Audio preview"
@@ -2634,9 +2634,6 @@ msgstr ""
 "Gajim vil forsøke å bruke STUN-tjener ved bruk av Jingle. Valget er i "
 "\"stun_server\", eller det gitt av XMPP-tjeneren."
 
-msgid "Ignore"
-msgstr ""
-
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Inviter _kontakter"
@@ -2813,6 +2810,10 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
+msgstr ""
+
+#, python-format
+msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
 msgid "JID"
@@ -3007,6 +3008,9 @@ msgstr "Behandle mellomtjenere"
 msgid "Manually set the hostname for the server"
 msgstr "Sett vertsnavnet for tjeneren manuelt"
 
+msgid "Mark all activities as read"
+msgstr ""
+
 msgid "Mark as Read"
 msgstr ""
 
@@ -3040,10 +3044,6 @@ msgstr "Medlem"
 msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Medlem"
-
-#, fuzzy
-msgid "Mention: Message Background Color"
-msgstr "_Tilbakestill til forvalgte farger"
 
 msgid "Message"
 msgstr "Melding"
@@ -3408,10 +3408,6 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#, fuzzy
-msgid "Notification Sounds"
-msgstr "Merknader"
-
 msgid "Notifications"
 msgstr "Merknader"
 
@@ -3481,6 +3477,10 @@ msgid "Open Emoji Chooser"
 msgstr "_Åpne E-post-behandler"
 
 #, fuzzy
+msgid "Open File?"
+msgstr "_Åpne inneholdende katalog"
+
+#, fuzzy
 msgid "Open Folder"
 msgstr "_Åpne inneholdende katalog"
 
@@ -3496,6 +3496,11 @@ msgid "Open folder"
 msgstr "Åpne _inneholdende mappe"
 
 msgid "OpenGL accelerated"
+msgstr ""
+
+msgid ""
+"Opening this file may be harmful for your computer. Do you really want to "
+"open this file?"
 msgstr ""
 
 #, fuzzy
@@ -3667,6 +3672,10 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr ""
+
+#, fuzzy
+msgid "Personal Settings"
+msgstr "Tillegg"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3964,11 +3973,11 @@ msgid "React with %s"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Reaction from %s"
+msgid "Reaction from %(nickname)s (%(chat)s)"
 msgstr "_Handlinger for \"%s\""
 
 #, fuzzy, python-format
-msgid "Reaction from %s (%s)"
+msgid "Reaction from %s"
 msgstr "_Handlinger for \"%s\""
 
 #, fuzzy
@@ -4227,10 +4236,6 @@ msgstr ""
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Krever gnome-keyring og python-gnome2-desktop, eller kwalletcli."
-
-#, fuzzy
-msgid "Requires: gsound"
-msgstr "Krever python-dbus."
 
 #, fuzzy
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
@@ -6089,6 +6094,10 @@ msgid "You have been kicked by %s"
 msgstr "%(jid)s har blitt invitert til dette rommet"
 
 #, fuzzy
+msgid "You have been mentioned"
+msgstr "%(jid)s har blitt invitert til dette rommet"
+
+#, fuzzy
 msgid "You have been removed from this group chat"
 msgstr "%(nick)s har blitt fjernet fra rommet (%(reason)s)"
 
@@ -6363,6 +6372,10 @@ msgid "_Offline"
 msgstr "_Frakoblet"
 
 #, fuzzy
+msgid "_Open"
+msgstr "Åpne"
+
+#, fuzzy
 msgid "_Overwrite"
 msgstr "Overskriv?"
 
@@ -6630,3 +6643,1526 @@ msgstr "%(nick)s er nå %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "usynkronisert"
+
+#, fuzzy, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "\"%s\" vil nå kunne se din status."
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s ikke funnet"
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
+
+#, fuzzy, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr "** Tilhørigheten til %(nick)s har blitt satt til %(affiliation)s"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr "** Rollen til %(nick)s har blitt satt til %(role)s av %(actor)s"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr ""
+#~ "** Tilhørighet for %(nick)s har blitt satt til %(affiliation)s av "
+#~ "%(actor)s"
+
+#, fuzzy, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "** Rollen til %(nick)s har blitt satt til %(role)s av %(actor)s"
+
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Beskrivelse"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Programtillegg kræsjet"
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "?Ask (for Subscription):Ingen"
+
+#, fuzzy
+#~ msgid "?Gender:None"
+#~ msgstr "Avsender: "
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "?Group Chat Contact Affiliation:Ingen"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat address:news"
+#~ msgstr "Ny gruppesamtale"
+
+#, fuzzy
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat address:team"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "Fremheving av gruppesamtale:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "Gruppesludringsstøtte"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "Fremheving av gruppesamtale:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "Fremheving av gruppesamtale:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "Fremheving av gruppesamtale:"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "Gruppe Samtale"
+
+#, fuzzy
+#~ msgid "?Group chat name:Team"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#, fuzzy
+#~ msgid "?Message row action:Copy"
+#~ msgstr "Meldingsforfatting"
+
+#, fuzzy
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "Meldingsforfatting"
+
+#, fuzzy
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "Meldingsforfatting"
+
+#, fuzzy
+#~ msgid "?Message state:Received"
+#~ msgstr "Første melding motatt"
+
+#~ msgid "?Noun:Download"
+#~ msgstr "?Noun:Nedlasting"
+
+#~ msgid "?Noun:Upload"
+#~ msgstr "?Noun:Opplasting"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "?Subscription we already have:Ingen"
+
+#, fuzzy
+#~ msgid "?config description:None"
+#~ msgstr "?Ask (for Subscription):Ingen"
+
+#, fuzzy
+#~ msgid "?config:Value"
+#~ msgstr "_Sett opp"
+
+#, fuzzy
+#~ msgid "?profile:Address"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~ msgid "?profile:Full Name"
+#~ msgstr "Fullt navn"
+
+#, fuzzy
+#~ msgid "?profile:Note"
+#~ msgstr "Profil"
+
+#, fuzzy
+#~ msgid "?profile:Role"
+#~ msgstr "Profil"
+
+#, fuzzy
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Completed"
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Not started"
+#~ msgstr "?transfer status:Pauset"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Status: "
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "?transfer status:Pauset"
+
+#, fuzzy
+#~ msgid "?transfer type:Type: "
+#~ msgstr "Filoverføring stoppet"
+
+#~ msgid "?user status:Available"
+#~ msgstr "?user status:Tilgjengelig"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "?user status:_Tilgjengelig"
+
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "Ei fil med dette navnet finnes allerede og du har ikke tilgang til å "
+#~ "overskrive den."
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "En liste over aktive, fullførte og stoppede filoverføringer"
+
+#, fuzzy, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "Account Settings…"
+#~ msgstr "Tillegg"
+
+#, fuzzy
+#~ msgid "Account is not connected"
+#~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "Account is not connected."
+#~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Påskrudd"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "Legg til kontakt…"
+
+#, fuzzy
+#~ msgid "Add new line"
+#~ msgstr "Legg til ny linje"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Sludresnarveier"
+
+#, fuzzy
+#~ msgid "Add some details…"
+#~ msgstr "Legg til kontakt…"
+
+#, fuzzy
+#~ msgid "Add to Contact List…"
+#~ msgstr "Legg til kontakt…"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Rediger _grupper…"
+
+#~ msgid "Adjust to Status"
+#~ msgstr "Juster til status"
+
+#~ msgid "Adjust to status"
+#~ msgstr "Juster til status"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Grupper"
+
+#~ msgid "Another process is using this file."
+#~ msgstr "En annen prosess bruker denne fila."
+
+#~ msgid "Archiving Preferences"
+#~ msgstr "Arkiveringsinnstillinger"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Error"
+#~ msgstr "Arkiveringsinnstillinger"
+
+#, fuzzy
+#~ msgid "Archiving Preferences Saved"
+#~ msgstr "Arkiveringsinnstillinger"
+
+#, python-format
+#~ msgid "Archiving Preferences for %s"
+#~ msgstr "Arkiveringsinnstillinger for %s"
+
+#, fuzzy
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Er du sikker på at du vil forlate gruppesamtalen \"%s\"?"
+
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Bekreft lukking av Gajim."
+
+#~ msgid "Artists"
+#~ msgstr "Artister"
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Lyd / Video"
+
+#, fuzzy
+#~ msgid "Audio Output Device"
+#~ msgstr "Lydenhet for avspilling"
+
+#, fuzzy
+#~ msgid "Audio preview is not available"
+#~ msgstr "Lydøkter er ikke tilgjengelige"
+
+#, fuzzy
+#~ msgid "Audio/Video"
+#~ msgstr "Lyd / Video"
+
+#, fuzzy
+#~ msgid "Author"
+#~ msgstr "Utviklere:"
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Godkjenning sendt"
+
+#, fuzzy
+#~ msgid "Auto Away Settings"
+#~ msgstr "Sludresnarveier"
+
+#, fuzzy
+#~ msgid "Auto Extended Away Settings"
+#~ msgstr "Utvidet fravær"
+
+#~ msgid "Autojoin"
+#~ msgstr "Bli med automatisk"
+
+#, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Stavekontroll av skrevne meldinger."
+
+#~ msgid "Back in some minutes."
+#~ msgstr "Tilbake om noen minutter."
+
+#~ msgid "Back soon"
+#~ msgstr "Straks tilbake"
+
+#, fuzzy
+#~ msgid "Blocking List"
+#~ msgstr "Liste over bannlyste"
+
+#, fuzzy, python-format
+#~ msgid "Blocking List for %s"
+#~ msgstr "Personvernsliste for %s"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Bokmerker"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "Bokmerker"
+
+#, fuzzy
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr "Avbryter valgte overføringer og fjerner uferdige filer"
+
+#, fuzzy, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "Kan ikke overskrive eksisterende fil \"%s\""
+
+#, fuzzy
+#~ msgid "Certificate Settings"
+#~ msgstr "Sertifikatsvalg"
+
+#, fuzzy
+#~ msgid "Ch_ange Subject"
+#~ msgstr "Endre emne"
+
+#, fuzzy
+#~ msgid "Chat List"
+#~ msgstr "Kontakter"
+
+#~ msgid "Chat history"
+#~ msgstr "Sludrehistorikk"
+
+#~ msgid "Checking file…"
+#~ msgstr "Sjekker fil…"
+
+#~ msgid "Choose Archive"
+#~ msgstr "Velg arkiv"
+
+#, fuzzy
+#~ msgid "Choose Avatar…"
+#~ msgstr "Velg arkiv"
+
+#, fuzzy
+#~ msgid "Choose Emoji"
+#~ msgstr "Velg Lyd"
+
+#~ msgid "Choose File to Send…"
+#~ msgstr "Velg fil å sende…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Vis kontaktens profil (Ctrl+I)"
+
+#~ msgid "Clear message entry"
+#~ msgstr "Tøm meldingsoppføring"
+
+#~ msgid "Client Certificate"
+#~ msgstr "Klientsertifikat"
+
+#, fuzzy
+#~ msgid "Complete a command or a nickname"
+#~ msgstr "Fullfør en kommando eller et kallenavn"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Fullført"
+
+#, fuzzy
+#~ msgid "Connection Settings"
+#~ msgstr "Tilkoblingsvalg"
+
+#~ msgid "Connection not available"
+#~ msgstr "Tilkobling ikke tilgjengelig"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Background Color"
+#~ msgstr "Kontakt tilkoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Font"
+#~ msgstr "Sludresnarveier"
+
+#, fuzzy
+#~ msgid "Contact List: Contact Foreground Color"
+#~ msgstr "Kontakt tilkoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Group Background Color"
+#~ msgstr "Kontakt Frakoblet"
+
+#, fuzzy
+#~ msgid "Contact List: Group Font"
+#~ msgstr "Merknadsfarge for kontaktavlogging"
+
+#, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Abonnement opphevet"
+
+#~ msgid "Contact information"
+#~ msgstr "Kontaktinformasjon"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kontakter"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Samtale med "
+
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kontaktinformasjon"
+
+#, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "_Kopier JID/E-postadresse"
+
+#, fuzzy
+#~ msgid "Copy Link"
+#~ msgstr "_Kopier lenke-plassering"
+
+#, fuzzy
+#~ msgid "Copy Link Location"
+#~ msgstr "_Kopier lenke-plassering"
+
+#, fuzzy
+#~ msgid "Copy Location"
+#~ msgstr "_Kopier lenke-plassering"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "Rom-JID"
+
+#, fuzzy
+#~ msgid "Copy info to clipboard"
+#~ msgstr "_Kopier lenke-plassering"
+
+#, fuzzy
+#~ msgid "Correct the last message"
+#~ msgstr "Sett statusmelding"
+
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Forlat gruppesamtaler"
+
+#, fuzzy
+#~ msgid "Create new group chat"
+#~ msgstr "Forlat gruppesamtaler"
+
+#~ msgid "Create new post"
+#~ msgstr "Lag en ny post"
+
+#~ msgid "Current Developers"
+#~ msgstr "Nåværende utviklere"
+
+#, fuzzy
+#~ msgid "Decryption failed"
+#~ msgstr "Tilkobling mislyktes"
+
+#~ msgid "Default"
+#~ msgstr "Forvalg"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Forvalgt melding"
+
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Abonnements-forespørsel"
+
+#~ msgid "Description: "
+#~ msgstr "Beskrivelse: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Tidligere utviklere"
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "GG-nummer:"
+
+#, fuzzy
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "Filoverføring stoppet"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
+#~ msgid "Download File"
+#~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy, python-format
+#~ msgid "Download failed (%s)"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgid "Downloading…"
+#~ msgstr "Laster"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Sender fil til en kontakt"
+
+#~ msgid "Eating"
+#~ msgstr "Spiser"
+
+#, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Fornavn"
+
+#, fuzzy
+#~ msgid "Edit Profile…"
+#~ msgstr "Sender profil…"
+
+#, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Rediger _grupper…"
+
+#, fuzzy
+#~ msgid "Enables Gajim to play sounds for various notifications"
+#~ msgstr "Evne til å starte lyd- og video-samtaler."
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "Evne til å starte lyd- og video-samtaler."
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a notification area icon"
+#~ msgstr "Evne til å starte lyd- og video-samtaler."
+
+#, fuzzy
+#~ msgid ""
+#~ "Enables Gajim to request your router to forward ports for file transfers"
+#~ msgstr ""
+#~ "Evnen til å forespørre din ruter etter åpning av port for filoverføring."
+
+#~ msgid "Encrypted Certificate"
+#~ msgstr "Kryptert sertifikat"
+
+#~ msgid "Error received: {}"
+#~ msgstr "Feil i mottatt: {}"
+
+#~ msgid "Error!"
+#~ msgstr "Feil!"
+
+#, fuzzy, python-format
+#~ msgid "Error: %s (mime types: %s)"
+#~ msgstr "Feilmelding: %s"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Feil: kan ikke åpne %s for lesing"
+
+#, fuzzy
+#~ msgid "Even more features via plugins"
+#~ msgstr "Andre funksjoner via programtillegg"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Funksjonen er ikke tilgjengelig på Windows."
+
+#~ msgid "Features:"
+#~ msgstr "Funksjonalitet:"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "Filoverføring"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "Filoverføring feilet"
+
+#~ msgid "File Transfer Failed"
+#~ msgstr "Filoverføring mislyktes"
+
+#~ msgid "File Transfers"
+#~ msgstr "Filoverføringer"
+
+#~ msgid "File error"
+#~ msgstr "Feil med fil"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "Filoverføring stoppet"
+
+#~ msgid "File transfers"
+#~ msgstr "Filoverføringer"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Filnavn: %s"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Filoverføring feilet"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Private samtaler"
+
+#, fuzzy
+#~ msgid "Full Message View"
+#~ msgstr "Melding sendt"
+
+#~ msgid "Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
+
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim kan ikke lese denne filen"
+
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Ingen konto tilgjengelig"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Ingen konto tilgjengelig"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Arkiveringsinnstillinger"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Invitasjon til gruppesamtale"
+
+#~ msgid "Group chat support"
+#~ msgstr "Gruppesludringsstøtte"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Skjul denne menyen"
+
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Hjemmeside:"
+
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "Port"
+
+#, python-format
+#~ msgid "Idle since: %s"
+#~ msgstr "Uvirksom siden: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim will save the main window position when hiding it, and "
+#~ "restore it when showing the window again."
+#~ msgstr ""
+#~ "Hvis sant vil Gajim lagre kontaktlisteposisjon når den blir skjult, og "
+#~ "gjennoprette den når den vises."
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, you will be able to set a negative priority to your account "
+#~ "in the Accounts window. BE CAREFUL, when you are logged in with a "
+#~ "negative priority, you will NOT receive any message from your server."
+#~ msgstr ""
+#~ "Hvis sant vil du kunne sette negativ prioritet for din konto i "
+#~ "kontoinnstillingene. VÆR FORSIKTIG, når du er logget inn med en negativ "
+#~ "prioritet vil du ikke motta noen meldinger fra din tjener."
+
+#, fuzzy
+#~ msgid ""
+#~ "If you quit now, the file(s) being transferred will be lost.\n"
+#~ "Do you still want to quit?"
+#~ msgstr ""
+#~ "Hvis du avslutter nå, vil fil(ene) som er underveis bli stoppet. Ønsker "
+#~ "du fremdeles å avslutte?"
+
+#~ msgid "Images"
+#~ msgstr "Bilder"
+
+#, fuzzy
+#~ msgid "Insert Emoji"
+#~ msgstr "Skru på ASCII-smilefjes"
+
+#~ msgid "Invalid File"
+#~ msgstr "Ugyldig fil"
+
+#, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Inviter _kontakter"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Inviter _kontakter"
+
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "Det er ikke mulig å sende tomme filer"
+
+#, fuzzy
+#~ msgid "I’m eating."
+#~ msgstr "Jeg jobber."
+
+#, fuzzy
+#~ msgid "I’m out enjoying life."
+#~ msgstr "Ute og lever livet."
+
+#, fuzzy
+#~ msgid "I’m watching a movie."
+#~ msgstr "Ser på en film."
+
+#, fuzzy
+#~ msgid "I’m working."
+#~ msgstr "Jeg jobber."
+
+#~ msgid "Last but not least"
+#~ msgstr "Sist men ikke minst"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Grunn"
+
+#, fuzzy
+#~ msgctxt "Group chat description"
+#~ msgid "Local news and reports"
+#~ msgstr "Oppretting av gruppesludring tillates ikke."
+
+#~ msgid "Location:"
+#~ msgstr "Plassering:"
+
+#, fuzzy
+#~ msgid "Login Settings"
+#~ msgstr "Tillegg"
+
+#, fuzzy
+#~ msgid "Manage Accounts…"
+#~ msgstr "_Rediger Konto"
+
+#, fuzzy
+#~ msgid "Manage Contact List"
+#~ msgstr "Kontakter"
+
+#, fuzzy
+#~ msgid "Mention: Message Background Color"
+#~ msgstr "_Tilbakestill til forvalgte farger"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Meldinger"
+
+#~ msgid "Message composition"
+#~ msgstr "Meldingsforfatting"
+
+#, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Meldinger vil kun være tilgjengelig for senere lesning hvis du har "
+#~ "historikk påskrudd og kontakten er å finne på din kontaktliste."
+
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "statusmelding"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "_Rediger Konto"
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Gi kontakt nytt navn"
+
+#~ msgid "Movie"
+#~ msgstr "Film"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "Tilkobling ikke tilgjengelig"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Merknader"
+
+#, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Mellomtjener"
+
+#, fuzzy
+#~ msgid "Not Connected"
+#~ msgstr "Tilkoblet"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Ikke startet"
+
+#, fuzzy
+#~ msgid "Notification Area Icon"
+#~ msgstr "Vis merknad i systemstatusfeltet (systray):"
+
+#, fuzzy
+#~ msgid "Notification Sounds"
+#~ msgstr "Merknader"
+
+#~ msgid "Notify of events in the notification area."
+#~ msgstr "Varsle om hendelser i system-statusfeltområdet."
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Åpne som _lenke"
+
+#, fuzzy
+#~ msgid "Open Link in Browser"
+#~ msgstr "_Åpne lenke i nettleser"
+
+#, fuzzy
+#~ msgid "Open Path"
+#~ msgstr "Åpne"
+
+#, fuzzy
+#~ msgid "Open _Folder"
+#~ msgstr "Åpne _inneholdende mappe"
+
+#, fuzzy
+#~ msgid "Organization (O)"
+#~ msgstr "På ferie"
+
+#~ msgid "Out"
+#~ msgstr "Ute"
+
+#~ msgid "PKCS12 Files"
+#~ msgstr "PCKS12-filer"
+
+#, fuzzy
+#~ msgid "Pa_use/Resume"
+#~ msgstr "_Fortsett"
+
+#, fuzzy
+#~ msgid "Past as Code Block"
+#~ msgstr "postnummer"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Avbryt filoverføring"
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Vis alle _handlinger på vent"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Tillegg"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Programtilleggsbehandler"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Ingen konto tilgjengelig"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Arkiveringsinnstillinger"
+
+#, fuzzy
+#~ msgid ""
+#~ "Preferred file transfer mechanism for file drag&drop on a chat window"
+#~ msgstr ""
+#~ "Foretrukket filoverføringsmekanisme for dra-og-slipp -funksjonalitet i "
+#~ "sludrevinduet. Kan være 'httpupload' (forvalg) eller 'jingle'"
+
+#~ msgid "Progress"
+#~ msgstr "Fremdrift"
+
+#, fuzzy
+#~ msgid "Proxy Host"
+#~ msgstr "_Vert for mellomtjener:"
+
+#, fuzzy
+#~ msgid "Proxy Type"
+#~ msgstr "Mellomtjener"
+
+#, fuzzy
+#~ msgid "Re-Login"
+#~ msgstr "Innlogging"
+
+#, fuzzy, python-format
+#~ msgid "Reaction from %s (%s)"
+#~ msgstr "_Handlinger for \"%s\""
+
+#, fuzzy
+#~ msgid "Really block this contact?"
+#~ msgstr "Er OpenPGP tilgjengelig for denne kontakten?"
+
+#~ msgid "Recent history"
+#~ msgstr "Nylig historikk"
+
+#~ msgid "Recipient: "
+#~ msgstr "Mottaker: "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Mottaker: %s"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Sludrehistorikk"
+
+#, fuzzy
+#~ msgid "Remove Group..."
+#~ msgstr "Fjern gruppe"
+
+#, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Merknad"
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "Vis transporter"
+
+#, fuzzy
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr "Fjerner fullførte, avbrutte og feilede filoverføringer fra listen"
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Fjerner kontakt fra kontaktliste"
+
+#, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Fjerner kontakt fra kontaktliste"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Rapporter feil"
+
+#, fuzzy
+#~ msgid "Requires: gsound"
+#~ msgstr "Krever python-dbus."
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Krever gir1.2-gupnpigd-1.0."
+
+#, fuzzy
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Krever libxss-biblioteket."
+
+#, fuzzy
+#~ msgid "Requires: libxss"
+#~ msgstr "Krever libxss-biblioteket."
+
+#, fuzzy
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STUN-tjener:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Tillegg"
+
+#~ msgid "Save File as…"
+#~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Save as…"
+#~ msgstr "Lagre _som"
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "Send _fil"
+
+#, fuzzy
+#~ msgid "Select an emoji"
+#~ msgstr "Velg et humørfjes"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "Velg hvilken konto du ønsker å flette sammen med"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Advarsel: %s"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Send"
+
+#, fuzzy
+#~ msgid "Send Chatstate"
+#~ msgstr "Siste tilstand"
+
+#, fuzzy
+#~ msgid "Send File Directly…"
+#~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Send Read Markers"
+#~ msgstr "Send hold-i-live meldinger"
+
+#, fuzzy
+#~ msgid "Send message on Ctrl+Enter and make a new line with Enter."
+#~ msgstr ""
+#~ "Send meldinger med Ctrl+Enter og lag ny linje med Enter (ICQ-klientens "
+#~ "Mirabilis standardoppførsel)."
+
+#~ msgid "Send the message"
+#~ msgstr "Send meldingen"
+
+#~ msgid "Sender: "
+#~ msgstr "Avsender: "
+
+#, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG-nummer:"
+
+#~ msgid "Server"
+#~ msgstr "Tjener"
+
+#~ msgid "Server Info"
+#~ msgstr "Tjenerinfo"
+
+#~ msgid "Server Software"
+#~ msgstr "Tjenerprogramvare"
+
+#, fuzzy, python-format
+#~ msgid "Server Software: %s\n"
+#~ msgstr "Tjenerprogramvare"
+
+#~ msgid "Server Uptime"
+#~ msgstr "Tjeneroppetid"
+
+#, fuzzy
+#~ msgid "Set status message"
+#~ msgstr "Sett statusmelding"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "Plassering:"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Vis _frakoblede kontakter"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Funksjonalitet"
+
+#, fuzzy
+#~ msgid "Show debug console"
+#~ msgstr "Vis _XML-konsoll"
+
+#, fuzzy
+#~ msgid "Show previews for files"
+#~ msgstr "Lydøkter er ikke tilgjengelige"
+
+#, fuzzy
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr "Viser en liste over filoverføringer mellom deg og andre"
+
+#, fuzzy
+#~ msgid "Shutting down Gajim"
+#~ msgstr "Gajim"
+
+#~ msgid "Sleeping"
+#~ msgstr "Sover"
+
+#~ msgid "Sta_tus"
+#~ msgstr "Sta_tus"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Innstallert"
+
+#, fuzzy
+#~ msgid "Start New Chat"
+#~ msgstr "Start samtale"
+
+#, fuzzy
+#~ msgid "Start Video Call…"
+#~ msgstr "Start samtale"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Start samtale"
+
+#, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Synkroniser statusen for alle kontoer"
+
+#, fuzzy
+#~ msgid "Status message…"
+#~ msgstr "_Statusmelding:"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
+#~ msgstr "Status: "
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "Filoverføringer"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Abonnements-forespørsel"
+
+#, fuzzy
+#~ msgid "Subscription:"
+#~ msgstr "Abonnement:"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Tjenesteoppdagelse med noder, brukersøk"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth chat"
+#~ msgstr "Bytt til første - niende fane"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Bytt til første - niende fane"
+
+#~ msgid "Synchronise"
+#~ msgstr "Flett"
+
+#, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Synkroniser kontakter"
+
+#, fuzzy
+#~ msgid "TLS Version"
+#~ msgstr "Versjon:"
+
+#, fuzzy, python-format
+#~ msgid "TLS verification failed: %s"
+#~ msgstr "Bekreftelse av SSL-sertifikat for %s"
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "The file %s has been received, but it seems to have been damaged along "
+#~ "the way.\n"
+#~ "Do you want to download it again?"
+#~ msgstr ""
+#~ "Fila %(file)s har blitt mottatt, men den later til å ha blitt skadet på "
+#~ "veien.\n"
+#~ "Ønsker du å laste den ned igjen?"
+
+#~ msgid "The service could not be found"
+#~ msgstr "Tjenesten ble ikke funnet"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "Denne kontoen er ikke tilkoblet tjeneren"
+
+#, fuzzy
+#~ msgid "This is your XMPP address"
+#~ msgstr "_Kopier JID/E-postadresse"
+
+#, fuzzy
+#~ msgid "Toggle Menu Bar"
+#~ msgstr "Vis transporter"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Filoverføring"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Overfører"
+
+#, fuzzy, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "Transporten \"%s\" vil bli fjernet"
+
+#~ msgid "Treat * / _ pairs as possible formatting characters."
+#~ msgstr "Behandle * / _-par som mulig inndeling av formateringstegn."
+
+#~ msgid "Tune:"
+#~ msgstr "Sang:"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Skriv"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "Uleste hendelser"
+
+#, fuzzy
+#~ msgid "Unselect Chat"
+#~ msgstr "Forespørsel om lydsamtale"
+
+#, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Stavekontroll"
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Lagre fil som…"
+
+#, fuzzy
+#~ msgid "Upload could not be completed."
+#~ msgstr "Tjenesten ble ikke funnet"
+
+#, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN-tjener:"
+
+#~ msgid "Use file transfer proxies"
+#~ msgstr "Bruk filoverførings-mellomtjenere"
+
+#, fuzzy
+#~ msgid "User Interface"
+#~ msgstr "_Brukernavn:"
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Brukernavn:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Bildetakt for video"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Videokamera-enhet"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Videoøkt"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Videoøkter er ikke tilgjengelige"
+
+#, fuzzy
+#~ msgid "Visual Notifications"
+#~ msgstr "<b>Visuelle merknader</b>"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "Ønsker du å slette valgt melding?"
+
+#~ msgid "Working"
+#~ msgstr "Jobber"
+
+#, fuzzy
+#~ msgid "Workspaces"
+#~ msgstr "Gi kontakt nytt navn"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Du har uleste meldinger"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Bekreft lukking av Gajim."
+
+#, fuzzy
+#~ msgid "You are not connected"
+#~ msgstr "Du er ikke tilkoblet tjeneren"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "Du er ikke tilkoblet tjeneren"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr "Du kan ikke flette med en konto uten å være tilkoblet."
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "You do not have permissions for this directory.\n"
+#~ "Error: %s."
+#~ msgstr "Du har ikke tilgang til å opprette filer i denne mappa."
+
+#, fuzzy
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "Du har ikke tilgang til å opprette filer i denne mappa."
+
+#, fuzzy
+#~ msgid "You still have running file transfers"
+#~ msgstr "Du har filoverføringer underveis"
+
+#, fuzzy
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr ""
+#~ "Du vil ikke lenger kunne sende og motta meldinger fra kontakter som "
+#~ "bruker denne transporten."
+
+#, fuzzy
+#~ msgid "Your archiving preferences have successfully been saved."
+#~ msgstr "Dine arkiveringsinnstillinger har blitt lagret."
+
+#, fuzzy
+#~ msgid "_Account"
+#~ msgstr "_Kontoer"
+
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Kontoer"
+
+#~ msgid "_Clear"
+#~ msgstr "_Tøm"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "XML-konsoll"
+
+#, fuzzy
+#~ msgid "_Default"
+#~ msgstr "Forvalg"
+
+#, fuzzy
+#~ msgid "_Description"
+#~ msgstr "Beskrivelse"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgid "_Download"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgid "_Download Again"
+#~ msgstr "_Ikke spør meg igjen"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "Filoverføring"
+
+#, fuzzy
+#~ msgid "_Help"
+#~ msgstr "Hjelp"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Innlogging"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "Legg til kontakt…"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Rediger Konto"
+
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "Ny post"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "_Åpne inneholdende katalog"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Innstillinger"
+
+#, fuzzy
+#~ msgid "_Save as…"
+#~ msgstr "Lagre _som"
+
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Start samtale"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "_Start samtale…"
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Vis transporter"
+
+#~ msgid "_Undo"
+#~ msgstr "_Angre"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Vis"
+
+#, fuzzy
+#~ msgid "app.open-folder"
+#~ msgstr "Åpne _inneholdende mappe"
+
+#~ msgid "file transfers list"
+#~ msgstr "filoverføringsliste"
+
+#, fuzzy
+#~ msgid ""
+#~ "has invited you to a group chat.\n"
+#~ "Do you want to join?"
+#~ msgstr "Inviter en bruker til et rom av en grunn"
+
+#, fuzzy
+#~ msgctxt "Group chat address"
+#~ msgid "vacation"
+#~ msgstr "Plassering:"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "I går"
+
+#, fuzzy, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "%(nick)s har blitt fjernet fra rommet (%(reason)s)"
