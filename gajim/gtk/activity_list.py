@@ -812,6 +812,9 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
             "reaction": emojis,
             "message": event.message.text or "",
         }
+
+        read = app.window.is_chat_active(event.account, event.jid)
+
         return cls(
             context_id=event.context_id,
             account=event.account,
@@ -822,7 +825,7 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
             title=title,
             timestamp=utc_now(),
             subject=subject,
-            read=False,
+            read=read,
             event=event,
         )
 
