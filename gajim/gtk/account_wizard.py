@@ -1171,8 +1171,8 @@ class WizardFormPage(AssistantPage):
     def get_credentials(self) -> tuple[str, str]:
         assert self._current_form is not None
         form = cast(SimpleDataForm, self._current_form.get_form())
-        username = cast(str, form["username"])
-        password = cast(str, form["password"])
+        username = cast(str, form["username"].value)
+        password = cast(str, form["password"].value)
         return username, password
 
     def get_submit_form(self) -> Any:
