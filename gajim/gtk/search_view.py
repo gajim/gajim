@@ -374,17 +374,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
-        control = app.window.get_control()
-        if not control.is_chat_active(row.account, row.remote_jid):
-            chat_type = "chat"
-            if row.type == MessageType.GROUPCHAT:
-                chat_type = "groupchat"
-            elif row.type == MessageType.PM:
-                chat_type = "pm"
-
-            app.window.add_chat(row.account, row.remote_jid, chat_type, select=True)
-
-        control.scroll_to_message(row.pk, row.timestamp)
+        app.window.scroll_to_message(row.account, row.message)
 
     def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()
@@ -428,24 +418,25 @@ class RowHeader(Gtk.Box):
 
 
 class ResultRow(Gtk.ListBoxRow):
-    def __init__(self, db_row: Message) -> None:
+    def __init__(self, message: Message) -> None:
         Gtk.ListBoxRow.__init__(self)
 
-        self._client = self._get_client(str(db_row.account.jid))
+        self._client = self._get_client(str(message.account.jid))
         self.account = self._client.account
 
-        self.remote_jid = db_row.remote.jid
-        self.direction = ChatDirection(db_row.direction)
+        self.message = message
+        self.remote_jid = message.remote.jid
+        self.direction = ChatDirection(message.direction)
 
-        jid = db_row.remote.jid
-        if db_row.direction == ChatDirection.OUTGOING:
+        jid = message.remote.jid
+        if message.direction == ChatDirection.OUTGOING:
             jid = JID.from_string(self._client.get_own_jid().bare)
 
-        self.pk = db_row.pk
-        self.timestamp = db_row.timestamp
-        self.local_timestamp = db_row.timestamp.astimezone()
+        self.pk = message.pk
+        self.timestamp = message.timestamp
+        self.local_timestamp = message.timestamp.astimezone()
 
-        self.type = MessageType(db_row.type)
+        self.type = MessageType(message.type)
 
         self.contact = self._client.get_module("Contacts").get_contact(
             jid, groupchat=self.type == MessageType.GROUPCHAT
@@ -462,7 +453,7 @@ class ResultRow(Gtk.ListBoxRow):
 
         contact_name = self.contact.name
         if self.type == MessageType.GROUPCHAT:
-            contact_name = db_row.resource or self.remote_jid.localpart
+            contact_name = message.resource or self.remote_jid.localpart
             assert contact_name is not None
 
         self._ui.row_name_label.set_text(contact_name)
@@ -474,7 +465,7 @@ class ResultRow(Gtk.ListBoxRow):
         format_string = app.settings.get("time_format")
         self._ui.row_time_label.set_text(self.local_timestamp.strftime(format_string))
 
-        text = db_row.text
+        text = message.text
         assert text is not None
 
         message_widget = MessageWidget(self.account, selectable=False)

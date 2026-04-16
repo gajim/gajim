@@ -39,8 +39,8 @@ class EventsTest(unittest.TestCase):
 
         self._event_storage.store(self._group_chat_contact, event_data)
 
-        events_list = self._event_storage.load(
-            self._group_chat_contact, True, utc_now().timestamp(), 1
+        events_list, _complete = self._event_storage.load(
+            self._group_chat_contact, "before", utc_now().timestamp(), 1
         )
         first_event = events_list[0]
         assert isinstance(first_event, events.MUCRoomDestroyed)

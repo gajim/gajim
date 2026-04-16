@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 import datetime as dt
 import json
@@ -92,17 +93,17 @@ class EventStorage(AlchemyStorage):
         self,
         session: Session,
         contact: ChatContactT,
-        before: bool,
+        direction: Literal["after", "before"],
         timestamp_: float,
         n_lines: int,
-    ) -> list[events.ApplicationEvent]:
+    ) -> tuple[list[events.ApplicationEvent], bool]:
         timestamp = dt.datetime.fromtimestamp(timestamp_, dt.UTC)
 
         stmt = sa.select(mod.Event).where(
             mod.Event.account == contact.account, mod.Event.jid == contact.jid
         )
 
-        if before:
+        if direction == "before":
             stmt = stmt.where(mod.Event.timestamp < timestamp).order_by(
                 sa.desc(mod.Event.timestamp)
             )
@@ -123,4 +124,5 @@ class EventStorage(AlchemyStorage):
             event_.context_id = context_id
             event_list.append(event_)
 
-        return event_list
+        complete = len(event_list) < n_lines
+        return event_list, complete

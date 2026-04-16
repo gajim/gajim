@@ -1033,10 +1033,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._chat_page.select_chat(account, jid)
 
     def scroll_to_message(self, account: str, message: Message) -> None:
-        message_type = MessageType(message.type).to_str()
-        app.window.add_chat(account, message.remote.jid, message_type, select=True)
-
         control = self._chat_page.get_control()
+        control.set_prepare_for_scroll()
+
+        if not self.is_chat_active(account, message.remote.jid):
+            message_type = MessageType(message.type).to_str()
+            app.window.add_chat(account, message.remote.jid, message_type, select=True)
+
         control.scroll_to_message(message.pk, message.timestamp)
 
     def select_next_chat(

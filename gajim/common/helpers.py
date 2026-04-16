@@ -581,3 +581,11 @@ def idle_add_once(func: Callable[..., Any], *args: Any) -> None:
         return False
 
     GLib.idle_add(wrapper)
+
+
+def timeout_add_once(ms: int, func: Callable[..., Any], *args: Any) -> None:
+    def wrapper():
+        func(*args)
+        return False
+
+    GLib.timeout_add(ms, wrapper)

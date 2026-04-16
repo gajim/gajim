@@ -5,14 +5,18 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
+from typing import Literal
 
 import datetime as dt
+import itertools
 import logging
 import time
-from collections.abc import Sequence
+from collections.abc import Iterable
 
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import Affiliation
@@ -46,7 +50,8 @@ from gajim.gtk.groupchat_state import GroupchatState
 
 HistoryRowT = events.ApplicationEvent | Message
 
-REQUEST_LINES_COUNT = 20
+INITIAL_REQUEST_MESSAGE_COUNT = 50
+REQUEST_MESSAGE_COUNT = 20
 
 log = logging.getLogger("gajim.gtk.control")
 
@@ -61,11 +66,15 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder("chat_control.ui")
 
+        self._set_prepare_for_scroll = False
+
         self._message_row_actions = MessageRowActions()
         self._ui.conv_view_overlay.add_overlay(self._message_row_actions)
 
-        self._scrolled_view = ConversationView(self._message_row_actions)
-        self._scrolled_view.connect("autoscroll-changed", self._on_autoscroll_changed)
+        self._scrolled_view = ConversationView(
+            self._message_row_actions, app.storage.archive
+        )
+        self._scrolled_view.connect("notify::at-bottom", self._on_at_bottom_changed)
         self._scrolled_view.connect("request-history", self._request_history)
         self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
@@ -170,7 +179,13 @@ class ChatControl(EventHelper):
         self._scrolled_view.reset()
 
     def view_is_at_bottom(self) -> bool:
-        return self._scrolled_view.get_autoscroll()
+        return self._scrolled_view.get_property("at-bottom")
+
+    def set_prepare_for_scroll(self) -> None:
+        # This var is for telling the control to not load messages
+        # on switch_contact(). Instead the scroll_to_message() method
+        # will load the messages
+        self._set_prepare_for_scroll = True
 
     def scroll_to_date(self, date: dt.datetime) -> None:
         if self._contact is None:
@@ -190,20 +205,11 @@ class ChatControl(EventHelper):
             log.warning("scroll_to_message() called without active contact")
             return
 
-        row = self._scrolled_view.get_row_by_pk(pk)
-        if row is None:
-            # Clear view and reload conversation around timestamp
-            self._scrolled_view.reset()
-            self._scrolled_view.block_signals(True)
-            messages = app.storage.archive.get_conversation_around_timestamp(
-                self._contact.account, self._contact.jid, timestamp
-            )
-            for message in messages:
-                self._add_message_from_storage(message)
-            self._scrolled_view.set_history_complete(False, False)
+        self._scrolled_view.scroll_to_message(
+            self._contact.account, self._contact.jid, timestamp, pk
+        )
 
-        GLib.idle_add(self._scrolled_view.block_signals, False)
-        GLib.idle_add(self._scrolled_view.scroll_to_message_and_highlight, pk)
+        self._set_prepare_for_scroll = False
 
     def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
@@ -238,7 +244,8 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.switch_contact(contact)
         self._message_row_actions.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)
-        self._request_history(None, True)
+        if not self._set_prepare_for_scroll:
+            self._request_history(None, "before")
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
 
@@ -468,10 +475,11 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.update_blocked_muc_users()
 
-    def _on_autoscroll_changed(
-        self, _widget: ConversationView, autoscroll: bool
+    def _on_at_bottom_changed(
+        self, view: ConversationView, param: GObject.ParamSpec
     ) -> None:
-        if not autoscroll:
+        at_bottom = cast(bool, view.get_property("at-bottom"))
+        if not at_bottom:
             self._jump_to_end_button.toggle(True)
             return
 
@@ -546,11 +554,18 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.add_message(message)
 
-    def _request_messages(self, before: bool) -> Sequence[Message]:
-        if before:
+    def _request_messages(
+        self,
+        direction: Literal["after", "before"],
+        *,
+        initial: bool,
+    ) -> tuple[Iterable[Message], bool]:
+        if direction == "before":
             row = self._scrolled_view.get_first_row()
+            order = "desc"
         else:
             row = self._scrolled_view.get_last_row()
+            order = "asc"
 
         if row is None:
             timestamp = dt.datetime.now(dt.UTC)
@@ -561,13 +576,19 @@ class ChatControl(EventHelper):
         return app.storage.archive.get_conversation_before_after(
             self._contact.account,
             self._contact.jid,
-            before,
             timestamp,
-            REQUEST_LINES_COUNT,
+            INITIAL_REQUEST_MESSAGE_COUNT if initial else REQUEST_MESSAGE_COUNT,
+            direction=direction,
+            order=order,
         )
 
-    def _request_events(self, before: bool) -> list[events.ApplicationEvent]:
-        if before:
+    def _request_events(
+        self,
+        direction: Literal["after", "before"],
+        *,
+        initial: bool,
+    ) -> tuple[list[events.ApplicationEvent], bool]:
+        if direction == "before":
             row = self._scrolled_view.get_first_event_row()
         else:
             row = self._scrolled_view.get_last_event_row()
@@ -579,19 +600,24 @@ class ChatControl(EventHelper):
 
         assert self._contact is not None
         return app.storage.events.load(
-            self._contact, before, timestamp, REQUEST_LINES_COUNT
+            self._contact,
+            direction,
+            timestamp,
+            INITIAL_REQUEST_MESSAGE_COUNT if initial else REQUEST_MESSAGE_COUNT,
         )
 
-    def _request_history(self, _widget: Any, before: bool) -> None:
+    def _request_history(
+        self, _widget: Any, direction: Literal["after", "before"], initial: bool = False
+    ) -> None:
         if self._contact is None:
             log.warning("_request_history() called without active contact")
             return
 
         self._scrolled_view.block_signals(True)
 
-        messages = self._request_messages(before)
-        event_rows = self._request_events(before)
-        rows = self._sort_request_rows(messages, event_rows, before)
+        messages, messages_complete = self._request_messages(direction, initial=initial)
+        event_rows, events_complete = self._request_events(direction, initial=initial)
+        rows = self._sort_request_rows(messages, event_rows, direction == "before")
 
         assert self._contact is not None
         for row in rows:
@@ -643,25 +669,30 @@ class ChatControl(EventHelper):
             else:
                 raise ValueError("Unknown event: %s" % type(row))
 
-        if len(rows) < REQUEST_LINES_COUNT:
-            self._scrolled_view.set_history_complete(before, True)
+        if messages_complete and events_complete:
+            self._scrolled_view.set_history_complete(direction == "before", True)
 
         self._scrolled_view.block_signals(False)
 
     @staticmethod
     def _sort_request_rows(
-        messages: Sequence[Message],
+        messages: Iterable[Message],
         event_rows: list[events.ApplicationEvent],
         before: bool,
-    ) -> list[HistoryRowT]:
+    ) -> Iterable[HistoryRowT]:
+
+        if not messages:
+            return event_rows
+
+        if not event_rows:
+            return messages
+
         def sort_func(obj: HistoryRowT) -> float:
             return obj.timestamp  # pyright: ignore
 
-        assert isinstance(messages, list)
-
-        rows = messages + event_rows
-        rows.sort(key=sort_func, reverse=before)
-        return rows
+        return sorted(
+            itertools.chain(messages, event_rows), key=sort_func, reverse=before
+        )
 
     def _on_user_nickname_changed(
         self,
