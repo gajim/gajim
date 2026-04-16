@@ -140,32 +140,67 @@ class MethodsTest(unittest.TestCase):
 
     def test_get_conversation_before_after(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
-        self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
+        self._insert_messages("testacc1", remote_jid=remote_jid, count=4)
 
-        messages, _complete = self._archive.get_conversation_before_after(
+        messages, complete = self._archive.get_conversation_before_after(
             "testacc1",
             remote_jid,
             datetime.now(dt.UTC),
-            10,
+            2,
             direction="before",
             order="desc",
         )
 
         messages = list(messages)
-        self.assertEqual(messages[0].id, "messageid9")
-        self.assertEqual(messages[1].id, "messageid8")
+        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages[0].id, "messageid3")
+        self.assertEqual(messages[1].id, "messageid2")
+        self.assertFalse(complete)
 
-        messages, _complete = self._archive.get_conversation_before_after(
+        messages, complete = self._archive.get_conversation_before_after(
             "testacc1",
             remote_jid,
-            datetime.fromtimestamp(0, dt.UTC),
-            10,
+            datetime(year=1970, month=1, day=1, tzinfo=dt.UTC),
+            2,
             direction="after",
+            order="desc",
         )
 
         messages = list(messages)
+        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages[0].id, "messageid1")
+        self.assertEqual(messages[1].id, "messageid0")
+        self.assertFalse(complete)
+
+        messages, complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime.now(dt.UTC),
+            2,
+            direction="before",
+            order="asc",
+        )
+
+        messages = list(messages)
+        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages[0].id, "messageid2")
+        self.assertEqual(messages[1].id, "messageid3")
+        self.assertFalse(complete)
+
+        messages, complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime(year=1970, month=1, day=1, tzinfo=dt.UTC),
+            2,
+            direction="after",
+            order="asc",
+        )
+
+        messages = list(messages)
+        self.assertEqual(len(messages), 2)
         self.assertEqual(messages[0].id, "messageid0")
         self.assertEqual(messages[1].id, "messageid1")
+        self.assertFalse(complete)
 
     def test_get_last_conversation_row(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
