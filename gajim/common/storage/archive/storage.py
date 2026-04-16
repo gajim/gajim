@@ -600,15 +600,11 @@ class MessageArchiveStorage(AlchemyStorage):
                 where = stmt.where(Message.timestamp > timestamp)
             stmt = where.order_by(Message.timestamp, Message.pk)
 
-        stmt = stmt.limit(n_lines + 1)
+        stmt = stmt.limit(n_lines)
 
         self._explain(session, stmt)
         result = session.scalars(stmt).all()
-        complete = len(result) != n_lines + 1
-
-        # Remove last result line which was used to check if query was complete
-        if not complete:
-            result = result[:-1]
+        complete = len(result) < n_lines
 
         match order, direction:
             case ("desc", "before") | ("asc", "after"):

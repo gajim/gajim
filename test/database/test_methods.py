@@ -202,6 +202,40 @@ class MethodsTest(unittest.TestCase):
         self.assertEqual(messages[1].id, "messageid1")
         self.assertFalse(complete)
 
+        # Test complete flag
+
+        # Same amount returned as requested
+        messages, complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime(year=1970, month=1, day=1, tzinfo=dt.UTC),
+            4,
+            direction="after",
+            order="asc",
+        )
+
+        messages = list(messages)
+        self.assertEqual(len(messages), 4)
+        self.assertEqual(messages[0].id, "messageid0")
+        self.assertEqual(messages[1].id, "messageid1")
+        self.assertFalse(complete)
+
+        # Less returned than requested
+        messages, complete = self._archive.get_conversation_before_after(
+            "testacc1",
+            remote_jid,
+            datetime(year=1970, month=1, day=1, tzinfo=dt.UTC),
+            5,
+            direction="after",
+            order="asc",
+        )
+
+        messages = list(messages)
+        self.assertEqual(len(messages), 4)
+        self.assertEqual(messages[0].id, "messageid0")
+        self.assertEqual(messages[1].id, "messageid1")
+        self.assertTrue(complete)
+
     def test_get_last_conversation_row(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
         self._insert_messages(

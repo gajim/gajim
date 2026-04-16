@@ -112,7 +112,7 @@ class EventStorage(AlchemyStorage):
                 mod.Event.timestamp
             )
 
-        stmt = stmt.limit(n_lines + 1)
+        stmt = stmt.limit(n_lines)
 
         event_list: list[events.ApplicationEvent] = []
 
@@ -124,8 +124,5 @@ class EventStorage(AlchemyStorage):
             event_.context_id = context_id
             event_list.append(event_)
 
-        complete = len(event_list) != n_lines + 1
-        if not complete:
-            event_list = event_list[:-1]
-
+        complete = len(event_list) < n_lines
         return event_list, complete
