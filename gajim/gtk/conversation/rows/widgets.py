@@ -294,13 +294,15 @@ class DateTimeLabel(Gtk.Label):
 
 class NicknameLabel(Gtk.Label):
     def __init__(self, name: str, from_us: bool) -> None:
-        Gtk.Label.__init__(self)
-
-        self.set_selectable(True)
-        self.set_ellipsize(Pango.EllipsizeMode.END)
-        self.set_valign(Gtk.Align.END)
+        Gtk.Label.__init__(
+            self,
+            selectable=True,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=32,
+            valign=Gtk.Align.END,
+            label=name,
+        )
         self.add_css_class("conversation-nickname")
-        self.set_text(name)
 
         if from_us:
             css_class = "gajim-outgoing-nickname"
