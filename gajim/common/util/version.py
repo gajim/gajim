@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import cast
-
 import functools
 import importlib.metadata
 import os
@@ -57,9 +55,9 @@ def get_os_info() -> str:
 
     elif sys.platform == "linux":
         try:
-            import distro  # type: ignore
+            import distro
 
-            info = cast(str, distro.name(pretty=True))  # type: ignore
+            info = distro.name(pretty=True)
         except ImportError:
             info = platform.system()
     return info
@@ -70,9 +68,9 @@ def get_os_name() -> str:
         return platform.system()
     if os.name == "posix":
         try:
-            import distro  # type: ignore
+            import distro
 
-            return distro.name(pretty=True)  # type: ignore
+            return distro.name(pretty=True)
         except ImportError:
             return platform.system()
     return ""
@@ -83,9 +81,9 @@ def get_os_version() -> str:
         return platform.version()
     if os.name == "posix":
         try:
-            import distro  # type: ignore
+            import distro
 
-            return distro.version(pretty=True)  # type: ignore
+            return distro.version(pretty=True)
         except ImportError:
             return platform.release()
     return ""
