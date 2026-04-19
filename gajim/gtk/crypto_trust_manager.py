@@ -8,19 +8,18 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
 
 import locale
 import logging
-import time
 
 from gi.repository import Adw
 from gi.repository import Gtk
-from omemo_dr.const import OMEMOTrust
-from omemo_dr.structs import IdentityInfo
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
+from gajim.common.const import Trust
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
@@ -29,7 +28,9 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.omemo import compose_trust_uri
+from gajim.common.modules.omemo import OMEMO
+from gajim.common.modules.openpgp import OpenPGP
+from gajim.common.modules.util import PublicKeyData
 
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.builder import get_builder
@@ -38,35 +39,40 @@ from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.misc import remove_css_class
 from gajim.gtk.util.window import open_window
 
-log = logging.getLogger("gajim.gtk.omemo_trust_manager")
+log = logging.getLogger("gajim.gtk.crypto_trust_manager")
 
 
 TRUST_DATA = {
-    OMEMOTrust.UNTRUSTED: (
+    Trust.UNTRUSTED: (
         "lucide-shield-x-symbolic",
         _("Untrusted"),
-        "omemo-untrusted-color",
+        "crypto-untrusted-color",
     ),
-    OMEMOTrust.UNDECIDED: (
+    Trust.UNDECIDED: (
         "lucide-shield-question-mark-symbolic",
         _("Not Decided"),
-        "omemo-undecided-color",
+        "crypto-undecided-color",
     ),
-    OMEMOTrust.VERIFIED: (
+    Trust.VERIFIED: (
         "lucide-shield-check-symbolic",
         _("Verified"),
-        "omemo-verified-color",
+        "crypto-verified-color",
     ),
-    OMEMOTrust.BLIND: (
+    Trust.BLIND: (
         "lucide-shield-symbolic",
         _("Blind Trust"),
-        "omemo-blind-color",
+        "crypto-blind-color",
     ),
 }
 
 
-class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
-    def __init__(self, account: str, contact: types.ChatContactT | None = None) -> None:
+class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
+    def __init__(
+        self,
+        encryption: Literal["OMEMO", "OpenPGP"],
+        account: str,
+        contact: types.ChatContactT | None = None,
+    ) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
         SignalManager.__init__(self)
@@ -74,7 +80,11 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._account = account
         self._contact = contact
 
-        self._ui = get_builder("omemo_trust_manager.ui")
+        client = app.get_client(self._account)
+        self._crypto_module = client.get_module(encryption)
+        self._encryption = encryption
+
+        self._ui = get_builder("crypto_trust_manager.ui")
         self.append(self._ui.stack)
 
         self._connect(
@@ -89,6 +99,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._connect(self._ui.copy_button, "clicked", self._on_copy_button_clicked)
 
         self._ui.list.set_sort_func(self._sort_func, None)
+        self._ui.list.set_filter_func(self._filter_func)
 
         self.register_events(
             [
@@ -154,11 +165,11 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list_heading.set_text(header_text)
         self._ui.comparing_instructions.set_text(popover_qr_text)
 
-        self._our_fpr_formatted = client.get_module(
-            "OMEMO"
-        ).backend.get_our_fingerprint(formatted=True)
-        self._ui.our_fingerprint_row.set_title(self._our_fpr_formatted)
-        self._ui.our_fingerprint_2.set_text(self._our_fpr_formatted)
+        self._our_public_key = self._crypto_module.get_our_public_key()
+
+        fingerprint = self._our_public_key.pretty_fingerprint()
+        self._ui.our_fingerprint_row.set_title(fingerprint)
+        self._ui.our_fingerprint_2.set_text(fingerprint)
 
         self.update()
         self._load_qrcode()
@@ -190,6 +201,10 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
             self._ui.stack.set_visible_child_name("no-connection")
 
     @staticmethod
+    def _filter_func(row: DeviceRow) -> bool:
+        return row.active
+
+    @staticmethod
     def _sort_func(row1: DeviceRow, row2: DeviceRow, _user_data: Any) -> int:
         result = locale.strcoll(row1.address, row2.address)
         if result != 0:
@@ -203,38 +218,34 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         return 0
 
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
-        client = app.get_client(self._account)
-
-        identity_info = client.get_module("OMEMO").backend.get_identity_infos(
-            str(contact.jid),
-            only_active=contact.is_groupchat,
-            trust=OMEMOTrust.UNDECIDED if contact.is_groupchat else None,
+        public_key_data = self._crypto_module.get_public_keys(
+            contact.jid, is_groupchat=contact.is_groupchat
         )
 
-        for info in identity_info:
-            self._ui.list.append(DeviceRow(contact, info))
+        for key in public_key_data:
+            self._ui.list.append(DeviceRow(contact, key, self._crypto_module))
 
         assert self._contact is not None
         if self._contact.is_groupchat:
-            self._ui.list.set_visible(bool(identity_info))
-            self._ui.undecided_placeholder.set_visible(not bool(identity_info))
+            self._ui.list.set_visible(bool(public_key_data))
+            self._ui.undecided_placeholder.set_visible(not bool(public_key_data))
 
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
-        uri = compose_trust_uri(
-            client.get_own_jid(),
-            [client.get_module("OMEMO").backend.get_our_identity()],
-        )
+        uri = self._crypto_module.compose_trust_uri(client.get_own_jid())
         log.debug("Trust URI: %s", uri)
-        self._ui.qr_code_image.set_from_paintable(generate_qr_code(uri))
+        self._ui.qr_code_image.set_from_paintable(
+            generate_qr_code(uri) if uri else None
+        )
+        self._ui.qr_menu_button.set_visible(bool(uri))
 
-    def _on_show_inactive(self, _switch: Gtk.Switch, _state: bool) -> None:
+    def _on_show_inactive(self, _switch: Gtk.Switch, state: bool) -> None:
+        self._ui.list.set_filter_func(None if state else self._filter_func)
         self._ui.list.invalidate_filter()
 
     def _on_clear_devices_clicked(self, _button: Gtk.Button) -> None:
         def _on_response() -> None:
-            client = app.get_client(self._account)
-            client.get_module("OMEMO").clear_devicelist()
+            self._crypto_module.clear_keylist()
 
         ConfirmationAlertDialog(
             _("Clear Devices?"),
@@ -246,51 +257,51 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
         window = open_window("Preferences")
-        window.show_page(f"{self._contact.account}-encryption-omemo")
+        window.show_page(
+            f"{self._contact.account}-encryption-{self._encryption.lower()}"
+        )
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
-        app.window.get_clipboard().set(self._our_fpr_formatted)
+        app.window.get_clipboard().set(self._our_public_key.pretty_fingerprint())
 
 
 class DeviceRow(Adw.ActionRow, SignalManager):
     def __init__(
-        self, contact: types.ChatContactT, identity_info: IdentityInfo
+        self,
+        contact: types.ChatContactT,
+        public_key_data: PublicKeyData,
+        crypto_module: OMEMO | OpenPGP,
     ) -> None:
         Adw.ActionRow.__init__(self)
         SignalManager.__init__(self)
-        self.add_css_class("omemo-device-row")
+        self.add_css_class("crypto-device-row")
 
         self._contact = contact
         self._client = app.get_client(contact.account)
 
-        self._address = identity_info.address
-        self._identity_info = identity_info
-        self._trust = identity_info.trust
+        self._crypto_module = crypto_module
+
+        self._public_key_data = public_key_data
+        self._trust = public_key_data.trust
 
         subtitle_entries: list[str] = []
         if contact.is_groupchat:
-            subtitle_entries.append(self._address)
+            subtitle_entries.append(str(self._public_key_data.address))
 
-        self._formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
-            formatted=True
-        )
-
-        if self._identity_info.last_seen is not None and not contact.is_groupchat:
-            last_seen_data = time.strftime(
-                app.settings.get("date_time_format"),
-                time.localtime(self._identity_info.last_seen),
-            )
+        if self._public_key_data.last_seen is not None and not contact.is_groupchat:
+            datetime = self._public_key_data.last_seen.astimezone()
+            last_seen_data = datetime.strftime(app.settings.get("date_time_format"))
         else:
             last_seen_data = _("Never")
         subtitle_entries.append(_("Last seen: %s") % last_seen_data)
 
-        if not self._identity_info.active:
+        if not self._public_key_data.active:
             subtitle_entries.append(_("(inactive)"))
 
-        self.set_title(self._formatted_fingerprint)
+        self.set_title(self._public_key_data.pretty_fingerprint())
         self.set_subtitle(" ".join(subtitle_entries))
 
-        self._trust_label = TrustLabel(identity_info.trust)
+        self._trust_label = TrustLabel(public_key_data.trust)
         self.add_suffix(self._trust_label)
 
         self._trust_button = TrustButton(self)
@@ -313,10 +324,7 @@ class DeviceRow(Adw.ActionRow, SignalManager):
 
     def delete_fingerprint(self, *args: Any) -> None:
         def _on_response() -> None:
-            self._client.get_module("OMEMO").backend.delete_session(
-                self._address, self._identity_info.device_id, delete_identity=True
-            )
-
+            self._crypto_module.remove_public_key(self._public_key_data)
             listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
 
@@ -328,32 +336,29 @@ class DeviceRow(Adw.ActionRow, SignalManager):
             callback=_on_response,
         )
 
-    def set_trust(self, trust: OMEMOTrust) -> None:
+    def set_trust(self, trust: Trust) -> None:
         self._trust = trust
         self._trust_label.set_trust(trust)
-
-        self._client.get_module("OMEMO").backend.set_trust(
-            self._address, self._identity_info.public_key, trust
-        )
+        self._crypto_module.set_public_key_trust(self._public_key_data, trust)
 
     @property
-    def trust(self) -> OMEMOTrust:
+    def trust(self) -> Trust:
         return self._trust
 
     @property
     def active(self) -> bool:
-        return self._identity_info.active
+        return self._public_key_data.active
 
     @property
     def address(self) -> str:
-        return self._address
+        return str(self._public_key_data.address)
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
-        app.window.get_clipboard().set(self._formatted_fingerprint)
+        app.window.get_clipboard().set(self._public_key_data.pretty_fingerprint())
 
 
 class TrustLabel(Gtk.Box):
-    def __init__(self, trust: OMEMOTrust) -> None:
+    def __init__(self, trust: Trust) -> None:
         Gtk.Box.__init__(
             self,
             margin_end=12,
@@ -371,9 +376,9 @@ class TrustLabel(Gtk.Box):
 
         self.set_trust(trust)
 
-    def set_trust(self, trust: OMEMOTrust) -> None:
-        remove_css_class(self._label, "omemo-")
-        remove_css_class(self._image, "omemo-")
+    def set_trust(self, trust: Trust) -> None:
+        remove_css_class(self._label, "crypto-")
+        remove_css_class(self._image, "crypto-")
 
         icon_name, text, css_class = TRUST_DATA[trust]
 
@@ -436,18 +441,18 @@ class TrustPopver(Gtk.Popover, SignalManager):
     def update(self) -> None:
         self._listbox.remove_all()
 
-        if self._row.trust != OMEMOTrust.VERIFIED:
+        if self._row.trust != Trust.VERIFIED:
             self._listbox.append(VerifiedOption())
-        if self._row.trust != OMEMOTrust.BLIND:
+        if self._row.trust != Trust.BLIND:
             self._listbox.append(BlindOption())
-        if self._row.trust != OMEMOTrust.UNTRUSTED:
+        if self._row.trust != Trust.UNTRUSTED:
             self._listbox.append(NotTrustedOption())
         self._listbox.append(DeleteOption())
 
 
 class MenuOption(Gtk.ListBoxRow):
     def __init__(
-        self, icon: str, label_text: str, color: str, type_: OMEMOTrust | None = None
+        self, icon: str, label_text: str, color: str, type_: Trust | None = None
     ) -> None:
         Gtk.ListBoxRow.__init__(self)
 
@@ -477,7 +482,7 @@ class BlindOption(MenuOption):
             "lucide-shield-symbolic",
             _("Blind Trust"),
             "encrypted-color",
-            OMEMOTrust.BLIND,
+            Trust.BLIND,
         )
 
 
@@ -488,7 +493,7 @@ class VerifiedOption(MenuOption):
             "lucide-shield-check-symbolic",
             _("Verified"),
             "encrypted-color",
-            OMEMOTrust.VERIFIED,
+            Trust.VERIFIED,
         )
 
 
@@ -499,7 +504,7 @@ class NotTrustedOption(MenuOption):
             "lucide-circle-x-symbolic",
             _("Untrusted"),
             "error",
-            OMEMOTrust.UNTRUSTED,
+            Trust.UNTRUSTED,
         )
 
 

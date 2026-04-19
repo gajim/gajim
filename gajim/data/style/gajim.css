@@ -900,13 +900,13 @@ list.sidebar-switcher .sidebar-row-header {
     border-bottom: 0px;
 }
 
-/* OMEMO */
-.omemo-inactive-color { color: var(--light-5); }
-.omemo-undecided-color { color: var(--warning-color); }
-.omemo-verified-color { color: var(--success-color); }
-.omemo-blind-color { color: var(--success-color); }
-.omemo-untrusted-color { color: var(--error-color); }
-.omemo-device-row .title .title {
+/* Crypto */
+.crypto-inactive-color { color: var(--light-5); }
+.crypto-undecided-color { color: var(--warning-color); }
+.crypto-verified-color { color: var(--success-color); }
+.crypto-blind-color { color: var(--success-color); }
+.crypto-untrusted-color { color: var(--error-color); }
+.crypto-device-row .title .title {
     font-family: monospace;
 }
 

@@ -178,6 +178,23 @@ class ContactInfoBuilder(Builder):
     devices_stack: Gtk.Stack
     devices_page: Adw.PreferencesPage
 
+class CryptoTrustManagerBuilder(Builder):
+    qr_code_popover: Gtk.Popover
+    comparing_instructions: Gtk.Label
+    our_fingerprint_2: Gtk.Label
+    qr_code_image: Gtk.Image
+    stack: Gtk.Stack
+    our_fingerprint_row: Adw.ActionRow
+    copy_button: Gtk.Button
+    qr_menu_button: Gtk.MenuButton
+    manage_trust_button: Gtk.Button
+    list_heading: Gtk.Label
+    list_heading_box: Gtk.Box
+    show_inactive_switch: Gtk.Switch
+    clear_devices_button: Gtk.Button
+    list: Gtk.ListBox
+    undecided_placeholder: Gtk.Label
+
 class DbMigrationBuilder(Builder):
     box: Gtk.Box
     stack: Gtk.Stack
@@ -443,23 +460,6 @@ class MessageActionsBoxBuilder(Builder):
     encryption_details_image: Gtk.Image
     visitor_popover: Gtk.Popover
     request_voice_button: Gtk.Button
-
-class OmemoTrustManagerBuilder(Builder):
-    qr_code_popover: Gtk.Popover
-    comparing_instructions: Gtk.Label
-    our_fingerprint_2: Gtk.Label
-    qr_code_image: Gtk.Image
-    stack: Gtk.Stack
-    our_fingerprint_row: Adw.ActionRow
-    copy_button: Gtk.Button
-    qr_menu_button: Gtk.MenuButton
-    manage_trust_button: Gtk.Button
-    list_heading: Gtk.Label
-    list_heading_box: Gtk.Box
-    show_inactive_switch: Gtk.Switch
-    clear_devices_button: Gtk.Button
-    list: Gtk.ListBox
-    undecided_placeholder: Gtk.Label
 
 class PasswordDialogBuilder(Builder):
     pass_box: Gtk.Box
@@ -732,6 +732,12 @@ def get_builder(
 ) -> ContactInfoBuilder: ...  # noqa
 @overload
 def get_builder(
+    file_name: Literal["crypto_trust_manager.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> CryptoTrustManagerBuilder: ...  # noqa
+@overload
+def get_builder(
     file_name: Literal["db_migration.ui"],
     instance: Any = None,
     widgets: list[str] = ...,
@@ -850,12 +856,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> MessageActionsBoxBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["omemo_trust_manager.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> OmemoTrustManagerBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["password_dialog.ui"],

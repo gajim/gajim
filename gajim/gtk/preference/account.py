@@ -29,7 +29,7 @@ from gajim.gtk.certificate_dialog import CertificatePage
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.crypto_trust_manager import CryptoTrustManager
 from gajim.gtk.preference.archiving import ArchivingPreferences
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
 from gajim.gtk.preference.manage_roster import ManageRoster
@@ -410,8 +410,8 @@ class AccountOmemoTrustGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(self, key="account-omemo-trust", account=account)
 
-        omemo_trust_manager = OMEMOTrustManager(account)
-        self.add(omemo_trust_manager)
+        crypto_trust_manager = CryptoTrustManager("OMEMO", account)
+        self.add(crypto_trust_manager)
 
 
 class AccountConnectionGroup(GajimPreferencesGroup):

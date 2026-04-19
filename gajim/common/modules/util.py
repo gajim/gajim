@@ -8,20 +8,25 @@ from __future__ import annotations
 
 from typing import Any
 from typing import ParamSpec
+from typing import Protocol
 from typing import TypeVar
 
+import datetime as dt
 import logging
 from collections.abc import Callable
+from dataclasses import dataclass
 from functools import partial
 from functools import wraps
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import Trust
 
 T = TypeVar("T")
 P = ParamSpec("P")
@@ -127,3 +132,46 @@ def delete_nodes(stanza: Message,
     nodes = stanza.getTags(name, namespace=namespace)
     for node in nodes:
         stanza.delChild(node)
+
+
+@dataclass
+class PublicKeyData:
+    active: bool
+    address: JID
+    label: str | None
+    last_seen: dt.datetime | None
+    fingerprint: str
+    trust: Trust
+
+    def pretty_fingerprint(self) -> str:
+        raise NotImplementedError
+
+
+class CryptoModule(Protocol):
+
+    def get_our_public_key(self) -> PublicKeyData:
+        ...
+
+    def get_public_keys(
+        self,
+        jid: JID,
+        *,
+        is_groupchat: bool
+    ) -> list[PublicKeyData]:
+        ...
+
+    def set_public_key_trust(
+        self,
+        public_key_data: PublicKeyData,
+        trust: Trust
+    ) -> None:
+        ...
+
+    def remove_public_key(self, public_key_data: PublicKeyData) -> None:
+        ...
+
+    def clear_keylist(self) -> None:
+        ...
+
+    def compose_trust_uri(self, jid: JID) -> str:
+        ...

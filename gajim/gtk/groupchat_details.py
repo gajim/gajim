@@ -13,6 +13,7 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_entry import ContactNameEntry
+from gajim.gtk.crypto_trust_manager import CryptoTrustManager
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
 from gajim.gtk.groupchat_blocks import GroupchatBlocks
 from gajim.gtk.groupchat_config import GroupchatConfig
@@ -20,7 +21,6 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_manage import GroupchatManage
 from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 from gajim.gtk.groupchat_settings import GroupChatSettings
-from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
@@ -191,7 +191,7 @@ class GroupchatDetails(GajimAppWindow):
             return
 
         self._ui.encryption_box.set_child(
-            OMEMOTrustManager(self._contact.account, self._contact)
+            CryptoTrustManager("OMEMO", self._contact.account, self._contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)
 
