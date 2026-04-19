@@ -1,3 +1,47 @@
+Gajim 2.4.6 (19 Apr 2026)
+
+  New
+
+  * Show hint if it's night for your contact (#12666)
+  * Activity list: Add menu for marking items as read
+
+  Improvements
+
+  * Activity list: Mark reaction notifications as read when opening chat
+  * Activity list: Mark reaction notifications as read if chat is active
+  * Timezone update: Make it easier to disable updates
+  * Use Adwaita colors for group chat subject and call box
+  * File transfers: Sanitize RTL codepoints from file names
+  * Voice messages: Reduce bitrate for Opus encoded voice messages
+  * Link preview: Make close button circular
+  * Group chat details: Add sidebar group for Personal Settings (#12502)
+  * Files: Ask for confirmation before opening executable files (#10699)
+  * Activity feed: Make subject brighter
+  * Chat list: Make close button circular
+
+  Change
+
+  * Raise nbxmpp to 7.2.0
+  * Mentions: Mark messages with an @-sign and an indicator
+  * Require cryptography >= 43.0.0
+  * Replace GSound by Gtk.MediaFile
+
+  Performance
+
+  * Application: Store count of active accounts for quicker access
+
+  Bug Fixes
+
+  * Chat: Ellipsize nicknames
+  * View: Fix jumping to older messages
+  * AccountWizard: Don't fail when signing up for new account (#12694)
+  * Group chat state: Fix label alignment
+  * Icons: Replace custom 'send message' icon with Lucide icon (#12680)
+  * Link preview: Hide overflow to honor rounded corners
+  * Link preview: Remove line breaks and strip whitespace
+  * Activity feed: Show account indicator only if there are multiple accounts enabled
+  * Activity feed: Hide workspace settings button
+
 Gajim 2.4.5 (30 Mar 2026)
 
   New
