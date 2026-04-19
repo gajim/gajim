@@ -241,10 +241,17 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if self._bare_contact is None:
             return
 
-        self._ui.encryption_box.set_child(
+        self._ui.encryption_omemo_box.set_child(
             CryptoTrustManager("OMEMO", self._bare_contact.account, self._bare_contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)
+
+        self._ui.encryption_openpgp_box.set_child(
+            CryptoTrustManager(
+                "OpenPGP", self._bare_contact.account, self._bare_contact
+            )
+        )
+        self._switcher.set_item_visible("encryption-openpgp", True)
 
     def _fill_note_page(self) -> None:
         if self._bare_contact is None or not self._is_in_roster:

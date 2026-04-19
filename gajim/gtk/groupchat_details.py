@@ -68,6 +68,12 @@ class GroupchatDetails(GajimAppWindow):
                     icon_name="lucide-lock-symbolic",
                 ),
                 SideBarMenuItem(
+                    "encryption-openpgp",
+                    _("Encryption (OpenPGP)"),
+                    group=_("Personal Settings"),
+                    icon_name="lucide-lock-symbolic",
+                ),
+                SideBarMenuItem(
                     "blocks",
                     _("Blocked Participants"),
                     group=_("Personal Settings"),
@@ -186,14 +192,19 @@ class GroupchatDetails(GajimAppWindow):
 
     def _add_groupchat_encryption(self) -> None:
         if self._contact.is_groupchat and self._contact.muc_context == "public":
-            # OMEMO is not available for public group chats
             self._switcher.set_item_visible("encryption-omemo", False)
+            self._switcher.set_item_visible("encryption-openpgp", False)
             return
 
-        self._ui.encryption_box.set_child(
+        self._ui.encryption_omemo_box.set_child(
             CryptoTrustManager("OMEMO", self._contact.account, self._contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)
+
+        self._ui.encryption_openpgp_box.set_child(
+            CryptoTrustManager("OpenPGP", self._contact.account, self._contact)
+        )
+        self._switcher.set_item_visible("encryption-openpgp", True)
 
     def _add_blocks(self) -> None:
         blocks = GroupchatBlocks(self._client, self._contact)

@@ -32,6 +32,7 @@ from gajim.gtk.preference.account import AccountConnectionPage
 from gajim.gtk.preference.account import AccountGeneralPage
 from gajim.gtk.preference.account import AccountManageRosterPage
 from gajim.gtk.preference.account import AccountOmemoPage
+from gajim.gtk.preference.account import AccountOpenPGPPage
 from gajim.gtk.preference.account import AccountPrivacyPage
 from gajim.gtk.preference.account import HostnamePage
 from gajim.gtk.preference.account import LoginPage
@@ -60,6 +61,7 @@ ACCOUNT_PAGES = [
     AccountGeneralPage,
     AccountPrivacyPage,
     AccountOmemoPage,
+    AccountOpenPGPPage,
     AccountConnectionPage,
     AccountProviderPage,
     AccountManageRosterPage,

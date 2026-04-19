@@ -163,8 +163,8 @@ class ContactInfoBuilder(Builder):
     request_stack: Gtk.Stack
     to_subscription_button: Gtk.Button
     remove_history_button: Gtk.Button
-    encryption_scrolled: Gtk.ScrolledWindow
-    encryption_box: Adw.Clamp
+    encryption_omemo_box: Adw.Clamp
+    encryption_openpgp_box: Adw.Clamp
     groups_page_stack: Gtk.Stack
     groups_treeview: Gtk.TreeView
     tree_selection: Gtk.TreeSelection
@@ -324,8 +324,8 @@ class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
     info_container: Gtk.Box
     settings_box: Gtk.Box
-    encryption_scrolled: Gtk.ScrolledWindow
-    encryption_box: Adw.Clamp
+    encryption_omemo_box: Adw.Clamp
+    encryption_openpgp_box: Adw.Clamp
     blocks_box: Gtk.Box
     manage_box: Gtk.Box
     affiliation_box: Gtk.Box

@@ -262,13 +262,34 @@
         <property name="title" translatable="yes">Encryption (OMEMO)</property>
         <property name="icon-name">lucide-lock-symbolic</property>
         <property name="child">
-          <object class="GtkScrolledWindow" id="encryption_scrolled">
+          <object class="GtkScrolledWindow">
             <property name="focusable">1</property>
             <property name="hscrollbar-policy">never</property>
             <property name="child">
               <object class="GtkViewport">
                 <property name="child">
-                  <object class="AdwClamp" id="encryption_box">
+                  <object class="AdwClamp" id="encryption_omemo_box">
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">encryption-openpgp</property>
+        <property name="title" translatable="yes">Encryption (OpenPGP)</property>
+        <property name="icon-name">lucide-lock-symbolic</property>
+        <property name="child">
+          <object class="GtkScrolledWindow">
+            <property name="focusable">1</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="child">
+              <object class="GtkViewport">
+                <property name="child">
+                  <object class="AdwClamp" id="encryption_openpgp_box">
                   </object>
                 </property>
               </object>
