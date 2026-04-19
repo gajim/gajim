@@ -79,10 +79,7 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
 
         self._account = account
         self._contact = contact
-
-        client = app.get_client(self._account)
-        self._crypto_module = client.get_module(encryption)
-        self._encryption = encryption
+        self._encryption: Literal["OMEMO", "OpenPGP"] = encryption
 
         self._ui = get_builder("crypto_trust_manager.ui")
         self.append(self._ui.stack)
@@ -125,6 +122,8 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
 
     def _update(self) -> None:
         client = app.get_client(self._account)
+        self._crypto_module = client.get_module(self._encryption)
+
         if self._contact is None:
             self._contact = client.get_module("Contacts").get_contact(
                 client.get_own_jid().bare

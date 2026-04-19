@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import datetime as dt
 import logging
+from collections.abc import Iterable
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -93,14 +94,17 @@ class OpenPGPStorage(AlchemyStorage):
         cert: pys.Cert,
         trust: Trust,
     ) -> None:
+
+        fingerprint = cert.fingerprint.upper()
+
         public = mod.Public(
             account=account,
             jid=jid,
             key=cert,
-            fingerprint=cert.fingerprint,
+            fingerprint=fingerprint,
             trust=trust,
         )
-        log.info("Store public key for %s, %s, %s", jid, cert.fingerprint, trust)
+        log.info("Store public key for %s, %s, %s", jid, fingerprint, trust)
         session.add(public)
 
         try:
@@ -113,12 +117,12 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def update_public_key(
+    def update_public_keys(
         self,
         session: Session,
         account: str,
         jid: JID,
-        fingerprint: str,
+        fingerprints: Iterable[str] | None = None,
         *,
         label: str | None | ValueMissingT = VALUE_MISSING,
         trust: Trust | ValueMissingT = VALUE_MISSING,
@@ -134,18 +138,19 @@ class OpenPGPStorage(AlchemyStorage):
         }
         values = {k: v for k, v in values.items() if v is not VALUE_MISSING}
 
-        log.info("Update public key for %s, %s, %s", jid, fingerprint, values)
+        fingerprints = set(map(str.upper, fingerprints or set()))
 
-        stmt = (
-            sa.update(mod.Public)
-            .where(
-                mod.Public.account == account,
-                mod.Public.jid == jid,
-                mod.Public.fingerprint == fingerprint,
-            )
-            .values(**values)
+        log.info("Update public key for %s, %s, %s", jid, fingerprints, values)
+
+        stmt = sa.update(mod.Public).where(
+            mod.Public.account == account,
+            mod.Public.jid == jid,
         )
 
+        if fingerprints:
+            stmt = stmt.where(mod.Public.fingerprint.in_(fingerprints))
+
+        stmt = stmt.values(**values)
         session.execute(stmt)
 
     @with_session
@@ -156,21 +161,9 @@ class OpenPGPStorage(AlchemyStorage):
         stmt = sa.select(mod.Public).where(
             mod.Public.account == account,
             mod.Public.jid == jid,
-            mod.Public.fingerprint == fingerprint,
+            mod.Public.fingerprint == fingerprint.upper(),
         )
         return session.scalar(stmt)
-
-    @with_session
-    @timeit
-    def remove_public_key(
-        self, session: Session, account: str, jid: JID, fingerprint: str
-    ) -> None:
-        stmt = sa.delete(mod.Public).where(
-            mod.Public.account == account,
-            mod.Public.jid == jid,
-            mod.Public.fingerprint == fingerprint,
-        )
-        session.scalar(stmt)
 
     @with_session
     @timeit
@@ -197,7 +190,19 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def get_fingerprints(
+    def remove_public_key(
+        self, session: Session, account: str, jid: JID, fingerprint: str
+    ) -> None:
+        stmt = sa.delete(mod.Public).where(
+            mod.Public.account == account,
+            mod.Public.jid == jid,
+            mod.Public.fingerprint == fingerprint.upper(),
+        )
+        session.execute(stmt)
+
+    @with_session
+    @timeit
+    def get_known_fingerprints(
         self,
         session: Session,
         account: str,
@@ -205,11 +210,6 @@ class OpenPGPStorage(AlchemyStorage):
         *,
         trust: list[Trust] | None = None,
     ) -> set[str]:
-        stmt = sa.select(mod.Public.fingerprint).where(
-            mod.Public.account == account,
-            mod.Public.jid.in_(jids),
-        )
-        if trust is not None:
-            stmt = stmt.where(mod.Public.trust.in_(trust))
 
-        return set(map(str.upper, session.scalars(stmt).all()))
+        keys = self.get_public_keys(account, jids, trust=trust, only_active=False)
+        return {k.fingerprint for k in keys}

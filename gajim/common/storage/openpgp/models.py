@@ -65,7 +65,7 @@ class Public(MappedAsDataclass, Base, kw_only=True):
     __tablename__ = "public"
     __table_args__ = (
         Index("idx_public", "account", "jid"),
-        Index("idx_public_fpr", "account", "fingerprint", unique=True),
+        Index("idx_public_fpr", "account", "jid", "fingerprint", unique=True),
     )
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)

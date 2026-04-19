@@ -45,7 +45,9 @@ from gajim.common.events import SignedIn
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
+from gajim.common.modules.util import PublicKeyData
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.decorators import event_filter
 
@@ -110,7 +112,7 @@ def format_fingerprint(fingerprint: str) -> str:
     for word in range(0, fplen, wordsize):
         buf += f"{fingerprint[word : word + wordsize]} "
     buf = textwrap.fill(buf, width=28)
-    return buf.rstrip().upper()
+    return buf.rstrip()
 
 
 def find_remote_key(
@@ -122,14 +124,7 @@ def find_remote_key(
 
 
 @dataclass
-class OpenPGPPublicKeyData:
-    active: bool
-    address: JID
-    label: str | None
-    last_seen: dt.datetime | None
-    fingerprint: str
-    trust: Trust
-
+class OpenPGPPublicKeyData(PublicKeyData):
     @classmethod
     def from_public(cls, public: mod.Public) -> OpenPGPPublicKeyData:
         return cls(
@@ -145,7 +140,7 @@ class OpenPGPPublicKeyData:
         return format_fingerprint(self.fingerprint)
 
 
-class OpenPGP(BaseModule):
+class OpenPGP(BaseModule, CryptoModule):
     _nbxmpp_extends = "OpenPGP"
     _nbxmpp_methods = [
         "set_keylist",
@@ -186,7 +181,7 @@ class OpenPGP(BaseModule):
             self._secret_cert, self._secret_key_date = secret_key
             self._log.info(
                 "Found secret key: %s, %s",
-                self._secret_cert.fingerprint,
+                self._secret_cert.fingerprint.upper(),
                 self._secret_key_date,
             )
 
@@ -232,7 +227,9 @@ class OpenPGP(BaseModule):
 
             assert cert.secrets is not None
             app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
-            self._log.info("Successfully migrated secret key: %s", cert.fingerprint)
+            self._log.info(
+                "Successfully migrated secret key: %s", cert.fingerprint.upper()
+            )
             self._load_secret_keys()
             break
 
@@ -259,9 +256,10 @@ class OpenPGP(BaseModule):
         assert cert.secrets is not None
 
         app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
-        self._log.info("Generated key %s", cert.fingerprint)
+        self._log.info("Generated key %s", cert.fingerprint.upper())
         self._load_secret_keys()
         self.set_public_key()
+        self.request_keylist()
 
     def import_key(self, data: str | bytes, password: str | None = None) -> None:
         if self._secret_cert is not None:
@@ -296,6 +294,7 @@ class OpenPGP(BaseModule):
         app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
         self._load_secret_keys()
         self.set_public_key()
+        self.request_keylist()
 
     def set_public_key(self) -> None:
         self._log.info("Publish public key")
@@ -307,7 +306,7 @@ class OpenPGP(BaseModule):
 
         self._nbxmpp("OpenPGP").set_public_key(
             bytes(public_cert),
-            self._secret_cert.fingerprint,
+            self._secret_cert.fingerprint.upper(),
             self._secret_key_date.timestamp(),
         )
 
@@ -341,7 +340,7 @@ class OpenPGP(BaseModule):
         if result.jid.to_iri() not in user_ids:
             self._log.warning(
                 "Ignore public key because of invalid user id: %s, user ids: %s",
-                cert.fingerprint,
+                cert.fingerprint.upper(),
                 user_ids,
             )
             return
@@ -358,7 +357,7 @@ class OpenPGP(BaseModule):
             keylist = [
                 PGPKeyMetadata(
                     self._own_jid,
-                    self._secret_cert.fingerprint,
+                    self._secret_cert.fingerprint.upper(),
                     self._secret_key_date.timestamp(),
                 )
             ]
@@ -402,68 +401,82 @@ class OpenPGP(BaseModule):
         self._log.info("Keylist received from %s", jid)
         self._process_keylist(keylist, jid)
 
+    def _validate_active_fingerprints(
+        self, keylist: list[PGPKeyMetadata]
+    ) -> tuple[set[str], bool]:
+        own_fpr_found = False
+        active_fprs: set[str] = set()
+        for key in keylist:
+            if not key.fingerprint.isupper():
+                self._log.warning("lower-cased fingerprint: %s", key.fingerprint)
+                continue
+
+            if (
+                self._secret_cert is not None
+                and self._secret_cert.fingerprint.upper() == key.fingerprint
+            ):
+                # Remove own fingerprint from the list
+                own_fpr_found = True
+                continue
+
+            active_fprs.add(key.fingerprint)
+
+        return active_fprs, own_fpr_found
+
     def _process_keylist(
         self, keylist: list[PGPKeyMetadata] | None, from_jid: JID
     ) -> None:
 
-        if self._own_jid.bare_match(from_jid):
-            self._process_own_keylist(keylist)
-            return
-
         self._log.info("Received keylist from %s", from_jid)
+        own_keylist = self._own_jid.bare_match(from_jid)
+
+        if own_keylist and not self.secret_key_exists():
+            self._log.info("Ignore own keylist because no secret key was found")
+            return
 
         if not keylist:
             self._log.info("Keylist is empty")
+            if own_keylist:
+                self.set_keylist()
+            app.storage.openpgp.update_public_keys(
+                self._account, from_jid, active=False
+            )
             return
 
-        known_fingerprints = app.storage.openpgp.get_fingerprints(
+        active_fprs, own_fpr_found = self._validate_active_fingerprints(keylist)
+        self._log.info("Active keys: %s, own key found: %s", active_fprs, own_fpr_found)
+
+        known_fprs = app.storage.openpgp.get_known_fingerprints(
             self._account, [from_jid]
         )
 
-        for key in keylist:
-            if not key.fingerprint.isupper():
-                self._log.warning("lower-cased fingerprint: %s", key.fingerprint)
-                continue
+        unknown_fprs = active_fprs - known_fprs
+        inactive_fprs = known_fprs - active_fprs
 
-            self._log.info(key.fingerprint)
-            if key.fingerprint not in known_fingerprints:
-                self.request_public_key(from_jid, key.fingerprint)
-
-    def _process_own_keylist(self, keylist: list[PGPKeyMetadata] | None) -> None:
-        self._log.info("Received own keylist")
-        if self._secret_cert is None:
-            self._log.info("No secret key available, ignore own keylist")
-            return
-
-        if not keylist:
-            self._log.warning("Our keylist is empty")
-            self.set_keylist()
-            return
-
-        is_key_published = False
-        for key in keylist:
-            if not key.fingerprint.isupper():
-                self._log.warning("lower-cased fingerprint: %s", key.fingerprint)
-                continue
-
-            self._log.info(key.fingerprint)
-
-            if key.fingerprint == self._secret_cert.fingerprint.upper():
-                self._log.info("Own fingerprint found in keys list")
-                is_key_published = True
-
-        if is_key_published:
-            return
-
-        self._log.info("Own fingerprint not published")
-        keylist.append(
-            PGPKeyMetadata(
-                self._own_jid,
-                self._secret_cert.fingerprint,
-                self._secret_key_date.timestamp(),
+        if active_fprs:
+            app.storage.openpgp.update_public_keys(
+                self._account, from_jid, fingerprints=active_fprs, active=True
             )
-        )
-        self.set_keylist(keylist)
+
+        if inactive_fprs:
+            app.storage.openpgp.update_public_keys(
+                self._account, from_jid, fingerprints=inactive_fprs, active=False
+            )
+
+        for fingerprint in unknown_fprs:
+            self.request_public_key(from_jid, fingerprint)
+
+        if own_keylist and not own_fpr_found:
+            assert self._secret_cert is not None
+            self._log.info("Own public key not published")
+            keylist.append(
+                PGPKeyMetadata(
+                    self._own_jid,
+                    self._secret_cert.fingerprint.upper(),
+                    self._secret_key_date.timestamp(),
+                )
+            )
+            self.set_keylist(keylist)
 
     def decrypt_message(
         self, _client: nbxmppClient, stanza: Message, properties: MessageProperties
@@ -487,7 +500,9 @@ class OpenPGP(BaseModule):
         assert self._secret_cert.has_secret_keys
 
         remote_public_keys = app.storage.openpgp.get_public_keys(
-            self._account, [remote_jid]
+            self._account,
+            [remote_jid],
+            only_active=False,
         )
 
         def _store(_key_id: list[str]) -> list[pys.Cert]:
@@ -522,7 +537,7 @@ class OpenPGP(BaseModule):
 
         prepare_stanza(stanza, payload)
 
-        fingerprint = decrypted.valid_sigs[0].certificate
+        fingerprint = decrypted.valid_sigs[0].certificate.upper()
         remote_key = find_remote_key(remote_public_keys, fingerprint)
         if remote_key is None:
             self._log.warning("Unable to find remote key: %s", fingerprint)
@@ -561,7 +576,7 @@ class OpenPGP(BaseModule):
 
         self._log.info(
             "Encrypt to recipients:\n%s",
-            "\n".join([r.fingerprint for r in recipient_certs]),
+            "\n".join([r.fingerprint.upper() for r in recipient_certs]),
         )
 
         payload = create_signcrypt_node(
@@ -587,7 +602,7 @@ class OpenPGP(BaseModule):
         message.set_encryption(
             EncryptionData(
                 protocol="OpenPGP",
-                key=self._secret_cert.fingerprint,
+                key=self._secret_cert.fingerprint.upper(),
                 trust=Trust.VERIFIED,
             )
         )
@@ -617,13 +632,11 @@ class OpenPGP(BaseModule):
             address=self._own_jid,
             label=None,
             last_seen=None,
-            fingerprint=self._secret_cert.fingerprint,
+            fingerprint=self._secret_cert.fingerprint.upper(),
             trust=Trust.VERIFIED,
         )
 
-    def get_public_keys(
-        self, jid: JID, *, is_groupchat: bool
-    ) -> list[OpenPGPPublicKeyData]:
+    def get_public_keys(self, jid: JID, *, is_groupchat: bool) -> list[PublicKeyData]:
 
         trust = [Trust.UNDECIDED] if is_groupchat else None
         public_key_data = app.storage.openpgp.get_public_keys(
@@ -631,21 +644,21 @@ class OpenPGP(BaseModule):
         )
         return [OpenPGPPublicKeyData.from_public(public) for public in public_key_data]
 
-    def compose_trust_uri(self, jid: JID) -> None:
-        return None
+    def compose_trust_uri(self, jid: JID) -> str:
+        return ""
 
-    def remove_public_key(self, public_key_data: OpenPGPPublicKeyData) -> None:
+    def remove_public_key(self, public_key_data: PublicKeyData) -> None:
         app.storage.openpgp.remove_public_key(
             self._account, public_key_data.address, public_key_data.fingerprint
         )
 
     def set_public_key_trust(
-        self, public_key_data: OpenPGPPublicKeyData, trust: Trust
+        self, public_key_data: PublicKeyData, trust: Trust
     ) -> None:
-        app.storage.openpgp.update_public_key(
+        app.storage.openpgp.update_public_keys(
             self._account,
             public_key_data.address,
-            public_key_data.fingerprint,
+            [public_key_data.fingerprint],
             trust=trust,
         )
 
