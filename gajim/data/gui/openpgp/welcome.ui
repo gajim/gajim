@@ -7,16 +7,66 @@
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">18</property>
         <child>
           <object class="GtkLabel">
-            <property name="halign">center</property>
-            <property name="label" translatable="yes">Gajim will now try to setup OpenPGP for you</property>
+            <property name="label" translatable="yes">To set up OpenPGP encryption you can either import an existing key, restore a backup, or let Gajim create a new key.</property>
+            <property name="max-width-chars">38</property>
             <property name="wrap">1</property>
-            <property name="max-width-chars">40</property>
+            <property name="justify">center</property>
             <style>
-              <class name="dimmed"/>
+              <class name="dimmed" />
             </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="halign">center</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Use My Own OpenPGP Key</property>
+                <style>
+                  <class name="title-4" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <style>
+                  <class name="mb-12" />
+                </style>
+                <child>
+                  <object class="GtkButton" id="_import_button">
+                    <property name="label" translatable="yes">Import Key</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="_restore_backup_button">
+                    <property name="label" translatable="yes">Restore Backup</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Create New OpenPGP Key</property>
+                <style>
+                  <class name="title-4" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_generate_button">
+                <property name="label" translatable="yes">Create New Key</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>
