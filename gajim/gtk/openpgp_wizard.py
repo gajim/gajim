@@ -17,6 +17,7 @@ from gajim.plugins.plugins_i18n import _
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
+from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.util.misc import get_ui_string
 
 log = logging.getLogger("gajim.gtk.openpgp.wizard")
@@ -34,6 +35,7 @@ class OpenPGPWizard(Assistant):
         # self._is_form = None
 
         self.add_button("back", _("Back"))
+        self.add_button("close", _("Close"))
         self.add_button(
             "import", _("Import Key"), complete=True, css_class="suggested-action"
         )
@@ -48,11 +50,11 @@ class OpenPGPWizard(Assistant):
                 "import": ImportPage(),
                 "restore": RestoreBackupPage(),
                 "error": ErrorPage(),
+                "success": SuccessPage(),
             }
         )
 
         self.add_default_page("progress")
-        self.add_default_page("success")
 
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
@@ -66,7 +68,10 @@ class OpenPGPWizard(Assistant):
     def get_page(self, name: Literal["import"]) -> ImportPage: ...
 
     @overload
-    def get_page(self, name: Literal["error"]) -> AssistantErrorPage: ...
+    def get_page(self, name: Literal["error"]) -> ErrorPage: ...
+
+    @overload
+    def get_page(self, name: Literal["success"]) -> SuccessPage: ...
 
     def get_page(self, name: str) -> AssistantPage:
         return self._pages[name]
@@ -98,10 +103,17 @@ class OpenPGPWizard(Assistant):
                 except Exception as error:
                     self._show_error_page(_("Error"), _("Error"), str(error))
                 else:
+                    self.get_page("success").set_title(_("Setup Complete"))
+                    self.get_page("success").set_text(
+                        _("You can now chat encrypted using OpenPGP.")
+                    )
                     self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
 
             case "back":
                 self.show_page("welcome", Gtk.StackTransitionType.SLIDE_RIGHT)
+
+            case "close":
+                self.close()
 
             case _:
                 raise ValueError
@@ -178,3 +190,8 @@ class RestoreBackupPage(AssistantPage):
 class ErrorPage(AssistantErrorPage):
     def get_visible_buttons(self) -> list[str]:
         return ["back"]
+
+
+class SuccessPage(AssistantSuccessPage):
+    def get_visible_buttons(self) -> list[str]:
+        return ["close"]
