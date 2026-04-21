@@ -123,6 +123,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("reaction-updated", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
                 ("timezone-changed", ged.GUI2, self._on_timezone_changed),
+                ("openpgp-key-backup", ged.GUI2, self._on_openpgp_key_backup),
             ]
         )
 
@@ -383,6 +384,9 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
     def _on_timezone_changed(self, event: events.TimezoneChanged) -> None:
         self._add(TimezoneChanged.from_event(event))
 
+    def _on_openpgp_key_backup(self, event: events.OpenPGPKeyBackup) -> None:
+        self._add(OpenPGPKeyBackup.from_event(event))
+
 
 class ActivityListItem(Generic[E], GObject.Object):
     __gtype_name__ = "ActivityListItem"
@@ -461,7 +465,7 @@ class ActivityListItem(Generic[E], GObject.Object):
         return True
 
     def __repr__(self) -> str:
-        return f"ActivityListItem: {self.account} - {self.activity_type}"
+        return f"{self.__class__.__name__}: {self.account} - {self.jid}"
 
 
 @Gtk.Template(string=get_ui_string("activity_list_row.ui"))
@@ -792,6 +796,28 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         )
 
 
+class OpenPGPKeyBackup(ActivityListItem[events.OpenPGPKeyBackup]):
+    @classmethod
+    def from_event(cls, event: events.OpenPGPKeyBackup) -> OpenPGPKeyBackup:
+        scale = app.window.get_scale_factor()
+        texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
+        return cls(
+            context_id=event.context_id,
+            account=event.account,
+            jid=None,
+            account_visible=app.app.multi_account_mode,
+            activity_type=0,
+            activity_type_icon="lucide-info-symbolic",
+            avatar=texture,
+            title=_("OpenPGP Key Backup"),
+            timestamp=utc_now(),
+            subject=_("Your OpenPGP key has no backup"),
+            read=False,
+            event=event,
+            unique=True,
+        )
+
+
 class TimezoneChanged(ActivityListItem[events.TimezoneChanged]):
     @classmethod
     def from_event(cls, event: events.TimezoneChanged) -> TimezoneChanged:
@@ -909,6 +935,7 @@ ActivityListItemT = (
     | Unsubscribed
     | MucInvitation
     | MucInvitationDeclined
+    | OpenPGPKeyBackup
     | TimezoneChanged
     | Reaction
 )

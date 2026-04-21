@@ -25,40 +25,54 @@ log = logging.getLogger("gajim.gtk.openpgp.wizard")
 
 
 class OpenPGPWizard(Assistant):
-    def __init__(self, account: str) -> None:
+    def __init__(self, account: str, *, backup_mode: bool = False) -> None:
         Assistant.__init__(self, name="OpenPGPWizard", height=500)
         self._destroyed: bool = False
 
         self._account = account
         self._client = app.get_client(account)
 
-        # self._data_form_widget = None
-        # self._is_form = None
-
         self.add_button("back", _("Back"))
         self.add_button("close", _("Close"))
-        self.add_button(
-            "import", _("Import Key"), complete=True, css_class="suggested-action"
-        )
-        self.add_button("generate", _("Create New Key"), css_class="suggested-action")
-        self.add_button(
-            "restore", _("Restore RestoreBackupPage"), css_class="suggested-action"
-        )
+
+        if backup_mode:
+            self._backup_password = self._client.get_module(
+                "OpenPGP"
+            ).generate_backup_password()
+            self.add_button("backup", _("Backup"), css_class="suggested-action")
+            self.add_pages(
+                {
+                    "backup": BackupPage(self._backup_password),
+                }
+            )
+
+        else:
+            self.add_pages(
+                {
+                    "welcome": WelcomePage(),
+                    "import": ImportPage(),
+                    "restore": RestoreBackupPage(),
+                }
+            )
+
+            self.add_button(
+                "import", _("Import Key"), complete=True, css_class="suggested-action"
+            )
+            self.add_button(
+                "restore", _("Restore RestoreBackupPage"), css_class="suggested-action"
+            )
+
+            welcome_page = self.get_page("welcome")
+            self._connect(welcome_page, "clicked", self._on_welcome_page_button_clicked)
 
         self.add_pages(
             {
-                "welcome": WelcomePage(),
-                "import": ImportPage(),
-                "restore": RestoreBackupPage(),
                 "error": ErrorPage(),
                 "success": SuccessPage(),
             }
         )
 
         self.add_default_page("progress")
-
-        welcome_page = self.get_page("welcome")
-        self._connect(welcome_page, "clicked", self._on_button_clicked)
 
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
@@ -97,6 +111,12 @@ class OpenPGPWizard(Assistant):
                 # TODO
                 self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
 
+            case "backup":
+                self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
+                self._client.get_module("OpenPGP").backup_secret_key(
+                    self._backup_password
+                )
+
             case "back":
                 self.show_page("welcome", Gtk.StackTransitionType.SLIDE_RIGHT)
 
@@ -106,7 +126,9 @@ class OpenPGPWizard(Assistant):
             case _:
                 raise ValueError
 
-    def _on_button_clicked(self, _page: Gtk.Widget, button_name: str) -> None:
+    def _on_welcome_page_button_clicked(
+        self, _page: Gtk.Widget, button_name: str
+    ) -> None:
         if button_name == "import":
             self.show_page("import", Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -155,18 +177,19 @@ class WelcomePage(AssistantPage):
         AssistantPage.__init__(self)
         self.title = _("Setup OpenPGP Encryption")
 
-        self._connect(self._import_button, "clicked", self._on_import)
-        self._connect(self._restore_backup_button, "clicked", self._on_restore_backup)
-        self._connect(self._generate_button, "clicked", self._on_generate)
+        self._connect(self._import_button, "clicked", self._on_button_clicked, "import")
+        self._connect(
+            self._restore_backup_button,
+            "clicked",
+            self._on_button_clicked,
+            "restore_backup",
+        )
+        self._connect(
+            self._generate_button, "clicked", self._on_button_clicked, "generate"
+        )
 
-    def _on_import(self, _button: Gtk.Button) -> None:
-        self.emit("clicked", "import")
-
-    def _on_restore_backup(self, _button: Gtk.Button) -> None:
-        self.emit("clicked", "restore_backup")
-
-    def _on_generate(self, _button: Gtk.Button) -> None:
-        self.emit("clicked", "generate")
+    def _on_button_clicked(self, _button: Gtk.Button, name: str) -> None:
+        self.emit("clicked", name)
 
 
 @Gtk.Template(string=get_ui_string("openpgp/import.ui"))
@@ -213,6 +236,29 @@ class RestoreBackupPage(AssistantPage):
 
     def get_visible_buttons(self) -> list[str]:
         return ["back", "restore"]
+
+
+@Gtk.Template(string=get_ui_string("openpgp/backup.ui"))
+class BackupPage(AssistantPage):
+    __gtype_name__ = "OpenPGPWizardBackup"
+
+    _password_label: Gtk.Label = Gtk.Template.Child()
+    _copy_button: Gtk.Button = Gtk.Template.Child()
+
+    def __init__(self, password: str) -> None:
+        AssistantPage.__init__(self)
+        self.title = _("Backup")
+        self.complete = False
+
+        self._password_label.set_text(password)
+
+        self._connect(self._copy_button, "clicked", self._on_copy_clicked)
+
+    def _on_copy_clicked(self, _button: Gtk.Button) -> None:
+        app.window.get_clipboard().set(self._password_label.get_text())
+
+    def get_visible_buttons(self) -> list[str]:
+        return ["close", "backup"]
 
 
 class ErrorPage(AssistantErrorPage):

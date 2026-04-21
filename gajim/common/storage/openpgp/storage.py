@@ -68,9 +68,25 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def store_secret_key_backup_hash(
+        self, session: Session, jid: JID, backup_hash: str
+    ) -> None:
+        log.info("Store secret key backup hash for %s", jid)
+
+        stmt = (
+            sa.update(mod.Secret)
+            .where(
+                mod.Public.jid == jid,
+            )
+            .values(backup_hash=backup_hash)
+        )
+        session.execute(stmt)
+
+    @with_session
+    @timeit
     def get_secret_key(
         self, session: Session, jid: JID
-    ) -> tuple[pys.Cert, dt.datetime] | None:
+    ) -> tuple[mod.Secret, dt.datetime] | None:
         stmt = sa.select(mod.Secret).where(mod.Secret.jid == jid)
         if row := session.scalar(stmt):
             date = None
@@ -80,7 +96,7 @@ class OpenPGPStorage(AlchemyStorage):
                     if date := packet.key_created:
                         break
 
-            return row.key, date or dt.datetime(1990, 1, 1, tzinfo=dt.UTC)
+            return row, date or dt.datetime(1990, 1, 1, tzinfo=dt.UTC)
 
         return None
 

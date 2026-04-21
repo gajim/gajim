@@ -346,6 +346,12 @@ class TimezoneChanged(ApplicationEvent):
 
 
 @dataclass
+class OpenPGPKeyBackup(ApplicationEvent):
+    name: str = field(init=False, default='openpgp-key-backup')
+    account: str
+
+
+@dataclass
 class MucUserBlockChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-block-changed')
     account: str
