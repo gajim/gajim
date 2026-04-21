@@ -56,6 +56,11 @@ class ActivityMucInvitationBuilder(Builder):
     invitation_title_label: Gtk.Label
     invitation_text_label: Gtk.Label
 
+class ActivityOpenpgpKeyBackupBuilder(Builder):
+    backup_box: Gtk.Box
+    disable_button: Gtk.Button
+    backup_button: Gtk.Button
+
 class ActivitySubscriptionBuilder(Builder):
     subscription_page: Gtk.Box
     subscription_image: Gtk.Image
@@ -692,6 +697,12 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ActivityMucInvitationBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["activity_openpgp_key_backup.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityOpenpgpKeyBackupBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["activity_subscription.ui"],

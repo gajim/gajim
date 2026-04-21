@@ -432,7 +432,14 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "openpgp_blind_trust",
                 desc=_("Blindly trust new devices until you verify them"),
-            )
+            ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Backup Secret Key"),
+                SettingType.ACCOUNT_CONFIG,
+                "openpgp_backup_secret_key",
+                desc=_("Stores the secret key encrypted on the server"),
+            ),
         ]
 
         for setting in settings:

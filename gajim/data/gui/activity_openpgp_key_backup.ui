@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="backup_box">
+    <property name="can-focus">0</property>
+    <property name="orientation">vertical</property>
+    <property name="halign">center</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="can-focus">0</property>
+        <property name="margin-bottom">6</property>
+        <property name="label" translatable="yes">Backup OpenPGP Key</property>
+        <style>
+          <class name="title-1"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="wrap">1</property>
+        <property name="max-width-chars">50</property>
+        <property name="label" translatable="yes">Gajim can backup your key</property>
+        <style>
+          <class name="dimmed" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="can-focus">0</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="margin-top">18</property>
+        <child>
+          <object class="GtkBox">
+            <property name="can-focus">0</property>
+            <property name="spacing">12</property>
+              <child>
+                <object class="GtkButton" id="disable_button">
+                  <property name="label" translatable="yes">Disable Backup</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkButton" id="backup_button">
+                  <property name="label" translatable="yes">Backup</property>
+                  <property name="halign">end</property>
+                  <property name="hexpand">1</property>
+                  <style>
+                    <class name="suggested-action" />
+                  </style>
+                </object>
+              </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

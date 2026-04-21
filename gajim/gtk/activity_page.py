@@ -29,6 +29,7 @@ from gajim.gtk.activity_list import GajimUpdate
 from gajim.gtk.activity_list import GajimUpdatePermission
 from gajim.gtk.activity_list import MucInvitation
 from gajim.gtk.activity_list import MucInvitationDeclined
+from gajim.gtk.activity_list import OpenPGPKeyBackup
 from gajim.gtk.activity_list import Subscribe
 from gajim.gtk.activity_list import TimezoneChanged
 from gajim.gtk.activity_list import Unsubscribed
@@ -38,6 +39,7 @@ from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import open_uri
+from gajim.gtk.util.window import open_window
 
 
 class ActivityPage(Gtk.Stack):
@@ -59,6 +61,7 @@ class ActivityPage(Gtk.Stack):
             Unsubscribed: UnsubscribedPage,
             MucInvitation: InvitationPage,
             MucInvitationDeclined: InvitationDeclinedPage,
+            OpenPGPKeyBackup: OpenPGPKeyBackupPage,
             TimezoneChanged: TimezoneChangedPage,
         }
 
@@ -70,12 +73,11 @@ class ActivityPage(Gtk.Stack):
         if child is not None:
             self.remove(child)
 
-        try:
-            page = self._pages[type(item)](item)  # pyright: ignore
-        except Exception:
-            # Not every item has a corresponding page
+        activity_cls = type(item)
+        if not activity_cls:
             return
 
+        page = self._pages[activity_cls](item)  # pyright: ignore
         page.connect("request-remove", self._on_request_remove)
 
         self.add_named(page, "activity")
@@ -382,6 +384,41 @@ class InvitationDeclinedPage(BaseActivityPage):
         texture = contact.get_avatar(AvatarSize.ACCOUNT_PAGE, self.get_scale_factor())
         self._ui.invitation_image.set_from_paintable(texture)
         self.add_widget(self._ui.muc_invitation_page)
+
+
+class OpenPGPKeyBackupPage(BaseActivityPage):
+    def __init__(self, item: OpenPGPKeyBackup) -> None:
+        BaseActivityPage.__init__(self, item)
+        self._ui = get_builder("activity_openpgp_key_backup.ui")
+
+        self._connect(self._ui.disable_button, "clicked", self._on_disable)
+        self._connect(self._ui.backup_button, "clicked", self._on_backup)
+
+        self._event = item.get_event()
+        self._client = app.get_client(self._event.account)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
+
+        self.add_widget(self._ui.backup_box)
+        self._set_sensitive(self._client.state.is_available)
+
+    def _set_sensitive(self, sensitive: bool) -> None:
+        self._ui.backup_button.set_sensitive(sensitive)
+        self._ui.disable_button.set_sensitive(sensitive)
+
+    def _on_backup(self, _button: Gtk.Button) -> None:
+        open_window("OpenPGPWizard", account=self._event.account, backup_mode=True)
+        self.emit("request-remove")
+
+    def _on_disable(self, _button: Gtk.Button) -> None:
+        app.settings.set_account_setting(
+            self._event.account, "openpgp_backup_secret_key", False
+        )
+        self.emit("request-remove")
+
+    def _on_client_state_changed(
+        self, client: Client, _signal_name: str, state: SimpleClientState
+    ) -> None:
+        self._set_sensitive(state.is_connected)
 
 
 class TimezoneChangedPage(BaseActivityPage):
