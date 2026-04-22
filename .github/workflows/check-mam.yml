@@ -1,0 +1,23 @@
+name: Check MAM Fix (LAM-156)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-mam-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify start_date = None is present
+        run: |
+          grep -q "start_date = None" gajim/common/modules/mam.py \
+            && echo "PASS: start_date = None found" \
+            || (echo "FAIL: start_date = None not found" && exit 1)
+
+      - name: Verify timedelta(days=1) is removed
+        run: |
+          ! grep -q "timedelta(days=1)" gajim/common/modules/mam.py \
+            && echo "PASS: timedelta(days=1) not present" \
+            || (echo "FAIL: timedelta(days=1) still present" && exit 1)
