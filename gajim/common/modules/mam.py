@@ -286,10 +286,12 @@ class MAM(BaseModule):
         now = datetime.now(UTC)
 
         if archive is None or archive.to_stanza_id is None:
-            # First join
-            start_date = now - timedelta(days=1)
-            self._log.info('Request archive: %s, after date %s',
-                           jid, start_date)
+            # First join — fetch full archive from server so complete
+            # history is available locally. Subsequent joins sync
+            # incrementally from last known mam-id.
+            start_date = None
+            self._log.info('Request archive (first join, full): %s',
+                           jid)
 
         elif threshold == SyncThreshold.NO_THRESHOLD:
             # Not our first join and no threshold set
