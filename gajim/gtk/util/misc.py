@@ -439,13 +439,15 @@ def is_file_extension_executable(path: Path) -> bool:
     if not path.suffix:
         return False
 
+    suffix_lowercase = path.suffix[1:].lower()
+
     match sys.platform:
         case "win32":
-            return path.suffix[1:] in WINDOWS_EXECUTABLE_EXTENSIONS
+            return suffix_lowercase in WINDOWS_EXECUTABLE_EXTENSIONS
         case "darwin":
-            return path.suffix[1:] in MACOS_EXECUTABLE_EXTENSIONS
+            return suffix_lowercase in MACOS_EXECUTABLE_EXTENSIONS
         case "linux":
-            return path.suffix[1:] in LINUX_EXECUTABLE_EXTENSIONS
+            return suffix_lowercase in LINUX_EXECUTABLE_EXTENSIONS
         case _:
             return False
 
