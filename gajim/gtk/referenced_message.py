@@ -83,7 +83,9 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
         avatar_image.set_pixel_size(AvatarSize.MESSAGE_REPLY)
 
         name = get_contact_name_for_message(message, self._contact)
-        name_label = Gtk.Label(label=name)
+        name_label = Gtk.Label(
+            label=name, max_width_chars=32, ellipsize=Pango.EllipsizeMode.END
+        )
         name_label.add_css_class("dimmed")
         name_label.add_css_class("bold")
 

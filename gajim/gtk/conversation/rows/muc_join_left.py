@@ -5,6 +5,7 @@
 from datetime import datetime
 
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
@@ -53,6 +54,8 @@ class MUCJoinLeft(BaseRow):
 
         self._label = SimpleLabel()
         self._label.set_text(process_non_spacing_marks(text))
+        self._label.set_max_width_chars(52)
+        self._label.set_ellipsize(Pango.EllipsizeMode.MIDDLE)
         self._label.add_css_class("gajim-status-message")
         self.grid.attach(self._label, 2, 0, 1, 1)
 
