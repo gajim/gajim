@@ -59,7 +59,7 @@ class Secret(MappedAsDataclass, Base, kw_only=True):
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     jid: Mapped[JID] = mapped_column(JIDType)
     key: Mapped[pys.Cert] = mapped_column(CertType)
-    backup_hash: Mapped[str | None] = mapped_column(default=None)
+    backup_password: Mapped[str | None] = mapped_column(default=None)
 
 
 class Public(MappedAsDataclass, Base, kw_only=True):
