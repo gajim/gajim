@@ -4,14 +4,15 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import cast
 from typing import Final
 
 import datetime as dt
-import hashlib
 import secrets
 import subprocess
 import textwrap
+from collections.abc import Generator
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -27,6 +28,7 @@ from nbxmpp.exceptions import StanzaDecrypted
 from nbxmpp.modules.openpgp import create_message_stanza
 from nbxmpp.modules.openpgp import create_signcrypt_node
 from nbxmpp.modules.openpgp import parse_signcrypt
+from nbxmpp.modules.util import raise_if_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -50,6 +52,7 @@ from gajim.common.helpers import timeout_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.util import as_task
 from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import PublicKeyData
@@ -178,24 +181,25 @@ class OpenPGP(BaseModule, CryptoModule):
 
         self._own_jid = self._get_own_bare_jid()
         self._secret_cert = None
-        self._backup_hash = None
+        self._backup_password = None
 
         self._load_secret_keys()
         self._migrate_secret_keys()
 
-        if app.settings.get_account_setting(self._account, "openpgp_backup_secret_key"):
+        if self.secret_key_exists() and app.settings.get_account_setting(
+            self._account, "openpgp_backup_secret_key"
+        ):
             timeout_add_once(10_000, self._check_secret_key_backup)
 
     def _load_secret_keys(self) -> None:
         if row := app.storage.openpgp.get_secret_key(self._own_jid):
             secret, self._secret_key_date = row
             self._secret_cert = secret.key
-            self._backup_hash = secret.backup_hash
+            self._backup_password = secret.backup_password
 
             self._log.info(
-                "Found secret key: %s, %s, %s",
+                "Found secret key: %s, %s",
                 self._secret_cert.fingerprint.upper(),
-                secret.backup_hash,
                 self._secret_key_date,
             )
 
@@ -627,7 +631,10 @@ class OpenPGP(BaseModule, CryptoModule):
             for _ in range(6)
         )
 
-    def backup_secret_key(self, password: str) -> None:
+    @as_task
+    def backup_secret_key(self, password: str) -> Generator[Any, None]:
+        _task = yield  # noqa: F841
+
         if self._secret_cert is None:
             raise NoSecretKeyFound
 
@@ -637,10 +644,13 @@ class OpenPGP(BaseModule, CryptoModule):
         encrypted_payload = pys.encrypt(
             passwords=[password], bytes=cert_bytes, armor=False
         )
-        self.set_secret_key(encrypted_payload)
-        self._backup_hash = hashlib.sha256(encrypted_payload).hexdigest()
-        app.storage.openpgp.store_secret_key_backup_hash(
-            self._own_jid, self._backup_hash
+
+        result = yield self.set_secret_key(encrypted_payload)
+        raise_if_error(result)
+
+        self._backup_password = password
+        app.storage.openpgp.store_secret_key_backup_password(
+            self._own_jid, self._backup_password
         )
 
     def _check_secret_key_backup(self) -> bool:
@@ -650,24 +660,52 @@ class OpenPGP(BaseModule, CryptoModule):
         return GLib.SOURCE_REMOVE
 
     def _secret_key_received(self, task: Task) -> None:
+        assert self._secret_cert is not None
+
         try:
-            cert_bytes = cast(bytes | None, task.finish())
+            encrypted_bytes = cast(bytes | None, task.finish())
         except (StanzaError, MalformedStanzaError) as error:
             self._log.error("Error on secret key request: %s", error)
             app.ged.raise_event(OpenPGPKeyBackup(self._account))
             return
 
-        if not cert_bytes:
+        if not encrypted_bytes:
             self._log.info("No secret key backup found")
             app.ged.raise_event(OpenPGPKeyBackup(self._account))
             return
 
-        backup_hash = hashlib.sha256(cert_bytes).hexdigest()
-        if self._backup_hash == backup_hash:
-            self._log.info("Backup on server matches our hash")
+        if self._backup_password is None:
+            self._log.info("Backup password not available, unable to decrypt backup")
             return
 
-        self._log.info("Backup hash from server does not match ours: %s", backup_hash)
+        try:
+            decrypted = pys.decrypt(
+                passwords=[self._backup_password], bytes=encrypted_bytes
+            )
+        except Exception as error:
+            self._log.warning("Unable to decrypt secret key backup: %s", error)
+            app.ged.raise_event(OpenPGPKeyBackup(self._account))
+            return
+
+        if decrypted.bytes is None:
+            self._log.warning("No bytes after decryption")
+            return
+
+        secret_certs = pys.Cert.split_bytes(decrypted.bytes)
+        self._log.info("Found certs in server backup: %s", secret_certs)
+
+        for cert in secret_certs:
+            if not cert.has_secret_keys:
+                self._log.warning(
+                    "Found public key in secret key backup: %s", cert.fingerprint
+                )
+                continue
+
+            if cert.fingerprint == self._secret_cert.fingerprint:
+                self._log.info("Found our secret key server backup")
+                return
+
+        self._log.info("Secret key not found in server backup")
         app.ged.raise_event(OpenPGPKeyBackup(self._account))
 
     def get_our_public_key(self) -> OpenPGPPublicKeyData:

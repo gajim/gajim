@@ -68,17 +68,17 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def store_secret_key_backup_hash(
-        self, session: Session, jid: JID, backup_hash: str
+    def store_secret_key_backup_password(
+        self, session: Session, jid: JID, backup_password: str
     ) -> None:
-        log.info("Store secret key backup hash for %s", jid)
+        log.info("Store secret key backup password for %s", jid)
 
         stmt = (
             sa.update(mod.Secret)
             .where(
-                mod.Public.jid == jid,
+                mod.Secret.jid == jid,
             )
-            .values(backup_hash=backup_hash)
+            .values(backup_password=backup_password)
         )
         session.execute(stmt)
 

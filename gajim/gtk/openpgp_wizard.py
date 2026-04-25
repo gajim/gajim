@@ -13,6 +13,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.modules.util import Task
 from gajim.plugins.plugins_i18n import _
 
 from gajim.gtk.assistant import Assistant
@@ -28,6 +29,7 @@ class OpenPGPWizard(Assistant):
     def __init__(self, account: str, *, backup_mode: bool = False) -> None:
         Assistant.__init__(self, name="OpenPGPWizard", height=500)
         self._destroyed: bool = False
+        self._backup_mode = backup_mode
 
         self._account = account
         self._client = app.get_client(account)
@@ -114,7 +116,8 @@ class OpenPGPWizard(Assistant):
             case "backup":
                 self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
                 self._client.get_module("OpenPGP").backup_secret_key(
-                    self._backup_password
+                    self._backup_password,
+                    callback=self._on_backup_result,
                 )
 
             case "back":
@@ -149,10 +152,16 @@ class OpenPGPWizard(Assistant):
             self.get_page("import").clear()
 
     def _show_success_page(self) -> None:
-        self.get_page("success").set_title(_("Setup Complete"))
-        self.get_page("success").set_text(
-            _("Your OpenPGP key has been created. Your chat is now encrypted.")
-        )
+        if self._backup_mode:
+            self.get_page("success").set_title(_("Backup Successful"))
+            self.get_page("success").set_text(
+                _("Your OpenPGP key backup was successful.")
+            )
+        else:
+            self.get_page("success").set_title(_("Setup Complete"))
+            self.get_page("success").set_text(
+                _("Your OpenPGP key has been created. Your chat is now encrypted.")
+            )
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
 
     def _show_error_page(self, title: str, heading: str, text: str) -> None:
@@ -160,6 +169,17 @@ class OpenPGPWizard(Assistant):
         self.get_page("error").set_heading(heading)
         self.get_page("error").set_text(text or "")
         self.show_page("error", Gtk.StackTransitionType.SLIDE_LEFT)
+
+    def _on_backup_result(self, task: Task) -> None:
+        try:
+            task.finish()
+        except Exception as error:
+            self._show_error_page(
+                _("Error on backup"), _("Error on backup"), str(error)
+            )
+            return
+
+        self._show_success_page()
 
 
 @Gtk.Template(string=get_ui_string("openpgp/welcome.ui"))
