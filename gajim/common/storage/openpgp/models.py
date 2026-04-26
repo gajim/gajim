@@ -31,9 +31,6 @@ class CertType(sa.types.TypeDecorator[pys.Cert]):
         if value is None:
             return None
 
-        if hasattr(value, "decryptor"):
-            # SecretCert
-            return str(value).encode()
         return bytes(value)
 
     def process_result_value(
@@ -58,7 +55,7 @@ class Secret(MappedAsDataclass, Base, kw_only=True):
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     jid: Mapped[JID] = mapped_column(JIDType)
-    key: Mapped[pys.Cert] = mapped_column(CertType)
+    key: Mapped[bytes]
     backup_password: Mapped[str | None] = mapped_column(default=None)
 
 

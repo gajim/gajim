@@ -8,7 +8,6 @@ from typing import Any
 from typing import cast
 from typing import Final
 
-import datetime as dt
 import secrets
 import subprocess
 import textwrap
@@ -46,7 +45,7 @@ from gajim.common import ged
 from gajim.common import types
 from gajim.common.client import Client
 from gajim.common.const import Trust
-from gajim.common.events import OpenPGPKeyBackup
+from gajim.common.events import OpenPGPEvent
 from gajim.common.events import SignedIn
 from gajim.common.helpers import timeout_add_once
 from gajim.common.i18n import _
@@ -83,6 +82,19 @@ class NoSecretKeyImportError(Exception):
 class SecretKeyExpirationImportError(Exception):
     def __init__(self) -> None:
         super().__init__(_("Imported key has expiration date"))
+
+
+class MultipleSecretKeysImportError(Exception):
+    def __init__(self, secret_certs: list[pys.Cert]) -> None:
+        self._secret_certs = secret_certs
+
+    def get_certs(self) -> list[pys.Cert]:
+        return self._secret_certs
+
+
+class EncryptionTestImportError(Exception):
+    def __init__(self) -> None:
+        super().__init__(_("Unable to use this key for encrypting messages"))
 
 
 class DecryptionFailed(Exception):
@@ -130,6 +142,18 @@ def find_remote_key(
     for public in public_rows:
         if public.fingerprint == fingerprint:
             return public
+
+
+def find_cert_with_fpr(
+    certs: list[pys.Cert], fingerprint: str | None
+) -> pys.Cert | None:
+    if fingerprint is None:
+        return certs[0]
+
+    for cert in certs:
+        if cert.fingerprint == fingerprint:
+            return cert
+    return None
 
 
 @dataclass
@@ -186,15 +210,13 @@ class OpenPGP(BaseModule, CryptoModule):
         self._load_secret_keys()
         self._migrate_secret_keys()
 
-        if self.secret_key_exists() and app.settings.get_account_setting(
-            self._account, "openpgp_backup_secret_key"
-        ):
-            timeout_add_once(10_000, self._check_secret_key_backup)
+        if app.settings.get_account_setting(self._account, "openpgp_backup_secret_key"):
+            timeout_add_once(5_000, self._check_secret_key_backup)
 
     def _load_secret_keys(self) -> None:
         if row := app.storage.openpgp.get_secret_key(self._own_jid):
             secret, self._secret_key_date = row
-            self._secret_cert = secret.key
+            self._secret_cert = pys.Cert.from_bytes(secret.key)
             self._backup_password = secret.backup_password
 
             self._log.info(
@@ -244,7 +266,10 @@ class OpenPGP(BaseModule, CryptoModule):
                 continue
 
             assert cert.secrets is not None
-            app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
+            backup_password = self.generate_backup_password()
+            app.storage.openpgp.store_secret_key(
+                self._own_jid, cert, backup_password=backup_password
+            )
             self._log.info(
                 "Successfully migrated secret key: %s", cert.fingerprint.upper()
             )
@@ -262,45 +287,64 @@ class OpenPGP(BaseModule, CryptoModule):
 
     def generate_key(self) -> None:
         assert self._secret_cert is None
-        cert = pys.Cert.generate(self._own_jid.to_iri(), profile=pys.Profile.RFC4880)
-        assert cert.secrets is not None
-
-        # Workaround because pysequoia allows not to generate certs
-        # without expiration
-        cert = cert.set_expiration(
-            dt.datetime(year=2099, month=12, day=31, tzinfo=dt.UTC),
-            certifier=cert.secrets.certifier(),
+        cert = pys.Cert.generate(
+            self._own_jid.to_iri(), profile=pys.Profile.RFC4880, validity_seconds=None
         )
         assert cert.secrets is not None
 
-        app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
+        backup_password = self.generate_backup_password()
+        app.storage.openpgp.store_secret_key(
+            self._own_jid, cert, backup_password=backup_password
+        )
         self._log.info("Generated key %s", cert.fingerprint.upper())
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
 
-    def import_key(self, data: str | bytes, password: str | None = None) -> None:
+    def import_key(
+        self,
+        data: str | bytes,
+        backup_password: str | None = None,
+        fingerprint: str | None = None,
+    ) -> None:
         if self._secret_cert is not None:
             raise ValueError("A secret key already exists")
 
         if isinstance(data, str):
             data = data.encode()
 
-        if password is not None:
-            decrypted = pys.decrypt(data, passwords=[password])
-            assert decrypted.bytes is not None
+        if backup_password is not None:
+            decrypted = pys.decrypt(data, passwords=[backup_password])
+            if decrypted.bytes is None:
+                raise NoSecretKeyImportError
+
             data = decrypted.bytes
 
-        cert = pys.Cert.from_bytes(data)
+        secret_certs = pys.Cert.split_bytes(data)
+        self._log.info("Certs in import data: %s", secret_certs)
+
+        if len(secret_certs) > 1 and not fingerprint:
+            raise MultipleSecretKeysImportError(secret_certs)
+
+        cert = find_cert_with_fpr(secret_certs, fingerprint)
+        if cert is None:
+            raise NoSecretKeyImportError
+
         if not cert.has_secret_keys:
+            self._log.warning(
+                "Found public key in secret key backup: %s", cert.fingerprint
+            )
             raise NoSecretKeyImportError
 
         if cert.expiration is not None:
             raise SecretKeyExpirationImportError
 
         assert cert.secrets is not None
-        # Test encrypt message to check if key is encrypted
-        pys.encrypt(b"", recipients=[cert], signer=cert.secrets.signer())
+
+        try:
+            pys.encrypt(b"", recipients=[cert], signer=cert.secrets.signer())
+        except Exception:
+            raise EncryptionTestImportError
 
         user_ids = set(map(str, cert.user_ids))
         if self._own_jid.to_iri() not in user_ids:
@@ -309,7 +353,10 @@ class OpenPGP(BaseModule, CryptoModule):
             )
 
         assert cert.secrets is not None
-        app.storage.openpgp.store_secret_key(self._own_jid, cert.secrets)
+        if not backup_password:
+            backup_password = self.generate_backup_password()
+
+        app.storage.openpgp.store_secret_key(self._own_jid, cert, backup_password)
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
@@ -632,26 +679,30 @@ class OpenPGP(BaseModule, CryptoModule):
         )
 
     @as_task
-    def backup_secret_key(self, password: str) -> Generator[Any, None]:
+    def backup_secret_key(
+        self, cert_bytes: bytes | None = None
+    ) -> Generator[Any, None]:
         _task = yield  # noqa: F841
 
         if self._secret_cert is None:
-            raise NoSecretKeyFound
+            self._log.info("No secret key found, backup not possible")
+            return
+
+        self._log.info("Backup secret key")
+        assert self._backup_password is not None
+
+        if cert_bytes is None:
+            assert self._secret_cert.secrets is not None
+            cert_bytes = bytes(self._secret_cert.secrets)
 
         # ToDo: This is the armored key, we need it un-armored but this
         # is currently blocked by a missing feature of pysequoia
-        cert_bytes = str(self._secret_cert.secrets).encode()
         encrypted_payload = pys.encrypt(
-            passwords=[password], bytes=cert_bytes, armor=False
+            passwords=[self._backup_password], bytes=cert_bytes, armor=False
         )
 
         result = yield self.set_secret_key(encrypted_payload)
         raise_if_error(result)
-
-        self._backup_password = password
-        app.storage.openpgp.store_secret_key_backup_password(
-            self._own_jid, self._backup_password
-        )
 
     def _check_secret_key_backup(self) -> bool:
         self._log.info("Check secret key backup")
@@ -660,18 +711,40 @@ class OpenPGP(BaseModule, CryptoModule):
         return GLib.SOURCE_REMOVE
 
     def _secret_key_received(self, task: Task) -> None:
-        assert self._secret_cert is not None
-
         try:
             encrypted_bytes = cast(bytes | None, task.finish())
-        except (StanzaError, MalformedStanzaError) as error:
+        except StanzaError as error:
+            if error.condition == "item-not-found":
+                self.backup_secret_key()
+            else:
+                self._log.error("Error on secret key request: %s", error)
+                if self.secret_key_exists():
+                    app.ged.raise_event(
+                        OpenPGPEvent(
+                            account=self._account,
+                            type="unknown-error",
+                            error=str(error),
+                        )
+                    )
+            return
+
+        except Exception as error:
             self._log.error("Error on secret key request: %s", error)
-            app.ged.raise_event(OpenPGPKeyBackup(self._account))
+            if self.secret_key_exists():
+                app.ged.raise_event(
+                    OpenPGPEvent(
+                        account=self._account, type="unknown-error", error=str(error)
+                    )
+                )
             return
 
         if not encrypted_bytes:
             self._log.info("No secret key backup found")
-            app.ged.raise_event(OpenPGPKeyBackup(self._account))
+            self.backup_secret_key()
+            return
+
+        if not self.secret_key_exists():
+            app.ged.raise_event(OpenPGPEvent(self._account, type="setup"))
             return
 
         if self._backup_password is None:
@@ -684,15 +757,19 @@ class OpenPGP(BaseModule, CryptoModule):
             )
         except Exception as error:
             self._log.warning("Unable to decrypt secret key backup: %s", error)
-            app.ged.raise_event(OpenPGPKeyBackup(self._account))
+            app.ged.raise_event(OpenPGPEvent(self._account, type="decryption-error"))
             return
 
         if decrypted.bytes is None:
             self._log.warning("No bytes after decryption")
+            self.backup_secret_key()
             return
 
         secret_certs = pys.Cert.split_bytes(decrypted.bytes)
         self._log.info("Found certs in server backup: %s", secret_certs)
+
+        assert self._secret_cert is not None
+        assert self._secret_cert.secrets is not None
 
         for cert in secret_certs:
             if not cert.has_secret_keys:
@@ -706,7 +783,8 @@ class OpenPGP(BaseModule, CryptoModule):
                 return
 
         self._log.info("Secret key not found in server backup")
-        app.ged.raise_event(OpenPGPKeyBackup(self._account))
+        our_cert_bytes = bytes(self._secret_cert.secrets)
+        self.backup_secret_key(decrypted.bytes + our_cert_bytes)
 
     def get_our_public_key(self) -> OpenPGPPublicKeyData:
         assert self._secret_cert is not None
