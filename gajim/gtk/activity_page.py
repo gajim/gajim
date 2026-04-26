@@ -29,7 +29,7 @@ from gajim.gtk.activity_list import GajimUpdate
 from gajim.gtk.activity_list import GajimUpdatePermission
 from gajim.gtk.activity_list import MucInvitation
 from gajim.gtk.activity_list import MucInvitationDeclined
-from gajim.gtk.activity_list import OpenPGPKeyBackup
+from gajim.gtk.activity_list import OpenPGPEvent
 from gajim.gtk.activity_list import Subscribe
 from gajim.gtk.activity_list import TimezoneChanged
 from gajim.gtk.activity_list import Unsubscribed
@@ -61,7 +61,7 @@ class ActivityPage(Gtk.Stack):
             Unsubscribed: UnsubscribedPage,
             MucInvitation: InvitationPage,
             MucInvitationDeclined: InvitationDeclinedPage,
-            OpenPGPKeyBackup: OpenPGPKeyBackupPage,
+            OpenPGPEvent: OpenPGPEventPage,
             TimezoneChanged: TimezoneChangedPage,
         }
 
@@ -386,17 +386,27 @@ class InvitationDeclinedPage(BaseActivityPage):
         self.add_widget(self._ui.muc_invitation_page)
 
 
-class OpenPGPKeyBackupPage(BaseActivityPage):
-    def __init__(self, item: OpenPGPKeyBackup) -> None:
+class OpenPGPEventPage(BaseActivityPage):
+    def __init__(self, item: OpenPGPEvent) -> None:
         BaseActivityPage.__init__(self, item)
-        self._ui = get_builder("activity_openpgp_key_backup.ui")
+        self._ui = get_builder("activity_openpgp_event.ui")
 
         self._connect(self._ui.disable_button, "clicked", self._on_disable)
-        self._connect(self._ui.backup_button, "clicked", self._on_backup)
+        self._connect(
+            self._ui.backup_button, "clicked", self._on_setup_backup_clicked, True
+        )
+        self._connect(
+            self._ui.setup_button, "clicked", self._on_setup_backup_clicked, False
+        )
 
         self._event = item.get_event()
         self._client = app.get_client(self._event.account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
+
+        if self._event.type == "setup":
+            self._ui.setup_button.set_visible(True)
+        else:
+            self._ui.backup_button.set_visible(True)
 
         self.add_widget(self._ui.backup_box)
         self._set_sensitive(self._client.state.is_available)
@@ -404,9 +414,12 @@ class OpenPGPKeyBackupPage(BaseActivityPage):
     def _set_sensitive(self, sensitive: bool) -> None:
         self._ui.backup_button.set_sensitive(sensitive)
         self._ui.disable_button.set_sensitive(sensitive)
+        self._ui.setup_button.set_sensitive(sensitive)
 
-    def _on_backup(self, _button: Gtk.Button) -> None:
-        open_window("OpenPGPWizard", account=self._event.account, backup_mode=True)
+    def _on_setup_backup_clicked(self, _button: Gtk.Button, backup_mode: bool) -> None:
+        open_window(
+            "OpenPGPWizard", account=self._event.account, backup_mode=backup_mode
+        )
         self.emit("request-remove")
 
     def _on_disable(self, _button: Gtk.Button) -> None:

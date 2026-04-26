@@ -123,7 +123,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("reaction-updated", ged.GUI1, self._on_event),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
                 ("timezone-changed", ged.GUI2, self._on_timezone_changed),
-                ("openpgp-key-backup", ged.GUI2, self._on_openpgp_key_backup),
+                ("openpgp-event", ged.GUI2, self._on_openpgp_event),
             ]
         )
 
@@ -384,8 +384,8 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
     def _on_timezone_changed(self, event: events.TimezoneChanged) -> None:
         self._add(TimezoneChanged.from_event(event))
 
-    def _on_openpgp_key_backup(self, event: events.OpenPGPKeyBackup) -> None:
-        self._add(OpenPGPKeyBackup.from_event(event))
+    def _on_openpgp_event(self, event: events.OpenPGPEvent) -> None:
+        self._add(OpenPGPEvent.from_event(event))
 
 
 class ActivityListItem(Generic[E], GObject.Object):
@@ -796,11 +796,19 @@ class MucInvitationDeclined(ActivityListItem[events.MucDecline]):
         )
 
 
-class OpenPGPKeyBackup(ActivityListItem[events.OpenPGPKeyBackup]):
+class OpenPGPEvent(ActivityListItem[events.OpenPGPEvent]):
     @classmethod
-    def from_event(cls, event: events.OpenPGPKeyBackup) -> OpenPGPKeyBackup:
+    def from_event(cls, event: events.OpenPGPEvent) -> OpenPGPEvent:
         scale = app.window.get_scale_factor()
         texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
+
+        if event.type == "setup":
+            title = _("Finish OpenPGP Setup")
+            subject = _("Finish your OpenPGP setup")
+        else:
+            title = _("OpenPGP Key Backup Error")
+            subject = _("OpenPGP backup failed")
+
         return cls(
             context_id=event.context_id,
             account=event.account,
@@ -809,9 +817,9 @@ class OpenPGPKeyBackup(ActivityListItem[events.OpenPGPKeyBackup]):
             activity_type=0,
             activity_type_icon="lucide-info-symbolic",
             avatar=texture,
-            title=_("OpenPGP Key Backup"),
+            title=title,
             timestamp=utc_now(),
-            subject=_("Your OpenPGP key has no backup"),
+            subject=subject,
             read=False,
             event=event,
             unique=True,
@@ -935,7 +943,7 @@ ActivityListItemT = (
     | Unsubscribed
     | MucInvitation
     | MucInvitationDeclined
-    | OpenPGPKeyBackup
+    | OpenPGPEvent
     | TimezoneChanged
     | Reaction
 )

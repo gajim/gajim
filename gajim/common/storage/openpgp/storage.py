@@ -56,8 +56,13 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def store_secret_key(self, session: Session, jid: JID, key: pys.Cert) -> None:
-        secret = mod.Secret(jid=jid, key=key)
+    def store_secret_key(
+        self, session: Session, jid: JID, key: pys.Cert, backup_password: str | None
+    ) -> None:
+        assert key.secrets is not None
+        secret = mod.Secret(
+            jid=jid, key=bytes(key.secrets), backup_password=backup_password
+        )
         log.info("Store secret key for %s", jid)
         session.add(secret)
 
@@ -90,9 +95,9 @@ class OpenPGPStorage(AlchemyStorage):
         stmt = sa.select(mod.Secret).where(mod.Secret.jid == jid)
         if row := session.scalar(stmt):
             date = None
-            pile = pyspacket.PacketPile.from_bytes(str(row.key).encode())
+            pile = pyspacket.PacketPile.from_bytes(row.key)
             for packet in pile:
-                if packet.tag == pyspacket.Tag.PublicKey:
+                if packet.tag == pyspacket.Tag.SecretKey:
                     if date := packet.key_created:
                         break
 

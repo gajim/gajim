@@ -14,7 +14,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkEntry">
+          <object class="GtkPasswordEntry" id="_password_entry">
           </object>
         </child>
       </object>
