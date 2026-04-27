@@ -383,6 +383,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.add_action(act)
 
     def _add_settings_actions(self) -> None:
+        if sys.platform in ("win32", "darwin"):
+            return
         action = app.settings.create_action("show_header_bar")
         action.simple_bind_property(self._header_bar, "visible")
         self.add_action(action)

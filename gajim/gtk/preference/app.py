@@ -93,7 +93,7 @@ class WindowBehaviourGroup(GajimPreferencesGroup):
                 SettingType.CONFIG,
                 "show_header_bar",
                 desc=_("Show the window’s title bar"),
-                enabled_func=lambda: sys.platform != "win32",
+                enabled_func=lambda: sys.platform not in ("win32", "darwin"),
             ),
         ]
 
