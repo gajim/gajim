@@ -46,7 +46,7 @@ class OpenPGPWizard(Assistant):
         self.add_button("close", _("Close"))
 
         if backup_mode:
-            self.add_button("backup", _("Backup"), css_class="suggested-action")
+            self.add_button("backup", _("Start Backup"), css_class="suggested-action")
             self.add_pages(
                 {
                     "backup": BackupPage("dummy"),
@@ -67,7 +67,7 @@ class OpenPGPWizard(Assistant):
                 "import", _("Import Key"), complete=True, css_class="suggested-action"
             )
             self.add_button(
-                "restore", _("Restore"), css_class="suggested-action", complete=True
+                "restore", _("Restore Key"), css_class="suggested-action", complete=True
             )
             self.add_button("choose", _("Confirm"), css_class="suggested-action")
 
@@ -146,7 +146,14 @@ class OpenPGPWizard(Assistant):
                     self.show_page("choose-secret-key")
 
                 except Exception as error:
-                    self._show_error_page(_("Error"), _("Error on import"), str(error))
+                    self._show_error_page(
+                        _("Import Error"),
+                        _("Import Error"),
+                        _(
+                            "An error occurred while trying to import your OpenPGP key: %s"
+                        )
+                        % str(error),
+                    )
 
                 else:
                     self._show_success_page()
@@ -215,7 +222,12 @@ class OpenPGPWizard(Assistant):
             task.finish()
         except Exception as error:
             self._show_error_page(
-                _("Error on backup"), _("Error on backup"), str(error)
+                _("Backup Error"),
+                _("Backup Error"),
+                _(
+                    "An error occurred while trying to create a backup  of your OpenPGP key: %s"
+                )
+                % str(error),
             )
             return
 
@@ -231,9 +243,9 @@ class OpenPGPWizard(Assistant):
 
         if not encrypted_bytes:
             self._show_error_page(
-                _("No backup found"),
-                _("No backup found"),
-                _("There is no backup on the server"),
+                _("No Backup Found"),
+                _("No Backup Found"),
+                _("Gajim can't find any backup of your OpenPGP key on the server"),
             )
             return
 

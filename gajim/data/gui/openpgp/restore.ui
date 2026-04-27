@@ -10,7 +10,22 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="yes">Password</property>
+            <property name="label" translatable="yes">Please enter the password you set when you created a backup of your OpenPGP key.</property>
+            <property name="max-width-chars">38</property>
+            <property name="wrap">1</property>
+            <property name="justify">center</property>
+            <style>
+              <class name="dimmed" />
+              <class name="mb-18" />
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Enter Backup Password</property>
+            <style>
+              <class name="bold" />
+            </style>
           </object>
         </child>
         <child>
