@@ -672,23 +672,25 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_encryption_details_clicked(self, _button: Gtk.Button) -> None:
         contact = self.get_current_contact()
         encryption = contact.settings.get("encryption")
-        if encryption == "OMEMO":
+        if encryption in ("OMEMO", "OpenPGP"):
             if contact.is_groupchat:
                 open_window(
-                    "GroupchatDetails", contact=contact, page="encryption-omemo"
+                    "GroupchatDetails",
+                    contact=contact,
+                    page=f"encryption-{encryption.lower()}",
                 )
                 return
 
             if isinstance(contact, BareContact) and contact.is_self:
                 window = open_window("Preferences")
-                window.show_page(f"{contact.account}-encryption-omemo")
+                window.show_page(f"{contact.account}-encryption-{encryption.lower()}")
                 return
 
             open_window(
                 "ContactInfo",
                 account=contact.account,
                 contact=contact,
-                page="encryption-omemo",
+                page=f"encryption-{encryption.lower()}",
             )
             return
 
