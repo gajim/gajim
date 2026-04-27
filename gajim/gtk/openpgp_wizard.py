@@ -169,7 +169,7 @@ class OpenPGPWizard(Assistant):
                 self.show_page("welcome")
 
             case "back":
-                self.show_page("welcome", Gtk.StackTransitionType.SLIDE_RIGHT)
+                self.show_last_page()
 
             case "close":
                 self.close()

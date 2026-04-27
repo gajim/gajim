@@ -30,6 +30,7 @@
         </child>
         <child>
           <object class="GtkPasswordEntry" id="_password_entry">
+            <property name="show-peek-icon">true</property>
           </object>
         </child>
       </object>

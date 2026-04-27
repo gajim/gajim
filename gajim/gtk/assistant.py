@@ -60,6 +60,8 @@ class Assistant(GajimAppWindow, EventHelper):
         self._pages: dict[str, AssistantPage] = {}
         self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
         self._button_visible_func = None
+        self._get_current_page_name: str | None = None
+        self._last_page_name: str | None = None
 
         self._ui = get_builder("assistant.ui")
         self._ui.main_box.add_css_class("window-padding")
@@ -171,6 +173,11 @@ class Assistant(GajimAppWindow, EventHelper):
         assert name is not None
         return name
 
+    def show_last_page(self) -> None:
+        if self._last_page_name is None:
+            return
+        self.show_page(self._last_page_name, Gtk.StackTransitionType.SLIDE_RIGHT)
+
     def show_page(
         self,
         name: str,
@@ -188,9 +195,13 @@ class Assistant(GajimAppWindow, EventHelper):
         if stack.get_visible_child_name() is None:
             # Happens for some reason when adding the first page
             return
+
+        self._last_page_name = self._get_current_page_name
+        self._get_current_page_name = stack.get_visible_child_name()
+
         self.update_title()
         self._set_buttons_visible()
-        self.emit("page-changed", stack.get_visible_child_name())
+        self.emit("page-changed", self._get_current_page_name)
 
     def __on_button_clicked(self, button: Gtk.Button) -> None:
         for button_name, button_data in self._buttons.items():
