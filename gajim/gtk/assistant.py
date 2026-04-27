@@ -44,6 +44,7 @@ class Assistant(GajimAppWindow, EventHelper):
         width: int = 550,
         height: int = 400,
         transition_duration: int = 200,
+        modal: bool = False,
     ) -> None:
         GajimAppWindow.__init__(
             self,
@@ -51,6 +52,7 @@ class Assistant(GajimAppWindow, EventHelper):
             transient_for=transient_for,
             default_width=width,
             default_height=height,
+            modal=modal,
         )
 
         EventHelper.__init__(self)

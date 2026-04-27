@@ -50,7 +50,6 @@ from gajim.common.events import SignedIn
 from gajim.common.helpers import timeout_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
@@ -615,13 +614,7 @@ class OpenPGP(BaseModule, CryptoModule):
         raise StanzaDecrypted
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
-        # jid = str(contact.jid)
-        if self._secret_cert is None:
-            return False
-
-        if isinstance(contact, GroupchatContact):  # noqa: SIM103
-            return False
-        return True
+        return self._secret_cert is not None
 
     def encrypt_message(self, message: OutgoingMessage) -> None:
         if self._secret_cert is None:
@@ -786,8 +779,9 @@ class OpenPGP(BaseModule, CryptoModule):
         our_cert_bytes = bytes(self._secret_cert.secrets)
         self.backup_secret_key(decrypted.bytes + our_cert_bytes)
 
-    def get_our_public_key(self) -> OpenPGPPublicKeyData:
-        assert self._secret_cert is not None
+    def get_our_public_key(self) -> OpenPGPPublicKeyData | None:
+        if self._secret_cert is None:
+            return None
 
         return OpenPGPPublicKeyData(
             active=True,

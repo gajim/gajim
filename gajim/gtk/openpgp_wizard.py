@@ -20,6 +20,7 @@ from gajim.common.modules.openpgp import MultipleSecretKeysImportError
 from gajim.common.modules.util import Task
 from gajim.plugins.plugins_i18n import _
 
+from gajim.gtk.activity_list import OpenPGPEvent
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
@@ -32,11 +33,13 @@ log = logging.getLogger("gajim.gtk.openpgp.wizard")
 
 class OpenPGPWizard(Assistant):
     def __init__(self, account: str, *, backup_mode: bool = False) -> None:
-        Assistant.__init__(self, name="OpenPGPWizard", height=500)
+        Assistant.__init__(
+            self, name="OpenPGPWizard", height=500, transient_for=app.window, modal=True
+        )
         self._destroyed: bool = False
         self._backup_mode = backup_mode
 
-        self._account = account
+        self.account = account
         self._client = app.get_client(account)
 
         self.add_button("back", _("Back"))
@@ -83,7 +86,13 @@ class OpenPGPWizard(Assistant):
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
 
-        self.show_first_page()
+        self.show_page("progress")
+        if self._client.get_module("OpenPGP").secret_key_exists():
+            self._show_success_page()
+        else:
+            self._client.get_module("OpenPGP").request_secret_key(
+                callback=self._on_secret_key_received
+            )
 
     @overload
     def get_page(self, name: Literal["welcome"]) -> WelcomePage: ...
@@ -193,6 +202,7 @@ class OpenPGPWizard(Assistant):
                 _("Your OpenPGP key has been created. Your chat is now encrypted.")
             )
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
+        app.window.get_activity_list().remove_by_type(OpenPGPEvent)
 
     def _show_error_page(self, title: str, heading: str, text: str) -> None:
         self.get_page("error").set_title(title)

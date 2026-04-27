@@ -243,7 +243,7 @@ class OMEMO(BaseModule, CryptoModule):
     def backend(self) -> OMEMOSessionManager:
         return self._backend
 
-    def get_our_public_key(self) -> OMEMOPublicKeyData:
+    def get_our_public_key(self) -> OMEMOPublicKeyData | None:
         device_id, identity_key = self._backend.get_our_identity()
 
         return OMEMOPublicKeyData(

@@ -874,8 +874,15 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if not encryption:
             return True
 
-        if encryption in ("OMEMO", "OpenPGP"):
-            return client.get_module(encryption).check_send_preconditions(contact)
+        if encryption == "OMEMO":
+            return client.get_module("OMEMO").check_send_preconditions(contact)
+
+        if encryption == "OpenPGP":
+            if not client.get_module("OpenPGP").secret_key_exists():
+                open_window("OpenPGPWizard", account=contact.account)
+                return False
+
+            return client.get_module("OpenPGP").check_send_preconditions(contact)
 
         if encryption not in app.plugin_manager.encryption_plugins:
             InformationAlertDialog(

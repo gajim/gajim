@@ -40,6 +40,7 @@ from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.about import AboutDialog
+from gajim.gtk.activity_list import ActivityListView
 from gajim.gtk.activity_list import Reaction
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import CancelDialogResponse
@@ -189,6 +190,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def get_chat_stack(self) -> ChatStack:
         return self._chat_page.get_chat_stack()
+
+    def get_activity_list(self) -> ActivityListView:
+        return self._chat_page.get_activity_list()
 
     def get_emoji_chooser(self) -> EmojiChooser:
         if self._emoji_chooser is None:
