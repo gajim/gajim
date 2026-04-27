@@ -165,8 +165,11 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.comparing_instructions.set_text(popover_qr_text)
 
         self._our_public_key = self._crypto_module.get_our_public_key()
+        if self._our_public_key is None:
+            fingerprint = _("No key found")
+        else:
+            fingerprint = self._our_public_key.pretty_fingerprint()
 
-        fingerprint = self._our_public_key.pretty_fingerprint()
         self._ui.our_fingerprint_row.set_title(fingerprint)
         self._ui.our_fingerprint_2.set_text(fingerprint)
 
@@ -261,6 +264,8 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
         )
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
+        if self._our_public_key is None:
+            return
         app.window.get_clipboard().set(self._our_public_key.pretty_fingerprint())
 
 

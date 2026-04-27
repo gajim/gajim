@@ -555,15 +555,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         match new_state:
-            case "" | "OMEMO":
+            case "" | "OMEMO" | "OpenPGP":
                 pass
-
-            case "OpenPGP":
-                assert self._client is not None
-                if not self._client.get_module("OpenPGP").secret_key_exists():
-                    assert self._contact is not None
-                    open_window("OpenPGPWizard", account=self._contact.account)
-                    return
 
             case _:
                 plugin = app.plugin_manager.encryption_plugins.get(new_state)

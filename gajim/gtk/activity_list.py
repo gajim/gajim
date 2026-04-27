@@ -232,6 +232,10 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                     self._decrease_unread_count()
                 self._model.remove(i)
 
+    def remove_by_type(self, item_type: type[ActivityListItemT]) -> None:
+        self.unselect()
+        self._remove_by_type(item_type)
+
     def _remove_by_type(self, item_type: type[ActivityListItemT]) -> None:
         for i in reversed(range(len(self._model))):
             item = self._model.get_item(i)

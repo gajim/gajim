@@ -149,7 +149,7 @@ class PublicKeyData:
 
 class CryptoModule(Protocol):
 
-    def get_our_public_key(self) -> PublicKeyData:
+    def get_our_public_key(self) -> PublicKeyData | None:
         ...
 
     def get_public_keys(
