@@ -803,11 +803,11 @@ class OpenPGPEvent(ActivityListItem[events.OpenPGPEvent]):
         texture = app.app.avatar_storage.get_gajim_circle_icon(AvatarSize.ROSTER, scale)
 
         if event.type == "setup":
-            title = _("Finish OpenPGP Setup")
-            subject = _("Finish your OpenPGP setup")
+            title = _("OpenPGP Backup")
+            subject = _("Complete your OpenPGP setup")
         else:
-            title = _("OpenPGP Key Backup Error")
-            subject = _("OpenPGP backup failed")
+            title = _("OpenPGP Backup Error")
+            subject = _("OpenPGP key backup failed")
 
         return cls(
             context_id=event.context_id,

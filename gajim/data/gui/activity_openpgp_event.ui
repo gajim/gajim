@@ -9,7 +9,7 @@
       <object class="GtkLabel">
         <property name="can-focus">0</property>
         <property name="margin-bottom">6</property>
-        <property name="label" translatable="yes">Backup OpenPGP Key</property>
+        <property name="label" translatable="yes">OpenPGP Key Backup</property>
         <style>
           <class name="title-1"/>
         </style>
@@ -19,7 +19,7 @@
       <object class="GtkLabel">
         <property name="wrap">1</property>
         <property name="max-width-chars">50</property>
-        <property name="label" translatable="yes">Gajim can backup your key</property>
+        <property name="label" translatable="yes">To secure your OpenPGP key for encrypted chats, Gajim can create a backup of your key.</property>
         <style>
           <class name="dimmed" />
         </style>
@@ -42,7 +42,7 @@
               </child>
               <child>
                 <object class="GtkButton" id="backup_button">
-                  <property name="label" translatable="yes">Backup</property>
+                  <property name="label" translatable="yes">Backup Now</property>
                   <property name="halign">end</property>
                   <property name="hexpand">1</property>
                   <property name="visible">false</property>

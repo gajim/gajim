@@ -28,7 +28,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Use My Own OpenPGP Key</property>
                 <style>
-                  <class name="title-4" />
+                  <class name="bold" />
                 </style>
               </object>
             </child>
@@ -36,7 +36,7 @@
               <object class="GtkBox">
                 <property name="spacing">12</property>
                 <style>
-                  <class name="mb-12" />
+                  <class name="mb-18" />
                 </style>
                 <child>
                   <object class="GtkButton" id="_import_button">
@@ -54,7 +54,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Create New OpenPGP Key</property>
                 <style>
-                  <class name="title-4" />
+                  <class name="bold" />
                 </style>
               </object>
             </child>
