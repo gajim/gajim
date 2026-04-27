@@ -63,6 +63,7 @@ class OpenPGPWizard(Assistant):
                 }
             )
 
+            self.add_button("other-options", _("Other Options"))
             self.add_button(
                 "import", _("Import Key"), complete=True, css_class="suggested-action"
             )
@@ -164,6 +165,9 @@ class OpenPGPWizard(Assistant):
                     callback=self._on_backup_result,
                 )
 
+            case "other-options":
+                self.show_page("welcome")
+
             case "back":
                 self.show_page("welcome", Gtk.StackTransitionType.SLIDE_RIGHT)
 
@@ -178,12 +182,6 @@ class OpenPGPWizard(Assistant):
     ) -> None:
         if button_name == "import":
             self.show_page("import", Gtk.StackTransitionType.SLIDE_LEFT)
-
-        elif button_name == "restore_backup":
-            self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
-            self._client.get_module("OpenPGP").request_secret_key(
-                callback=self._on_secret_key_received,
-            )
 
         elif button_name == "generate":
             try:
@@ -238,15 +236,11 @@ class OpenPGPWizard(Assistant):
             encrypted_bytes = cast(bytes | None, task.finish())
         except Exception as error:
             log.error("Error on secret key request: %s", error)
-            self._show_error_page(_("Error"), _("Error"), str(error))
+            self.show_page("welcome", Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
         if not encrypted_bytes:
-            self._show_error_page(
-                _("No Backup Found"),
-                _("No Backup Found"),
-                _("Gajim can't find any backup of your OpenPGP key on the server"),
-            )
+            self.show_page("welcome", Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
         self._encrypted_backup_bytes = encrypted_bytes
@@ -261,7 +255,6 @@ class WelcomePage(AssistantPage):
     }
 
     _import_button: Gtk.Button = Gtk.Template.Child()
-    _restore_backup_button: Gtk.Button = Gtk.Template.Child()
     _generate_button: Gtk.Button = Gtk.Template.Child()
 
     def __init__(self) -> None:
@@ -269,12 +262,6 @@ class WelcomePage(AssistantPage):
         self.title = _("Setup OpenPGP Encryption")
 
         self._connect(self._import_button, "clicked", self._on_button_clicked, "import")
-        self._connect(
-            self._restore_backup_button,
-            "clicked",
-            self._on_button_clicked,
-            "restore_backup",
-        )
         self._connect(
             self._generate_button, "clicked", self._on_button_clicked, "generate"
         )
@@ -330,7 +317,7 @@ class RestoreBackupPage(AssistantPage):
         self._connect(self._password_entry, "changed", self._on_entry_changed)
 
     def get_visible_buttons(self) -> list[str]:
-        return ["back", "restore"]
+        return ["other-options", "restore"]
 
     def _on_entry_changed(self, entry: Gtk.PasswordEntry) -> None:
         ## TODO validate input against regex

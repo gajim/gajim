@@ -43,11 +43,6 @@
                     <property name="label" translatable="yes">Import Key</property>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkButton" id="_restore_backup_button">
-                    <property name="label" translatable="yes">Restore Backup</property>
-                  </object>
-                </child>
               </object>
             </child>
             <child>
