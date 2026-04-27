@@ -40,7 +40,7 @@ class EncryptionInfoMsg(Enum):
                       'Querying for devices now…')
     UNDECIDED_FINGERPRINTS = _('There are devices for which you have not made '
                                'a trust decision yet.')
-    SESSION_BUILD = _('Successfully build new session with {device_id}.')
+    SESSION_BUILD = _('Successfully built new session with device {device_id}.')
 
 
 class Entity(NamedTuple):
