@@ -171,7 +171,7 @@ def rename(*, prefix: Path, files: dict[str, str], new_app_id: str) -> None:
 
 
 def cmd_build(args: argparse.Namespace) -> None:
-    if args.dist == "win":
+    if args.dist in ["win", "macos"]:
         build_translations()
         return
 
@@ -219,7 +219,7 @@ if __name__ == "__main__":
     build_parser = subparsers.add_parser("build", help="Build Gajim")
     build_parser.add_argument(
         "--dist",
-        choices=["unix", "flatpak", "flatpak-nightly", "win"],
+        choices=["unix", "flatpak", "flatpak-nightly", "win", "macos"],
         default="unix",
         help="Distribution",
     )

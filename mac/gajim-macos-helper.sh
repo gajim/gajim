@@ -135,6 +135,7 @@ function install_nbxmpp() {
 function install_gajim() {
 	source ./gajim-venv/bin/activate
 	cd ./gajim-source/
+	python ./make.py build --dist macos
 	pip3 install .
 	cd ../
 	deactivate
