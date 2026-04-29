@@ -32,51 +32,37 @@ log = logging.getLogger("gajim.gtk.openpgp.wizard")
 
 
 class OpenPGPWizard(Assistant):
-    def __init__(self, account: str, *, backup_mode: bool = False) -> None:
+    def __init__(self, account: str, *, mode: Literal["test-password"] | None) -> None:
         Assistant.__init__(
             self, name="OpenPGPWizard", height=500, transient_for=app.window, modal=True
         )
         self._destroyed: bool = False
-        self._backup_mode = backup_mode
+        self._mode = mode
 
         self.account = account
         self._client = app.get_client(account)
 
         self.add_button("back", _("Back"))
         self.add_button("close", _("Close"))
-
-        if backup_mode:
-            self.add_button("backup", _("Start Backup"), css_class="suggested-action")
-            self.add_pages(
-                {
-                    "backup": BackupPage("dummy"),
-                }
-            )
-
-        else:
-            self.add_pages(
-                {
-                    "welcome": WelcomePage(),
-                    "import": ImportPage(),
-                    "restore": RestoreBackupPage(),
-                    "choose-secret-key": ChooseSecretKeyPage(),
-                }
-            )
-
-            self.add_button("other-options", _("Other Options"))
-            self.add_button(
-                "import", _("Import Key"), complete=True, css_class="suggested-action"
-            )
-            self.add_button(
-                "restore", _("Restore Key"), css_class="suggested-action", complete=True
-            )
-            self.add_button("choose", _("Confirm"), css_class="suggested-action")
-
-            welcome_page = self.get_page("welcome")
-            self._connect(welcome_page, "clicked", self._on_welcome_page_button_clicked)
+        self.add_button("overwrite", _("Overwrite"), css_class="destructive-action")
+        self.add_button("other-options", _("Other Options"))
+        self.add_button(
+            "import", _("Import Key"), complete=True, css_class="suggested-action"
+        )
+        self.add_button(
+            "restore", _("Restore Key"), css_class="suggested-action", complete=True
+        )
+        self.add_button("choose", _("Confirm"), css_class="suggested-action")
+        self.add_button(
+            "test-password", _("Apply"), css_class="suggested-action", complete=True
+        )
 
         self.add_pages(
             {
+                "welcome": WelcomePage(),
+                "import": ImportPage(),
+                "password": BackupPasswordPage(mode=mode),
+                "choose-secret-key": ChooseSecretKeyPage(),
                 "error": ErrorPage(),
                 "success": SuccessPage(),
             }
@@ -84,11 +70,17 @@ class OpenPGPWizard(Assistant):
 
         self.add_default_page("progress")
 
+        welcome_page = self.get_page("welcome")
+        self._connect(welcome_page, "clicked", self._on_welcome_page_button_clicked)
+
         self._connect(self, "button-clicked", self._on_assistant_button_clicked)
         self._connect(self, "page-changed", self._on_page_changed)
 
         self.show_page("progress")
-        if self._client.get_module("OpenPGP").secret_key_exists():
+        if (
+            self._client.get_module("OpenPGP").secret_key_exists()
+            and not mode == "test-password"
+        ):
             self._show_success_page()
         else:
             self._client.get_module("OpenPGP").request_secret_key(
@@ -102,7 +94,7 @@ class OpenPGPWizard(Assistant):
     def get_page(self, name: Literal["import"]) -> ImportPage: ...
 
     @overload
-    def get_page(self, name: Literal["restore"]) -> RestoreBackupPage: ...
+    def get_page(self, name: Literal["password"]) -> BackupPasswordPage: ...
 
     @overload
     def get_page(self, name: Literal["choose-secret-key"]) -> ChooseSecretKeyPage: ...
@@ -136,7 +128,7 @@ class OpenPGPWizard(Assistant):
                         "choose-secret-key"
                     ).get_selected_fingerprint()
 
-                password = self.get_page("restore").get_password()
+                password = self.get_page("password").get_password()
 
                 try:
                     self._client.get_module("OpenPGP").import_key(
@@ -159,11 +151,25 @@ class OpenPGPWizard(Assistant):
                 else:
                     self._show_success_page()
 
-            case "backup":
-                self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
-                self._client.get_module("OpenPGP").backup_secret_key(
-                    callback=self._on_backup_result,
-                )
+            case "test-password":
+                password = self.get_page("password").get_password()
+                try:
+                    self._client.get_module("OpenPGP").test_backup_password(
+                        self._encrypted_backup_bytes, password
+                    )
+                except Exception as error:
+                    self._show_error_page(
+                        _("Decryption Error"),
+                        _("Decryption Error"),
+                        _("An error occurred while trying to decrypt your backup: %s")
+                        % str(error),
+                    )
+
+                else:
+                    self._show_success_page()
+
+            case "overwrite":
+                pass
 
             case "other-options":
                 self.show_page("welcome")
@@ -196,7 +202,7 @@ class OpenPGPWizard(Assistant):
             self.get_page("import").clear()
 
     def _show_success_page(self) -> None:
-        if self._backup_mode:
+        if self._mode == "test-password":
             self.get_page("success").set_title(_("Backup Successful"))
             self.get_page("success").set_text(
                 _("Your OpenPGP key backup was successful.")
@@ -215,22 +221,6 @@ class OpenPGPWizard(Assistant):
         self.get_page("error").set_text(text or "")
         self.show_page("error", Gtk.StackTransitionType.SLIDE_LEFT)
 
-    def _on_backup_result(self, task: Task) -> None:
-        try:
-            task.finish()
-        except Exception as error:
-            self._show_error_page(
-                _("Backup Error"),
-                _("Backup Error"),
-                _(
-                    "An error occurred while trying to create a backup  of your OpenPGP key: %s"
-                )
-                % str(error),
-            )
-            return
-
-        self._show_success_page()
-
     def _on_secret_key_received(self, task: Task) -> None:
         try:
             encrypted_bytes = cast(bytes | None, task.finish())
@@ -244,7 +234,7 @@ class OpenPGPWizard(Assistant):
             return
 
         self._encrypted_backup_bytes = encrypted_bytes
-        self.show_page("restore")
+        self.show_page("password")
 
 
 @Gtk.Template(string=get_ui_string("openpgp/welcome.ui"))
@@ -303,20 +293,26 @@ class ImportPage(AssistantPage):
         return ["back", "import"]
 
 
-@Gtk.Template(string=get_ui_string("openpgp/restore.ui"))
-class RestoreBackupPage(AssistantPage):
-    __gtype_name__ = "OpenPGPWizardRestore"
+@Gtk.Template(string=get_ui_string("openpgp/password.ui"))
+class BackupPasswordPage(AssistantPage):
+    __gtype_name__ = "OpenPGPWizardBackupPassword"
 
     _password_entry: Gtk.PasswordEntry = Gtk.Template.Child()
 
-    def __init__(self) -> None:
+    def __init__(self, mode: Literal["test-password"] | None) -> None:
         AssistantPage.__init__(self)
-        self.title = _("Restore Backup")
+        self._mode = mode
+        if mode == "test-password":
+            self.title = _("Enter Password")
+        else:
+            self.title = _("Restore Backup")
         self.complete = False
 
         self._connect(self._password_entry, "changed", self._on_entry_changed)
 
     def get_visible_buttons(self) -> list[str]:
+        if self._mode == "test-password":
+            return ["overwrite", "test-password"]
         return ["other-options", "restore"]
 
     def _on_entry_changed(self, entry: Gtk.PasswordEntry) -> None:
@@ -376,32 +372,9 @@ class FingerprintLabel(Gtk.Label):
         return self._cert.fingerprint
 
 
-@Gtk.Template(string=get_ui_string("openpgp/backup.ui"))
-class BackupPage(AssistantPage):
-    __gtype_name__ = "OpenPGPWizardBackup"
-
-    _password_label: Gtk.Label = Gtk.Template.Child()
-    _copy_button: Gtk.Button = Gtk.Template.Child()
-
-    def __init__(self, password: str) -> None:
-        AssistantPage.__init__(self)
-        self.title = _("Backup")
-        self.complete = False
-
-        self._password_label.set_text(password)
-
-        self._connect(self._copy_button, "clicked", self._on_copy_clicked)
-
-    def _on_copy_clicked(self, _button: Gtk.Button) -> None:
-        app.window.get_clipboard().set(self._password_label.get_text())
-
-    def get_visible_buttons(self) -> list[str]:
-        return ["close", "backup"]
-
-
 class ErrorPage(AssistantErrorPage):
     def get_visible_buttons(self) -> list[str]:
-        return ["back"]
+        return ["back", "close"]
 
 
 class SuccessPage(AssistantSuccessPage):

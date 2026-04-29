@@ -393,10 +393,13 @@ class OpenPGPEventPage(BaseActivityPage):
 
         self._connect(self._ui.disable_button, "clicked", self._on_disable)
         self._connect(
-            self._ui.backup_button, "clicked", self._on_setup_backup_clicked, True
+            self._ui.backup_button,
+            "clicked",
+            self._on_setup_backup_clicked,
+            "test-password",
         )
         self._connect(
-            self._ui.setup_button, "clicked", self._on_setup_backup_clicked, False
+            self._ui.setup_button, "clicked", self._on_setup_backup_clicked, None
         )
 
         self._event = item.get_event()
@@ -416,10 +419,8 @@ class OpenPGPEventPage(BaseActivityPage):
         self._ui.disable_button.set_sensitive(sensitive)
         self._ui.setup_button.set_sensitive(sensitive)
 
-    def _on_setup_backup_clicked(self, _button: Gtk.Button, backup_mode: bool) -> None:
-        open_window(
-            "OpenPGPWizard", account=self._event.account, backup_mode=backup_mode
-        )
+    def _on_setup_backup_clicked(self, _button: Gtk.Button, mode: str | None) -> None:
+        open_window("OpenPGPWizard", account=self._event.account, mode=mode)
         self.emit("request-remove")
 
     def _on_disable(self, _button: Gtk.Button) -> None:

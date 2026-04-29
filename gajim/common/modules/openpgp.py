@@ -91,6 +91,11 @@ class MultipleSecretKeysImportError(Exception):
         return self._secret_certs
 
 
+class BackupDecryptionError(Exception):
+    def __init__(self) -> None:
+        super().__init__(_("Unable to decrypt the backup with this password"))
+
+
 class EncryptionTestImportError(Exception):
     def __init__(self) -> None:
         super().__init__(_("Unable to use this key for encrypting messages"))
@@ -299,6 +304,19 @@ class OpenPGP(BaseModule, CryptoModule):
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
+
+    def test_backup_password(self, data: bytes, password: str) -> None:
+        try:
+            decrypted = pys.decrypt(data, passwords=[password])
+        except Exception:
+            raise BackupDecryptionError
+
+        if decrypted.bytes is None:
+            raise BackupDecryptionError
+
+        pys.Cert.split_bytes(decrypted.bytes)
+
+        app.storage.openpgp.store_secret_key_backup_password(self._own_jid, password)
 
     def import_key(
         self,

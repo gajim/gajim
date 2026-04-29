@@ -421,9 +421,6 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
         )
 
         self.set_title(_("Trust Management"))
-        wiki_url = "https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO"
-        link_text = _("Read more about blind trust")
-        self.set_description(f'<a href="{wiki_url}">{link_text}</a>')
 
         settings = [
             Setting(
@@ -431,7 +428,7 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
                 _("Blind Trust"),
                 SettingType.ACCOUNT_CONFIG,
                 "openpgp_blind_trust",
-                desc=_("Blindly trust new devices until you verify them"),
+                desc=_("Blindly trust new devices"),
             ),
             Setting(
                 SettingKind.SWITCH,
