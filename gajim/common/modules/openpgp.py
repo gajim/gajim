@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import Final
 
+import random
 import secrets
 import subprocess
 import textwrap
@@ -17,7 +18,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pysequoia as pys
-from gi.repository import GLib
 from nbxmpp import Node
 from nbxmpp import StanzaMalformed
 from nbxmpp.client import Client as nbxmppClient
@@ -47,7 +47,7 @@ from gajim.common.client import Client
 from gajim.common.const import Trust
 from gajim.common.events import OpenPGPEvent
 from gajim.common.events import SignedIn
-from gajim.common.helpers import timeout_add_once
+from gajim.common.helpers import timeout_add_seconds_once
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
@@ -214,8 +214,7 @@ class OpenPGP(BaseModule, CryptoModule):
         self._load_secret_keys()
         self._migrate_secret_keys()
 
-        if app.settings.get_account_setting(self._account, "openpgp_backup_secret_key"):
-            timeout_add_once(5_000, self._check_secret_key_backup)
+        timeout_add_seconds_once(random.randint(30, 60), self.check_secret_key_backup)
 
     def _load_secret_keys(self) -> None:
         if row := app.storage.openpgp.get_secret_key(self._own_jid):
@@ -304,6 +303,7 @@ class OpenPGP(BaseModule, CryptoModule):
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
+        self.check_secret_key_backup()
 
     def test_backup_password(self, data: bytes, password: str) -> None:
         try:
@@ -316,7 +316,9 @@ class OpenPGP(BaseModule, CryptoModule):
 
         pys.Cert.split_bytes(decrypted.bytes)
 
+        self._backup_password = password
         app.storage.openpgp.store_secret_key_backup_password(self._own_jid, password)
+        self.check_secret_key_backup()
 
     def import_key(
         self,
@@ -377,6 +379,7 @@ class OpenPGP(BaseModule, CryptoModule):
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
+        self.check_secret_key_backup()
 
     def set_public_key(self) -> None:
         self._log.info("Publish public key")
@@ -715,11 +718,17 @@ class OpenPGP(BaseModule, CryptoModule):
         result = yield self.set_secret_key(encrypted_payload)
         raise_if_error(result)
 
-    def _check_secret_key_backup(self) -> bool:
-        self._log.info("Check secret key backup")
+    def check_secret_key_backup(self) -> None:
+        if not app.account_is_available(self._account):
+            return
 
+        if not app.settings.get_account_setting(
+            self._account, "openpgp_backup_secret_key"
+        ):
+            return
+
+        self._log.info("Check secret key backup")
         self.request_secret_key(callback=self._secret_key_received)
-        return GLib.SOURCE_REMOVE
 
     def _secret_key_received(self, task: Task) -> None:
         try:

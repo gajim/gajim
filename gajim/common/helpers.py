@@ -589,3 +589,11 @@ def timeout_add_once(ms: int, func: Callable[..., Any], *args: Any) -> None:
         return False
 
     GLib.timeout_add(ms, wrapper)
+
+
+def timeout_add_seconds_once(sec: int, func: Callable[..., Any], *args: Any) -> None:
+    def wrapper():
+        func(*args)
+        return False
+
+    GLib.timeout_add_seconds(sec, wrapper)
