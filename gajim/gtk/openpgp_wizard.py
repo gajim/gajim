@@ -32,7 +32,9 @@ log = logging.getLogger("gajim.gtk.openpgp.wizard")
 
 
 class OpenPGPWizard(Assistant):
-    def __init__(self, account: str, *, mode: Literal["test-password"] | None) -> None:
+    def __init__(
+        self, account: str, *, mode: Literal["test-password"] | None = None
+    ) -> None:
         Assistant.__init__(
             self, name="OpenPGPWizard", height=500, transient_for=app.window, modal=True
         )
@@ -169,7 +171,10 @@ class OpenPGPWizard(Assistant):
                     self._show_success_page()
 
             case "overwrite":
-                pass
+                self._client.get_module("OpenPGP").backup_secret_key(
+                    callback=self._on_overwrite_result
+                )
+                self.show_page("progress")
 
             case "other-options":
                 self.show_page("welcome")
@@ -235,6 +240,21 @@ class OpenPGPWizard(Assistant):
 
         self._encrypted_backup_bytes = encrypted_bytes
         self.show_page("password")
+
+    def _on_overwrite_result(self, task: Task) -> None:
+        try:
+            task.finish()
+        except Exception as error:
+            log.error("Error when overwriting secret key : %s", error)
+            self._show_error_page(
+                _("Backup Error"),
+                _("Backup Error"),
+                _("An error occurred while trying to overwrite your backup: %s")
+                % str(error),
+            )
+
+        else:
+            self._show_success_page()
 
 
 @Gtk.Template(string=get_ui_string("openpgp/welcome.ui"))

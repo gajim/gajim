@@ -879,7 +879,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         if encryption == "OpenPGP":
             if not client.get_module("OpenPGP").secret_key_exists():
-                open_window("OpenPGPWizard", account=contact.account, mode="setup")
+                open_window("OpenPGPWizard", account=contact.account)
                 return False
 
             return client.get_module("OpenPGP").check_send_preconditions(contact)
