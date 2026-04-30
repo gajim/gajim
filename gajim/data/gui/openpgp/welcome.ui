@@ -10,7 +10,7 @@
         <property name="spacing">18</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="yes">To set up OpenPGP encryption you can either import an existing key, restore a backup, or let Gajim create a new key.</property>
+            <property name="label" translatable="yes">To set up OpenPGP encryption you can either import an existing key or let Gajim create a new key.</property>
             <property name="max-width-chars">38</property>
             <property name="wrap">1</property>
             <property name="justify">center</property>
@@ -33,16 +33,8 @@
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="spacing">12</property>
-                <style>
-                  <class name="mb-18" />
-                </style>
-                <child>
-                  <object class="GtkButton" id="_import_button">
-                    <property name="label" translatable="yes">Import Key</property>
-                  </object>
-                </child>
+              <object class="GtkButton" id="_import_button">
+                <property name="label" translatable="yes">Import Key</property>
               </object>
             </child>
             <child>
@@ -50,6 +42,7 @@
                 <property name="label" translatable="yes">Create New OpenPGP Key</property>
                 <style>
                   <class name="bold" />
+                  <class name="mt-18" />
                 </style>
               </object>
             </child>
