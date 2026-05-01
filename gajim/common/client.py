@@ -574,7 +574,9 @@ class Client(Observable, ClientModules):
             except Exception:
                 self._log.exception('Error')
                 text = message.get_text(with_fallback=False)
-                assert text is not None
+                if text is None:
+                    return
+
                 app.ged.raise_event(
                     MessageNotSent(
                         client=self._client,

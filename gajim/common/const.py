@@ -31,9 +31,11 @@ MAX_MESSAGE_CORRECTION_DELAY = 3600
 
 
 class EncryptionInfoMsg(Enum):
-    BAD_OMEMO_CONFIG = _('This chat’s configuration is unsuitable for '
-                         'encryption with OMEMO. To use OMEMO in this chat, '
-                         'it should be non-anonymous and members-only.')
+    BAD_MUC_CONFIG = _(
+        'This chat’s configuration is unsuitable for '
+        'encryption with {encryption}. To use {encryption} in this chat, '
+        'it should be non-anonymous and members-only.'
+    )
     NO_FINGERPRINTS = _('To send an encrypted message, you have to decide '
                         'whether to trust the device of your contact.')
     QUERY_DEVICES = _('No devices found to encrypt this message to. '

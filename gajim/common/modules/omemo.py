@@ -326,8 +326,8 @@ class OMEMO(BaseModule, CryptoModule):
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
-                type=EncryptionInfoMsg.BAD_OMEMO_CONFIG,
-                message=EncryptionInfoMsg.BAD_OMEMO_CONFIG.value,
+                type=EncryptionInfoMsg.BAD_MUC_CONFIG,
+                message=EncryptionInfoMsg.BAD_MUC_CONFIG.value.format(encryption="OMEMO"),
             ))
             return False
 

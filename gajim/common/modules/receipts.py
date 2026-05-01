@@ -19,6 +19,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import ReceiptReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.message_util import successfully_decrypted
 from gajim.common.storage.archive import models as mod
 
 
@@ -105,6 +106,9 @@ class Receipts(BaseModule):
             raise nbxmpp.NodeProcessed
 
     def _should_answer(self, properties: MessageProperties) -> bool:
+        if not successfully_decrypted(properties):
+            return False
+
         if properties.is_muc_pm:
             return True
 

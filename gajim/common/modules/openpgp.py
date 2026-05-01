@@ -44,17 +44,26 @@ from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.client import Client
+from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import Trust
+from gajim.common.events import EncryptionInfo
+from gajim.common.events import MucAdded
 from gajim.common.events import OpenPGPEvent
 from gajim.common.events import SignedIn
 from gajim.common.helpers import timeout_add_seconds_once
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import PublicKeyData
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.decorators import cache_with_ttl
 from gajim.common.util.decorators import event_filter
 
 NOT_ENCRYPTED_TAGS = [
@@ -204,6 +213,7 @@ class OpenPGP(BaseModule, CryptoModule):
         self.register_events(
             [
                 ("signed-in", ged.CORE, self._on_signed_in),
+                ("muc-added", ged.PREGUI, self._on_muc_added),
             ]
         )
 
@@ -466,6 +476,10 @@ class OpenPGP(BaseModule, CryptoModule):
 
         self._process_keylist(keylist, properties.jid)
 
+    @cache_with_ttl(ttl=7200)
+    def _request_keylist_ttl(self, remote_jid: JID) -> None:
+        self.request_keylist(remote_jid)
+
     def request_keylist(self, jid: JID | None = None) -> None:
         if jid is None:
             jid = self._own_jid
@@ -566,6 +580,55 @@ class OpenPGP(BaseModule, CryptoModule):
             )
             self.set_keylist(keylist)
 
+    def _process_muc_message(self, properties: MessageProperties) -> str | None:
+
+        assert properties.jid is not None
+        resource = properties.jid.resource
+        if properties.muc_ofrom is not None:
+            # History Message from MUC
+            return properties.muc_ofrom.bare
+
+        contact = self._client.get_module("Contacts").get_contact(properties.jid)
+        assert isinstance(contact, GroupchatParticipant)
+        if contact.real_jid is not None:
+            return contact.real_jid.bare
+
+        self._log.error("Unable to find jid for group chat message from %s", resource)
+        return None
+
+    def _get_signer_from_message(
+        self, remote_jid: JID, properties: MessageProperties
+    ) -> JID | None:
+        muc_data = None
+        if properties.type.is_groupchat:
+            muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
+            if muc_data is None:
+                self._log.warning("Groupchat message from unknown MUC: %s", remote_jid)
+                return
+
+        _, direction = get_chat_type_and_direction(muc_data, self._own_jid, properties)
+        if direction == ChatDirection.OUTGOING:
+            return self._own_jid
+
+        if not properties.from_muc:
+            return properties.remote_jid
+
+        if properties.mam:
+            self._log.info("Message received, archive: %s", properties.mam.archive)
+            if properties.muc_user is None or properties.muc_user.jid is None:
+                self._log.warning(
+                    "Received MAM message which can not be mapped to a real jid"
+                )
+                return None
+            return properties.muc_user.jid.new_as_bare()
+
+        else:
+            assert properties.jid is not None
+            contact = self._client.get_module("Contacts").get_contact(properties.jid)
+            if isinstance(contact, GroupchatParticipant):
+                if contact.real_jid is not None:
+                    return contact.real_jid.new_as_bare()
+
     def decrypt_message(
         self, _client: nbxmppClient, stanza: Message, properties: MessageProperties
     ) -> None:
@@ -587,11 +650,21 @@ class OpenPGP(BaseModule, CryptoModule):
         assert self._secret_cert.secrets is not None
         assert self._secret_cert.has_secret_keys
 
+        signer_jid = self._get_signer_from_message(remote_jid, properties)
+        if signer_jid is None:
+            self._log.warning("Unable to determine remote jid for message")
+            return
+
         remote_public_keys = app.storage.openpgp.get_public_keys(
             self._account,
-            [remote_jid],
+            [signer_jid],
             only_active=False,
         )
+        if self._own_jid == signer_jid:
+            own_public_key = app.storage.openpgp.get_public_key_from_secret(
+                self._account, self._own_jid, self._secret_cert
+            )
+            remote_public_keys.append(own_public_key)
 
         def _store(_key_id: list[str]) -> list[pys.Cert]:
             return [public.key for public in remote_public_keys]
@@ -614,11 +687,15 @@ class OpenPGP(BaseModule, CryptoModule):
         try:
             payload, recipients, _timestamp = parse_signcrypt(signcrypt)
         except StanzaMalformed as error:
-            self._log.warning("Decryption failed: %s", error)
+            self._log.warning("Malformed payload: %s", error)
             self._log.warning(payload)
             return
 
-        if not any(map(self._own_jid.bare_match, recipients)):
+        to_address = self._own_jid
+        if properties.type.is_groupchat:
+            to_address = remote_jid
+
+        if to_address not in recipients:
             self._log.warning("to attr not valid")
             self._log.warning(signcrypt)
             return
@@ -638,7 +715,121 @@ class OpenPGP(BaseModule, CryptoModule):
         raise StanzaDecrypted
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
-        return self._secret_cert is not None
+        match contact:
+            case GroupchatContact():
+                if not self._is_compatible_muc(contact.jid):
+                    app.ged.raise_event(
+                        EncryptionInfo(
+                            account=contact.account,
+                            jid=contact.jid,
+                            type=EncryptionInfoMsg.BAD_MUC_CONFIG,
+                            message=EncryptionInfoMsg.BAD_MUC_CONFIG.value.format(
+                                encryption="OpenPGP"
+                            ),
+                        )
+                    )
+                    return False
+
+                return True
+
+            case BareContact():
+                if contact.is_self:
+                    return self.secret_key_exists()
+
+                active, undecided = self._remote_has_active_keys(contact.jid)
+                if not active:
+                    self.request_keylist(contact.jid)
+                    app.ged.raise_event(
+                        EncryptionInfo(
+                            account=contact.account,
+                            jid=contact.jid,
+                            type=EncryptionInfoMsg.QUERY_DEVICES,
+                            message=EncryptionInfoMsg.QUERY_DEVICES.value,
+                        )
+                    )
+                    return False
+
+                if undecided:
+                    app.ged.raise_event(
+                        EncryptionInfo(
+                            account=contact.account,
+                            jid=contact.jid,
+                            type=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS,
+                            message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS.value,
+                        )
+                    )
+                    return False
+                return True
+
+            case _:
+                raise ValueError(f"Unhandled contact type: {contact!r}")
+
+    @event_filter(["account"])
+    def _on_muc_added(self, event: MucAdded) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_module("Contacts").get_contact(event.jid)
+        if not isinstance(contact, GroupchatContact):
+            self._log.warning("%s is not a groupchat contact", contact)
+            return
+
+        # Event is triggert on every join, avoid multiple connects
+        contact.disconnect_all_from_obj(self)
+        contact.connect("room-joined", self._on_muc_event)
+        contact.connect("user-affiliation-changed", self._on_muc_event)
+        contact.connect("room-affiliation-changed", self._on_muc_event)
+        contact.connect("room-affiliations-received", self._on_muc_event)
+
+    def _on_muc_event(
+        self, contact: GroupchatContact, _signal_name: str, *args: Any
+    ) -> None:
+
+        if not self._is_compatible_muc(contact.jid):
+            return
+
+        self._check_groupchat_members_keys(contact.jid)
+
+    def _get_groupchat_members(self, remote_jid: JID) -> set[JID]:
+        affiliations = self._client.get_module("MUC").get_affiliations(
+            remote_jid, include_outcast=False
+        )
+        members: set[JID] = set()
+        members.update(*affiliations.values())
+        return members
+
+    def _check_groupchat_members_keys(self, remote_jid: JID) -> None:
+        for jid in self._get_groupchat_members(remote_jid):
+            if not self._is_contact_in_roster(jid):
+                self._log.info("%s not in roster, query keylist...", jid)
+                self._request_keylist_ttl(jid)
+
+    def _is_contact_in_roster(self, remote_jid: JID) -> bool:
+        if remote_jid == self._own_jid:
+            return True
+
+        roster_item = self._client.get_module("Roster").get_item(remote_jid)
+        if roster_item is None:
+            return False
+
+        contact = self._client.get_module("Contacts").get_contact(remote_jid)
+        assert isinstance(contact, BareContact)
+        return contact.subscription == "both"
+
+    def _is_compatible_muc(self, remote_jid: JID) -> bool:
+        disco_info = app.storage.cache.get_last_disco_info(remote_jid)
+        assert disco_info is not None
+        return disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous
+
+    def _remote_has_active_keys(self, remote: JID) -> tuple[bool, bool]:
+        public_keys = app.storage.openpgp.get_public_keys(
+            self._account,
+            [remote],
+            trust=[Trust.VERIFIED, Trust.BLIND, Trust.UNDECIDED],
+        )
+        for key in public_keys:
+            if key.trust == Trust.UNDECIDED:
+                return True, True
+
+        return bool(public_keys), False
 
     def encrypt_message(self, message: OutgoingMessage) -> None:
         if self._secret_cert is None:
@@ -646,10 +837,15 @@ class OpenPGP(BaseModule, CryptoModule):
 
         remote_jid = message.contact.jid
 
-        recipients: list[mod.Public] = []
-        recipients += app.storage.openpgp.get_public_keys(
+        jids = [self._own_jid]
+        if message.is_groupchat:
+            jids += self._get_groupchat_members(remote_jid)
+        else:
+            jids += [remote_jid]
+
+        recipients = app.storage.openpgp.get_public_keys(
             self._account,
-            [self._own_jid, remote_jid],
+            jids,
             trust=[Trust.VERIFIED, Trust.BLIND],
         )
 
