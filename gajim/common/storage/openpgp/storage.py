@@ -7,7 +7,6 @@ from __future__ import annotations
 import datetime as dt
 import logging
 from collections.abc import Iterable
-from collections.abc import Sequence
 from pathlib import Path
 
 import pysequoia as pys
@@ -174,6 +173,17 @@ class OpenPGPStorage(AlchemyStorage):
         stmt = stmt.values(**values)
         session.execute(stmt)
 
+    def get_public_key_from_secret(
+        self, account: str, jid: JID, cert: pys.Cert
+    ) -> mod.Public:
+        return mod.Public(
+            account=account,
+            jid=jid,
+            key=cert,
+            fingerprint=cert.fingerprint.upper(),
+            trust=Trust.VERIFIED,
+        )
+
     @with_session
     @timeit
     def get_public_key(
@@ -196,7 +206,7 @@ class OpenPGPStorage(AlchemyStorage):
         *,
         trust: list[Trust] | None = None,
         only_active: bool = True,
-    ) -> Sequence[mod.Public]:
+    ) -> list[mod.Public]:
         stmt = sa.select(mod.Public).where(
             mod.Public.account == account,
             mod.Public.jid.in_(jids),
@@ -207,7 +217,7 @@ class OpenPGPStorage(AlchemyStorage):
         if only_active:
             stmt = stmt.where(mod.Public.active == only_active)
 
-        return session.scalars(stmt).all()
+        return list(session.scalars(stmt).all())
 
     @with_session
     @timeit

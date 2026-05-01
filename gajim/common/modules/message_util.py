@@ -286,3 +286,7 @@ def get_thumbnail(image_uri: str | None) -> tuple[str, bytes] | tuple[None, None
         return _parse()
     except Exception:
         return None, None
+
+
+def successfully_decrypted(properties: MessageProperties) -> bool:
+    return properties.eme is None or properties.encrypted is not None
