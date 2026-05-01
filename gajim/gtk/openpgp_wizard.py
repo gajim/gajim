@@ -82,7 +82,7 @@ class OpenPGPWizard(Assistant):
             self._client.get_module("OpenPGP").secret_key_exists()
             and not mode == "test-password"
         ):
-            self._show_success_page()
+            self._show_success_page("key-exists")
         else:
             self._client.get_module("OpenPGP").request_secret_key(
                 callback=self._on_secret_key_received
@@ -150,7 +150,7 @@ class OpenPGPWizard(Assistant):
                     )
 
                 else:
-                    self._show_success_page()
+                    self._show_success_page("restored")
 
             case "test-password":
                 password = self.get_page("password").get_password()
@@ -167,11 +167,11 @@ class OpenPGPWizard(Assistant):
                     )
 
                 else:
-                    self._show_success_page()
+                    self._show_success_page("test-password")
 
             case "overwrite":
                 self._client.get_module("OpenPGP").backup_secret_key(
-                    callback=self._on_overwrite_result
+                    callback=self._on_overwrite_result  # pyright: ignore
                 )
                 self.show_page("progress")
 
@@ -199,25 +199,47 @@ class OpenPGPWizard(Assistant):
             except Exception as error:
                 self._show_error_page(_("Error"), _("Error"), str(error))
             else:
-                self._show_success_page(
-                    self._client.get_module("OpenPGP").get_backup_password()
-                )
+                self._show_success_page("generate")
 
     def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == "import":
             self.get_page("import").clear()
 
-    def _show_success_page(self, backup_password: str | None = None) -> None:
+    def _show_success_page(
+        self,
+        mode: Literal[
+            "generate", "overwrite", "key-exists", "restored", "test-password"
+        ],
+    ) -> None:
+
+        match mode:
+            case "generate":
+                title = _("Setup Complete")
+                text = _(
+                    "Your OpenPGP key has been created. Your chat is now encrypted."
+                )
+                password = self._client.get_module("OpenPGP").get_backup_password()
+
+            case "overwrite" | "test-password":
+                title = _("Backup Successful")
+                text = _("Your OpenPGP key backup was successful.")
+                password = None
+
+            case "key-exists":
+                title = _("Setup Complete")
+                text = _("OpenPGP Setup is completed.")
+                password = None
+
+            case "restored":
+                title = _("Setup Complete")
+                text = _("Successfully imported key from server.")
+                password = None
+
         success_page = self.get_page("success")
-        if self._mode == "test-password":
-            success_page.set_title(_("Backup Successful"))
-            success_page.set_text(_("Your OpenPGP key backup was successful."))
-        else:
-            success_page.set_title(_("Setup Complete"))
-            success_page.set_text(
-                _("Your OpenPGP key has been created. Your chat is now encrypted.")
-            )
-        success_page.show_backup_password(backup_password)
+        success_page.set_title(title)
+        success_page.set_text(text)
+        password = self._client.get_module("OpenPGP").get_backup_password()
+        success_page.show_backup_password(password)
 
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
         app.window.get_activity_list().remove_by_type(OpenPGPEvent)
@@ -256,9 +278,7 @@ class OpenPGPWizard(Assistant):
             )
 
         else:
-            self._show_success_page(
-                self._client.get_module("OpenPGP").get_backup_password()
-            )
+            self._show_success_page("overwrite")
 
 
 @Gtk.Template(string=get_ui_string("openpgp/welcome.ui"))
