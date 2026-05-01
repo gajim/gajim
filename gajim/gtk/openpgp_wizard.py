@@ -24,7 +24,6 @@ from gajim.gtk.activity_list import OpenPGPEvent
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
-from gajim.gtk.assistant import AssistantSuccessPage
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_ui_string
 
@@ -200,23 +199,26 @@ class OpenPGPWizard(Assistant):
             except Exception as error:
                 self._show_error_page(_("Error"), _("Error"), str(error))
             else:
-                self._show_success_page()
+                self._show_success_page(
+                    self._client.get_module("OpenPGP").get_backup_password()
+                )
 
     def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == "import":
             self.get_page("import").clear()
 
-    def _show_success_page(self) -> None:
+    def _show_success_page(self, backup_password: str | None = None) -> None:
+        success_page = self.get_page("success")
         if self._mode == "test-password":
-            self.get_page("success").set_title(_("Backup Successful"))
-            self.get_page("success").set_text(
-                _("Your OpenPGP key backup was successful.")
-            )
+            success_page.set_title(_("Backup Successful"))
+            success_page.set_text(_("Your OpenPGP key backup was successful."))
         else:
-            self.get_page("success").set_title(_("Setup Complete"))
-            self.get_page("success").set_text(
+            success_page.set_title(_("Setup Complete"))
+            success_page.set_text(
                 _("Your OpenPGP key has been created. Your chat is now encrypted.")
             )
+        success_page.show_backup_password(backup_password)
+
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
         app.window.get_activity_list().remove_by_type(OpenPGPEvent)
 
@@ -254,7 +256,9 @@ class OpenPGPWizard(Assistant):
             )
 
         else:
-            self._show_success_page()
+            self._show_success_page(
+                self._client.get_module("OpenPGP").get_backup_password()
+            )
 
 
 @Gtk.Template(string=get_ui_string("openpgp/welcome.ui"))
@@ -382,11 +386,46 @@ class ChooseSecretKeyPage(AssistantPage):
             self._listbox.append(FingerprintLabel(cert))
 
 
+@Gtk.Template(string=get_ui_string("openpgp/success.ui"))
+class SuccessPage(AssistantPage):
+    __gtype_name__ = "OpenPGPWizardSuccess"
+
+    _heading: Gtk.Label = Gtk.Template.Child()
+    _text: Gtk.Label = Gtk.Template.Child()
+    _backup_password_box: Gtk.Box = Gtk.Template.Child()
+    _password_entry: Gtk.PasswordEntry = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        AssistantPage.__init__(self)
+
+    def set_title(self, title: str) -> None:
+        self.title = title
+
+    def set_heading(self, heading: str) -> None:
+        self._heading.set_text(heading)
+
+    def set_text(self, text: str) -> None:
+        self._text.set_text(text)
+
+    def show_backup_password(self, backup_password: str | None) -> None:
+        if backup_password is None:
+            self._backup_password_box.set_visible(False)
+            return
+
+        self._backup_password_box.set_visible(True)
+        self._password_entry.set_text(backup_password)
+
+    def get_visible_buttons(self) -> list[str]:
+        return ["close"]
+
+
 class FingerprintLabel(Gtk.Label):
     def __init__(self, cert: pys.Cert) -> None:
         super().__init__()
         self._cert = cert
-        self.set_label(format_fingerprint(cert.fingerprint))
+        self.set_label(format_fingerprint(cert.fingerprint).upper())
+        self.add_css_class("p-6")
+        self.add_css_class("monospace")
 
     def get_fingerprint(self) -> str:
         return self._cert.fingerprint
@@ -395,8 +434,3 @@ class FingerprintLabel(Gtk.Label):
 class ErrorPage(AssistantErrorPage):
     def get_visible_buttons(self) -> list[str]:
         return ["back", "close"]
-
-
-class SuccessPage(AssistantSuccessPage):
-    def get_visible_buttons(self) -> list[str]:
-        return ["close"]

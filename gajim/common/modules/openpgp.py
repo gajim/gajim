@@ -305,6 +305,9 @@ class OpenPGP(BaseModule, CryptoModule):
         self.request_keylist()
         self.check_secret_key_backup()
 
+    def get_backup_password(self) -> str | None:
+        return self._backup_password
+
     def test_backup_password(self, data: bytes, password: str) -> None:
         try:
             decrypted = pys.decrypt(data, passwords=[password])
