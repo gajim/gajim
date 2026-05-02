@@ -835,9 +835,11 @@ def get_preview_menu(uri: str, *, encrypted: bool = False) -> GajimMenu:
 
 def get_format_menu() -> GajimMenu:
     menuitems: MenuItemListT = [
-        (_("bold"), "win.input-bold", None),
-        (_("italic"), "win.input-italic", None),
-        (_("strike"), "win.input-strike", None),
+        (_("Bold"), "win.input-bold", None),
+        (_("Italic"), "win.input-italic", None),
+        (_("Strike"), "win.input-strike", None),
+        (_("Code"), "win.input-preformatted", None),
+        (_("Code Block"), "win.input-preformatted-block", None),
     ]
 
     return GajimMenu.from_list(menuitems)

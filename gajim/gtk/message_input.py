@@ -50,7 +50,8 @@ FORMAT_CHARS: dict[str, str] = {
     "bold": "*",
     "italic": "_",
     "strike": "~",
-    "pre": "`",
+    "preformatted": "`",
+    "preformatted-block": "```",
 }
 
 log = logging.getLogger("gajim.gtk.message_input")
@@ -132,6 +133,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             "input-bold",
             "input-italic",
             "input-strike",
+            "input-preformatted",
+            "input-preformatted-block",
             "input-emoji",
             "input-paste-as-quote",
             "input-paste-as-code-block",
@@ -158,7 +161,13 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             case "input-focus":
                 self.grab_focus_delayed()
 
-            case "input-bold" | "input-italic" | "input-strike":
+            case (
+                "input-bold"
+                | "input-italic"
+                | "input-strike"
+                | "input-preformatted"
+                | "input-preformatted-block"
+            ):
                 self._apply_formatting(action_name.removeprefix("input-"))
 
             case "input-emoji":
@@ -383,7 +392,12 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         return (start, end)
 
     def _apply_formatting(self, formatting: str) -> None:
-        format_char = FORMAT_CHARS[formatting]
+        format_char_start = format_char_end = FORMAT_CHARS[formatting]
+        char_offset = 1
+        if formatting == "preformatted-block":
+            format_char_start = f"{format_char_start}\n"
+            format_char_end = f"\n{format_char_end}"
+            char_offset = 4
 
         buf = self.get_buffer()
         start, end = self._get_active_iters()
@@ -391,33 +405,38 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         end_offset = end.get_offset()
 
         text = buf.get_text(start, end, True)
-        if text.startswith(format_char) and text.endswith(format_char):
+        if text.startswith(format_char_start) and text.endswith(format_char_end):
             # (Selected) text begins and ends with formatting chars
             # -> remove them
-            buf.delete(start, buf.get_iter_at_offset(start_offset + 1))
+            buf.delete(start, buf.get_iter_at_offset(start_offset + char_offset))
             buf.delete(
-                buf.get_iter_at_offset(end_offset - 2),
-                buf.get_iter_at_offset(end_offset - 1),
+                buf.get_iter_at_offset(end_offset - char_offset * 2),
+                buf.get_iter_at_offset(end_offset - char_offset),
             )
             return
 
-        ext_start = buf.get_iter_at_offset(start_offset - 1)
-        ext_end = buf.get_iter_at_offset(end_offset + 1)
+        ext_start = buf.get_iter_at_offset(start_offset - char_offset)
+        ext_end = buf.get_iter_at_offset(end_offset + char_offset)
         ext_text = buf.get_text(ext_start, ext_end, True)
-        if ext_text.startswith(format_char) and ext_text.endswith(format_char):
+        if ext_text.startswith(format_char_start) and ext_text.endswith(
+            format_char_end
+        ):
             # (Selected) text is surrounded by formatting chars -> remove them
             buf.delete(ext_start, buf.get_iter_at_offset(start_offset))
             buf.delete(
-                buf.get_iter_at_offset(end_offset - 1),
+                buf.get_iter_at_offset(end_offset - char_offset),
                 buf.get_iter_at_offset(end_offset),
             )
             return
 
         # No formatting chars found at start/end or surrounding -> add them
-        buf.insert(start, format_char, -1)
-        buf.insert(buf.get_iter_at_offset(end_offset + 1), format_char, -1)
+        buf.insert(start, format_char_start, -1)
+        buf.insert(
+            buf.get_iter_at_offset(end_offset + char_offset), format_char_end, -1
+        )
         buf.select_range(
-            buf.get_iter_at_offset(start_offset), buf.get_iter_at_offset(end_offset + 2)
+            buf.get_iter_at_offset(start_offset),
+            buf.get_iter_at_offset(end_offset + char_offset * 2),
         )
 
     def clear(self, *args: Any) -> None:

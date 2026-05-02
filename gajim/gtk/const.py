@@ -199,6 +199,8 @@ MAIN_WIN_ACTIONS = [
     ("input-bold", None, True),
     ("input-italic", None, True),
     ("input-strike", None, True),
+    ("input-preformatted", None, True),
+    ("input-preformatted-block", None, True),
     ("input-focus", None, True),
     ("input-emoji", None, True),
     ("input-paste-as-code-block", None, True),
