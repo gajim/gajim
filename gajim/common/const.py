@@ -344,6 +344,16 @@ EME_MESSAGES = {
 }
 
 
+EME_PROTOCOLS = {
+    'urn:xmpp:otr:0': 'OTR',
+    'jabber:x:encrypted': 'PGP',
+    'urn:xmpp:openpgp:0': 'OpenPGP',
+    'eu.siacs.conversations.axolotl': 'OMEMO',
+    'urn:xmpp:omemo:1': 'OMEMO',
+    'urn:xmpp:omemo:2': 'OMEMO',
+}
+
+
 LOCATION_DATA = {
     'accuracy': _('accuracy'),
     'alt': _('alt'),

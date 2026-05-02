@@ -18,6 +18,7 @@ from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import RETRACTION_FALLBACK
+from gajim.common.const import Trust
 from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
 from gajim.common.events import MessageError
@@ -30,6 +31,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import convert_message_type
 from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
+from gajim.common.modules.message_util import get_eme_protocol
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.modules.message_util import get_open_graph
@@ -215,6 +217,9 @@ class Message(BaseModule):
 
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
+            protocol = get_eme_protocol(properties.eme)
+            encryption_data = mod.Encryption(
+                protocol=protocol, key="Unknown", trust=Trust.UNTRUSTED)
 
         if not message_text:
             self._log.debug('Received message without text')

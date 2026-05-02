@@ -20,6 +20,7 @@ from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
 from gajim.common.const import EME_MESSAGES
+from gajim.common.const import EME_PROTOCOLS
 from gajim.common.const import IMAGE_MIME_TYPES
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -40,6 +41,10 @@ def get_eme_message(eme_data: nbxmpp.structs.EMEData) -> str:
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
         return EME_MESSAGES['fallback'] % eme_data.name
+
+
+def get_eme_protocol(eme_data: nbxmpp.structs.EMEData) -> str:
+    return EME_PROTOCOLS.get(eme_data.namespace, "Unknown")
 
 
 def get_chat_type_and_direction(

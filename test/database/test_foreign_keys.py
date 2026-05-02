@@ -56,7 +56,7 @@ class ForeignKeyTest(unittest.TestCase):
             to=JID.from_string("somejid@jid.com"),
         )
 
-        enc_data = Encryption(protocol=1, key="testkey", trust=2)
+        enc_data = Encryption(protocol="OMEMO", key="testkey", trust=2)
 
         sec_data = SecurityLabel(
             account_=self._account,

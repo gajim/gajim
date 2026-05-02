@@ -254,7 +254,7 @@ class Encryption(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __table_args__ = (Index("idx_encryption", "key", "trust", "protocol", unique=True),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
-    protocol: Mapped[int]
+    protocol: Mapped[str]
     key: Mapped[str]
     trust: Mapped[int]
 

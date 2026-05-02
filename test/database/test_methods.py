@@ -118,7 +118,7 @@ class MethodsTest(unittest.TestCase):
             state=MessageState.ACKNOWLEDGED,
             id="1",
             stanza_id=uuid,
-            encryption_=Encryption(protocol=1, key="123", trust=1),
+            encryption_=Encryption(protocol="OMEMO", key="123", trust=1),
         )
         m2.pk = pk
 

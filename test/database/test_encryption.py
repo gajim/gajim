@@ -42,9 +42,9 @@ class EncryptionTest(unittest.TestCase):
         app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_encryption_join(self):
-        enc_data1 = Encryption(protocol=1, key="testkey", trust=2)
+        enc_data1 = Encryption(protocol="OMEMO", key="testkey", trust=2)
 
-        enc_data2 = Encryption(protocol=1, key="testkey", trust=2)
+        enc_data2 = Encryption(protocol="OMEMO", key="testkey", trust=2)
 
         message_data1 = Message(
             account_=self._account,
@@ -87,14 +87,14 @@ class EncryptionTest(unittest.TestCase):
         assert message2.encryption is not None
 
         self.assertEqual(message1.encryption.pk, message2.encryption.pk)
-        self.assertEqual(message1.encryption.protocol, 1)
+        self.assertEqual(message1.encryption.protocol, "OMEMO")
         self.assertEqual(message1.encryption.key, "testkey")
         self.assertEqual(message1.encryption.trust, 2)
 
     def test_encryption_update(self):
-        enc_data1 = Encryption(protocol=1, key="testkey1", trust=2)
+        enc_data1 = Encryption(protocol="OMEMO", key="testkey1", trust=2)
 
-        enc_data2 = Encryption(protocol=1, key="testkey1", trust=2)
+        enc_data2 = Encryption(protocol="OMEMO", key="testkey1", trust=2)
 
         pk1 = self._archive.insert_row(enc_data1, return_pk_on_conflict=True)
         pk2 = self._archive.insert_row(enc_data2, return_pk_on_conflict=True)
