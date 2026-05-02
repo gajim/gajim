@@ -238,7 +238,6 @@ class OpenPGPWizard(Assistant):
         success_page = self.get_page("success")
         success_page.set_title(title)
         success_page.set_text(text)
-        password = self._client.get_module("OpenPGP").get_backup_password()
         success_page.show_backup_password(password)
 
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
