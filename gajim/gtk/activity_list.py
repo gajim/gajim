@@ -808,7 +808,7 @@ class OpenPGPEvent(ActivityListItem[events.OpenPGPEvent]):
 
         if event.type == "setup":
             title = _("OpenPGP Backup")
-            subject = _("Complete your OpenPGP setup")
+            subject = _("Complete the OpenPGP setup")
         else:
             title = _("OpenPGP Backup Error")
             subject = _("OpenPGP key backup failed")

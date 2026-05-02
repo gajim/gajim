@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkBox" id="backup_box">
+  <object class="GtkBox" id="text_box">
     <property name="can-focus">0</property>
     <property name="orientation">vertical</property>
     <property name="halign">center</property>
     <child>
-      <object class="GtkLabel">
+      <object class="GtkLabel" id="title">
         <property name="can-focus">0</property>
         <property name="margin-bottom">6</property>
-        <property name="label" translatable="yes">OpenPGP Key Backup</property>
+        <property name="label" translatable="yes"></property>
         <style>
           <class name="title-1"/>
         </style>
       </object>
     </child>
     <child>
-      <object class="GtkLabel">
+      <object class="GtkLabel" id="text">
         <property name="wrap">1</property>
         <property name="max-width-chars">50</property>
-        <property name="label" translatable="yes">To secure your OpenPGP key for encrypted chats, Gajim can create a backup of your key.</property>
+        <property name="label" translatable="yes"></property>
         <style>
           <class name="dimmed" />
         </style>
@@ -37,7 +37,7 @@
             <property name="spacing">12</property>
               <child>
                 <object class="GtkButton" id="disable_button">
-                  <property name="label" translatable="yes">Disable Backup</property>
+                  <property name="label" translatable="yes">Disable Check</property>
                 </object>
               </child>
               <child>

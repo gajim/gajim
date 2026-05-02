@@ -407,11 +407,19 @@ class OpenPGPEventPage(BaseActivityPage):
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         if self._event.type == "setup":
+            self._ui.title.set_text(_("OpenPGP Setup"))
+            self._ui.text.set_text(_("Complete the OpenPGP setup to chat encrypted."))
             self._ui.setup_button.set_visible(True)
         else:
+            self._ui.title.set_text(_("OpenPGP Key Backup"))
+            self._ui.text.set_text(
+                _(
+                    "To secure your OpenPGP key for encrypted chats, Gajim can create an encrypted backup of your key on your server."
+                )
+            )
             self._ui.backup_button.set_visible(True)
 
-        self.add_widget(self._ui.backup_box)
+        self.add_widget(self._ui.text_box)
         self._set_sensitive(self._client.state.is_available)
 
     def _set_sensitive(self, sensitive: bool) -> None:

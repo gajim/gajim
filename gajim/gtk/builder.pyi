@@ -57,7 +57,9 @@ class ActivityMucInvitationBuilder(Builder):
     invitation_text_label: Gtk.Label
 
 class ActivityOpenpgpEventBuilder(Builder):
-    backup_box: Gtk.Box
+    text_box: Gtk.Box
+    title: Gtk.Label
+    text: Gtk.Label
     disable_button: Gtk.Button
     backup_button: Gtk.Button
     setup_button: Gtk.Button

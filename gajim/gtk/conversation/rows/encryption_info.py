@@ -33,7 +33,7 @@ class EncryptionInfoRow(BaseRow):
         icon.set_pixel_size(AvatarSize.ROSTER)
         icon.add_css_class("dimmed")
         avatar_placeholder.append(icon)
-        self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
+        self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
 
         timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
