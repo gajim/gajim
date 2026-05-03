@@ -685,8 +685,19 @@ class OpenPGP(BaseModule, CryptoModule):
                 store=_store,
             )
         except Exception as error:
-            self._log.warning(error)
-            return
+            self._log.warning(
+                "Failed to decrypt with signature verification: %s", error
+            )
+            try:
+                decrypted = pys.decrypt(
+                    bytes=properties.openpgp,
+                    decryptor=self._secret_cert.secrets.decryptor(),
+                )
+            except Exception as error:
+                self._log.warning(
+                    "Failed to decrypt without signature verification: %s", error
+                )
+                return
 
         assert decrypted.bytes is not None
         payload = decrypted.bytes.decode()
@@ -711,14 +722,19 @@ class OpenPGP(BaseModule, CryptoModule):
 
         prepare_stanza(stanza, payload)
 
-        fingerprint = decrypted.valid_sigs[0].certificate.upper()
-        remote_key = find_remote_key(remote_public_keys, fingerprint)
-        if remote_key is None:
-            self._log.warning("Unable to find remote key: %s", fingerprint)
-            return
+        trust = Trust.UNTRUSTED
+        fingerprint = "Unknown"
+
+        if decrypted.valid_sigs:
+            fingerprint = decrypted.valid_sigs[0].certificate.upper()
+            remote_key = find_remote_key(remote_public_keys, fingerprint)
+            if remote_key is None:
+                self._log.warning("Unable to find remote key: %s", fingerprint)
+            else:
+                trust = remote_key.trust
 
         properties.encrypted = EncryptionData(
-            protocol="OpenPGP", key=fingerprint, trust=remote_key.trust
+            protocol="OpenPGP", key=fingerprint, trust=trust
         )
 
         raise StanzaDecrypted
