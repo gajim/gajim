@@ -199,7 +199,7 @@ class CryptoTrustManagerBuilder(Builder):
     list_heading: Gtk.Label
     list_heading_box: Gtk.Box
     show_inactive_switch: Gtk.Switch
-    clear_devices_button: Gtk.Button
+    remove_public_keys_button: Gtk.Button
     list: Gtk.ListBox
     undecided_placeholder: Gtk.Label
 

@@ -91,7 +91,9 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
             self._ui.show_inactive_switch, "state-set", self._on_show_inactive
         )
         self._connect(
-            self._ui.clear_devices_button, "clicked", self._on_clear_devices_clicked
+            self._ui.remove_public_keys_button,
+            "clicked",
+            self._on_remove_public_keys_clicked,
         )
         self._connect(self._ui.copy_button, "clicked", self._on_copy_button_clicked)
 
@@ -181,7 +183,7 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
         clear_listbox(self._ui.list)
 
         if isinstance(self._contact, BareContact) and self._contact.is_self:
-            self._ui.clear_devices_button.set_visible(True)
+            self._ui.remove_public_keys_button.set_visible(True)
         else:
             self._ui.manage_trust_button.set_visible(True)
             if self._contact.is_groupchat:
@@ -245,14 +247,14 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list.set_filter_func(None if state else self._filter_func)
         self._ui.list.invalidate_filter()
 
-    def _on_clear_devices_clicked(self, _button: Gtk.Button) -> None:
+    def _on_remove_public_keys_clicked(self, _button: Gtk.Button) -> None:
         def _on_response() -> None:
             self._crypto_module.clear_keylist()
 
         ConfirmationAlertDialog(
-            _("Clear Devices?"),
-            _("This will clear the devices store for your account."),
-            confirm_label=_("_Clear Devices"),
+            _("Remove Public Keys?"),
+            _("This will remove all published public keys from your account."),
+            confirm_label=_("_Remove Public Keys"),
             callback=_on_response,
         )
 
