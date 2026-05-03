@@ -159,9 +159,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="clear_devices_button">
+                  <object class="GtkButton" id="remove_public_keys_button">
                     <property name="visible">0</property>
-                    <property name="label" translatable="yes">Clear Devices…</property>
+                    <property name="label" translatable="yes">Remove Public Keys…</property>
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
                     <property name="hexpand">1</property>

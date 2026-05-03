@@ -1052,5 +1052,5 @@ class OpenPGP(BaseModule, CryptoModule):
             trust=trust,
         )
 
-    def clear_fingerprints(self) -> None:
+    def clear_keylist(self) -> None:
         self.set_keylist()
