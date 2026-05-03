@@ -1075,4 +1075,4 @@ class OpenPGP(BaseModule, CryptoModule):
 
         if self.secret_key_exists():
             self.set_public_key()
-        self.set_keylist()
+            self.set_keylist()
