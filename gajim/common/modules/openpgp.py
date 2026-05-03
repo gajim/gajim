@@ -31,6 +31,7 @@ from nbxmpp.modules.util import raise_if_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
+from nbxmpp.structs import DiscoItems
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PGPKeyMetadata
@@ -1053,4 +1054,25 @@ class OpenPGP(BaseModule, CryptoModule):
         )
 
     def clear_keylist(self) -> None:
+        self._client.get_module("Discovery").disco_items(
+            self._own_jid, callback=self._on_disco_items_result
+        )
+
+    def _on_disco_items_result(self, task: Task) -> None:
+        try:
+            result = cast(DiscoItems, task.finish())
+        except Exception as error:
+            self._log.warning("Disco items failed: %s", error)
+
+        else:
+            for item in result.items:
+                if item.node is None or not item.node.startswith(
+                    f"{Namespace.OPENPGP_PK}:"
+                ):
+                    continue
+                self._log.info("Remove pubsub node: %s", item.node)
+                self._client.get_module("PubSub").delete(item.node, self._own_jid)
+
+        if self.secret_key_exists():
+            self.set_public_key()
         self.set_keylist()
