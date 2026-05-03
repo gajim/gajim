@@ -607,20 +607,20 @@ class OpenPGP(BaseModule, CryptoModule):
 
     def _get_signer_from_message(
         self, remote_jid: JID, properties: MessageProperties
-    ) -> JID | None:
+    ) -> tuple[JID | None, ChatDirection | None]:
         muc_data = None
         if properties.type.is_groupchat:
             muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
             if muc_data is None:
                 self._log.warning("Groupchat message from unknown MUC: %s", remote_jid)
-                return
+                return None, None
 
         _, direction = get_chat_type_and_direction(muc_data, self._own_jid, properties)
         if direction == ChatDirection.OUTGOING:
-            return self._own_jid
+            return self._own_jid, direction
 
         if not properties.from_muc:
-            return properties.remote_jid
+            return properties.remote_jid, direction
 
         if properties.mam:
             self._log.info("Message received, archive: %s", properties.mam.archive)
@@ -628,15 +628,17 @@ class OpenPGP(BaseModule, CryptoModule):
                 self._log.warning(
                     "Received MAM message which can not be mapped to a real jid"
                 )
-                return None
-            return properties.muc_user.jid.new_as_bare()
+                return None, None
+            return properties.muc_user.jid.new_as_bare(), direction
 
         else:
             assert properties.jid is not None
             contact = self._client.get_module("Contacts").get_contact(properties.jid)
             if isinstance(contact, GroupchatParticipant):
                 if contact.real_jid is not None:
-                    return contact.real_jid.new_as_bare()
+                    return contact.real_jid.new_as_bare(), direction
+
+        return None, None
 
     def decrypt_message(
         self, _client: nbxmppClient, stanza: Message, properties: MessageProperties
@@ -652,14 +654,14 @@ class OpenPGP(BaseModule, CryptoModule):
             )
             return
 
-        self._log.info("Received encrypted message from %s", properties.jid)
+        self._log.info("Received encrypted message from %s", properties.remote_jid)
 
         remote_jid = properties.remote_jid
         assert remote_jid is not None
         assert self._secret_cert.secrets is not None
         assert self._secret_cert.has_secret_keys
 
-        signer_jid = self._get_signer_from_message(remote_jid, properties)
+        signer_jid, direction = self._get_signer_from_message(remote_jid, properties)
         if signer_jid is None:
             self._log.warning("Unable to determine remote jid for message")
             return
@@ -712,7 +714,7 @@ class OpenPGP(BaseModule, CryptoModule):
             return
 
         to_address = self._own_jid
-        if properties.type.is_groupchat:
+        if properties.type.is_groupchat or direction == ChatDirection.OUTGOING:
             to_address = remote_jid
 
         if to_address not in recipients:
@@ -878,7 +880,8 @@ class OpenPGP(BaseModule, CryptoModule):
         recipient_certs.append(self._secret_cert)
 
         self._log.info(
-            "Encrypt to recipients:\n%s",
+            "Encrypt to %s:\n%s",
+            remote_jid,
             "\n".join([r.fingerprint.upper() for r in recipient_certs]),
         )
 
