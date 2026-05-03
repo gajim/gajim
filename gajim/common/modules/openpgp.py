@@ -926,6 +926,13 @@ class OpenPGP(BaseModule, CryptoModule):
         result = yield self.set_secret_key(encrypted_payload)
         raise_if_error(result)
 
+    def remove_backup_from_server(self) -> None:
+        if not app.account_is_available(self._account):
+            return
+
+        self._log.info("Remove backup from server")
+        self._client.get_module("PubSub").delete(Namespace.OPENPGP_SK, self._own_jid)
+
     def check_secret_key_backup(self) -> None:
         if not app.account_is_available(self._account):
             return
