@@ -18,6 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 import gajim.common.storage.openpgp.models as mod
+from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import Trust
 from gajim.common.storage.base import AlchemyStorage
@@ -25,6 +26,7 @@ from gajim.common.storage.base import timeit
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import ValueMissingT
 from gajim.common.storage.base import with_session
+from gajim.common.storage.openpgp.models import Account
 from gajim.common.storage.openpgp.models import Base
 
 CURRENT_USER_VERSION = 1
@@ -46,6 +48,8 @@ class OpenPGPStorage(AlchemyStorage):
             },
         )
 
+        self._account_pks: dict[str, int] = {}
+
     def _create_table(self, session: Session, engine: Engine) -> None:
         Base.metadata.create_all(engine)
         session.execute(sa.text(f"PRAGMA user_version={CURRENT_USER_VERSION}"))
@@ -53,16 +57,38 @@ class OpenPGPStorage(AlchemyStorage):
     def _migrate(self) -> None:
         pass
 
+    def _get_account_pk(self, session: Session, account: str) -> int:
+        pk = self._account_pks.get(account)
+        if pk is not None:
+            return pk
+
+        jid_str = app.get_jid_from_account(account)
+        jid = JID.from_string(jid_str)
+
+        pk = session.scalar(sa.select(Account.pk).where(Account.jid == jid))
+        if pk is None:
+            acc = Account(jid=jid)
+            session.add(acc)
+            session.flush()
+            pk = acc.pk
+
+        self._account_pks[account] = pk
+        return pk
+
     @with_session
     @timeit
     def store_secret_key(
-        self, session: Session, jid: JID, key: pys.Cert, backup_password: str | None
+        self, session: Session, account: str, key: pys.Cert, backup_password: str | None
     ) -> None:
         assert key.secrets is not None
+
+        fk_account_pk = self._get_account_pk(session, account)
         secret = mod.Secret(
-            jid=jid, key=bytes(key.secrets), backup_password=backup_password
+            fk_account_pk=fk_account_pk,
+            key=bytes(key.secrets),
+            backup_password=backup_password,
         )
-        log.info("Store secret key for %s", jid)
+        log.info("Store secret key for %s", fk_account_pk)
         session.add(secret)
 
         try:
@@ -73,14 +99,15 @@ class OpenPGPStorage(AlchemyStorage):
     @with_session
     @timeit
     def store_secret_key_backup_password(
-        self, session: Session, jid: JID, backup_password: str
+        self, session: Session, account: str, backup_password: str
     ) -> None:
-        log.info("Store secret key backup password for %s", jid)
+        log.info("Store secret key backup password for %s", account)
 
+        fk_account_pk = self._get_account_pk(session, account)
         stmt = (
             sa.update(mod.Secret)
             .where(
-                mod.Secret.jid == jid,
+                mod.Secret.fk_account_pk == fk_account_pk,
             )
             .values(backup_password=backup_password)
         )
@@ -89,9 +116,11 @@ class OpenPGPStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_secret_key(
-        self, session: Session, jid: JID
+        self, session: Session, account: str
     ) -> tuple[mod.Secret, dt.datetime] | None:
-        stmt = sa.select(mod.Secret).where(mod.Secret.jid == jid)
+
+        fk_account_pk = self._get_account_pk(session, account)
+        stmt = sa.select(mod.Secret).where(mod.Secret.fk_account_pk == fk_account_pk)
         if row := session.scalar(stmt):
             date = None
             pile = pyspacket.PacketPile.from_bytes(row.key)
@@ -115,11 +144,13 @@ class OpenPGPStorage(AlchemyStorage):
         trust: Trust,
     ) -> None:
 
+        fk_account_pk = self._get_account_pk(session, account)
+
         fingerprint = cert.fingerprint.upper()
 
         public = mod.Public(
-            account=account,
-            jid=jid,
+            fk_account_pk=fk_account_pk,
+            remote_jid=jid,
             key=cert,
             fingerprint=fingerprint,
             trust=trust,
@@ -150,6 +181,8 @@ class OpenPGPStorage(AlchemyStorage):
         last_seen: dt.datetime | ValueMissingT = VALUE_MISSING,
     ) -> None:
 
+        fk_account_pk = self._get_account_pk(session, account)
+
         values = {
             "label": label,
             "trust": trust,
@@ -163,8 +196,8 @@ class OpenPGPStorage(AlchemyStorage):
         log.info("Update public key for %s, %s, %s", jid, fingerprints, values)
 
         stmt = sa.update(mod.Public).where(
-            mod.Public.account == account,
-            mod.Public.jid == jid,
+            mod.Public.fk_account_pk == fk_account_pk,
+            mod.Public.remote_jid == jid,
         )
 
         if fingerprints:
@@ -176,9 +209,10 @@ class OpenPGPStorage(AlchemyStorage):
     def get_public_key_from_secret(
         self, account: str, jid: JID, cert: pys.Cert
     ) -> mod.Public:
+
         return mod.Public(
-            account=account,
-            jid=jid,
+            fk_account_pk=0,
+            remote_jid=jid,
             key=cert,
             fingerprint=cert.fingerprint.upper(),
             trust=Trust.VERIFIED,
@@ -189,9 +223,12 @@ class OpenPGPStorage(AlchemyStorage):
     def get_public_key(
         self, session: Session, account: str, jid: JID, fingerprint: str
     ) -> mod.Public | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+
         stmt = sa.select(mod.Public).where(
-            mod.Public.account == account,
-            mod.Public.jid == jid,
+            mod.Public.fk_account_pk == fk_account_pk,
+            mod.Public.remote_jid == jid,
             mod.Public.fingerprint == fingerprint.upper(),
         )
         return session.scalar(stmt)
@@ -207,9 +244,12 @@ class OpenPGPStorage(AlchemyStorage):
         trust: list[Trust] | None = None,
         only_active: bool = True,
     ) -> list[mod.Public]:
+
+        fk_account_pk = self._get_account_pk(session, account)
+
         stmt = sa.select(mod.Public).where(
-            mod.Public.account == account,
-            mod.Public.jid.in_(jids),
+            mod.Public.fk_account_pk == fk_account_pk,
+            mod.Public.remote_jid.in_(jids),
         )
         if trust is not None:
             stmt = stmt.where(mod.Public.trust.in_(trust))
@@ -224,18 +264,19 @@ class OpenPGPStorage(AlchemyStorage):
     def remove_public_key(
         self, session: Session, account: str, jid: JID, fingerprint: str
     ) -> None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+
         stmt = sa.delete(mod.Public).where(
-            mod.Public.account == account,
-            mod.Public.jid == jid,
+            mod.Public.fk_account_pk == fk_account_pk,
+            mod.Public.remote_jid == jid,
             mod.Public.fingerprint == fingerprint.upper(),
         )
         session.execute(stmt)
 
-    @with_session
     @timeit
     def get_known_fingerprints(
         self,
-        session: Session,
         account: str,
         jids: list[JID],
         *,
@@ -244,3 +285,12 @@ class OpenPGPStorage(AlchemyStorage):
 
         keys = self.get_public_keys(account, jids, trust=trust, only_active=False)
         return {k.fingerprint for k in keys}
+
+    @with_session
+    @timeit
+    def remove_account(self, session: Session, account: str) -> None:
+        fk_account_pk = self._get_account_pk(session, account)
+
+        session.execute(sa.delete(Account).where(Account.pk == fk_account_pk))
+
+        self._account_pks.pop(account)

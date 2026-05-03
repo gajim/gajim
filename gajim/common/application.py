@@ -416,6 +416,7 @@ class CoreApplication(ged.EventHelper):
         # which would recreate the account with defaults values if not found
         passwords.delete_password(account)
         app.storage.archive.remove_account(account)
+        app.storage.openpgp.remove_account(account)
         app.settings.remove_account(account)
         app.app.remove_account_actions(account)
 

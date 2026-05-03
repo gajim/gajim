@@ -11,6 +11,7 @@ import datetime
 import pysequoia as pys
 import sqlalchemy as sa
 from nbxmpp import JID
+from sqlalchemy import ForeignKey
 from sqlalchemy import Index
 from sqlalchemy import types
 from sqlalchemy.orm import DeclarativeBase
@@ -49,12 +50,22 @@ class Base(DeclarativeBase):
     }
 
 
+class Account(MappedAsDataclass, Base, kw_only=True):
+    __tablename__ = "account"
+    __table_args__ = (Index("idx_account", "jid", unique=True),)
+
+    pk: Mapped[int] = mapped_column(init=False, primary_key=True)
+    jid: Mapped[JID] = mapped_column(JIDType)
+
+
 class Secret(MappedAsDataclass, Base, kw_only=True):
     __tablename__ = "secret"
-    __table_args__ = (Index("idx_secret", "jid", unique=True),)
+    __table_args__ = (Index("idx_secret", "fk_account_pk", unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
-    jid: Mapped[JID] = mapped_column(JIDType)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey("account.pk", ondelete="CASCADE")
+    )
     key: Mapped[bytes]
     backup_password: Mapped[str | None] = mapped_column(default=None)
 
@@ -62,13 +73,17 @@ class Secret(MappedAsDataclass, Base, kw_only=True):
 class Public(MappedAsDataclass, Base, kw_only=True):
     __tablename__ = "public"
     __table_args__ = (
-        Index("idx_public", "account", "jid"),
-        Index("idx_public_fpr", "account", "jid", "fingerprint", unique=True),
+        Index("idx_public", "fk_account_pk", "remote_jid"),
+        Index(
+            "idx_public_fpr", "fk_account_pk", "remote_jid", "fingerprint", unique=True
+        ),
     )
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
-    account: Mapped[str]
-    jid: Mapped[JID] = mapped_column(JIDType)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey("account.pk", ondelete="CASCADE")
+    )
+    remote_jid: Mapped[JID] = mapped_column(JIDType)
     key: Mapped[pys.Cert] = mapped_column(CertType)
     fingerprint: Mapped[str]
     label: Mapped[str | None] = mapped_column(default=None)
