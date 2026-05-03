@@ -338,8 +338,7 @@ EME_MESSAGES = {
           'the PGP plugin to handle those messages.'),
     'urn:xmpp:openpgp:0':
         _('This message was encrypted with '
-          'OpenPGP for XMPP and could not be decrypted. You can install '
-          'the OpenPGP plugin to handle those messages.'),
+          'OpenPGP for XMPP and could not be decrypted.'),
     'fallback':
         _('This message was encrypted with %s '
           'and could not be decrypted.')
