@@ -226,6 +226,14 @@ class OpenPGP(BaseModule, CryptoModule):
 
         timeout_add_seconds_once(random.randint(30, 60), self.check_secret_key_backup)
 
+        app.settings.connect_signal(
+            "openpgp_backup_secret_key", self._on_backup_settng_changed, self._account
+        )
+
+    def _on_backup_settng_changed(self, enabled: bool, *args: Any) -> None:
+        if enabled:
+            self.check_secret_key_backup()
+
     def _load_secret_keys(self) -> None:
         if row := app.storage.openpgp.get_secret_key(self._own_jid):
             secret, self._secret_key_date = row
