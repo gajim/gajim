@@ -436,11 +436,33 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "openpgp_backup_secret_key",
                 desc=_("Stores the secret key encrypted on the server"),
+                enabled_func=(lambda: app.account_is_connected(account)),
+                callback=self._on_backup,
             ),
         ]
 
         for setting in settings:
             self.add_setting(setting)
+
+    def _on_backup(self, state: bool, _data: Any) -> None:
+        if state:
+            return
+
+        def _on_response() -> None:
+            assert self.account is not None
+            client = app.get_client(self.account)
+            client.get_module("OpenPGP").remove_backup_from_server()
+
+        AlertDialog(
+            _("Remove Backup"),
+            _("Do you want to remove the backup from your server?"),
+            responses=[
+                CancelDialogResponse(label=_("Keep Backup")),
+                DialogResponse("confirm", _("Remove from Server"), "destructive"),
+            ],
+            emit_responses=["confirm"],
+            callback=_on_response,
+        )
 
 
 class AccountOpenPGPTrustGroup(GajimPreferencesGroup):
