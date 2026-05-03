@@ -213,6 +213,8 @@ class OpenPGPWizard(Assistant):
         ],
     ) -> None:
 
+        password = None
+
         match mode:
             case "generate":
                 title = _("Setup Complete")
@@ -224,17 +226,16 @@ class OpenPGPWizard(Assistant):
             case "overwrite" | "test-password":
                 title = _("Backup Successful")
                 text = _("Your OpenPGP key backup was successful.")
-                password = None
+                if mode == "overwrite":
+                    password = self._client.get_module("OpenPGP").get_backup_password()
 
             case "key-exists":
                 title = _("Setup Complete")
                 text = _("OpenPGP Setup is completed.")
-                password = None
 
             case "restored":
                 title = _("Setup Complete")
                 text = _("Successfully imported key from server.")
-                password = None
 
         success_page = self.get_page("success")
         success_page.set_title(title)
@@ -242,7 +243,7 @@ class OpenPGPWizard(Assistant):
         success_page.show_backup_password(password)
 
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
-        app.window.get_activity_list().remove_by_type(OpenPGPEvent)
+        app.window.get_activity_list().remove_by_type(OpenPGPEvent, self.account)
 
     def _show_error_page(self, title: str, heading: str, text: str) -> None:
         self.get_page("error").set_title(title)

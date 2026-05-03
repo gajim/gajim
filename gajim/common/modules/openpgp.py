@@ -175,7 +175,7 @@ class OpenPGPPublicKeyData(PublicKeyData):
     def from_public(cls, public: mod.Public) -> OpenPGPPublicKeyData:
         return cls(
             active=public.active,
-            address=public.jid,
+            address=public.remote_jid,
             label=public.label,
             last_seen=public.last_seen,
             fingerprint=public.fingerprint,
@@ -235,7 +235,7 @@ class OpenPGP(BaseModule, CryptoModule):
             self.check_secret_key_backup()
 
     def _load_secret_keys(self) -> None:
-        if row := app.storage.openpgp.get_secret_key(self._own_jid):
+        if row := app.storage.openpgp.get_secret_key(self._account):
             secret, self._secret_key_date = row
             self._secret_cert = pys.Cert.from_bytes(secret.key)
             self._backup_password = secret.backup_password
@@ -289,7 +289,7 @@ class OpenPGP(BaseModule, CryptoModule):
             assert cert.secrets is not None
             backup_password = self.generate_backup_password()
             app.storage.openpgp.store_secret_key(
-                self._own_jid, cert, backup_password=backup_password
+                self._account, cert, backup_password=backup_password
             )
             self._log.info(
                 "Successfully migrated secret key: %s", cert.fingerprint.upper()
@@ -315,7 +315,7 @@ class OpenPGP(BaseModule, CryptoModule):
 
         backup_password = self.generate_backup_password()
         app.storage.openpgp.store_secret_key(
-            self._own_jid, cert, backup_password=backup_password
+            self._account, cert, backup_password=backup_password
         )
         self._log.info("Generated key %s", cert.fingerprint.upper())
         self._load_secret_keys()
@@ -338,7 +338,7 @@ class OpenPGP(BaseModule, CryptoModule):
         pys.Cert.split_bytes(decrypted.bytes)
 
         self._backup_password = password
-        app.storage.openpgp.store_secret_key_backup_password(self._own_jid, password)
+        app.storage.openpgp.store_secret_key_backup_password(self._account, password)
         self.check_secret_key_backup()
 
     def import_key(
@@ -396,7 +396,7 @@ class OpenPGP(BaseModule, CryptoModule):
         if not backup_password:
             backup_password = self.generate_backup_password()
 
-        app.storage.openpgp.store_secret_key(self._own_jid, cert, backup_password)
+        app.storage.openpgp.store_secret_key(self._account, cert, backup_password)
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
