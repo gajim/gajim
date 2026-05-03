@@ -18,6 +18,7 @@ from gajim.common import app
 from gajim.common.modules.openpgp import format_fingerprint
 from gajim.common.modules.openpgp import MultipleSecretKeysImportError
 from gajim.common.modules.util import Task
+from gajim.common.regex import OPENPGP_BACKUP_PASSWORD_RX
 from gajim.plugins.plugins_i18n import _
 
 from gajim.gtk.activity_list import OpenPGPEvent
@@ -359,13 +360,12 @@ class BackupPasswordPage(AssistantPage):
         return ["other-options", "restore"]
 
     def _on_entry_changed(self, entry: Gtk.PasswordEntry) -> None:
-        ## TODO validate input against regex
-        self.complete = True
+        res = OPENPGP_BACKUP_PASSWORD_RX.fullmatch(self._password_entry.get_text())
+        self.complete = res is not None
         self.update_page_complete()
 
     def get_password(self) -> str:
-        password = self._password_entry.get_text()
-        return password.upper().strip()
+        return self._password_entry.get_text()
 
 
 @Gtk.Template(string=get_ui_string("openpgp/choose_secret_key.ui"))
