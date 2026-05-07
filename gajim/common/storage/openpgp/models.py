@@ -6,22 +6,25 @@ from __future__ import annotations
 
 from typing import Any
 
-import datetime
+import datetime as dt
 
 import pysequoia as pys
 import sqlalchemy as sa
 from nbxmpp import JID
+from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import Index
 from sqlalchemy import types
+from sqlalchemy.dialects.sqlite import DATETIME
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import MappedAsDataclass
 from sqlalchemy.types import TypeEngine
 
-from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
+
+DateTimeSQLite = DateTime().with_variant(DATETIME(truncate_microseconds=True), "sqlite")
 
 
 class CertType(sa.types.TypeDecorator[pys.Cert]):
@@ -89,6 +92,4 @@ class Public(MappedAsDataclass, Base, kw_only=True):
     label: Mapped[str | None] = mapped_column(default=None)
     trust: Mapped[int]
     active: Mapped[bool] = mapped_column(default=True)
-    last_seen: Mapped[datetime.datetime | None] = mapped_column(
-        EpochTimestampType, default=None
-    )
+    last_seen: Mapped[dt.datetime | None] = mapped_column(DateTimeSQLite, default=None)

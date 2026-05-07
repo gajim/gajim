@@ -178,7 +178,6 @@ class OpenPGPStorage(AlchemyStorage):
         label: str | None | ValueMissingT = VALUE_MISSING,
         trust: Trust | ValueMissingT = VALUE_MISSING,
         active: bool | ValueMissingT = VALUE_MISSING,
-        last_seen: dt.datetime | ValueMissingT = VALUE_MISSING,
     ) -> None:
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -187,7 +186,6 @@ class OpenPGPStorage(AlchemyStorage):
             "label": label,
             "trust": trust,
             "active": active,
-            "last_seen": last_seen,
         }
         values = {k: v for k, v in values.items() if v is not VALUE_MISSING}
 
@@ -204,6 +202,31 @@ class OpenPGPStorage(AlchemyStorage):
             stmt = stmt.where(mod.Public.fingerprint.in_(fingerprints))
 
         stmt = stmt.values(**values)
+        session.execute(stmt)
+
+    @with_session
+    @timeit
+    def set_last_seen(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        fingerprint: str,
+        last_seen: dt.datetime,
+    ) -> None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+
+        log.info("Update last seen for %s, %s, %s", jid, fingerprint, last_seen)
+
+        stmt = sa.update(mod.Public).where(
+            mod.Public.fk_account_pk == fk_account_pk,
+            mod.Public.remote_jid == jid,
+            mod.Public.fingerprint == fingerprint.upper(),
+            sa.or_(mod.Public.last_seen.is_(None), mod.Public.last_seen < last_seen),
+        )
+
+        stmt = stmt.values(last_seen=last_seen)
         session.execute(stmt)
 
     def get_public_key_from_secret(

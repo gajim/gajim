@@ -58,6 +58,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import CryptoModule
 from gajim.common.modules.util import event_node
@@ -733,6 +734,12 @@ class OpenPGP(BaseModule, CryptoModule):
             if remote_key is None:
                 self._log.warning("Unable to find remote key: %s", fingerprint)
             else:
+                app.storage.openpgp.set_last_seen(
+                    self._account,
+                    remote_key.remote_jid,
+                    fingerprint,
+                    get_message_timestamp(properties),
+                )
                 trust = remote_key.trust
 
         properties.encrypted = EncryptionData(
