@@ -858,6 +858,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if "image/png" in mime_types or "image/bmp" in mime_types:
             self._ui.input_overlay.set_visible(True)
             self._ui.input_overlay_label.set_text(_("Processing image…"))
+            textview.stop_emission_by_name("paste-clipboard")
             clipboard.read_texture_async(None, self._on_clipboard_read_texture_finished)
             return
 
