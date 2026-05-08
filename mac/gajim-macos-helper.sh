@@ -24,7 +24,7 @@
 set -e
 
 # Variables
-gajim_version="master"
+gajim_version="mac-ci"
 nbxmpp_version="master"
 omemo_dr_version="master"
 python_version="3.13"
@@ -68,7 +68,11 @@ export CI_GAJIM_RELEASE=0
 
 function install_brew_dependencies() {
 	brew update
-	brew install gettext python@${python_version} librsvg git
+	if [ "$CI_BUILD" == 0 ]
+	then
+		brew install python@${python_version}
+	fi
+	brew install gettext librsvg git
 	brew unlink python && brew link python@${python_version}
 	brew install gtk4 libadwaita pygobject3 adwaita-icon-theme libsoup@3 gst-python gtksourceview5 gstreamer
 	brew unlink gettext && brew link gettext
