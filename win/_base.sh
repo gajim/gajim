@@ -64,6 +64,7 @@ git+https://dev.gajim.org/gajim/python-nbxmpp.git
 css_parser
 httpx[http2,socks]
 truststore
+pysequoia
 emoji
 pystray
 python-gnupg
