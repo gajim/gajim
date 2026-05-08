@@ -29,7 +29,7 @@ from gajim.gtk.certificate_dialog import CertificatePage
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.crypto_trust_manager import CryptoTrustManager
 from gajim.gtk.preference.archiving import ArchivingPreferences
 from gajim.gtk.preference.blocked_contacts import BlockedContacts
 from gajim.gtk.preference.manage_roster import ManageRoster
@@ -410,8 +410,69 @@ class AccountOmemoTrustGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(self, key="account-omemo-trust", account=account)
 
-        omemo_trust_manager = OMEMOTrustManager(account)
-        self.add(omemo_trust_manager)
+        crypto_trust_manager = CryptoTrustManager("OMEMO", account)
+        self.add(crypto_trust_manager)
+
+
+class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-settings", account=account
+        )
+
+        self.set_title(_("Trust Management"))
+
+        settings = [
+            Setting(
+                SettingKind.SWITCH,
+                _("Blind Trust"),
+                SettingType.ACCOUNT_CONFIG,
+                "openpgp_blind_trust",
+                desc=_("Blindly trust new devices"),
+            ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Backup Secret Key"),
+                SettingType.ACCOUNT_CONFIG,
+                "openpgp_backup_secret_key",
+                desc=_("Stores the secret key encrypted on the server"),
+                enabled_func=(lambda: app.account_is_connected(account)),
+                callback=self._on_backup,
+            ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+    def _on_backup(self, state: bool, _data: Any) -> None:
+        if state:
+            return
+
+        def _on_response() -> None:
+            assert self.account is not None
+            client = app.get_client(self.account)
+            client.get_module("OpenPGP").remove_backup_from_server()
+
+        AlertDialog(
+            _("Remove Backup"),
+            _("Do you want to remove the backup from your server?"),
+            responses=[
+                CancelDialogResponse(label=_("Keep Backup")),
+                DialogResponse("confirm", _("Remove from Server"), "destructive"),
+            ],
+            emit_responses=["confirm"],
+            callback=_on_response,
+        )
+
+
+class AccountOpenPGPTrustGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-trust", account=account
+        )
+
+        crypto_trust_manager = CryptoTrustManager("OpenPGP", account)
+        self.add(crypto_trust_manager)
 
 
 class AccountConnectionGroup(GajimPreferencesGroup):
@@ -833,6 +894,23 @@ class AccountOmemoPage(GajimPreferencePage):
 
         self.add(AccountOmemoSettingsGroup(account))
         self.add(AccountOmemoTrustGroup(account))
+
+
+class AccountOpenPGPPage(GajimPreferencePage):
+    key = "encryption-openpgp"
+    icon_name = "lucide-lock-symbolic"
+    label = _("Encryption (OpenPGP)")
+
+    def __init__(self, account: str) -> None:
+        GajimPreferencePage.__init__(
+            self,
+            title=_("Encryption (OpenPGP) – %(account)s") % {"account": account},
+            groups=[],
+            tag_prefix=f"{account}-",
+        )
+
+        self.add(AccountOpenPGPSettingsGroup(account))
+        self.add(AccountOpenPGPTrustGroup(account))
 
 
 class AccountConnectionDetailsPage(GajimPreferencePage):

@@ -568,13 +568,15 @@ class Client(Observable, ClientModules):
             self._send_message(message)
             return
 
-        if method == 'OMEMO':
+        if method in ('OMEMO', 'OpenPGP'):
             try:
-                self.get_module('OMEMO').encrypt_message(message)
+                self.get_module(method).encrypt_message(message)
             except Exception:
                 self._log.exception('Error')
                 text = message.get_text(with_fallback=False)
-                assert text is not None
+                if text is None:
+                    return
+
                 app.ged.raise_event(
                     MessageNotSent(
                         client=self._client,

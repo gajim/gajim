@@ -554,14 +554,18 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if current_state == new_state:
             return
 
-        if new_state and new_state != "OMEMO":
-            plugin = app.plugin_manager.encryption_plugins.get(new_state)
-            if plugin is None:
-                # TODO: Add GUI error here
-                return
+        match new_state:
+            case "" | "OMEMO" | "OpenPGP":
+                pass
 
-            if not plugin.activate_encryption(app.window.get_control()):
-                return
+            case _:
+                plugin = app.plugin_manager.encryption_plugins.get(new_state)
+                if plugin is None:
+                    # TODO: Add GUI error here
+                    return
+
+                if not plugin.activate_encryption(app.window.get_control()):
+                    return
 
         contact = self.get_current_contact()
         contact.settings.set("encryption", new_state)
@@ -626,7 +630,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         }
 
         if encryption:
-            if encryption == "OMEMO":
+            if encryption in ("OMEMO", "OpenPGP"):
                 encryption_state["authenticated"] = True
             else:
                 # Only fire extension_point for plugins (i.e. not OMEMO)
@@ -661,23 +665,25 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_encryption_details_clicked(self, _button: Gtk.Button) -> None:
         contact = self.get_current_contact()
         encryption = contact.settings.get("encryption")
-        if encryption == "OMEMO":
+        if encryption in ("OMEMO", "OpenPGP"):
             if contact.is_groupchat:
                 open_window(
-                    "GroupchatDetails", contact=contact, page="encryption-omemo"
+                    "GroupchatDetails",
+                    contact=contact,
+                    page=f"encryption-{encryption.lower()}",
                 )
                 return
 
             if isinstance(contact, BareContact) and contact.is_self:
                 window = open_window("Preferences")
-                window.show_page(f"{contact.account}-encryption-omemo")
+                window.show_page(f"{contact.account}-encryption-{encryption.lower()}")
                 return
 
             open_window(
                 "ContactInfo",
                 account=contact.account,
                 contact=contact,
-                page="encryption-omemo",
+                page=f"encryption-{encryption.lower()}",
             )
             return
 

@@ -290,6 +290,8 @@ BoolAccountSettings = Literal[
     'use_ft_proxies',
     'use_plain_connection',
     'omemo_blind_trust',
+    'openpgp_blind_trust',
+    'openpgp_backup_secret_key',
 ]
 
 
@@ -429,6 +431,8 @@ ACCOUNT_SETTINGS = {
         'use_ft_proxies': False,
         'use_plain_connection': False,
         'omemo_blind_trust': True,
+        'openpgp_blind_trust': True,
+        'openpgp_backup_secret_key': True,
     },
 
     'contact': {

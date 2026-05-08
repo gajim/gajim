@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="OpenPGPWizardWelcome" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">To set up OpenPGP encryption you can either import an existing key or let Gajim create a new key.</property>
+            <property name="max-width-chars">38</property>
+            <property name="wrap">1</property>
+            <property name="justify">center</property>
+            <style>
+              <class name="dimmed" />
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="halign">center</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Use My Own OpenPGP Key</property>
+                <style>
+                  <class name="bold" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_import_button">
+                <property name="label" translatable="yes">Import Key</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Create New OpenPGP Key</property>
+                <style>
+                  <class name="bold" />
+                  <class name="mt-18" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_generate_button">
+                <property name="label" translatable="yes">Create New Key</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="suggested-action" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

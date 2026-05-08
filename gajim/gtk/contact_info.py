@@ -42,7 +42,7 @@ from gajim.gtk.alert import DialogResponse
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_entry import ContactNameEntry
 from gajim.gtk.contact_settings import ContactSettings
-from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.crypto_trust_manager import CryptoTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.util.misc import get_ui_string
@@ -241,10 +241,17 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if self._bare_contact is None:
             return
 
-        self._ui.encryption_box.set_child(
-            OMEMOTrustManager(self._bare_contact.account, self._bare_contact)
+        self._ui.encryption_omemo_box.set_child(
+            CryptoTrustManager("OMEMO", self._bare_contact.account, self._bare_contact)
         )
         self._switcher.set_item_visible("encryption-omemo", True)
+
+        self._ui.encryption_openpgp_box.set_child(
+            CryptoTrustManager(
+                "OpenPGP", self._bare_contact.account, self._bare_contact
+            )
+        )
+        self._switcher.set_item_visible("encryption-openpgp", True)
 
     def _fill_note_page(self) -> None:
         if self._bare_contact is None or not self._is_in_roster:

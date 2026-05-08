@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import typing
 from typing import Any
+from typing import Literal
 from typing import Union
 
 import datetime
@@ -343,6 +344,14 @@ class TimezoneChanged(ApplicationEvent):
     account: str
     vcard: str | None
     local: str | None
+
+
+@dataclass
+class OpenPGPEvent(ApplicationEvent):
+    name: str = field(init=False, default='openpgp-event')
+    account: str
+    type: Literal["decryption-error", "unknown-error", "setup"]
+    error: str | None = None
 
 
 @dataclass

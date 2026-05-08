@@ -75,7 +75,7 @@
                 <child>
                   <object class="AdwActionRow" id="our_fingerprint_row">
                     <style>
-                      <class name="omemo-device-row"/>
+                      <class name="crypto-device-row"/>
                     </style>
                     <child type="suffix">
                       <object class="GtkBox">
@@ -159,9 +159,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="clear_devices_button">
+                  <object class="GtkButton" id="remove_public_keys_button">
                     <property name="visible">0</property>
-                    <property name="label" translatable="yes">Clear Devices…</property>
+                    <property name="label" translatable="yes">Remove Public Keys…</property>
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
                     <property name="hexpand">1</property>

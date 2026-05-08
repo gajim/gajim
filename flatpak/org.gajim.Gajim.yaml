@@ -442,6 +442,29 @@ modules:
         url: https://files.pythonhosted.org/packages/4f/6c/2e024e615cca6f5e03261cf8fa9f584a5ecd59d3fb7ac7e7bf52f2d9cee1/omemo_dr-1.2.0.tar.gz
         sha256: 18b6542b3bb7ed6dce34dd02f32b16401982ba24f0146ddae091dcb92c79a484
 
+  # pysequoia dependencies
+  - name: python3-pysequoia
+    buildsystem: simple
+    only-arches:
+      - aarch64
+    build-commands:
+    - pip3 install --no-build-isolation .
+    sources:
+    - type: archive
+      url: https://files.pythonhosted.org/packages/4e/eb/3386925c306be972639d61b17fb33e2a2f6f6a03f8d9f95cd59022b7502e/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      sha256: f137ae2bb2d4099e3a771482c265b8b5ec21fe12e67cf1be1c7e91c5fc31c792
+
+  - name: python3-pysequoia
+    buildsystem: simple
+    only-arches:
+      - x86_64
+    build-commands:
+    - pip3 install --no-build-isolation .
+    sources:
+    - type: archive
+      url: https://files.pythonhosted.org/packages/c6/6a/3b5624127757e0d56cf19cfbc62ef29fe85501868182a03a5bff6cef45af/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      sha256: 960ec5e4d3d999f63c55bb90265f8676f419b220199e80e1dbccee4982c23b13
+
   # nbxmpp dependency (optional)
   - name: python3-gssapi
     buildsystem: simple
