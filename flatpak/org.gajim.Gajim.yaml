@@ -445,12 +445,25 @@ modules:
   # pysequoia dependencies
   - name: python3-pysequoia
     buildsystem: simple
+    only-arches:
+      - aarch64
     build-commands:
     - pip3 install --no-build-isolation .
     sources:
     - type: archive
-      url: https://files.pythonhosted.org/packages/b8/61/126fd5e906d9ee8e7b563e404ad03376befddb0c74a452bfbd8213e8351f/pysequoia-0.1.32.tar.gz
-      sha256: baa5892b3e68dbf4492fcd4b5beb10bdeed8080ca5e8f57725606a824b65753f
+      url: https://files.pythonhosted.org/packages/4e/eb/3386925c306be972639d61b17fb33e2a2f6f6a03f8d9f95cd59022b7502e/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      sha256: f137ae2bb2d4099e3a771482c265b8b5ec21fe12e67cf1be1c7e91c5fc31c792
+
+  - name: python3-pysequoia
+    buildsystem: simple
+    only-arches:
+      - x86_64
+    build-commands:
+    - pip3 install --no-build-isolation .
+    sources:
+    - type: archive
+      url: https://files.pythonhosted.org/packages/c6/6a/3b5624127757e0d56cf19cfbc62ef29fe85501868182a03a5bff6cef45af/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      sha256: 960ec5e4d3d999f63c55bb90265f8676f419b220199e80e1dbccee4982c23b13
 
   # nbxmpp dependency (optional)
   - name: python3-gssapi
