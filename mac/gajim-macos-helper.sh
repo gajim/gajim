@@ -46,7 +46,8 @@ python_dependencies="\
 	emoji \
 	h2 \
 	socksio \
-	httpx"
+	httpx \
+	pysequoia"
 
 # Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://dev.gajim.org/gajim/gajim/-/issues/12365)
 DEFAULT_PATH="$PATH"
