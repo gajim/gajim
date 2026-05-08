@@ -633,11 +633,6 @@ class CallbackSetting(GenericSetting):
         GenericSetting.__init__(self, *args, **kwargs)
         self.callback = callback
 
-    def do_unroot(self) -> None:
-        # TODO test, currently not in use
-        GenericSetting.do_unroot(self)
-        del self.callback
-
     def _on_activated(self, row: Adw.ActionRow) -> None:
         self.callback()
 
