@@ -30,6 +30,7 @@ from gajim.gtk.activity_list import GajimUpdatePermission
 from gajim.gtk.activity_list import MucInvitation
 from gajim.gtk.activity_list import MucInvitationDeclined
 from gajim.gtk.activity_list import OpenPGPEvent
+from gajim.gtk.activity_list import Reaction
 from gajim.gtk.activity_list import Subscribe
 from gajim.gtk.activity_list import TimezoneChanged
 from gajim.gtk.activity_list import Unsubscribed
@@ -73,11 +74,10 @@ class ActivityPage(Gtk.Stack):
         if child is not None:
             self.remove(child)
 
-        activity_cls = type(item)
-        if not activity_cls:
+        if isinstance(item, Reaction):
             return
 
-        page = self._pages[activity_cls](item)  # pyright: ignore
+        page = self._pages[type(item)](item)  # pyright: ignore
         page.connect("request-remove", self._on_request_remove)
 
         self.add_named(page, "activity")
