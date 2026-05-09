@@ -25,7 +25,7 @@ from gajim.common.storage.base import timeit
 
 ContactCacheDictT = dict[tuple[str, JID], dict[str, Any]]
 
-CURRENT_USER_VERSION = 10
+CURRENT_USER_VERSION = 11
 
 CACHE_SQL_STATEMENT = (
     """
@@ -108,7 +108,7 @@ class CacheStorage(SqliteStorage):
             self._reinit_storage()
             return
 
-        if user_version < 10:
+        if user_version < 11:
             self._reinit_storage()
             return
 

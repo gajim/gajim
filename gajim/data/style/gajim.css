@@ -653,7 +653,10 @@ button.flat.link { padding: 0; border: 0; }
     transition: background-color 1s;
     background-color: alpha(var(--accent-bg-color), 0.8);
 }
-
+.conversation-last-read-highlight {
+    border-bottom: 3px dotted rgb(137, 137, 137);
+    border-radius: 0px;
+}
 /* Row widgets ============================================================ */
 .conversation-subject-box {
     color: mix(var(--accent-blue), var(--view-fg-color), 0.7);

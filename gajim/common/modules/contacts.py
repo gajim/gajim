@@ -327,6 +327,12 @@ class CommonContact(Observable):
     def get_address(self, _prefer_real: bool = True) -> JID:
         return self._jid
 
+    def get_last_read(self) -> tuple[int, datetime] | None:
+        return app.storage.cache.get_last_read(self)
+
+    def set_last_read(self, pk: int, timestamp: datetime) -> None:
+        app.storage.cache.set_last_read(self, pk, timestamp)
+
     @property
     def chatstate(self) -> Chatstate | None:
         return None

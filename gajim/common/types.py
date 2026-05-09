@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
     from gajim.common.client import Client
     from gajim.common.modules.contacts import BareContact
-    from gajim.common.modules.contacts import CommonContact  # type: ignore # noqa: F401
+    from gajim.common.modules.contacts import CommonContact
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.modules.contacts import ResourceContact
@@ -60,9 +60,10 @@ GdkPixbufType = GdkPixbuf.Pixbuf | GdkPixbuf.PixbufAnimation
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
 
-BareContactT = Union["BareContact"]
-ChatContactT = Union["BareContact", "GroupchatContact", "GroupchatParticipant"]
-OneOnOneContactT = Union["BareContact", "GroupchatParticipant"]
-GroupchatContactT = Union["GroupchatContact"]
+CommonContactT = Union['CommonContact']
+BareContactT = Union['BareContact']
+ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
+OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
+GroupchatContactT = Union['GroupchatContact']
 
 PresenceShowT = PresenceShowExt | PresenceShow
