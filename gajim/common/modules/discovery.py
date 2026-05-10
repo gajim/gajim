@@ -232,23 +232,28 @@ class Discovery(BaseModule):
         assert result.info.jid is not None
         app.storage.cache.set_last_disco_info(result.info.jid, result.info)
 
+        contact = self._con.get_module('Contacts').get_contact(
+            result.info.jid, groupchat=True)
+        assert isinstance(contact, GroupchatContact)
+
         if result.vcard is not None:
             avatar, avatar_sha = result.vcard.get_avatar()
             if avatar is not None:
                 if not app.app.avatar_storage.avatar_exists(avatar_sha):
                     app.app.avatar_storage.save_avatar(avatar)
 
-                app.storage.cache.set_muc(
-                    self._account, result.info.jid, 'avatar', avatar_sha)
-                app.app.avatar_storage.invalidate_cache(result.info.jid)
+                app.storage.archive.set_contact_value(
+                    self._account, result.info.jid, 'avatar_sha', avatar_sha)
+                contact.update_avatar(avatar_sha)
+
+        app.storage.archive.set_contact_value(
+            self._account, contact.jid, 'remote_name', result.info.muc_name)
 
         self._con.get_module('VCardAvatars').muc_disco_info_update(result.info)
         app.ged.raise_event(MucDiscoUpdate(
             account=self._account,
             jid=result.info.jid))
 
-        contact = self._con.get_module('Contacts').get_contact(
-            result.info.jid, groupchat=True)
         contact.notify('disco-info-update')
 
         yield result

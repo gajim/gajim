@@ -36,6 +36,7 @@ from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
 from gajim.common.storage.base import StrValueMissingType
+from gajim.common.util.datetime import utc_now
 
 
 class Base(DeclarativeBase):
@@ -1014,3 +1015,63 @@ Message.retraction = relationship(
     ),
     viewonly=True,
 )
+
+
+class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = "contact"
+    __index_cols__ = ["fk_remote_pk", "fk_account_pk"]
+    __no_table_cols__ = ["account_", "remote_jid_"]
+    __upsert_cols__ = [
+        "timestamp",
+        "custom_name",
+        "remote_name",
+        "fallback_name",
+        "draft",
+        "avatar_sha",
+    ]
+    __table_args__ = (Index("idx_contact", *__index_cols__, unique=True),)
+
+    pk: Mapped[int] = mapped_column(primary_key=True, init=False)
+
+    account_: str = dataclasses.field(repr=False)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey("account.pk", ondelete="CASCADE"), init=False
+    )
+
+    remote_jid_: JID = dataclasses.field(repr=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey("remote.pk"), init=False)
+
+    timestamp: Mapped[datetime.datetime] = mapped_column(
+        EpochTimestampType, default_factory=utc_now
+    )
+
+    custom_name: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+    remote_name: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+    fallback_name: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+
+    draft: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+
+    avatar_sha: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+
+    last_read_id: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+
+    def get_name(self) -> str | None:
+        if self.custom_name is not None:
+            return self.custom_name
+
+        if self.remote_name is not None:
+            return self.remote_name
+
+        return self.fallback_name

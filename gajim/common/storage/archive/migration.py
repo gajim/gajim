@@ -133,6 +133,8 @@ class Migration:
             self._v17()
         if user_version < 18:
             self._v18()
+        if user_version < 19:
+            self._v19()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -399,6 +401,13 @@ class Migration:
             index.create(self._engine, checkfirst=True)
 
         self._archive.set_user_version(18)
+
+    def _v19(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=19))
+        mod.Base.metadata.tables["contact"].create(self._engine, checkfirst=True)
+        self._archive.set_user_version(19)
+        for account in app.settings.get_accounts():
+            app.settings.set_account_setting(account, "roster_version", "")
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

@@ -62,6 +62,12 @@ class UserAvatar(BaseModule):
 
         if metadata is None or not metadata.infos:
             self._log.info('No avatar published: %s', jid)
+            app.storage.archive.set_contact_value(
+                self._account,
+                contact.jid,
+                'avatar_sha',
+                None
+            )
             contact.update_avatar(None)
             return
 
@@ -76,6 +82,12 @@ class UserAvatar(BaseModule):
         if app.app.avatar_storage.avatar_exists(metadata.default):
             self._log.info('Avatar found in cache, update: %s %s',
                            jid, metadata.default)
+            app.storage.archive.set_contact_value(
+                self._account,
+                contact.jid,
+                'avatar_sha',
+                metadata.default
+            )
             contact.update_avatar(metadata.default)
             return
 
@@ -86,6 +98,8 @@ class UserAvatar(BaseModule):
         #
         # Reset the sha, because we don’t know if the avatar data query will
         # succeed. This forces an update of the avatar if the query succeeds.
+        app.storage.archive.set_contact_value(
+            self._account, contact.jid, 'avatar_sha', None)
         contact.update_avatar(None)
         self._request_avatar_data(contact, metadata.default)
 
@@ -114,4 +128,6 @@ class UserAvatar(BaseModule):
         assert isinstance(avatar, AvatarData)
         self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
         app.app.avatar_storage.save_avatar(avatar.data)
+        app.storage.archive.set_contact_value(
+            self._account, contact.jid, 'avatar_sha', avatar.sha)
         contact.update_avatar(avatar.sha)

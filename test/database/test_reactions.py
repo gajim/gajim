@@ -83,13 +83,13 @@ class ReactionsTest(unittest.TestCase):
             timestamp=mk_utc_dt(9),
         )
 
-        pk = self._archive.upsert_row2(r_data1)
+        pk = self._archive.upsert_row2(r_data1, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data2)
+        pk = self._archive.upsert_row2(r_data2, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data3)
+        pk = self._archive.upsert_row2(r_data3, return_full=False)
         self.assertIsNone(pk)
-        pk = self._archive.upsert_row2(r_data4)
+        pk = self._archive.upsert_row2(r_data4, return_full=False)
         self.assertIsNotNone(pk)
 
         message_data = Message(
@@ -166,11 +166,11 @@ class ReactionsTest(unittest.TestCase):
             timestamp=mk_utc_dt(3),
         )
 
-        pk = self._archive.upsert_row2(r_data1)
+        pk = self._archive.upsert_row2(r_data1, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data2)
+        pk = self._archive.upsert_row2(r_data2, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data3)
+        pk = self._archive.upsert_row2(r_data3, return_full=False)
         self.assertIsNotNone(pk)
 
         message_data = Message(
@@ -269,11 +269,11 @@ class ReactionsTest(unittest.TestCase):
             timestamp=mk_utc_dt(3),
         )
 
-        pk = self._archive.upsert_row2(r_data1)
+        pk = self._archive.upsert_row2(r_data1, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data2)
+        pk = self._archive.upsert_row2(r_data2, return_full=False)
         self.assertIsNotNone(pk)
-        pk = self._archive.upsert_row2(r_data3)
+        pk = self._archive.upsert_row2(r_data3, return_full=False)
         self.assertIsNotNone(pk)
 
         message_data = Message(

@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Literal
+from typing import overload
+from typing import TypeVar
 
 import calendar
 import datetime as dt
@@ -25,6 +27,7 @@ import sqlalchemy as sa
 from nbxmpp import JID
 from sqlalchemy import delete
 from sqlalchemy import func
+from sqlalchemy import Insert
 from sqlalchemy import Row
 from sqlalchemy import select
 from sqlalchemy import update
@@ -48,6 +51,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
+from gajim.common.storage.archive.models import Contact
 from gajim.common.storage.archive.models import DisplayedMarker
 from gajim.common.storage.archive.models import Encryption
 from gajim.common.storage.archive.models import MAMArchiveState
@@ -70,8 +74,9 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 18
+CURRENT_USER_VERSION = 19
 
+_T = TypeVar("_T")
 
 log = logging.getLogger("gajim.c.storage.archive")
 
@@ -112,6 +117,7 @@ class MessageArchiveStorage(AlchemyStorage):
         self._account_pks: dict[str, int] = {}
         self._jid_pks: dict[JID, int] = {}
         self._occupant_cache: dict[tuple[str, JID, JID], tuple[Occupant, datetime]] = {}
+        self._contact_cache: dict[tuple[str, JID], Contact | None] = {}
 
     def init(self) -> None:
         super().init()
@@ -336,29 +342,47 @@ class MessageArchiveStorage(AlchemyStorage):
         session.execute(stmt)
         return existing.pk
 
+    @overload
     @with_session
     @timeit
-    def upsert_row2(self, session: Session, row: Any) -> int | None:
-        return self._upsert_row2(session, row)
+    def upsert_row2(
+        self, session: Session, row: _T, *, return_full: Literal[True]
+    ) -> _T | None: ...
 
-    def _upsert_row2(
+    @overload
+    @with_session
+    @timeit
+    def upsert_row2(
+        self, session: Session, row: object, *, return_full: Literal[False]
+    ) -> int | None: ...
+
+    @with_session
+    @timeit
+    def upsert_row2(self, session: Session, row: Any, *, return_full: bool) -> Any:
+        table = row.__class__
+        stmt = self._generate_upsert_stmt(session, table, row)
+        if return_full:
+            stmt = stmt.returning(table)
+        else:
+            stmt = stmt.returning(table.pk)
+        return session.scalar(stmt)
+
+    def _generate_upsert_stmt(
         self,
         session: Session,
+        table: Any,
         row: Any,
-    ) -> int | None:
+    ) -> Insert:
         row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
-        table = row.__class__
 
         stmt = insert(table).values(**row.get_insert_values())
         stmt = stmt.on_conflict_do_update(
             set_=row.get_upsert_values(),
             where=sa.text("excluded.timestamp > timestamp"),
         )
-        stmt = stmt.returning(table.pk)
-        pk = session.scalar(stmt)
-        return pk
+        return stmt
 
     @with_session
     @timeit
@@ -1407,3 +1431,71 @@ class MessageArchiveStorage(AlchemyStorage):
             occupant_d[real_remote_jid] = occupant
 
         return occupant_d
+
+    def set_contact_value(
+        self,
+        account: str,
+        jid: JID,
+        attr: Literal[
+            "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
+        ],
+        value: str | None,
+    ) -> None:
+
+        cache_key = (account, jid)
+        try:
+            contact = self._contact_cache[cache_key]
+        except KeyError:
+            pass
+
+        else:
+            if contact is not None and getattr(contact, attr) == value:
+                return
+
+        args = {attr: value}
+        contact = self.upsert_row2(
+            Contact(account_=account, remote_jid_=jid, **args),  # pyright:ignore
+            return_full=True,
+        )
+        if contact is None:
+            # Upsert did not insert or update any data
+            return None
+
+        self._contact_cache[cache_key] = contact
+
+    @with_session
+    @timeit
+    def get_contact_value(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        attr: Literal[
+            "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
+        ],
+    ) -> str | None:
+
+        cache_key = (account, jid)
+        try:
+            contact = self._contact_cache[cache_key]
+        except KeyError:
+            pass
+        else:
+            if contact is None:
+                return
+            return getattr(contact, attr)
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = select(Contact).where(
+            Contact.fk_remote_pk == fk_remote_pk,
+            Contact.fk_account_pk == fk_account_pk,
+        )
+
+        contact = session.scalar(stmt)
+        self._contact_cache[cache_key] = contact
+        if contact is None:
+            return None
+
+        return getattr(contact, attr)

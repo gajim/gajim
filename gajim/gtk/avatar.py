@@ -510,7 +510,9 @@ class AvatarStorage(metaclass=Singleton):
             if texture is not None:
                 return texture
 
-            avatar_sha = app.storage.cache.get_muc(account, jid, "avatar")
+            avatar_sha = app.storage.archive.get_contact_value(
+                account, jid, "avatar_sha"
+            )
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is not None:
@@ -523,10 +525,6 @@ class AvatarStorage(metaclass=Singleton):
                     texture = convert_surface_to_texture(surface)
                     self._cache[jid][(size, scale, None, transport_icon)] = texture
                     return texture
-
-                # avatar_sha set, but image is missing
-                # (e.g. avatar cache deleted)
-                app.storage.cache.set_muc(account, jid, "avatar", None)
 
         client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact_if_exists(jid)

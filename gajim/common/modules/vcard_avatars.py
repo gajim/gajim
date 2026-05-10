@@ -94,7 +94,8 @@ class VCardAvatars(BaseModule):
         app.app.avatar_storage.save_avatar(avatar)
 
         if isinstance(contact, BareContact | GroupchatContact):
-            contact.set_avatar_sha(avatar_sha)
+            app.storage.archive.set_contact_value(
+                self._account, contact.jid, 'avatar_sha', avatar_sha)
 
         else:
             self._muc_avatar_cache[contact.jid] = avatar_sha
@@ -163,7 +164,8 @@ class VCardAvatars(BaseModule):
             # Empty <photo/> tag, means no avatar is advertised
             assert avatar_sha is None
             self._log.info('%s has no avatar published', jid)
-            contact.set_avatar_sha(None)
+            app.storage.archive.set_contact_value(
+                self._account, contact.jid, 'avatar_sha', None)
             contact.update_avatar(avatar_sha)
 
         else:
@@ -177,7 +179,8 @@ class VCardAvatars(BaseModule):
             if app.app.avatar_storage.avatar_exists(avatar_sha):
                 # Check if the avatar is already in storage
                 self._log.info('Found avatar in storage')
-                contact.set_avatar_sha(avatar_sha)
+                app.storage.archive.set_contact_value(
+                    self._account, contact.jid, 'avatar_sha', avatar_sha)
                 contact.update_avatar(avatar_sha)
                 return
 

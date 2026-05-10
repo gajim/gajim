@@ -465,7 +465,7 @@ class MethodsTest(unittest.TestCase):
             timestamp=utc_now(),
         )
 
-        self._archive.upsert_row2(reaction)
+        self._archive.upsert_row2(reaction, return_full=False)
 
         marker = mod.DisplayedMarker(
             account_=self._account,
@@ -590,7 +590,7 @@ class MethodsTest(unittest.TestCase):
             timestamp=utc_now(),
         )
 
-        self._archive.upsert_row2(reaction)
+        self._archive.upsert_row2(reaction, return_full=False)
 
         marker = mod.DisplayedMarker(
             account_=self._account,
@@ -682,7 +682,7 @@ class MethodsTest(unittest.TestCase):
             timestamp=utc_now(),
         )
 
-        self._archive.upsert_row2(reaction)
+        self._archive.upsert_row2(reaction, return_full=False)
 
         jid_related_tables = [
             mod.OOB,
@@ -762,7 +762,7 @@ class MethodsTest(unittest.TestCase):
             timestamp=utc_now(),
         )
 
-        self._archive.upsert_row2(reaction)
+        self._archive.upsert_row2(reaction, return_full=False)
 
         marker = mod.DisplayedMarker(
             account_=self._account,
@@ -909,7 +909,7 @@ class MethodsTest(unittest.TestCase):
             timestamp=utc_now(),
         )
 
-        self._archive.upsert_row2(reaction)
+        self._archive.upsert_row2(reaction, return_full=False)
 
         marker = mod.DisplayedMarker(
             account_=self._account,

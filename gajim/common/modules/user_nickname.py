@@ -64,11 +64,11 @@ class UserNickname(BaseModule):
         if contact.name == properties.nickname:
             return
 
-        app.storage.cache.set_contact(
+        app.storage.archive.set_contact_value(
             self._account,
             remote_jid,
-            'nickname',
-            f'{properties.nickname} ({remote_jid})'
+            'remote_name',
+            f'{properties.nickname} ({remote_jid})',
         )
 
         contact.notify('nickname-update')
@@ -91,8 +91,13 @@ class UserNickname(BaseModule):
             return
 
         assert properties.jid is not None
-        app.storage.cache.set_contact(
-            self._account, properties.jid, 'nickname', nick)
+
+        app.storage.archive.set_contact_value(
+            self._account,
+            properties.jid,
+            'remote_name',
+            nick,
+        )
 
         self._log.info('Nickname for %s: %s', properties.jid, nick)
 

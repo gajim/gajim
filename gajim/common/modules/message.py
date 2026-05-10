@@ -428,7 +428,7 @@ class Message(BaseModule):
                     timestamp=message.timestamp,
                 )
 
-                app.storage.archive.upsert_row2(reaction)
+                app.storage.archive.upsert_row2(reaction, return_full=False)
 
             app.ged.raise_event(
                 ReactionUpdated(

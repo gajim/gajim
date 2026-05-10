@@ -160,7 +160,7 @@ class Reactions(BaseModule):
         )
 
         self._log.info('Received reactions: %s', reaction)
-        app.storage.archive.upsert_row2(reaction)
+        app.storage.archive.upsert_row2(reaction, return_full=False)
 
         id_type = ("stanza-id" if m_type in (MessageType.GROUPCHAT, MessageType.PM)
                     else "message-id")
