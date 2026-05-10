@@ -54,6 +54,7 @@ ${MINGW_PACKAGE_PREFIX}-python-setuptools \
 ${MINGW_PACKAGE_PREFIX}-python-setuptools-scm \
 ${MINGW_PACKAGE_PREFIX}-python-six \
 ${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
+${MINGW_PACKAGE_PREFIX}-python-pysequoia \
 ${MINGW_PACKAGE_PREFIX}-sqlite3 \
 ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
 "
@@ -64,7 +65,6 @@ git+https://dev.gajim.org/gajim/python-nbxmpp.git
 css_parser
 httpx[http2,socks]
 truststore
-pysequoia
 emoji
 pystray
 python-gnupg
@@ -105,7 +105,7 @@ function install_pre_deps {
         intltool \
         p7zip \
         wget \
-        mingw-w64-x86_64-nsis \
+        ${MINGW_PACKAGE_PREFIX}-nsis \
         ${MINGW_PACKAGE_PREFIX}-librsvg \
         ${MINGW_PACKAGE_PREFIX}-python \
         ${MINGW_PACKAGE_PREFIX}-toolchain
