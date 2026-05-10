@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common.const import VALUE_MISSING
 from gajim.common.const import ValueMissingT
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.base import DraftType
 from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
@@ -1044,7 +1045,6 @@ class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     timestamp: Mapped[datetime.datetime] = mapped_column(
         EpochTimestampType, default_factory=utc_now
     )
-
     custom_name: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
@@ -1054,15 +1054,10 @@ class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     fallback_name: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
-
-    draft: Mapped[str | None] = mapped_column(
-        StrValueMissingType, default=VALUE_MISSING
-    )
-
+    draft: Mapped[str | None] = mapped_column(DraftType, default=VALUE_MISSING)
     avatar_sha: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
-
     last_read_id: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )

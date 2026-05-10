@@ -54,8 +54,6 @@ CACHE_SQL_STATEMENT = (
     );
 
     CREATE INDEX idx_unread ON unread(account, jid);
-    CREATE INDEX idx_contact ON contact(jid);
-    CREATE INDEX idx_muc ON muc(jid);
 
     PRAGMA user_version=%s;
     """

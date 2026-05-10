@@ -27,7 +27,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.storage.archive import models as mod
-from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.muc import message_needs_highlight
@@ -129,12 +128,12 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.update_name()
         self.update_account_identifier()
 
-        app.storage.drafts.connect("draft-update", self._on_draft_update)
-
         if isinstance(self.contact, GroupchatContact) and not self.contact.can_notify():
             self._ui.unread_label.add_css_class("unread-counter-silent")
 
-        draft = app.storage.drafts.get(self.contact)
+        draft = app.storage.archive.get_contact_value(
+            self.contact.account, self.contact.jid, "draft"
+        )
         if not self._set_draft_mode(draft):
             self._display_last_conversation_row()
 
@@ -388,14 +387,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     def _on_draft_update(
         self,
-        _draft_storage: DraftStorage,
+        _contact: ChatContactT,
         _signal_name: str,
-        contact: ChatContactT,
         draft: Draft | None,
     ) -> None:
-        if contact != self.contact:
-            return
-
         if not self._set_draft_mode(draft):
             self._display_last_conversation_row()
         self.changed()
@@ -425,7 +420,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
 
-        app.storage.drafts.disconnect_all_from_obj(self)
         app.settings.disconnect_signals(self)
 
         self._client.disconnect_all_from_obj(self)
@@ -502,6 +496,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     def _connect_contact_signals(self) -> None:
         self.contact.connect("chatstate-update", self._on_chatstate_update)
+        self.contact.connect("draft-update", self._on_draft_update)
+
         if isinstance(self.contact, BareContact):
             self.contact.connect("presence-update", self._on_presence_update)
             self.contact.connect("nickname-update", self._on_nickname_update)

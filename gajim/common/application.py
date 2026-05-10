@@ -42,7 +42,6 @@ from gajim.common.file_transfer_manager import FileTransferManager
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
-from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.events.storage import EventStorage
 from gajim.common.storage.openpgp.storage import OpenPGPStorage
 from gajim.common.task_manager import PulseManager
@@ -89,8 +88,6 @@ class CoreApplication(ged.EventHelper):
             app.ged.raise_event(DBMigrationError(exception=error))
             log.exception('Failed to init storage')
             return False
-
-        app.storage.drafts = DraftStorage()
 
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()

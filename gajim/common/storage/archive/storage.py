@@ -44,6 +44,7 @@ from sqlalchemy.orm import Session
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import VALUE_MISSING
+from gajim.common.const import Draft
 from gajim.common.events import DBMigration
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
@@ -1432,6 +1433,24 @@ class MessageArchiveStorage(AlchemyStorage):
 
         return occupant_d
 
+    @overload
+    def set_contact_value(
+        self,
+        account: str,
+        jid: JID,
+        attr: Literal["draft"],
+        value: Draft | None,
+    ) -> None: ...
+
+    @overload
+    def set_contact_value(
+        self,
+        account: str,
+        jid: JID,
+        attr: Literal["custom_name", "remote_name", "fallback_name", "avatar_sha"],
+        value: str | None,
+    ) -> None: ...
+
     def set_contact_value(
         self,
         account: str,
@@ -1439,7 +1458,7 @@ class MessageArchiveStorage(AlchemyStorage):
         attr: Literal[
             "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
         ],
-        value: str | None,
+        value: str | Draft | None,
     ) -> None:
 
         cache_key = (account, jid)
@@ -1463,6 +1482,28 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._contact_cache[cache_key] = contact
 
+    @overload
+    @with_session
+    @timeit
+    def get_contact_value(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        attr: Literal["draft"],
+    ) -> Draft | None: ...
+
+    @overload
+    @with_session
+    @timeit
+    def get_contact_value(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        attr: Literal["custom_name", "remote_name", "fallback_name", "avatar_sha"],
+    ) -> str | None: ...
+
     @with_session
     @timeit
     def get_contact_value(
@@ -1473,7 +1514,7 @@ class MessageArchiveStorage(AlchemyStorage):
         attr: Literal[
             "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
         ],
-    ) -> str | None:
+    ) -> str | Draft | None:
 
         cache_key = (account, jid)
         try:

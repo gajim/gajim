@@ -945,3 +945,8 @@ class ContactBlocked(ApplicationEvent):
     name: str = field(init=False, default='contact-blocked')
     account: str
     jid: JID
+
+
+@dataclass
+class PrepareForShutdown(ApplicationEvent):
+    name: str = field(init=False, default='prepare-for-shutdown')

@@ -10,6 +10,7 @@ from typing import Concatenate
 from typing import ParamSpec
 from typing import TypeVar
 
+import dataclasses
 import json
 import logging
 import math
@@ -48,6 +49,7 @@ from sqlalchemy.sql.compiler import SQLCompiler
 from sqlalchemy.sql.expression import ClauseElement
 from sqlalchemy.sql.expression import Executable
 
+from gajim.common.const import Draft
 from gajim.common.const import ValueMissingT
 from gajim.common.util.version import python_version
 
@@ -561,6 +563,23 @@ class JSONType(sa.types.TypeDecorator[Any]):
         if value is not None:
             return json.loads(value)
         return value
+
+
+class DraftType(sa.types.TypeDecorator[Any]):
+    impl = sa.types.TEXT
+    cache_ok = True
+
+    def process_bind_param(
+        self, value: Draft | ValueMissingT | None, dialect: Any
+    ) -> str | None:
+        if isinstance(value, ValueMissingT) or value is None:
+            return None
+        return json.dumps(dataclasses.asdict(value))
+
+    def process_result_value(self, value: str | None, dialect: Any) -> Draft | None:
+        if value is None:
+            return None
+        return Draft(**json.loads(value))
 
 
 def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:

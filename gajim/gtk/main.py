@@ -1346,6 +1346,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def start_shutdown(self) -> None:
         self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
+        app.ged.raise_event(events.PrepareForShutdown())
 
         if self.is_visible():
             window_width, window_height = self.get_width(), self.get_height()

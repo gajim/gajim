@@ -160,6 +160,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 ("message-sent", ged.GUI2, self._on_message_sent),
                 ("register-actions", ged.GUI2, self._on_register_actions),
                 ("muc-disco-update", ged.GUI2, self._on_muc_disco_update),
+                ("prepare-for-shutdown", ged.GUI2, self._on_prepare_for_shutdown),
             ]
         )
 
@@ -200,6 +201,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         self._update_encryption_state()
+
+    def _on_prepare_for_shutdown(self, event: events.PrepareForShutdown) -> None:
+        self._store_draft()
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -348,11 +352,16 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if any([text, reply_pk]):
             draft = Draft(text, reply_pk)
 
-        app.storage.drafts.set(self._contact, draft)
+        app.storage.archive.set_contact_value(
+            self._contact.account, self._contact.jid, "draft", draft
+        )
+        self._contact.notify("draft-update", draft)
 
     def _restore_draft(self) -> None:
         assert self._contact is not None
-        draft = app.storage.drafts.get(self._contact)
+        draft = app.storage.archive.get_contact_value(
+            self._contact.account, self._contact.jid, "draft"
+        )
         if draft is None:
             return
 
@@ -426,7 +435,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._message_url_previews.clear()
         self._cancel_action()
         assert self._contact is not None
-        app.storage.drafts.set(self._contact, None)
+        app.storage.archive.set_contact_value(
+            self._contact.account, self._contact.jid, "draft", None
+        )
+        self._contact.notify("draft-update", None)
 
     def toggle_message_correction(self) -> None:
         assert self._contact is not None
