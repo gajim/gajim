@@ -319,6 +319,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._dm_id_occupant_markers.clear()
         self._dm_occupant_markers.clear()
         self._dm_rows.clear()
+        self._last_occupant_messages.clear()
 
     def reset(self) -> None:
         assert self._contact is not None
