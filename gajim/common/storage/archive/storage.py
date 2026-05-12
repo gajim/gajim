@@ -43,8 +43,8 @@ from sqlalchemy.orm import Session
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import VALUE_MISSING
 from gajim.common.const import Draft
+from gajim.common.const import VALUE_MISSING
 from gajim.common.events import DBMigration
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
@@ -133,6 +133,10 @@ class MessageArchiveStorage(AlchemyStorage):
     def _create_table(self, session: Session, engine: Engine) -> None:
         Base.metadata.create_all(engine)
         self.set_user_version(CURRENT_USER_VERSION)
+        # Clear roster version so the full roster is requested on connect
+        # so we can fill the contact table with the roster data
+        for account in app.settings.get_accounts():
+            app.settings.set_account_setting(account, "roster_version", "")
 
     def _make_backup(self) -> None:
         db_path = configpaths.get("LOG_DB")
@@ -1540,3 +1544,45 @@ class MessageArchiveStorage(AlchemyStorage):
             return None
 
         return getattr(contact, attr)
+
+    @with_session
+    @timeit
+    def bulk_update_custom_names(
+        self,
+        session: Session,
+        account: str,
+        items: Iterable[tuple[JID, str | None]],
+    ) -> None:
+
+        values: list[dict[str, int | str | dt.datetime | None]] = []
+        for jid, name in items:
+            try:
+                contact = self._contact_cache[(account, jid)]
+            except KeyError:
+                pass
+
+            else:
+                if contact is not None and contact.custom_name == name:
+                    # No need to update, skip record
+                    continue
+
+                self._contact_cache.pop((account, jid), None)
+
+            values.append(
+                {
+                    "fk_remote_pk": self._get_jid_pk(session, jid),
+                    "fk_account_pk": self._get_account_pk(session, account),
+                    "timestamp": utc_now(),
+                    "custom_name": name,
+                }
+            )
+
+        if not values:
+            log.debug("No values to update in bulk_update_custom_names()")
+            return
+
+        stmt = insert(Contact).values(values)
+        stmt = stmt.on_conflict_do_update(
+            set_={"custom_name": stmt.excluded.custom_name}
+        )
+        session.execute(stmt)

@@ -120,6 +120,9 @@ class Roster(BaseModule):
             self._roster[item.jid] = item
 
         self._store_roster()
+        app.storage.archive.bulk_update_custom_names(
+            self._account,
+            [(item.jid, item.name) for item in self._roster.values()])
 
     def _process_roster_push(self,
                              _con: types.NBXMPPClient,
@@ -136,6 +139,8 @@ class Roster(BaseModule):
 
         self._groups = None
         self._store_roster()
+        app.storage.archive.set_contact_value(
+            self._account, item.jid, "custom_name", item.name)
 
         self._log.info('New version: %s', properties.roster.version)
         app.settings.set_account_setting(self._account,
@@ -211,6 +216,8 @@ class Roster(BaseModule):
         item = self.get_item(jid)
         assert item is not None
         self._nbxmpp('Roster').set_item(jid, name, item.groups)
+        app.storage.archive.set_contact_value(
+            self._account, item.jid, "custom_name", item.name)
 
     def iter(self) -> Iterator[tuple[JID, RosterItem]]:
         yield from self._roster.items()
