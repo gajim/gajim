@@ -38,12 +38,15 @@ from nbxmpp.structs import CommonError
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import RosterItem
 from sqlalchemy import event
-from sqlalchemy.dialects.sqlite import dialect as sqlite_dialect
 from sqlalchemy.engine import Engine
 from sqlalchemy.engine.interfaces import DBAPIConnection
+from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.orm import ORMExecuteState
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql.compiler import SQLCompiler
+from sqlalchemy.sql.expression import ClauseElement
+from sqlalchemy.sql.expression import Executable
 
 from gajim.common.util.version import python_version
 
@@ -201,6 +204,35 @@ def json_decoder(dct: dict[str, Any]) -> Any:
         return getattr(nbxmpp.const, type_)(dct["value"])
 
     return dct
+
+
+class Explain(Executable, ClauseElement):
+    inherit_cache = False
+
+    def __init__(self, stmt: Executable) -> None:
+        self.statement = stmt
+
+
+@compiles(Explain, "sqlite")
+def sqlite_explain(element: Any, compiler: SQLCompiler, **kw: Any):
+    compiled = compiler.process(element.statement, **kw)
+    return f"EXPLAIN QUERY PLAN {compiled}"
+
+
+def _do_orm_execute(orm_execute_state: ORMExecuteState) -> None:
+    stmt = orm_execute_state.statement
+    if not stmt.is_select and not stmt.is_delete:
+        return
+
+    res = orm_execute_state.session.execute(
+        Explain(stmt), params=orm_execute_state.parameters
+    ).all()
+    explanation = pprint.pformat(res)
+    log.debug("EXPLANATION\n%s\n%s", explanation, stmt)
+
+
+if os.environ.get("GAJIM_DEBUG_SQL"):
+    event.listen(Session, "do_orm_execute", _do_orm_execute)
 
 
 class SqliteStorage:
@@ -400,12 +432,7 @@ class AlchemyStorage:
             con_str, connect_args={"check_same_thread": False}, echo=False
         )
         event.listen(engine, "connect", self._set_sqlite_pragma)
-        if os.environ.get("GAJIM_DEBUG_SQL"):
-            event.listen(Session, "do_orm_execute", self._do_orm_execute)
         return engine
-
-    def _do_orm_execute(self, orm_execute_state: ORMExecuteState) -> None:
-        log.debug(orm_execute_state.statement)
 
     def _create_session(self) -> Session:
         return sessionmaker(
@@ -447,18 +474,6 @@ class AlchemyStorage:
 
     def _migrate(self) -> None:
         raise NotImplementedError
-
-    def _explain(self, session: Session, stmt: Any) -> None:
-        if not os.environ.get("GAJIM_DEBUG_SQL"):
-            return
-
-        stmt = stmt.compile(
-            compile_kwargs={"literal_binds": True}, dialect=sqlite_dialect()
-        )
-
-        res = session.execute(sa.text(f"EXPLAIN QUERY PLAN {stmt}")).all()
-        explanation = pprint.pformat(res)
-        log.debug("\n%s\n%s", stmt, explanation)
 
     @with_session
     @timeit

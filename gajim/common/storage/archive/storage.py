@@ -541,7 +541,6 @@ class MessageArchiveStorage(AlchemyStorage):
         ).subquery()
 
         stmt = select(Remote.jid, subq.c.type).join(subq)
-        self._explain(session, stmt)
         return session.execute(stmt).fetchall()
 
     @with_session
@@ -602,7 +601,6 @@ class MessageArchiveStorage(AlchemyStorage):
 
         stmt = stmt.limit(n_lines)
 
-        self._explain(session, stmt)
         result = session.scalars(stmt).all()
         complete = len(result) < n_lines
 
@@ -679,7 +677,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .limit(1)
         )
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -712,7 +709,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .limit(1)
         )
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -733,7 +729,6 @@ class MessageArchiveStorage(AlchemyStorage):
 
         stmt = stmt.order_by(sa.desc(Message.timestamp)).limit(1)
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     def get_referenced_message(
@@ -743,7 +738,6 @@ class MessageArchiveStorage(AlchemyStorage):
             return app.storage.archive.get_message_with_stanza_id(
                 account, jid, reply_id
             )
-
         return app.storage.archive.get_message_with_id(account, jid, reply_id)
 
     @with_session
@@ -777,7 +771,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .limit(1)
             .options(joinedload(DisplayedMarker.remote))
         )
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -809,7 +802,6 @@ class MessageArchiveStorage(AlchemyStorage):
         dm = aliased(DisplayedMarker, cte)
         stmt = select(dm).where(cte.c.rn == 1).options(joinedload(dm.remote))
 
-        self._explain(session, stmt)
         return list(session.scalars(stmt).all())
 
     @with_session
@@ -919,7 +911,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .execution_options(yield_per=25)
         )
 
-        self._explain(session, stmt)
         yield from session.scalars(stmt)
 
     @with_session
@@ -974,7 +965,6 @@ class MessageArchiveStorage(AlchemyStorage):
             )
         )
 
-        self._explain(session, stmt)
         return session.scalars(stmt).all()
 
     def _get_message_ts(
@@ -999,7 +989,6 @@ class MessageArchiveStorage(AlchemyStorage):
 
         stmt = stmt.limit(1)
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -1053,7 +1042,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .limit(1)
         )
 
-        self._explain(session, stmt)
         result = session.execute(stmt).one_or_none()
         if result is None:
             return None
@@ -1083,7 +1071,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .order_by(sa.desc(Message.timestamp))
         )
 
-        self._explain(session, stmt)
         return cast(Sequence[str], session.scalars(stmt).all())
 
     @with_session
@@ -1099,7 +1086,6 @@ class MessageArchiveStorage(AlchemyStorage):
             MAMArchiveState.fk_remote_pk == fk_remote_pk,
         )
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -1140,7 +1126,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .returning(Message.pk)
         )
 
-        self._explain(session, stmt)
         return session.scalar(stmt)
 
     @with_session
@@ -1262,7 +1247,6 @@ class MessageArchiveStorage(AlchemyStorage):
             .execution_options(yield_per=25)
         )
 
-        self._explain(session, stmt)
         yield from session.scalars(stmt)
 
     @with_session
@@ -1286,7 +1270,6 @@ class MessageArchiveStorage(AlchemyStorage):
             Occupant.blocked == True,  # noqa: E712
         ).options(joinedload(Occupant.remote))
 
-        self._explain(session, stmt)
         return session.scalars(stmt).all()
 
     @with_session
@@ -1313,8 +1296,6 @@ class MessageArchiveStorage(AlchemyStorage):
             Occupant.fk_account_pk == fk_account_pk,
             Occupant.blocked != value,
         ).values(blocked=value)
-
-        self._explain(session, stmt)
 
         res = cast(CursorResult[Any], session.execute(stmt))
         return res.rowcount
@@ -1348,7 +1329,6 @@ class MessageArchiveStorage(AlchemyStorage):
             Occupant.fk_real_remote_pk == fk_real_remote_pk,
         )
 
-        self._explain(session, stmt)
         res = session.scalars(stmt).all()
         if not res:
             log.debug("Unable to find occupant for jid %s", occupant_jid)
