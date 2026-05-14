@@ -102,7 +102,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         EventHelper.__init__(self)
 
         self.set_application(app.app)
-        self.set_title(GLib.get_application_name())
+        self.set_application_title()
         self.set_default_icon_name("gajim")
 
         self._startup_finished: bool = False
@@ -172,6 +172,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         manager = app.app.get_shortcut_manager()
         manager.install_shortcuts(self, "main-win")
+
+    def set_application_title(self, title: str | None = None) -> None:
+        application_name = GLib.get_application_name()
+        if title is not None:
+            application_name = f"{application_name} – {title}"
+        self.set_title(application_name)
 
     @property
     def about_dialog(self) -> AboutDialog:

@@ -9,6 +9,9 @@ from typing import cast
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
+from gajim.common import app
+from gajim.common.i18n import _
+
 from gajim.gtk.account_page import AccountPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_page import ChatPage
@@ -47,6 +50,7 @@ class MainStack(Gtk.Stack):
     def show_activity_page(self, context_id: str | None = None) -> None:
         self.set_visible_child_name("chats")
         self._chat_page.show_activity_page(context_id)
+        app.window.set_application_title(_("Activity Feed"))
 
     def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
@@ -59,6 +63,8 @@ class MainStack(Gtk.Stack):
         account_page = self._get_account_page()
         account_page.set_account(account)
         self.set_visible_child_name("account")
+        account_label = app.settings.get_account_setting(account, "account_label")
+        app.window.set_application_title(account_label)
 
     def get_chat_page(self) -> ChatPage:
         chat_page = self.get_child_by_name("chats")

@@ -221,6 +221,11 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         )
         self._current_contact = contact
 
+        if isinstance(contact, BareContact) and contact.is_self:
+            app.window.set_application_title(_("Note to myself"))
+        else:
+            app.window.set_application_title(self._current_contact.name)
+
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)

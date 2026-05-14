@@ -158,6 +158,7 @@ class ChatPage(Gtk.Paned):
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
         self._chat_stack.clear()
         self._search_view.set_context(None, None)
+        app.window.set_application_title()
 
     def _on_focus_search(
         self, _action: Gio.SimpleAction, _param: Literal[None]
