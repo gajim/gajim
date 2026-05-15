@@ -245,7 +245,9 @@ class MethodsTest(unittest.TestCase):
             count=10,
         )
 
-        message = self._archive.get_last_conversation_row("testacc1", remote_jid)
+        message = self._archive.get_last_conversation_row(
+            "testacc1", remote_jid, incl_related_data=True
+        )
         assert message is not None
 
         self.assertEqual(message.id, "messageid9")

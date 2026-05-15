@@ -162,18 +162,16 @@ class Reactions(BaseModule):
         self._log.info('Received reactions: %s', reaction)
         app.storage.archive.upsert_row2(reaction)
 
-        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
-            message = app.storage.archive.get_message_with_stanza_id(
-                self._account,
-                remote_jid,
-                properties.reactions.id
-            )
-        else:
-            message = app.storage.archive.get_message_with_id(
-                self._account,
-                remote_jid,
-                properties.reactions.id
-            )
+        id_type = ("stanza-id" if m_type in (MessageType.GROUPCHAT, MessageType.PM)
+                    else "message-id")
+
+        message = app.storage.archive.get_message_with_id(
+            self._account,
+            remote_jid,
+            id_type,
+            properties.reactions.id,
+            default_options=False,
+        )
 
         app.ged.raise_event(
             ReactionUpdated(

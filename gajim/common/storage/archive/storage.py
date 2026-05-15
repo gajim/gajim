@@ -78,6 +78,24 @@ CURRENT_USER_VERSION = 18
 log = logging.getLogger("gajim.c.storage.archive")
 
 
+load_all_relations = (
+    joinedload(Message.call),
+    joinedload(Message.encryption),
+    joinedload(Message.error),
+    joinedload(Message.moderation),
+    joinedload(Message.occupant),
+    joinedload(Message.receipt),
+    joinedload(Message.reply),
+    joinedload(Message.retraction),
+    joinedload(Message.security_label),
+    joinedload(Message.thread),
+    selectinload(Message.filetransfers),
+    selectinload(Message.og),
+    selectinload(Message.oob),
+    selectinload(Message.reactions),
+)
+
+
 class MessageArchiveStorage(AlchemyStorage):
     def __init__(self, in_memory: bool = False, path: Path | None = None) -> None:
         if path is None:
@@ -347,67 +365,80 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_message_with_pk(
-        self, session: Session, pk: int, options: Any = None
+        self,
+        session: Session,
+        pk: int,
+        options: Any = None,
+        default_options: bool = True,
     ) -> Message | None:
-        return self._get_message_with_pk(session, pk, options)
+        return self._get_message_with_pk(
+            session, pk, options, default_options=default_options
+        )
 
     def _get_message_with_pk(
-        self, session: Session, pk: int, options: Any = None
+        self,
+        session: Session,
+        pk: int,
+        options: Any = None,
+        *,
+        default_options: bool,
     ) -> Message | None:
         stmt = select(Message).where(Message.pk == pk)
+        if default_options:
+            stmt = stmt.options(
+                *load_all_relations,
+                selectinload(Message.corrections).options(*load_all_relations),
+            )
+
         if options is not None:
             stmt = stmt.options(*options)
+
         return session.scalar(stmt)
 
     @with_session
     @timeit
     def get_message_with_id(
-        self, session: Session, account: str, jid: JID, message_id: str
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        id_type: Literal["stanza-id", "message-id"],
+        id_: str,
+        *,
+        default_options: bool,
     ) -> Message | None:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
+        id_col = Message.stanza_id if id_type == "stanza-id" else Message.id
+
         stmt = select(Message).where(
-            Message.id == message_id,
+            id_col == id_,
             Message.fk_remote_pk == fk_remote_pk,
             Message.fk_account_pk == fk_account_pk,
         )
+
+        if default_options:
+            stmt = stmt.options(
+                *load_all_relations,
+                selectinload(Message.corrections).options(*load_all_relations),
+            )
 
         result = session.scalars(stmt).all()
         if len(result) == 1:
             return result[0]
 
-        self._log.warning(
-            "Found %s messages with message id %s", len(result), message_id
-        )
-        return None
-
-    @with_session
-    @timeit
-    def get_message_with_stanza_id(
-        self, session: Session, account: str, jid: JID, stanza_id: str
-    ) -> Message | None:
-        fk_account_pk = self._get_account_pk(session, account)
-        fk_remote_pk = self._get_jid_pk(session, jid)
-
-        stmt = select(Message).where(
-            Message.stanza_id == stanza_id,
-            Message.fk_remote_pk == fk_remote_pk,
-            Message.fk_account_pk == fk_account_pk,
-        )
-
-        result = session.scalars(stmt).all()
-        if len(result) == 1:
-            return result[0]
-
-        self._log.warning("Found %s messages with stanza id %s", len(result), stanza_id)
+        self._log.warning("Found %s messages with %s %s", len(result), id_type, id_)
         return None
 
     @with_session
     @timeit
     def delete_message(self, session: Session, pk: int) -> None:
         message = self._get_message_with_pk(
-            session, pk, options=[selectinload(Message.markers)]
+            session,
+            pk,
+            options=[selectinload(Message.markers)],
+            default_options=True,
         )
         if message is None:
             self._log.warning("Deletion failed, no message found with pk %s", pk)
@@ -599,6 +630,11 @@ class MessageArchiveStorage(AlchemyStorage):
                 where = stmt.where(Message.timestamp > timestamp)
             stmt = where.order_by(Message.timestamp, Message.pk)
 
+        stmt = stmt.options(
+            *load_all_relations,
+            selectinload(Message.corrections).options(*load_all_relations),
+        )
+
         stmt = stmt.limit(n_lines)
 
         result = session.scalars(stmt).all()
@@ -648,7 +684,12 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_last_conversation_row(
-        self, session: Session, account: str, jid: JID
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        *,
+        incl_related_data: bool,
     ) -> Message | None:
         """
         Load the last line of a conversation with jid for account.
@@ -672,10 +713,25 @@ class MessageArchiveStorage(AlchemyStorage):
                 sa.or_(Occupant.blocked == sa.false(), Occupant.blocked.is_(None)),
             )
             .outerjoin(Occupant)
-            .options(contains_eager(Message.occupant))
-            .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
-            .limit(1)
+            .options(
+                contains_eager(Message.occupant),
+            )
         )
+
+        if incl_related_data:
+            stmt = stmt.options(
+                selectinload(Message.corrections).options(
+                    joinedload(Message.retraction),
+                    joinedload(Message.moderation),
+                ),
+                joinedload(Message.call),
+                joinedload(Message.moderation),
+                joinedload(Message.retraction),
+                selectinload(Message.filetransfers),
+                selectinload(Message.oob),
+            )
+
+        stmt = stmt.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk)).limit(1)
 
         return session.scalar(stmt)
 
@@ -709,6 +765,17 @@ class MessageArchiveStorage(AlchemyStorage):
             .limit(1)
         )
 
+        stmt = stmt.options(
+            joinedload(Message.error),
+            joinedload(Message.moderation),
+            joinedload(Message.reply),
+            joinedload(Message.retraction),
+            joinedload(Message.security_label),
+            joinedload(Message.thread),
+            selectinload(Message.corrections),
+            selectinload(Message.og),
+        )
+
         return session.scalar(stmt)
 
     @with_session
@@ -727,18 +794,26 @@ class MessageArchiveStorage(AlchemyStorage):
         if correction.type == 2 and correction.fk_occupant_pk is None:
             stmt = stmt.where(Message.resource == correction.resource)
 
-        stmt = stmt.order_by(sa.desc(Message.timestamp)).limit(1)
+        stmt = (
+            stmt.order_by(sa.desc(Message.timestamp))
+            .limit(1)
+            .options(
+                selectinload(Message.corrections).options(
+                    joinedload(Message.retraction),
+                    joinedload(Message.moderation),
+                ),
+            )
+        )
 
         return session.scalar(stmt)
 
     def get_referenced_message(
         self, account: str, jid: JID, message_type: MessageType | int, reply_id: str
     ) -> Message | None:
-        if message_type == MessageType.GROUPCHAT:
-            return app.storage.archive.get_message_with_stanza_id(
-                account, jid, reply_id
-            )
-        return app.storage.archive.get_message_with_id(account, jid, reply_id)
+        id_type = "stanza-id" if message_type == MessageType.GROUPCHAT else "message-id"
+        return self.get_message_with_id(
+            account, jid, id_type, reply_id, default_options=True
+        )
 
     @with_session
     @timeit
@@ -908,6 +983,13 @@ class MessageArchiveStorage(AlchemyStorage):
                 ~Message.retraction.has(),
             )
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
+            .options(
+                joinedload(Message.occupant),
+                selectinload(Message.corrections).options(
+                    joinedload(Message.retraction),
+                    joinedload(Message.moderation),
+                ),
+            )
             .execution_options(yield_per=25)
         )
 
@@ -1212,17 +1294,14 @@ class MessageArchiveStorage(AlchemyStorage):
             now = datetime.now(dt.UTC)
             threshold = now - timedelta(seconds=max_age)
 
-            stmt = (
-                select(Message)
-                .where(
-                    Message.fk_account_pk == fk_account_pk,
-                    Message.timestamp < threshold,
-                )
-                .options(selectinload(Message.markers))
+            stmt = select(Message.pk).where(
+                Message.fk_account_pk == fk_account_pk,
+                Message.timestamp < threshold,
             )
 
-            for message in session.scalars(stmt).unique().all():
-                self._delete_message(session, message)
+            pks = session.scalars(stmt).all()
+            for pk in pks:
+                self.delete_message(pk)
 
             log.info("Removed messages older then %s", threshold.isoformat())
 
@@ -1244,6 +1323,14 @@ class MessageArchiveStorage(AlchemyStorage):
                 ~Message.retraction.has(),
             )
             .order_by(Message.timestamp, Message.pk)
+            .options(
+                joinedload(Message.occupant),
+                joinedload(Message.call),
+                selectinload(Message.corrections).options(
+                    joinedload(Message.retraction),
+                    joinedload(Message.moderation),
+                ),
+            )
             .execution_options(yield_per=25)
         )
 

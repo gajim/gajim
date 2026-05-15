@@ -1134,7 +1134,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             # Dont set read state before we have all messages
             return
 
-        last_message = app.storage.archive.get_last_conversation_row(account, jid)
+        last_message = app.storage.archive.get_last_conversation_row(
+            account, jid, incl_related_data=False
+        )
         if last_message is None or last_message.id is None:
             return
 
@@ -1323,7 +1325,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
         last_message = app.storage.archive.get_last_conversation_row(
-            event.account, event.jid
+            event.account, event.jid, incl_related_data=False
         )
 
         if last_message is None:

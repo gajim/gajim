@@ -737,7 +737,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     thread_id_: str | None = dataclasses.field(repr=False, default=None)
     thread: Mapped[Thread | None] = relationship(
-        lazy="joined", viewonly=True, init=False
+        lazy="raise", viewonly=True, init=False
     )
     fk_thread_pk: Mapped[int | None] = mapped_column(
         ForeignKey("thread.pk"), default=None, init=False
@@ -745,7 +745,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     occupant_: Occupant | None = dataclasses.field(repr=False, default=None)
     occupant: Mapped[Occupant | None] = relationship(
-        lazy="joined", viewonly=True, init=False
+        lazy="raise", viewonly=True, init=False
     )
     fk_occupant_pk: Mapped[int | None] = mapped_column(
         ForeignKey("occupant.pk"), default=None, init=False
@@ -753,7 +753,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     encryption_: Encryption | None = dataclasses.field(repr=False, default=None)
     encryption: Mapped[Encryption | None] = relationship(
-        lazy="joined", viewonly=True, init=False
+        lazy="raise", viewonly=True, init=False
     )
     fk_encryption_pk: Mapped[int | None] = mapped_column(
         ForeignKey("encryption.pk"), default=None, init=False
@@ -761,7 +761,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     security_label_: SecurityLabel | None = dataclasses.field(repr=False, default=None)
     security_label: Mapped[SecurityLabel | None] = relationship(
-        lazy="joined", viewonly=True, init=False
+        lazy="raise", viewonly=True, init=False
     )
     fk_security_label_pk: Mapped[int | None] = mapped_column(
         ForeignKey("securitylabel.pk"), default=None, init=False
@@ -770,7 +770,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     correction_id: Mapped[str | None] = mapped_column(default=None)
 
     corrections: Mapped[list[Message]] = relationship(
-        lazy="selectin",
+        lazy="raise",
         init=False,
         primaryjoin=sa.and_(
             foreign(id) == sa_remote(correction_id),
@@ -815,7 +815,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     receipt: Mapped[Receipt | None] = relationship(
-        lazy="joined",
+        lazy="raise",
         init=False,
         default=None,
         primaryjoin=sa.and_(
@@ -827,7 +827,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     reactions: Mapped[list[Reaction]] = relationship(
-        lazy="selectin",
+        lazy="raise",
         init=False,
         primaryjoin=sa.and_(
             Reaction.id
@@ -843,7 +843,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     retraction: Mapped[Retraction | None] = relationship(init=False)
 
     moderation: Mapped[Moderation | None] = relationship(
-        lazy="joined",
+        lazy="raise",
         default=None,
         init=False,
         primaryjoin=sa.and_(
@@ -855,7 +855,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     error: Mapped[MessageError | None] = relationship(
-        lazy="joined",
+        lazy="raise",
         default=None,
         init=False,
         primaryjoin=sa.and_(
@@ -867,31 +867,31 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     filetransfers: Mapped[list[FileTransfer]] = relationship(
-        lazy="selectin",
+        lazy="raise",
         default_factory=list,
         cascade="all, delete",
         passive_deletes=True,
     )
     call: Mapped[Call | None] = relationship(
-        lazy="joined",
+        lazy="raise",
         default=None,
         cascade="all, delete",
         passive_deletes=True,
     )
     oob: Mapped[list[OOB]] = relationship(
-        lazy="selectin",
+        lazy="raise",
         default_factory=list,
         cascade="all, delete",
         passive_deletes=True,
     )
     og: Mapped[list[OpenGraph]] = relationship(
-        lazy="selectin",
+        lazy="raise",
         default_factory=list,
         cascade="all, delete",
         passive_deletes=True,
     )
     reply: Mapped[Reply | None] = relationship(
-        lazy="joined",
+        lazy="raise",
         default=None,
         cascade="all, delete",
         passive_deletes=True,
@@ -998,7 +998,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 Message.retraction = relationship(
     Retraction,
-    lazy="joined",
+    lazy="raise",
     default=None,
     init=False,
     primaryjoin=sa.and_(

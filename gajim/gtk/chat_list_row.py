@@ -140,7 +140,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     def _display_last_conversation_row(self) -> None:
         message = app.storage.archive.get_last_conversation_row(
-            self.contact.account, self.contact.jid
+            self.contact.account, self.contact.jid, incl_related_data=True
         )
         if message is None:
             self.set_visible(True)
