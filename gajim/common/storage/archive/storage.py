@@ -447,9 +447,8 @@ class MessageArchiveStorage(AlchemyStorage):
         self._delete_message(session, message)
 
     def _delete_message(self, session: Session, message: Message) -> None:
-        if message.corrections:
-            for correction in message.corrections:
-                session.delete(correction)
+        # SecurityLabels, Encryption, Threads cannot be deleted because
+        # there exists a Many-to-One relationship to these tables
 
         if message.error is not None:
             session.delete(message.error)
@@ -468,6 +467,10 @@ class MessageArchiveStorage(AlchemyStorage):
 
         for reaction in message.reactions:
             session.delete(reaction)
+
+        if message.corrections:
+            for correction in message.corrections:
+                self.delete_message(correction.pk)
 
         session.delete(message)
 
@@ -1220,6 +1223,8 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
+        # It is intended that the Encryption table is missing
+        # as it contains no JID or Message related fields
         tables = [
             MessageError,
             Moderation,

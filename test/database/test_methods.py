@@ -13,20 +13,13 @@ import sqlalchemy.exc
 from nbxmpp.protocol import JID
 from sqlalchemy import select
 
+import gajim.common.storage.archive.models as mod
 from gajim.common import app
 from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive.models import DisplayedMarker
-from gajim.common.storage.archive.models import Encryption
-from gajim.common.storage.archive.models import MAMArchiveState
-from gajim.common.storage.archive.models import Message
-from gajim.common.storage.archive.models import MessageError
-from gajim.common.storage.archive.models import Moderation
-from gajim.common.storage.archive.models import Occupant
-from gajim.common.storage.archive.models import SecurityLabel
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.util.datetime import utc_now
 
@@ -79,7 +72,7 @@ class MethodsTest(unittest.TestCase):
             if resource_ is None:
                 resource_ = f"res{i}"
 
-            m = Message(
+            m = mod.Message(
                 account_=account,
                 remote_jid_=remote_jid_,
                 resource=resource_,
@@ -95,7 +88,7 @@ class MethodsTest(unittest.TestCase):
     def test_rollback(self) -> None:
         now = utc_now()
         uuid = get_uuid()
-        m1 = Message(
+        m1 = mod.Message(
             account_="testacc1",
             remote_jid_=JID.from_string("remote1@jid.org"),
             resource=None,
@@ -108,7 +101,7 @@ class MethodsTest(unittest.TestCase):
         )
         pk = self._archive.insert_object(m1)
 
-        m2 = Message(
+        m2 = mod.Message(
             account_="testacc1",
             remote_jid_=JID.from_string("remote1@jid.org"),
             resource=None,
@@ -118,7 +111,7 @@ class MethodsTest(unittest.TestCase):
             state=MessageState.ACKNOWLEDGED,
             id="1",
             stanza_id=uuid,
-            encryption_=Encryption(protocol="OMEMO", key="123", trust=1),
+            encryption_=mod.Encryption(protocol="OMEMO", key="123", trust=1),
         )
         m2.pk = pk
 
@@ -126,7 +119,7 @@ class MethodsTest(unittest.TestCase):
             self._archive.insert_object(m2, ignore_on_conflict=False)
 
         with self._archive.get_session() as s:
-            result = s.scalar(select(Encryption))
+            result = s.scalar(select(mod.Encryption))
             self.assertIsNone(result)
 
     def test_get_conversation_jids(self) -> None:
@@ -394,7 +387,7 @@ class MethodsTest(unittest.TestCase):
 
     def test_get_mam_archive_state(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
-        state = MAMArchiveState(
+        state = mod.MAMArchiveState(
             account_="testacc1",
             remote_jid_=remote_jid,
             from_stanza_id="stanzaid1",
@@ -411,7 +404,7 @@ class MethodsTest(unittest.TestCase):
 
     def test_reset_mam_archive_state(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
-        state = MAMArchiveState(
+        state = mod.MAMArchiveState(
             account_="testacc1",
             remote_jid_=remote_jid,
         )
@@ -423,13 +416,13 @@ class MethodsTest(unittest.TestCase):
         state = self._archive.get_mam_archive_state("testacc1", remote_jid)
         self.assertIsNone(state)
 
-    def test_remove_history(self) -> None:
+    def test_remove_history_for_jid(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
         self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
         # Moderation message should no match any message to
         # test if orphan data are removed
-        mod = Moderation(
+        m = mod.Moderation(
             account_="testacc1",
             remote_jid_=remote_jid,
             occupant_=None,
@@ -438,9 +431,9 @@ class MethodsTest(unittest.TestCase):
             reason=None,
             timestamp=utc_now(),
         )
-        self._archive.insert_object(mod)
+        self._archive.insert_object(m)
 
-        error = MessageError(
+        error = mod.MessageError(
             account_="testacc1",
             remote_jid_=remote_jid,
             message_id="messageid1",
@@ -454,7 +447,7 @@ class MethodsTest(unittest.TestCase):
 
         self._archive.insert_object(error)
 
-        seclabel = SecurityLabel(
+        seclabel = mod.SecurityLabel(
             account_="testacc1",
             remote_jid_=remote_jid,
             label_hash="hash1",
@@ -464,7 +457,49 @@ class MethodsTest(unittest.TestCase):
             updated_at=utc_now(),
         )
 
-        m = Message(
+        reaction = mod.Reaction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="123",
+            direction=ChatDirection.INCOMING,
+            emojis="😁️;😘️;😇️",
+            timestamp=utc_now(),
+        )
+
+        self._archive.upsert_row2(reaction)
+
+        marker = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(marker)
+
+        receipt = mod.Receipt(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            id="123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(receipt)
+
+        retraction_data = mod.Retraction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="123",
+            direction=ChatDirection.OUTGOING,
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_row(retraction_data)
+
+        m = mod.Message(
             account_="testacc1",
             remote_jid_=remote_jid,
             resource="test",
@@ -477,34 +512,223 @@ class MethodsTest(unittest.TestCase):
             text="testmessage",
             security_label_=seclabel,
             thread_id_="testthreadid",
+            encryption_=mod.Encryption(protocol="OMEMO", key="somekey", trust=1),
+            call=mod.Call(sid="somesid", state=1),
+            oob=[mod.OOB(url="someurl", description="desc")],
+            og=[mod.OpenGraph(about="about", title="title")],
+            reply=mod.Reply(id="132", to=None),
         )
         self._archive.insert_object(m)
 
+        jid_related_tables = [
+            mod.OOB,
+            mod.OpenGraph,
+            mod.Reply,
+            mod.Call,
+            mod.MessageError,
+            mod.Moderation,
+            mod.Retraction,
+            mod.Receipt,
+            mod.DisplayedMarker,
+            mod.Reaction,
+            mod.Message,
+            mod.SecurityLabel,
+            mod.Thread,
+        ]
+
         with self._archive.get_session() as s:
-            result = s.scalar(select(MessageError))
-            self.assertIsNotNone(result)
+            for table in jid_related_tables:
+                result = s.scalar(select(table))
+                self.assertIsNotNone(result)
 
-            result = s.scalar(select(Moderation))
-            self.assertIsNotNone(result)
-
-            result = s.scalar(select(Message))
+            result = s.scalar(select(mod.Encryption))
             self.assertIsNotNone(result)
 
         self._archive.remove_history_for_jid("testacc1", remote_jid)
 
         with self._archive.get_session() as s:
-            result = s.scalar(select(MessageError))
-            self.assertIsNone(result)
+            for table in jid_related_tables:
+                result = s.scalar(select(table))
+                self.assertIsNone(result)
 
-            result = s.scalar(select(Moderation))
-            self.assertIsNone(result)
+            result = s.scalar(select(mod.Encryption))
+            self.assertIsNotNone(result)
 
-            result = s.scalar(select(Message))
-            self.assertIsNone(result)
+    def test_delete_message(self) -> None:
+        remote_jid = JID.from_string("remote1@jid.org")
+
+        m = mod.Moderation(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            occupant_=None,
+            stanza_id="stanzaid123",
+            by=None,
+            reason=None,
+            timestamp=utc_now(),
+        )
+        self._archive.insert_object(m)
+
+        error = mod.MessageError(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            message_id="123",
+            by=None,
+            type="modify",
+            text="text",
+            condition="somecond",
+            condition_text="somecondtext",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(error)
+
+        reaction = mod.Reaction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            direction=ChatDirection.INCOMING,
+            emojis="😁️;😘️;😇️",
+            timestamp=utc_now(),
+        )
+
+        self._archive.upsert_row2(reaction)
+
+        marker = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(marker)
+
+        receipt = mod.Receipt(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            id="123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(receipt)
+
+        retraction_data = mod.Retraction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_row(retraction_data)
+
+        m = mod.Message(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            resource="test",
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id="123",
+            stanza_id="stanzaid123",
+            text="testmessage",
+            security_label_=mod.SecurityLabel(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                label_hash="hash1",
+                displaymarking="dm",
+                bgcolor="red",
+                fgcolor="blue",
+                updated_at=utc_now(),
+            ),
+            thread_id_="testthreadid",
+            encryption_=mod.Encryption(protocol="OMEMO", key="somekey", trust=1),
+            call=mod.Call(sid="somesid", state=1),
+            oob=[mod.OOB(url="someurl", description="desc")],
+            og=[mod.OpenGraph(about="about", title="title")],
+            reply=mod.Reply(id="132", to=None),
+        )
+        m_pk = self._archive.insert_object(m)
+
+        m = mod.Message(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            resource="test",
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id="124",
+            stanza_id="stanzaid124",
+            correction_id="123",
+            text="corrected message",
+            thread_id_="testthreadid",
+            call=mod.Call(sid="somesid", state=1),
+            oob=[mod.OOB(url="someurl", description="desc")],
+            og=[mod.OpenGraph(about="about", title="title")],
+            reply=mod.Reply(id="132", to=None),
+        )
+
+        self._archive.insert_object(m)
+
+        reaction = mod.Reaction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid124",
+            direction=ChatDirection.INCOMING,
+            emojis="😁️",
+            timestamp=utc_now(),
+        )
+
+        self._archive.upsert_row2(reaction)
+
+        jid_related_tables = [
+            mod.OOB,
+            mod.OpenGraph,
+            mod.Reply,
+            mod.Call,
+            mod.MessageError,
+            mod.Retraction,
+            mod.Receipt,
+            mod.DisplayedMarker,
+            mod.Reaction,
+            mod.Moderation,
+            mod.Message,
+        ]
+
+        many_to_one_tables = [
+            mod.Encryption,
+            mod.SecurityLabel,
+            mod.Thread,
+        ]
+
+        with self._archive.get_session() as s:
+            for table in jid_related_tables:
+                result = s.scalar(select(table))
+                self.assertIsNotNone(result)
+
+            for table in many_to_one_tables:
+                result = s.scalar(select(table))
+                self.assertIsNotNone(result)
+
+        self._archive.delete_message(m_pk)
+
+        with self._archive.get_session() as s:
+            for table in jid_related_tables:
+                result = s.scalar(select(table))
+                self.assertIsNone(result)
+
+            for table in many_to_one_tables:
+                result = s.scalar(select(table))
+                self.assertIsNotNone(result)
 
     def test_check_if_stanza_id_exists(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
-        m = Message(
+        m = mod.Message(
             account_="testacc1",
             remote_jid_=remote_jid,
             resource="test",
@@ -528,7 +752,7 @@ class MethodsTest(unittest.TestCase):
 
     def test_check_if_message_id_exists(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
-        m = Message(
+        m = mod.Message(
             account_="testacc1",
             remote_jid_=remote_jid,
             resource="test",
@@ -553,7 +777,7 @@ class MethodsTest(unittest.TestCase):
         pks: list[int] = []
 
         for i in range(10):
-            occupant = Occupant(
+            occupant = mod.Occupant(
                 account_="testacc1",
                 remote_jid_=remote_jid,
                 id=f"occupant{i}",
@@ -566,7 +790,7 @@ class MethodsTest(unittest.TestCase):
             if i > 4:
                 pks.append(pk)
 
-        occupant = Occupant(
+        occupant = mod.Occupant(
             account_="testacc2",
             remote_jid_=remote_jid,
             id="occupant11",
@@ -617,7 +841,7 @@ class MethodsTest(unittest.TestCase):
         remote_jid2 = JID.from_string("remote2@jid.org")
 
         for i in range(3):
-            occupant = Occupant(
+            occupant = mod.Occupant(
                 account_="testacc1",
                 remote_jid_=remote_jid1,
                 id=f"occupant{i}",
@@ -628,7 +852,7 @@ class MethodsTest(unittest.TestCase):
             )
 
             for i in range(3):
-                marker = DisplayedMarker(
+                marker = mod.DisplayedMarker(
                     account_="testacc1",
                     remote_jid_=remote_jid1,
                     occupant_=occupant,
@@ -638,7 +862,7 @@ class MethodsTest(unittest.TestCase):
                 self._archive.insert_object(marker)
 
                 # Same markers but from different account received
-                marker = DisplayedMarker(
+                marker = mod.DisplayedMarker(
                     account_="testacc2",
                     remote_jid_=remote_jid1,
                     occupant_=occupant,
@@ -648,7 +872,7 @@ class MethodsTest(unittest.TestCase):
                 self._archive.insert_object(marker)
 
             # Marker from different JID
-            marker = DisplayedMarker(
+            marker = mod.DisplayedMarker(
                 account_="testacc1",
                 remote_jid_=remote_jid2,
                 occupant_=None,
