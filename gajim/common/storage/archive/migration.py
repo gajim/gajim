@@ -141,20 +141,17 @@ class Migration:
             for stmt in statements:
                 conn.execute(sa.text(stmt))
 
-    def _execute_multiple_with_error(
-        self, statements: list[tuple[str, str] | tuple[str, None]]
-    ) -> None:
+    def _execute_multiple_with_error(self, statements: list[tuple[str, str]]) -> None:
         with self._engine.begin() as conn:
             for stmt, error_string in statements:
                 try:
                     conn.execute(sa.text(stmt))
                 except OperationalError as e:
-                    if error_string is not None:
-                        assert e.orig is not None
-                        sql_error = e.orig.args[0]
-                        if error_string in sql_error:
-                            log.warning('Ignore "%s" for %s', sql_error, e.statement)
-                            continue
+                    assert e.orig is not None
+                    sql_error = e.orig.args[0]
+                    if error_string in sql_error:
+                        log.warning('Ignore "%s" for %s', sql_error, e.statement)
+                        continue
                     raise
 
     def _pre_v7(self, user_version: int) -> None:
@@ -175,10 +172,10 @@ class Migration:
                     oldest_mam_timestamp TEXT,
                     last_muc_timestamp TEXT
                     )""",
-                "PRAGMA user_version=1",
             ]
 
             self._execute_multiple(statements)
+            self._archive.set_user_version(1)
 
         if user_version < 2:
             statements = [
@@ -186,31 +183,31 @@ class Migration:
                     "ALTER TABLE last_archive_message "
                     'ADD COLUMN "sync_threshold" INTEGER'
                 ),
-                "PRAGMA user_version=2",
             ]
             self._execute_multiple(statements)
+            self._archive.set_user_version(2)
 
         if user_version < 3:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "message_id" TEXT',
-                "PRAGMA user_version=3",
             ]
             self._execute_multiple(statements)
+            self._archive.set_user_version(3)
 
         if user_version < 4:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "error" TEXT',
-                "PRAGMA user_version=4",
             ]
             self._execute_multiple(statements)
+            self._archive.set_user_version(4)
 
         if user_version < 7:
             statements = [
                 'ALTER TABLE logs ADD COLUMN "real_jid" TEXT',
                 'ALTER TABLE logs ADD COLUMN "occupant_id" TEXT',
-                "PRAGMA user_version=7",
             ]
             self._execute_multiple(statements)
+            self._archive.set_user_version(7)
 
     def _v8(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=8))
@@ -252,20 +249,21 @@ class Migration:
             conn.execute(sa.text("DROP TABLE logs"))
             conn.execute(sa.text("DROP TABLE jids"))
             conn.execute(sa.text("DROP TABLE IF EXISTS unread_messages"))
-            conn.execute(sa.text("PRAGMA user_version=8"))
+
+        self._archive.set_user_version(8)
 
     def _v9(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=9))
         statements = [
             "CREATE INDEX IF NOT EXISTS idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);",
-            "PRAGMA user_version=9",
         ]
 
         self._execute_multiple(statements)
+        self._archive.set_user_version(9)
 
     def _v10(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=10))
-        self._execute_multiple(["PRAGMA foreign_keys=OFF"])
+        self._archive.set_foreign_keys(False)
 
         with self._engine.begin() as conn:
             stmt = sa.select(mod.Message.fk_occupant_pk).union(
@@ -301,12 +299,13 @@ class Migration:
                 sa.delete(mod.Remote).where(mod.Remote.pk.not_in(occupant_pks))
             )
 
-        self._execute_multiple(["PRAGMA foreign_keys=ON", "PRAGMA user_version=10"])
+        self._archive.set_foreign_keys(True)
+        self._archive.set_user_version(10)
 
     def _v11_and_v12(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=12))
         mod.Base.metadata.create_all(self._engine)
-        self._execute_multiple(["PRAGMA user_version=12"])
+        self._archive.set_user_version(12)
 
     def _v13(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=13))
@@ -315,9 +314,9 @@ class Migration:
                 'ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
                 "duplicate column",
             ),
-            ("PRAGMA user_version=13", None),
         ]
         self._execute_multiple_with_error(statements)
+        self._archive.set_user_version(13)
 
     def _v14(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=14))
@@ -330,9 +329,9 @@ class Migration:
                 "CREATE INDEX IF NOT EXISTS idx_displayed_marker_last_gc ON displayed_marker "
                 "(fk_remote_pk, fk_account_pk, fk_occupant_pk, timestamp DESC)"
             ),
-            "PRAGMA user_version=14",
         ]
         self._execute_multiple(statements)
+        self._archive.set_user_version(14)
 
     def _v15(self) -> None:
         # In the past some PM messages were not correctly discovered
@@ -357,12 +356,12 @@ class Migration:
                 s.execute(stmt)
             s.commit()
 
-        self._execute_multiple(["PRAGMA user_version=15"])
+        self._archive.set_user_version(15)
 
     def _v16(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=16))
         mod.Base.metadata.create_all(self._engine)
-        self._execute_multiple(["PRAGMA user_version=16"])
+        self._archive.set_user_version(16)
 
     def _v17(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=17))
@@ -379,7 +378,7 @@ class Migration:
                     'ALTER TABLE opengraph ADD COLUMN "image_bytes" BLOB',
                 ]
             )
-        self._execute_multiple(["PRAGMA user_version=17"])
+        self._archive.set_user_version(17)
 
     def _v18(self) -> None:
         app.ged.raise_event(DBMigrationStart(version=18))
@@ -399,7 +398,7 @@ class Migration:
         for index in mod.Base.metadata.tables["occupant"].indexes:
             index.create(self._engine, checkfirst=True)
 
-        self._execute_multiple(["PRAGMA user_version=18"])
+        self._archive.set_user_version(18)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

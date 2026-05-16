@@ -69,7 +69,7 @@ class EventStorage(AlchemyStorage):
 
     def _create_table(self, session: Session, engine: Engine) -> None:
         mod.Base.metadata.create_all(engine)
-        session.execute(sa.text("PRAGMA user_version=1"))
+        self.set_user_version(1)
 
     def _migrate(self) -> None:
         pass

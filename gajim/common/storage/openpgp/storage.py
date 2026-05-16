@@ -52,7 +52,7 @@ class OpenPGPStorage(AlchemyStorage):
 
     def _create_table(self, session: Session, engine: Engine) -> None:
         Base.metadata.create_all(engine)
-        session.execute(sa.text(f"PRAGMA user_version={CURRENT_USER_VERSION}"))
+        self.set_user_version(CURRENT_USER_VERSION)
 
     def _migrate(self) -> None:
         pass

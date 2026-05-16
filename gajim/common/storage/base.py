@@ -397,37 +397,44 @@ class AlchemyStorage:
     def get_engine(self) -> Engine:
         return self._engine
 
-    def _set_sqlite_pragma(
+    def _dbapi_execute_multiple(
+        self,
+        statements: list[str],
+        *,
+        dbapi_connection: DBAPIConnection | None = None,
+    ) -> None:
+        if dbapi_connection is None:
+            dbapi_connection = self._engine.raw_connection().dbapi_connection
+            assert dbapi_connection is not None
+
+        # the sqlite3 driver will not set PRAGMA if autocommit=False
+        # also VACUUM does not work with
+        dbapi_connection.autocommit = True
+
+        cursor = dbapi_connection.cursor()
+        for stmt in statements:
+            cursor.execute(stmt)
+        cursor.close()
+
+        dbapi_connection.autocommit = False
+
+    def set_user_version(self, version: int) -> None:
+        self._dbapi_execute_multiple([f"PRAGMA user_version={version}"])
+
+    def set_foreign_keys(self, enabled: bool) -> None:
+        self._dbapi_execute_multiple([f"PRAGMA foreign_keys={int(enabled)}"])
+
+    def _on_db_connect(
         self, dbapi_connection: DBAPIConnection, _connection_record: Any
     ) -> None:
-        # the sqlite3 driver will not set PRAGMA
-        # if autocommit=False; set to True temporarily
-        dbapi_connection.autocommit = True
-
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-
-        for key, value in self._pragma.items():
-            cursor.execute(f"PRAGMA {key}={value}")
-        cursor.close()
-
-        dbapi_connection.autocommit = False
+        stmts = ["PRAGMA foreign_keys=1"]
+        stmts += [f"PRAGMA {key}={value}" for key, value in self._pragma.items()]
+        self._dbapi_execute_multiple(stmts, dbapi_connection=dbapi_connection)
 
     def _run_analyze(self) -> None:
-        dbapi_connection = self._engine.raw_connection().dbapi_connection
-        assert dbapi_connection is not None
-
-        # the sqlite3 driver will not set PRAGMA
-        # if autocommit=False; set to True temporarily
-        dbapi_connection.autocommit = True
-
-        cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA analysis_limit=400")
-        cursor.execute("PRAGMA optimize")
-        cursor.execute("VACUUM")
-        cursor.close()
-
-        dbapi_connection.autocommit = False
+        self._dbapi_execute_multiple(
+            ["PRAGMA analysis_limit=400", "PRAGMA optimize", "VACUUM"]
+        )
 
     def _get_user_version(self) -> int:
         with self._create_session() as s:
@@ -443,7 +450,7 @@ class AlchemyStorage:
         engine = sa.create_engine(
             con_str, connect_args={"check_same_thread": False}, echo=False
         )
-        event.listen(engine, "connect", self._set_sqlite_pragma)
+        event.listen(engine, "connect", self._on_db_connect)
         return engine
 
     def _create_session(self) -> Session:
