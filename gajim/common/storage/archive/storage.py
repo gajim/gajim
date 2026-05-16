@@ -117,7 +117,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
     def init(self) -> None:
         super().init()
-        with self._session as s:
+        with self._create_session() as s:
             self._load_jids(s)
 
     def _log_row(self, row: Any) -> None:

@@ -379,7 +379,6 @@ class AlchemyStorage:
         self._log = log
         self._path = path
         self._engine = self._create_engine()
-        self._session = self._create_session()
         self._commit_source_id = None
         self._pragma = pragma or {}
 
@@ -393,7 +392,7 @@ class AlchemyStorage:
         self._migrate_storage()
 
     def get_session(self) -> Session:
-        return self._session
+        return self._create_session()
 
     def get_engine(self) -> Engine:
         return self._engine
@@ -431,7 +430,7 @@ class AlchemyStorage:
         dbapi_connection.autocommit = False
 
     def _get_user_version(self) -> int:
-        with self._session as s:
+        with self._create_session() as s:
             return s.scalar(sa.text("PRAGMA user_version"))
 
     def _create_engine(self) -> Engine:
@@ -455,7 +454,7 @@ class AlchemyStorage:
     def _create_storage(self) -> None:
         self._log.info("Creating %s", self._path or "in memory")
 
-        with self._session as s:
+        with self._create_session() as s:
             try:
                 self._create_table(s, self._engine)
             except Exception:
@@ -475,7 +474,6 @@ class AlchemyStorage:
         if self._path is not None:
             self._path.unlink()
         self._engine = self._create_engine()
-        self._session = self._create_session()
         self.init()
 
     def _migrate_storage(self) -> None:
@@ -497,7 +495,6 @@ class AlchemyStorage:
     def shutdown(self) -> None:
         self._run_analyze()
         self._engine.dispose()
-        del self._session
         del self._engine
 
 
