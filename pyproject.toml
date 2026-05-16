@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 name = "gajim"
 description = "A GTK XMPP Client"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 license = {text = "GPL-3.0-or-later"}
 authors = [
   {name = "Philipp Hörist", email = "philipp@hoerist.com"},
@@ -20,7 +20,7 @@ classifiers = [
   "Environment :: X11 Applications :: GTK",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Topic :: Communications :: Chat",
 ]
 dependencies = [
@@ -95,7 +95,7 @@ skip = "*__pycache__*,_build_root,build,debian_build,dist,test,*.egg-info,.git,*
 ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin,FLE"
 
 [tool.pyright]
-pythonVersion = "3.11"
+pythonVersion = "3.12"
 pythonPlatform = "All"
 typeCheckingMode = "strict"
 
@@ -156,7 +156,7 @@ exclude = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint]
 
@@ -272,6 +272,8 @@ ignore = [
   "SIM300", # Yoda conditions are discouraged use x instead
   "UP031",  # Use format specifiers instead of percent format
   "UP037",  # Remove quotes from type annotation
+  "UP046",  # Generic class uses `Generic` subclass instead of type parameters
+  "UP047",  # Generic should use type parameters
 ]
 
 exclude = [

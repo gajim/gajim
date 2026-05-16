@@ -32,7 +32,7 @@ thoughts or discuss the news with your groups.
 - [pysequoia](https://pypi.org/project/pysequoia/) (>=0.1.33)
 - [pycairo](https://pypi.org/project/pycairo/)
 - [PyGObject](https://pypi.org/project/PyGObject/) (>=3.53.0)
-- [Python](https://www.python.org/) (>=3.11)
+- [Python](https://www.python.org/) (>=3.12)
 - [qrcode](https://pypi.org/project/qrcode/) (>=7.3.1)
 - [socksio](https://pypi.org/project/socksio/)
 - [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) (>=2.0.0)
