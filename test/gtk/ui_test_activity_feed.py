@@ -196,7 +196,7 @@ class TestPluginRepository(Observable):
 
 
 class TestModule(MagicMock):
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # pyright: ignore
         super().__init__()
 
     def get_contact(self, jid: JID, groupchat: bool = False) -> MagicMock:
@@ -236,7 +236,7 @@ class TestModule(MagicMock):
 
 
 class TestClient(MagicMock):
-    def __init__(self):
+    def __init__(self) -> None:  # pyright: ignore
         super().__init__()
 
     def get_module(self) -> TestModule:
