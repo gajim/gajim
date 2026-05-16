@@ -709,13 +709,13 @@ class MessageArchiveStorage(AlchemyStorage):
 
         stmt = (
             select(Message)
+            .outerjoin(Occupant)
             .where(
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
                 Message.correction_id.is_(None),
                 sa.or_(Occupant.blocked == sa.false(), Occupant.blocked.is_(None)),
             )
-            .outerjoin(Occupant)
             .options(
                 contains_eager(Message.occupant),
             )
