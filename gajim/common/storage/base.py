@@ -401,6 +401,10 @@ class AlchemyStorage:
     def _set_sqlite_pragma(
         self, dbapi_connection: DBAPIConnection, _connection_record: Any
     ) -> None:
+        # the sqlite3 driver will not set PRAGMA
+        # if autocommit=False; set to True temporarily
+        dbapi_connection.autocommit = True
+
         cursor = dbapi_connection.cursor()
         cursor.execute("PRAGMA foreign_keys=ON")
 
@@ -408,14 +412,23 @@ class AlchemyStorage:
             cursor.execute(f"PRAGMA {key}={value}")
         cursor.close()
 
+        dbapi_connection.autocommit = False
+
     def _run_analyze(self) -> None:
-        with self._session as s:
-            connection = s.connection().connection.dbapi_connection
-            assert connection is not None
-            cursor = connection.cursor()
-            cursor.execute("PRAGMA analysis_limit=400")
-            cursor.execute("PRAGMA optimize")
-            cursor.execute("VACUUM")
+        dbapi_connection = self._engine.raw_connection().dbapi_connection
+        assert dbapi_connection is not None
+
+        # the sqlite3 driver will not set PRAGMA
+        # if autocommit=False; set to True temporarily
+        dbapi_connection.autocommit = True
+
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA analysis_limit=400")
+        cursor.execute("PRAGMA optimize")
+        cursor.execute("VACUUM")
+        cursor.close()
+
+        dbapi_connection.autocommit = False
 
     def _get_user_version(self) -> int:
         with self._session as s:
