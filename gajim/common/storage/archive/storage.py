@@ -379,19 +379,25 @@ class MessageArchiveStorage(AlchemyStorage):
         self,
         session: Session,
         pk: int,
-        options: Any = None,
+        options: list[Any] | None = None,
         *,
         default_options: bool,
     ) -> Message | None:
-        stmt = select(Message).where(Message.pk == pk)
-        if default_options:
-            stmt = stmt.options(
-                *load_all_relations,
-                selectinload(Message.corrections).options(*load_all_relations),
-            )
 
-        if options is not None:
-            stmt = stmt.options(*options)
+        if options is None:
+            options = []
+
+        if default_options:
+            options = list(load_all_relations) + options
+
+        stmt = (
+            select(Message)
+            .where(Message.pk == pk)
+            .options(
+                *options,
+                selectinload(Message.corrections).options(*options),
+            )
+        )
 
         return session.scalar(stmt)
 
