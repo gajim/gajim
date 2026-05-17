@@ -44,12 +44,9 @@ from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
-from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.control import ChatControl
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
-from gajim.gtk.preview.preview import PreviewWidget
-from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
 from gajim.gtk.util.misc import gi_gui_package_version
@@ -748,17 +745,17 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def _on_drag_leave(self, _drop_target: Gtk.DropTarget) -> None:
         self._drop_area.set_visible(False)
 
-    def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
-        # Don't allow dropping certain gtypes directly into chat
-        drag = drop.get_drag()
-        if drag is not None:
-            formats = drag.get_formats()
-            if (
-                formats.contain_gtype(PreviewWidget)
-                or formats.contain_gtype(ChatListRow)
-                or formats.contain_gtype(SideBarListBoxRow)
-            ):
-                return False
+    def _on_drop_accept(self, target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        # Accept handler needs to be here, the default accept handler returns
+        # always False, because the overlay is not visible
+        allowed_formats = target.get_formats()
+        assert allowed_formats is not None
+
+        offered_formats = drop.get_formats()
+
+        log.debug("Offered formats for drop: %s", offered_formats.get_gtypes())
+        if not allowed_formats.match(offered_formats):
+            return False
 
         # DND on X11 freezes due to a GTK bug:
         # https://dev.gajim.org/gajim/gajim/-/issues/12313
