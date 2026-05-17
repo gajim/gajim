@@ -12,6 +12,7 @@ from datetime import timedelta
 import sqlalchemy.exc
 from nbxmpp.protocol import JID
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 import gajim.common.storage.archive.models as mod
 from gajim.common import app
@@ -725,6 +726,272 @@ class MethodsTest(unittest.TestCase):
             for table in many_to_one_tables:
                 result = s.scalar(select(table))
                 self.assertIsNotNone(result)
+
+    def test_get_message_with_pk(self) -> None:
+        remote_jid = JID.from_string("remote1@jid.org")
+
+        m = mod.Moderation(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            occupant_=None,
+            stanza_id="stanzaid123",
+            by=None,
+            reason=None,
+            timestamp=utc_now(),
+        )
+        self._archive.insert_object(m)
+
+        error = mod.MessageError(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            message_id="123",
+            by=None,
+            type="modify",
+            text="text",
+            condition="somecond",
+            condition_text="somecondtext",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(error)
+
+        reaction = mod.Reaction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            direction=ChatDirection.INCOMING,
+            emojis="😁️;😘️;😇️",
+            timestamp=utc_now(),
+        )
+
+        self._archive.upsert_row2(reaction)
+
+        marker = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(marker)
+
+        receipt = mod.Receipt(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            id="123",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(receipt)
+
+        retraction_data = mod.Retraction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid123",
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_row(retraction_data)
+
+        m = mod.Message(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            resource="test",
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id="123",
+            stanza_id="stanzaid123",
+            text="testmessage",
+            security_label_=mod.SecurityLabel(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                label_hash="hash1",
+                displaymarking="dm",
+                bgcolor="red",
+                fgcolor="blue",
+                updated_at=utc_now(),
+            ),
+            thread_id_="testthreadid",
+            occupant_=mod.Occupant(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                id="someoccid",
+                real_remote_jid_=JID.from_string("real@remote.jid"),
+                nickname="peter",
+                avatar_sha="sha1",
+                updated_at=utc_now(),
+            ),
+            encryption_=mod.Encryption(protocol="OMEMO", key="somekey", trust=1),
+            call=mod.Call(sid="somesid", state=1),
+            oob=[mod.OOB(url="someurl", description="desc")],
+            og=[mod.OpenGraph(about="about", title="title")],
+            reply=mod.Reply(id="132", to=None),
+        )
+        m_pk = self._archive.insert_object(m)
+
+        # Correction
+
+        m = mod.Message(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            resource="test",
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id="124",
+            stanza_id="stanzaid124",
+            correction_id="123",
+            text="corrected message",
+            security_label_=mod.SecurityLabel(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                label_hash="hash2",
+                displaymarking="dm",
+                bgcolor="red",
+                fgcolor="blue",
+                updated_at=utc_now(),
+            ),
+            thread_id_="testthreadid",
+            occupant_=mod.Occupant(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                id="someoccid",
+                real_remote_jid_=JID.from_string("real@remote.jid"),
+                nickname="peter",
+                avatar_sha="sha1",
+                updated_at=utc_now(),
+            ),
+            encryption_=mod.Encryption(protocol="OMEMO", key="some_cor_key", trust=1),
+            call=mod.Call(sid="some_cor_sid", state=1),
+            oob=[mod.OOB(url="some_cor_url", description="desc")],
+            og=[mod.OpenGraph(about="about_cor", title="title")],
+            reply=mod.Reply(id="133", to=None),
+        )
+
+        self._archive.insert_object(m)
+
+        m = mod.Moderation(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            occupant_=None,
+            stanza_id="stanzaid124",
+            by=None,
+            reason=None,
+            timestamp=utc_now(),
+        )
+        self._archive.insert_object(m)
+
+        error = mod.MessageError(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            message_id="124",
+            by=None,
+            type="modify",
+            text="cor_text",
+            condition="somecond",
+            condition_text="somecondtext",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(error)
+
+        reaction = mod.Reaction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid124",
+            direction=ChatDirection.INCOMING,
+            emojis="😁️",
+            timestamp=utc_now(),
+        )
+
+        self._archive.upsert_row2(reaction)
+
+        marker = mod.DisplayedMarker(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid124",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(marker)
+
+        receipt = mod.Receipt(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            id="124",
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_object(receipt)
+
+        retraction_data = mod.Retraction(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            occupant_=None,
+            id="stanzaid124",
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+        )
+
+        self._archive.insert_row(retraction_data)
+
+        message = self._archive.get_message_with_pk(
+            m_pk, options=[selectinload(mod.Message.markers)]
+        )
+        assert message is not None
+        self.assertIsNotNone(message.account)
+        self.assertIsNotNone(message.remote)
+        self.assertIsNotNone(message.thread)
+        self.assertIsNotNone(message.occupant)
+        self.assertIsNotNone(message.encryption)
+        self.assertIsNotNone(message.security_label)
+        self.assertIsNotNone(message.receipt)
+        self.assertIsNotNone(message.retraction)
+        self.assertIsNotNone(message.moderation)
+        self.assertIsNotNone(message.error)
+        self.assertIsNotNone(message.call)
+        self.assertIsNotNone(message.reply)
+        self.assertEqual(len(message.oob), 1)
+        self.assertEqual(len(message.reactions), 1)
+        # self.assertEqual(len(message.filetransfers), 1)
+        self.assertEqual(len(message.og), 1)
+        self.assertEqual(len(message.markers), 1)
+        self.assertEqual(len(message.corrections), 1)
+
+        # Now check if the correction also has all the relationships loaded
+        message = message.corrections[0]
+
+        self.assertIsNotNone(message.account)
+        self.assertIsNotNone(message.remote)
+        self.assertIsNotNone(message.thread)
+        self.assertIsNotNone(message.occupant)
+        self.assertIsNotNone(message.encryption)
+        assert message.encryption is not None
+        self.assertEqual(message.encryption.key, "some_cor_key")
+        self.assertIsNotNone(message.security_label)
+        assert message.security_label is not None
+        self.assertEqual(message.security_label.label_hash, "hash2")
+        self.assertIsNotNone(message.receipt)
+        self.assertIsNotNone(message.retraction)
+        self.assertIsNotNone(message.moderation)
+        self.assertIsNotNone(message.error)
+        self.assertIsNotNone(message.call)
+        self.assertIsNotNone(message.reply)
+        self.assertEqual(len(message.oob), 1)
+        self.assertEqual(len(message.reactions), 1)
+        self.assertEqual(message.reactions[0].emojis, "😁️")
+        # self.assertEqual(len(message.filetransfers), 1)
+        self.assertEqual(len(message.og), 1)
+        self.assertEqual(len(message.markers), 1)
 
     def test_check_if_stanza_id_exists(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
