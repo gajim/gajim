@@ -54,6 +54,7 @@ from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.timezone_hint import TimezoneHint
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
+from gajim.gtk.util.misc import is_message_correctable
 from gajim.gtk.util.window import open_window
 from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
 
@@ -441,13 +442,17 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         assert self._contact is not None
-        message = app.storage.archive.get_last_correctable_message(
-            self._contact.account, self._contact.jid, last_message_id
+        message = app.storage.archive.get_message_with_id(
+            self._contact.account,
+            self._contact.jid,
+            "message-id",
+            last_message_id,
+            default_options=True,
         )
-        if message is None or message.text is None:
+        if message is None:
             return
 
-        if message.moderation or message.retraction:
+        if not is_message_correctable(message):
             return
 
         self._set_correcting(last_message_id)

@@ -39,6 +39,7 @@ from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import LINUX_EXECUTABLE_EXTENSIONS
 from gajim.common.const import MACOS_EXECUTABLE_EXTENSIONS
+from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.const import WINDOWS_EXECUTABLE_EXTENSIONS
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -46,8 +47,10 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.styling import PlainBlock
+from gajim.common.util.datetime import utc_now
 from gajim.common.util.decorators import catch_exceptions
 from gajim.common.util.uri import geo_provider_from_location
 from gajim.common.util.uri import GeoUri
@@ -207,6 +210,23 @@ def get_avatar_for_message(
 
         case _:
             raise ValueError(f"Unhandled type: {db_row.type}")
+
+
+def is_message_correctable(message: mod.Message) -> bool:
+    if any([message.retraction, message.moderation, message.error]):
+        return False
+
+    if (
+        message.direction == ChatDirection.INCOMING
+        or message.state == MessageState.PENDING
+    ):
+        return False
+
+    if not message.text:
+        return False
+
+    min_time = utc_now() - datetime.timedelta(seconds=MAX_MESSAGE_CORRECTION_DELAY)
+    return message.timestamp > min_time
 
 
 def make_pango_attributes(block: PlainBlock) -> Pango.AttrList:

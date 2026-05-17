@@ -47,6 +47,7 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.util.misc import is_message_correctable
 
 MenuValueT = None | str | GLib.Variant | VariantMixin
 MenuItemListT = list[tuple[str, str, MenuValueT]]
@@ -695,16 +696,11 @@ def get_chat_row_menu(
 
     menu_items.append((p_("Message row action", "Copy"), "win.copy-message", copy_text))
 
-    show_correction = False
     if original_message.id is not None:
-        show_correction = app.window.is_message_correctable(
-            contact, original_message.id
-        )
-
-    if show_correction and not is_retracted:
-        menu_items.append(
-            (p_("Message row action", "Edit…"), "win.correct-message", None)
-        )
+        if is_message_correctable(original_message):
+            menu_items.append(
+                (p_("Message row action", "Edit…"), "win.correct-message", None)
+            )
 
     param = None
     if not is_retracted:

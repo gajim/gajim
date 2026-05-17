@@ -246,10 +246,6 @@ class MethodsTest(unittest.TestCase):
 
         self.assertEqual(message.id, "messageid9")
 
-    def test_get_last_correctable_message(self) -> None:
-        # TODO
-        pass
-
     def test_search_archive(self) -> None:
         # TODO
         return

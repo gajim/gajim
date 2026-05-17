@@ -41,7 +41,6 @@ from sqlalchemy.orm import Session
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.events import DBMigration
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
@@ -741,49 +740,6 @@ class MessageArchiveStorage(AlchemyStorage):
             )
 
         stmt = stmt.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk)).limit(1)
-
-        return session.scalar(stmt)
-
-    @with_session
-    @timeit
-    def get_last_correctable_message(
-        self, session: Session, account: str, jid: JID, message_id: str
-    ) -> Message | None:
-        """
-        Load the last correctable message of a conversation by message_id.
-        """
-
-        fk_account_pk = self._get_account_pk(session, account)
-        fk_remote_pk = self._get_jid_pk(session, jid)
-
-        min_time = datetime.now(dt.UTC) - timedelta(
-            seconds=MAX_MESSAGE_CORRECTION_DELAY
-        )
-
-        stmt = (
-            select(Message)
-            .where(
-                Message.id == message_id,
-                Message.fk_remote_pk == fk_remote_pk,
-                Message.fk_account_pk == fk_account_pk,
-                Message.direction == ChatDirection.OUTGOING,
-                Message.timestamp > min_time,
-                Message.state == MessageState.ACKNOWLEDGED,
-            )
-            .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
-            .limit(1)
-        )
-
-        stmt = stmt.options(
-            joinedload(Message.error),
-            joinedload(Message.moderation),
-            joinedload(Message.reply),
-            joinedload(Message.retraction),
-            joinedload(Message.security_label),
-            joinedload(Message.thread),
-            selectinload(Message.corrections),
-            selectinload(Message.og),
-        )
 
         return session.scalar(stmt)
 
