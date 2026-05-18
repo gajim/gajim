@@ -135,7 +135,7 @@ class MessageArchiveStorage(AlchemyStorage):
         shutil.copy(db_path, db_backup_path)
 
     def _migrate(self) -> None:
-        user_version = self._get_user_version()
+        user_version = self.get_user_version()
         if user_version < CURRENT_USER_VERSION:
             app.ged.raise_event(DBMigration())
             self._make_backup()

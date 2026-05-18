@@ -436,7 +436,7 @@ class AlchemyStorage:
             ["PRAGMA analysis_limit=400", "PRAGMA optimize", "VACUUM"]
         )
 
-    def _get_user_version(self) -> int:
+    def get_user_version(self) -> int:
         with self._create_session() as s:
             return s.scalar(sa.text("PRAGMA user_version"))
 
