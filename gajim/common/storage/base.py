@@ -48,19 +48,13 @@ from sqlalchemy.sql.compiler import SQLCompiler
 from sqlalchemy.sql.expression import ClauseElement
 from sqlalchemy.sql.expression import Executable
 
+from gajim.common.const import ValueMissingT
 from gajim.common.util.version import python_version
 
 log = logging.getLogger("gajim.c.storage")
 
 P = ParamSpec("P")
 R = TypeVar("R")
-
-
-class ValueMissingT:
-    pass
-
-
-VALUE_MISSING = ValueMissingT()
 
 
 def timeit(func: Callable[P, R]) -> Callable[P, R]:

@@ -21,10 +21,10 @@ import gajim.common.storage.openpgp.models as mod
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import Trust
+from gajim.common.const import VALUE_MISSING
+from gajim.common.const import ValueMissingT
 from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
-from gajim.common.storage.base import VALUE_MISSING
-from gajim.common.storage.base import ValueMissingT
 from gajim.common.storage.base import with_session
 from gajim.common.storage.openpgp.models import Account
 from gajim.common.storage.openpgp.models import Base

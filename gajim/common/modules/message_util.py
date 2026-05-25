@@ -22,13 +22,13 @@ from gajim.common import app
 from gajim.common.const import EME_MESSAGES
 from gajim.common.const import EME_PROTOCOLS
 from gajim.common.const import IMAGE_MIME_TYPES
+from gajim.common.const import VALUE_MISSING
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 from gajim.common.structs import ReplyData
 from gajim.common.util.uri import DataUri

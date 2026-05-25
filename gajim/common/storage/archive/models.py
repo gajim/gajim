@@ -29,13 +29,13 @@ from sqlalchemy.sql import expression as expr
 from sqlalchemy.types import TypeEngine
 
 from gajim.common import app
+from gajim.common.const import VALUE_MISSING
+from gajim.common.const import ValueMissingT
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
 from gajim.common.storage.base import StrValueMissingType
-from gajim.common.storage.base import VALUE_MISSING
-from gajim.common.storage.base import ValueMissingT
 
 
 class Base(DeclarativeBase):

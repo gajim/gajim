@@ -16,6 +16,8 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.const import VALUE_MISSING
+from gajim.common.const import ValueMissingT
 from gajim.common.helpers import determine_proxy
 from gajim.common.multiprocess.http import CancelledError
 from gajim.common.multiprocess.url_preview import generate_url_preview
@@ -30,13 +32,6 @@ from gajim.gtk.util.misc import container_remove_all
 log = logging.getLogger("gajim.gtk.message_url_previews")
 
 MAX_URL_PREVIEWS = 3
-
-
-class _MISSING:
-    pass
-
-
-MISSING = _MISSING()
 
 
 class MessageURLPreviews(Gtk.Box):
@@ -184,8 +179,8 @@ class MessageURLPreviews(Gtk.Box):
             if self._requests_in_progress.get(url):
                 continue
 
-            og_data = self._request_cache.get(url, MISSING)
-            if isinstance(og_data, _MISSING):
+            og_data = self._request_cache.get(url, VALUE_MISSING)
+            if isinstance(og_data, ValueMissingT):
                 self._request_url_preview(url)
                 continue
 

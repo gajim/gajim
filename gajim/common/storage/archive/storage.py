@@ -40,6 +40,7 @@ from sqlalchemy.orm import Session
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.const import VALUE_MISSING
 from gajim.common.events import DBMigration
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
@@ -63,7 +64,6 @@ from gajim.common.storage.archive.models import SecurityLabel
 from gajim.common.storage.archive.models import Thread
 from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
 from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
