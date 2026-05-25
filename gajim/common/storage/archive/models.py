@@ -119,7 +119,6 @@ class Thread(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = "occupant"
-    __index_cols__ = ["id", "fk_remote_pk", "fk_account_pk"]
     __upsert_cols__ = ["fk_real_remote_pk", "nickname", "avatar_sha", "updated_at"]
     __no_table_cols__ = [
         "account_",
@@ -128,7 +127,15 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         "real_remote_jid_",
         "real_remote",
     ]
-    __table_args__ = (Index("idx_occupant", *__index_cols__, unique=True),)
+    __table_args__ = (
+        Index("idx_occupant", "id", "fk_remote_pk", "fk_account_pk", unique=True),
+        Index(
+            "idx_occupant_real_remote",
+            "fk_real_remote_pk",
+            "fk_remote_pk",
+            "fk_account_pk",
+        ),
+    )
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
@@ -201,6 +208,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = "oob"
+    __table_args__ = (Index("idx_oob_message_pk", "fk_message_pk"),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     fk_message_pk: Mapped[int] = mapped_column(
@@ -212,6 +220,7 @@ class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 class OpenGraph(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = "opengraph"
+    __table_args__ = (Index("idx_opengraph_message_pk", "fk_message_pk"),)
 
     pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     fk_message_pk: Mapped[int] = mapped_column(
@@ -609,6 +618,12 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     __table_args__ = (
         Index(
+            "idx_reaction",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
+        ),
+        Index(
             "idx_reaction_id",
             "id",
             "fk_remote_pk",
@@ -658,6 +673,13 @@ class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     state: Mapped[int] = mapped_column(default=0)
 
     __table_args__ = (
+        Index(
+            "idx_retraction",
+            "id",
+            "fk_remote_pk",
+            "fk_account_pk",
+            "direction",
+        ),
         Index(
             "idx_retraction_id",
             "id",
@@ -793,8 +815,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     receipt: Mapped[Receipt | None] = relationship(
-        lazy="selectin",
+        lazy="joined",
         init=False,
+        default=None,
         primaryjoin=sa.and_(
             foreign(id) == Receipt.id,
             fk_remote_pk == Receipt.fk_remote_pk,
@@ -807,39 +830,17 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         lazy="selectin",
         init=False,
         primaryjoin=sa.and_(
-            expr.case(
-                (
-                    type == 2,  # Groupchat
-                    foreign(stanza_id) == Reaction.id,
-                ),
-                else_=foreign(id) == Reaction.id,
-            ),
-            fk_remote_pk == Reaction.fk_remote_pk,
-            fk_account_pk == Reaction.fk_account_pk,
+            Reaction.id
+            == expr.case((type == 2, foreign(stanza_id)), else_=foreign(id)),
+            Reaction.fk_remote_pk == fk_remote_pk,
+            Reaction.fk_account_pk == fk_account_pk,
         ),
         viewonly=True,
         uselist=True,
     )
 
-    retraction: Mapped[Retraction | None] = relationship(
-        lazy="joined",
-        default=None,
-        init=False,
-        primaryjoin=sa.and_(
-            expr.case(
-                (
-                    type == 2,  # Groupchat
-                    foreign(stanza_id) == Retraction.id,
-                ),
-                else_=foreign(id) == Retraction.id,
-            ),
-            fk_remote_pk == Retraction.fk_remote_pk,
-            fk_account_pk == Retraction.fk_account_pk,
-            fk_occupant_pk.is_(Retraction.fk_occupant_pk),
-            direction == Retraction.direction,
-        ),
-        viewonly=True,
-    )
+    # Real relationship defined later because join expression needs to be evaluated later
+    retraction: Mapped[Retraction | None] = relationship(init=False)
 
     moderation: Mapped[Moderation | None] = relationship(
         lazy="joined",
@@ -993,3 +994,23 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         for message in itertools.chain([self], self.corrections):
             if message.stanza_id is not None:
                 yield message.stanza_id
+
+
+Message.retraction = relationship(
+    Retraction,
+    lazy="joined",
+    default=None,
+    init=False,
+    primaryjoin=sa.and_(
+        Retraction.id
+        == expr.case(
+            (foreign(Message.type) == 2, foreign(Message.stanza_id)),
+            else_=foreign(Message.id),
+        ),
+        Retraction.fk_remote_pk == foreign(Message.fk_remote_pk),
+        Retraction.fk_account_pk == foreign(Message.fk_account_pk),
+        Retraction.direction == foreign(Message.direction),
+        Retraction.fk_occupant_pk.is_(Retraction.fk_occupant_pk),
+    ),
+    viewonly=True,
+)

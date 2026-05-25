@@ -131,6 +131,8 @@ class Migration:
             self._v16()
         if user_version < 17:
             self._v17()
+        if user_version < 18:
+            self._v18()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -378,6 +380,26 @@ class Migration:
                 ]
             )
         self._execute_multiple(["PRAGMA user_version=17"])
+
+    def _v18(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=18))
+
+        for index in mod.Base.metadata.tables["oob"].indexes:
+            index.create(self._engine, checkfirst=True)
+
+        for index in mod.Base.metadata.tables["opengraph"].indexes:
+            index.create(self._engine, checkfirst=True)
+
+        for index in mod.Base.metadata.tables["reaction"].indexes:
+            index.create(self._engine, checkfirst=True)
+
+        for index in mod.Base.metadata.tables["retraction"].indexes:
+            index.create(self._engine, checkfirst=True)
+
+        for index in mod.Base.metadata.tables["occupant"].indexes:
+            index.create(self._engine, checkfirst=True)
+
+        self._execute_multiple(["PRAGMA user_version=18"])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
