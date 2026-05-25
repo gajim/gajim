@@ -234,7 +234,7 @@ class CoreApplication(ged.EventHelper):
                 return
 
         app.ged.register_event_handler('account-disconnected',
-                                       ged.CORE,
+                                       ged.POSTGUI,
                                        _on_disconnect)
 
         for client in accounts_to_disconnect.values():

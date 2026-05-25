@@ -377,6 +377,8 @@ class Client(Observable, ClientModules):
             self._after_disconnect()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
+        app.ged.raise_event(AccountDisconnected(account=self._account))
+
     def _after_disconnect(self) -> None:
         self._disable_reconnect_timer()
 
@@ -384,8 +386,6 @@ class Client(Observable, ClientModules):
 
         if self._destroy_client:
             self._create_client()
-
-        app.ged.raise_event(AccountDisconnected(account=self._account))
 
     def _on_connection_failed(self,
                               _client: NBXMPPClient,
