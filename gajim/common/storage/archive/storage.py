@@ -12,7 +12,6 @@ import calendar
 import datetime as dt
 import itertools
 import logging
-import operator
 import pprint
 import shutil
 from collections.abc import Iterable
@@ -1356,39 +1355,55 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def get_occupant_by_jid(
+    def get_occupant_by_jids(
         self,
         session: Session,
         account: str,
         room_jid: JID,
-        occupant_jid: JID,
+        occupant_jids: Iterable[JID],
         *,
         max_age: timedelta = timedelta(),
-    ) -> Occupant | None:
-        cache_key = (account, room_jid, occupant_jid)
+    ) -> dict[JID, Occupant]:
 
-        if cache_result := self._occupant_cache.get(cache_key):
-            occupant, cache_dt = cache_result
-            if utc_now() - cache_dt < max_age:
-                log.debug("Return result from cache")
-                return occupant
+        now = utc_now()
+
+        occupant_d: dict[JID, Occupant] = {}
+        load: list[JID] = []
+
+        for occupant_jid in occupant_jids:
+            cache_key = (account, room_jid, occupant_jid)
+            if cache_result := self._occupant_cache.get(cache_key):
+                occupant, cache_dt = cache_result
+                if now - cache_dt < max_age:
+                    occupant_d[occupant_jid] = occupant
+                    continue
+
+            load.append(occupant_jid)
+
+        log.debug("%s occupants in cache found", len(occupant_d))
+        if not load:
+            return occupant_d
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, room_jid)
-        fk_real_remote_pk = self._get_jid_pk(session, occupant_jid)
+        fk_real_remote_pks = [self._get_jid_pk(session, jid) for jid in load]
 
-        stmt = select(Occupant).where(
-            Occupant.fk_remote_pk == fk_remote_pk,
-            Occupant.fk_account_pk == fk_account_pk,
-            Occupant.fk_real_remote_pk == fk_real_remote_pk,
+        stmt = (
+            select(Occupant)
+            .where(
+                Occupant.fk_remote_pk == fk_remote_pk,
+                Occupant.fk_account_pk == fk_account_pk,
+                Occupant.fk_real_remote_pk.in_(fk_real_remote_pks),
+            )
+            .order_by(sa.asc(Occupant.updated_at))
         )
 
-        res = session.scalars(stmt).all()
-        if not res:
-            log.debug("Unable to find occupant for jid %s", occupant_jid)
-            return None
+        occupants = list(session.scalars(stmt).all())
+        for occupant in occupants:
+            assert occupant.real_remote is not None
+            real_remote_jid = occupant.real_remote.jid
+            cache_key = (account, room_jid, real_remote_jid)
+            self._occupant_cache[cache_key] = (occupant, now)
+            occupant_d[real_remote_jid] = occupant
 
-        # Return latest occupant in case of multiple rows
-        occupant = sorted(res, key=operator.attrgetter("updated_at"))[-1]
-        self._occupant_cache[cache_key] = (occupant, utc_now())
-        return occupant
+        return occupant_d

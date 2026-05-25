@@ -28,11 +28,14 @@ from nbxmpp.structs import LocationData
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import TuneData
 
+import gajim.common.storage.archive.models as mod
 from gajim.common import app
 from gajim.common import modules
 from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
+from gajim.common.const import VALUE_MISSING
+from gajim.common.const import ValueMissingT
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
@@ -893,21 +896,27 @@ class GroupchatContact(CommonContact):
         self,
         affiliation: str | None = None
     ) -> Iterator[GroupchatOfflineParticipant]:
+
         participant_real_jids = {
             c.real_jid for c in self.get_participants()
             if c.real_jid is not None
         }
-        affiliations = self.get_module('MUC').get_affiliations(self._jid)
 
+        affiliations = self.get_module('MUC').get_affiliations(self._jid)
         for name, jids in affiliations.items():
+            if not jids:
+                continue
+
             if affiliation is not None and name != affiliation:
                 continue
 
-            for jid in jids:
-                if jid in participant_real_jids:
-                    continue
+            offline_jids = set(jids) - participant_real_jids
+            occupants = app.storage.archive.get_occupant_by_jids(
+                self._account, self._jid, offline_jids, max_age=timedelta(minutes=60))
+
+            for jid in offline_jids:
                 yield GroupchatOfflineParticipant(
-                    self._account, jid, self, name)
+                    self._account, jid, self, name, occupants.get(jid))
 
     @property
     def nickname(self) -> str | None:
@@ -1148,15 +1157,25 @@ class GroupchatOfflineParticipant(CommonContact):
         account: str,
         jid: JID,
         room: GroupchatContact,
-        affiliation: str
+        affiliation: str,
+        occupant: mod.Occupant | None | ValueMissingT = VALUE_MISSING
     ) -> None:
         CommonContact.__init__(self, None, jid, account)
 
         self._affiliation = Affiliation[affiliation.upper()]
         self._room = room
         self._client = app.get_client(self._account)
-        self._occupant = app.storage.archive.get_occupant_by_jid(
-            account, self._room.jid, jid, max_age=timedelta(minutes=60))
+
+        if occupant is VALUE_MISSING:
+            occupants = app.storage.archive.get_occupant_by_jids(
+                account,
+                room.jid,
+                [jid],
+                max_age=timedelta(minutes=60)
+            )
+            self._occupant = occupants.get(jid)
+        else:
+            self._occupant = occupant
 
     @classmethod
     def from_participant(
@@ -1164,11 +1183,12 @@ class GroupchatOfflineParticipant(CommonContact):
         contact: GroupchatParticipant
     ) -> GroupchatOfflineParticipant:
         assert contact.real_jid is not None
+
         return cls(
             contact.account,
             contact.real_jid,
             contact.room,
-            contact.affiliation.value
+            contact.affiliation.value,
         )
 
     @property

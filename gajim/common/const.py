@@ -30,6 +30,13 @@ PROPAGATE_EVENT = False
 MAX_MESSAGE_CORRECTION_DELAY = 3600
 
 
+class ValueMissingT:
+    pass
+
+
+VALUE_MISSING = ValueMissingT()
+
+
 class EncryptionInfoMsg(Enum):
     BAD_MUC_CONFIG = _(
         'This chat’s configuration is unsuitable for '

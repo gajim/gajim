@@ -8,6 +8,7 @@ import datetime as dt
 import unittest
 from datetime import datetime
 from datetime import timedelta
+from datetime import UTC
 
 import sqlalchemy.exc
 from nbxmpp.protocol import JID
@@ -1161,6 +1162,69 @@ class MethodsTest(unittest.TestCase):
 
         self.assertEqual(res2.occupant.id, "occupant2")
         self.assertEqual(res2.id, "message2")
+
+    def test_get_occupant_by_jids(self) -> None:
+        remote_jid1 = JID.from_string("remote1@jid.org")
+
+        real_remote_jid1 = JID.from_string("real1@remote.jid")
+        real_remote_jid3 = JID.from_string("real3@remote.jid")
+
+        occupant1 = mod.Occupant(
+            account_=self._account,
+            remote_jid_=remote_jid1,
+            id="1",
+            real_remote_jid_=real_remote_jid1,
+            nickname="peter1",
+            avatar_sha="sha1",
+            updated_at=datetime.fromtimestamp(101, UTC),
+        )
+
+        occupant2 = mod.Occupant(
+            account_=self._account,
+            remote_jid_=remote_jid1,
+            id="2",
+            real_remote_jid_=real_remote_jid1,
+            nickname="peter2",
+            avatar_sha="sha1",
+            updated_at=datetime.fromtimestamp(100, UTC),
+        )
+
+        occupant3 = mod.Occupant(
+            account_=self._account,
+            remote_jid_=remote_jid1,
+            id="3",
+            real_remote_jid_=real_remote_jid3,
+            nickname="susi",
+            avatar_sha="sha1",
+            updated_at=datetime.fromtimestamp(102, UTC),
+        )
+
+        self._archive.upsert_row(occupant1)
+        self._archive.upsert_row(occupant2)
+        self._archive.upsert_row(occupant3)
+
+        occupants = self._archive.get_occupant_by_jids(
+            self._account,
+            remote_jid1,
+            [real_remote_jid1, real_remote_jid3],
+            max_age=timedelta(minutes=60),
+        )
+        self.assertEqual(len(occupants), 2)
+
+        occupant1 = occupants[real_remote_jid1]
+        occupant3 = occupants[real_remote_jid3]
+
+        assert occupant1.real_remote is not None
+        assert occupant3.real_remote is not None
+
+        self.assertEqual(occupant1.id, "1")
+        self.assertEqual(occupant1.real_remote.jid, real_remote_jid1)
+        self.assertEqual(occupant1.nickname, "peter1")
+        self.assertEqual(occupant1.updated_at, datetime.fromtimestamp(101, UTC))
+
+        self.assertEqual(occupant3.id, "3")
+        self.assertEqual(occupant3.real_remote.jid, real_remote_jid3)
+        self.assertEqual(occupant3.nickname, "susi")
 
 
 if __name__ == "__main__":
