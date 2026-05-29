@@ -162,38 +162,58 @@ class Bookmarks(BaseModule):
             return 'PEPBookmarks'
         return 'PrivateBookmarks'
 
-    def _act_on_changed_bookmarks(self,
-                                  current_bookmarks: types.BookmarksDict
-                                  ) -> None:
-        new_bookmarks = self._convert_to_set(self._bookmarks)
-        old_bookmarks = self._convert_to_set(current_bookmarks)
-        changed = new_bookmarks - old_bookmarks
-        if not changed:
-            return
+    def _act_on_changed_bookmarks(
+        self,
+        current_bookmarks: types.BookmarksDict
+    ) -> None:
 
-        join = [jid for jid, autojoin in changed if autojoin]
-        bookmarks: list[BookmarkData] = []
-        for jid in join:
-            self._log.info('Schedule autojoin in 10s for: %s', jid)
-            bookmarks.append(cast(BookmarkData, self._bookmarks.get(jid)))
+        changed_autojoin, changed_name = self._get_changed_attrs(
+            current_bookmarks, self._bookmarks)
+
+        if changed_name:
+            app.storage.archive.bulk_update_custom_names(
+                self._account, changed_name)
+
+        join_bookmarks = [
+            self._bookmarks[jid] for jid, autojoin in changed_autojoin if autojoin
+        ]
+        self._log.info(
+            'Schedule autojoin in 10s for: %s\n',
+            '\n'.join(str(join_bookmarks))
+        )
+
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
         # the configuration.
         if app.settings.get_account_setting(self._account, 'autojoin_sync'):
             timeout_id = GLib.timeout_add_seconds(
-                10, self._join_with_timeout, bookmarks)
+                10, self._join_with_timeout, join_bookmarks)
             self._join_timeouts.append(timeout_id)
 
         # TODO: leave mucs
         # leave = [jid for jid, autojoin in changed if not autojoin]
 
     @staticmethod
-    def _convert_to_set(bookmarks: types.BookmarksDict
-                        ) -> set[tuple[JID, bool]]:
-        set_: set[tuple[JID, bool]] = set()
-        for jid, bookmark in bookmarks.items():
-            set_.add((jid, bookmark.autojoin))
-        return set_
+    def _get_changed_attrs(
+        old_bookmarks: types.BookmarksDict,
+        new_bookmarks: types.BookmarksDict,
+    ) -> tuple[set[tuple[JID, bool]], set[tuple[JID, str | None]]]:
+
+        new_autojoin: set[tuple[JID, bool]] = set()
+        new_name: set[tuple[JID, str | None]] = set()
+        for b in new_bookmarks.values():
+            new_autojoin.add((b.jid, b.autojoin))
+            new_name.add((b.jid, b.name))
+
+        old_autojoin: set[tuple[JID, bool]] = set()
+        old_name: set[tuple[JID, str | None]] = set()
+        for b in old_bookmarks.values():
+            old_autojoin.add((b.jid, b.autojoin))
+            old_name.add((b.jid, b.name))
+
+        changed_autojoin = new_autojoin - old_autojoin
+        changed_name = new_name - old_name
+        return changed_autojoin, changed_name
 
     @staticmethod
     def _convert_to_dict(bookmarks: list[BookmarkData] | None
@@ -273,6 +293,10 @@ class Bookmarks(BaseModule):
         if bookmark is None:
             return
 
+        if 'name' in kwargs:
+            app.storage.archive.set_contact_value(
+                self._account, jid, 'custom_name', kwargs['name'])
+
         new_bookmark = bookmark._replace(**kwargs)
         if new_bookmark == bookmark:
             # No change happened
@@ -293,6 +317,9 @@ class Bookmarks(BaseModule):
         new_bookmark = BookmarkData(jid=jid, **kwargs)
         self._bookmarks[jid] = new_bookmark
         self._log.info('Add new bookmark: %s', new_bookmark)
+
+        app.storage.archive.set_contact_value(
+            self._account, jid, 'custom_name', new_bookmark.name)
 
         self.store_bookmarks([new_bookmark])
 
