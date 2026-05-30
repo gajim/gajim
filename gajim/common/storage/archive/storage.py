@@ -1487,48 +1487,50 @@ class MessageArchiveStorage(AlchemyStorage):
         self._contact_cache[cache_key] = contact
 
     @overload
-    @with_session
     @timeit
     def get_contact_value(
         self,
-        session: Session,
         account: str,
         jid: JID,
         attr: Literal["draft"],
     ) -> Draft | None: ...
 
     @overload
-    @with_session
     @timeit
     def get_contact_value(
         self,
-        session: Session,
         account: str,
         jid: JID,
         attr: Literal["custom_name", "remote_name", "fallback_name", "avatar_sha"],
     ) -> str | None: ...
 
-    @with_session
     @timeit
     def get_contact_value(
+        self,
+        account: str,
+        jid: JID,
+        attr: str,
+    ) -> str | Draft | None:
+
+        contact = self.get_contact(account, jid)
+        if contact is None:
+            return None
+        return getattr(contact, attr)
+
+    @with_session
+    @timeit
+    def get_contact(
         self,
         session: Session,
         account: str,
         jid: JID,
-        attr: Literal[
-            "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
-        ],
-    ) -> str | Draft | None:
+    ) -> Contact | None:
 
         cache_key = (account, jid)
         try:
-            contact = self._contact_cache[cache_key]
+            return self._contact_cache[cache_key]
         except KeyError:
             pass
-        else:
-            if contact is None:
-                return
-            return getattr(contact, attr)
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -1540,10 +1542,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         contact = session.scalar(stmt)
         self._contact_cache[cache_key] = contact
-        if contact is None:
-            return None
-
-        return getattr(contact, attr)
+        return contact
 
     @with_session
     @timeit
