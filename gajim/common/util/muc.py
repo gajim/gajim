@@ -149,14 +149,10 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
 
 
 def get_groupchat_name(client: types.Client, jid: JID) -> str:
-    name = client.get_module("Bookmarks").get_name_from_bookmark(jid)
-    if name:
-        return name
-
-    disco_info = app.storage.cache.get_last_disco_info(jid)
-    if disco_info is not None:
-        if disco_info.muc_name:
-            return disco_info.muc_name
+    contact = app.storage.archive.get_contact(client.account, jid)
+    if contact is not None:
+        if name := contact.get_name():
+            return name
 
     assert jid.localpart is not None
     return jid.localpart
