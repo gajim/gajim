@@ -45,15 +45,15 @@ if typing.TYPE_CHECKING:
     from gajim.plugins.manifest import PluginManifest
 
 ChatListEventT = Union[
-    'MessageReceived',
-    'MessageCorrected',
-    'MessageModerated',
-    'MessageRetracted',
-    'PresenceReceived',
-    'MessageSent',
-    'MessageDeleted',
-    'JingleRequestReceived',
-    'FileRequestReceivedEvent'
+    "MessageReceived",
+    "MessageCorrected",
+    "MessageModerated",
+    "MessageRetracted",
+    "PresenceReceived",
+    "MessageSent",
+    "MessageDeleted",
+    "JingleRequestReceived",
+    "FileRequestReceivedEvent",
 ]
 
 
@@ -63,7 +63,7 @@ class ApplicationEvent:
     context_id: str = field(init=False, default_factory=get_uuid)
 
     def serialize(self) -> str:
-        '''Convert to a json formatted string for database storage'''
+        """Convert to a json formatted string for database storage"""
         event_data = self.__dict__.copy()
 
         # Drop timestamp, since it is already handled while storing
@@ -73,41 +73,41 @@ class ApplicationEvent:
 
 @dataclass
 class StyleChanged(ApplicationEvent):
-    name: str = field(init=False, default='style-changed')
+    name: str = field(init=False, default="style-changed")
 
 
 @dataclass
 class ThemeUpdate(ApplicationEvent):
-    name: str = field(init=False, default='theme-update')
+    name: str = field(init=False, default="theme-update")
 
 
 @dataclass
 class ShowChanged(ApplicationEvent):
-    name: str = field(init=False, default='our-show')
+    name: str = field(init=False, default="our-show")
     account: str
     show: str
 
 
 @dataclass
 class RegisterActions(ApplicationEvent):
-    name: str = field(init=False, default='register-actions')
+    name: str = field(init=False, default="register-actions")
 
 
 @dataclass
 class AccountConnected(ApplicationEvent):
-    name: str = field(init=False, default='account-connected')
+    name: str = field(init=False, default="account-connected")
     account: str
 
 
 @dataclass
 class AccountDisconnected(ApplicationEvent):
-    name: str = field(init=False, default='account-disconnected')
+    name: str = field(init=False, default="account-disconnected")
     account: str
 
 
 @dataclass
 class PlainConnection(ApplicationEvent):
-    name: str = field(init=False, default='plain-connection')
+    name: str = field(init=False, default="plain-connection")
     account: str
     connect: Callable[..., Any]
     abort: Callable[..., Any]
@@ -115,14 +115,14 @@ class PlainConnection(ApplicationEvent):
 
 @dataclass
 class PasswordRequired(ApplicationEvent):
-    name: str = field(init=False, default='password-required')
-    client: 'Client'
+    name: str = field(init=False, default="password-required")
+    client: "Client"
     on_password: Callable[..., Any]
 
 
 @dataclass
 class Notification(ApplicationEvent):
-    name: str = field(init=False, default='notification')
+    name: str = field(init=False, default="notification")
     context_id: str
     account: str
     type: str
@@ -136,53 +136,53 @@ class Notification(ApplicationEvent):
 
 @dataclass
 class NotificationWithdrawn(ApplicationEvent):
-    name: str = field(init=False, default='notification-withdrawn')
+    name: str = field(init=False, default="notification-withdrawn")
     context_id: str
 
 
 @dataclass
 class ChatRead(ApplicationEvent):
-    name: str = field(init=False, default='chat-read')
+    name: str = field(init=False, default="chat-read")
     account: str
     jid: JID
 
 
 @dataclass
 class StanzaSent(ApplicationEvent):
-    name: str = field(init=False, default='stanza-sent')
+    name: str = field(init=False, default="stanza-sent")
     account: str
     stanza: Any
 
 
 @dataclass
 class StanzaReceived(ApplicationEvent):
-    name: str = field(init=False, default='stanza-received')
+    name: str = field(init=False, default="stanza-received")
     account: str
     stanza: Any
 
 
 @dataclass
 class SignedIn(ApplicationEvent):
-    name: str = field(init=False, default='signed-in')
+    name: str = field(init=False, default="signed-in")
     account: str
-    conn: 'Client'
+    conn: "Client"
 
 
 @dataclass
 class LocationChanged(ApplicationEvent):
-    name: str = field(init=False, default='location-changed')
+    name: str = field(init=False, default="location-changed")
     info: LocationData | None
 
 
 @dataclass
 class MusicTrackChanged(ApplicationEvent):
-    name: str = field(init=False, default='music-track-changed')
+    name: str = field(init=False, default="music-track-changed")
     info: TuneData | None
 
 
 @dataclass
 class MessageSent(ApplicationEvent):
-    name: str = field(init=False, default='message-sent')
+    name: str = field(init=False, default="message-sent")
     account: str
     jid: JID
     pk: int
@@ -197,8 +197,8 @@ class MessageSent(ApplicationEvent):
 
 @dataclass
 class MessageNotSent(ApplicationEvent):
-    name: str = field(init=False, default='message-not-sent')
-    client: 'Client'
+    name: str = field(init=False, default="message-not-sent")
+    client: "Client"
     jid: str
     message: str
     error: str
@@ -207,7 +207,7 @@ class MessageNotSent(ApplicationEvent):
 
 @dataclass
 class MessageDeleted(ApplicationEvent):
-    name: str = field(init=False, default='message-deleted')
+    name: str = field(init=False, default="message-deleted")
     account: str
     jid: JID
     pk: int
@@ -215,7 +215,7 @@ class MessageDeleted(ApplicationEvent):
 
 @dataclass
 class MessageAcknowledged(ApplicationEvent):
-    name: str = field(init=False, default='message-acknowledged')
+    name: str = field(init=False, default="message-acknowledged")
     account: str
     jid: JID
     pk: int
@@ -224,13 +224,13 @@ class MessageAcknowledged(ApplicationEvent):
 
 @dataclass
 class FileProgress(ApplicationEvent):
-    name: str = field(init=False, default='file-progress')
+    name: str = field(init=False, default="file-progress")
     file_props: FileProp
 
 
 @dataclass
 class FileCompleted(ApplicationEvent):
-    name: str = field(init=False, default='file-completed')
+    name: str = field(init=False, default="file-completed")
     account: str
     file_props: FileProp
     jid: str
@@ -238,7 +238,7 @@ class FileCompleted(ApplicationEvent):
 
 @dataclass
 class FileError(ApplicationEvent):
-    name: str = field(init=False, default='file-error')
+    name: str = field(init=False, default="file-error")
     account: str
     file_props: FileProp
     jid: str
@@ -246,7 +246,7 @@ class FileError(ApplicationEvent):
 
 @dataclass
 class FileHashError(ApplicationEvent):
-    name: str = field(init=False, default='file-hash-error')
+    name: str = field(init=False, default="file-hash-error")
     account: str
     file_props: FileProp
     jid: str
@@ -254,7 +254,7 @@ class FileHashError(ApplicationEvent):
 
 @dataclass
 class FileRequestSent(ApplicationEvent):
-    name: str = field(init=False, default='file-request-sent')
+    name: str = field(init=False, default="file-request-sent")
     account: str
     file_props: FileProp
     jid: JID
@@ -262,25 +262,25 @@ class FileRequestSent(ApplicationEvent):
 
 @dataclass
 class FileRequestError(ApplicationEvent):
-    name: str = field(init=False, default='file-request-error')
-    conn: 'Client'
+    name: str = field(init=False, default="file-request-error")
+    conn: "Client"
     file_props: FileProp
     jid: str
-    error_msg: str = ''
+    error_msg: str = ""
 
 
 @dataclass
 class FileSendError(ApplicationEvent):
-    name: str = field(init=False, default='file-send-error')
+    name: str = field(init=False, default="file-send-error")
     account: str
     file_props: FileProp
     jid: str
-    error_msg: str = ''
+    error_msg: str = ""
 
 
 @dataclass
 class HTTPUploadStarted(ApplicationEvent):
-    name: str = field(init=False, default='http-upload-started')
+    name: str = field(init=False, default="http-upload-started")
     account: str
     jid: JID
     transfer: HTTPFileTransfer
@@ -288,7 +288,7 @@ class HTTPUploadStarted(ApplicationEvent):
 
 @dataclass
 class HTTPUploadError(ApplicationEvent):
-    name: str = field(init=False, default='http-upload-error')
+    name: str = field(init=False, default="http-upload-error")
     account: str
     jid: JID
     error_msg: str
@@ -296,51 +296,51 @@ class HTTPUploadError(ApplicationEvent):
 
 @dataclass
 class AccountEnabled(ApplicationEvent):
-    name: str = field(init=False, default='account-enabled')
+    name: str = field(init=False, default="account-enabled")
     account: str
 
 
 @dataclass
 class AccountDisabled(ApplicationEvent):
-    name: str = field(init=False, default='account-disabled')
+    name: str = field(init=False, default="account-disabled")
     account: str
 
 
 @dataclass
 class AccountCreated(ApplicationEvent):
-    name: str = field(init=False, default='account-created')
+    name: str = field(init=False, default="account-created")
     account: str
 
 
 @dataclass
 class AccountRemoved(ApplicationEvent):
-    name: str = field(init=False, default='account-removed')
+    name: str = field(init=False, default="account-removed")
     account: str
 
 
 @dataclass
 class FeatureDiscovered(ApplicationEvent):
-    name: str = field(init=False, default='feature-discovered')
+    name: str = field(init=False, default="feature-discovered")
     account: str
     feature: str
 
 
 @dataclass
 class BookmarksReceived(ApplicationEvent):
-    name: str = field(init=False, default='bookmarks-received')
+    name: str = field(init=False, default="bookmarks-received")
     account: str
 
 
 @dataclass
 class VCard4Received(ApplicationEvent):
-    name: str = field(init=False, default='vcard4-received')
+    name: str = field(init=False, default="vcard4-received")
     account: str
     vcard: VCard
 
 
 @dataclass
 class TimezoneChanged(ApplicationEvent):
-    name: str = field(init=False, default='timezone-changed')
+    name: str = field(init=False, default="timezone-changed")
     account: str
     vcard: str | None
     local: str | None
@@ -348,7 +348,7 @@ class TimezoneChanged(ApplicationEvent):
 
 @dataclass
 class OpenPGPEvent(ApplicationEvent):
-    name: str = field(init=False, default='openpgp-event')
+    name: str = field(init=False, default="openpgp-event")
     account: str
     type: Literal["decryption-error", "unknown-error", "setup"]
     error: str | None = None
@@ -356,14 +356,14 @@ class OpenPGPEvent(ApplicationEvent):
 
 @dataclass
 class MucUserBlockChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-block-changed')
+    name: str = field(init=False, default="muc-user-block-changed")
     account: str
     jid: JID | None = None
 
 
 @dataclass
 class ReadStateSync(ApplicationEvent):
-    name: str = field(init=False, default='read-state-sync')
+    name: str = field(init=False, default="read-state-sync")
     account: str
     jid: JID
     marker_id: str
@@ -371,7 +371,7 @@ class ReadStateSync(ApplicationEvent):
 
 @dataclass
 class DisplayedReceived(ApplicationEvent):
-    name: str = field(init=False, default='displayed-received')
+    name: str = field(init=False, default="displayed-received")
     account: str
     jid: JID
     pk: int
@@ -385,7 +385,7 @@ class DisplayedReceived(ApplicationEvent):
 
 @dataclass
 class ReactionUpdated(ApplicationEvent):
-    name: str = field(init=False, default='reaction-updated')
+    name: str = field(init=False, default="reaction-updated")
     account: str
     jid: JID
     id: str
@@ -398,24 +398,24 @@ class ReactionUpdated(ApplicationEvent):
 
 @dataclass
 class HttpAuth(ApplicationEvent):
-    name: str = field(init=False, default='http-auth')
-    client: 'Client'
+    name: str = field(init=False, default="http-auth")
+    client: "Client"
     data: HTTPAuthData
     stanza: Any
 
 
 @dataclass
 class AgentRemoved(ApplicationEvent):
-    name: str = field(init=False, default='agent-removed')
-    conn: 'Client'
+    name: str = field(init=False, default="agent-removed")
+    conn: "Client"
     agent: str
     jid_list: list[str]
 
 
 @dataclass
 class GatewayPromptReceived(ApplicationEvent):
-    name: str = field(init=False, default='gateway-prompt-received')
-    conn: 'Client'
+    name: str = field(init=False, default="gateway-prompt-received")
+    conn: "Client"
     fjid: str
     jid: str
     resource: str
@@ -427,20 +427,20 @@ class GatewayPromptReceived(ApplicationEvent):
 
 @dataclass
 class ServerDiscoReceived(ApplicationEvent):
-    name: str = field(init=False, default='server-disco-received')
+    name: str = field(init=False, default="server-disco-received")
     account: str
 
 
 @dataclass
 class MucDiscoUpdate(ApplicationEvent):
-    name: str = field(init=False, default='muc-disco-update')
+    name: str = field(init=False, default="muc-disco-update")
     account: str
     jid: JID
 
 
 @dataclass
 class RawMamMessageReceived(ApplicationEvent):
-    name: str = field(init=False, default='raw-mam-message-received')
+    name: str = field(init=False, default="raw-mam-message-received")
     account: str
     stanza: Any
     properties: Any
@@ -448,14 +448,14 @@ class RawMamMessageReceived(ApplicationEvent):
 
 @dataclass
 class ArchivingIntervalFinished(ApplicationEvent):
-    name: str = field(init=False, default='archiving-interval-finished')
+    name: str = field(init=False, default="archiving-interval-finished")
     account: str
     query_id: str
 
 
 @dataclass
 class MessageCorrected(ApplicationEvent):
-    name: str = field(init=False, default='message-corrected')
+    name: str = field(init=False, default="message-corrected")
     account: str
     jid: JID
     pk: int
@@ -470,7 +470,7 @@ class MessageCorrected(ApplicationEvent):
 
 @dataclass
 class MessageModerated(ApplicationEvent):
-    name: str = field(init=False, default='message-moderated')
+    name: str = field(init=False, default="message-moderated")
     account: str
     jid: JID
     moderation: mod.Moderation
@@ -478,7 +478,7 @@ class MessageModerated(ApplicationEvent):
 
 @dataclass
 class MessageRetracted(ApplicationEvent):
-    name: str = field(init=False, default='message-retracted')
+    name: str = field(init=False, default="message-retracted")
     account: str
     jid: JID
     retraction: mod.Retraction
@@ -486,7 +486,7 @@ class MessageRetracted(ApplicationEvent):
 
 @dataclass
 class MessageReceived(ApplicationEvent):
-    name: str = field(init=False, default='message-received')
+    name: str = field(init=False, default="message-received")
     account: str
     jid: JID
     m_type: MessageType
@@ -506,7 +506,7 @@ class MessageReceived(ApplicationEvent):
 
 @dataclass
 class MessageError(ApplicationEvent):
-    name: str = field(init=False, default='message-error')
+    name: str = field(init=False, default="message-error")
     account: str
     jid: JID
     message_id: str
@@ -515,8 +515,8 @@ class MessageError(ApplicationEvent):
 
 @dataclass
 class RosterItemExchangeEvent(ApplicationEvent):
-    name: str = field(init=False, default='roster-item-exchange')
-    client: 'Client'
+    name: str = field(init=False, default="roster-item-exchange")
+    client: "Client"
     jid: JID
     exchange_items_list: dict[str, list[str]]
     action: str
@@ -524,36 +524,36 @@ class RosterItemExchangeEvent(ApplicationEvent):
 
 @dataclass
 class RosterReceived(ApplicationEvent):
-    name: str = field(init=False, default='roster-received')
+    name: str = field(init=False, default="roster-received")
     account: str
 
 
 @dataclass
 class RosterPush(ApplicationEvent):
-    name: str = field(init=False, default='roster-push')
+    name: str = field(init=False, default="roster-push")
     account: str
     item: RosterItem
 
 
 @dataclass
 class SearchFormReceivedEvent(ApplicationEvent):
-    name: str = field(init=False, default='search-form-received')
-    conn: 'Client'
+    name: str = field(init=False, default="search-form-received")
+    conn: "Client"
     is_dataform: bool
     data: Any
 
 
 @dataclass
 class SearchResultReceivedEvent(ApplicationEvent):
-    name: str = field(init=False, default='search-result-received')
-    conn: 'Client'
+    name: str = field(init=False, default="search-result-received")
+    conn: "Client"
     is_dataform: bool
     data: Any
 
 
 @dataclass
 class ReceiptReceived(ApplicationEvent):
-    name: str = field(init=False, default='receipt-received')
+    name: str = field(init=False, default="receipt-received")
     account: str
     jid: JID
     receipt_id: str
@@ -561,21 +561,21 @@ class ReceiptReceived(ApplicationEvent):
 
 @dataclass
 class CallStarted(ApplicationEvent):
-    name: str = field(init=False, default='call-started')
+    name: str = field(init=False, default="call-started")
     account: str
     resource_jid: JID
 
 
 @dataclass
 class CallStopped(ApplicationEvent):
-    name: str = field(init=False, default='call-stopped')
+    name: str = field(init=False, default="call-stopped")
     account: str
     jid: JID
 
 
 @dataclass
 class CallUpdated(ApplicationEvent):
-    name: str = field(init=False, default='call-updated')
+    name: str = field(init=False, default="call-updated")
     jingle_type: str
     audio_state: JingleState
     video_state: JingleState
@@ -586,7 +586,7 @@ class CallUpdated(ApplicationEvent):
 @dataclass
 class JingleEvent(ApplicationEvent):
     name: str
-    conn: 'Client'
+    conn: "Client"
     account: str
     fjid: str
     jid: JID
@@ -597,39 +597,39 @@ class JingleEvent(ApplicationEvent):
 
 @dataclass
 class JingleConnectedReceived(JingleEvent):
-    name: str = field(init=False, default='jingle-connected-received')
+    name: str = field(init=False, default="jingle-connected-received")
     media: Any
 
 
 @dataclass
 class JingleDisconnectedReceived(JingleEvent):
-    name: str = field(init=False, default='jingle-disconnected-received')
+    name: str = field(init=False, default="jingle-disconnected-received")
     media: Any
     reason: str
 
 
 @dataclass
 class JingleRequestReceived(JingleEvent):
-    name: str = field(init=False, default='jingle-request-received')
+    name: str = field(init=False, default="jingle-request-received")
     contents: Any
 
 
 @dataclass
 class JingleFtCancelledReceived(JingleEvent):
-    name: str = field(init=False, default='jingle-ft-cancelled-received')
+    name: str = field(init=False, default="jingle-ft-cancelled-received")
     media: Any
     reason: str
 
 
 @dataclass
 class JingleErrorReceived(JingleEvent):
-    name: str = field(init=False, default='jingle-error-received')
+    name: str = field(init=False, default="jingle-error-received")
     reason: str
 
 
 @dataclass
 class MucAdded(ApplicationEvent):
-    name: str = field(init=False, default='muc-added')
+    name: str = field(init=False, default="muc-added")
     account: str
     jid: JID
     select_chat: bool
@@ -637,7 +637,7 @@ class MucAdded(ApplicationEvent):
 
 @dataclass
 class MucDecline(ApplicationEvent):
-    name: str = field(init=False, default='muc-decline')
+    name: str = field(init=False, default="muc-decline")
     account: str
     muc: JID
     from_: JID
@@ -646,7 +646,7 @@ class MucDecline(ApplicationEvent):
 
 @dataclass
 class MucInvitation(ApplicationEvent):
-    name: str = field(init=False, default='muc-invitation')
+    name: str = field(init=False, default="muc-invitation")
     account: str
     info: Any
     muc: JID
@@ -660,14 +660,14 @@ class MucInvitation(ApplicationEvent):
 
 @dataclass
 class PingSent(ApplicationEvent):
-    name: str = field(init=False, default='ping-sent')
+    name: str = field(init=False, default="ping-sent")
     account: str
     contact: Any
 
 
 @dataclass
 class PingError(ApplicationEvent):
-    name: str = field(init=False, default='ping-error')
+    name: str = field(init=False, default="ping-error")
     account: str
     contact: Any
     error: str
@@ -675,7 +675,7 @@ class PingError(ApplicationEvent):
 
 @dataclass
 class PingReply(ApplicationEvent):
-    name: str = field(init=False, default='ping-reply')
+    name: str = field(init=False, default="ping-reply")
     account: str
     contact: Any
     seconds: float
@@ -683,7 +683,7 @@ class PingReply(ApplicationEvent):
 
 @dataclass
 class SecCatalogReceived(ApplicationEvent):
-    name: str = field(init=False, default='sec-catalog-received')
+    name: str = field(init=False, default="sec-catalog-received")
     account: str
     jid: JID
     catalog: Catalog
@@ -691,9 +691,9 @@ class SecCatalogReceived(ApplicationEvent):
 
 @dataclass
 class PresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='presence-received')
+    name: str = field(init=False, default="presence-received")
     account: str
-    conn: 'Client'
+    conn: "Client"
     stanza: Any
     prio: int
     need_add_in_roster: bool
@@ -716,8 +716,8 @@ class PresenceReceived(ApplicationEvent):
 
 @dataclass
 class SubscribePresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='subscription-request')
-    conn: 'Client'
+    name: str = field(init=False, default="subscription-request")
+    conn: "Client"
     account: str
     jid: str
     fjid: str
@@ -728,23 +728,23 @@ class SubscribePresenceReceived(ApplicationEvent):
 
 @dataclass
 class SubscribedPresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='subscribed-presence-received')
+    name: str = field(init=False, default="subscribed-presence-received")
     account: str
     jid: str
 
 
 @dataclass
 class UnsubscribedPresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='unsubscribed-presence-received')
-    conn: 'Client'
+    name: str = field(init=False, default="unsubscribed-presence-received")
+    conn: "Client"
     account: str
     jid: str
 
 
 @dataclass
 class FileRequestReceivedEvent(ApplicationEvent):
-    name: str = field(init=False, default='file-request-received')
-    conn: 'Client'
+    name: str = field(init=False, default="file-request-received")
+    conn: "Client"
     stanza: Any
     id_: str
     fjid: str
@@ -755,25 +755,25 @@ class FileRequestReceivedEvent(ApplicationEvent):
 
 @dataclass
 class AllowGajimUpdateCheck(ApplicationEvent):
-    name: str = field(init=False, default='allow-gajim-update-check')
+    name: str = field(init=False, default="allow-gajim-update-check")
 
 
 @dataclass
 class PluginUpdatesAvailable(ApplicationEvent):
-    name: str = field(init=False, default='plugin-updates-available')
+    name: str = field(init=False, default="plugin-updates-available")
     manifests: list[PluginManifest]
 
 
 @dataclass
 class GajimUpdateAvailable(ApplicationEvent):
-    name: str = field(init=False, default='gajim-update-available')
+    name: str = field(init=False, default="gajim-update-available")
     version: str
     setup_url: str
 
 
 @dataclass
 class MUCNicknameChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-nickname-changed')
+    name: str = field(init=False, default="muc-nickname-changed")
     is_self: bool
     new_name: str
     old_name: str
@@ -782,27 +782,27 @@ class MUCNicknameChanged(ApplicationEvent):
 
 @dataclass
 class MUCRoomConfigChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-config-changed')
+    name: str = field(init=False, default="muc-room-config-changed")
     timestamp: datetime.datetime
     status_codes: set[StatusCode]
 
 
 @dataclass
 class MUCRoomConfigFinished(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-config-finished')
+    name: str = field(init=False, default="muc-room-config-finished")
     timestamp: datetime.datetime
 
 
 @dataclass
 class MUCRoomPresenceError(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-presence-error')
+    name: str = field(init=False, default="muc-room-presence-error")
     timestamp: datetime.datetime
     error: str
 
 
 @dataclass
 class MUCRoomKicked(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-kicked')
+    name: str = field(init=False, default="muc-room-kicked")
     timestamp: datetime.datetime
     status_codes: set[StatusCode] | None
     reason: str | None
@@ -811,7 +811,7 @@ class MUCRoomKicked(ApplicationEvent):
 
 @dataclass
 class MUCRoomDestroyed(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-destroyed')
+    name: str = field(init=False, default="muc-room-destroyed")
     timestamp: datetime.datetime
     reason: str | None
     alternate: JID | None
@@ -819,7 +819,7 @@ class MUCRoomDestroyed(ApplicationEvent):
 
 @dataclass
 class MUCRoomVoiceRequestError(ApplicationEvent):
-    name: str = field(init=False, default='muc-room-voice-request-error')
+    name: str = field(init=False, default="muc-room-voice-request-error")
     timestamp: datetime.datetime
     message_id: str
     error: Any
@@ -827,7 +827,7 @@ class MUCRoomVoiceRequestError(ApplicationEvent):
 
 @dataclass
 class MUCUserHatsChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-hats-changed')
+    name: str = field(init=False, default="muc-user-hats-changed")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -836,7 +836,7 @@ class MUCUserHatsChanged(ApplicationEvent):
 
 @dataclass
 class MUCUserJoined(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-joined')
+    name: str = field(init=False, default="muc-user-joined")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -845,7 +845,7 @@ class MUCUserJoined(ApplicationEvent):
 
 @dataclass
 class MUCUserLeft(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-left')
+    name: str = field(init=False, default="muc-user-left")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -856,7 +856,7 @@ class MUCUserLeft(ApplicationEvent):
 
 @dataclass
 class MUCUserRoleChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-role-changed')
+    name: str = field(init=False, default="muc-user-role-changed")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -867,7 +867,7 @@ class MUCUserRoleChanged(ApplicationEvent):
 
 @dataclass
 class MUCUserAffiliationChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-affiliation-changed')
+    name: str = field(init=False, default="muc-user-affiliation-changed")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -878,7 +878,7 @@ class MUCUserAffiliationChanged(ApplicationEvent):
 
 @dataclass
 class MUCAffiliationChanged(ApplicationEvent):
-    name: str = field(init=False, default='room-affiliation-changed')
+    name: str = field(init=False, default="room-affiliation-changed")
     timestamp: datetime.datetime
     nick: str
     affiliation: Affiliation
@@ -887,7 +887,7 @@ class MUCAffiliationChanged(ApplicationEvent):
 
 @dataclass
 class MUCUserStatusShowChanged(ApplicationEvent):
-    name: str = field(init=False, default='muc-user-status-show-changed')
+    name: str = field(init=False, default="muc-user-status-show-changed")
     timestamp: datetime.datetime
     is_self: bool
     nick: str
@@ -897,7 +897,7 @@ class MUCUserStatusShowChanged(ApplicationEvent):
 
 @dataclass
 class EncryptionInfo(ApplicationEvent):
-    name: str = field(init=False, default='encryption-check')
+    name: str = field(init=False, default="encryption-check")
     account: str
     jid: JID
     type: EncryptionInfoMsg
@@ -906,18 +906,18 @@ class EncryptionInfo(ApplicationEvent):
 
 @dataclass
 class DBMigration(ApplicationEvent):
-    name: str = field(init=False, default='db-migration')
+    name: str = field(init=False, default="db-migration")
 
 
 @dataclass
 class DBMigrationStart(ApplicationEvent):
-    name: str = field(init=False, default='db-migration-start')
+    name: str = field(init=False, default="db-migration-start")
     version: int
 
 
 @dataclass
 class DBMigrationProgress(ApplicationEvent):
-    name: str = field(init=False, default='db-migration-progress')
+    name: str = field(init=False, default="db-migration-progress")
     count: int
     progress: int
 
@@ -926,27 +926,27 @@ class DBMigrationProgress(ApplicationEvent):
         value = 100
         if self.count != 0:
             value = self.progress / self.count * 100
-        return f'{value:05.2f}'
+        return f"{value:05.2f}"
 
 
 @dataclass
 class DBMigrationFinished(ApplicationEvent):
-    name: str = field(init=False, default='db-migration-finished')
+    name: str = field(init=False, default="db-migration-finished")
 
 
 @dataclass
 class DBMigrationError(ApplicationEvent):
-    name: str = field(init=False, default='db-migration-error')
+    name: str = field(init=False, default="db-migration-error")
     exception: Exception
 
 
 @dataclass
 class ContactBlocked(ApplicationEvent):
-    name: str = field(init=False, default='contact-blocked')
+    name: str = field(init=False, default="contact-blocked")
     account: str
     jid: JID
 
 
 @dataclass
 class PrepareForShutdown(ApplicationEvent):
-    name: str = field(init=False, default='prepare-for-shutdown')
+    name: str = field(init=False, default="prepare-for-shutdown")

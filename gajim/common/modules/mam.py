@@ -46,24 +46,23 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
 
 class MAM(BaseModule):
-
-    _nbxmpp_extends = 'MAM'
+    _nbxmpp_extends = "MAM"
     _nbxmpp_methods = [
-        'request_preferences',
-        'set_preferences',
-        'make_query',
+        "request_preferences",
+        "set_preferences",
+        "make_query",
     ]
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
-            StanzaHandler(name='message',
-                          callback=self._set_message_archive_info,
-                          priority=42),
-            StanzaHandler(name='message',
-                          callback=self._mam_message_received,
-                          priority=41),
+            StanzaHandler(
+                name="message", callback=self._set_message_archive_info, priority=42
+            ),
+            StanzaHandler(
+                name="message", callback=self._mam_message_received, priority=41
+            ),
         ]
 
         self.available = False
@@ -72,31 +71,28 @@ class MAM(BaseModule):
         # Holds archive jids where catch up was successful
         self._catch_up_finished: list[JID] = []
 
-        self._con.connect_signal('state-changed', self._on_client_state_changed)
-        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
+        self._con.connect_signal("state-changed", self._on_client_state_changed)
+        self._con.connect_signal("resume-failed", self._on_client_resume_failed)
 
     def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.MAM_2 not in info.features:
             return
 
         self.available = True
-        self._log.info('Discovered MAM: %s', info.jid)
+        self._log.info("Discovered MAM: %s", info.jid)
 
         app.ged.raise_event(
-            FeatureDiscovered(account=self._account,
-                              feature=Namespace.MAM_2))
+            FeatureDiscovered(account=self._account, feature=Namespace.MAM_2)
+        )
 
-    def _on_client_resume_failed(self,
-                                 _client: types.Client,
-                                 _signal_name: str
-                                 ) -> None:
+    def _on_client_resume_failed(
+        self, _client: types.Client, _signal_name: str
+    ) -> None:
         self._reset_state()
 
-    def _on_client_state_changed(self,
-                                 _client: types.Client,
-                                 _signal_name: str,
-                                 state: ClientState
-                                 ) -> None:
+    def _on_client_state_changed(
+        self, _client: types.Client, _signal_name: str, state: ClientState
+    ) -> None:
         if state.is_disconnected:
             self._reset_state()
 
@@ -129,10 +125,9 @@ class MAM(BaseModule):
 
         return self._is_catch_up_finished(archive_jid)
 
-    def _from_valid_archive(self,
-                            _stanza: Message,
-                            properties: MessageProperties
-                            ) -> bool:
+    def _from_valid_archive(
+        self, _stanza: Message, properties: MessageProperties
+    ) -> bool:
         if properties.type.is_groupchat:
             assert properties.jid is not None
             expected_archive = properties.jid
@@ -143,22 +138,22 @@ class MAM(BaseModule):
         return properties.mam.archive.bare_match(expected_archive)
 
     @staticmethod
-    def _get_stanza_id(properties: MessageProperties,
-                       archive_jid: JID
-                       ) -> StanzaIDData | None:
+    def _get_stanza_id(
+        properties: MessageProperties, archive_jid: JID
+    ) -> StanzaIDData | None:
         for stanza_id in properties.stanza_ids:
             if stanza_id.by == str(archive_jid):
                 return stanza_id
         return None
 
-    def _set_message_archive_info(self,
-                                  _con: types.NBXMPPClient,
-                                  _stanza: Message,
-                                  properties: MessageProperties
-                                  ) -> None:
-        if (properties.is_mam_message or
-                properties.is_pubsub or
-                properties.is_muc_subject):
+    def _set_message_archive_info(
+        self, _con: types.NBXMPPClient, _stanza: Message, properties: MessageProperties
+    ) -> None:
+        if (
+            properties.is_mam_message
+            or properties.is_pubsub
+            or properties.is_muc_subject
+        ):
             return
 
         if properties.type.is_groupchat:
@@ -205,31 +200,29 @@ class MAM(BaseModule):
             )
         )
 
-    def _mam_message_received(self,
-                              _con: types.NBXMPPClient,
-                              stanza: Message,
-                              properties: MessageProperties
-                              ) -> None:
+    def _mam_message_received(
+        self, _con: types.NBXMPPClient, stanza: Message, properties: MessageProperties
+    ) -> None:
 
         if not properties.is_mam_message:
             return
 
         app.ged.raise_event(
-            RawMamMessageReceived(account=self._account,
-                                  stanza=stanza,
-                                  properties=properties))
+            RawMamMessageReceived(
+                account=self._account, stanza=stanza, properties=properties
+            )
+        )
 
         assert properties.mam is not None
         if not self._from_valid_archive(stanza, properties):
-            self._log.warning('Message from invalid archive %s',
-                              properties.mam.archive)
+            self._log.warning("Message from invalid archive %s", properties.mam.archive)
             raise nbxmpp.NodeProcessed
 
-        self._log.info('Received message from archive: %s',
-                       properties.mam.archive)
+        self._log.info("Received message from archive: %s", properties.mam.archive)
         if not self._is_valid_request(properties):
-            self._log.warning('Invalid MAM Message: unknown query id %s',
-                              properties.mam.query_id)
+            self._log.warning(
+                "Invalid MAM Message: unknown query id %s", properties.mam.query_id
+            )
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
@@ -237,11 +230,9 @@ class MAM(BaseModule):
         stanza_id = properties.mam.id
 
         if app.storage.archive.check_if_stanza_id_exists(
-            self._account,
-            properties.remote_jid,
-            stanza_id
+            self._account, properties.remote_jid, stanza_id
         ):
-            self._log.info('Received duplicated message from MAM: %s', stanza_id)
+            self._log.info("Received duplicated message from MAM: %s", stanza_id)
             raise nbxmpp.NodeProcessed
 
     def _is_valid_request(self, properties: MessageProperties) -> bool:
@@ -256,8 +247,7 @@ class MAM(BaseModule):
 
     def _get_query_params(self) -> tuple[str | None, datetime | None]:
         own_jid = self._con.get_own_jid().new_as_bare()
-        archive = app.storage.archive.get_mam_archive_state(
-            self._account, own_jid)
+        archive = app.storage.archive.get_mam_archive_state(self._account, own_jid)
 
         mam_id = None
         if archive is not None:
@@ -265,20 +255,17 @@ class MAM(BaseModule):
 
         start_date = None
         if mam_id:
-            self._log.info('Request archive: %s, after mam-id %s',
-                           own_jid, mam_id)
+            self._log.info("Request archive: %s, after mam-id %s", own_jid, mam_id)
 
         else:
             # First Start, we request the last week
             start_date = datetime.now(UTC) - timedelta(days=7)
-            self._log.info('Request archive: %s, after date %s',
-                           own_jid, start_date)
+            self._log.info("Request archive: %s, after date %s", own_jid, start_date)
         return mam_id, start_date
 
-    def _get_muc_query_params(self,
-                              jid: JID,
-                              threshold: int
-                              ) -> tuple[str | None, datetime | None]:
+    def _get_muc_query_params(
+        self, jid: JID, threshold: int
+    ) -> tuple[str | None, datetime | None]:
 
         archive = app.storage.archive.get_mam_archive_state(self._account, jid)
         mam_id = None
@@ -288,36 +275,42 @@ class MAM(BaseModule):
         if archive is None or archive.to_stanza_id is None:
             # First join
             start_date = now - timedelta(days=1)
-            self._log.info('Request archive: %s, after date %s',
-                           jid, start_date)
+            self._log.info("Request archive: %s, after date %s", jid, start_date)
 
         elif threshold == SyncThreshold.NO_THRESHOLD:
             # Not our first join and no threshold set
 
             mam_id = archive.to_stanza_id
-            self._log.info('Request archive: %s, after mam-id %s',
-                           jid, archive.to_stanza_id)
+            self._log.info(
+                "Request archive: %s, after mam-id %s", jid, archive.to_stanza_id
+            )
 
         else:
             # Not our first join, check how much time elapsed since our
             # last join and check against threshold
             last = archive.to_stanza_ts
             if last is None:
-                self._log.info('No last muc timestamp found: %s', jid)
+                self._log.info("No last muc timestamp found: %s", jid)
                 last = FIRST_UTC_DATETIME
 
             if now - last > timedelta(days=threshold):
                 # To much time has elapsed since last join, apply threshold
                 start_date = now - timedelta(days=threshold)
-                self._log.info('Too much time elapsed since last join, '
-                               'request archive: %s, after date %s, '
-                               'threshold: %s', jid, start_date, threshold)
+                self._log.info(
+                    "Too much time elapsed since last join, "
+                    "request archive: %s, after date %s, "
+                    "threshold: %s",
+                    jid,
+                    start_date,
+                    threshold,
+                )
 
             else:
                 # Request from last mam-id
                 mam_id = archive.to_stanza_id
-                self._log.info('Request archive: %s, after mam-id %s:',
-                               jid, archive.to_stanza_id)
+                self._log.info(
+                    "Request archive: %s, after mam-id %s:", jid, archive.to_stanza_id
+                )
 
         return mam_id, start_date
 
@@ -328,21 +321,20 @@ class MAM(BaseModule):
         own_jid = self._con.get_own_jid().new_as_bare()
 
         if own_jid in self._mam_query_ids:
-            self._log.warning('request already running for %s', own_jid)
+            self._log.warning("request already running for %s", own_jid)
             return
 
         mam_id, start_date = self._get_query_params()
 
         result = yield self._execute_query(own_jid, mam_id, start_date)
         if is_error(result):
-            if result.condition != 'item-not-found':
+            if result.condition != "item-not-found":
                 self._log.warning(result)
                 return
 
             self._log.warning(result)
-            self._log.warning('Reset archive state: %s', own_jid)
-            app.storage.archive.reset_mam_archive_state(
-                self._account, result.jid)
+            self._log.warning("Reset archive state: %s", own_jid)
+            app.storage.archive.reset_mam_archive_state(self._account, result.jid)
             _, start_date = self._get_query_params()
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
@@ -371,7 +363,7 @@ class MAM(BaseModule):
                 mod.MAMArchiveState(
                     account_=self._account,
                     remote_jid_=result.jid,
-                    from_stanza_ts=start_date
+                    from_stanza_ts=start_date,
                 )
             )
 
@@ -379,38 +371,37 @@ class MAM(BaseModule):
     def request_archive_on_muc_join(self, jid: JID) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
-        threshold = app.settings.get_group_chat_setting(self._account,
-                                                        jid,
-                                                        'sync_threshold')
-        self._log.info('Threshold for %s: %s', jid, threshold)
+        threshold = app.settings.get_group_chat_setting(
+            self._account, jid, "sync_threshold"
+        )
+        self._log.info("Threshold for %s: %s", jid, threshold)
 
         if threshold == SyncThreshold.NO_SYNC:
             return
 
         contact = self._get_contact_if_exists(jid)
         if contact is not None:
-            contact.notify('mam-sync-started')
+            contact.notify("mam-sync-started")
 
         mam_id, start_date = self._get_muc_query_params(jid, threshold)
 
         result = yield self._execute_query(jid, mam_id, start_date)
         if is_error(result):
-            if result.condition != 'item-not-found':
+            if result.condition != "item-not-found":
                 self._log.warning(result)
                 if contact is not None:
-                    contact.notify('mam-sync-error', result.get_text())
+                    contact.notify("mam-sync-error", result.get_text())
                 return
 
             self._log.warning(result)
-            self._log.warning('Reset archive state: %s', jid)
-            app.storage.archive.reset_mam_archive_state(
-                self._account, result.jid)
+            self._log.warning("Reset archive state: %s", jid)
+            app.storage.archive.reset_mam_archive_state(self._account, result.jid)
             _, start_date = self._get_muc_query_params(jid, threshold)
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
                 self._log.warning(result)
                 if contact is not None:
-                    contact.notify('mam-sync-error', result.get_text())
+                    contact.notify("mam-sync-error", result.get_text())
                 return
 
         assert isinstance(result, MAMQueryData)
@@ -423,19 +414,17 @@ class MAM(BaseModule):
                     account_=self._account,
                     remote_jid_=result.jid,
                     to_stanza_id=result.rsm.last,
-                    to_stanza_ts=datetime.now(UTC)
+                    to_stanza_ts=datetime.now(UTC),
                 )
             )
 
         if contact is not None:
-            contact.notify('mam-sync-finished')
+            contact.notify("mam-sync-finished")
 
     @as_task
-    def _execute_query(self,
-                       jid: JID,
-                       mam_id: str | None,
-                       start_date: datetime | None
-                       ) -> Generator[Any, Any]:
+    def _execute_query(
+        self, jid: JID, mam_id: str | None, start_date: datetime | None
+    ) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         if jid in self._catch_up_finished:
@@ -443,10 +432,7 @@ class MAM(BaseModule):
 
         queryid = self._get_query_id(jid)
 
-        result = yield self.make_query(jid,
-                                       queryid,
-                                       after=mam_id,
-                                       start=start_date)
+        result = yield self.make_query(jid, queryid, after=mam_id, start=start_date)
 
         self._remove_query_by_jid(result.jid)
 
@@ -464,46 +450,50 @@ class MAM(BaseModule):
 
             queryid = self._get_query_id(result.jid)
 
-            result = yield self.make_query(result.jid,
-                                           queryid,
-                                           after=result.rsm.last,
-                                           start=start_date)
+            result = yield self.make_query(
+                result.jid, queryid, after=result.rsm.last, start=start_date
+            )
 
             self._remove_query_by_jid(result.jid)
 
             raise_if_error(result)
 
         self._catch_up_finished.append(result.jid)
-        self._log.info('Request finished: %s, last mam id: %s',
-                       result.jid, result.rsm.last)
+        self._log.info(
+            "Request finished: %s, last mam id: %s", result.jid, result.rsm.last
+        )
         yield result
 
-    def request_archive_interval(self,
-                                 start_date: datetime,
-                                 end_date: datetime,
-                                 after: str | None = None,
-                                 queryid: str | None = None
-                                 ) -> str:
+    def request_archive_interval(
+        self,
+        start_date: datetime,
+        end_date: datetime,
+        after: str | None = None,
+        queryid: str | None = None,
+    ) -> str:
 
         jid = self._con.get_own_jid().new_as_bare()
 
         if after is None:
-            self._log.info('Request interval: %s, from %s to %s',
-                           jid, start_date, end_date)
+            self._log.info(
+                "Request interval: %s, from %s to %s", jid, start_date, end_date
+            )
         else:
-            self._log.info('Request page: %s, after %s', jid, after)
+            self._log.info("Request page: %s, after %s", jid, after)
 
         if queryid is None:
             queryid = self._get_query_id(jid)
         self._mam_query_ids[jid] = queryid
 
-        self.make_query(jid,
-                        queryid,
-                        after=after,
-                        start=start_date,
-                        end=end_date,
-                        callback=self._on_interval_result,
-                        user_data=(queryid, start_date, end_date))
+        self.make_query(
+            jid,
+            queryid,
+            after=after,
+            start=start_date,
+            end=end_date,
+            callback=self._on_interval_result,
+            user_data=(queryid, start_date, end_date),
+        )
         return queryid
 
     def _on_interval_result(self, task: Task) -> None:
@@ -524,8 +514,9 @@ class MAM(BaseModule):
 
         assert isinstance(result, MAMQueryData)
         if result.complete:
-            self._log.info('Request finished: %s, last mam id: %s',
-                           result.jid, result.rsm.last)
+            self._log.info(
+                "Request finished: %s, last mam id: %s", result.jid, result.rsm.last
+            )
             app.storage.archive.upsert_row(
                 mod.MAMArchiveState(
                     account_=self._account,
@@ -534,12 +525,11 @@ class MAM(BaseModule):
                 )
             )
 
-            app.ged.raise_event(ArchivingIntervalFinished(
-                account=self._account,
-                query_id=queryid))
+            app.ged.raise_event(
+                ArchivingIntervalFinished(account=self._account, query_id=queryid)
+            )
 
         else:
-            self.request_archive_interval(start_date,
-                                          end_date,
-                                          result.rsm.last,
-                                          queryid)
+            self.request_archive_interval(
+                start_date, end_date, result.rsm.last, queryid
+            )

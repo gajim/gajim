@@ -31,8 +31,8 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
 from gajim.common.task_manager import Task
 
-NS_AVATAR_HASH = 'muc#roominfo_avatarhash'
-NS_AVATAR_HASH_TEMP = '{http://modules.prosody.im/mod_vcard_muc}avatar#sha1'
+NS_AVATAR_HASH = "muc#roominfo_avatarhash"
+NS_AVATAR_HASH_TEMP = "{http://modules.prosody.im/mod_vcard_muc}avatar#sha1"
 
 
 class VCardAvatars(BaseModule):
@@ -41,11 +41,13 @@ class VCardAvatars(BaseModule):
         self._requested_shas: list[str] = []
 
         self.handlers = [
-            StanzaHandler(name='presence',
-                          typ='available',
-                          callback=self._presence_received,
-                          ns=Namespace.VCARD_UPDATE,
-                          priority=51),
+            StanzaHandler(
+                name="presence",
+                typ="available",
+                callback=self._presence_received,
+                ns=Namespace.VCARD_UPDATE,
+                priority=51,
+            ),
         ]
 
         self.avatar_conversion_available = False
@@ -55,7 +57,7 @@ class VCardAvatars(BaseModule):
     def pass_disco(self, info: DiscoInfo) -> None:
         is_available = Namespace.VCARD_CONVERSION in info.features
         self.avatar_conversion_available = is_available
-        self._log.info('Discovered Avatar Conversion')
+        self._log.info("Discovered Avatar Conversion")
 
     def get_avatar_sha(self, jid: JID) -> str | None:
         return self._muc_avatar_cache.get(jid)
@@ -64,14 +66,12 @@ class VCardAvatars(BaseModule):
         self._muc_avatar_cache.pop(jid, None)
 
     @as_task
-    def _request_vcard(self,
-                       contact: types.ChatContactT,
-                       expected_sha: str
-                       ) -> Generator[Any, Any]:
+    def _request_vcard(
+        self, contact: types.ChatContactT, expected_sha: str
+    ) -> Generator[Any, Any]:
         _task = yield
 
-        vcard = yield self._con.get_module('VCardTemp').request_vcard(
-            jid=contact.jid)
+        vcard = yield self._con.get_module("VCardTemp").request_vcard(jid=contact.jid)
 
         if is_error(vcard):
             self._log.warning(vcard)
@@ -80,36 +80,36 @@ class VCardAvatars(BaseModule):
         assert isinstance(vcard, VCard)
         avatar, avatar_sha = vcard.get_avatar()
         if avatar is None or avatar_sha is None:
-            self._log.info('Avatar missing: %s %s', contact.jid, expected_sha)
+            self._log.info("Avatar missing: %s %s", contact.jid, expected_sha)
             return
 
         if expected_sha != avatar_sha:
-            self._log.warning('Avatar mismatch: %s %s != %s',
-                              contact.jid,
-                              expected_sha,
-                              avatar_sha)
+            self._log.warning(
+                "Avatar mismatch: %s %s != %s", contact.jid, expected_sha, avatar_sha
+            )
             return
 
-        self._log.info('Received: %s %s', contact.jid, avatar_sha)
+        self._log.info("Received: %s %s", contact.jid, avatar_sha)
         app.app.avatar_storage.save_avatar(avatar)
 
         if isinstance(contact, BareContact | GroupchatContact):
             app.storage.archive.set_contact_value(
-                self._account, contact.jid, 'avatar_sha', avatar_sha)
+                self._account, contact.jid, "avatar_sha", avatar_sha
+            )
 
         else:
             self._muc_avatar_cache[contact.jid] = avatar_sha
 
         contact.update_avatar(avatar_sha)
 
-    def _presence_received(self,
-                           _con: types.NBXMPPClient,
-                           _stanza: Presence,
-                           properties: PresenceProperties
-                           ) -> None:
+    def _presence_received(
+        self,
+        _con: types.NBXMPPClient,
+        _stanza: Presence,
+        properties: PresenceProperties,
+    ) -> None:
 
-        if properties.avatar_state in (AvatarState.IGNORE,
-                                       AvatarState.NOT_READY):
+        if properties.avatar_state in (AvatarState.IGNORE, AvatarState.NOT_READY):
             return
 
         assert properties.jid is not None
@@ -121,11 +121,10 @@ class VCardAvatars(BaseModule):
 
         else:
             jid = properties.jid.new_as_bare()
-            muc = self._con.get_module('MUC').get_muc_data(properties.jid)
-            self._process_update(jid,
-                                 properties.avatar_state,
-                                 properties.avatar_sha,
-                                 muc is not None)
+            muc = self._con.get_module("MUC").get_muc_data(properties.jid)
+            self._process_update(
+                jid, properties.avatar_state, properties.avatar_sha, muc is not None
+            )
 
     def muc_disco_info_update(self, disco_info: DiscoInfo) -> None:
         if not disco_info.supports(Namespace.VCARD):
@@ -143,59 +142,57 @@ class VCardAvatars(BaseModule):
             # support sha in disco info.
             return
 
-        avatar_sha = disco_info.get_field_value(
-            Namespace.MUC_INFO, ns_avatar_hash) or None
+        avatar_sha = (
+            disco_info.get_field_value(Namespace.MUC_INFO, ns_avatar_hash) or None
+        )
         state = AvatarState.EMPTY if not avatar_sha else AvatarState.ADVERTISED
 
         assert disco_info.jid is not None
         self._process_update(disco_info.jid, state, avatar_sha, True)
 
-    def _process_update(self,
-                        jid: JID,
-                        state: AvatarState,
-                        avatar_sha: str | None,
-                        groupchat: bool
-                        ) -> None:
-        contact = self._con.get_module('Contacts').get_contact(
-            jid, groupchat=groupchat)
+    def _process_update(
+        self, jid: JID, state: AvatarState, avatar_sha: str | None, groupchat: bool
+    ) -> None:
+        contact = self._con.get_module("Contacts").get_contact(jid, groupchat=groupchat)
         assert isinstance(contact, BareContact | GroupchatContact)
 
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
             assert avatar_sha is None
-            self._log.info('%s has no avatar published', jid)
+            self._log.info("%s has no avatar published", jid)
             app.storage.archive.set_contact_value(
-                self._account, contact.jid, 'avatar_sha', None)
+                self._account, contact.jid, "avatar_sha", None
+            )
             contact.update_avatar(avatar_sha)
 
         else:
             assert avatar_sha
-            self._log.info('Update: %s %s', jid, avatar_sha)
+            self._log.info("Update: %s %s", jid, avatar_sha)
 
             if avatar_sha == contact.avatar_sha:
-                self._log.info('Avatar already known: %s %s', jid, avatar_sha)
+                self._log.info("Avatar already known: %s %s", jid, avatar_sha)
                 return
 
             if app.app.avatar_storage.avatar_exists(avatar_sha):
                 # Check if the avatar is already in storage
-                self._log.info('Found avatar in storage')
+                self._log.info("Found avatar in storage")
                 app.storage.archive.set_contact_value(
-                    self._account, contact.jid, 'avatar_sha', avatar_sha)
+                    self._account, contact.jid, "avatar_sha", avatar_sha
+                )
                 contact.update_avatar(avatar_sha)
                 return
 
             if avatar_sha not in self._requested_shas:
                 self._requested_shas.append(avatar_sha)
 
-                task = VCardAvatarsTask(contact,
-                                        avatar_sha,
-                                        self._request_vcard)
+                task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
                 app.task_manager.add_task(task)
 
     def _muc_update_received(self, properties: PresenceProperties) -> None:
         assert properties.jid is not None
-        contact = self._con.get_module('Contacts').get_contact(properties.jid,
-                                                               groupchat=True)
+        contact = self._con.get_module("Contacts").get_contact(
+            properties.jid, groupchat=True
+        )
         assert isinstance(contact, GroupchatParticipant)
 
         if contact.is_blocked:
@@ -207,51 +204,48 @@ class VCardAvatars(BaseModule):
             # We have no disco when we create a new room, but receive our
             # self presence
             allow_query = contact.room.get_config_value(
-                'muc#roomconfig_allow_query_users')
+                "muc#roomconfig_allow_query_users"
+            )
             if allow_query is False:
-                self._log.debug('Room does not allow IQ queries: %s',
-                                contact.room.jid)
+                self._log.debug("Room does not allow IQ queries: %s", contact.room.jid)
                 return
 
         nick = properties.jid.resource
 
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
-            self._log.info('%s has no avatar published', nick)
+            self._log.info("%s has no avatar published", nick)
             self._muc_avatar_cache.pop(properties.jid, None)
             contact.update_avatar()
 
         else:
             assert properties.avatar_sha
-            self._log.info('Update: %s %s', nick, properties.avatar_sha)
+            self._log.info("Update: %s %s", nick, properties.avatar_sha)
             if not app.app.avatar_storage.avatar_exists(properties.avatar_sha):
                 if properties.avatar_sha not in self._requested_shas:
-                    app.log('avatar').info('Request: %s', nick)
+                    app.log("avatar").info("Request: %s", nick)
                     self._requested_shas.append(properties.avatar_sha)
 
-                    task = VCardAvatarsTask(contact,
-                                            properties.avatar_sha,
-                                            self._request_vcard)
+                    task = VCardAvatarsTask(
+                        contact, properties.avatar_sha, self._request_vcard
+                    )
                     app.task_manager.add_task(task)
                 return
 
             current_avatar_sha = self._muc_avatar_cache.get(properties.jid)
             if current_avatar_sha != properties.avatar_sha:
-                self._log.info('%s changed their Avatar: %s',
-                               nick, properties.avatar_sha)
+                self._log.info(
+                    "%s changed their Avatar: %s", nick, properties.avatar_sha
+                )
                 self._muc_avatar_cache[properties.jid] = properties.avatar_sha
                 contact.update_avatar()
 
             else:
-                self._log.info('Avatar already known: %s', nick)
+                self._log.info("Avatar already known: %s", nick)
 
 
 class VCardAvatarsTask(Task):
-    def __init__(self,
-                 contact: Any,
-                 sha: str,
-                 callback: Callable[..., Any]
-                 ) -> None:
+    def __init__(self, contact: Any, sha: str, callback: Callable[..., Any]) -> None:
 
         Task.__init__(self)
         self._contact = contact
@@ -282,7 +276,7 @@ class VCardAvatarsTask(Task):
         return True
 
     def __repr__(self) -> str:
-        return f'VCardAvatars ({self._contact.jid} {self._sha})'
+        return f"VCardAvatars ({self._contact.jid} {self._sha})"
 
     def __hash__(self) -> int:
         return hash((self._contact, self._sha))

@@ -14,18 +14,17 @@ from gajim.common.modules.base import BaseModule
 
 
 class PubSub(BaseModule):
-
-    _nbxmpp_extends = 'PubSub'
+    _nbxmpp_extends = "PubSub"
     _nbxmpp_methods = [
-        'publish',
-        'delete',
-        'set_node_configuration',
-        'get_node_configuration',
-        'get_access_model',
-        'request_items',
-        'subscribe',
-        'unsubscribe',
-        'get_subscriptions',
+        "publish",
+        "delete",
+        "set_node_configuration",
+        "get_node_configuration",
+        "get_access_model",
+        "request_items",
+        "subscribe",
+        "unsubscribe",
+        "get_subscriptions",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -35,5 +34,5 @@ class PubSub(BaseModule):
 
     def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.PUBSUB_PUBLISH_OPTIONS in info.features:
-            self._log.info('Discovered Pubsub publish options: %s', info.jid)
+            self._log.info("Discovered Pubsub publish options: %s", info.jid)
             self.publish_options = True

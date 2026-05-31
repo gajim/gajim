@@ -25,10 +25,9 @@ from gajim.common.util.decorators import event_filter
 
 
 class UserLocation(BaseModule):
-
-    _nbxmpp_extends = 'Location'
+    _nbxmpp_extends = "Location"
     _nbxmpp_methods = [
-        'set_location',
+        "set_location",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -45,11 +44,9 @@ class UserLocation(BaseModule):
         return self._contact_locations.get(jid)
 
     @event_node(Namespace.LOCATION)
-    def _location_received(self,
-                           _con: types.NBXMPPClient,
-                           _stanza: Message,
-                           properties: MessageProperties
-                           ) -> None:
+    def _location_received(
+        self, _con: types.NBXMPPClient, _stanza: Message, properties: MessageProperties
+    ) -> None:
         assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
@@ -62,33 +59,33 @@ class UserLocation(BaseModule):
         self._contact_locations[properties.jid] = data
 
         contact = self._get_contact(properties.jid)
-        contact.notify('location-update', data)
+        contact.notify("location-update", data)
 
     @store_publish
-    def set_location(self,
-                     location: LocationData | None,
-                     force: bool = False
-                     ) -> None:
-        if not self._con.get_module('PEP').supported:
+    def set_location(self, location: LocationData | None, force: bool = False) -> None:
+        if not self._con.get_module("PEP").supported:
             return
 
         if not force and not app.settings.get_account_setting(
-                self._account, 'publish_location'):
+            self._account, "publish_location"
+        ):
             return
 
         if location == self._current_location:
             return
 
         self._current_location = location
-        self._log.info('Send %s', location)
-        self._nbxmpp('Location').set_location(location)
+        self._log.info("Send %s", location)
+        self._nbxmpp("Location").set_location(location)
 
     def set_enabled(self, enable: bool) -> None:
         if enable:
-            self.register_events([
-                ('location-changed', ged.CORE, self._on_location_changed),
-                ('signed-in', ged.CORE, self._on_signed_in),
-            ])
+            self.register_events(
+                [
+                    ("location-changed", ged.CORE, self._on_location_changed),
+                    ("signed-in", ged.CORE, self._on_signed_in),
+                ]
+            )
             self._publish_current_location()
         else:
             self.unregister_events()
@@ -97,7 +94,7 @@ class UserLocation(BaseModule):
     def _publish_current_location(self):
         self.set_location(LocationListener.get().current_location)
 
-    @event_filter(['account'])
+    @event_filter(["account"])
     def _on_signed_in(self, _event: SignedIn) -> None:
         self._publish_current_location()
 

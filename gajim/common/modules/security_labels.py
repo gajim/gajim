@@ -24,10 +24,9 @@ from gajim.common.modules.util import as_task
 
 
 class SecLabels(BaseModule):
-
-    _nbxmpp_extends = 'SecurityLabels'
+    _nbxmpp_extends = "SecurityLabels"
     _nbxmpp_methods = [
-        'request_catalog',
+        "request_catalog",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -41,13 +40,13 @@ class SecLabels(BaseModule):
             return
 
         self.supported = True
-        self._log.info('Discovered security labels: %s', info.jid)
+        self._log.info("Discovered security labels: %s", info.jid)
 
     @as_task
     def request_catalog(self, jid: JID) -> Generator[Any, Any]:
         _task = yield
 
-        catalog = yield self._nbxmpp('SecurityLabels').request_catalog(str(jid))
+        catalog = yield self._nbxmpp("SecurityLabels").request_catalog(str(jid))
 
         if is_error(catalog):
             self._log.info(catalog)
@@ -56,11 +55,11 @@ class SecLabels(BaseModule):
         assert isinstance(catalog, Catalog)
         self._catalogs[jid] = catalog
 
-        self._log.info('Received catalog: %s', jid)
+        self._log.info("Received catalog: %s", jid)
 
-        app.ged.raise_event(SecCatalogReceived(account=self._account,
-                                               jid=jid,
-                                               catalog=catalog))
+        app.ged.raise_event(
+            SecCatalogReceived(account=self._account, jid=jid, catalog=catalog)
+        )
 
     def get_catalog(self, jid: JID) -> Catalog | None:
         if not self.supported:

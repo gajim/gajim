@@ -12,17 +12,16 @@ from pathlib import Path
 
 from gi.repository import Gtk
 
-if sys.platform == 'win32' or typing.TYPE_CHECKING:
+if sys.platform == "win32" or typing.TYPE_CHECKING:
     import winsound
 
-if sys.platform == 'darwin' or typing.TYPE_CHECKING:
+if sys.platform == "darwin" or typing.TYPE_CHECKING:
     from AppKit import NSSound
 
-log = logging.getLogger('gajim.c.sound')
+log = logging.getLogger("gajim.c.sound")
 
 
 class PlaySound:
-
     def play(self, path: Path, loop: bool = False) -> None:
         raise NotImplementedError
 
@@ -34,7 +33,6 @@ class PlaySound:
 
 
 class PlatformWindows(PlaySound):
-
     def __init__(self) -> None:
         self._loop_in_progress = False
 
@@ -43,9 +41,7 @@ class PlatformWindows(PlaySound):
             return
 
         assert winsound is not None
-        flags = (winsound.SND_FILENAME |
-                 winsound.SND_ASYNC |
-                 winsound.SND_NODEFAULT)
+        flags = winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_NODEFAULT
         if loop:
             self._loop_in_progress = True
             flags = flags | winsound.SND_LOOP
@@ -53,14 +49,14 @@ class PlatformWindows(PlaySound):
         try:
             winsound.PlaySound(str(path), flags)
         except Exception:
-            log.exception('Sound Playback Error')
+            log.exception("Sound Playback Error")
 
     def stop(self) -> None:
         assert winsound is not None
         try:
             winsound.PlaySound(None, 0)
         except Exception:
-            log.exception('Sound Playback Error')
+            log.exception("Sound Playback Error")
         self._loop_in_progress = False
 
     def loop_in_progress(self) -> bool:
@@ -68,7 +64,6 @@ class PlatformWindows(PlaySound):
 
 
 class PlatformMacOS(PlaySound):
-
     def play(self, path: Path, loop: bool = False) -> None:
         assert NSSound is not None
         sound = NSSound.alloc()
@@ -83,7 +78,6 @@ class PlatformMacOS(PlaySound):
 
 
 class PlatformUnix(PlaySound):
-
     def __init__(self) -> None:
         self._media_file: Gtk.MediaFile | None = None
 
@@ -109,10 +103,10 @@ class PlatformUnix(PlaySound):
 
 
 def _init_platform() -> PlaySound:
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         return PlatformWindows()
 
-    if sys.platform == 'darwin':
+    if sys.platform == "darwin":
         return PlatformMacOS()
 
     return PlatformUnix()

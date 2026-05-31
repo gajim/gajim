@@ -29,8 +29,7 @@ from gajim.common.structs import OutgoingMessage
 
 
 class Retraction(BaseModule):
-
-    _nbxmpp_extends = 'Retraction'
+    _nbxmpp_extends = "Retraction"
 
     def __init__(self, client: types.Client) -> None:
         BaseModule.__init__(self, client)
@@ -59,7 +58,7 @@ class Retraction(BaseModule):
             )
 
             self._client.send_message(message)
-            self._log.info('Send retraction for %s to %s', retraction_id, contact.jid)
+            self._log.info("Send retraction for %s to %s", retraction_id, contact.jid)
 
     def _process_retraction_message(
         self,
@@ -81,7 +80,7 @@ class Retraction(BaseModule):
         assert properties.remote_jid is not None
         assert properties.jid is not None
 
-        muc_data = self._client.get_module('MUC').get_muc_data(properties.remote_jid)
+        muc_data = self._client.get_module("MUC").get_muc_data(properties.remote_jid)
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, self._client.get_own_jid(), properties
@@ -94,12 +93,12 @@ class Retraction(BaseModule):
         occupant = None
 
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
-            contact = self._client.get_module('Contacts').get_contact(
+            contact = self._client.get_module("Contacts").get_contact(
                 properties.jid, groupchat=True
             )
             if not isinstance(contact, GroupchatParticipant):
                 self._log.warning(
-                    'Ignore unexpected retraction from: %s' % properties.jid
+                    "Ignore unexpected retraction from: %s" % properties.jid
                 )
                 return
 
@@ -117,8 +116,11 @@ class Retraction(BaseModule):
         if properties.retraction.is_tombstone:
             assert properties.mam is not None
 
-            self._log.info('Received retraction tombstone from %s for %s',
-                           remote_jid, properties.mam.id)
+            self._log.info(
+                "Received retraction tombstone from %s for %s",
+                remote_jid,
+                properties.mam.id,
+            )
 
             message_data = mod.Message(
                 account_=self._account,
@@ -147,9 +149,11 @@ class Retraction(BaseModule):
             )
 
         else:
-
-            self._log.info('Received retraction from %s for %s',
-                           remote_jid, properties.retraction.id)
+            self._log.info(
+                "Received retraction from %s for %s",
+                remote_jid,
+                properties.retraction.id,
+            )
             retraction = mod.Retraction(
                 account_=self._account,
                 remote_jid_=remote_jid,

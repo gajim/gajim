@@ -16,11 +16,10 @@ from gajim.common.types import ConnectionT
 
 
 class Annotations(BaseModule):
-
-    _nbxmpp_extends = 'Annotations'
+    _nbxmpp_extends = "Annotations"
     _nbxmpp_methods = [
-        'request_annotations',
-        'set_annotations',
+        "request_annotations",
+        "set_annotations",
     ]
 
     def __init__(self, con: ConnectionT) -> None:
@@ -29,8 +28,9 @@ class Annotations(BaseModule):
         self._annotations: dict[JID | str, AnnotationNote] = {}
 
     def request_annotations(self) -> None:
-        self._nbxmpp('Annotations').request_annotations(
-            callback=self._annotations_received)
+        self._nbxmpp("Annotations").request_annotations(
+            callback=self._annotations_received
+        )
 
     def _annotations_received(self, task: Task) -> None:
         try:

@@ -67,8 +67,7 @@ class ContactSettings:
     def get(self, setting: BoolContactSettings) -> bool: ...
 
     def get(self, setting: AllContactSettings) -> AllContactSettingsT:
-        return app.settings.get_contact_setting(
-            self._account, self._jid, setting)
+        return app.settings.get_contact_setting(self._account, self._jid, setting)
 
     @overload
     def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501
@@ -76,8 +75,7 @@ class ContactSettings:
     def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501
 
     def set(self, setting: Any, value: Any) -> None:
-        app.settings.set_contact_setting(
-            self._account, self._jid, setting, value)
+        app.settings.set_contact_setting(self._account, self._jid, setting, value)
 
 
 class GroupChatSettings:
@@ -93,8 +91,7 @@ class GroupChatSettings:
     def get(self, setting: IntGroupChatSettings) -> int: ...
 
     def get(self, setting: AllGroupChatSettings) -> AllGroupChatSettingsT:
-        return app.settings.get_group_chat_setting(
-            self._account, self._jid, setting)
+        return app.settings.get_group_chat_setting(self._account, self._jid, setting)
 
     @overload
     def set(self, setting: StringGroupChatSettings, value: str | None) -> None: ...  # noqa: E501
@@ -104,8 +101,7 @@ class GroupChatSettings:
     def set(self, setting: IntGroupChatSettings, value: int | None) -> None: ...  # noqa: E501
 
     def set(self, setting: Any, value: Any) -> None:
-        app.settings.set_group_chat_setting(
-            self._account, self._jid, setting, value)
+        app.settings.set_group_chat_setting(self._account, self._jid, setting, value)
 
 
 class Contacts(BaseModule):
@@ -113,18 +109,17 @@ class Contacts(BaseModule):
         BaseModule.__init__(self, client)
 
         self._contacts: dict[JID, BareContact | GroupchatContact] = {}
-        self._con.connect_signal('state-changed', self._on_client_state_changed)
-        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
+        self._con.connect_signal("state-changed", self._on_client_state_changed)
+        self._con.connect_signal("resume-failed", self._on_client_resume_failed)
 
-    def _on_client_resume_failed(self,
-                                 _client: types.Client,
-                                 _signal_name: str) -> None:
+    def _on_client_resume_failed(
+        self, _client: types.Client, _signal_name: str
+    ) -> None:
         self._reset_presence()
 
-    def _on_client_state_changed(self,
-                                 _client: types.Client,
-                                 _signal_name: str,
-                                 state: SimpleClientState) -> None:
+    def _on_client_state_changed(
+        self, _client: types.Client, _signal_name: str, state: SimpleClientState
+    ) -> None:
         if state.is_disconnected:
             self._reset_presence()
 
@@ -135,8 +130,10 @@ class Contacts(BaseModule):
         contact = self._contacts.get(jid)
         if contact is not None:
             if not isinstance(contact, BareContact):
-                raise ValueError(f'Trying to add BareContact {jid}, '
-                                 f'but contact exists already as {contact}')
+                raise ValueError(
+                    f"Trying to add BareContact {jid}, "
+                    f"but contact exists already as {contact}"
+                )
             return contact
 
         contact = BareContact(self._log, jid, self._account)
@@ -153,13 +150,15 @@ class Contacts(BaseModule):
             if isinstance(contact, GroupchatContact):
                 return contact
 
-            self._log.error(f'Trying to add GroupchatContact {jid}, '
-                            f'but contact already exists as {contact} '
-                            f'(in roster: {contact.is_in_roster})')
+            self._log.error(
+                f"Trying to add GroupchatContact {jid}, "
+                f"but contact already exists as {contact} "
+                f"(in roster: {contact.is_in_roster})"
+            )
             # Most likely a groupchat which has been added to the roster.
             # Remove jid from roster (if we are online) and delete contact.
             if self._client.state.is_available:
-                self._client.get_module('Roster').delete_item(jid)
+                self._client.get_module("Roster").delete_item(jid)
             self._contacts.pop(jid)
 
         contact = GroupchatContact(self._log, jid, self._account)
@@ -172,7 +171,7 @@ class Contacts(BaseModule):
             jid = JID.from_string(jid)
 
         if jid.resource is None:
-            raise ValueError(f'Trying to add a bare JID as private {jid}')
+            raise ValueError(f"Trying to add a bare JID as private {jid}")
 
         contact = self._contacts.get(jid.new_as_bare())
         if contact is None:
@@ -180,14 +179,15 @@ class Contacts(BaseModule):
             return group_chat_contact.add_resource(jid.resource)
 
         if not isinstance(contact, GroupchatContact):
-            raise ValueError(f'Trying to add GroupchatParticipant {jid}, '
-                             f'to BareContact {contact}')
+            raise ValueError(
+                f"Trying to add GroupchatParticipant {jid}, to BareContact {contact}"
+            )
 
         return contact.add_resource(jid.resource)
 
-    def add_contact(self,
-                    jid: str | JID,
-                    groupchat: bool = False) -> BareContact | GroupchatContact:
+    def add_contact(
+        self, jid: str | JID, groupchat: bool = False
+    ) -> BareContact | GroupchatContact:
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -203,10 +203,7 @@ class Contacts(BaseModule):
         self._contacts[jid] = contact
         return contact
 
-    def get_contact(self,
-                    jid: str | JID,
-                    groupchat: bool = False
-                    ) -> types.ContactT:
+    def get_contact(self, jid: str | JID, groupchat: bool = False) -> types.ContactT:
 
         if isinstance(jid, str):
             jid = JID.from_string(jid)
@@ -225,8 +222,7 @@ class Contacts(BaseModule):
         return contact
 
     def get_contact_if_exists(
-        self,
-        jid: JID
+        self, jid: JID
     ) -> BareContact | ResourceContact | GroupchatContact | GroupchatParticipant | None:
         contact = self._contacts.get(jid.new_as_bare())
         if contact is None:
@@ -236,9 +232,9 @@ class Contacts(BaseModule):
             return contact.get_resource_if_exists(jid.resource)
         return contact
 
-    def get_contacts_with_domain(self,
-                                 domain: str
-                                 ) -> list[BareContact | GroupchatContact]:
+    def get_contacts_with_domain(
+        self, domain: str
+    ) -> list[BareContact | GroupchatContact]:
 
         contacts: list[BareContact | GroupchatContact] = []
         for contact in self._contacts.values():
@@ -259,11 +255,7 @@ class Contacts(BaseModule):
 
 
 class CommonContact(Observable):
-    def __init__(self,
-                 logger: LogAdapter | None,
-                 jid: JID,
-                 account: str
-                 ) -> None:
+    def __init__(self, logger: LogAdapter | None, jid: JID, account: str) -> None:
 
         Observable.__init__(self, logger)
         self._jid = jid
@@ -271,14 +263,13 @@ class CommonContact(Observable):
         self._gateway_type: str | None = None
 
     def __hash__(self) -> int:
-        return hash(f'{self._account}-{self._jid}')
+        return hash(f"{self._account}-{self._jid}")
 
     def __eq__(self, obj: object) -> bool:
         if not isinstance(obj, CommonContact):
             return NotImplemented
 
-        return (self._account == obj.account and
-                obj._jid == self._jid)
+        return self._account == obj.account and obj._jid == self._jid
 
     @property
     def jid(self) -> JID:
@@ -293,13 +284,12 @@ class CommonContact(Observable):
 
     def _on_signal(
         self,
-        _contact: (BareContact |
-                   ResourceContact |
-                   GroupchatContact |
-                   GroupchatParticipant),
+        _contact: (
+            BareContact | ResourceContact | GroupchatContact | GroupchatParticipant
+        ),
         signal_name: str,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         self.notify(signal_name, *args, **kwargs)
 
@@ -347,7 +337,7 @@ class CommonContact(Observable):
 
     @property
     def is_muted(self) -> bool:
-        mute_until = self.settings.get('mute_until')
+        mute_until = self.settings.get("mute_until")
         if not mute_until:
             return False
 
@@ -355,15 +345,15 @@ class CommonContact(Observable):
         is_muted = until > datetime.now(UTC)
         if not is_muted:
             # Reset the setting to default
-            GLib.idle_add(self.settings.set, 'mute_until', None)
+            GLib.idle_add(self.settings.set, "mute_until", None)
         return is_muted
 
     def __repr__(self) -> str:
-        return f'{self.jid} ({self._account})'
+        return f"{self.jid} ({self._account})"
 
     def _get_transport_icon_name(self) -> str | None:
         if self._gateway_type is not None:
-            return f'gateway-{self._gateway_type}'
+            return f"gateway-{self._gateway_type}"
 
         domain_disco = app.storage.cache.get_last_disco_info(self._jid.domain)
         if domain_disco is None:
@@ -371,14 +361,14 @@ class CommonContact(Observable):
 
         if gateway_type := domain_disco.gateway_type:
             self._gateway_type = gateway_type
-            return f'gateway-{gateway_type}'
+            return f"gateway-{gateway_type}"
 
     def update_gateway_type(self, gateway_type: str | None):
         if gateway_type == self._gateway_type:
             return
 
         self._gateway_type = gateway_type
-        self.notify('avatar-update')
+        self.notify("avatar-update")
 
 
 class BareContact(CommonContact):
@@ -389,7 +379,8 @@ class BareContact(CommonContact):
         self._resources: dict[str, ResourceContact] = {}
 
         self._avatar_sha = app.storage.archive.get_contact_value(
-            account, jid, "avatar_sha")
+            account, jid, "avatar_sha"
+        )
         self._presence = UNKNOWN_PRESENCE
 
     @property
@@ -400,20 +391,19 @@ class BareContact(CommonContact):
     def supports(self, requested_feature: str) -> bool:
         if not self._resources:
             return super().supports(requested_feature)
-        return any(resource.supports(requested_feature)
-                   for resource in self.iter_resources())
+        return any(
+            resource.supports(requested_feature) for resource in self.iter_resources()
+        )
 
     @property
     def supports_audio(self) -> bool:
-        if (self.supports(Namespace.JINGLE_ICE_UDP) and
-                app.is_installed('FARSTREAM')):
+        if self.supports(Namespace.JINGLE_ICE_UDP) and app.is_installed("FARSTREAM"):
             return self.supports(Namespace.JINGLE_RTP_AUDIO)
         return False
 
     @property
     def supports_video(self) -> bool:
-        if (self.supports(Namespace.JINGLE_ICE_UDP) and
-                app.is_installed('FARSTREAM')):
+        if self.supports(Namespace.JINGLE_ICE_UDP) and app.is_installed("FARSTREAM"):
             return self.supports(Namespace.JINGLE_RTP_VIDEO)
         return False
 
@@ -427,9 +417,9 @@ class BareContact(CommonContact):
         assert isinstance(self._log, LogAdapter)
         contact = ResourceContact(self._log, jid, self._account)
         self._resources[resource] = contact
-        contact.connect('presence-update', self._on_signal)
-        contact.connect('nickname-update', self._on_signal)
-        contact.connect('caps-update', self._on_signal)
+        contact.connect("presence-update", self._on_signal)
+        contact.connect("nickname-update", self._on_signal)
+        contact.connect("caps-update", self._on_signal)
         return contact
 
     def has_resources(self) -> bool:
@@ -448,8 +438,7 @@ class BareContact(CommonContact):
         if not self._resources:
             return None
 
-        return sorted(self._resources.values(),
-                      key=operator.attrgetter('show'))[-1]
+        return sorted(self._resources.values(), key=operator.attrgetter("show"))[-1]
 
     def get_resources(self) -> list[ResourceContact]:
         resources: list[ResourceContact] = []
@@ -467,8 +456,7 @@ class BareContact(CommonContact):
     def is_available(self) -> bool:
         if not self._resources:
             return self._presence.available
-        return any(contact.is_available for contact
-                   in self._resources.values())
+        return any(contact.is_available for contact in self._resources.values())
 
     @property
     def show(self) -> PresenceShow | Literal[PresenceShowExt.OFFLINE]:
@@ -501,15 +489,16 @@ class BareContact(CommonContact):
 
     @property
     def chatstate(self) -> Chatstate | None:
-        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
+        return self.get_module("Chatstate").get_remote_chatstate(self._jid)
 
     def force_chatstate_update(self) -> None:
-        self.notify('chatstate-update')
+        self.notify("chatstate-update")
 
     @property
     def name(self) -> str:
         if custom_name := app.storage.archive.get_contact_value(
-                self._account, self._jid, "custom_name"):
+            self._account, self._jid, "custom_name"
+        ):
             return custom_name
 
         return self.original_name
@@ -517,7 +506,8 @@ class BareContact(CommonContact):
     @property
     def original_name(self) -> str:
         if remote_name := app.storage.archive.get_contact_value(
-                self._account, self._jid, "remote_name"):
+            self._account, self._jid, "remote_name"
+        ):
             return remote_name
 
         if self._jid.is_domain:
@@ -528,22 +518,23 @@ class BareContact(CommonContact):
         return self._jid.localpart
 
     def get_tune(self) -> TuneData | None:
-        return self.get_module('UserTune').get_contact_tune(self._jid)
+        return self.get_module("UserTune").get_contact_tune(self._jid)
 
     def get_location(self) -> LocationData | None:
-        return self.get_module('UserLocation').get_contact_location(self._jid)
+        return self.get_module("UserLocation").get_contact_location(self._jid)
 
     @property
     def avatar_sha(self) -> str | None:
         return self._avatar_sha
 
-    def get_avatar(self,
-                   size: int,
-                   scale: int,
-                   add_show: bool = True,
-                   default: bool = False,
-                   style: str = 'circle'
-                   ) -> Gdk.Texture:
+    def get_avatar(
+        self,
+        size: int,
+        scale: int,
+        add_show: bool = True,
+        default: bool = False,
+        style: str = "circle",
+    ) -> Gdk.Texture:
 
         show = self.show.value if add_show else None
 
@@ -556,14 +547,15 @@ class BareContact(CommonContact):
             show,
             default=default,
             transport_icon=transport_icon,
-            style=style)
+            style=style,
+        )
 
     def update_presence(self, presence_data: PresenceData) -> None:
         self._presence = presence_data
         if not presence_data.available:
             for contact in self._resources.values():
                 contact.update_presence(presence_data, notify=False)
-        self.notify('presence-update')
+        self.notify("presence-update")
 
     def update_avatar(self, sha: str | None) -> None:
         if self._avatar_sha == sha:
@@ -572,11 +564,11 @@ class BareContact(CommonContact):
         self._avatar_sha = sha
 
         app.app.avatar_storage.invalidate_cache(self._jid)
-        self.notify('avatar-update')
+        self.notify("avatar-update")
 
     @property
     def is_in_roster(self) -> bool:
-        item = self.get_module('Roster').get_item(self._jid)
+        item = self.get_module("Roster").get_item(self._jid)
         return item is not None
 
     @property
@@ -588,39 +580,39 @@ class BareContact(CommonContact):
 
     @property
     def ask(self) -> str | None:
-        item = self.get_module('Roster').get_item(self._jid)
+        item = self.get_module("Roster").get_item(self._jid)
         if item is None:
             return None
         return item.ask
 
     @property
     def subscription(self) -> str | None:
-        item = self.get_module('Roster').get_item(self._jid)
+        item = self.get_module("Roster").get_item(self._jid)
         if item is None:
             return None
         return item.subscription
 
     @property
     def groups(self) -> set[str]:
-        item = self.get_module('Roster').get_item(self._jid)
+        item = self.get_module("Roster").get_item(self._jid)
         if item is None:
             return set()
         return item.groups
 
     @property
     def is_subscribed(self) -> bool:
-        return self.subscription in ('from', 'both')
+        return self.subscription in ("from", "both")
 
     @property
     def is_blocked(self) -> bool:
-        return self.get_module('Blocking').is_blocked(self._jid)
+        return self.get_module("Blocking").is_blocked(self._jid)
 
     def set_blocked(self) -> None:
         self.update_presence(UNKNOWN_PRESENCE)
-        self.notify('blocking-update')
+        self.notify("blocking-update")
 
     def set_unblocked(self) -> None:
-        self.notify('blocking-update')
+        self.notify("blocking-update")
 
     @property
     def is_jingle_available(self) -> bool:
@@ -633,14 +625,14 @@ class BareContact(CommonContact):
         return True
 
     @property
-    def type_string(self) -> Literal['chat']:
-        return 'chat'
+    def type_string(self) -> Literal["chat"]:
+        return "chat"
 
     @property
     def is_bot(self) -> bool:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
 
-        if disco_info is not None and disco_info.has_identity('client', 'bot'):
+        if disco_info is not None and disco_info.has_identity("client", "bot"):
             return True
 
         return any(r.is_bot for r in self.iter_resources())
@@ -687,14 +679,12 @@ class ResourceContact(CommonContact):
         if disco_info is None:
             return False
 
-        return any(identity.type == 'phone' for
-                   identity in disco_info.identities)
+        return any(identity.type == "phone" for identity in disco_info.identities)
 
     @property
     def is_bot(self):
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
-        return (disco_info is not None
-                and disco_info.has_identity('client', 'bot'))
+        return disco_info is not None and disco_info.has_identity("client", "bot")
 
     @property
     def is_available(self) -> bool:
@@ -718,13 +708,10 @@ class ResourceContact(CommonContact):
     def idle_datetime(self) -> datetime | None:
         return self._presence.idle_datetime
 
-    def update_presence(self,
-                        presence_data: PresenceData,
-                        notify: bool = True
-                        ) -> None:
+    def update_presence(self, presence_data: PresenceData, notify: bool = True) -> None:
         self._presence = presence_data
         if notify:
-            self.notify('presence-update')
+            self.notify("presence-update")
 
     @property
     def type_string(self) -> str:
@@ -743,7 +730,8 @@ class GroupchatContact(CommonContact):
         self._resources: dict[str, GroupchatParticipant] = {}
 
         self._avatar_sha = app.storage.archive.get_contact_value(
-            account, jid, "avatar_sha")
+            account, jid, "avatar_sha"
+        )
 
     @property
     def is_groupchat(self) -> bool:
@@ -763,8 +751,8 @@ class GroupchatContact(CommonContact):
             return None
 
         if disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous:
-            return 'private'
-        return 'public'
+            return "private"
+        return "public"
 
     @property
     def encryption_available(self) -> bool:
@@ -772,8 +760,7 @@ class GroupchatContact(CommonContact):
         if disco_info is None:
             return True
 
-        return (disco_info.muc_is_members_only and
-                disco_info.muc_is_nonanonymous)
+        return disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous
 
     def get_config_value(self, field_name: str) -> Any:
         disco_info = self.get_disco()
@@ -794,13 +781,13 @@ class GroupchatContact(CommonContact):
         assert isinstance(self._log, LogAdapter)
         contact = GroupchatParticipant(self._log, jid, self._account)
         self._resources[resource] = contact
-        contact.connect('user-joined', self._on_user_signal)
-        contact.connect('user-left', self._on_user_signal)
-        contact.connect('user-affiliation-changed', self._on_user_signal)
-        contact.connect('user-role-changed', self._on_user_signal)
-        contact.connect('user-hats-changed', self._on_user_signal)
-        contact.connect('user-status-show-changed', self._on_user_signal)
-        contact.connect('user-avatar-update', self._on_user_signal)
+        contact.connect("user-joined", self._on_user_signal)
+        contact.connect("user-left", self._on_user_signal)
+        contact.connect("user-affiliation-changed", self._on_user_signal)
+        contact.connect("user-role-changed", self._on_user_signal)
+        contact.connect("user-hats-changed", self._on_user_signal)
+        contact.connect("user-status-show-changed", self._on_user_signal)
+        contact.connect("user-avatar-update", self._on_user_signal)
         return contact
 
     def get_resource(self, resource: str) -> GroupchatParticipant:
@@ -848,16 +835,12 @@ class GroupchatContact(CommonContact):
         transport_icon = self._get_transport_icon_name()
 
         return app.app.avatar_storage.get_muc_texture(
-            self._account,
-            self._jid,
-            size,
-            scale,
-            transport_icon=transport_icon)
+            self._account, self._jid, size, scale, transport_icon=transport_icon
+        )
 
-    def _on_user_signal(self,
-                        contact: GroupchatParticipant,
-                        signal_name: str, *args: Any
-                        ) -> None:
+    def _on_user_signal(
+        self, contact: GroupchatParticipant, signal_name: str, *args: Any
+    ) -> None:
         self.notify(signal_name, contact, *args)
 
     def update_avatar(self, sha: str | None) -> None:
@@ -867,11 +850,11 @@ class GroupchatContact(CommonContact):
         self._avatar_sha = sha
 
         app.app.avatar_storage.invalidate_cache(self._jid)
-        self.notify('avatar-update')
+        self.notify("avatar-update")
 
     def force_chatstate_update(self) -> None:
         for contact in self._resources.values():
-            contact.notify('chatstate-update')
+            contact.notify("chatstate-update")
 
     def get_self(self) -> GroupchatParticipant | None:
         nick = self.nickname
@@ -880,16 +863,14 @@ class GroupchatContact(CommonContact):
         return self.get_resource(nick)
 
     def get_offline_members(
-        self,
-        affiliation: str | None = None
+        self, affiliation: str | None = None
     ) -> Iterator[GroupchatOfflineParticipant]:
 
         participant_real_jids = {
-            c.real_jid for c in self.get_participants()
-            if c.real_jid is not None
+            c.real_jid for c in self.get_participants() if c.real_jid is not None
         }
 
-        affiliations = self.get_module('MUC').get_affiliations(self._jid)
+        affiliations = self.get_module("MUC").get_affiliations(self._jid)
         for name, jids in affiliations.items():
             if not jids:
                 continue
@@ -899,50 +880,52 @@ class GroupchatContact(CommonContact):
 
             offline_jids = set(jids) - participant_real_jids
             occupants = app.storage.archive.get_occupant_by_jids(
-                self._account, self._jid, offline_jids, max_age=timedelta(minutes=60))
+                self._account, self._jid, offline_jids, max_age=timedelta(minutes=60)
+            )
 
             for jid in offline_jids:
                 yield GroupchatOfflineParticipant(
-                    self._account, jid, self, name, occupants.get(jid))
+                    self._account, jid, self, name, occupants.get(jid)
+                )
 
     @property
     def nickname(self) -> str | None:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.nick
 
     @property
     def occupant_jid(self) -> JID | None:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.occupant_jid
 
     @property
     def subject(self) -> MucSubject | None:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.subject
 
     @property
     def is_joined(self) -> bool:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return False
         return muc_data.state.is_joined
 
     @property
     def is_joining(self) -> bool:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return False
         return muc_data.state.is_joining or muc_data.state.is_before_joining
 
     @property
     def is_not_joined(self) -> bool:
-        muc_data = self.get_module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module("MUC").get_muc_data(self._jid)
         if muc_data is None:
             return True
         return muc_data.state.is_not_joined
@@ -953,25 +936,25 @@ class GroupchatContact(CommonContact):
 
     def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
-        return client.get_module('MUC').get_joined_users(self._jid)
+        return client.get_module("MUC").get_joined_users(self._jid)
 
     def get_disco(self, max_age: int = 0) -> DiscoInfo | None:
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
 
     def can_notify(self) -> bool:
-        all_ = app.settings.get('notify_on_all_muc_messages')
-        room = self.settings.get('notify_on_all_messages')
+        all_ = app.settings.get("notify_on_all_muc_messages")
+        room = self.settings.get("notify_on_all_messages")
         return all_ or room
 
     @property
-    def type_string(self) -> Literal['groupchat']:
-        return 'groupchat'
+    def type_string(self) -> Literal["groupchat"]:
+        return "groupchat"
 
     def has_composing_participants(self) -> bool:
-        return bool(self.get_module('Chatstate').get_composers(self._jid))
+        return bool(self.get_module("Chatstate").get_composers(self._jid))
 
-    def get_composers(self) -> list['GroupchatParticipant']:
-        return self.get_module('Chatstate').get_composers(self._jid)
+    def get_composers(self) -> list["GroupchatParticipant"]:
+        return self.get_module("Chatstate").get_composers(self._jid)
 
     @property
     def reactions_per_user(self) -> int | None:
@@ -1022,8 +1005,9 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def room(self) -> GroupchatContact:
-        contact = self.get_module('Contacts').get_contact_if_exists(
-            self.jid.new_as_bare())
+        contact = self.get_module("Contacts").get_contact_if_exists(
+            self.jid.new_as_bare()
+        )
         assert isinstance(contact, GroupchatContact)
         return contact
 
@@ -1069,8 +1053,7 @@ class GroupchatParticipant(CommonContact):
         jid = self._presence.real_jid
         if jid is None:
             return None
-        contact = self._client.get_module('Contacts').get_contact(
-            jid.new_as_bare())
+        contact = self._client.get_module("Contacts").get_contact(jid.new_as_bare())
         assert isinstance(contact, BareContact)
         return contact
 
@@ -1084,34 +1067,29 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def chatstate(self) -> Chatstate | None:
-        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
+        return self.get_module("Chatstate").get_remote_chatstate(self._jid)
 
     @property
     def avatar_sha(self) -> str | None:
-        return self._client.get_module('VCardAvatars').get_avatar_sha(
-            self._jid)
+        return self._client.get_module("VCardAvatars").get_avatar_sha(self._jid)
 
-    def get_avatar(self,
-                   size: int,
-                   scale: int,
-                   add_show: bool = True,
-                   style: str = 'circle'
-                   ) -> Gdk.Texture:
+    def get_avatar(
+        self, size: int, scale: int, add_show: bool = True, style: str = "circle"
+    ) -> Gdk.Texture:
 
         show = self.show.value if add_show else None
-        return app.app.avatar_storage.get_texture(
-            self, size, scale, show, style=style)
+        return app.app.avatar_storage.get_texture(self, size, scale, show, style=style)
 
     def update_presence(self, presence: MUCPresenceData) -> None:
         self._presence = presence
 
     def update_avatar(self, *args: Any) -> None:
         app.app.avatar_storage.invalidate_cache(self._jid)
-        self.notify('user-avatar-update')
+        self.notify("user-avatar-update")
 
     @property
-    def type_string(self) -> Literal['pm']:
-        return 'pm'
+    def type_string(self) -> Literal["pm"]:
+        return "pm"
 
     @property
     def occupant_id(self) -> str | None:
@@ -1119,7 +1097,7 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def is_self(self) -> bool:
-        data = self.get_module('MUC').get_muc_data(self.room.jid)
+        data = self.get_module("MUC").get_muc_data(self.room.jid)
         assert data is not None
         return data.nick == self.name
 
@@ -1130,8 +1108,9 @@ class GroupchatParticipant(CommonContact):
     @property
     def is_blocked(self) -> bool:
         client = app.get_client(self._account)
-        return client.get_module('MucBlocking').is_blocked(
-            self.room.jid, self.occupant_id)
+        return client.get_module("MucBlocking").is_blocked(
+            self.room.jid, self.occupant_id
+        )
 
     @property
     def reactions_per_user(self) -> int | None:
@@ -1145,7 +1124,7 @@ class GroupchatOfflineParticipant(CommonContact):
         jid: JID,
         room: GroupchatContact,
         affiliation: str,
-        occupant: mod.Occupant | None | ValueMissingT = VALUE_MISSING
+        occupant: mod.Occupant | None | ValueMissingT = VALUE_MISSING,
     ) -> None:
         CommonContact.__init__(self, None, jid, account)
 
@@ -1155,10 +1134,7 @@ class GroupchatOfflineParticipant(CommonContact):
 
         if isinstance(occupant, ValueMissingT):
             occupants = app.storage.archive.get_occupant_by_jids(
-                account,
-                room.jid,
-                [jid],
-                max_age=timedelta(minutes=60)
+                account, room.jid, [jid], max_age=timedelta(minutes=60)
             )
             self._occupant = occupants.get(jid)
         else:
@@ -1166,8 +1142,7 @@ class GroupchatOfflineParticipant(CommonContact):
 
     @classmethod
     def from_participant(
-        cls,
-        contact: GroupchatParticipant
+        cls, contact: GroupchatParticipant
     ) -> GroupchatOfflineParticipant:
         assert contact.real_jid is not None
 
@@ -1234,26 +1209,25 @@ class GroupchatOfflineParticipant(CommonContact):
                 return sha
         return None
 
-    def get_avatar(self,
-                   size: int,
-                   scale: int,
-                   add_show: bool = True,
-                   style: str = 'circle'
-                   ) -> Gdk.Texture:
+    def get_avatar(
+        self, size: int, scale: int, add_show: bool = True, style: str = "circle"
+    ) -> Gdk.Texture:
 
         return app.app.avatar_storage.get_texture(
-            self, size, scale, self.show.value, style=style)
+            self, size, scale, self.show.value, style=style
+        )
 
     def get_real_contact(self) -> BareContact:
-        contact = self._client.get_module('Contacts').get_contact(self._jid)
+        contact = self._client.get_module("Contacts").get_contact(self._jid)
         assert isinstance(contact, BareContact)
         return contact
 
     @property
     def is_blocked(self) -> bool:
         client = app.get_client(self._account)
-        return client.get_module('MucBlocking').is_blocked(
-            self._room.jid, self.occupant_id)
+        return client.get_module("MucBlocking").is_blocked(
+            self._room.jid, self.occupant_id
+        )
 
 
 def can_add_to_roster(contact: BareContact) -> bool:

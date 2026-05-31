@@ -28,15 +28,14 @@ from gajim.common.util.text import normalize_reactions
 
 
 class Reactions(BaseModule):
-
-    _nbxmpp_extends = 'Reactions'
+    _nbxmpp_extends = "Reactions"
 
     def __init__(self, client: types.Client) -> None:
         BaseModule.__init__(self, client)
 
         self.handlers = [
             StanzaHandler(
-                name='message',
+                name="message",
                 callback=self._process_reaction,
                 ns=Namespace.REACTIONS,
                 priority=47,
@@ -55,7 +54,7 @@ class Reactions(BaseModule):
 
         if properties.type.is_normal or properties.type.is_headline:
             self._log.warning(
-                'Reaction with undefined message type %s', properties.type
+                "Reaction with undefined message type %s", properties.type
             )
             raise NodeProcessed
 
@@ -67,7 +66,7 @@ class Reactions(BaseModule):
             raise NodeProcessed
 
         assert properties.jid is not None
-        if (properties.type.is_groupchat and properties.jid.is_bare):
+        if properties.type.is_groupchat and properties.jid.is_bare:
             # Reactions from the bare groupchat jid are not defined
             raise NodeProcessed
 
@@ -78,9 +77,9 @@ class Reactions(BaseModule):
 
         muc_data = None
         if properties.type.is_groupchat:
-            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning('Reaction message from unknown MUC: %s', remote_jid)
+                self._log.warning("Reaction message from unknown MUC: %s", remote_jid)
                 raise NodeProcessed
 
         own_bare_jid = self._get_own_bare_jid()
@@ -93,7 +92,7 @@ class Reactions(BaseModule):
         occupant_id = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
             assert properties.jid is not None
-            contact = self._client.get_module('Contacts').get_contact(
+            contact = self._client.get_module("Contacts").get_contact(
                 properties.jid, groupchat=True
             )
 
@@ -110,7 +109,7 @@ class Reactions(BaseModule):
             )
 
             if occupant is None:
-                self._log.info('Reactions not supported without occupant-id')
+                self._log.info("Reactions not supported without occupant-id")
                 raise NodeProcessed
 
             occupant_id = occupant.id
@@ -123,7 +122,7 @@ class Reactions(BaseModule):
                 reaction_id=properties.reactions.id,
                 direction=direction,
             )
-            self._log.info('Delete reactions: %s', properties.jid)
+            self._log.info("Delete reactions: %s", properties.jid)
             app.ged.raise_event(
                 ReactionUpdated(
                     account=self._account,
@@ -133,7 +132,7 @@ class Reactions(BaseModule):
                     occupant=occupant,
                     emojis=None,
                     message=None,
-                    is_mam_message=properties.is_mam_message
+                    is_mam_message=properties.is_mam_message,
                 )
             )
             raise NodeProcessed
@@ -143,8 +142,8 @@ class Reactions(BaseModule):
         # Check if reactions qualify as emojis.
         valid, invalid = normalize_reactions(list(properties.reactions.emojis))
         if invalid:
-            codepoints = ', '.join([convert_to_codepoints(i) for i in invalid])
-            self._log.warning('Reactions did not qualify as emoji: %s', codepoints)
+            codepoints = ", ".join([convert_to_codepoints(i) for i in invalid])
+            self._log.warning("Reactions did not qualify as emoji: %s", codepoints)
 
         if not valid:
             raise NodeProcessed
@@ -155,15 +154,18 @@ class Reactions(BaseModule):
             occupant_=occupant,
             id=properties.reactions.id,
             direction=direction,
-            emojis=';'.join(valid),
+            emojis=";".join(valid),
             timestamp=timestamp,
         )
 
-        self._log.info('Received reactions: %s', reaction)
+        self._log.info("Received reactions: %s", reaction)
         app.storage.archive.upsert_row2(reaction, return_full=False)
 
-        id_type = ("stanza-id" if m_type in (MessageType.GROUPCHAT, MessageType.PM)
-                    else "message-id")
+        id_type = (
+            "stanza-id"
+            if m_type in (MessageType.GROUPCHAT, MessageType.PM)
+            else "message-id"
+        )
 
         message = app.storage.archive.get_message_with_id(
             self._account,
@@ -182,7 +184,7 @@ class Reactions(BaseModule):
                 occupant=occupant,
                 emojis=valid,
                 message=message,
-                is_mam_message=properties.is_mam_message
+                is_mam_message=properties.is_mam_message,
             )
         )
 
@@ -197,8 +199,8 @@ class Reactions(BaseModule):
 
         valid, invalid = normalize_reactions(list(reactions))
         if invalid:
-            codepoints = ', '.join([convert_to_codepoints(i) for i in invalid])
-            self._log.warning('Trying to send invalid reactions: %s', codepoints)
+            codepoints = ", ".join([convert_to_codepoints(i) for i in invalid])
+            self._log.warning("Trying to send invalid reactions: %s", codepoints)
 
         message = OutgoingMessage(
             account=self._account,
@@ -208,4 +210,4 @@ class Reactions(BaseModule):
         )
 
         self._client.send_message(message)
-        self._log.info('Send %s: %s', reactions, contact.jid)
+        self._log.info("Send %s: %s", reactions, contact.jid)

@@ -22,25 +22,26 @@ from gajim.common.util.uri import MailUri
 from gajim.common.util.uri import parse_uri as analyze_uri
 from gajim.common.util.uri import XmppIri
 
-PRE = '`'
-STRONG = '*'
-STRIKE = '~'
-EMPH = '_'
+PRE = "`"
+STRONG = "*"
+STRIKE = "~"
+EMPH = "_"
 
 WHITESPACE = set(string.whitespace)
 SPAN_DIRS = {PRE, STRONG, STRIKE, EMPH}
 VALID_SPAN_START = WHITESPACE | SPAN_DIRS
 
-PRE_RX = r'(?P<pre>^```.+?(^```$(.|\Z)))'
-PRE_NESTED_RX = r'(?P<pre>^```.+?((^```$(.|\Z))|\Z))'
-QUOTE_RX = r'(?P<quote>^(?=>).*?(^|\Z)(?!>))'
+PRE_RX = r"(?P<pre>^```.+?(^```$(.|\Z)))"
+PRE_NESTED_RX = r"(?P<pre>^```.+?((^```$(.|\Z))|\Z))"
+QUOTE_RX = r"(?P<quote>^(?=>).*?(^|\Z)(?!>))"
 
-BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.DOTALL | re.MULTILINE)
-BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.DOTALL | re.MULTILINE)
-UNQUOTE_RX = re.compile(r'^> |^>', re.MULTILINE)
+BLOCK_RX = re.compile(PRE_RX + "|" + QUOTE_RX, re.DOTALL | re.MULTILINE)
+BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + "|" + QUOTE_RX, re.DOTALL | re.MULTILINE)
+UNQUOTE_RX = re.compile(r"^> |^>", re.MULTILINE)
 
 URI_OR_JID_RX = re.compile(
-    fr'(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})')
+    rf"(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})"
+)
 
 SD = 0
 SD_POS = 1
@@ -69,59 +70,54 @@ class BaseHyperlink(StyleObject):
 
 @dataclass
 class Hyperlink(BaseHyperlink):
-    name: str = field(default='uri', init=False)
+    name: str = field(default="uri", init=False)
 
 
 @dataclass
 class Address(BaseHyperlink):
-    name: str = field(default='address', init=False)
+    name: str = field(default="address", init=False)
 
 
 @dataclass
 class XMPPAddress(BaseHyperlink):
-    name: str = field(default='xmppadr', init=False)
+    name: str = field(default="xmppadr", init=False)
 
 
 @dataclass
 class MailAddress(BaseHyperlink):
-    name: str = field(default='mailadr', init=False)
+    name: str = field(default="mailadr", init=False)
 
 
 @dataclass
 class Block(StyleObject):
-
     @classmethod
     def from_match(cls: Any, match: Match[str]) -> Block:
-        return cls(start=match.start(),
-                   end=match.end(),
-                   text=match.group(cls.name))
+        return cls(start=match.start(), end=match.end(), text=match.group(cls.name))
 
 
 @dataclass
 class PlainBlock(Block):
-    name: str = field(default='plain', init=False)
-    spans: list[Span] = field(default_factory=list['Span'])
-    uris: list[BaseHyperlink] = field(default_factory=list['BaseHyperlink'])
+    name: str = field(default="plain", init=False)
+    spans: list[Span] = field(default_factory=list["Span"])
+    uris: list[BaseHyperlink] = field(default_factory=list["BaseHyperlink"])
 
     @classmethod
     def from_quote_match(cls, match: Match[str]) -> PlainBlock:
-        return cls(start=match.start(),
-                   end=match.end(),
-                   text=match.group('quote'))
+        return cls(start=match.start(), end=match.end(), text=match.group("quote"))
 
 
 @dataclass
 class PreBlock(Block):
-    name: str = field(default='pre', init=False)
+    name: str = field(default="pre", init=False)
 
 
 @dataclass
 class QuoteBlock(Block):
-    name: str = field(default='quote', init=False)
-    blocks: list[Block] = field(default_factory=list['Block'])
+    name: str = field(default="quote", init=False)
+    blocks: list[Block] = field(default_factory=list["Block"])
 
     def unquote(self) -> str:
-        return UNQUOTE_RX.sub('', self.text)
+        return UNQUOTE_RX.sub("", self.text)
 
 
 @dataclass
@@ -133,34 +129,34 @@ class Span(StyleObject):
 
 @dataclass
 class PlainSpan(Span):
-    name: str = field(default='plain', init=False)
+    name: str = field(default="plain", init=False)
 
 
 @dataclass
 class StrongSpan(Span):
-    name: str = field(default='strong', init=False)
+    name: str = field(default="strong", init=False)
 
 
 @dataclass
 class EmphasisSpan(Span):
-    name: str = field(default='emphasis', init=False)
+    name: str = field(default="emphasis", init=False)
 
 
 @dataclass
 class PreTextSpan(Span):
-    name: str = field(default='pre', init=False)
+    name: str = field(default="pre", init=False)
 
 
 @dataclass
 class StrikeSpan(Span):
-    name: str = field(default='strike', init=False)
+    name: str = field(default="strike", init=False)
 
 
 SPAN_CLS_DICT = {
     STRONG: StrongSpan,
     EMPH: EmphasisSpan,
     PRE: PreTextSpan,
-    STRIKE: StrikeSpan
+    STRIKE: StrikeSpan,
 }
 
 
@@ -177,7 +173,7 @@ def find_byte_index(text: str, index: int):
         if index == index_:
             return byte_index
 
-    raise ValueError(f'index not in string: {text}, {index}')
+    raise ValueError(f"index not in string: {text}, {index}")
 
 
 def process(text: str | bytes, level: int = 0) -> ParsingResult:
@@ -227,28 +223,30 @@ def _parse_blocks(text: str, level: int) -> list[Block]:
 
     for match in rx.finditer(text):
         if match.start() != last_end_pos:
-            blocks.append(PlainBlock(
-                start=last_end_pos,
-                end=match.start(),
-                text=text[last_end_pos:match.start()]))
+            blocks.append(
+                PlainBlock(
+                    start=last_end_pos,
+                    end=match.start(),
+                    text=text[last_end_pos : match.start()],
+                )
+            )
 
         last_end_pos = match.end()
         group_dict = match.groupdict()
 
-        if group_dict.get('quote') is not None:
+        if group_dict.get("quote") is not None:
             if level > MAX_QUOTE_LEVEL:
                 blocks.append(PlainBlock.from_quote_match(match))
             else:
                 blocks.append(QuoteBlock.from_match(match))
 
-        if group_dict.get('pre') is not None:
+        if group_dict.get("pre") is not None:
             blocks.append(PreBlock.from_match(match))
 
     if last_end_pos != text_len:
-        blocks.append(PlainBlock(
-            start=last_end_pos,
-            end=text_len,
-            text=text[last_end_pos:]))
+        blocks.append(
+            PlainBlock(start=last_end_pos, end=text_len, text=text[last_end_pos:])
+        )
 
     return blocks
 
@@ -275,11 +273,7 @@ def _parse_line(line: str, offset: int, offset_bytes: int) -> list[Span]:
 
         if is_valid_start:
             if sd == PRE:
-                index = _handle_pre_span(line,
-                                         index,
-                                         offset,
-                                         offset_bytes,
-                                         spans)
+                index = _handle_pre_span(line, index, offset, offset_bytes, spans)
                 continue
 
             stack.append((sd, index))
@@ -297,55 +291,41 @@ def _parse_line(line: str, offset: int, offset_bytes: int) -> list[Span]:
                 continue
 
             start_pos = _find_span_start_position(sd, stack)
-            spans.append(_make_span(line,
-                                    sd,
-                                    start_pos,
-                                    index,
-                                    offset,
-                                    offset_bytes))
+            spans.append(_make_span(line, sd, start_pos, index, offset, offset_bytes))
 
         index += 1
 
     return spans
 
 
-def _parse_uris(line: str,
-                offset: int,
-                offset_bytes: int) -> list[BaseHyperlink]:
+def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseHyperlink]:
     uris: list[BaseHyperlink] = []
 
     def make(start: int, end: int, is_jid: bool) -> BaseHyperlink | None:
-        if line[end - 1] == ',':
+        if line[end - 1] == ",":
             # Trim one trailing comma
             end -= 1
-        if '(' in line[:start] and line[end - 1] == ')':
+        if "(" in line[:start] and line[end - 1] == ")":
             # Trim one trailing closing parenthesis if the match is preceded
             # by an opening one somewhere on the line
             end -= 1
-        if re.fullmatch('[^:]+:', line[start:end]):
+        if re.fullmatch("[^:]+:", line[start:end]):
             # URIs that consist only of a scheme are thusly excluded
             return None
-        return _make_hyperlink(line,
-                               start,
-                               end - 1,
-                               offset,
-                               offset_bytes,
-                               is_jid)
+        return _make_hyperlink(line, start, end - 1, offset, offset_bytes, is_jid)
 
     for match in URI_OR_JID_RX.finditer(line):
         start, end = match.span()
-        hyperlink = make(start, end, bool(match.group('jid')))
+        hyperlink = make(start, end, bool(match.group("jid")))
         if hyperlink:
             uris.append(hyperlink)
 
     return uris
 
 
-def _handle_pre_span(line: str,
-                     index: int,
-                     offset: int,
-                     offset_bytes: int,
-                     spans: list[Span]) -> int:
+def _handle_pre_span(
+    line: str, index: int, offset: int, offset_bytes: int, spans: list[Span]
+) -> int:
 
     # Scan ahead for the end
     end = line.find(PRE, index + 1)
@@ -360,14 +340,11 @@ def _handle_pre_span(line: str,
     return end + 1
 
 
-def _make_span(line: str,
-               sd: str,
-               start: int,
-               end: int,
-               offset: int,
-               offset_bytes: int) -> Span:
+def _make_span(
+    line: str, sd: str, start: int, end: int, offset: int, offset_bytes: int
+) -> Span:
 
-    text = line[start:end + 1]
+    text = line[start : end + 1]
 
     start_byte = find_byte_index(line, start) + offset_bytes
     end_byte = find_byte_index(line, end) + offset_bytes + 1
@@ -377,21 +354,16 @@ def _make_span(line: str,
     span_class = SPAN_CLS_DICT.get(sd)
     assert span_class is not None
 
-    return span_class(start=start,
-                      start_byte=start_byte,
-                      end=end,
-                      end_byte=end_byte,
-                      text=text)
+    return span_class(
+        start=start, start_byte=start_byte, end=end, end_byte=end_byte, text=text
+    )
 
 
-def _make_hyperlink(line: str,
-                    start: int,
-                    end: int,
-                    offset: int,
-                    offset_bytes: int,
-                    is_jid: bool) -> BaseHyperlink | None:
+def _make_hyperlink(
+    line: str, start: int, end: int, offset: int, offset_bytes: int, is_jid: bool
+) -> BaseHyperlink | None:
 
-    text = line[start:end + 1]
+    text = line[start : end + 1]
 
     start_byte = find_byte_index(line, start) + offset_bytes
     end_byte = find_byte_index(line, end) + offset_bytes + 1
@@ -421,12 +393,14 @@ def _make_hyperlink(line: str,
             case _:
                 cls_ = Hyperlink
 
-    return cls_(start=start,
-                start_byte=start_byte,
-                end=end,
-                end_byte=end_byte,
-                uri=uri,
-                text=text)
+    return cls_(
+        start=start,
+        start_byte=start_byte,
+        end=end,
+        end_byte=end_byte,
+        uri=uri,
+        text=text,
+    )
 
 
 def _is_span_empty(sd: str, index: int, stack: list[tuple[str, int]]) -> bool:
@@ -444,18 +418,18 @@ def _find_span_start_position(sd: str, stack: list[tuple[str, int]]) -> int:
         if start_sd == sd:
             return pos
 
-    raise ValueError('Unable to find opening span')
+    raise ValueError("Unable to find opening span")
 
 
 def _is_valid_span_start(line: str, index: int) -> bool:
-    '''
+    """
     https://xmpp.org/extensions/xep-0393.html#span
 
     ... The opening styling directive MUST be located at the beginning
     of the line, after a whitespace character, or after a different opening
     styling directive. The opening styling directive MUST NOT be followed
     by a whitespace character ...
-    '''
+    """
 
     try:
         char = line[index + 1]
@@ -473,12 +447,12 @@ def _is_valid_span_start(line: str, index: int) -> bool:
 
 
 def _is_valid_span_end(line: str, index: int) -> bool:
-    '''
+    """
     https://xmpp.org/extensions/xep-0393.html#span
 
     ... and the closing styling directive MUST NOT be preceded
     by a whitespace character ...
-    '''
+    """
 
     if index == 0:
         return False

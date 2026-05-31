@@ -26,10 +26,9 @@ from gajim.common.util.decorators import event_filter
 
 
 class UserTune(BaseModule):
-
-    _nbxmpp_extends = 'Tune'
+    _nbxmpp_extends = "Tune"
     _nbxmpp_methods = [
-        'set_tune',
+        "set_tune",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -45,11 +44,9 @@ class UserTune(BaseModule):
         return self._contact_tunes.get(jid)
 
     @event_node(Namespace.TUNE)
-    def _tune_received(self,
-                       _con: types.NBXMPPClient,
-                       _stanza: Any,
-                       properties: MessageProperties
-                       ) -> None:
+    def _tune_received(
+        self, _con: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
         assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
@@ -62,15 +59,16 @@ class UserTune(BaseModule):
         self._contact_tunes[properties.jid] = data
 
         contact = self._get_contact(properties.jid)
-        contact.notify('tune-update', data)
+        contact.notify("tune-update", data)
 
     @store_publish
     def set_tune(self, tune: TuneData | None, force: bool = False) -> None:
-        if not self._con.get_module('PEP').supported:
+        if not self._con.get_module("PEP").supported:
             return
 
         if not force and not app.settings.get_account_setting(
-                self._account, 'publish_tune'):
+            self._account, "publish_tune"
+        ):
             return
 
         if tune == self._current_tune:
@@ -78,15 +76,17 @@ class UserTune(BaseModule):
 
         self._current_tune = tune
 
-        self._log.info('Send %s', tune)
-        self._nbxmpp('Tune').set_tune(tune)
+        self._log.info("Send %s", tune)
+        self._nbxmpp("Tune").set_tune(tune)
 
     def set_enabled(self, enable: bool) -> None:
         if enable:
-            self.register_events([
-                ('music-track-changed', ged.CORE, self._on_music_track_changed),
-                ('signed-in', ged.CORE, self._on_signed_in),
-            ])
+            self.register_events(
+                [
+                    ("music-track-changed", ged.CORE, self._on_music_track_changed),
+                    ("signed-in", ged.CORE, self._on_signed_in),
+                ]
+            )
             self._publish_current_tune()
         else:
             self.unregister_events()
@@ -95,7 +95,7 @@ class UserTune(BaseModule):
     def _publish_current_tune(self):
         self.set_tune(MusicTrackListener.get().current_tune)
 
-    @event_filter(['account'])
+    @event_filter(["account"])
     def _on_signed_in(self, _event: SignedIn) -> None:
         self._publish_current_tune()
 

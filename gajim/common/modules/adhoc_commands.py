@@ -9,11 +9,10 @@ from gajim.common.modules.base import BaseModule
 
 
 class AdHocCommands(BaseModule):
-
-    _nbxmpp_extends = 'AdHoc'
+    _nbxmpp_extends = "AdHoc"
     _nbxmpp_methods = [
-        'request_command_list',
-        'execute_command',
+        "request_command_list",
+        "execute_command",
     ]
 
     def __init__(self, con: types.Client) -> None:

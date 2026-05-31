@@ -39,17 +39,21 @@ VALUE_MISSING = ValueMissingT()
 
 class EncryptionInfoMsg(Enum):
     BAD_MUC_CONFIG = _(
-        'This chat’s configuration is unsuitable for '
-        'encryption with {encryption}. To use {encryption} in this chat, '
-        'it should be non-anonymous and members-only.'
+        "This chat’s configuration is unsuitable for "
+        "encryption with {encryption}. To use {encryption} in this chat, "
+        "it should be non-anonymous and members-only."
     )
-    NO_FINGERPRINTS = _('To send an encrypted message, you have to decide '
-                        'whether to trust the device of your contact.')
-    QUERY_DEVICES = _('No devices found to encrypt this message to. '
-                      'Querying for devices now…')
-    UNDECIDED_FINGERPRINTS = _('There are devices for which you have not made '
-                               'a trust decision yet.')
-    SESSION_BUILD = _('Successfully built new session with device {device_id}.')
+    NO_FINGERPRINTS = _(
+        "To send an encrypted message, you have to decide "
+        "whether to trust the device of your contact."
+    )
+    QUERY_DEVICES = _(
+        "No devices found to encrypt this message to. Querying for devices now…"
+    )
+    UNDECIDED_FINGERPRINTS = _(
+        "There are devices for which you have not made a trust decision yet."
+    )
+    SESSION_BUILD = _("Successfully built new session with device {device_id}.")
 
 
 class Entity(NamedTuple):
@@ -111,9 +115,9 @@ class PathType(IntEnum):
 
 @unique
 class StyleAttr(Enum):
-    COLOR = 'color'
-    BACKGROUND = 'background'
-    FONT = 'font'
+    COLOR = "color"
+    BACKGROUND = "background"
+    FONT = "font"
 
 
 @unique
@@ -127,16 +131,16 @@ class CSSPriority(IntEnum):
 
 @unique
 class ButtonAction(Enum):
-    DESTRUCTIVE = 'destructive-action'
-    SUGGESTED = 'suggested-action'
+    DESTRUCTIVE = "destructive-action"
+    SUGGESTED = "suggested-action"
 
 
 @unique
 class IdleState(Enum):
-    UNKNOWN = 'unknown'
-    XA = 'xa'
-    AWAY = 'away'
-    AWAKE = 'online'
+    UNKNOWN = "unknown"
+    XA = "xa"
+    AWAY = "away"
+    AWAKE = "online"
 
 
 class SyncThreshold(IntEnum):
@@ -171,17 +175,17 @@ class Direction(IntEnum):
 
 
 class Display(Enum):
-    X11 = 'X11Display'
-    WAYLAND = 'GdkWaylandDisplay'
-    WIN32 = 'GdkWin32Display'
-    QUARTZ = 'GdkQuartzDisplay'
+    X11 = "X11Display"
+    WAYLAND = "GdkWaylandDisplay"
+    WIN32 = "GdkWin32Display"
+    QUARTZ = "GdkQuartzDisplay"
 
 
 # https://xmpp.org/registrar/querytypes.html
 class XmppUriQuery(Enum):
-    NONE = ''
-    MESSAGE = 'message'
-    JOIN = 'join'
+    NONE = ""
+    MESSAGE = "message"
+    JOIN = "join"
 
     @staticmethod
     def from_str(s: str) -> XmppUriQuery | None:
@@ -199,14 +203,14 @@ class XmppUriQuery(Enum):
 
 
 class MUCJoinedState(Enum):
-    JOINED = 'joined'
-    NOT_JOINED = 'not joined'
-    BEFORE_JOINING = 'before joining'
-    JOINING = 'joining'
-    CREATING = 'creating'
-    CAPTCHA_REQUEST = 'captcha in progress'
-    CAPTCHA_FAILED = 'captcha failed'
-    PASSWORD_REQUEST = 'password request'  # noqa: S105
+    JOINED = "joined"
+    NOT_JOINED = "not joined"
+    BEFORE_JOINING = "before joining"
+    JOINING = "joining"
+    CREATING = "creating"
+    CAPTCHA_REQUEST = "captcha in progress"
+    CAPTCHA_FAILED = "captcha failed"
+    PASSWORD_REQUEST = "password request"  # noqa: S105
 
     def __str__(self):
         return self.name
@@ -278,10 +282,10 @@ class ClientState(IntEnum):
 
 
 class SimpleClientState(Enum):
-    CONNECTING = 'connecting'
-    DISCONNECTED = 'disconnected'
-    CONNECTED = 'connected'
-    RESUME_IN_PROGRESS = 'resume-in-progress'
+    CONNECTING = "connecting"
+    DISCONNECTED = "disconnected"
+    CONNECTED = "connected"
+    RESUME_IN_PROGRESS = "resume-in-progress"
 
     @property
     def is_connecting(self):
@@ -301,19 +305,19 @@ class SimpleClientState(Enum):
 
 
 class JingleState(Enum):
-    NULL = 'stop'
-    CONNECTING = 'connecting'
-    CONNECTION_RECEIVED = 'connection_received'
-    CONNECTED = 'connected'
-    ERROR = 'error'
+    NULL = "stop"
+    CONNECTING = "connecting"
+    CONNECTION_RECEIVED = "connection_received"
+    CONNECTED = "connected"
+    ERROR = "error"
 
     def __str__(self):
         return self.value
 
 
 class CallType(Enum):
-    AUDIO = 'audio'
-    VIDEO = 'video'
+    AUDIO = "audio"
+    VIDEO = "video"
 
 
 @dataclass
@@ -323,460 +327,459 @@ class Draft:
 
 
 MUC_DISCO_ERRORS = {
-    'remote-server-not-found': _('Remote server not found'),
-    'remote-server-timeout': _('Remote server timeout'),
-    'service-unavailable': _('Address does not belong to a group chat server'),
-    'subscription-required': _(
-        'Address does not belong to a group chat server'),
-    'not-muc-service': _('Address does not belong to a group chat server'),
-    'already-exists': _('Group chat already exists'),
-    'item-not-found': _('Group chat does not exist'),
-    'gone': _('Group chat is closed'),
+    "remote-server-not-found": _("Remote server not found"),
+    "remote-server-timeout": _("Remote server timeout"),
+    "service-unavailable": _("Address does not belong to a group chat server"),
+    "subscription-required": _("Address does not belong to a group chat server"),
+    "not-muc-service": _("Address does not belong to a group chat server"),
+    "already-exists": _("Group chat already exists"),
+    "item-not-found": _("Group chat does not exist"),
+    "gone": _("Group chat is closed"),
 }
 
 
 EME_MESSAGES = {
-    'urn:xmpp:otr:0':
-        _('This message was encrypted with OTR '
-          'and could not be decrypted.'),
-    'jabber:x:encrypted':
-        _('This message was encrypted with Legacy '
-          'OpenPGP and could not be decrypted. You can install '
-          'the PGP plugin to handle those messages.'),
-    'urn:xmpp:openpgp:0':
-        _('This message was encrypted with '
-          'OpenPGP for XMPP and could not be decrypted.'),
-    'fallback':
-        _('This message was encrypted with %s '
-          'and could not be decrypted.')
+    "urn:xmpp:otr:0": _(
+        "This message was encrypted with OTR and could not be decrypted."
+    ),
+    "jabber:x:encrypted": _(
+        "This message was encrypted with Legacy "
+        "OpenPGP and could not be decrypted. You can install "
+        "the PGP plugin to handle those messages."
+    ),
+    "urn:xmpp:openpgp:0": _(
+        "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+    ),
+    "fallback": _("This message was encrypted with %s and could not be decrypted."),
 }
 
 
 EME_PROTOCOLS = {
-    'urn:xmpp:otr:0': 'OTR',
-    'jabber:x:encrypted': 'PGP',
-    'urn:xmpp:openpgp:0': 'OpenPGP',
-    'eu.siacs.conversations.axolotl': 'OMEMO',
-    'urn:xmpp:omemo:1': 'OMEMO',
-    'urn:xmpp:omemo:2': 'OMEMO',
+    "urn:xmpp:otr:0": "OTR",
+    "jabber:x:encrypted": "PGP",
+    "urn:xmpp:openpgp:0": "OpenPGP",
+    "eu.siacs.conversations.axolotl": "OMEMO",
+    "urn:xmpp:omemo:1": "OMEMO",
+    "urn:xmpp:omemo:2": "OMEMO",
 }
 
 
 LOCATION_DATA = {
-    'accuracy': _('accuracy'),
-    'alt': _('alt'),
-    'area': _('area'),
-    'bearing': _('bearing'),
-    'building': _('building'),
-    'country': _('country'),
-    'countrycode': _('countrycode'),
-    'datum': _('datum'),
-    'description': _('description'),
-    'error': _('error'),
-    'floor': _('floor'),
-    'lat': _('lat'),
-    'locality': _('locality'),
-    'lon': _('lon'),
-    'postalcode': _('postalcode'),
-    'region': _('region'),
-    'room': _('room'),
-    'speed': _('speed'),
-    'street': _('street'),
-    'text': _('text'),
-    'timestamp': _('timestamp'),
-    'uri': _('URI')
+    "accuracy": _("accuracy"),
+    "alt": _("alt"),
+    "area": _("area"),
+    "bearing": _("bearing"),
+    "building": _("building"),
+    "country": _("country"),
+    "countrycode": _("countrycode"),
+    "datum": _("datum"),
+    "description": _("description"),
+    "error": _("error"),
+    "floor": _("floor"),
+    "lat": _("lat"),
+    "locality": _("locality"),
+    "lon": _("lon"),
+    "postalcode": _("postalcode"),
+    "region": _("region"),
+    "room": _("room"),
+    "speed": _("speed"),
+    "street": _("street"),
+    "text": _("text"),
+    "timestamp": _("timestamp"),
+    "uri": _("URI"),
 }
 
 
 SSLError = {
-    2: _('Unable to get issuer certificate'),
-    3: _('Unable to get certificate CRL'),
+    2: _("Unable to get issuer certificate"),
+    3: _("Unable to get certificate CRL"),
     4: _("Unable to decrypt certificate's signature"),
     5: _("Unable to decrypt CRL's signature"),
-    6: _('Unable to decode issuer public key'),
-    7: _('Certificate signature failure'),
-    8: _('CRL signature failure'),
-    9: _('Certificate is not yet valid'),
-    10: _('Certificate has expired'),
-    11: _('CRL is not yet valid'),
-    12: _('CRL has expired'),
+    6: _("Unable to decode issuer public key"),
+    7: _("Certificate signature failure"),
+    8: _("CRL signature failure"),
+    9: _("Certificate is not yet valid"),
+    10: _("Certificate has expired"),
+    11: _("CRL is not yet valid"),
+    12: _("CRL has expired"),
     13: _("Format error in certificate's notBefore field"),
     14: _("Format error in certificate's notAfter field"),
     15: _("Format error in CRL's lastUpdate field"),
     16: _("Format error in CRL's nextUpdate field"),
-    17: _('Out of memory'),
-    18: _('Self signed certificate'),
-    19: _('Self signed certificate in certificate chain'),
-    20: _('Unable to get local issuer certificate'),
-    21: _('Unable to verify the first certificate'),
-    22: _('Certificate chain too long'),
-    23: _('Certificate revoked'),
-    24: _('Invalid CA certificate'),
-    25: _('Path length constraint exceeded'),
-    26: _('Unsupported certificate purpose'),
-    27: _('Certificate not trusted'),
-    28: _('Certificate rejected'),
-    29: _('Subject issuer mismatch'),
-    30: _('Authority and subject key identifier mismatch'),
-    31: _('Authority and issuer serial number mismatch'),
-    32: _('Key usage does not include certificate signing'),
-    50: _('Application verification failure'),
+    17: _("Out of memory"),
+    18: _("Self signed certificate"),
+    19: _("Self signed certificate in certificate chain"),
+    20: _("Unable to get local issuer certificate"),
+    21: _("Unable to verify the first certificate"),
+    22: _("Certificate chain too long"),
+    23: _("Certificate revoked"),
+    24: _("Invalid CA certificate"),
+    25: _("Path length constraint exceeded"),
+    26: _("Unsupported certificate purpose"),
+    27: _("Certificate not trusted"),
+    28: _("Certificate rejected"),
+    29: _("Subject issuer mismatch"),
+    30: _("Authority and subject key identifier mismatch"),
+    31: _("Authority and issuer serial number mismatch"),
+    32: _("Key usage does not include certificate signing"),
+    50: _("Application verification failure"),
 }
 
 
-VOWELS = 'aeiou'
+VOWELS = "aeiou"
 
 
-CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
+CONSONANTS = "bcdfghjklmnpqrstvwxyz"
 
 
 THANKS = [
-    'Alexander Futász',
-    'Alexander V. Butenko',
-    'Alexey Nezhdanov',
-    'Alfredo Junix',
-    'Anaël Verrier',
-    'Anders Ström',
-    'Andrew Sayman',
-    'Anton Shmigirilov',
-    'Christian Bjälevik',
-    'Christophe Got',
-    'Christoph Neuroth',
-    'David Campey',
-    'Dennis Craven',
-    'Fabian Neumann',
-    'Filippos Papadopoulos',
-    'Francisco Alburquerque Parra (Membris Khan)',
-    'Frederic Lory',
-    'Fridtjof Bussefor',
-    'Geobert Quach',
-    'Guillaume Morin',
-    'Gustavo J. A. M. Carneiro',
-    'Ivo Anjo',
-    'Josef Vybíral',
-    'Juraj Michalek',
-    'Kjell Braden',
-    'Luis Peralta',
-    'Michael Scherer',
-    'Michele Campeotto',
-    'Mike Albon',
-    'Miguel Fonseca',
-    'Norman Rasmussen',
-    'Oscar Hellström',
-    'Peter Saint-Andre',
-    'Petr Menšík',
-    'Sergey Kuleshov',
-    'Stavros Giannouris',
-    'Stian B. Barmen',
-    'Thilo Molitor',
-    'Thomas Klein-Hitpaß',
-    'Urtzi Alfaro',
-    'Witold Kieraś',
-    'Yakov Bezrukov',
-    'Yavor Doganov',
+    "Alexander Futász",
+    "Alexander V. Butenko",
+    "Alexey Nezhdanov",
+    "Alfredo Junix",
+    "Anaël Verrier",
+    "Anders Ström",
+    "Andrew Sayman",
+    "Anton Shmigirilov",
+    "Christian Bjälevik",
+    "Christophe Got",
+    "Christoph Neuroth",
+    "David Campey",
+    "Dennis Craven",
+    "Fabian Neumann",
+    "Filippos Papadopoulos",
+    "Francisco Alburquerque Parra (Membris Khan)",
+    "Frederic Lory",
+    "Fridtjof Bussefor",
+    "Geobert Quach",
+    "Guillaume Morin",
+    "Gustavo J. A. M. Carneiro",
+    "Ivo Anjo",
+    "Josef Vybíral",
+    "Juraj Michalek",
+    "Kjell Braden",
+    "Luis Peralta",
+    "Michael Scherer",
+    "Michele Campeotto",
+    "Mike Albon",
+    "Miguel Fonseca",
+    "Norman Rasmussen",
+    "Oscar Hellström",
+    "Peter Saint-Andre",
+    "Petr Menšík",
+    "Sergey Kuleshov",
+    "Stavros Giannouris",
+    "Stian B. Barmen",
+    "Thilo Molitor",
+    "Thomas Klein-Hitpaß",
+    "Urtzi Alfaro",
+    "Witold Kieraś",
+    "Yakov Bezrukov",
+    "Yavor Doganov",
 ]
 
 
 ARTISTS = [
-    'Anders Ström',
-    'Christophe Got',
-    'Dennis Craven',
-    'Dmitry Korzhevin',
-    'Guillaume Morin',
-    'Gvorcek Spajreh',
-    'Josef Vybíral',
-    'Membris Khan',
-    'Rederick Asher',
-    'Jakub Szypulka',
+    "Anders Ström",
+    "Christophe Got",
+    "Dennis Craven",
+    "Dmitry Korzhevin",
+    "Guillaume Morin",
+    "Gvorcek Spajreh",
+    "Josef Vybíral",
+    "Membris Khan",
+    "Rederick Asher",
+    "Jakub Szypulka",
 ]
 
 
 MAINTAINERS = [
-    'Philipp Hörist (philipp AT hoerist.com)',
-    'Daniel Brötzmann (cal0pteryx AT posteo.de)',
+    "Philipp Hörist (philipp AT hoerist.com)",
+    "Daniel Brötzmann (cal0pteryx AT posteo.de)",
 ]
 
 
 DEVELOPERS = [
-    'Marc Henning',
-    'André Apitzsch',
-    'Yann Leboulanger (asterix AT lagaule.org)',
-    'Stefan Bethge (stefan AT lanpartei.de)',
-    'Alexander Cherniuk (ts33kr AT gmail.com)',
-    'Stephan Erb (steve-e AT h3c.de)',
-    'Vincent Hanquez (tab AT snarc.org)',
-    'Dimitur Kirov (dkirov AT gmail.com)',
-    'Nikos Kouremenos (kourem AT gmail.com)',
-    'Julien Pivotto (roidelapluie AT gmail.com)',
-    'Jonathan Schleifer (js-gajim AT webkeks.org)',
-    'Travis Shirk (travis AT pobox.com)',
-    'Brendan Taylor (whateley AT gmail.com)',
-    'Jean-Marie Traissard (jim AT lapin.org)',
+    "Marc Henning",
+    "André Apitzsch",
+    "Yann Leboulanger (asterix AT lagaule.org)",
+    "Stefan Bethge (stefan AT lanpartei.de)",
+    "Alexander Cherniuk (ts33kr AT gmail.com)",
+    "Stephan Erb (steve-e AT h3c.de)",
+    "Vincent Hanquez (tab AT snarc.org)",
+    "Dimitur Kirov (dkirov AT gmail.com)",
+    "Nikos Kouremenos (kourem AT gmail.com)",
+    "Julien Pivotto (roidelapluie AT gmail.com)",
+    "Jonathan Schleifer (js-gajim AT webkeks.org)",
+    "Travis Shirk (travis AT pobox.com)",
+    "Brendan Taylor (whateley AT gmail.com)",
+    "Jean-Marie Traissard (jim AT lapin.org)",
 ]
 
 
 RFC5646_LANGUAGE_TAGS = {
-    'af': 'Afrikaans',
-    'af-ZA': 'Afrikaans (South Africa)',
-    'ar': 'Arabic',
-    'ar-AE': 'Arabic (U.A.E.)',
-    'ar-BH': 'Arabic (Bahrain)',
-    'ar-DZ': 'Arabic (Algeria)',
-    'ar-EG': 'Arabic (Egypt)',
-    'ar-IQ': 'Arabic (Iraq)',
-    'ar-JO': 'Arabic (Jordan)',
-    'ar-KW': 'Arabic (Kuwait)',
-    'ar-LB': 'Arabic (Lebanon)',
-    'ar-LY': 'Arabic (Libya)',
-    'ar-MA': 'Arabic (Morocco)',
-    'ar-OM': 'Arabic (Oman)',
-    'ar-QA': 'Arabic (Qatar)',
-    'ar-SA': 'Arabic (Saudi Arabia)',
-    'ar-SY': 'Arabic (Syria)',
-    'ar-TN': 'Arabic (Tunisia)',
-    'ar-YE': 'Arabic (Yemen)',
-    'az': 'Azeri (Latin)',
-    'az-AZ': 'Azeri (Latin) (Azerbaijan)',
-    'az-Cyrl-AZ': 'Azeri (Cyrillic) (Azerbaijan)',
-    'be': 'Belarusian',
-    'be-BY': 'Belarusian (Belarus)',
-    'bg': 'Bulgarian',
-    'bg-BG': 'Bulgarian (Bulgaria)',
-    'bs-BA': 'Bosnian (Bosnia and Herzegovina)',
-    'ca': 'Catalan',
-    'ca-ES': 'Catalan (Spain)',
-    'cs': 'Czech',
-    'cs-CZ': 'Czech (Czech Republic)',
-    'cy': 'Welsh',
-    'cy-GB': 'Welsh (United Kingdom)',
-    'da': 'Danish',
-    'da-DK': 'Danish (Denmark)',
-    'de': 'German',
-    'de-AT': 'German (Austria)',
-    'de-CH': 'German (Switzerland)',
-    'de-DE': 'German (Germany)',
-    'de-LI': 'German (Liechtenstein)',
-    'de-LU': 'German (Luxembourg)',
-    'dv': 'Divehi',
-    'dv-MV': 'Divehi (Maldives)',
-    'el': 'Greek',
-    'el-GR': 'Greek (Greece)',
-    'en': 'English',
-    'en-AU': 'English (Australia)',
-    'en-BZ': 'English (Belize)',
-    'en-CA': 'English (Canada)',
-    'en-CB': 'English (Caribbean)',
-    'en-GB': 'English (United Kingdom)',
-    'en-IE': 'English (Ireland)',
-    'en-JM': 'English (Jamaica)',
-    'en-NZ': 'English (New Zealand)',
-    'en-PH': 'English (Republic of the Philippines)',
-    'en-TT': 'English (Trinidad and Tobago)',
-    'en-US': 'English (United States)',
-    'en-ZA': 'English (South Africa)',
-    'en-ZW': 'English (Zimbabwe)',
-    'eo': 'Esperanto',
-    'es': 'Spanish',
-    'es-AR': 'Spanish (Argentina)',
-    'es-BO': 'Spanish (Bolivia)',
-    'es-CL': 'Spanish (Chile)',
-    'es-CO': 'Spanish (Colombia)',
-    'es-CR': 'Spanish (Costa Rica)',
-    'es-DO': 'Spanish (Dominican Republic)',
-    'es-EC': 'Spanish (Ecuador)',
-    'es-ES': 'Spanish (Spain)',
-    'es-GT': 'Spanish (Guatemala)',
-    'es-HN': 'Spanish (Honduras)',
-    'es-MX': 'Spanish (Mexico)',
-    'es-NI': 'Spanish (Nicaragua)',
-    'es-PA': 'Spanish (Panama)',
-    'es-PE': 'Spanish (Peru)',
-    'es-PR': 'Spanish (Puerto Rico)',
-    'es-PY': 'Spanish (Paraguay)',
-    'es-SV': 'Spanish (El Salvador)',
-    'es-UY': 'Spanish (Uruguay)',
-    'es-VE': 'Spanish (Venezuela)',
-    'et': 'Estonian',
-    'et-EE': 'Estonian (Estonia)',
-    'eu': 'Basque',
-    'eu-ES': 'Basque (Spain)',
-    'fa': 'Farsi',
-    'fa-IR': 'Farsi (Iran)',
-    'fi': 'Finnish',
-    'fi-FI': 'Finnish (Finland)',
-    'fo': 'Faroese',
-    'fo-FO': 'Faroese (Faroe Islands)',
-    'fr': 'French',
-    'fr-BE': 'French (Belgium)',
-    'fr-CA': 'French (Canada)',
-    'fr-CH': 'French (Switzerland)',
-    'fr-FR': 'French (France)',
-    'fr-LU': 'French (Luxembourg)',
-    'fr-MC': 'French (Principality of Monaco)',
-    'gl': 'Galician',
-    'gl-ES': 'Galician (Spain)',
-    'gu': 'Gujarati',
-    'gu-IN': 'Gujarati (India)',
-    'he': 'Hebrew',
-    'he-IL': 'Hebrew (Israel)',
-    'hi': 'Hindi',
-    'hi-IN': 'Hindi (India)',
-    'hr': 'Croatian',
-    'hr-BA': 'Croatian (Bosnia and Herzegovina)',
-    'hr-HR': 'Croatian (Croatia)',
-    'hu': 'Hungarian',
-    'hu-HU': 'Hungarian (Hungary)',
-    'hy': 'Armenian',
-    'hy-AM': 'Armenian (Armenia)',
-    'id': 'Indonesian',
-    'id-ID': 'Indonesian (Indonesia)',
-    'is': 'Icelandic',
-    'is-IS': 'Icelandic (Iceland)',
-    'it': 'Italian',
-    'it-CH': 'Italian (Switzerland)',
-    'it-IT': 'Italian (Italy)',
-    'ja': 'Japanese',
-    'ja-JP': 'Japanese (Japan)',
-    'ka': 'Georgian',
-    'ka-GE': 'Georgian (Georgia)',
-    'kk': 'Kazakh',
-    'kk-KZ': 'Kazakh (Kazakhstan)',
-    'kn': 'Kannada',
-    'kn-IN': 'Kannada (India)',
-    'ko': 'Korean',
-    'ko-KR': 'Korean (Korea)',
-    'kok': 'Konkani',
-    'kok-IN': 'Konkani (India)',
-    'ky': 'Kyrgyz',
-    'ky-KG': 'Kyrgyz (Kyrgyzstan)',
-    'lt': 'Lithuanian',
-    'lt-LT': 'Lithuanian (Lithuania)',
-    'lv': 'Latvian',
-    'lv-LV': 'Latvian (Latvia)',
-    'mi': 'Maori',
-    'mi-NZ': 'Maori (New Zealand)',
-    'mk': 'FYRO Macedonian',
-    'mk-MK': 'FYRO Macedonian (Former Yugoslav Republic of Macedonia)',
-    'mn': 'Mongolian',
-    'mn-MN': 'Mongolian (Mongolia)',
-    'mr': 'Marathi',
-    'mr-IN': 'Marathi (India)',
-    'ms': 'Malay',
-    'ms-BN': 'Malay (Brunei Darussalam)',
-    'ms-MY': 'Malay (Malaysia)',
-    'mt': 'Maltese',
-    'mt-MT': 'Maltese (Malta)',
-    'nb': 'Norwegian (Bokm?l)',
-    'nb-NO': 'Norwegian (Bokm?l) (Norway)',
-    'nl': 'Dutch',
-    'nl-BE': 'Dutch (Belgium)',
-    'nl-NL': 'Dutch (Netherlands)',
-    'nn-NO': 'Norwegian (Nynorsk) (Norway)',
-    'ns': 'Northern Sotho',
-    'ns-ZA': 'Northern Sotho (South Africa)',
-    'pa': 'Punjabi',
-    'pa-IN': 'Punjabi (India)',
-    'pl': 'Polish',
-    'pl-PL': 'Polish (Poland)',
-    'ps': 'Pashto',
-    'ps-AR': 'Pashto (Afghanistan)',
-    'pt': 'Portuguese',
-    'pt-BR': 'Portuguese (Brazil)',
-    'pt-PT': 'Portuguese (Portugal)',
-    'qu': 'Quechua',
-    'qu-BO': 'Quechua (Bolivia)',
-    'qu-EC': 'Quechua (Ecuador)',
-    'qu-PE': 'Quechua (Peru)',
-    'ro': 'Romanian',
-    'ro-RO': 'Romanian (Romania)',
-    'ru': 'Russian',
-    'ru-RU': 'Russian (Russia)',
-    'sa': 'Sanskrit',
-    'sa-IN': 'Sanskrit (India)',
-    'se': 'Sami',
-    'se-FI': 'Sami (Finland)',
-    'se-NO': 'Sami (Norway)',
-    'se-SE': 'Sami (Sweden)',
-    'sk': 'Slovak',
-    'sk-SK': 'Slovak (Slovakia)',
-    'sl': 'Slovenian',
-    'sl-SI': 'Slovenian (Slovenia)',
-    'sq': 'Albanian',
-    'sq-AL': 'Albanian (Albania)',
-    'sr-BA': 'Serbian (Latin) (Bosnia and Herzegovina)',
-    'sr-Cyrl-BA': 'Serbian (Cyrillic) (Bosnia and Herzegovina)',
-    'sr-SP': 'Serbian (Latin) (Serbia and Montenegro)',
-    'sr-Cyrl-SP': 'Serbian (Cyrillic) (Serbia and Montenegro)',
-    'sv': 'Swedish',
-    'sv-FI': 'Swedish (Finland)',
-    'sv-SE': 'Swedish (Sweden)',
-    'sw': 'Swahili',
-    'sw-KE': 'Swahili (Kenya)',
-    'syr': 'Syriac',
-    'syr-SY': 'Syriac (Syria)',
-    'ta': 'Tamil',
-    'ta-IN': 'Tamil (India)',
-    'te': 'Telugu',
-    'te-IN': 'Telugu (India)',
-    'th': 'Thai',
-    'th-TH': 'Thai (Thailand)',
-    'tl': 'Tagalog',
-    'tl-PH': 'Tagalog (Philippines)',
-    'tn': 'Tswana',
-    'tn-ZA': 'Tswana (South Africa)',
-    'tr': 'Turkish',
-    'tr-TR': 'Turkish (Turkey)',
-    'tt': 'Tatar',
-    'tt-RU': 'Tatar (Russia)',
-    'ts': 'Tsonga',
-    'uk': 'Ukrainian',
-    'uk-UA': 'Ukrainian (Ukraine)',
-    'ur': 'Urdu',
-    'ur-PK': 'Urdu (Islamic Republic of Pakistan)',
-    'uz': 'Uzbek (Latin)',
-    'uz-UZ': 'Uzbek (Latin) (Uzbekistan)',
-    'uz-Cyrl-UZ': 'Uzbek (Cyrillic) (Uzbekistan)',
-    'vi': 'Vietnamese',
-    'vi-VN': 'Vietnamese (Vietnam)',
-    'xh': 'Xhosa',
-    'xh-ZA': 'Xhosa (South Africa)',
-    'zh': 'Chinese',
-    'zh-CN': 'Chinese (S)',
-    'zh-HK': 'Chinese (Hong Kong)',
-    'zh-MO': 'Chinese (Macau)',
-    'zh-SG': 'Chinese (Singapore)',
-    'zh-TW': 'Chinese (T)',
-    'zu': 'Zulu',
-    'zu-ZA': 'Zulu (South Africa)'
+    "af": "Afrikaans",
+    "af-ZA": "Afrikaans (South Africa)",
+    "ar": "Arabic",
+    "ar-AE": "Arabic (U.A.E.)",
+    "ar-BH": "Arabic (Bahrain)",
+    "ar-DZ": "Arabic (Algeria)",
+    "ar-EG": "Arabic (Egypt)",
+    "ar-IQ": "Arabic (Iraq)",
+    "ar-JO": "Arabic (Jordan)",
+    "ar-KW": "Arabic (Kuwait)",
+    "ar-LB": "Arabic (Lebanon)",
+    "ar-LY": "Arabic (Libya)",
+    "ar-MA": "Arabic (Morocco)",
+    "ar-OM": "Arabic (Oman)",
+    "ar-QA": "Arabic (Qatar)",
+    "ar-SA": "Arabic (Saudi Arabia)",
+    "ar-SY": "Arabic (Syria)",
+    "ar-TN": "Arabic (Tunisia)",
+    "ar-YE": "Arabic (Yemen)",
+    "az": "Azeri (Latin)",
+    "az-AZ": "Azeri (Latin) (Azerbaijan)",
+    "az-Cyrl-AZ": "Azeri (Cyrillic) (Azerbaijan)",
+    "be": "Belarusian",
+    "be-BY": "Belarusian (Belarus)",
+    "bg": "Bulgarian",
+    "bg-BG": "Bulgarian (Bulgaria)",
+    "bs-BA": "Bosnian (Bosnia and Herzegovina)",
+    "ca": "Catalan",
+    "ca-ES": "Catalan (Spain)",
+    "cs": "Czech",
+    "cs-CZ": "Czech (Czech Republic)",
+    "cy": "Welsh",
+    "cy-GB": "Welsh (United Kingdom)",
+    "da": "Danish",
+    "da-DK": "Danish (Denmark)",
+    "de": "German",
+    "de-AT": "German (Austria)",
+    "de-CH": "German (Switzerland)",
+    "de-DE": "German (Germany)",
+    "de-LI": "German (Liechtenstein)",
+    "de-LU": "German (Luxembourg)",
+    "dv": "Divehi",
+    "dv-MV": "Divehi (Maldives)",
+    "el": "Greek",
+    "el-GR": "Greek (Greece)",
+    "en": "English",
+    "en-AU": "English (Australia)",
+    "en-BZ": "English (Belize)",
+    "en-CA": "English (Canada)",
+    "en-CB": "English (Caribbean)",
+    "en-GB": "English (United Kingdom)",
+    "en-IE": "English (Ireland)",
+    "en-JM": "English (Jamaica)",
+    "en-NZ": "English (New Zealand)",
+    "en-PH": "English (Republic of the Philippines)",
+    "en-TT": "English (Trinidad and Tobago)",
+    "en-US": "English (United States)",
+    "en-ZA": "English (South Africa)",
+    "en-ZW": "English (Zimbabwe)",
+    "eo": "Esperanto",
+    "es": "Spanish",
+    "es-AR": "Spanish (Argentina)",
+    "es-BO": "Spanish (Bolivia)",
+    "es-CL": "Spanish (Chile)",
+    "es-CO": "Spanish (Colombia)",
+    "es-CR": "Spanish (Costa Rica)",
+    "es-DO": "Spanish (Dominican Republic)",
+    "es-EC": "Spanish (Ecuador)",
+    "es-ES": "Spanish (Spain)",
+    "es-GT": "Spanish (Guatemala)",
+    "es-HN": "Spanish (Honduras)",
+    "es-MX": "Spanish (Mexico)",
+    "es-NI": "Spanish (Nicaragua)",
+    "es-PA": "Spanish (Panama)",
+    "es-PE": "Spanish (Peru)",
+    "es-PR": "Spanish (Puerto Rico)",
+    "es-PY": "Spanish (Paraguay)",
+    "es-SV": "Spanish (El Salvador)",
+    "es-UY": "Spanish (Uruguay)",
+    "es-VE": "Spanish (Venezuela)",
+    "et": "Estonian",
+    "et-EE": "Estonian (Estonia)",
+    "eu": "Basque",
+    "eu-ES": "Basque (Spain)",
+    "fa": "Farsi",
+    "fa-IR": "Farsi (Iran)",
+    "fi": "Finnish",
+    "fi-FI": "Finnish (Finland)",
+    "fo": "Faroese",  # codespell:ignore
+    "fo-FO": "Faroese (Faroe Islands)",
+    "fr": "French",
+    "fr-BE": "French (Belgium)",
+    "fr-CA": "French (Canada)",
+    "fr-CH": "French (Switzerland)",
+    "fr-FR": "French (France)",
+    "fr-LU": "French (Luxembourg)",
+    "fr-MC": "French (Principality of Monaco)",
+    "gl": "Galician",
+    "gl-ES": "Galician (Spain)",
+    "gu": "Gujarati",
+    "gu-IN": "Gujarati (India)",
+    "he": "Hebrew",
+    "he-IL": "Hebrew (Israel)",
+    "hi": "Hindi",
+    "hi-IN": "Hindi (India)",
+    "hr": "Croatian",
+    "hr-BA": "Croatian (Bosnia and Herzegovina)",
+    "hr-HR": "Croatian (Croatia)",
+    "hu": "Hungarian",
+    "hu-HU": "Hungarian (Hungary)",
+    "hy": "Armenian",
+    "hy-AM": "Armenian (Armenia)",
+    "id": "Indonesian",
+    "id-ID": "Indonesian (Indonesia)",
+    "is": "Icelandic",
+    "is-IS": "Icelandic (Iceland)",
+    "it": "Italian",
+    "it-CH": "Italian (Switzerland)",
+    "it-IT": "Italian (Italy)",
+    "ja": "Japanese",
+    "ja-JP": "Japanese (Japan)",
+    "ka": "Georgian",
+    "ka-GE": "Georgian (Georgia)",
+    "kk": "Kazakh",
+    "kk-KZ": "Kazakh (Kazakhstan)",
+    "kn": "Kannada",
+    "kn-IN": "Kannada (India)",
+    "ko": "Korean",
+    "ko-KR": "Korean (Korea)",
+    "kok": "Konkani",
+    "kok-IN": "Konkani (India)",
+    "ky": "Kyrgyz",
+    "ky-KG": "Kyrgyz (Kyrgyzstan)",
+    "lt": "Lithuanian",
+    "lt-LT": "Lithuanian (Lithuania)",
+    "lv": "Latvian",
+    "lv-LV": "Latvian (Latvia)",
+    "mi": "Maori",
+    "mi-NZ": "Maori (New Zealand)",
+    "mk": "FYRO Macedonian",
+    "mk-MK": "FYRO Macedonian (Former Yugoslav Republic of Macedonia)",
+    "mn": "Mongolian",
+    "mn-MN": "Mongolian (Mongolia)",
+    "mr": "Marathi",
+    "mr-IN": "Marathi (India)",
+    "ms": "Malay",
+    "ms-BN": "Malay (Brunei Darussalam)",
+    "ms-MY": "Malay (Malaysia)",
+    "mt": "Maltese",
+    "mt-MT": "Maltese (Malta)",
+    "nb": "Norwegian (Bokm?l)",
+    "nb-NO": "Norwegian (Bokm?l) (Norway)",
+    "nl": "Dutch",
+    "nl-BE": "Dutch (Belgium)",
+    "nl-NL": "Dutch (Netherlands)",
+    "nn-NO": "Norwegian (Nynorsk) (Norway)",
+    "ns": "Northern Sotho",
+    "ns-ZA": "Northern Sotho (South Africa)",
+    "pa": "Punjabi",
+    "pa-IN": "Punjabi (India)",
+    "pl": "Polish",
+    "pl-PL": "Polish (Poland)",
+    "ps": "Pashto",
+    "ps-AR": "Pashto (Afghanistan)",
+    "pt": "Portuguese",
+    "pt-BR": "Portuguese (Brazil)",
+    "pt-PT": "Portuguese (Portugal)",
+    "qu": "Quechua",
+    "qu-BO": "Quechua (Bolivia)",
+    "qu-EC": "Quechua (Ecuador)",
+    "qu-PE": "Quechua (Peru)",
+    "ro": "Romanian",
+    "ro-RO": "Romanian (Romania)",
+    "ru": "Russian",
+    "ru-RU": "Russian (Russia)",
+    "sa": "Sanskrit",
+    "sa-IN": "Sanskrit (India)",
+    "se": "Sami",
+    "se-FI": "Sami (Finland)",
+    "se-NO": "Sami (Norway)",
+    "se-SE": "Sami (Sweden)",
+    "sk": "Slovak",
+    "sk-SK": "Slovak (Slovakia)",
+    "sl": "Slovenian",
+    "sl-SI": "Slovenian (Slovenia)",
+    "sq": "Albanian",
+    "sq-AL": "Albanian (Albania)",
+    "sr-BA": "Serbian (Latin) (Bosnia and Herzegovina)",
+    "sr-Cyrl-BA": "Serbian (Cyrillic) (Bosnia and Herzegovina)",
+    "sr-SP": "Serbian (Latin) (Serbia and Montenegro)",
+    "sr-Cyrl-SP": "Serbian (Cyrillic) (Serbia and Montenegro)",
+    "sv": "Swedish",
+    "sv-FI": "Swedish (Finland)",
+    "sv-SE": "Swedish (Sweden)",
+    "sw": "Swahili",
+    "sw-KE": "Swahili (Kenya)",
+    "syr": "Syriac",
+    "syr-SY": "Syriac (Syria)",
+    "ta": "Tamil",
+    "ta-IN": "Tamil (India)",
+    "te": "Telugu",  # codespell:ignore
+    "te-IN": "Telugu (India)",
+    "th": "Thai",
+    "th-TH": "Thai (Thailand)",
+    "tl": "Tagalog",
+    "tl-PH": "Tagalog (Philippines)",
+    "tn": "Tswana",
+    "tn-ZA": "Tswana (South Africa)",
+    "tr": "Turkish",
+    "tr-TR": "Turkish (Turkey)",
+    "tt": "Tatar",
+    "tt-RU": "Tatar (Russia)",
+    "ts": "Tsonga",
+    "uk": "Ukrainian",
+    "uk-UA": "Ukrainian (Ukraine)",
+    "ur": "Urdu",
+    "ur-PK": "Urdu (Islamic Republic of Pakistan)",
+    "uz": "Uzbek (Latin)",
+    "uz-UZ": "Uzbek (Latin) (Uzbekistan)",
+    "uz-Cyrl-UZ": "Uzbek (Cyrillic) (Uzbekistan)",
+    "vi": "Vietnamese",
+    "vi-VN": "Vietnamese (Vietnam)",
+    "xh": "Xhosa",
+    "xh-ZA": "Xhosa (South Africa)",
+    "zh": "Chinese",
+    "zh-CN": "Chinese (S)",
+    "zh-HK": "Chinese (Hong Kong)",
+    "zh-MO": "Chinese (Macau)",
+    "zh-SG": "Chinese (Singapore)",
+    "zh-TW": "Chinese (T)",
+    "zu": "Zulu",
+    "zu-ZA": "Zulu (South Africa)",
 }
 
 
 GIO_TLS_ERRORS = {
     Gio.TlsCertificateFlags.UNKNOWN_CA: _(
-        'The signing certificate authority is not known'),
-    Gio.TlsCertificateFlags.REVOKED: _(
-        'The certificate has been revoked'),
+        "The signing certificate authority is not known"
+    ),
+    Gio.TlsCertificateFlags.REVOKED: _("The certificate has been revoked"),
     Gio.TlsCertificateFlags.BAD_IDENTITY: _(
-        'The certificate does not match the expected identity of the site'),
-    Gio.TlsCertificateFlags.INSECURE: _(
-        'The certificate’s algorithm is insecure'),
+        "The certificate does not match the expected identity of the site"
+    ),
+    Gio.TlsCertificateFlags.INSECURE: _("The certificate’s algorithm is insecure"),
     Gio.TlsCertificateFlags.NOT_ACTIVATED: _(
-        'The certificate’s activation time is in the future'),
-    Gio.TlsCertificateFlags.GENERIC_ERROR: _('Unknown validation error'),
-    Gio.TlsCertificateFlags.EXPIRED: _('The certificate has expired'),
+        "The certificate’s activation time is in the future"
+    ),
+    Gio.TlsCertificateFlags.GENERIC_ERROR: _("Unknown validation error"),
+    Gio.TlsCertificateFlags.EXPIRED: _("The certificate has expired"),
 }
 
 
 class FTState(Enum):
-    INIT = 'init'
-    PREPARING = 'prepare'
-    ENCRYPTING = 'encrypting'
-    DECRYPTING = 'decrypting'
-    STARTED = 'started'
-    IN_PROGRESS = 'progress'
-    FINISHED = 'finished'
-    ERROR = 'error'
-    CANCELLED = 'cancelled'
+    INIT = "init"
+    PREPARING = "prepare"
+    ENCRYPTING = "encrypting"
+    DECRYPTING = "decrypting"
+    STARTED = "started"
+    IN_PROGRESS = "progress"
+    FINISHED = "finished"
+    ERROR = "error"
+    CANCELLED = "cancelled"
 
     @property
     def is_preparing(self):
@@ -812,23 +815,21 @@ class FTState(Enum):
 
     @property
     def is_active(self):
-        return not (self.is_error or
-                    self.is_cancelled or
-                    self.is_finished)
+        return not (self.is_error or self.is_cancelled or self.is_finished)
 
 
 SASL_ERRORS = {
-    'aborted': _('Authentication aborted'),
-    'account-disabled': _('Account disabled'),
-    'credentials-expired': _('Credentials expired'),
-    'encryption-required': _('Encryption required'),
-    'incorrect-encoding': _('Authentication failed'),
-    'invalid-authzid': _('Authentication failed'),
-    'malformed-request': _('Authentication failed'),
-    'invalid-mechanism': _('Authentication mechanism not supported'),
-    'mechanism-too-weak': _('Authentication mechanism too weak'),
-    'not-authorized': _('Authentication failed'),
-    'temporary-auth-failure': _('Authentication currently not possible'),
+    "aborted": _("Authentication aborted"),
+    "account-disabled": _("Account disabled"),
+    "credentials-expired": _("Credentials expired"),
+    "encryption-required": _("Encryption required"),
+    "incorrect-encoding": _("Authentication failed"),
+    "invalid-authzid": _("Authentication failed"),
+    "malformed-request": _("Authentication failed"),
+    "invalid-mechanism": _("Authentication mechanism not supported"),
+    "mechanism-too-weak": _("Authentication mechanism too weak"),
+    "not-authorized": _("Authentication failed"),
+    "temporary-auth-failure": _("Authentication currently not possible"),
 }
 
 
@@ -866,56 +867,56 @@ COMMON_FEATURES = [
     # Namespace.JINGLE_FILE_TRANSFER_5,
     # Namespace.JINGLE_BYTESTREAM,
     # Namespace.JINGLE_IBB,
-    Namespace.AVATAR_METADATA + '+notify',
+    Namespace.AVATAR_METADATA + "+notify",
     Namespace.MESSAGE_MODERATE,
     Namespace.REPLY,
-    Namespace.OMEMO_TEMP_DL + '+notify',
-    Namespace.OPENPGP_PK + '+notify',
+    Namespace.OMEMO_TEMP_DL + "+notify",
+    Namespace.OPENPGP_PK + "+notify",
     Namespace.STYLING,
     Namespace.REACTIONS,
-    Namespace.MDS + '+notify',
+    Namespace.MDS + "+notify",
 ]
 
 
 SHOW_LIST = [
-    'offline',
-    'connecting',
-    'away',
-    'xa',
-    'chat',
-    'online',
-    'dnd',
+    "offline",
+    "connecting",
+    "away",
+    "xa",
+    "chat",
+    "online",
+    "dnd",
 ]
 
 SHOW_STRING = {
-    'dnd': p_('User status', 'Busy'),
-    'xa': p_('User status', 'Not Available'),
-    'chat': p_('User status', 'Free for Chat'),
-    'online': p_('User status', 'Available'),
-    'connecting': _('Connecting'),
-    'away': p_('User status', 'Away'),
-    'offline': _('Offline'),
+    "dnd": p_("User status", "Busy"),
+    "xa": p_("User status", "Not Available"),
+    "chat": p_("User status", "Free for Chat"),
+    "online": p_("User status", "Available"),
+    "connecting": _("Connecting"),
+    "away": p_("User status", "Away"),
+    "offline": _("Offline"),
 }
 
 SHOW_STRING_MNEMONIC = {
-    'dnd': p_('User status', '_Busy'),
-    'xa': p_('User status', '_Not Available'),
-    'chat': p_('User status', '_Free for Chat'),
-    'online': p_('User status', '_Available'),
-    'connecting': _('Connecting'),
-    'away': p_('User status', 'A_way'),
-    'offline': _('_Offline'),
+    "dnd": p_("User status", "_Busy"),
+    "xa": p_("User status", "_Not Available"),
+    "chat": p_("User status", "_Free for Chat"),
+    "online": p_("User status", "_Available"),
+    "connecting": _("Connecting"),
+    "away": p_("User status", "A_way"),
+    "offline": _("_Offline"),
 }
 
-GAJIM_FAQ_URI = 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq'
-GAJIM_PRIVACY_POLICY_URI = 'https://gajim.org/privacy/'
-GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'
-GAJIM_SUPPORT_JID = 'gajim@conference.gajim.org'
+GAJIM_FAQ_URI = "https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq"
+GAJIM_PRIVACY_POLICY_URI = "https://gajim.org/privacy/"
+GAJIM_WIKI_URI = "https://dev.gajim.org/gajim/gajim/wikis"
+GAJIM_SUPPORT_JID = "gajim@conference.gajim.org"
 
 
 # Clickable URI schemes not (yet) registered with IANA (see ./iana/uri_schemes.py)
 NONREGISTERED_URI_SCHEMES = {
-    'gemini',
+    "gemini",
 }
 
 # This is an excerpt of Media Types from
@@ -923,98 +924,98 @@ NONREGISTERED_URI_SCHEMES = {
 # plus some additions
 OTHER_MIME_TYPES = {
     # application/
-    'application/calendar+json',
-    'application/calendar+xml',
-    'application/epub+zip',
-    'application/json',
-    'application/mp4',
-    'application/msword',
-    'application/ogg',
-    'application/pdf',
-    'application/pgp-encrypted',
-    'application/pgp-signature',
-    'application/postscript',
-    'application/rtf',
-    'application/vcard+json',
-    'application/vcard+xml',
-    'application/vnd.amazon.mobi8-ebook',
-    'application/vnd.google-earth.kml+xml',
-    'application/vnd.google-earth.kmz',
+    "application/calendar+json",
+    "application/calendar+xml",
+    "application/epub+zip",
+    "application/json",
+    "application/mp4",
+    "application/msword",
+    "application/ogg",
+    "application/pdf",
+    "application/pgp-encrypted",
+    "application/pgp-signature",
+    "application/postscript",
+    "application/rtf",
+    "application/vcard+json",
+    "application/vcard+xml",
+    "application/vnd.amazon.mobi8-ebook",
+    "application/vnd.google-earth.kml+xml",
+    "application/vnd.google-earth.kmz",
     # Start office
-    'application/vnd.ms-access',
-    'application/vnd.ms-excel',
-    'application/vnd.ms-excel.addin.macroEnabled.12',
-    'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
-    'application/vnd.ms-excel.sheet.macroEnabled.12',
-    'application/vnd.ms-excel.template.macroEnabled.12',
-    'application/vnd.ms-powerpoint',
-    'application/vnd.ms-powerpoint.addin.macroEnabled.12',
-    'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
-    'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
-    'application/vnd.ms-powerpoint.template.macroEnabled.12',
-    'application/vnd.ms-word.document.macroEnabled.12',
-    'application/vnd.ms-word.template.macroEnabled.12',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
-    'application/vnd.openxmlformats-officedocument.presentationml.template',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
-    'application/vnd.openxmlformats-officedocument.vmlDrawing',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+    "application/vnd.ms-access",
+    "application/vnd.ms-excel",
+    "application/vnd.ms-excel.addin.macroEnabled.12",
+    "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
+    "application/vnd.ms-excel.sheet.macroEnabled.12",
+    "application/vnd.ms-excel.template.macroEnabled.12",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.ms-powerpoint.addin.macroEnabled.12",
+    "application/vnd.ms-powerpoint.presentation.macroEnabled.12",
+    "application/vnd.ms-powerpoint.slideshow.macroEnabled.12",
+    "application/vnd.ms-powerpoint.template.macroEnabled.12",
+    "application/vnd.ms-word.document.macroEnabled.12",
+    "application/vnd.ms-word.template.macroEnabled.12",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+    "application/vnd.openxmlformats-officedocument.presentationml.template",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+    "application/vnd.openxmlformats-officedocument.vmlDrawing",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
     # End office
-    'application/vnd.sqlite3',
-    'application/zip',
+    "application/vnd.sqlite3",
+    "application/zip",
     # font/*
-    'font/ttf',
-    'font/woff',
-    'font/woff2',
+    "font/ttf",
+    "font/woff",
+    "font/woff2",
     # model/*
-    'model/mtl',
-    'model/obj',
-    'model/stl',
+    "model/mtl",
+    "model/obj",
+    "model/stl",
     # text/*
-    'text/calendar',
-    'text/csv',
-    'text/markdown',
-    'text/rtf',
-    'text/vcard',
+    "text/calendar",
+    "text/csv",
+    "text/markdown",
+    "text/rtf",
+    "text/vcard",
 }
 
 AUDIO_MIME_TYPES = {
-    'audio/aac',
-    'audio/ac3',
-    'audio/flac',
-    'audio/mp3',
-    'audio/mp4',
-    'audio/mpeg',
-    'audio/ogg',
-    'audio/opus',
-    'audio/vnd.wave',
-    'audio/wav',
-    'audio/wave',
-    'audio/x-aac',
-    'audio/x-flac',
-    'audio/x-m4a',
-    'audio/x-matroska',
-    'audio/x-mp3',
-    'audio/x-mpeg',
-    'audio/x-ogg',
-    'audio/x-wav',
+    "audio/aac",
+    "audio/ac3",
+    "audio/flac",
+    "audio/mp3",
+    "audio/mp4",
+    "audio/mpeg",
+    "audio/ogg",
+    "audio/opus",
+    "audio/vnd.wave",
+    "audio/wav",
+    "audio/wave",
+    "audio/x-aac",
+    "audio/x-flac",
+    "audio/x-m4a",
+    "audio/x-matroska",
+    "audio/x-mp3",
+    "audio/x-mpeg",
+    "audio/x-ogg",
+    "audio/x-wav",
 }
 
 VIDEO_MIME_TYPES = {
-    'video/H264',
-    'video/H265',
-    'video/mp4',
-    'video/mpeg4-generic',
-    'video/ogg',
-    'video/quicktime',
-    'video/vc1',
-    'video/VP8',
-    'video/webm',
-    'video/x-matroska',
-    'video/x-msvideo',
+    "video/H264",
+    "video/H265",
+    "video/mp4",
+    "video/mpeg4-generic",
+    "video/ogg",
+    "video/quicktime",
+    "video/vc1",
+    "video/VP8",
+    "video/webm",
+    "video/x-matroska",
+    "video/x-msvideo",
 }
 
 # Executable files extensions:
@@ -1086,10 +1087,7 @@ def get_pil_mime_types() -> set[str]:
     for mime_type in Image.MIME.values():
         pil_mime_types.add(mime_type.lower())
 
-    return set(filter(
-        lambda mime_type: mime_type.startswith('image'),
-        pil_mime_types
-    ))
+    return set(filter(lambda mime_type: mime_type.startswith("image"), pil_mime_types))
 
 
 PIL_IMAGE_MIME_TYPES = get_pil_mime_types()
@@ -1097,47 +1095,43 @@ PIXBUF_IMAGE_MIME_TYPES = get_pixbuf_mime_types()
 IMAGE_MIME_TYPES = PIL_IMAGE_MIME_TYPES | PIXBUF_IMAGE_MIME_TYPES
 
 ALL_MIME_TYPES = (
-    OTHER_MIME_TYPES |
-    IMAGE_MIME_TYPES |
-    AUDIO_MIME_TYPES |
-    VIDEO_MIME_TYPES
+    OTHER_MIME_TYPES | IMAGE_MIME_TYPES | AUDIO_MIME_TYPES | VIDEO_MIME_TYPES
 )
 
 TRUST_SYMBOL_DATA = {
-    Trust.UNTRUSTED: ('lucide-circle-x-symbolic',
-                      _('Untrusted'),
-                      'error-color'),
-    Trust.UNDECIDED: ('lucide-shield-alert-symbolic',
-                      _('Trust Not Decided'),
-                      'warning-color'),
-    Trust.BLIND: ('lucide-shield-question-mark-symbolic',
-                  _('Blind Trust'),
-                  'encrypted-color'),
-    Trust.VERIFIED: ('lucide-shield-check-symbolic',
-                     _('Verified'),
-                     'encrypted-color')
+    Trust.UNTRUSTED: ("lucide-circle-x-symbolic", _("Untrusted"), "error-color"),
+    Trust.UNDECIDED: (
+        "lucide-shield-alert-symbolic",
+        _("Trust Not Decided"),
+        "warning-color",
+    ),
+    Trust.BLIND: (
+        "lucide-shield-question-mark-symbolic",
+        _("Blind Trust"),
+        "encrypted-color",
+    ),
+    Trust.VERIFIED: ("lucide-shield-check-symbolic", _("Verified"), "encrypted-color"),
 }
 
 
 THRESHOLD_OPTIONS = {
-    -1: _('No Sync'),
-    1: _('1 Day'),
-    2: _('2 Days'),
-    7: _('1 Week'),
-    30: _('1 Month'),
-    0: _('No Threshold'),
+    -1: _("No Sync"),
+    1: _("1 Day"),
+    2: _("2 Days"),
+    7: _("1 Week"),
+    30: _("1 Month"),
+    0: _("No Threshold"),
 }
 
 
 @total_ordering
 class PresenceShowExt(Enum):
-
-    '''
+    """
     This extends nbxmpp.const.PresenceShow for convenience
     with an OFFLINE member
-    '''
+    """
 
-    OFFLINE = 'offline'
+    OFFLINE = "offline"
 
     @property
     def is_offline(self):
@@ -1154,11 +1148,12 @@ class PresenceShowExt(Enum):
 # Replace keys with Gio.TlsProtocolVersion enum once
 # we require GLib >= 2.69
 TLS_VERSION_STRINGS = {
-    3: '1.1',
-    4: '1.2',
-    5: '1.3',
+    3: "1.1",
+    4: "1.2",
+    5: "1.3",
 }
 
 
 RETRACTION_FALLBACK = (
-    "/me retracted a previous message, but it's unsupported by your client.")
+    "/me retracted a previous message, but it's unsupported by your client."
+)

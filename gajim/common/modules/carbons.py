@@ -25,9 +25,9 @@ class Carbons(BaseModule):
             return
 
         self.supported = True
-        self._log.info('Discovered carbons: %s', info.jid)
+        self._log.info("Discovered carbons: %s", info.jid)
 
-        iq = nbxmpp.Iq('set')
-        iq.setTag('enable', namespace=Namespace.CARBONS)
-        self._log.info('Activate')
+        iq = nbxmpp.Iq("set")
+        iq.setTag("enable", namespace=Namespace.CARBONS)
+        self._log.info("Activate")
         self._con.connection.send(iq)

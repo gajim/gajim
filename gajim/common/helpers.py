@@ -62,51 +62,71 @@ if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
 
 HAS_PYWIN32 = False
-if os.name == 'nt':
+if os.name == "nt":
     try:
         import pywintypes
         import win32con
         import win32file
+
         HAS_PYWIN32 = True
     except ImportError:
         pass
 
-log = logging.getLogger('gajim.c.helpers')
+log = logging.getLogger("gajim.c.helpers")
 
 
 def sanitize_filename(filename: str) -> str:
-    '''
+    """
     Sanitize filename of:
      - characters used to obfuscate file names/extensions
      - elements not allowed on Windows
        https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
     Limit filename length to 50 chars on all systems
-    '''
+    """
 
     # Remove right-to-left override U+202E (commonly used to spoof extensions)
-    filename = filename.replace("\u202E", "")
+    filename = filename.replace("\u202e", "")
 
-    if sys.platform == 'win32':
-        blacklist = ['\\', '/', ':', '*', '?', '？', '"', '<', '>', '|', '\0']
+    if sys.platform == "win32":
+        blacklist = ["\\", "/", ":", "*", "?", "？", '"', "<", ">", "|", "\0"]
         reserved_filenames = [
-            'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5',
-            'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4',
-            'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9',
+            "CON",
+            "PRN",
+            "AUX",
+            "NUL",
+            "COM1",
+            "COM2",
+            "COM3",
+            "COM4",
+            "COM5",
+            "COM6",
+            "COM7",
+            "COM8",
+            "COM9",
+            "LPT1",
+            "LPT2",
+            "LPT3",
+            "LPT4",
+            "LPT5",
+            "LPT6",
+            "LPT7",
+            "LPT8",
+            "LPT9",
         ]
-        filename = ''.join(char for char in filename if char not in blacklist)
+        filename = "".join(char for char in filename if char not in blacklist)
 
-        filename = ''.join(char for char in filename if ord(char) > 31)
+        filename = "".join(char for char in filename if ord(char) > 31)
 
-        filename = unicodedata.normalize('NFKD', filename)
-        filename = filename.rstrip('. ')
+        filename = unicodedata.normalize("NFKD", filename)
+        filename = filename.rstrip(". ")
         filename = filename.strip()
 
-        if all(char == '.' for char in filename):
-            filename = f'__{filename}'
+        if all(char == "." for char in filename):
+            filename = f"__{filename}"
         if filename.upper() in reserved_filenames:
-            filename = f'__{filename}'
+            filename = f"__{filename}"
         if len(filename) == 0:
-            filename = '__'
+            filename = "__"
 
     extension = Path(filename).suffix[:10]
     filename = Path(filename).stem
@@ -115,7 +135,7 @@ def sanitize_filename(filename: str) -> str:
     # Many Filesystems have a limit on filename length: keep it short
     filename = filename[:final_length]
 
-    return f'{filename}{extension}'
+    return f"{filename}{extension}"
 
 
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
@@ -132,56 +152,60 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
 
 
 def generate_qr_code(content: str) -> Gdk.Texture:
-    qr = qrcode.QRCode(version=None,
-                       error_correction=qrcode.constants.ERROR_CORRECT_L,
-                       box_size=6,
-                       border=4)
+    qr = qrcode.QRCode(
+        version=None,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=6,
+        border=4,
+    )
     qr.add_data(content)
     qr.make(fit=True)
 
-    img = qr.make_image(image_factory=QrcPilImage).convert('RGB')
+    img = qr.make_image(image_factory=QrcPilImage).convert("RGB")
     pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
         GLib.Bytes.new(img.tobytes()),
-        GdkPixbuf.Colorspace.RGB, False, 8,
-        img.width, img.height, img.width*3)
+        GdkPixbuf.Colorspace.RGB,
+        False,
+        8,
+        img.width,
+        img.height,
+        img.width * 3,
+    )
     return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 
-def play_sound(sound_event: str,
-               account: str | None = None,
-               force: bool = False,
-               loop: bool = False) -> None:
+def play_sound(
+    sound_event: str,
+    account: str | None = None,
+    force: bool = False,
+    loop: bool = False,
+) -> None:
 
     if sound_event is None:
         return
-    if (force or account is None or
-            allow_sound_notification(account, sound_event)):
-        play_sound_file(
-            app.settings.get_soundevent_settings(sound_event)['path'], loop)
+    if force or account is None or allow_sound_notification(account, sound_event):
+        play_sound_file(app.settings.get_soundevent_settings(sound_event)["path"], loop)
 
 
-def check_soundfile_path(file_: str,
-                         dirs: list[Path] | None = None
-                         ) -> Path | None:
-    '''
+def check_soundfile_path(file_: str, dirs: list[Path] | None = None) -> Path | None:
+    """
     Check if the sound file exists
 
     :param file_: the file to check, absolute or relative to 'dirs' path
     :param dirs: list of knows paths to fallback if the file doesn't exists
                                      (eg: ~/.gajim/sounds/, DATADIR/sounds...).
     :return      the path to file or None if it doesn't exists.
-    '''
+    """
     if not file_:
         return None
     if Path(file_).exists():
         return Path(file_)
 
     if dirs is None:
-        dirs = [configpaths.get('MY_DATA'),
-                configpaths.get('DATA')]
+        dirs = [configpaths.get("MY_DATA"), configpaths.get("DATA")]
 
     for dir_ in dirs:
-        dir_ = dir_ / 'sounds' / file_
+        dir_ = dir_ / "sounds" / file_
         if dir_.exists():
             return dir_
     return None
@@ -193,33 +217,33 @@ def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
         return
 
     from gajim.common import sound
+
     sound.play(path_to_soundfile, loop)
 
 
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
-    '''
+    """
     Return sha of sid + initiator + target used for proxy auth
-    '''
-    return hashlib.sha1(
-        (f'{sid}{initiator}{target}').encode()).hexdigest()
+    """
+    return hashlib.sha1((f"{sid}{initiator}{target}").encode()).hexdigest()
 
 
 def allow_showing_notification(account: str) -> bool:
-    if not app.settings.get('show_notifications'):
+    if not app.settings.get("show_notifications"):
         return False
-    if app.settings.get('show_notifications_away'):
+    if app.settings.get("show_notifications_away"):
         return True
     client = app.get_client(account)
-    return client.status == 'online'
+    return client.status == "online"
 
 
 def allow_sound_notification(account: str, sound_event: str) -> bool:
-    if not app.settings.get('sounds_on'):
+    if not app.settings.get("sounds_on"):
         return False
     client = app.get_client(account)
-    if client.status != 'online' and not app.settings.get('sounddnd'):
+    if client.status != "online" and not app.settings.get("sounddnd"):
         return False
-    if app.settings.get_soundevent_settings(sound_event)['enabled']:  # noqa: SIM103
+    if app.settings.get_soundevent_settings(sound_event)["enabled"]:  # noqa: SIM103
         return True
     return False
 
@@ -227,38 +251,38 @@ def allow_sound_notification(account: str, sound_event: str) -> bool:
 def get_optional_features(account: str) -> list[str]:
     features: list[str] = []
 
-    if app.settings.get_account_setting(account, 'request_user_data'):
-        features.append(Namespace.TUNE + '+notify')
-        features.append(Namespace.LOCATION + '+notify')
+    if app.settings.get_account_setting(account, "request_user_data"):
+        features.append(Namespace.TUNE + "+notify")
+        features.append(Namespace.LOCATION + "+notify")
 
-    features.append(Namespace.NICK + '+notify')
+    features.append(Namespace.NICK + "+notify")
 
     client = app.get_client(account)
 
-    if client.get_module('Bookmarks').nativ_bookmarks_used:
-        features.append(Namespace.BOOKMARKS_1 + '+notify')
-    elif client.get_module('Bookmarks').pep_bookmarks_used:
-        features.append(Namespace.BOOKMARKS + '+notify')
-    if app.is_installed('AV'):
+    if client.get_module("Bookmarks").nativ_bookmarks_used:
+        features.append(Namespace.BOOKMARKS_1 + "+notify")
+    elif client.get_module("Bookmarks").pep_bookmarks_used:
+        features.append(Namespace.BOOKMARKS + "+notify")
+    if app.is_installed("AV"):
         features.append(Namespace.JINGLE_RTP)
         features.append(Namespace.JINGLE_RTP_AUDIO)
         features.append(Namespace.JINGLE_RTP_VIDEO)
         features.append(Namespace.JINGLE_ICE_UDP)
 
     # Give plugins the possibility to add their features
-    app.plugin_manager.extension_point('update_caps', account, features)
+    app.plugin_manager.extension_point("update_caps", account, features)
     return features
 
 
 def get_global_proxy() -> ProxyData | None:
-    proxy_name = app.settings.get('global_proxy')
+    proxy_name = app.settings.get("global_proxy")
     if not proxy_name:
         return None
     return get_proxy(proxy_name)
 
 
 def get_account_proxy(account: str, fallback: bool = True) -> ProxyData | None:
-    proxy_name = app.settings.get_account_setting(account, 'proxy')
+    proxy_name = app.settings.get_account_setting(account, "proxy")
     if proxy_name:
         return get_proxy(proxy_name)
 
@@ -268,11 +292,8 @@ def get_account_proxy(account: str, fallback: bool = True) -> ProxyData | None:
 
 
 def get_proxy(proxy_name: str) -> ProxyData | None:
-    if proxy_name == 'no-proxy':
-        return ProxyData(type='direct',
-                         host='',
-                         username=None,
-                         password=None)
+    if proxy_name == "no-proxy":
+        return ProxyData(type="direct", host="", username=None, password=None)
 
     try:
         settings = app.settings.get_proxy_settings(proxy_name)
@@ -280,13 +301,15 @@ def get_proxy(proxy_name: str) -> ProxyData | None:
         return None
 
     username, password = None, None
-    if settings['useauth']:
-        username, password = settings['user'], settings['pass']
+    if settings["useauth"]:
+        username, password = settings["user"], settings["pass"]
 
-    return ProxyData(type=settings['type'],
-                     host=f"{settings['host']}:{settings['port']}",
-                     username=username,
-                     password=password)
+    return ProxyData(
+        type=settings["type"],
+        host=f"{settings['host']}:{settings['port']}",
+        username=username,
+        password=password,
+    )
 
 
 def determine_proxy(account: str | None = None) -> ProxyData | None:
@@ -312,14 +335,12 @@ def determine_proxy(account: str | None = None) -> ProxyData | None:
     return proxies[0] if proxies else None
 
 
-def load_json(path: Path,
-              key: str | None = None,
-              default: Any | None = None) -> Any:
+def load_json(path: Path, key: str | None = None, default: Any | None = None) -> Any:
     try:
-        with path.open('r', encoding='utf8') as file:
+        with path.open("r", encoding="utf8") as file:
             json_dict = json.loads(file.read())
     except Exception:
-        log.exception('Parsing error')
+        log.exception("Parsing error")
         return default
 
     if key is None:
@@ -330,18 +351,18 @@ def load_json(path: Path,
 def dump_json(path: Path, data: dict[Any, Any]) -> None:
     """Save a JSON-serializable object to a .json file."""
     try:
-        with path.open('w', encoding='utf8') as file:
+        with path.open("w", encoding="utf8") as file:
             json.dump(data, file)
     except Exception:
-        log.exception('Error while trying to dump JSON')
+        log.exception("Error while trying to dump JSON")
 
 
 def file_is_locked(path_to_file: str) -> bool:
-    '''
+    """
     Return True if file is locked
     NOTE: Windows only.
-    '''
-    if os.name != 'nt':
+    """
+    if os.name != "nt":
         return False
 
     if not HAS_PYWIN32:
@@ -359,7 +380,8 @@ def file_is_locked(path_to_file: str) -> bool:
             secur_att,
             win32con.OPEN_EXISTING,  # existing file only
             win32con.FILE_ATTRIBUTE_NORMAL,  # normal file
-            0)  # no attr. template
+            0,
+        )  # no attr. template
     except pywintypes.error:
         return True
     else:  # in case all went ok, close file handle
@@ -368,14 +390,14 @@ def file_is_locked(path_to_file: str) -> bool:
 
 
 def get_resource(account: str) -> str | None:
-    resource = app.settings.get_account_setting(account, 'resource')
+    resource = app.settings.get_account_setting(account, "resource")
     if not resource:
         return None
 
     resource = Template(resource).safe_substitute(
-        {'hostname': socket.gethostname(),
-         'rand': get_random_string()})
-    app.settings.set_account_setting(account, 'resource', resource)
+        {"hostname": socket.gethostname(), "rand": get_random_string()}
+    )
+    app.settings.set_account_setting(account, "resource", resource)
     return resource
 
 
@@ -386,7 +408,7 @@ def to_user_string(error: CommonError | StanzaError) -> str:
 
     condition = error.condition
     if error.app_condition is not None:
-        return f'{condition} ({error.app_condition})'
+        return f"{condition} ({error.app_condition})"
     return condition
 
 
@@ -395,13 +417,9 @@ class Observable:
         self._log = log_
         self._callbacks: types.ObservableCbDict = defaultdict(list)
 
-    def __disconnect(self,
-                     obj: Any,
-                     signals: set[str] | None = None
-                     ) -> None:
+    def __disconnect(self, obj: Any, signals: set[str] | None = None) -> None:
 
-        def _remove(handlers: list[weakref.WeakMethod[types.AnyCallableT]]
-                    ) -> None:
+        def _remove(handlers: list[weakref.WeakMethod[types.AnyCallableT]]) -> None:
 
             for handler in list(handlers):
                 func = handler()
@@ -424,10 +442,7 @@ class Observable:
     def disconnect_signals(self) -> None:
         self._callbacks = defaultdict(list)
 
-    def multi_disconnect(self,
-                         obj: Any,
-                         signals: set[str] | None
-                         ) -> None:
+    def multi_disconnect(self, obj: Any, signals: set[str] | None) -> None:
 
         self.__disconnect(obj, signals)
 
@@ -440,11 +455,9 @@ class Observable:
     def disconnect_signal(self, obj: Any, signal: str) -> None:
         self.__disconnect(obj, {signal})
 
-    def connect_signal(self,
-                       signal_name: str,
-                       func: types.AnyCallableT) -> None:
+    def connect_signal(self, signal_name: str, func: types.AnyCallableT) -> None:
         if not inspect.ismethod(func):
-            raise ValueError('Only bound methods allowed')
+            raise ValueError("Only bound methods allowed")
 
         weak_func = weakref.WeakMethod(func)
 
@@ -454,9 +467,7 @@ class Observable:
 
         self._callbacks[signal_name].append(weak_func)
 
-    def connect(self,
-                signal_name: str,
-                func: types.AnyCallableT) -> None:
+    def connect(self, signal_name: str, func: types.AnyCallableT) -> None:
         self.connect_signal(signal_name, func)
 
     def multi_connect(self, signal_dict: dict[str, types.AnyCallableT]):
@@ -469,7 +480,7 @@ class Observable:
             return
 
         if self._log is not None:
-            self._log.info('Signal: %s', signal_name)
+            self._log.info("Signal: %s", signal_name)
 
         for weak_method in list(signal_callbacks):
             func = weak_method()
@@ -480,14 +491,15 @@ class Observable:
 
 
 def write_file_async(
-        path: Path,
-        data: bytes,
-        callback: Callable[[bool, GLib.Error | None, Any], Any],
-        user_data: Any | None = None):
+    path: Path,
+    data: bytes,
+    callback: Callable[[bool, GLib.Error | None, Any], Any],
+    user_data: Any | None = None,
+):
 
-    def _on_write_finished(outputstream: Gio.OutputStream,
-                           result: Gio.AsyncResult,
-                           _data: bytes) -> None:
+    def _on_write_finished(
+        outputstream: Gio.OutputStream, result: Gio.AsyncResult, _data: bytes
+    ) -> None:
         try:
             successful, _bytes_written = outputstream.write_all_finish(result)
         except GLib.Error as error:
@@ -505,26 +517,23 @@ def write_file_async(
         # Pass data as user_data to the callback, because
         # write_all_async() takes no reference to the data
         # and python gc collects it before the data is written
-        outputstream.write_all_async(data,
-                                     GLib.PRIORITY_DEFAULT,
-                                     None,
-                                     _on_write_finished,
-                                     data)
+        outputstream.write_all_async(
+            data, GLib.PRIORITY_DEFAULT, None, _on_write_finished, data
+        )
 
     file = Gio.File.new_for_path(str(path))
-    file.create_async(Gio.FileCreateFlags.PRIVATE,
-                      GLib.PRIORITY_DEFAULT,
-                      None,
-                      _on_file_created)
+    file.create_async(
+        Gio.FileCreateFlags.PRIVATE, GLib.PRIORITY_DEFAULT, None, _on_file_created
+    )
 
-def load_file_async(path: Path,
-                    callback: Callable[[bytes | None,
-                                        GLib.Error | None,
-                                        Any], Any],
-                    user_data: Any | None = None) -> None:
 
-    def _on_load_finished(file: Gio.File,
-                          result: Gio.AsyncResult) -> None:
+def load_file_async(
+    path: Path,
+    callback: Callable[[bytes | None, GLib.Error | None, Any], Any],
+    user_data: Any | None = None,
+) -> None:
+
+    def _on_load_finished(file: Gio.File, result: Gio.AsyncResult) -> None:
 
         try:
             _, contents, _ = file.load_contents_finish(result)
@@ -540,34 +549,32 @@ def load_file_async(path: Path,
 
 def get_x509_cert_from_gio_cert(cert: Gio.TlsCertificate) -> x509.Certificate:
     glib_bytes = GLib.ByteArray.free_to_bytes(cert.props.certificate)
-    return x509.load_der_x509_certificate(
-        glib_bytes.get_data(), default_backend())
+    return x509.load_der_x509_certificate(glib_bytes.get_data(), default_backend())
 
 
 def get_custom_host(
-    account: str
+    account: str,
 ) -> tuple[str, ConnectionProtocol, ConnectionType] | None:
 
-    if not app.settings.get_account_setting(account, 'use_custom_host'):
+    if not app.settings.get_account_setting(account, "use_custom_host"):
         return None
-    host = app.settings.get_account_setting(account, 'custom_host')
-    port = app.settings.get_account_setting(account, 'custom_port')
-    type_ = app.settings.get_account_setting(account, 'custom_type')
+    host = app.settings.get_account_setting(account, "custom_host")
+    port = app.settings.get_account_setting(account, "custom_port")
+    type_ = app.settings.get_account_setting(account, "custom_type")
 
-    if host.startswith(('ws://', 'wss://')):
+    if host.startswith(("ws://", "wss://")):
         protocol = ConnectionProtocol.WEBSOCKET
     else:
-        host = f'{host}:{port}'
+        host = f"{host}:{port}"
         protocol = ConnectionProtocol.TCP
 
     return (host, protocol, ConnectionType(type_))
 
 
-def warn_about_plain_connection(account: str,
-                                connection_types: list[ConnectionType]
-                                ) -> bool:
-    warn = app.settings.get_account_setting(
-        account, 'confirm_unencrypted_connection')
+def warn_about_plain_connection(
+    account: str, connection_types: list[ConnectionType]
+) -> bool:
+    warn = app.settings.get_account_setting(account, "confirm_unencrypted_connection")
     return any(type_.is_plain and warn for type_ in connection_types)
 
 

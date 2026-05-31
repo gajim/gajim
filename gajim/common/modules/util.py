@@ -36,38 +36,39 @@ def from_xs_boolean(value: str | bool) -> bool:
     if isinstance(value, bool):
         return value
 
-    if value in ('1', 'true', 'True'):
+    if value in ("1", "true", "True"):
         return True
 
-    if value in ('0', 'false', 'False', ''):
+    if value in ("0", "false", "False", ""):
         return False
 
-    raise ValueError(f'Cant convert {value} to python boolean')
+    raise ValueError(f"Can't convert {value} to python boolean")
 
 
 def to_xs_boolean(value: bool | None) -> str:
     # Convert to xs:boolean ('true', 'false')
     # from a python boolean (True, False) or None
     if value is True:
-        return 'true'
+        return "true"
 
     if value is False:
-        return 'false'
+        return "false"
 
     if value is None:
-        return 'false'
+        return "false"
 
-    raise ValueError(f'Cant convert {value} to xs:boolean')
+    raise ValueError(f"Can't convert {value} to xs:boolean")
 
 
 def event_node(node: str) -> Callable[[Callable[P, object]], Callable[P, None]]:
     def event_node_decorator(func: Callable[P, object]) -> Callable[P, None]:
         @wraps(func)
-        def func_wrapper(self: Any,
-                         _con: types.NBXMPPClient,
-                         _stanza: Message,
-                         properties: MessageProperties
-                         ) -> None:
+        def func_wrapper(
+            self: Any,
+            _con: types.NBXMPPClient,
+            _stanza: Message,
+            properties: MessageProperties,
+        ) -> None:
             if not properties.is_pubsub_event:
                 return
 
@@ -77,6 +78,7 @@ def event_node(node: str) -> Callable[[Callable[P, object]], Callable[P, None]]:
             func(self, _con, _stanza, properties)
 
         return func_wrapper
+
     return event_node_decorator
 
 
@@ -87,13 +89,14 @@ def store_publish(func: Callable[P, T]) -> Callable[P, T | None]:
             self._stored_publish = partial(func, self, *args, **kwargs)
             return None
         return func(self, *args, **kwargs)
+
     return func_wrapper
 
 
 class LogAdapter(logging.LoggerAdapter[logging.Logger]):
     def process(self, msg: str, kwargs: Any) -> tuple[str, Any]:
         assert self.extra is not None
-        return f'({self.extra["account"]}) {msg}', kwargs
+        return f"({self.extra['account']}) {msg}", kwargs
 
 
 def as_task(func: Callable[P, T]) -> Callable[P, T]:
@@ -115,19 +118,17 @@ def as_task(func: Callable[P, T]) -> Callable[P, T]:
             task_.add_done_callback(callback)
         task_.start()
         return task_
+
     return func_wrapper
 
 
 def prepare_stanza(stanza: Message, plaintext: str) -> None:
-    delete_nodes(stanza, 'encrypted', Namespace.OMEMO_TEMP)
-    delete_nodes(stanza, 'body')
+    delete_nodes(stanza, "encrypted", Namespace.OMEMO_TEMP)
+    delete_nodes(stanza, "body")
     stanza.setBody(plaintext)
 
 
-def delete_nodes(stanza: Message,
-                 name: str,
-                 namespace: str | None = None
-                 ) -> None:
+def delete_nodes(stanza: Message, name: str, namespace: str | None = None) -> None:
 
     nodes = stanza.getTags(name, namespace=namespace)
     for node in nodes:
@@ -148,30 +149,18 @@ class PublicKeyData:
 
 
 class CryptoModule(Protocol):
-
-    def get_our_public_key(self) -> PublicKeyData | None:
-        ...
+    def get_our_public_key(self) -> PublicKeyData | None: ...
 
     def get_public_keys(
-        self,
-        jid: JID,
-        *,
-        is_groupchat: bool
-    ) -> list[PublicKeyData]:
-        ...
+        self, jid: JID, *, is_groupchat: bool
+    ) -> list[PublicKeyData]: ...
 
     def set_public_key_trust(
-        self,
-        public_key_data: PublicKeyData,
-        trust: Trust
-    ) -> None:
-        ...
+        self, public_key_data: PublicKeyData, trust: Trust
+    ) -> None: ...
 
-    def remove_public_key(self, public_key_data: PublicKeyData) -> None:
-        ...
+    def remove_public_key(self, public_key_data: PublicKeyData) -> None: ...
 
-    def clear_keylist(self) -> None:
-        ...
+    def clear_keylist(self) -> None: ...
 
-    def compose_trust_uri(self, jid: JID) -> str:
-        ...
+    def compose_trust_uri(self, jid: JID) -> str: ...

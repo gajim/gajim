@@ -13,7 +13,7 @@ from collections.abc import Callable
 
 from gi.repository import GLib
 
-log = logging.getLogger('gajim.c.m.task_manager')
+log = logging.getLogger("gajim.c.m.task_manager")
 
 
 class TaskManager:
@@ -25,24 +25,24 @@ class TaskManager:
         self._timeout = GLib.timeout_add_seconds(2, self._process_queue)
 
     def _process_queue(self) -> bool:
-        log.info('%s tasks queued', self._queue.qsize())
+        log.info("%s tasks queued", self._queue.qsize())
         requeue: list[Task] = []
         while not self._queue.empty():
             task = self._queue.get_nowait()
             if task.is_obsolete():
-                log.info('Task obsolete: %r', task)
+                log.info("Task obsolete: %r", task)
                 continue
 
             if not task.preconditions_met():
                 # precondition_met() can change the obsolete flag, so we need
                 # to check again here
                 if task.is_obsolete():
-                    log.info('Task obsolete: %r', task)
+                    log.info("Task obsolete: %r", task)
                 else:
                     requeue.append(task)
                 continue
 
-            log.info('Execute task %r', task)
+            log.info("Execute task %r", task)
             task.execute()
             self._requeue_tasks(requeue)
             return True
@@ -61,12 +61,12 @@ class TaskManager:
             return False
 
         for task in tasks:
-            log.info('Requeue task (preconditions not met): %r', task)
+            log.info("Requeue task (preconditions not met): %r", task)
             self._queue.put_nowait(task)
         return True
 
     def add_task(self, task: Task) -> None:
-        log.info('Adding task: %r', task)
+        log.info("Adding task: %r", task)
         self._queue.put_nowait(task)
         if self._timeout is None:
             self._start_worker()
@@ -113,11 +113,11 @@ class PulseManager:
         self._callbacks.remove(callback)
 
     def _execute_pulse(self) -> bool:
-        log.info('Execute pulse for %s callbacks', len(self._callbacks))
+        log.info("Execute pulse for %s callbacks", len(self._callbacks))
         for callback in self._callbacks:
             try:
                 callback()
             except Exception:
-                log.exception('Unable to execute pulse')
+                log.exception("Unable to execute pulse")
 
         return GLib.SOURCE_CONTINUE

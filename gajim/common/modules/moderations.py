@@ -42,33 +42,41 @@ class Moderations(BaseModule):
         BaseModule.__init__(self, client)
 
         self.handlers = [
-            StanzaHandler(name='message',
-                          callback=self._process_moderation_message,
-                          typ='groupchat',
-                          ns=Namespace.FASTEN,
-                          priority=45),
-            StanzaHandler(name='message',
-                          callback=self._process_moderation_message,
-                          typ='groupchat',
-                          ns=Namespace.MESSAGE_RETRACT_1,
-                          priority=45),
-            StanzaHandler(name='message',
-                          callback=self._process_message_moderated_tombstone,
-                          typ='groupchat',
-                          ns=Namespace.MESSAGE_MODERATE,
-                          priority=45),
-            StanzaHandler(name='message',
-                          callback=self._process_message_moderated_tombstone,
-                          typ='groupchat',
-                          ns=Namespace.MESSAGE_RETRACT_1,
-                          priority=45),
+            StanzaHandler(
+                name="message",
+                callback=self._process_moderation_message,
+                typ="groupchat",
+                ns=Namespace.FASTEN,
+                priority=45,
+            ),
+            StanzaHandler(
+                name="message",
+                callback=self._process_moderation_message,
+                typ="groupchat",
+                ns=Namespace.MESSAGE_RETRACT_1,
+                priority=45,
+            ),
+            StanzaHandler(
+                name="message",
+                callback=self._process_message_moderated_tombstone,
+                typ="groupchat",
+                ns=Namespace.MESSAGE_MODERATE,
+                priority=45,
+            ),
+            StanzaHandler(
+                name="message",
+                callback=self._process_message_moderated_tombstone,
+                typ="groupchat",
+                ns=Namespace.MESSAGE_RETRACT_1,
+                priority=45,
+            ),
         ]
 
     def _process_message_moderated_tombstone(
         self,
         _client: types.NBXMPPClient,
         stanza: Message,
-        properties: MessageProperties
+        properties: MessageProperties,
     ) -> None:
 
         if not properties.is_moderation:
@@ -85,10 +93,9 @@ class Moderations(BaseModule):
         assert properties.remote_jid is not None
 
         remote_jid = properties.remote_jid
-        muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+        muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
         if muc_data is None:
-            self._log.warning('Groupchat message from unknown MUC: %s',
-                              remote_jid)
+            self._log.warning("Groupchat message from unknown MUC: %s", remote_jid)
             return
 
         is_occupant_id_supported = self._is_occupant_id_supported(properties)
@@ -101,7 +108,7 @@ class Moderations(BaseModule):
         self,
         _client: types.NBXMPPClient,
         stanza: Message,
-        properties: MessageProperties
+        properties: MessageProperties,
     ) -> None:
 
         if not properties.is_moderation:
@@ -114,9 +121,7 @@ class Moderations(BaseModule):
         raise NodeProcessed
 
     def _insert_moderation_message(
-        self,
-        properties: MessageProperties,
-        is_occupant_id_supported: bool
+        self, properties: MessageProperties, is_occupant_id_supported: bool
     ) -> None:
 
         assert properties.moderation is not None
@@ -150,22 +155,21 @@ class Moderations(BaseModule):
             timestamp=properties.moderation.stamp,
         )
 
-        pk = app.storage.archive.insert_row(
-            moderation_data, ignore_on_conflict=True)
+        pk = app.storage.archive.insert_row(moderation_data, ignore_on_conflict=True)
         if pk == -1:
             return
 
         app.ged.raise_event(
             MessageModerated(
-                account=self._account,
-                jid=remote_jid,
-                moderation=moderation_data))
+                account=self._account, jid=remote_jid, moderation=moderation_data
+            )
+        )
 
     def _insert_tombstone(
         self,
         muc_data: MUCData,
         properties: MessageProperties,
-        is_occupant_id_supported: bool
+        is_occupant_id_supported: bool,
     ) -> None:
 
         assert properties.mam is not None
@@ -178,8 +182,7 @@ class Moderations(BaseModule):
         if is_occupant_id_supported:
             message_occupant_id = properties.occupant_id
 
-        timestamp = dt.datetime.fromtimestamp(
-            properties.mam.timestamp, dt.UTC)
+        timestamp = dt.datetime.fromtimestamp(properties.mam.timestamp, dt.UTC)
 
         occupant_data = None
         if message_occupant_id is not None:
@@ -192,7 +195,8 @@ class Moderations(BaseModule):
             )
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties)
+            muc_data, self._client.get_own_jid(), properties
+        )
 
         assert properties.id is not None
 
@@ -218,18 +222,18 @@ class Moderations(BaseModule):
                 jid=remote_jid,
                 m_type=MessageType.GROUPCHAT,
                 mam=properties.mam,
-                pk=pk))
+                pk=pk,
+            )
+        )
 
     def _is_occupant_id_supported(self, properties: MessageProperties) -> bool:
         assert properties.remote_jid is not None
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.remote_jid, groupchat=True)
+        contact = self._client.get_module("Contacts").get_contact(
+            properties.remote_jid, groupchat=True
+        )
         return contact.supports(Namespace.OCCUPANT_ID)
 
-    def _get_moderator_nickname(
-        self,
-        properties: MessageProperties
-    ) -> str | None:
+    def _get_moderator_nickname(self, properties: MessageProperties) -> str | None:
 
         assert properties.moderation is not None
         if properties.moderation.by is None:

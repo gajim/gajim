@@ -26,37 +26,36 @@ from gajim.common.modules.base import BaseModule
 
 
 class IBB(BaseModule):
-
-    _nbxmpp_extends = 'IBB'
+    _nbxmpp_extends = "IBB"
     _nbxmpp_methods = [
-        'send_open',
-        'send_close',
-        'send_data',
-        'send_reply',
+        "send_open",
+        "send_close",
+        "send_data",
+        "send_reply",
     ]
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
-            StanzaHandler(name='iq',
-                          callback=self._ibb_received,
-                          ns=Namespace.IBB),
+            StanzaHandler(name="iq", callback=self._ibb_received, ns=Namespace.IBB),
         ]
 
-    def _ibb_received(self,
-                      _con: types.NBXMPPClient,
-                      stanza: Iq,
-                      properties: IqProperties
-                      ) -> None:
+    def _ibb_received(
+        self, _con: types.NBXMPPClient, stanza: Iq, properties: IqProperties
+    ) -> None:
         if not properties.is_ibb:
             return
 
-        if properties.ibb.type == 'data':
-            self._log.info('Data received, sid: %s, seq: %s',
-                           properties.ibb.sid, properties.ibb.seq)
-            file_props = FilesProp.getFilePropByTransportSid(self._account,
-                                                             properties.ibb.sid)
+        if properties.ibb.type == "data":
+            self._log.info(
+                "Data received, sid: %s, seq: %s",
+                properties.ibb.sid,
+                properties.ibb.seq,
+            )
+            file_props = FilesProp.getFilePropByTransportSid(
+                self._account, properties.ibb.sid
+            )
             if not file_props:
                 self.send_reply(stanza, nbxmpp.ERR_ITEM_NOT_FOUND)
                 raise NodeProcessed
@@ -65,18 +64,22 @@ class IBB(BaseModule):
                 self._on_data_received(stanza, file_props, properties)
                 self.send_reply(stanza)
 
-        elif properties.ibb.type == 'open':
-            self._log.info('Open received, sid: %s, blocksize: %s',
-                           properties.ibb.sid, properties.ibb.block_size)
+        elif properties.ibb.type == "open":
+            self._log.info(
+                "Open received, sid: %s, blocksize: %s",
+                properties.ibb.sid,
+                properties.ibb.block_size,
+            )
 
-            file_props = FilesProp.getFilePropByTransportSid(self._account,
-                                                             properties.ibb.sid)
+            file_props = FilesProp.getFilePropByTransportSid(
+                self._account, properties.ibb.sid
+            )
             if not file_props:
                 self.send_reply(stanza, nbxmpp.ERR_ITEM_NOT_FOUND)
                 raise NodeProcessed
 
             file_props.block_size = properties.ibb.block_size
-            file_props.direction = '<'
+            file_props.direction = "<"
             file_props.seq = 0
             file_props.received_len = 0
             file_props.last_time = time.time()
@@ -87,13 +90,14 @@ class IBB(BaseModule):
             file_props.disconnect_cb = None
             file_props.continue_cb = None
             file_props.syn_id = stanza.getID()
-            file_props.fp = open(file_props.file_name, 'wb')  # pylint: disable=consider-using-with  # noqa: E501
+            file_props.fp = open(file_props.file_name, "wb")  # pylint: disable=consider-using-with  # noqa: E501
             self.send_reply(stanza)
 
-        elif properties.ibb.type == 'close':
-            self._log.info('Close received, sid: %s', properties.ibb.sid)
-            file_props = FilesProp.getFilePropByTransportSid(self._account,
-                                                             properties.ibb.sid)
+        elif properties.ibb.type == "close":
+            self._log.info("Close received, sid: %s", properties.ibb.sid)
+            file_props = FilesProp.getFilePropByTransportSid(
+                self._account, properties.ibb.sid
+            )
             if not file_props:
                 self.send_reply(stanza, nbxmpp.ERR_ITEM_NOT_FOUND)
                 raise NodeProcessed
@@ -107,19 +111,21 @@ class IBB(BaseModule):
 
         raise NodeProcessed
 
-    def _on_data_received(self,
-                          stanza: Iq,
-                          file_props: FileProp,
-                          properties: IqProperties
-                          ) -> None:
+    def _on_data_received(
+        self, stanza: Iq, file_props: FileProp, properties: IqProperties
+    ) -> None:
         ibb = properties.ibb
         if ibb.seq != file_props.seq:
             self.send_reply(stanza, nbxmpp.ERR_UNEXPECTED_REQUEST)
             self.send_close(file_props)
             raise NodeProcessed
 
-        self._log.debug('Data received: sid: %s, %s+%s bytes',
-                        ibb.sid, file_props.fp.tell(), len(ibb.data))
+        self._log.debug(
+            "Data received: sid: %s, %s+%s bytes",
+            ibb.sid,
+            file_props.fp.tell(),
+            len(ibb.data),
+        )
 
         file_props.seq += 1
         file_props.started = True
@@ -133,9 +139,9 @@ class IBB(BaseModule):
             file_props.completed = True
 
     def send_open(self, to: str, sid: str, fp: FileProp) -> FileProp:
-        self._log.info('Send open to %s, sid: %s', to, sid)
+        self._log.info("Send open to %s, sid: %s", to, sid)
         file_props = FilesProp.getFilePropBySid(sid)
-        file_props.direction = '>'
+        file_props.direction = ">"
         file_props.block_size = 4096
         file_props.fp = fp
         file_props.seq = -1
@@ -147,18 +153,20 @@ class IBB(BaseModule):
         file_props.completed = False
         file_props.disconnect_cb = None
         file_props.continue_cb = None
-        self._nbxmpp('IBB').send_open(to,
-                                      file_props.transport_sid,
-                                      4096,
-                                      callback=self._on_open_result,
-                                      user_data=file_props)
+        self._nbxmpp("IBB").send_open(
+            to,
+            file_props.transport_sid,
+            4096,
+            callback=self._on_open_result,
+            user_data=file_props,
+        )
         return file_props
 
     def _on_open_result(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as error:
-            app.socks5queue.error_cb('Error', to_user_string(error))
+            app.socks5queue.error_cb("Error", to_user_string(error))
             self._log.warning(error)
             return
 
@@ -170,23 +178,24 @@ class IBB(BaseModule):
         file_props.fp.close()
         file_props.stopped = True
         to = file_props.receiver
-        if file_props.direction == '<':
+        if file_props.direction == "<":
             to = file_props.sender
 
-        self._log.info('Send close to %s, sid: %s',
-                       to, file_props.transport_sid)
-        self._nbxmpp('IBB').send_close(to, file_props.transport_sid,
-                                       callback=self._on_close_result)
+        self._log.info("Send close to %s, sid: %s", to, file_props.transport_sid)
+        self._nbxmpp("IBB").send_close(
+            to, file_props.transport_sid, callback=self._on_close_result
+        )
 
         if file_props.completed:
             app.socks5queue.complete_transfer_cb(self._account, file_props)
         else:
-            if file_props.type_ == 's':
+            if file_props.type_ == "s":
                 peerjid = file_props.receiver
             else:
                 peerjid = file_props.sender
-            session = self._con.get_module('Jingle').get_jingle_session(
-                peerjid, file_props.sid, 'file')
+            session = self._con.get_module("Jingle").get_jingle_session(
+                peerjid, file_props.sid, "file"
+            )
             # According to the xep, the initiator also cancels
             # the jingle session if there are no more files to send using IBB
             if session.weinitiate:
@@ -196,7 +205,7 @@ class IBB(BaseModule):
         try:
             task.finish()
         except StanzaError as error:
-            app.socks5queue.error_cb('Error', to_user_string(error))
+            app.socks5queue.error_cb("Error", to_user_string(error))
             self._log.warning(error)
             return
 
@@ -212,14 +221,19 @@ class IBB(BaseModule):
             if file_props.seq == 65536:
                 file_props.seq = 0
 
-            self._log.info('Send data to %s, sid: %s',
-                           file_props.receiver, file_props.transport_sid)
-            self._nbxmpp('IBB').send_data(file_props.receiver,
-                                          file_props.transport_sid,
-                                          file_props.seq,
-                                          chunk,
-                                          callback=self._on_data_result,
-                                          user_data=file_props)
+            self._log.info(
+                "Send data to %s, sid: %s",
+                file_props.receiver,
+                file_props.transport_sid,
+            )
+            self._nbxmpp("IBB").send_data(
+                file_props.receiver,
+                file_props.transport_sid,
+                file_props.seq,
+                chunk,
+                callback=self._on_data_result,
+                user_data=file_props,
+            )
             current_time = time.time()
             file_props.elapsed_time += current_time - file_props.last_time
             file_props.last_time = current_time
@@ -232,7 +246,7 @@ class IBB(BaseModule):
         try:
             task.finish()
         except StanzaError as error:
-            app.socks5queue.error_cb('Error', to_user_string(error))
+            app.socks5queue.error_cb("Error", to_user_string(error))
             self._log.warning(error)
             return
 

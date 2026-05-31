@@ -1,4 +1,4 @@
-'''
+"""
 This module is in charge of taking care of all the information related to
 individual files. Files are identified by the account name and its sid.
 
@@ -15,7 +15,7 @@ Exception: this class should not be instantiated
 >>> fp2 = FilesProp.getFileProp('jabberid', '10')
 >>> fp == fp2
 True
-'''
+"""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ class FilesProp:
     _files_props: ClassVar[dict[tuple[str, str], FileProp]] = {}
 
     def __init__(self):
-        raise Exception('this class should not be instantiated')
+        raise Exception("this class should not be instantiated")
 
     @classmethod
     def getNewFileProp(cls, account: str, sid: str) -> FileProp:
@@ -51,10 +51,7 @@ class FilesProp:
         return file_props
 
     @classmethod
-    def getFilePropByType(cls,
-                          type_: Literal['r', 's'],
-                          sid: str
-                          ) -> FileProp | None:
+    def getFilePropByType(cls, type_: Literal["r", "s"], sid: str) -> FileProp | None:
         # This method should be deleted. Getting fileprop by type and sid is not
         # unique enough. More than one fileprop might have the same type and sid
         files_prop = cls.getAllFileProp()
@@ -75,10 +72,7 @@ class FilesProp:
         return None
 
     @classmethod
-    def getFilePropByTransportSid(cls,
-                                  account: str,
-                                  sid: str
-                                  ) -> FileProp | None:
+    def getFilePropByTransportSid(cls, account: str, sid: str) -> FileProp | None:
         files_prop = cls.getAllFileProp()
         for fp in files_prop:
             if fp.account == account and fp.transport_sid == sid:
@@ -129,7 +123,7 @@ class FileProp:
         self.continue_cb: Callable[..., None] | None = None
         self.sha_str: str | None = None
         # transfer type: 's' for sending and 'r' for receiving
-        self.type_: Literal['r', 's'] | None = None
+        self.type_: Literal["r", "s"] | None = None
         self.error: int | None = None
         self.elapsed_time: float = 0  # Elapsed time of the file transfer
         self.last_time: float | None = None
@@ -148,7 +142,7 @@ class FileProp:
         self.account = account
         self.mime_type: str | None = None
         self.algo: str | None = None
-        self.direction: Literal['<', '>'] | None = None
+        self.direction: Literal["<", ">"] | None = None
         self.syn_id: str | None = None
         self.seq: int | None = None
         self.hash_: str | None = None
@@ -173,6 +167,7 @@ class FileProp:
     sid = property(getsid, setsid)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

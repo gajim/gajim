@@ -49,7 +49,7 @@ from gajim.common.task_manager import TaskManager
 from gajim.common.util.text import from_one_line
 from gajim.common.util.text import get_random_string
 
-log = logging.getLogger('gajim.c.application')
+log = logging.getLogger("gajim.c.application")
 
 
 class CoreApplication(ged.EventHelper):
@@ -86,7 +86,7 @@ class CoreApplication(ged.EventHelper):
             app.storage.openpgp.init()
         except Exception as error:
             app.ged.raise_event(DBMigrationError(exception=error))
-            log.exception('Failed to init storage')
+            log.exception("Failed to init storage")
             return False
 
         app.cert_store = CertificateStore()
@@ -100,9 +100,10 @@ class CoreApplication(ged.EventHelper):
 
         if app.is_installed("GST"):
             from gajim.gtk.audio_player import AudioPlayer
+
             app.audio_player = AudioPlayer()
 
-        if sys.platform in ('win32', 'darwin'):
+        if sys.platform in ("win32", "darwin"):
             GLib.timeout_add_seconds(20, self._check_for_updates)
 
         for account in app.settings.get_active_accounts():
@@ -120,31 +121,33 @@ class CoreApplication(ged.EventHelper):
         app.commands.init()
 
         for client in app.get_clients():
-            client.get_module('Roster').load_roster()
+            client.get_module("Roster").load_roster()
 
         GLib.timeout_add_seconds(5, self._remote_init)
 
-        self.register_events([
-            ('signed-in', ged.CORE, self._on_signed_in),
-        ])
+        self.register_events(
+            [
+                ("signed-in", ged.CORE, self._on_signed_in),
+            ]
+        )
 
         return True
 
     @property
     def _log(self) -> logging.Logger:
-        return app.log('app')
+        return app.log("app")
 
     def _core_command_line(self, options: GLib.VariantDict) -> None:
-        if options.contains('cprofile'):
+        if options.contains("cprofile"):
             self.start_profiling()
 
-        if options.contains('gdebug'):
-            os.environ['G_MESSAGES_DEBUG'] = 'all'
+        if options.contains("gdebug"):
+            os.environ["G_MESSAGES_DEBUG"] = "all"
 
-        if options.contains('separate'):
+        if options.contains("separate"):
             configpaths.set_separation(True)
 
-        config_path = options.lookup_value('config-path')
+        config_path = options.lookup_value("config-path")
         if config_path is not None:
             config_path = config_path.get_string()
             configpaths.set_config_root(config_path)
@@ -152,51 +155,51 @@ class CoreApplication(ged.EventHelper):
         configpaths.init()
         logging_helpers.init()
 
-        if options.contains('quiet'):
+        if options.contains("quiet"):
             logging_helpers.set_quiet()
 
-        if options.contains('verbose'):
+        if options.contains("verbose"):
             logging_helpers.set_verbose()
 
-        loglevel = options.lookup_value('loglevel')
+        loglevel = options.lookup_value("loglevel")
         if loglevel is not None:
             loglevel = loglevel.get_string()
             logging_helpers.set_loglevels(loglevel)
 
-        if options.contains('warnings'):
+        if options.contains("warnings"):
             self._show_warnings()
 
     def _auto_connect(self) -> None:
         for client in app.get_clients():
             account = client.account
-            if not app.settings.get_account_setting(account,
-                                                    'autoconnect'):
+            if not app.settings.get_account_setting(account, "autoconnect"):
                 continue
 
-            status = 'online'
-            status_message = ''
+            status = "online"
+            status_message = ""
 
-            if app.settings.get_account_setting(account, 'restore_last_status'):
-                status = app.settings.get_account_setting(
-                    account, 'last_status')
+            if app.settings.get_account_setting(account, "restore_last_status"):
+                status = app.settings.get_account_setting(account, "last_status")
                 status_message = app.settings.get_account_setting(
-                    account, 'last_status_msg')
+                    account, "last_status_msg"
+                )
                 status_message = from_one_line(status_message)
 
             client.change_status(status, status_message)
 
     def _remote_init(self) -> None:
-        if not app.settings.get('remote_control'):
+        if not app.settings.get("remote_control"):
             return
 
         try:
             from gajim.common.dbus import remote_control
+
             remote_control.GajimRemote()
         except Exception:
-            self._log.exception('Failed to init remote control')
+            self._log.exception("Failed to init remote control")
 
     def start_profiling(self) -> None:
-        self._log.info('Start profiling')
+        self._log.info("Start profiling")
         self._profiling_session = cProfile.Profile()
         self._profiling_session.enable()
 
@@ -205,7 +208,7 @@ class CoreApplication(ged.EventHelper):
             return
 
         self._profiling_session.disable()
-        self._log.info('End profiling')
+        self._log.info("End profiling")
         ps = pstats.Stats(self._profiling_session)
         ps = ps.sort_stats(SortKey.TIME)
         ps.print_stats()
@@ -230,12 +233,12 @@ class CoreApplication(ged.EventHelper):
                 self._shutdown_complete()
                 return
 
-        app.ged.register_event_handler('account-disconnected',
-                                       ged.POSTGUI,
-                                       _on_disconnect)
+        app.ged.register_event_handler(
+            "account-disconnected", ged.POSTGUI, _on_disconnect
+        )
 
         for client in accounts_to_disconnect.values():
-            client.change_status('offline', '')
+            client.change_status("offline", "")
 
     def _shutdown_core(self) -> None:
         self._log.info("Shutdown core")
@@ -259,46 +262,49 @@ class CoreApplication(ged.EventHelper):
         import traceback
         import warnings
 
-        def warn_with_traceback(message: Warning | str,
-                                category: type[Warning],
-                                filename: str,
-                                lineno: int,
-                                _file: TextIO | None = None,
-                                line: str | None = None) -> None:
+        def warn_with_traceback(
+            message: Warning | str,
+            category: type[Warning],
+            filename: str,
+            lineno: int,
+            _file: TextIO | None = None,
+            line: str | None = None,
+        ) -> None:
 
             traceback.print_stack(file=sys.stderr)
-            sys.stderr.write(warnings.formatwarning(message, category,
-                                                    filename, lineno, line))
+            sys.stderr.write(
+                warnings.formatwarning(message, category, filename, lineno, line)
+            )
 
         warnings.showwarning = warn_with_traceback
-        warnings.filterwarnings(action='always')
+        warnings.filterwarnings(action="always")
 
     def _check_for_updates(self) -> None:
-        if not app.settings.get('check_for_update'):
+        if not app.settings.get("check_for_update"):
             return
 
-        if sys.platform == 'win32' and app.is_ms_store():
+        if sys.platform == "win32" and app.is_ms_store():
             # Gajim updates are handled by MS Store directly
             return
 
         now = datetime.now()
-        last_check = app.settings.get('last_update_check')
+        last_check = app.settings.get("last_update_check")
         if not last_check:
             app.ged.raise_event(AllowGajimUpdateCheck())
             return
 
-        last_check_time = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
+        last_check_time = datetime.strptime(last_check, "%Y-%m-%d %H:%M")
         if (now - last_check_time).days < 7:
             return
 
         self.check_for_gajim_updates()
 
     def check_for_gajim_updates(self) -> None:
-        self._log.info('Checking for Gajim updates')
+        self._log.info("Checking for Gajim updates")
 
         app.ftm.http_request(
-            'GET',
-            'https://gajim.org/current-version.json',
+            "GET",
+            "https://gajim.org/current-version.json",
             callback=self._on_update_response,
         )
 
@@ -306,67 +312,66 @@ class CoreApplication(ged.EventHelper):
         try:
             result = obj.get_result()
         except Exception as error:
-            self._log.warning(
-                'Error while performing gajim update check: %s', error)
+            self._log.warning("Error while performing gajim update check: %s", error)
             return
 
         now = datetime.now()
-        app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
+        app.settings.set("last_update_check", now.strftime("%Y-%m-%d %H:%M"))
 
         try:
             data = json.loads(result.content)
-            latest_version = data['current_version']
-            setup_url = data['current_win_setup']
+            latest_version = data["current_version"]
+            setup_url = data["current_win_setup"]
             if IS_PORTABLE:
-                setup_url = data['current_win_portable_setup']
+                setup_url = data["current_win_portable_setup"]
         except Exception:
             self._log.exception("Unable to perform update check")
             return
 
         if V(latest_version) > V(app.version):
-            app.ged.raise_event(GajimUpdateAvailable(version=latest_version,
-                                                     setup_url=setup_url))
+            app.ged.raise_event(
+                GajimUpdateAvailable(version=latest_version, setup_url=setup_url)
+            )
             return
 
-        self._log.info('Gajim is up to date')
+        self._log.info("Gajim is up to date")
 
-    def create_account(self,
-                       account: str,
-                       address: JID,
-                       password: str,
-                       proxy_name: str | None,
-                       custom_host: tuple[str,
-                                          ConnectionProtocol,
-                                          ConnectionType] | None,
-                       anonymous: bool = False
-                       ) -> None:
+    def create_account(
+        self,
+        account: str,
+        address: JID,
+        password: str,
+        proxy_name: str | None,
+        custom_host: tuple[str, ConnectionProtocol, ConnectionType] | None,
+        anonymous: bool = False,
+    ) -> None:
 
         if anonymous:
-            address = address.new_with(localpart='anon')
+            address = address.new_with(localpart="anon")
 
         if not address.localpart:
-            raise ValueError('Username must be set')
+            raise ValueError("Username must be set")
 
         account_label = str(address)
 
         config: dict[str, str | int | bool] = {
-            'address': str(address),
-            'resource': f'gajim.{get_random_string(8)}',
-            'account_label': account_label,
-            'anonymous_auth': anonymous,
+            "address": str(address),
+            "resource": f"gajim.{get_random_string(8)}",
+            "account_label": account_label,
+            "anonymous_auth": anonymous,
         }
 
         if proxy_name:
-            config['proxy'] = proxy_name
+            config["proxy"] = proxy_name
 
         use_custom_host = custom_host is not None
-        config['use_custom_host'] = use_custom_host
+        config["use_custom_host"] = use_custom_host
         if custom_host:
             host, _protocol, type_ = custom_host
-            host, port = host.rsplit(':', maxsplit=1)
-            config['custom_port'] = int(port)
-            config['custom_host'] = host
-            config['custom_type'] = type_.value
+            host, port = host.rsplit(":", maxsplit=1)
+            config["custom_port"] = int(port)
+            config["custom_host"] = host
+            config["custom_type"] = type_.value
 
         app.settings.add_account(account)
         for opt, value in config.items():
@@ -381,20 +386,19 @@ class CoreApplication(ged.EventHelper):
     def enable_account(self, account: str) -> None:
         app.connections[account] = Client(account)
 
-        app.plugin_manager.register_modules_for_account(
-            app.connections[account])
+        app.plugin_manager.register_modules_for_account(app.connections[account])
 
         app.to_be_removed[account] = []
         app.nicks[account] = app.get_default_nick(account)
-        app.settings.set_account_setting(account, 'active', True)
+        app.settings.set_account_setting(account, "active", True)
 
         app.ged.raise_event(AccountEnabled(account=account))
 
-        app.get_client(account).change_status('online', '')
+        app.get_client(account).change_status("online", "")
 
     def disable_account(self, account: str) -> None:
-        app.settings.set_account_setting(account, 'roster_version', '')
-        app.settings.set_account_setting(account, 'active', False)
+        app.settings.set_account_setting(account, "roster_version", "")
+        app.settings.set_account_setting(account, "active", False)
 
         # Code in account-disabled handlers may use app.get_client()
         app.ged.raise_event(AccountDisabled(account=account))
@@ -405,7 +409,7 @@ class CoreApplication(ged.EventHelper):
         del app.to_be_removed[account]
 
     def remove_account(self, account: str) -> None:
-        if app.settings.get_account_setting(account, 'active'):
+        if app.settings.get_account_setting(account, "active"):
             self.disable_account(account)
 
         app.storage.cache.remove_roster(account)
@@ -421,21 +425,19 @@ class CoreApplication(ged.EventHelper):
 
     def _on_signed_in(self, event: SignedIn) -> None:
         client = app.get_client(event.account)
-        if client.get_module('MAM').available:
-            client.get_module('MAM').request_archive_on_signin()
+        if client.get_module("MAM").available:
+            client.get_module("MAM").request_archive_on_signin()
 
-    def change_status(self,
-                      status: str,
-                      account: str | None = None
-                      ) -> None:
+    def change_status(self, status: str, account: str | None = None) -> None:
 
         if account is not None:
             self._change_status(account, status)
             return
 
         for client in app.get_clients():
-            if not app.settings.get_account_setting(client.account,
-                                                    'sync_with_global_status'):
+            if not app.settings.get_account_setting(
+                client.account, "sync_with_global_status"
+            ):
                 continue
 
             self._change_status(client.account, status)
@@ -445,7 +447,7 @@ class CoreApplication(ged.EventHelper):
         client = app.get_client(account)
         message = client.status_message
 
-        if status == 'offline':
+        if status == "offline":
             # TODO delete pep
             # self.delete_pep(app.get_jid_from_account(account), account)
             pass

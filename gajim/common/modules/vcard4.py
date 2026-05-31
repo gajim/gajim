@@ -35,10 +35,9 @@ from gajim.common.util.datetime import utc_now
 
 
 class VCard4(BaseModule):
-
-    _nbxmpp_extends = 'VCard4'
+    _nbxmpp_extends = "VCard4"
     _nbxmpp_methods = [
-        'set_vcard',
+        "set_vcard",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -52,20 +51,23 @@ class VCard4(BaseModule):
         self,
         _client: types.NBXMPPClient,
         _stanza: Message,
-        properties: MessageProperties
-        ) -> None:
+        properties: MessageProperties,
+    ) -> None:
 
         assert properties.jid is not None
         if not properties.jid.bare_match(self._get_own_bare_jid()):
             self._log.info(
-                "Ignore VCard4 event not from our account: %s", properties.jid)
+                "Ignore VCard4 event not from our account: %s", properties.jid
+            )
             return
 
         assert properties.pubsub_event is not None
-        if (properties.pubsub_event.deleted
-                or properties.pubsub_event.purged
-                or properties.pubsub_event.retracted):
-            self._log.info('VCard4 node deleted/purged/retracted')
+        if (
+            properties.pubsub_event.deleted
+            or properties.pubsub_event.purged
+            or properties.pubsub_event.retracted
+        ):
+            self._log.info("VCard4 node deleted/purged/retracted")
             self._own_vcard = VCard()
 
         else:
@@ -89,8 +91,11 @@ class VCard4(BaseModule):
         if vcard_timezone == local_timezone:
             return
 
-        self._log.info("Timezone change detected, vcard: %s, local: %s",
-                       vcard_timezone, local_timezone)
+        self._log.info(
+            "Timezone change detected, vcard: %s, local: %s",
+            vcard_timezone,
+            local_timezone,
+        )
 
         app.ged.raise_event(
             TimezoneChanged(
@@ -123,9 +128,9 @@ class VCard4(BaseModule):
         jid = self._get_own_bare_jid()
         # JID is necessary because ejabberd servers react weird to subscribe
         # to own nodes if 'to' attribute is not set
-        self._client.get_module('PubSub').subscribe(Namespace.VCARD4_PUBSUB, jid)
+        self._client.get_module("PubSub").subscribe(Namespace.VCARD4_PUBSUB, jid)
 
-        self._nbxmpp('VCard4').request_vcard(
+        self._nbxmpp("VCard4").request_vcard(
             jid,
             timeout=10,
             callback=self._on_vcard_received,
@@ -150,9 +155,9 @@ class VCard4(BaseModule):
         elif inspect.isfunction(callback):
             weak_callable = weakref.ref(callback)
         else:
-            raise TypeError('Unknown callback type: %s' % callback)
+            raise TypeError("Unknown callback type: %s" % callback)
 
-        self._nbxmpp('VCard4').request_vcard(
+        self._nbxmpp("VCard4").request_vcard(
             jid,
             timeout=10,
             callback=self._on_vcard_received,
@@ -163,7 +168,7 @@ class VCard4(BaseModule):
         try:
             vcard = cast(VCard | None, task.finish())
         except (StanzaError, TimeoutStanzaError) as err:
-            self._log.info('Error loading VCard: %s', err)
+            self._log.info("Error loading VCard: %s", err)
             vcard = None
 
         jid, weak_callable = task.get_user_data()
@@ -171,7 +176,7 @@ class VCard4(BaseModule):
         if vcard is None:
             vcard = VCard()
         else:
-            self._log.info('Received VCard for %s', jid)
+            self._log.info("Received VCard for %s", jid)
             self._vcard_cache[jid] = (utc_now(), vcard)
 
         if jid.bare_match(self._get_own_bare_jid()):

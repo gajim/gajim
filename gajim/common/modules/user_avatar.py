@@ -28,13 +28,12 @@ from gajim.common.modules.util import event_node
 
 
 class UserAvatar(BaseModule):
-
-    _nbxmpp_extends = 'UserAvatar'
+    _nbxmpp_extends = "UserAvatar"
     _nbxmpp_methods = [
-        'request_avatar_metadata',
-        'request_avatar_data',
-        'set_avatar',
-        'set_access_model'
+        "request_avatar_metadata",
+        "request_avatar_data",
+        "set_avatar",
+        "set_access_model",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -42,11 +41,9 @@ class UserAvatar(BaseModule):
         self._register_pubsub_handler(self._avatar_metadata_received)
 
     @event_node(Namespace.AVATAR_METADATA)
-    def _avatar_metadata_received(self,
-                                  _con: types.NBXMPPClient,
-                                  _stanza: Message,
-                                  properties: MessageProperties
-                                  ) -> None:
+    def _avatar_metadata_received(
+        self, _con: types.NBXMPPClient, _stanza: Message, properties: MessageProperties
+    ) -> None:
         assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
@@ -54,19 +51,15 @@ class UserAvatar(BaseModule):
         metadata = properties.pubsub_event.data
         assert properties.jid is not None
         jid = properties.jid
-        contact = self._con.get_module('Contacts').get_contact(jid)
+        contact = self._con.get_module("Contacts").get_contact(jid)
         assert isinstance(
-            contact,
-            BareContact | GroupchatContact | GroupchatParticipant
+            contact, BareContact | GroupchatContact | GroupchatParticipant
         )
 
         if metadata is None or not metadata.infos:
-            self._log.info('No avatar published: %s', jid)
+            self._log.info("No avatar published: %s", jid)
             app.storage.archive.set_contact_value(
-                self._account,
-                contact.jid,
-                'avatar_sha',
-                None
+                self._account, contact.jid, "avatar_sha", None
             )
             contact.update_avatar(None)
             return
@@ -74,19 +67,18 @@ class UserAvatar(BaseModule):
         assert isinstance(metadata, AvatarMetaData)
         sha = contact.avatar_sha
         if sha is not None:
-            if (sha in metadata.avatar_shas and
-                    app.app.avatar_storage.avatar_exists(sha)):
-                self._log.info('Avatar already known: %s %s', jid, sha)
+            if sha in metadata.avatar_shas and app.app.avatar_storage.avatar_exists(
+                sha
+            ):
+                self._log.info("Avatar already known: %s %s", jid, sha)
                 return
 
         if app.app.avatar_storage.avatar_exists(metadata.default):
-            self._log.info('Avatar found in cache, update: %s %s',
-                           jid, metadata.default)
+            self._log.info(
+                "Avatar found in cache, update: %s %s", jid, metadata.default
+            )
             app.storage.archive.set_contact_value(
-                self._account,
-                contact.jid,
-                'avatar_sha',
-                metadata.default
+                self._account, contact.jid, "avatar_sha", metadata.default
             )
             contact.update_avatar(metadata.default)
             return
@@ -99,26 +91,28 @@ class UserAvatar(BaseModule):
         # Reset the sha, because we don’t know if the avatar data query will
         # succeed. This forces an update of the avatar if the query succeeds.
         app.storage.archive.set_contact_value(
-            self._account, contact.jid, 'avatar_sha', None)
+            self._account, contact.jid, "avatar_sha", None
+        )
         contact.update_avatar(None)
         self._request_avatar_data(contact, metadata.default)
 
     @as_task
-    def _request_avatar_data(self,
-                             contact: types.ChatContactT,
-                             sha: str
-                             ) -> Generator[Any, Any]:
+    def _request_avatar_data(
+        self, contact: types.ChatContactT, sha: str
+    ) -> Generator[Any, Any]:
 
-        self._log.info('Request: %s %s', contact.jid, sha)
+        self._log.info("Request: %s %s", contact.jid, sha)
 
         _task = yield
 
-        avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
-            sha, jid=contact.jid)
+        avatar = yield self._nbxmpp("UserAvatar").request_avatar_data(
+            sha, jid=contact.jid
+        )
 
         if avatar is None:
-            self._log.warning('%s advertised %s but data node is empty',
-                              contact.jid, sha)
+            self._log.warning(
+                "%s advertised %s but data node is empty", contact.jid, sha
+            )
             return
 
         if is_error(avatar):
@@ -126,8 +120,9 @@ class UserAvatar(BaseModule):
             return
 
         assert isinstance(avatar, AvatarData)
-        self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
+        self._log.info("Received Avatar: %s %s", contact.jid, avatar.sha)
         app.app.avatar_storage.save_avatar(avatar.data)
         app.storage.archive.set_contact_value(
-            self._account, contact.jid, 'avatar_sha', avatar.sha)
+            self._account, contact.jid, "avatar_sha", avatar.sha
+        )
         contact.update_avatar(avatar.sha)

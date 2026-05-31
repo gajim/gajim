@@ -14,11 +14,10 @@ from gajim.common.modules.base import BaseModule
 
 
 class VCardTemp(BaseModule):
-
-    _nbxmpp_extends = 'VCardTemp'
+    _nbxmpp_extends = "VCardTemp"
     _nbxmpp_methods = [
-        'request_vcard',
-        'set_vcard',
+        "request_vcard",
+        "set_vcard",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -32,4 +31,4 @@ class VCardTemp(BaseModule):
             return
 
         self.supported = True
-        self._log.info('Discovered vcard-temp: %s', info.jid)
+        self._log.info("Discovered vcard-temp: %s", info.jid)

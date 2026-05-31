@@ -119,56 +119,57 @@ ModulesT = (
 )
 
 ModulesLiteralT = Literal[
-    'AdHocCommands',
-    'Annotations',
-    'BitsOfBinary',
-    'Blocking',
-    'Bookmarks',
-    'Bytestream',
-    'Caps',
-    'Carbons',
-    'ChatMarkers',
-    'Chatstate',
-    'Contacts',
-    'Discovery',
-    'EntityTime',
-    'Gateway',
-    'HTTPAuth',
-    'HttpMucSearch',
-    'HTTPUpload',
-    'IBB',
-    'Iq',
-    'Jingle',
-    'LastActivity',
-    'MAM',
-    'MDS',
-    'Message',
-    'Moderations',
-    'MUC',
-    'MucBlocking',
-    'OMEMO',
-    'OpenPGP',
-    'PEP',
-    'Ping',
-    'Presence',
-    'PubSub',
-    'Reactions',
-    'Receipts',
-    'Register',
-    'Retraction',
-    'Roster',
-    'RosterItemExchange',
-    'Search',
-    'SecLabels',
-    'SoftwareVersion',
-    'UserAvatar',
-    'UserLocation',
-    'UserNickname',
-    'UserTune',
-    'VCard4',
-    'VCardAvatars',
-    'VCardTemp',
+    "AdHocCommands",
+    "Annotations",
+    "BitsOfBinary",
+    "Blocking",
+    "Bookmarks",
+    "Bytestream",
+    "Caps",
+    "Carbons",
+    "ChatMarkers",
+    "Chatstate",
+    "Contacts",
+    "Discovery",
+    "EntityTime",
+    "Gateway",
+    "HTTPAuth",
+    "HttpMucSearch",
+    "HTTPUpload",
+    "IBB",
+    "Iq",
+    "Jingle",
+    "LastActivity",
+    "MAM",
+    "MDS",
+    "Message",
+    "Moderations",
+    "MUC",
+    "MucBlocking",
+    "OMEMO",
+    "OpenPGP",
+    "PEP",
+    "Ping",
+    "Presence",
+    "PubSub",
+    "Reactions",
+    "Receipts",
+    "Register",
+    "Retraction",
+    "Roster",
+    "RosterItemExchange",
+    "Search",
+    "SecLabels",
+    "SoftwareVersion",
+    "UserAvatar",
+    "UserLocation",
+    "UserNickname",
+    "UserTune",
+    "VCard4",
+    "VCardAvatars",
+    "VCardTemp",
 ]
+
 
 class ModuleDict(TypedDict):
     AdHocCommands: AdHocCommands
@@ -224,15 +225,15 @@ class ModuleDict(TypedDict):
 
 _modules: dict[str, ModuleDict] = {}
 _store_publish_modules = (
-    'UserLocation',
-    'UserTune',
+    "UserLocation",
+    "UserTune",
 )
 
 
-log = logging.getLogger('gajim.c.m')
+log = logging.getLogger("gajim.c.m")
 
 
-def register_modules(client: 'Client') -> None:
+def register_modules(client: "Client") -> None:
     if client.account in _modules:
         return
 
@@ -242,25 +243,23 @@ def register_modules(client: 'Client') -> None:
         _modules[client.account][name] = module_cls.get_instance(client)
 
 
-def register_single_module(client: 'Client',
-                           instance: BaseModule,
-                           name: str) -> None:
+def register_single_module(client: "Client", instance: BaseModule, name: str) -> None:
 
     if client.account not in _modules:
-        raise ValueError('Unknown account name: %s' % client.account)
+        raise ValueError("Unknown account name: %s" % client.account)
     _modules[client.account][name] = instance
 
 
-def unregister_modules(client: 'Client') -> None:
+def unregister_modules(client: "Client") -> None:
     for instance in _modules[client.account].values():
         instance = cast(ModulesT, instance)
-        if hasattr(instance, 'cleanup'):
+        if hasattr(instance, "cleanup"):
             instance.cleanup()
         app.check_finalize(instance)
     del _modules[client.account]
 
 
-def unregister_single_module(client: 'Client', name: str) -> None:
+def unregister_single_module(client: "Client", name: str) -> None:
     if client.account not in _modules:
         return
     if name not in _modules[client.account]:
@@ -277,7 +276,7 @@ def get_module(account: str, name: ModulesLiteralT) -> ModulesT:
     return _modules[account][name]
 
 
-def get_handlers(client: 'Client') -> list[StanzaHandler]:
+def get_handlers(client: "Client") -> list[StanzaHandler]:
     handlers: list[StanzaHandler] = []
     for module in _modules[client.account].values():
         module = cast(ModulesT, module)

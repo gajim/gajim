@@ -19,35 +19,35 @@ LogCallback = Callable[[str], None]
 
 
 def parseLogLevel(arg: str) -> int:
-    '''
+    """
     Either numeric value or level name from logging module
-    '''
+    """
     if arg.isdigit():
         return int(arg)
     if arg.isupper() and hasattr(logging, arg):
         return getattr(logging, arg)
-    print(_('%s is not a valid loglevel') % repr(arg), file=sys.stderr)
+    print(_("%s is not a valid loglevel") % repr(arg), file=sys.stderr)
     return 0
 
 
 def parseLogTarget(arg: str) -> str:
-    '''
+    """
     [gajim.]c.x.y  ->  gajim.c.x.y
     .other_logger  ->  other_logger
     <None>         ->  gajim
-    '''
+    """
     arg = arg.lower()
     if not arg:
-        return 'gajim'
-    if arg.startswith('.'):
+        return "gajim"
+    if arg.startswith("."):
         return arg[1:]
-    if arg.startswith('gajim'):
+    if arg.startswith("gajim"):
         return arg
-    return 'gajim.' + arg
+    return "gajim." + arg
 
 
 def parseAndSetLogLevels(arg: str) -> None:
-    '''
+    """
     [=]LOGLEVEL     ->  gajim=LOGLEVEL
     gajim=LOGLEVEL  ->  gajim=LOGLEVEL
     .other=10       ->  other=10
@@ -56,41 +56,40 @@ def parseAndSetLogLevels(arg: str) -> None:
                         gajim.c.z=20
     gajim=10,c.x=20 ->  gajim=10
                         gajim.c.x=20
-    '''
-    for directive in arg.split(','):
+    """
+    for directive in arg.split(","):
         directive = directive.strip()
         if not directive:
             continue
-        if '=' not in directive:
-            directive = '=' + directive
-        targets, level = directive.rsplit('=', 1)
+        if "=" not in directive:
+            directive = "=" + directive
+        targets, level = directive.rsplit("=", 1)
         level = parseLogLevel(level.strip())
-        for target in targets.split('='):
+        for target in targets.split("="):
             target = parseLogTarget(target.strip())
             if target:
                 logging.getLogger(target).setLevel(level)
-                print('Logger %s level set to %d' % (target, level),
-                      file=sys.stderr)
+                print("Logger %s level set to %d" % (target, level), file=sys.stderr)
 
 
 class Colors:
-    NONE = chr(27) + '[0m'
-    BLACK = chr(27) + '[30m'
-    RED = chr(27) + '[31m'
-    GREEN = chr(27) + '[32m'
-    BROWN = chr(27) + '[33m'
-    BLUE = chr(27) + '[34m'
-    MAGENTA = chr(27) + '[35m'
-    CYAN = chr(27) + '[36m'
-    LIGHT_GRAY = chr(27) + '[37m'
-    DARK_GRAY = chr(27) + '[30;1m'
-    BRIGHT_RED = chr(27) + '[31;1m'
-    BRIGHT_GREEN = chr(27) + '[32;1m'
-    YELLOW = chr(27) + '[33;1m'
-    BRIGHT_BLUE = chr(27) + '[34;1m'
-    PURPLE = chr(27) + '[35;1m'
-    BRIGHT_CYAN = chr(27) + '[36;1m'
-    WHITE = chr(27) + '[37;1m'
+    NONE = chr(27) + "[0m"
+    BLACK = chr(27) + "[30m"
+    RED = chr(27) + "[31m"
+    GREEN = chr(27) + "[32m"
+    BROWN = chr(27) + "[33m"
+    BLUE = chr(27) + "[34m"
+    MAGENTA = chr(27) + "[35m"
+    CYAN = chr(27) + "[36m"
+    LIGHT_GRAY = chr(27) + "[37m"
+    DARK_GRAY = chr(27) + "[30;1m"
+    BRIGHT_RED = chr(27) + "[31;1m"
+    BRIGHT_GREEN = chr(27) + "[32;1m"
+    YELLOW = chr(27) + "[33;1m"
+    BRIGHT_BLUE = chr(27) + "[34;1m"
+    PURPLE = chr(27) + "[35;1m"
+    BRIGHT_CYAN = chr(27) + "[36;1m"
+    WHITE = chr(27) + "[37;1m"
 
 
 def colorize(text: str, color: str) -> str:
@@ -111,101 +110,96 @@ class LogConsoleHandler(logging.StreamHandler):  # pyright: ignore
         if self._callback is not None:
             self._callback(msg)
 
-    def set_callback(self,
-                     func: LogCallback | None
-                     ) -> None:
+    def set_callback(self, func: LogCallback | None) -> None:
         self._callback = func
 
 
 logging.Formatter.default_msec_format = None
 
+
 class FancyFormatter(logging.Formatter):
-    '''
+    """
     An eye-candy formatter with Colors
-    '''
+    """
+
     colors_mapping = {
-        'DEBUG': Colors.BLUE,
-        'INFO': Colors.GREEN,
-        'WARNING': Colors.BROWN,
-        'ERROR': Colors.RED,
-        'CRITICAL': Colors.BRIGHT_RED,
+        "DEBUG": Colors.BLUE,
+        "INFO": Colors.GREEN,
+        "WARNING": Colors.BROWN,
+        "ERROR": Colors.RED,
+        "CRITICAL": Colors.BRIGHT_RED,
     }
 
-    def __init__(self,
-                 fmt: str | None = None,
-                 use_color: bool = False) -> None:
+    def __init__(self, fmt: str | None = None, use_color: bool = False) -> None:
         logging.Formatter.__init__(self, fmt)
         self.use_color = use_color
 
     def format(self, record: logging.LogRecord) -> str:
         level = record.levelname
-        record.levelname = '(%s)' % level[0]
+        record.levelname = "(%s)" % level[0]
 
         if self.use_color:
-            c = FancyFormatter.colors_mapping.get(level, '')
+            c = FancyFormatter.colors_mapping.get(level, "")
             record.levelname = colorize(record.levelname, c)
-            record.name = '%-25s' % colorize(record.name, Colors.CYAN)
+            record.name = "%-25s" % colorize(record.name, Colors.CYAN)
         else:
-            record.name = '%-25s|' % record.name
+            record.name = "%-25s|" % record.name
 
         return logging.Formatter.format(self, record)
 
 
 def init() -> None:
-    '''
+    """
     Initialize the logging system
-    '''
+    """
 
     if app.get_debug_mode():
         _cleanup_debug_logs()
         _redirect_output()
 
     use_color = False
-    if os.name != 'nt':
+    if os.name != "nt":
         use_color = sys.stderr.isatty()
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(
-        FancyFormatter(
-            '%(asctime)s %(levelname)s %(name)-35s %(message)s',
-            use_color
-        )
+        FancyFormatter("%(asctime)s %(levelname)s %(name)-35s %(message)s", use_color)
     )
 
-    root_log = logging.getLogger('gajim')
+    root_log = logging.getLogger("gajim")
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(_log_console_handler)
     root_log.addHandler(stream_handler)
     root_log.propagate = False
 
-    root_log = logging.getLogger('nbxmpp')
+    root_log = logging.getLogger("nbxmpp")
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(_log_console_handler)
     root_log.addHandler(stream_handler)
     root_log.propagate = False
 
-    root_log = logging.getLogger('gnupg')
+    root_log = logging.getLogger("gnupg")
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(_log_console_handler)
     root_log.addHandler(stream_handler)
     root_log.propagate = False
 
-    root_log = logging.getLogger('omemo_dr')
+    root_log = logging.getLogger("omemo_dr")
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(_log_console_handler)
     root_log.addHandler(stream_handler)
     root_log.propagate = False
 
-    if os.environ.get('GAJIM_LEAK'):
-        logging.getLogger('gajim.leak').setLevel(logging.DEBUG)
+    if os.environ.get("GAJIM_LEAK"):
+        logging.getLogger("gajim.leak").setLevel(logging.DEBUG)
 
-    if os.environ.get('GAJIM_DEBUG_SQL'):
-        logging.getLogger('gajim.c.storage').setLevel(logging.DEBUG)
+    if os.environ.get("GAJIM_DEBUG_SQL"):
+        logging.getLogger("gajim.c.storage").setLevel(logging.DEBUG)
 
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
     # Gajim-Debug.exe shows a command line prompt and we want to redirect
     # log output to it
-    if app.get_debug_mode() or os.environ.get('GAJIM_DEBUG', False):  # noqa: PLW1508
+    if app.get_debug_mode() or os.environ.get("GAJIM_DEBUG", False):  # noqa: PLW1508
         set_verbose()
 
 
@@ -214,15 +208,15 @@ def set_loglevels(loglevels_string: str) -> None:
 
 
 def set_verbose() -> None:
-    parseAndSetLogLevels('gajim=DEBUG')
-    parseAndSetLogLevels('.nbxmpp=INFO')
-    parseAndSetLogLevels('.omemo_dr=DEBUG')
+    parseAndSetLogLevels("gajim=DEBUG")
+    parseAndSetLogLevels(".nbxmpp=INFO")
+    parseAndSetLogLevels(".omemo_dr=DEBUG")
 
 
 def set_quiet() -> None:
-    parseAndSetLogLevels('gajim=CRITICAL')
-    parseAndSetLogLevels('.nbxmpp=CRITICAL')
-    parseAndSetLogLevels('.omemo_dr=CRITICAL')
+    parseAndSetLogLevels("gajim=CRITICAL")
+    parseAndSetLogLevels(".nbxmpp=CRITICAL")
+    parseAndSetLogLevels(".omemo_dr=CRITICAL")
 
 
 def get_log_console_handler() -> LogConsoleHandler:
@@ -230,16 +224,16 @@ def get_log_console_handler() -> LogConsoleHandler:
 
 
 def _redirect_output() -> None:
-    debug_folder = configpaths.get('DEBUG')
-    date = datetime.today().strftime('%Y-%m-%d-%H%M%S')
-    filename = '%s-debug.log' % date
-    fd = open(debug_folder / filename, 'a', encoding='utf8')
+    debug_folder = configpaths.get("DEBUG")
+    date = datetime.today().strftime("%Y-%m-%d-%H%M%S")
+    filename = "%s-debug.log" % date
+    fd = open(debug_folder / filename, "a", encoding="utf8")
     sys.stderr = sys.stdout = fd
 
 
 def _cleanup_debug_logs() -> None:
-    debug_folder = configpaths.get('DEBUG')
-    debug_files = list(debug_folder.glob('*-debug.log*'))
+    debug_folder = configpaths.get("DEBUG")
+    debug_files = list(debug_folder.glob("*-debug.log*"))
     now = time.time()
     for file in debug_files:
         # Delete everything older than 3 days
@@ -250,26 +244,26 @@ def _cleanup_debug_logs() -> None:
 _log_console_handler = LogConsoleHandler()
 _log_console_handler.setFormatter(
     logging.Formatter(
-        '%(asctime)s (%(levelname).1s) %(name)-35s | %(message)s\n',
+        "%(asctime)s (%(levelname).1s) %(name)-35s | %(message)s\n",
     )
 )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     init()
 
-    set_loglevels('gajim.c=DEBUG,INFO')
+    set_loglevels("gajim.c=DEBUG,INFO")
 
-    log = logging.getLogger('gajim')
-    log.debug('debug')
-    log.info('info')
-    log.warning('warn')
-    log.error('error')
-    log.critical('critical')
+    log = logging.getLogger("gajim")
+    log.debug("debug")
+    log.info("info")
+    log.warning("warn")
+    log.error("error")
+    log.critical("critical")
 
-    log = logging.getLogger('gajim.c.x.dispatcher')
-    log.debug('debug')
-    log.info('info')
-    log.warning('warn')
-    log.error('error')
-    log.critical('critical')
+    log = logging.getLogger("gajim.c.x.dispatcher")
+    log.debug("debug")
+    log.info("info")
+    log.warning("warn")
+    log.error("error")
+    log.critical("critical")

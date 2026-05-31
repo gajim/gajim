@@ -20,7 +20,7 @@ class PEP(BaseModule):
 
     def pass_disco(self, info: DiscoInfo) -> None:
         for identity in info.identities:
-            if identity.category == 'pubsub':
-                if identity.type == 'pep':
-                    self._log.info('Discovered PEP support: %s', info.jid)
+            if identity.category == "pubsub":
+                if identity.type == "pep":
+                    self._log.info("Discovered PEP support: %s", info.jid)
                     self.supported = True

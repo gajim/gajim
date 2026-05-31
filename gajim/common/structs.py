@@ -36,19 +36,20 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
 from gajim.common.util.datetime import utc_now
 
-log = logging.getLogger('gajim.c.structs')
+log = logging.getLogger("gajim.c.structs")
 
-_T = TypeVar('_T')
+_T = TypeVar("_T")
 
 
 class MUCData:
-    def __init__(self,
-                 room_jid: str,
-                 nick: str,
-                 occupant_id: str | None,
-                 password: str | None,
-                 config: dict[str, Any] | None = None
-                 ) -> None:
+    def __init__(
+        self,
+        room_jid: str,
+        nick: str,
+        occupant_id: str | None,
+        password: str | None,
+        config: dict[str, Any] | None = None,
+    ) -> None:
 
         self._room_jid = JID.from_string(room_jid)
         self._config = config
@@ -101,7 +102,8 @@ class OutgoingMessage:
 
     _text: str | None = dataclasses.field(init=False)
     _encryption_data: EncryptionData | None = dataclasses.field(
-        init=False, default=None)
+        init=False, default=None
+    )
     _stanza: Any = dataclasses.field(init=False, default=None)
 
     def __post_init__(self, text: str | None) -> None:
@@ -125,7 +127,7 @@ class OutgoingMessage:
         if self.reply_data is None:
             return self._text
         assert self._text is not None
-        return f'{self.reply_data.fallback_text}{self._text}'
+        return f"{self.reply_data.fallback_text}{self._text}"
 
     def has_text(self) -> bool:
         return bool(self._text)
@@ -160,23 +162,26 @@ class PresenceData:
     def from_presence(cls, properties: PresenceProperties) -> PresenceData:
         idle_datetime = None
         if properties.idle_timestamp is not None:
-            idle_datetime = convert_epoch_to_local_datetime(
-                properties.idle_timestamp)
+            idle_datetime = convert_epoch_to_local_datetime(properties.idle_timestamp)
 
-        return cls(show=properties.show,
-                   status=properties.status,
-                   priority=properties.priority,
-                   idle_datetime=idle_datetime,
-                   available=properties.type.is_available,
-                   hats=properties.hats)
+        return cls(
+            show=properties.show,
+            status=properties.status,
+            priority=properties.priority,
+            idle_datetime=idle_datetime,
+            available=properties.type.is_available,
+            hats=properties.hats,
+        )
 
 
-UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
-                                status='',
-                                priority=0,
-                                idle_datetime=None,
-                                available=False,
-                                hats=None)
+UNKNOWN_PRESENCE = PresenceData(
+    show=PresenceShowExt.OFFLINE,
+    status="",
+    priority=0,
+    idle_datetime=None,
+    available=False,
+    hats=None,
+)
 
 
 @dataclass(frozen=True)
@@ -192,57 +197,58 @@ class MUCPresenceData:
     hats: HatData | None
 
     @classmethod
-    def from_presence(cls,
-                      properties: PresenceProperties,
-                      occupant_id: str | None
-                      ) -> MUCPresenceData:
+    def from_presence(
+        cls, properties: PresenceProperties, occupant_id: str | None
+    ) -> MUCPresenceData:
         idle_datetime = None
         if properties.idle_timestamp is not None:
-            idle_datetime = convert_epoch_to_local_datetime(
-                properties.idle_timestamp)
+            idle_datetime = convert_epoch_to_local_datetime(properties.idle_timestamp)
 
-        return cls(show=properties.show,
-                   status=properties.status,
-                   idle_datetime=idle_datetime,
-                   available=properties.type.is_available,
-                   affiliation=properties.muc_user.affiliation,
-                   role=properties.muc_user.role,
-                   real_jid=properties.muc_user.jid,
-                   occupant_id=occupant_id,
-                   hats=properties.hats)
+        return cls(
+            show=properties.show,
+            status=properties.status,
+            idle_datetime=idle_datetime,
+            available=properties.type.is_available,
+            affiliation=properties.muc_user.affiliation,
+            role=properties.muc_user.role,
+            real_jid=properties.muc_user.jid,
+            occupant_id=occupant_id,
+            hats=properties.hats,
+        )
 
 
-UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
-                                       status='',
-                                       idle_datetime=None,
-                                       available=False,
-                                       affiliation=Affiliation.NONE,
-                                       role=Role.NONE,
-                                       real_jid=None,
-                                       occupant_id=None,
-                                       hats=None)
+UNKNOWN_MUC_PRESENCE = MUCPresenceData(
+    show=PresenceShowExt.OFFLINE,
+    status="",
+    idle_datetime=None,
+    available=False,
+    affiliation=Affiliation.NONE,
+    role=Role.NONE,
+    real_jid=None,
+    occupant_id=None,
+    hats=None,
+)
 
 
 ANNOTATION_TO_VARIANT = {
-    'str': (str, 's'),
-    'list[str]': (list, 'as'),
-    'Optional[str]': (str, 'ms'),
-    'bool': (bool, 'b'),
-    'int': (int, 'i'),
-    'JID': (JID, 's'),
-    'Optional[JID]': (JID, 'ms'),
-    "Literal['chat', 'groupchat', 'pm']": (str, 's'),
+    "str": (str, "s"),
+    "list[str]": (list, "as"),
+    "Optional[str]": (str, "ms"),
+    "bool": (bool, "b"),
+    "int": (int, "i"),
+    "JID": (JID, "s"),
+    "Optional[JID]": (JID, "ms"),
+    "Literal['chat', 'groupchat', 'pm']": (str, "s"),
 }
 
 
 class VariantMixin:
-
     _type_to_variant_funcs = {
         JID: str,
     }
 
     _variant_to_type_funcs = {
-        'JID': JID.from_string,
+        "JID": JID.from_string,
     }
 
     def to_variant(self) -> GLib.Variant:
@@ -257,7 +263,7 @@ class VariantMixin:
 
             if not isinstance(value, field_t):
                 raise ValueError(
-                    f'invalid type: {value} type {type(value)} is not a {field_t}'
+                    f"invalid type: {value} type {type(value)} is not a {field_t}"
                 )
 
             conversion_func = self._type_to_variant_funcs.get(field_t)
@@ -268,8 +274,8 @@ class VariantMixin:
             vdict[field.name] = GLib.Variant(variant_str, value)
 
         if __types:
-            vdict['__types'] = GLib.Variant('a{ss}', __types)
-        return GLib.Variant('a{sv}', vdict)
+            vdict["__types"] = GLib.Variant("a{ss}", __types)
+        return GLib.Variant("a{sv}", vdict)
 
     def serialize(self) -> str:
         variant = self.to_variant()
@@ -280,20 +286,14 @@ class VariantMixin:
 
     @classmethod
     def from_serialized_string(
-        cls: type[_T],
-        serialized_data: str,
-        variant_type: GLib.VariantType
+        cls: type[_T], serialized_data: str, variant_type: GLib.VariantType
     ) -> _T | None:
         try:
             data = base64.b64decode(serialized_data.encode())
             g_bytes = GLib.Bytes.new(data)
-            variant = GLib.Variant.new_from_bytes(
-                variant_type,
-                g_bytes,
-                True
-            )
+            variant = GLib.Variant.new_from_bytes(variant_type, g_bytes, True)
         except Exception as e:
-            log.error('Could not decode serialized variant %s', e)
+            log.error("Could not decode serialized variant %s", e)
             return None
 
         return cls.from_variant(variant)
@@ -301,13 +301,13 @@ class VariantMixin:
     @classmethod
     def from_variant(cls: type[_T], variant: GLib.Variant) -> _T:
         vdict = variant.unpack()
-        __types = vdict.pop('__types', None)
+        __types = vdict.pop("__types", None)
         if __types is not None:
             for field_name, value_t_name in __types.items():
                 value = vdict[field_name]
                 conversion_func = cls._variant_to_type_funcs.get(value_t_name)
                 if conversion_func is None:
-                    raise ValueError(f'no conversion for: {value_t_name}')
+                    raise ValueError(f"no conversion for: {value_t_name}")
                 vdict[field_name] = conversion_func(value)
         return cls(**vdict)
 

@@ -50,52 +50,57 @@ class Message(BaseModule):
         BaseModule.__init__(self, con)
 
         self.handlers = [
-            StanzaHandler(name='message',
-                          callback=self._check_if_unknown_contact,
-                          priority=41),
-            StanzaHandler(name='message',
-                          callback=self._message_received,
-                          priority=50),
-            StanzaHandler(name='message',
-                          typ='error',
-                          callback=self._message_error_received,
-                          priority=50),
+            StanzaHandler(
+                name="message", callback=self._check_if_unknown_contact, priority=41
+            ),
+            StanzaHandler(name="message", callback=self._message_received, priority=50),
+            StanzaHandler(
+                name="message",
+                typ="error",
+                callback=self._message_error_received,
+                priority=50,
+            ),
         ]
 
         # XEPs for which this message module should not be executed
         self._message_namespaces = {Namespace.ROSTERX, Namespace.IBB}
 
-    def _check_if_unknown_contact(self,
-                                  _con: types.NBXMPPClient,
-                                  stanza: nbxmpp.Message,
-                                  properties: MessageProperties
-                                  ) -> None:
-        if (properties.type.is_groupchat or
-                properties.is_muc_pm or
-                properties.is_self_message or
-                properties.is_mam_message):
+    def _check_if_unknown_contact(
+        self,
+        _con: types.NBXMPPClient,
+        stanza: nbxmpp.Message,
+        properties: MessageProperties,
+    ) -> None:
+        if (
+            properties.type.is_groupchat
+            or properties.is_muc_pm
+            or properties.is_self_message
+            or properties.is_mam_message
+        ):
             return
 
         if self._con.get_own_jid().domain == str(properties.jid):
             # Server message
             return
 
-        if not app.settings.get_account_setting(self._account,
-                                                'ignore_unknown_contacts'):
+        if not app.settings.get_account_setting(
+            self._account, "ignore_unknown_contacts"
+        ):
             return
 
         assert properties.jid is not None
         bare_jid = properties.jid.new_as_bare()
-        if self._con.get_module('Roster').get_item(bare_jid) is None:
-            self._log.warning('Ignore message from unknown contact: %s', bare_jid)
+        if self._con.get_module("Roster").get_item(bare_jid) is None:
+            self._log.warning("Ignore message from unknown contact: %s", bare_jid)
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
-    def _message_received(self,
-                          _con: types.NBXMPPClient,
-                          stanza: nbxmpp.Message,
-                          properties: MessageProperties
-                          ) -> None:
+    def _message_received(
+        self,
+        _con: types.NBXMPPClient,
+        stanza: nbxmpp.Message,
+        properties: MessageProperties,
+    ) -> None:
 
         if properties.is_pubsub or properties.type.is_error:
             return
@@ -109,7 +114,7 @@ class Message(BaseModule):
         if self._message_namespaces & set(stanza.getProperties()):
             return
 
-        self._log.info('Received from %s', stanza.getFrom())
+        self._log.info("Received from %s", stanza.getFrom())
 
         if properties.carbon is not None and properties.carbon.is_sent:
             # Ugly, we treat the from attr as the remote jid,
@@ -127,26 +132,26 @@ class Message(BaseModule):
 
         muc_data = None
         if properties.type.is_groupchat:
-            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning(
-                    'Groupchat message from unknown MUC: %s', remote_jid
-                )
+                self._log.warning("Groupchat message from unknown MUC: %s", remote_jid)
                 return
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties)
+            muc_data, self._client.get_own_jid(), properties
+        )
 
         user_delay_ts = None
         if properties.user_timestamp is not None:
             user_delay_ts = dt.datetime.fromtimestamp(
-                properties.user_timestamp, tz=dt.UTC)
+                properties.user_timestamp, tz=dt.UTC
+            )
 
         message_id = properties.id
         if message_id is None:
             # TODO: Make Gajim not depend on a message_id being present
             message_id = generate_id()
-            self._log.debug('Generating id for message')
+            self._log.debug("Generating id for message")
 
         stanza_id = self._get_stanza_id(properties)
 
@@ -154,29 +159,37 @@ class Message(BaseModule):
         # https://dev.gajim.org/gajim/gajim/-/issues/11837
         origin_id = properties.origin_id or properties.id
 
-        if (m_type in (MessageType.CHAT, MessageType.PM) and
-                direction == ChatDirection.OUTGOING and
-                origin_id is not None):
+        if (
+            m_type in (MessageType.CHAT, MessageType.PM)
+            and direction == ChatDirection.OUTGOING
+            and origin_id is not None
+        ):
             if app.storage.archive.check_if_message_id_exists(
-                    self._account, remote_jid, origin_id):
-                self._log.info('Duplicated message received: %s', origin_id)
+                self._account, remote_jid, origin_id
+            ):
+                self._log.info("Duplicated message received: %s", origin_id)
                 return
 
-        if (m_type == MessageType.GROUPCHAT and
-                direction == ChatDirection.OUTGOING and
-                origin_id is not None):
-
+        if (
+            m_type == MessageType.GROUPCHAT
+            and direction == ChatDirection.OUTGOING
+            and origin_id is not None
+        ):
             # Use origin-id because some group chats change the message id
             # on the reflection.
             pk = app.storage.archive.update_pending_message(
-                self._account, remote_jid, origin_id, stanza_id)
+                self._account, remote_jid, origin_id, stanza_id
+            )
 
             if pk is not None:
                 app.ged.raise_event(
-                    MessageAcknowledged(account=self._account,
-                                        jid=remote_jid,
-                                        pk=pk,
-                                        stanza_id=stanza_id))
+                    MessageAcknowledged(
+                        account=self._account,
+                        jid=remote_jid,
+                        pk=pk,
+                        stanza_id=stanza_id,
+                    )
+                )
                 return
 
         resource = jid.resource
@@ -188,11 +201,10 @@ class Message(BaseModule):
             resource = None
 
         occupant = None
-        if (m_type in (MessageType.GROUPCHAT, MessageType.PM)
-                and not jid.is_bare):
-
-            contact = self._client.get_module('Contacts').get_contact(
-                    jid, groupchat=True)
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM) and not jid.is_bare:
+            contact = self._client.get_module("Contacts").get_contact(
+                jid, groupchat=True
+            )
             assert isinstance(contact, GroupchatParticipant)
 
             occupant = get_occupant_info(
@@ -203,7 +215,7 @@ class Message(BaseModule):
                 m_type,
                 timestamp,
                 contact,
-                properties
+                properties,
             )
 
         assert properties.bodies is not None
@@ -212,21 +224,22 @@ class Message(BaseModule):
 
         encryption_data = None
         if properties.encrypted is not None:
-            encryption_data = mod.Encryption(
-                **dataclasses.asdict(properties.encrypted))
+            encryption_data = mod.Encryption(**dataclasses.asdict(properties.encrypted))
 
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
             protocol = get_eme_protocol(properties.eme)
             encryption_data = mod.Encryption(
-                protocol=protocol, key="Unknown", trust=Trust.UNTRUSTED)
+                protocol=protocol, key="Unknown", trust=Trust.UNTRUSTED
+            )
 
         if not message_text:
-            self._log.debug('Received message without text')
+            self._log.debug("Received message without text")
             return
 
         securitylabel_data = get_security_label(
-            self._account, remote_jid, timestamp, properties.security_label)
+            self._account, remote_jid, timestamp, properties.security_label
+        )
         reply = get_reply(properties.reply_data)
 
         correction_id = None
@@ -259,36 +272,44 @@ class Message(BaseModule):
 
         try:
             pk = app.storage.archive.insert_object(
-                message_data, ignore_on_conflict=False)
+                message_data, ignore_on_conflict=False
+            )
         except sqlalchemy.exc.IntegrityError:
-            self._log.exception('Insertion Error')
+            self._log.exception("Insertion Error")
             return
 
         if correction_id is not None:
-            event = MessageCorrected(account=self._account,
-                                     jid=remote_jid,
-                                     pk=pk,
-                                     correction_id=correction_id)
+            event = MessageCorrected(
+                account=self._account,
+                jid=remote_jid,
+                pk=pk,
+                correction_id=correction_id,
+            )
             app.ged.raise_event(event)
             return
 
-        app.ged.raise_event(MessageReceived(account=self._account,
-                                            jid=remote_jid,
-                                            m_type=m_type,
-                                            mam=properties.mam,
-                                            pk=pk))
+        app.ged.raise_event(
+            MessageReceived(
+                account=self._account,
+                jid=remote_jid,
+                m_type=m_type,
+                mam=properties.mam,
+                pk=pk,
+            )
+        )
 
-    def _message_error_received(self,
-                                _con: types.NBXMPPClient,
-                                stanza: nbxmpp.Message,
-                                properties: MessageProperties
-                                ) -> None:
+    def _message_error_received(
+        self,
+        _con: types.NBXMPPClient,
+        stanza: nbxmpp.Message,
+        properties: MessageProperties,
+    ) -> None:
 
         remote_jid = properties.remote_jid
         assert remote_jid is not None
         message_id = properties.id
         if message_id is None:
-            self._log.warning('Received error without message id')
+            self._log.warning("Received error without message id")
             self._log.warning(stanza)
             return
 
@@ -308,22 +329,23 @@ class Message(BaseModule):
             timestamp=timestamp,
         )
 
-        pk = app.storage.archive.insert_row(
-            error_data, ignore_on_conflict=True)
+        pk = app.storage.archive.insert_row(error_data, ignore_on_conflict=True)
         if pk == -1:
             self._log.warning(
-                'Received error with already known message id: %s', message_id)
+                "Received error with already known message id: %s", message_id
+            )
             return
 
         app.ged.raise_event(
-            MessageError(account=self._account,
-                         jid=remote_jid,
-                         message_id=message_id,
-                         error=properties.error))
+            MessageError(
+                account=self._account,
+                jid=remote_jid,
+                message_id=message_id,
+                error=properties.error,
+            )
+        )
 
-    def _get_stanza_id(self,
-                       properties: MessageProperties
-                       ) -> str | None:
+    def _get_stanza_id(self, properties: MessageProperties) -> str | None:
 
         if properties.is_mam_message:
             assert properties.mam is not None
@@ -341,7 +363,7 @@ class Message(BaseModule):
                 return None
 
         else:
-            if not self._con.get_module('MAM').available:
+            if not self._con.get_module("MAM").available:
                 return None
 
             archive = self._con.get_own_jid().new_as_bare()
@@ -353,14 +375,15 @@ class Message(BaseModule):
         return None
 
     def store_message(self, message: OutgoingMessage) -> None:
-        if (not message.has_text() and
-                message.reaction_data is None and
-                message.retraction_id is None):
+        if (
+            not message.has_text()
+            and message.reaction_data is None
+            and message.retraction_id is None
+        ):
             return
 
         if message.type == MessageType.GROUPCHAT:
-            if (message.reaction_data is not None or
-                    message.retraction_id is not None):
+            if message.reaction_data is not None or message.retraction_id is not None:
                 # Store reaction when the MUC reflects it
                 return
 
@@ -376,10 +399,9 @@ class Message(BaseModule):
         if message.type in (MessageType.GROUPCHAT, MessageType.PM):
             # PM is a full jid, so convert to bare
             muc_jid = remote_jid.new_as_bare()
-            muc_data = self._client.get_module('MUC').get_muc_data(muc_jid)
+            muc_data = self._client.get_module("MUC").get_muc_data(muc_jid)
             if muc_data is None:
-                self._log.warning('Trying to send message to unknown MUC: %s',
-                                  muc_jid)
+                self._log.warning("Trying to send message to unknown MUC: %s", muc_jid)
                 return
 
             resource = muc_data.nick
@@ -415,7 +437,7 @@ class Message(BaseModule):
                     reaction_id=reactions_id,
                     direction=direction,
                 )
-                self._log.info('Delete own reactions for: %s', reactions_id)
+                self._log.info("Delete own reactions for: %s", reactions_id)
 
             else:
                 reaction = mod.Reaction(
@@ -424,7 +446,7 @@ class Message(BaseModule):
                     occupant_=occupant,
                     id=reactions_id,
                     direction=direction,
-                    emojis=';'.join(reactions),
+                    emojis=";".join(reactions),
                     timestamp=message.timestamp,
                 )
 
@@ -439,7 +461,7 @@ class Message(BaseModule):
                     occupant=occupant,
                     emojis=None,
                     message=None,
-                    is_mam_message=False
+                    is_mam_message=False,
                 )
             )
             return
@@ -469,7 +491,8 @@ class Message(BaseModule):
             encryption_data = mod.Encryption(**dataclasses.asdict(encryption))
 
         securitylabel_data = get_security_label(
-            self._account, remote_jid, message.timestamp, message.sec_label)
+            self._account, remote_jid, message.timestamp, message.sec_label
+        )
         reply = get_reply(message.reply_data)
 
         thread_id = None
@@ -511,18 +534,23 @@ class Message(BaseModule):
             return
 
         if message.correct_id is not None:
-            event = MessageCorrected(account=self._account,
-                                     jid=remote_jid,
-                                     pk=pk,
-                                     correction_id=message.correct_id)
+            event = MessageCorrected(
+                account=self._account,
+                jid=remote_jid,
+                pk=pk,
+                correction_id=message.correct_id,
+            )
             app.ged.raise_event(event)
             return
 
         app.ged.raise_event(
-            MessageSent(jid=remote_jid,
-                        account=message.account,
-                        pk=pk,
-                        play_sound=message.play_sound))
+            MessageSent(
+                jid=remote_jid,
+                account=message.account,
+                pk=pk,
+                play_sound=message.play_sound,
+            )
+        )
 
 
 def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Message:
@@ -531,7 +559,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     stanza = nbxmpp.Message(
         to=str(remote_jid),
         body=message.get_text(),
-        typ=convert_message_type(message.type)
+        typ=convert_message_type(message.type),
     )
 
     # XEP-0359
@@ -542,25 +570,28 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # Mark Message as MUC PM
     if message.is_pm:
-        stanza.setTag('x', namespace=Namespace.MUC_USER)
+        stanza.setTag("x", namespace=Namespace.MUC_USER)
 
     # XEP-0444
     if message.reaction_data is not None:
         stanza.setReactions(*message.reaction_data)
-        stanza.setTag('store', namespace=Namespace.MSG_HINTS)
+        stanza.setTag("store", namespace=Namespace.MSG_HINTS)
         return stanza
 
     if message.correct_id:
-        stanza.setTag('replace', attrs={'id': message.correct_id},
-                      namespace=Namespace.CORRECT)
+        stanza.setTag(
+            "replace", attrs={"id": message.correct_id}, namespace=Namespace.CORRECT
+        )
 
     # XEP-0461
     if message.reply_data is not None:
         thread_id = message.reply_data.thread_id
-        stanza.setReply(str(message.reply_data.to),
-                        message.reply_data.id,
-                        message.reply_data.fallback_start,
-                        message.reply_data.fallback_end)
+        stanza.setReply(
+            str(message.reply_data.to),
+            message.reply_data.id,
+            message.reply_data.fallback_start,
+            message.reply_data.fallback_end,
+        )
 
     # OGP link previews
     if message.open_graph_data is not None:
@@ -573,8 +604,8 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # XEP-0066
     if message.oob_url is not None:
-        oob = stanza.addChild('x', namespace=Namespace.X_OOB)
-        oob.addChild('url').setData(message.oob_url)
+        oob = stanza.addChild("x", namespace=Namespace.X_OOB)
+        oob.addChild("url").setData(message.oob_url)
 
     # XEP-0184
     if not own_jid.bare_match(message.contact.jid):
@@ -585,8 +616,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
     if message.chatstate is not None:
         stanza.setTag(message.chatstate, namespace=Namespace.CHATSTATES)
         if not message.has_text():
-            stanza.setTag('no-store',
-                          namespace=Namespace.MSG_HINTS)
+            stanza.setTag("no-store", namespace=Namespace.MSG_HINTS)
 
     # XEP-0333
     if message.has_text():
@@ -597,8 +627,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # XEP-0424
     if message.retraction_id is not None:
-        stanza.setRetracted(
-            message.retraction_id, fallback_text=RETRACTION_FALLBACK)
+        stanza.setRetracted(message.retraction_id, fallback_text=RETRACTION_FALLBACK)
 
     # XEP-0490
     if message.mds_id is not None:

@@ -17,7 +17,7 @@ from nbxmpp import NodeProcessed
 from gajim.common import app
 from gajim.common.events import ApplicationEvent
 
-log = logging.getLogger('gajim.c.ged')
+log = logging.getLogger("gajim.c.ged")
 
 PRECORE = 10
 CORE = 20
@@ -38,14 +38,12 @@ EventHandlerT = tuple[str, int, HandlerFuncT]
 
 
 class GlobalEventsDispatcher:
-
     def __init__(self):
         self.handlers: dict[str, list[tuple[int, HandlerFuncT]]] = {}
 
-    def register_event_handler(self,
-                               event_name: str,
-                               priority: int,
-                               handler: HandlerFuncT) -> None:
+    def register_event_handler(
+        self, event_name: str, priority: int, handler: HandlerFuncT
+    ) -> None:
 
         if event_name not in self.handlers:
             self.handlers[event_name] = [(priority, handler)]
@@ -59,23 +57,27 @@ class GlobalEventsDispatcher:
         handlers_list.append((priority, handler))
         handlers_list.sort(key=operator.itemgetter(0))
 
-    def remove_event_handler(self,
-                             event_name: str,
-                             priority: int,
-                             handler: HandlerFuncT) -> None:
+    def remove_event_handler(
+        self, event_name: str, priority: int, handler: HandlerFuncT
+    ) -> None:
 
         if event_name in self.handlers:
             try:
                 self.handlers[event_name].remove((priority, handler))
             except ValueError as error:
                 log.warning(
-                    '''Function (%s) with priority "%s" never
+                    """Function (%s) with priority "%s" never
                     registered as handler of event "%s".
-                    Error: %s''', handler, priority, event_name, error)
+                    Error: %s""",
+                    handler,
+                    priority,
+                    event_name,
+                    error,
+                )
 
     def raise_event(self, event_obj: ApplicationEvent) -> Any:
         event_name = event_obj.name
-        log.debug('Raise event: %s', event_name)
+        log.debug("Raise event: %s", event_name)
         if event_name in self.handlers:
             node_processed = False
             # Iterate over a copy of the handlers list, so while iterating
@@ -83,18 +85,17 @@ class GlobalEventsDispatcher:
             for _priority, handler in list(self.handlers[event_name]):
                 try:
                     if inspect.ismethod(handler):
-                        log.debug('Call handler %s on %s',
-                                  handler.__name__,
-                                  handler.__self__)
+                        log.debug(
+                            "Call handler %s on %s", handler.__name__, handler.__self__
+                        )
                     else:
-                        log.debug('Call handler %s', handler.__name__)
+                        log.debug("Call handler %s", handler.__name__)
                     if handler(event_obj):
                         return True
                 except NodeProcessed:
                     node_processed = True
                 except Exception:
-                    log.error('Error while running an event handler: %s',
-                              handler)
+                    log.error("Error while running an event handler: %s", handler)
                     traceback.print_exc()
             if node_processed:
                 raise NodeProcessed
@@ -107,10 +108,9 @@ class EventHelper:
     def has_events_registered(self) -> bool:
         return bool(self.__event_handlers)
 
-    def register_event(self,
-                       event_name: str,
-                       priority: int,
-                       handler: HandlerFuncT) -> None:
+    def register_event(
+        self, event_name: str, priority: int, handler: HandlerFuncT
+    ) -> None:
 
         if (event_name, priority, handler) in self.__event_handlers:
             return
@@ -125,10 +125,9 @@ class EventHelper:
             self.__event_handlers.append(handler)
             app.ged.register_event_handler(*handler)
 
-    def unregister_event(self,
-                         event_name: str,
-                         priority: int,
-                         handler: HandlerFuncT) -> None:
+    def unregister_event(
+        self, event_name: str, priority: int, handler: HandlerFuncT
+    ) -> None:
 
         self.__event_handlers.remove((event_name, priority, handler))
         app.ged.register_event_handler(event_name, priority, handler)

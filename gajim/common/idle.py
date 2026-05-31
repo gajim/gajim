@@ -27,7 +27,7 @@ from gajim.common import app
 from gajim.common.const import Display
 from gajim.common.const import IdleState
 
-log = logging.getLogger('gajim.c.idle')
+log = logging.getLogger("gajim.c.idle")
 
 
 class IdleMonitor:
@@ -45,36 +45,35 @@ class IdleMonitor:
 
 
 class DBusFreedesktop(IdleMonitor):
-
     def __init__(self) -> None:
         IdleMonitor.__init__(self)
         self._last_idle_time = 0
 
-        log.debug('Connecting to org.freedesktop.ScreenSaver')
+        log.debug("Connecting to org.freedesktop.ScreenSaver")
         self._dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
             None,
-            'org.freedesktop.ScreenSaver',
-            '/org/freedesktop/ScreenSaver',
-            'org.freedesktop.ScreenSaver',
-            None
+            "org.freedesktop.ScreenSaver",
+            "/org/freedesktop/ScreenSaver",
+            "org.freedesktop.ScreenSaver",
+            None,
         )
-        log.debug('Connected')
+        log.debug("Connected")
 
         # Only the following call will trigger exceptions if the D-Bus
         # interface/method/... does not exist. Using the failing method
         # for class init to allow other idle monitors to be used on failure.
         self._get_idle_sec_fail()
-        log.debug('Test successful')
+        log.debug("Test successful")
 
     def _get_idle_sec_fail(self) -> int:
-        (idle_time,) = cast(tuple[int], self._dbus_proxy.call_sync(
-            'GetSessionIdleTime',
-            None,
-            Gio.DBusCallFlags.NO_AUTO_START,
-            -1,
-            None))
+        (idle_time,) = cast(
+            tuple[int],
+            self._dbus_proxy.call_sync(
+                "GetSessionIdleTime", None, Gio.DBusCallFlags.NO_AUTO_START, -1, None
+            ),
+        )
 
         return idle_time // 1000
 
@@ -83,43 +82,42 @@ class DBusFreedesktop(IdleMonitor):
             self._last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
             log.warning(
-                'org.freedesktop.ScreenSaver.GetSessionIdleTime() failed: %s',
-                error)
+                "org.freedesktop.ScreenSaver.GetSessionIdleTime() failed: %s", error
+            )
 
         return self._last_idle_time
 
 
 class DBusGnome(IdleMonitor):
-
     def __init__(self) -> None:
         IdleMonitor.__init__(self)
         self._last_idle_time = 0
 
-        log.debug('Connecting to org.gnome.Mutter.IdleMonitor')
+        log.debug("Connecting to org.gnome.Mutter.IdleMonitor")
         self._dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
             None,
-            'org.gnome.Mutter.IdleMonitor',
-            '/org/gnome/Mutter/IdleMonitor/Core',
-            'org.gnome.Mutter.IdleMonitor',
-            None
+            "org.gnome.Mutter.IdleMonitor",
+            "/org/gnome/Mutter/IdleMonitor/Core",
+            "org.gnome.Mutter.IdleMonitor",
+            None,
         )
-        log.debug('Connected')
+        log.debug("Connected")
 
         # Only the following call will trigger exceptions if the D-Bus
         # interface/method/... does not exist. Using the failing method
         # for class init to allow other idle monitors to be used on failure.
         self._get_idle_sec_fail()
-        log.debug('Test successful')
+        log.debug("Test successful")
 
     def _get_idle_sec_fail(self) -> int:
-        (idle_time,) = cast(tuple[int], self._dbus_proxy.call_sync(
-            'GetIdletime',
-            None,
-            Gio.DBusCallFlags.NO_AUTO_START,
-            -1,
-            None))
+        (idle_time,) = cast(
+            tuple[int],
+            self._dbus_proxy.call_sync(
+                "GetIdletime", None, Gio.DBusCallFlags.NO_AUTO_START, -1, None
+            ),
+        )
 
         return idle_time // 1000
 
@@ -127,9 +125,7 @@ class DBusGnome(IdleMonitor):
         try:
             self._last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
-            log.warning(
-                'org.gnome.Mutter.IdleMonitor.GetIdletime() failed: %s',
-                error)
+            log.warning("org.gnome.Mutter.IdleMonitor.GetIdletime() failed: %s", error)
 
         return self._last_idle_time
 
@@ -140,12 +136,12 @@ class Xss(IdleMonitor):
 
         class XScreenSaverInfo(ctypes.Structure):
             _fields_ = [
-                ('window', ctypes.c_ulong),
-                ('state', ctypes.c_int),
-                ('kind', ctypes.c_int),
-                ('til_or_since', ctypes.c_ulong),
-                ('idle', ctypes.c_ulong),
-                ('eventMask', ctypes.c_ulong)
+                ("window", ctypes.c_ulong),
+                ("state", ctypes.c_int),
+                ("kind", ctypes.c_int),
+                ("til_or_since", ctypes.c_ulong),
+                ("idle", ctypes.c_ulong),
+                ("eventMask", ctypes.c_ulong),
             ]
 
         XScreenSaverInfo_p = ctypes.POINTER(XScreenSaverInfo)
@@ -154,9 +150,9 @@ class Xss(IdleMonitor):
         xid = ctypes.c_ulong
         c_int_p = ctypes.POINTER(ctypes.c_int)
 
-        lib_x11_path = ctypes.util.find_library('X11')
+        lib_x11_path = ctypes.util.find_library("X11")
         if lib_x11_path is None:
-            raise OSError('libX11 could not be found.')
+            raise OSError("libX11 could not be found.")
 
         lib_x11 = ctypes.cdll.LoadLibrary(lib_x11_path)
         lib_x11.XOpenDisplay.restype = display_p
@@ -164,37 +160,45 @@ class Xss(IdleMonitor):
         lib_x11.XDefaultRootWindow.restype = xid
         lib_x11.XDefaultRootWindow.argtypes = (display_p,)
 
-        lib_xss_path = ctypes.util.find_library('Xss')
+        lib_xss_path = ctypes.util.find_library("Xss")
         if lib_xss_path is None:
-            raise OSError('libXss could not be found.')
+            raise OSError("libXss could not be found.")
 
         self._lib_xss = ctypes.cdll.LoadLibrary(lib_xss_path)
         self._lib_xss.XScreenSaverQueryExtension.argtypes = (
-            display_p, c_int_p, c_int_p)
+            display_p,
+            c_int_p,
+            c_int_p,
+        )
         self._lib_xss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
         self._lib_xss.XScreenSaverQueryInfo.argtypes = (
-            display_p, xid, XScreenSaverInfo_p)
+            display_p,
+            xid,
+            XScreenSaverInfo_p,
+        )
 
         self._dpy_p = lib_x11.XOpenDisplay(None)
         if self._dpy_p is None:
-            raise OSError('Could not open X Display.')
+            raise OSError("Could not open X Display.")
 
         _event_basep = ctypes.c_int()
         _error_basep = ctypes.c_int()
         extension = self._lib_xss.XScreenSaverQueryExtension(
-            self._dpy_p, ctypes.byref(_event_basep), ctypes.byref(_error_basep))
+            self._dpy_p, ctypes.byref(_event_basep), ctypes.byref(_error_basep)
+        )
         if extension == 0:
-            raise OSError('XScreenSaver Extension not available on display.')
+            raise OSError("XScreenSaver Extension not available on display.")
 
         self._xss_info_p = self._lib_xss.XScreenSaverAllocInfo()
         if self._xss_info_p is None:
-            raise OSError('XScreenSaverAllocInfo: Out of Memory.')
+            raise OSError("XScreenSaverAllocInfo: Out of Memory.")
 
         self.root_window = lib_x11.XDefaultRootWindow(self._dpy_p)
 
     def get_idle_sec(self) -> int:
         info = self._lib_xss.XScreenSaverQueryInfo(
-            self._dpy_p, self.root_window, self._xss_info_p)
+            self._dpy_p, self.root_window, self._xss_info_p
+        )
         if info == 0:
             return info
         return self._xss_info_p.contents.idle // 1000
@@ -212,10 +216,7 @@ class Windows(IdleMonitor):
         self._locked_time = None
 
         class LastInputInfo(ctypes.Structure):
-            _fields_ = [
-                ('cbSize', ctypes.c_uint),
-                ('dwTime', ctypes.c_uint)
-            ]
+            _fields_ = [("cbSize", ctypes.c_uint), ("dwTime", ctypes.c_uint)]
 
         self._lastInputInfo = LastInputInfo()
         self._lastInputInfo.cbSize = ctypes.sizeof(self._lastInputInfo)
@@ -231,8 +232,7 @@ class Windows(IdleMonitor):
         # Check if Screen Saver is running
         # 0x72 is SPI_GETSCREENSAVERRUNNING
         saver_runing = ctypes.c_int(0)
-        info = self._SystemParametersInfo(
-            0x72, 0, ctypes.byref(saver_runing), 0)
+        info = self._SystemParametersInfo(0x72, 0, ctypes.byref(saver_runing), 0)
         if info and saver_runing.value:
             return True
 
@@ -256,13 +256,13 @@ class Windows(IdleMonitor):
 
 
 class IdleMonitorManager(GObject.Object):
-
     __gsignals__ = {
-        'state-changed': (
+        "state-changed": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            ()
-        )}
+            (),
+        )
+    }
 
     def __init__(self):
         GObject.Object.__init__(self)
@@ -273,18 +273,15 @@ class IdleMonitorManager(GObject.Object):
         if self.is_available():
             GLib.timeout_add_seconds(5, self._poll)
 
-    def set_interval(self,
-                     away_interval: int = 60,
-                     xa_interval: int = 120) -> None:
+    def set_interval(self, away_interval: int = 60, xa_interval: int = 120) -> None:
 
-        log.info('Set interval: away: %s, xa: %s',
-                 away_interval, xa_interval)
+        log.info("Set interval: away: %s, xa: %s", away_interval, xa_interval)
         self._away_interval = away_interval
         self._xa_interval = xa_interval
 
     def set_extended_away(self, state: bool) -> None:
         if self._idle_monitor is None:
-            raise ValueError('No idle monitor available')
+            raise ValueError("No idle monitor available")
 
         self._idle_monitor.set_extended_away(state)
 
@@ -311,20 +308,22 @@ class IdleMonitorManager(GObject.Object):
 
     @staticmethod
     def _get_idle_monitor() -> IdleMonitor | None:
-        if sys.platform == 'win32':
+        if sys.platform == "win32":
             return Windows()
 
         try:
             return DBusFreedesktop()
         except GLib.Error as error:
-            log.info('Idle time via org.freedesktop.Screensaver '
-                     'not available: %s', error)
+            log.info(
+                "Idle time via org.freedesktop.Screensaver not available: %s", error
+            )
 
         try:
             return DBusGnome()
         except GLib.Error as error:
-            log.info('Idle time via org.gnome.Mutter.IdleMonitor '
-                     'not available: %s', error)
+            log.info(
+                "Idle time via org.gnome.Mutter.IdleMonitor not available: %s", error
+            )
 
         if app.is_display(Display.WAYLAND):
             return None
@@ -332,23 +331,23 @@ class IdleMonitorManager(GObject.Object):
         try:
             return Xss()
         except OSError as error:
-            log.info('Idle time via XScreenSaverInfo not available: %s', error)
+            log.info("Idle time via XScreenSaverInfo not available: %s", error)
 
         return None
 
     def get_idle_sec(self) -> int:
         if self._idle_monitor is None:
-            raise ValueError('No idle monitor available')
+            raise ValueError("No idle monitor available")
         return self._idle_monitor.get_idle_sec()
 
     def _poll(self) -> bool:
-        '''
+        """
         Check to see if we should change state
-        '''
+        """
         assert self._idle_monitor is not None
 
         if self._idle_monitor.is_extended_away():
-            log.info('Extended Away: Screensaver or Locked Screen')
+            log.info("Extended Away: Screensaver or Locked Screen")
             self._set_state(IdleState.XA)
             return True
 
@@ -368,8 +367,8 @@ class IdleMonitorManager(GObject.Object):
             return
 
         self._state = state
-        log.info('State changed: %s', state)
-        self.emit('state-changed')
+        log.info("State changed: %s", state)
+        self.emit("state-changed")
 
 
 Monitor = IdleMonitorManager()

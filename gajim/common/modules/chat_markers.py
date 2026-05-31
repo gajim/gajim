@@ -37,26 +37,26 @@ from gajim.common.structs import OutgoingMessage
 
 
 class ChatMarkers(BaseModule):
-
-    _nbxmpp_extends = 'ChatMarkers'
+    _nbxmpp_extends = "ChatMarkers"
 
     def __init__(self, client: types.Client):
         BaseModule.__init__(self, client)
 
         self.handlers = [
-            StanzaHandler(name='message',
-                          callback=self._process_chat_marker,
-                          ns=Namespace.CHATMARKERS,
-                          priority=47),
+            StanzaHandler(
+                name="message",
+                callback=self._process_chat_marker,
+                ns=Namespace.CHATMARKERS,
+                priority=47,
+            ),
         ]
 
     def pass_disco(self, info: DiscoInfo) -> None:
         self.mds_assist_supported = Namespace.MDS_ASSIST in info.features
 
-    def _process_chat_marker(self,
-                             _client: types.NBXMPPClient,
-                             _stanza: Any,
-                             properties: MessageProperties) -> None:
+    def _process_chat_marker(
+        self, _client: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
 
         if properties.marker is None or not properties.marker.is_displayed:
             return
@@ -80,12 +80,12 @@ class ChatMarkers(BaseModule):
                 return
 
             assert properties.muc_jid is not None
-            contact = self._client.get_module('Contacts').get_contact(
-                properties.muc_jid,
-                groupchat=True)
+            contact = self._client.get_module("Contacts").get_contact(
+                properties.muc_jid, groupchat=True
+            )
             assert isinstance(contact, GroupchatContact)
             if not contact.is_joined:
-                self._log.warning('Received chat marker while not joined')
+                self._log.warning("Received chat marker while not joined")
                 return
 
             if properties.muc_nickname != contact.nickname:
@@ -95,43 +95,42 @@ class ChatMarkers(BaseModule):
             self._raise_read_state_sync(jid, properties.marker.id)
             return
 
-        if (properties.is_sent_carbon or
-                (properties.is_mam_message and properties.is_from_us())):
+        if properties.is_sent_carbon or (
+            properties.is_mam_message and properties.is_from_us()
+        ):
             self._raise_read_state_sync(jid, properties.marker.id)
             return
 
         self._raise_event(properties)
 
     def _raise_read_state_sync(self, jid: JID, marker_id: str) -> None:
-        self._log.info('Read state sync: %s - %s', jid, marker_id)
+        self._log.info("Read state sync: %s - %s", jid, marker_id)
         app.ged.raise_event(
-            ReadStateSync(account=self._account,
-                          jid=jid,
-                          marker_id=marker_id))
+            ReadStateSync(account=self._account, jid=jid, marker_id=marker_id)
+        )
 
     def _raise_event(self, properties: MessageProperties) -> None:
         assert properties.marker is not None
         assert properties.jid is not None
         assert properties.remote_jid is not None
 
-        self._log.info('displayed-received: %s %s',
-                       properties.remote_jid,
-                       properties.marker.id)
+        self._log.info(
+            "displayed-received: %s %s", properties.remote_jid, properties.marker.id
+        )
 
         remote_jid = properties.remote_jid
         timestamp = get_message_timestamp(properties)
 
         muc_data = None
         if properties.type.is_groupchat:
-            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            muc_data = self._client.get_module("MUC").get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning(
-                    'Groupchat message from unknown MUC: %s', remote_jid
-                )
+                self._log.warning("Groupchat message from unknown MUC: %s", remote_jid)
                 return
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties)
+            muc_data, self._client.get_own_jid(), properties
+        )
 
         if direction == ChatDirection.OUTGOING:
             return
@@ -139,7 +138,7 @@ class ChatMarkers(BaseModule):
         contact = self._get_contact_with_mtype(m_type, properties.jid)
 
         if not self._is_sending_marker_allowed(contact):
-            self._log.info('Ignore marker because setting is disabled')
+            self._log.info("Ignore marker because setting is disabled")
             return
 
         occupant = None
@@ -170,7 +169,8 @@ class ChatMarkers(BaseModule):
             remote_jid_=properties.remote_jid,
             occupant_=occupant,
             id=properties.marker.id,
-            timestamp=timestamp)
+            timestamp=timestamp,
+        )
 
         pk = app.storage.archive.insert_object(marker_data)
         if pk == -1:
@@ -184,10 +184,9 @@ class ChatMarkers(BaseModule):
             )
         )
 
-    def send_displayed_marker(self,
-                              contact: types.ChatContactT,
-                              message_id: str,
-                              stanza_id: str | None) -> bool:
+    def send_displayed_marker(
+        self, contact: types.ChatContactT, message_id: str, stanza_id: str | None
+    ) -> bool:
 
         # Return value is True if displayed marker was sent and
         # mds assist was added
@@ -202,23 +201,28 @@ class ChatMarkers(BaseModule):
             # https://xmpp.org/extensions/xep-0490.html#rules-client
             stanza_id = None
 
-        message = OutgoingMessage(account=self._account,
-                                  contact=contact,
-                                  marker=('displayed', marker_id),
-                                  mds_id=stanza_id,
-                                  play_sound=False)
+        message = OutgoingMessage(
+            account=self._account,
+            contact=contact,
+            marker=("displayed", marker_id),
+            mds_id=stanza_id,
+            play_sound=False,
+        )
 
         self._client.send_message(message)
-        self._log.info('Send displayed to %s, marker id: %s, mds id: %s',
-                        contact.jid, marker_id, stanza_id)
+        self._log.info(
+            "Send displayed to %s, marker id: %s, mds id: %s",
+            contact.jid,
+            marker_id,
+            stanza_id,
+        )
 
         return stanza_id is not None
 
     @staticmethod
-    def _determine_marker_id(contact: types.ChatContactT,
-                             message_id: str,
-                             stanza_id: str | None
-                             ) -> str:
+    def _determine_marker_id(
+        contact: types.ChatContactT, message_id: str, stanza_id: str | None
+    ) -> str:
 
         if stanza_id is None:
             return message_id
@@ -228,8 +232,7 @@ class ChatMarkers(BaseModule):
         return message_id
 
     def _get_contact_with_mtype(
-        self, mtype: MessageType,
-        jid: JID
+        self, mtype: MessageType, jid: JID
     ) -> types.ChatContactT:
 
         if mtype in (MessageType.GROUPCHAT, MessageType.PM):
@@ -246,10 +249,12 @@ class ChatMarkers(BaseModule):
                 return False
 
             return app.settings.get_contact_setting(
-                contact.account, contact.jid, 'send_marker')
+                contact.account, contact.jid, "send_marker"
+            )
 
         return app.settings.get_group_chat_setting(
-            contact.account, contact.jid.new_as_bare(), 'send_marker')
+            contact.account, contact.jid.new_as_bare(), "send_marker"
+        )
 
 
 @dataclass
@@ -262,14 +267,12 @@ class DisplayedMarkerData:
 
     @classmethod
     def from_model(
-        cls,
-        account: str,
-        marker: mod.DisplayedMarker
+        cls, account: str, marker: mod.DisplayedMarker
     ) -> DisplayedMarkerData:
         return cls(
             account=account,
             jid=marker.remote.jid,
             id=marker.id,
             timestamp=marker.timestamp,
-            occupant=marker.occupant
+            occupant=marker.occupant,
         )

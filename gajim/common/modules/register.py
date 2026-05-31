@@ -14,14 +14,13 @@ from gajim.common.modules.base import BaseModule
 
 
 class Register(BaseModule):
-
-    _nbxmpp_extends = 'Register'
+    _nbxmpp_extends = "Register"
     _nbxmpp_methods = [
-        'unregister',
-        'change_password',
-        'change_password_with_form',
-        'request_register_form',
-        'submit_register_form',
+        "unregister",
+        "change_password",
+        "change_password_with_form",
+        "request_register_form",
+        "submit_register_form",
     ]
 
     def __init__(self, con: types.Client) -> None:

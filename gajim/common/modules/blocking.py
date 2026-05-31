@@ -31,12 +31,11 @@ from gajim.common.modules.util import as_task
 
 
 class Blocking(BaseModule):
-
-    _nbxmpp_extends = 'Blocking'
+    _nbxmpp_extends = "Blocking"
     _nbxmpp_methods = [
-        'block',
-        'unblock',
-        'request_blocking_list',
+        "block",
+        "unblock",
+        "request_blocking_list",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -45,10 +44,12 @@ class Blocking(BaseModule):
         self.blocked: set[JID] = set()
 
         self.handlers = [
-            StanzaHandler(name='iq',
-                          callback=self._blocking_push_received,
-                          typ='set',
-                          ns=Namespace.BLOCKING),
+            StanzaHandler(
+                name="iq",
+                callback=self._blocking_push_received,
+                typ="set",
+                ns=Namespace.BLOCKING,
+            ),
         ]
 
         self.supported = False
@@ -59,10 +60,10 @@ class Blocking(BaseModule):
 
         self.supported = True
         app.ged.raise_event(
-            FeatureDiscovered(account=self._account,
-                              feature=Namespace.BLOCKING))
+            FeatureDiscovered(account=self._account, feature=Namespace.BLOCKING)
+        )
 
-        self._log.info('Discovered blocking: %s', info.jid)
+        self._log.info("Discovered blocking: %s", info.jid)
 
     def is_blocked(self, jid: JID) -> bool:
         return jid in self.blocked
@@ -73,12 +74,10 @@ class Blocking(BaseModule):
             app.ged.raise_event(ContactBlocked(account=self._account, jid=jid))
 
     @as_task
-    def get_blocking_list(
-        self
-    ) -> Generator[Any, set[JID]]:
+    def get_blocking_list(self) -> Generator[Any, set[JID]]:
         _task = yield  # noqa: F841
 
-        blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()
+        blocking_list = yield self._nbxmpp("Blocking").request_blocking_list()
 
         raise_if_error(blocking_list)
 
@@ -89,10 +88,9 @@ class Blocking(BaseModule):
         yield blocking_list
 
     @as_task
-    def update_blocking_list(self,
-                             block: set[JID],
-                             unblock: set[JID]
-                             ) -> Generator[Any, bool]:
+    def update_blocking_list(
+        self, block: set[JID], unblock: set[JID]
+    ) -> Generator[Any, bool]:
         _task = yield  # noqa: F841
 
         if block:
@@ -105,11 +103,9 @@ class Blocking(BaseModule):
 
         yield True
 
-    def _blocking_push_received(self,
-                                _con: types.NBXMPPClient,
-                                _stanza: Iq,
-                                properties: BlockingProperties
-                                ) -> None:
+    def _blocking_push_received(
+        self, _con: types.NBXMPPClient, _stanza: Iq, properties: BlockingProperties
+    ) -> None:
         if not properties.is_blocking:
             return
 
@@ -127,7 +123,7 @@ class Blocking(BaseModule):
             block = properties.blocking.block
             self.blocked.update(block)
             for contact in self._get_contacts_from_jids(block):
-                self._log.info('Block Push: %s', contact.jid)
+                self._log.info("Block Push: %s", contact.jid)
                 contact.set_blocked()
 
         raise nbxmpp.NodeProcessed
@@ -136,13 +132,11 @@ class Blocking(BaseModule):
         for contact in self._get_contacts_from_jids(jids):
             contact.set_unblocked()
             self._presence_probe(contact.jid)
-            self._log.info('Unblock Push: %s', contact.jid)
+            self._log.info("Unblock Push: %s", contact.jid)
 
-    def _get_contacts_from_jids(self,
-                                jids: set[JID]
-                                ) -> Iterator[BareContact]:
+    def _get_contacts_from_jids(self, jids: set[JID]) -> Iterator[BareContact]:
 
-        module = self._con.get_module('Contacts')
+        module = self._con.get_module("Contacts")
 
         for jid in jids:
             if jid.resource is not None:
@@ -152,7 +146,6 @@ class Blocking(BaseModule):
             if jid.is_domain:
                 contacts = module.get_contacts_with_domain(jid.domain)
                 for contact in contacts:
-
                     if not isinstance(contact, BareContact):
                         continue
 
@@ -167,7 +160,7 @@ class Blocking(BaseModule):
             yield contact
 
     def _presence_probe(self, jid: JID) -> None:
-        self._log.info('Presence probe: %s', jid)
+        self._log.info("Presence probe: %s", jid)
         # Send a presence Probe to get the current Status
-        probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
+        probe = nbxmpp.Presence(jid, "probe", frm=self._con.get_own_jid())
         self._nbxmpp().send(probe)

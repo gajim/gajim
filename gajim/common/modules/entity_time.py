@@ -16,12 +16,11 @@ from gajim.common.modules.contacts import BareContact
 
 
 class EntityTime(BaseModule):
-
-    _nbxmpp_extends = 'EntityTime'
+    _nbxmpp_extends = "EntityTime"
     _nbxmpp_methods = [
-        'request_entity_time',
-        'enable',
-        'disable',
+        "request_entity_time",
+        "enable",
+        "disable",
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -31,15 +30,15 @@ class EntityTime(BaseModule):
 
     def set_enabled(self, enabled: bool) -> None:
         if not enabled:
-            self._nbxmpp('EntityTime').disable()
+            self._nbxmpp("EntityTime").disable()
             return
 
-        self._nbxmpp('EntityTime').enable()
-        self._nbxmpp('EntityTime').set_allow_reply_func(self._allow_reply)
+        self._nbxmpp("EntityTime").enable()
+        self._nbxmpp("EntityTime").set_allow_reply_func(self._allow_reply)
 
     def _allow_reply(self, jid: JID) -> bool:
         bare_jid = jid.new_as_bare()
-        item = self._con.get_module('Roster').get_item(bare_jid)
+        item = self._con.get_module("Roster").get_item(bare_jid)
         if item is None:
             return False
 

@@ -25,7 +25,7 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import event_node
 
-NODE_MAX_NS = 'http://jabber.org/protocol/pubsub#config-node-max'
+NODE_MAX_NS = "http://jabber.org/protocol/pubsub#config-node-max"
 
 
 class Bookmarks(BaseModule):
@@ -59,32 +59,29 @@ class Bookmarks(BaseModule):
 
     @property
     def pep_bookmarks_used(self) -> bool:
-        return self._bookmark_module() == 'PEPBookmarks'
+        return self._bookmark_module() == "PEPBookmarks"
 
     @property
     def nativ_bookmarks_used(self) -> bool:
-        return self._bookmark_module() == 'NativeBookmarks'
+        return self._bookmark_module() == "NativeBookmarks"
 
     @event_node(Namespace.BOOKMARKS)
-    def _bookmark_event_received(self,
-                                 _con: types.NBXMPPClient,
-                                 _stanza: Any,
-                                 properties: MessageProperties
-                                 ) -> None:
+    def _bookmark_event_received(
+        self, _con: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
         assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
         if not properties.is_self_message:
-            self._log.warning('%s has an open access bookmarks node',
-                              properties.jid)
+            self._log.warning("%s has an open access bookmarks node", properties.jid)
             return
 
         if not self.pep_bookmarks_used:
             return
 
         if self._request_in_progress:
-            self._log.info('Ignore update, pubsub request in progress')
+            self._log.info("Ignore update, pubsub request in progress")
             return
 
         bookmarks = self._convert_to_dict(properties.pubsub_event.data)
@@ -92,42 +89,41 @@ class Bookmarks(BaseModule):
         old_bookmarks = self._bookmarks.copy()
         self._bookmarks = bookmarks
         self._act_on_changed_bookmarks(old_bookmarks)
-        app.ged.raise_event(
-            BookmarksReceived(account=self._account))
+        app.ged.raise_event(BookmarksReceived(account=self._account))
 
     @event_node(Namespace.BOOKMARKS_1)
-    def _bookmark_1_event_received(self,
-                                   _con: types.NBXMPPClient,
-                                   _stanza: Any,
-                                   properties: MessageProperties
-                                   ) -> None:
+    def _bookmark_1_event_received(
+        self, _con: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
         if not properties.is_self_message:
-            self._log.warning('%s has an open access bookmarks node',
-                              properties.jid)
+            self._log.warning("%s has an open access bookmarks node", properties.jid)
             return
 
         if not self.nativ_bookmarks_used:
             return
 
         if self._request_in_progress:
-            self._log.info('Ignore update, pubsub request in progress')
+            self._log.info("Ignore update, pubsub request in progress")
             return
 
         old_bookmarks = self._bookmarks.copy()
 
         assert properties.pubsub_event is not None
         if properties.pubsub_event.deleted or properties.pubsub_event.purged:
-            self._log.info('Bookmark node deleted/purged')
+            self._log.info("Bookmark node deleted/purged")
             self._bookmarks.clear()
 
         elif properties.pubsub_event.retracted:
             try:
                 jid = JID.from_string(properties.pubsub_event.id)
             except Exception as error:
-                self._log.info('Unable to parse retracted bookmark: %s %s',
-                                properties.pubsub_event.id, error)
+                self._log.info(
+                    "Unable to parse retracted bookmark: %s %s",
+                    properties.pubsub_event.id,
+                    error,
+                )
             else:
-                self._log.info('Retract: %s', jid)
+                self._log.info("Retract: %s", jid)
                 bookmark = self._bookmarks.get(jid)
                 if bookmark is not None:
                     self._bookmarks.pop(jid, None)
@@ -137,8 +133,7 @@ class Bookmarks(BaseModule):
             self._bookmarks[new_bookmark.jid] = new_bookmark
 
         self._act_on_changed_bookmarks(old_bookmarks)
-        app.ged.raise_event(
-            BookmarksReceived(account=self._account))
+        app.ged.raise_event(BookmarksReceived(account=self._account))
 
     def pass_disco(self, info: DiscoInfo) -> None:
         self._node_max = NODE_MAX_NS in info.features
@@ -147,47 +142,44 @@ class Bookmarks(BaseModule):
         self._conversion = Namespace.BOOKMARK_CONVERSION in info.features
 
     def _bookmark_module(
-        self
-    ) -> Literal['PrivateBookmarks', 'NativeBookmarks', 'PEPBookmarks']:
-        if not self._con.get_module('PubSub').publish_options:
-            return 'PrivateBookmarks'
+        self,
+    ) -> Literal["PrivateBookmarks", "NativeBookmarks", "PEPBookmarks"]:
+        if not self._con.get_module("PubSub").publish_options:
+            return "PrivateBookmarks"
 
-        if app.settings.get('dev_force_bookmark_2'):
-            return 'NativeBookmarks'
+        if app.settings.get("dev_force_bookmark_2"):
+            return "NativeBookmarks"
 
         if self._compat_pep and self._node_max:
-            return 'NativeBookmarks'
+            return "NativeBookmarks"
 
         if self._conversion:
-            return 'PEPBookmarks'
-        return 'PrivateBookmarks'
+            return "PEPBookmarks"
+        return "PrivateBookmarks"
 
-    def _act_on_changed_bookmarks(
-        self,
-        current_bookmarks: types.BookmarksDict
-    ) -> None:
+    def _act_on_changed_bookmarks(self, current_bookmarks: types.BookmarksDict) -> None:
 
         changed_autojoin, changed_name = self._get_changed_attrs(
-            current_bookmarks, self._bookmarks)
+            current_bookmarks, self._bookmarks
+        )
 
         if changed_name:
-            app.storage.archive.bulk_update_custom_names(
-                self._account, changed_name)
+            app.storage.archive.bulk_update_custom_names(self._account, changed_name)
 
         join_bookmarks = [
             self._bookmarks[jid] for jid, autojoin in changed_autojoin if autojoin
         ]
         self._log.info(
-            'Schedule autojoin in 10s for: %s\n',
-            '\n'.join(str(join_bookmarks))
+            "Schedule autojoin in 10s for: %s\n", "\n".join(str(join_bookmarks))
         )
 
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
         # the configuration.
-        if app.settings.get_account_setting(self._account, 'autojoin_sync'):
+        if app.settings.get_account_setting(self._account, "autojoin_sync"):
             timeout_id = GLib.timeout_add_seconds(
-                10, self._join_with_timeout, join_bookmarks)
+                10, self._join_with_timeout, join_bookmarks
+            )
             self._join_timeouts.append(timeout_id)
 
         # TODO: leave mucs
@@ -216,8 +208,7 @@ class Bookmarks(BaseModule):
         return changed_autojoin, changed_name
 
     @staticmethod
-    def _convert_to_dict(bookmarks: list[BookmarkData] | None
-                         ) -> types.BookmarksDict:
+    def _convert_to_dict(bookmarks: list[BookmarkData] | None) -> types.BookmarksDict:
         _dict: types.BookmarksDict = {}
         if not bookmarks:
             return _dict
@@ -235,7 +226,8 @@ class Bookmarks(BaseModule):
 
         self._request_in_progress = True
         self._nbxmpp(self._bookmark_module()).request_bookmarks(
-            callback=self._bookmarks_received)
+            callback=self._bookmarks_received
+        )
 
     def _bookmarks_received(self, task: Task) -> None:
         try:
@@ -246,24 +238,25 @@ class Bookmarks(BaseModule):
 
         self._request_in_progress = False
 
-        self._client.get_module('MucBlocking').pass_bookmarks(bookmarks)
+        self._client.get_module("MucBlocking").pass_bookmarks(bookmarks)
 
         self._cleanup_bookmarks(bookmarks)
         self._bookmarks = self._convert_to_dict(bookmarks)
-        if app.settings.get_account_setting(self._account, 'autojoin_sync'):
+        if app.settings.get_account_setting(self._account, "autojoin_sync"):
             self.auto_join_bookmarks(self.bookmarks)
-        app.ged.raise_event(
-            BookmarksReceived(account=self._account))
+        app.ged.raise_event(BookmarksReceived(account=self._account))
 
     def _cleanup_bookmarks(self, bookmarks: list[BookmarkData]) -> None:
         for bookmark in list(bookmarks):
-            contact = self._client.get_module('Contacts').get_contact(
-                bookmark.jid, groupchat=True)
+            contact = self._client.get_module("Contacts").get_contact(
+                bookmark.jid, groupchat=True
+            )
             if not isinstance(contact, GroupchatContact):
                 # The contact exists probably in the roster and is therefore
                 # assumed to not be a MUC
-                self._log.warning('Received bookmark but jid is not '
-                                  'a groupchat: %s', bookmark.jid)
+                self._log.warning(
+                    "Received bookmark but jid is not a groupchat: %s", bookmark.jid
+                )
                 bookmarks.remove(bookmark)
 
     def store_bookmarks(self, bookmarks: list[BookmarkData]) -> None:
@@ -275,8 +268,7 @@ class Bookmarks(BaseModule):
 
         self._nbxmpp(self._bookmark_module()).store_bookmarks(bookmarks)
 
-        app.ged.raise_event(
-            BookmarksReceived(account=self._account))
+        app.ged.raise_event(BookmarksReceived(account=self._account))
 
     def _join_with_timeout(self, bookmarks: list[BookmarkData]) -> None:
         self._join_timeouts.pop(0)
@@ -285,30 +277,31 @@ class Bookmarks(BaseModule):
     def auto_join_bookmarks(self, bookmarks: list[BookmarkData]) -> None:
         for bookmark in bookmarks:
             if bookmark.autojoin:
-                self._log.info('Autojoin Bookmark: %s', bookmark.jid)
-                self._con.get_module('MUC').join(bookmark.jid)
+                self._log.info("Autojoin Bookmark: %s", bookmark.jid)
+                self._con.get_module("MUC").join(bookmark.jid)
 
     def modify(self, jid: JID, **kwargs: Any) -> None:
         bookmark = self._bookmarks.get(jid)
         if bookmark is None:
             return
 
-        if 'name' in kwargs:
+        if "name" in kwargs:
             app.storage.archive.set_contact_value(
-                self._account, jid, 'custom_name', kwargs['name'])
+                self._account, jid, "custom_name", kwargs["name"]
+            )
 
         new_bookmark = bookmark._replace(**kwargs)
         if new_bookmark == bookmark:
             # No change happened
             return
-        self._log.info('Modify bookmark: %s %s', jid, kwargs)
+        self._log.info("Modify bookmark: %s %s", jid, kwargs)
         self._bookmarks[jid] = new_bookmark
 
         self.store_bookmarks([new_bookmark])
 
     def add_or_modify(self, jid: JID, **kwargs: Any) -> None:
-        if not app.settings.get_account_setting(self._account, 'autojoin_sync'):
-            kwargs.pop('autojoin', None)
+        if not app.settings.get_account_setting(self._account, "autojoin_sync"):
+            kwargs.pop("autojoin", None)
         bookmark = self._bookmarks.get(jid)
         if bookmark is not None:
             self.modify(jid, **kwargs)
@@ -316,10 +309,11 @@ class Bookmarks(BaseModule):
 
         new_bookmark = BookmarkData(jid=jid, **kwargs)
         self._bookmarks[jid] = new_bookmark
-        self._log.info('Add new bookmark: %s', new_bookmark)
+        self._log.info("Add new bookmark: %s", new_bookmark)
 
         app.storage.archive.set_contact_value(
-            self._account, jid, 'custom_name', new_bookmark.name)
+            self._account, jid, "custom_name", new_bookmark.name
+        )
 
         self.store_bookmarks([new_bookmark])
 
@@ -329,7 +323,7 @@ class Bookmarks(BaseModule):
             return
         if publish:
             if self.nativ_bookmarks_used:
-                self._nbxmpp('NativeBookmarks').retract_bookmark(jid)
+                self._nbxmpp("NativeBookmarks").retract_bookmark(jid)
             else:
                 self.store_bookmarks(self.bookmarks)
 

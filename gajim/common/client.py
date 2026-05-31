@@ -55,7 +55,7 @@ from gajim.common.util.text import to_one_line
 
 from gajim.gtk.util.window import open_window
 
-log = logging.getLogger('gajim.c.client')
+log = logging.getLogger("gajim.c.client")
 
 
 IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
@@ -67,19 +67,20 @@ def call_counter(func: Any):
             self._connect_machine_calls = 0
         self._connect_machine_calls += 1
         return func(self)
+
     return helper
 
 
 class Client(Observable, ClientModules):
     def __init__(self, account: str) -> None:
-        self._log = LogAdapter(log, {'account': account})
+        self._log = LogAdapter(log, {"account": account})
         Observable.__init__(self, self._log)
         ClientModules.__init__(self, account)
         self._client = None
         self._account = account
         self.name = account
 
-        address = app.settings.get_account_setting(self._account, 'address')
+        address = app.settings.get_account_setting(self._account, "address")
         self._address = JID.from_string(address)
 
         self._connect_machine_calls = 0
@@ -89,11 +90,11 @@ class Client(Observable, ClientModules):
 
         self._state = ClientState.DISCONNECTED
         self._status_sync_on_resume = False
-        self._status = 'online'
-        self._status_message = ''
-        self._idle_status = 'online'
+        self._status = "online"
+        self._status_message = ""
+        self._idle_status = "online"
         self._idle_status_enabled = True
-        self._idle_status_message = ''
+        self._idle_status_message = ""
 
         self._reconnect = True
         self._reconnect_timer_source = None
@@ -110,17 +111,20 @@ class Client(Observable, ClientModules):
         self._create_client()
 
         if Monitor.is_available():
-            self._idle_handler_id = Monitor.connect('state-changed',
-                                                    self._idle_state_changed)
+            self._idle_handler_id = Monitor.connect(
+                "state-changed", self._idle_state_changed
+            )
             self._screensaver_handler_id = app.app.connect(
-                'notify::screensaver-active', self._screensaver_state_changed)
+                "notify::screensaver-active", self._screensaver_state_changed
+            )
 
         monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor_id = monitor.connect(
-            'notify::connectivity', self._network_status_changed)
+            "notify::connectivity", self._network_status_changed
+        )
 
     def _set_state(self, state: ClientState) -> None:
-        self._log.info('State: %s', repr(state))
+        self._log.info("State: %s", repr(state))
         self._state = state
 
     @property
@@ -153,7 +157,7 @@ class Client(Observable, ClientModules):
     def local_address(self) -> str | None:
         address = self._client.local_address
         if address is not None:
-            return address.to_string().split(':')[0]
+            return address.to_string().split(":")[0]
         return None
 
     def is_destroyed(self) -> bool:
@@ -166,7 +170,7 @@ class Client(Observable, ClientModules):
         self._remove_account = value
 
     def _create_client(self) -> None:
-        self._log.info('Create new nbxmpp client')
+        self._log.info("Create new nbxmpp client")
 
         if self._client is not None:
             self._client.destroy()
@@ -180,28 +184,24 @@ class Client(Observable, ClientModules):
         self._client.set_resource(get_resource(self._account))
         self._client.set_supported_fallback_ns([Namespace.REPLY])
 
-        self._client.subscribe('resume-failed', self._on_resume_failed)
-        self._client.subscribe('resume-successful', self._on_resume_successful)
-        self._client.subscribe('disconnected', self._on_disconnected)
-        self._client.subscribe('connection-failed', self._on_connection_failed)
-        self._client.subscribe('connected', self._on_connected)
+        self._client.subscribe("resume-failed", self._on_resume_failed)
+        self._client.subscribe("resume-successful", self._on_resume_successful)
+        self._client.subscribe("disconnected", self._on_disconnected)
+        self._client.subscribe("connection-failed", self._on_connection_failed)
+        self._client.subscribe("connected", self._on_connected)
 
-        self._client.subscribe('stanza-sent', self._on_stanza_sent)
-        self._client.subscribe('stanza-received', self._on_stanza_received)
+        self._client.subscribe("stanza-sent", self._on_stanza_sent)
+        self._client.subscribe("stanza-received", self._on_stanza_received)
 
         for handler in modules.get_handlers(self):
             self._client.register_handler(handler)
 
-    def _on_resume_failed(self,
-                          _client: NBXMPPClient,
-                          _signal_name: str) -> None:
+    def _on_resume_failed(self, _client: NBXMPPClient, _signal_name: str) -> None:
 
-        self._log.info('Resume failed')
-        self.notify('resume-failed')
+        self._log.info("Resume failed")
+        self.notify("resume-failed")
 
-    def _on_resume_successful(self,
-                              _client: NBXMPPClient,
-                              _signal_name: str) -> None:
+    def _on_resume_successful(self, _client: NBXMPPClient, _signal_name: str) -> None:
 
         self._set_state(ClientState.CONNECTED)
         self._set_client_available()
@@ -210,31 +210,30 @@ class Client(Observable, ClientModules):
             self._status_sync_on_resume = False
             self.update_presence()
 
-        self.notify('state-changed', SimpleClientState.CONNECTED)
-        self.notify('resume-successful')
+        self.notify("state-changed", SimpleClientState.CONNECTED)
+        self.notify("resume-successful")
 
     def _set_client_available(self) -> None:
         self._set_state(ClientState.AVAILABLE)
         app.ged.raise_event(AccountConnected(account=self._account))
 
-        if not app.settings.get_account_setting(self._account, 'autojoin_sync'):
+        if not app.settings.get_account_setting(self._account, "autojoin_sync"):
             self.join_mucs()
 
-    def _network_status_changed(self,
-                                monitor: Gio.NetworkMonitor,
-                                _network_available: bool
-                                ) -> None:
+    def _network_status_changed(
+        self, monitor: Gio.NetworkMonitor, _network_available: bool
+    ) -> None:
 
         if monitor.get_connectivity() == Gio.NetworkConnectivity.FULL:
             return
 
         reachable = self.remote_is_reachable()
-        self._log.info('Network status changed, reachable: %s', reachable)
+        self._log.info("Network status changed, reachable: %s", reachable)
 
         if reachable:
             return
 
-        if (self._state.is_connected or self._state.is_available):
+        if self._state.is_connected or self._state.is_available:
             self.disconnect(gracefully=False, reconnect=True)
 
     def remote_is_reachable(self) -> bool:
@@ -245,7 +244,8 @@ class Client(Observable, ClientModules):
         if address is None:
             # Address is None when websocket is used
             self._log.info(
-                "Unable to determine if host is reachable, remote address unknown")
+                "Unable to determine if host is reachable, remote address unknown"
+            )
             return True
 
         monitor = Gio.NetworkMonitor.get_default()
@@ -255,7 +255,7 @@ class Client(Observable, ClientModules):
                 Gio.InetSocketAddress.new_from_string(address, int(port))
             )
         except GLib.Error as error:
-            quark = GLib.quark_try_string('g-io-error-quark')
+            quark = GLib.quark_try_string("g-io-error-quark")
             if error.matches(quark, Gio.IOErrorEnum.HOST_UNREACHABLE):
                 return False
 
@@ -266,10 +266,9 @@ class Client(Observable, ClientModules):
             log.exception("Unable to determine if host is reachable")
             return True
 
-    def disconnect(self,
-                   gracefully: bool,
-                   reconnect: bool,
-                   destroy_client: bool = False) -> None:
+    def disconnect(
+        self, gracefully: bool, reconnect: bool, destroy_client: bool = False
+    ) -> None:
 
         self._reconnect = reconnect
         self._destroy_client = destroy_client
@@ -288,19 +287,17 @@ class Client(Observable, ClientModules):
             return
 
         if self._state.is_disconnecting:
-            self._log.warning('Disconnect already in progress')
+            self._log.warning("Disconnect already in progress")
             return
 
         self._set_state(ClientState.DISCONNECTING)
 
-        self._log.info('Starting to disconnect')
+        self._log.info("Starting to disconnect")
         self._client.disconnect(immediate=not gracefully)
 
-    def _on_disconnected(self,
-                         _client: NBXMPPClient,
-                         _signal_name: str) -> None:
+    def _on_disconnected(self, _client: NBXMPPClient, _signal_name: str) -> None:
 
-        self._log.info('Disconnect')
+        self._log.info("Disconnect")
         self._set_state(ClientState.DISCONNECTED)
 
         domain, error, text = self._client.get_error()
@@ -315,20 +312,22 @@ class Client(Observable, ClientModules):
 
             cert, errors = self._client.peer_certificate
 
-            open_window('SSLErrorDialog',
-                        account=self._account,
-                        client=self,
-                        cert=cert,
-                        ignored_errors=set(self._client.ignored_tls_errors),
-                        error=errors.pop())
+            open_window(
+                "SSLErrorDialog",
+                account=self._account,
+                client=self,
+                cert=cert,
+                ignored_errors=set(self._client.ignored_tls_errors),
+                error=errors.pop(),
+            )
 
         elif domain in (StreamError.STREAM, StreamError.BIND):
-            if error == 'conflict':
+            if error == "conflict":
                 # Reset resource
-                app.settings.set_account_setting(self._account,
-                                                 'resource',
-                                                 'gajim.$rand')
-            if error == 'system-shutdown':
+                app.settings.set_account_setting(
+                    self._account, "resource", "gajim.$rand"
+                )
+            if error == "system-shutdown":
                 account_label = app.settings.get_account_setting(
                     self._account, "account_label"
                 )
@@ -349,19 +348,24 @@ class Client(Observable, ClientModules):
             self._reconnect = False
             self._destroy_client = True
 
-            if error in ('not-authorized', 'no-password'):
+            if error in ("not-authorized", "no-password"):
+
                 def _on_password() -> None:
                     self.connect()
 
-                app.ged.raise_event(PasswordRequired(client=self,
-                                                     on_password=_on_password))
+                app.ged.raise_event(
+                    PasswordRequired(client=self, on_password=_on_password)
+                )
 
             app.ged.raise_event(
-                Notification(context_id="",
-                             account=self._account,
-                             type='connection-failed',
-                             title=_('Authentication failed'),
-                             text=text or error))
+                Notification(
+                    context_id="",
+                    account=self._account,
+                    type="connection-failed",
+                    title=_("Authentication failed"),
+                    text=text or error,
+                )
+            )
 
         if self._reconnect:
             # Save resumeable information because in
@@ -370,52 +374,44 @@ class Client(Observable, ClientModules):
             self._after_disconnect()
             self._schedule_reconnect()
             if not stream_is_resumeable:
-                self.notify('state-changed', SimpleClientState.DISCONNECTED)
-            self.notify('state-changed', SimpleClientState.RESUME_IN_PROGRESS)
+                self.notify("state-changed", SimpleClientState.DISCONNECTED)
+            self.notify("state-changed", SimpleClientState.RESUME_IN_PROGRESS)
 
         else:
             self._after_disconnect()
-            self.notify('state-changed', SimpleClientState.DISCONNECTED)
+            self.notify("state-changed", SimpleClientState.DISCONNECTED)
 
         app.ged.raise_event(AccountDisconnected(account=self._account))
 
     def _after_disconnect(self) -> None:
         self._disable_reconnect_timer()
 
-        self.get_module('Bytestream').remove_all_transfers()
+        self.get_module("Bytestream").remove_all_transfers()
 
         if self._destroy_client:
             self._create_client()
 
-    def _on_connection_failed(self,
-                              _client: NBXMPPClient,
-                              _signal_name: str) -> None:
+    def _on_connection_failed(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._schedule_reconnect()
 
-    def _on_connected(self,
-                      _client: NBXMPPClient,
-                      _signal_name: str) -> None:
+    def _on_connected(self, _client: NBXMPPClient, _signal_name: str) -> None:
 
         self._set_state(ClientState.CONNECTED)
-        self.get_module('Discovery').discover_server_info()
-        self.get_module('Discovery').discover_account_info()
-        self.get_module('Discovery').discover_server_items()
+        self.get_module("Discovery").discover_server_info()
+        self.get_module("Discovery").discover_account_info()
+        self.get_module("Discovery").discover_server_items()
 
-    def _on_stanza_sent(self,
-                        _client: NBXMPPClient,
-                        _signal_name: str,
-                        stanza: Any) -> None:
+    def _on_stanza_sent(
+        self, _client: NBXMPPClient, _signal_name: str, stanza: Any
+    ) -> None:
 
-        app.ged.raise_event(StanzaSent(account=self._account,
-                                       stanza=stanza))
+        app.ged.raise_event(StanzaSent(account=self._account, stanza=stanza))
 
-    def _on_stanza_received(self,
-                            _client: NBXMPPClient,
-                            _signal_name: str,
-                            stanza: Any) -> None:
+    def _on_stanza_received(
+        self, _client: NBXMPPClient, _signal_name: str, stanza: Any
+    ) -> None:
 
-        app.ged.raise_event(StanzaReceived(account=self._account,
-                                           stanza=stanza))
+        app.ged.raise_event(StanzaReceived(account=self._account, stanza=stanza))
 
     def is_own_jid(self, jid: JID | str) -> bool:
         own_jid = self.get_own_jid()
@@ -428,10 +424,10 @@ class Client(Observable, ClientModules):
         return contact
 
     def get_own_jid(self) -> JID:
-        '''
+        """
         Return the last full JID we received on a bind event.
         In case we were never connected it returns the bare JID from config.
-        '''
+        """
         if self._client is not None:
             jid = self._client.get_bound_jid()
             if jid is not None:
@@ -448,43 +444,37 @@ class Client(Observable, ClientModules):
 
     def change_status(self, show: str, message: str) -> None:
         if not message:
-            message = ''
+            message = ""
 
-        self._idle_status_enabled = show == 'online'
+        self._idle_status_enabled = show == "online"
         self._status_message = message
 
-        if show != 'offline':
+        if show != "offline":
             self._status = show
 
+            app.settings.set_account_setting(self._account, "last_status", show)
             app.settings.set_account_setting(
-                self._account,
-                'last_status',
-                show)
-            app.settings.set_account_setting(
-                self._account,
-                'last_status_msg',
-                to_one_line(message))
+                self._account, "last_status_msg", to_one_line(message)
+            )
 
         if self._state.is_disconnecting:
             self._log.warning("Can't change status while disconnect is in progress")
             return
 
         if self._state.is_disconnected:
-            if show == 'offline':
+            if show == "offline":
                 return
 
             self.connect()
             return
 
         if self._state.is_connecting:
-            if show == 'offline':
-                self.disconnect(gracefully=False,
-                                reconnect=False,
-                                destroy_client=True)
+            if show == "offline":
+                self.disconnect(gracefully=False, reconnect=False, destroy_client=True)
             return
 
         if self._state.is_reconnect_scheduled:
-            if show == 'offline':
+            if show == "offline":
                 self._destroy_client = True
                 self._abort_reconnect()
             else:
@@ -492,37 +482,33 @@ class Client(Observable, ClientModules):
             return
 
         # We are connected
-        if show == 'offline':
-            self.get_module('UserTune').set_tune(None)
-            self.get_module('UserLocation').set_location(None)
-            presence = self.get_module('Presence').get_presence(
-                typ='unavailable',
-                status=message,
-                caps=False)
+        if show == "offline":
+            self.get_module("UserTune").set_tune(None)
+            self.get_module("UserLocation").set_location(None)
+            presence = self.get_module("Presence").get_presence(
+                typ="unavailable", status=message, caps=False
+            )
 
             self.send_stanza(presence)
-            self.disconnect(gracefully=True,
-                            reconnect=False,
-                            destroy_client=True)
+            self.disconnect(gracefully=True, reconnect=False, destroy_client=True)
             return
 
         self.update_presence()
 
     def update_presence(self, include_muc: bool = True) -> None:
         status, message, idle = self.get_presence_state()
-        self.get_module('Presence').send_presence(
-            show=status,
-            status=message,
-            idle_time=idle)
+        self.get_module("Presence").send_presence(
+            show=status, status=message, idle_time=idle
+        )
 
         if include_muc:
-            self.get_module('MUC').update_presence()
+            self.get_module("MUC").update_presence()
 
     @call_counter
     def connect_machine(self) -> None:
-        self._log.info('Connect machine state: %s', self._connect_machine_calls)
+        self._log.info("Connect machine state: %s", self._connect_machine_calls)
         if self._connect_machine_calls == 1:
-            self.get_module('Roster').request_roster()
+            self.get_module("Roster").request_roster()
         elif self._connect_machine_calls == 2:
             self._finish_connect()
 
@@ -533,46 +519,46 @@ class Client(Observable, ClientModules):
         # We did not resume the stream, so we are not joined any MUCs
         self.update_presence(include_muc=False)
 
-        self.get_module('Bookmarks').request_bookmarks()
-        self.get_module('SoftwareVersion').set_enabled(True)
-        self.get_module('LastActivity').set_enabled(True)
-        self.get_module('EntityTime').set_enabled(True)
-        self.get_module('Annotations').request_annotations()
-        self.get_module('Blocking').get_blocking_list()
-        self.get_module('VCard4').subscribe_to_node()
+        self.get_module("Bookmarks").request_bookmarks()
+        self.get_module("SoftwareVersion").set_enabled(True)
+        self.get_module("LastActivity").set_enabled(True)
+        self.get_module("EntityTime").set_enabled(True)
+        self.get_module("Annotations").request_annotations()
+        self.get_module("Blocking").get_blocking_list()
+        self.get_module("VCard4").subscribe_to_node()
 
-        if app.settings.get_account_setting(self._account, 'publish_tune'):
-            self.get_module('UserTune').set_enabled(True)
+        if app.settings.get_account_setting(self._account, "publish_tune"):
+            self.get_module("UserTune").set_enabled(True)
 
-        self.notify('state-changed', SimpleClientState.CONNECTED)
+        self.notify("state-changed", SimpleClientState.CONNECTED)
 
         app.ged.raise_event(SignedIn(account=self._account, conn=self))
         modules.send_stored_publish(self._account)
 
     def send_stanza(self, stanza: Any) -> None:
-        '''
+        """
         Send a stanza untouched
-        '''
+        """
         return self._client.send_stanza(stanza)
 
     def send_message(self, message: OutgoingMessage) -> None:
         if not self._state.is_available:
-            self._log.warning('Trying to send message while offline')
+            self._log.warning("Trying to send message while offline")
             return
 
         stanza = build_message_stanza(message, self.get_own_jid())
         message.set_stanza(stanza)
 
-        method = message.contact.settings.get('encryption')
+        method = message.contact.settings.get("encryption")
         if not method:
             self._send_message(message)
             return
 
-        if method in ('OMEMO', 'OpenPGP'):
+        if method in ("OMEMO", "OpenPGP"):
             try:
                 self.get_module(method).encrypt_message(message)
             except Exception:
-                self._log.exception('Error')
+                self._log.exception("Error")
                 text = message.get_text(with_fallback=False)
                 if text is None:
                     return
@@ -582,35 +568,35 @@ class Client(Observable, ClientModules):
                         client=self._client,
                         jid=str(message.contact.jid),
                         message=text,
-                        error=_('Encryption error'),
-                        time=time.time()))
+                        error=_("Encryption error"),
+                        time=time.time(),
+                    )
+                )
                 return
 
             self._send_message(message)
             return
 
         # TODO: Make extension point return encrypted message
-        extension = 'encrypt'
+        extension = "encrypt"
         if message.is_groupchat:
-            extension = 'gc_encrypt'
-        app.plugin_manager.extension_point(extension + method,
-                                           self,
-                                           message,
-                                           self._send_message)
+            extension = "gc_encrypt"
+        app.plugin_manager.extension_point(
+            extension + method, self, message, self._send_message
+        )
 
     def _send_message(self, message: OutgoingMessage) -> None:
         self.send_stanza(message.get_stanza())
-        self.get_module('Message').store_message(message)
+        self.get_module("Message").store_message(message)
 
-    def connect(
-        self,
-        ignored_tls_errors: IgnoredTlsErrorsT = None
-    ) -> None:
+    def connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
 
-        self._log.info('Connect')
+        self._log.info("Connect")
 
-        if self._state not in (ClientState.DISCONNECTED,
-                               ClientState.RECONNECT_SCHEDULED):
+        if self._state not in (
+            ClientState.DISCONNECTED,
+            ClientState.RECONNECT_SCHEDULED,
+        ):
             # Do not try to reco while we are already trying
             return
 
@@ -619,18 +605,15 @@ class Client(Observable, ClientModules):
         if custom_host is not None:
             self._client.set_custom_host(*custom_host)
 
-        gssapi = app.settings.get_account_setting(self._account,
-                                                  'enable_gssapi')
+        gssapi = app.settings.get_account_setting(self._account, "enable_gssapi")
         if gssapi:
-            self._client.set_mechs(['GSSAPI'])
+            self._client.set_mechs(["GSSAPI"])
 
-        anonymous = app.settings.get_account_setting(self._account,
-                                                     'anonymous_auth')
+        anonymous = app.settings.get_account_setting(self._account, "anonymous_auth")
         if anonymous:
-            self._client.set_mechs(['ANONYMOUS'])
+            self._client.set_mechs(["ANONYMOUS"])
 
-        if app.settings.get_account_setting(self._account,
-                                            'use_plain_connection'):
+        if app.settings.get_account_setting(self._account, "use_plain_connection"):
             self._client.set_connection_types([ConnectionType.PLAIN])
 
         proxy = get_account_proxy(self._account)
@@ -640,20 +623,22 @@ class Client(Observable, ClientModules):
         password = passwords.get_password(self._account)
         self._client.set_password(password)
 
-        self._client.set_accepted_certificates(
-            app.cert_store.get_certificates())
+        self._client.set_accepted_certificates(app.cert_store.get_certificates())
         self._client.set_ignored_tls_errors(ignored_tls_errors)
 
         self._reconnect = True
         self._disable_reconnect_timer()
         self._set_state(ClientState.CONNECTING)
-        self.notify('state-changed', SimpleClientState.CONNECTING)
+        self.notify("state-changed", SimpleClientState.CONNECTING)
 
-        if warn_about_plain_connection(self._account,
-                                       self._client.connection_types):
-            app.ged.raise_event(PlainConnection(account=self._account,
-                                                connect=self._client.connect,
-                                                abort=self._abort_reconnect))
+        if warn_about_plain_connection(self._account, self._client.connection_types):
+            app.ged.raise_event(
+                PlainConnection(
+                    account=self._account,
+                    connect=self._client.connect,
+                    abort=self._abort_reconnect,
+                )
+            )
             return
 
         def _on_host_meta_response(obj: FileTransfer) -> None:
@@ -664,17 +649,18 @@ class Client(Observable, ClientModules):
             try:
                 result = obj.get_result()
             except Exception as error:
-                self._log.warning('Error while requesting host-meta data: %s', error)
+                self._log.warning("Error while requesting host-meta data: %s", error)
             else:
-                self._log.info("Received host meta data with length: %s",
-                               len(result.content))
+                self._log.info(
+                    "Received host meta data with length: %s", len(result.content)
+                )
                 self._client.set_host_meta_data(result.content)
 
             self._client.connect()
 
         app.ftm.http_request(
-            'GET',
-            f'https://{self._address.domain}/.well-known/host-meta',
+            "GET",
+            f"https://{self._address.domain}/.well-known/host-meta",
             proxy=determine_proxy(self._account),
             timeout=3,
             callback=_on_host_meta_response,
@@ -682,9 +668,8 @@ class Client(Observable, ClientModules):
 
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
-        self._log.info('Reconnect in 3s')
-        self._reconnect_timer_source = GLib.timeout_add_seconds(
-            3, self.connect)
+        self._log.info("Reconnect in 3s")
+        self._reconnect_timer_source = GLib.timeout_add_seconds(3, self.connect)
 
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
@@ -693,7 +678,7 @@ class Client(Observable, ClientModules):
         if self._destroy_client:
             self._create_client()
 
-        self.notify('state-changed', SimpleClientState.DISCONNECTED)
+        self.notify("state-changed", SimpleClientState.DISCONNECTED)
 
     def _disable_reconnect_timer(self) -> None:
         if self._reconnect_timer_source is not None:
@@ -705,19 +690,20 @@ class Client(Observable, ClientModules):
 
         if monitor.is_awake():
             self._idle_status = state
-            self._idle_status_message = ''
+            self._idle_status_message = ""
             self._update_status()
             return
 
-        if not app.settings.get(f'auto{state}'):
+        if not app.settings.get(f"auto{state}"):
             return
 
-        if ((state in ('away', 'xa') and self._status == 'online') or
-                (state == 'xa' and self._idle_status == 'away')):
-
+        if (state in ("away", "xa") and self._status == "online") or (
+            state == "xa" and self._idle_status == "away"
+        ):
             self._idle_status = state
             self._idle_status_message = get_idle_status_message(
-                state, self._status_message)
+                state, self._status_message
+            )
             self._update_status()
 
     def _update_status(self) -> None:
@@ -737,7 +723,7 @@ class Client(Observable, ClientModules):
         if not self._idle_status_enabled:
             return False
 
-        return self._idle_status != 'online'
+        return self._idle_status != "online"
 
     def get_presence_state(self) -> tuple[str, str, bool]:
         if self._idle_status_active():
@@ -745,21 +731,21 @@ class Client(Observable, ClientModules):
         return self._status, self._status_message, False
 
     @staticmethod
-    def _screensaver_state_changed(application: Gtk.Application,
-                                   _param: GObject.ParamSpec) -> None:
-        active = application.get_property('screensaver-active')
+    def _screensaver_state_changed(
+        application: Gtk.Application, _param: GObject.ParamSpec
+    ) -> None:
+        active = application.get_property("screensaver-active")
         Monitor.set_extended_away(active)
 
     def join_mucs(self) -> None:
-        '''Only used when autojoin_sync is False'''
-        self._log.info('Joining all MUCs in all workspaces')
+        """Only used when autojoin_sync is False"""
+        self._log.info("Joining all MUCs in all workspaces")
         for workspace_id in app.settings.get_workspaces():
-            for chat in app.settings.get_workspace_setting(
-                    workspace_id, 'chats'):
-                if chat['account'] != self._account:
+            for chat in app.settings.get_workspace_setting(workspace_id, "chats"):
+                if chat["account"] != self._account:
                     continue
-                if chat['type'] == 'groupchat':
-                    self.get_module('MUC').join(chat['jid'])
+                if chat["type"] == "groupchat":
+                    self.get_module("MUC").join(chat["jid"])
 
     def cleanup(self) -> None:
         self.disconnect_signals()
@@ -776,7 +762,9 @@ class Client(Observable, ClientModules):
         modules.unregister_modules(self)
 
     def quit(self, kill_core: bool) -> None:
-        if kill_core and self._state in (ClientState.CONNECTING,
-                                         ClientState.CONNECTED,
-                                         ClientState.AVAILABLE):
+        if kill_core and self._state in (
+            ClientState.CONNECTING,
+            ClientState.CONNECTED,
+            ClientState.AVAILABLE,
+        ):
             self.disconnect(gracefully=True, reconnect=False)

@@ -33,14 +33,14 @@ from gajim.common.structs import MUCData
 from gajim.common.structs import ReplyData
 from gajim.common.util.uri import DataUri
 
-UNKNOWN_MESSAGE = _('Message content unknown')
+UNKNOWN_MESSAGE = _("Message content unknown")
 
 
 def get_eme_message(eme_data: nbxmpp.structs.EMEData) -> str:
     try:
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
-        return EME_MESSAGES['fallback'] % eme_data.name
+        return EME_MESSAGES["fallback"] % eme_data.name
 
 
 def get_eme_protocol(eme_data: nbxmpp.structs.EMEData) -> str:
@@ -144,7 +144,8 @@ def get_occupant_info(
 
 
 def get_occupant_id(
-    contact: GroupchatParticipant, properties: MessageProperties,
+    contact: GroupchatParticipant,
+    properties: MessageProperties,
 ) -> str | None:
 
     if not properties.occupant_id:
@@ -162,10 +163,10 @@ def get_message_timestamp(properties: MessageProperties) -> datetime:
     return datetime.fromtimestamp(timestamp, tz=UTC)
 
 
-def convert_message_type(type_: MessageType) -> Literal['chat', 'groupchat']:
+def convert_message_type(type_: MessageType) -> Literal["chat", "groupchat"]:
     if type_ in (MessageType.CHAT, MessageType.PM):
-        return 'chat'
-    return 'groupchat'
+        return "chat"
+    return "groupchat"
 
 
 def get_nickname_from_message(account: str, message: mod.Message) -> tuple[str, str]:
@@ -233,7 +234,7 @@ def get_reply(data: nbxmpp.structs.ReplyData | ReplyData | None) -> mod.Reply | 
 
 
 def get_open_graph(
-    open_graph: dict[str, nbxmpp.structs.OpenGraphData] | dict[str, OpenGraphData]
+    open_graph: dict[str, nbxmpp.structs.OpenGraphData] | dict[str, OpenGraphData],
 ) -> list[mod.OpenGraph]:
 
     og_data: list[mod.OpenGraph] = []

@@ -34,26 +34,24 @@ if TYPE_CHECKING:
 
     from gajim.gtk.css_config import CSSConfig
 
-    ContactT = (BareContact |
-                ResourceContact |
-                GroupchatContact |
-                GroupchatParticipant)
+    ContactT = BareContact | ResourceContact | GroupchatContact | GroupchatParticipant
 
-PluginManagerT = Union['PluginManager']
-PluginRepositoryT = Union['PluginRepository']
+PluginManagerT = Union["PluginManager"]
+PluginRepositoryT = Union["PluginRepository"]
 
-ConnectionT = Union['Client']
-CSSConfigT = Union['CSSConfig']
+ConnectionT = Union["Client"]
+CSSConfigT = Union["CSSConfig"]
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
 PEPHandlersDict = dict[str, list[PEPNotifyCallback]]
 
 # Plugins
-PluginExtensionPoints = dict[str, tuple[Callable[..., None] | None,
-                                        Callable[..., None] | None]]
+PluginExtensionPoints = dict[
+    str, tuple[Callable[..., None] | None, Callable[..., None] | None]
+]
 
-SettingsT = Union['Settings']
+SettingsT = Union["Settings"]
 
 BookmarksDict = dict[JID, BookmarkData]
 
@@ -62,9 +60,9 @@ GdkPixbufType = GdkPixbuf.Pixbuf | GdkPixbuf.PixbufAnimation
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
 
-BareContactT = Union['BareContact']
-ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
-OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
-GroupchatContactT = Union['GroupchatContact']
+BareContactT = Union["BareContact"]
+ChatContactT = Union["BareContact", "GroupchatContact", "GroupchatParticipant"]
+OneOnOneContactT = Union["BareContact", "GroupchatParticipant"]
+GroupchatContactT = Union["GroupchatContact"]
 
 PresenceShowT = PresenceShowExt | PresenceShow

@@ -100,28 +100,28 @@ notification = None
 # list of our nick names in each account
 nicks: dict[str, str] = {}
 
-cert_store = cast('CertificateStore', None)
+cert_store = cast("CertificateStore", None)
 
-call_manager = cast('CallManager', None)
-audio_player: Union['AudioPlayer', None] = None  # noqa: UP007
-ftm = cast('FileTransferManager', None)
+call_manager = cast("CallManager", None)
+audio_player: Union["AudioPlayer", None] = None  # noqa: UP007
+ftm = cast("FileTransferManager", None)
 
-task_manager = cast('TaskManager', None)
-pulse_manager = cast('PulseManager', None)
+task_manager = cast("TaskManager", None)
+pulse_manager = cast("PulseManager", None)
 
 gupnp_igd = None
 
 process_pool = cast(ProcessPoolExecutor, None)
 
 _dependencies = {
-    'FARSTREAM': False,
-    'GST': False,
-    'AV': False,
-    'GEOCLUE': False,
-    'UPNP': False,
-    'SPELLING': False,
-    'IDLE': False,
-    'SENTRY_SDK': False,
+    "FARSTREAM": False,
+    "GST": False,
+    "AV": False,
+    "GEOCLUE": False,
+    "UPNP": False,
+    "SPELLING": False,
+    "IDLE": False,
+    "SENTRY_SDK": False,
 }
 
 _tasks: dict[int, list[Task]] = defaultdict(list)
@@ -143,7 +143,7 @@ def init_process_pool() -> None:
 
 
 def print_version() -> None:
-    log('gajim').info('Gajim Version: %s', gajim.__version__)
+    log("gajim").info("Gajim Version: %s", gajim.__version__)
 
 
 def get_client(account: str) -> types.Client:
@@ -175,21 +175,21 @@ def is_ms_store() -> bool:
 
 
 def get_default_app_id() -> str:
-    app_id = 'org.gajim.Gajim'
+    app_id = "org.gajim.Gajim"
     if is_flatpak_nightly():
-        return f'{app_id}.Devel'
+        return f"{app_id}.Devel"
     return app_id
 
 
 def is_display(display: Display) -> bool:
     # XWayland reports as Display X11, so try with env var
-    is_wayland = os.environ.get('XDG_SESSION_TYPE') == 'wayland'
+    is_wayland = os.environ.get("XDG_SESSION_TYPE") == "wayland"
     if is_wayland and display == Display.WAYLAND:
         return True
 
     default = Gdk.Display.get_default()
     if default is None:
-        log('gajim').warning('Could not determine window manager')
+        log("gajim").warning("Could not determine window manager")
         return False
     return default.__class__.__name__ == display.value
 
@@ -202,21 +202,22 @@ def detect_dependencies() -> None:
     import gi
 
     try:
-        gi.require_version('Gst', '1.0')
-        gi.require_version('GstPbutils', '1.0')
+        gi.require_version("Gst", "1.0")
+        gi.require_version("GstPbutils", "1.0")
         from gi.repository import Gst
         from gi.repository import GstPbutils  # noqa: F401
+
         success, _argv = Gst.init_check(None)
-        _dependencies['GST'] = success
+        _dependencies["GST"] = success
     except Exception:
         pass
 
     try:
-        gi.require_version('Farstream', '0.2')
+        gi.require_version("Farstream", "0.2")
         # from gi.repository import Farstream
         # _dependencies['FARSTREAM'] = True
     except Exception as error:
-        log('gajim').warning('AV dependency test failed: %s', error)
+        log("gajim").warning("AV dependency test failed: %s", error)
 
     # try:
     #     if _dependencies['GST'] and _dependencies['FARSTREAM']:
@@ -235,9 +236,10 @@ def detect_dependencies() -> None:
 
     # GEOCLUE
     try:
-        gi.require_version('Geoclue', '2.0')
+        gi.require_version("Geoclue", "2.0")
         from gi.repository import Geoclue  # noqa: F401
-        _dependencies['GEOCLUE'] = True
+
+        _dependencies["GEOCLUE"] = True
     except (ImportError, ValueError):
         pass
 
@@ -257,29 +259,33 @@ def detect_dependencies() -> None:
     # IDLE
     try:
         from gajim.common import idle
+
         if idle.Monitor.is_available():
-            _dependencies['IDLE'] = True
+            _dependencies["IDLE"] = True
     except Exception:
         pass
 
     # LIBSPELLING
     try:
-        gi.require_version('Spelling', '1')
+        gi.require_version("Spelling", "1")
         from gi.repository import Spelling
+
         provider = Spelling.Provider.get_default()
         langs = provider.list_languages()
         for lang in langs:
-            log('gajim').info('%s (%s) dict available',
-                              lang.get_name(), lang.get_code())
+            log("gajim").info(
+                "%s (%s) dict available", lang.get_name(), lang.get_code()
+            )
         if langs:
-            _dependencies['SPELLING'] = True
+            _dependencies["SPELLING"] = True
     except (ImportError, ValueError):
         pass
 
     # SENTRY SDK
     try:
         import sentry_sdk  # noqa: F401
-        _dependencies['SENTRY_SDK'] = True
+
+        _dependencies["SENTRY_SDK"] = True
     except Exception:
         # Sentry has a lot of side effects on import
         # make sure this optional dependency does not prevent
@@ -288,21 +294,21 @@ def detect_dependencies() -> None:
 
     # Print results
     for dep, val in _dependencies.items():
-        log('gajim').info('%-13s %s', dep, val)
+        log("gajim").info("%-13s %s", dep, val)
 
-    log('gajim').info('Used language: %s', get_default_lang())
+    log("gajim").info("Used language: %s", get_default_lang())
 
 
 def detect_desktop_env() -> str | None:
-    if sys.platform in ('win32', 'darwin'):
+    if sys.platform in ("win32", "darwin"):
         return sys.platform
 
-    desktop = os.environ.get('XDG_CURRENT_DESKTOP')
+    desktop = os.environ.get("XDG_CURRENT_DESKTOP")
     if desktop is None:
         return None
 
-    if 'gnome' in desktop.lower():
-        return 'gnome'
+    if "gnome" in desktop.lower():
+        return "gnome"
     return desktop
 
 
@@ -310,7 +316,7 @@ desktop_env = detect_desktop_env()
 
 
 def get_server_from_jid(jid: str) -> str:
-    pos = jid.find('@') + 1  # after @
+    pos = jid.find("@") + 1  # after @
     return jid[pos:]
 
 
@@ -318,22 +324,21 @@ def get_room_and_nick_from_fjid(jid: str) -> list[str]:
     # fake jid is the jid for a contact in a room
     # gaim@conference.jabber.no/nick/nick-continued
     # return ('gaim@conference.jabber.no', 'nick/nick-continued')
-    list_ = jid.split('/', 1)
+    list_ = jid.split("/", 1)
     if len(list_) == 1:  # No nick
-        list_.append('')
+        list_.append("")
     return list_
 
 
 def get_jid_without_resource(jid: str) -> str:
-    return jid.split('/', maxsplit=1)[0]
+    return jid.split("/", maxsplit=1)[0]
 
 
-def get_number_of_connected_accounts(
-        accounts_list: list[str] | None = None) -> int:
-    '''
+def get_number_of_connected_accounts(accounts_list: list[str] | None = None) -> int:
+    """
     Returns the number of connected accounts. You can optionally pass an
     accounts_list and if you do those will be checked, else all will be checked
-    '''
+    """
     connected_accounts = 0
     if accounts_list is None:
         accounts = connections.keys()
@@ -354,12 +359,12 @@ def get_available_clients() -> list[types.Client]:
 
 
 def get_connected_accounts(exclude_local: bool = False) -> list[str]:
-    '''
+    """
     Returns a list of CONNECTED accounts
-    '''
+    """
     account_list: list[str] = []
     for account in connections:
-        if account == 'Local' and exclude_local:
+        if account == "Local" and exclude_local:
             continue
         if account_is_connected(account):
             account_list.append(account)
@@ -367,21 +372,19 @@ def get_connected_accounts(exclude_local: bool = False) -> list[str]:
 
 
 def get_accounts_sorted() -> list[str]:
-    '''
+    """
     Get all accounts alphabetically sorted with Local first
-    '''
+    """
     account_list = settings.get_accounts()
     account_list.sort(key=str.lower)
     return account_list
 
 
-def get_enabled_accounts_with_labels(
-    connected_only: bool = False
-) -> list[list[str]]:
-    '''
+def get_enabled_accounts_with_labels(connected_only: bool = False) -> list[list[str]]:
+    """
     Returns a list with [account, account_label] entries.
     Order by account_label
-    '''
+    """
     accounts: list[list[str]] = []
     for acc in connections:
         if connected_only and not account_is_connected(acc):
@@ -394,14 +397,16 @@ def get_enabled_accounts_with_labels(
 
 
 def get_account_label(account: str) -> str:
-    return settings.get_account_setting(account, 'account_label') or account
+    return settings.get_account_setting(account, "account_label") or account
 
 
 def account_is_connected(account: str) -> bool:
     if account not in connections:
         return False
-    return (connections[account].state.is_connected or
-            connections[account].state.is_available)
+    return (
+        connections[account].state.is_connected
+        or connections[account].state.is_available
+    )
 
 
 def account_is_available(account: str) -> bool:
@@ -411,14 +416,13 @@ def account_is_available(account: str) -> bool:
 
 
 def get_transport_name_from_jid(
-        jid: str,
-        use_config_setting: bool = True) -> str | None:
-
-    '''
+    jid: str, use_config_setting: bool = True
+) -> str | None:
+    """
     Returns 'gg', 'irc' etc
 
     If JID is not from transport returns None.
-    '''
+    """
     # TODO: Rewrite/remove
 
     # FIXME: jid can be None! one TB I saw had this problem:
@@ -432,70 +436,68 @@ def get_transport_name_from_jid(
         return transport_type[host]
 
     # host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
-    host_splitted = host.split('.')
+    host_splitted = host.split(".")
     if host_splitted:
         # now we support both 'icq.' and 'icq' but not icqsucks.org
         host = host_splitted[0]
 
-    if host in ('irc', 'icq', 'sms', 'weather', 'mrim', 'facebook'):
+    if host in ("irc", "icq", "sms", "weather", "mrim", "facebook"):
         return host
-    if host == 'gg':
-        return 'gadu-gadu'
-    if host == 'jit':
-        return 'icq'
-    if host == 'facebook':
-        return 'facebook'
+    if host == "gg":
+        return "gadu-gadu"
+    if host == "jit":
+        return "icq"
+    if host == "facebook":
+        return "facebook"
     return None
 
 
 def jid_is_transport(jid: str) -> bool:
     # if not '@' or '@' starts the jid then it is transport
-    return jid.find('@') <= 0
+    return jid.find("@") <= 0
 
 
 def get_jid_from_account(account_name: str) -> str:
-    '''
+    """
     Return the jid we use in the given account
-    '''
-    return settings.get_account_setting(account_name, 'address')
+    """
+    return settings.get_account_setting(account_name, "address")
 
 
 def get_default_nick(account_name: str) -> str:
-    address = settings.get_account_setting(account_name, 'address')
+    address = settings.get_account_setting(account_name, "address")
     jid = JID.from_string(address)
     assert jid.localpart is not None
     return jid.localpart
 
 
-def get_hostname_from_account(
-    account_name: str,
-    prefer_custom: bool = False
-) -> str:
+def get_hostname_from_account(account_name: str, prefer_custom: bool = False) -> str:
     if prefer_custom:
-        if settings.get_account_setting(account_name, 'use_custom_host'):
-            return settings.get_account_setting(account_name, 'custom_host')
+        if settings.get_account_setting(account_name, "use_custom_host"):
+            return settings.get_account_setting(account_name, "custom_host")
 
-    address = settings.get_account_setting(account_name, 'address')
+    address = settings.get_account_setting(account_name, "address")
     jid = JID.from_string(address)
     assert jid.domain is not None
     return jid.domain
 
 
 def log(domain: str) -> logging.Logger:
-    if domain != 'gajim':
-        domain = 'gajim.%s' % domain
+    if domain != "gajim":
+        domain = "gajim.%s" % domain
     return logging.getLogger(domain)
 
 
 def load_css_config() -> None:
-    global css_config   # pylint: disable=global-statement
+    global css_config  # pylint: disable=global-statement
     from gajim.gtk.css_config import CSSConfig
+
     css_config = CSSConfig()
 
 
 def set_debug_mode(enable: bool) -> None:
-    debug_folder = configpaths.get('DEBUG')
-    debug_enabled = debug_folder / 'debug-enabled'
+    debug_folder = configpaths.get("DEBUG")
+    debug_enabled = debug_folder / "debug-enabled"
     if enable:
         debug_enabled.touch()
     else:
@@ -504,8 +506,8 @@ def set_debug_mode(enable: bool) -> None:
 
 
 def get_debug_mode() -> bool:
-    debug_folder = configpaths.get('DEBUG')
-    debug_enabled = debug_folder / 'debug-enabled'
+    debug_folder = configpaths.get("DEBUG")
+    debug_enabled = debug_folder / "debug-enabled"
     return debug_enabled.exists()
 
 
@@ -513,9 +515,9 @@ def get_stored_bob_data(algo_hash: str) -> bytes | None:
     try:
         return bob_cache[algo_hash]
     except KeyError:
-        filepath = configpaths.get('BOB') / algo_hash
+        filepath = configpaths.get("BOB") / algo_hash
         if filepath.exists():
-            with open(str(filepath), 'r+b') as file:
+            with open(str(filepath), "r+b") as file:
                 data = file.read()
             return data
     return None
@@ -546,12 +548,12 @@ def cancel_tasks(obj: Any) -> None:
 
 
 def check_finalize(obj: Any) -> None:
-    if 'GAJIM_LEAK' not in os.environ:
+    if "GAJIM_LEAK" not in os.environ:
         return
 
     name = obj.__class__.__name__
-    logger = logging.getLogger('gajim.leak')
-    finalizer = weakref.finalize(obj, logger.info, f'{name} has been finalized')
+    logger = logging.getLogger("gajim.leak")
+    finalizer = weakref.finalize(obj, logger.info, f"{name} has been finalized")
 
     g_objects: list[str] = []
     if isinstance(obj, GObject.Object):
@@ -573,19 +575,19 @@ def check_finalize(obj: Any) -> None:
         gc.collect()
 
         if g_objects:
-            logger.warning('GObject not finalized: %s', name)
+            logger.warning("GObject not finalized: %s", name)
 
         tup = finalizer.peek()
         if tup is None:
             return
 
-        logger.warning('%s not finalized', name)
-        logger.warning('References:')
+        logger.warning("%s not finalized", name)
+        logger.warning("References:")
         for ref in gc.get_referrers(tup[0]):
             if is_finalizer_ref(ref):
                 continue
             if isinstance(ref, dict):
-                logger.warning('\n%s', pprint.pformat(ref))
+                logger.warning("\n%s", pprint.pformat(ref))
             else:
                 logger.warning(ref)
 

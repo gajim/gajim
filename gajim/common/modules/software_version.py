@@ -16,29 +16,28 @@ from gajim.common.util.version import get_os_info
 
 
 class SoftwareVersion(BaseModule):
-
-    _nbxmpp_extends = 'SoftwareVersion'
+    _nbxmpp_extends = "SoftwareVersion"
     _nbxmpp_methods = [
-        'set_software_version',
-        'request_software_version',
-        'disable',
+        "set_software_version",
+        "request_software_version",
+        "disable",
     ]
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
     def set_enabled(self, enabled: bool) -> None:
-        if enabled and app.settings.get_account_setting(self._account,
-                                                        'send_os_info'):
+        if enabled and app.settings.get_account_setting(self._account, "send_os_info"):
             os_info = get_os_info()
         else:
             os_info = None
-        self._nbxmpp('SoftwareVersion').set_software_version(
-            'Gajim', app.version, os_info)
-        self._nbxmpp('SoftwareVersion').set_allow_reply_func(self._allow_reply)
+        self._nbxmpp("SoftwareVersion").set_software_version(
+            "Gajim", app.version, os_info
+        )
+        self._nbxmpp("SoftwareVersion").set_allow_reply_func(self._allow_reply)
 
     def _allow_reply(self, jid: JID) -> bool:
-        item = self._con.get_module('Roster').get_item(jid.new_as_bare())
+        item = self._con.get_module("Roster").get_item(jid.new_as_bare())
         if item is None:
             return False
 
