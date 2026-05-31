@@ -500,12 +500,13 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         if isinstance(self.contact, BareContact):
             self.contact.connect("presence-update", self._on_presence_update)
-            self.contact.connect("nickname-update", self._on_nickname_update)
+            self.contact.connect("nickname-update", self._on_name_update)
             self.contact.connect("caps-update", self._on_avatar_update)
             self.contact.connect("avatar-update", self._on_avatar_update)
 
         elif isinstance(self.contact, GroupchatContact):
             self.contact.connect("avatar-update", self._on_avatar_update)
+            self.contact.connect("name-update", self._on_name_update)
             self.contact.connect("disco-info-update", self._on_disco_info_update)
             self.contact.connect("state-changed", self._on_muc_state_changed)
             self.contact.connect("mam-sync-started", self._on_mam_sync_changed)
@@ -610,7 +611,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         else:
             self._ui.chatstate_image.set_visible(contact.chatstate.is_composing)
 
-    def _on_nickname_update(self, _contact: ChatContactT, _signal_name: str) -> None:
+    def _on_name_update(self, _contact: ChatContactT, _signal_name: str) -> None:
         self.update_name()
 
 

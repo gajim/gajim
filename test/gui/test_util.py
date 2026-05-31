@@ -4,6 +4,8 @@
 
 import unittest
 
+from gajim.common.util.muc import format_private_group_name
+
 from gajim.gtk.util.misc import get_first_grapheme
 
 
@@ -60,6 +62,18 @@ class Test(unittest.TestCase):
         )
         # This probably won't fail on *any* locale, ever, again because the
         # implementation doesn't seem locale-specific.
+
+    def test_format_private_muc_name(self) -> None:
+        self.assertEqual(format_private_group_name(["a"], 5), "a and me")
+        self.assertEqual(format_private_group_name(["a", "b"], 5), "a, b")
+        self.assertEqual(
+            format_private_group_name(["b", "a", "c", "d", "e", "f"], 5),
+            "a, b, c, d, e, f",
+        )
+        self.assertEqual(
+            format_private_group_name(["a", "c", "d", "e", "f", "g", "b"], 5),
+            "a, b, c, d, e, 2 others",
+        )
 
 
 if __name__ == "__main__":

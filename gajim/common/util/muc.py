@@ -11,11 +11,13 @@ import random
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
+from gajim.common.i18n import p_
 
 if typing.TYPE_CHECKING:
     from gajim.common.modules.contacts import GroupchatOfflineParticipant
@@ -167,3 +169,21 @@ def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
             return bookmark.nick
 
     return app.nicks[account]
+
+
+def format_private_group_name(nicks: list[str], limit: int = 5) -> str:
+    if len(nicks) == 1:
+        return p_("Group chat name", "%(nickname)s and me") % {"nickname": nicks[0]}
+    if len(nicks) <= limit + 1:
+        # it makes no sense to write ", 1 other" instead of the last nick
+        return ", ".join(sorted(nicks))
+    else:
+        return ", ".join(sorted(nicks)[:limit]) + p_(
+            "Group chat name", ", %(number of participants)s others"
+        ) % {"number of participants": (len(nicks) - limit)}
+
+
+def get_muc_name_from_disco(disco_info: DiscoInfo) -> str | None:
+    if name := disco_info.muc_room_name:
+        return name
+    return disco_info.muc_identity_name

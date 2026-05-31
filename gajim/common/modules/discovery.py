@@ -30,6 +30,7 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
+from gajim.common.util.muc import get_muc_name_from_disco
 
 
 class Discovery(BaseModule):
@@ -247,8 +248,9 @@ class Discovery(BaseModule):
                 )
                 contact.update_avatar(avatar_sha)
 
+        muc_name = get_muc_name_from_disco(result.info)
         app.storage.archive.set_contact_value(
-            self._account, contact.jid, "remote_name", result.info.muc_name
+            self._account, contact.jid, "remote_name", muc_name
         )
 
         self._con.get_module("VCardAvatars").muc_disco_info_update(result.info)

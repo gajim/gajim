@@ -137,7 +137,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._contact.multi_connect(
             {
-                "nickname-update": self._on_nickname_update,
+                "nickname-update": self._on_name_update,
                 "avatar-update": self._on_avatar_update,
                 "presence-update": self._on_presence_update,
                 "caps-update": self._on_caps_update,
@@ -149,6 +149,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
                 {
                     "room-voice-request": self._on_room_voice_request,
                     "disco-info-update": self._on_disco_info_update,
+                    "name-update": self._on_name_update,
                 }
             )
 
@@ -183,9 +184,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._update_avatar()
         self._update_description_label()
 
-    def _on_nickname_update(
-        self, _contact: types.BareContact, _signal_name: str
-    ) -> None:
+    def _on_name_update(self, _contact: types.ChatContactT, _signal_name: str) -> None:
         self._update_name_label()
 
     def _on_avatar_update(self, _contact: types.BareContact, _signal_name: str) -> None:

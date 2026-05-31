@@ -14,6 +14,7 @@ import logging
 import time
 from collections import defaultdict
 from collections.abc import Sequence
+from datetime import timedelta
 
 import nbxmpp
 from gi.repository import GLib
@@ -47,6 +48,7 @@ from gajim.common.const import MUCJoinedState
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
+from gajim.common.helpers import timeout_add_seconds_once
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -56,6 +58,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.muc import format_private_group_name
 from gajim.common.util.muc import get_default_muc_config
 from gajim.common.util.muc import get_group_chat_nick
 
@@ -852,6 +855,7 @@ class MUC(BaseModule):
                     properties.muc_jid, presence.affiliation, presence.real_jid
                 )
             signals_and_events.append(("user-affiliation-changed", event))
+            self._update_muc_fallback_name(properties.muc_jid)
 
         if occupant.role != presence.role:
             assert properties.muc_user is not None
@@ -941,6 +945,7 @@ class MUC(BaseModule):
         self._muc_affiliations.change_user_affiliation(
             room_jid, properties.muc_user.affiliation, properties.muc_user.jid
         )
+        self._update_muc_fallback_name(room_jid)
         room.notify("room-affiliation-changed", event)
 
     def _process_user_presence(self, properties: PresenceProperties) -> MUCPresenceData:
@@ -1028,6 +1033,8 @@ class MUC(BaseModule):
             self._request_affiliation_list(muc_data.jid)
             room.notify("room-joined")
 
+            timeout_add_seconds_once(10, self._update_muc_fallback_name, muc_data.jid)
+
         raise nbxmpp.NodeProcessed
 
     def cancel_password_request(self, room_jid: JID) -> None:
@@ -1051,6 +1058,36 @@ class MUC(BaseModule):
         assert disco_info is not None
         if disco_info.has_mam_2:
             self._con.get_module("MAM").request_archive_on_muc_join(muc_data.jid)
+
+    def _update_muc_fallback_name(self, jid: JID) -> None:
+        affiliations = self.get_affiliations(jid)
+        members: set[JID] = set()
+        members.update(*affiliations.values())
+        members.discard(self._get_own_bare_jid())
+
+        occupants = app.storage.archive.get_occupant_by_jids(
+            self._account, jid, list(members), max_age=timedelta(minutes=60)
+        )
+
+        nicks: list[str] = []
+        for real_jid, occupant in occupants.items():
+            if nick := occupant.nickname:
+                nicks.append(nick)
+                members.discard(real_jid)
+
+        for member in members:
+            nicks.append(member.localpart or member.domain)
+
+        muc_name = format_private_group_name(nicks)
+        if not muc_name:
+            self._log.warning("Unable to calculate private muc name for %s", jid)
+            return
+
+        app.storage.archive.set_contact_value(
+            self._account, jid, "fallback_name", muc_name
+        )
+        self._log.info("Update fallback name for %s to %s", jid, muc_name)
+        self._get_contact(jid, groupchat=True).notify("name-update")
 
     def request_voice(self, jid: JID) -> None:
         message_id = self._nbxmpp("MUC").request_voice(jid)
