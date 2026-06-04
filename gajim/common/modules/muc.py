@@ -1418,7 +1418,7 @@ class AffiliationManager(Observable):
             self._running_affiliation_requests.pop(muc_jid)
             self.notify("affiliation-request-complete", muc_jid)
 
-    def add_user_affiliation(
+    def _add_user_affiliation(
         self, muc_jid: JID, affiliation: Affiliation, user_real_jid: JID
     ) -> None:
         log.info(
@@ -1429,7 +1429,7 @@ class AffiliationManager(Observable):
         )
         self._affiliations[muc_jid][affiliation.value].append(user_real_jid)
 
-    def remove_user_affiliation(self, muc_jid: JID, user_real_jid: JID) -> None:
+    def _remove_user_affiliation(self, muc_jid: JID, user_real_jid: JID) -> None:
         log.info("AffiliationManager: Remove user: %s %s", muc_jid, user_real_jid)
         for jids in self._affiliations.get(muc_jid, {}).values():
             if user_real_jid in jids:
@@ -1446,11 +1446,11 @@ class AffiliationManager(Observable):
             user_real_jid,
         )
 
-        self.remove_user_affiliation(muc_jid, user_real_jid)
+        self._remove_user_affiliation(muc_jid, user_real_jid)
         if affiliation == Affiliation.NONE:
             return
 
-        self.add_user_affiliation(muc_jid, affiliation, user_real_jid)
+        self._add_user_affiliation(muc_jid, affiliation, user_real_jid)
 
     def get_users(
         self, jid: JID, *, include_outcast: bool = False
