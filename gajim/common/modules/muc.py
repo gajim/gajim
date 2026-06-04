@@ -175,7 +175,7 @@ class MUC(BaseModule):
         )
         self._mucs: dict[JID, MUCData] = {}
         self._muc_nicknames = {}
-        self._muc_affiliations = AffiliationManager()
+        self._muc_affiliations = AffiliationManager(self._log)
         self._muc_affiliations.connect(
             "affiliation-request-complete", self._on_affiliations_complete
         )
@@ -1374,8 +1374,9 @@ class MUC(BaseModule):
 
 
 class AffiliationManager(Observable):
-    def __init__(self) -> None:
+    def __init__(self, log: logging.LoggerAdapter[Any]) -> None:
         Observable.__init__(self)
+        self._log = log
         self._affiliations: dict[JID, dict[str, list[JID]]] = defaultdict(
             lambda: defaultdict(list)
         )
@@ -1389,11 +1390,11 @@ class AffiliationManager(Observable):
     ) -> None:
 
         if muc_jid not in self._running_affiliation_requests:
-            log.info("Unexpected affiliation request for %s", muc_jid)
+            self._log.info("Unexpected affiliation request for %s", muc_jid)
             return
 
         if result is None:
-            log.info(
+            self._log.info(
                 "AffiliationManager: Remove affiliation: %s %s", muc_jid, affiliation
             )
             try:
@@ -1403,7 +1404,7 @@ class AffiliationManager(Observable):
 
         else:
             user_jids = [jid.new_as_bare() for jid in result.users]
-            log.info(
+            self._log.info(
                 "AffiliationManager: Add result: %s %s %s",
                 result.jid,
                 affiliation,
@@ -1414,14 +1415,14 @@ class AffiliationManager(Observable):
         open_requests = self._running_affiliation_requests[muc_jid]
         open_requests.discard(affiliation)
         if not open_requests:
-            log.info("AffiliationManager: Request complete for %s", muc_jid)
+            self._log.info("AffiliationManager: Request complete for %s", muc_jid)
             self._running_affiliation_requests.pop(muc_jid)
             self.notify("affiliation-request-complete", muc_jid)
 
     def _add_user_affiliation(
         self, muc_jid: JID, affiliation: Affiliation, user_real_jid: JID
     ) -> None:
-        log.info(
+        self._log.info(
             "AffiliationManager: Add user: %s %s %s",
             muc_jid,
             affiliation,
@@ -1430,7 +1431,7 @@ class AffiliationManager(Observable):
         self._affiliations[muc_jid][affiliation.value].append(user_real_jid)
 
     def _remove_user_affiliation(self, muc_jid: JID, user_real_jid: JID) -> None:
-        log.info("AffiliationManager: Remove user: %s %s", muc_jid, user_real_jid)
+        self._log.info("AffiliationManager: Remove user: %s %s", muc_jid, user_real_jid)
         for jids in self._affiliations.get(muc_jid, {}).values():
             if user_real_jid in jids:
                 jids.remove(user_real_jid)
@@ -1439,7 +1440,7 @@ class AffiliationManager(Observable):
     def change_user_affiliation(
         self, muc_jid: JID, affiliation: Affiliation, user_real_jid: JID
     ) -> None:
-        log.info(
+        self._log.info(
             "AffiliationManager: Change user affiliation: %s %s %s",
             muc_jid,
             affiliation,
