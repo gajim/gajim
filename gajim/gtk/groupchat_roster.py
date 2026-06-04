@@ -60,7 +60,7 @@ CONTACT_SIGNALS = {
     "user-role-changed",
     "user-status-show-changed",
     "room-affiliation-changed",
-    "room-affiliations-received",
+    "room-affiliations-complete",
 }
 
 
@@ -188,7 +188,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                 "user-role-changed": self._on_contact_changed,
                 "user-status-show-changed": self._on_contact_changed,
                 "room-affiliation-changed": self._on_room_affiliation_changed,
-                "room-affiliations-received": self._on_room_affiliations_received,
+                "room-affiliations-complete": self._on_room_affiliations_complete,
             }
         )
 
@@ -354,17 +354,16 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if event.affiliation not in (Affiliation.OUTCAST, Affiliation.NONE):
             self._add_offline_contact(user_contact)
 
-    def _on_room_affiliations_received(
+    def _on_room_affiliations_complete(
         self,
         _contact: types.GroupchatContact,
         signal_name: str,
-        affiliation: str,
     ) -> None:
-        log.info("Received affiliation %s", affiliation)
-        self._contact_view.remove_offline_members(affiliation)
+        log.info("Received affiliations complete")
+        self._contact_view.remove_offline_members()
 
         assert self._contact is not None
-        for contact in self._contact.get_offline_members(affiliation):
+        for contact in self._contact.get_offline_members():
             self._add_offline_contact(contact)
 
         self.notify("total-count")
@@ -503,7 +502,7 @@ class GroupchatContactListView(Gtk.ListView):
     def add(self, item: GroupchatContactListItem) -> None:
         self._model.append(item)
 
-    def remove_offline_members(self, affiliation: str) -> None:
+    def remove_offline_members(self) -> None:
         for i in reversed(range(len(self._model))):
             item = self._model.get_item(i)
             assert isinstance(item, GroupchatContactListItem)
@@ -511,8 +510,7 @@ class GroupchatContactListView(Gtk.ListView):
             if not isinstance(item.contact, GroupchatOfflineParticipant):
                 continue
 
-            if item.contact.affiliation.value == affiliation:
-                self._model.remove(i)
+            self._model.remove(i)
 
     def remove(
         self, contact: GroupchatParticipant | GroupchatOfflineParticipant

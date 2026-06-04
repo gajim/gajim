@@ -200,10 +200,9 @@ class OMEMO(BaseModule, CryptoModule):
         contact.connect("room-joined", self._on_room_joined)
         contact.connect("user-affiliation-changed", self._on_affiliation_change)
         contact.connect("room-affiliation-changed", self._on_affiliation_change)
-        contact.connect("room-affiliations-received", self._on_affiliation_change)
+        contact.connect("room-affiliations-complete", self._on_affiliation_change)
 
     def _on_room_joined(self, contact: GroupchatContact, _signal_name: str) -> None:
-
         self._check_if_omemo_capable(contact.jid)
 
     def _on_affiliation_change(

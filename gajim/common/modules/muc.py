@@ -48,7 +48,7 @@ from gajim.common.const import MUCJoinedState
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
-from gajim.common.helpers import timeout_add_seconds_once
+from gajim.common.helpers import Observable
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -176,6 +176,9 @@ class MUC(BaseModule):
         self._mucs: dict[JID, MUCData] = {}
         self._muc_nicknames = {}
         self._muc_affiliations = AffiliationManager()
+        self._muc_affiliations.connect(
+            "affiliation-request-complete", self._on_affiliations_complete
+        )
         self._voice_requests: dict[GroupchatContact, list[VoiceRequest]] = defaultdict(
             list
         )
@@ -528,6 +531,7 @@ class MUC(BaseModule):
         # Don't request affiliation outcast, it is rarley needed and
         # can be requested on demand rather than on each join
 
+        self._muc_affiliations.start_affiliation_request(room_jid)
         for affiliation in ("owner", "admin", "member"):
             self.get_affiliation(
                 room_jid,
@@ -542,15 +546,19 @@ class MUC(BaseModule):
             result = task.finish()
         except StanzaError as error:
             self._log.info("Affiliation request failed: %s %s", jid, error)
-            self._muc_affiliations.remove_affiliation(jid, affiliation)
+            self._muc_affiliations.process_affiliation_result(jid, affiliation, None)
             return
 
         assert isinstance(result, AffiliationResult)
-        self._muc_affiliations.add_affiliation_result(affiliation, result)
+        self._muc_affiliations.process_affiliation_result(jid, affiliation, result)
 
+    def _on_affiliations_complete(
+        self, manager: AffiliationManager, _signal: str, jid: JID
+    ) -> None:
+        self._update_muc_fallback_name(jid)
         room = self._get_contact(jid)
         assert isinstance(room, GroupchatContact)
-        room.notify("room-affiliations-received", affiliation)
+        room.notify("room-affiliations-complete")
 
     def get_affiliations(
         self, room_jid: JID, *, include_outcast: bool = False
@@ -1033,8 +1041,6 @@ class MUC(BaseModule):
             self._request_affiliation_list(muc_data.jid)
             room.notify("room-joined")
 
-            timeout_add_seconds_once(10, self._update_muc_fallback_name, muc_data.jid)
-
         raise nbxmpp.NodeProcessed
 
     def cancel_password_request(self, room_jid: JID) -> None:
@@ -1367,30 +1373,50 @@ class MUC(BaseModule):
         self._remove_all_timeouts()
 
 
-class AffiliationManager:
+class AffiliationManager(Observable):
     def __init__(self) -> None:
+        Observable.__init__(self)
         self._affiliations: dict[JID, dict[str, list[JID]]] = defaultdict(
             lambda: defaultdict(list)
         )
+        self._running_affiliation_requests: dict[JID, set[str]] = {}
 
-    def add_affiliation_result(
-        self, affiliation: str, result: AffiliationResult
+    def start_affiliation_request(self, muc_jid: JID) -> None:
+        self._running_affiliation_requests[muc_jid] = {"member", "admin", "owner"}
+
+    def process_affiliation_result(
+        self, muc_jid: JID, affiliation: str, result: AffiliationResult | None
     ) -> None:
-        user_jids = [jid.new_as_bare() for jid in result.users]
-        log.info(
-            "AffiliationManager: Add result: %s %s %s",
-            result.jid,
-            affiliation,
-            list(map(str, user_jids)),
-        )
-        self._affiliations[result.jid][affiliation] = user_jids
 
-    def remove_affiliation(self, muc_jid: JID, affiliation: str) -> None:
-        log.info("AffiliationManager: Remove affiliation: %s %s", muc_jid, affiliation)
-        try:
-            del self._affiliations[muc_jid][affiliation]
-        except KeyError:
-            pass
+        if muc_jid not in self._running_affiliation_requests:
+            log.info("Unexpected affiliation request for %s", muc_jid)
+            return
+
+        if result is None:
+            log.info(
+                "AffiliationManager: Remove affiliation: %s %s", muc_jid, affiliation
+            )
+            try:
+                del self._affiliations[muc_jid][affiliation]
+            except KeyError:
+                pass
+
+        else:
+            user_jids = [jid.new_as_bare() for jid in result.users]
+            log.info(
+                "AffiliationManager: Add result: %s %s %s",
+                result.jid,
+                affiliation,
+                list(map(str, user_jids)),
+            )
+            self._affiliations[result.jid][affiliation] = user_jids
+
+        open_requests = self._running_affiliation_requests[muc_jid]
+        open_requests.discard(affiliation)
+        if not open_requests:
+            log.info("AffiliationManager: Request complete for %s", muc_jid)
+            self._running_affiliation_requests.pop(muc_jid)
+            self.notify("affiliation-request-complete", muc_jid)
 
     def add_user_affiliation(
         self, muc_jid: JID, affiliation: Affiliation, user_real_jid: JID

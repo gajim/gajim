@@ -810,7 +810,7 @@ class OpenPGP(BaseModule, CryptoModule):
         contact.connect("room-joined", self._on_muc_event)
         contact.connect("user-affiliation-changed", self._on_muc_event)
         contact.connect("room-affiliation-changed", self._on_muc_event)
-        contact.connect("room-affiliations-received", self._on_muc_event)
+        contact.connect("room-affiliations-complete", self._on_muc_event)
 
     def _on_muc_event(
         self, contact: GroupchatContact, _signal_name: str, *args: Any
