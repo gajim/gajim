@@ -282,7 +282,7 @@ class Presence(BaseModule):
 
     def get_presence(
         self,
-        to: str | None = None,
+        to: str | JID | None = None,
         typ: str | None = None,
         show: str | None = None,
         status: str | None = None,

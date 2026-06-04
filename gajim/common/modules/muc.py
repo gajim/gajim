@@ -214,6 +214,7 @@ class MUC(BaseModule):
 
     def set_password(self, room_jid: JID, password: str) -> None:
         muc_data = self.get_muc_data(room_jid)
+        assert muc_data is not None
         muc_data.password = password
 
     def _get_mucs_with_state(self, states: list[MUCJoinedState]):
@@ -299,8 +300,9 @@ class MUC(BaseModule):
         if disco_info is None:
             self._set_muc_state(muc_data.jid, MUCJoinedState.BEFORE_JOINING)
             self._con.get_module("Discovery").disco_muc(
-                muc_data.jid, callback=self._on_disco_result
-            )  # type: ignore
+                muc_data.jid,
+                callback=self._on_disco_result,  # type: ignore
+            )
         else:
             self._join(muc_data)
 
@@ -324,9 +326,14 @@ class MUC(BaseModule):
         try:
             result = task.finish()
         except StanzaError as error:
+            assert error.jid is not None
             jid = error.jid
             self._log.info("Disco %s failed: %s", jid, error.get_text())
             muc_data = self._mucs.get(jid)
+            if muc_data is None:
+                self._log.info("Unable to find MUC data for %s", jid)
+                return
+
             muc_data.error = "join-failed"
             error_text = helpers.to_user_string(error)
             muc_data.error_text = error_text
@@ -439,23 +446,24 @@ class MUC(BaseModule):
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
     def configure_room(self, room_jid: JID) -> None:
-        self._nbxmpp("MUC").request_config(room_jid, callback=self._on_room_config)  # type: ignore
+        self._nbxmpp("MUC").request_config(room_jid, callback=self._on_room_config)
 
     def _on_room_config(self, task: Task) -> None:
         try:
             result = task.finish()
         except StanzaError as error:
             self._log.info(error)
-
-            room = self._get_contact(error.jid.bare)
+            assert error.jid is not None
+            room = self._get_contact(error.jid.new_as_bare())
             error_text = helpers.to_user_string(error)
-            room.notfiy("room-config-failed", error_text)
+            room.notify("room-config-failed", error_text)
             return
 
         assert isinstance(result, MucConfigResult)
         self._log.info("Configure room: %s", result.jid)
 
         muc_data = self._mucs[result.jid]
+        assert result.form is not None
         self._apply_config(result.form, muc_data.config)
         self.set_config(result.jid, result.form, callback=self._on_config_result)
 
@@ -472,23 +480,24 @@ class MUC(BaseModule):
             except KeyError:
                 pass
             else:
-                field.value = value
+                field.value = value  # type: ignore
 
     def _on_config_result(self, task: Task) -> None:
         try:
             result = task.finish()
         except StanzaError as error:
             self._log.info(error)
-
-            room = self._get_contact(error.jid.bare)
+            assert error.jid is not None
+            room = self._get_contact(error.jid.new_as_bare())
             error_text = helpers.to_user_string(error)
-            room.notfiy("room-config-failed", error_text)
+            room.notify("room-config-failed", error_text)
             return
 
         assert isinstance(result, CommonResult)
         self._con.get_module("Discovery").disco_muc(
-            result.jid, callback=self._on_disco_result_after_config
-        )  # type: ignore
+            result.jid,
+            callback=self._on_disco_result_after_config,  # type: ignore
+        )
 
     def _on_disco_result_after_config(self, task: Task) -> None:
         try:
@@ -576,6 +585,7 @@ class MUC(BaseModule):
     ) -> None:
 
         assert properties.jid is not None
+        assert properties.error is not None
         room_jid = properties.jid.new_as_bare()
         muc_data = self._mucs.get(room_jid)
         if muc_data is None:
@@ -645,6 +655,7 @@ class MUC(BaseModule):
         muc_data = self._mucs[room_jid]
         assert properties.jid is not None
         occupant = self._get_contact(properties.jid, groupchat=True)
+        assert isinstance(occupant, GroupchatParticipant)
         room = self._get_contact(properties.jid.new_as_bare())
         assert isinstance(room, GroupchatContact)
 
@@ -669,8 +680,11 @@ class MUC(BaseModule):
 
         if properties.is_nickname_changed:
             assert properties.muc_user is not None
+            muc_user_nick = properties.muc_user.nick
+            assert muc_user_nick is not None
+
             if properties.is_muc_self_presence:
-                muc_data.nick = properties.muc_user.nick
+                muc_data.nick = muc_user_nick
                 self._con.get_module("Bookmarks").modify(
                     muc_data.jid, nick=muc_data.nick
                 )
@@ -680,16 +694,15 @@ class MUC(BaseModule):
                 "%s nickname changed: %s to %s",
                 initiator,
                 properties.jid,
-                properties.muc_user.nick,
+                muc_user_nick,
             )
 
             # We receive only the unavailable presence here, so we take
             # the current presence and create a new contact with it, before we
             # update the presence.
-            nickname = properties.muc_user.nick
-            new_occupant = room.add_resource(nickname)
+            new_occupant = room.add_resource(muc_user_nick)
             new_occupant.set_presence(occupant.presence)
-            self._joined_users[room.jid][nickname] = occupant.presence
+            self._joined_users[room.jid][muc_user_nick] = occupant.presence
 
             presence = self._process_user_presence(properties)
             self._process_occupant_presence_change(properties, presence, occupant)
@@ -719,6 +732,7 @@ class MUC(BaseModule):
                         properties.is_nickname_modified
                         or muc_data.nick != properties.muc_nickname
                     ):
+                        assert properties.muc_nickname is not None
                         muc_data.nick = properties.muc_nickname
                         self._log.info(
                             "Server modified nickname to: %s", properties.muc_nickname
@@ -855,6 +869,7 @@ class MUC(BaseModule):
             signals_and_events.append(("user-role-changed", event))
 
         if occupant.status != presence.status or occupant.show != presence.show:
+            assert properties.show is not None
             event = events.MUCUserStatusShowChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
@@ -946,7 +961,8 @@ class MUC(BaseModule):
             self._joined_users[jid.new_as_bare()][jid.resource] = muc_presence
         return muc_presence
 
-    def _is_user_joined(self, jid: JID | None) -> bool:
+    def _is_user_joined(self, jid: JID) -> bool:
+        assert jid.resource is not None
         try:
             self._joined_users[jid.new_as_bare()][jid.resource]
         except KeyError:
@@ -1032,6 +1048,7 @@ class MUC(BaseModule):
         )
 
         disco_info = app.storage.cache.get_last_disco_info(muc_data.jid)
+        assert disco_info is not None
         if disco_info.has_mam_2:
             self._con.get_module("MAM").request_archive_on_muc_join(muc_data.jid)
 
@@ -1159,17 +1176,19 @@ class MUC(BaseModule):
         self._set_muc_state(room_jid, MUCJoinedState.JOINING)
         self._nbxmpp("MUC").send_captcha(
             room_jid, form_node, callback=self._on_captcha_result
-        )  # type: ignore
+        )
 
     def _on_captcha_result(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as error:
-            muc_data = self._mucs.get(error.jid)
+            assert error.jid is not None
+            jid = error.jid
+            muc_data = self._mucs.get(jid)
             if muc_data is None:
                 return
-            self._set_muc_state(error.jid, MUCJoinedState.CAPTCHA_FAILED)
-            room = self._get_contact(error.jid)
+            self._set_muc_state(jid, MUCJoinedState.CAPTCHA_FAILED)
+            room = self._get_contact(jid)
             error_text = helpers.to_user_string(error)
             room.notify("room-captcha-error", error_text)
 
@@ -1239,8 +1258,8 @@ class MUC(BaseModule):
                 data.muc,
                 request_vcard=True,
                 callback=self._on_disco_result_after_invite,  # type: ignore
-                user_data=data,
-            )  # type: ignore
+                user_data=data,  # type: ignore
+            )
 
             raise nbxmpp.NodeProcessed
 
