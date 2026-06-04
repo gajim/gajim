@@ -256,9 +256,7 @@ class OMEMO(BaseModule, CryptoModule):
             public_key=identity_key,
         )
 
-    def get_public_keys(
-        self, jid: JID, *, is_groupchat: bool
-    ) -> list[OMEMOPublicKeyData]:
+    def get_public_keys(self, jid: JID, *, is_groupchat: bool) -> list[PublicKeyData]:
         identity_infos = self._backend.get_identity_infos(
             str(jid),
             only_active=is_groupchat,
@@ -398,8 +396,12 @@ class OMEMO(BaseModule, CryptoModule):
         if omemo_message is None:
             raise Exception("Encryption error")
 
+        assert omemo_message.payload is not None
+
         create_omemo_message(
-            message.get_stanza(), omemo_message, node_whitelist=ALLOWED_TAGS
+            message.get_stanza(),
+            omemo_message,  # type: ignore
+            node_whitelist=ALLOWED_TAGS,  # type: ignore
         )
 
         if message.is_groupchat:
@@ -425,7 +427,7 @@ class OMEMO(BaseModule, CryptoModule):
             self._log.warning("Key transport message to %s (%s) failed", jid, devices)
             return
 
-        transport_message = get_key_transport_message(typ, jid, omemo_message)
+        transport_message = get_key_transport_message(typ, jid, omemo_message)  # type: ignore
         self._log.info("Send key transport message to %s (%s)", jid, devices)
         self._client.send_stanza(transport_message)
 
@@ -449,6 +451,7 @@ class OMEMO(BaseModule, CryptoModule):
             from_jid = self._process_muc_message(properties)
 
         else:
+            assert properties.jid is not None
             from_jid = properties.jid.bare
 
         if from_jid is None:
@@ -459,7 +462,8 @@ class OMEMO(BaseModule, CryptoModule):
         assert isinstance(properties.omemo, OMEMOMessage)
         try:
             plaintext, fingerprint, trust = self.backend.decrypt_message(
-                properties.omemo, from_jid
+                properties.omemo,  # type: ignore
+                from_jid,
             )
         except (KeyExchangeMessage, DuplicateMessage):
             raise NodeProcessed
@@ -498,7 +502,6 @@ class OMEMO(BaseModule, CryptoModule):
         )
 
     def _process_muc_message(self, properties: MessageProperties) -> str | None:
-
         assert properties.jid is not None
         resource = properties.jid.resource
         if properties.muc_ofrom is not None:
@@ -514,7 +517,8 @@ class OMEMO(BaseModule, CryptoModule):
         return None
 
     def _process_mam_message(self, properties: MessageProperties) -> str | None:
-
+        assert properties.mam is not None
+        assert properties.from_ is not None
         self._log.info("Message received, archive: %s", properties.mam.archive)
         if properties.from_muc:
             self._log.info("MUC MAM Message received")
@@ -530,7 +534,7 @@ class OMEMO(BaseModule, CryptoModule):
         if jid == self._own_jid:
             return True
 
-        roster_item = self._client.get_module("Roster").get_item(jid)
+        roster_item = self._client.get_module("Roster").get_item(JID.from_string(jid))
         if roster_item is None:
             return False
 
@@ -652,8 +656,7 @@ class OMEMO(BaseModule, CryptoModule):
         self._process_devicelist_update(str(properties.jid), devicelist)
 
     def _process_devicelist_update(self, jid: str, devicelist: list[int]) -> None:
-
-        own_devices = jid is None or self._client.get_own_jid().bare_match(jid)
+        own_devices = self._client.get_own_jid().bare_match(jid)
         if own_devices:
             jid = self._own_jid
 
