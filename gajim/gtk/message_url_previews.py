@@ -136,6 +136,7 @@ class MessageURLPreviews(Gtk.Box):
                 url,
                 event,
                 None if proxy is None else proxy.get_uri(),
+                app.settings.get("use_http2"),
             )
         except Exception as error:
             log.warning("Unable to generate preview: %s %s", url, error)

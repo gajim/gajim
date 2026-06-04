@@ -146,6 +146,7 @@ class FileTransferManager:
                 encryption_data=encryption_data,
                 decryption_data=decryption_data,
                 proxy=None if proxy is None else proxy.get_uri(),
+                http2=app.settings.get("use_http2"),
             )
         except Exception as error:
             log.exception(error)

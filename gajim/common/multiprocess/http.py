@@ -143,6 +143,7 @@ def http_request(
     encryption_data: AESKeyData | None = None,
     decryption_data: AESKeyData | None = None,
     proxy: str | None = None,
+    http2: bool = False,
 ) -> HTTPResult:
     trust_env = True
     if proxy == "direct://":
@@ -153,7 +154,7 @@ def http_request(
     client = httpx.Client(
         timeout=timeout,
         verify=ctx,
-        http2=True,
+        http2=http2,
         proxy=proxy,
         trust_env=trust_env,
         follow_redirects=True,

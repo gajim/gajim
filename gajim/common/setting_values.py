@@ -79,6 +79,7 @@ BoolSettings = Literal[
     "sounddnd",
     "sounds_on",
     "trayicon_notification_on_events",
+    "use_http2",
     "use_keyring",
     "use_kib_mib",
     "use_speller",
@@ -245,6 +246,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     "stun_server": "",
     "time_format": "%H:%M",
     "trayicon_notification_on_events": True,
+    "use_http2": False,
     "use_keyring": True,
     "use_kib_mib": False,
     "use_speller": True,
@@ -589,6 +591,7 @@ ADVANCED_SETTINGS = {
         "search_engine": "",
         "stun_server": _("STUN server to use when using Jingle"),
         "time_format": "https://docs.python.org/3/library/time.html#time.strftime",  # noqa: E501
+        "use_http2": _("Use HTTP2 for requests if there is server support"),
         "use_kib_mib": _("IEC standard says KiB = 1024 bytes, KB = 1000 bytes."),
         "use_stun_server": _(
             "If enabled, Gajim will try to use a STUN server when using Jingle."

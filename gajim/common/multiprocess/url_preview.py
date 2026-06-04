@@ -22,6 +22,7 @@ def generate_url_preview(
     url: str,
     event: threading.Event,
     proxy: str | None,
+    http2: bool,
 ) -> OpenGraphData | None:
     result = http_request(
         event=event,
@@ -31,6 +32,7 @@ def generate_url_preview(
         timeout=5,
         max_download_size=1024 * 150,
         proxy=proxy,
+        http2=http2,
     )
 
     html_content, _ = utf8_decode(result.content)
@@ -48,6 +50,7 @@ def generate_url_preview(
             url=og_data.image,
             timeout=5,
             proxy=proxy,
+            http2=http2,
         )
 
         og_data.thumbnail = _make_thumbnail(image_result.content)
