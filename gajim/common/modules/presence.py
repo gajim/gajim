@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 import time
 
@@ -83,10 +84,10 @@ class Presence(BaseModule):
 
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to GUI
-        self.automatically_added: list[str] = []
+        self.automatically_added: set[JID] = set()
 
         # list of jid to auto-authorize
-        self._jids_for_auto_auth: set[str] = set()
+        self._jids_for_auto_auth: set[JID] = set()
 
     def _presence_received(
         self,
@@ -102,13 +103,13 @@ class Presence(BaseModule):
             return
 
         assert properties.jid is not None
-        muc = self._con.get_module("MUC").get_muc_data(properties.jid)
+        muc = self._client.get_module("MUC").get_muc_data(properties.jid)
         if muc is not None:
             # Presence from the MUC itself, used for MUC avatar
             # handled in VCardAvatars module
             return
 
-        roster_item = self._con.get_module("Roster").get_item(
+        roster_item = self._client.get_module("Roster").get_item(
             properties.jid.new_as_bare()
         )
 
@@ -121,11 +122,12 @@ class Presence(BaseModule):
         presence_data = PresenceData.from_presence(properties)
         self._presence_store[properties.jid] = presence_data
 
-        contact = self._con.get_module("Contacts").get_contact(properties.jid)
+        contact = self._client.get_module("Contacts").get_contact(properties.jid)
         assert isinstance(contact, BareContact | ResourceContact)
         contact.update_presence(presence_data)
 
         assert properties.type is not None
+        assert properties.show is not None
         if properties.is_self_presence and not properties.type.is_unavailable:
             app.ged.raise_event(
                 ShowChanged(account=self._account, show=properties.show.value)
@@ -138,7 +140,6 @@ class Presence(BaseModule):
 
         event_attrs: dict[str, Any] = {
             "account": self._account,
-            "conn": self._con,
             "stanza": stanza,
             "prio": properties.priority,
             "need_add_in_roster": False,
@@ -168,10 +169,9 @@ class Presence(BaseModule):
         properties: PresenceProperties,
     ) -> None:
         assert properties.jid is not None
-        jid = properties.jid.bare
-        fjid = str(properties.jid)
+        jid = properties.jid.new_as_bare()
 
-        is_transport = app.jid_is_transport(fjid)
+        is_transport = app.jid_is_transport(str(properties.jid))
         auto_auth = app.settings.get_account_setting(self._account, "autoauth")
 
         self._log.info(
@@ -198,10 +198,8 @@ class Presence(BaseModule):
 
         app.ged.raise_event(
             SubscribePresenceReceived(
-                conn=self._con,
                 account=self._account,
                 jid=jid,
-                fjid=fjid,
                 status=status,
                 user_nick=properties.nickname,
                 is_transport=is_transport,
@@ -217,10 +215,10 @@ class Presence(BaseModule):
         properties: PresenceProperties,
     ) -> None:
         assert properties.jid is not None
-        jid = properties.jid.bare
         self._log.info("Received Subscribed: %s", properties.jid)
-        if jid in self.automatically_added:
-            self.automatically_added.remove(jid)
+        bare_jid = properties.jid.new_as_bare()
+        if bare_jid in self.automatically_added:
+            self.automatically_added.discard(bare_jid)
             raise nbxmpp.NodeProcessed
 
         app.ged.raise_event(
@@ -247,24 +245,24 @@ class Presence(BaseModule):
         self._log.info("Received Unsubscribed: %s", properties.jid)
         app.ged.raise_event(
             UnsubscribedPresenceReceived(
-                conn=self._con, account=self._account, jid=properties.jid.bare
+                account=self._account, jid=properties.jid.new_as_bare()
             )
         )
         raise nbxmpp.NodeProcessed
 
-    def unsubscribed(self, jid: JID | str) -> None:
+    def unsubscribed(self, jid: JID) -> None:
         self._log.info("Unsubscribed: %s", jid)
-        self._jids_for_auto_auth.discard(str(jid))
+        self._jids_for_auto_auth.discard(jid)
         self._nbxmpp("BasePresence").unsubscribed(jid)
 
-    def unsubscribe(self, jid: JID | str) -> None:
+    def unsubscribe(self, jid: JID) -> None:
         self._log.info("Unsubscribe from %s", jid)
-        self._jids_for_auto_auth.discard(str(jid))
+        self._jids_for_auto_auth.discard(jid)
         self._nbxmpp("BasePresence").unsubscribe(jid)
 
     def subscribe(
         self,
-        jid: JID | str,
+        jid: JID,
         msg: str | None = None,
         name: str | None = None,
         groups: list[str] | set[str] | None = None,
@@ -275,7 +273,7 @@ class Presence(BaseModule):
         if auto_auth:
             self._jids_for_auto_auth.add(jid)
 
-        self._con.get_module("Roster").set_item(jid, name, groups=groups)
+        self._client.get_module("Roster").set_item(jid, name, groups=groups)
         self._nbxmpp("BasePresence").subscribe(
             jid, status=msg, nick=app.nicks[self._account]
         )
@@ -283,7 +281,7 @@ class Presence(BaseModule):
     def get_presence(
         self,
         to: str | JID | None = None,
-        typ: str | None = None,
+        typ: Literal["probe", "unavailable"] | None = None,
         show: str | None = None,
         status: str | None = None,
         nick: str | None = None,
@@ -308,9 +306,11 @@ class Presence(BaseModule):
             idle_node = presence.setTag("idle", namespace=Namespace.IDLE)
             idle_node.setAttr("since", time_)
 
-        caps = self._con.get_module("Caps").caps
-        if caps is not None and typ != "unavailable":
-            presence.setTag("c", namespace=Namespace.CAPS, attrs=caps._asdict())
+        own_entity_caps = self._client.get_module("Caps").get_own_caps()
+        if own_entity_caps is not None and typ != "unavailable":
+            presence.setTag(
+                "c", namespace=Namespace.CAPS, attrs=own_entity_caps._asdict()
+            )
 
         return presence
 
@@ -320,4 +320,4 @@ class Presence(BaseModule):
         presence = self.get_presence(*args, **kwargs)
         app.plugin_manager.extension_point("send-presence", self._account, presence)
         self._log.debug("Send presence:\n%s", presence)
-        self._con.connection.send(presence)
+        self._client.send_stanza(presence)

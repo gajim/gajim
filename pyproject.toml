@@ -129,7 +129,6 @@ exclude = [
   "gajim/common/modules/ibb.py",
   "gajim/common/modules/jingle.py",
   "gajim/common/modules/omemo.py",
-  "gajim/common/modules/presence.py",
   "gajim/common/modules/roster_item_exchange.py",
   "gajim/common/modules/search.py",
   "gajim/common/modules/user_avatar.py",

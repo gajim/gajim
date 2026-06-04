@@ -682,7 +682,7 @@ class Subscribe(ActivityListItem[events.SubscribePresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            jid=JID.from_string(event.jid),
+            jid=event.jid,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",
@@ -713,7 +713,7 @@ class Unsubscribed(ActivityListItem[events.UnsubscribedPresenceReceived]):
         return cls(
             context_id=event.context_id,
             account=event.account,
-            jid=JID.from_string(event.jid),
+            jid=event.jid,
             account_visible=app.app.multi_account_mode,
             activity_type=0,
             activity_type_icon="lucide-users-symbolic",

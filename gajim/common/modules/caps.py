@@ -22,6 +22,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import EntityCapsData
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task as nbxmpp_Task
@@ -39,7 +40,7 @@ from gajim.common.task_manager import Task
 
 class Caps(BaseModule):
     _nbxmpp_extends = "EntityCaps"
-    _nbxmpp_methods = ["caps", "set_caps"]
+    _nbxmpp_methods = ["set_caps"]
 
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
@@ -60,6 +61,9 @@ class Caps(BaseModule):
             set
         )
         self._queued_tasks_by_jid: dict[JID, EntityCapsTask] = {}
+
+    def get_own_caps(self) -> EntityCapsData | None:
+        return self._nbxmpp("EntityCaps").caps
 
     def _queue_task(self, task: EntityCapsTask) -> None:
         old_task = self._get_task(task.entity.jid)

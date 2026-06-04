@@ -693,7 +693,6 @@ class SecCatalogReceived(ApplicationEvent):
 class PresenceReceived(ApplicationEvent):
     name: str = field(init=False, default="presence-received")
     account: str
-    conn: "Client"
     stanza: Any
     prio: int
     need_add_in_roster: bool
@@ -717,12 +716,10 @@ class PresenceReceived(ApplicationEvent):
 @dataclass
 class SubscribePresenceReceived(ApplicationEvent):
     name: str = field(init=False, default="subscription-request")
-    conn: "Client"
     account: str
-    jid: str
-    fjid: str
+    jid: JID
     status: str
-    user_nick: str
+    user_nick: str | None
     is_transport: bool
 
 
@@ -730,15 +727,14 @@ class SubscribePresenceReceived(ApplicationEvent):
 class SubscribedPresenceReceived(ApplicationEvent):
     name: str = field(init=False, default="subscribed-presence-received")
     account: str
-    jid: str
+    jid: JID
 
 
 @dataclass
 class UnsubscribedPresenceReceived(ApplicationEvent):
     name: str = field(init=False, default="unsubscribed-presence-received")
-    conn: "Client"
     account: str
-    jid: str
+    jid: JID
 
 
 @dataclass

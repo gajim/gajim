@@ -141,10 +141,8 @@ class TestActivityFeed(GajimAppWindow):
 
     def _on_subscription_button_clicked(self, _button: Gtk.Button) -> None:
         event = events.SubscribePresenceReceived(
-            conn=app.get_client(ACCOUNT),
             account=ACCOUNT,
-            jid=str(FROM_JID),
-            fjid=f"{FROM_JID}/test",
+            jid=FROM_JID,
             status="",
             user_nick="User Nick",
             is_transport=False,
@@ -152,9 +150,8 @@ class TestActivityFeed(GajimAppWindow):
         app.ged.raise_event(event)
 
         event = events.UnsubscribedPresenceReceived(
-            conn=app.get_client(ACCOUNT),
             account=ACCOUNT,
-            jid=str(FROM_JID_2),
+            jid=FROM_JID_2,
         )
         app.ged.raise_event(event)
 

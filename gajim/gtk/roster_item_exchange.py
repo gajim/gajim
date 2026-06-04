@@ -193,12 +193,12 @@ class RosterItemExchange(GajimAppWindow):
                         groups = []
                     jid = self._model[iter_][1]
                     if app.jid_is_transport(str(self._jid_from)):
-                        self._client.get_module("Presence").automatically_added.append(
-                            jid
+                        self._client.get_module("Presence").automatically_added.add(
+                            JID.from_string(jid)
                         )
 
                     self._client.get_module("Presence").subscribe(
-                        jid,
+                        JID.from_string(jid),
                         msg=message,
                         name=self._model[iter_][2],
                         groups=groups,
@@ -235,7 +235,9 @@ class RosterItemExchange(GajimAppWindow):
                     count += 1
                     # It is selected
                     jid = self._model[iter_][1]
-                    self._client.get_module("Presence").unsubscribe(jid)
+                    self._client.get_module("Presence").unsubscribe(
+                        JID.from_string(jid)
+                    )
                     self._client.get_module("Roster").delete_item(jid)
                 iter_ = self._model.iter_next(iter_)
             InformationAlertDialog(
