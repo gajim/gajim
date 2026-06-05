@@ -75,9 +75,9 @@ def event_node(node: str) -> Callable[[Callable[P, object]], Callable[P, None]]:
             assert properties.pubsub_event is not None
             if properties.pubsub_event.node != node:
                 return
-            func(self, _con, _stanza, properties)
+            func(self, _con, _stanza, properties)  # type: ignore
 
-        return func_wrapper
+        return func_wrapper  # type: ignore
 
     return event_node_decorator
 
@@ -88,9 +88,9 @@ def store_publish(func: Callable[P, T]) -> Callable[P, T | None]:
         if not app.account_is_connected(self._account):
             self._stored_publish = partial(func, self, *args, **kwargs)
             return None
-        return func(self, *args, **kwargs)
+        return func(self, *args, **kwargs)  # type: ignore
 
-    return func_wrapper
+    return func_wrapper  # type: ignore
 
 
 class LogAdapter(logging.LoggerAdapter[logging.Logger]):
@@ -109,7 +109,7 @@ def as_task(func: Callable[P, T]) -> Callable[P, T]:
         user_data: Any = None,
         **kwargs: Any,
     ) -> T:
-        task_ = Task(func(self, *args, **kwargs))
+        task_ = Task(func(self, *args, **kwargs))  # type: ignore
         task_.set_timeout(timeout)
         app.register_task(self, task_)
         task_.set_finalize_func(app.remove_task, id(self))
@@ -117,7 +117,7 @@ def as_task(func: Callable[P, T]) -> Callable[P, T]:
         if callback is not None:
             task_.add_done_callback(callback)
         task_.start()
-        return task_
+        return task_  # type: ignore
 
     return func_wrapper
 
