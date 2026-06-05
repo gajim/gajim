@@ -39,13 +39,16 @@ class ChangePassword(Assistant):
         self._client = app.get_client(account)
         self._destroyed = False
 
+        cur_password = passwords.get_password(self.account)
+        assert cur_password is not None
+
         self.add_button("apply", _("Change"), "suggested-action", complete=True)
         self.add_button("close", _("Close"))
         self.add_button("back", _("Back"))
 
         self.add_pages(
             {
-                "password": EnterPassword(),
+                "password": EnterPassword(cur_password),
                 "next_stage": NextStage(),
                 "error": Error(),
                 "success": Success(),
@@ -123,10 +126,11 @@ class ChangePassword(Assistant):
 
 
 class EnterPassword(AssistantPage):
-    def __init__(self) -> None:
+    def __init__(self, cur_password: str) -> None:
         AssistantPage.__init__(self)
         self.complete = False
         self.title = _("Change Password")
+        self._cur_password = cur_password
 
         heading = Gtk.Label(
             label=_("Change Password"),
@@ -144,6 +148,13 @@ class EnterPassword(AssistantPage):
             justify=Gtk.Justification.CENTER,
             margin_bottom=12,
         )
+
+        self._cur_password_entry = Gtk.PasswordEntry(
+            show_peek_icon=True,
+            placeholder_text=_("Enter current password..."),
+            valign=Gtk.Align.END,
+        )
+        self._connect(self._cur_password_entry, "changed", self._on_changed)
 
         self._password1_entry = Gtk.PasswordEntry(
             show_peek_icon=True,
@@ -168,6 +179,7 @@ class EnterPassword(AssistantPage):
 
         self.append(heading)
         self.append(label)
+        self.append(self._cur_password_entry)
         self.append(self._password1_entry)
         self.append(self._password2_entry)
         self.append(box)
@@ -182,6 +194,12 @@ class EnterPassword(AssistantPage):
         self._warning_label.set_text(text)
 
     def _on_changed(self, _entry: Gtk.Entry) -> None:
+        cur_password = self._cur_password_entry.get_text()
+        if cur_password != self._cur_password:
+            self._show_warning(_("Current password incorrect"))
+            self._set_complete(False)
+            return
+
         password1 = self._password1_entry.get_text()
         if not password1:
             self._show_warning(_("Passwords do not match"))
