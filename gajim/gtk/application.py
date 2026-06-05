@@ -537,7 +537,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         self,
         account: str,
         address: JID,
-        password: str,
+        password: str | None,
         proxy_name: str | None,
         custom_host: tuple[str, ConnectionProtocol, ConnectionType] | None,
         anonymous: bool = False,
