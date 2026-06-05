@@ -65,6 +65,7 @@ class UserAvatar(BaseModule):
             return
 
         assert isinstance(metadata, AvatarMetaData)
+        assert metadata.default is not None
         sha = contact.avatar_sha
         if sha is not None:
             if sha in metadata.avatar_shas and app.app.avatar_storage.avatar_exists(
