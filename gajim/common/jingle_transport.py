@@ -21,7 +21,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
-from gajim.common.client import Client
+from gajim.common import types
 from gajim.common.file_props import FileProp
 from gajim.common.jingle_content import JingleContent
 
@@ -70,7 +70,7 @@ class JingleTransport:
         self.candidates: list[dict[str, Any]] = []
         self.remote_candidates: list[dict[str, Any]] = []
 
-        self.connection: Client | None = None
+        self.connection: types.Client | None = None
         self.file_props: FileProp | None = None
         self.ourjid: str | None = None
         self.sid: str | None = None
@@ -104,7 +104,7 @@ class JingleTransport:
         """
         return []
 
-    def set_connection(self, conn: Client) -> None:
+    def set_connection(self, conn: types.Client) -> None:
         self.connection = conn
         if not self.sid:
             self.sid = generate_id()

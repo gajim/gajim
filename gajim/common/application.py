@@ -57,7 +57,7 @@ class CoreApplication(ged.EventHelper):
         ged.EventHelper.__init__(self)
         self._profiling_session = None
 
-    def _init_core(self) -> bool:
+    def _init_core(self, *, in_memory: bool) -> bool:
         # Create and initialize Application Paths & Databases
         app.app = self
         app.print_version()
@@ -65,7 +65,7 @@ class CoreApplication(ged.EventHelper):
         app.init_process_pool()
         configpaths.create_paths()
 
-        app.settings = Settings()
+        app.settings = Settings(in_memory=in_memory)
         app.settings.init()
 
         passwords.init()
@@ -73,16 +73,16 @@ class CoreApplication(ged.EventHelper):
         app.commands = ChatCommands()
 
         try:
-            app.storage.cache = CacheStorage()
+            app.storage.cache = CacheStorage(in_memory=in_memory)
             app.storage.cache.init()
 
             app.storage.events = EventStorage()
             app.storage.events.init()
 
-            app.storage.archive = MessageArchiveStorage()
+            app.storage.archive = MessageArchiveStorage(in_memory=in_memory)
             app.storage.archive.init()
 
-            app.storage.openpgp = OpenPGPStorage()
+            app.storage.openpgp = OpenPGPStorage(in_memory=in_memory)
             app.storage.openpgp.init()
         except Exception as error:
             app.ged.raise_event(DBMigrationError(exception=error))
@@ -251,7 +251,6 @@ class CoreApplication(ged.EventHelper):
         app.settings.shutdown()
 
         self.end_profiling()
-        app.app.systray.shutdown()
         configpaths.cleanup_temp()
 
     def _shutdown_complete(self) -> None:
@@ -340,7 +339,7 @@ class CoreApplication(ged.EventHelper):
         self,
         account: str,
         address: JID,
-        password: str,
+        password: str | None,
         proxy_name: str | None,
         custom_host: tuple[str, ConnectionProtocol, ConnectionType] | None,
         anonymous: bool = False,
@@ -377,13 +376,13 @@ class CoreApplication(ged.EventHelper):
         for opt, value in config.items():
             app.settings.set_account_setting(account, opt, value)  # pyright: ignore  # noqa: E501
 
-        if not anonymous:
+        if not anonymous and password is not None:
             # Password module depends on existing config
             passwords.save_password(account, password)
 
         app.ged.raise_event(AccountCreated(account=account))
 
-    def enable_account(self, account: str) -> None:
+    def enable_account(self, account: str, *, connect: bool) -> None:
         app.connections[account] = Client(account)
 
         app.plugin_manager.register_modules_for_account(app.connections[account])
@@ -394,7 +393,8 @@ class CoreApplication(ged.EventHelper):
 
         app.ged.raise_event(AccountEnabled(account=account))
 
-        app.get_client(account).change_status("online", "")
+        if connect:
+            app.get_client(account).change_status("online", "")
 
     def disable_account(self, account: str) -> None:
         app.settings.set_account_setting(account, "roster_version", "")

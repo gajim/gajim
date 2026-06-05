@@ -35,7 +35,7 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common.client import Client
+from gajim.common import types
 from gajim.common.file_props import FilesProp
 from gajim.common.jingle_content import get_jingle_content
 from gajim.common.jingle_content import JingleContent
@@ -106,7 +106,7 @@ class JingleSession:
 
     def __init__(
         self,
-        con: Client,
+        con: types.Client,
         weinitiate: bool,
         jid: str,
         iq_id: str | None = None,

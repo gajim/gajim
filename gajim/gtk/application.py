@@ -226,7 +226,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         app.ged.register_event_handler("db-migration", 0, self._on_db_migration)
 
-        if not self._init_core():
+        if not self._init_core(in_memory=False):
             return
 
         icon_theme = get_icon_theme()
@@ -294,6 +294,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def start_shutdown(self) -> None:
         app.window.start_shutdown()
+        app.app.systray.shutdown()
         CoreApplication._start_shutdown(self)
 
     def _shutdown_complete(self) -> None:
@@ -555,8 +556,8 @@ class GajimApplication(Adw.Application, CoreApplication):
         # Store count in variable to reduce db queries
         return self._active_accounts_count > 1
 
-    def enable_account(self, account: str) -> None:
-        CoreApplication.enable_account(self, account)
+    def enable_account(self, account: str, *, connect: bool = True) -> None:
+        CoreApplication.enable_account(self, account, connect=connect)
 
         self.update_app_actions_state()
 

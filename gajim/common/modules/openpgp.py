@@ -44,7 +44,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.client import Client
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import Trust
 from gajim.common.events import EncryptionInfo
@@ -199,7 +198,7 @@ class OpenPGP(BaseModule, CryptoModule):
         "request_secret_key",
     ]
 
-    def __init__(self, client: Client):
+    def __init__(self, client: types.Client):
         BaseModule.__init__(self, client)
 
         self.handlers = [
