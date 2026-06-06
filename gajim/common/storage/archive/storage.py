@@ -191,6 +191,16 @@ class MessageArchiveStorage(AlchemyStorage):
         self._jid_pks[jid] = pk
         return pk
 
+    def _get_existing_jid_pks(self, jids: Iterable[JID]) -> list[int]:
+        fk_remote_pks: list[int] = []
+        for jid in jids:
+            pk = self._jid_pks.get(jid)
+            if pk is None:
+                continue
+
+            fk_remote_pks.append(pk)
+        return fk_remote_pks
+
     def _set_foreign_keys(self, session: Session, row: Any) -> None:
         fk_account_pk = None
         account = getattr(row, "account_", None)
@@ -427,6 +437,33 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         return session.scalar(stmt)
+
+    @with_session
+    @timeit
+    def get_message_from_error_id(
+        self,
+        session: Session,
+        account: str,
+        jids: Iterable[JID],
+        id_: str,
+    ) -> Message | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pks = self._get_existing_jid_pks(jids)
+        if not fk_remote_pks:
+            return None
+
+        stmt = select(Message).where(
+            Message.id == id_,
+            Message.fk_remote_pk.in_(fk_remote_pks),
+            Message.fk_account_pk == fk_account_pk,
+        )
+
+        results = session.scalars(stmt).all()
+        self._log.info(
+            "Found %s corresponding message(s) for error with id %s", len(results), id_
+        )
+        return results[0] if results else None
 
     @with_session
     @timeit
