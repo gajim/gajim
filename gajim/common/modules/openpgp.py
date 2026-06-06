@@ -12,6 +12,7 @@ import random
 import secrets
 import subprocess
 import textwrap
+from base64 import b64encode
 from collections.abc import Generator
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -925,6 +926,29 @@ class OpenPGP(BaseModule, CryptoModule):
             for _ in range(6)
         )
 
+    def get_secret_share_uri(self) -> str | None:
+        if self._secret_cert is None or self._backup_password is None:
+            return None
+
+        assert self._secret_cert.secrets is not None
+        cert_bytes = bytes(self._secret_cert.secrets)
+        encrypted_key = pys.encrypt(
+            passwords=[self._backup_password], bytes=cert_bytes, armor=False
+        )
+        query = (
+            "openpgp",
+            [
+                ("secret", b64encode(encrypted_key).decode()),
+                ("password", self._backup_password),
+            ],
+        )
+        return self._own_jid.to_iri(query)
+
+    def export_secret_key(self) -> str | None:
+        if self._secret_cert is None:
+            return None
+        return str(self._secret_cert.secrets)
+
     @as_task
     def backup_secret_key(
         self, cert_bytes: bytes | None = None
@@ -942,8 +966,6 @@ class OpenPGP(BaseModule, CryptoModule):
             assert self._secret_cert.secrets is not None
             cert_bytes = bytes(self._secret_cert.secrets)
 
-        # ToDo: This is the armored key, we need it un-armored but this
-        # is currently blocked by a missing feature of pysequoia
         encrypted_payload = pys.encrypt(
             passwords=[self._backup_password], bytes=cert_bytes, armor=False
         )

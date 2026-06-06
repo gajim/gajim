@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="OpenPGPUnlock" parent="AssistantPage">
+    <child>
+      <object class="GtkBox">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Enter your account password to unlock the secret key</property>
+            <property name="max-width-chars">38</property>
+            <property name="wrap">1</property>
+            <property name="justify">center</property>
+            <style>
+              <class name="dimmed" />
+              <class name="mb-18" />
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPasswordEntry" id="_password_entry">
+            <property name="show-peek-icon">true</property>
+            <property name="activates-default">true</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="_warning_box">
+            <property name="visible">false</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-circle-alert-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_warning_label">
+                <property name="max-width-chars">38</property>
+                <property name="wrap">1</property>
+                <property name="justify">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
