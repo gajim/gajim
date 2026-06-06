@@ -430,6 +430,21 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
                 "openpgp_blind_trust",
                 desc=_("Blindly trust new devices"),
             ),
+        ]
+
+        for setting in settings:
+            self.add_setting(setting)
+
+
+class AccountOpenPGPSecretGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-secret", account=account
+        )
+
+        self.set_title(_("Secret Key Management"))
+
+        settings = [
             Setting(
                 SettingKind.SWITCH,
                 _("Backup Secret Key"),
@@ -438,6 +453,12 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
                 desc=_("Stores the secret key encrypted on the server"),
                 enabled_func=(lambda: app.account_is_connected(account)),
                 callback=self._on_backup,
+            ),
+            Setting(
+                SettingKind.DIALOG,
+                _("Export & Share Secret Key"),
+                SettingType.DIALOG,
+                props={"dialog": "OpenPGPSecret"},
             ),
         ]
 
@@ -910,6 +931,7 @@ class AccountOpenPGPPage(GajimPreferencePage):
         )
 
         self.add(AccountOpenPGPSettingsGroup(account))
+        self.add(AccountOpenPGPSecretGroup(account))
         self.add(AccountOpenPGPTrustGroup(account))
 
 
