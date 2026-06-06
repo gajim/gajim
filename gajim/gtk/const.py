@@ -144,6 +144,7 @@ WINDOW_MODULES = {
     "HistorySyncAssistant": "gajim.gtk.history_sync",
     "ManageProxies": "gajim.gtk.manage_proxies",
     "ManageSounds": "gajim.gtk.manage_sounds",
+    "OpenPGPSecret": "gajim.gtk.openpgp_secret",
     "OpenPGPWizard": "gajim.gtk.openpgp_wizard",
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",
