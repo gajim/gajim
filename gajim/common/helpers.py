@@ -156,7 +156,7 @@ def generate_qr_code(content: str) -> Gdk.Texture:
         version=None,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=6,
-        border=4,
+        border=2,
     )
     qr.add_data(content)
     qr.make(fit=True)
