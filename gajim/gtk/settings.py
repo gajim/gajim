@@ -225,7 +225,9 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         enabled_func: Callable[..., bool] | None = None,
         **kwargs: Any,
     ) -> None:
-        Adw.ActionRow.__init__(self, activatable=True, title=label, subtitle=desc or "")
+        Adw.ActionRow.__init__(
+            self, activatable=True, title=label, subtitle=desc or "", use_markup=False
+        )
         SignalManager.__init__(self)
 
         self.callback = callback
