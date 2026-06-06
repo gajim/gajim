@@ -295,16 +295,7 @@ def allow_send_message(has_text: bool, contact: types.ChatContactT) -> bool:
         if not contact.is_available:
             return False
 
-        groupchat_contact = contact.room
-        joined = groupchat_contact.is_joined
-
-        is_visitor = False
-        if joined:
-            self_contact = groupchat_contact.get_self()
-            assert self_contact
-            is_visitor = self_contact.role.is_visitor
-
-        return bool(has_text and joined and not is_visitor)
+        return bool(has_text and contact.room.is_joined)
 
     # BareContact
     online = app.account_is_connected(contact.account)
