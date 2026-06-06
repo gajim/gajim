@@ -249,6 +249,13 @@ class AssistantPage(Gtk.Box, SignalManager):
     def get_default_button(self) -> str | None:
         return None
 
+    def set_complete(self, complete: bool) -> None:
+        if self.complete == complete:
+            return
+
+        self.complete = complete
+        self.emit("update-page-complete")
+
     def update_page_complete(self) -> None:
         self.emit("update-page-complete")
 
