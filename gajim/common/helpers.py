@@ -266,11 +266,11 @@ def get_optional_features(account: str) -> list[str]:
         features.append(Namespace.BOOKMARKS_1 + "+notify")
     elif client.get_module("Bookmarks").pep_bookmarks_used:
         features.append(Namespace.BOOKMARKS + "+notify")
-    if app.is_installed("AV"):
-        features.append(Namespace.JINGLE_RTP)
-        features.append(Namespace.JINGLE_RTP_AUDIO)
-        features.append(Namespace.JINGLE_RTP_VIDEO)
-        features.append(Namespace.JINGLE_ICE_UDP)
+    # if app.is_installed("AV"):
+    #     features.append(Namespace.JINGLE_RTP)
+    #     features.append(Namespace.JINGLE_RTP_AUDIO)
+    #     features.append(Namespace.JINGLE_RTP_VIDEO)
+    #     features.append(Namespace.JINGLE_ICE_UDP)
 
     # Give plugins the possibility to add their features
     app.plugin_manager.extension_point("update_caps", account, features)
