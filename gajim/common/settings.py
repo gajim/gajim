@@ -27,6 +27,7 @@ from nbxmpp.protocol import JID
 from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.helpers import deep_update
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import AllAccountSettings
 from gajim.common.setting_values import AllAccountSettingsT
@@ -224,7 +225,7 @@ class Settings:
             except Exception:
                 log.exception("Error while executing signal callback")
 
-    def init(self) -> None:
+    def init(self, init_config_path: Path | None = None) -> None:
         self._setup_installation_defaults()
         if self._in_memory:
             self._connect_in_memory_database()
@@ -233,6 +234,7 @@ class Settings:
         self._load_settings()
         self._load_account_settings()
         self._migrate_database()
+        self._load_settings_from_path(init_config_path)
         self._load_app_overrides()
         self._commit()
 
@@ -243,6 +245,33 @@ class Settings:
 
         if sys.platform == "win32":
             APP_SETTINGS["app_font_size"] = 1.125
+
+    def _load_settings_from_path(self, path: Path | None) -> None:
+        if path is None:
+            return
+
+        log.info("Load settings from path: %s", path)
+
+        try:
+            settings = json.loads(path.read_bytes(), object_hook=json_decoder)
+        except Exception as error:
+            sys.exit(f"Unable to load settings from path: {error}")
+
+        for cat in self._settings:
+            self._settings[cat] = deep_update(
+                self._settings[cat], settings.get(cat, {})
+            )
+
+        account_settings = settings.get("accounts", {})
+        for account in account_settings:
+            if account not in self._account_settings:
+                self.add_account(account)
+
+        self._account_settings = deep_update(
+            self._account_settings, settings.get("accounts", {})
+        )
+
+        self._commit_all()
 
     def _load_app_overrides(self) -> None:
         if not OVERRIDES_PATH.exists():
@@ -256,6 +285,12 @@ class Settings:
                 return
 
         self._settings["app"].update(self._app_overrides)
+
+    def export_to_json(self, path: Path) -> None:
+        config = self._settings.copy()
+        config["accounts"] = self._account_settings
+        json_string = json.dumps(config, cls=Encoder, indent=2)
+        path.write_text(json_string)
 
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> NamedTuple:
@@ -322,6 +357,13 @@ class Settings:
 
         elif self._commit_scheduled is None:
             self._commit_scheduled = GLib.timeout_add(200, self._scheduled_commit)
+
+    def _commit_all(self) -> None:
+        for account in self._account_settings:
+            self._commit_account_settings(account)
+
+        for key in self._settings:
+            self._commit_settings(key)
 
     def save(self) -> None:
         self._commit()

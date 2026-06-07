@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import TYPE_CHECKING
+from typing import TypeVar
 
 import hashlib
 import inspect
@@ -73,6 +74,8 @@ if os.name == "nt":
         pass
 
 log = logging.getLogger("gajim.c.helpers")
+
+KeyType = TypeVar("KeyType")
 
 
 def sanitize_filename(filename: str) -> str:
@@ -604,3 +607,20 @@ def timeout_add_seconds_once(sec: int, func: Callable[..., Any], *args: Any) -> 
         return False
 
     GLib.timeout_add_seconds(sec, wrapper)
+
+
+def deep_update(
+    mapping: dict[KeyType, Any], *updating_mappings: dict[KeyType, Any]
+) -> dict[KeyType, Any]:
+    updated_mapping = mapping.copy()
+    for updating_mapping in updating_mappings:
+        for k, v in updating_mapping.items():
+            if (
+                k in updated_mapping
+                and isinstance(updated_mapping[k], dict)
+                and isinstance(v, dict)
+            ):
+                updated_mapping[k] = deep_update(updated_mapping[k], v)  # type: ignore
+            else:
+                updated_mapping[k] = v
+    return updated_mapping

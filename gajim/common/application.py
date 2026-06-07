@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from typing import Any
 from typing import TextIO
 
 import cProfile
@@ -11,6 +12,7 @@ import os
 import pstats
 import sys
 from datetime import datetime
+from pathlib import Path
 from pstats import SortKey
 
 from gi.repository import GLib
@@ -56,19 +58,29 @@ class CoreApplication(ged.EventHelper):
     def __init__(self) -> None:
         ged.EventHelper.__init__(self)
         self._profiling_session = None
+        self._cmd_line_options: dict[str, Any] = {}
 
     def _init_core(self, *, in_memory: bool) -> bool:
         # Create and initialize Application Paths & Databases
         app.app = self
         app.print_version()
-        app.detect_dependencies()
-        app.init_process_pool()
         configpaths.create_paths()
 
+        configure_path = self._cmd_line_options.get("configure")
+
         app.settings = Settings(in_memory=in_memory)
-        app.settings.init()
+        app.settings.init(configure_path)
+
+        if configure_path:
+            sys.exit()
+
+        if export_path := self._cmd_line_options.get("export-settings"):
+            app.settings.export_to_json(export_path)
+            sys.exit()
 
         passwords.init()
+        app.detect_dependencies()
+        app.init_process_pool()
 
         app.commands = ChatCommands()
 
@@ -168,6 +180,14 @@ class CoreApplication(ged.EventHelper):
 
         if options.contains("warnings"):
             self._show_warnings()
+
+        configure_path = options.lookup_value("configure")
+        if configure_path is not None:
+            self._cmd_line_options["configure"] = Path(configure_path.get_string())
+
+        export_path = options.lookup_value("export-settings")
+        if export_path is not None:
+            self._cmd_line_options["export-settings"] = Path(export_path.get_string())
 
     def _auto_connect(self) -> None:
         for client in app.get_clients():

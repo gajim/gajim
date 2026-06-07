@@ -197,6 +197,24 @@ class GajimApplication(Adw.Application, CoreApplication):
             _("Start a new chat"),
         )
 
+        self.add_main_option(
+            "configure",
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _("Configure Gajim with values from a .json file"),
+            "PATH",
+        )
+
+        self.add_main_option(
+            "export-settings",
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _("Export settings to a .json file"),
+            "PATH",
+        )
+
         self.add_main_option_entries(self._get_remaining_entry())
 
         self.connect("activate", self._on_activate)
@@ -314,7 +332,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         self, _application: GajimApplication, command_line: Gio.ApplicationCommandLine
     ) -> int:
         """Handles command line options not related to the startup of Gajim."""
-
         options = command_line.get_options_dict()
 
         remote_commands = [
@@ -344,6 +361,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _handle_local_options(
         self, _application: Gtk.Application, options: GLib.VariantDict
     ) -> int:
+
         if options.contains("version"):
             print(gajim.__version__)
             return 0
