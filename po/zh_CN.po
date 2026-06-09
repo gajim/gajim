@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
-"PO-Revision-Date: 2026-04-12 05:20+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"PO-Revision-Date: 2026-06-08 02:20+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -57,7 +57,7 @@ msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
-"将会审核撤回 %(participant)s 的 %(count)s 条消息。\n"
+"来自 %(participant)s 的 %(count)s 条消息将被审核撤回。\n"
 "为什么要审核撤回这些消息？"
 
 #, python-format
@@ -102,6 +102,11 @@ msgstr "%(nick)s 已被 %(actor)s 踢出"
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s 现在是此群聊的%(affiliation)s"
+
+#, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "%(nickname)s 和我"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -256,6 +261,11 @@ msgstr "（原因：群聊配置已更改为仅成员）"
 msgid "(reason: system shutdown)"
 msgstr "（原因：系统关闭）"
 
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
+msgstr "，以及其他 %(number of participants)s 人"
+
 msgid "1 Day"
 msgstr "1 天"
 
@@ -407,8 +417,8 @@ msgid ""
 "Account %(name)s is still connected\n"
 "All chat and group chat windows will be closed."
 msgstr ""
-"账号 %(name)s 仍连接\n"
-"将会关闭所有聊天和群聊窗口。"
+"账号 %(name)s 仍处于连接状态\n"
+"所有聊天和群聊窗口都将关闭。"
 
 msgid "Account Added"
 msgstr "账号已添加"
@@ -444,7 +454,7 @@ msgid "Account has been added successfully"
 msgstr "账号已成功添加"
 
 msgid "Account has to be connected"
-msgstr "账号必须已连接"
+msgstr "账号必须处于连接状态"
 
 msgid "Account is being created"
 msgstr "正在创建账号"
@@ -676,6 +686,14 @@ msgstr "尝试更改密码时出错。"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "尝试在 %(path)s 创建文件时出错：%(error)s"
 
+#, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "尝试解密备份时出错：%s"
+
+#, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "尝试导入 OpenPGP 密钥时出错：%s"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -687,6 +705,10 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
 msgstr "尝试将 {occupant_jid} 设为{affiliation_or_role}时出错：{error}"
+
+#, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
+msgstr "尝试覆盖备份时出错：%s"
 
 msgid "And more..."
 msgstr "以及更多…"
@@ -839,6 +861,18 @@ msgstr "离开"
 msgid "Back"
 msgstr "返回"
 
+msgid "Backup Error"
+msgstr "备份错误"
+
+msgid "Backup Now"
+msgstr "立即备份"
+
+msgid "Backup Secret Key"
+msgstr "备份私钥"
+
+msgid "Backup Successful"
+msgstr "备份成功"
+
 msgid "Ban"
 msgstr "封禁"
 
@@ -861,8 +895,11 @@ msgstr "生日"
 msgid "Blind Trust"
 msgstr "盲目信任"
 
+msgid "Blindly trust new devices"
+msgstr "盲目信任新设备"
+
 msgid "Blindly trust new devices until you verify them"
-msgstr "自动信任未经验证的联系人的新设备，但已验证的联系人的新设备需手动确认"
+msgstr "在您验证之前盲目信任新设备"
 
 msgid "Block"
 msgstr "屏蔽"
@@ -877,17 +914,20 @@ msgid "Block Participant?"
 msgstr "屏蔽参与者？"
 
 msgid "Blocked Contacts"
-msgstr "已屏蔽的联系人"
+msgstr "已屏蔽联系人"
 
 #, python-format
 msgid "Blocked Contacts – %(account)s"
-msgstr "已屏蔽的联系人 - %(account)s"
+msgstr "已屏蔽联系人 - %(account)s"
 
 msgid "Blocked Participants"
-msgstr "已屏蔽的参与者"
+msgstr "已屏蔽参与者"
 
 msgid "Block…"
 msgstr "屏蔽…"
+
+msgid "Bold"
+msgstr "加粗"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1064,7 +1104,7 @@ msgid "Chats"
 msgstr "聊天"
 
 msgid "Chats from this account will use this workspace by default"
-msgstr "此账号的聊天将默认使用此工作区"
+msgstr "来自此账号的聊天将默认使用此工作区"
 
 msgid "Check For Updates"
 msgstr "检查更新"
@@ -1087,6 +1127,9 @@ msgstr "选择设备"
 msgid "Choose History Export Directory"
 msgstr "选择历史导出目录"
 
+msgid "Choose Secret Key"
+msgstr "选择私钥"
+
 msgid "Choose Sound"
 msgstr "选择声音"
 
@@ -1097,19 +1140,13 @@ msgid "Choose a group…"
 msgstr "选择分组…"
 
 msgid "Choose encryption"
-msgstr "选择加密方式"
+msgstr "选择加密"
 
 msgid "City"
 msgstr "城市"
 
 msgid "Clear"
 msgstr "清除"
-
-msgid "Clear Devices?"
-msgstr "清除设备？"
-
-msgid "Clear Devices…"
-msgstr "清除设备…"
 
 msgid "Clear File"
 msgstr "清除文件"
@@ -1154,6 +1191,12 @@ msgstr "关闭此预览"
 msgid "Close with Escape"
 msgstr "Esc 键关闭"
 
+msgid "Code"
+msgstr "代码"
+
+msgid "Code Block"
+msgstr "代码块"
+
 msgid "Code snippet"
 msgstr "代码片段"
 
@@ -1192,6 +1235,12 @@ msgstr ""
 msgid "Complete"
 msgstr "完成"
 
+msgid "Complete the OpenPGP setup"
+msgstr "完成 OpenPGP 设置"
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr "完成 OpenPGP 设置即可进行加密聊天。"
+
 msgid "Completed"
 msgstr "已完成"
 
@@ -1207,6 +1256,9 @@ msgstr "配置"
 msgid "Configure"
 msgstr "配置"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr "使用 .json 文件中的值配置 Gajim"
+
 msgid "Configure logging system"
 msgstr "配置日志系统"
 
@@ -1217,6 +1269,9 @@ msgid ""
 msgstr ""
 "配置哪些消息将在服务器上归档。不在服务器上归档消息可能会导致无法在您的设备之"
 "间同步消息。"
+
+msgid "Confirm"
+msgstr "确认"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "确认未加密连接"
@@ -1309,7 +1364,7 @@ msgid "Conversations"
 msgstr "对话"
 
 msgid "Conversations are not stored on the server"
-msgstr "对话未存储在服务器上"
+msgstr "对话不存储在服务器上"
 
 msgid "Conversations are stored on the server"
 msgstr "对话会存储在服务器上"
@@ -1392,11 +1447,20 @@ msgstr "创建新账号"
 msgid "Create New Group Chat"
 msgstr "创建新群聊"
 
+msgid "Create New Key"
+msgstr "创建新密钥"
+
+msgid "Create New OpenPGP Key"
+msgstr "创建新的 OpenPGP 密钥"
+
 msgid "Creating Account..."
 msgstr "正在创建账号…"
 
 msgid "Credentials expired"
 msgstr "凭据已过期"
+
+msgid "Current password incorrect"
+msgstr "当前密码不正确"
 
 msgid "Custom"
 msgstr "自定义"
@@ -1434,8 +1498,11 @@ msgstr "减小字体大小"
 msgid "Decrease playback speed"
 msgstr "减慢播放速度"
 
+msgid "Decryption Error"
+msgstr "解密错误"
+
 msgid "Default Encryption"
-msgstr "默认加密方式"
+msgstr "默认加密"
 
 msgid "Default Sync Threshold"
 msgstr "默认同步阈值"
@@ -1543,6 +1610,9 @@ msgstr "目录不可写入"
 msgid "Disable Account?"
 msgstr "禁用账号？"
 
+msgid "Disable Check"
+msgstr "禁用检查"
+
 msgid "Disable Update"
 msgstr "禁用更新"
 
@@ -1568,10 +1638,10 @@ msgstr "发现服务…"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
-msgstr "是否接受此请求（账号：%s）？"
+msgstr "您接受此请求吗（账号：%s）？"
 
 msgid "Do you accept this request?"
-msgstr "是否接受此请求？"
+msgstr "您接受此请求吗？"
 
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
@@ -1584,48 +1654,51 @@ msgstr ""
 
 #, python-format
 msgid "Do you want to block %(name)s?"
-msgstr "是否要屏蔽 %(name)s？"
+msgstr "要屏蔽 %(name)s 吗？"
 
 msgid "Do you want to delete this PEP node?"
-msgstr "是否要删除此 PEP 节点？"
+msgstr "要删除此 PEP 节点吗？"
 
 msgid "Do you want to delete this theme?"
-msgstr "是否要删除此主题？"
+msgstr "要删除此主题吗？"
 
 msgid "Do you want to overwrite the currently installed version?"
-msgstr "是否要覆盖当前已安装的版本？"
+msgstr "要覆盖当前已安装的版本吗？"
 
 #, python-format
 msgid "Do you want to remove \"%(group)s\"?"
-msgstr "是否要移除“%(group)s”？"
+msgstr "要移除“%(group)s”吗？"
 
 msgid "Do you want to remove all chat history for this chat?"
-msgstr "是否要移除此聊天的所有聊天记录？"
+msgstr "要移除此聊天的所有聊天记录吗？"
+
+msgid "Do you want to remove the backup from your server?"
+msgstr "要从您的服务器中移除备份吗？"
 
 msgid "Do you want to remove this chat including its chat history?"
-msgstr "是否要移除此聊天及其聊天记录？"
+msgstr "要移除此聊天及其聊天记录吗？"
 
 msgid "Do you want to remove this proxy?"
-msgstr "是否要移除此代理？"
+msgstr "要移除此代理吗？"
 
 msgid ""
 "Do you want to retract this message?\n"
 "Please note that retracting a message does not guarantee that your provider "
 "or your contact’s device will remove it."
 msgstr ""
-"是否要撤回此消息？\n"
+"要撤回此消息吗？\n"
 "请注意，撤回消息并不保证您的提供者或联系人的设备会将其移除。"
 
 #, python-format
 msgid "Do you want to unblock %(name)s?"
-msgstr "是否要取消屏蔽 %(name)s？"
+msgstr "要取消屏蔽 %(name)s 吗？"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
-msgstr "是否也要注销 <b>%s</b> 上的账号？"
+msgstr "也要注销您在 <b>%s</b> 上的账号吗？"
 
 msgid "Doing so will permanently delete this Fingerprint"
-msgstr "执行操作后会永久删除此指纹"
+msgstr "执行操作后将永久删除此指纹"
 
 msgid "Download"
 msgstr "下载"
@@ -1719,6 +1792,13 @@ msgstr "加密（OMEMO）"
 msgid "Encryption (OMEMO) – %(account)s"
 msgstr "加密（OMEMO）- %(account)s"
 
+msgid "Encryption (OpenPGP)"
+msgstr "加密（OpenPGP）"
+
+#, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "加密（OpenPGP）- %(account)s"
+
 msgid "Encryption Error"
 msgstr "加密错误"
 
@@ -1726,7 +1806,7 @@ msgid "Encryption error"
 msgstr "加密错误"
 
 msgid "Encryption is not available in private chats"
-msgstr "私人聊天无法加密"
+msgstr "加密在私人聊天中不可用"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr "未单独对联系人指定加密方式时采用的默认加密方式"
@@ -1740,8 +1820,17 @@ msgstr "结束通话"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr "用于检索注册提供者列表的端点"
 
+msgid "Enter Backup Password"
+msgstr "输入备份密码"
+
+msgid "Enter Password"
+msgstr "输入密码"
+
 msgid "Enter a password to join this chat"
-msgstr "输入密码以加入此聊天"
+msgstr "输入密码即可加入此聊天"
+
+msgid "Enter current password..."
+msgstr "输入当前密码…"
 
 msgid "Enter group name"
 msgstr "输入分组名称"
@@ -1781,7 +1870,7 @@ msgid "Error while receiving search results."
 msgstr "接收搜索结果时出错。"
 
 msgid "Error while retrieving search form."
-msgstr "检索搜索表时出错。"
+msgstr "检索搜索表单时出错。"
 
 msgid "Error while uploading avatar"
 msgstr "上传头像时出错"
@@ -1838,8 +1927,11 @@ msgstr "导出已完成"
 msgid "Export History…"
 msgstr "导出历史…"
 
+msgid "Export settings to a .json file"
+msgstr "将设置导出到 .json 文件"
+
 msgid "Export your chat history from Gajim"
-msgstr "从 Gajim 导出您的聊天记录"
+msgstr "从 Gajim 中导出您的聊天记录"
 
 msgid "Exporting History..."
 msgstr "正在导出历史…"
@@ -1960,7 +2052,7 @@ msgstr "指纹"
 
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
-msgstr "与“%s”连接的设备的指纹"
+msgstr "与“%s”连接设备的指纹"
 
 msgid "Finished"
 msgstr "已完成"
@@ -2106,6 +2198,11 @@ msgid "Gajim is quitting…"
 msgstr "Gajim 正在退出…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr "Gajim 正在尝试从服务器恢复您的 OpenPGP 密钥备份。请输入您的备份密码。"
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr "Gajim 无法访问服务器。请确保您的 XMPP 地址正确。"
@@ -2173,7 +2270,7 @@ msgid "Group chat already exists"
 msgstr "群聊已存在"
 
 msgid "Group chat can be found via search"
-msgstr "可以通过搜索找到此群聊"
+msgstr "此群聊可以通过搜索找到"
 
 msgid "Group chat does not exist"
 msgstr "群聊不存在"
@@ -2314,7 +2411,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "忽略未知联系人"
 
 msgid "Ignore everything from contacts not in your contact list"
-msgstr "忽略不在您联系人列表的联系人的一切活动"
+msgstr "忽略来自不在您联系人列表中的联系人的所有信息"
 
 msgid "Image"
 msgstr "图片"
@@ -2331,11 +2428,23 @@ msgstr "导入联系人？"
 msgid "Import Error"
 msgstr "导入错误"
 
+msgid "Import Key"
+msgstr "导入密钥"
+
+msgid "Import OpenPGP Key"
+msgstr "导入 OpenPGP 密钥"
+
 msgid "Import from Account"
 msgstr "从账号导入"
 
 msgid "Import from File"
 msgstr "从文件导入"
+
+msgid "Imported key has expiration date"
+msgstr "导入的密钥有到期日期"
+
+msgid "Imported key is not a secret key"
+msgstr "导入的密钥不是私钥"
 
 msgid "Import…"
 msgstr "导入…"
@@ -2467,6 +2576,9 @@ msgstr "检测到的问题"
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr "%(name)s 那边现在是 <b>%(time)s</b>"
 
+msgid "Italic"
+msgstr "倾斜"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2499,6 +2611,9 @@ msgstr "加入…"
 
 msgid "Just now"
 msgstr "刚刚"
+
+msgid "Keep Backup"
+msgstr "保留备份"
 
 msgid "Keep Chat History"
 msgstr "保留聊天记录"
@@ -2698,7 +2813,7 @@ msgid "Messages from Contacts"
 msgstr "来自联系人的消息"
 
 msgid "Messages from this users are blocked"
-msgstr "此用户的消息已被屏蔽"
+msgstr "来自此用户的消息已被屏蔽"
 
 #, python-format
 msgid "Migration to version %s"
@@ -2895,6 +3010,9 @@ msgstr "未分配分组"
 msgid "No info available"
 msgstr "没有可用信息"
 
+msgid "No key found"
+msgstr "未找到密钥"
+
 msgid "No keys pressed"
 msgstr "未按下任何键"
 
@@ -2907,6 +3025,9 @@ msgstr "无结果"
 
 msgid "No results found"
 msgstr "未找到结果"
+
+msgid "No secret key found"
+msgstr "未找到私钥"
 
 msgid "No undecided fingerprints"
 msgstr "无未决定指纹"
@@ -2946,7 +3067,7 @@ msgid "Not Available"
 msgstr "不在"
 
 msgid "Not Decided"
-msgstr "尚未决定"
+msgstr "未决定"
 
 msgid "Not Joined"
 msgstr "未加入"
@@ -3059,6 +3180,24 @@ msgstr "打开文件夹"
 msgid "OpenGL accelerated"
 msgstr "OpenGL 加速"
 
+msgid "OpenPGP Backup"
+msgstr "OpenPGP 备份"
+
+msgid "OpenPGP Backup Error"
+msgstr "OpenPGP 备份错误"
+
+msgid "OpenPGP Key Backup"
+msgstr "OpenPGP 密钥备份"
+
+msgid "OpenPGP Setup"
+msgstr "OpenPGP 设置"
+
+msgid "OpenPGP Setup is completed."
+msgstr "OpenPGP 设置已完成。"
+
+msgid "OpenPGP key backup failed"
+msgstr "OpenPGP 密钥备份失败"
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3081,6 +3220,9 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "其他"
 
+msgid "Other Options"
+msgstr "其他选项"
+
 msgid "Other devices connected with your account"
 msgstr "与您的账号连接的其他设备"
 
@@ -3092,6 +3234,9 @@ msgstr "内存不足"
 
 msgid "Outcasts"
 msgstr "被驱逐者"
+
+msgid "Overwrite"
+msgstr "覆盖"
 
 msgid "Overwrite Plugin?"
 msgstr "覆盖插件？"
@@ -3191,6 +3336,9 @@ msgstr "粘贴为代码块"
 msgid "Paste as Quote"
 msgstr "粘贴为引用"
 
+msgid "Paste your OpenPGP key here"
+msgstr "在此粘贴您的 OpenPGP 密钥"
+
 msgid "Pasting Content Failed"
 msgstr "粘贴内容失败"
 
@@ -3226,7 +3374,7 @@ msgid "Phone No."
 msgstr "电话号码"
 
 msgid "Picture and Name"
-msgstr "照片和名称"
+msgstr "头像和昵称"
 
 msgid "Pin Chat"
 msgstr "固定聊天"
@@ -3251,6 +3399,11 @@ msgstr "播放声音来通知事件"
 
 msgid "Please choose an account"
 msgstr "请选择账号"
+
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr "请选择 Gajim 应使用您的哪个 OpenPGP 密钥来加密您的聊天。"
 
 msgid "Please enter an XMPP address"
 msgstr "请输入 XMPP 地址"
@@ -3280,8 +3433,16 @@ msgid ""
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
-"请选择您的账号。\n"
-"Gajim 会将所选账号和聊天的所有消息导出到您选择的目录。"
+"请选择您的一个账号。\n"
+"Gajim 会将所选账号和聊天中的所有消息导出到您选择的目录。"
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
+msgstr ""
+"请将您的 OpenPGP 密钥备份密码妥善保管。如果您需要恢复密钥或在其他设备上使用，"
+"将需要此密码。"
 
 msgid "Please use these settings with caution!"
 msgstr "请谨慎使用这些设置！"
@@ -3320,7 +3481,7 @@ msgid "Postal Code"
 msgstr "邮政编码"
 
 msgid "Prefer direct messages in private group chats "
-msgstr "在私人群聊中偏好通过 XMPP 地址私信 "
+msgstr "在私人群聊中偏好直接通过 XMPP 地址私信 "
 
 msgctxt "Configuration"
 msgid "Preference Name"
@@ -3566,6 +3727,9 @@ msgstr "从您的联系人列表移除 %s 位联系人？"
 msgid "Remove Account"
 msgstr "移除账号"
 
+msgid "Remove Backup"
+msgstr "移除备份"
+
 msgid "Remove Chat History?"
 msgstr "移除聊天记录？"
 
@@ -3596,6 +3760,12 @@ msgstr "移除代理"
 msgid "Remove Proxy?"
 msgstr "移除代理？"
 
+msgid "Remove Public Keys?"
+msgstr "移除公钥？"
+
+msgid "Remove Public Keys…"
+msgstr "移除公钥…"
+
 msgid "Remove Setting"
 msgstr "移除设置"
 
@@ -3611,14 +3781,17 @@ msgstr "从联系人列表移除…"
 msgid "Remove from Group"
 msgstr "从分组移除"
 
+msgid "Remove from Server"
+msgstr "从服务器移除"
+
 msgid "Remove this workspace"
 msgstr "移除此工作区"
 
 msgid "Remove your group chat avatar"
-msgstr "移除您的群聊头像"
+msgstr "移除群聊头像"
 
 msgid "Remove your profile picture"
-msgstr "移除您的个人资料照片"
+msgstr "移除您的头像"
 
 #, python-format
 msgid "Removed %(count)s contact"
@@ -3653,7 +3826,7 @@ msgid "Request"
 msgstr "请求"
 
 msgid "Request Search Form"
-msgstr "请求搜索表"
+msgstr "请求搜索表单"
 
 msgid "Request Voice"
 msgstr "请求发言权"
@@ -3674,13 +3847,13 @@ msgid "Requesting HTTP File Upload Slot…"
 msgstr "正在请求 HTTP 文件上传插槽…"
 
 msgid "Requesting Register Form"
-msgstr "正在请求注册表"
+msgstr "正在请求注册表单"
 
 msgid "Requesting register form from server…"
-msgstr "正在向服务器请求注册表…"
+msgstr "正在从服务器请求注册表单…"
 
 msgid "Requesting search form from server"
-msgstr "正在向服务器请求搜索表"
+msgstr "正在从服务器请求搜索表单"
 
 msgid "Required"
 msgstr "必填"
@@ -3744,8 +3917,14 @@ msgstr "重启 Gajim 以开始调试日志记录"
 msgid "Restart Pending"
 msgstr "重启待处理"
 
+msgid "Restore Backup"
+msgstr "恢复备份"
+
 msgid "Restore Closed Chat"
 msgstr "恢复已关闭的聊天"
+
+msgid "Restore Key"
+msgstr "恢复密钥"
 
 msgid "Restore last state"
 msgstr "恢复上次状态"
@@ -3938,6 +4117,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "选择消息…"
 
+msgid "Select Secret Key"
+msgstr "选择私钥"
+
 msgid "Select a security label for your message…"
 msgstr "为您的消息选择安全标签…"
 
@@ -4062,6 +4244,15 @@ msgstr "系统已锁定设置"
 msgid "Settings"
 msgstr "设置"
 
+msgid "Setup"
+msgstr "设置"
+
+msgid "Setup Complete"
+msgstr "设置完成"
+
+msgid "Setup OpenPGP Encryption"
+msgstr "设置 OpenPGP 加密"
+
 msgid "Share Contact…"
 msgstr "分享联系人…"
 
@@ -4154,8 +4345,8 @@ msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
 "multiple messages from the same sender within a specific timespan."
 msgstr ""
-"如果同一发送者在特定时间段内发送了多条消息，仅显示一次消息元数据（头像、昵"
-"称、时间戳）。"
+"如果在特定时间段内有来自同一发送者的多条消息，则仅显示一次消息元数据（头像、"
+"昵称、时间戳）。"
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "即使是离开、忙碌等状态时仍显示通知"
@@ -4300,10 +4491,10 @@ msgid "Status Messages in Participants List"
 msgstr "参与者列表中的状态消息"
 
 msgid "Status is not shared"
-msgstr "未共享状态"
+msgstr "状态未共享"
 
 msgid "Status is shared"
-msgstr "已共享状态"
+msgstr "状态已共享"
 
 msgid "Status: Away Color"
 msgstr "状态：离开颜色"
@@ -4331,8 +4522,14 @@ msgstr "重现问题的步骤…"
 msgid "Stop Sharing Online Status?"
 msgstr "停止分享在线状态？"
 
+msgid "Stores the secret key encrypted on the server"
+msgstr "将加密后的私钥存储在服务器上"
+
 msgid "Street"
 msgstr "街道"
+
+msgid "Strike"
+msgstr "删除线"
 
 msgid "Style"
 msgstr "样式"
@@ -4366,8 +4563,11 @@ msgid "Successfully Removed Contacts"
 msgstr "已成功移除联系人"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
-msgstr "已成功与 {device_id} 建立新会话。"
+msgid "Successfully built new session with device {device_id}."
+msgstr "已成功与设备 {device_id} 建立新会话。"
+
+msgid "Successfully imported key from server."
+msgstr "已成功从服务器导入密钥。"
 
 msgid "Support"
 msgstr "支持"
@@ -4537,7 +4737,8 @@ msgstr "证书的算法是非安全的"
 msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
-msgstr "将会通知联系人您已停止分享状态。请注意，这可能会有其他连带影响。"
+msgstr ""
+"联系人将收到您已停止分享状态的通知。请注意，此操作可能会有其他连带影响。"
 
 msgid ""
 "The following warnings came up while trying to verify the provider's "
@@ -4596,7 +4797,7 @@ msgid "There is an update available for this plugin"
 msgstr "此插件有可用的更新"
 
 msgid "There is no encryption method available for the chosen encryption."
-msgstr "所选加密方式无可用加密方法。"
+msgstr "所选加密方式没有可用的加密方法。"
 
 msgid "There is no more history"
 msgstr "没有更多的历史记录"
@@ -4632,12 +4833,13 @@ msgstr "此地址似乎未提供任何网关服务。"
 msgid "This address is not reachable."
 msgstr "无法访问此地址。"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
-"此聊天的配置不适合使用 OMEMO 加密。要在此聊天中使用 OMEMO，聊天应为非匿名且仅"
-"成员。"
+"此聊天的配置不适合使用 {encryption} 加密。要在此聊天中使用 {encryption}，聊天"
+"应为非匿名且仅成员。"
 
 msgid "This contact does not share their status with you"
 msgstr "此联系人未与您分享其状态"
@@ -4655,40 +4857,40 @@ msgid "This gateway does not support direct registering."
 msgstr "此网关不支持直接注册。"
 
 msgid "This group chat can not be found via search"
-msgstr "无法通过搜索找到此群聊"
+msgstr "此群聊无法通过搜索找到"
 
 msgid "This group chat does not require a password upon entry"
-msgstr "无需密码即可进入此群聊"
+msgstr "此群聊无需密码即可进入"
 
 msgid "This group chat does require a password upon entry"
-msgstr "需要密码才能进入此群聊"
+msgstr "此群聊需要密码才能进入"
 
 msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
-msgstr "此群聊仅限成员进入，但您不在成员列表中。需要授权人员邀请您加入。"
+msgstr "此群聊仅限成员进入，但您不在成员列表中。需要授权人员邀请您。"
 
 msgid "This group chat is restricted to members only"
-msgstr "只有成员才能进入此群聊"
+msgstr "此群聊仅限成员进入"
 
 msgid "This group chat persists even if there are no participants"
 msgstr "即使没有参与者，此群聊仍然存在"
 
 msgid "This group chat will be destroyed once the last participant left"
-msgstr "最后一位参与者离开后，将会解散此群聊"
+msgstr "当最后一位参与者离开后，此群聊将被解散"
 
 msgid "This information will be publicly visible."
 msgstr "此信息将公开可见。"
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr "这是公开群聊，无法加密。"
+msgstr "这是公开群聊。加密不可用。"
 
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
 msgstr ""
 "这是您当前使用的主题。\n"
-"是否要删除此主题？"
+"要删除此主题吗？"
 
 msgid "This message has been moderated"
 msgstr "此消息已被审核撤回"
@@ -4709,7 +4911,7 @@ msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
-"此消息已使用传统 OpenPGP 加密且无法解密。您可以安装 PGP 插件来处理此类消息。"
+"此消息已使用旧版 OpenPGP 加密且无法解密。您可以安装 PGP 插件来处理此类消息。"
 
 msgid "This message was encrypted with OMEMO, but not for your device."
 msgstr "此消息已使用 OMEMO 加密，但未针对您的设备进行加密。"
@@ -4718,14 +4920,11 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "此消息已使用 OTR 加密且无法解密。"
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"此消息已使用 XMPP 专用 OpenPGP 加密且无法解密。您可以安装 OpenPGP 插件来处理"
-"此类消息。"
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "此消息已使用新版 OpenPGP 加密且无法解密。"
 
 msgid "This message will be deleted from your local chat history"
-msgstr "将从您本地聊天记录删除此消息"
+msgstr "此消息将从您的本地聊天记录中删除"
 
 msgid "This plugin is managed by your operating system"
 msgstr "此插件由您的操作系统管理"
@@ -4752,20 +4951,20 @@ msgstr "此服务尚未响应详细的信息"
 msgid "This type of service does not contain any items to browse."
 msgstr "此类服务不包含任何可浏览项目。"
 
-msgid "This will clear the devices store for your account."
-msgstr "这将清除您账号的设备存储。"
-
 msgid "This will purge all locally stored chat history"
-msgstr "这将清空所有本地存储的聊天记录"
+msgstr "此操作将清空所有本地存储的聊天记录"
+
+msgid "This will remove all published public keys from your account."
+msgstr "此操作将从您的账号中移除所有已发布的公钥。"
 
 msgid "This will remove the account and delete all data"
-msgstr "这将移除账号并删除所有数据"
+msgstr "此操作将移除该账号并删除所有数据"
 
 msgid "This will remove your account from Gajim."
-msgstr "这将从 Gajim 移除您的账号。"
+msgstr "此操作将从 Gajim 中移除您的账号。"
 
 msgid "This will reset all introduction hints"
-msgstr "这将重置所有引导提示"
+msgstr "此操作将重置所有引导提示"
 
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
@@ -4803,9 +5002,21 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr "要使所有更改立即生效，您必须重新登录。"
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+"为了保护您用于加密聊天的 OpenPGP 密钥，Gajim 可以在您的服务器上创建密钥的加密"
+"备份。"
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr "要发送加密消息，您必须决定是否信任联系人的设备。"
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
+msgstr "要设置 OpenPGP 加密，您可以导入现有密钥，或让 Gajim 创建新密钥。"
 
 msgid "Toggle Chat List"
 msgstr "切换聊天列表"
@@ -4877,6 +5088,9 @@ msgstr "无法解密 CRL 的签名"
 msgid "Unable to decrypt certificate's signature"
 msgstr "无法解密证书的签名"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr "无法使用此密码解密备份"
+
 msgid "Unable to get certificate CRL"
 msgstr "无法获取证书 CRL"
 
@@ -4891,6 +5105,9 @@ msgstr "无法正确移除插件"
 
 msgid "Unable to save profile"
 msgstr "无法保存个人资料"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr "无法使用此密钥加密消息"
 
 msgid "Unable to verify the first certificate"
 msgstr "无法验证首个证书"
@@ -5022,8 +5239,14 @@ msgstr "使用“//”以斜杠“/”开始消息。"
 msgid "Use GSSAPI"
 msgstr "使用 GSSAPI"
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr "如果服务器支持，为请求使用 HTTP2"
+
 msgid "Use Image"
 msgstr "使用图片"
+
+msgid "Use My Own OpenPGP Key"
+msgstr "使用我自己的 OpenPGP 密钥"
 
 msgid "Use System Keyring"
 msgstr "使用系统密钥环"
@@ -5248,7 +5471,7 @@ msgid "You can join this group chat instead: %s"
 msgstr "您可以改为加入此群聊：%s"
 
 msgid "You can not join a group chat unless you are connected."
-msgstr "您只有连接后才能加入群聊。"
+msgstr "除非您处于连接状态，否则您无法加入群聊。"
 
 msgid "You can see the contact's online status"
 msgstr "您可以查看此联系人的在线状态"
@@ -5303,7 +5526,7 @@ msgid "You have left due to an error"
 msgstr "发生错误，您已离开"
 
 msgid "You have to be connected to create a group chat."
-msgstr "您必须连接后才能创建群聊。"
+msgstr "您必须处于连接状态才能创建群聊。"
 
 msgid "You have to invite people so they can join"
 msgstr "您必须邀请他人加入"
@@ -5331,8 +5554,17 @@ msgid ""
 "messages."
 msgstr "您将对此联系人显示为离线，且不会继续接收其消息。"
 
+msgid "Your Backup Password"
+msgstr "您的备份密码"
+
 msgid "Your Nickname"
 msgstr "您的昵称"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr "您的 OpenPGP 密钥备份成功。"
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr "您的 OpenPGP 密钥已创建。您的聊天现已加密。"
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "您的 XMPP 地址（例如：user@example.org）"
@@ -5354,10 +5586,10 @@ msgstr ""
 "这可能需要一段时间…"
 
 msgid "Your connection to the server is secured by this certificate"
-msgstr "此证书保护着您与服务器的连接"
+msgstr "您与服务器的连接受此证书保护"
 
 msgid "Your message can not be sent until you are connected."
-msgstr "连接后才能发送您的消息。"
+msgstr "在您处于连接状态之前，您的消息无法发送。"
 
 msgid "Your messages have been exported successfully"
 msgstr "您的消息已成功导出"
@@ -5422,9 +5654,6 @@ msgstr "忙碌(_B)"
 
 msgid "_Cancel"
 msgstr "取消(_C)"
-
-msgid "_Clear Devices"
-msgstr "清除设备(_C)"
 
 msgid "_Close"
 msgstr "关闭(_C)"
@@ -5551,6 +5780,9 @@ msgstr "记住我的决定(_R)"
 msgid "_Remove"
 msgstr "移除(_R)"
 
+msgid "_Remove Public Keys"
+msgstr "移除公钥(_R)"
+
 msgid "_Report Spam"
 msgstr "举报垃圾信息(_R)"
 
@@ -5632,9 +5864,6 @@ msgstr "音频输出"
 msgid "bearing"
 msgstr "方位"
 
-msgid "bold"
-msgstr "加粗"
-
 msgid "building"
 msgstr "建筑"
 
@@ -5678,9 +5907,6 @@ msgstr "正在撰写消息…"
 
 msgid "is doing something else"
 msgstr "正在做其他事情"
-
-msgid "italic"
-msgstr "倾斜"
 
 #, python-format
 msgid "last seen: %s"
@@ -5730,9 +5956,6 @@ msgstr "速度"
 
 msgid "street"
 msgstr "街道"
-
-msgid "strike"
-msgstr "删除线"
 
 msgid "text"
 msgstr "文本"
@@ -6177,9 +6400,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Back in some minutes."
 #~ msgstr "稍后回来。"
 
-#~ msgid "Back soon"
-#~ msgstr "马上回来"
-
 #~ msgid "Blocking List"
 #~ msgstr "屏蔽列表"
 
@@ -6242,6 +6462,12 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "现在清除设备？"
+
+#~ msgid "Clear Devices?"
+#~ msgstr "清除设备？"
+
+#~ msgid "Clear Devices…"
+#~ msgstr "清除设备…"
 
 #~ msgid "Clear message entry"
 #~ msgstr "清除消息条目"
@@ -6342,9 +6568,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Create new group chat"
 #~ msgstr "创建新群聊"
-
-#~ msgid "Create new post"
-#~ msgstr "创建新消息"
 
 #~ msgid "Creating thumbnail failed"
 #~ msgstr "创建缩略图失败"
@@ -6827,9 +7050,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "密码包含禁用字符"
 
-#~ msgid "Past as Code Block"
-#~ msgstr "粘贴为代码块"
-
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "暂停或恢复文件传输"
 
@@ -7187,6 +7407,13 @@ msgstr "…或将其拖放到此处"
 #~ msgid "This is your XMPP address"
 #~ msgstr "这是您的 XMPP 地址"
 
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "此消息已使用 XMPP 专用 OpenPGP 加密且无法解密。您可以安装 OpenPGP 插件来处"
+#~ "理此类消息。"
+
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "切换菜单栏"
 
@@ -7309,9 +7536,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "You are not connected"
 #~ msgstr "您未连接"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "您未连接到服务器"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "只有连接后才能与账号同步。"
 
@@ -7351,6 +7575,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "_Clear"
 #~ msgstr "清除(_C)"
+
+#~ msgid "_Clear Devices"
+#~ msgstr "清除设备(_C)"
 
 #~ msgid "_Debug Console"
 #~ msgstr "调试控制台(_D)"
@@ -7418,6 +7645,9 @@ msgstr "…或将其拖放到此处"
 #, fuzzy
 #~ msgid "app.open-folder"
 #~ msgstr "打开文件夹"
+
+#~ msgid "bold"
+#~ msgstr "加粗"
 
 #~ msgid "dark skin tone"
 #~ msgstr "较深肤色"

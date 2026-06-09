@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
-"PO-Revision-Date: 2026-04-13 07:20+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"PO-Revision-Date: 2026-05-07 15:20+0000\n"
 "Last-Translator: Aozora Mei <ineudorfl@gmail.com>\n"
-"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/>"
-"\n"
+"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
+">\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -105,6 +105,11 @@ msgstr "%(nick)s byli vyhozeni %(actor)s"
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s je teď %(affiliation)s této skupiny"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -260,6 +265,11 @@ msgstr "(důvod: nastavení skupinové konverzace změněno na \"pouze pro člen
 
 msgid "(reason: system shutdown)"
 msgstr "(důvod: vypnutí systému)"
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 den"
@@ -688,6 +698,14 @@ msgstr "Objevila se chyba při změně hesla."
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Objevila se chyba při vytváření souboru v %(path)s: %(error)s"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Objevila se chyba při změně hesla."
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Objevila se chyba při změně hesla."
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -703,6 +721,10 @@ msgid ""
 msgstr ""
 "Došlo k chybě při pokusu nastavení {occupant_jid} na {affiliation_or_role}: "
 "{error}"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
+msgstr "Objevila se chyba při změně hesla."
 
 msgid "And more..."
 msgstr "A více..."
@@ -856,6 +878,19 @@ msgstr "Pryč"
 msgid "Back"
 msgstr "Zpět"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Hned jsem zpět"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 msgid "Ban"
 msgstr "Zabanovat"
 
@@ -877,6 +912,10 @@ msgstr "Narozeniny"
 
 msgid "Blind Trust"
 msgstr "Slepá důvěra"
+
+#, fuzzy
+msgid "Blindly trust new devices"
+msgstr "Slepě důvěřovat novým zařízením, dokud je neověříte"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr "Slepě důvěřovat novým zařízením, dokud je neověříte"
@@ -905,6 +944,9 @@ msgstr "Zablokovaní účastníci"
 
 msgid "Block…"
 msgstr "Blokovat…"
+
+msgid "Bold"
+msgstr "Ztučnění"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1109,6 +1151,10 @@ msgstr "Vyberte zařízení"
 msgid "Choose History Export Directory"
 msgstr "Vyberte složku pro export historie"
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Vyberte zařízení"
+
 msgid "Choose Sound"
 msgstr "Vyberte zvuk"
 
@@ -1126,13 +1172,6 @@ msgstr "Město"
 
 msgid "Clear"
 msgstr "Vyčistit"
-
-msgid "Clear Devices?"
-msgstr "Vyčistit zařízení?"
-
-# FIXME: chtelo by to cesky vyraz pro service discovery
-msgid "Clear Devices…"
-msgstr "Vymazat zařízení…"
 
 msgid "Clear File"
 msgstr "Smazat soubor"
@@ -1179,6 +1218,12 @@ msgstr "Zavřít náhled"
 msgid "Close with Escape"
 msgstr "Zavřete stisknutím klávesy Escape"
 
+msgid "Code"
+msgstr "Kód"
+
+msgid "Code Block"
+msgstr "Blok kódu"
+
 msgid "Code snippet"
 msgstr "Útržek kódu"
 
@@ -1218,6 +1263,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Dokončeno"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Dokončeno"
 
@@ -1233,6 +1284,9 @@ msgstr "Nastavení"
 msgid "Configure"
 msgstr "Nastavit"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr "Upravit nastavení logovacího systému"
 
@@ -1243,6 +1297,10 @@ msgid ""
 msgstr ""
 "Nakonfigurujte, které zprávy se budou archivovat na serveru. Nearchivování "
 "zpráv na serveru může zabránit jejich synchronizaci mezi vašimi zařízeními."
+
+#, fuzzy
+msgid "Confirm"
+msgstr "Nastavit"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Potvrdit nešifrované spojení"
@@ -1418,11 +1476,23 @@ msgstr "Vytvořit nový účet"
 msgid "Create New Group Chat"
 msgstr "Vytvořit novou skupinovou konverzaci"
 
+#, fuzzy
+msgid "Create New Key"
+msgstr "Vytvoř nový zápis"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Vytvořit novou skupinovou konverzaci"
+
 msgid "Creating Account..."
 msgstr "Vytvářím účet..."
 
 msgid "Credentials expired"
 msgstr "Platnost přístupových údajů vypršela"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Bezpečné ukládání hesla"
 
 msgid "Custom"
 msgstr "Vlastní"
@@ -1459,6 +1529,10 @@ msgstr "Zmenšit velikost fontu"
 
 msgid "Decrease playback speed"
 msgstr "Snížit rychlost přehrávání"
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Chyba šifrování"
 
 msgid "Default Encryption"
 msgstr "Výchozí šifrování"
@@ -1571,6 +1645,10 @@ msgstr "Adresář nelní zapisovatelný"
 msgid "Disable Account?"
 msgstr "Vypnout účet?"
 
+#, fuzzy
+msgid "Disable Check"
+msgstr "Vypnout aktualizace"
+
 msgid "Disable Update"
 msgstr "Vypnout aktualizace"
 
@@ -1632,6 +1710,10 @@ msgstr "Opravdu si přejete odebrat \"%(group)s\"?"
 
 msgid "Do you want to remove all chat history for this chat?"
 msgstr "Opravdu si přejete smazat historii této konverzace?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
+msgstr "Opravdu si přejete smazat tuto konverzaci a její historii?"
 
 msgid "Do you want to remove this chat including its chat history?"
 msgstr "Opravdu si přejete smazat tuto konverzaci a její historii?"
@@ -1751,6 +1833,14 @@ msgstr "Šifrování (OMEMO)"
 msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Šifrování (OMEMO) – %(account)s"
 
+#, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Šifrování (OMEMO)"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Šifrování (OMEMO) – %(account)s"
+
 msgid "Encryption Error"
 msgstr "Chyba šifrování"
 
@@ -1774,8 +1864,20 @@ msgstr "Ukončit hovor"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr "Koncový bod pro získání seznamu poskytovatelů pro registraci"
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Zadejte nové heslo..."
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Změnit heslo"
+
 msgid "Enter a password to join this chat"
 msgstr "Zadejte heslo pro připojení k této konverzaci"
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Zadejte nové heslo..."
 
 msgid "Enter group name"
 msgstr "Zadejte jméno skupiny"
@@ -1872,6 +1974,9 @@ msgstr "Export dokončen"
 
 msgid "Export History…"
 msgstr "Exportovat historii konverzace…"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr "Exportovat historii konverzací Gajimu"
@@ -2143,6 +2248,11 @@ msgid "Gajim is quitting…"
 msgstr "Gajim se vypíná…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2377,11 +2487,24 @@ msgstr "Importovat kontakty?"
 msgid "Import Error"
 msgstr "Chyba při importu"
 
+#, fuzzy
+msgid "Import Key"
+msgstr "Importovat"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
 msgid "Import from Account"
 msgstr "Importovat z účtu"
 
 msgid "Import from File"
 msgstr "Importovat ze souboru"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr "Importovat…"
@@ -2513,6 +2636,9 @@ msgstr "Byly nalezeny problémy"
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr "Je <b>%(time)s</b> pro %(name)s"
 
+msgid "Italic"
+msgstr "Kurzíva"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2545,6 +2671,9 @@ msgstr "Připojit…"
 
 msgid "Just now"
 msgstr "Právě teď"
+
+msgid "Keep Backup"
+msgstr ""
 
 msgid "Keep Chat History"
 msgstr "Ponechat historii konverzace"
@@ -2943,6 +3072,10 @@ msgstr "Nepřiděleny žádné skupiny"
 msgid "No info available"
 msgstr "Nejsou dostupné žádné informace"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Nebyly nalezeny žádné výsledky"
+
 msgid "No keys pressed"
 msgstr "Nebyly stisknuty žádné klávesy"
 
@@ -2954,6 +3087,10 @@ msgid "No results"
 msgstr "Žádné výsledky"
 
 msgid "No results found"
+msgstr "Nebyly nalezeny žádné výsledky"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
 msgid "No undecided fingerprints"
@@ -3108,6 +3245,24 @@ msgstr "Otevřít složku"
 msgid "OpenGL accelerated"
 msgstr "Akcelerováno pomocí OpenGL"
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3132,6 +3287,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Ostatní"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Ostatní"
+
 msgid "Other devices connected with your account"
 msgstr "Další zařízení spojena s vaším účtem"
 
@@ -3143,6 +3302,10 @@ msgstr "Nedostatek paměti"
 
 msgid "Outcasts"
 msgstr "Odpadlíci"
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "Přepsat"
 
 msgid "Overwrite Plugin?"
 msgstr "Přepsat zásuvný modul?"
@@ -3245,6 +3408,9 @@ msgstr "Vložit jako útržek kódu"
 msgid "Paste as Quote"
 msgstr "Vložit jako citát"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 msgid "Pasting Content Failed"
 msgstr "Vložení obsahu se nezdařilo"
 
@@ -3306,6 +3472,11 @@ msgstr "Přehrávat zvuky pro upozornění na události"
 msgid "Please choose an account"
 msgstr "Vyberte účet"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 msgid "Please enter an XMPP address"
 msgstr "Zadejte prosím adresu XMPP"
 
@@ -3337,6 +3508,12 @@ msgstr ""
 "Vyberte prosím jeden ze svých účtů.\n"
 "Gajim exportuje všechny zprávy a konverzace z vybraného účtu do vámi "
 "zvoleného adresáře."
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
+msgstr ""
 
 msgid "Please use these settings with caution!"
 msgstr "Prosíme, používejte tato nastavení opatrně!"
@@ -3623,6 +3800,10 @@ msgstr "Odstranit %s kontaktů ze seznamu?"
 msgid "Remove Account"
 msgstr "Odstranit účet"
 
+#, fuzzy
+msgid "Remove Backup"
+msgstr "Odstranit skupinu?"
+
 msgid "Remove Chat History?"
 msgstr "Smazat historii konverzace?"
 
@@ -3653,6 +3834,14 @@ msgstr "Odstranit proxy"
 msgid "Remove Proxy?"
 msgstr "Odstranit proxy?"
 
+#, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Veřejný klíč: "
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Smazat historii…"
+
 msgid "Remove Setting"
 msgstr "Odstranit nastavení"
 
@@ -3666,6 +3855,10 @@ msgid "Remove from Contact List…"
 msgstr "Odstranit ze seznamu kontaktů…"
 
 msgid "Remove from Group"
+msgstr "Odstranit ze skupiny"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Odstranit ze skupiny"
 
 msgid "Remove this workspace"
@@ -3804,8 +3997,15 @@ msgstr "Restartujte Gajim pro spuštění logování ladění"
 msgid "Restart Pending"
 msgstr "Restart čeká na spuštění"
 
+msgid "Restore Backup"
+msgstr ""
+
 msgid "Restore Closed Chat"
 msgstr "Obnovit zavřenou konverzaci"
+
+#, fuzzy
+msgid "Restore Key"
+msgstr "Obnovit poslední stav"
 
 msgid "Restore last state"
 msgstr "Obnovit poslední stav"
@@ -3999,6 +4199,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Vyberte zprávy…"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr "Vyberte bezpečnostní štítek pro svou zprávu…"
 
@@ -4125,6 +4328,17 @@ msgstr "Nastavení je uzamčeno systémem"
 
 msgid "Settings"
 msgstr "Nastavení"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Dokončeno"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Výchozí šifrování"
 
 msgid "Share Contact…"
 msgstr "Sdílet kontakt…"
@@ -4401,8 +4615,15 @@ msgstr "Kroky pro reprodukování problému…"
 msgid "Stop Sharing Online Status?"
 msgstr "Přestat sdílet stav online?"
 
+#, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Nejste připojen(a) k serveru"
+
 msgid "Street"
 msgstr "Ulice"
+
+msgid "Strike"
+msgstr "Přeškrtnuté"
 
 msgid "Style"
 msgstr "Styl"
@@ -4436,8 +4657,11 @@ msgid "Successfully Removed Contacts"
 msgstr "Kontakt úspěšně odstraněn"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
-msgstr "Úspěšně vytvořena nová relace s {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr "Úspěšně vytvořena nová relace s zařízením {device_id}."
+
+msgid "Successfully imported key from server."
+msgstr ""
 
 msgid "Support"
 msgstr "Podpora"
@@ -4711,9 +4935,10 @@ msgstr "Tato adresa nejspíš nenabízí žádnou bránu."
 msgid "This address is not reachable."
 msgstr "Tato adresa není dostupná."
 
+#, fuzzy, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 "Konfigurace této konverzace není vhodná pro šifrování OMEMO. Pro použití "
 "OMEMO v této konverzaci by neměla být anonymní a pouze pro členy."
@@ -4800,12 +5025,10 @@ msgstr "Tato zpráva byla zašifrována pomocí OMEMO, ale ne pro vaše zaříze
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Tato zpráva byla zašifrována pomocí OTR a nebylo možné ji dešifrovat."
 
+#, fuzzy
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"Tato zpráva byla zašifrována pomocí OpenPGP pro XMPP a nelze ji dešifrovat. "
-"Pro zpracování těchto zpráv můžete nainstalovat zásuvný modul OpenPGP."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "Tato zpráva byla zašifrována pomocí OTR a nebylo možné ji dešifrovat."
 
 msgid "This message will be deleted from your local chat history"
 msgstr "Tato zpráva bude odstraněna z vaší místní historie konverzace"
@@ -4835,11 +5058,12 @@ msgstr "Tato služba dosud neodpověděla s detaily"
 msgid "This type of service does not contain any items to browse."
 msgstr "Tento typ služby neobsahuje žádné položky, které je možné prohlížet."
 
-msgid "This will clear the devices store for your account."
-msgstr "Toto odstraní zařízení z úložiště zařízení vašeho účtu."
-
 msgid "This will purge all locally stored chat history"
 msgstr "Toto vymaže všechnu lokálně uloženou historii konverzací"
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "Toto odstraní zařízení z úložiště zařízení vašeho účtu."
 
 msgid "This will remove the account and delete all data"
 msgstr "Toto odstraní účet a smaže všechna data"
@@ -4888,11 +5112,21 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr "Pokud chcete, aby se změny projevily, musíte se znovu přihlásit."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr ""
 "Pro poslání zašifrované zprávy se musíte rozhodnout, jestli důvěřujete "
 "zařízením kontaktu."
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
+msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Přepnout seznam konverzací"
@@ -4964,6 +5198,9 @@ msgstr "Nepodařilo se dešifrovat podpis CRL certifikátu"
 msgid "Unable to decrypt certificate's signature"
 msgstr "Nepodařilo se dešifrovat podpis certifikátu"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "Nepodařilo se získat certifikát CRL"
 
@@ -4978,6 +5215,9 @@ msgstr "Nebylo možné správně odstranit zásuvný modul"
 
 msgid "Unable to save profile"
 msgstr "Nelze uložit profil"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "Nepodařilo se ověřit první certifikát"
@@ -5109,8 +5349,14 @@ msgstr "Použijte \"//\" pro napsání zprávy začínající s lomítkem \"/\".
 msgid "Use GSSAPI"
 msgstr "Použít GSSAPI"
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 msgid "Use Image"
 msgstr "Použít obrázek"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr "Použít systémovou klíčenku"
@@ -5425,8 +5671,18 @@ msgstr ""
 "Tomuto kontaktu se budete zobrazovat jako nepřipojení a nebudete dostávat "
 "další zprávy."
 
+#, fuzzy
+msgid "Your Backup Password"
+msgstr "Vaše heslo"
+
 msgid "Your Nickname"
 msgstr "Vaše přezdívka"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "Vaše adresa XMPP (uživatel@příklad.org)"
@@ -5518,9 +5774,6 @@ msgstr "Zaneprázdněný"
 
 msgid "_Cancel"
 msgstr "_Zrušit"
-
-msgid "_Clear Devices"
-msgstr "Vymazat zařízení (_C)"
 
 msgid "_Close"
 msgstr "Zavřít"
@@ -5647,6 +5900,10 @@ msgstr "Zapamatovat mou volbu (_R)"
 msgid "_Remove"
 msgstr "Odst_ranit"
 
+#, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Veřejný klíč: "
+
 msgid "_Report Spam"
 msgstr "Nahlásit spam"
 
@@ -5728,9 +5985,6 @@ msgstr "audio výstup"
 msgid "bearing"
 msgstr "způsob"
 
-msgid "bold"
-msgstr "tučné"
-
 msgid "building"
 msgstr "stavení"
 
@@ -5774,9 +6028,6 @@ msgstr "píše…"
 
 msgid "is doing something else"
 msgstr "dělá něco jiného"
-
-msgid "italic"
-msgstr "kurzíva"
 
 #, python-format
 msgid "last seen: %s"
@@ -5826,9 +6077,6 @@ msgstr "rychlost"
 
 msgid "street"
 msgstr "ulice"
-
-msgid "strike"
-msgstr "přeškrtnuté"
 
 msgid "text"
 msgstr "text"
@@ -6288,9 +6536,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Back in some minutes."
 #~ msgstr "Jsem zpátky za pár minut."
 
-#~ msgid "Back soon"
-#~ msgstr "Hned jsem zpět"
-
 #~ msgid "Blocking List"
 #~ msgstr "Seznam blokovaných kontaktů"
 
@@ -6351,6 +6596,13 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Cipher Suite"
 #~ msgstr "Sada šifer"
+
+#~ msgid "Clear Devices?"
+#~ msgstr "Vyčistit zařízení?"
+
+# FIXME: chtelo by to cesky vyraz pro service discovery
+#~ msgid "Clear Devices…"
+#~ msgstr "Vymazat zařízení…"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Zpráva odeslána"
@@ -6455,9 +6707,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Create new group chat"
 #~ msgstr "Vytvořit novou skupinovou konverzaci"
-
-#~ msgid "Create new post"
-#~ msgstr "Vytvoř nový zápis"
 
 #~ msgid "Creating thumbnail failed"
 #~ msgstr "Vytváření náhledu selhalo"
@@ -6932,10 +7181,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Heslo obsahuje nepovolené znaky"
 
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "Vložit jako útržek kódu"
-
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pozastavit nebo pokračovat v přenosu souboru"
 
@@ -7292,6 +7537,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "This is your XMPP address"
 #~ msgstr "Vaši XMPP adresu mohou vidět pouze moderátoři"
 
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "Tato zpráva byla zašifrována pomocí OpenPGP pro XMPP a nelze ji "
+#~ "dešifrovat. Pro zpracování těchto zpráv můžete nainstalovat zásuvný modul "
+#~ "OpenPGP."
+
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "Zobrazit na hlavním panelu"
@@ -7419,9 +7672,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "You are not connected"
 #~ msgstr "Nejste připojeni"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Nejste připojen(a) k serveru"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Nemůžete synchronyzovat účet pokud nění připojen."
 
@@ -7459,6 +7709,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "_Clear"
 #~ msgstr "Vyčistit"
+
+#~ msgid "_Clear Devices"
+#~ msgstr "Vymazat zařízení (_C)"
 
 #, fuzzy
 #~ msgid "_Debug Console"
@@ -7526,6 +7779,9 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "app.open-folder"
 #~ msgstr "Otevřít složku"
+
+#~ msgid "bold"
+#~ msgstr "tučné"
 
 #~ msgid "dark skin tone"
 #~ msgstr "tmavý motiv vzhledu"

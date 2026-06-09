@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -95,6 +95,11 @@ msgstr "{nick} is uit het gesprek geschopt{actor}{reason}"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "Bijnaam:"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
@@ -251,6 +256,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr ": Configuratie van groepschat gewijzigd naar alleen voor leden"
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -744,6 +754,14 @@ msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -754,6 +772,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
 #, fuzzy
@@ -936,6 +958,19 @@ msgstr "Afwezig"
 msgid "Back"
 msgstr "Zo terug"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Zo terug"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "Ver_bannen"
@@ -958,6 +993,9 @@ msgid "Birthday"
 msgstr "Verjaardag"
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -994,6 +1032,9 @@ msgstr "Deelnemers"
 #, fuzzy
 msgid "Block…"
 msgstr "_Blokkeren"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1219,6 +1260,10 @@ msgstr "Kies archief"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Kies archief"
+
 msgid "Choose Sound"
 msgstr "Kies geluid"
 
@@ -1237,14 +1282,6 @@ msgstr "Stad"
 
 msgid "Clear"
 msgstr "Wissen"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "Server"
-
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "Diensten ontdekken"
 
 msgid "Clear File"
 msgstr "Bestand wissen"
@@ -1290,6 +1327,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "Postcode"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1328,6 +1372,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Afgerond"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Afgerond"
 
@@ -1345,6 +1395,9 @@ msgstr "Configuratie"
 msgid "Configure"
 msgstr "Configureren"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr "Logboeksysteem configureren"
 
@@ -1353,6 +1406,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "Configureren"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1566,12 +1623,24 @@ msgid "Create New Group Chat"
 msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "Nieuwe post maken"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Groepsgesprekken verlaten"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "Account %s wordt verwijderd"
 
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Gebruikersreferenties"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Veilige wachtwoordopslag"
 
 msgid "Custom"
 msgstr ""
@@ -1614,6 +1683,10 @@ msgstr "Gebr_uikersnaam"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Versleutelingsfout"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1747,6 +1820,10 @@ msgid "Disable Account?"
 msgstr "Account uitschakelen"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Uitgeschakeld"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Uitgeschakeld"
 
@@ -1813,6 +1890,10 @@ msgstr "Wil je ze echt allemaal sluiten?"
 
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
+msgstr "Wil je ze echt allemaal sluiten?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
 #, fuzzy
@@ -1950,6 +2031,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Versleutelingsfout"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Versleutelingsfout"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Versleutelingsfout"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Versleutelingsfout"
 
@@ -1973,8 +2062,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Voer nieuw wachtwoord in:"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Verander wachtwoord"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Voer nieuw wachtwoord in:"
 
 #, fuzzy
 msgid "Enter group name"
@@ -2090,6 +2191,9 @@ msgstr "Voltooid"
 #, fuzzy
 msgid "Export History…"
 msgstr "Gespreksgeschiedenis"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2398,6 +2502,11 @@ msgid "Gajim is quitting…"
 msgstr "%s is aan het typen…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2661,12 +2770,25 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "_Exporteren"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Ondersteuning voor meerdere accounts"
 
 #, fuzzy
 msgid "Import from File"
 msgstr "Installeren van bestand…"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr ""
@@ -2819,6 +2941,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Schuingedrukt"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2856,6 +2982,9 @@ msgid "Join…"
 msgstr "Wordt verbannen…"
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 #, fuzzy
@@ -3316,6 +3445,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Geen account beschikbaar"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Geen resultaten gevonden"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3329,6 +3462,10 @@ msgstr "Geen resultaat"
 
 #, fuzzy
 msgid "No results found"
+msgstr "Geen resultaten gevonden"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Geen resultaten gevonden"
 
 msgid "No undecided fingerprints"
@@ -3502,6 +3639,24 @@ msgstr "_Bovenliggende map openen"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3529,6 +3684,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Overigen"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Overigen"
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3540,6 +3699,10 @@ msgstr "Geheugentekort"
 
 msgid "Outcasts"
 msgstr ""
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "Overschrijven?"
 
 #, fuzzy
 msgid "Overwrite Plugin?"
@@ -3651,6 +3814,9 @@ msgstr "Postcode"
 msgid "Paste as Quote"
 msgstr "Kies afbeelding"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Wachtwoord vereist"
@@ -3722,6 +3888,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "Kies een groepsgesprek"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "Maak een mooi nieuw thema."
@@ -3749,6 +3920,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 #, fuzzy
@@ -4077,6 +4254,10 @@ msgid "Remove Account"
 msgstr "Account %s wordt verwijderd"
 
 #, fuzzy
+msgid "Remove Backup"
+msgstr "Groep verwijderen"
+
+#, fuzzy
 msgid "Remove Chat History?"
 msgstr "Gespreksgeschiedenis"
 
@@ -4116,6 +4297,14 @@ msgid "Remove Proxy?"
 msgstr "Proxy verwijderen"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Versleutelingsfout"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Geschiedenis synchroniseren"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Plug-in-instellingen"
 
@@ -4133,6 +4322,10 @@ msgstr "Verwijdert contact van rooster"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Groep verwijderen"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Groep verwijderen"
 
 #, fuzzy
@@ -4292,8 +4485,15 @@ msgstr ""
 msgid "Restart Pending"
 msgstr "Vereist: Gspell"
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "Laatste toestand"
+
+#, fuzzy
+msgid "Restore Key"
 msgstr "Laatste toestand"
 
 #, fuzzy
@@ -4518,6 +4718,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Bericht verwijderen"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4664,6 +4867,17 @@ msgstr ""
 
 msgid "Settings"
 msgstr "Instellingen"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Afgerond"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Versleutelingsfout"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -4986,8 +5200,16 @@ msgstr ""
 msgid "Stop Sharing Online Status?"
 msgstr "mij status te sturen"
 
+#, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Er is geen verbinding met de server"
+
 msgid "Street"
 msgstr "Straat"
+
+#, fuzzy
+msgid "Strike"
+msgstr "Doorstrepen"
 
 msgid "Style"
 msgstr "Stijl"
@@ -5026,7 +5248,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Contact hernoemen"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5338,9 +5563,10 @@ msgstr "%s is geen groepsgespreksserver"
 msgid "This address is not reachable."
 msgstr "De dienst kan niet worden doorbladerd"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5432,11 +5658,8 @@ msgstr "Dit bericht is versleuteld met OTR en kon niet ontsleuteld worden."
 
 #, fuzzy
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"Dit bericht is versleuteld met Legacy OpenPGP en kon niet ontsleuteld "
-"worden. Installeer de PGP-plug-in om deze berichten te verwerken."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "Dit bericht is versleuteld met OTR en kon niet ontsleuteld worden."
 
 msgid "This message will be deleted from your local chat history"
 msgstr ""
@@ -5469,12 +5692,12 @@ msgstr "Deze dienst heeft nog niet geantwoord met gedetailleerde informatie"
 msgid "This type of service does not contain any items to browse."
 msgstr "Dit soort dienst heeft geen items om te doorbladeren."
 
-#, fuzzy
-msgid "This will clear the devices store for your account."
-msgstr "Verwijder account alleen van Gajim"
-
 msgid "This will purge all locally stored chat history"
 msgstr ""
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "Verwijder account alleen van Gajim"
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5530,8 +5753,18 @@ msgstr ""
 "Als je alle wijzigingen onmiddellijk wil toepassen moet je opnieuw inloggen."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5613,6 +5846,9 @@ msgstr "Kan CRL-ondertekening niet ontsleutelen"
 msgid "Unable to decrypt certificate's signature"
 msgstr "Kan certificaatsondertekening niet ontsleutelen"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "Kan CRL van certificaat niet ophalen"
 
@@ -5628,6 +5864,9 @@ msgstr "Kon plug-in niet correct verwijderen"
 #, fuzzy
 msgid "Unable to save profile"
 msgstr "Kon bestand niet openen"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "Kan het eerste certificaat niet verifiëren"
@@ -5780,9 +6019,15 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 #, fuzzy
 msgid "Use Image"
 msgstr "Kies afbeelding"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -6139,8 +6384,18 @@ msgid ""
 msgstr "JID of contact die het bericht zal ontvangen"
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "Voer nieuw wachtwoord in:"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "Je bijnaam"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -6242,10 +6497,6 @@ msgstr "_Bezig"
 
 msgid "_Cancel"
 msgstr "_Annuleren"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "Kies archief"
 
 msgid "_Close"
 msgstr "S_luiten"
@@ -6399,6 +6650,10 @@ msgid "_Remove"
 msgstr "_Verwijderen"
 
 #, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Versleutelingsfout"
+
+#, fuzzy
 msgid "_Report Spam"
 msgstr "_Fout melden"
 
@@ -6490,9 +6745,6 @@ msgstr "audio-uitvoer"
 msgid "bearing"
 msgstr "lager"
 
-msgid "bold"
-msgstr ""
-
 msgid "building"
 msgstr "bouwen"
 
@@ -6539,10 +6791,6 @@ msgstr "is een bericht aan het typen…"
 
 msgid "is doing something else"
 msgstr "is met iets anders bezig"
-
-#, fuzzy
-msgid "italic"
-msgstr "Schuingedrukt"
 
 #, fuzzy, python-format
 msgid "last seen: %s"
@@ -6593,10 +6841,6 @@ msgstr "snelheid"
 
 msgid "street"
 msgstr "straat"
-
-#, fuzzy
-msgid "strike"
-msgstr "Doorstrepen"
 
 msgid "text"
 msgstr "tekst"
@@ -7018,9 +7262,6 @@ msgstr ""
 #~ msgid "Back in some minutes."
 #~ msgstr "In een paar minuten terug."
 
-#~ msgid "Back soon"
-#~ msgstr "Zo terug"
-
 #~ msgid "Blocking List"
 #~ msgstr "Blokkeringslijst"
 
@@ -7086,6 +7327,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Profiel van contact weergeven (Ctrl+I)"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "Diensten ontdekken"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Berichtinvoer wissen"
@@ -7197,9 +7446,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "Groepsgesprekken verlaten"
-
-#~ msgid "Create new post"
-#~ msgstr "Nieuwe post maken"
 
 #~ msgid "Current Developers"
 #~ msgstr "Huidige ontwikkelaars"
@@ -7654,10 +7900,6 @@ msgstr ""
 #~ msgstr "He_rvatten"
 
 #, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "Postcode"
-
-#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Bestandsoverdracht annuleren"
 
@@ -8006,6 +8248,14 @@ msgstr ""
 #~ "<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
 
 #, fuzzy
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "Dit bericht is versleuteld met Legacy OpenPGP en kon niet ontsleuteld "
+#~ "worden. Installeer de PGP-plug-in om deze berichten te verwerken."
+
+#, fuzzy
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "Transporten weergeven"
 
@@ -8123,9 +8373,6 @@ msgstr ""
 #~ msgid "You are not connected"
 #~ msgstr "Er is geen verbinding met de server"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Er is geen verbinding met de server"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr ""
 #~ "Het is niet mogelijk met een account te synchroniseren zonder dat deze "
@@ -8167,6 +8414,10 @@ msgstr ""
 
 #~ msgid "_Clear"
 #~ msgstr "_Wissen"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "Kies archief"
 
 #, fuzzy
 #~ msgid "_Debug Console"

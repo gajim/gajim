@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -91,6 +91,11 @@ msgstr ""
 
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
+msgstr "Sobrenom:"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
 msgstr "Sobrenom:"
 
 #, fuzzy, python-format
@@ -247,6 +252,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr ""
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -716,6 +726,14 @@ msgstr "Cliqui per a canviar la contrasenya del compte"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Cliqui per a canviar la contrasenya del compte"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Cliqui per a canviar la contrasenya del compte"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Cliqui per a canviar la contrasenya del compte"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -726,6 +744,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "Cliqui per a canviar la contrasenya del compte"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "Cliqui per a canviar la contrasenya del compte"
 
 #, fuzzy
@@ -899,6 +921,18 @@ msgstr "Absent"
 msgid "Back"
 msgstr ""
 
+msgid "Backup Error"
+msgstr ""
+
+msgid "Backup Now"
+msgstr ""
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "_Bandeja"
@@ -920,6 +954,9 @@ msgid "Birthday"
 msgstr ""
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -956,6 +993,9 @@ msgstr "Accions Ocupant"
 #, fuzzy
 msgid "Block…"
 msgstr "_Bloca"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1174,6 +1214,10 @@ msgstr "Connexió"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Connexió"
+
 msgid "Choose Sound"
 msgstr ""
 
@@ -1192,14 +1236,6 @@ msgstr ""
 
 msgid "Clear"
 msgstr ""
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "_Servidor:"
-
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "_Descobreix Serveis"
 
 #, fuzzy
 msgid "Clear File"
@@ -1247,6 +1283,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "_Bloca"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1283,6 +1326,12 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr ""
 
@@ -1301,6 +1350,9 @@ msgstr "Configuració de Sala"
 msgid "Configure"
 msgstr "_Configura"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr ""
 
@@ -1309,6 +1361,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "_Configura"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1518,11 +1574,23 @@ msgid "Create New Group Chat"
 msgstr "Grups de xat"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "Crea nou missatge"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Grups de xat"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "Fusiona comptes"
 
 msgid "Credentials expired"
 msgstr ""
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Desa la contrasenya"
 
 msgid "Custom"
 msgstr ""
@@ -1564,6 +1632,10 @@ msgstr "_Nom d'usuari:"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Connexió"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1694,6 +1766,10 @@ msgid "Disable Account?"
 msgstr "Compte"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Inhabilitat"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Inhabilitat"
 
@@ -1750,6 +1826,9 @@ msgid "Do you want to remove \"%(group)s\"?"
 msgstr ""
 
 msgid "Do you want to remove all chat history for this chat?"
+msgstr ""
+
+msgid "Do you want to remove the backup from your server?"
 msgstr ""
 
 msgid "Do you want to remove this chat including its chat history?"
@@ -1875,6 +1954,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Connexió"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Connexió"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Connexió"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Connexió"
 
@@ -1897,8 +1984,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Desa la contrasenya"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Canviar contrasenya"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Desa la contrasenya"
 
 #, fuzzy
 msgid "Enter group name"
@@ -2008,6 +2107,9 @@ msgstr "Acaba"
 #, fuzzy
 msgid "Export History…"
 msgstr "Historial"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2300,6 +2402,11 @@ msgid "Gajim is quitting…"
 msgstr "_Registra"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2550,12 +2657,25 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "_Exporta"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Fusiona comptes"
 
 #, fuzzy
 msgid "Import from File"
 msgstr "Instal·la des d'un zip"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr ""
@@ -2706,6 +2826,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Cursiva"
+
 msgid "JID"
 msgstr ""
 
@@ -2744,6 +2868,9 @@ msgid "Join…"
 msgstr "_Entra-hi"
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 #, fuzzy
@@ -3189,6 +3316,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Transferència de Fitxers"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Grups de xat"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3202,6 +3333,10 @@ msgstr "Grups de xat"
 
 #, fuzzy
 msgid "No results found"
+msgstr "Grups de xat"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Grups de xat"
 
 msgid "No undecided fingerprints"
@@ -3372,6 +3507,24 @@ msgstr "_Obre Carpeta Contenidora"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3397,6 +3550,9 @@ msgctxt "Gender"
 msgid "Other"
 msgstr ""
 
+msgid "Other Options"
+msgstr ""
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3407,6 +3563,9 @@ msgid "Out of memory"
 msgstr ""
 
 msgid "Outcasts"
+msgstr ""
+
+msgid "Overwrite"
 msgstr ""
 
 msgid "Overwrite Plugin?"
@@ -3516,6 +3675,9 @@ msgstr ""
 msgid "Paste as Quote"
 msgstr ""
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Contrasenya:"
@@ -3586,6 +3748,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "Afegeix aquesta sala a les adreces d'interès"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "Sobrenom:"
@@ -3613,6 +3780,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 msgid "Please use these settings with caution!"
@@ -3937,6 +4110,10 @@ msgid "Remove Account"
 msgstr "Fusiona comptes"
 
 #, fuzzy
+msgid "Remove Backup"
+msgstr "Esborra"
+
+#, fuzzy
 msgid "Remove Chat History?"
 msgstr "Historial"
 
@@ -3977,6 +4154,14 @@ msgid "Remove Proxy?"
 msgstr "Esborra"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Connexió"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Sincronitza els contactes"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Connectors"
 
@@ -3994,6 +4179,10 @@ msgstr "Esborra transferència de fitxer de la llista."
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Esborra"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Esborra"
 
 #, fuzzy
@@ -4153,8 +4342,15 @@ msgstr ""
 msgid "Restart Pending"
 msgstr "requereix"
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "Lliure per xatejar"
+
+#, fuzzy
+msgid "Restore Key"
 msgstr "Lliure per xatejar"
 
 msgid "Restore last state"
@@ -4367,6 +4563,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Missatges preconfigurats:"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4509,6 +4708,16 @@ msgstr ""
 #, fuzzy
 msgid "Settings"
 msgstr "Connectors"
+
+msgid "Setup"
+msgstr ""
+
+msgid "Setup Complete"
+msgstr ""
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Connexió"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -4818,8 +5027,16 @@ msgstr ""
 msgid "Stop Sharing Online Status?"
 msgstr "Mostra els contactes desconnectats"
 
+#, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Informació sobre tu, tal i com està guardada al servidor"
+
 msgid "Street"
 msgstr ""
+
+#, fuzzy
+msgid "Strike"
+msgstr "Ratllat"
 
 msgid "Style"
 msgstr ""
@@ -4856,7 +5073,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Afegeix un contacte nou"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5153,9 +5373,10 @@ msgstr ""
 msgid "This address is not reachable."
 msgstr "Uneix-te al xat en grup"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5236,8 +5457,7 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
 msgid "This message will be deleted from your local chat history"
@@ -5267,10 +5487,10 @@ msgstr ""
 msgid "This type of service does not contain any items to browse."
 msgstr ""
 
-msgid "This will clear the devices store for your account."
+msgid "This will purge all locally stored chat history"
 msgstr ""
 
-msgid "This will purge all locally stored chat history"
+msgid "This will remove all published public keys from your account."
 msgstr ""
 
 msgid "This will remove the account and delete all data"
@@ -5320,8 +5540,18 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5402,6 +5632,9 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr ""
 
@@ -5415,6 +5648,9 @@ msgid "Unable to properly remove the plugin"
 msgstr ""
 
 msgid "Unable to save profile"
+msgstr ""
+
+msgid "Unable to use this key for encrypting messages"
 msgstr ""
 
 msgid "Unable to verify the first certificate"
@@ -5563,7 +5799,13 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 msgid "Use Image"
+msgstr ""
+
+msgid "Use My Own OpenPGP Key"
 msgstr ""
 
 msgid "Use System Keyring"
@@ -5895,8 +6137,18 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "Desa la contrasenya"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "Sobrenom:"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -5996,10 +6248,6 @@ msgstr "Ocupat"
 
 msgid "_Cancel"
 msgstr "_Cancel·la"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "Connexió"
 
 msgid "_Close"
 msgstr ""
@@ -6151,6 +6399,10 @@ msgid "_Remove"
 msgstr ""
 
 #, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Connexió"
+
+#, fuzzy
 msgid "_Report Spam"
 msgstr "Informa de l'error"
 
@@ -6242,9 +6494,6 @@ msgstr ""
 msgid "bearing"
 msgstr ""
 
-msgid "bold"
-msgstr ""
-
 msgid "building"
 msgstr ""
 
@@ -6289,10 +6538,6 @@ msgstr ""
 
 msgid "is doing something else"
 msgstr ""
-
-#, fuzzy
-msgid "italic"
-msgstr "Cursiva"
 
 #, fuzzy, python-format
 msgid "last seen: %s"
@@ -6343,10 +6588,6 @@ msgstr ""
 
 msgid "street"
 msgstr ""
-
-#, fuzzy
-msgid "strike"
-msgstr "Ratllat"
 
 msgid "text"
 msgstr ""
@@ -6652,6 +6893,14 @@ msgstr ""
 #~ msgstr "Mostra el perfil del contacte (Ctrl+I)"
 
 #, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "_Servidor:"
+
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "_Descobreix Serveis"
+
+#, fuzzy
 #~ msgid "Client Certificate"
 #~ msgstr "Certificat de client"
 
@@ -6718,9 +6967,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "Grups de xat"
-
-#~ msgid "Create new post"
-#~ msgstr "Crea nou missatge"
 
 #, fuzzy
 #~ msgid "Decryption failed"
@@ -7209,6 +7455,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Comptes"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "Connexió"
 
 #, fuzzy
 #~ msgid "_Debug Console"

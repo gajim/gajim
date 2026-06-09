@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -109,6 +109,11 @@ msgstr "%(nick)s נבעט/ה: %(reason)s"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(jid)s הוזמן/ה לחדר זה"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "שם כינוי:"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
@@ -269,6 +274,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr "תצורת חדר שונתה אל חברים-בלבד"
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -779,6 +789,14 @@ msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -789,6 +807,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
 #, fuzzy
@@ -979,6 +1001,19 @@ msgstr "נעדר"
 msgid "Back"
 msgstr "אשוב בקרוב"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "אשוב בקרוב"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "א_סור"
@@ -1001,6 +1036,9 @@ msgid "Birthday"
 msgstr "<b>יום הולדת:</b>"
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -1037,6 +1075,9 @@ msgstr "משתתפים"
 #, fuzzy
 msgid "Block…"
 msgstr "_חסום"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1266,6 +1307,10 @@ msgstr "בחירת ארכיון"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "בחירת ארכיון"
+
 msgid "Choose Sound"
 msgstr "בחירת צליל"
 
@@ -1286,15 +1331,6 @@ msgstr ""
 #, fuzzy
 msgid "Clear"
 msgstr "מנקה"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "שרת"
-
-# איתור
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "מצא _שירותים"
 
 #, fuzzy
 msgid "Clear File"
@@ -1344,6 +1380,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "מיקוד דואר"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1383,6 +1426,12 @@ msgstr ""
 msgid "Complete"
 msgstr "הושלמה"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "הושלמה"
 
@@ -1400,6 +1449,9 @@ msgstr "תצורה"
 msgid "Configure"
 msgstr "תצורה"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 #, fuzzy
 msgid "Configure logging system"
 msgstr "cli"
@@ -1409,6 +1461,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "תצורה"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1628,12 +1684,24 @@ msgid "Create New Group Chat"
 msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "יצירת פוסט חדש"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "עזוב שיחות קבוצה"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "הסרת חשבון ‫%s"
 
 #, fuzzy
 msgid "Credentials expired"
 msgstr "אישורי Oauth2"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "שמור סיסמה"
 
 msgid "Custom"
 msgstr ""
@@ -1676,6 +1744,10 @@ msgstr "שם _משתמש:"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "בקשת הרשמה"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1814,6 +1886,10 @@ msgid "Disable Account?"
 msgstr "חשבון שגוי"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "מנוטרלת"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "מנוטרלת"
 
@@ -1877,6 +1953,10 @@ msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
+msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
 #, fuzzy
@@ -2017,6 +2097,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "בקשת הרשמה"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "בקשת הרשמה"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "בקשת הרשמה"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "בקשת הרשמה"
 
@@ -2040,8 +2128,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "הזן סיסמה חדשה:"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "שינוי סיסמה"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "הזן סיסמה חדשה:"
 
 # להכניס/להזין
 #, fuzzy
@@ -2167,6 +2267,9 @@ msgstr "_סיים"
 #, fuzzy
 msgid "Export History…"
 msgstr "אחרונים:"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2468,6 +2571,11 @@ msgid "Gajim is quitting…"
 msgstr "כותב"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2742,12 +2850,25 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "יצא"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "הסרת חשבון ‫%s"
 
 #, fuzzy
 msgid "Import from File"
 msgstr "התקן מתוך zip"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr ""
@@ -2899,6 +3020,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "נטוי"
+
 msgid "JID"
 msgstr "‏JID"
 
@@ -2938,6 +3063,9 @@ msgid "Join…"
 msgstr "אסירה..."
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 # (שנפתחו) לאחרונה
@@ -3405,6 +3533,10 @@ msgstr ""
 msgid "No info available"
 msgstr "אין חשבון זמין"
 
+#, fuzzy
+msgid "No key found"
+msgstr "אין תנובה"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3418,6 +3550,10 @@ msgstr "אין תנובה"
 
 #, fuzzy
 msgid "No results found"
+msgstr "אין תנובה"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "אין תנובה"
 
 msgid "No undecided fingerprints"
@@ -3591,6 +3727,24 @@ msgstr "_פתח תיקיה מכילה"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3617,6 +3771,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "אחרים"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "אחרים"
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3629,6 +3787,10 @@ msgstr "לא נותר זיכרון"
 
 msgid "Outcasts"
 msgstr ""
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "להחליף?"
 
 #, fuzzy
 msgid "Overwrite Plugin?"
@@ -3743,6 +3905,9 @@ msgstr "מיקוד דואר"
 msgid "Paste as Quote"
 msgstr "בחירת תמונה"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "נדרשת מילת מעבר"
@@ -3816,6 +3981,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
@@ -3843,6 +4013,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 msgid "Please use these settings with caution!"
@@ -4190,6 +4366,10 @@ msgstr "cli"
 msgid "Remove Account"
 msgstr "הסרת חשבון ‫%s"
 
+#, fuzzy
+msgid "Remove Backup"
+msgstr "הסרת קבוצה"
+
 # (שנפתחו) לאחרונה
 # (חדרים/ערוצים) אחרונים
 # (כתובות) אחרונות
@@ -4234,6 +4414,14 @@ msgid "Remove Proxy?"
 msgstr "הסרת קבוצה"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "בקשת הרשמה"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "סנכרון"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "תוספים"
 
@@ -4251,6 +4439,10 @@ msgstr "cli"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "הסרת קבוצה"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "הסרת קבוצה"
 
 #, fuzzy
@@ -4408,9 +4600,17 @@ msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מ
 msgid "Restart Pending"
 msgstr "יש צורך בהתקנת libgtkspell."
 
+msgid "Restore Backup"
+msgstr ""
+
 # By last state
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "לפי מצב אחרון"
+
+# By last state
+#, fuzzy
+msgid "Restore Key"
 msgstr "לפי מצב אחרון"
 
 # By last state
@@ -4638,6 +4838,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "הודעה שגרתית"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4789,6 +4992,17 @@ msgstr ""
 #, fuzzy
 msgid "Settings"
 msgstr "קיצורי מקש"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "הושלמה"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "בקשת הרשמה"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -5117,8 +5331,16 @@ msgid "Stop Sharing Online Status?"
 msgstr "לשלוח אלי מצב"
 
 #, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "אינך מחובר לשרת"
+
+#, fuzzy
 msgid "Street"
 msgstr "רחוב"
+
+#, fuzzy
+msgid "Strike"
+msgstr "קו חוצה"
 
 msgid "Style"
 msgstr "סגנון"
@@ -5159,7 +5381,10 @@ msgid "Successfully Removed Contacts"
 msgstr "שינוי שם איש קשר"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5474,9 +5699,10 @@ msgstr "‏%s אינו שרת שיחת קבוצה"
 msgid "This address is not reachable."
 msgstr "השירות אינו בר עיון"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5563,8 +5789,7 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
 msgid "This message will be deleted from your local chat history"
@@ -5600,12 +5825,12 @@ msgstr "שירות זה טרם הגיב עם מידע מפורט"
 msgid "This type of service does not contain any items to browse."
 msgstr "טיפוס זה של שירות לא מכיל פריטים לעיון."
 
-#, fuzzy
-msgid "This will clear the devices store for your account."
-msgstr "להסיר חשבון מתוך _Gajim בלבד"
-
 msgid "This will purge all locally stored chat history"
 msgstr ""
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "להסיר חשבון מתוך _Gajim בלבד"
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5660,8 +5885,18 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr "אם ברצונך כי השינויים יחולו באופן מידי, עליך להתחבר מחדש."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5744,6 +5979,9 @@ msgstr "אין אפשרות לפענח חתימת CRL"
 msgid "Unable to decrypt certificate's signature"
 msgstr "אין אפשרות לפענח חתימת תעודה"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "אין אפשרות לקבל תעודת CRL"
 
@@ -5759,6 +5997,9 @@ msgstr "אין אפשרות להסיר כהוגן את התוסף"
 #, fuzzy
 msgid "Unable to save profile"
 msgstr "לא היתה אפשרות להטעין תמונה"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "אין אפשרות לאמת את התעודה הראשונה"
@@ -5915,9 +6156,15 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 #, fuzzy
 msgid "Use Image"
 msgstr "בחירת תמונה"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -6288,8 +6535,18 @@ msgid ""
 msgstr "cli"
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "הזן סיסמה חדשה:"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "שם כינוי:"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -6393,10 +6650,6 @@ msgstr "_עסוק"
 
 msgid "_Cancel"
 msgstr "_ביטול"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "בחירת ארכיון"
 
 #, fuzzy
 msgid "_Close"
@@ -6554,6 +6807,10 @@ msgid "_Remove"
 msgstr "הס_ר"
 
 #, fuzzy
+msgid "_Remove Public Keys"
+msgstr "בקשת הרשמה"
+
+#, fuzzy
 msgid "_Report Spam"
 msgstr "_דווחו על בעיה"
 
@@ -6647,9 +6904,6 @@ msgstr "פלט שמע"
 msgid "bearing"
 msgstr "הסבה"
 
-msgid "bold"
-msgstr ""
-
 msgid "building"
 msgstr "בניין"
 
@@ -6698,10 +6952,6 @@ msgstr "כותב/ת כעת הודעה..."
 
 msgid "is doing something else"
 msgstr "עושה כעת משהו אחר"
-
-#, fuzzy
-msgid "italic"
-msgstr "נטוי"
 
 #, fuzzy, python-format
 msgid "last seen: %s"
@@ -6752,10 +7002,6 @@ msgstr "מהירות"
 
 msgid "street"
 msgstr "רחוב"
-
-#, fuzzy
-msgid "strike"
-msgstr "קו חוצה"
 
 msgid "text"
 msgstr "תמליל"
@@ -7172,9 +7418,6 @@ msgstr ""
 #~ msgid "Back in some minutes."
 #~ msgstr "אני אחזור בעוד כמה דקות."
 
-#~ msgid "Back soon"
-#~ msgstr "אשוב בקרוב"
-
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "רשימת אסירה"
@@ -7234,6 +7477,15 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose the contact's groups"
 #~ msgstr "הוספת איש קשר זה לרשימה (Ctrl+D)"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "שרת"
+
+# איתור
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "מצא _שירותים"
 
 #, fuzzy
 #~ msgid "Clear message entry"
@@ -7336,9 +7588,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "עזוב שיחות קבוצה"
-
-#~ msgid "Create new post"
-#~ msgstr "יצירת פוסט חדש"
 
 #, fuzzy
 #~ msgid "Current Developers"
@@ -7754,10 +8003,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "_חזור"
-
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "מיקוד דואר"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -8200,9 +8445,6 @@ msgstr ""
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "אינך מחובר לשרת"
-
 # BUG: synchronise with *another* account
 # עד אשר זה לא יחובר
 #~ msgid "You cannot synchronize with an account unless it is connected."
@@ -8242,6 +8484,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "חשבונות"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "בחירת ארכיון"
 
 #, fuzzy
 #~ msgid "_Debug Console"

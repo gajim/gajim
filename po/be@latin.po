@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -92,6 +92,11 @@ msgstr "%(nick)s vypchnuty z pakoju: %(reason)s"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "Mianuška:"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
@@ -248,6 +253,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr ""
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -746,6 +756,14 @@ msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -756,6 +774,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
 
 #, fuzzy
@@ -940,6 +962,19 @@ msgstr "Adyjšoŭ"
 msgid "Back"
 msgstr "Chutka viarnusia"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Chutka viarnusia"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "Za_blakuj"
@@ -962,6 +997,9 @@ msgid "Birthday"
 msgstr "Narodziny:"
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -997,6 +1035,9 @@ msgstr "Udzielniki"
 #, fuzzy
 msgid "Block…"
 msgstr "Kantakty"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1219,6 +1260,10 @@ msgstr "Abiary vyjavu"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Abiary vyjavu"
+
 msgid "Choose Sound"
 msgstr "Abiary hukavy fajł"
 
@@ -1240,14 +1285,6 @@ msgstr "Horad:"
 #, fuzzy
 msgid "Clear"
 msgstr "Viečar"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "Server"
-
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "_Šukaj servisy"
 
 #, fuzzy
 msgid "Clear File"
@@ -1296,6 +1333,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "Paštovy indeks:"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1335,6 +1379,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Zavieršana"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Zavieršana"
 
@@ -1354,6 +1404,9 @@ msgstr "Kanfihuracyja pakoju"
 msgid "Configure"
 msgstr "_Praciahni"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr ""
 
@@ -1362,6 +1415,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "_Praciahni"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1578,12 +1635,24 @@ msgid "Create New Group Chat"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "Stvary novy zapis"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Pakiń pakoji"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "Vydalajecca kont %s"
 
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Musiš vyznačyć parol"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Zachavaj parol"
 
 msgid "Custom"
 msgstr ""
@@ -1626,6 +1695,10 @@ msgstr "_Imia karystalnika:"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Šyfravańnie ŭklučanaje"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1759,6 +1832,10 @@ msgid "Disable Account?"
 msgstr "Niapravilnaja nazva kontu"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Adklučana"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Adklučana"
 
@@ -1825,6 +1902,10 @@ msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
+msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
 msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 
 #, fuzzy
@@ -1956,6 +2037,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Šyfravańnie ŭklučanaje"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Šyfravańnie ŭklučanaje"
 
@@ -1979,8 +2068,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Uviadzi novy parol:"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Źmiani parol"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Uviadzi novy parol:"
 
 #, fuzzy
 msgid "Enter group name"
@@ -2097,6 +2198,9 @@ msgstr "_Skonč"
 #, fuzzy
 msgid "Export History…"
 msgstr "Niadaŭna:"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2397,6 +2501,11 @@ msgid "Gajim is quitting…"
 msgstr "Pracuju"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2659,10 +2768,23 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "Ekspartuj"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Vydalajecca kont %s"
 
 msgid "Import from File"
+msgstr ""
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
 msgstr ""
 
 msgid "Import…"
@@ -2815,6 +2937,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Nachileny"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2854,6 +2980,9 @@ msgid "Join…"
 msgstr "Blakavańnie..."
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 #, fuzzy
@@ -3316,6 +3445,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Konty niedastupnyja"
 
+#, fuzzy
+msgid "No key found"
+msgstr "%s nia znojdzieny"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3329,6 +3462,10 @@ msgstr "%s nia znojdzieny"
 
 #, fuzzy
 msgid "No results found"
+msgstr "%s nia znojdzieny"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "%s nia znojdzieny"
 
 msgid "No undecided fingerprints"
@@ -3504,6 +3641,24 @@ msgstr "_Adčyni kataloh z fajłam"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3530,6 +3685,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Inšyja"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Inšyja"
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3541,6 +3700,10 @@ msgstr ""
 
 msgid "Outcasts"
 msgstr ""
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "Paviedamleńnie statusu"
 
 #, fuzzy
 msgid "Overwrite Plugin?"
@@ -3654,6 +3817,9 @@ msgstr "Paštovy indeks:"
 msgid "Paste as Quote"
 msgstr "Abiary vyjavu"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Vymahaje parolu"
@@ -3726,6 +3892,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "Stvary novy zapis"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "Stvary novy zapis"
@@ -3753,6 +3924,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 msgid "Please use these settings with caution!"
@@ -4090,6 +4267,10 @@ msgid "Remove Account"
 msgstr "Vydalajecca kont %s"
 
 #, fuzzy
+msgid "Remove Backup"
+msgstr "Vydal hrupu"
+
+#, fuzzy
 msgid "Remove Chat History?"
 msgstr "Niadaŭna:"
 
@@ -4130,6 +4311,14 @@ msgid "Remove Proxy?"
 msgstr "Vydal hrupu"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Pakažy _adłučanyja kantakty"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Niemahvyma dałučycca"
 
@@ -4147,6 +4336,10 @@ msgstr "Vydalaje kantakt sa śpisu"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Vydal hrupu"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Vydal hrupu"
 
 #, fuzzy
@@ -4305,8 +4498,15 @@ msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
 msgid "Restart Pending"
 msgstr "Vymahaje parolu"
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "Apošni status: %s"
+
+#, fuzzy
+msgid "Restore Key"
 msgstr "Apošni status: %s"
 
 #, fuzzy
@@ -4526,6 +4726,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4674,6 +4877,17 @@ msgstr ""
 #, fuzzy
 msgid "Settings"
 msgstr "Niemahvyma dałučycca"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Zavieršana"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Šyfravańnie ŭklučanaje"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -4999,8 +5213,16 @@ msgid "Stop Sharing Online Status?"
 msgstr "dasyłać mnie paviedamleńni statusu"
 
 #, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Niama złučeńnia z serveram"
+
+#, fuzzy
 msgid "Street"
 msgstr "Vulica:"
+
+#, fuzzy
+msgid "Strike"
+msgstr "Mianuška"
 
 #, fuzzy
 msgid "Style"
@@ -5039,7 +5261,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Źmiani nazvu kantaktu"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5345,9 +5570,10 @@ msgstr "Heta nie pakoj"
 msgid "This address is not reachable."
 msgstr "Niemahčyma ahladać hety servis"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5433,8 +5659,7 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
 msgid "This message will be deleted from your local chat history"
@@ -5468,12 +5693,12 @@ msgstr "Hety servis dahetul nie adkazaŭ na zapyt padrabiaznych źviestak"
 msgid "This type of service does not contain any items to browse."
 msgstr "Taki servis nia ŭtrymlivaje elementaŭ dla ahladańnia."
 
-#, fuzzy
-msgid "This will clear the devices store for your account."
-msgstr "Vydal kont _tolki dla Gajim"
-
 msgid "This will purge all locally stored chat history"
 msgstr ""
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "Vydal kont _tolki dla Gajim"
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5528,8 +5753,18 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr "Kali chočaš zadziejničać źmieny, treba pieradałučycca."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5610,6 +5845,9 @@ msgstr ""
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr ""
 
@@ -5625,6 +5863,9 @@ msgstr ""
 #, fuzzy
 msgid "Unable to save profile"
 msgstr "Niemahčyma adčytać vyjavu"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr ""
@@ -5778,9 +6019,15 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 #, fuzzy
 msgid "Use Image"
 msgstr "Abiary vyjavu"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -6126,8 +6373,18 @@ msgid ""
 msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "Uviadzi novy parol:"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "П_ерад мянушкай:"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -6230,10 +6487,6 @@ msgstr "_Zaniaty"
 
 msgid "_Cancel"
 msgstr "_Anuluj"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "Abiary vyjavu"
 
 #, fuzzy
 msgid "_Close"
@@ -6389,6 +6642,10 @@ msgid "_Remove"
 msgstr "_Vydal"
 
 #, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy
 msgid "_Report Spam"
 msgstr "_Paviedam pra pamyłku"
 
@@ -6483,9 +6740,6 @@ msgstr ""
 msgid "bearing"
 msgstr "marski"
 
-msgid "bold"
-msgstr ""
-
 #, fuzzy
 msgid "building"
 msgstr "Vypichvajecca %s"
@@ -6537,10 +6791,6 @@ msgstr "piša paviedamleńnie..."
 msgid "is doing something else"
 msgstr "robić štości inšaje"
 
-#, fuzzy
-msgid "italic"
-msgstr "Nachileny"
-
 #, fuzzy, python-format
 msgid "last seen: %s"
 msgstr "Pryčyna"
@@ -6591,10 +6841,6 @@ msgstr ""
 
 msgid "street"
 msgstr ""
-
-#, fuzzy
-msgid "strike"
-msgstr "Mianuška"
 
 msgid "text"
 msgstr ""
@@ -6979,9 +7225,6 @@ msgstr ""
 #~ msgid "Back in some minutes."
 #~ msgstr "Viarnusia praz paru chvilinaŭ."
 
-#~ msgid "Back soon"
-#~ msgstr "Chutka viarnusia"
-
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Śpis zablakavanych kantaktaŭ"
@@ -7041,6 +7284,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Dadaje kantakt u śpis kantaktaŭ"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "Server"
+
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "_Šukaj servisy"
 
 #, fuzzy
 #~ msgid "Clear message entry"
@@ -7141,9 +7392,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "Pakiń pakoji"
-
-#~ msgid "Create new post"
-#~ msgstr "Stvary novy zapis"
 
 #, fuzzy
 #~ msgid "Current Developers"
@@ -7510,10 +7758,6 @@ msgstr ""
 
 #~ msgid "Out"
 #~ msgstr "Vyjšaŭ"
-
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "Paštovy indeks:"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7919,9 +8163,6 @@ msgstr ""
 #~ msgid "You are not connected"
 #~ msgstr "Niama złučeńnia z serveram"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Niama złučeńnia z serveram"
-
 #, fuzzy
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr ""
@@ -7960,6 +8201,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Konty"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "Abiary vyjavu"
 
 #, fuzzy
 #~ msgid "_Debug Console"

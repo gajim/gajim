@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -99,6 +99,11 @@ msgstr "%(nick)s har blitt kastet ut: %(reason)s"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(jid)s har blitt invitert til dette rommet"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "Kallenavn:"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
@@ -255,6 +260,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr "romoppsett endret til kun medlemmer"
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -747,6 +757,14 @@ msgstr "Det skjedde en feil under oppretting av kontoen"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Det skjedde en feil under oppretting av kontoen"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Det skjedde en feil under oppretting av kontoen"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Det skjedde en feil under oppretting av kontoen"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -757,6 +775,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "Det skjedde en feil under oppretting av kontoen"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "Det skjedde en feil under oppretting av kontoen"
 
 #, fuzzy
@@ -941,6 +963,19 @@ msgstr "Borte"
 msgid "Back"
 msgstr "Straks tilbake"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Straks tilbake"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "_Bannlys"
@@ -962,6 +997,9 @@ msgid "Birthday"
 msgstr "Fødselsdag"
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -998,6 +1036,9 @@ msgstr "Deltakere"
 #, fuzzy
 msgid "Block…"
 msgstr "_Blokker"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1222,6 +1263,10 @@ msgstr "Velg arkiv"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Velg arkiv"
+
 msgid "Choose Sound"
 msgstr "Velg Lyd"
 
@@ -1242,14 +1287,6 @@ msgstr "By:"
 
 msgid "Clear"
 msgstr "Tøm"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "Tjener"
-
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "Oppdag tjenester"
 
 msgid "Clear File"
 msgstr "Tøm fil"
@@ -1297,6 +1334,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "postnummer"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1336,6 +1380,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Fullført"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Fullført"
 
@@ -1353,6 +1403,9 @@ msgstr "Oppsett"
 msgid "Configure"
 msgstr "_Sett opp"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr "Sett opp loggføringssystem"
 
@@ -1361,6 +1414,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "_Sett opp"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1575,12 +1632,24 @@ msgid "Create New Group Chat"
 msgstr "Forlat gruppesamtaler"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "Lag en ny post"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Forlat gruppesamtaler"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "Fjerner kontoen %s"
 
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Sertifikatet har utløpt"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Lagre passord"
 
 msgid "Custom"
 msgstr ""
@@ -1623,6 +1692,10 @@ msgstr "_Brukernavn:"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Krypteringsfeil"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1755,6 +1828,10 @@ msgid "Disable Account?"
 msgstr "Ugyldig konto"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Avskrudd"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Avskrudd"
 
@@ -1817,6 +1894,10 @@ msgstr "Ønsker du å lukke alle sammen?"
 
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
+msgstr "Ønsker du å lukke alle sammen?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
 msgstr "Ønsker du å lukke alle sammen?"
 
 #, fuzzy
@@ -1950,6 +2031,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Krypteringsfeil"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Krypteringsfeil"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Krypteringsfeil"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Krypteringsfeil"
 
@@ -1973,8 +2062,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Skriv inn nytt passord:"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Endre passord"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Skriv inn nytt passord:"
 
 #, fuzzy
 msgid "Enter group name"
@@ -2091,6 +2192,9 @@ msgstr "_Avslutt"
 #, fuzzy
 msgid "Export History…"
 msgstr "Sludrehistorikk"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2396,6 +2500,11 @@ msgid "Gajim is quitting…"
 msgstr "Skriver"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2660,12 +2769,25 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "_Eksporter"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Fjerner kontoen %s"
 
 #, fuzzy
 msgid "Import from File"
 msgstr "Installer fra zip-fil"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr ""
@@ -2816,6 +2938,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Kursiv"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2854,6 +2980,9 @@ msgid "Join…"
 msgstr "Bannlyser…"
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 #, fuzzy
@@ -3313,6 +3442,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Ingen konto tilgjengelig"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Inget resultat"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3326,6 +3459,10 @@ msgstr "Inget resultat"
 
 #, fuzzy
 msgid "No results found"
+msgstr "Inget resultat"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Inget resultat"
 
 msgid "No undecided fingerprints"
@@ -3498,6 +3635,24 @@ msgstr "Åpne _inneholdende mappe"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3524,6 +3679,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Andre"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Andre"
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3535,6 +3694,10 @@ msgstr "Tom for minne"
 
 msgid "Outcasts"
 msgstr ""
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "Overskriv?"
 
 #, fuzzy
 msgid "Overwrite Plugin?"
@@ -3648,6 +3811,9 @@ msgstr "postnummer"
 msgid "Paste as Quote"
 msgstr "Velg bilde"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Passord påkrevd"
@@ -3721,6 +3887,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "Velt et rom"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "Velg en ny og ren drakt."
@@ -3748,6 +3919,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 msgid "Please use these settings with caution!"
@@ -4079,6 +4256,10 @@ msgid "Remove Account"
 msgstr "Fjerner kontoen %s"
 
 #, fuzzy
+msgid "Remove Backup"
+msgstr "Fjern gruppe"
+
+#, fuzzy
 msgid "Remove Chat History?"
 msgstr "Sludrehistorikk"
 
@@ -4119,6 +4300,14 @@ msgid "Remove Proxy?"
 msgstr "Fjern gruppe"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Krypteringsfeil"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Synkroniser historikk"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Tillegg"
 
@@ -4136,6 +4325,10 @@ msgstr "Fjerner kontakt fra kontaktliste"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Fjern gruppe"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Fjern gruppe"
 
 #, fuzzy
@@ -4299,8 +4492,15 @@ msgstr ""
 msgid "Restart Pending"
 msgstr "Krever Gspell"
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "Siste tilstand"
+
+#, fuzzy
+msgid "Restore Key"
 msgstr "Siste tilstand"
 
 #, fuzzy
@@ -4521,6 +4721,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Forvalgt melding"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4668,6 +4871,17 @@ msgstr ""
 #, fuzzy
 msgid "Settings"
 msgstr "Sludresnarveier"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Fullført"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Krypteringsfeil"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -4992,8 +5206,16 @@ msgid "Stop Sharing Online Status?"
 msgstr "å sende meg status"
 
 #, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Du er ikke tilkoblet tjeneren"
+
+#, fuzzy
 msgid "Street"
 msgstr "gate"
+
+#, fuzzy
+msgid "Strike"
+msgstr "Gjennomstrek"
 
 msgid "Style"
 msgstr "Stil"
@@ -5031,7 +5253,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Gi kontakt nytt navn"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5345,9 +5570,10 @@ msgstr "%s er ikke en gruppesamtale-tjener"
 msgid "This address is not reachable."
 msgstr "Ikke mulig å utforske tjeneste"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5440,12 +5666,8 @@ msgstr "Meldingen har blitt kryptert med OTR og kunne ikke dekrypteres."
 
 #, fuzzy
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"Meldingen har blitt kryptert med foreldet OpenPGP, og kunne ikke "
-"dekrypteres. Du kan installere PGP-programtillegget for å håndtere de "
-"meldingene."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "Meldingen har blitt kryptert med OTR og kunne ikke dekrypteres."
 
 msgid "This message will be deleted from your local chat history"
 msgstr ""
@@ -5478,12 +5700,12 @@ msgstr "Denne tjenesten har ikke svart med detaljert informasjon"
 msgid "This type of service does not contain any items to browse."
 msgstr "Denne typen tjeneste inneholder ingen elementer å utforske."
 
-#, fuzzy
-msgid "This will clear the devices store for your account."
-msgstr "Fjern kontoen _bare fra Gajim"
-
 msgid "This will purge all locally stored chat history"
 msgstr ""
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "Fjern kontoen _bare fra Gajim"
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5540,8 +5762,18 @@ msgstr ""
 "på nytt."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5623,6 +5855,9 @@ msgstr "Ikke i stand til å dekryptere CRL-ens signatur"
 msgid "Unable to decrypt certificate's signature"
 msgstr "Ikke i stand til å dekryptere sertifikatets signatur"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "Ikke i stand til å skaffe sertifikatets CRL"
 
@@ -5638,6 +5873,9 @@ msgstr "Fikk ikke til å fjerne programtillegget på rett måte"
 #, fuzzy
 msgid "Unable to save profile"
 msgstr "Kunne ikke åpne fil"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "Ute av stand til å bekrefte det første sertifikatet"
@@ -5793,9 +6031,15 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 #, fuzzy
 msgid "Use Image"
 msgstr "Velg bilde"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -6145,8 +6389,18 @@ msgid ""
 msgstr "JID-en til kontakten som vil motta meldingen"
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "Skriv inn nytt passord:"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "Ditt kallenavn:"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -6249,10 +6503,6 @@ msgstr "_Opptatt"
 
 msgid "_Cancel"
 msgstr "_Avbryt"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "Velg arkiv"
 
 msgid "_Close"
 msgstr "_Lukk"
@@ -6408,6 +6658,10 @@ msgid "_Remove"
 msgstr "_Fjern"
 
 #, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Krypteringsfeil"
+
+#, fuzzy
 msgid "_Report Spam"
 msgstr "Rapporter feil"
 
@@ -6500,9 +6754,6 @@ msgstr "lydutdata"
 msgid "bearing"
 msgstr "kurs"
 
-msgid "bold"
-msgstr ""
-
 msgid "building"
 msgstr "bygning"
 
@@ -6548,10 +6799,6 @@ msgstr "skriver en melding…"
 
 msgid "is doing something else"
 msgstr "gjør noe annet"
-
-#, fuzzy
-msgid "italic"
-msgstr "Kursiv"
 
 #, fuzzy, python-format
 msgid "last seen: %s"
@@ -6602,10 +6849,6 @@ msgstr "hastighet"
 
 msgid "street"
 msgstr "gate"
-
-#, fuzzy
-msgid "strike"
-msgstr "Gjennomstrek"
 
 msgid "text"
 msgstr "tekst"
@@ -7012,9 +7255,6 @@ msgstr ""
 #~ msgid "Back in some minutes."
 #~ msgstr "Tilbake om noen minutter."
 
-#~ msgid "Back soon"
-#~ msgstr "Straks tilbake"
-
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Liste over bannlyste"
@@ -7073,6 +7313,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Vis kontaktens profil (Ctrl+I)"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "Tjener"
+
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "Oppdag tjenester"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Tøm meldingsoppføring"
@@ -7170,9 +7418,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "Forlat gruppesamtaler"
-
-#~ msgid "Create new post"
-#~ msgstr "Lag en ny post"
 
 #~ msgid "Current Developers"
 #~ msgstr "Nåværende utviklere"
@@ -7578,10 +7823,6 @@ msgstr ""
 #~ msgstr "_Fortsett"
 
 #, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "postnummer"
-
-#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Avbryt filoverføring"
 
@@ -7915,6 +8156,15 @@ msgstr ""
 #~ msgstr "_Kopier JID/E-postadresse"
 
 #, fuzzy
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "Meldingen har blitt kryptert med foreldet OpenPGP, og kunne ikke "
+#~ "dekrypteres. Du kan installere PGP-programtillegget for å håndtere de "
+#~ "meldingene."
+
+#, fuzzy
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "Vis transporter"
 
@@ -8021,9 +8271,6 @@ msgstr ""
 #~ msgid "You are not connected"
 #~ msgstr "Du er ikke tilkoblet tjeneren"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Du er ikke tilkoblet tjeneren"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Du kan ikke flette med en konto uten å være tilkoblet."
 
@@ -8063,6 +8310,10 @@ msgstr ""
 
 #~ msgid "_Clear"
 #~ msgstr "_Tøm"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "Velg arkiv"
 
 #, fuzzy
 #~ msgid "_Debug Console"

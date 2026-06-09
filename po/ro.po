@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -99,6 +99,11 @@ msgstr "{nick} a fost dat afară{actor}{reason}"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%s a fost invitat la acest grup de chat"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -258,6 +263,11 @@ msgstr ""
 "membri"
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -702,6 +712,14 @@ msgstr ""
 "A apărut o eroare în timpul încercării de a crea un fișier la %(path)s: "
 "%(error)s"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "A apărut o eroare în timpul încercării de a vă schimba parola."
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "A apărut o eroare în timpul încercării de a vă schimba parola."
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -717,6 +735,10 @@ msgid ""
 msgstr ""
 "S-a produs o eroare în timpul încercării de a face {occupant_jid} "
 "{affiliation_or_role}: {error}"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
+msgstr "A apărut o eroare în timpul încercării de a vă schimba parola."
 
 msgid "And more..."
 msgstr "Și multe altele..."
@@ -875,6 +897,19 @@ msgstr "Departe"
 msgid "Back"
 msgstr "Înapoi"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Înapoi în curând"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 msgid "Ban"
 msgstr "Interzis"
 
@@ -896,6 +931,10 @@ msgstr "Zi de naștere"
 
 msgid "Blind Trust"
 msgstr "Încredere oarbă"
+
+#, fuzzy
+msgid "Blindly trust new devices"
+msgstr "Aveți încredere oarbă în noile dispozitive până când le verificați"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr "Aveți încredere oarbă în noile dispozitive până când le verificați"
@@ -928,6 +967,9 @@ msgstr "Participanți"
 
 msgid "Block…"
 msgstr "Blochează…"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1138,6 +1180,10 @@ msgstr "Alegeți dispozitivul"
 msgid "Choose History Export Directory"
 msgstr "Alegeți Directorul de export istoric"
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Alegeți dispozitivul"
+
 msgid "Choose Sound"
 msgstr "Alegeți Sunet"
 
@@ -1155,13 +1201,6 @@ msgstr "Orașul"
 
 msgid "Clear"
 msgstr "Clar"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "Dispozitive Șterse"
-
-msgid "Clear Devices…"
-msgstr "Ștergeți Dispozitivele…"
 
 msgid "Clear File"
 msgstr "Ștergeți fișierul"
@@ -1212,6 +1251,13 @@ msgstr "Nu există previzualizare automată"
 msgid "Close with Escape"
 msgstr "Închideți cu Escape"
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "Lipiți ca bloc de cod"
+
 msgid "Code snippet"
 msgstr "Fragment de cod"
 
@@ -1252,6 +1298,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Complet"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Completat"
 
@@ -1267,6 +1319,9 @@ msgstr "Configurația"
 msgid "Configure"
 msgstr "Configurare"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr "Configurați sistemul de logare"
 
@@ -1275,6 +1330,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "Configurare"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Confirmați conexiunea necriptată"
@@ -1460,11 +1519,23 @@ msgstr "Creați un cont nou"
 msgid "Create New Group Chat"
 msgstr "Creați un chat de grup"
 
+#, fuzzy
+msgid "Create New Key"
+msgstr "Creați un post nou"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Creați un chat de grup"
+
 msgid "Creating Account..."
 msgstr "Crearea contului..."
 
 msgid "Credentials expired"
 msgstr "Credențiale expirate"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Stocarea securizată a parolelor"
 
 msgid "Custom"
 msgstr ""
@@ -1502,6 +1573,10 @@ msgstr "Dimensiunea fontului interfeței utilizatorului"
 
 msgid "Decrease playback speed"
 msgstr "Reduceți viteza de redare"
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Eroare de criptare"
 
 msgid "Default Encryption"
 msgstr "Criptare implicită"
@@ -1626,6 +1701,10 @@ msgid "Disable Account?"
 msgstr "Dezactivați contul"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Dezactivat"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Dezactivat"
 
@@ -1690,6 +1769,10 @@ msgstr "Chiar doriți să eliminați \"%s\"?"
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
 msgstr "Chiar doriți să ștergeți istoricul de chat pentru acest chat?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
+msgstr "Chiar doriți să eliminați \"%s\"?"
 
 #, fuzzy
 msgid "Do you want to remove this chat including its chat history?"
@@ -1819,6 +1902,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Criptare (OMEMO)"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Criptare (OMEMO)"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Criptare (OMEMO)"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Eroare de criptare"
 
@@ -1842,8 +1933,20 @@ msgstr "Terminarea apelului"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Introduceți o nouă parolă..."
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Schimbați parola"
+
 msgid "Enter a password to join this chat"
 msgstr "Introduceți o parolă pentru a vă alătura acestui chat"
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Introduceți o nouă parolă..."
 
 #, fuzzy
 msgid "Enter group name"
@@ -1947,6 +2050,9 @@ msgstr "Export Finalizat"
 #, fuzzy
 msgid "Export History…"
 msgstr "Exportați istoricul de chat"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr "Exportați istoricul de chat din Gajim"
@@ -2225,6 +2331,11 @@ msgid "Gajim is quitting…"
 msgstr "%s tastează…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2466,12 +2577,25 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "Exportați"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Suport pentru conturi multiple"
 
 #, fuzzy
 msgid "Import from File"
 msgstr "Instalare din fișier…"
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
+msgstr ""
 
 msgid "Import…"
 msgstr ""
@@ -2614,6 +2738,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Italic"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2646,6 +2774,9 @@ msgstr "Alăturați-vă…"
 
 msgid "Just now"
 msgstr "Chiar acum"
+
+msgid "Keep Backup"
+msgstr ""
 
 msgid "Keep Chat History"
 msgstr "Păstrați istoricul chat-ului"
@@ -3071,6 +3202,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Nu există informații disponibile"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Nu s-au găsit rezultate"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3082,6 +3217,10 @@ msgid "No results"
 msgstr "Nu există rezultate"
 
 msgid "No results found"
+msgstr "Nu s-au găsit rezultate"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Nu s-au găsit rezultate"
 
 msgid "No undecided fingerprints"
@@ -3239,6 +3378,24 @@ msgstr "Deschideți folderul"
 msgid "OpenGL accelerated"
 msgstr "Accelerare OpenGL"
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3262,6 +3419,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Altele"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Alții"
+
 msgid "Other devices connected with your account"
 msgstr "Alte dispozitive conectate cu contul dumneavoastră"
 
@@ -3273,6 +3434,10 @@ msgstr "În afara memoriei"
 
 msgid "Outcasts"
 msgstr "Excluși"
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "_Suprascrieți"
 
 msgid "Overwrite Plugin?"
 msgstr "Suprascrieți Plugin-ul?"
@@ -3378,6 +3543,9 @@ msgstr "Lipiți ca bloc de cod"
 msgid "Paste as Quote"
 msgstr "Lipiți ca citat"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Schimbarea parolei a eșuat"
@@ -3441,6 +3609,11 @@ msgstr "Redă sunete pentru a notifica despre evenimente"
 msgid "Please choose an account"
 msgstr "Vă rugăm să alegeți un cont"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 msgid "Please enter an XMPP address"
 msgstr "Vă rugăm să introduceți o adresă XMPP"
 
@@ -3473,6 +3646,12 @@ msgstr ""
 "Vă rugăm să selectați unul dintre conturile dumneavoastră.\n"
 "Gajim va exporta toate mesajele din contul selectat într-un director la "
 "alegerea dumneavoastră."
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
+msgstr ""
 
 msgid "Please use these settings with caution!"
 msgstr "Vă rugăm să utilizați aceste setări cu prudență!"
@@ -3776,6 +3955,10 @@ msgstr "Eliminarea contactului din lista de contacte"
 msgid "Remove Account"
 msgstr "Eliminați contul"
 
+#, fuzzy
+msgid "Remove Backup"
+msgstr "Eliminați grupul"
+
 msgid "Remove Chat History?"
 msgstr "Eliminați istoricul conversațiilor?"
 
@@ -3813,6 +3996,14 @@ msgstr "Eliminați Proxy"
 msgid "Remove Proxy?"
 msgstr "Eliminați Proxy"
 
+#, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Cheia Publică: "
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Eliminați istoria…"
+
 msgid "Remove Setting"
 msgstr "Eliminați setarea"
 
@@ -3829,6 +4020,10 @@ msgstr "Eliminarea din lista de contacte"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Eliminați grupul"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Eliminați grupul"
 
 msgid "Remove this workspace"
@@ -3973,9 +4168,16 @@ msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
 msgid "Restart Pending"
 msgstr "Necesită: Gspell"
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
 msgstr "Restaurați chat-ul"
+
+#, fuzzy
+msgid "Restore Key"
+msgstr "Restabilirea ultimei stări"
 
 msgid "Restore last state"
 msgstr "Restabilirea ultimei stări"
@@ -4171,6 +4373,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Selectați Mesaje…"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr "Selectați o etichetă de securitate pentru mesajul dumneavoastră…"
 
@@ -4307,6 +4512,17 @@ msgstr "Setarea este blocată de sistem"
 
 msgid "Settings"
 msgstr "Setări"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Complet"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Criptare implicită"
 
 msgid "Share Contact…"
 msgstr "Distribuie Contact…"
@@ -4599,8 +4815,16 @@ msgstr ""
 msgid "Stop Sharing Online Status?"
 msgstr "Nu mai împărtășiți statutul online?"
 
+#, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Nu sunteți conectat la server"
+
 msgid "Street"
 msgstr "Stradă"
+
+#, fuzzy
+msgid "Strike"
+msgstr "lovitură"
 
 msgid "Style"
 msgstr "Stil"
@@ -4638,7 +4862,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Eliminați contactul"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -4944,9 +5171,10 @@ msgstr "Această adresă nu pare să ofere niciun serviciu de gateway."
 msgid "This address is not reachable."
 msgstr "Această adresă nu este accesibilă."
 
+#, fuzzy, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 "Configurația acestui chat nu este potrivită pentru criptarea cu OMEMO. "
 "Pentru a utiliza OMEMO în acest chat, acesta trebuie să fie non-anonim și "
@@ -5035,12 +5263,10 @@ msgstr ""
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Acest mesaj a fost criptat cu OTR și nu a putut fi decriptat."
 
+#, fuzzy
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"Acest mesaj a fost criptat cu OpenPGP pentru XMPP și nu a putut fi "
-"decriptat. Puteți instala extensia OpenPGP pentru a gestiona aceste mesaje."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "Acest mesaj a fost criptat cu OTR și nu a putut fi decriptat."
 
 msgid "This message will be deleted from your local chat history"
 msgstr "Acest mesaj va fi șters din istoricul de chat local"
@@ -5070,13 +5296,14 @@ msgstr "Acest serviciu nu a răspuns încă cu informații detaliate"
 msgid "This type of service does not contain any items to browse."
 msgstr "Acest tip de serviciu nu conține elemente de răsfoit."
 
-msgid "This will clear the devices store for your account."
-msgstr ""
-"Acest lucru va șterge stocul de dispozitive pentru contul dumneavoastră."
-
 #, fuzzy
 msgid "This will purge all locally stored chat history"
 msgstr "Acest mesaj va fi șters din istoricul de chat local"
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr ""
+"Acest lucru va șterge stocul de dispozitive pentru contul dumneavoastră."
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5131,11 +5358,21 @@ msgstr ""
 "din nou."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr ""
 "Pentru a trimite un mesaj criptat, trebuie să decideți dacă aveți încredere "
 "în dispozitivul persoanei de contact."
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
+msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
@@ -5208,6 +5445,9 @@ msgstr "Imposibilitatea de decriptare a semnăturii CRL"
 msgid "Unable to decrypt certificate's signature"
 msgstr "Imposibilitatea de a decripta semnătura certificatului"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "Nu se poate obține certificatul CRL"
 
@@ -5222,6 +5462,9 @@ msgstr "Imposibilitatea de a elimina în mod corespunzător plugin-ul"
 
 msgid "Unable to save profile"
 msgstr "Nu se poate salva profilul"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "Nu se poate verifica primul certificat"
@@ -5360,8 +5603,14 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr "Utilizați GSSAPI"
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 msgid "Use Image"
 msgstr "Utilizați imaginea"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr "Utilizați sistemul Keyring"
@@ -5688,8 +5937,18 @@ msgid ""
 msgstr ""
 "Veți apărea offline pentru acest contact și nu veți mai primi alte mesaje."
 
+#, fuzzy
+msgid "Your Backup Password"
+msgstr "Parola dumneavoastră"
+
 msgid "Your Nickname"
 msgstr "Pseudonimul dumneavoastră"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "Adresa dumneavoastră XMPP (de exemplu, user@example.org)"
@@ -5783,9 +6042,6 @@ msgstr "_Ocupat"
 
 msgid "_Cancel"
 msgstr "_Anulează"
-
-msgid "_Clear Devices"
-msgstr ":Ștergeți Dispozitivul"
 
 msgid "_Close"
 msgstr "_Închideți"
@@ -5916,6 +6172,10 @@ msgstr ""
 msgid "_Remove"
 msgstr "_Îndepărtați"
 
+#, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Cheia Publică: "
+
 msgid "_Report Spam"
 msgstr "_Reportați spam-ul"
 
@@ -6001,9 +6261,6 @@ msgstr "ieșire audio"
 msgid "bearing"
 msgstr "rulment"
 
-msgid "bold"
-msgstr "îngroșat"
-
 msgid "building"
 msgstr "clădire"
 
@@ -6048,9 +6305,6 @@ msgstr "compune un mesaj…"
 
 msgid "is doing something else"
 msgstr "face altceva"
-
-msgid "italic"
-msgstr "Italic"
 
 #, fuzzy, python-format
 msgid "last seen: %s"
@@ -6100,9 +6354,6 @@ msgstr "viteză"
 
 msgid "street"
 msgstr "stradă"
-
-msgid "strike"
-msgstr "lovitură"
 
 msgid "text"
 msgstr "textul"
@@ -6530,9 +6781,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Back in some minutes."
 #~ msgstr "Mă întorc în câteva minute."
 
-#~ msgid "Back soon"
-#~ msgstr "Înapoi în curând"
-
 #~ msgid "Blocking List"
 #~ msgstr "Lista de blocare"
 
@@ -6600,6 +6848,13 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Ștergeți dispozitivele acum?"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "Dispozitive Șterse"
+
+#~ msgid "Clear Devices…"
+#~ msgstr "Ștergeți Dispozitivele…"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Introducerea mesajului de ștergere"
@@ -6704,9 +6959,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Create new group chat"
 #~ msgstr "Creați un nou chat de grup"
-
-#~ msgid "Create new post"
-#~ msgstr "Creați un post nou"
 
 #~ msgid "Creating thumbnail failed"
 #~ msgstr "Crearea miniaturii a eșuat"
@@ -7191,10 +7443,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Parola conține caractere interzise"
 
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "Lipiți ca bloc de cod"
-
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Întrerupeți sau reluați transferul de fișiere"
 
@@ -7557,6 +7805,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "This is your XMPP address"
 #~ msgstr "Aceasta este adresa ta XMPP"
 
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "Acest mesaj a fost criptat cu OpenPGP pentru XMPP și nu a putut fi "
+#~ "decriptat. Puteți instala extensia OpenPGP pentru a gestiona aceste "
+#~ "mesaje."
+
 #, fuzzy
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "_Afișează bara de meniu"
@@ -7683,9 +7939,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "You are not connected"
 #~ msgstr "Nu sunteți conectat"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Nu sunteți conectat la server"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Nu puteți sincroniza cu un cont decât dacă acesta este conectat."
 
@@ -7727,6 +7980,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "_Clear"
 #~ msgstr "_Curăță"
+
+#~ msgid "_Clear Devices"
+#~ msgstr ":Ștergeți Dispozitivul"
 
 #~ msgid "_Debug Console"
 #~ msgstr "_Consola de depanare"
@@ -7792,6 +8048,9 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "app.open-folder"
 #~ msgstr "Deschideți folderul"
+
+#~ msgid "bold"
+#~ msgstr "îngroșat"
 
 #~ msgid "dark skin tone"
 #~ msgstr "tonul închis al pielii"

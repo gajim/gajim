@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,6 +90,11 @@ msgstr "%(nick)s је избачен: %(reason)s"
 #, fuzzy, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s је избачен из собе (%(reason)s)"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "Надимак:"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
@@ -248,6 +253,11 @@ msgid "(reason: group chat configuration changed to members-only)"
 msgstr "конфигурација собе се променила на само-чланови"
 
 msgid "(reason: system shutdown)"
+msgstr ""
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
 msgstr ""
 
 msgid "1 Day"
@@ -753,6 +763,14 @@ msgstr "Појавила се грешка при креирању налога"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Појавила се грешка при креирању налога"
 
+#, fuzzy, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Појавила се грешка при креирању налога"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "Појавила се грешка при креирању налога"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -763,6 +781,10 @@ msgstr ""
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
+msgstr "Појавила се грешка при креирању налога"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
 msgstr "Појавила се грешка при креирању налога"
 
 #, fuzzy
@@ -950,6 +972,19 @@ msgstr "Одсутан"
 msgid "Back"
 msgstr "Враћам се брзо"
 
+msgid "Backup Error"
+msgstr ""
+
+#, fuzzy
+msgid "Backup Now"
+msgstr "Враћам се брзо"
+
+msgid "Backup Secret Key"
+msgstr ""
+
+msgid "Backup Successful"
+msgstr ""
+
 #, fuzzy
 msgid "Ban"
 msgstr "_Забрани"
@@ -972,6 +1007,9 @@ msgid "Birthday"
 msgstr "<b>Рођендан:</b>"
 
 msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices"
 msgstr ""
 
 msgid "Blindly trust new devices until you verify them"
@@ -1008,6 +1046,9 @@ msgstr "Учесници"
 #, fuzzy
 msgid "Block…"
 msgstr "_Блокирај"
+
+msgid "Bold"
+msgstr ""
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1232,6 +1273,10 @@ msgstr "Одаберите слику"
 msgid "Choose History Export Directory"
 msgstr ""
 
+#, fuzzy
+msgid "Choose Secret Key"
+msgstr "Одаберите слику"
+
 msgid "Choose Sound"
 msgstr "Одаберите звук"
 
@@ -1252,14 +1297,6 @@ msgstr ""
 #, fuzzy
 msgid "Clear"
 msgstr "Чисти"
-
-#, fuzzy
-msgid "Clear Devices?"
-msgstr "Сервер"
-
-#, fuzzy
-msgid "Clear Devices…"
-msgstr "_Откривање сервиса"
 
 #, fuzzy
 msgid "Clear File"
@@ -1308,6 +1345,13 @@ msgstr ""
 msgid "Close with Escape"
 msgstr ""
 
+msgid "Code"
+msgstr ""
+
+#, fuzzy
+msgid "Code Block"
+msgstr "<b>Поштански број:</b>"
+
 msgid "Code snippet"
 msgstr ""
 
@@ -1347,6 +1391,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Завршен"
 
+msgid "Complete the OpenPGP setup"
+msgstr ""
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr ""
+
 msgid "Completed"
 msgstr "Завршен"
 
@@ -1366,6 +1416,9 @@ msgstr "Конфигурација собе"
 msgid "Configure"
 msgstr "_Конфигуриши"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr ""
 
@@ -1374,6 +1427,10 @@ msgid ""
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+
+#, fuzzy
+msgid "Confirm"
+msgstr "_Конфигуриши"
 
 #, fuzzy
 msgid "Confirm Unencrypted Connection"
@@ -1591,12 +1648,24 @@ msgid "Create New Group Chat"
 msgstr "Напусти групне разговоре"
 
 #, fuzzy
+msgid "Create New Key"
+msgstr "Направи нову објаву"
+
+#, fuzzy
+msgid "Create New OpenPGP Key"
+msgstr "Напусти групне разговоре"
+
+#, fuzzy
 msgid "Creating Account..."
 msgstr "Уклањање рачуна %s"
 
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Сертификат је истекао"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "Сачувај лозинку"
 
 msgid "Custom"
 msgstr ""
@@ -1639,6 +1708,10 @@ msgstr "_Корисничко име:"
 
 msgid "Decrease playback speed"
 msgstr ""
+
+#, fuzzy
+msgid "Decryption Error"
+msgstr "Захтев за претплатом"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1772,6 +1845,10 @@ msgid "Disable Account?"
 msgstr "Неисправан налог"
 
 #, fuzzy
+msgid "Disable Check"
+msgstr "Онемогућено"
+
+#, fuzzy
 msgid "Disable Update"
 msgstr "Онемогућено"
 
@@ -1838,6 +1915,10 @@ msgstr "Да ли заиста желите да их све затворите?
 
 #, fuzzy
 msgid "Do you want to remove all chat history for this chat?"
+msgstr "Да ли заиста желите да их све затворите?"
+
+#, fuzzy
+msgid "Do you want to remove the backup from your server?"
 msgstr "Да ли заиста желите да их све затворите?"
 
 #, fuzzy
@@ -1973,6 +2054,14 @@ msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Захтев за претплатом"
 
 #, fuzzy
+msgid "Encryption (OpenPGP)"
+msgstr "Захтев за претплатом"
+
+#, fuzzy, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Захтев за претплатом"
+
+#, fuzzy
 msgid "Encryption Error"
 msgstr "Захтев за претплатом"
 
@@ -1996,8 +2085,20 @@ msgstr ""
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
+#, fuzzy
+msgid "Enter Backup Password"
+msgstr "Унесите нову лозинку:"
+
+#, fuzzy
+msgid "Enter Password"
+msgstr "Измени лозинку"
+
 msgid "Enter a password to join this chat"
 msgstr ""
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "Унесите нову лозинку:"
 
 #, fuzzy
 msgid "Enter group name"
@@ -2113,6 +2214,9 @@ msgstr "_Заврши"
 #, fuzzy
 msgid "Export History…"
 msgstr "Недавно:"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2411,6 +2515,11 @@ msgid "Gajim is quitting…"
 msgstr "Пише"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2673,10 +2782,23 @@ msgid "Import Error"
 msgstr ""
 
 #, fuzzy
+msgid "Import Key"
+msgstr "Извези"
+
+msgid "Import OpenPGP Key"
+msgstr ""
+
+#, fuzzy
 msgid "Import from Account"
 msgstr "Уклањање рачуна %s"
 
 msgid "Import from File"
+msgstr ""
+
+msgid "Imported key has expiration date"
+msgstr ""
+
+msgid "Imported key is not a secret key"
 msgstr ""
 
 msgid "Import…"
@@ -2827,6 +2949,10 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr ""
 
+#, fuzzy
+msgid "Italic"
+msgstr "Курзив"
+
 msgid "JID"
 msgstr "ЏИД"
 
@@ -2866,6 +2992,9 @@ msgid "Join…"
 msgstr "Забрана..."
 
 msgid "Just now"
+msgstr ""
+
+msgid "Keep Backup"
 msgstr ""
 
 #, fuzzy
@@ -3326,6 +3455,10 @@ msgstr ""
 msgid "No info available"
 msgstr "Нема доступних налога"
 
+#, fuzzy
+msgid "No key found"
+msgstr "Нема резултата"
+
 msgid "No keys pressed"
 msgstr ""
 
@@ -3339,6 +3472,10 @@ msgstr "Нема резултата"
 
 #, fuzzy
 msgid "No results found"
+msgstr "Нема резултата"
+
+#, fuzzy
+msgid "No secret key found"
 msgstr "Нема резултата"
 
 msgid "No undecided fingerprints"
@@ -3512,6 +3649,24 @@ msgstr "_Отвори садржавајућу фасциклу"
 msgid "OpenGL accelerated"
 msgstr ""
 
+msgid "OpenPGP Backup"
+msgstr ""
+
+msgid "OpenPGP Backup Error"
+msgstr ""
+
+msgid "OpenPGP Key Backup"
+msgstr ""
+
+msgid "OpenPGP Setup"
+msgstr ""
+
+msgid "OpenPGP Setup is completed."
+msgstr ""
+
+msgid "OpenPGP key backup failed"
+msgstr ""
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3538,6 +3693,10 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Остали"
 
+#, fuzzy
+msgid "Other Options"
+msgstr "Остали"
+
 msgid "Other devices connected with your account"
 msgstr ""
 
@@ -3549,6 +3708,10 @@ msgstr "Немам више меморије"
 
 msgid "Outcasts"
 msgstr ""
+
+#, fuzzy
+msgid "Overwrite"
+msgstr "Препиши статусну поруку?"
 
 #, fuzzy
 msgid "Overwrite Plugin?"
@@ -3663,6 +3826,9 @@ msgstr "<b>Поштански број:</b>"
 msgid "Paste as Quote"
 msgstr "Одаберите слику"
 
+msgid "Paste your OpenPGP key here"
+msgstr ""
+
 #, fuzzy
 msgid "Pasting Content Failed"
 msgstr "Лозинка захтевана"
@@ -3736,6 +3902,11 @@ msgstr ""
 msgid "Please choose an account"
 msgstr "Молимо Вас направите нову чисту тему са жељеним именом."
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+
 #, fuzzy
 msgid "Please enter an XMPP address"
 msgstr "Молимо Вас направите нову чисту тему са жељеним именом."
@@ -3763,6 +3934,12 @@ msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
+msgstr ""
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
 msgstr ""
 
 msgid "Please use these settings with caution!"
@@ -4100,6 +4277,10 @@ msgid "Remove Account"
 msgstr "Уклањање рачуна %s"
 
 #, fuzzy
+msgid "Remove Backup"
+msgstr "Уклони групу"
+
+#, fuzzy
 msgid "Remove Chat History?"
 msgstr "Недавно:"
 
@@ -4140,6 +4321,14 @@ msgid "Remove Proxy?"
 msgstr "Уклони групу"
 
 #, fuzzy
+msgid "Remove Public Keys?"
+msgstr "Захтев за претплатом"
+
+#, fuzzy
+msgid "Remove Public Keys…"
+msgstr "Синхронизуј"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Регистрација неуспела"
 
@@ -4157,6 +4346,10 @@ msgstr "Уклања контакт са листе"
 
 #, fuzzy
 msgid "Remove from Group"
+msgstr "Уклони групу"
+
+#, fuzzy
+msgid "Remove from Server"
 msgstr "Уклони групу"
 
 #, fuzzy
@@ -4318,8 +4511,15 @@ msgstr ""
 msgid "Restart Pending"
 msgstr "Захтева libgtkspell."
 
+msgid "Restore Backup"
+msgstr ""
+
 #, fuzzy
 msgid "Restore Closed Chat"
+msgstr "Последњи статус: %s"
+
+#, fuzzy
+msgid "Restore Key"
 msgstr "Последњи статус: %s"
 
 #, fuzzy
@@ -4539,6 +4739,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Подразумевана порука"
 
+msgid "Select Secret Key"
+msgstr ""
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4686,6 +4889,17 @@ msgstr ""
 #, fuzzy
 msgid "Settings"
 msgstr "Регистрација неуспела"
+
+msgid "Setup"
+msgstr ""
+
+#, fuzzy
+msgid "Setup Complete"
+msgstr "Завршен"
+
+#, fuzzy
+msgid "Setup OpenPGP Encryption"
+msgstr "Захтев за претплатом"
 
 #, fuzzy
 msgid "Share Contact…"
@@ -5013,8 +5227,16 @@ msgid "Stop Sharing Online Status?"
 msgstr "да ми пошаље статус"
 
 #, fuzzy
+msgid "Stores the secret key encrypted on the server"
+msgstr "Нисте повезани на сервер"
+
+#, fuzzy
 msgid "Street"
 msgstr "Под стресом"
+
+#, fuzzy
+msgid "Strike"
+msgstr "Прецртано"
 
 msgid "Style"
 msgstr "Стил"
@@ -5052,7 +5274,10 @@ msgid "Successfully Removed Contacts"
 msgstr "Преименуј контакт"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr ""
+
+msgid "Successfully imported key from server."
 msgstr ""
 
 msgid "Support"
@@ -5369,9 +5594,10 @@ msgstr "Ово није групни разговор"
 msgid "This address is not reachable."
 msgstr "Услуге нису претраживе"
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This contact does not share their status with you"
@@ -5457,8 +5683,7 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
 msgid "This message will be deleted from your local chat history"
@@ -5492,12 +5717,12 @@ msgstr "Овај сервис још није пружио детаљне инф
 msgid "This type of service does not contain any items to browse."
 msgstr "Овај тип услуге не садржи елементе за претрагу"
 
-#, fuzzy
-msgid "This will clear the devices store for your account."
-msgstr "Уклони налог само из Гајима"
-
 msgid "This will purge all locally stored chat history"
 msgstr ""
+
+#, fuzzy
+msgid "This will remove all published public keys from your account."
+msgstr "Уклони налог само из Гајима"
 
 #, fuzzy
 msgid "This will remove the account and delete all data"
@@ -5553,8 +5778,18 @@ msgstr ""
 "Ако желите да се све промене тренутно примене, морате да се поново повежете."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
+msgstr ""
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
 msgstr ""
 
 #, fuzzy
@@ -5635,6 +5870,9 @@ msgstr "Нисам успео да дешифрујем CRL сертификат
 msgid "Unable to decrypt certificate's signature"
 msgstr "Нисам успео да дешифрујем потпис сертификата"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr ""
+
 msgid "Unable to get certificate CRL"
 msgstr "Нисам успео да узмем CRL сертификата"
 
@@ -5650,6 +5888,9 @@ msgstr ""
 #, fuzzy
 msgid "Unable to save profile"
 msgstr "Не могу учитати слику"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "У немогућности да верификујем први сертификат"
@@ -5804,9 +6045,15 @@ msgstr ""
 msgid "Use GSSAPI"
 msgstr ""
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 #, fuzzy
 msgid "Use Image"
 msgstr "Одаберите слику"
+
+msgid "Use My Own OpenPGP Key"
+msgstr ""
 
 msgid "Use System Keyring"
 msgstr ""
@@ -6156,8 +6403,18 @@ msgid ""
 msgstr "Џабер ИД контакта који ће примити поруку"
 
 #, fuzzy
+msgid "Your Backup Password"
+msgstr "Унесите нову лозинку:"
+
+#, fuzzy
 msgid "Your Nickname"
 msgstr "Надимак:"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr ""
@@ -6261,10 +6518,6 @@ msgstr "_Заузет"
 
 msgid "_Cancel"
 msgstr "_Одустани"
-
-#, fuzzy
-msgid "_Clear Devices"
-msgstr "Одаберите слику"
 
 #, fuzzy
 msgid "_Close"
@@ -6418,6 +6671,10 @@ msgstr ""
 msgid "_Remove"
 msgstr "_Уклони"
 
+#, fuzzy
+msgid "_Remove Public Keys"
+msgstr "Захтев за претплатом"
+
 msgid "_Report Spam"
 msgstr ""
 
@@ -6511,9 +6768,6 @@ msgstr ""
 msgid "bearing"
 msgstr "морска"
 
-msgid "bold"
-msgstr ""
-
 #, fuzzy
 msgid "building"
 msgstr "Крије се"
@@ -6565,10 +6819,6 @@ msgstr "пише поруку..."
 msgid "is doing something else"
 msgstr "ради нешто друго"
 
-#, fuzzy
-msgid "italic"
-msgstr "Курзив"
-
 #, fuzzy, python-format
 msgid "last seen: %s"
 msgstr "Разлог"
@@ -6619,10 +6869,6 @@ msgstr ""
 
 msgid "street"
 msgstr ""
-
-#, fuzzy
-msgid "strike"
-msgstr "Прецртано"
 
 msgid "text"
 msgstr ""
@@ -7020,9 +7266,6 @@ msgstr ""
 #~ msgid "Back in some minutes."
 #~ msgstr "Враћам се за пар минута."
 
-#~ msgid "Back soon"
-#~ msgstr "Враћам се брзо"
-
 #, fuzzy
 #~ msgid "Blocking List"
 #~ msgstr "Листа забрана"
@@ -7082,6 +7325,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Прикажи профил контакта (Ctrl+I)"
+
+#, fuzzy
+#~ msgid "Clear Devices?"
+#~ msgstr "Сервер"
+
+#, fuzzy
+#~ msgid "Clear Devices…"
+#~ msgstr "_Откривање сервиса"
 
 #, fuzzy
 #~ msgid "Clear message entry"
@@ -7182,9 +7433,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Create new group chat"
 #~ msgstr "Напусти групне разговоре"
-
-#~ msgid "Create new post"
-#~ msgstr "Направи нову објаву"
 
 #, fuzzy
 #~ msgid "Current Developers"
@@ -7550,10 +7798,6 @@ msgstr ""
 
 #~ msgid "Out"
 #~ msgstr "Напољу"
-
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "<b>Поштански број:</b>"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7966,9 +8210,6 @@ msgstr ""
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Јесте ли сигурни да желите затворити Гајим?"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Нисте повезани на сервер"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr "Не можете се синхронизовати са налогом ако нисте повезани."
 
@@ -8005,6 +8246,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Accounts"
 #~ msgstr "Налози"
+
+#, fuzzy
+#~ msgid "_Clear Devices"
+#~ msgstr "Одаберите слику"
 
 #, fuzzy
 #~ msgid "_Debug Console"

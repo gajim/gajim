@@ -9,11 +9,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
-"PO-Revision-Date: 2026-04-13 20:20+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"PO-Revision-Date: 2026-05-11 01:20+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
-"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/>"
-"\n"
+"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
+">\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,6 +100,11 @@ msgstr "طُرِد %(nick)s بواسطة %(actor)s"
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "أصبح %(nick)s الآن %(affiliation)s مجموعة الدردشة هذه"
+
+#, fuzzy, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -258,6 +263,11 @@ msgstr "(السبب: تغير ضبط مجموعة الدردشة إلى الأع
 
 msgid "(reason: system shutdown)"
 msgstr "(السبب: إيقاف تشغيل النظام)"
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
+msgstr ""
 
 msgid "1 Day"
 msgstr "يوم واحد"
@@ -686,6 +696,14 @@ msgstr "حدث خطأ أثناء محاولة تغيير كلمة سرِّك."
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "حدث خطأ أثناء محاولة إنشاء ملف في %(path)s: %(error)s"
 
+#, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "حدث خطأ أثناء محاولة فك تعمية نسختك الاحتياطية: %s"
+
+#, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr "حدث خطأ أثناء محاولة استيراد مفتاح OpenPGP الخاص بك: %s"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -699,6 +717,10 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
 msgstr "حدث خطأ أثناء محاولة جعل {occupant_jid} {affiliation_or_role}: {error}"
+
+#, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
+msgstr "حدث خطأ أثناء محاولة طمس نسختك الاحتياطية: %s"
 
 msgid "And more..."
 msgstr "والمزيد..."
@@ -851,6 +873,18 @@ msgstr "غائب"
 msgid "Back"
 msgstr "عُد"
 
+msgid "Backup Error"
+msgstr "خطأ في النسخ الاحتياطي"
+
+msgid "Backup Now"
+msgstr "أنشئ نسخة احتياطية الآن"
+
+msgid "Backup Secret Key"
+msgstr "مفتاح النسخة الاحتياطية السري"
+
+msgid "Backup Successful"
+msgstr "نجح النسخ الاحتياطي"
+
 msgid "Ban"
 msgstr "امنع"
 
@@ -872,6 +906,9 @@ msgstr "يوم الميلاد"
 
 msgid "Blind Trust"
 msgstr "الثقة العمياء"
+
+msgid "Blindly trust new devices"
+msgstr "ثِق بالأجهزة الجديدة ثقة عمياء"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr "يثِق بالأجهزة الجديدة ثقة عمياء حتى تتحقق منها"
@@ -900,6 +937,9 @@ msgstr "المشاركون المحظورون"
 
 msgid "Block…"
 msgstr "احظر…"
+
+msgid "Bold"
+msgstr "عريض"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1101,6 +1141,9 @@ msgstr "اختر جهازًا"
 msgid "Choose History Export Directory"
 msgstr "اختر مجلد تصدير التأريخ"
 
+msgid "Choose Secret Key"
+msgstr "اختر مفتاحًا سريًا"
+
 msgid "Choose Sound"
 msgstr "اختر صوتًا"
 
@@ -1118,12 +1161,6 @@ msgstr "مدينة"
 
 msgid "Clear"
 msgstr "امح"
-
-msgid "Clear Devices?"
-msgstr "ستمحُ الأجهزة؟"
-
-msgid "Clear Devices…"
-msgstr "امح الأجهزة…"
 
 msgid "Clear File"
 msgstr "امح الملف"
@@ -1169,6 +1206,12 @@ msgstr "أغلق هذه المعاينة"
 msgid "Close with Escape"
 msgstr "الإغلاق بمفتاح ESC"
 
+msgid "Code"
+msgstr "ترميز"
+
+msgid "Code Block"
+msgstr "كتلة ترميز"
+
 msgid "Code snippet"
 msgstr "قصاصة ترميز"
 
@@ -1208,6 +1251,12 @@ msgstr ""
 msgid "Complete"
 msgstr "أكمِل"
 
+msgid "Complete the OpenPGP setup"
+msgstr "أكمل تهيئة OpenPGP"
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr "أكمل تهيئة OpenPGP لتكون دردشتك معمآة."
+
 msgid "Completed"
 msgstr "اكتمل"
 
@@ -1223,6 +1272,9 @@ msgstr "الضبط"
 msgid "Configure"
 msgstr "اضبط"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr ""
+
 msgid "Configure logging system"
 msgstr "اضبط نظام السجلات"
 
@@ -1233,6 +1285,9 @@ msgid ""
 msgstr ""
 "يضبط أي رسائل ستؤرشف على الخادوم. قد يمنعك عدم أرشفة الرسائل من المزامنة بين "
 "أجهزتك."
+
+msgid "Confirm"
+msgstr "أكِّد"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "تأكيد الاتصال غير المعمى"
@@ -1408,11 +1463,21 @@ msgstr "أنشِئ حسابًا جديدًا"
 msgid "Create New Group Chat"
 msgstr "أنشِئ مجموعة دردشة جديدة"
 
+msgid "Create New Key"
+msgstr "أنشِئ مفتاحًا جديدًا"
+
+msgid "Create New OpenPGP Key"
+msgstr "أنشِئ مفتاح OpenPGP جديد"
+
 msgid "Creating Account..."
 msgstr "يُنشَأ الحساب…"
 
 msgid "Credentials expired"
 msgstr "انتهت صلاحية الإعتماديات"
+
+#, fuzzy
+msgid "Current password incorrect"
+msgstr "تخزين آمن لكلمات السر"
 
 msgid "Custom"
 msgstr "مخصَّص"
@@ -1449,6 +1514,9 @@ msgstr "صغِّر حجم الخط"
 
 msgid "Decrease playback speed"
 msgstr "قلِّل سرعة التشغيل"
+
+msgid "Decryption Error"
+msgstr "خطأ في التعمية"
 
 msgid "Default Encryption"
 msgstr "التعمية المبدئية"
@@ -1561,6 +1629,9 @@ msgstr "المجلد غير قابل للكتابة"
 msgid "Disable Account?"
 msgstr "ستعطِّل الحساب؟"
 
+msgid "Disable Check"
+msgstr "عطِّل التحقق"
+
 msgid "Disable Update"
 msgstr "عطِّل التحديث"
 
@@ -1619,6 +1690,9 @@ msgstr "أتود إزالة \"%(group)s\"؟"
 
 msgid "Do you want to remove all chat history for this chat?"
 msgstr "أتود إزالة كل تأريخ هذه الدردشة؟"
+
+msgid "Do you want to remove the backup from your server?"
+msgstr "أتود إزالة هذه النسخة الاحتياطية من خادومك؟"
 
 msgid "Do you want to remove this chat including its chat history?"
 msgstr "أتود إزالة هذه الدردشة بما في ذلك تأريخها؟"
@@ -1737,6 +1811,13 @@ msgstr "التعمية (OMEMO)"
 msgid "Encryption (OMEMO) – %(account)s"
 msgstr "التعمية (OMEMO) – %(account)s"
 
+msgid "Encryption (OpenPGP)"
+msgstr "التعمية (OpenPGP)"
+
+#, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "التعمية (OpenPGP) – %(account)s"
+
 msgid "Encryption Error"
 msgstr "خطأ في التعمية"
 
@@ -1758,8 +1839,18 @@ msgstr "أنهِ المكالمة"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr "نقطة النهاية لاسترداد قائمة الموفِّرين للتسجيل"
 
+msgid "Enter Backup Password"
+msgstr "أدخِل كلمة سر النسخة الاحتياطية"
+
+msgid "Enter Password"
+msgstr "أدخِل كلمة السر"
+
 msgid "Enter a password to join this chat"
 msgstr "أدخِل كلمة سر للانضمام إلى هذه الدردشو"
+
+#, fuzzy
+msgid "Enter current password..."
+msgstr "أدخِل كلمة السر الجديدة..."
 
 msgid "Enter group name"
 msgstr "أدخِل اسم المجموعة"
@@ -1855,6 +1946,9 @@ msgstr "انتهى التصدير"
 
 msgid "Export History…"
 msgstr "صدِّر التأريخ…"
+
+msgid "Export settings to a .json file"
+msgstr ""
 
 msgid "Export your chat history from Gajim"
 msgstr "يصدِّر تأريخ دردشاتك من غاجم"
@@ -2125,6 +2219,13 @@ msgid "Gajim is quitting…"
 msgstr "غاجم يغادر…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+"يحاول غاجم استيراد نسخة احتياطية لمفتاح OpenPGP الخاص بك من الخادوم. أدخِل "
+"كلمة السر لنسختك الاحتياطية."
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr "لم يتمكن غاجم من الوصول إلى الخادوم. تأكد من صحة عنوان XMPP الخاص بك."
@@ -2352,11 +2453,23 @@ msgstr "ستستورد المتراسلين؟"
 msgid "Import Error"
 msgstr "خطأ في الاستيراد"
 
+msgid "Import Key"
+msgstr "استورِد مفتاحًا"
+
+msgid "Import OpenPGP Key"
+msgstr "استورد مفتاح OpenPGP"
+
 msgid "Import from Account"
 msgstr "استورِد من حساب"
 
 msgid "Import from File"
 msgstr "استورِد من ملف"
+
+msgid "Imported key has expiration date"
+msgstr "انتهت صلاحية المفتاح المستورد"
+
+msgid "Imported key is not a secret key"
+msgstr "المفتاح المستورد ليس مفتاحًا سريًا"
 
 msgid "Import…"
 msgstr "استورِد…"
@@ -2488,6 +2601,9 @@ msgstr "اكتُشفت مشاكل"
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr "الوقت هو <b>%(time)s</b> لدى %(name)s"
 
+msgid "Italic"
+msgstr "مائل"
+
 msgid "JID"
 msgstr "معرِّف Jabber"
 
@@ -2520,6 +2636,9 @@ msgstr "انضم…"
 
 msgid "Just now"
 msgstr "للتو"
+
+msgid "Keep Backup"
+msgstr "أبقِ النسخة الاحتياطية"
 
 msgid "Keep Chat History"
 msgstr "الاحتفاظ بتأريخ الدردشة"
@@ -2916,6 +3035,9 @@ msgstr "لم تُعيّن مجموعة"
 msgid "No info available"
 msgstr "لا معلومات متاحة"
 
+msgid "No key found"
+msgstr "لم يُعثر على مفتاح"
+
 msgid "No keys pressed"
 msgstr "لم يُنقر أي مفتاح"
 
@@ -2928,6 +3050,9 @@ msgstr "لا نتائج"
 
 msgid "No results found"
 msgstr "لم يُعثر على نتائج"
+
+msgid "No secret key found"
+msgstr "لم يُعثر على مفتاح سري"
 
 msgid "No undecided fingerprints"
 msgstr "لا بصمات غير مقرَّرة"
@@ -3080,6 +3205,24 @@ msgstr "افتح المجلد"
 msgid "OpenGL accelerated"
 msgstr "مسرَّع بواسطة OpenGL"
 
+msgid "OpenPGP Backup"
+msgstr "نسخة OpenPGP احتياطية"
+
+msgid "OpenPGP Backup Error"
+msgstr "أخفق نسخ OpenPGP الاحتياطي"
+
+msgid "OpenPGP Key Backup"
+msgstr "نسخة مفتاح OpenPGP احتياطية"
+
+msgid "OpenPGP Setup"
+msgstr "تهيئة OpenPGP"
+
+msgid "OpenPGP Setup is completed."
+msgstr "اكتملت تهيئة OpenPGP."
+
+msgid "OpenPGP key backup failed"
+msgstr "تعذَّر نسخ مفتاح OpenPGP احتياطيًا"
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3102,6 +3245,9 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "آخر"
 
+msgid "Other Options"
+msgstr "خيارات أخرى"
+
 msgid "Other devices connected with your account"
 msgstr "أجهزة أخرى متصلة بحسابك"
 
@@ -3113,6 +3259,9 @@ msgstr "نفدت الذاكرة"
 
 msgid "Outcasts"
 msgstr "المنبوذون"
+
+msgid "Overwrite"
+msgstr "اطمس"
 
 msgid "Overwrite Plugin?"
 msgstr "ستطمس فوق الملحق؟"
@@ -3213,6 +3362,9 @@ msgstr "ألصق ككتلة ترميز"
 msgid "Paste as Quote"
 msgstr "ألصق كاقتباس"
 
+msgid "Paste your OpenPGP key here"
+msgstr "ألصق مفتاح OpenPGP الخاص بك هنا"
+
 msgid "Pasting Content Failed"
 msgstr "تعذَّر لصق المحتوى"
 
@@ -3274,6 +3426,12 @@ msgstr "يشغِّل أصواتًا للتنبيه بالأحداث"
 msgid "Please choose an account"
 msgstr "اختر حسابًا"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+"حدِّد أيًا من مفاتيح OpenPGP الخاصة بك ينبغي على غاجم استخدامها لتعمية دردشتك."
+
 msgid "Please enter an XMPP address"
 msgstr "أدخل عنوان XMPP"
 
@@ -3304,6 +3462,14 @@ msgid ""
 msgstr ""
 "اختر أحد حساباتك.\n"
 "سيصدِّر غاجم كل الرسائل من الحساب والدردشات المحدَّدة إلى مجلد من اختيارك."
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
+msgstr ""
+"خزِّن كلمة السر هذه لمفتاح نسخة OpenPGP الاحتياطية الخاصة بك في مكان آمن. "
+"ستحتاج كلمة السر هذه أثناء استرداد المفتاح أو حين استخدامه مع أجهزة أخرى."
 
 msgid "Please use these settings with caution!"
 msgstr "استخدم هذه الإعدادات بحذر!"
@@ -3588,6 +3754,9 @@ msgstr "ستزيل %s متراسلًا من قائمتك؟"
 msgid "Remove Account"
 msgstr "إزالة الحساب"
 
+msgid "Remove Backup"
+msgstr "احذف النسخة الاحتياطية"
+
 msgid "Remove Chat History?"
 msgstr "ستزيل تأريخ الدردشات؟"
 
@@ -3618,6 +3787,12 @@ msgstr "أزِل الوسيط"
 msgid "Remove Proxy?"
 msgstr "ستزيل الوسيط؟"
 
+msgid "Remove Public Keys?"
+msgstr "أستزيل المفاتيح العمومية؟"
+
+msgid "Remove Public Keys…"
+msgstr "أزِل المفاتيح العمومية…"
+
 msgid "Remove Setting"
 msgstr "أزِل الإعداد"
 
@@ -3632,6 +3807,9 @@ msgstr "أزِل من قائمة المتراسلين…"
 
 msgid "Remove from Group"
 msgstr "أزِل من المجموعة"
+
+msgid "Remove from Server"
+msgstr "أزِل من الخادوم"
 
 msgid "Remove this workspace"
 msgstr "أزِل مساحة العمل هذه"
@@ -3772,8 +3950,14 @@ msgstr "أعِد تشغيل غاجم لبدء سجل التنقيح"
 msgid "Restart Pending"
 msgstr "إعادة التشغيل معلَّقة"
 
+msgid "Restore Backup"
+msgstr "استعِد النسخة الاحتياطية"
+
 msgid "Restore Closed Chat"
 msgstr "استعِد الدردشة المغلقة"
+
+msgid "Restore Key"
+msgstr "استعِد مفتاحًا"
 
 msgid "Restore last state"
 msgstr "استعِد الحالة الأخيرة"
@@ -3966,6 +4150,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "حدِّد رسائل…"
 
+msgid "Select Secret Key"
+msgstr "اختر مفتاحًا سريًا"
+
 msgid "Select a security label for your message…"
 msgstr "حدِّد تسمية أمان لرسالتك…"
 
@@ -4089,6 +4276,15 @@ msgstr "الإعداد مقفل من قبل النظام"
 
 msgid "Settings"
 msgstr "الإعدادات"
+
+msgid "Setup"
+msgstr "هيئ"
+
+msgid "Setup Complete"
+msgstr "اكتملت التهيئة"
+
+msgid "Setup OpenPGP Encryption"
+msgstr "هيئ تعمية OpnePGP"
 
 msgid "Share Contact…"
 msgstr "شارك المتراسل…"
@@ -4363,8 +4559,14 @@ msgstr "الخطوات لإعادة تكوين المشكلة…"
 msgid "Stop Sharing Online Status?"
 msgstr "ستوقف مشاركة حالة الاتصال؟"
 
+msgid "Stores the secret key encrypted on the server"
+msgstr "يخزن المفتاح السري بصيغة معماة على الخادوم"
+
 msgid "Street"
 msgstr "الشارع"
+
+msgid "Strike"
+msgstr "اشطب"
 
 msgid "Style"
 msgstr "النمط"
@@ -4398,8 +4600,11 @@ msgid "Successfully Removed Contacts"
 msgstr "أُزيل متراسلون بنجاح"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
-msgstr "بُنيَّت جلسة جديدة تحت المعرَّف {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr "بُنيَّت جلسة جديدة تحت الجهاز {device_id}."
+
+msgid "Successfully imported key from server."
+msgstr "نجح استيراد المفتاح من الخادوم."
 
 msgid "Support"
 msgstr "الدعم"
@@ -4669,12 +4874,13 @@ msgstr "لا يبدو أن هذا العنوان يقدِّم أي خدمة بو
 msgid "This address is not reachable."
 msgstr "لا يمكن الوصول إلى هذا العنوان."
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
-"ضبط هذه الدردشة غير مناسب للتعميَّة باستخدام OMEMO. لاستخدام OMEMO في هذه "
-"الدردشة، يجب أن تكون غير مجهولة ومقتصرة على الأعضاء فقط."
+"ضبط هذه الدردشة غير مناسب للتعميَّة باستخدام {encryption}. لاستخدام "
+"{encryption} في هذه الدردشة، يجب أن تكون غير مجهولة ومقتصرة على الأعضاء فقط."
 
 msgid "This contact does not share their status with you"
 msgstr "هذا المتراسل لا يشارك حالته معك"
@@ -4757,11 +4963,8 @@ msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "عميَّت هذه الرسالة باستخدام OTR وتعذَّر فك تعميَّتها."
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
-msgstr ""
-"عميَّت هذه الرسالة باستخدام OpenPGP ل‍ XMPP وتعذَّر فك تعميَّتها. يمكنك تنصيب ملحق "
-"OpenPGP لمعالجة تلك الرسائل."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
+msgstr "عميَّت هذه الرسالة باستخدام OpenPGP ل‍XMPP وتعذَّر فك تعميَّتها."
 
 msgid "This message will be deleted from your local chat history"
 msgstr "ستُحذَف هذه الرسالة من تأريخ دردشاتك المحلي"
@@ -4791,11 +4994,11 @@ msgstr "لم تستجب هذه الخدمة بعد بمعلومات مفصَّل
 msgid "This type of service does not contain any items to browse."
 msgstr "هذا النوع من الخدمات لا يحوي على أي عناصر لتصفُّحها."
 
-msgid "This will clear the devices store for your account."
-msgstr "سيؤدي هذا إلى محو مخزن الأجهزة لحسابك."
-
 msgid "This will purge all locally stored chat history"
 msgstr "سيؤدي هذا إلى تطهير كل تأريخ الدردشات المخزَّن محليًا"
+
+msgid "This will remove all published public keys from your account."
+msgstr "سيؤدي هذا إلى محو كل المفاتيح العمومية المنشورة من حسابك."
 
 msgid "This will remove the account and delete all data"
 msgstr "سيؤدي هذا إلى إزالة الحساب وحذف كافة البيانات"
@@ -4844,9 +5047,19 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr "أعِد الولوج لتطبيق كل التغييرات فورًا."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr "لإرسال رسالة معمَّاة، عليك أن تقرر ما إذا كنت ستثق في جهاز متراسلك."
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
+msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "بدِّل عرض قائمة الدردشات"
@@ -4918,6 +5131,9 @@ msgstr "تعذَّر فك تعميَّة توقيع قائمة نقض الشها
 msgid "Unable to decrypt certificate's signature"
 msgstr "تعذَّر فك تعميَّة توقيع الشهادة"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr "تعذَّر فك تعمية النسخة الاحتياطية باستخدام كلمة السر هذه"
+
 msgid "Unable to get certificate CRL"
 msgstr "تعذَّر الحصول على قائمة نقض الشهادات (CRL) للشهادة"
 
@@ -4932,6 +5148,9 @@ msgstr "تعذَّرت إزالة الملحق بشكل صحيح"
 
 msgid "Unable to save profile"
 msgstr "تعذَّر حفظ اللاحة"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr "تعذَّر التّحقّق من الشهادة الأولى"
@@ -5063,8 +5282,14 @@ msgstr "استخدم ”//“ لبدء رسالة بشرطة مائلة ”/“.
 msgid "Use GSSAPI"
 msgstr "استخدم GSSAPI"
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr ""
+
 msgid "Use Image"
 msgstr "استخدام صورة"
+
+msgid "Use My Own OpenPGP Key"
+msgstr "استخدم مفتاح تعمية OpenPGP الخاص بي"
 
 msgid "Use System Keyring"
 msgstr "استخدام حلقة مفاتيح النظام"
@@ -5376,8 +5601,17 @@ msgid ""
 "messages."
 msgstr "ستظهر غير متصل لهذا المتراسل ولن تتلقى المزيد من الرسائل."
 
+msgid "Your Backup Password"
+msgstr "كلمة سر نسختك الاحتياطية"
+
 msgid "Your Nickname"
 msgstr "لقبك"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr ""
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "عنوان XMPP الخاص بك (مثلًا user@example.org)"
@@ -5467,9 +5701,6 @@ msgstr "مش_غول"
 
 msgid "_Cancel"
 msgstr "أ_لغِ"
-
-msgid "_Clear Devices"
-msgstr "ام_حُ الأجهزة"
 
 msgid "_Close"
 msgstr "أ_غلِق"
@@ -5596,6 +5827,9 @@ msgstr "ت_ذكَّر قراري"
 msgid "_Remove"
 msgstr "أ_زِل"
 
+msgid "_Remove Public Keys"
+msgstr "أ_زِل المفاتيح العمومية"
+
 msgid "_Report Spam"
 msgstr "أ_بلغ عن رسائل مزعجة"
 
@@ -5677,9 +5911,6 @@ msgstr "مخرج الصوت"
 msgid "bearing"
 msgstr "الاتجاه"
 
-msgid "bold"
-msgstr "عريض"
-
 msgid "building"
 msgstr "المبنى"
 
@@ -5726,9 +5957,6 @@ msgstr "يكتب رسالة…"
 
 msgid "is doing something else"
 msgstr "يفعل شيئًا آخر"
-
-msgid "italic"
-msgstr "مائل"
 
 #, python-format
 msgid "last seen: %s"
@@ -5778,9 +6006,6 @@ msgstr "السرعة"
 
 msgid "street"
 msgstr "الشارع"
-
-msgid "strike"
-msgstr "مشطوب"
 
 msgid "text"
 msgstr "النص"
@@ -5997,9 +6222,6 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Back in some minutes."
 #~ msgstr "عائد بعد دقائق."
 
-#~ msgid "Back soon"
-#~ msgstr "عائد قريبًا"
-
 #~ msgid "Blocking List"
 #~ msgstr "قائمة الحظر"
 
@@ -6059,6 +6281,12 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "أامح الأجهزة الآن؟"
+
+#~ msgid "Clear Devices?"
+#~ msgstr "ستمحُ الأجهزة؟"
+
+#~ msgid "Clear Devices…"
+#~ msgstr "امح الأجهزة…"
 
 #~ msgid "Clear message entry"
 #~ msgstr "امح مدخلة الرسالة"
@@ -6153,9 +6381,6 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Create new group chat"
 #~ msgstr "أنشِئ مجموعة دردشة جديدة"
-
-#~ msgid "Create new post"
-#~ msgstr "أنشِئ منشورًا جديدًا"
 
 #~ msgid "Creating thumbnail failed"
 #~ msgstr "تعذَّر إنشاء المصغرة"
@@ -6343,10 +6568,6 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "تحوي كلمة السر حروفًا ممنوعة"
 
-#, fuzzy
-#~ msgid "Past as Code Block"
-#~ msgstr "ألصق ككتلة ترميز"
-
 #~ msgctxt "Group chat description"
 #~ msgid "Project discussion"
 #~ msgstr "نقاش المشروع"
@@ -6457,6 +6678,13 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "This is your XMPP address"
 #~ msgstr "هذا هو عنوان XMPP الخاص بك"
 
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "عميَّت هذه الرسالة باستخدام OpenPGP ل‍ XMPP وتعذَّر فك تعميَّتها. يمكنك تنصيب "
+#~ "ملحق OpenPGP لمعالجة تلك الرسائل."
+
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "بدِّل عرض شريط القوائم"
 
@@ -6523,6 +6751,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "_Clear"
 #~ msgstr "ام_ح"
 
+#~ msgid "_Clear Devices"
+#~ msgstr "ام_حُ الأجهزة"
+
 #~ msgid "_Default"
 #~ msgstr "الم_بدئي"
 
@@ -6567,6 +6798,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "app.save-file-as"
 #~ msgstr "app.save-file-as"
+
+#~ msgid "bold"
+#~ msgstr "عريض"
 
 #, python-format
 #~ msgid "e.g. %s"

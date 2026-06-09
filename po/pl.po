@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 19:55+0000\n"
-"PO-Revision-Date: 2026-04-12 19:20+0000\n"
+"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"PO-Revision-Date: 2026-06-08 06:20+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -99,6 +99,11 @@ msgstr "%(nick)s został wyrzucony przez %(actor)s"
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s jest teraz %(affiliation)s tej rozmowy grupowej"
+
+#, python-format
+msgctxt "Group chat name"
+msgid "%(nickname)s and me"
+msgstr "%(nickname)s i ja"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -256,6 +261,11 @@ msgstr ""
 
 msgid "(reason: system shutdown)"
 msgstr "(powód: wyłączenie systemu)"
+
+#, python-format
+msgctxt "Group chat name"
+msgid ", %(number of participants)s others"
+msgstr ", %(number of participants)s innych"
 
 msgid "1 Day"
 msgstr "1 dzień"
@@ -685,6 +695,15 @@ msgstr "Wystąpił błąd w trakcie próby zmiany Twojego hasła."
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Wystąpił błąd w trakcie próby utworzenia pliku w %(path)s: %(error)s"
 
+#, python-format
+msgid "An error occurred while trying to decrypt your backup: %s"
+msgstr "Wystąpił błąd w trakcie próby odszyfrowania Twojej kopii zapasowej: %s"
+
+#, python-format
+msgid "An error occurred while trying to import your OpenPGP key: %s"
+msgstr ""
+"Wystąpił błąd w trakcie próby zaimportowania Twojego klucza OpenPGP: %s"
+
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
@@ -700,6 +719,10 @@ msgid ""
 msgstr ""
 "Wystąpił błąd podczas próby przypisania {occupant_jid} "
 "{affiliation_or_role}: {error}"
+
+#, python-format
+msgid "An error occurred while trying to overwrite your backup: %s"
+msgstr "Wystąpił błąd w trakcie próby nadpisania Twojej kopii zapasowej: %s"
 
 msgid "And more..."
 msgstr "I więcej…"
@@ -853,6 +876,18 @@ msgstr "Zaraz wracam"
 msgid "Back"
 msgstr "Wstecz"
 
+msgid "Backup Error"
+msgstr "Błąd kopii zapasowej"
+
+msgid "Backup Now"
+msgstr "Utwórz kopię zapasową teraz"
+
+msgid "Backup Secret Key"
+msgstr "Klucz tajny kopii zapasowej"
+
+msgid "Backup Successful"
+msgstr "Utworzenie kopii zapasowej powiodło się"
+
 msgid "Ban"
 msgstr "Zbanuj"
 
@@ -874,6 +909,9 @@ msgstr "Data urodzenia"
 
 msgid "Blind Trust"
 msgstr "Ślepe zaufanie"
+
+msgid "Blindly trust new devices"
+msgstr "Ślepo ufaj nowym urządzeniom"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr "Ślepo ufaj nowym urządzeniom zanim je zweryfikujesz"
@@ -902,6 +940,9 @@ msgstr "Zablokowani uczestnicy"
 
 msgid "Block…"
 msgstr "Zablokuj…"
+
+msgid "Bold"
+msgstr "Pogrubienie"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1105,6 +1146,9 @@ msgstr "Wybierz urządzenie"
 msgid "Choose History Export Directory"
 msgstr "Wybierz katalog do eksportu historii"
 
+msgid "Choose Secret Key"
+msgstr "Wybierz klucz tajny"
+
 msgid "Choose Sound"
 msgstr "Wybierz dźwięk"
 
@@ -1122,12 +1166,6 @@ msgstr "Miasto"
 
 msgid "Clear"
 msgstr "Wyczyść"
-
-msgid "Clear Devices?"
-msgstr "Wyczyścić urządzenia?"
-
-msgid "Clear Devices…"
-msgstr "Wyczyść urządzenia…"
 
 msgid "Clear File"
 msgstr "Wyczyść plik"
@@ -1174,6 +1212,12 @@ msgstr "Zamknij ten podgląd"
 msgid "Close with Escape"
 msgstr "Zamknij używając Escape"
 
+msgid "Code"
+msgstr "Kod"
+
+msgid "Code Block"
+msgstr "Blok kodu"
+
 msgid "Code snippet"
 msgstr "Wycinek kodu"
 
@@ -1213,6 +1257,12 @@ msgstr ""
 msgid "Complete"
 msgstr "Ukończone"
 
+msgid "Complete the OpenPGP setup"
+msgstr "Ukończ konfigurację OpenPGP"
+
+msgid "Complete the OpenPGP setup to chat encrypted."
+msgstr "Ukończ konfigurację OpenPGP aby korzystać z szyfrowanych rozmów."
+
 msgid "Completed"
 msgstr "Ukończony"
 
@@ -1228,6 +1278,9 @@ msgstr "Konfiguracja"
 msgid "Configure"
 msgstr "Konfiguruj"
 
+msgid "Configure Gajim with values from a .json file"
+msgstr "Skonfiguruj Gajima z ustawieniami z pliku JSON"
+
 msgid "Configure logging system"
 msgstr "Skonfiguruj dziennik zdarzeń"
 
@@ -1239,6 +1292,9 @@ msgstr ""
 "Konfiguruje, które wiadomości będą archiwizowane na serwerze. Wyłączenie "
 "archiwizacji wiadomości na serwerze może uniemożliwić ich synchronizację "
 "pomiędzy Twoimi urządzeniami."
+
+msgid "Confirm"
+msgstr "Potwierdź"
 
 msgid "Confirm Unencrypted Connection"
 msgstr "Potwierdź niezaszyfrowane połączenie"
@@ -1415,11 +1471,20 @@ msgstr "Utwórz nowe konto"
 msgid "Create New Group Chat"
 msgstr "Utwórz nową rozmowę grupową"
 
+msgid "Create New Key"
+msgstr "Utwórz nowy klucz"
+
+msgid "Create New OpenPGP Key"
+msgstr "Utwórz nowy klucz OpenPGP"
+
 msgid "Creating Account..."
 msgstr "Tworzenie konta…"
 
 msgid "Credentials expired"
 msgstr "Dane uwierzytelniające wygasły"
+
+msgid "Current password incorrect"
+msgstr "Obecne hasło jest nieprawidłowe"
 
 msgid "Custom"
 msgstr "Własny"
@@ -1456,6 +1521,9 @@ msgstr "Zmniejsz rozmiar czcionki"
 
 msgid "Decrease playback speed"
 msgstr "Zmniejsz prędkość odtwarzania"
+
+msgid "Decryption Error"
+msgstr "Błąd odszyfrowania"
 
 msgid "Default Encryption"
 msgstr "Domyślne szyfrowanie"
@@ -1568,6 +1636,9 @@ msgstr "Katalog niedostępny do zapisu"
 msgid "Disable Account?"
 msgstr "Wyłączyć konto?"
 
+msgid "Disable Check"
+msgstr "Wyłącz sprawdzanie"
+
 msgid "Disable Update"
 msgstr "Wyłącz aktualizację"
 
@@ -1626,6 +1697,9 @@ msgstr "Czy chcesz usunąć „%(group)s”?"
 
 msgid "Do you want to remove all chat history for this chat?"
 msgstr "Czy chcesz usunąć całą historię tej rozmowy?"
+
+msgid "Do you want to remove the backup from your server?"
+msgstr "Czy chcesz usunąć kopię zapasową z Twojego serwera?"
 
 msgid "Do you want to remove this chat including its chat history?"
 msgstr "Czy chcesz usunąć tę rozmowę wraz z jej historią?"
@@ -1750,6 +1824,13 @@ msgstr "Szyfrowanie (OMEMO)"
 msgid "Encryption (OMEMO) – %(account)s"
 msgstr "Szyfrowanie (OMEMO) — %(account)s"
 
+msgid "Encryption (OpenPGP)"
+msgstr "Szyfrowanie (OpenPGP)"
+
+#, python-format
+msgid "Encryption (OpenPGP) – %(account)s"
+msgstr "Szyfrowanie (OpenPGP) — %(account)s"
+
 msgid "Encryption Error"
 msgstr "Błąd szyfrowania"
 
@@ -1772,8 +1853,17 @@ msgstr "Zakończ rozmowę"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr "Punkt końcowy do pobierania listy dostawców do rejestracji konta"
 
+msgid "Enter Backup Password"
+msgstr "Wprowadź hasło kopii zapasowej"
+
+msgid "Enter Password"
+msgstr "Wprowadź hasło"
+
 msgid "Enter a password to join this chat"
 msgstr "Wprowadź hasło, aby dołączyć do tej rozmowy"
+
+msgid "Enter current password..."
+msgstr "Wprowadź obecne hasło…"
 
 msgid "Enter group name"
 msgstr "Podaj nazwę grupy"
@@ -1869,6 +1959,9 @@ msgstr "Eksport zakończony"
 
 msgid "Export History…"
 msgstr "Eksportuj historię…"
+
+msgid "Export settings to a .json file"
+msgstr "Eksportuj ustawienia do pliku JSON"
 
 msgid "Export your chat history from Gajim"
 msgstr "Eksportuj swoją historię rozmów z Gajima"
@@ -2142,6 +2235,13 @@ msgid "Gajim is quitting…"
 msgstr "Gajim wyłącza się…"
 
 msgid ""
+"Gajim tries to restore a backup of your OpenPGP key from the server. Please "
+"enter the password for your backup."
+msgstr ""
+"Gajim próbuje przywrócić kopię zapasową Twojego klucza OpenPGP z serwera. "
+"Wprowadź hasło do Twojej kopii zapasowej."
+
+msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
@@ -2375,11 +2475,23 @@ msgstr "Importować kontakty?"
 msgid "Import Error"
 msgstr "Błąd importowania"
 
+msgid "Import Key"
+msgstr "Importuj klucz"
+
+msgid "Import OpenPGP Key"
+msgstr "Importuj klucz OpenPGP"
+
 msgid "Import from Account"
 msgstr "Importuj z konta"
 
 msgid "Import from File"
 msgstr "Importuj z pliku"
+
+msgid "Imported key has expiration date"
+msgstr "Importowany klucz ma datę wygaśnięcia"
+
+msgid "Imported key is not a secret key"
+msgstr "Importowany klucz nie jest kluczem tajnym"
 
 msgid "Import…"
 msgstr "Importuj…"
@@ -2512,6 +2624,9 @@ msgstr "Wykryto problemy"
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr "Jest <b>%(time)s</b> dla %(name)s"
 
+msgid "Italic"
+msgstr "Kursywa"
+
 msgid "JID"
 msgstr "JID"
 
@@ -2544,6 +2659,9 @@ msgstr "Dołącz…"
 
 msgid "Just now"
 msgstr "Przed chwilą"
+
+msgid "Keep Backup"
+msgstr "Zachowaj kopię zapasową"
 
 msgid "Keep Chat History"
 msgstr "Przechowuj historię rozmowy"
@@ -2944,6 +3062,9 @@ msgstr "Brak przypisanej grupy"
 msgid "No info available"
 msgstr "Brak dostępnych informacji"
 
+msgid "No key found"
+msgstr "Nie odnaleziono klucza"
+
 msgid "No keys pressed"
 msgstr "Nie naciśnięto klawiszy"
 
@@ -2956,6 +3077,9 @@ msgstr "Brak wyników"
 
 msgid "No results found"
 msgstr "Nie odnaleziono wyników"
+
+msgid "No secret key found"
+msgstr "Nie odnaleziono klucza tajnego"
 
 msgid "No undecided fingerprints"
 msgstr "Brak niezdecydowanych odcisków palców"
@@ -3109,6 +3233,24 @@ msgstr "Otwórz katalog"
 msgid "OpenGL accelerated"
 msgstr "Przyspieszenie OpenGL"
 
+msgid "OpenPGP Backup"
+msgstr "Kopia zapasowa OpenPGP"
+
+msgid "OpenPGP Backup Error"
+msgstr "Błąd kopii zapasowej OpenPGP"
+
+msgid "OpenPGP Key Backup"
+msgstr "Kopia zapasowa klucza OpenPGP"
+
+msgid "OpenPGP Setup"
+msgstr "Konfiguracja OpenPGP"
+
+msgid "OpenPGP Setup is completed."
+msgstr "Konfiguracja OpenPGP jest ukończona."
+
+msgid "OpenPGP key backup failed"
+msgstr "Kopia zapasowa klucza OpenPGP nie powiodła się"
+
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
@@ -3133,6 +3275,9 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "Inna"
 
+msgid "Other Options"
+msgstr "Inne opcje"
+
 msgid "Other devices connected with your account"
 msgstr "Inne urządzenia połączone z Twoim kontem"
 
@@ -3144,6 +3289,9 @@ msgstr "Brak pamięci"
 
 msgid "Outcasts"
 msgstr "Wyrzutki"
+
+msgid "Overwrite"
+msgstr "Nadpisz"
 
 msgid "Overwrite Plugin?"
 msgstr "Nadpisać wtyczkę?"
@@ -3247,6 +3395,9 @@ msgstr "Wklej jako blok kodu"
 msgid "Paste as Quote"
 msgstr "Wklej jako cytat"
 
+msgid "Paste your OpenPGP key here"
+msgstr "Wklej Twój klucz OpenPGP tutaj"
+
 msgid "Pasting Content Failed"
 msgstr "Wklejenie treści nie powiodło się"
 
@@ -3308,6 +3459,13 @@ msgstr "Odtwarzaj dźwięki, żeby powiadomić o zdarzeniach"
 msgid "Please choose an account"
 msgstr "Proszę wybrać konto"
 
+msgid ""
+"Please choose which of your OpenPGP keys Gajim should use for encrypting "
+"your chat."
+msgstr ""
+"Wybierz, którego z Twoich kluczy OpenPGP Gajim powinien używać do "
+"szyfrowania Twojej rozmowy."
+
 msgid "Please enter an XMPP address"
 msgstr "Proszę podać adres XMPP"
 
@@ -3339,6 +3497,15 @@ msgstr ""
 "Wybierz jedno z Twoich kont.\n"
 "Gajim wyeksportuje wszystkie wiadomości z wybranego konta i rozmowy do "
 "wybranego katalogu."
+
+msgid ""
+"Please store this password for your OpenPGP key backup somewhere safe. You "
+"will need this password if you want to restore the key or when using it with "
+"other devices."
+msgstr ""
+"Zachowaj to hasło do Twojej kopii zapasowej klucza OpenPGP w bezpiecznym "
+"miejscu. Będziesz go potrzebować jeśli będziesz chciał przywrócić klucz lub "
+"użyć go z innymi urządzeniami."
 
 msgid "Please use these settings with caution!"
 msgstr "Proszę używać tych ustawień z ostrożnością!"
@@ -3626,6 +3793,9 @@ msgstr "Usunąć %s kontaktów z Twojej listy kontaktów?"
 msgid "Remove Account"
 msgstr "Usuń konto"
 
+msgid "Remove Backup"
+msgstr "Usuń kopię zapasową"
+
 msgid "Remove Chat History?"
 msgstr "Usunąć historię rozmowy?"
 
@@ -3656,6 +3826,12 @@ msgstr "Usuń proxy"
 msgid "Remove Proxy?"
 msgstr "Usunąć proxy?"
 
+msgid "Remove Public Keys?"
+msgstr "Usunąć klucze publiczne?"
+
+msgid "Remove Public Keys…"
+msgstr "Usuń klucze publiczne…"
+
 msgid "Remove Setting"
 msgstr "Usuń ustawienie"
 
@@ -3670,6 +3846,9 @@ msgstr "Usuń z listy kontaktów…"
 
 msgid "Remove from Group"
 msgstr "Usuń z grupy"
+
+msgid "Remove from Server"
+msgstr "Usuń z serwera"
 
 msgid "Remove this workspace"
 msgstr "Usuń ten obszar roboczy"
@@ -3807,8 +3986,14 @@ msgstr "Uruchom ponownie Gajima, żeby rozpocząć logowanie dla debugowania"
 msgid "Restart Pending"
 msgstr "Restart w trakcie"
 
+msgid "Restore Backup"
+msgstr "Przywróć kopię zapasową"
+
 msgid "Restore Closed Chat"
 msgstr "Przywróć zamkniętą rozmowę"
+
+msgid "Restore Key"
+msgstr "Przywróć klucz"
 
 msgid "Restore last state"
 msgstr "Przywróć ostatni stan"
@@ -4002,6 +4187,9 @@ msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Wybierz wiadomości…"
 
+msgid "Select Secret Key"
+msgstr "Wybierz klucz tajny"
+
 msgid "Select a security label for your message…"
 msgstr "Wybierz etykietę bezpieczeństwa dla Twojej wiadomości…"
 
@@ -4128,6 +4316,15 @@ msgstr "Ustawienie jest zablokowane przez system"
 
 msgid "Settings"
 msgstr "Ustawienia"
+
+msgid "Setup"
+msgstr "Konfiguruj"
+
+msgid "Setup Complete"
+msgstr "Konfiguracja ukończona"
+
+msgid "Setup OpenPGP Encryption"
+msgstr "Konfiguruj szyfrowanie OpenPGP"
 
 msgid "Share Contact…"
 msgstr "Udostępnij kontakt…"
@@ -4410,8 +4607,14 @@ msgstr "Kroki do odtworzenia problemu…"
 msgid "Stop Sharing Online Status?"
 msgstr "Zatrzymać udostępnianie statusu online?"
 
+msgid "Stores the secret key encrypted on the server"
+msgstr "Przechowuje klucz tajny zaszyfrowany na serwerze"
+
 msgid "Street"
 msgstr "Ulica"
+
+msgid "Strike"
+msgstr "Przekreślenie"
 
 msgid "Style"
 msgstr "Styl"
@@ -4445,8 +4648,11 @@ msgid "Successfully Removed Contacts"
 msgstr "Pomyślnie usunięto kontakty"
 
 #, python-brace-format
-msgid "Successfully build new session with {device_id}."
-msgstr "Pomyślnie zbudowano nową sesję z {device_id}."
+msgid "Successfully built new session with device {device_id}."
+msgstr "Pomyślnie nawiązano nową sesję z urządzeniem {device_id}."
+
+msgid "Successfully imported key from server."
+msgstr "Pomyślnie zaimportowano klucz z serwera."
 
 msgid "Support"
 msgstr "Wsparcie"
@@ -4724,12 +4930,14 @@ msgstr "Ten adres najwyraźniej nie oferuje żadnej usługi bramy."
 msgid "This address is not reachable."
 msgstr "Ten adres jest nieosiągalny."
 
+#, python-brace-format
 msgid ""
-"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
-"OMEMO in this chat, it should be non-anonymous and members-only."
+"This chat’s configuration is unsuitable for encryption with {encryption}. To "
+"use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
-"Konfiguracja tej rozmowy jest nieodpowiednia do szyfrowania z OMEMO. Aby "
-"używać OMEMO w tej rozmowie, powinna być nieanonimowa i tylko dla członków."
+"Konfiguracja tej rozmowy jest nieodpowiednia do szyfrowania za pomocą "
+"{encryption}. Aby używać {encryption} w tej rozmowie, powinna być "
+"nieanonimowa i tylko dla członków."
 
 msgid "This contact does not share their status with you"
 msgstr "Ten kontakt nie udostępnia Ci swojego statusu"
@@ -4820,12 +5028,10 @@ msgstr ""
 "odszyfrować."
 
 msgid ""
-"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
-"You can install the OpenPGP plugin to handle those messages."
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 "Ta wiadomość została zaszyfrowana używając OpenPGP dla XMPP i nie można było "
-"jej odszyfrować. Możesz zainstalować wtyczkę OpenPGP do obsługi takich "
-"wiadomości."
+"jej odszyfrować."
 
 msgid "This message will be deleted from your local chat history"
 msgstr "Ta wiadomość zostanie usunięta z Twojej lokalnej historii rozmowy"
@@ -4855,11 +5061,11 @@ msgstr "Ta usługa nie odesłała jeszcze szczegółowych informacji"
 msgid "This type of service does not contain any items to browse."
 msgstr "Tego typu usługa nie zawiera elementów, które można przeglądać."
 
-msgid "This will clear the devices store for your account."
-msgstr "To wyczyści listę urządzeń Twojego konta."
-
 msgid "This will purge all locally stored chat history"
 msgstr "To wyczyści całą lokalnie przechowywaną historię rozmowy"
+
+msgid "This will remove all published public keys from your account."
+msgstr "To usunie wszystkie opublikowane klucze publiczne z Twojego konta."
 
 msgid "This will remove the account and delete all data"
 msgstr "To usunie konto i wszystkie dane"
@@ -4909,11 +5115,25 @@ msgstr ""
 "Aby zastosować wszystkie zmiany natychmiast, musisz zalogować się ponownie."
 
 msgid ""
+"To secure your OpenPGP key for encrypted chats, Gajim can create an "
+"encrypted backup of your key on your server."
+msgstr ""
+"Aby zabezpieczyć Twój klucz OpenPGP dla szyfrowanych rozmów, Gajim może "
+"utworzyć kopię zapasową Twojego klucza na Twoim serwerze."
+
+msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr ""
 "Aby wysłać zaszyfrowaną wiadomość, musisz zdecydować czy ufasz urządzeniu "
 "Twojego kontaktu."
+
+msgid ""
+"To set up OpenPGP encryption you can either import an existing key or let "
+"Gajim create a new key."
+msgstr ""
+"Aby skonfigurować szyfrowanie za pomocą OpenPGP możesz zaimportować "
+"istniejący klucz lub pozwolić Gajimowi na utworzenie nowego klucza."
 
 msgid "Toggle Chat List"
 msgstr "Przełącz listę rozmów"
@@ -4985,6 +5205,9 @@ msgstr "Nie można odszyfrować podpisu CRL"
 msgid "Unable to decrypt certificate's signature"
 msgstr "Nie można odszyfrować podpisu certyfikatu"
 
+msgid "Unable to decrypt the backup with this password"
+msgstr "Nie można odszyfrować kopii zapasowej używając tego hasła"
+
 msgid "Unable to get certificate CRL"
 msgstr "Nie można uzyskać CRL"
 
@@ -4999,6 +5222,9 @@ msgstr "Nie można poprawnie usunąć wtyczki"
 
 msgid "Unable to save profile"
 msgstr "Nie udało się zapisać profilu"
+
+msgid "Unable to use this key for encrypting messages"
+msgstr "Nie można używać tego klucza do szyfrowania wiadomości"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nie można zweryfikować pierwszego certyfikatu"
@@ -5130,8 +5356,14 @@ msgstr "Użyj „//” aby rozpocząć wiadomość ukośnikiem („/”)."
 msgid "Use GSSAPI"
 msgstr "Użyj GSSAPI"
 
+msgid "Use HTTP2 for requests if there is server support"
+msgstr "Używaj HTTP2 dla żądań jeśli jest wsparcie serwera"
+
 msgid "Use Image"
 msgstr "Użyj obrazu"
+
+msgid "Use My Own OpenPGP Key"
+msgstr "Użyj mojego własnego klucza OpenPGP"
 
 msgid "Use System Keyring"
 msgstr "Użyj systemowego pęku kluczy"
@@ -5451,8 +5683,18 @@ msgstr ""
 "Będziesz wyglądać jak rozłączony dla tego kontaktu i nie otrzymasz kolejnych "
 "wiadomości."
 
+msgid "Your Backup Password"
+msgstr "Hasło do Twojej kopii zapasowej"
+
 msgid "Your Nickname"
 msgstr "Twój pseudonim"
+
+msgid "Your OpenPGP key backup was successful."
+msgstr "Pomyślnie utworzono kopię zapasową Twojego klucza OpenPGP."
+
+msgid "Your OpenPGP key has been created. Your chat is now encrypted."
+msgstr ""
+"Twój klucz OpenPGP został utworzony. Twoja rozmowa jest teraz szyfrowana."
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "Twój adres XMPP (np. uzytkownik@example.org)"
@@ -5544,9 +5786,6 @@ msgstr "_Zajęty"
 
 msgid "_Cancel"
 msgstr "_Anuluj"
-
-msgid "_Clear Devices"
-msgstr "_Wyczyść urządzenia"
 
 msgid "_Close"
 msgstr "_Zamknij"
@@ -5673,6 +5912,9 @@ msgstr "_Zapamiętaj mój wybór"
 msgid "_Remove"
 msgstr "_Usuń"
 
+msgid "_Remove Public Keys"
+msgstr "_Usuń klucze publiczne"
+
 msgid "_Report Spam"
 msgstr "_Zgłoś spam"
 
@@ -5754,9 +5996,6 @@ msgstr "wyjście dźwięku"
 msgid "bearing"
 msgstr "namiar"
 
-msgid "bold"
-msgstr "pogrubienie"
-
 msgid "building"
 msgstr "budynek"
 
@@ -5800,9 +6039,6 @@ msgstr "pisze wiadomość…"
 
 msgid "is doing something else"
 msgstr "robi coś innego"
-
-msgid "italic"
-msgstr "kursywa"
 
 #, python-format
 msgid "last seen: %s"
@@ -5852,9 +6088,6 @@ msgstr "prędkość"
 
 msgid "street"
 msgstr "ulica"
-
-msgid "strike"
-msgstr "przekreślenie"
 
 msgid "text"
 msgstr "tekst"
@@ -6303,9 +6536,6 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Back in some minutes."
 #~ msgstr "Wrócę za jakiś czas."
 
-#~ msgid "Back soon"
-#~ msgstr "Niedługo wrócę"
-
 #~ msgid "Blocking List"
 #~ msgstr "Lista zablokowanych"
 
@@ -6372,6 +6602,12 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Wyczyścić urządzenia teraz?"
+
+#~ msgid "Clear Devices?"
+#~ msgstr "Wyczyścić urządzenia?"
+
+#~ msgid "Clear Devices…"
+#~ msgstr "Wyczyść urządzenia…"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Wyczyść wpis wiadomości"
@@ -6476,9 +6712,6 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Create new group chat"
 #~ msgstr "Utwórz nową rozmowę grupową"
-
-#~ msgid "Create new post"
-#~ msgstr "Utwórz nowy wpis"
 
 #~ msgid "Creating thumbnail failed"
 #~ msgstr "Tworzenie miniaturki nie powiodło się"
@@ -6974,9 +7207,6 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Hasło zawiera niedozwolone znaki"
 
-#~ msgid "Past as Code Block"
-#~ msgstr "Wklej jako blok kodu"
-
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Wstrzymaj lub wznów transfer pliku"
 
@@ -7345,6 +7575,14 @@ msgstr "…lub upuść tutaj"
 #~ msgid "This is your XMPP address"
 #~ msgstr "To jest Twój adres XMPP"
 
+#~ msgid ""
+#~ "This message was encrypted with OpenPGP for XMPP and could not be "
+#~ "decrypted. You can install the OpenPGP plugin to handle those messages."
+#~ msgstr ""
+#~ "Ta wiadomość została zaszyfrowana używając OpenPGP dla XMPP i nie można "
+#~ "było jej odszyfrować. Możesz zainstalować wtyczkę OpenPGP do obsługi "
+#~ "takich wiadomości."
+
 #~ msgid "Toggle Menu Bar"
 #~ msgstr "Przełącz pasek menu"
 
@@ -7468,9 +7706,6 @@ msgstr "…lub upuść tutaj"
 #~ msgid "You are not connected"
 #~ msgstr "Nie jesteś podłączony"
 
-#~ msgid "You are not connected to the server"
-#~ msgstr "Brak połączenia z serwerem"
-
 #~ msgid "You cannot synchronize with an account unless it is connected."
 #~ msgstr ""
 #~ "Nie możesz zsynchronizować się z kontem dopóki nie jest ono połączone "
@@ -7514,6 +7749,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "_Clear"
 #~ msgstr "_Wyczyść"
+
+#~ msgid "_Clear Devices"
+#~ msgstr "_Wyczyść urządzenia"
 
 #~ msgid "_Debug Console"
 #~ msgstr "Konsola _debugowania"
@@ -7581,6 +7819,9 @@ msgstr "…lub upuść tutaj"
 #, fuzzy
 #~ msgid "app.open-folder"
 #~ msgstr "Otwórz katalog"
+
+#~ msgid "bold"
+#~ msgstr "pogrubienie"
 
 #~ msgid "dark skin tone"
 #~ msgstr "karnacja ciemna"
