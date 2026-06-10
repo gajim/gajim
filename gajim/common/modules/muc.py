@@ -176,8 +176,11 @@ class MUC(BaseModule):
         self._mucs: dict[JID, MUCData] = {}
         self._muc_nicknames = {}
         self._muc_affiliations = AffiliationManager(self._log)
-        self._muc_affiliations.connect(
-            "affiliation-request-complete", self._on_affiliations_complete
+        self._muc_affiliations.multi_connect(
+            {
+                "affiliation-request-complete": self._on_affiliations_complete,
+                "affiliations-changed": self._on_affiliations_changed,
+            }
         )
         self._voice_requests: dict[GroupchatContact, list[VoiceRequest]] = defaultdict(
             list
@@ -560,6 +563,15 @@ class MUC(BaseModule):
         assert isinstance(room, GroupchatContact)
         room.notify("room-affiliations-complete")
 
+    def _on_affiliations_changed(
+        self,
+        manager: AffiliationManager,
+        _signal: str,
+        jid: JID,
+        *args: Any,
+    ) -> None:
+        self._update_muc_fallback_name(jid)
+
     def get_affiliations(
         self, room_jid: JID, *, include_outcast: bool = False
     ) -> dict[str, list[JID]]:
@@ -807,6 +819,7 @@ class MUC(BaseModule):
         occupant: GroupchatParticipant,
     ) -> None:
 
+        assert properties.muc_jid is not None
         timestamp = utc_now()
 
         if not occupant.is_available and presence.available:
@@ -838,6 +851,25 @@ class MUC(BaseModule):
             )
 
             app.storage.events.store(occupant.room, event)
+
+            status_codes = properties.muc_status_codes or set()
+            if (
+                StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes
+                and presence.real_jid is not None
+            ):
+                self._muc_affiliations.change_user_affiliation(
+                    properties.muc_jid, presence.affiliation, presence.real_jid
+                )
+                event = events.MUCUserAffiliationChanged(
+                    timestamp=timestamp,
+                    is_self=properties.is_muc_self_presence,
+                    nick=occupant.name,
+                    affiliation=presence.affiliation,
+                    reason=properties.muc_user.reason,
+                    actor=properties.muc_user.actor,
+                )
+                occupant.notify("user-affiliation-changed", event)
+
             occupant.update_presence(presence)
             occupant.notify("user-left", event)
             return
@@ -857,13 +889,11 @@ class MUC(BaseModule):
             )
 
             app.storage.events.store(occupant.room, event)
-            assert properties.muc_jid is not None
             if presence.real_jid is not None:
                 self._muc_affiliations.change_user_affiliation(
                     properties.muc_jid, presence.affiliation, presence.real_jid
                 )
             signals_and_events.append(("user-affiliation-changed", event))
-            self._update_muc_fallback_name(properties.muc_jid)
 
         if occupant.role != presence.role:
             assert properties.muc_user is not None
@@ -953,7 +983,6 @@ class MUC(BaseModule):
         self._muc_affiliations.change_user_affiliation(
             room_jid, properties.muc_user.affiliation, properties.muc_user.jid
         )
-        self._update_muc_fallback_name(room_jid)
         room.notify("room-affiliation-changed", event)
 
     def _process_user_presence(self, properties: PresenceProperties) -> MUCPresenceData:
@@ -1448,10 +1477,9 @@ class AffiliationManager(Observable):
         )
 
         self._remove_user_affiliation(muc_jid, user_real_jid)
-        if affiliation == Affiliation.NONE:
-            return
-
-        self._add_user_affiliation(muc_jid, affiliation, user_real_jid)
+        if affiliation != Affiliation.NONE:
+            self._add_user_affiliation(muc_jid, affiliation, user_real_jid)
+        self.notify("affiliations-changed", muc_jid, user_real_jid, affiliation)
 
     def get_users(
         self, jid: JID, *, include_outcast: bool = False
