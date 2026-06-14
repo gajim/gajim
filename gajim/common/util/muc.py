@@ -17,6 +17,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
+from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
 if typing.TYPE_CHECKING:
@@ -172,6 +173,8 @@ def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
 
 
 def format_private_group_name(nicks: list[str], limit: int = 5) -> str:
+    if not nicks:
+        return _("Me")
     if len(nicks) == 1:
         return p_("Group chat name", "%(nickname)s and me") % {"nickname": nicks[0]}
     if len(nicks) <= limit + 1:
