@@ -7,6 +7,7 @@ from typing import Literal
 from nbxmpp.const import PresenceShow
 
 from gajim.common import app
+from gajim.common.const import ClientState
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import SHOW_STRING
@@ -24,13 +25,14 @@ ShowSortOrder = {
 
 def get_client_status(account: str) -> str:
     client = app.get_client(account)
-    if client.state.is_disconnected:
+    if client.state == ClientState.DISCONNECTED:
         return "offline"
 
-    if (
-        client.state.is_reconnect_scheduled
-        or client.state.is_connecting
-        or client.state.is_connected
+    if client.state in (
+        ClientState.RECONNECT_SCHEDULED,
+        ClientState.CONNECTING,
+        ClientState.CONNECTED,
+        ClientState.HOST_META_REQUEST,
     ):
         return "connecting"
 

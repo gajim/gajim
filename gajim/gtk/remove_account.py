@@ -131,7 +131,7 @@ class RemoveAccount(Assistant):
             self.show_page("success")
             return
 
-        self._client.disconnect(gracefully=True, reconnect=False)
+        self._client.disconnect_immediate()
         self._account_removed = True
 
     def _on_remove_response(self, task: Task) -> None:

@@ -253,8 +253,9 @@ class ClientState(IntEnum):
     DISCONNECTED = 1
     RECONNECT_SCHEDULED = 2
     CONNECTING = 3
-    CONNECTED = 4
-    AVAILABLE = 5
+    HOST_META_REQUEST = 4
+    CONNECTED = 5
+    AVAILABLE = 6
 
     @property
     def is_disconnecting(self):
@@ -271,6 +272,10 @@ class ClientState(IntEnum):
     @property
     def is_connecting(self):
         return self == ClientState.CONNECTING
+
+    @property
+    def is_host_meta_request(self):
+        return self == ClientState.HOST_META_REQUEST
 
     @property
     def is_connected(self):

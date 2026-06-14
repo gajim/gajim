@@ -48,6 +48,7 @@ from gajim.common.idle import Monitor
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
 from gajim.common.modules.util import LogAdapter
+from gajim.common.multiprocess.http import CancelledError
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.status import get_idle_status_message
@@ -95,6 +96,7 @@ class Client(Observable, ClientModules):
         self._idle_status = "online"
         self._idle_status_enabled = True
         self._idle_status_message = ""
+        self._host_meta_request: FileTransfer | None = None
 
         self._reconnect = True
         self._reconnect_timer_source = None
@@ -202,7 +204,6 @@ class Client(Observable, ClientModules):
         self.notify("resume-failed")
 
     def _on_resume_successful(self, _client: NBXMPPClient, _signal_name: str) -> None:
-
         self._set_state(ClientState.CONNECTED)
         self._set_client_available()
 
@@ -286,6 +287,15 @@ class Client(Observable, ClientModules):
                 self.connect()
             return
 
+        if self._state.is_host_meta_request:
+            if destroy_client:
+                self._create_client()
+            assert self._host_meta_request is not None
+            self._host_meta_request.cancel()
+            self._set_state(ClientState.DISCONNECTED)
+            self.notify("state-changed", SimpleClientState.DISCONNECTED)
+            return
+
         if self._state.is_disconnecting:
             self._log.warning("Disconnect already in progress")
             return
@@ -295,8 +305,10 @@ class Client(Observable, ClientModules):
         self._log.info("Starting to disconnect")
         self._client.disconnect(immediate=not gracefully)
 
-    def _on_disconnected(self, _client: NBXMPPClient, _signal_name: str) -> None:
+    def disconnect_immediate(self) -> None:
+        self.disconnect(gracefully=False, reconnect=False, destroy_client=True)
 
+    def _on_disconnected(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._log.info("Disconnect")
         self._set_state(ClientState.DISCONNECTED)
 
@@ -392,10 +404,14 @@ class Client(Observable, ClientModules):
             self._create_client()
 
     def _on_connection_failed(self, _client: NBXMPPClient, _signal_name: str) -> None:
-        self._schedule_reconnect()
+        self._log.info("Connection failed")
+        if self._reconnect:
+            self._schedule_reconnect()
+        else:
+            self._set_state(ClientState.DISCONNECTED)
+            self.notify("state-changed", SimpleClientState.DISCONNECTED)
 
     def _on_connected(self, _client: NBXMPPClient, _signal_name: str) -> None:
-
         self._set_state(ClientState.CONNECTED)
         self.get_module("Discovery").discover_server_info()
         self.get_module("Discovery").discover_account_info()
@@ -470,7 +486,7 @@ class Client(Observable, ClientModules):
 
         if self._state.is_connecting:
             if show == "offline":
-                self.disconnect(gracefully=False, reconnect=False, destroy_client=True)
+                self.disconnect_immediate()
             return
 
         if self._state.is_reconnect_scheduled:
@@ -628,43 +644,57 @@ class Client(Observable, ClientModules):
 
         self._reconnect = True
         self._disable_reconnect_timer()
-        self._set_state(ClientState.CONNECTING)
-        self.notify("state-changed", SimpleClientState.CONNECTING)
 
         if warn_about_plain_connection(self._account, self._client.connection_types):
             app.ged.raise_event(
                 PlainConnection(
                     account=self._account,
-                    connect=self._client.connect,
+                    connect=self._make_host_meta_request,
                     abort=self._abort_reconnect,
                 )
             )
             return
 
-        def _on_host_meta_response(obj: FileTransfer) -> None:
-            if self._client is None or self._state != ClientState.CONNECTING:
-                # State was changed in the meantime
-                return
+        self._make_host_meta_request()
 
-            try:
-                result = obj.get_result()
-            except Exception as error:
-                self._log.warning("Error while requesting host-meta data: %s", error)
-            else:
-                self._log.info(
-                    "Received host meta data with length: %s", len(result.content)
-                )
-                self._client.set_host_meta_data(result.content)
+    def _make_host_meta_request(self) -> None:
+        if self._host_meta_request is not None:
+            self._host_meta_request.cancel()
 
-            self._client.connect()
+        self._set_state(ClientState.HOST_META_REQUEST)
+        self.notify("state-changed", SimpleClientState.CONNECTING)
 
-        app.ftm.http_request(
+        self._host_meta_request = app.ftm.http_request(
             "GET",
             f"https://{self._address.domain}/.well-known/host-meta",
             proxy=determine_proxy(self._account),
             timeout=3,
-            callback=_on_host_meta_response,
+            callback=self._on_host_meta_response,
         )
+
+    def _on_host_meta_response(self, obj: FileTransfer) -> None:
+        self._host_meta_request = None
+        if self._client is None or self._state != ClientState.HOST_META_REQUEST:
+            self._log.warning("Invalid client state, host meta response not processed")
+            return
+
+        try:
+            result = obj.get_result()
+        except CancelledError:
+            self._log.info("Host meta request was cancelled")
+            return
+
+        except Exception as error:
+            self._log.warning("Error while requesting host-meta data: %s", error)
+
+        else:
+            self._log.info(
+                "Received host meta data with length: %s", len(result.content)
+            )
+            self._client.set_host_meta_data(result.content)
+
+        self._set_state(ClientState.CONNECTING)
+        self._client.connect()
 
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
