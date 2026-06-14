@@ -240,7 +240,7 @@ class EntityCapsTask(Task):
                 self.set_obsolete()
                 return False
 
-        return client.state.is_available
+        return client.is_available()
 
     def __repr__(self) -> str:
         return f"Entity Caps ({self.entity.jid} {self.entity.hash})"

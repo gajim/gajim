@@ -371,7 +371,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
         if self._client is None:
             return False
 
-        if not self._client.state.is_available:
+        if not self._client.is_available():
             return False
 
         return self._client.get_module("Bookmarks").nativ_bookmarks_used

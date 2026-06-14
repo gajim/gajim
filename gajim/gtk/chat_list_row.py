@@ -553,7 +553,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.connection_icon.add_css_class("dimmed")
             self._ui.connection_icon.set_tooltip_text(_("Joining Group Chat…"))
             self._ui.connection_icon.set_visible(True)
-        elif self.contact.is_not_joined or not self._client.state.is_available:
+        elif self.contact.is_not_joined or not self._client.is_available():
             self._ui.connection_icon.set_from_icon_name("lucide-zap-symbolic")
             self._ui.connection_icon.add_css_class("warning")
             self._ui.connection_icon.set_tooltip_text(_("Not connected"))

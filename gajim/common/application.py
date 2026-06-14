@@ -238,7 +238,7 @@ class CoreApplication(ged.EventHelper):
         accounts_to_disconnect: dict[str, Client] = {}
 
         for client in app.get_clients():
-            if client.state.is_available:
+            if client.is_available():
                 accounts_to_disconnect[client.account] = client
 
         if not accounts_to_disconnect:

@@ -353,7 +353,7 @@ def get_number_of_connected_accounts(accounts_list: list[str] | None = None) -> 
 def get_available_clients() -> list[types.Client]:
     clients: list[types.Client] = []
     for client in connections.values():
-        if client.state.is_available:
+        if client.is_available():
             clients.append(client)
     return clients
 

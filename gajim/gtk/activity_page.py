@@ -420,7 +420,7 @@ class OpenPGPEventPage(BaseActivityPage):
             self._ui.backup_button.set_visible(True)
 
         self.add_widget(self._ui.text_box)
-        self._set_sensitive(self._client.state.is_available)
+        self._set_sensitive(self._client.is_available())
 
     def _set_sensitive(self, sensitive: bool) -> None:
         self._ui.backup_button.set_sensitive(sensitive)
@@ -459,7 +459,7 @@ class TimezoneChangedPage(BaseActivityPage):
         self._ui.new_timezone_label.set_text(self._event.local or "")
 
         self.add_widget(self._ui.change_timezone_page)
-        self._set_sensitive(self._client.state.is_available)
+        self._set_sensitive(self._client.is_available())
 
     def _set_sensitive(self, sensitive: bool) -> None:
         self._ui.update_button.set_sensitive(sensitive)

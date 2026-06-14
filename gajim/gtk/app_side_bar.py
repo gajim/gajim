@@ -123,15 +123,15 @@ class AppSideBar(Gtk.Box, EventHelper):
             account,
             AvatarSize.ACCOUNT_SIDE_BAR,
             self.get_scale_factor(),
-            self._has_connectivity_issues(),
+            self._has_connectivity_problems(),
         )
         self._account_row.set_from_paintable(texture)
 
     @staticmethod
-    def _has_connectivity_issues() -> bool:
+    def _has_connectivity_problems() -> bool:
         for account in app.settings.get_active_accounts():
             client = app.get_client(account)
-            if client.state.is_disconnected or client.state.is_reconnect_scheduled:
+            if client.has_connectivity_problems():
                 return True
         return False
 
@@ -330,17 +330,15 @@ class AccountPopoverRow(Gtk.ListBoxRow):
         self._label.set_text(label)
 
         client = app.get_client(account)
-        connectivity_issues = bool(
-            client.state.is_disconnected or client.state.is_reconnect_scheduled
-        )
+        connectivity_problems = client.has_connectivity_problems()
         texture = app.app.avatar_storage.get_account_button_texture(
             account,
             AvatarSize.ACCOUNT_SIDE_BAR,
             self.get_scale_factor(),
-            connectivity_issues,
+            connectivity_problems,
         )
         self._avatar.set_from_paintable(texture)
-        if connectivity_issues:
+        if connectivity_problems:
             self._avatar.set_tooltip_text(_("There are connectivity issues"))
         else:
             self._avatar.set_tooltip_text("")

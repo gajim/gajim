@@ -375,7 +375,7 @@ class MUC(BaseModule):
         self._con.send_stanza(presence)
 
     def _rejoin(self, room_jid: JID) -> bool:
-        if not self._client.state.is_available:
+        if not self._client.is_available():
             return True
 
         muc_data = self._mucs[room_jid]

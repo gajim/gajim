@@ -514,7 +514,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _update_message_input_state(self) -> None:
         assert self._client
-        state = self._client.state.is_available
+        state = self._client.is_available()
 
         self._ui.visitor_menu_button.set_visible(False)
 

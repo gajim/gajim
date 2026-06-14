@@ -255,7 +255,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         contact = client.get_module("Contacts").get_contact(jid)
         assert isinstance(contact, GroupchatContact)
 
-        if contact.is_not_joined and client.state.is_available:
+        if contact.is_not_joined and client.is_available():
             # For example a chat opened from the search bar
             _remove()
             return

@@ -102,7 +102,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
     def _on_services_selection_changed(self, _selection: Gtk.TreeSelection) -> None:
-        if not self._client.state.is_available:
+        if not self._client.is_available():
             return
 
         self._ui.configure_button.set_sensitive(True)

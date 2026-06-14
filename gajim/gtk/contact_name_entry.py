@@ -127,7 +127,7 @@ class ContactNameEntry(Gtk.Box, SignalManager):
             return
 
         client = app.get_client(self._contact.account)
-        if not client.state.is_connected and not client.state.is_available:
+        if not client.is_available():
             return
 
         self._name_label.set_visible(False)

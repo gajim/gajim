@@ -130,7 +130,7 @@ class GroupchatDetails(GajimAppWindow):
         self._add_groupchat_encryption()
         self._add_blocks()
 
-        if self._client.state.is_available and self._contact.is_joined:
+        if self._client.is_available() and self._contact.is_joined:
             self._add_groupchat_manage()
             self._add_affiliations()
             self._add_outcasts()

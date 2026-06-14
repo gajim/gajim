@@ -97,7 +97,7 @@ class RemoveAccount(Assistant):
             app.app.remove_account(self.account)
 
     def _set_remove_from_server_checkbox(self) -> None:
-        enabled = self._client is not None and self._client.state.is_available
+        enabled = self._client is not None and self._client.is_available()
         self.get_page("remove_choice").set_remove_from_server(enabled)
 
     def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:

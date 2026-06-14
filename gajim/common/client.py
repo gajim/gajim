@@ -162,6 +162,12 @@ class Client(Observable, ClientModules):
             return address.to_string().split(":")[0]
         return None
 
+    def is_available(self) -> bool:
+        return self._state.is_available
+
+    def has_connectivity_problems(self) -> bool:
+        return self._state.is_disconnected or self._state.is_reconnect_scheduled
+
     def is_destroyed(self) -> bool:
         return self._destroyed
 

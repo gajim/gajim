@@ -264,7 +264,7 @@ class VCardAvatarsTask(Task):
             self.set_obsolete()
             return False
 
-        if not client.state.is_available:
+        if not client.is_available():
             self.set_obsolete()
             return False
 

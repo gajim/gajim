@@ -210,7 +210,7 @@ class ChatCommands(Observable):
             ):
                 continue
 
-            if not client.state.is_available:
+            if not client.is_available():
                 continue
 
             client.change_status(args.status, args.message or client.status_message)

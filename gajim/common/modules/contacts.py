@@ -157,7 +157,7 @@ class Contacts(BaseModule):
             )
             # Most likely a groupchat which has been added to the roster.
             # Remove jid from roster (if we are online) and delete contact.
-            if self._client.state.is_available:
+            if self._client.is_available():
                 self._client.get_module("Roster").delete_item(jid)
             self._contacts.pop(jid)
 

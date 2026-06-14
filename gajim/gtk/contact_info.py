@@ -215,7 +215,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.append(self._vcard_grid)
-        if self._client.state.is_available and self._bare_contact is not None:
+        if self._client.is_available() and self._bare_contact is not None:
             self._client.get_module("VCard4").request_vcard(
                 jid=self._bare_contact.jid, callback=self._on_vcard_received
             )
@@ -275,7 +275,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self._ui.from_subscription_switch.set_active(self._bare_contact.is_subscribed)
 
-        self._ui.subscription_listbox.set_sensitive(self._client.state.is_available)
+        self._ui.subscription_listbox.set_sensitive(self._client.is_available())
 
         if self._bare_contact.subscription in ("to", "both"):
             self._ui.to_subscription_stack.set_visible_child_name("checkmark")
@@ -305,7 +305,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if self._bare_contact is None or not self._is_in_roster:
             return
 
-        if not self._client.state.is_available:
+        if not self._client.is_available():
             return
 
         model = self._ui.groups_treeview.get_model()
@@ -388,7 +388,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if self._bare_contact is None or not self._is_in_roster:
             return
 
-        if not self._client.state.is_available:
+        if not self._client.is_available():
             return
 
         buffer_ = self._ui.textview_annotation.get_buffer()

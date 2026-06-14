@@ -329,7 +329,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         items = self._get_selected_items()
 
         def _on_response() -> None:
-            if not self._client.state.is_available:
+            if not self._client.is_available():
                 return
 
             for item in items:
@@ -347,7 +347,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         item = self._get_selected_items()[0]
 
         def _on_response(name: str) -> None:
-            if not self._client.state.is_available:
+            if not self._client.is_available():
                 return
             self._client.get_module("Roster").change_name(
                 JID.from_string(item.jid), name
@@ -374,7 +374,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
             return
 
         def _on_response() -> None:
-            if not self._client.state.is_available:
+            if not self._client.is_available():
                 return
 
             for item in remote_items:
@@ -488,7 +488,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
             return
 
         def _on_response() -> None:
-            if not self._client.state.is_available:
+            if not self._client.is_available():
                 return
 
             for item in items:

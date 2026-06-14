@@ -87,7 +87,7 @@ class GroupchatState(Gtk.Box, SignalManager):
             self._ui.groupchat_state.set_visible_child_name("not-joined")
 
         assert self._client is not None
-        self.set_visible(self._client.state.is_available and not contact.is_joined)
+        self.set_visible(self._client.is_available() and not contact.is_joined)
 
     def _on_mam_sync_changed(
         self,
