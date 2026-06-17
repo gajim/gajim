@@ -21,8 +21,6 @@ from gajim.gtk.util.classes import SignalManager
 
 AudioSampleT = list[tuple[float, float]]
 
-SEEK_BAR_PADDING = 11
-
 log = logging.getLogger("gajim.gtk.preview.audio_player")
 
 

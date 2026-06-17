@@ -24,6 +24,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         width: int = 340,
         height: int = 50,
         x_offset: int = 0,
+        is_seekable: bool = False,
     ) -> None:
         Gtk.Widget.__init__(
             self,
@@ -39,6 +40,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
 
         self._samples: AudioSampleT = []
+        self._is_seekable = is_seekable
         self._seek_position = -1.0
         self._position = 0.0
         self._live_mode = False
@@ -47,6 +49,10 @@ class AudioVisualizerWidget(Gtk.Widget):
         self._waveform_path: Gsk.Path | None = None
 
         accent = Adw.StyleManager.get_default().get_accent_color_rgba()
+
+        style_context = self.get_style_context()
+        self._slider_color = style_context.lookup_color("window_bg_color")[1]
+        self._slider_border_color = style_context.lookup_color("window_fg_color")[1]
 
         self._color_progress = accent
         self._color_seek = Gdk.RGBA(
@@ -129,6 +135,22 @@ class AudioVisualizerWidget(Gtk.Widget):
                 self._waveform_path, Gsk.FillRule.WINDING, self._color_seek
             )
             snapshot.pop()
+            slider_pos = seek_x
+        else:
+            slider_pos = play_x
+
+        slider_pos = max(slider_pos, self._bar_width)
+        slider_pos = min(slider_pos, self._width - self._bar_width)
+        slider_radius = self._height // 5
+        self._draw_slider(
+            snapshot,
+            x=slider_pos,
+            y=self._height // 2,
+            radius=slider_radius,
+            fill_color=self._slider_color,
+            border_color=self._slider_border_color,
+            border_width=1,
+        )
 
     def _draw_animated(self, snapshot: Gtk.Snapshot) -> None:
         if not self._is_LTR:
@@ -165,7 +187,33 @@ class AudioVisualizerWidget(Gtk.Widget):
         snapshot.rotate(180)
         snapshot.translate(Graphene.Point().init(-cx, -cy))
 
-    # --- Path building ---
+    def _draw_slider(
+        self,
+        snapshot: Gtk.Snapshot,
+        x: float,
+        y: float,
+        radius: float,
+        fill_color: Gdk.RGBA,
+        border_color: Gdk.RGBA,
+        border_width: float,
+    ) -> None:
+        rect = Graphene.Rect()
+        rect.init(
+            x - radius,
+            y - radius,
+            radius * 2,
+            radius * 2,
+        )
+        rounded = Gsk.RoundedRect()
+        rounded.init_from_rect(rect, radius)
+        snapshot.push_rounded_clip(rounded)
+        snapshot.append_color(fill_color, rect)
+        snapshot.pop()
+        snapshot.append_border(
+            rounded,
+            [border_width] * 4,
+            [border_color] * 4,
+        )
 
     def _build_static_path(self, samples: AudioSampleT) -> Gsk.Path | None:
         if not samples:

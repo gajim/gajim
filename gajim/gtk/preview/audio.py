@@ -16,19 +16,17 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.enum import AudioPlayerState
+from gajim.common.i18n import _
 from gajim.common.multiprocess.audio_preview import extract_audio_properties
 from gajim.common.util.text import format_duration
 
 from gajim.gtk.audio_player import AudioPlayer
-from gajim.gtk.preview.audio_visualizer import AudioVisualizerWidget
+from gajim.gtk.preview.audio_waveform_navigator import AudioWaveformNavigator
 from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # pyright: ignore
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
 log = logging.getLogger("gajim.gtk.preview.audio")
-
-
-SEEK_BAR_PADDING = 12
 
 
 @Gtk.Template.from_string(string=get_ui_string("preview/audio.ui"))
@@ -46,12 +44,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     _open_folder_button: Gtk.Button = Gtk.Template.Child()
     _save_as_button: Gtk.Button = Gtk.Template.Child()
     _stack: Gtk.Stack = Gtk.Template.Child()
-    _seek_bar_adj: Gtk.Adjustment = Gtk.Template.Child()
     _speed_bar_adj: Gtk.Adjustment = Gtk.Template.Child()
     _drawing_box: Gtk.Box = Gtk.Template.Child()
-    _seek_bar_box: Gtk.Box = Gtk.Template.Child()
-    _seek_bar: Gtk.Scale = Gtk.Template.Child()
     _progress_label: Gtk.Label = Gtk.Template.Child()
+    _control_popover: Gtk.Popover = Gtk.Template.Child()
     _control_box: Gtk.Box = Gtk.Template.Child()
     _rewind_button: Gtk.Button = Gtk.Template.Child()
     _play_pause_button: Gtk.Button = Gtk.Template.Child()
@@ -84,13 +80,9 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._preview_state = self._audio_player.get_audio_state(self._id)
 
         # UI
-        self._is_ltr = bool(self.get_direction() == Gtk.TextDirection.LTR)
-        self._offset_backward = -10e9  # in ns
-        self._offset_forward = 10e9
-        self._cursor_pos = 0.0
-        self._user_holds_position_slider = False
-        self._seek_ts = -1  # in ns, -1 means invalid
+        self.set_valign(Gtk.Align.CENTER)
         self._new_voice_message_track = False
+        self._seek_step = 10e9  # 10 seconds
 
         self._open_folder_button.set_action_target_value(
             GLib.Variant("s", str(self._orig_path))
@@ -118,34 +110,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._connect(self._rewind_button, "clicked", self._on_rewind_clicked)
         self._connect(self._forward_button, "clicked", self._on_forward_clicked)
 
-        self._gesture_visualizer_click = Gtk.GestureClick(
-            button=Gdk.BUTTON_PRIMARY, propagation_phase=Gtk.PropagationPhase.CAPTURE
-        )
-        self._connect(
-            self._gesture_visualizer_click,
-            "pressed",
-            self._on_visualizer_button_clicked,
-        )
-
-        gesture_seek_click = Gtk.GestureClick(
-            button=Gdk.BUTTON_PRIMARY, propagation_phase=Gtk.PropagationPhase.CAPTURE
-        )
-        self._connect(gesture_seek_click, "pressed", self._on_seek_bar_button_pressed)
-        self._connect(gesture_seek_click, "released", self._on_seek_bar_button_released)
-        self._seek_bar_box.add_controller(gesture_seek_click)
-
-        controller_motion = Gtk.EventControllerMotion(
-            propagation_phase=Gtk.PropagationPhase.CAPTURE
-        )
-        self._connect(controller_motion, "motion", self._on_seek_bar_cursor_move)
-        self._seek_bar.add_controller(controller_motion)
-
-        controller_scroll = Gtk.EventControllerScroll(
-            flags=Gtk.EventControllerScrollFlags.VERTICAL
-        )
-        self._connect(controller_scroll, "scroll", self._on_seek_bar_scrolled)
-        self._seek_bar.add_controller(controller_scroll)
-
         gesture_timestamp_click = Gtk.GestureClick(
             button=Gdk.BUTTON_PRIMARY, propagation_phase=Gtk.PropagationPhase.TARGET
         )
@@ -154,13 +118,15 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         )
         self._progress_label.add_controller(gesture_timestamp_click)
 
-        self._visualizer = AudioVisualizerWidget(
-            width=300 - 2 * SEEK_BAR_PADDING, x_offset=SEEK_BAR_PADDING
+        self._visualizer = AudioWaveformNavigator(
+            preview_state=self._preview_state, width=270
         )
-        self._visualizer.add_controller(self._gesture_visualizer_click)
+        self._visualizer.set_halign(Gtk.Align.CENTER)
         self._drawing_box.append(self._visualizer)
+        self._connect(self._visualizer, "seeked", self._on_seek)
 
         self._progress_id = None
+        self._play_pause_button.add_css_class("circular")
         self._connect(self._play_pause_button, "clicked", self._on_play_clicked)
 
         if self._orig_path.is_file():
@@ -183,7 +149,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     def sample_voice_message(self, audio_path: Path) -> None:
         self._orig_path = audio_path
         self._preview_state.position = 0
-        self._seek_bar.set_value(0)
         self._new_voice_message_track = True
         self._get_audio_properties()
 
@@ -256,12 +221,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._update_ui_from_state()
 
     def _update_ui_from_state(self):
-        if not self._user_holds_position_slider:
-            self._seek_bar.set_value(self._preview_state.position)
-        self._visualizer.render_static_graph(
-            self._preview_state.position / self._preview_state.duration,
-            self._seek_ts / self._preview_state.duration,
-        )
+        self._visualizer.update()
         self._progress_label.set_text(
             self._convert_pos_to_text(
                 self._preview_state.position, self._preview_state.duration
@@ -312,112 +272,15 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         )
         self._update_timestamp_label()
 
-    def _convert_position_to_timestamp(self, x: float, x_max: float) -> float:
-        if x_max == 0.0:
-            log.warning("Width is zero, when converting position to timestamp")
-            return 0.0
-
-        if not self._is_ltr:
-            x = x_max - x
-        x = max(0.0, x)
-        x = min(x, x_max)
-        timestamp = x / x_max * self._preview_state.duration
-        return timestamp
-
-    def _on_seek_bar_button_pressed(
-        self,
-        gesture_click: Gtk.GestureClick,
-        _n_press: int,
-        _x: float,
-        _y: float,
-    ) -> None:
-        self._user_holds_position_slider = True
-
-    def _on_seek_bar_button_released(
-        self,
-        _gesture_click: Gtk.GestureClick,
-        _n_press: int,
-        _x: float,
-        _y: float,
-    ) -> None:
-        seek_ts = self._convert_position_to_timestamp(
-            self._cursor_pos, self._seek_bar.get_width()
-        )
-        if self._audio_player.preview_id != self.id:
-            self._preview_state.position = seek_ts
-        else:
-            self._audio_player.set_playback_position(self._id, seek_ts)
-
+    def _display_audio_preview(self) -> None:
+        self._visualizer.set_samples(self._preview_state.samples)
         self._update_ui_from_state()
+        self._stack.set_visible_child_name("preview")
 
-        self._seek_ts = -1
-        self._user_holds_position_slider = False
-
-    def _on_seek_bar_cursor_move(
-        self,
-        _event_controller: Gtk.EventControllerMotion,
-        x: float,
-        _y: float,
-    ) -> None:
-        if not self._user_holds_position_slider:
-            return
-
-        if abs(x - self._cursor_pos) < 1e-2:
-            return
-
-        self._cursor_pos = x
-        seek_ts = self._convert_position_to_timestamp(x, self._seek_bar.get_width())
-        if (
-            self._user_holds_position_slider
-            and self._preview_state.pipeline_state != AudioPlayerState.PLAYING
-        ):
-            if self._audio_player.preview_id != self.id:
-                self._preview_state.position = seek_ts
-            else:
-                self._audio_player.set_playback_position(self._id, seek_ts)
-            self._update_ui_from_state()
-        else:
-            self._seek_ts = seek_ts
-
-    def _on_seek_bar_scrolled(
-        self,
-        _event_controller: Gtk.EventControllerScroll,
-        _dx: float,
-        dy: float,
-    ) -> None:
-        if dy > 0:
-            timestamp = self._preview_state.position + self._offset_backward
-        else:
-            timestamp = self._preview_state.position + self._offset_forward
-
-        self._set_preview_state_position(timestamp)
-        self._audio_player.set_playback_position(self.id, self._preview_state.position)
-        self._update_ui_from_state()
-
-    def _on_visualizer_button_clicked(
-        self,
-        gesture_click: Gtk.GestureClick,
-        _n_press: int,
-        x: float,
-        _y: float,
-    ) -> None:
-        assert self._cursor_pos is not None
-
-        gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
-        timestamp = self._convert_position_to_timestamp(
-            x, self._visualizer.get_effective_width()
-        )
-
+    def _on_seek(self, _widget: AudioWaveformNavigator, timestamp: float) -> None:
         self._set_preview_state_position(timestamp)
         self._update_ui_from_state()
         self._audio_player.set_playback_position(self._id, timestamp)
-
-    def _display_audio_preview(self) -> None:
-        self._visualizer.set_samples(self._preview_state.samples)
-        self._seek_bar_adj.set_lower(0.0)
-        self._seek_bar_adj.set_upper(self._preview_state.duration)
-        self._update_ui_from_state()
-        self._stack.set_visible_child_name("preview")
 
     def _set_playback_speed(self, speed: float) -> None:
         speed = max(0.25, speed)
@@ -458,7 +321,7 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._update_ui_from_state()
 
     def _on_rewind_clicked(self, _button: Gtk.Button) -> None:
-        self._change_playback_position_by_step(self._offset_backward)
+        self._change_playback_position_by_step(-self._seek_step)
 
     def _on_forward_clicked(self, _button: Gtk.Button) -> None:
-        self._change_playback_position_by_step(self._offset_forward)
+        self._change_playback_position_by_step(self._seek_step)
