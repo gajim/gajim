@@ -33,7 +33,7 @@
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
                         <property name="width-request">50</property>
-                        <property name="tooltip-text" translatable="yes">Start/stop playback</property>
+                        <property name="tooltip-text" translatable="yes">Play</property>
                         <child>
                           <object class="GtkImage" id="_play_icon">
                             <property name="icon-name">lucide-play-symbolic</property>

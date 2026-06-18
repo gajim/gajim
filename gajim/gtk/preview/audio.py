@@ -215,8 +215,10 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
         if state == AudioPlayerState.PLAYING.value:
             self._play_icon.set_from_icon_name("lucide-pause-symbolic")
+            self._play_pause_button.set_tooltip_text(_("Pause"))
         else:
             self._play_icon.set_from_icon_name("lucide-play-symbolic")
+            self._play_pause_button.set_tooltip_text(_("Play"))
 
         self._update_ui_from_state()
 
