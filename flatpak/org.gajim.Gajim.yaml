@@ -75,11 +75,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.11-py3-none-any.whl
+      - pip3 install idna-3.18-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/0e/61/66938bbb5fc52dbdf84594873d5b51fb1f7c7794e9c0f5bd885f30bc507b/idna-3.11-py3-none-any.whl
-        sha256: 771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea
+        url: https://files.pythonhosted.org/packages/1e/5e/d4e9f1a599fb8e573b7b87160658329fbf28d19eac2718f51fc3def3aa5a/idna-3.18-py3-none-any.whl
+        sha256: 7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2
 
   - name: python3-cryptography
     buildsystem: simple
@@ -125,13 +125,13 @@ modules:
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-11.0.2-py3-none-any.whl
+      - pip3 install more_itertools-11.1.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cb/98/6af411189d9413534c3eb691182bff1f5c6d44ed2f93f2edfe52a1bbceb8/more_itertools-11.0.2-py3-none-any.whl
-        sha256: 6e35b35f818b01f691643c6c611bc0902f2e92b46c18fffa77ae1e7c46e912e4
+        url: https://files.pythonhosted.org/packages/e8/3d/1087453384dbde46a8c7f9356eead2c58be8a7bf156bca40243377c85715/more_itertools-11.1.0-py3-none-any.whl
+        sha256: 4b65538ae22f6fed0ce4874efd317463a7489796a0939fa66824dd542125a192
 
   # keyring dependency
   - name: python3-jaraco.classes
@@ -155,11 +155,11 @@ modules:
   - name: python3-jaraco.functools
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco_functools-4.4.0-py3-none-any.whl
+      - pip3 install jaraco_functools-4.5.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/fd/c4/813bb09f0985cb21e959f21f2464169eca882656849adf727ac7bb7e1767/jaraco_functools-4.4.0-py3-none-any.whl
-        sha256: 9eec1e36f45c818d9bf307c8948eb03b2b56cd44087b3cdc989abca1f20b9176
+        url: https://files.pythonhosted.org/packages/96/9a/982e48afcffcd727a9144506720ffd4224b6b7e355c98641866f38b7c043/jaraco_functools-4.5.0-py3-none-any.whl
+        sha256: 79ce39246eddbde4b3a03b77ea5f0f7878dc669b166a66cf3fa8e266aa3fa2f4
 
   - name: python3-keyring
     buildsystem: simple
@@ -175,11 +175,11 @@ modules:
   - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install css_parser-1.0.10-py2.py3-none-any.whl
+      - pip3 install css_parser-1.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/7c/01/4a633580393fa23e17c22f5782886e898c0fdbdb9e77736552a7a12637b5/css_parser-1.0.10-py2.py3-none-any.whl
-        sha256: d2e955a114829f0a327cc5535c2e65fe2e40b883b892881017d419a3b6dd05b7
+        url: https://files.pythonhosted.org/packages/64/28/36be39d3252f9fb8844abc87ff040737862242b49624a802a849bca278bf/css_parser-1.1.1-py3-none-any.whl
+        sha256: 62c2fdba7b7093b1c613de463762fcaa4dfbf41a2a2ae05f968ee0a27fb3062c
 
   - name: python3-precis_i18n
     buildsystem: simple
@@ -278,20 +278,20 @@ modules:
   - name: python3-anyio
     buildsystem: simple
     build-commands:
-      - pip3 install anyio-4.13.0-py3-none-any.whl
+      - pip3 install anyio-4.14.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/da/42/e921fccf5015463e32a3cf6ee7f980a6ed0f395ceeaa45060b61d86486c2/anyio-4.13.0-py3-none-any.whl
-        sha256: 08b310f9e24a9594186fd75b4f73f4a4152069e3853f1ed8bfbf58369f4ad708
+        url: https://files.pythonhosted.org/packages/ba/16/9826f089383c593cdfc4a6e5aca94d9e91ae1692c57af82c3b2aa5e810f7/anyio-4.14.0-py3-none-any.whl
+        sha256: dd9b7a2a9799ed6552fde617b2c5df02b7fdd7d88392fc48101e51bae46164d9
 
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2026.2.25-py3-none-any.whl
+      - pip3 install certifi-2026.6.17-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9a/3c/c17fb3ca2d9c3acff52e30b309f538586f9f5b9c9cf454f3845fc9af4881/certifi-2026.2.25-py3-none-any.whl
-        sha256: 027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa
+        url: https://files.pythonhosted.org/packages/ef/2f/c5464532e965badff2f4c4c1a3a83f5697f0d7c407ed0cda44aaa99bb451/certifi-2026.6.17-py3-none-any.whl
+        sha256: 2227dcbaafe0d2f59279d1762ddddc37783ed4354594f194ffc31d20f41fc3db
 
   - name: python3-h11
     buildsystem: simple
@@ -343,20 +343,20 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.6.3-py3-none-any.whl
+      - pip3 install urllib3-2.7.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl
-        sha256: bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4
+        url: https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl
+        sha256: 9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.58.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.63.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/fa/eb/d875669993b762556ae8b2efd86219943b4c0864d22204d622a9aee3052b/sentry_sdk-2.58.0-py2.py3-none-any.whl
-        sha256: 688d1c704ddecf382ea3326f21a67453d4caa95592d722b7c780a36a9d23109e
+        url: https://files.pythonhosted.org/packages/7b/57/cb205f7d93373120f666b9c5736dc0815524d96a9b278e7a728f018dc22a/sentry_sdk-2.63.0-py3-none-any.whl
+        sha256: 3a9b5ddd403f79eb73bd670f75f04485819db53d28f76ced7bc09041cb0dfd6a
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -373,17 +373,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/86/94/a5935717b307d7c71fe877b52b884c6af707d2d2090db118a03fbd799369/greenlet-3.4.0.tar.gz
-        sha256: f50a96b64dafd6169e595a5c56c9146ef80333e67d4476a65a9c55f400fc22ff
+        url: https://files.pythonhosted.org/packages/dd/8b/befc3cb36965f397d87e86fb3b00e3ec0dc67c1ecb0986d7f54ee528f018/greenlet-3.5.2.tar.gz
+        sha256: c1b906220d83c140361cdd12eef970fb5881a168b98ee58a43786426173da14c
 
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install sqlalchemy-2.0.49-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.51-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e5/30/8519fdde58a7bdf155b714359791ad1dc018b47d60269d5d160d311fdc36/sqlalchemy-2.0.49-py3-none-any.whl
-        sha256: ec44cfa7ef1a728e88ad41674de50f6db8cfdb3e2af84af86e0041aaf02d43d0
+        url: https://files.pythonhosted.org/packages/e2/22/dbf013a12ec759e54a34a119e9e217435b3f71b2dd5c61a7ade0a25dae87/sqlalchemy-2.0.51-py3-none-any.whl
+        sha256: bb024d8b621d0be75f4f44ecc7c950450026e76d66dc8f791bb5331d7fed59d5
 
   - name: python3-emoji
     buildsystem: simple
@@ -398,11 +398,11 @@ modules:
   - name: python3-decorator
     buildsystem: simple
     build-commands:
-      - pip3 install decorator-5.2.1-py3-none-any.whl
+      - pip3 install decorator-5.3.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
-        sha256: d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
+        url: https://files.pythonhosted.org/packages/05/7f/798705f5296a58ca505d600456748d1be48078eac8a7050d8a98bc9edb89/decorator-5.3.1-py3-none-any.whl
+        sha256: f47fe6fdbd2edd623ecfe36875d37aba411624e2670dd395dddae1358689bb3c
 
   # qrcode dependencies
   - name: python3-pypng
@@ -427,11 +427,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-7.34.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-7.35.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/88/95/608f665226bca68b736b79e457fded9a2a38c4f4379a4a7614303d9db3bc/protobuf-7.34.1-py3-none-any.whl
-        sha256: bb3812cd53aefea2b028ef42bd780f5b96407247f20c6ef7c679807e9d188f11
+        url: https://files.pythonhosted.org/packages/19/c7/5f7c636ec43e0c545e28d1f1db71990108306f7bdcb89f069ba97e428e7f/protobuf-7.35.1-py3-none-any.whl
+        sha256: 4bc97768d8fe4ad6743c8a19403e314511ed9f6d13205b687e52421c023ac1b9
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -448,22 +448,24 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-    - pip3 install --no-build-isolation .
+      - pip3 install --no-build-isolation .
     sources:
-    - type: archive
-      url: https://files.pythonhosted.org/packages/4e/eb/3386925c306be972639d61b17fb33e2a2f6f6a03f8d9f95cd59022b7502e/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-      sha256: f137ae2bb2d4099e3a771482c265b8b5ec21fe12e67cf1be1c7e91c5fc31c792
+      - type: archive
+        url: 
+          https://files.pythonhosted.org/packages/4e/eb/3386925c306be972639d61b17fb33e2a2f6f6a03f8d9f95cd59022b7502e/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: f137ae2bb2d4099e3a771482c265b8b5ec21fe12e67cf1be1c7e91c5fc31c792
 
   - name: python3-pysequoia
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-    - pip3 install --no-build-isolation .
+      - pip3 install --no-build-isolation .
     sources:
-    - type: archive
-      url: https://files.pythonhosted.org/packages/c6/6a/3b5624127757e0d56cf19cfbc62ef29fe85501868182a03a5bff6cef45af/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      sha256: 960ec5e4d3d999f63c55bb90265f8676f419b220199e80e1dbccee4982c23b13
+      - type: archive
+        url: 
+          https://files.pythonhosted.org/packages/c6/6a/3b5624127757e0d56cf19cfbc62ef29fe85501868182a03a5bff6cef45af/pysequoia-0.1.33-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 960ec5e4d3d999f63c55bb90265f8676f419b220199e80e1dbccee4982c23b13
 
   # nbxmpp dependency (optional)
   - name: python3-gssapi
