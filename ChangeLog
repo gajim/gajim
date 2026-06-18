@@ -1,3 +1,42 @@
+Gajim 2.4.7 (18 Jun 2026)
+
+  New
+
+  * Pre-configure Gajim via command line (#12720)
+  * Store drafts across restarts
+  * Add OpenPGP (XEP-0374)
+
+  Improvements
+
+  * GroupChat: Name chat after participants if no other name is available
+  * ChangePassword: Require current password before change
+  * Disable http2 by default
+  * Storage: Correctly delete related data for corrections
+  * Message formatting: Add 'Code' and 'Code Block' for formatting options (#12708)
+  * Always store encryption protocol in database
+
+  Change
+
+  * Require Python 3.12
+
+  Performance
+
+  * ArchiveStorage: Add new indexes
+
+  Bug Fixes
+
+  * Preferences: Fix disabling account while connecting
+  * MUC: Don't display users as offline if their membership was revoked
+  * GroupChat: Correctly show error when PM cannot be sent (#12196)
+  * GroupChat: Allow sending PMs as visitor (#12296)
+  * ChatStack: Only handle allowed formats when DnD (#12718)
+  * View: Fix case where last displayed marker was not shown
+  * Process picture clipboard paste correctly (#12712)
+  * Don't allow hiding title bar on Windows and macOS (#12668)
+  * MacOS: Add translation files during build
+  * Normalize file suffix before checking for executable file suffixes (#12700)
+  * Ellipsize nicknames in replies and join/left messages
+
 Gajim 2.4.6 (19 Apr 2026)
 
   New
