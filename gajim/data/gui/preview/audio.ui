@@ -53,6 +53,9 @@
                         <property name="label">-0:00/0:00</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
+                        <style>
+                          <class name="numeric" />
+                        </style>
                       </object>
                     </child>
                     <child>
