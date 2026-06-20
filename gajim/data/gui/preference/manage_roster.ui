@@ -109,6 +109,14 @@
                     </property>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkColumnViewColumn" id="_approved_col">
+                    <property name="title" translatable="yes">Approved</property>
+                    <property name="factory">
+                      <object class="GtkSignalListItemFactory"></object>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

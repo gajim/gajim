@@ -72,6 +72,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
     _name_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
     _subscription_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
     _ask_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
+    _approved_col: Gtk.ColumnViewColumn = Gtk.Template.Child()
 
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
@@ -100,6 +101,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
             (self._name_col, RosterViewItemLabel, "name"),
             (self._subscription_col, RosterViewItemImage, "subscription"),
             (self._ask_col, RosterViewItemImage, "ask"),
+            (self._approved_col, RosterViewItemImage, "approved"),
         ]
 
         for col, widget, attr in columns:
@@ -569,6 +571,7 @@ class RosterListItem(GObject.Object):
     name = GObject.Property(type=str)
     ask = GObject.Property(type=object)
     subscription = GObject.Property(type=object)
+    approved = GObject.Property(type=object)
     group = GObject.Property(type=str)
     search_string = GObject.Property(type=str)
 
@@ -581,9 +584,18 @@ class RosterListItem(GObject.Object):
             name=item.name or "",
             ask=ask,
             subscription=subscription,
+            approved=self._get_approved_data(item),
             group=group,
             search_string=f"{item.jid}|{item.name or ''}",
         )
+
+    def _get_approved_data(
+        self, item: RosterItem
+    ) -> tuple[str | None, str | None, str | None]:
+        if item.approved == "true":
+            return "lucide-check-symbolic", "success", _("Contact is pre-approved")
+        else:
+            return (None, None, None)
 
     def _get_subscription_data(self, subscription: str | None) -> tuple[str, str, str]:
         match subscription:

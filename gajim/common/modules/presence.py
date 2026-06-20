@@ -268,12 +268,20 @@ class Presence(BaseModule):
         groups: list[str] | set[str] | None = None,
         auto_auth: bool = False,
     ) -> None:
-        self._log.info("Request Subscription to %s", jid)
+        pre_approval = self._server_has_pre_approval()
+
+        self._log.info(
+            "Request Subscription to %s, %s", jid, f"{auto_auth=}, {pre_approval=}"
+        )
+
+        self._con.get_module("Roster").set_item(jid, name, groups=groups)
 
         if auto_auth:
-            self._jids_for_auto_auth.add(jid)
+            if pre_approval:
+                self.subscribed(jid)
+            else:
+                self._jids_for_auto_auth.add(jid)
 
-        self._client.get_module("Roster").set_item(jid, name, groups=groups)
         self._nbxmpp("BasePresence").subscribe(
             jid, status=msg, nick=app.nicks[self._account]
         )
@@ -321,3 +329,9 @@ class Presence(BaseModule):
         app.plugin_manager.extension_point("send-presence", self._account, presence)
         self._log.debug("Send presence:\n%s", presence)
         self._client.send_stanza(presence)
+
+    def _server_has_pre_approval(self) -> bool:
+        if self._client.features is None:
+            return False
+
+        return self._client.features.has_pre_approval()
