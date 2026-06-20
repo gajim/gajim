@@ -29,9 +29,34 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Web Link</property>
+                <property name="hexpand">1</property>
+                <property name="halign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_copy_web_address_button">
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">lucide-copy-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <child>
               <object class="GtkLabel" id="_jid_label">
                 <property name="hexpand">1</property>
-                <property name="justify">center</property>
+                <property name="halign">start</property>
                 <property name="wrap">1</property>
                 <property name="wrap-mode">word-char</property>
                 <property name="max-width-chars">30</property>
