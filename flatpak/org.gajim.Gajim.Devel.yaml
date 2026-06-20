@@ -196,6 +196,9 @@ modules:
 
   - name: libspelling
     buildsystem: meson
+    config-opts:
+      - -Ddocs=false
+      - -Dvapi=false
     cleanup:
       - /bin
     sources:
