@@ -209,6 +209,58 @@ def cmd_install(args: argparse.Namespace) -> None:
         )
 
 
+def cmd_flatpak(args: argparse.Namespace) -> None:
+    if args.system:
+        installation = "--system"
+    else:
+        installation = "--user"
+
+    dest_dir = Path("flatpak_build")
+    repo_dir = Path("flatpak_repo")
+    repo_name = "gajim-repo"
+    manifest = Path("flatpak/org.gajim.Gajim.Devel.yaml")
+
+    steps = [
+        [
+            "flatpak",
+            installation,
+            "remote-add",
+            "--if-not-exists",
+            "flathub",
+            "https://flathub.org/repo/flathub.flatpakrepo",
+        ],
+        [
+            "flatpak-builder",
+            installation,
+            f"--repo={repo_dir}",
+            "--install-deps-from=flathub",
+            "--force-clean",
+            dest_dir,
+            str(manifest),
+        ],
+        [
+            "flatpak",
+            installation,
+            "remote-add",
+            "--if-not-exists",
+            "--no-gpg-verify",
+            repo_name,
+            str(repo_dir),
+        ],
+        [
+            "flatpak",
+            installation,
+            "install",
+            "--or-update",
+            repo_name,
+            "org.gajim.Gajim.Devel",
+        ],
+    ]
+
+    for step in steps:
+        subprocess.run(step, check=True)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
@@ -239,6 +291,14 @@ if __name__ == "__main__":
         help='The path prefix for installation (e.g. "/usr")',
     )
     install_parser.set_defaults(func=cmd_install)
+
+    flatpak_parser = subparsers.add_parser("flatpak", help="Build flatpak nightly")
+    flatpak_parser.add_argument(
+        "--system",
+        action="store_true",
+        help="Install dependencies in system-wide installations",
+    )
+    flatpak_parser.set_defaults(func=cmd_flatpak)
 
     args = parser.parse_args()
     args.func(args)
