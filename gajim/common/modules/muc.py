@@ -1095,6 +1095,15 @@ class MUC(BaseModule):
             self._con.get_module("MAM").request_archive_on_muc_join(muc_data.jid)
 
     def _update_muc_fallback_name(self, jid: JID) -> None:
+        contact = self._get_contact(jid, groupchat=True)
+        assert isinstance(contact, GroupchatContact)
+        if contact.muc_context != "private":
+            app.storage.archive.set_contact_value(
+                self._account, jid, "fallback_name", None
+            )
+            contact.notify("name-update")
+            return
+
         affiliations = self.get_affiliations(jid)
         members: set[JID] = set()
         members.update(*affiliations.values())
@@ -1122,7 +1131,7 @@ class MUC(BaseModule):
             self._account, jid, "fallback_name", muc_name
         )
         self._log.info("Update fallback name for %s to %s", jid, muc_name)
-        self._get_contact(jid, groupchat=True).notify("name-update")
+        contact.notify("name-update")
 
     def request_voice(self, jid: JID) -> None:
         message_id = self._nbxmpp("MUC").request_voice(jid)
