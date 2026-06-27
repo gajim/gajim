@@ -160,7 +160,7 @@ build-windows-nightly:
       release-helper build-windows-pkg \
         --account=lovetox \
         --repository=https://dev.gajim.org/gajim/gajim \
-        --branch=master \
+        --branch=$CI_COMMIT_BRANCH \
         --version=Nightly \
         --commit-sha=$CI_COMMIT_SHA \
         --api-key=$APPVEYOR_API_KEY \
