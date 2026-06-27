@@ -88,8 +88,8 @@ function build_pacman {
     pacman --root "${BUILD_ROOT}" "$@"
 }
 
-function build_pip {
-    "${BUILD_ROOT}"/"${MSYSTEM_PREFIX:1}"/bin/"${PYTHON_ID}".exe -m pip "$@"
+function build_pip_install {
+    "${BUILD_ROOT}"/"${MSYSTEM_PREFIX:1}"/bin/"${PYTHON_ID}".exe -m pip install --break-system-packages "$@"
 }
 
 function build_python {
@@ -129,8 +129,8 @@ function install_mingw_deps {
 }
 
 function install_python_deps {
-    build_pip install precis-i18n
-    build_pip install $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
+    build_pip_install precis-i18n
+    build_pip_install $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
 }
 
 function post_install_deps {
@@ -153,7 +153,7 @@ function install_gajim {
     cd ..
 
     build_python make.py build --dist=win
-    build_pip install .
+    build_pip_install .
 
     QL_VERSION=$(MSYSTEM= build_python -c \
         "import gajim; import sys; sys.stdout.write(gajim.__version__.split('+')[0])")
@@ -337,8 +337,8 @@ function makepri {
 }
 
 function build_exe_installer {
-    MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi"
-    MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi"
+    cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=${QL_VERSION_DESC} -DARCH=${MSYSTEM_CARCH} -DPREFIX=${MSYSTEM_PREFIX:1} ${MISC}/gajim.nsi
+    cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=${QL_VERSION_DESC} -DARCH=${MSYSTEM_CARCH} -DPREFIX=${MSYSTEM_PREFIX:1} ${MISC}/gajim-portable.nsi
 }
 
 function build_msix_installer {
