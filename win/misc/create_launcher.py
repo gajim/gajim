@@ -112,7 +112,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     Py_NoUserSiteDirectory = 1;
     Py_IgnoreEnvironmentFlag = 1;
-    Py_DontWriteBytecodeFlag = 1;
     Py_FrozenFlag = 1;
     Py_Initialize();
     PySys_SetArgvEx(__argc, szArglist, 0);

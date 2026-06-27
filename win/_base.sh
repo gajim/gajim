@@ -97,7 +97,7 @@ function build_python {
 }
 
 function build_compileall {
-    build_python -m compileall -b "$@"
+    build_python -m compileall -q -f "$@"
 }
 
 function install_pre_deps {
@@ -318,8 +318,9 @@ function cleanup_install {
     find "${MINGW_ROOT}" -name "*.sh" -exec rm -f {} \;
     find "${MINGW_ROOT}" -name "*.whl" -exec rm -f {} \;
 
-    find "${MINGW_ROOT}" -type d -name "__pycache__" -prune -exec rm -rf {} \;
-    find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
+    # Byte-compile Python files and clean up afterwards
+    echo "Byte-compile Python files"
+    build_compileall "${MINGW_ROOT}"
 
     echo "Run depcheck.py"
     build_python "${MISC}/depcheck.py"
