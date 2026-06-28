@@ -92,16 +92,21 @@ test-unittest:
 
 prepare-build:
   stage: prepare-build
+  rules:
+    - if: '$DEBIAN_BUILD'
+    - if: '$WINDOWS_BUILD'
+    - if: '$NIGHTLY_BUILD'
+    - if: '$CI_COMMIT_TAG'
   script:
-    - echo "CURRENT_DATE_1=$(date +'%Y%m%d')" >> release.env
-    - echo "CURRENT_DATE_2=$(date +'%Y-%m-%d')" >> release.env
-    - echo "GAJIM_VERSION=$(echo $CI_COMMIT_TAG | cut -d+ -f 1)" >> release.env
-    - echo "GAJIM_SHORT_VERSION=$(echo $CI_COMMIT_TAG | cut -c 1-3)" >> release.env
-    - cat release.env
+    - echo "CURRENT_DATE_1=$(date +'%Y%m%d')" >> vars.env
+    - echo "CURRENT_DATE_2=$(date +'%Y-%m-%d')" >> vars.env
+    - echo "GAJIM_VERSION=$(echo $CI_COMMIT_TAG | cut -d+ -f 1)" >> vars.env
+    - echo "GAJIM_SHORT_VERSION=$(echo $CI_COMMIT_TAG | cut -c 1-3)" >> vars.env
+    - cat vars.env
 
   artifacts:
     reports:
-      dotenv: release.env
+      dotenv: vars.env
 
 build-unix:
   image: gajim-build
