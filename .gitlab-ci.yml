@@ -180,7 +180,7 @@ build-windows-nightly:
         --account=lovetox \
         --repository=https://dev.gajim.org/gajim/gajim \
         --branch=$CI_COMMIT_BRANCH \
-        --version=Nightly \
+        --version=$CURRENT_DATE_2 \
         --commit-sha=$CI_COMMIT_SHA \
         --api-key=$APPVEYOR_API_KEY \
         .ci/appveyor.yml

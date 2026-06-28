@@ -25,12 +25,6 @@ build_script:
         $filename_portable = "Gajim-Portable-$($env:GAJIM_VERSION)-$($env:ARCH)"
         $filename_msixbundle = "Gajim-$($env:GAJIM_VERSION)"
 
-        if ($env:GAJIM_VERSION -eq "Nightly") {
-            $time_string=(get-date -UFormat "%Y-%m-%d").ToString()
-            $filename = $filename + "-" + $time_string
-            $filename_portable = $filename_portable + "-" + $time_string
-        }
-
         $buildroot="C:\msys64\home\appveyor\gajim\win\_build_root"
 
         function bash($command) {
