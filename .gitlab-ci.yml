@@ -8,9 +8,15 @@ workflow:
 
 stages:
   - test
+  - prepare-build
   - build
   - deploy
   - publish
+
+variables:
+  WINDOWS_RELEASE: '/^(\d\.)*(\d){1}(\+win)*?$/'
+  UNIX_RELEASE: '/^(\d\.)*(\d){1}(\+unix)*?$/'
+  MACOS_RELEASE: '/^(\d\.)*(\d){1}(\+macos)*?$/'
 
 test-other:
   image: gajim-test
@@ -84,14 +90,26 @@ test-unittest:
         path: coverage.xml
   interruptible: true
 
+prepare-build:
+  stage: prepare-build
+  script:
+    - echo "CURRENT_DATE_1=$(date +'%Y%m%d')" >> release.env
+    - echo "CURRENT_DATE_2=$(date +'%Y-%m-%d')" >> release.env
+    - echo "GAJIM_VERSION=$(echo $CI_COMMIT_TAG | cut -d+ -f 1)" >> release.env
+    - echo "GAJIM_SHORT_VERSION=$(echo $CI_COMMIT_TAG | cut -c 1-3)" >> release.env
+    - cat release.env
+
+  artifacts:
+    reports:
+      dotenv: release.env
+
 build-unix:
   image: gajim-build
   stage: build
-  dependencies: []
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG =~ $UNIX_RELEASE'
   script:
     - ./make.py build
     - pyproject-build
@@ -108,9 +126,7 @@ build-debian-nightly:
   stage: build
   variables:
     REV: "1"
-  needs:
-    - job: build-unix
-      artifacts: true
+  needs: ["build-unix"]
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
@@ -130,16 +146,15 @@ build-debian-nightly:
 build-windows:
   image: gajim-build
   stage: build
-  dependencies: []
   rules:
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG =~ $WINDOWS_RELEASE'
   script:
     - >
       release-helper build-windows-pkg \
         --account=lovetox \
         --repository=https://dev.gajim.org/gajim/gajim \
         --branch=master \
-        --version=$CI_COMMIT_TAG \
+        --version=$GAJIM_VERSION \
         --commit-sha=$CI_COMMIT_SHA \
         --api-key=$APPVEYOR_API_KEY \
         .ci/appveyor.yml
@@ -151,7 +166,6 @@ build-windows:
 build-windows-nightly:
   image: gajim-build
   stage: build
-  dependencies: []
   rules:
     - if: '$NIGHTLY_BUILD'
     - if: '$WINDOWS_BUILD'
@@ -173,27 +187,23 @@ build-windows-nightly:
 deploy-unix:
   image: gajim-deploy
   stage: deploy
-  dependencies:
-    - build-unix
+  needs: ["build-unix"]
   rules:
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG =~ $UNIX_RELEASE'
   script:
     - >
       release-helper deploy-to-ftp \
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
-        --rename=gajim-$CI_COMMIT_TAG.tar.gz \
+        --directory=downloads/$GAJIM_SHORT_VERSION \
+        --rename=gajim-$GAJIM_VERSION.tar.gz \
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-unix-nightly:
   image: gajim-deploy
   stage: deploy
-  dependencies:
-    - build-unix
-  needs:
-    - build-unix
+  needs: ["build-unix"]
   rules:
     - if: '$NIGHTLY_BUILD'
   allow_failure:
@@ -207,16 +217,13 @@ deploy-unix-nightly:
         --user=$FTP_USER \
         --password=$FTP_PASS \
         --directory=downloads/snap \
-        --rename=gajim-"$(date +'%Y-%m-%d')".tar.gz \
+        --rename=gajim-$CURRENT_DATE_2.tar.gz \
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-debian-nightly:
   image: gajim-deploy
   stage: deploy
-  dependencies:
-    - build-debian-nightly
-  needs:
-    - build-debian-nightly
+  needs: ["build-debian-nightly"]
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
@@ -232,16 +239,15 @@ deploy-debian-nightly:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=debian/gajim/"$(date +'%Y%m%d')" \
+        --directory=debian/gajim/$CURRENT_DATE_1 \
         debian_build
 
 deploy-windows:
   image: gajim-deploy
   stage: deploy
-  dependencies:
-    - build-windows
+  needs: ["build-windows"]
   rules:
-    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_TAG =~ $WINDOWS_RELEASE'
   script:
     - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
     - rm windows_build/*.json
@@ -250,16 +256,13 @@ deploy-windows:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
+        --directory=downloads/$GAJIM_SHORT_VERSION \
         windows_build
 
 deploy-windows-nightly:
   image: gajim-deploy
   stage: deploy
-  dependencies:
-    - build-windows-nightly
-  needs:
-    - build-windows-nightly
+  needs: ["build-windows-nightly"]
   rules:
     - if: '$NIGHTLY_BUILD'
     - if: '$WINDOWS_BUILD'
@@ -301,7 +304,7 @@ deploy-flatpak:
 publish-website:
   image: gajim-publish
   stage: publish
-  dependencies: []
+  dependencies: ["prepare-build"]
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
@@ -311,16 +314,16 @@ publish-website:
     - git clone git@dev.gajim.org:gajim/website.git
     - cd website
     - git checkout master
-    - python ./scripts/bump_version.py $CI_COMMIT_TAG
+    - python ./scripts/bump_version.py $GAJIM_VERSION
     - git diff
     - git add -u
-    - git commit -m "Release Gajim $CI_COMMIT_TAG"
+    - git commit -m "Release Gajim $GAJIM_VERSION"
     - git push
 
 publish-release:
   image: gajim-publish
   stage: publish
-  dependencies: []
+  dependencies: ["prepare-build"]
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
@@ -328,12 +331,12 @@ publish-release:
       release-helper finish-milestone \
         $CI_PROJECT_ID \
         $PROJECT_TOKEN \
-        --version=$CI_COMMIT_TAG \
+        --version=$GAJIM_VERSION \
         --title="Next Release"
     - >
       release-helper create-release \
         $CI_PROJECT_ID \
         $PROJECT_TOKEN \
-        --version=$CI_COMMIT_TAG \
+        --version=$GAJIM_VERSION \
         --tag=$CI_COMMIT_TAG \
-        --milestone=$CI_COMMIT_TAG
+        --milestone=$GAJIM_VERSION
