@@ -192,7 +192,7 @@ build-windows-nightly:
 deploy-unix:
   image: gajim-deploy
   stage: deploy
-  needs: ["build-unix"]
+  needs: ["prepare-build", "build-unix"]
   rules:
     - if: '$CI_COMMIT_TAG =~ $UNIX_RELEASE'
   script:
@@ -208,7 +208,7 @@ deploy-unix:
 deploy-unix-nightly:
   image: gajim-deploy
   stage: deploy
-  needs: ["build-unix"]
+  needs: ["prepare-build", "build-unix"]
   rules:
     - if: '$NIGHTLY_BUILD'
   allow_failure:
@@ -228,7 +228,7 @@ deploy-unix-nightly:
 deploy-debian-nightly:
   image: gajim-deploy
   stage: deploy
-  needs: ["build-debian-nightly"]
+  needs: ["prepare-build", "build-debian-nightly"]
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
@@ -250,7 +250,7 @@ deploy-debian-nightly:
 deploy-windows:
   image: gajim-deploy
   stage: deploy
-  needs: ["build-windows"]
+  needs: ["prepare-build", "build-windows"]
   rules:
     - if: '$CI_COMMIT_TAG =~ $WINDOWS_RELEASE'
   script:
@@ -267,7 +267,7 @@ deploy-windows:
 deploy-windows-nightly:
   image: gajim-deploy
   stage: deploy
-  needs: ["build-windows-nightly"]
+  needs: ["prepare-build", "build-windows-nightly"]
   rules:
     - if: '$NIGHTLY_BUILD'
     - if: '$WINDOWS_BUILD'
