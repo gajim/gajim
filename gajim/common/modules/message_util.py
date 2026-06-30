@@ -40,7 +40,10 @@ def get_eme_message(eme_data: nbxmpp.structs.EMEData) -> str:
     try:
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
-        return EME_MESSAGES["fallback"] % eme_data.name
+        encryption_name = EME_PROTOCOLS.get(eme_data.namespace)
+        if not encryption_name:
+            encryption_name = eme_data.name or eme_data.namespace
+        return EME_MESSAGES["fallback"] % encryption_name
 
 
 def get_eme_protocol(eme_data: nbxmpp.structs.EMEData) -> str:
