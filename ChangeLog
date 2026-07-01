@@ -1,3 +1,15 @@
+Gajim 2.4.7.1 (30 Jun 2026)
+
+  Performance
+
+  * Windows: Compile python files so startup is faster
+
+  Bug Fixes
+
+  * Chat: Display encryption name correctly if message cannot be decrypted
+  * Windows: Fix broken reaction emojis (#12730)
+  * MUC: Fix fallback name for public MUCs
+
 Gajim 2.4.7 (18 Jun 2026)
 
   New
