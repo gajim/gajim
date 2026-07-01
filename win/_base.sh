@@ -344,6 +344,9 @@ function build_exe_installer {
 function build_msix_installer {
     (
         cd ${BUILD_ROOT}
+
+        MSIX_VERSION=$(python -c "import sys; v = '${QL_VERSION}'; res = f'{v }.0' if v.count('.') == 2 else v; sys.stdout.write(res)")
+
         rm -rf assets bundle filemapping.txt assets.resfiles appxmanifest.xml resources.pri
         echo "[Files]" > filemapping.txt
         find ${MSYSTEM_PREFIX:1} -type f | while read line; do
@@ -366,7 +369,7 @@ function build_msix_installer {
             echo "\"assets/gajim44x44.targetsize-${size}_altform-unplated.png\" \"assets/gajim44x44.targetsize-${size}_altform-unplated.png\"" >> filemapping.txt
             echo "\"assets/gajim44x44.targetsize-${size}_altform-lightunplated.png\" \"assets/gajim44x44.targetsize-${size}_altform-lightunplated.png\"" >> filemapping.txt
         done
-        sed "s/QL_VERSION/${QL_VERSION}.0/" ${MISC}/appxmanifest.xml > AppxManifest.xml
+        sed "s/QL_VERSION/${MSIX_VERSION}/" ${MISC}/appxmanifest.xml > AppxManifest.xml
         makepri new -pr . -cf ${MISC}/priconfig.xml -mn AppxManifest.xml -of resources.pri -o
         echo "\"resources.pri\" \"resources.pri\"" >> filemapping.txt
         echo "\"AppxManifest.xml\" \"AppxManifest.xml\"" >> filemapping.txt
