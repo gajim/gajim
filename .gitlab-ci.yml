@@ -319,7 +319,7 @@ publish-website:
     - git clone git@dev.gajim.org:gajim/website.git
     - cd website
     - git checkout master
-    - python ./scripts/bump_version.py $GAJIM_VERSION
+    - python ./scripts/bump_version.py $CI_COMMIT_TAG
     - git diff
     - git add -u
     - git commit -m "Release Gajim $GAJIM_VERSION"
