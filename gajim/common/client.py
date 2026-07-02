@@ -266,11 +266,15 @@ class Client(Observable, ClientModules):
             if error.matches(quark, Gio.IOErrorEnum.HOST_UNREACHABLE):
                 return False
 
-            log.exception("Unable to determine if %r is reachable", address)
+            log.exception(
+                "Unable to determine if %r is reachable", self._client.remote_address
+            )
             return True
 
         except Exception:
-            log.exception("Unable to determine if %r is reachable", address)
+            log.exception(
+                "Unable to determine if %r is reachable", self._client.remote_address
+            )
             return True
 
     def disconnect(
