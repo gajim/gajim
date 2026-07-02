@@ -891,7 +891,10 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
 
         assert event.message is not None
         assert event.emojis is not None
-        emojis = " ".join(event.emojis)
+
+        # Add emoji presentation selector, otherwise depending on the font
+        # emojis might be displayed in its text variant
+        emojis = " ".join({f"{e}\ufe0f" for e in event.emojis})
 
         subject = _(
             "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
