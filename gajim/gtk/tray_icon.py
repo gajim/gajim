@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import TYPE_CHECKING
 
 import logging
 import sys
@@ -39,7 +40,7 @@ from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.trayicon")
 
-if sys.platform == "win32":
+if sys.platform == "win32" or TYPE_CHECKING:
     import pystray
     from PIL import Image
 
@@ -184,7 +185,6 @@ class WindowsTrayIcon(TrayIconBackend):
         self._tray_icon.stop()
 
     def _create_tray_icon(self) -> pystray.Icon:
-        assert pystray  # type: ignore
         menu_items: list[pystray.MenuItem] = [
             pystray.MenuItem(
                 text=_("Show/Hide Window"),
@@ -256,7 +256,9 @@ class WindowsTrayIcon(TrayIconBackend):
             / "status"
             / f"{tray_icon_name}.png"
         )
-        return Image.open(path)  # type: ignore
+        with Image.open(path) as image:
+            image.load()
+        return image
 
 
 class LinuxTrayIcon(TrayIconBackend):
