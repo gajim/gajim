@@ -2,16 +2,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from unittest.mock import MagicMock
-
 import gi
 
 gi.require_version("Gst", "1.0")
 
 from gi.repository import Gst
 from gi.repository import Gtk
-
-from gajim.common import app
 
 from gajim.gtk.gstreamer import create_video_elements
 from gajim.gtk.window import GajimAppWindow
@@ -64,8 +60,6 @@ class TestGstreamer(GajimAppWindow):
 
 
 Gst.init()
-
-app.is_installed = MagicMock(return_value=True)
 
 util.init_settings()
 

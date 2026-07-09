@@ -57,7 +57,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         except Exception:
             log.exception("Error while initializing VoiceMessageRecorder")
 
-        if app.audio_player is None or not hasattr(self, "_voice_message_recorder"):
+        if not hasattr(self, "_voice_message_recorder"):
             self.set_sensitive(False)
             self.set_tooltip_text(_("Voice Messages are not available"))
             self.set_child(Gtk.Image.new_from_icon_name("lucide-mic-symbolic"))
@@ -88,6 +88,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         # which will be overwritten with the first recording.
         # This is fine in this case, b/c we generate a static ID for the audio player.
         # We might want to handle this a little bit more intuitive though in the future.
+        assert app.audio_player is not None
         self._audio_player_widget = AudioPreviewWidget(
             app.audio_player, "", 0, self._voice_message_recorder.audio_file_abspath
         )

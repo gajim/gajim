@@ -4,8 +4,6 @@
 
 from typing import Any
 
-from unittest.mock import MagicMock
-
 import gi
 
 from gajim.common.file_transfer_manager import FileTransferManager
@@ -115,8 +113,6 @@ Adw.init()
 
 app.init_process_pool()
 app.window = Gtk.Window()
-app.is_installed = MagicMock(return_value=True)
-
 logging_helpers.set_loglevels("gajim=DEBUG")
 
 util.init_settings()

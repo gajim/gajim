@@ -266,11 +266,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 )
 
             elif is_audio(self._mime_type):
-                if (
-                    app.audio_player is not None
-                    and app.is_installed("GST")
-                    and contains_audio_streams(self._orig_path)
-                ):
+                if contains_audio_streams(self._orig_path):
+                    assert app.audio_player is not None
                     widget = AudioPreviewWidget(
                         app.audio_player,
                         self._filename,

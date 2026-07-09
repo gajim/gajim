@@ -41,9 +41,6 @@ class VoiceMessageRecorder(GObject.GObject):
 
     def __init__(self, error_callback: Callable[[int, str], None]) -> None:
         GObject.GObject.__init__(self)
-        if not app.is_installed("GST"):
-            raise Exception("Missing GStreamer dependency")
-
         self._available = True
         self._error_callback = error_callback
 

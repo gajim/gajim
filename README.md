@@ -20,6 +20,8 @@ thoughts or discuss the news with your groups.
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.80.0)
 - [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.17.5)
 - [GtkSourceView5](https://gitlab.gnome.org/GNOME/gtksourceview)
+- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
+- [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-base)
 - [keyring](https://pypi.org/project/keyring/)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.2.0)
 - [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.2.0)
@@ -55,11 +57,9 @@ thoughts or discuss the news with your groups.
 
 #### Rich Previews (Images and Voice Messages)
 
-- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
 - [gst-libav](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-libav)
-- [gst-plugins-bad](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-bad)
-- [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-base)
 - [gst-plugins-good](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-good)
+- [gst-plugins-bad](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-bad)
 - [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
 
 ### Build Requirements

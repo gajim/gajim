@@ -1,20 +1,12 @@
 # This file is part of Gajim.
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-import typing
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 import gi
 
-try:
-    gi.require_version("Gst", "1.0")
-    from gi.repository import Gst
-except Exception:
-    if typing.TYPE_CHECKING:
-        from gi.repository import Gst
-
+gi.require_version("Gst", "1.0")
 from gi.repository import Gst
 from gi.repository import Gtk
 
@@ -90,8 +82,6 @@ class TestAudioWidget(GajimAppWindow):
 util.init_settings()
 
 Gst.init()
-
-app.is_installed = MagicMock(return_value=True)
 
 app.init_process_pool()
 

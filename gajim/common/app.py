@@ -199,11 +199,6 @@ def disable_dependency(dependency: str) -> None:
 def detect_dependencies() -> None:
     import gi
 
-    gi.require_version("Gst", "1.0")
-    from gi.repository import Gst
-
-    Gst.init(None)
-
     try:
         gi.require_version("Farstream", "0.2")
         # from gi.repository import Farstream

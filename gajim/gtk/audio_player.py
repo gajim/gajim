@@ -4,27 +4,18 @@
 
 from __future__ import annotations
 
-import typing
-
 import logging
 import sys
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path
 
-import gi
-from gi.repository import GLib
-from gi.repository import GObject
+from gi.repository import GLib  # noqa: E402
+from gi.repository import GObject  # noqa: E402
+from gi.repository import Gst  # noqa: E402
 
 from gajim.common.enum import AudioPlayerState
 from gajim.common.ged import EventHelper
-
-try:
-    gi.require_version("Gst", "1.0")
-    from gi.repository import Gst
-except Exception:
-    if typing.TYPE_CHECKING:
-        from gi.repository import Gst
 
 from gajim.gtk.util.classes import SignalManager
 
@@ -237,23 +228,13 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
         audioresample = Gst.ElementFactory.make("audioresample", "audioresample")
         autoaudiosink = Gst.ElementFactory.make("autoaudiosink", "autoaudiosink")
 
-        pipeline_elements = [
-            audio_sink,
-            audioconvert,
-            scaletempo,
-            audioresample,
-            autoaudiosink,
-        ]
+        required_elements = [audio_sink, audioconvert, audioresample, autoaudiosink]
 
-        if any(element is None for element in pipeline_elements):
-            # If it fails there will be
-            # * a delay until playback starts
-            # * a chipmunk effect when speeding up the playback
+        if any(element is None for element in required_elements):
             log.error("Could not set up full audio preview pipeline.")
         else:
             assert autoaudiosink is not None
             assert audioconvert is not None
-            assert scaletempo is not None
             assert audioresample is not None
 
             # On Windows the first fraction of an audio
@@ -266,12 +247,18 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
                 autoaudiosink.set_property("sync", False)
 
             audio_sink.add(audioconvert)
-            audio_sink.add(scaletempo)
             audio_sink.add(audioresample)
             audio_sink.add(autoaudiosink)
 
-            audioconvert.link(scaletempo)
-            scaletempo.link(audioresample)
+            if scaletempo is not None:
+                audio_sink.add(scaletempo)
+                audioconvert.link(scaletempo)
+                scaletempo.link(audioresample)
+            else:
+                # Without scaletempo, speed changes will cause a chipmunk effect
+                log.warning("scaletempo not available")
+                audioconvert.link(audioresample)
+
             audioresample.link(autoaudiosink)
 
             sink_pad = audioconvert.get_static_pad("sink")

@@ -9,7 +9,6 @@ from typing import cast
 
 import sys
 
-from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -811,13 +810,8 @@ class AudioGroup(GajimPreferencesGroup):
             title=_("Audio"),
         )
 
-        deps_installed = app.is_installed("GST")
-
-        audio_input_devices = {}
-        # audio_output_devices = {}
-        if deps_installed:
-            audio_input_devices = AudioInputManager().get_devices()
-            # audio_output_devices = AudioOutputManager().get_devices()
+        audio_input_devices = AudioInputManager().get_devices()
+        # audio_output_devices = AudioOutputManager().get_devices()
 
         audio_input_items = self._create_av_combo_items(audio_input_devices)
         # audio_output_items = self._create_av_combo_items(audio_output_devices)
@@ -843,8 +837,6 @@ class AudioGroup(GajimPreferencesGroup):
 
         for setting in settings:
             self.add_setting(setting)
-
-        self.set_sensitive(deps_installed)
 
     @staticmethod
     def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
@@ -1270,14 +1262,6 @@ class AudioVideoPage(GajimPreferencePage):
                 # VideoGroup,
             ],
         )
-
-        banner = Adw.Banner(
-            revealed=bool(not app.is_installed("GST")),
-            title=_("Missing dependencies for audio support"),
-            button_label=_("Features"),
-            action_name="app.features",
-        )
-        self._pref_page.set_banner(banner)
 
 
 class PluginsPage(GajimPreferencePage):

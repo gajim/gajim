@@ -173,18 +173,17 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         return GLib.SOURCE_REMOVE
 
     def _display_image_preview(self) -> None:
-        if app.is_installed("GST"):
-            if self._mime_type == "image/gif" and is_image_animated(self._orig_path):
-                self._display_animated_image_preview(AnimatedImageBackend)
-                return
+        if self._mime_type == "image/gif" and is_image_animated(self._orig_path):
+            self._display_animated_image_preview(AnimatedImageBackend)
+            return
 
-            if self._mime_type in [
-                "image/webp",
-                "image/avif",
-                "image/png",
-            ] and is_image_animated(self._orig_path):
-                self._display_animated_image_preview(AnimatedImageFallbackBackend)
-                return
+        if self._mime_type in [
+            "image/webp",
+            "image/avif",
+            "image/png",
+        ] and is_image_animated(self._orig_path):
+            self._display_animated_image_preview(AnimatedImageFallbackBackend)
+            return
 
         self._display_static_image_preview()
 

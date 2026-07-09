@@ -10,8 +10,6 @@ import logging
 
 from gi.repository import Gdk
 
-from gajim.common import app
-
 try:
     from gi.repository import Gst
 except Exception:
@@ -22,9 +20,6 @@ log = logging.getLogger("gajim.gtk.gstreamer")
 
 
 def create_video_elements() -> tuple[Gst.Element, Gdk.Paintable, str] | None:
-    if not app.is_installed("GST"):
-        return None
-
     gtksink = Gst.ElementFactory.make("gtk4paintablesink", None)
     if gtksink is None:
         return None
