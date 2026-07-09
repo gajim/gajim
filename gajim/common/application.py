@@ -110,10 +110,9 @@ class CoreApplication(ged.EventHelper):
         # from gajim.common.call_manager import CallManager
         # app.call_manager = CallManager()
 
-        if app.is_installed("GST"):
-            from gajim.gtk.audio_player import AudioPlayer
+        from gajim.gtk.audio_player import AudioPlayer
 
-            app.audio_player = AudioPlayer()
+        app.audio_player = AudioPlayer()
 
         if sys.platform in ("win32", "darwin"):
             GLib.timeout_add_seconds(20, self._check_for_updates)

@@ -19,7 +19,6 @@ from __future__ import annotations
 import typing
 from typing import Any
 from typing import cast
-from typing import Union
 
 import gc
 import logging
@@ -103,7 +102,7 @@ nicks: dict[str, str] = {}
 cert_store = cast("CertificateStore", None)
 
 call_manager = cast("CallManager", None)
-audio_player: Union["AudioPlayer", None] = None  # noqa: UP007
+audio_player: AudioPlayer | None = None
 ftm = cast("FileTransferManager", None)
 
 task_manager = cast("TaskManager", None)
@@ -115,7 +114,6 @@ process_pool = cast(ProcessPoolExecutor, None)
 
 _dependencies = {
     "FARSTREAM": False,
-    "GST": False,
     "AV": False,
     "GEOCLUE": False,
     "UPNP": False,
@@ -201,16 +199,10 @@ def disable_dependency(dependency: str) -> None:
 def detect_dependencies() -> None:
     import gi
 
-    try:
-        gi.require_version("Gst", "1.0")
-        gi.require_version("GstPbutils", "1.0")
-        from gi.repository import Gst
-        from gi.repository import GstPbutils  # noqa: F401
+    gi.require_version("Gst", "1.0")
+    from gi.repository import Gst
 
-        success, _argv = Gst.init_check(None)
-        _dependencies["GST"] = success
-    except Exception:
-        pass
+    Gst.init(None)
 
     try:
         gi.require_version("Farstream", "0.2")

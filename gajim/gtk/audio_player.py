@@ -70,6 +70,7 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
         self._bus_watch_id: int = 0
 
         self._do_broadcasting = False
+        self._loop = False
         self._switch_track = False
         self._play_new_track = False
         self._seek_track_position = False
@@ -114,11 +115,18 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
             else:
                 self._playbin.set_state(Gst.State.PLAYING)
 
-    def play_audio_file(self, file_path: Path, preview_id: int) -> None:
+    def play_audio_file(
+        self,
+        file_path: Path,
+        preview_id: int,
+        loop: bool = False,
+        from_start: bool = False,
+    ) -> None:
         assert self._playbin is not None
         assert preview_id != self._preview_id
 
         self._do_broadcasting = False
+        self._loop = loop
         self._playbin.set_state(Gst.State.READY)
 
         self._preview_id = preview_id
@@ -134,7 +142,7 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
 
         self._playbin.set_property("uri", self._file_path.as_uri())
 
-        if self._is_eos():
+        if self._is_eos() or from_start:
             self._state.position = 0.0
         self._playbin.set_state(Gst.State.PLAYING)
 
@@ -154,6 +162,7 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
         assert self._playbin is not None
 
         self._do_broadcasting = False
+        self._loop = False
         self._preview_id = -1
         self._playbin.set_state(Gst.State.NULL)
         if self._state is not None:
@@ -389,9 +398,13 @@ class AudioPlayer(GObject.GObject, SignalManager, EventHelper):
             return
 
         if message.type == Gst.MessageType.EOS and self._state is not None:
-            self._state.position = self._state.duration
-            self._playbin.set_state(Gst.State.PAUSED)
-            self._do_broadcasting = False
+            if self._loop:
+                self._set_playback_position(0.0)
+                self._playbin.set_state(Gst.State.PLAYING)
+            else:
+                self._state.position = self._state.duration
+                self._playbin.set_state(Gst.State.PAUSED)
+                self._do_broadcasting = False
             return
 
         if message.type == Gst.MessageType.ERROR:

@@ -10,7 +10,7 @@ import logging
 import sys
 from pathlib import Path
 
-from gi.repository import Gtk
+from gajim.gtk.audio_player import AudioPlayer
 
 if sys.platform == "win32" or typing.TYPE_CHECKING:
     import winsound
@@ -78,28 +78,33 @@ class PlatformMacOS(PlaySound):
 
 
 class PlatformUnix(PlaySound):
+    _SOUND_PREVIEW_ID = 0
+
     def __init__(self) -> None:
-        self._media_file: Gtk.MediaFile | None = None
+        self._loop_in_progress = False
+        self._audio_player = AudioPlayer()
+
+    @property
+    def sound_preview_id(self) -> int:
+        return self._SOUND_PREVIEW_ID
 
     def play(self, path: Path, loop: bool = False) -> None:
-        if self.loop_in_progress():
+        if self._loop_in_progress:
             return
 
-        self._media_file = Gtk.MediaFile.new_for_filename(str(path))
-
-        if self._media_file.is_seekable():
-            self._media_file.set_loop(loop)
-
-        self._media_file.play()
+        self.stop()
+        self._audio_player.get_audio_state(self._SOUND_PREVIEW_ID)
+        self._loop_in_progress = loop
+        self._audio_player.play_audio_file(
+            path, self._SOUND_PREVIEW_ID, loop=loop, from_start=True
+        )
 
     def stop(self) -> None:
-        if self._media_file is None:
-            return
-
-        self._media_file.clear()
+        self._loop_in_progress = False
+        self._audio_player.stop(self._SOUND_PREVIEW_ID)
 
     def loop_in_progress(self) -> bool:
-        return self._media_file is not None and self._media_file.get_loop()
+        return self._loop_in_progress
 
 
 def _init_platform() -> PlaySound:
