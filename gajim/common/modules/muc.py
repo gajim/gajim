@@ -970,7 +970,7 @@ class MUC(BaseModule):
             if isinstance(contact, BareContact):
                 nick = contact.name
             else:
-                nick = str(properties.muc_user.jid)
+                nick = properties.muc_user.jid.to_user_string()
 
         assert properties.muc_user.affiliation is not None
         event = events.MUCAffiliationChanged(

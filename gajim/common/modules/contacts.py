@@ -16,6 +16,7 @@ from datetime import UTC
 
 from gi.repository import Gdk
 from gi.repository import GLib
+from nbxmpp import unescape_localpart
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import PresenceShow
@@ -515,7 +516,7 @@ class BareContact(CommonContact):
             return self._jid.domain
 
         assert self._jid.localpart is not None
-        return self._jid.localpart
+        return unescape_localpart(self._jid.localpart)
 
     def get_tune(self) -> TuneData | None:
         return self.get_module("UserTune").get_contact_tune(self._jid)
