@@ -52,14 +52,14 @@ class VoiceMessageRecorder(GObject.GObject):
         self._output_file_valid = False
         self._output_files_invalid: list[int] = []
         self._num_samples = 80
-        self._num_samples_buffer = 20
         self._samples: deque[float] = deque(
             [0.0] * self._num_samples, maxlen=self._num_samples
         )
-        self._samples_buffer: deque[float] = deque(
-            [0.0] * self._num_samples_buffer, maxlen=self._num_samples_buffer
-        )
-        self._buffer_level = 0
+        self._current_peak: float = 0.0
+        self._noise_floor_db: float = -45.0
+        self._floor_samples: list[float] = []
+        self._floor_established: bool = False
+        self._recent_db: deque[float] = deque(maxlen=500)
         self._rec_time = {"start": 0, "total": 0}
 
         app.settings.connect_signal(
@@ -110,6 +110,7 @@ class VoiceMessageRecorder(GObject.GObject):
         assert self._filesink is not None
 
         audiolevel.set_property("message", True)
+        audiolevel.set_property("interval", 10 * 1_000_000)  # 10 ms in nanoseconds
         # Force S16LE so wavenc writes standard integer PCM (format 1)
         capsfilt.set_property("caps", Gst.Caps.from_string("audio/x-raw,format=S16LE"))
         self._filesink.set_property("location", str(self._file_path))
@@ -232,6 +233,11 @@ class VoiceMessageRecorder(GObject.GObject):
         self._output_file_counter = 0
         self._output_files_invalid = []
         self._samples = deque([0] * self._num_samples, maxlen=self._num_samples)
+        self._current_peak = 0.0
+        self._noise_floor_db = -45.0
+        self._floor_samples = []
+        self._floor_established = False
+        self._recent_db.clear()
         self._rec_time = {"start": 0, "total": 0}
 
     def recording_time(self) -> int:
@@ -241,15 +247,37 @@ class VoiceMessageRecorder(GObject.GObject):
         return self._rec_time["total"] + delta
 
     def request_new_sample(self) -> None:
-        if self._buffer_level != 0:
-            samples_avg = math.fsum(list(self._samples_buffer)) / self._buffer_level
-            self._buffer_level = 0
-        else:
-            samples_avg = 0
-        self._samples_buffer = deque(
-            [0.0] * self._num_samples_buffer, maxlen=self._num_samples_buffer
-        )
-        self._samples.appendleft(samples_avg)
+        peak = self._current_peak
+        self._current_peak = 0.0
+        prev = self._samples[0] if self._samples else 0.0
+        # Release envelope: decay rather than hard-cut to zero on silence
+        released = prev * 0.5
+        self._samples.appendleft(max(peak, released))
+
+    def _normalize_peak_db(self, peak_db: float) -> float:
+        self._recent_db.append(peak_db)
+
+        if not self._floor_established:
+            self._floor_samples.append(peak_db)
+            if len(self._floor_samples) >= 5:  # 5 × 10 ms = 50 ms
+                self._noise_floor_db = sum(self._floor_samples) / len(self._floor_samples)
+                self._floor_established = True
+            return 0.0
+        elif len(self._recent_db) >= 50:
+            sorted_levels = sorted(self._recent_db)
+            idx = int(len(sorted_levels) * 0.10)
+            floor_estimate = sorted_levels[idx]
+            # Very slow EMA so the floor never visibly shifts during recording
+            self._noise_floor_db = (
+                self._noise_floor_db * 0.999 + floor_estimate * 0.001
+            )
+
+        adjusted = peak_db - self._noise_floor_db - 3.0
+        if adjusted <= 0.0:
+            return 0.0
+
+        value = min(1.0, adjusted / 50.0)
+        return math.sqrt(value)
 
     def recording_samples(self) -> list[tuple[float, float]]:
         sample_list = reversed(list(self._samples))
@@ -361,16 +389,17 @@ class VoiceMessageRecorder(GObject.GObject):
         if message.type == Gst.MessageType.ELEMENT:
             name = structure.get_name()
             if name == "level":
-                if not structure.has_field("rms"):
+                if not structure.has_field("peak"):
                     return
 
-                rms_values = structure.get_value("rms")
-                assert rms_values is not None
-                if len(rms_values) > 0:
-                    rms_value = rms_values[0]
-                    self._rms = math.pow(10, rms_value / 10 / 2)
-                    self._samples_buffer.appendleft(self._rms)
-                    self._buffer_level += 1 % self._num_samples
+                peak_values = structure.get_value("peak")
+                assert peak_values is not None
+                if len(peak_values) > 0:
+                    peak_db = float(peak_values[0])
+                    if not math.isinf(peak_db) and peak_db > -90.0:
+                        normalized = self._normalize_peak_db(peak_db)
+                        if normalized > self._current_peak:
+                            self._current_peak = normalized
             log.debug("gst element message: %s", message_string)
 
         elif message.type == Gst.MessageType.ERROR:

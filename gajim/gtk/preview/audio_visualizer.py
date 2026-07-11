@@ -76,8 +76,10 @@ class AudioVisualizerWidget(Gtk.Widget):
         if self._is_static():
             samples = self._average_samples(samples)
             samples = self._normalize_samples(samples)
-        self._samples = self._rescale_samples(samples)
-        self._waveform_path = self._create_waveform_path()
+            self._samples = self._rescale_samples(samples)
+            self._waveform_path = self._create_waveform_path()
+        else:
+            self._samples = samples
 
     def render_animated_graph(self, animation_index: int = 0) -> None:
         if not self._samples:
@@ -85,7 +87,6 @@ class AudioVisualizerWidget(Gtk.Widget):
             return
 
         self._animation_index = animation_index
-        self._waveform_path = self._create_waveform_path()
         self.queue_draw()
 
     def render_static_graph(self, position: float, seek_position: float = -1.0) -> None:
@@ -97,10 +98,17 @@ class AudioVisualizerWidget(Gtk.Widget):
         self.queue_draw()
 
     def do_snapshot(self, snapshot: Gtk.Snapshot) -> None:
-        if self._waveform_path is None:
-            log.debug("Waveform Path is None")
-            return
+        if self._is_static():
+            if self._waveform_path is None:
+                log.debug("Waveform Path is None")
+                return
+            self._snapshot_static(snapshot)
+        else:
+            if not self._samples:
+                return
+            self._snapshot_animated(snapshot)
 
+    def _snapshot_static(self, snapshot: Gtk.Snapshot) -> None:
         if not self._is_LTR:
             # rotate 180° around the center
             snapshot.translate(Graphene.Point().init(self._width / 2, self._height / 2))
@@ -139,6 +147,39 @@ class AudioVisualizerWidget(Gtk.Widget):
                 self._waveform_path, Gsk.FillRule.WINDING, self._color_seek
             )
             snapshot.pop()
+
+    def _snapshot_animated(self, snapshot: Gtk.Snapshot) -> None:
+        if not self._is_LTR:
+            snapshot.translate(Graphene.Point().init(self._width / 2, self._height / 2))
+            snapshot.rotate(180)
+            snapshot.translate(
+                Graphene.Point().init(-self._width / 2, -self._height / 2)
+            )
+
+        n = len(self._samples)
+        peak_width = self._peak_width
+        x_shift = (self._width - 2 * peak_width) / n
+        x_shift_anime = x_shift * self._animation_index / self._animation_period
+        x = x_shift - x_shift_anime
+        fade_count = max(1, n // 8)
+
+        for i, (s1, s2) in enumerate(self._samples):
+            if i < fade_count:
+                t = i / fade_count
+                alpha = t * t * (3.0 - 2.0 * t)  # smoothstep
+            else:
+                alpha = 1.0
+
+            color = Gdk.RGBA(
+                red=self._color_progress.red,
+                green=self._color_progress.green,
+                blue=self._color_progress.blue,
+                alpha=self._color_progress.alpha * alpha,
+            )
+
+            bar_path = self._rounded_rec(x, self._height / 2, peak_width, s1, s2)
+            snapshot.append_fill(bar_path, Gsk.FillRule.WINDING, color)
+            x += x_shift
 
     def _is_static(self):
         return self._animation_period == 1
