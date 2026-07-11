@@ -347,6 +347,12 @@ class VoiceMessageRecorder(GObject.GObject):
                 self._error_callback(
                     GST_ERROR_ON_START, _("Is a microphone plugged in and accessible?")
                 )
+        if domain == "gst-stream-error-quark":
+            if code == 1:
+                # GST_STREAM_ERROR_FAILED (1) also fires when no audio device is available.
+                self._error_callback(
+                    GST_ERROR_ON_START, _("Is a microphone plugged in and accessible?")
+                )
 
     def _handle_error_on_recording(self, message: Gst.Message | None):
         if message is not None and not self._is_error(message):
@@ -367,11 +373,10 @@ class VoiceMessageRecorder(GObject.GObject):
 
         if domain == "gst-stream-error-quark":
             if code == 1:
-                # GST_STREAM_ERROR_FAILED (1)
-                # a general error which doesn't fit in any other category.
-                # Make sure you add a custom message to the error call.
+                # GST_STREAM_ERROR_FAILED (1) also fires when no audio device is available.
                 self._error_callback(
-                    GST_ERROR_ON_RECORDING, _("Error in audio data stream.")
+                    GST_ERROR_ON_RECORDING,
+                    _("Is a microphone plugged in and accessible?"),
                 )
 
     def _handle_error_on_stop(self, message: Gst.Message | None) -> None:
