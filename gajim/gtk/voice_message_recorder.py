@@ -80,8 +80,7 @@ class VoiceMessageRecorder(GObject.GObject):
         audioconvert = Gst.ElementFactory.make("audioconvert")
         audioresample = Gst.ElementFactory.make("audioresample")
         audiolevel = Gst.ElementFactory.make("level")
-        opusenc = Gst.ElementFactory.make("opusenc")
-        mp4mux = Gst.ElementFactory.make("mp4mux")
+        wavenc = Gst.ElementFactory.make("wavenc")
         self._filesink = Gst.ElementFactory.make("filesink")
 
         pipeline_elements = [
@@ -90,8 +89,7 @@ class VoiceMessageRecorder(GObject.GObject):
             audioconvert,
             audioresample,
             audiolevel,
-            opusenc,
-            mp4mux,
+            wavenc,
             self._filesink,
         ]
 
@@ -103,12 +101,9 @@ class VoiceMessageRecorder(GObject.GObject):
         assert audioconvert is not None
         assert audioresample is not None
         assert audiolevel is not None
-        assert opusenc is not None
-        assert mp4mux is not None
+        assert wavenc is not None
         assert self._filesink is not None
 
-        opusenc.set_property("audio-type", "voice")
-        opusenc.set_property("bitrate", 32000)
         audiolevel.set_property("message", True)
         self._filesink.set_property("location", str(self._file_path))
         self._filesink.set_property("async", False)
@@ -117,16 +112,14 @@ class VoiceMessageRecorder(GObject.GObject):
         self._pipeline.add(audioconvert)
         self._pipeline.add(audioresample)
         self._pipeline.add(audiolevel)
-        self._pipeline.add(opusenc)
-        self._pipeline.add(mp4mux)
+        self._pipeline.add(wavenc)
         self._pipeline.add(self._filesink)
 
         self._queue.link(audioconvert)
         audioconvert.link(audioresample)
         audioresample.link(audiolevel)
-        audiolevel.link(opusenc)
-        opusenc.link(mp4mux)
-        mp4mux.link(self._filesink)
+        audiolevel.link(wavenc)
+        wavenc.link(self._filesink)
 
         self._clock: Gst.Clock | None = None
 
@@ -419,8 +412,8 @@ class VoiceMessageRecorder(GObject.GObject):
     def _file_merge_required(self) -> bool:
         return self._output_file_counter > 1
 
-    def _merge_opus_m4a_command(self) -> str:
-        log.info("Merging opus files started")
+    def _build_merge_command(self) -> str:
+        log.info("Merging WAV files started")
 
         # Use as_posix() on file path to convert "\" to "/" on Windows
         sources = ""
@@ -430,8 +423,9 @@ class VoiceMessageRecorder(GObject.GObject):
             source = " ! ".join(
                 [
                     f"filesrc location={self._file_path.as_posix()}.part{i}",
-                    "qtdemux",
-                    "opusdec",
+                    "wavparse",
+                    "audioconvert",
+                    "audioresample",
                     "c. ",
                 ]
             )
@@ -455,7 +449,7 @@ class VoiceMessageRecorder(GObject.GObject):
             self._handle_error_output_dir_inaccessible()
             return
 
-        command = self._merge_opus_m4a_command()
+        command = self._build_merge_command()
         pipeline = Gst.parse_launch(command)
 
         # Remove the original output file first before writing into it
