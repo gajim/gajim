@@ -30,8 +30,7 @@ from gajim.gtk.voice_message_recorder import VoiceMessageRecorder
 log = logging.getLogger("gajim.gtk.voice_message_recorder_widget")
 
 TIME_LABEL_UPDATE_DELAY = 200
-ANIMATION_PERIOD = 4
-VISUALIZATION_UPDATE_DELAY = int(100 / ANIMATION_PERIOD)
+BAR_INTERVAL_MS = 62  # ≈ 5000 ms / 80 bars
 
 
 class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
@@ -40,11 +39,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         SignalManager.__init__(self)
 
         self._time_label_update_timeout_id = None
-        self._visualization_timeout_id = None
+        self._bar_timeout_id = None
+        self._frame_tick_id: int | None = None
+        self._last_bar_ts: int = 0
 
         self._mic_button_long_pressed = False
+        self._early_recording_started = False
 
-        self._animation_index = 0
         self._new_recording = True
 
         self.set_visible(app.settings.get("show_voice_message_button"))
@@ -74,7 +75,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             Gtk.PropagationPhase.CAPTURE
         )
         self._connect(
+            gesture_direct_record_pressed, "begin", self._on_direct_record_begin
+        )
+        self._connect(
             gesture_direct_record_pressed, "pressed", self._on_direct_record_pressed
+        )
+        self._connect(
+            gesture_direct_record_pressed, "cancelled", self._on_direct_record_cancelled
         )
         self.add_controller(gesture_direct_record_pressed)
 
@@ -103,7 +110,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._connect(self._ui.popover, "closed", self._on_popover_closed)
 
         self._audio_visualizer = AudioVisualizerWidget()
-        self._audio_visualizer.set_parameters(1.0, ANIMATION_PERIOD)
+        self._audio_visualizer.set_parameters(1.0, live_mode=True)
         self._audio_visualizer.set_visible(True)
 
         self._ui.visualization_box.append(self._audio_visualizer)
@@ -114,7 +121,10 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
         self._update_button_state()
         self._update_icons()
-        self._update_visualization(self._voice_message_recorder.recording_samples)
+        self._audio_visualizer.set_samples(
+            self._voice_message_recorder.recording_samples()
+        )
+        self._audio_visualizer.render_animated_graph(0.0)
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
         )
@@ -173,9 +183,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             GLib.source_remove(self._time_label_update_timeout_id)
         self._time_label_update_timeout_id = None
 
-        if self._visualization_timeout_id is not None:
-            GLib.source_remove(self._visualization_timeout_id)
-        self._visualization_timeout_id = None
+        if self._bar_timeout_id is not None:
+            GLib.source_remove(self._bar_timeout_id)
+        self._bar_timeout_id = None
+
+        if self._frame_tick_id is not None:
+            self._audio_visualizer.remove_tick_callback(self._frame_tick_id)
+        self._frame_tick_id = None
 
     def _start_recording(self) -> None:
         log.debug("Start recording")
@@ -185,13 +199,15 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             self._voice_message_recorder.recording_time,
         )
 
-        self._visualization_timeout_id = GLib.timeout_add(
-            VISUALIZATION_UPDATE_DELAY,
-            self._update_visualization,
-            self._voice_message_recorder.recording_samples,
+        samples = self._voice_message_recorder.recording_samples
+        self._last_bar_ts = GLib.get_monotonic_time()
+        self._bar_timeout_id = GLib.timeout_add(
+            BAR_INTERVAL_MS, self._tick_bar, samples
         )
+        self._frame_tick_id = self._audio_visualizer.add_tick_callback(self._tick_frame)
 
-        self._voice_message_recorder.start_recording()
+        if not self._voice_message_recorder.recording_in_progress:
+            self._voice_message_recorder.start_recording()
         self._new_recording = False
         self._update_icons()
 
@@ -201,7 +217,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._show_playback_box()
         self._remove_timeout_ids()
         self._update_icons()
-        self._animation_index = 0
 
     def _stop_and_reset_recording(self) -> None:
         assert app.audio_player is not None
@@ -212,9 +227,11 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._ui.send_button.set_sensitive(False)
         self._ui.cancel_button.set_sensitive(False)
 
-        self._animation_index = 0
         self._new_recording = True
-        self._update_visualization(self._voice_message_recorder.recording_samples)
+        self._audio_visualizer.set_samples(
+            self._voice_message_recorder.recording_samples()
+        )
+        self._audio_visualizer.render_animated_graph(0.0)
         app.audio_player.stop(self._audio_player_widget.id)
 
         self._show_recording_box()
@@ -247,15 +264,17 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._ui.time_label.set_text(formatted)
         return True
 
-    def _update_visualization(
-        self,
-        samples: Callable[..., list[tuple[float, float]]],
-    ) -> bool:
+    def _tick_bar(self, samples: Callable[..., list[tuple[float, float]]]) -> bool:
         self._voice_message_recorder.request_new_sample()
         self._audio_visualizer.set_samples(samples())
-        self._audio_visualizer.render_animated_graph(self._animation_index)
-        self._animation_index = (self._animation_index + 1) % ANIMATION_PERIOD
+        self._last_bar_ts = GLib.get_monotonic_time()
         return True
+
+    def _tick_frame(self, _widget: Gtk.Widget, _frame_clock: Any) -> bool:
+        elapsed_us = GLib.get_monotonic_time() - self._last_bar_ts
+        frac = min(1.0, elapsed_us / (BAR_INTERVAL_MS * 1000))
+        self._audio_visualizer.render_animated_graph(frac)
+        return GLib.SOURCE_CONTINUE
 
     def _show_playback_box(self) -> None:
         self._ui.audio_player_box.set_visible(True)
@@ -305,7 +324,18 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._stop_and_reset_recording()
         self._ui.popover.popdown()
 
+    def _on_direct_record_begin(self, _gesture: Any, _sequence: Any) -> None:
+        if not self._voice_message_recorder.recording_in_progress:
+            self._voice_message_recorder.start_recording()
+            self._early_recording_started = True
+
+    def _on_direct_record_cancelled(self, _gesture: Any) -> None:
+        if self._early_recording_started:
+            self._early_recording_started = False
+            self._voice_message_recorder.cancel_recording()
+
     def _on_direct_record_pressed(self, _x: float, _y: float, _user_data: Any) -> None:
+        self._early_recording_started = False
         self._mic_button_long_pressed = True
         self._ui.popover.set_autohide(False)
         self._hide_recording_controls()
