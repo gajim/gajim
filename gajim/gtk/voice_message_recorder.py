@@ -11,6 +11,7 @@ import datetime
 import logging
 import math
 import sys
+import wave
 from collections import deque
 from collections.abc import Callable
 from pathlib import Path
@@ -29,6 +30,7 @@ except Exception:
 
 log = logging.getLogger("gajim.gtk.voice_message_recorder")
 
+WAV_SILENCE_START_ENABLED = True
 
 GST_ERROR_ON_START = 0
 GST_ERROR_ON_RECORDING = 1
@@ -80,6 +82,7 @@ class VoiceMessageRecorder(GObject.GObject):
         audioconvert = Gst.ElementFactory.make("audioconvert")
         audioresample = Gst.ElementFactory.make("audioresample")
         audiolevel = Gst.ElementFactory.make("level")
+        capsfilt = Gst.ElementFactory.make("capsfilter")
         wavenc = Gst.ElementFactory.make("wavenc")
         self._filesink = Gst.ElementFactory.make("filesink")
 
@@ -89,6 +92,7 @@ class VoiceMessageRecorder(GObject.GObject):
             audioconvert,
             audioresample,
             audiolevel,
+            capsfilt,
             wavenc,
             self._filesink,
         ]
@@ -101,10 +105,13 @@ class VoiceMessageRecorder(GObject.GObject):
         assert audioconvert is not None
         assert audioresample is not None
         assert audiolevel is not None
+        assert capsfilt is not None
         assert wavenc is not None
         assert self._filesink is not None
 
         audiolevel.set_property("message", True)
+        # Force S16LE so wavenc writes standard integer PCM (format 1)
+        capsfilt.set_property("caps", Gst.Caps.from_string("audio/x-raw,format=S16LE"))
         self._filesink.set_property("location", str(self._file_path))
         self._filesink.set_property("async", False)
 
@@ -112,13 +119,15 @@ class VoiceMessageRecorder(GObject.GObject):
         self._pipeline.add(audioconvert)
         self._pipeline.add(audioresample)
         self._pipeline.add(audiolevel)
+        self._pipeline.add(capsfilt)
         self._pipeline.add(wavenc)
         self._pipeline.add(self._filesink)
 
         self._queue.link(audioconvert)
         audioconvert.link(audioresample)
         audioresample.link(audiolevel)
-        audiolevel.link(wavenc)
+        audiolevel.link(capsfilt)
+        capsfilt.link(wavenc)
         wavenc.link(self._filesink)
 
         self._clock: Gst.Clock | None = None
@@ -300,6 +309,7 @@ class VoiceMessageRecorder(GObject.GObject):
             return
 
         log.error("Error during the recording.")
+        self._output_files_invalid.append(self._output_file_counter)
 
         domain, code = self._error_info(message)
         if domain == "gst-resource-error-quark":
@@ -412,6 +422,63 @@ class VoiceMessageRecorder(GObject.GObject):
     def _file_merge_required(self) -> bool:
         return self._output_file_counter > 1
 
+    def _smooth_wav_boundaries(
+        self, file_path: Path, silence_ms: int = 20, fade_ms: int = 30
+    ) -> None:
+        try:
+            with wave.open(str(file_path), "rb") as wav_in:
+                params = wav_in.getparams()
+                frames = wav_in.readframes(params.nframes)
+        except Exception as e:
+            log.warning("Skipping boundary smoothing for %s: %s", file_path, e)
+            return
+
+        n_channels = params.nchannels
+        sampwidth = params.sampwidth
+        n_frames = params.nframes
+        framerate = params.framerate
+
+        silence_frames = min(int(framerate * silence_ms / 1000), n_frames)
+        fade_frames = min(int(framerate * fade_ms / 1000), n_frames - silence_frames)
+
+        buf = bytearray(frames)
+
+        # Zero the initial silence region
+        silence_bytes = silence_frames * n_channels * sampwidth
+        buf[:silence_bytes] = b"\x00" * silence_bytes
+
+        if sampwidth == 2:
+            # Fade-in after the silence to avoid a step discontinuity at the start
+            for i in range(fade_frames):
+                factor = i / fade_frames
+                frame_start = (silence_frames + i) * n_channels * sampwidth
+                for ch in range(n_channels):
+                    offset = frame_start + ch * sampwidth
+                    value = int.from_bytes(
+                        buf[offset : offset + 2], "little", signed=True
+                    )
+                    buf[offset : offset + 2] = int(value * factor).to_bytes(
+                        2, "little", signed=True
+                    )
+
+            # Fade-out at the end to avoid a step discontinuity at the merge point
+            fade_out_frames = min(int(framerate * fade_ms / 1000), n_frames)
+            for i in range(fade_out_frames):
+                factor = i / fade_out_frames
+                frame_start = (n_frames - 1 - i) * n_channels * sampwidth
+                for ch in range(n_channels):
+                    offset = frame_start + ch * sampwidth
+                    value = int.from_bytes(
+                        buf[offset : offset + 2], "little", signed=True
+                    )
+                    buf[offset : offset + 2] = int(value * factor).to_bytes(
+                        2, "little", signed=True
+                    )
+
+        with wave.open(str(file_path), "wb") as wav_out:
+            wav_out.setparams(params)
+            wav_out.writeframes(bytes(buf))
+
     def _build_merge_command(self) -> str:
         log.info("Merging WAV files started")
 
@@ -448,6 +515,13 @@ class VoiceMessageRecorder(GObject.GObject):
         if not self._file_path.parent.exists():
             self._handle_error_output_dir_inaccessible()
             return
+
+        for i in range(1, self._output_file_counter + 1):
+            if i in self._output_files_invalid:
+                continue
+            part_path = Path(f"{self._file_path}.part{i}")
+            if WAV_SILENCE_START_ENABLED:
+                self._smooth_wav_boundaries(part_path)
 
         command = self._build_merge_command()
         pipeline = Gst.parse_launch(command)
