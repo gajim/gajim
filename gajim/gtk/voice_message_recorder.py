@@ -240,6 +240,22 @@ class VoiceMessageRecorder(GObject.GObject):
         self._recent_db.clear()
         self._rec_time = {"start": 0, "total": 0}
 
+    def cancel_recording(self) -> None:
+        # Immediately abort without draining EOS or merging files, so short taps
+        # that triggered an early pipeline start don't block the main thread.
+        self._pipeline.set_state(Gst.State.NULL)
+        self._new_recording = True
+        self._output_file_valid = False
+        self._output_file_counter = 0
+        self._output_files_invalid = []
+        self._samples = deque([0] * self._num_samples, maxlen=self._num_samples)
+        self._current_peak = 0.0
+        self._noise_floor_db = -45.0
+        self._floor_samples = []
+        self._floor_established = False
+        self._recent_db.clear()
+        self._rec_time = {"start": 0, "total": 0}
+
     def recording_time(self) -> int:
         delta = 0
         if self.recording_in_progress and self._clock is not None:
@@ -260,7 +276,9 @@ class VoiceMessageRecorder(GObject.GObject):
         if not self._floor_established:
             self._floor_samples.append(peak_db)
             if len(self._floor_samples) >= 5:  # 5 × 10 ms = 50 ms
-                self._noise_floor_db = sum(self._floor_samples) / len(self._floor_samples)
+                self._noise_floor_db = sum(self._floor_samples) / len(
+                    self._floor_samples
+                )
                 self._floor_established = True
             return 0.0
         elif len(self._recent_db) >= 50:
@@ -268,9 +286,7 @@ class VoiceMessageRecorder(GObject.GObject):
             idx = int(len(sorted_levels) * 0.10)
             floor_estimate = sorted_levels[idx]
             # Very slow EMA so the floor never visibly shifts during recording
-            self._noise_floor_db = (
-                self._noise_floor_db * 0.999 + floor_estimate * 0.001
-            )
+            self._noise_floor_db = self._noise_floor_db * 0.999 + floor_estimate * 0.001
 
         adjusted = peak_db - self._noise_floor_db - 3.0
         if adjusted <= 0.0:
@@ -398,8 +414,7 @@ class VoiceMessageRecorder(GObject.GObject):
                     peak_db = float(peak_values[0])
                     if not math.isinf(peak_db) and peak_db > -90.0:
                         normalized = self._normalize_peak_db(peak_db)
-                        if normalized > self._current_peak:
-                            self._current_peak = normalized
+                        self._current_peak = max(self._current_peak, normalized)
             log.debug("gst element message: %s", message_string)
 
         elif message.type == Gst.MessageType.ERROR:
