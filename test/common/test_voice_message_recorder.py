@@ -25,7 +25,11 @@ def _make_wav(
         w.setnchannels(n_channels)
         w.setsampwidth(2)
         w.setframerate(framerate)
-        w.writeframes(struct.pack(f"<{n_frames * n_channels}h", *([value] * n_frames * n_channels)))
+        w.writeframes(
+            struct.pack(
+                f"<{n_frames * n_channels}h", *([value] * n_frames * n_channels)
+            )
+        )
 
 
 def _read_samples(path: Path) -> list[int]:
@@ -37,17 +41,20 @@ def _read_samples(path: Path) -> list[int]:
 class TestExtractFirstWord(unittest.TestCase):
     def test_single_word(self) -> None:
         self.assertEqual(
-            VoiceMessageRecorder._extract_first_word("autoaudiosrc"), "autoaudiosrc"
+            VoiceMessageRecorder._extract_first_word("autoaudiosrc"),  # pyright: ignore[reportPrivateUsage]
+            "autoaudiosrc",
         )
 
     def test_word_with_parameters(self) -> None:
         self.assertEqual(
-            VoiceMessageRecorder._extract_first_word("pulsesrc volume=0.8 device=default"),
+            VoiceMessageRecorder._extract_first_word(  # pyright: ignore[reportPrivateUsage]
+                "pulsesrc volume=0.8 device=default"
+            ),
             "pulsesrc",
         )
 
     def test_empty_string(self) -> None:
-        self.assertEqual(VoiceMessageRecorder._extract_first_word(""), "")
+        self.assertEqual(VoiceMessageRecorder._extract_first_word(""), "")  # pyright: ignore[reportPrivateUsage]
 
 
 class TestBuildMergeCommand(unittest.TestCase):
@@ -58,9 +65,16 @@ class TestBuildMergeCommand(unittest.TestCase):
         mock._file_path = path
         return mock
 
+    def setUp(self) -> None:
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self._path = Path(self._tmpdir.name) / "voice-test.m4a"
+
+    def tearDown(self) -> None:
+        self._tmpdir.cleanup()
+
     def test_single_part_contains_required_elements(self) -> None:
-        path = Path("/tmp/voice-test.m4a")
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(1, [], path))
+        path = self._path
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(1, [], path))  # pyright: ignore[reportPrivateUsage]
         self.assertIn(f"location={path.as_posix()}.part1", cmd)
         self.assertIn("wavparse", cmd)
         self.assertIn("opusenc", cmd)
@@ -68,14 +82,14 @@ class TestBuildMergeCommand(unittest.TestCase):
         self.assertIn(f"location={path.as_posix()} ", cmd)
 
     def test_multiple_parts_all_included(self) -> None:
-        path = Path("/tmp/voice-test.m4a")
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [], path))
+        path = self._path
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [], path))  # pyright: ignore[reportPrivateUsage]
         for i in (1, 2, 3):
             self.assertIn(f"location={path.as_posix()}.part{i}", cmd)
 
     def test_invalid_parts_excluded(self) -> None:
-        path = Path("/tmp/voice-test.m4a")
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [2], path))
+        path = self._path
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [2], path))  # pyright: ignore[reportPrivateUsage]
         self.assertIn(f"location={path.as_posix()}.part1", cmd)
         self.assertNotIn(f"location={path.as_posix()}.part2", cmd)
         self.assertIn(f"location={path.as_posix()}.part3", cmd)
@@ -94,7 +108,9 @@ class TestSmoothWavBoundaries(unittest.TestCase):
         self._tmpdir.cleanup()
 
     def _call(self, path: Path, silence_ms: int = 20, fade_ms: int = 30) -> None:
-        VoiceMessageRecorder._smooth_wav_boundaries(self._mock_self, path, silence_ms, fade_ms)
+        VoiceMessageRecorder._smooth_wav_boundaries(  # pyright: ignore[reportPrivateUsage]
+            self._mock_self, path, silence_ms, fade_ms
+        )
 
     def _wav_path(self, name: str = "test.wav", n_frames: int = FRAMERATE) -> Path:
         path = self._tmp / name
@@ -190,7 +206,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         error_cb.assert_called_once()
         kind, msg = error_cb.call_args[0]
@@ -202,7 +218,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         mock_self._is_error.return_value = True
         mock_self._error_info.return_value = ("gst-resource-error-quark", 5)
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         self.assertIn(3, mock_self._output_files_invalid)
 
@@ -212,7 +228,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         error_cb.assert_not_called()
         self.assertEqual(mock_self._output_files_invalid, [])
@@ -224,7 +240,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         self.assertIn(1, mock_self._output_files_invalid)
         error_cb.assert_not_called()
@@ -238,7 +254,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         error_cb.assert_called_once()
         kind, msg = error_cb.call_args[0]
@@ -252,7 +268,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         error_cb.assert_called_once()
         kind, _ = error_cb.call_args[0]
@@ -263,16 +279,16 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         mock_self._is_error.return_value = True
         mock_self._error_info.return_value = ("gst-resource-error-quark", 9)
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         self.assertIn(2, mock_self._output_files_invalid)
 
     def test_none_message_still_marks_invalid(self) -> None:
-        # message=None means the pipeline itself reported an error without a message object
+        # message=None: pipeline reported an error without a message object
         mock_self = _make_error_self()
         mock_self._error_info.return_value = (None, None)
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, None)
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, None)  # pyright: ignore[reportPrivateUsage]
 
         self.assertIn(1, mock_self._output_files_invalid)
 
@@ -282,7 +298,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
 
         error_cb.assert_not_called()
         self.assertEqual(mock_self._output_files_invalid, [])
