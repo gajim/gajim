@@ -42,6 +42,7 @@ def extract_audio_properties(
             f"\n{__name__}: Could not set up pipeline for audio preview analyzer"
         )
 
+    assert playbin is not None
     assert audioconvert is not None
     assert level is not None
     assert fakesink is not None
@@ -55,74 +56,74 @@ def extract_audio_properties(
 
     fakesink.set_property("sync", False)
 
-    samples: list[tuple[float, float]] = []
-    duration: float = 0.0
-
     sink_pad = audioconvert.get_static_pad("sink")
     assert sink_pad is not None
     ghost_pad = Gst.GhostPad.new("sink", sink_pad)
     assert ghost_pad is not None
     audio_sink.add_pad(ghost_pad)
 
-    assert playbin is not None
+    # 0x02 = GST_PLAY_FLAG_AUDIO — skip video/text decoding
+    playbin.set_property("flags", 0x02)
     playbin.set_property("audio-sink", audio_sink)
     playbin.set_property("uri", input_path.as_uri())
-    playbin.no_more_pads()
 
     state_return = playbin.set_state(Gst.State.PLAYING)
     if state_return == Gst.StateChangeReturn.FAILURE:
+        playbin.set_state(Gst.State.NULL)
         raise Exception(f"\n{__name__}: Failed to set GST playbin to PLAYING")
 
     bus = playbin.get_bus()
     if not bus:
+        playbin.set_state(Gst.State.NULL)
         raise Exception(f"\n{__name__}: Could not get GST bus")
 
-    while True:
-        msg = bus.timed_pop_filtered(
-            Gst.CLOCK_TIME_NONE,
-            Gst.MessageType.EOS
-            | Gst.MessageType.ERROR
-            | Gst.MessageType.STATE_CHANGED
-            | Gst.MessageType.DURATION_CHANGED
-            | Gst.MessageType.ELEMENT,
-        )
+    samples: list[tuple[float, float]] = []
+    duration: float = 0.0
 
-        if msg is None:
-            break
+    try:
+        while True:
+            msg = bus.timed_pop_filtered(
+                Gst.CLOCK_TIME_NONE,
+                Gst.MessageType.EOS
+                | Gst.MessageType.ERROR
+                | Gst.MessageType.DURATION_CHANGED
+                | Gst.MessageType.ELEMENT,
+            )
 
-        if msg.type == Gst.MessageType.ERROR:
-            err, debug = msg.parse_error()
-            raise Exception(f"\n{__name__}: Error: {err}, debug: {debug}")
+            if msg is None:
+                break
 
-        if msg.type == Gst.MessageType.EOS:
-            break
+            if msg.type == Gst.MessageType.ERROR:
+                err, debug = msg.parse_error()
+                raise Exception(f"\n{__name__}: Error: {err}, debug: {debug}")
 
-        if msg.type in (
-            Gst.MessageType.STATE_CHANGED,
-            Gst.MessageType.DURATION_CHANGED,
-        ):
-            _success, duration = playbin.query_duration(Gst.Format.TIME)
+            if msg.type == Gst.MessageType.EOS:
+                _success, duration = playbin.query_duration(Gst.Format.TIME)
+                break
 
-        if msg.type == Gst.MessageType.ELEMENT:
-            structure = msg.get_structure()
-            if (
-                structure
-                and structure.get_name() == "level"
-                and structure.has_field("rms")
-            ):
-                rms_values = structure.get_value("rms")
-                if rms_values:
-                    num_channels = min(2, len(rms_values))
-                    if num_channels == 0:
-                        samples.append((0.0, 0.0))
-                    elif num_channels == 1:
-                        lin_val = math.pow(10, rms_values[0] / 10 / 2)
-                        samples.append((lin_val, lin_val))
-                    else:
-                        lin_val1 = math.pow(10, rms_values[0] / 10 / 2)
-                        lin_val2 = math.pow(10, rms_values[1] / 10 / 2)
-                        samples.append((lin_val1, lin_val2))
+            if msg.type == Gst.MessageType.DURATION_CHANGED:
+                _success, duration = playbin.query_duration(Gst.Format.TIME)
 
-    playbin.set_state(Gst.State.NULL)
+            if msg.type == Gst.MessageType.ELEMENT:
+                structure = msg.get_structure()
+                if (
+                    structure
+                    and structure.get_name() == "level"
+                    and structure.has_field("rms")
+                ):
+                    rms_values = structure.get_value("rms")
+                    if rms_values:
+                        num_channels = min(2, len(rms_values))
+                        if num_channels == 0:
+                            samples.append((0.0, 0.0))
+                        elif num_channels == 1:
+                            lin_val = math.pow(10, rms_values[0] / 10 / 2)
+                            samples.append((lin_val, lin_val))
+                        else:
+                            lin_val1 = math.pow(10, rms_values[0] / 10 / 2)
+                            lin_val2 = math.pow(10, rms_values[1] / 10 / 2)
+                            samples.append((lin_val1, lin_val2))
+    finally:
+        playbin.set_state(Gst.State.NULL)
 
     return samples, duration
