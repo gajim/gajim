@@ -13,6 +13,8 @@ from gi.repository import Graphene
 from gi.repository import Gsk
 from gi.repository import Gtk
 
+from gajim.common import app
+
 from gajim.gtk.audio_player import AudioSampleT
 
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
@@ -64,6 +66,9 @@ class AudioVisualizerWidget(Gtk.Widget):
         color_default = accent.copy()
         color_default.alpha = max(0.0, accent.alpha - 0.4)
         self._color_default = color_default
+
+    def do_unroot(self) -> None:
+        app.check_finalize(self)
 
     def get_effective_width(self) -> int:
         return self._width

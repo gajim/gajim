@@ -10,6 +10,8 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from gajim.common import app
+
 from gajim.gtk.audio_player import AudioPreviewState
 from gajim.gtk.preview.audio_visualizer import AudioVisualizerWidget
 from gajim.gtk.util.classes import SignalManager
@@ -69,6 +71,10 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
         self.add_controller(controller_scroll)
         self.add_controller(controller_motion)
         self.add_controller(gesture_seek_click)
+
+    def run_destroy(self) -> None:
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def update(self) -> None:
         if not self._preview_state.duration > 0:
