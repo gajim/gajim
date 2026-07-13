@@ -105,8 +105,6 @@ class AudioVisualizerWidget(Gtk.Widget):
                 return
             self._draw_animated(snapshot)
 
-    # --- Drawing ---
-
     def _draw_static(self, snapshot: Gtk.Snapshot) -> None:
         assert self._waveform_path is not None
         if not self._is_LTR:
@@ -162,7 +160,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         cy = self._height / 2
         fade_n = max(1, n // 8)
 
-        # Batch all fully-opaque bars into a single path and draw call
+        # Batch all fully opaque bars into a single path and draw call
         pb = Gsk.PathBuilder.new()
         for i in range(fade_n, n):
             self._add_bar(pb, x0 + i * x_step, cy, *self._samples[i])
@@ -254,8 +252,6 @@ class AudioVisualizerWidget(Gtk.Widget):
         pb.line_to(x, cy)
         pb.line_to(x + r, cy)
         pb.close()
-
-    # --- Sample processing (static mode only) ---
 
     def _downsample(self, samples: AudioSampleT) -> AudioSampleT:
         num_bars = int(self._width / (self._bar_width * 2))
