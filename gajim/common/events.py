@@ -169,6 +169,12 @@ class SignedIn(ApplicationEvent):
 
 
 @dataclass
+class DndChanged(ApplicationEvent):
+    name: str = field(init=False, default="dnd-changed")
+    inhibited: bool
+
+
+@dataclass
 class LocationChanged(ApplicationEvent):
     name: str = field(init=False, default="location-changed")
     info: LocationData | None

@@ -595,9 +595,19 @@ class AutomaticStatusGroup(GajimPreferencesGroup):
                 props={"subpage": "auto-extended-away"},
             ),
         ]
-
         for setting in settings:
             self.add_setting(setting)
+
+        if sys.platform not in ("win32", "darwin"):
+            self.add_setting(
+                Setting(
+                    SettingKind.SWITCH,
+                    _("Honor System Do Not Disturb"),
+                    SettingType.CONFIG,
+                    "honor_system_dnd",
+                    desc=_('Follow the "Do Not Disturb" mode of the system'),
+                )
+            )
 
     @staticmethod
     def _get_auto_away() -> bool:

@@ -21,13 +21,16 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common import modules
 from gajim.common import passwords
 from gajim.common.client_modules import ClientModules
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
+from gajim.common.dbus.system_dnd import DoNotDisturbListener
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
+from gajim.common.events import DndChanged
 from gajim.common.events import MessageNotSent
 from gajim.common.events import Notification
 from gajim.common.events import PasswordRequired
@@ -90,6 +93,7 @@ class Client(Observable, ClientModules):
         self.roster_supported = True
 
         self._state = ClientState.DISCONNECTED
+        self._last_presence_state = None
         self._status_sync_on_resume = False
         self._status = "online"
         self._status_message = ""
@@ -125,9 +129,39 @@ class Client(Observable, ClientModules):
             "notify::connectivity", self._network_status_changed
         )
 
+        app.ged.register_event_handler("dnd-changed", ged.CORE, self._on_dnd_changed)
+
     def _set_state(self, state: ClientState) -> None:
         self._log.info("State: %s", repr(state))
         self._state = state
+
+    def _on_dnd_changed(self, event: DndChanged) -> None:
+        if not app.settings.get("honor_system_dnd"):
+            return
+
+        if not self.state.is_available:
+            return
+
+        if self.state.is_disconnecting or self._state.is_disconnected:
+            return
+
+        inhibited = event.inhibited
+        self._log.debug("Do Not Disturb: %s", inhibited)
+        if inhibited:
+            self._last_presence_state = self.get_presence_state()
+            self._idle_status_enabled = False
+            self._status = "dnd"
+            self.update_presence()
+            return
+
+        if self._last_presence_state is None:
+            self._last_presence_state = self.get_presence_state()
+            return
+
+        self._log.debug("Last present state: %s", self._last_presence_state)
+        self.change_status(
+            show=self._last_presence_state[0], message=self._last_presence_state[1]
+        )
 
     @property
     def state(self) -> ClientState:
@@ -472,6 +506,13 @@ class Client(Observable, ClientModules):
         if not message:
             message = ""
 
+        if (
+            app.settings.get("honor_system_dnd")
+            and DoNotDisturbListener.get().inhibited
+            and show != "dnd"
+        ):
+            self._last_presence_state = (show, message, False)
+
         self._idle_status_enabled = show == "online"
         self._status_message = message
 
@@ -538,9 +579,19 @@ class Client(Observable, ClientModules):
         elif self._connect_machine_calls == 2:
             self._finish_connect()
 
+    def _apply_initial_dnd_state(self) -> None:
+        if not app.settings.get("honor_system_dnd"):
+            return
+        if not DoNotDisturbListener.get().inhibited:
+            return
+        if self._last_presence_state is None:
+            self._last_presence_state = self.get_presence_state()
+        self._status = "dnd"
+
     def _finish_connect(self) -> None:
         self._status_sync_on_resume = False
         self._set_client_available()
+        self._apply_initial_dnd_state()
 
         # We did not resume the stream, so we are not joined any MUCs
         self.update_presence(include_muc=False)
@@ -796,6 +847,8 @@ class Client(Observable, ClientModules):
 
         monitor = Gio.NetworkMonitor.get_default()
         monitor.disconnect(self._network_monitor_id)
+
+        app.ged.remove_event_handler("dnd-changed", ged.CORE, self._on_dnd_changed)
 
         if self._client is not None:
             self._client.destroy()
