@@ -63,7 +63,7 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
         self._connect(controller_motion, "motion", self._on_cursor_move)
 
         controller_scroll = Gtk.EventControllerScroll(
-            flags=Gtk.EventControllerScrollFlags.VERTICAL,
+            flags=Gtk.EventControllerScrollFlags.HORIZONTAL,
             propagation_phase=Gtk.PropagationPhase.CAPTURE,
         )
         self._connect(controller_scroll, "scroll", self._on_scroll)
@@ -87,7 +87,7 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
 
     def _convert_position_to_timestamp(self, x: float, x_max: float) -> float:
         if x_max == 0.0:
-            log.warning("Width is zero, when converting position to timestamp")
+            log.warning("Width is zero, when converting position to thimestamp")
             return 0.0
 
         if not self._preview_state.duration > 0:
@@ -153,16 +153,16 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
     def _on_scroll(
         self,
         _event_controller: Gtk.EventControllerScroll,
-        _dx: float,
-        dy: float,
+        dx: float,
+        _dy: float,
     ) -> bool:
         if not self._preview_state.duration > 0:
             return False
 
-        if dy > 0:
-            timestamp = self._preview_state.position - self._scroll_step
-        else:
+        if dx > 0:
             timestamp = self._preview_state.position + self._scroll_step
+        else:
+            timestamp = self._preview_state.position - self._scroll_step
         self.emit("seeked", timestamp)
         self.render_static_graph(
             timestamp / self._preview_state.duration,
