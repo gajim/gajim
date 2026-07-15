@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-05-11 01:20+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -798,9 +798,6 @@ msgstr "ملف صوتي"
 
 msgid "Audio Input Device"
 msgstr "جهاز إدخال الصوت"
-
-msgid "Audio Preview"
-msgstr "معاينة صوتية"
 
 msgid "Audio test"
 msgstr "اختبار الصوت"
@@ -1786,9 +1783,6 @@ msgid ""
 "Status automatically"
 msgstr "يمكِِّن غاجم من قياس وقت خمول حاسوبك لتعيين حالتك تلقائيًا"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "يمكِّن غاجم من توفير معاينة صوتية"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "يمكِّن غاجم من التدقيق الإملائي لرسائلك أثناء كتابتها"
 
@@ -1873,9 +1867,6 @@ msgstr "خطأ"
 
 msgid "Error Loading Image"
 msgstr "خطأ في تحميل الصورة"
-
-msgid "Error in audio data stream."
-msgstr "خطأ في دفق البيانات الصوتية."
 
 msgid "Error opening file"
 msgstr "خطأ في فتح الملف"
@@ -2853,9 +2844,6 @@ msgstr "الدقائق المتبقية حتى تتغير حالتك"
 msgid "Miscellaneous"
 msgstr "متنوعات"
 
-msgid "Missing dependencies for audio support"
-msgstr "الاعتماديات اللازمة لدعم الصوت مفقودة"
-
 msgid "Missing necessary encryption plugin"
 msgstr "ملحق التعمية الضروري مفقود"
 
@@ -3371,6 +3359,9 @@ msgstr "تعذَّر لصق المحتوى"
 msgid "Path length constraint exceeded"
 msgstr "تم تجاوز قيد طول المسار"
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr "معلَّق"
 
@@ -3410,6 +3401,9 @@ msgstr "مثبَّتة"
 
 msgid "Pipewire"
 msgstr "بايب‌واير"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "شغِّل الصوت"
@@ -3905,9 +3899,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "يتطلب: gnome-keyring أو kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "يتطلب: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "يتطلب: libspelling"
 
@@ -4316,6 +4307,10 @@ msgstr "أظهر معلومات المتراسل"
 msgid "Show Content"
 msgstr "اعرض المحتوى"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "اعرض المحتوى"
+
 msgid "Show Details"
 msgstr "أظهر التفاصيل"
 
@@ -4504,9 +4499,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "ابدأ\\أوقف التسجيل"
-
-msgid "Start/stop playback"
-msgstr "ابدأ\\أوقف التشغيل"
 
 msgid "State"
 msgstr "الحالة"
@@ -6195,6 +6187,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Audio Output Device"
 #~ msgstr "جهاز الإخراج الصوتي"
 
+#~ msgid "Audio Preview"
+#~ msgstr "معاينة صوتية"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "المعاينة الصوتية غير متاحة"
 
@@ -6427,8 +6422,14 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Enables Gajim to play sounds for various notifications"
 #~ msgstr "يمكِّن غاجم من تشغيل الأصوات لتنبيهات مختلفة"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "يمكِّن غاجم من توفير معاينة صوتية"
+
 #~ msgid "Encrypted Certificate"
 #~ msgstr "شهادة معمَّاة"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "خطأ في دفق البيانات الصوتية."
 
 #~ msgid "Error received: {}"
 #~ msgstr "استُلِم خطأ: {}"
@@ -6531,6 +6532,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Message composition"
 #~ msgstr "إنشاء الرسالة"
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "الاعتماديات اللازمة لدعم الصوت مفقودة"
+
 #~ msgid "Movie"
 #~ msgstr "فيلم"
 
@@ -6591,6 +6595,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "يتطلب: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "يتطلب: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: libxss"
 #~ msgstr "يتطلب: libxss"
@@ -6654,6 +6661,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Start New Chat"
 #~ msgstr "ابدأ دردشة جديدة"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "ابدأ\\أوقف التشغيل"
 
 #~ msgid "Status message…"
 #~ msgstr "رسالة الحالة…"

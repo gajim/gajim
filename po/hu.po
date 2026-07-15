@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-06-08 04:20+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-14 22:20+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -788,9 +788,6 @@ msgstr "Hangfájl"
 
 msgid "Audio Input Device"
 msgstr "Bemeneti eszköz"
-
-msgid "Audio Preview"
-msgstr "Hangbemutató"
 
 msgid "Audio test"
 msgstr "Hangpróba"
@@ -1785,9 +1782,6 @@ msgid ""
 msgstr ""
 "A tétlenül töltött idő alapján a jelenléti állapot automatikus beállítása"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Hangok kipróbálása a Gajimban"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Az üzenetek automatikus helyesírás-ellenőrzése"
 
@@ -1873,9 +1867,6 @@ msgstr "Hiba"
 
 msgid "Error Loading Image"
 msgstr "Képbetöltési hiba"
-
-msgid "Error in audio data stream."
-msgstr "Hiba a hangadatfolyamban."
 
 msgid "Error opening file"
 msgstr "Fájlmegnyitási hiba"
@@ -2857,9 +2848,6 @@ msgstr "Percben megadott tétlenség, miután a jelenléti állapot megváltozik
 msgid "Miscellaneous"
 msgstr "Vegyes"
 
-msgid "Missing dependencies for audio support"
-msgstr "A hangfunkciókhoz szükséges összetevők hiányoznak"
-
 msgid "Missing necessary encryption plugin"
 msgstr "A titkosítás bővítménye hiányzik"
 
@@ -3378,6 +3366,9 @@ msgstr "Sikertelen beillesztés"
 msgid "Path length constraint exceeded"
 msgstr "Az elérési út túl hosszú"
 
+msgid "Pause"
+msgstr "Szünet"
+
 msgid "Pending"
 msgstr "Függőben"
 
@@ -3417,6 +3408,9 @@ msgstr "Kiemelt"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr "Lejátszás"
 
 msgid "Play Sound"
 msgstr "Hang lejátszása"
@@ -3912,9 +3906,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Követelmény: gnome-keyring vagy kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Követelmény: libspelling"
 
@@ -4327,6 +4318,9 @@ msgstr "A névjegy tulajdonságainak megjelenítése"
 msgid "Show Content"
 msgstr "Tartalom megjelenítése"
 
+msgid "Show Controls"
+msgstr "Vezérlők megjelenítése"
+
 msgid "Show Details"
 msgstr "Részletes információ"
 
@@ -4521,9 +4515,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Felvétel indítása/leállítása"
-
-msgid "Start/stop playback"
-msgstr "Lejátszás indítása/leállítása"
 
 msgid "State"
 msgstr "Állam"
@@ -6461,6 +6452,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Audio Output Device"
 #~ msgstr "Kimeneti eszköz"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Hangbemutató"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "A hangbemutató nem áll rendelkezésre"
 
@@ -6769,6 +6763,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Hang- és videóbeszélgetések a Gajimban"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Hangok kipróbálása a Gajimban"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "A Gajim ikonjának megjelenítése az értesítési területen"
 
@@ -6783,6 +6780,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Titkosított tanúsítvány"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Hiba a hangadatfolyamban."
 
 #~ msgid "Error received: {}"
 #~ msgstr "A hibaüzenet: {}"
@@ -7070,6 +7070,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Az üzenetek később már csak akkor olvashatók el, ha a beszélgetések "
 #~ "mentése be van kapcsolva és a másik fél szerepel a névjegyek között."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "A hangfunkciókhoz szükséges összetevők hiányoznak"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s %(count)s üzenetének moderálása?"
@@ -7162,10 +7165,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "A fájlátvitel szüneteltetése vagy folytatása"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Szüneteltetve"
 
 #~ msgid "Pending Event"
 #~ msgstr "Várakozó események"
@@ -7265,6 +7264,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Követelmény: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Követelmény: gupnpigd-1.0"
@@ -7437,6 +7439,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Hanghívás…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Lejátszás indítása/leállítása"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Jelenléti állapot és állapotüzenet az összes fiókhoz"

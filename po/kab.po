@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-02-22 20:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
@@ -780,9 +780,6 @@ msgstr "Afaylu ameslaw"
 
 msgid "Audio Input Device"
 msgstr "Ibenk n unekcum n umeslaw"
-
-msgid "Audio Preview"
-msgstr "Taskant n umeslaw"
 
 msgid "Audio test"
 msgstr "Asekyed n umeslaw"
@@ -1759,9 +1756,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -1850,9 +1844,6 @@ msgstr "Tuccḍa"
 
 msgid "Error Loading Image"
 msgstr "Tuccḍa deg usali n tugna"
-
-msgid "Error in audio data stream."
-msgstr "Tuccḍa deg usuddem n yisefka n umeslaw."
 
 msgid "Error opening file"
 msgstr "Tuccḍa deg tulya n ufaylu"
@@ -2819,9 +2810,6 @@ msgstr "Tisdanin i d-yeqqimen alamma ibeddel waddad-ik·im"
 msgid "Miscellaneous"
 msgstr "Ayen-nniḍen"
 
-msgid "Missing dependencies for audio support"
-msgstr "Ulac iḍaraɛen i usefrek n umeslaw"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Azegrir n uwgelhen ulac-it"
 
@@ -3343,6 +3331,9 @@ msgstr "Asenṭeḍ n ugbur ur yeddi ara"
 msgid "Path length constraint exceeded"
 msgstr "Talast n teɣzi n ubrid tɛedda"
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr ""
 
@@ -3382,6 +3373,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 msgid "Play Sound"
@@ -3866,9 +3860,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -4281,6 +4272,10 @@ msgstr ""
 msgid "Show Content"
 msgstr ""
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Sken tiludna"
+
 msgid "Show Details"
 msgstr ""
 
@@ -4474,9 +4469,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Bdu/Ḥbes asekles"
-
-msgid "Start/stop playback"
-msgstr "Bdu/seḥbes taɣuri"
 
 msgid "State"
 msgstr "Awanek"
@@ -6014,6 +6006,9 @@ msgstr ""
 #~ msgid "Add some details…"
 #~ msgstr "Rnu kra n telqayt…"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Taskant n umeslaw"
+
 #~ msgid "Choose Emoji"
 #~ msgstr "Fren Imujit"
 
@@ -6025,6 +6020,9 @@ msgstr ""
 
 #~ msgid "Eating"
 #~ msgstr "Učči"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Tuccḍa deg usuddem n yisefka n umeslaw."
 
 #, python-format
 #~ msgid "Error: %s (mime types: %s)"
@@ -6038,6 +6036,9 @@ msgstr ""
 #~ msgid "Local news and reports"
 #~ msgstr "Isallen akked ineqqisen idiganen"
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Ulac iḍaraɛen i usefrek n umeslaw"
+
 #~ msgid "Movie"
 #~ msgstr "Asaru"
 
@@ -6047,6 +6048,9 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Reaction from %s (%s)"
 #~ msgstr "Tigawin i \"%s\""
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Bdu/seḥbes taɣuri"
 
 #~ msgid ""
 #~ "This message was encrypted with OpenPGP for XMPP and could not be "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -862,10 +862,6 @@ msgstr "Dosya: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Ses giriş aygıtı"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Dosya: "
 
 msgid "Audio test"
 msgstr "Ses testi"
@@ -2000,9 +1996,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2100,9 +2093,6 @@ msgstr "Hata"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Resim seç"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Dosya açılırken hata"
@@ -3214,9 +3204,6 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3809,6 +3796,9 @@ msgstr "Şifre gerekli"
 msgid "Path length constraint exceeded"
 msgstr "Kağıt Uçağın Gideceği Yol Uzunluğu"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Bütün Bekleyen _Olayları Göster"
@@ -3854,6 +3844,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4423,9 +4416,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Paket Yöneticisi"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr " (yetki gerektirir)"
@@ -4910,6 +4900,10 @@ msgid "Show Content"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Sadece _Çecredeki Kişileri Göster"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Ayrıntılar"
 
@@ -5129,9 +5123,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7182,6 +7173,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Ses çıkış aygıtı"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Dosya: "
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -817,10 +817,6 @@ msgstr "Fil: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Standardmeddelande"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Fil: "
 
 msgid "Audio test"
 msgstr ""
@@ -1910,9 +1906,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2008,9 +2001,6 @@ msgstr "Fel"
 
 msgid "Error Loading Image"
 msgstr "Fel vid inläsning av bild"
-
-msgid "Error in audio data stream."
-msgstr "Fel i ljuddataström."
 
 msgid "Error opening file"
 msgstr "Fel vid öppnande av filen"
@@ -3063,9 +3053,6 @@ msgstr "_Logga statusändringar för kontakter"
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3632,6 +3619,10 @@ msgstr "Lösenordsändringen misslyckades"
 msgid "Path length constraint exceeded"
 msgstr "Begränsningen för sökvägslängd har överskridits"
 
+#, fuzzy
+msgid "Pause"
+msgstr "Pausad"
+
 msgid "Pending"
 msgstr "Väntande"
 
@@ -3672,6 +3663,9 @@ msgstr "Fäst"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Spela upp ljud"
@@ -4228,9 +4222,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kräver: gnome-keyring eller kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Kräver: gstreamer-1.0, gst-plugins-base-1.0"
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kräver: Gspell"
@@ -4715,6 +4706,10 @@ msgid "Show Content"
 msgstr "Visa endast _aktiva kontakter"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Visa endast _aktiva kontakter"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detaljer"
 
@@ -4933,9 +4928,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7032,6 +7024,10 @@ msgstr ""
 #~ msgstr "Standardmeddelande"
 
 #, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Fil: "
+
+#, fuzzy
 #~ msgid "Audio preview is not available"
 #~ msgstr "Sessionsbus inte tillgänglig"
 
@@ -7310,6 +7306,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Självsignerat certifikat"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Fel i ljuddataström."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Fel mottaget: {}"
@@ -7633,10 +7632,6 @@ msgstr ""
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pausa eller återuppta filöverföringen"
 
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Pausad"
-
 #~ msgid "Pending Event"
 #~ msgstr "Väntande händelse"
 
@@ -7733,6 +7728,9 @@ msgstr ""
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Kräver: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Kräver: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Kräver: gupnpigd-1.0"

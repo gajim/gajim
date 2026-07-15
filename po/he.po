@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -909,10 +909,6 @@ msgstr "קובץ: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "התקן קלט שמע"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "קובץ: "
 
 msgid "Audio test"
 msgstr "בדיקת קול"
@@ -2065,10 +2061,6 @@ msgstr ""
 "יכולת למדוד את הזמן אשר בו המערכת מצויה בחוסר פעילות, בכדי לקבוע מצב חיבור "
 "אוטומטי."
 
-#, fuzzy
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "יכולת לערוך שיחות קוליות וחזותיות."
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2172,9 +2164,6 @@ msgstr "שגיאה"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "בחירת תמונה"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "שגיאה בפתיחת קובץ"
@@ -3323,9 +3312,6 @@ msgstr "הצג _הודעות מצב"
 msgid "Miscellaneous"
 msgstr "<b>שונות</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3915,6 +3901,9 @@ msgstr "נדרשת מילת מעבר"
 msgid "Path length constraint exceeded"
 msgstr "מגבלת אורך נתיב מוצתה"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "הצג _אירועים ממתינים"
@@ -3960,6 +3949,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4544,9 +4536,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "יש צורך בהתקנת gnome-keyring וגם python-gnome2-desktop, או kwalletcli."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "יש צורך בהתקנת libgtkspell."
@@ -5045,6 +5034,10 @@ msgid "Show Content"
 msgstr "הצג אנשי קשר _פעילים בלבד"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "הצג אנשי קשר _פעילים בלבד"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "פרטים"
 
@@ -5266,9 +5259,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7383,6 +7373,10 @@ msgstr ""
 #~ msgstr "התקן פלט שמע"
 
 #, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "קובץ: "
+
+#, fuzzy
 #~ msgid "Audio preview is not available"
 #~ msgstr "סשנים קוליים אינם זמינים"
 
@@ -7677,6 +7671,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "יכולת לערוך שיחות קוליות וחזותיות."
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "יכולת לערוך שיחות קוליות וחזותיות."
 
 #, fuzzy

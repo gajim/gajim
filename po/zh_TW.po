@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -788,9 +788,6 @@ msgstr "音訊檔"
 
 msgid "Audio Input Device"
 msgstr "音訊輸入裝置"
-
-msgid "Audio Preview"
-msgstr "音訊預覽"
 
 msgid "Audio test"
 msgstr "音訊測試"
@@ -1881,10 +1878,6 @@ msgid ""
 "Status automatically"
 msgstr "測算閒置時間以自動調整狀態的能力。"
 
-#, fuzzy
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "開始進行語音視訊通話的能力。"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -1983,9 +1976,6 @@ msgstr "錯誤"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "選擇圖像"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "開啟檔案錯誤"
@@ -3108,9 +3098,6 @@ msgstr "記錄聯絡人狀態變化(_L)"
 msgid "Miscellaneous"
 msgstr "<b>雜項</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3698,6 +3685,9 @@ msgstr "需要密碼"
 msgid "Path length constraint exceeded"
 msgstr "超過了路徑長度限制"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "顯示所有未處理事件(_E)"
@@ -3743,6 +3733,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4312,9 +4305,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要 gnome-keyring 和 python-gnome2-desktop，或 kwalletcli。"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "需要 libgtkspell。"
@@ -4799,6 +4789,10 @@ msgid "Show Content"
 msgstr "只顯示活動的聯絡人(_A)"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "只顯示活動的聯絡人(_A)"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "細節"
 
@@ -5018,9 +5012,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7106,6 +7097,9 @@ msgstr ""
 #~ msgid "Audio Output Device"
 #~ msgstr "音訊輸出裝置"
 
+#~ msgid "Audio Preview"
+#~ msgstr "音訊預覽"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "音訊預覽不可用"
 
@@ -7385,6 +7379,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "開始進行語音視訊通話的能力。"
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "開始進行語音視訊通話的能力。"
 
 #, fuzzy

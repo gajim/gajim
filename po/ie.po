@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -792,10 +792,6 @@ msgstr ""
 
 msgid "Audio Input Device"
 msgstr ""
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Cargante…"
 
 msgid "Audio test"
 msgstr ""
@@ -1788,9 +1784,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -1873,9 +1866,6 @@ msgid "Error"
 msgstr "Errore"
 
 msgid "Error Loading Image"
-msgstr ""
-
-msgid "Error in audio data stream."
 msgstr ""
 
 msgid "Error opening file"
@@ -2848,9 +2838,6 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3365,6 +3352,9 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr ""
 
@@ -3404,6 +3394,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 msgid "Play Sound"
@@ -3902,9 +3895,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -4321,6 +4311,10 @@ msgid "Show Content"
 msgstr ""
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Contactes"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detallies"
 
@@ -4504,9 +4498,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 msgid "State"
@@ -6038,6 +6029,10 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Cargante…"
 
 #, fuzzy
 #~ msgid "Clear Devices?"

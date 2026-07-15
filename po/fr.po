@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-06-07 23:20+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-15 01:20+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -813,9 +813,6 @@ msgstr "Fichier audio"
 
 msgid "Audio Input Device"
 msgstr "Périphérique audio d’entrée"
-
-msgid "Audio Preview"
-msgstr "Aperçu de l'audio"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1826,9 +1823,6 @@ msgstr ""
 "Autorise Gajim à mesurer le temps d’inactivité de votre PC, afin de définir "
 "votre statut automatique"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Active les prévisualisations audio dans Gajim"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Autorise la vérification de l'orthographe de vos messages pendant la saisie"
@@ -1919,9 +1913,6 @@ msgstr "Erreur"
 
 msgid "Error Loading Image"
 msgstr "Erreur de chargement de l'image"
-
-msgid "Error in audio data stream."
-msgstr "Erreur dans le flux audio."
 
 msgid "Error opening file"
 msgstr "Erreur à l’ouverture du fichier"
@@ -2792,7 +2783,7 @@ msgid "Look it up in _Dictionary"
 msgstr "Chercher dans le _Dictionnaire"
 
 msgid "Make Admin"
-msgstr "Rendre admin"
+msgstr "Rendre administrateur·ice"
 
 msgid "Make Member"
 msgstr "Rendre membre"
@@ -2917,9 +2908,6 @@ msgstr "Nombre de minutes avant que votre état soit changé"
 
 msgid "Miscellaneous"
 msgstr "Divers"
-
-msgid "Missing dependencies for audio support"
-msgstr "Dépendances manquantes pour le support audio"
 
 msgid "Missing necessary encryption plugin"
 msgstr "L'extension de chiffrement nécessaire est manquante"
@@ -3448,6 +3436,9 @@ msgstr "Coller le contenu a échoué"
 msgid "Path length constraint exceeded"
 msgstr "Longueur du chemin dépassée"
 
+msgid "Pause"
+msgstr "Pause"
+
 msgid "Pending"
 msgstr "En attente"
 
@@ -3487,6 +3478,9 @@ msgstr "Épinglé"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr "Jouer"
 
 msgid "Play Sound"
 msgstr "Jouer le son"
@@ -3987,9 +3981,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Nécessite gnome-keyring ou kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Nécessite : gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Nécessite : libspelling"
 
@@ -4405,6 +4396,9 @@ msgstr "Afficher les informations du contact"
 msgid "Show Content"
 msgstr "Afficher le contenu"
 
+msgid "Show Controls"
+msgstr "Afficher les controles audio"
+
 msgid "Show Details"
 msgstr "Montrer les détails"
 
@@ -4603,9 +4597,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Lancer/Arrêter l'enregistrement"
-
-msgid "Start/stop playback"
-msgstr "Démarrer/interrompre la lecture"
 
 msgid "State"
 msgstr "Statut"
@@ -6576,6 +6567,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Audio Output Device"
 #~ msgstr "Périphérique audio de sortie"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Aperçu de l'audio"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "L'aperçu audio n'est pas disponible"
 
@@ -6886,6 +6880,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Active les discussions audio et vidéo dans Gajim"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Active les prévisualisations audio dans Gajim"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
 #~ "Permet à Gajim de disposer d'une icône dans l'espace de notification"
@@ -6903,6 +6900,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Certificat chiffré"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Erreur dans le flux audio."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Erreur reçue : {}"
@@ -7187,6 +7187,9 @@ msgstr "... ou bien déposez ici"
 #~ "l’archivage de l'historique est actif et si le contact est dans votre "
 #~ "liste de contact."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Dépendances manquantes pour le support audio"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "Modérer %(count)s messages de %(participant)s ?"
@@ -7281,10 +7284,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Mettre en pause ou reprendre le transfert de fichier"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "En pause"
 
 #~ msgid "Pending Event"
 #~ msgstr "Événement en attente"
@@ -7388,6 +7387,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Nécessite : gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Nécessite : gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Nécessite : gupnpigd-1.0"
@@ -7566,6 +7568,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Démarrer un appel audio…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Démarrer/interrompre la lecture"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "État et message d'état pour tous les comptes"

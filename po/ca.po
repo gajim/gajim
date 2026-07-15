@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -835,10 +835,6 @@ msgstr "Envia _Fitxer"
 
 msgid "Audio Input Device"
 msgstr ""
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Envia _Fitxer"
 
 msgid "Audio test"
 msgstr ""
@@ -1927,9 +1923,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2023,9 +2016,6 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
-msgstr ""
-
-msgid "Error in audio data stream."
 msgstr ""
 
 msgid "Error opening file"
@@ -3109,9 +3099,6 @@ msgstr "Mostra els canvis d'estat"
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3685,6 +3672,9 @@ msgstr "Contrasenya:"
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Events _Personals"
@@ -3728,6 +3718,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4282,9 +4275,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "requereix"
@@ -4760,6 +4750,10 @@ msgid "Show Content"
 msgstr "Mostra Contactes Actius"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Mostra Contactes Actius"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Gajim"
 
@@ -4964,9 +4958,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -6839,6 +6830,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Envia _Fitxer"
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

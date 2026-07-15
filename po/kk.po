@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-05-10 14:20+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -800,9 +800,6 @@ msgstr "Аудио файлы"
 
 msgid "Audio Input Device"
 msgstr "Аудио енгізу құрылғысы"
-
-msgid "Audio Preview"
-msgstr "Аудионы алдын ала қарау"
 
 msgid "Audio test"
 msgstr "Аудио сынау"
@@ -1803,9 +1800,6 @@ msgstr ""
 "Gajim үшін қалып-күйіңізд автоматты өзгерту үшін белсенді емес уақыт шамасын "
 "анықтауды рұқсат етеді"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Gajim үшін аудио алдын ала қарауды қамтамасыз етеді"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Gajim-ге хабарламалар жазу кезінде емлені тексеруге мүмкіндік береді"
 
@@ -1893,9 +1887,6 @@ msgstr "Қате"
 
 msgid "Error Loading Image"
 msgstr "Суретті жүктеу қатесі"
-
-msgid "Error in audio data stream."
-msgstr "Аудио деректер ағынындағы қате."
 
 msgid "Error opening file"
 msgstr "Файлды ашу қатесі"
@@ -2884,9 +2875,6 @@ msgstr "Қалып-күйіңіздің өзгеруіне дейінгі мин
 msgid "Miscellaneous"
 msgstr "Әртүрлі"
 
-msgid "Missing dependencies for audio support"
-msgstr "Аудио қолдауы үшін тәуелділіктер жетіспейді"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Қажетті шифрлеу плагині жоқ"
 
@@ -3406,6 +3394,10 @@ msgstr "Мазмұнды кірістіру сәтсіз аяқталды"
 msgid "Path length constraint exceeded"
 msgstr "Жол ұзындық шектеуі асырылған"
 
+#, fuzzy
+msgid "Pause"
+msgstr "Аялдатылған"
+
 msgid "Pending"
 msgstr "Оқылмаған"
 
@@ -3445,6 +3437,9 @@ msgstr "Бекітілген"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Дыбысты ойнату"
@@ -3942,9 +3937,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Талап етеді: gnome-keyring немесе kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "libspelling қажет"
 
@@ -4355,6 +4347,10 @@ msgstr "Контакт ақпараттарын көрсету"
 msgid "Show Content"
 msgstr "Мазмұнды көрсету"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Мазмұнды көрсету"
+
 msgid "Show Details"
 msgstr "Ақпаратын көрсету"
 
@@ -4553,9 +4549,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Жазуды бастау/тоқтату"
-
-msgid "Start/stop playback"
-msgstr "Ойнатуды бастау/тоқтату"
 
 msgid "State"
 msgstr "Штат"
@@ -6447,6 +6440,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Audio Output Device"
 #~ msgstr "Аудио шығару құрылғысы"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Аудионы алдын ала қарау"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Аудионы алдын ала қарау қолжетімді емес"
 
@@ -6743,6 +6739,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr ""
 #~ "Gajim-ге аудио және видео чаттарды қамтамасыз етуге мүмкіндік береді"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Gajim үшін аудио алдын ала қарауды қамтамасыз етеді"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Gajim хабарландыру аймағының белгішесін қамтамасыз етеді"
 
@@ -6758,6 +6757,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Шифрленген сертификат"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Аудио деректер ағынындағы қате."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Қате алынды: {}"
@@ -7031,6 +7033,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ "Хабарламаларды кейінірек оқу үшін тек чат тарихын сақтау іске қосулы және "
 #~ "контакт сіздің контакттар тізімінде болса ғана қолжетімді болады."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Аудио қолдауы үшін тәуелділіктер жетіспейді"
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Хабарламаны қайтарып алу керек пе?"
@@ -7122,10 +7127,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Файлдармен алмасуды аялдату немесе жалғастыру"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Аялдатылған"
 
 #~ msgid "Pending Event"
 #~ msgstr "Оқылмаған оқиға"
@@ -7227,6 +7228,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Талап етеді: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Талап етеді: gupnpigd-1.0"
@@ -7393,6 +7397,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Дыбыс қоңырауын бастау…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Ойнатуды бастау/тоқтату"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -869,10 +869,6 @@ msgstr "Bestanden:"
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "_Audio-invoerapparaat"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Bestanden:"
 
 msgid "Audio test"
 msgstr "Audiotest"
@@ -1999,10 +1995,6 @@ msgstr ""
 "Geeft Gajim de mogelijkheid om de inactiviteitsduur van je computer te meten "
 "om automatische status in te stellen"
 
-#, fuzzy
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Geeft Gajim de mogelijkheid om de spelling in je berichten te controleren "
@@ -2103,9 +2095,6 @@ msgstr "Fout"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Kies afbeelding"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Fout bij openen van bestand"
@@ -3238,9 +3227,6 @@ msgstr "Statusveranderingen tonen"
 msgid "Miscellaneous"
 msgstr "Overige"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3824,6 +3810,9 @@ msgstr "Wachtwoord vereist"
 msgid "Path length constraint exceeded"
 msgstr "Padlengtelimiet overschreden"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Toon alle wachtende gebeurt_enissen"
@@ -3868,6 +3857,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 msgid "Play Sound"
@@ -4427,12 +4419,6 @@ msgid "Requires: gnome-keyring or kwallet"
 msgstr "Vereist gnome-keyring en python-gnome2-desktop, of kwalletcli."
 
 #, fuzzy
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-"Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
-"gstreamer1.0-plugins-ugly"
-
-#, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vereist: Gspell"
 
@@ -4920,6 +4906,10 @@ msgid "Show Content"
 msgstr "Alleen actieve contacten weergeven"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Alleen actieve contacten weergeven"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Details"
 
@@ -5137,9 +5127,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 msgid "State"
@@ -7231,6 +7218,10 @@ msgstr ""
 #~ msgstr "A_udio-uitvoerapparaat"
 
 #, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Bestanden:"
+
+#, fuzzy
 #~ msgid "Audio preview is not available"
 #~ msgstr "Audiosessies zijn niet beschikbaar"
 
@@ -7537,6 +7528,11 @@ msgstr ""
 #~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr ""
+#~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr ""
 #~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
@@ -7999,6 +7995,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gsound"
 #~ msgstr "Vereist: python-dbus"
+
+#, fuzzy
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr ""
+#~ "Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
+#~ "gstreamer1.0-plugins-ugly"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"

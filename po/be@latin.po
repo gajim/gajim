@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -872,10 +872,6 @@ msgstr "Fajł: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Fajł: "
 
 msgid "Audio test"
 msgstr ""
@@ -2009,9 +2005,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2109,9 +2102,6 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Abiary vyjavu"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 #, fuzzy
 msgid "Error opening file"
@@ -3233,9 +3223,6 @@ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
 msgid "Miscellaneous"
 msgstr "<b>Roznaje</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3827,6 +3814,9 @@ msgstr "Vymahaje parolu"
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
@@ -3872,6 +3862,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4442,9 +4435,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kiraŭnik žurnałaŭ"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vymahaje parolu"
@@ -4929,6 +4919,10 @@ msgid "Show Content"
 msgstr "Pakažy _adłučanyja kantakty"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Pakažy _adłučanyja kantakty"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Padrabiaznaści"
 
@@ -5148,9 +5142,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7197,6 +7188,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Fajł: "
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -890,10 +890,6 @@ msgstr "Datoteka: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Predefinirana Poruka"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Datoteka: "
 
 msgid "Audio test"
 msgstr ""
@@ -2032,9 +2028,6 @@ msgid ""
 msgstr ""
 "Mogućnost mjerenja vremena neaktivnosti, da bi se postavio automatski status."
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2133,9 +2126,6 @@ msgstr "Greška"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Odabir Slike"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Greška pri čitanju datoteke"
@@ -3252,9 +3242,6 @@ msgstr "_Pamti promjene statusa kontakata"
 msgid "Miscellaneous"
 msgstr "<b>Ostalo</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3844,6 +3831,9 @@ msgstr "Potrebna Lozinka"
 msgid "Path length constraint exceeded"
 msgstr "Pređeno ograničenje duljine putanje"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Prikaži Sve _Događaje na Čekanju"
@@ -3889,6 +3879,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4461,9 +4454,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Potrebni su gnome-keyring i python-gnome2-desktop, ili kwalletcli."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Potreban je libgtkspell."
@@ -4951,6 +4941,10 @@ msgid "Show Content"
 msgstr "Prikaži Samo _Aktivne Kontakte"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Prikaži Samo _Aktivne Kontakte"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detalji"
 
@@ -5172,9 +5166,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7246,6 +7237,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Predefinirana Poruka"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Datoteka: "
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

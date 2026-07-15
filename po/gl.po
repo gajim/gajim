@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2025-11-18 17:19+0000\n"
 "Last-Translator: \"[1D*nxLf\\\"@373\" <correoxm@disroot.org>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -798,9 +798,6 @@ msgstr "Ficheiro de son"
 
 msgid "Audio Input Device"
 msgstr "Dispositivo de entrada de son"
-
-msgid "Audio Preview"
-msgstr "Vista previa da gravación"
 
 msgid "Audio test"
 msgstr "Proba de son"
@@ -1809,9 +1806,6 @@ msgstr ""
 "Permite a Gajim ver o grao de inactividade da computadora para poder "
 "establecer automaticamente o Estado"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Permite que Gajim proporcione vista previa da gravación"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Permite a Gajim comprobar a ortografía ao escribir mensaxes"
 
@@ -1904,9 +1898,6 @@ msgstr "Erro"
 
 msgid "Error Loading Image"
 msgstr "Erro ao cargar a imaxe"
-
-msgid "Error in audio data stream."
-msgstr "Erro no fluxo do son."
 
 msgid "Error opening file"
 msgstr "Erro ao abrir o ficheiro"
@@ -2904,9 +2895,6 @@ msgstr "_Rexistrar os cambios de estado dos contactos"
 msgid "Miscellaneous"
 msgstr "<b>Varios</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3497,6 +3485,9 @@ msgstr "É necesario o contrasinal"
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Amosar todos os _eventos pendentes"
@@ -3542,6 +3533,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4103,9 +4097,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Historial"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "É necesario o contrasinal"
@@ -4592,6 +4583,10 @@ msgid "Show Content"
 msgstr "Amosar os contactos desconectados"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Amosar os contactos desconectados"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detalles"
 
@@ -4811,9 +4806,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -6868,6 +6860,9 @@ msgstr ""
 #~ msgid "Audio Output Device"
 #~ msgstr "Mensaxes de estado por defecto"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Vista previa da gravación"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Non está dispoñible a vista previa da gravación"
 
@@ -7150,9 +7145,15 @@ msgstr ""
 #~ msgid "Enables Gajim to play sounds for various notifications"
 #~ msgstr "Permitir a Gajim reproducir sons para as notificacións"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Permite que Gajim proporcione vista previa da gravación"
+
 #, fuzzy
 #~ msgid "Encrypted Certificate"
 #~ msgstr "O nome de usuario non é válido"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Erro no fluxo do son."
 
 #, fuzzy
 #~ msgid "Error received: {}"

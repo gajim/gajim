@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -819,9 +819,6 @@ msgstr "Fișier audio"
 
 msgid "Audio Input Device"
 msgstr "Dispozitiv de intrare audio"
-
-msgid "Audio Preview"
-msgstr "Previzualizare audio"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1873,9 +1870,6 @@ msgstr ""
 "Permite lui Gajim să măsoare timpul de inactivitate al computerului "
 "dumneavoastră, pentru a vă seta automat Statusul"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Permite Gajim să ofere o previzualizare audio"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Permite lui Gajim să vă verifice ortografia mesajelor în timp ce le compuneți"
@@ -1973,9 +1967,6 @@ msgstr "Eroare"
 
 msgid "Error Loading Image"
 msgstr "Eroare la încărcarea imaginii"
-
-msgid "Error in audio data stream."
-msgstr "Eroare în fluxul de date audio."
 
 msgid "Error opening file"
 msgstr "Eroare la deschiderea fișierului"
@@ -3002,10 +2993,6 @@ msgstr "Minute până când statutul tău se schimbă"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#, fuzzy
-msgid "Missing dependencies for audio support"
-msgstr "Dependențe lipsă pentru Audio/Video"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Lipsește plugin-ul de criptare necesar"
 
@@ -3553,6 +3540,10 @@ msgstr "Schimbarea parolei a eșuat"
 msgid "Path length constraint exceeded"
 msgstr "Constrângerea de lungime a traseului a fost depășită"
 
+#, fuzzy
+msgid "Pause"
+msgstr "Pauză"
+
 msgid "Pending"
 msgstr "În așteptare"
 
@@ -3593,6 +3584,9 @@ msgstr "Fixat"
 
 msgid "Pipewire"
 msgstr "Fir de țeavă"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Redarea sunetului"
@@ -4116,9 +4110,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Necesită: gnome-keyring sau kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Necesită: Gspell"
@@ -4556,6 +4547,10 @@ msgstr "Afișați informațiile de contact"
 msgid "Show Content"
 msgstr "Arată conținutul"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Arată conținutul"
+
 msgid "Show Details"
 msgstr "Afișați detaliile"
 
@@ -4760,9 +4755,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Începeți/opriți înregistrarea"
-
-msgid "Start/stop playback"
-msgstr "Pornirea/oprirea redării"
 
 msgid "State"
 msgstr "Stat"
@@ -6754,6 +6746,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Audio Output Device"
 #~ msgstr "Dispozitiv de ieșire audio"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Previzualizare audio"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Previzualizarea audio nu este disponibilă"
 
@@ -7059,6 +7054,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Permite Gajim să ofere chat-uri audio și video"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Permite Gajim să ofere o previzualizare audio"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
 #~ "Permite lui Gajim să furnizeze o pictogramă pentru zona de notificare"
@@ -7075,6 +7073,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Certificat criptat"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Eroare în fluxul de date audio."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Eroare primită: {}"
@@ -7354,6 +7355,10 @@ msgstr "...sau lăsați-o aici"
 #~ "activată stocarea istoricului conversațiilor și dacă persoana de contact "
 #~ "se află în lista dumneavoastră de contacte."
 
+#, fuzzy
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Dependențe lipsă pentru Audio/Video"
+
 #~ msgid "Moderate message?"
 #~ msgstr "Moderați mesajul?"
 
@@ -7445,10 +7450,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Întrerupeți sau reluați transferul de fișiere"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Pauză"
 
 #~ msgid "Pending Event"
 #~ msgstr "Eveniment în așteptare"
@@ -7551,6 +7552,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Necesită: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Necesită: gupnpigd-1.0"
@@ -7722,6 +7726,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Începeți apelul vocal…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Pornirea/oprirea redării"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Stare și mesaj de stare pentru toate conturile"

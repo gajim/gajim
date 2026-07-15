@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2025-12-23 17:19+0000\n"
 "Last-Translator: Nomadic Entity <noiteluna@noleron.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -797,9 +797,6 @@ msgstr "Аудіофайл"
 
 msgid "Audio Input Device"
 msgstr "Пристрій введення звуку"
-
-msgid "Audio Preview"
-msgstr "Попередній перегляд аудіо"
 
 msgid "Audio test"
 msgstr "Тест аудіо"
@@ -1808,9 +1805,6 @@ msgstr ""
 "Дозволяє Gajim вимірювати час простою вашого комп'ютера, щоб автоматично "
 "встановлювати ваш статус"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Дозволяє Gajim надавати попередній аудіо перегляд"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Дозволяє перевіряти правопис повідомлень під час набору"
 
@@ -1900,9 +1894,6 @@ msgstr "Помилка"
 
 msgid "Error Loading Image"
 msgstr "Помилка завантаження зображення"
-
-msgid "Error in audio data stream."
-msgstr "Помилка в потоці аудіоданих."
 
 msgid "Error opening file"
 msgstr "Помилка під час спроби прочитати файл"
@@ -2888,9 +2879,6 @@ msgstr "Хвилини до зміни вашого статусу"
 msgid "Miscellaneous"
 msgstr "Різне"
 
-msgid "Missing dependencies for audio support"
-msgstr "Відсутні залежності для підтримки аудіо"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Відсутній необхідний плагін шифрування"
 
@@ -3420,6 +3408,9 @@ msgstr "Не вдалося вставити вміст"
 msgid "Path length constraint exceeded"
 msgstr "Перевищення обмеження на довжину адреси"
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr "На розгляді"
 
@@ -3460,6 +3451,9 @@ msgstr "Закріпленo"
 
 msgid "Pipewire"
 msgstr "Трубопровід"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Відтворити звук"
@@ -3964,9 +3958,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Потрібно: гном-брелок або гаманець"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Потрібно: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Потрібно: libspelling"
 
@@ -4381,6 +4372,10 @@ msgstr "Показати контактну інформацію"
 msgid "Show Content"
 msgstr "Показати вміст"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Показати вміст"
+
 msgid "Show Details"
 msgstr "Показати деталі"
 
@@ -4580,9 +4575,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Почати/зупинити запис"
-
-msgid "Start/stop playback"
-msgstr "Початок/зупинка відтворення"
 
 msgid "State"
 msgstr "Держава"
@@ -6526,6 +6518,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Audio Output Device"
 #~ msgstr "Пристрій відтворення звуку"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Попередній перегляд аудіо"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Попередній перегляд аудіо недоступний"
 
@@ -6812,6 +6807,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Можливість проводити аудіо та відео розмови"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Дозволяє Gajim надавати попередній аудіо перегляд"
+
 #, fuzzy
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Можливість показувати значок в системному лотку"
@@ -6827,6 +6825,9 @@ msgstr "...або киньте сюди."
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Зашифрований сертифікат"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Помилка в потоці аудіоданих."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Отримано помилку: {}"
@@ -7059,6 +7060,9 @@ msgstr "...або киньте сюди."
 #~ "Доступ для читання повідомлень буде можливим, лише якщо ви увімкнули "
 #~ "журнал, а контакт наявний у вашому реєстрі."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Відсутні залежності для підтримки аудіо"
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "повідомлення про стан"
@@ -7243,6 +7247,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Requires: gsound"
 #~ msgstr "Потрібно: gsound"
 
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Потрібно: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Потрібен python-gupnp-igd."
@@ -7400,6 +7407,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Почати балачку"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Початок/зупинка відтворення"
 
 #, fuzzy
 #~ msgid "Status and status message for all accounts"

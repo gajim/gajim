@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-05-07 15:20+0000\n"
 "Last-Translator: Aozora Mei <ineudorfl@gmail.com>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -803,9 +803,6 @@ msgstr "Audio soubor"
 
 msgid "Audio Input Device"
 msgstr "Vstupní zařízení audio"
-
-msgid "Audio Preview"
-msgstr "Náhled pro audio"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1808,9 +1805,6 @@ msgid ""
 "Status automatically"
 msgstr "Funkce pro měření času nečinnosti pro nastavení automatického stavu"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Umožňuje náhled audia"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Umožňuje Gajim kontrolovat pravopis Vašich zpráv při psaní"
 
@@ -1901,9 +1895,6 @@ msgstr "Chyba"
 
 msgid "Error Loading Image"
 msgstr "Chyba při načítání obrázku"
-
-msgid "Error in audio data stream."
-msgstr "Chyba v datovém toku zvuku."
 
 msgid "Error opening file"
 msgstr "Chyba při čtení souboru"
@@ -2888,9 +2879,6 @@ msgstr "Minuty, než se váš změní"
 msgid "Miscellaneous"
 msgstr "Ostatní"
 
-msgid "Missing dependencies for audio support"
-msgstr "Chybí závislosti pro audio podporu"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Chybí nezbytný zásuvný modul pro šifrování"
 
@@ -3417,6 +3405,10 @@ msgstr "Vložení obsahu se nezdařilo"
 msgid "Path length constraint exceeded"
 msgstr "Překročena delká cesty"
 
+#, fuzzy
+msgid "Pause"
+msgstr "Pozastaveno"
+
 msgid "Pending"
 msgstr "Čekající"
 
@@ -3456,6 +3448,9 @@ msgstr "Připnuto"
 
 msgid "Pipewire"
 msgstr "PipeWire"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Přehrát zvuk"
@@ -3952,9 +3947,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Vyžaduje gnome-keyring nebo kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Vyžaduje: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Vyžaduje: libspelling"
 
@@ -4370,6 +4362,10 @@ msgstr "Zobrazit informace o kontaktech"
 msgid "Show Content"
 msgstr "Zobrazit obsah"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Zobrazit obsah"
+
 msgid "Show Details"
 msgstr "Zobrazit podrobnosti"
 
@@ -4560,9 +4556,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Spustit/zastavit nahrávání"
-
-msgid "Start/stop playback"
-msgstr "Přehrát/pozastavit"
 
 msgid "State"
 msgstr "Stát"
@@ -6509,6 +6502,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Audio Output Device"
 #~ msgstr "Výstupní zařízení audio"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Náhled pro audio"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Náhled pro audio není dostupný"
 
@@ -6802,6 +6798,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Umožňuje poskytnout audio a video hovory"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Umožňuje náhled audia"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Umožňuje zobrazení ikony v oznamovací oblasti"
 
@@ -6817,6 +6816,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Šifrovaný certifikát"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Chyba v datovém toku zvuku."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Chyba: {}"
@@ -7091,6 +7093,9 @@ msgstr "...nebo přetáhněte sem"
 #~ "Zprávy bude možné číst později, pokud je povolen záznam historie a "
 #~ "kontakt je v seznamu kontaktů."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Chybí závislosti pro audio podporu"
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Odvolat zprávu?"
@@ -7183,10 +7188,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pozastavit nebo pokračovat v přenosu souboru"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Pozastaveno"
 
 #~ msgid "Pending Event"
 #~ msgstr "Čekající událost"
@@ -7290,6 +7291,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Vyžaduje: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Vyžaduje: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Vyžaduje : gupnpigd-1.0"
@@ -7458,6 +7462,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Začít hlasový hovor…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Přehrát/pozastavit"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Stav a zprávy o stavu u všech účtů"

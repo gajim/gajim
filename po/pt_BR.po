@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -819,9 +819,6 @@ msgstr "Arquivo de Áudio"
 
 msgid "Audio Input Device"
 msgstr "Dispositivo de Entrada de Áudio"
-
-msgid "Audio Preview"
-msgstr "Pré-visualização de Áudio"
 
 msgid "Audio test"
 msgstr "Teste de áudio"
@@ -1851,9 +1848,6 @@ msgstr ""
 "Permite que o Gajim meça o tempo ocioso do seu computador para definir seu "
 "Status automaticamente"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Permite que o Gajim forneça uma visualização de Áudio"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Permite que o Gajim verifique a ortografia enquanto digita"
 
@@ -1944,9 +1938,6 @@ msgstr "Erro"
 
 msgid "Error Loading Image"
 msgstr "Erro Carregando a Imagem"
-
-msgid "Error in audio data stream."
-msgstr "Erro no fluxo de dados de áudio."
 
 msgid "Error opening file"
 msgstr "Erro abrindo arquivo"
@@ -2941,10 +2932,6 @@ msgstr "Minutos até seu status mudar"
 msgid "Miscellaneous"
 msgstr "Diversos"
 
-#, fuzzy
-msgid "Missing dependencies for audio support"
-msgstr "Faltando dependências para Áudio/Vídeo"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Faltando plugin de criptografia necessário"
 
@@ -3476,6 +3463,9 @@ msgstr "Falha ao Colar Conteúdo"
 msgid "Path length constraint exceeded"
 msgstr "Limite de comprimento do caminho excedido"
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr "Pendentes"
 
@@ -3516,6 +3506,9 @@ msgstr "Fixado"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Reproduzir um som"
@@ -4014,9 +4007,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Requer: gnome-keyring or kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Requer: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Requer: libspelling"
 
@@ -4447,6 +4437,10 @@ msgstr "Mostrar Informações do Contato"
 msgid "Show Content"
 msgstr "Mostrar Conteúdo"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Mostrar Conteúdo"
+
 msgid "Show Details"
 msgstr "Mostrar Detalhes"
 
@@ -4645,9 +4639,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Iniciar/Parar gravação"
-
-msgid "Start/stop playback"
-msgstr "Iniciar/Parar reprodução"
 
 msgid "State"
 msgstr "Estado"
@@ -6637,6 +6628,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Audio Output Device"
 #~ msgstr "Dispositivo de Saída de Áudio"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Pré-visualização de Áudio"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "A escuta de áudio não está disponível"
 
@@ -6940,6 +6934,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Permite que o Gajim forneça chats de Áudio e Vídeo"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Permite que o Gajim forneça uma visualização de Áudio"
+
 #, fuzzy
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Permite que o Gajim toque sons para várias notificações"
@@ -6952,6 +6949,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Certificado Criptografado"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Erro no fluxo de dados de áudio."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Erro recebido: {}"
@@ -7229,6 +7229,10 @@ msgstr "...ou solte-o aqui"
 #~ "Mensagens somente estarão disponíveis para leitura mais tarde se você "
 #~ "estiver com histórico habilitado e o contato estiver na sua lista."
 
+#, fuzzy
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Faltando dependências para Áudio/Vídeo"
+
 #~ msgid "Moderate message?"
 #~ msgstr "Moderar mensagem?"
 
@@ -7432,6 +7436,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Requires: gsound"
 #~ msgstr "Requer: gsound"
 
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Requer: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Requer: gir1.2-gupnpigd-1.0"
@@ -7604,6 +7611,9 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Iniciar conversa"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Iniciar/Parar reprodução"
 
 #, fuzzy
 #~ msgid "Status and status message for all accounts"

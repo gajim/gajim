@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-06-08 06:20+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-15 08:20+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -801,9 +801,6 @@ msgstr "Plik audio"
 
 msgid "Audio Input Device"
 msgstr "Urządzenie wejścia audio"
-
-msgid "Audio Preview"
-msgstr "Podgląd dźwięku"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1796,9 +1793,6 @@ msgstr ""
 "Umożliwia Gajimowi mierzenie czasu bezczynności komputera w celu "
 "automatycznego ustawienia Twojego statusu"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Umożliwia Gajimowi dostarczanie podglądu dźwięku"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Umożliwia Gajimowi sprawdzanie pisowni w twoich wiadomościach podczas pisania"
@@ -1886,9 +1880,6 @@ msgstr "Błąd"
 
 msgid "Error Loading Image"
 msgstr "Błąd wczytywania obrazu"
-
-msgid "Error in audio data stream."
-msgstr "Błąd w strumieniu danych audio."
 
 msgid "Error opening file"
 msgstr "Błąd podczas otwierania pliku"
@@ -2878,9 +2869,6 @@ msgstr "Liczba minut zanim Twój status zostanie zmieniony"
 msgid "Miscellaneous"
 msgstr "Różne"
 
-msgid "Missing dependencies for audio support"
-msgstr "Brakujące zależności do obsługi audio"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Brak wymaganej wtyczki do szyfrowania"
 
@@ -3404,6 +3392,9 @@ msgstr "Wklejenie treści nie powiodło się"
 msgid "Path length constraint exceeded"
 msgstr "Stała długości ścieżki przekroczona"
 
+msgid "Pause"
+msgstr "Wstrzymaj"
+
 msgid "Pending"
 msgstr "Oczekujące"
 
@@ -3443,6 +3434,9 @@ msgstr "Przypięty"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr "Odtwórz"
 
 msgid "Play Sound"
 msgstr "Odtwórz dźwięk"
@@ -3941,9 +3935,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Wymaga: gnome-keyring lub kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Wymaga: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Wymaga: libspelling"
 
@@ -4356,6 +4347,9 @@ msgstr "Pokaż informacje o kontakcie"
 msgid "Show Content"
 msgstr "Pokaż treść"
 
+msgid "Show Controls"
+msgstr "Pokaż przyciski"
+
 msgid "Show Details"
 msgstr "Pokaż szczegóły"
 
@@ -4551,9 +4545,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Rozpocznij/zatrzymaj nagrywanie"
-
-msgid "Start/stop playback"
-msgstr "Uruchom/zatrzymaj odtwarzanie"
 
 msgid "State"
 msgstr "Stan/Województwo"
@@ -6509,6 +6500,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Audio Output Device"
 #~ msgstr "Urządzenie wyjścia audio"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Podgląd dźwięku"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Podgląd audio jest niedostępny"
 
@@ -6815,6 +6809,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Umożliwia Gajimowi obsługę rozmów głosowych i wideo"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Umożliwia Gajimowi dostarczanie podglądu dźwięku"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
 #~ "Umożliwia Gajimowi dostarczanie ikony do systemowego obszaru powiadomień"
@@ -6831,6 +6828,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Zaszyfrowany certyfikat"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Błąd w strumieniu danych audio."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Odebrany błąd: {}"
@@ -7112,6 +7112,9 @@ msgstr "…lub upuść tutaj"
 #~ "wtedy, gdy historia konwersacji jest załączona i użytkownik, z którym się "
 #~ "kontaktujesz jest na Twojej liście kontaktów."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Brakujące zależności do obsługi audio"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "Moderować %(count)s wiadomości od %(participant)s?"
@@ -7209,10 +7212,6 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Wstrzymaj lub wznów transfer pliku"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Wstrzymany"
 
 #~ msgid "Pending Event"
 #~ msgstr "Oczekujące zdarzenie"
@@ -7312,6 +7311,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Wymaga: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Wymaga: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Wymaga: gupnpigd-1.0"
@@ -7493,6 +7495,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Rozpocznij rozmowę głosową…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Uruchom/zatrzymaj odtwarzanie"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Status i wiadomość statusu dla wszystkich kont"

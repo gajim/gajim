@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -884,10 +884,6 @@ msgstr "Fil: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Standard Besked"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Fil: "
 
 msgid "Audio test"
 msgstr ""
@@ -2023,10 +2019,6 @@ msgid ""
 "Status automatically"
 msgstr "Evnen til at måle tomgangs tid, for at kunne sætte automatisk status."
 
-#, fuzzy
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Understøtter start af lyd og billede chat."
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2125,9 +2117,6 @@ msgstr "Fejl"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Vælg billede"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Fejl ved åbning af fil"
@@ -3244,9 +3233,6 @@ msgstr "_Log status ændringer hos kontakter"
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3836,6 +3822,9 @@ msgstr "Adgangskode er Påkrævet"
 msgid "Path length constraint exceeded"
 msgstr "Sti længde begrænsning overskredet"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Vis Alle Ventende Hænd_elser"
@@ -3881,6 +3870,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4451,9 +4443,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kræver gnome-keyring og python-gnome2-desktop, eller kwalletcli."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kræver Gspell"
@@ -4941,6 +4930,10 @@ msgid "Show Content"
 msgstr "Vis Kun _Aktive Kontakter"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Vis Kun _Aktive Kontakter"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detaljer"
 
@@ -5162,9 +5155,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7238,6 +7228,10 @@ msgstr ""
 #~ msgstr "Standard Besked"
 
 #, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Fil: "
+
+#, fuzzy
 #~ msgid "Audio preview is not available"
 #~ msgstr "En tilslutning er ikke tilgængelig"
 
@@ -7523,6 +7517,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "Understøtter start af lyd og billede chat."
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "Understøtter start af lyd og billede chat."
 
 #, fuzzy

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -879,10 +879,6 @@ msgstr "Súbor:"
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Vstupné zariadenie zvuku"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Súbor:"
 
 msgid "Audio test"
 msgstr "Zvukový test"
@@ -2020,9 +2016,6 @@ msgid ""
 msgstr ""
 "Schopnosť odhadnúť čas nečinnosti v nastavení poradia automatických stavov."
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2121,9 +2114,6 @@ msgstr "Chyba"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Vybrať obrázok"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Chyba otvárania súboru"
@@ -3236,9 +3226,6 @@ msgstr "_Zaznamenať zmenu stavu kontaktu"
 msgid "Miscellaneous"
 msgstr "<b>Rôzne</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3827,6 +3814,9 @@ msgstr "Heslo je požadované"
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Zobraziť všetky čakajúce _udalosti"
@@ -3872,6 +3862,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4442,9 +4435,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Požaduje gnome-keyring a python-gnome2-desktop, alebo kwalletcli."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vyžaduje libgtkspell."
@@ -4928,6 +4918,10 @@ msgid "Show Content"
 msgstr "Zobraziť len _aktívne kontakty"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Zobraziť len _aktívne kontakty"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Podrobnosti"
 
@@ -5149,9 +5143,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7215,6 +7206,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Výstupné zariadenie zvuku"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Súbor:"
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

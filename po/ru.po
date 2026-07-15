@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-06-09 07:20+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -809,9 +809,6 @@ msgstr "Аудиофайл"
 
 msgid "Audio Input Device"
 msgstr "Устройство аудиовхода"
-
-msgid "Audio Preview"
-msgstr "Предварительное прослушивание аудио"
 
 msgid "Audio test"
 msgstr "Тест звука"
@@ -1807,9 +1804,6 @@ msgid ""
 msgstr ""
 "Измерение времени простоя компьютера для автоматической установки статуса"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Позволяет Gajim выполнять предварительное прослушивание аудио"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Проверка орфографии при составлении сообщений"
 
@@ -1896,9 +1890,6 @@ msgstr "Ошибка"
 
 msgid "Error Loading Image"
 msgstr "Ошибка загрузки изображения"
-
-msgid "Error in audio data stream."
-msgstr "Ошибка в потоке аудиоданных."
 
 msgid "Error opening file"
 msgstr "Ошибка открытия файла"
@@ -2891,9 +2882,6 @@ msgstr "Минуты до изменения вашего статуса"
 msgid "Miscellaneous"
 msgstr "Прочее"
 
-msgid "Missing dependencies for audio support"
-msgstr "Отсутствуют зависимости для поддержки аудио"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Отсутствует требуемый подключаемый модуль шифрования"
 
@@ -3415,6 +3403,10 @@ msgstr "Не удалось вставить содержимое"
 msgid "Path length constraint exceeded"
 msgstr "Превышено ограничение по длине пути"
 
+#, fuzzy
+msgid "Pause"
+msgstr "Приостановлено"
+
 msgid "Pending"
 msgstr "Непросмотренное"
 
@@ -3454,6 +3446,9 @@ msgstr "Закреплено"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr ""
 
 msgid "Play Sound"
 msgstr "Воспроизвести звук"
@@ -3953,9 +3948,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Требуется: gnome-keyring или kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Требуется: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Требуется: libspelling"
 
@@ -4370,6 +4362,10 @@ msgstr "Показать информацию о контакте"
 msgid "Show Content"
 msgstr "Показать содержимое"
 
+#, fuzzy
+msgid "Show Controls"
+msgstr "Показать содержимое"
+
 msgid "Show Details"
 msgstr "Показать подробную информацию"
 
@@ -4566,9 +4562,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Запустить/Остановить запись"
-
-msgid "Start/stop playback"
-msgstr "Начать/остановить воспроизведение"
 
 msgid "State"
 msgstr "Регион"
@@ -6494,6 +6487,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Audio Output Device"
 #~ msgstr "Устройство аудиовыхода"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Предварительное прослушивание аудио"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Предварительное прослушивание аудио недоступно"
 
@@ -6800,6 +6796,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Возможность проведения аудио- и видеочатов"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Позволяет Gajim выполнять предварительное прослушивание аудио"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Отображение значка в области уведомлений"
 
@@ -6814,6 +6813,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Шифрованный сертификат"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Ошибка в потоке аудиоданных."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Получена ошибка: {}"
@@ -7097,6 +7099,9 @@ msgstr "…или перетащите его сюда"
 #~ "Сообщения будут доступны для чтения только в том случае, если включена "
 #~ "история чата и если контакт присутствует в вашем списке контактов."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Отсутствуют зависимости для поддержки аудио"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "Модерировать %(count)s сообщений для %(participant)s?"
@@ -7194,10 +7199,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Приостановить или возобновить передачу файлов"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Приостановлено"
 
 #~ msgid "Pending Event"
 #~ msgstr "Непросмотренное событие"
@@ -7299,6 +7300,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Требуется: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Требуется: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Требуется: gupnpigd-1.0"
@@ -7478,6 +7482,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Начать голосовой звонок…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Начать/остановить воспроизведение"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Статус и сообщение о статусе для всех учётных записей"

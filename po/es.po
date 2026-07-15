@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-06-07 23:20+0000\n"
-"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-15 12:45+0000\n"
+"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -805,9 +805,6 @@ msgstr "Fichero de Sonido"
 msgid "Audio Input Device"
 msgstr "Dispositivo de entrada de sonido"
 
-msgid "Audio Preview"
-msgstr "Preaudición de audio"
-
 msgid "Audio test"
 msgstr "Prueba de audio"
 
@@ -1477,7 +1474,7 @@ msgid "Create New Key"
 msgstr "Crear Nueva Clave"
 
 msgid "Create New OpenPGP Key"
-msgstr "Crear Nuevo Clave OpenPGP"
+msgstr "Crear nueva clave OpenPGP"
 
 msgid "Creating Account..."
 msgstr "Creando cuenta..."
@@ -1800,9 +1797,6 @@ msgstr ""
 "Habilita a Gajim para medir el tiempo de inactividad de tu ordenador para "
 "ajustar tu estado automáticamente"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Habilita a Gajim para proporcionar preaudición de ficheros de audio"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Permite a Gajim revisar la ortografía de tus mensajes mientras redactas"
@@ -1889,9 +1883,6 @@ msgstr "Error"
 
 msgid "Error Loading Image"
 msgstr "Error cargando imagen"
-
-msgid "Error in audio data stream."
-msgstr "Error en datos de audio."
 
 msgid "Error opening file"
 msgstr "Error abriendo el fichero"
@@ -2879,9 +2870,6 @@ msgstr "Minutos hasta que cambie tu estado"
 msgid "Miscellaneous"
 msgstr "Miscelánea"
 
-msgid "Missing dependencies for audio support"
-msgstr "Faltan dependencias para audio"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Falta el complemento necesario de cifrado"
 
@@ -3404,6 +3392,9 @@ msgstr "Fallo al pegar el contenido"
 msgid "Path length constraint exceeded"
 msgstr "La longitud de la ruta excedió el límite"
 
+msgid "Pause"
+msgstr "Pausar"
+
 msgid "Pending"
 msgstr "Pendiente"
 
@@ -3443,6 +3434,9 @@ msgstr "Anclado"
 
 msgid "Pipewire"
 msgstr "Tubería"
+
+msgid "Play"
+msgstr "Reproducir"
 
 msgid "Play Sound"
 msgstr "Reproducir sonido"
@@ -3940,9 +3934,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Requiere: gnome-keyring o kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Requiere: gstreamer-1.0, gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "Requiere: libspelling"
 
@@ -4357,6 +4348,9 @@ msgstr "Mostrar informaciones de contacto"
 msgid "Show Content"
 msgstr "Mostrar contenido"
 
+msgid "Show Controls"
+msgstr "Mostrar controles"
+
 msgid "Show Details"
 msgstr "Mostrar Detalles"
 
@@ -4554,9 +4548,6 @@ msgstr ""
 
 msgid "Start/Stop recording"
 msgstr "Iniciar/detener grabación"
-
-msgid "Start/stop playback"
-msgstr "Iniciar/detener reproduccion"
 
 msgid "State"
 msgstr "Estado"
@@ -6498,6 +6489,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Audio Output Device"
 #~ msgstr "Dispositivo de salida de sonido"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Preaudición de audio"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "Preaudición de sonido no disponible"
 
@@ -6806,6 +6800,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Habilita a Gajim para proporcionar chats de audio y vídeo"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Habilita a Gajim para proporcionar preaudición de ficheros de audio"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
 #~ "Habilita a Gajim para proveer un icono en el área de notificaciones del "
@@ -6823,6 +6820,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Certificado cifrado"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Error en datos de audio."
 
 #~ msgid "Error received: {}"
 #~ msgstr "Error recibido: {}"
@@ -7111,6 +7111,9 @@ msgstr "…o soltarla aqui"
 #~ "almacenamiento del historial de chat está habilitado y si el contacto "
 #~ "está en tu roster."
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Faltan dependencias para audio"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "¿Moderar %(count)s mensajes de %(participant)s?"
@@ -7205,10 +7208,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Pausar o reanudar la transferencia de fichero"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "Pausado"
 
 #~ msgid "Pending Event"
 #~ msgstr "Evento Pendiente"
@@ -7311,6 +7310,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "Requiere: gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Requiere: gstreamer-1.0, gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Requiere: gupnpigd-1.0"
@@ -7484,6 +7486,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "Iniciar llamada de voz…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "Iniciar/detener reproduccion"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "Estado y mensaje de estado para todas las cuentas"

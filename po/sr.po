@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -881,10 +881,6 @@ msgstr "Датотека: "
 #, fuzzy
 msgid "Audio Input Device"
 msgstr "Подразумевана порука"
-
-#, fuzzy
-msgid "Audio Preview"
-msgstr "Датотека: "
 
 msgid "Audio test"
 msgstr ""
@@ -2025,9 +2021,6 @@ msgstr ""
 "Даје могућност мерења времена када се ништа не дешава, да се одреди ауто "
 "статус."
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2126,9 +2119,6 @@ msgstr "Грешка"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Одаберите слику"
-
-msgid "Error in audio data stream."
-msgstr ""
 
 msgid "Error opening file"
 msgstr "Грешка при отварању датотеке"
@@ -3244,9 +3234,6 @@ msgstr "_Записуј у дневник статусне промене кон
 msgid "Miscellaneous"
 msgstr "<b>Остало</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3836,6 +3823,9 @@ msgstr "Лозинка захтевана"
 msgid "Path length constraint exceeded"
 msgstr "Прекорачена дужина путање"
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Прикажи св_е догађаје на чекању"
@@ -3881,6 +3871,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 #, fuzzy
@@ -4451,9 +4444,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Захтева gnome-network-manager и python-dbus."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Захтева libgtkspell."
@@ -4941,6 +4931,10 @@ msgid "Show Content"
 msgstr "Прикажи само _активне контакте"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Прикажи само _активне контакте"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Гајим"
 
@@ -5162,9 +5156,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -7234,6 +7225,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Audio Output Device"
 #~ msgstr "Подразумевана порука"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Датотека: "
 
 #, fuzzy
 #~ msgid "Audio preview is not available"

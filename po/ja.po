@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-04-20 13:20+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-03 05:20+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -105,10 +105,10 @@ msgstr "%(nick)s は %(actor)s によって蹴り出されました"
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s さんはこの談話室での %(affiliation)s となります"
 
-#, fuzzy, python-format
+#, python-format
 msgctxt "Group chat name"
 msgid "%(nickname)s and me"
-msgstr "%(nickname)s:"
+msgstr "%(nickname)s と私"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -692,13 +692,13 @@ msgstr "パスワード変更時にエラーが起きました。"
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "%(path)s にファイルを作成する際にエラーが起きました: %(error)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while trying to decrypt your backup: %s"
-msgstr "パスワード変更時にエラーが起きました。"
+msgstr "バックアップを復号化しようとする際にエラーが起きました: %s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while trying to import your OpenPGP key: %s"
-msgstr "パスワード変更時にエラーが起きました。"
+msgstr "OpenPGP の鍵を取り込もうとする際にエラーが起きました: %s"
 
 #, python-brace-format
 msgid ""
@@ -716,9 +716,9 @@ msgstr ""
 "{occupant_jid} を {affiliation_or_role} にしようとする際にエラーが起こりまし"
 "た: {error}"
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while trying to overwrite your backup: %s"
-msgstr "パスワード変更時にエラーが起きました。"
+msgstr "バックアップを上書きしようとする際にエラーが起きました: %s"
 
 msgid "And more..."
 msgstr "つづく…"
@@ -799,9 +799,6 @@ msgstr "音声ファイル"
 msgid "Audio Input Device"
 msgstr "音声入力デバイス"
 
-msgid "Audio Preview"
-msgstr "音声のプレビュー"
-
 msgid "Audio test"
 msgstr "音声テスト"
 
@@ -875,14 +872,13 @@ msgid "Back"
 msgstr "戻る"
 
 msgid "Backup Error"
-msgstr ""
+msgstr "バックアップエラー"
 
-#, fuzzy
 msgid "Backup Now"
-msgstr "すぐに戻ります"
+msgstr "今すぐバックアップ"
 
 msgid "Backup Secret Key"
-msgstr ""
+msgstr "秘密鍵のバックアップ"
 
 msgid "Backup Successful"
 msgstr ""
@@ -909,9 +905,8 @@ msgstr "誕生日"
 msgid "Blind Trust"
 msgstr "無条件の信頼"
 
-#, fuzzy
 msgid "Blindly trust new devices"
-msgstr "検証するまで新しいデバイスを無条件に信頼します"
+msgstr "新しいデバイスを無条件に信頼"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr "検証するまで新しいデバイスを無条件に信頼します"
@@ -942,7 +937,7 @@ msgid "Block…"
 msgstr "遮断…"
 
 msgid "Bold"
-msgstr ""
+msgstr "太字"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1088,9 +1083,8 @@ msgstr ""
 msgid "Chat"
 msgstr "チャット"
 
-#, fuzzy
 msgid "Chat Address"
-msgstr "連絡先アドレス"
+msgstr "チャットアドレス"
 
 msgid "Chat Banner: Background Color"
 msgstr "チャットバナー: 背景色"
@@ -1146,9 +1140,8 @@ msgstr "デバイスを選択"
 msgid "Choose History Export Directory"
 msgstr "履歴を書き出すディレクトリを選択"
 
-#, fuzzy
 msgid "Choose Secret Key"
-msgstr "デバイスを選択"
+msgstr "秘密鍵を選択"
 
 msgid "Choose Sound"
 msgstr "サウンドの選択"
@@ -1215,9 +1208,8 @@ msgstr "エスケープで閉じる"
 msgid "Code"
 msgstr ""
 
-#, fuzzy
 msgid "Code Block"
-msgstr "コードブロックとして貼付"
+msgstr "コードブロック"
 
 msgid "Code snippet"
 msgstr "コードスニペット"
@@ -1259,10 +1251,10 @@ msgid "Complete"
 msgstr "完了"
 
 msgid "Complete the OpenPGP setup"
-msgstr ""
+msgstr "OpenPGP の設定を完了"
 
 msgid "Complete the OpenPGP setup to chat encrypted."
-msgstr ""
+msgstr "会話を暗号化するために OpenPGP の設定を完了します。"
 
 msgid "Completed"
 msgstr "完了しました"
@@ -1280,7 +1272,7 @@ msgid "Configure"
 msgstr "調整"
 
 msgid "Configure Gajim with values from a .json file"
-msgstr ""
+msgstr ".json ファイルの値で Gajim を設定"
 
 msgid "Configure logging system"
 msgstr "ログシステムを調整"
@@ -1444,8 +1436,7 @@ msgstr "ファイルを開けませんでした (%s)"
 
 #, python-format
 msgid "Could not read content of %s. Only CSV files can be imported."
-msgstr ""
-"%s の内容を読み込めませんでした。インポートできるのは CSV ファイルのみです。"
+msgstr "%s の内容を読み込めませんでした。取り込めるのは CSV ファイルのみです。"
 
 msgid "Could not save file to selected directory."
 msgstr "選択されたディレクトリにファイルを保存できませんでした。"
@@ -1474,13 +1465,11 @@ msgstr "新しいアカウントを作成"
 msgid "Create New Group Chat"
 msgstr "新しい談話室を作成"
 
-#, fuzzy
 msgid "Create New Key"
-msgstr "新しい投稿を作成"
+msgstr "新しい鍵を作成"
 
-#, fuzzy
 msgid "Create New OpenPGP Key"
-msgstr "新しい談話室を作成"
+msgstr "新しい OpenPGP を作成"
 
 msgid "Creating Account..."
 msgstr "アカウント作成中…"
@@ -1488,9 +1477,8 @@ msgstr "アカウント作成中…"
 msgid "Credentials expired"
 msgstr "認証情報は期限切れです"
 
-#, fuzzy
 msgid "Current password incorrect"
-msgstr "安全なパスワード保存"
+msgstr "現在のパスワードは正しくありません"
 
 msgid "Custom"
 msgstr ""
@@ -1528,9 +1516,8 @@ msgstr "フォントサイズを小さくする"
 msgid "Decrease playback speed"
 msgstr "再生速度を落とす"
 
-#, fuzzy
 msgid "Decryption Error"
-msgstr "暗号化のエラー"
+msgstr "復号のエラー"
 
 msgid "Default Encryption"
 msgstr "デフォルトの暗号化"
@@ -1707,9 +1694,8 @@ msgstr "\"%(group)s\" を除去しますか ?"
 msgid "Do you want to remove all chat history for this chat?"
 msgstr "この会話のすべての履歴を除去しますか ?"
 
-#, fuzzy
 msgid "Do you want to remove the backup from your server?"
-msgstr "このプロキシを除去しますか ?"
+msgstr "バックアップをサーバーから除去しますか ?"
 
 msgid "Do you want to remove this chat including its chat history?"
 msgstr "この会話を履歴も含めて除去しますか ?"
@@ -1805,9 +1791,6 @@ msgid ""
 msgstr ""
 "在席状況を自動的に変更するため、操作のない時間をGajim が計測することを許可"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "音声のプレビューを可能にします"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "メッセージ作成時にスペルチェックを行います"
 
@@ -1830,13 +1813,12 @@ msgstr "暗号化 (OMEMO)"
 msgid "Encryption (OMEMO) – %(account)s"
 msgstr "暗号化 (OMEMO) – %(account)s"
 
-#, fuzzy
 msgid "Encryption (OpenPGP)"
-msgstr "暗号化 (OMEMO)"
+msgstr "暗号化 (OpenPGP)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Encryption (OpenPGP) – %(account)s"
-msgstr "暗号化 (OMEMO) – %(account)s"
+msgstr "暗号化 (OpenPGP) – %(account)s"
 
 msgid "Encryption Error"
 msgstr "暗号化のエラー"
@@ -1859,20 +1841,17 @@ msgstr "通話を終了"
 msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr "登録用プロバイダー一覧を取得するためのエンドポイント"
 
-#, fuzzy
 msgid "Enter Backup Password"
-msgstr "新しいパスワードを入力してください…"
+msgstr "バックアップのパスワードを入力してください"
 
-#, fuzzy
 msgid "Enter Password"
-msgstr "パスワードを変更"
+msgstr "パスワードを入力"
 
 msgid "Enter a password to join this chat"
 msgstr "この談話室に参加するにはパスワードを入れてください"
 
-#, fuzzy
 msgid "Enter current password..."
-msgstr "新しいパスワードを入力してください…"
+msgstr "現在のパスワードを入力してください…"
 
 msgid "Enter group name"
 msgstr "グループ名を入れてください"
@@ -1895,9 +1874,6 @@ msgstr "エラー"
 
 msgid "Error Loading Image"
 msgstr "画像読み込みのエラー"
-
-msgid "Error in audio data stream."
-msgstr "音声データストリームでエラーが発生しました。"
 
 msgid "Error opening file"
 msgstr "ファイルを開く際のエラー"
@@ -1970,7 +1946,7 @@ msgid "Export History…"
 msgstr "履歴を書き出す…"
 
 msgid "Export settings to a .json file"
-msgstr ""
+msgstr "設定を .json ファイルに書き出す"
 
 msgid "Export your chat history from Gajim"
 msgstr "会話履歴を Gajim から書き出します"
@@ -2064,9 +2040,8 @@ msgstr "ファイルが空です"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "ファイルが大きすぎます。最大ファイルサイズ: %s"
 
-#, fuzzy
 msgid "File saved"
-msgstr "ファイル名: "
+msgstr "ファイル名を保存しました"
 
 msgid "File too big"
 msgstr "ファイルが大きすぎます"
@@ -2252,6 +2227,8 @@ msgid ""
 "Gajim tries to restore a backup of your OpenPGP key from the server. Please "
 "enter the password for your backup."
 msgstr ""
+"Gajim はサーバーから OpenPGP 鍵のバックアップを復元しようとします。バックアッ"
+"プ用のパスワードを入力してください。"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2486,12 +2463,11 @@ msgstr "相手先を取り込みますか ?"
 msgid "Import Error"
 msgstr "取り込みエラー"
 
-#, fuzzy
 msgid "Import Key"
-msgstr "取り込み"
+msgstr "鍵を取り込む"
 
 msgid "Import OpenPGP Key"
-msgstr ""
+msgstr "OpenPGP Key を取り込む"
 
 msgid "Import from Account"
 msgstr "アカウントから取り込む"
@@ -2500,10 +2476,10 @@ msgid "Import from File"
 msgstr "ファイルから取り込む"
 
 msgid "Imported key has expiration date"
-msgstr ""
+msgstr "取り込んだキーには有効期限があります"
 
 msgid "Imported key is not a secret key"
-msgstr ""
+msgstr "取り込んだ鍵は秘密鍵ではありません"
 
 msgid "Import…"
 msgstr "取り込む…"
@@ -2638,7 +2614,6 @@ msgstr ""
 msgid "It's <b>%(time)s</b> for %(name)s"
 msgstr "%(name)s にとっての時刻は <b>%(time)s</b>"
 
-#, fuzzy
 msgid "Italic"
 msgstr "イタリック"
 
@@ -2676,7 +2651,7 @@ msgid "Just now"
 msgstr "たった今"
 
 msgid "Keep Backup"
-msgstr ""
+msgstr "バックアップを保持"
 
 msgid "Keep Chat History"
 msgstr "会話の履歴を保存"
@@ -2809,9 +2784,8 @@ msgstr "デバイスを管理…"
 msgid "Manually set the hostname for the server"
 msgstr "サーバーのホスト名を手動で設定します"
 
-#, fuzzy
 msgid "Mark all activities as read"
-msgstr "既読としてマーク"
+msgstr "すべて既読としてマーク"
 
 msgid "Mark as Read"
 msgstr "既読としてマーク"
@@ -2897,9 +2871,6 @@ msgstr "在籍状況を変更するまでの時間(分)"
 
 msgid "Miscellaneous"
 msgstr "その他の設定"
-
-msgid "Missing dependencies for audio support"
-msgstr "音声の依存関係に欠落があります"
 
 msgid "Missing necessary encryption plugin"
 msgstr "必要な暗号化プラグインが欠落しています"
@@ -3035,9 +3006,8 @@ msgstr "非同期"
 msgid "No Threshold"
 msgstr "制限なし"
 
-#, fuzzy
 msgid "No Timezone"
-msgstr "タイムゾーン"
+msgstr "タイムゾーンなし"
 
 msgid "No additional requirements"
 msgstr "追加要件なし"
@@ -3085,9 +3055,8 @@ msgstr "割り当てられたグループはありません"
 msgid "No info available"
 msgstr "有効な情報はありません"
 
-#, fuzzy
 msgid "No key found"
-msgstr "見つかりません"
+msgstr "鍵が見つかりません"
 
 msgid "No keys pressed"
 msgstr "キーが押されていません"
@@ -3102,9 +3071,8 @@ msgstr "結果はありません"
 msgid "No results found"
 msgstr "見つかりません"
 
-#, fuzzy
 msgid "No secret key found"
-msgstr "見つかりません"
+msgstr "秘密鍵が見つかりません"
 
 msgid "No undecided fingerprints"
 msgstr "未定の指紋はありません"
@@ -3242,9 +3210,8 @@ msgid "Open Emoji Chooser"
 msgstr "絵文字選択画面を開く"
 
 # #(Mako)Containing をどうする
-#, fuzzy
 msgid "Open File?"
-msgstr "フォルダを開く"
+msgstr "ファイルを開きますか ?"
 
 # #(Mako)Containing をどうする
 msgid "Open Folder"
@@ -3264,22 +3231,22 @@ msgid "OpenGL accelerated"
 msgstr "OpenGL 加速化されています"
 
 msgid "OpenPGP Backup"
-msgstr ""
+msgstr "OpenPGP をバックアップ"
 
 msgid "OpenPGP Backup Error"
-msgstr ""
+msgstr "OpenPGP バックアップのエラー"
 
 msgid "OpenPGP Key Backup"
-msgstr ""
+msgstr "OpenPGP 鍵をバックアップ"
 
 msgid "OpenPGP Setup"
-msgstr ""
+msgstr "OpenPGP を設定"
 
 msgid "OpenPGP Setup is completed."
-msgstr ""
+msgstr "OpenPGP の設定が完了しました。"
 
 msgid "OpenPGP key backup failed"
-msgstr ""
+msgstr "OpenPGP 鍵のバックアップは失敗しました"
 
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
@@ -3305,9 +3272,8 @@ msgctxt "Gender"
 msgid "Other"
 msgstr "その他"
 
-#, fuzzy
 msgid "Other Options"
-msgstr "その他"
+msgstr "その他のオプション"
 
 msgid "Other devices connected with your account"
 msgstr "アカウントに係属する他のデバイス"
@@ -3321,9 +3287,8 @@ msgstr "メモリが足りません"
 msgid "Outcasts"
 msgstr "追放者"
 
-#, fuzzy
 msgid "Overwrite"
-msgstr "上書き (_O)"
+msgstr "上書き"
 
 msgid "Overwrite Plugin?"
 msgstr "プラグインを上書きしますか ?"
@@ -3425,13 +3390,17 @@ msgid "Paste as Quote"
 msgstr "引用として貼付"
 
 msgid "Paste your OpenPGP key here"
-msgstr ""
+msgstr "ここに OpenPGP 鍵を貼り付けてください"
 
 msgid "Pasting Content Failed"
 msgstr "内容の貼り付けに失敗しました"
 
 msgid "Path length constraint exceeded"
 msgstr "パスの長さの制限を越えています"
+
+#, fuzzy
+msgid "Pause"
+msgstr "一時停止しました"
 
 msgid "Pending"
 msgstr "保留中"
@@ -3449,9 +3418,8 @@ msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr "永続"
 
-#, fuzzy
 msgid "Personal Settings"
-msgstr "ログイン設定"
+msgstr "個人設定"
 
 msgid "Personal notes about this contact"
 msgstr "この相手先についての個人的な備考"
@@ -3474,6 +3442,9 @@ msgstr "ピン止め済"
 msgid "Pipewire"
 msgstr "Pipewire"
 
+msgid "Play"
+msgstr ""
+
 msgid "Play Sound"
 msgstr "サウンドを鳴らす"
 
@@ -3492,7 +3463,7 @@ msgstr "アカウントを選択してください"
 msgid ""
 "Please choose which of your OpenPGP keys Gajim should use for encrypting "
 "your chat."
-msgstr ""
+msgstr "Gajim がチャットの暗号化に使用する OpenPGP 鍵を選択してください。"
 
 msgid "Please enter an XMPP address"
 msgstr "XMPP アドレスを入力してください"
@@ -3531,6 +3502,9 @@ msgid ""
 "will need this password if you want to restore the key or when using it with "
 "other devices."
 msgstr ""
+"OpenPGP 鍵のバックアップ用にこのパスワードを安全な場所に保管してください。鍵"
+"を復元する場合や他のデバイスで使用する場合に、このパスワードが必要になりま"
+"す。"
 
 msgid "Please use these settings with caution!"
 msgstr "これらの設定には注意してください。"
@@ -3818,9 +3792,8 @@ msgstr "%s 件の相手先を相手先一覧から除去しますか ?"
 msgid "Remove Account"
 msgstr "アカウントを除去"
 
-#, fuzzy
 msgid "Remove Backup"
-msgstr "グループを除去しますか ?"
+msgstr "バックアップを除去"
 
 msgid "Remove Chat History?"
 msgstr "会話の履歴を除去しますか ?"
@@ -3852,13 +3825,11 @@ msgstr "プロキシの除去"
 msgid "Remove Proxy?"
 msgstr "プロキシを除去しますか ?"
 
-#, fuzzy
 msgid "Remove Public Keys?"
-msgstr "公開鍵: "
+msgstr "公開鍵を除去しますか ?"
 
-#, fuzzy
 msgid "Remove Public Keys…"
-msgstr "履歴を除去…"
+msgstr "公開鍵を除去…"
 
 msgid "Remove Setting"
 msgstr "設定を除去"
@@ -3875,9 +3846,8 @@ msgstr "相手先一覧から除去…"
 msgid "Remove from Group"
 msgstr "グループから除去"
 
-#, fuzzy
 msgid "Remove from Server"
-msgstr "グループから除去"
+msgstr "サーバーから除去"
 
 msgid "Remove this workspace"
 msgstr "この作業空間を除去"
@@ -3968,9 +3938,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "gnome-keyring または kwallet が必要です"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "gstreamer-1.0, gst-plugins-base-1.0 が必要です"
-
 msgid "Requires: libspelling"
 msgstr "libspelling が必要です"
 
@@ -4016,16 +3983,15 @@ msgid "Restart Pending"
 msgstr "保留中の申し込み"
 
 msgid "Restore Backup"
-msgstr ""
+msgstr "バックアップを復元"
 
 # 起動時に名簿を表示するか
 msgid "Restore Closed Chat"
 msgstr "閉じた会話を復元"
 
 # 起動時に名簿を表示するか
-#, fuzzy
 msgid "Restore Key"
-msgstr "以前の状態を復元"
+msgstr "鍵を復元"
 
 # 起動時に名簿を表示するか
 msgid "Restore last state"
@@ -4221,7 +4187,7 @@ msgid "Select Messages…"
 msgstr "メッセージを選択…"
 
 msgid "Select Secret Key"
-msgstr ""
+msgstr "秘密鍵を選択"
 
 msgid "Select a security label for your message…"
 msgstr "メッセージの安全性ラベルを選択…"
@@ -4348,15 +4314,13 @@ msgid "Settings"
 msgstr "設定"
 
 msgid "Setup"
-msgstr ""
+msgstr "設定"
 
-#, fuzzy
 msgid "Setup Complete"
-msgstr "完了"
+msgstr "設定を完了"
 
-#, fuzzy
 msgid "Setup OpenPGP Encryption"
-msgstr "デフォルトの暗号化"
+msgstr "OpenPGP 暗号化を設定"
 
 msgid "Share Contact…"
 msgstr "相手先を共有…"
@@ -4386,6 +4350,10 @@ msgid "Show Contact Infos"
 msgstr "相手先の情報を表示"
 
 msgid "Show Content"
+msgstr "内容を表示"
+
+#, fuzzy
+msgid "Show Controls"
 msgstr "内容を表示"
 
 msgid "Show Details"
@@ -4585,9 +4553,6 @@ msgstr ""
 msgid "Start/Stop recording"
 msgstr "録音を開始/停止"
 
-msgid "Start/stop playback"
-msgstr "再生を開始/停止"
-
 msgid "State"
 msgstr "状態"
 
@@ -4640,14 +4605,12 @@ msgstr "問題を再現する手順は…"
 msgid "Stop Sharing Online Status?"
 msgstr "在席状況を知らせるのをやめますか ?"
 
-#, fuzzy
 msgid "Stores the secret key encrypted on the server"
-msgstr "サーバーに接続していません"
+msgstr "秘密鍵を暗号化してサーバーに保存します"
 
 msgid "Street"
 msgstr "町丁名・番地"
 
-#, fuzzy
 msgid "Strike"
 msgstr "抹消線"
 
@@ -4682,12 +4645,12 @@ msgstr "相手先は正常に追加されました"
 msgid "Successfully Removed Contacts"
 msgstr "相手先は正常に除去されました"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Successfully built new session with device {device_id}."
 msgstr "{device_id} での新しいセッションを確立しました。"
 
 msgid "Successfully imported key from server."
-msgstr ""
+msgstr "サーバーから鍵を取り込みました。"
 
 msgid "Support"
 msgstr "サポート"
@@ -4959,13 +4922,13 @@ msgstr "このアドレスは中継サービスを提供していないようで
 msgid "This address is not reachable."
 msgstr "このアドレスには到達できません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "This chat’s configuration is unsuitable for encryption with {encryption}. To "
 "use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
-"この談話室の調整は OMEMO での暗号化に適していません。この談話室で OMEMO を使"
-"用するには、非匿名かつメンバー限定である必要があります。"
+"この談話室の調整は {encryption} での暗号化に適していません。この談話室で "
+"{encryption} を使用するには、非匿名かつメンバー限定である必要があります。"
 
 msgid "This contact does not share their status with you"
 msgstr "この相手先はあなたと状況を共有しません"
@@ -5050,10 +5013,10 @@ msgstr ""
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
 
-#, fuzzy
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
-msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
+msgstr ""
+"このメッセージは OpenPGP で暗号化されており、復号することができません。"
 
 msgid "This message will be deleted from your local chat history"
 msgstr "このメッセージはローカルの会話履歴から削除されます"
@@ -5086,9 +5049,8 @@ msgstr "このサービスのタイプには表示する項目がありません
 msgid "This will purge all locally stored chat history"
 msgstr "すべてのローカルの会話履歴を削除します"
 
-#, fuzzy
 msgid "This will remove all published public keys from your account."
-msgstr "アカウントのデバイス一覧を消去します。"
+msgstr "これにより、公開されたすべての公開鍵をアカウントから除去します。"
 
 msgid "This will remove the account and delete all data"
 msgstr "これはアカウントを除去し、すべてのデータを削除します"
@@ -5141,6 +5103,8 @@ msgid ""
 "To secure your OpenPGP key for encrypted chats, Gajim can create an "
 "encrypted backup of your key on your server."
 msgstr ""
+"暗号化チャット用の OpenPGP 鍵を保護するために、Gajim は鍵の暗号化されたバック"
+"アップをサーバー上に作成できます。"
 
 msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
@@ -5153,6 +5117,8 @@ msgid ""
 "To set up OpenPGP encryption you can either import an existing key or let "
 "Gajim create a new key."
 msgstr ""
+"OpenPGP 暗号化を設定するには、既存のキーを取り込むか、Gajim に新しいキーを作"
+"成させることができます。"
 
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
@@ -5225,7 +5191,7 @@ msgid "Unable to decrypt certificate's signature"
 msgstr "証明書の署名を復号できません"
 
 msgid "Unable to decrypt the backup with this password"
-msgstr ""
+msgstr "このパスワードではバックアップを復号できません"
 
 msgid "Unable to get certificate CRL"
 msgstr "証明書失効リストを取得できません"
@@ -5243,7 +5209,7 @@ msgid "Unable to save profile"
 msgstr "プロフィールを保存できません"
 
 msgid "Unable to use this key for encrypting messages"
-msgstr ""
+msgstr "この鍵はメッセージの暗号化に使用できません"
 
 # (Mako)The first は root のことか?
 msgid "Unable to verify the first certificate"
@@ -5377,13 +5343,13 @@ msgid "Use GSSAPI"
 msgstr "GSSAPI を使う"
 
 msgid "Use HTTP2 for requests if there is server support"
-msgstr ""
+msgstr "サーバーが対応している場合はリクエストに HTTP2 を使用します"
 
 msgid "Use Image"
 msgstr "画像を使う"
 
 msgid "Use My Own OpenPGP Key"
-msgstr ""
+msgstr "自分の OpenPGP を使う"
 
 msgid "Use System Keyring"
 msgstr "システムの鍵束を使用する"
@@ -5701,18 +5667,17 @@ msgstr ""
 "この相手先にはオフラインとみなされます。これ以上のメッセージを受け取りませ"
 "ん。"
 
-#, fuzzy
 msgid "Your Backup Password"
-msgstr "パスワード"
+msgstr "バックアップ用のパスワード"
 
 msgid "Your Nickname"
 msgstr "あなたのニックネーム"
 
 msgid "Your OpenPGP key backup was successful."
-msgstr ""
+msgstr "OpenPGP 鍵のバックアップは成功しました。"
 
 msgid "Your OpenPGP key has been created. Your chat is now encrypted."
-msgstr ""
+msgstr "OpenPGP 鍵は生成されました。会話は暗号化されます。"
 
 msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "XMPP アドレス (例: user@example.org)"
@@ -5932,9 +5897,8 @@ msgstr "決定を記憶する (_R)"
 msgid "_Remove"
 msgstr "除去 (_R)"
 
-#, fuzzy
 msgid "_Remove Public Keys"
-msgstr "公開鍵: "
+msgstr "公開鍵を除去 (_R)"
 
 msgid "_Report Spam"
 msgstr "スパムを報告 (_R)"
@@ -6506,6 +6470,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Audio Output Device"
 #~ msgstr "音声出力デバイス"
 
+#~ msgid "Audio Preview"
+#~ msgstr "音声のプレビュー"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "音声のプレビューは無効です"
 
@@ -6803,6 +6770,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "音声・ビデオチャットを可能にします"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "音声のプレビューを可能にします"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "システム通知エリアのアイコンを使います"
 
@@ -6815,6 +6785,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "暗号化された証明書"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "音声データストリームでエラーが発生しました。"
 
 #~ msgid "Error received: {}"
 #~ msgstr "エラーを受け取りました: {}"
@@ -7087,6 +7060,9 @@ msgstr "…またはここにドロップ"
 #~ "履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読"
 #~ "めます。"
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "音声の依存関係に欠落があります"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s からの %(count)s 件のメッセージを抑制しますか ?"
@@ -7183,10 +7159,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "ファイルの転送を一時中断または再開します"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "一時停止しました"
 
 #~ msgid "Pending Event"
 #~ msgstr "保留中のイベント"
@@ -7286,6 +7258,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "gsound が必要です"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "gstreamer-1.0, gst-plugins-base-1.0 が必要です"
 
 # …
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7459,6 +7434,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "音声通話を開始…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "再生を開始/停止"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "すべてのアカウントの在席状況と状況メッセージ"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -761,9 +761,6 @@ msgid "Audio File"
 msgstr ""
 
 msgid "Audio Input Device"
-msgstr ""
-
-msgid "Audio Preview"
 msgstr ""
 
 msgid "Audio test"
@@ -1726,9 +1723,6 @@ msgid ""
 "Status automatically"
 msgstr ""
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -1811,9 +1805,6 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
-msgstr ""
-
-msgid "Error in audio data stream."
 msgstr ""
 
 msgid "Error opening file"
@@ -2765,9 +2756,6 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
-msgid "Missing dependencies for audio support"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
@@ -3276,6 +3264,9 @@ msgstr ""
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 msgid "Pending"
 msgstr ""
 
@@ -3314,6 +3305,9 @@ msgid "Pinned"
 msgstr ""
 
 msgid "Pipewire"
+msgstr ""
+
+msgid "Play"
 msgstr ""
 
 msgid "Play Sound"
@@ -3791,9 +3785,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -4196,6 +4187,9 @@ msgstr ""
 msgid "Show Content"
 msgstr ""
 
+msgid "Show Controls"
+msgstr ""
+
 msgid "Show Details"
 msgstr ""
 
@@ -4378,9 +4372,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 msgid "State"

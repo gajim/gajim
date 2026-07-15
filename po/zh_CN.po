@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
-"PO-Revision-Date: 2026-06-08 02:20+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"PO-Revision-Date: 2026-07-15 03:20+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -786,9 +786,6 @@ msgstr "音频文件"
 
 msgid "Audio Input Device"
 msgstr "音频输入设备"
-
-msgid "Audio Preview"
-msgstr "音频预览"
 
 msgid "Audio test"
 msgstr "音频测试"
@@ -1767,9 +1764,6 @@ msgid ""
 "Status automatically"
 msgstr "允许 Gajim 检测您计算机的空闲时间，以便自动设置您的状态"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "允许 Gajim 提供音频预览"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "允许 Gajim 在您撰写消息时进行拼写检查"
 
@@ -1853,9 +1847,6 @@ msgstr "错误"
 
 msgid "Error Loading Image"
 msgstr "加载图片错误"
-
-msgid "Error in audio data stream."
-msgstr "音频数据流错误。"
 
 msgid "Error opening file"
 msgstr "打开文件错误"
@@ -2828,9 +2819,6 @@ msgstr "状态更改前的分钟数"
 msgid "Miscellaneous"
 msgstr "杂项"
 
-msgid "Missing dependencies for audio support"
-msgstr "缺少音频支持的依赖"
-
 msgid "Missing necessary encryption plugin"
 msgstr "缺少必要的加密插件"
 
@@ -3345,6 +3333,9 @@ msgstr "粘贴内容失败"
 msgid "Path length constraint exceeded"
 msgstr "超出路径长度限制"
 
+msgid "Pause"
+msgstr "暂停"
+
 msgid "Pending"
 msgstr "待处理"
 
@@ -3384,6 +3375,9 @@ msgstr "已固定"
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr "播放"
 
 msgid "Play Sound"
 msgstr "播放声音"
@@ -3872,9 +3866,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要：gnome-keyring 或 kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
-
 msgid "Requires: libspelling"
 msgstr "需要：libspelling"
 
@@ -4283,6 +4274,9 @@ msgstr "显示联系人信息"
 msgid "Show Content"
 msgstr "显示内容"
 
+msgid "Show Controls"
+msgstr "显示控制"
+
 msgid "Show Details"
 msgstr "显示详情"
 
@@ -4468,9 +4462,6 @@ msgstr "开始新聊天、加入群聊或全局搜索新群聊，您也可以输
 
 msgid "Start/Stop recording"
 msgstr "开始/停止录制"
-
-msgid "Start/stop playback"
-msgstr "开始/停止播放"
 
 msgid "State"
 msgstr "省份"
@@ -6373,6 +6364,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Audio Output Device"
 #~ msgstr "音频输出设备"
 
+#~ msgid "Audio Preview"
+#~ msgstr "音频预览"
+
 #~ msgid "Audio preview is not available"
 #~ msgstr "音频预览不可用"
 
@@ -6670,6 +6664,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "允许 Gajim 提供音频和视频聊天"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "允许 Gajim 提供音频预览"
+
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "允许 Gajim 提供系统通知区域图标"
 
@@ -6682,6 +6679,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Encrypted Certificate"
 #~ msgstr "加密证书"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "音频数据流错误。"
 
 #~ msgid "Error received: {}"
 #~ msgstr "收到错误：{}"
@@ -6957,6 +6957,9 @@ msgstr "…或将其拖放到此处"
 #~ msgstr ""
 #~ "仅当启用了存储聊天记录并且对方在您的联系人列表时，消息才可供稍后阅读。"
 
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "缺少音频支持的依赖"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "撤回来自 %(participant)s 的 %(count)s 条消息？"
@@ -7052,10 +7055,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "暂停或恢复文件传输"
-
-#~ msgctxt "File transfer state"
-#~ msgid "Paused"
-#~ msgstr "已暂停"
 
 #~ msgid "Pending Event"
 #~ msgstr "待处理事件"
@@ -7153,6 +7152,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Requires: gsound"
 #~ msgstr "需要：gsound"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
 
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "需要：gupnpigd-1.0"
@@ -7327,6 +7329,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Start Voice Call…"
 #~ msgstr "开始语音通话…"
+
+#~ msgid "Start/stop playback"
+#~ msgstr "开始/停止播放"
 
 #~ msgid "Status and status message for all accounts"
 #~ msgstr "所有账号的状态和状态消息"

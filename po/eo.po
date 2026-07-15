@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 18:23+0000\n"
+"POT-Creation-Date: 2026-07-14 18:46+0000\n"
 "PO-Revision-Date: 2026-03-02 21:19+0000\n"
 "Last-Translator: Turingon <kopse@e.email>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -790,9 +790,6 @@ msgstr "Sondosiero"
 
 msgid "Audio Input Device"
 msgstr "Sonenigo"
-
-msgid "Audio Preview"
-msgstr "Sonantaŭvido"
 
 msgid "Audio test"
 msgstr "Sontesto"
@@ -1798,9 +1795,6 @@ msgstr ""
 "Ebligas Gajim mezuri la neaktivan tempon de via komputilo por aŭtomate "
 "agordi vian staton"
 
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Ebligas Gajim provizi sono-antaŭrigardojn"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Ebligas Gajim literumkontroli viajn mesaĝojn dum verkado"
 
@@ -1889,9 +1883,6 @@ msgstr "Eraro"
 
 msgid "Error Loading Image"
 msgstr "Bildŝarĝaderaro"
-
-msgid "Error in audio data stream."
-msgstr "Eraro en la sondatumfluo."
 
 msgid "Error opening file"
 msgstr "Dosiermalfermaderaro"
@@ -2887,9 +2878,6 @@ msgstr "_Protokoli statŝanĝojn de kontaktoj"
 msgid "Miscellaneous"
 msgstr "<b>Cetero</b>"
 
-msgid "Missing dependencies for audio support"
-msgstr "Mankas dependecoj por aŭdisubteno"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Mankas necesa ĉifradetendaĵo"
 
@@ -3474,6 +3462,9 @@ msgstr "Pasvorto necesas"
 msgid "Path length constraint exceeded"
 msgstr ""
 
+msgid "Pause"
+msgstr ""
+
 #, fuzzy
 msgid "Pending"
 msgstr "Montri ĉiujn nelegitajn _eventojn"
@@ -3520,6 +3511,9 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr "Pipewire"
+
+msgid "Play"
+msgstr ""
 
 #, fuzzy
 msgid "Play Sound"
@@ -4086,9 +4080,6 @@ msgstr ""
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Postulas: gnome-keyring aŭ kwallet"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Pasvorto necesas"
@@ -4575,6 +4566,10 @@ msgid "Show Content"
 msgstr "Montri _senkonektajn kontaktojn"
 
 #, fuzzy
+msgid "Show Controls"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
 msgid "Show Details"
 msgstr "Detalaĵoj"
 
@@ -4793,9 +4788,6 @@ msgid ""
 msgstr ""
 
 msgid "Start/Stop recording"
-msgstr ""
-
-msgid "Start/stop playback"
 msgstr ""
 
 #, fuzzy
@@ -6849,6 +6841,9 @@ msgstr ""
 #~ msgid "Audio Output Device"
 #~ msgstr "Defaŭlta statmesaĝo"
 
+#~ msgid "Audio Preview"
+#~ msgstr "Sonantaŭvido"
+
 #, fuzzy
 #~ msgid "Audio preview is not available"
 #~ msgstr "Konekto mankas"
@@ -7126,9 +7121,15 @@ msgstr ""
 #~ msgid "Enables Gajim to play sounds for various notifications"
 #~ msgstr "Ebligas Gajim ludi sonojn por diversaj sciigoj"
 
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Ebligas Gajim provizi sono-antaŭrigardojn"
+
 #, fuzzy
 #~ msgid "Encrypted Certificate"
 #~ msgstr "Malkorekta salutnomo"
+
+#~ msgid "Error in audio data stream."
+#~ msgstr "Eraro en la sondatumfluo."
 
 #~ msgid "Error!"
 #~ msgstr "Eraro !"
@@ -7338,6 +7339,9 @@ msgstr ""
 #~ "Messages will only be available for reading them later if storing chat "
 #~ "history is enabled and if the contact is in your contact list."
 #~ msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
+
+#~ msgid "Missing dependencies for audio support"
+#~ msgstr "Mankas dependecoj por aŭdisubteno"
 
 #, fuzzy
 #~ msgid "Moderate message?"
