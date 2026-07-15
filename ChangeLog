@@ -1,3 +1,30 @@
+Gajim 2.5.0 (15 Jul 2026)
+
+  Improvements
+
+  * Preview: Reduce minimal height
+  * AudioPreview: Make time label numeric
+  * AudioPreview: Show stateful tooltips
+  * AudioPreview: Compactify UI
+  * AudioVisualizer: Overhaul and prettify
+  * AudioRecorder: Make waveform more realistic
+  * AudioRecorder: Silence pop sound
+  * Unescape JID in various parts of the UI
+
+  Change
+
+  * Raise nbxmpp version
+  * AudioVisualizer: Use horizontal scroll
+  * Make Gstreamer mandatory
+
+  Bug Fixes
+
+  * AudioRecorder: Handle Stream Error
+  * AudioRecorder: Start recording early on hold down
+  * Sound: Use AudioPlayer for sounds
+  * TrayIcon: Close FD, when updating the icon
+  * ActivityFeed: Show all reactions in color
+
 Gajim 2.4.7.1 (30 Jun 2026)
 
   Performance
