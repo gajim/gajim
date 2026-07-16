@@ -19,6 +19,8 @@ from gajim.gtk.util.styling import get_source_view_style_scheme
 
 log = logging.getLogger("gajim.gtk.conversation.code_widget")
 
+LANG_MAP = {"python": "python3"}
+
 
 class CodeWidget(Gtk.Box, SignalManager):
     def __init__(self, account: str) -> None:
@@ -83,7 +85,7 @@ class CodeWidget(Gtk.Box, SignalManager):
             lang = code_start[3:]
 
         code = text.partition("\n")[2][:-4]
-        return code, lang
+        return code, LANG_MAP.get(lang, lang)
 
 
 class CodeTextview(GtkSource.View):
