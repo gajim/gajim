@@ -75,7 +75,7 @@ function install_brew_dependencies() {
 	fi
 	brew install gettext librsvg git
 	brew unlink python && brew link python@${python_version}
-	brew install gtk4 libadwaita pygobject3 adwaita-icon-theme libsoup@3 gst-python gtksourceview5 gstreamer
+	brew install gtk4 libadwaita pygobject3 adwaita-icon-theme libsoup@3 gst-python gtksourceview5 gstreamer libspelling
 	brew unlink gettext && brew link gettext
 	brew unlink libsoup && brew link libsoup@3
 	# Reinstall glib via Brew to avoid missing libgobject (see https://github.com/libvips/ruby-vips/issues/284#issuecomment-2040414765)
