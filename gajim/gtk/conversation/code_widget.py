@@ -19,7 +19,7 @@ from gajim.gtk.util.styling import get_source_view_style_scheme
 
 log = logging.getLogger("gajim.gtk.conversation.code_widget")
 
-LANG_MAP = {"python": "python3"}
+LANG_MAP: dict[str | None, str | None] = {"python": "python3"}
 
 
 class CodeWidget(Gtk.Box, SignalManager):
