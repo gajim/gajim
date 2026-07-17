@@ -47,7 +47,8 @@ Gajim will export all messages from the selected account and chats to a director
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="yes">Chat</property>
+            <property name="valign">start</property>
+            <property name="label" translatable="yes">Chats</property>
             <style>
               <class name="dimmed"/>
             </style>

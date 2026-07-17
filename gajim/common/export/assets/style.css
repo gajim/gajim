@@ -1,0 +1,799 @@
+/* ── Variables ─────────────────────────────────────────────────────────── */
+:root {
+    --bg:           #fafafa;
+    --bg-alt:       #f0f0f0;
+    --surface:      #ffffff;
+    --text:         #1a1a1a;
+    --text-dim:     #5c5c5c;
+    --accent:       #3584e4;
+    --border:       #dedede;
+    --code-border:  #d0d0d0;
+    --ref-bg:       rgba(0, 0, 0, 0.04);
+    --ref-hover-bg: rgba(0, 0, 0, 0.08);
+    --highlight-bg: rgba(53, 132, 228, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg:           #242424;
+        --bg-alt:       #2d2d2d;
+        --surface:      #1e1e1e;
+        --text:         #e0e0e0;
+        --text-dim:     #909090;
+        --accent:       #78aeed;
+        --border:       #3d3d3d;
+        --code-border:  #404040;
+        --ref-bg:       rgba(255, 255, 255, 0.06);
+        --ref-hover-bg: rgba(255, 255, 255, 0.1);
+        --highlight-bg: rgba(120, 174, 237, 0.2);
+    }
+}
+
+/* ── Reset & base ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    padding-right: 52px; /* reserve space for timeline scrubber */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Cantarell,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.chat-container {
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+/* ── Message list ────────────────────────────────────────────────────────── */
+.message-list {
+    padding: 12px 0 40px;
+}
+
+/* ── Date separator ─────────────────────────────────────────────────────── */
+.date-separator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px 8px;
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.date-separator::before,
+.date-separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ── Message row ─────────────────────────────────────────────────────────── */
+.message-row {
+    display: flex;
+    gap: 12px;
+    padding: 4px 24px;
+    scroll-margin-top: 60px;
+    /* No content-visibility: it causes visible layout shifts during inertial
+       scrolling when the browser measures previously-skipped rows and their
+       size differs from the intrinsic estimate (esp. reply-to and media rows).
+       Lazy chunk loading keeps DOM size bounded, so eager render is affordable. */
+}
+.message-row:hover { background: var(--ref-bg); }
+.message-row + .message-row { margin-top: 2px; }
+
+@keyframes highlight-pulse {
+    0%   { background: var(--ref-bg); }
+    25%  { background: var(--highlight-bg); }
+    100% { background: transparent; }
+}
+.message-row:target { animation: highlight-pulse 1.8s ease forwards; }
+
+/* ── Avatar ─────────────────────────────────────────────────────────────── */
+.avatar-box { flex-shrink: 0; padding-top: 4px; }
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+}
+
+/* ── Message content ─────────────────────────────────────────────────────── */
+.message-content { flex: 1; min-width: 0; }
+
+/* ── Meta box (nickname + timestamp) ─────────────────────────────────────── */
+.meta-box {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+.nickname { font-weight: 600; font-size: 14px; }
+.outgoing-message .nickname { color: var(--accent); }
+.timestamp { font-size: 11px; color: var(--text-dim); }
+
+/* ── Edit history (pen icon + version dropdown) ──────────────────────────── */
+.edit-history { position: relative; display: inline-block; }
+.edit-indicator {
+    display: inline;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-dim);
+    list-style: none;
+    user-select: none;
+    padding: 0 2px;
+}
+.edit-indicator::-webkit-details-marker { display: none; }
+.edit-indicator::marker { display: none; content: ''; }
+.edit-history:hover > .edit-indicator,
+.edit-history[open] > .edit-indicator { color: var(--accent); }
+.edit-versions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 20;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    min-width: 420px;
+    max-width: min(720px, calc(100vw - 80px));
+    max-height: 600px;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    white-space: normal;
+    font-weight: normal;
+}
+.edit-version {
+    padding: 6px 0;
+    border-top: 1px solid var(--border);
+}
+.edit-version:first-child { border-top: none; }
+.edit-version .edit-time {
+    display: block;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 2px;
+}
+.edit-version .edit-text {
+    color: var(--text);
+    font-size: 13px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* ── Bottom box ──────────────────────────────────────────────────────────── */
+.bottom-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ── Referenced message (reply) ───────────────────────────────────────────── */
+.message-ref-link {
+    display: block;
+    max-width: 600px;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+.message-ref-link:hover .referenced-message {
+    background: var(--ref-hover-bg);
+}
+.referenced-message {
+    display: flex;
+    background: var(--ref-bg);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.quote-bar {
+    width: 4px;
+    flex-shrink: 0;
+    background: var(--accent);
+}
+.ref-content { padding: 6px 10px; min-width: 0; }
+.ref-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+.ref-avatar { width: 18px; height: 18px; border-radius: 50%; }
+.avatar.avatar-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    user-select: none;
+}
+.ref-avatar.ref-avatar-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 8px;
+    user-select: none;
+}
+.ref-name {
+    font-weight: 600;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+.ref-timestamp { font-size: 11px; color: var(--text-dim); }
+.ref-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+
+/* ── Reactions ───────────────────────────────────────────────────────────── */
+.reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+}
+.reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 8px;
+    background: var(--ref-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: default;
+}
+.reaction-count { color: var(--text-dim); font-weight: 500; }
+
+/* ── Message body ────────────────────────────────────────────────────────── */
+.message-body { color: var(--text); }
+.message-text {
+    margin: 0;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.message-text + .message-text { margin-top: 2px; }
+
+/* ── Inline formatting (XEP-0393) ────────────────────────────────────────── */
+.fmt-marker {
+    color: var(--text-dim);
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+}
+code {
+    font-family: "Cascadia Code", "JetBrains Mono", "Fira Code",
+                 Consolas, "Courier New", monospace;
+    font-size: 0.88em;
+    background: var(--bg-alt);
+    border: 1px solid var(--code-border);
+    border-radius: 3px;
+    padding: 1px 4px;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────────────────── */
+pre {
+    position: relative;
+    margin: 6px 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+/* ── Code copy button ────────────────────────────────────────────────────── */
+.code-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+pre:hover .code-copy-btn { opacity: 1; }
+.code-copy-btn:hover { color: var(--text); background: var(--border); }
+.code-copy-btn.copied { opacity: 1; color: var(--accent); }
+.code-copy-btn.copied::after {
+    content: "Copied!";
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: copied-hint 1.4s ease forwards;
+    z-index: 100;
+}
+pre code {
+    display: block;
+    padding: 12px 16px 12px 56px;
+    background: none;
+    border: none;
+    border-radius: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre;
+    counter-reset: linenum;
+}
+pre code .line {
+    display: block;
+    counter-increment: linenum;
+    position: relative;
+}
+pre code .line::before {
+    content: counter(linenum);
+    position: absolute;
+    left: -44px;
+    width: 32px;
+    padding-right: 8px;
+    color: var(--text-dim);
+    text-align: right;
+    user-select: none;
+    -webkit-user-select: none;
+    font-variant-numeric: tabular-nums;
+    border-right: 1px solid var(--code-border);
+}
+/* Zero-width space keeps empty lines from collapsing (still not in textContent). */
+pre code .line:empty::after { content: "\200B"; }
+
+/* ── Block quotes (XEP-0393 "> " lines) ───────────────────────────────────── */
+blockquote {
+    margin: 2px 0;
+    padding: 0 0 0 10px;
+    border-left: 4px solid var(--accent);
+    color: var(--text-dim);
+}
+blockquote blockquote { margin-left: 0; }
+blockquote p { margin: 0; }
+
+/* ── Links ───────────────────────────────────────────────────────────────── */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Media previews ──────────────────────────────────────────────────────── */
+.media-preview {
+    display: block;
+    max-width: min(400px, 100%);
+    max-height: 400px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 6px;
+    object-fit: contain;
+}
+video.media-preview,
+audio.media-preview {
+    max-width: min(500px, 100%);
+    max-height: none;
+}
+
+/* ── Video wrapper + expand button ──────────────────────────────────────── */
+.media-wrapper { position: relative; display: inline-block; margin-top: 6px; }
+.media-wrapper .media-preview { margin-top: 0; }
+.media-expand {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.55);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    padding: 0;
+}
+.media-expand:hover { background: rgba(0, 0, 0, 0.75); }
+.media-wrapper:hover .media-expand { opacity: 1; }
+
+/* ── Lightbox ────────────────────────────────────────────────────────────── */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lightbox[hidden] { display: none; }
+body:has(#lightbox:not([hidden])) { overflow: hidden; }
+.lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    cursor: zoom-out;
+}
+.lightbox-content {
+    position: relative;
+    z-index: 1;
+    max-width: 92vw;
+    max-height: 92vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lightbox-img,
+.lightbox-video {
+    max-width: 92vw;
+    max-height: 92vh;
+    border-radius: 6px;
+    box-shadow: 0 12px 60px rgba(0, 0, 0, 0.7);
+}
+.lightbox-img { object-fit: contain; }
+
+/* ── Link previews (OpenGraph) ──────────────────────────────────────────── */
+.link-preview {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin-top: 6px;
+    padding: 8px 10px;
+    background: var(--ref-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+}
+.link-preview:hover {
+    background: var(--ref-hover-bg);
+    text-decoration: none;
+}
+.link-preview-thumb {
+    width: 120px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: var(--bg-alt);
+}
+.link-preview-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.link-preview-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+.link-preview-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
+}
+.link-preview-host {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: auto;
+}
+
+/* ── File attachment / download link ────────────────────────────────────── */
+.file-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 6px 12px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+}
+.media-download {
+    color: var(--accent);
+    cursor: pointer;
+    font-family: inherit;
+}
+.media-download:disabled { opacity: 0.6; cursor: default; }
+
+/* ── Lazy media placeholders ─────────────────────────────────────────────── */
+.lazy-media {
+    display: block;
+    background: var(--bg-alt);
+    border-radius: 8px;
+    margin-top: 6px;
+    width: 100%;
+    min-height: 50px;
+    overflow: hidden;
+}
+.lazy-media[data-type="img"] { cursor: zoom-in; }
+.lazy-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+}
+.lazy-media > .media-wrapper {
+    display: block;
+    margin-top: 0;
+    width: 100%;
+}
+.lazy-media > .media-wrapper > video.media-preview {
+    max-width: 100%;
+    width: 100%;
+    margin-top: 0;
+}
+/* No-JS fallback: <noscript> children fill the placeholder. */
+.lazy-media > noscript { display: contents; }
+.lazy-media > noscript > video.media-preview {
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+/* ── Timeline scrubber ───────────────────────────────────────────────────── */
+.tl-scrubber {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 52px;
+    z-index: 50;
+    pointer-events: none;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+.tl-inner {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    pointer-events: all;
+    cursor: pointer;
+}
+.tl-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: var(--border);
+    border-radius: 1px;
+    transition: width 0.15s, background 0.15s;
+}
+.tl-scrubber:hover .tl-bar {
+    width: 3px;
+    background: var(--text-dim);
+}
+.tl-handle {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    top: 0;
+    cursor: grab;
+    transition: transform 0.1s;
+    z-index: 1;
+}
+.tl-handle:hover, .tl-handle:active { transform: translate(-50%, -50%) scale(1.3); }
+.tl-handle:active { cursor: grabbing; }
+.tl-tooltip {
+    position: absolute;
+    /* positioned in tl-inner, to the left of the center bar */
+    right: calc(50% + 6px);
+    top: 0;
+    transform: translateY(-50%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    z-index: 3;
+}
+.tl-tick {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    text-decoration: none;
+    color: inherit;
+}
+.tl-dot {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.12s, transform 0.12s;
+}
+.tl-tick:hover .tl-dot {
+    background: var(--accent);
+    transform: scale(1.5);
+}
+.tl-tick.tl-year .tl-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--text-dim);
+}
+.tl-tick.tl-year:hover .tl-dot { background: var(--accent); }
+.tl-label {
+    position: absolute;
+    right: calc(100% + 8px);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ── Media link button (copy-URL icon next to timestamp) ────────────────── */
+.media-link-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    color: var(--text-dim);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+.message-row:hover .media-link-btn,
+.media-link-btn.copied { opacity: 1; }
+.media-link-btn:hover,
+.media-link-btn.copied { color: var(--accent); }
+@keyframes copied-hint {
+    0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    70%  { opacity: 1; transform: translateX(-50%) translateY(-2px); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+}
+.media-link-btn.copied::after {
+    content: "Copied!";
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: copied-hint 1.4s ease forwards;
+    z-index: 100;
+}
+
+/* ── Search highlights ───────────────────────────────────────────────────── */
+.search-match {
+    background: rgba(245, 166, 35, 0.18) !important;
+    box-shadow: inset 3px 0 0 #f5a623;
+}
+.search-match-active {
+    background: rgba(245, 166, 35, 0.38) !important;
+    box-shadow: inset 3px 0 0 #f5a623;
+}
+mark.search-hit {
+    background: rgba(245, 166, 35, 0.55);
+    color: inherit;
+    padding: 0 1px;
+    border-radius: 2px;
+}
+.search-match-active mark.search-hit {
+    background: #f5a623;
+    color: #000;
+}
+.tl-search-mark {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 3px;
+    background: #f5a623;
+    border-radius: 1px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* ── Scroll nav buttons ──────────────────────────────────────────────────── */
+.scroll-nav {
+    position: fixed;
+    right: 66px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 45;
+}
+.scroll-nav button {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    opacity: 0.85;
+    transition: opacity 0.15s, background 0.15s;
+}
+.scroll-nav button:hover {
+    opacity: 1;
+    background: var(--bg-alt);
+}
+.scroll-anchor {
+    height: 1px;
+    pointer-events: none;
+}

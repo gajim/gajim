@@ -85,6 +85,7 @@ include = ["gajim*"]
 [tool.setuptools.package-data]
 gajim = ["py.typed"]
 "gajim.data" = ["**/*"]
+"gajim.common.export" = ["assets/*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "gajim.__version__"}

@@ -1364,9 +1364,21 @@ class MessageArchiveStorage(AlchemyStorage):
             .options(
                 joinedload(Message.occupant),
                 joinedload(Message.call),
+                joinedload(Message.moderation),
+                joinedload(Message.retraction),
+                selectinload(Message.oob),
+                selectinload(Message.og),
+                selectinload(Message.reply),
+                selectinload(Message.filetransfers),
+                selectinload(Message.reactions),
                 selectinload(Message.corrections).options(
                     joinedload(Message.retraction),
                     joinedload(Message.moderation),
+                    selectinload(Message.oob),
+                    selectinload(Message.og),
+                    selectinload(Message.reply),
+                    selectinload(Message.filetransfers),
+                    selectinload(Message.reactions),
                 ),
             )
             .execution_options(yield_per=25)
