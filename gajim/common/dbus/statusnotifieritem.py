@@ -89,18 +89,40 @@ class StatusNotifierItemService(DBusService):
         self._cancellable: Gio.Cancellable | None = None
         self._bus = session_bus
         self._menu = DBusMenuService("/StatusNotifierItem/Menu", session_bus, menu)
+        self._watcher_watch_id: int | None = None
 
     def register(self):
         if self._registered:
             return
 
         self._registered = True
-        self._cancellable = Gio.Cancellable()
         self._menu.register()
         super().register()
 
+        # Watch the watcher's bus name instead of registering only once.
+        # This makes sure we re-register whenever the watcher (e.g. a
+        # status bar's embedded tray host) restarts and its previously
+        # registered items are forgotten.
+        self._watcher_watch_id = Gio.bus_watch_name_on_connection(
+            self._bus,
+            "org.kde.StatusNotifierWatcher",
+            Gio.BusNameWatcherFlags.NONE,
+            self._on_watcher_appeared,
+            None,
+        )
+
+    def _on_watcher_appeared(
+        self,
+        connection: Gio.DBusConnection,
+        name: str,
+        name_owner: str,
+    ) -> None:
+        cancellable = Gio.Cancellable()
+        self._cancellable = cancellable
+
         def _on_finish(src: Gio.DBusProxy, res: Gio.AsyncResult) -> None:
-            self._cancellable = None
+            if self._cancellable is cancellable:
+                self._cancellable = None
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
                 proxy.RegisterStatusNotifierItem(  # pyright: ignore
@@ -111,19 +133,24 @@ class StatusNotifierItemService(DBusService):
                 return
 
         Gio.DBusProxy.new(
-            connection=self._bus,
+            connection=connection,
             flags=Gio.DBusProxyFlags.DO_NOT_LOAD_PROPERTIES,
             info=None,
             name="org.kde.StatusNotifierWatcher",
             object_path="/StatusNotifierWatcher",
             interface_name="org.kde.StatusNotifierWatcher",
-            cancellable=self._cancellable,
+            cancellable=cancellable,
             callback=_on_finish,
         )
 
     def unregister(self):
         if self._cancellable is not None:
             self._cancellable.cancel()
+            self._cancellable = None
+
+        if self._watcher_watch_id is not None:
+            Gio.bus_unwatch_name(self._watcher_watch_id)
+            self._watcher_watch_id = None
 
         super().unregister()
         self._menu.unregister()
