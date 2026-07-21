@@ -278,7 +278,6 @@ class SqliteStorage:
         self._con.execute("PRAGMA secure_delete=1")
 
     def _run_analyze(self) -> None:
-        self._con.execute("PRAGMA analysis_limit=400")
         self._con.execute("PRAGMA optimize")
 
     @property
@@ -428,9 +427,7 @@ class AlchemyStorage:
         self._dbapi_execute_multiple(stmts, dbapi_connection=dbapi_connection)
 
     def _run_analyze(self) -> None:
-        self._dbapi_execute_multiple(
-            ["PRAGMA analysis_limit=400", "PRAGMA optimize", "VACUUM"]
-        )
+        self._dbapi_execute_multiple(["PRAGMA optimize", "VACUUM"])
 
     def get_user_version(self) -> int:
         with self._create_session() as s:
