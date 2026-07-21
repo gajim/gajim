@@ -11,6 +11,7 @@ from typing import overload
 import logging
 import threading
 from datetime import datetime
+from datetime import UTC
 from pathlib import Path
 
 from gi.repository import GLib
@@ -147,7 +148,7 @@ class HistoryExport(Assistant):
 
     def _on_export(self) -> None:
         start_page = self.get_page("start")
-        account, jids, directory = start_page.get_export_settings()
+        account, jids, directory, start_dt, end_dt = start_page.get_export_settings()
 
         current_time = datetime.now()
         time_str = current_time.strftime("%Y-%m-%d-%H-%M-%S")
@@ -168,7 +169,7 @@ class HistoryExport(Assistant):
 
         thread = threading.Thread(
             target=self._export_worker,
-            args=(account, jid_types, export_dir, self._cancel_event),
+            args=(account, jid_types, export_dir, self._cancel_event, start_dt, end_dt),
             daemon=True,
         )
         thread.start()
@@ -179,6 +180,8 @@ class HistoryExport(Assistant):
         jid_types: list[tuple[JID, MessageType]],
         export_dir: Path,
         cancel_event: threading.Event,
+        start_dt: datetime | None = None,
+        end_dt: datetime | None = None,
     ) -> None:
         client = app.get_client(account)
         exported: list[tuple[str, str, str, str]] = []
@@ -204,7 +207,9 @@ class HistoryExport(Assistant):
                 break
 
             messages = list(
-                app.storage.archive.get_messages_for_export(account, cur_jid)
+                app.storage.archive.get_messages_for_export(
+                    account, cur_jid, start=start_dt, end=end_dt
+                )
             )
 
             if cancel_event.is_set():
@@ -408,6 +413,8 @@ class ExportSettings(AssistantPage):
         self._select_all_check: Gtk.CheckButton | None = None
         self._updating_select_all = False
         self._chat_list_populated = False
+        self._start_dt: datetime | None = None
+        self._end_dt: datetime | None = None
 
         self._ui = get_builder("history_export.ui")
         self.append(self._ui.select_account_box)
@@ -454,6 +461,19 @@ class ExportSettings(AssistantPage):
         file_chooser_button.set_size_request(250, -1)
         self._connect(file_chooser_button, "path-picked", self._on_path_picked)
         self._ui.settings_grid.attach(file_chooser_button, 1, 2, 1, 1)
+
+        self._connect(
+            self._ui.export_from_calendar, "day-selected", self._on_from_date_selected
+        )
+        self._connect(
+            self._ui.export_to_calendar, "day-selected", self._on_to_date_selected
+        )
+        self._connect(
+            self._ui.export_from_reset_button, "clicked", self._on_from_reset_clicked
+        )
+        self._connect(
+            self._ui.export_to_reset_button, "clicked", self._on_to_reset_clicked
+        )
 
         self._set_complete()
 
@@ -563,10 +583,42 @@ class ExportSettings(AssistantPage):
             return
         self._export_directory = paths[0]
 
-    def get_export_settings(self) -> tuple[str, list[JID], Path]:
+    def _on_from_date_selected(self, calendar: Gtk.Calendar) -> None:
+        g_dt = calendar.get_date()
+        y, m, d = g_dt.get_ymd()
+        self._start_dt = datetime(y, m, d).astimezone(UTC)
+        date_format = app.settings.get("date_format")
+        self._ui.export_from_label.set_text(self._start_dt.strftime(date_format))
+
+    def _on_to_date_selected(self, calendar: Gtk.Calendar) -> None:
+        g_dt = calendar.get_date()
+        y, m, d = g_dt.get_ymd()
+        self._end_dt = datetime(y, m, d, 23, 59, 59, 999999).astimezone(UTC)
+        date_format = app.settings.get("date_format")
+        self._ui.export_to_label.set_text(self._end_dt.strftime(date_format))
+
+    def _on_from_reset_clicked(self, _button: Gtk.Button) -> None:
+        self._start_dt = None
+        self._ui.export_from_label.set_text("-")
+        self._ui.export_from_popover.popdown()
+
+    def _on_to_reset_clicked(self, _button: Gtk.Button) -> None:
+        self._end_dt = None
+        self._ui.export_to_label.set_text("-")
+        self._ui.export_to_popover.popdown()
+
+    def get_export_settings(
+        self,
+    ) -> tuple[str, list[JID], Path, datetime | None, datetime | None]:
         assert self._account is not None
         assert self._export_directory is not None
         selected = [
             JID.from_string(k) for k, cb in self._chat_checks.items() if cb.get_active()
         ]
-        return self._account, selected, self._export_directory
+        return (
+            self._account,
+            selected,
+            self._export_directory,
+            self._start_dt,
+            self._end_dt,
+        )

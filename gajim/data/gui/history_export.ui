@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
+  <object class="GtkPopover" id="export_from_popover">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkCalendar" id="export_from_calendar">
+            <property name="focusable">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="export_from_reset_button">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="halign">center</property>
+          </object>
+        </child>
+        <style>
+          <class name="p-6"/>
+        </style>
+      </object>
+    </property>
+  </object>
+  <object class="GtkPopover" id="export_to_popover">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkCalendar" id="export_to_calendar">
+            <property name="focusable">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="export_to_reset_button">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="halign">center</property>
+          </object>
+        </child>
+        <style>
+          <class name="p-6"/>
+        </style>
+      </object>
+    </property>
+  </object>
   <object class="GtkBox" id="select_account_box">
     <property name="orientation">vertical</property>
     <property name="spacing">18</property>
@@ -68,6 +116,94 @@ Gajim will export all messages from the selected account and chats to a director
             <layout>
               <property name="column">0</property>
               <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">From</property>
+            <style>
+              <class name="dimmed"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">To</property>
+            <style>
+              <class name="dimmed"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="export_from_label">
+            <property name="halign">start</property>
+            <property name="hexpand">1</property>
+            <property name="label">-</property>
+            <property name="single-line-mode">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="export_from_button">
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="yes">Set date…</property>
+            <property name="halign">end</property>
+            <property name="popover">export_from_popover</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-calendar-symbolic</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="export_to_label">
+            <property name="halign">start</property>
+            <property name="hexpand">1</property>
+            <property name="label">-</property>
+            <property name="single-line-mode">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="export_to_button">
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="yes">Set date…</property>
+            <property name="halign">end</property>
+            <property name="popover">export_to_popover</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-calendar-symbolic</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">2</property>
+              <property name="row">4</property>
             </layout>
           </object>
         </child>

@@ -1,3 +1,4 @@
+
 from typing import Any
 from typing import Literal
 from typing import overload
@@ -8,17 +9,22 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
+
 class GajimBuilder:
+
     def __init__(
         self,
         filename: str | None = None,
         instance: Any = None,
         widgets: list[str] | None = None,
         domain: str | None = None,
-        gettext_: Any | None = None,
+        gettext_: Any | None = None
     ) -> None: ...
 
-class Builder(Gtk.Builder): ...
+
+class Builder(Gtk.Builder):
+    ...
+
 
 class ActivityChangeTimezoneBuilder(Builder):
     change_timezone_page: Gtk.Box
@@ -27,8 +33,10 @@ class ActivityChangeTimezoneBuilder(Builder):
     disable_button: Gtk.Button
     update_button: Gtk.Button
 
+
 class ActivityDefaultBuilder(Builder):
     default_page: Gtk.Box
+
 
 class ActivityGajimUpdateBuilder(Builder):
     gajim_update_page: Gtk.Box
@@ -50,6 +58,7 @@ class ActivityGajimUpdateBuilder(Builder):
     update_plugins_success_text_label: Gtk.Label
     update_plugins_success_button: Gtk.Button
 
+
 class ActivityMucInvitationBuilder(Builder):
     muc_invitation_page: Gtk.Box
     muc_invitation_box: Gtk.Box
@@ -58,6 +67,7 @@ class ActivityMucInvitationBuilder(Builder):
     invitation_title_label: Gtk.Label
     invitation_text_label: Gtk.Label
 
+
 class ActivityOpenpgpEventBuilder(Builder):
     text_box: Gtk.Box
     title: Gtk.Label
@@ -65,6 +75,7 @@ class ActivityOpenpgpEventBuilder(Builder):
     disable_button: Gtk.Button
     backup_button: Gtk.Button
     setup_button: Gtk.Button
+
 
 class ActivitySubscriptionBuilder(Builder):
     subscription_page: Gtk.Box
@@ -78,6 +89,7 @@ class ActivitySubscriptionBuilder(Builder):
     unsubscribed_box: Gtk.Box
     unsubscribed_remove_button: Gtk.Button
 
+
 class AdvancedConfigurationBuilder(Builder):
     box: Gtk.Box
     search_entry: Gtk.SearchEntry
@@ -86,11 +98,13 @@ class AdvancedConfigurationBuilder(Builder):
     description: Gtk.Label
     reset_button: Gtk.Button
 
+
 class AssistantBuilder(Builder):
     main_box: Gtk.Box
     content_area: Gtk.Box
     stack: Gtk.Stack
     action_area: Gtk.Box
+
 
 class CallWindowBuilder(Builder):
     adjustment1: Gtk.Adjustment
@@ -130,10 +144,12 @@ class CallWindowBuilder(Builder):
     volumebutton_minus_button1: Gtk.Button
     dtmf_button: Gtk.MenuButton
 
+
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
     conv_view_paned: Gtk.Paned
     conv_view_overlay: Gtk.Overlay
+
 
 class ChatListRowBuilder(Builder):
     mainbox: Gtk.Box
@@ -152,6 +168,7 @@ class ChatListRowBuilder(Builder):
     unread_label: Gtk.Label
     revealer: Gtk.Revealer
     close_button: Gtk.Button
+
 
 class ContactInfoBuilder(Builder):
     groups_model: Gtk.ListStore
@@ -188,6 +205,7 @@ class ContactInfoBuilder(Builder):
     devices_stack: Gtk.Stack
     devices_page: Adw.PreferencesPage
 
+
 class CryptoTrustManagerBuilder(Builder):
     qr_code_popover: Gtk.Popover
     comparing_instructions: Gtk.Label
@@ -205,6 +223,7 @@ class CryptoTrustManagerBuilder(Builder):
     list: Gtk.ListBox
     undecided_placeholder: Gtk.Label
 
+
 class DbMigrationBuilder(Builder):
     box: Gtk.Box
     stack: Gtk.Stack
@@ -215,6 +234,7 @@ class DbMigrationBuilder(Builder):
     error_copy_button: Gtk.Button
     error_close_button: Gtk.Button
     success_close_button: Gtk.Button
+
 
 class DebugConsoleBuilder(Builder):
     popover: Gtk.Popover
@@ -243,6 +263,7 @@ class DebugConsoleBuilder(Builder):
     header_box: Gtk.Box
     search_toggle: Gtk.ToggleButton
 
+
 class ExceptionDialogBuilder(Builder):
     exception_box: Gtk.Box
     infobar: Gtk.Revealer
@@ -253,6 +274,7 @@ class ExceptionDialogBuilder(Builder):
     report_spinner: Adw.Spinner
     report_button: Gtk.Button
 
+
 class FileTransferBuilder(Builder):
     transfer_box: Gtk.Box
     transfer_description: Gtk.Label
@@ -261,6 +283,7 @@ class FileTransferBuilder(Builder):
     progress_bar: Gtk.ProgressBar
     transfer_progress: Gtk.Label
     cancel_button: Gtk.Button
+
 
 class FileTransferJingleBuilder(Builder):
     transfer_box: Gtk.Box
@@ -281,6 +304,7 @@ class FileTransferJingleBuilder(Builder):
     progress_bar: Gtk.ProgressBar
     cancel_transfer: Gtk.Button
 
+
 class FileTransferSelectorBuilder(Builder):
     file_box: Gtk.Box
     preview_image_box: Gtk.Box
@@ -294,6 +318,7 @@ class FileTransferSelectorBuilder(Builder):
     listbox: Gtk.ListBox
     resource_box: Gtk.Box
     resource_instructions: Gtk.Label
+
 
 class GroupchatAffiliationBuilder(Builder):
     affiliation_store: Gtk.ListStore
@@ -311,6 +336,7 @@ class GroupchatAffiliationBuilder(Builder):
     add_button: Gtk.Button
     remove_button: Gtk.Button
 
+
 class GroupchatBlocksBuilder(Builder):
     main: Gtk.Box
     top_box: Gtk.Box
@@ -322,6 +348,7 @@ class GroupchatBlocksBuilder(Builder):
     nickname_col: Gtk.ColumnViewColumn
     id_col: Gtk.ColumnViewColumn
 
+
 class GroupchatConfigBuilder(Builder):
     stack: Gtk.Stack
     loading_box: Gtk.Box
@@ -329,6 +356,7 @@ class GroupchatConfigBuilder(Builder):
     error_box: Gtk.Box
     error_image: Gtk.Image
     error_label: Gtk.Label
+
 
 class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
@@ -341,6 +369,7 @@ class GroupchatDetailsBuilder(Builder):
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
     configuration_box: Gtk.Box
+
 
 class GroupchatInfoScrolledBuilder(Builder):
     info_clamp: Adw.Clamp
@@ -361,6 +390,7 @@ class GroupchatInfoScrolledBuilder(Builder):
     features_group: Adw.PreferencesGroup
     features_listbox: Gtk.ListBox
 
+
 class GroupchatInviterBuilder(Builder):
     account_store: Gtk.ListStore
     invite_box: Gtk.Box
@@ -369,6 +399,7 @@ class GroupchatInviterBuilder(Builder):
     contacts_listbox: Gtk.ListBox
     contacts_placeholder: Gtk.Box
     invitees_scrolled: Gtk.ScrolledWindow
+
 
 class GroupchatManageBuilder(Builder):
     scrolled: Gtk.ScrolledWindow
@@ -391,6 +422,7 @@ class GroupchatManageBuilder(Builder):
     destroy_cancel_button: Gtk.Button
     destroy_button: Gtk.Button
 
+
 class GroupchatOutcastBuilder(Builder):
     info_popover: Gtk.Popover
     outcast_store: Gtk.ListStore
@@ -406,11 +438,13 @@ class GroupchatOutcastBuilder(Builder):
     remove_button: Gtk.Button
     info_button: Gtk.MenuButton
 
+
 class GroupchatRosterBuilder(Builder):
     box: Gtk.Box
     participants_count_label: Gtk.Label
     search_entry: Gtk.SearchEntry
     scrolled: Gtk.ScrolledWindow
+
 
 class GroupchatRosterTooltipBuilder(Builder):
     tooltip_grid: Gtk.Grid
@@ -422,6 +456,7 @@ class GroupchatRosterTooltipBuilder(Builder):
     affiliation: Gtk.Label
     hats_box: Gtk.Box
 
+
 class GroupchatStateBuilder(Builder):
     groupchat_state: Gtk.Stack
     join_button: Gtk.Button
@@ -431,9 +466,21 @@ class GroupchatStateBuilder(Builder):
     mam_error_label: Gtk.Label
     close_button: Gtk.Button
 
+
 class HistoryExportBuilder(Builder):
+    export_from_popover: Gtk.Popover
+    export_from_calendar: Gtk.Calendar
+    export_from_reset_button: Gtk.Button
+    export_to_popover: Gtk.Popover
+    export_to_calendar: Gtk.Calendar
+    export_to_reset_button: Gtk.Button
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
+    export_from_label: Gtk.Label
+    export_from_button: Gtk.MenuButton
+    export_to_label: Gtk.Label
+    export_to_button: Gtk.MenuButton
+
 
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
@@ -442,6 +489,7 @@ class ManageSoundsBuilder(Builder):
     sound_buttons_box: Gtk.Box
     clear_sound_button: Gtk.Button
     play_sound_button: Gtk.Button
+
 
 class MessageActionsBoxBuilder(Builder):
     box: Gtk.Box
@@ -471,6 +519,7 @@ class MessageActionsBoxBuilder(Builder):
     visitor_popover: Gtk.Popover
     request_voice_button: Gtk.Button
 
+
 class PasswordDialogBuilder(Builder):
     pass_box: Gtk.Box
     header: Gtk.Label
@@ -480,6 +529,7 @@ class PasswordDialogBuilder(Builder):
     keyring_hint: Gtk.Label
     cancel_button: Gtk.Button
     ok_button: Gtk.Button
+
 
 class PepConfigBuilder(Builder):
     stack: Gtk.Stack
@@ -498,6 +548,7 @@ class PepConfigBuilder(Builder):
     form_box: Gtk.Box
     config_back_button: Gtk.Button
     save_button: Gtk.Button
+
 
 class ProfileBuilder(Builder):
     privacy_popover: Gtk.Popover
@@ -526,12 +577,14 @@ class ProfileBuilder(Builder):
     error_title_label: Gtk.Label
     back_button: Gtk.Button
 
+
 class QuitDialogBuilder(Builder):
     box: Gtk.Box
     remember_checkbutton: Gtk.CheckButton
     hide_button: Gtk.Button
     minimize_button: Gtk.Button
     quit_button: Gtk.Button
+
 
 class RosterItemExchangeBuilder(Builder):
     roster_item_exchange: Gtk.Box
@@ -542,6 +595,7 @@ class RosterItemExchangeBuilder(Builder):
     treeview_selection1: Gtk.TreeSelection
     cancel_button: Gtk.Button
     accept_button: Gtk.Button
+
 
 class SearchViewBuilder(Builder):
     calendar_popover: Gtk.Popover
@@ -583,6 +637,7 @@ class SearchViewBuilder(Builder):
     row_time_label: Gtk.Label
     row_name_label: Gtk.Label
 
+
 class ServiceDiscoveryWindowBuilder(Builder):
     service_discovery: Gtk.Box
     banner_agent_icon: Gtk.Image
@@ -597,6 +652,7 @@ class ServiceDiscoveryWindowBuilder(Builder):
     treeview_selection1: Gtk.TreeSelection
     action_buttonbox: Gtk.Box
 
+
 class SslErrorDialogBuilder(Builder):
     ssl_error_box: Gtk.Box
     intro_text: Gtk.Label
@@ -604,6 +660,7 @@ class SslErrorDialogBuilder(Builder):
     add_certificate_checkbutton: Gtk.CheckButton
     view_cert_button: Gtk.Button
     connect_button: Gtk.Button
+
 
 class StartChatDialogBuilder(Builder):
     stack: Gtk.Stack
@@ -636,6 +693,7 @@ class StartChatDialogBuilder(Builder):
     account_back_button: Gtk.Button
     account_select_button: Gtk.Button
 
+
 class ThemesWindowBuilder(Builder):
     option_popover: Gtk.Popover
     choose_option_listbox: Gtk.ListBox
@@ -650,10 +708,12 @@ class ThemesWindowBuilder(Builder):
     add_theme_button: Gtk.Button
     remove_theme_button: Gtk.Button
 
+
 class VideoPreviewBuilder(Builder):
     video_preview_box: Gtk.Box
     video_source_label: Gtk.Label
     video_preview_placeholder: Gtk.Box
+
 
 class VoiceMessageRecorderBuilder(Builder):
     popover: Gtk.Popover
@@ -669,6 +729,7 @@ class VoiceMessageRecorderBuilder(Builder):
     record_toggle_button_image: Gtk.Image
     send_button: Gtk.Button
 
+
 class WorkspaceDialogBuilder(Builder):
     box: Gtk.Box
     preview: Gtk.Image
@@ -681,270 +742,99 @@ class WorkspaceDialogBuilder(Builder):
     cancel_button: Gtk.Button
     save_button: Gtk.Button
 
+
 @overload
-def get_builder(
-    file_name: Literal["activity_change_timezone.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityChangeTimezoneBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_change_timezone.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivityChangeTimezoneBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["activity_default.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityDefaultBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_default.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivityDefaultBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["activity_gajim_update.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityGajimUpdateBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_gajim_update.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivityGajimUpdateBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["activity_muc_invitation.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityMucInvitationBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_muc_invitation.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivityMucInvitationBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["activity_openpgp_event.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityOpenpgpEventBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_openpgp_event.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivityOpenpgpEventBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["activity_subscription.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivitySubscriptionBuilder: ...  # noqa
+def get_builder(file_name: Literal['activity_subscription.ui'], instance: Any = None, widgets: list[str] = ...) -> ActivitySubscriptionBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["advanced_configuration.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> AdvancedConfigurationBuilder: ...  # noqa
+def get_builder(file_name: Literal['advanced_configuration.ui'], instance: Any = None, widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["assistant.ui"], instance: Any = None, widgets: list[str] = ...
-) -> AssistantBuilder: ...  # noqa
+def get_builder(file_name: Literal['assistant.ui'], instance: Any = None, widgets: list[str] = ...) -> AssistantBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["call_window.ui"], instance: Any = None, widgets: list[str] = ...
-) -> CallWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['call_window.ui'], instance: Any = None, widgets: list[str] = ...) -> CallWindowBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["chat_control.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ChatControlBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_control.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatControlBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["chat_list_row.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ChatListRowBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_list_row.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatListRowBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["contact_info.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ContactInfoBuilder: ...  # noqa
+def get_builder(file_name: Literal['contact_info.ui'], instance: Any = None, widgets: list[str] = ...) -> ContactInfoBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["crypto_trust_manager.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> CryptoTrustManagerBuilder: ...  # noqa
+def get_builder(file_name: Literal['crypto_trust_manager.ui'], instance: Any = None, widgets: list[str] = ...) -> CryptoTrustManagerBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["db_migration.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> DbMigrationBuilder: ...  # noqa
+def get_builder(file_name: Literal['db_migration.ui'], instance: Any = None, widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["debug_console.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> DebugConsoleBuilder: ...  # noqa
+def get_builder(file_name: Literal['debug_console.ui'], instance: Any = None, widgets: list[str] = ...) -> DebugConsoleBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["exception_dialog.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ExceptionDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['exception_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> ExceptionDialogBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["file_transfer.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> FileTransferBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["file_transfer_jingle.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> FileTransferJingleBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer_jingle.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferJingleBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["file_transfer_selector.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> FileTransferSelectorBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer_selector.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferSelectorBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_affiliation.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatAffiliationBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_affiliation.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatAffiliationBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_blocks.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatBlocksBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_blocks.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatBlocksBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_config.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatConfigBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_config.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatConfigBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_details.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatDetailsBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_details.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatDetailsBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_info_scrolled.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatInfoScrolledBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_inviter.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatInviterBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_inviter.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatInviterBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_manage.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatManageBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_manage.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatManageBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_outcast.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatOutcastBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_outcast.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatOutcastBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_roster.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatRosterBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_roster.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatRosterBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_roster_tooltip.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatRosterTooltipBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_roster_tooltip.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatRosterTooltipBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["groupchat_state.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupchatStateBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_state.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatStateBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["history_export.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> HistoryExportBuilder: ...  # noqa
+def get_builder(file_name: Literal['history_export.ui'], instance: Any = None, widgets: list[str] = ...) -> HistoryExportBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["manage_sounds.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ManageSoundsBuilder: ...  # noqa
+def get_builder(file_name: Literal['manage_sounds.ui'], instance: Any = None, widgets: list[str] = ...) -> ManageSoundsBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["message_actions_box.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> MessageActionsBoxBuilder: ...  # noqa
+def get_builder(file_name: Literal['message_actions_box.ui'], instance: Any = None, widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["password_dialog.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> PasswordDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['password_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> PasswordDialogBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
-) -> PepConfigBuilder: ...  # noqa
+def get_builder(file_name: Literal['pep_config.ui'], instance: Any = None, widgets: list[str] = ...) -> PepConfigBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["profile.ui"], instance: Any = None, widgets: list[str] = ...
-) -> ProfileBuilder: ...  # noqa
+def get_builder(file_name: Literal['profile.ui'], instance: Any = None, widgets: list[str] = ...) -> ProfileBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["quit_dialog.ui"], instance: Any = None, widgets: list[str] = ...
-) -> QuitDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['quit_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> QuitDialogBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["roster_item_exchange.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> RosterItemExchangeBuilder: ...  # noqa
+def get_builder(file_name: Literal['roster_item_exchange.ui'], instance: Any = None, widgets: list[str] = ...) -> RosterItemExchangeBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["search_view.ui"], instance: Any = None, widgets: list[str] = ...
-) -> SearchViewBuilder: ...  # noqa
+def get_builder(file_name: Literal['search_view.ui'], instance: Any = None, widgets: list[str] = ...) -> SearchViewBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["service_discovery_window.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ServiceDiscoveryWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['service_discovery_window.ui'], instance: Any = None, widgets: list[str] = ...) -> ServiceDiscoveryWindowBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["ssl_error_dialog.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> SslErrorDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['ssl_error_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> SslErrorDialogBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["start_chat_dialog.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> StartChatDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['start_chat_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> StartChatDialogBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["themes_window.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ThemesWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['themes_window.ui'], instance: Any = None, widgets: list[str] = ...) -> ThemesWindowBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["video_preview.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> VideoPreviewBuilder: ...  # noqa
+def get_builder(file_name: Literal['video_preview.ui'], instance: Any = None, widgets: list[str] = ...) -> VideoPreviewBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["voice_message_recorder.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> VoiceMessageRecorderBuilder: ...  # noqa
+def get_builder(file_name: Literal['voice_message_recorder.ui'], instance: Any = None, widgets: list[str] = ...) -> VoiceMessageRecorderBuilder: ...  # noqa
 @overload
-def get_builder(
-    file_name: Literal["workspace_dialog.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> WorkspaceDialogBuilder: ...  # noqa
-def get_builder(
-    file_name: str, instance: Any = None, widgets: list[str] = ...
-) -> Builder: ...
+def get_builder(file_name: Literal['workspace_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> WorkspaceDialogBuilder: ...  # noqa
+
+
+def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ...

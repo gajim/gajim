@@ -1346,20 +1346,31 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session_yield_from
     @timeit
     def get_messages_for_export(
-        self, session: Session, account: str, jid: JID
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        start: datetime | None = None,
+        end: datetime | None = None,
     ) -> Iterator[Message]:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
+        conditions = [
+            Message.fk_account_pk == fk_account_pk,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.correction_id.is_(None),
+            ~Message.moderation.has(),
+            ~Message.retraction.has(),
+        ]
+        if start is not None:
+            conditions.append(Message.timestamp >= start)
+        if end is not None:
+            conditions.append(Message.timestamp <= end)
+
         stmt = (
             select(Message)
-            .where(
-                Message.fk_account_pk == fk_account_pk,
-                Message.fk_remote_pk == fk_remote_pk,
-                Message.correction_id.is_(None),
-                ~Message.moderation.has(),
-                ~Message.retraction.has(),
-            )
+            .where(*conditions)
             .order_by(Message.timestamp, Message.pk)
             .options(
                 joinedload(Message.occupant),
