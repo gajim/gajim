@@ -277,7 +277,7 @@ class SqliteStorage:
     def _enable_secure_delete(self) -> None:
         self._con.execute("PRAGMA secure_delete=1")
 
-    def _run_analyze(self) -> None:
+    def _run_optimize(self) -> None:
         self._con.execute("PRAGMA optimize")
 
     @property
@@ -359,7 +359,7 @@ class SqliteStorage:
             GLib.source_remove(self._commit_source_id)
 
         self._commit()
-        self._run_analyze()
+        self._run_optimize()
         self._con.close()
         del self._con
 
@@ -426,7 +426,10 @@ class AlchemyStorage:
         stmts += [f"PRAGMA {key}={value}" for key, value in self._pragma.items()]
         self._dbapi_execute_multiple(stmts, dbapi_connection=dbapi_connection)
 
-    def _run_analyze(self) -> None:
+    def run_analyze(self) -> None:
+        self._dbapi_execute_multiple(["PRAGMA analysis_limit=0", "ANALYZE"])
+
+    def _run_optimize(self) -> None:
         self._dbapi_execute_multiple(["PRAGMA optimize", "VACUUM"])
 
     def get_user_version(self) -> int:
@@ -493,7 +496,7 @@ class AlchemyStorage:
         session.refresh(obj, attribute_names=attrs)
 
     def shutdown(self) -> None:
-        self._run_analyze()
+        self._run_optimize()
         self._engine.dispose()
         del self._engine
 

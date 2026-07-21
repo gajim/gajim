@@ -135,6 +135,8 @@ class Migration:
             self._v18()
         if user_version < 19:
             self._v19()
+        if user_version < 20:
+            self._v20()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -408,6 +410,11 @@ class Migration:
         self._archive.set_user_version(19)
         for account in app.settings.get_accounts():
             app.settings.set_account_setting(account, "roster_version", "")
+
+    def _v20(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=20))
+        self._archive.run_analyze()
+        self._archive.set_user_version(20)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

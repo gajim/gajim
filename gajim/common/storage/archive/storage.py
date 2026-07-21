@@ -75,7 +75,7 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 19
+CURRENT_USER_VERSION = 20
 
 _T = TypeVar("_T")
 
