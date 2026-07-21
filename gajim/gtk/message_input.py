@@ -211,6 +211,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.clear()
 
     def switch_contact(self, contact: ChatContactT) -> None:
+        self._completion_popover.popdown()
         self._text_buffer_manager.switch_contact(contact)
         self.clear()
         self._contact = contact
