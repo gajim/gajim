@@ -1373,7 +1373,11 @@ class MUC(BaseModule):
             affiliation = self_contact.affiliation
             admin = affiliation.is_owner or affiliation.is_admin
             if admin:
-                self.set_affiliation(room, {jid: {"affiliation": "member"}})
+                user_affiliation = self._muc_affiliations.get_user_affiliation(
+                    room, jid
+                )
+                if user_affiliation in ("outcast", None):
+                    self.set_affiliation(room, {jid: {"affiliation": "member"}})
                 type_ = InviteType.DIRECT
             else:
                 type_ = InviteType.MEDIATED
@@ -1498,3 +1502,10 @@ class AffiliationManager(Observable):
         if not include_outcast:
             affiliations.pop("outcast", None)
         return affiliations
+
+    def get_user_affiliation(self, muc_jid: JID, jid: JID) -> str | None:
+        affiliations = self._affiliations[muc_jid]
+        for affiliation in ("member", "admin", "owner", "outcast"):
+            if jid in affiliations.get(affiliation, []):
+                return affiliation
+        return None
