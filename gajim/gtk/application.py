@@ -300,7 +300,9 @@ class GajimApplication(Adw.Application, CoreApplication):
             )
 
         self._inhibit_cookie = self.inhibit(
-            app.window, Gtk.ApplicationInhibitFlags.LOGOUT, _("Quitting…")
+            app.window,
+            Gtk.ApplicationInhibitFlags.LOGOUT,
+            _("There are connected accounts"),
         )
 
         GLib.timeout_add(100, self._auto_connect)
