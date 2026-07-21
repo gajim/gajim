@@ -96,6 +96,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         # required to track screensaver state
         self.props.register_session = True
+        self._inhibit_cookie: int | None = None
 
         self.add_main_option(
             "version",
@@ -299,12 +300,6 @@ class GajimApplication(Adw.Application, CoreApplication):
                 body_use_markup=True,
             )
 
-        self._inhibit_cookie = self.inhibit(
-            app.window,
-            Gtk.ApplicationInhibitFlags.LOGOUT,
-            _("There are connected accounts"),
-        )
-
         GLib.timeout_add(100, self._auto_connect)
 
     def _on_window_added(
@@ -319,11 +314,18 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _shutdown_complete(self) -> None:
         CoreApplication._shutdown_complete(self)
-        self.uninhibit(self._inhibit_cookie)
+        if self._inhibit_cookie is not None:
+            self.uninhibit(self._inhibit_cookie)
+            self._inhibit_cookie = None
         self.quit()
 
     def _on_query_end(self, _application: GajimApplication) -> None:
         app.log("app").info("Session end signal received")
+        self._inhibit_cookie = self.inhibit(
+            app.window,
+            Gtk.ApplicationInhibitFlags.LOGOUT,
+            _("Quitting…"),
+        )
         # Use a idle call so Gtk can send QueryEndResponse on Linux
         idle_add_once(self.start_shutdown)
 
