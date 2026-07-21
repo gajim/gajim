@@ -144,7 +144,7 @@ class PublicKeyData:
     fingerprint: str
     trust: Trust
 
-    def pretty_fingerprint(self) -> str:
+    def pretty_fingerprint(self, wrap: bool = True) -> str:
         raise NotImplementedError
 
 

@@ -11,7 +11,6 @@ from typing import Final
 import random
 import secrets
 import subprocess
-import textwrap
 from collections.abc import Generator
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -66,6 +65,7 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.decorators import cache_with_ttl
 from gajim.common.util.decorators import event_filter
+from gajim.common.util.text import format_fingerprint
 
 NOT_ENCRYPTED_TAGS = [
     ("no-store", Namespace.HINTS),
@@ -140,16 +140,6 @@ def delete_nodes(stanza: Node, name: str, namespace: str | None = None) -> None:
         stanza.delChild(node)
 
 
-def format_fingerprint(fingerprint: str) -> str:
-    fplen = len(fingerprint)
-    wordsize = fplen // 8
-    buf = ""
-    for word in range(0, fplen, wordsize):
-        buf += f"{fingerprint[word : word + wordsize]} "
-    buf = textwrap.fill(buf, width=28)
-    return buf.rstrip()
-
-
 def find_remote_key(
     public_rows: Sequence[mod.Public], fingerprint: str
 ) -> mod.Public | None:
@@ -183,8 +173,8 @@ class OpenPGPPublicKeyData(PublicKeyData):
             trust=Trust(public.trust),
         )
 
-    def pretty_fingerprint(self) -> str:
-        return format_fingerprint(self.fingerprint)
+    def pretty_fingerprint(self, wrap: bool = True) -> str:
+        return format_fingerprint(self.fingerprint, "OpenPGP", wrap=wrap)
 
 
 class OpenPGP(BaseModule, CryptoModule):

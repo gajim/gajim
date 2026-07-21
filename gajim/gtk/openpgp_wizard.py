@@ -15,10 +15,10 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.modules.openpgp import format_fingerprint
 from gajim.common.modules.openpgp import MultipleSecretKeysImportError
 from gajim.common.modules.util import Task
 from gajim.common.regex import OPENPGP_BACKUP_PASSWORD_RX
+from gajim.common.util.text import format_fingerprint
 from gajim.plugins.plugins_i18n import _
 
 from gajim.gtk.activity_list import OpenPGPEvent
@@ -443,7 +443,7 @@ class FingerprintLabel(Gtk.Label):
     def __init__(self, cert: pys.Cert) -> None:
         super().__init__()
         self._cert = cert
-        self.set_label(format_fingerprint(cert.fingerprint).upper())
+        self.set_label(format_fingerprint(cert.fingerprint, "OpenPGP", wrap=True))
         self.add_css_class("p-6")
         self.add_css_class("monospace")
 

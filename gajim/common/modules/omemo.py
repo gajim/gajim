@@ -67,6 +67,7 @@ from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.decorators import cache_with_ttl
 from gajim.common.util.decorators import event_filter
+from gajim.common.util.text import format_fingerprint
 
 ALLOWED_TAGS = [
     ("request", Namespace.RECEIPTS),
@@ -114,8 +115,9 @@ class OMEMOPublicKeyData(PublicKeyData):
             public_key=info.public_key,
         )
 
-    def pretty_fingerprint(self) -> str:
-        return self.public_key.get_fingerprint(formatted=True)
+    def pretty_fingerprint(self, wrap: bool = True) -> str:
+        fingerprint = self.public_key.get_fingerprint()
+        return format_fingerprint(fingerprint, "OMEMO", wrap=wrap)
 
 
 class OMEMO(BaseModule, CryptoModule):

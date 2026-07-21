@@ -268,7 +268,9 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
         if self._our_public_key is None:
             return
-        app.window.get_clipboard().set(self._our_public_key.pretty_fingerprint())
+        app.window.get_clipboard().set(
+            self._our_public_key.pretty_fingerprint(wrap=False)
+        )
 
 
 class DeviceRow(Adw.ActionRow, SignalManager):
@@ -360,7 +362,9 @@ class DeviceRow(Adw.ActionRow, SignalManager):
         return str(self._public_key_data.address)
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
-        app.window.get_clipboard().set(self._public_key_data.pretty_fingerprint())
+        app.window.get_clipboard().set(
+            self._public_key_data.pretty_fingerprint(wrap=False)
+        )
 
 
 class TrustLabel(Gtk.Box):

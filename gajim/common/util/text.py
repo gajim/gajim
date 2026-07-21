@@ -25,6 +25,11 @@ from gajim.common.regex import URL_REGEX
 # from RFC 3986, 3.3. Path (pchar without unreserved and pct-encoded):
 _reserved_chars_allowed_in_path_segment = regex.sub_delims + ":@"
 
+FINGERPRINT_FORMAT = {
+    "OMEMO": (8, 36),
+    "OpenPGP": (5, 24),
+}
+
 
 def remove_invalid_xml_chars(input_string: str) -> str:
     if input_string:
@@ -90,13 +95,14 @@ def format_eta(time_: int | float) -> str:
     return _("%s s") % times["seconds"]
 
 
-def format_fingerprint(fingerprint: str) -> str:
+def format_fingerprint(fingerprint: str, protocol: str, *, wrap: bool) -> str:
+    wordsize, width = FINGERPRINT_FORMAT.get(protocol, (8, 36))
     fplen = len(fingerprint)
-    wordsize = fplen // 8
     buf = ""
     for char in range(0, fplen, wordsize):
         buf += f"{fingerprint[char : char + wordsize]} "
-    buf = textwrap.fill(buf, width=36)
+    if wrap:
+        buf = textwrap.fill(buf, width=width)
     return buf.rstrip().upper()
 
 

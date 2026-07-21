@@ -436,7 +436,9 @@ class MessageRow(BaseRow):
             icon, trust_tooltip, color = TRUST_SYMBOL_DATA[Trust(encryption_data.trust)]
             tooltip = f"{tooltip}\n{trust_tooltip}"
             if encryption_data.key != "Unknown":
-                fingerprint = format_fingerprint(encryption_data.key)
+                fingerprint = format_fingerprint(
+                    encryption_data.key, encryption_data.protocol, wrap=True
+                )
                 tooltip = f"{tooltip}\n<tt>{fingerprint}</tt>"
 
         return icon, color, tooltip
