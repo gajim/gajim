@@ -27,7 +27,7 @@ set -e
 gajim_version="master"
 nbxmpp_version="master"
 omemo_dr_version="master"
-python_version="3.13"
+python_version="3.14"
 gajim_git="https://dev.gajim.org/gajim/gajim"
 nbxmpp_git="https://dev.gajim.org/gajim/python-nbxmpp"
 omemo_dr_git="https://dev.gajim.org/gajim/omemo-dr"
