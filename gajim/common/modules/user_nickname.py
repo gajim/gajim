@@ -80,12 +80,6 @@ class UserNickname(BaseModule):
             return
 
         nick = properties.pubsub_event.data
-        if properties.is_self_message:
-            if nick is None:
-                nick = app.get_default_nick(self._account)
-            app.nicks[self._account] = nick
-            return
-
         assert properties.jid is not None
 
         app.storage.archive.set_contact_value(

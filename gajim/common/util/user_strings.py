@@ -44,8 +44,10 @@ def get_subscription_request_msg(account: str | None = None) -> str:
     if message:
         return message
 
+    contact = app.get_client(account).get_own_contact()
+
     message = _("Hello, I am $name. %s") % message
-    return Template(message).safe_substitute({"name": app.nicks[account]})
+    return Template(message).safe_substitute({"name": contact.name})
 
 
 def get_moderation_text(by: str | JID | None, reason: str | None) -> str:

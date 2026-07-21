@@ -658,11 +658,11 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         message = event.message
         assert message.text is not None
 
+        contact = app.get_client(event.account).get_own_contact()
+
         row.set_nick(_("Me"))
         row.set_timestamp(message.timestamp)
-        row.set_message_text(
-            message.text, nickname=app.nicks[event.account], oob=message.oob
-        )
+        row.set_message_text(message.text, nickname=contact.name, oob=message.oob)
         row.changed()
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:

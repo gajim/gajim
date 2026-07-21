@@ -120,7 +120,6 @@ class CoreApplication(ged.EventHelper):
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
             app.to_be_removed[account] = []
-            app.nicks[account] = app.get_default_nick(account)
 
         from gajim.plugins.pluginmanager import PluginManager
         from gajim.plugins.repository import PluginRepository
@@ -407,7 +406,6 @@ class CoreApplication(ged.EventHelper):
         app.plugin_manager.register_modules_for_account(app.connections[account])
 
         app.to_be_removed[account] = []
-        app.nicks[account] = app.get_default_nick(account)
         app.settings.set_account_setting(account, "active", True)
 
         app.ged.raise_event(AccountEnabled(account=account))
@@ -424,7 +422,6 @@ class CoreApplication(ged.EventHelper):
 
         app.get_client(account).cleanup()
         del app.connections[account]
-        del app.nicks[account]
         del app.to_be_removed[account]
 
     def remove_account(self, account: str) -> None:

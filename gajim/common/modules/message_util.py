@@ -191,8 +191,8 @@ def get_nickname_from_message(account: str, message: mod.Message) -> tuple[str, 
             if message.direction == ChatDirection.INCOMING:
                 return "", ""
 
-            # FIXME: app.nicks is not correctly filled on start
-            return _("Me"), app.nicks[account]
+            nickname = app.get_client(account).get_own_contact().name
+            return _("Me"), nickname
 
         case MessageType.PM:
             if message.direction == ChatDirection.INCOMING:

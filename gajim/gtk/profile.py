@@ -25,7 +25,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
@@ -78,7 +77,8 @@ class ProfileWindow(GajimAppWindow):
         self._client = app.get_client(self.account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
-        self._contact = self._client.get_module("Contacts").get_contact(self._jid)
+        self._contact = self._client.get_own_contact()
+        self._contact.connect_signal("nickname-update", self._on_nickname_update)
 
         self._ui = get_builder("profile.ui")
 
@@ -126,8 +126,9 @@ class ProfileWindow(GajimAppWindow):
         self._new_avatar: None | bool | Avatar = False
 
         self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
-        self._ui.nickname_label.set_text(app.nicks[account])
-        self._ui.nickname_entry.set_text(app.nicks[account])
+
+        nick = self._contact.name
+        self._ui.nickname_label.set_text(nick)
 
         self._vcard_grid = VCardGrid(self.account)
         self._ui.profile_box.append(self._vcard_grid)
@@ -172,6 +173,7 @@ class ProfileWindow(GajimAppWindow):
         self._running_tasks.clear()
         self._avatar_selector = None
         self._client.disconnect_all_from_obj(self)
+        self._contact.disconnect_all_from_obj(self)
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
@@ -211,9 +213,12 @@ class ProfileWindow(GajimAppWindow):
         self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._show_profile_page()
 
+    def _on_nickname_update(self, *args: Any) -> None:
+        nick = self._contact.name
+        self._ui.nickname_label.set_text(nick)
+
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
-        assert isinstance(self._contact, BareContact)
         self._current_avatar = self._contact.get_avatar(
             AvatarSize.VCARD, scale, add_show=False
         )
@@ -243,6 +248,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.set_visible(True)
         self._avatar_edit_button.set_visible(True)
         self._ui.nickname_label.set_visible(False)
+        self._ui.nickname_entry.set_text(self._contact.name)
         self._ui.nickname_entry.set_visible(True)
         self._ui.privacy_button.set_visible(True)
 
@@ -256,9 +262,7 @@ class ProfileWindow(GajimAppWindow):
         self._avatar_edit_button.set_visible(False)
         self._ui.privacy_button.set_visible(False)
         self._ui.nickname_label.set_visible(True)
-        self._ui.nickname_label.set_text(app.nicks[self.account])
         self._ui.nickname_entry.set_visible(False)
-        self._ui.nickname_entry.set_text(app.nicks[self.account])
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore
         self._new_avatar = False
@@ -313,10 +317,6 @@ class ProfileWindow(GajimAppWindow):
         nick = self._ui.nickname_entry.get_text()
         client.get_module("UserNickname").set_nickname(nick, public=public)
 
-        if not nick:
-            nick = app.get_default_nick(self.account)
-        app.nicks[self.account] = nick
-
     @ensure_not_destroyed
     def _on_set_avatar_result(self, task: Task) -> None:
         self._running_tasks.remove(task)
@@ -363,7 +363,6 @@ class ProfileWindow(GajimAppWindow):
 
     def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
-        assert isinstance(self._contact, BareContact)
         texture = self._contact.get_avatar(
             AvatarSize.VCARD, scale, add_show=False, default=True
         )

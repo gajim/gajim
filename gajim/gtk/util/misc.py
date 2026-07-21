@@ -157,7 +157,8 @@ def get_contact_name_for_message(
     if db_row.type == MessageType.CHAT:
         if db_row.direction == ChatDirection.INCOMING:
             return contact.name
-        return app.nicks[contact.account]
+
+        return app.get_client(contact.account).get_own_contact().name
 
     elif db_row.type == MessageType.GROUPCHAT:
         resource = db_row.resource

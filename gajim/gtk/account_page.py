@@ -122,6 +122,7 @@ class AccountPage(Gtk.Box, SignalManager):
         assert self._contact is not None
 
         self._contact.connect("avatar-update", self._on_avatar_update)
+        self._contact.connect("nickname-update", self._on_nickname_update)
         app.settings.connect_signal(
             "account_label", self._on_account_label_changed, self._account
         )
@@ -150,6 +151,12 @@ class AccountPage(Gtk.Box, SignalManager):
 
     def _on_avatar_update(self, *args: Any) -> None:
         self._update_avatar()
+
+    def _on_nickname_update(self, *args: Any) -> None:
+        assert self._contact is not None
+        nick = self._contact.name
+        self._name_label.set_label(nick)
+        self._profile_name_row.set_subtitle(nick)
 
     def _update_account_label(self, label: str) -> None:
         self._account_label.set_text(label)
@@ -213,14 +220,15 @@ class AccountPage(Gtk.Box, SignalManager):
 
         assert self._contact is not None
 
+        nick = self._contact.name
         account_label = app.settings.get_account_setting(self._account, "account_label")
 
         self._update_avatar()
         self._update_account_label(account_label)
-        self._name_label.set_label(app.nicks[self._account])
+        self._name_label.set_label(nick)
 
         self._our_jid_row.set_subtitle(str(self._contact.jid))
         self._status_selector.set_account(self._account)
         self._status_message_row.set_account(self._account)
 
-        self._profile_name_row.set_subtitle(app.nicks[self._account])
+        self._profile_name_row.set_subtitle(nick)

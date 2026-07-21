@@ -169,7 +169,7 @@ def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
         if bookmark.nick is not None:
             return bookmark.nick
 
-    return app.nicks[account]
+    return app.get_client(account).get_own_contact().name
 
 
 def format_private_group_name(nicks: list[str], limit: int = 5) -> str:

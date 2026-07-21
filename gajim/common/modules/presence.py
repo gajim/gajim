@@ -275,7 +275,7 @@ class Presence(BaseModule):
 
         self._client.get_module("Roster").set_item(jid, name, groups=groups)
         self._nbxmpp("BasePresence").subscribe(
-            jid, status=msg, nick=app.nicks[self._account]
+            jid, status=msg, nick=self._client.get_own_contact().name
         )
 
     def get_presence(

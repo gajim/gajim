@@ -96,9 +96,6 @@ to_be_removed: dict[str, list[str]] = {}
 
 notification = None
 
-# list of our nick names in each account
-nicks: dict[str, str] = {}
-
 cert_store = cast("CertificateStore", None)
 
 call_manager = cast("CallManager", None)
@@ -449,13 +446,6 @@ def get_jid_from_account(account_name: str) -> str:
     Return the jid we use in the given account
     """
     return settings.get_account_setting(account_name, "address")
-
-
-def get_default_nick(account_name: str) -> str:
-    address = settings.get_account_setting(account_name, "address")
-    jid = JID.from_string(address)
-    assert jid.localpart is not None
-    return jid.localpart
 
 
 def get_hostname_from_account(account_name: str, prefer_custom: bool = False) -> str:
