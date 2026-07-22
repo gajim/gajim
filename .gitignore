@@ -15,17 +15,20 @@ gajim/data/locale
 __pycache__/
 .mypy_cache/
 .ruff_cache/
+.pytest_cache/
 
 # Build folders
 
-debian_build/
-build/
-dist/
-gajim.egg-info/
+flatpak_build
+flatpak_repo
+debian_build
+build
+dist
+gajim.egg-info
 win/_build_root
 venv/
 .venv/
-node_modules/
+node_modules
 .flatpak-builder
 mac/gajim-source
 mac/nbxmpp-source
