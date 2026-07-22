@@ -10,6 +10,8 @@ from typing import overload
 import logging
 from pathlib import Path
 
+from gi.repository import Adw
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -90,15 +92,35 @@ class UnlockPage(AssistantPage):
         self.title = _("Enter Password to Unlock")
         self.complete = False
 
+        self._password_check_timeout_id = None
+
         self._cur_password = passwords.get_password(account)
 
         self._connect(self._password_entry, "changed", self._on_changed)
 
     def _on_changed(self, _password_entry: Gtk.PasswordEntry) -> None:
+        if self._password_check_timeout_id is not None:
+            GLib.source_remove(self._password_check_timeout_id)
+            self._password_check_timeout_id = None
+
         if self._cur_password is None:
-            self.set_warning(_("No account password found, unlock not possible"))
+            self.set_warning(_("No account password found, unlocking not possible"))
             self.set_complete(False)
             return
+
+        if not self._password_entry.get_text():
+            self.set_complete(False)
+            self.set_warning(None)
+            return
+
+        self._password_check_timeout_id = GLib.timeout_add(
+            800, self.delayed_password_check
+        )
+
+    def delayed_password_check(self) -> None:
+        assert self._password_check_timeout_id is not None
+        GLib.source_remove(self._password_check_timeout_id)
+        self._password_check_timeout_id = None
 
         cur_password = self._password_entry.get_text()
         if cur_password != self._cur_password:
@@ -124,9 +146,11 @@ class UnlockPage(AssistantPage):
 class SharePage(AssistantPage):
     __gtype_name__ = "OpenPGPSecretShare"
 
+    _toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
     _box: Gtk.Box = Gtk.Template.Child()
     _key_label: Gtk.Label = Gtk.Template.Child()
     _copy_button: CopyButton = Gtk.Template.Child()
+    _hint_label: Gtk.Label = Gtk.Template.Child()
     _qr_code_image: Gtk.Image = Gtk.Template.Child()
 
     def __init__(self, account: str) -> None:
@@ -153,16 +177,25 @@ class SharePage(AssistantPage):
         backup_password = self._client.get_module("OpenPGP").get_backup_password()
 
         if share_uri is None or backup_password is None:
-            self._key_label.set_text("No key found")
+            self._key_label.set_text(_("No key found"))
+            self._copy_button.set_sensitive(False)
+            self._hint_label.set_visible(False)
+
+            self._qr_code_image.set_visible(False)
             self._qr_code_image.set_from_paintable(None)
 
         else:
             self._key_label.set_text(backup_password)
+            self._copy_button.set_sensitive(True)
+            self._hint_label.set_visible(True)
+
             texture = generate_qr_code(share_uri)
+            self._qr_code_image.set_visible(True)
             self._qr_code_image.set_from_paintable(texture)
 
     def _on_copy_clicked(self, _button: CopyButton) -> None:
         app.window.get_clipboard().set(self._key_label.get_text())
+        self._toast_overlay.add_toast(Adw.Toast.new(_("Key copied to clipboard")))
 
     def _on_path_picked(self, button: Gtk.Button, paths: list[Path]) -> None:
         exported_key = self._client.get_module("OpenPGP").export_secret_key()
@@ -170,6 +203,15 @@ class SharePage(AssistantPage):
             return
 
         paths[0].write_text(exported_key)
+
+        toast = Adw.Toast(
+            title=_("Key has been saved"),
+            timeout=5,
+            button_label=_("Open Folder"),
+            action_name="app.open-folder",
+            action_target=GLib.Variant("s", str(paths[0])),
+        )
+        self._toast_overlay.add_toast(toast)
 
     def get_visible_buttons(self) -> list[str]:
         return ["close"]
