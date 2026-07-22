@@ -30,7 +30,9 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
 from gajim.common.task_manager import Task
+from gajim.common.util.classes import TTLCache
 
+VCardContactsT = BareContact | GroupchatContact | GroupchatParticipant
 NS_AVATAR_HASH = "muc#roominfo_avatarhash"
 NS_AVATAR_HASH_TEMP = "{http://modules.prosody.im/mod_vcard_muc}avatar#sha1"
 
@@ -38,7 +40,11 @@ NS_AVATAR_HASH_TEMP = "{http://modules.prosody.im/mod_vcard_muc}avatar#sha1"
 class VCardAvatars(BaseModule):
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
-        self._requested_shas: list[str] = []
+        self._ignored_sha_cache: TTLCache[tuple[JID, str], None] = TTLCache(
+            ttl_seconds=60 * 60 * 6, extend_ttl_on_hit=False
+        )
+        self._muc_avatar_cache: dict[JID, str] = {}
+        self.avatar_conversion_available = False
 
         self.handlers = [
             StanzaHandler(
@@ -49,10 +55,6 @@ class VCardAvatars(BaseModule):
                 priority=51,
             ),
         ]
-
-        self.avatar_conversion_available = False
-
-        self._muc_avatar_cache: dict[JID, str] = {}
 
     def pass_disco(self, info: DiscoInfo) -> None:
         is_available = Namespace.VCARD_CONVERSION in info.features
@@ -71,22 +73,33 @@ class VCardAvatars(BaseModule):
     ) -> Generator[Any, Any]:
         _task = yield
 
+        if app.app.avatar_storage.avatar_exists(expected_sha):
+            # Check if avatar was already received while task was queued
+            contact.update_avatar(expected_sha)
+            self._log.info("Found avatar in storage: %s %s", contact.jid, expected_sha)
+            return
+
         vcard = yield self._con.get_module("VCardTemp").request_vcard(jid=contact.jid)
+
+        cache_key = (contact.jid, expected_sha)
 
         if is_error(vcard):
             self._log.warning(vcard)
+            self._ignored_sha_cache.add(cache_key, None)
             return
 
         assert isinstance(vcard, VCard)
         avatar, avatar_sha = vcard.get_avatar()
         if avatar is None or avatar_sha is None:
             self._log.info("Avatar missing: %s %s", contact.jid, expected_sha)
+            self._ignored_sha_cache.add(cache_key, None)
             return
 
         if expected_sha != avatar_sha:
             self._log.warning(
                 "Avatar mismatch: %s %s != %s", contact.jid, expected_sha, avatar_sha
             )
+            self._ignored_sha_cache.add(cache_key, None)
             return
 
         self._log.info("Received: %s %s", contact.jid, avatar_sha)
@@ -182,14 +195,22 @@ class VCardAvatars(BaseModule):
                 contact.update_avatar(avatar_sha)
                 return
 
-            if avatar_sha not in self._requested_shas:
-                self._requested_shas.append(avatar_sha)
+            if (jid, avatar_sha) in self._ignored_sha_cache:
+                self._log.info(
+                    "Avatar will be ignored because of cached error: %s %s",
+                    jid,
+                    avatar_sha,
+                )
+                return
 
-                task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
-                app.task_manager.add_task(task)
+            task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
+            app.task_manager.add_task(task)
 
     def _muc_update_received(self, properties: PresenceProperties) -> None:
         assert properties.jid is not None
+        jid = properties.jid
+        avatar_sha = properties.avatar_sha
+
         contact = self._con.get_module("Contacts").get_contact(
             properties.jid, groupchat=True
         )
@@ -207,45 +228,46 @@ class VCardAvatars(BaseModule):
                 "muc#roomconfig_allow_query_users"
             )
             if allow_query is False:
-                self._log.debug("Room does not allow IQ queries: %s", contact.room.jid)
+                self._log.debug("Room does not allow IQ queries: %s", contact.jid)
                 return
-
-        nick = properties.jid.resource
 
         if properties.avatar_state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
-            self._log.info("%s has no avatar published", nick)
-            self._muc_avatar_cache.pop(properties.jid, None)
+            self._log.info("%s has no avatar published", jid)
+            self._muc_avatar_cache.pop(jid, None)
             contact.update_avatar()
 
         else:
-            assert properties.avatar_sha
-            self._log.info("Update: %s %s", nick, properties.avatar_sha)
-            if not app.app.avatar_storage.avatar_exists(properties.avatar_sha):
-                if properties.avatar_sha not in self._requested_shas:
-                    app.log("avatar").info("Request: %s", nick)
-                    self._requested_shas.append(properties.avatar_sha)
-
-                    task = VCardAvatarsTask(
-                        contact, properties.avatar_sha, self._request_vcard
+            assert avatar_sha
+            self._log.info("Update: %s %s", jid, avatar_sha)
+            if not app.app.avatar_storage.avatar_exists(avatar_sha):
+                if (jid, avatar_sha) in self._ignored_sha_cache:
+                    self._log.info(
+                        "Avatar will be ignored because of cached error: %s %s",
+                        jid,
+                        avatar_sha,
                     )
-                    app.task_manager.add_task(task)
+                    return
+
+                app.log("avatar").info("Request avatar: %s", jid)
+                task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
+                app.task_manager.add_task(task)
                 return
 
-            current_avatar_sha = self._muc_avatar_cache.get(properties.jid)
-            if current_avatar_sha != properties.avatar_sha:
-                self._log.info(
-                    "%s changed their Avatar: %s", nick, properties.avatar_sha
-                )
-                self._muc_avatar_cache[properties.jid] = properties.avatar_sha
+            current_avatar_sha = self._muc_avatar_cache.get(jid)
+            if current_avatar_sha != avatar_sha:
+                self._log.info("%s changed their avatar: %s", jid, avatar_sha)
+                self._muc_avatar_cache[jid] = avatar_sha
                 contact.update_avatar()
 
             else:
-                self._log.info("Avatar already known: %s", nick)
+                self._log.info("Avatar already known: %s", jid)
 
 
 class VCardAvatarsTask(Task):
-    def __init__(self, contact: Any, sha: str, callback: Callable[..., Any]) -> None:
+    def __init__(
+        self, contact: VCardContactsT, sha: str, callback: Callable[..., Any]
+    ) -> None:
 
         Task.__init__(self)
         self._contact = contact
