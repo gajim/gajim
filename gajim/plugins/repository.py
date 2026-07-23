@@ -30,7 +30,7 @@ UPDATE_CHECK_INTERVAL = 68400
 class PluginRepository(Observable):
     """Signals
 
-    - donwload-started
+    - download-started
     - download-finished
     - download-failed
     - plugin-updates-available

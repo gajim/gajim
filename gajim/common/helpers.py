@@ -262,7 +262,7 @@ def get_optional_features(account: str) -> list[str]:
 
     client = app.get_client(account)
 
-    if client.get_module("Bookmarks").nativ_bookmarks_used:
+    if client.get_module("Bookmarks").native_bookmarks_used:
         features.append(Namespace.BOOKMARKS_1 + "+notify")
     elif client.get_module("Bookmarks").pep_bookmarks_used:
         features.append(Namespace.BOOKMARKS + "+notify")
@@ -371,8 +371,8 @@ def file_is_locked(path_to_file: str) -> bool:
     if not HAS_PYWIN32:
         return False
 
-    secur_att = pywintypes.SECURITY_ATTRIBUTES()
-    secur_att.Initialize()
+    secure_att = pywintypes.SECURITY_ATTRIBUTES()
+    secure_att.Initialize()
 
     try:
         # try create a handle for READING the file
@@ -380,7 +380,7 @@ def file_is_locked(path_to_file: str) -> bool:
             path_to_file,
             win32con.GENERIC_READ,  # open for reading
             0,  # do not share with other proc
-            secur_att,
+            secure_att,
             win32con.OPEN_EXISTING,  # existing file only
             win32con.FILE_ATTRIBUTE_NORMAL,  # normal file
             0,
@@ -429,7 +429,7 @@ class Observable:
                 # Don’t remove dead weakrefs from the handler list
                 # notify() will remove dead refs, and __disconnect()
                 # can be called from inside notify(), this can lead
-                # to race conditions where later notfiy tries to remove
+                # to race conditions where later notify tries to remove
                 # a dead ref which is not anymore in the list.
                 if func is not None and func.__self__ is obj:
                     handlers.remove(handler)

@@ -253,7 +253,7 @@ class MessageRow(BaseRow):
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
-            self._message_icons.set_encrytion_icon_data(*encryption_data)
+            self._message_icons.set_encryption_icon_data(*encryption_data)
             self._message_icons.set_encryption_icon_visible(True)
 
         sec_label_data = self._get_security_labels_data(message.security_label)

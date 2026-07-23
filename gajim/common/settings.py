@@ -47,7 +47,7 @@ from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
 from gajim.common.setting_values import FloatSettings
 from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
 from gajim.common.setting_values import HAS_APP_DEFAULT
-from gajim.common.setting_values import INITAL_WORKSPACE
+from gajim.common.setting_values import INITIAL_WORKSPACE
 from gajim.common.setting_values import IntAccountSettings
 from gajim.common.setting_values import IntGroupChatSettings
 from gajim.common.setting_values import IntSettings
@@ -94,7 +94,7 @@ CREATE_SQL = """
     PRAGMA user_version={version};
     """.format(  # noqa: UP032
     proxies=json.dumps(PROXY_EXAMPLES),
-    workspaces=json.dumps(INITAL_WORKSPACE),
+    workspaces=json.dumps(INITIAL_WORKSPACE),
     version=CURRENT_USER_VERSION,
 )
 
@@ -389,8 +389,8 @@ class Settings:
         if version < 1:
             sql = """INSERT INTO settings(name, settings)
                      VALUES ('workspaces', ?)"""
-            self._con.execute(sql, (json.dumps(INITAL_WORKSPACE),))
-            self._settings["workspaces"] = INITAL_WORKSPACE
+            self._con.execute(sql, (json.dumps(INITIAL_WORKSPACE),))
+            self._settings["workspaces"] = INITIAL_WORKSPACE
             self._commit_settings("workspaces")
             self._set_user_version(1)
 

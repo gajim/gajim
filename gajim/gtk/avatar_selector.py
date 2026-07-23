@@ -242,7 +242,7 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         if self._aspect > 0:
             self._aspect = self._base_width / self._base_height
 
-    def set_contstrain_aspect(self, constrain: bool) -> None:
+    def set_constrain_aspect(self, constrain: bool) -> None:
         if constrain:
             self._aspect = self._base_width / self._base_height
         else:

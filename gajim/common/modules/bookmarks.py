@@ -62,7 +62,7 @@ class Bookmarks(BaseModule):
         return self._bookmark_module() == "PEPBookmarks"
 
     @property
-    def nativ_bookmarks_used(self) -> bool:
+    def native_bookmarks_used(self) -> bool:
         return self._bookmark_module() == "NativeBookmarks"
 
     @event_node(Namespace.BOOKMARKS)
@@ -99,7 +99,7 @@ class Bookmarks(BaseModule):
             self._log.warning("%s has an open access bookmarks node", properties.jid)
             return
 
-        if not self.nativ_bookmarks_used:
+        if not self.native_bookmarks_used:
             return
 
         if self._request_in_progress:
@@ -263,7 +263,7 @@ class Bookmarks(BaseModule):
         if not app.account_is_available(self._account):
             return
 
-        if not self.nativ_bookmarks_used:
+        if not self.native_bookmarks_used:
             bookmarks = self.bookmarks
 
         self._nbxmpp(self._bookmark_module()).store_bookmarks(bookmarks)
@@ -322,7 +322,7 @@ class Bookmarks(BaseModule):
         if not removed:
             return
         if publish:
-            if self.nativ_bookmarks_used:
+            if self.native_bookmarks_used:
                 self._nbxmpp("NativeBookmarks").retract_bookmark(jid)
             else:
                 self.store_bookmarks(self.bookmarks)

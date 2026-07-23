@@ -163,7 +163,7 @@ STYLING = {
         "input": "****",
         "tokens": [PlainBlock(start=0, end=4, text="****", spans=[])],
     },
-    "invalid diretives ignored": {
+    "invalid directives ignored": {
         "input": "* plain *strong*",
         "tokens": [
             PlainBlock(

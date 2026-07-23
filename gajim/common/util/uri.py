@@ -307,7 +307,7 @@ def split_geo_uri(uri: str) -> Coords:
     if len(coords) not in (2, 3):
         raise ValueError("Invalid geo uri: invalid coord count")
 
-    # Remoove coord-c (altitude)
+    # Remove coord-c (altitude)
     if len(coords) == 3:
         coords.pop(2)
 

@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return template
 
 
-def get_resouce_code(
+def get_resource_code(
     filename: str,
     file_version: str,
     file_desc: str,
@@ -209,7 +209,7 @@ def build_launcher(
         shutil.copyfile(src_ico, "launcher.ico")
         with open("launcher.rc", "w") as h:
             h.write(
-                get_resouce_code(
+                get_resource_code(
                     os.path.basename(target),
                     file_version,
                     file_desc,

@@ -140,7 +140,7 @@ class StateTransportReplace(JingleFileTransferStates):
         self.jft.session.transport_replace()
 
 
-class StateTransfering(JingleFileTransferStates):
+class StateTransferring(JingleFileTransferStates):
     """
     This state will start the transfer depending on the type of transport
     we have.

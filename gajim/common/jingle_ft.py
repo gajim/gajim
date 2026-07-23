@@ -33,7 +33,7 @@ from gajim.common.jingle_ftstates import StateCandReceived
 from gajim.common.jingle_ftstates import StateCandSent
 from gajim.common.jingle_ftstates import StateCandSentAndRecv
 from gajim.common.jingle_ftstates import StateInitialized
-from gajim.common.jingle_ftstates import StateTransfering
+from gajim.common.jingle_ftstates import StateTransferring
 from gajim.common.jingle_ftstates import StateTransportReplace
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import TransportType
@@ -122,7 +122,7 @@ class JingleFileTransfer(JingleContent):
             State.INITIALIZED: StateInitialized(self),
             State.CAND_SENT: StateCandSent(self),
             State.CAND_RECEIVED: StateCandReceived(self),
-            State.TRANSFERRING: StateTransfering(self),
+            State.TRANSFERRING: StateTransferring(self),
             State.TRANSPORT_REPLACE: StateTransportReplace(self),
             State.CAND_SENT_AND_RECEIVED: StateCandSentAndRecv(self),
         }

@@ -126,7 +126,7 @@ class ManageSounds(GajimAppWindow):
             self._file_chooser_button.reset()
             last_path = app.settings.get("last_sounds_dir")
             if last_path:
-                self._file_chooser_button.set_inital_path(Path(last_path))
+                self._file_chooser_button.set_initial_path(Path(last_path))
         else:
             self._file_chooser_button.set_path(path_to_snd_file)
 
