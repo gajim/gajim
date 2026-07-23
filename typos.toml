@@ -1,0 +1,19 @@
+[files]
+extend-exclude = ["po", "gajim/common/const.py", "win/misc/gajim*.nsi", "test/gtk/ui_test_certificate_dialog.py", "test/gtk/ui_test_ssl_error_dialog.py"]
+
+[default.extend-words]
+ba = "ba"
+certifi = "certifi" # A python package
+datas = "datas"
+fle = "fle" # A timezone
+fpr = "fpr" # Fingerprint
+gir = "gir"
+itms = "itms"
+iy = "iy"
+muc = "muc"
+ofrom = "ofrom"
+pn = "pn" # For UPnP
+seeked = "seeked"
+selectin = "selectin"
+ser = "ser"
+spacify = "spacify" # Outdated URI scheme
