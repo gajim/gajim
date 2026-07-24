@@ -509,6 +509,10 @@ def remove_css_class(widget: Gtk.Widget, css_class_name: str) -> None:
             widget.remove_css_class(css_class)
 
 
+def transform_to_inverted_bool(_binding: GObject.Binding, value: GLib.Variant) -> bool:
+    return not value.unpack()
+
+
 class ObjTracker:
     def __init__(self) -> None:
         self._gobjects: list[str] = []

@@ -304,6 +304,12 @@ MAIN_WIN_SHORTCUTS = GajimShortcutGroup(
             action_name="win.reset-app-font-size",
         ),
         GajimShortcut(
+            label=_("Toggle Focus Mode"),
+            category="general",
+            accelerators=["<Primary><Shift>F"],
+            action_name="win.focus-mode",
+        ),
+        GajimShortcut(
             label=_("Focus Search"),
             category="chats",
             accelerators=["<Primary>K"],

@@ -50,6 +50,7 @@ from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import allow_send_message
 from gajim.gtk.util.misc import gi_gui_package_version
+from gajim.gtk.util.misc import transform_to_inverted_bool
 from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.chatstack")
@@ -84,9 +85,12 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         app.commands.connect("command-not-found", self._on_command_signal)
         app.commands.connect("command-result", self._on_command_signal)
 
+        self._banner_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self._banner_box.append(self._chat_banner)
+        self._banner_box.append(Gtk.Separator(margin_start=12, margin_end=12))
+
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.append(self._chat_banner)
-        box.append(Gtk.Separator(margin_start=12, margin_end=12))
+        box.append(self._banner_box)
         box.append(self._chat_control.get_widget())
         box.append(self._message_action_box)
 
@@ -177,6 +181,15 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             action = app.window.lookup_action(action)
             assert action is not None
             action.connect("activate", self._on_action)
+
+        focus_action = app.window.lookup_action("focus-mode")
+        assert focus_action is not None
+        focus_action.bind_property(
+            "state",
+            self._banner_box,
+            "visible",
+            transform_to=transform_to_inverted_bool,
+        )
 
     def _get_current_contact(self) -> ChatContactT:
         assert self._current_contact is not None

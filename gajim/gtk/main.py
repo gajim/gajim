@@ -106,6 +106,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self.set_default_icon_name("gajim")
 
         self._startup_finished: bool = False
+        self._chat_list_visible_before_focus: bool = True
 
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
@@ -405,6 +406,25 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         )
 
         self.add_action(action)
+
+        action = Gio.SimpleAction.new_stateful(
+            "focus-mode", None, GLib.Variant("b", False)
+        )
+        action.connect("notify::state", self._on_focus_mode_changed)
+        self.add_action(action)
+
+    def _on_focus_mode_changed(self, action: Gio.SimpleAction, _param: Any) -> None:
+        state = action.get_state()
+        assert state is not None
+        if state.get_boolean():
+            chat_list_state = self.get_action("chat-list-visible").get_state()
+            assert chat_list_state is not None
+            self._chat_list_visible_before_focus = chat_list_state.get_boolean()
+            self.set_action_state("chat-list-visible", False)
+        else:
+            self.set_action_state(
+                "chat-list-visible", self._chat_list_visible_before_focus
+            )
 
     def _connect_actions(self) -> None:
         actions = [
@@ -964,6 +984,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._app_side_bar.activate_workspace(workspace_id)
         self._main_stack.show_chats(workspace_id)
 
+        self.set_action_state("focus-mode", False)
         self.set_action_state("chat-list-visible", True)
 
     def update_workspace(self, workspace_id: str) -> None:
