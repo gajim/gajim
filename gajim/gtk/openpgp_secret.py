@@ -69,6 +69,8 @@ class OpenPGPSecret(Assistant):
     ) -> None:
         match button_name:
             case "unlock":
+                if not self.get_page("unlock").check_unlock():
+                    return
                 self.get_page("share").generate()
                 self.show_page("share")
 
@@ -90,46 +92,28 @@ class UnlockPage(AssistantPage):
     def __init__(self, account: str) -> None:
         AssistantPage.__init__(self)
         self.title = _("Enter Password to Unlock")
-        self.complete = False
-
-        self._password_check_timeout_id = None
+        self.complete = True
 
         self._cur_password = passwords.get_password(account)
 
         self._connect(self._password_entry, "changed", self._on_changed)
 
     def _on_changed(self, _password_entry: Gtk.PasswordEntry) -> None:
-        if self._password_check_timeout_id is not None:
-            GLib.source_remove(self._password_check_timeout_id)
-            self._password_check_timeout_id = None
-
         if self._cur_password is None:
             self.set_warning(_("No account password found, unlocking not possible"))
             self.set_complete(False)
             return
 
-        if not self._password_entry.get_text():
-            self.set_complete(False)
-            self.set_warning(None)
-            return
+        self.set_warning(None)
 
-        self._password_check_timeout_id = GLib.timeout_add(
-            800, self.delayed_password_check
-        )
-
-    def delayed_password_check(self) -> None:
-        assert self._password_check_timeout_id is not None
-        GLib.source_remove(self._password_check_timeout_id)
-        self._password_check_timeout_id = None
-
+    def check_unlock(self) -> bool:
         cur_password = self._password_entry.get_text()
         if cur_password != self._cur_password:
             self.set_warning(_("Password incorrect"))
-            self.set_complete(False)
-            return
+            return False
 
         self.set_warning(None)
-        self.set_complete(True)
+        return True
 
     def set_warning(self, text: str | None) -> None:
         self._warning_label.set_text(text or "")
