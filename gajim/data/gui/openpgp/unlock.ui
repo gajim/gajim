@@ -7,7 +7,8 @@
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
+        <property name="height-request">150</property>
         <child>
           <object class="GtkLabel">
             <property name="label" translatable="yes">Enter your account password to unlock the secret key</property>
@@ -16,7 +17,6 @@
             <property name="justify">center</property>
             <style>
               <class name="dimmed" />
-              <class name="mb-18" />
             </style>
           </object>
         </child>
