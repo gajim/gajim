@@ -80,9 +80,29 @@
       <object class="GtkBox">
         <property name="spacing">12</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
-            <property name="focusable">1</property>
-            <property name="placeholder-text" translatable="yes">Search…</property>
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="focusable">1</property>
+                <property name="placeholder-text" translatable="yes">Search…</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="search_button">
+                <property name="sensitive">0</property>
+                <property name="focusable">1</property>
+                <property name="focus-on-click">0</property>
+                <property name="tooltip-text" translatable="yes">Search</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">lucide-search-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>
@@ -213,7 +233,7 @@
     <property name="column-spacing">12</property>
     <child>
       <object class="GtkLabel" id="filter_from_desc_label">
-        <property name="visible">0</property>
+        <property name="visible">false</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">From</property>
         <style>
@@ -234,7 +254,7 @@
         </style>
         <layout>
           <property name="column">0</property>
-          <property name="row">2</property>
+          <property name="row">4</property>
         </layout>
       </object>
     </child>
@@ -247,18 +267,41 @@
         </style>
         <layout>
           <property name="column">0</property>
-          <property name="row">1</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GajimDropDown" id="filter_from_dropdown">
+        <property name="visible">false</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+          <property name="column-span">2</property>
         </layout>
       </object>
     </child>
     <child>
       <object class="GtkEntry" id="filter_from_entry">
-        <property name="visible">0</property>
+        <property name="visible">false</property>
         <property name="focusable">1</property>
-        <property name="placeholder-text" translatable="yes">Nickname…</property>
+        <property name="placeholder-text" translatable="yes">Nick</property>
         <layout>
           <property name="column">1</property>
-          <property name="row">0</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="search_all_from_checkbutton">
+        <property name="visible">false</property>
+        <property name="label" translatable="yes">Search all messages</property>
+        <property name="focusable">1</property>
+        <property name="tooltip-text" translatable="yes">If checked the search text is ignored.</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">2</property>
           <property name="column-span">2</property>
         </layout>
       </object>
@@ -278,7 +321,7 @@
         </child>
         <layout>
           <property name="column">2</property>
-          <property name="row">2</property>
+          <property name="row">4</property>
         </layout>
       </object>
     </child>
@@ -297,7 +340,7 @@
         </child>
         <layout>
           <property name="column">2</property>
-          <property name="row">1</property>
+          <property name="row">3</property>
         </layout>
       </object>
     </child>
@@ -309,7 +352,7 @@
         <property name="single-line-mode">1</property>
         <layout>
           <property name="column">1</property>
-          <property name="row">2</property>
+          <property name="row">4</property>
         </layout>
       </object>
     </child>
@@ -321,7 +364,7 @@
         <property name="single-line-mode">1</property>
         <layout>
           <property name="column">1</property>
-          <property name="row">1</property>
+          <property name="row">3</property>
         </layout>
       </object>
     </child>

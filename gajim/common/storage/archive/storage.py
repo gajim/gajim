@@ -956,6 +956,7 @@ class MessageArchiveStorage(AlchemyStorage):
         from_users: list[str] | None = None,
         before: datetime | None = None,
         after: datetime | None = None,
+        direction: ChatDirection | None = None,
     ) -> Iterator[Message]:
         """
         Search the conversation log for messages containing the `query` string.
@@ -975,6 +976,8 @@ class MessageArchiveStorage(AlchemyStorage):
         :param before: A datetime.datetime instance or None
 
         :param after: A datetime.datetime instance or None
+
+        :param direction: The direction of the message flow
 
         returns a list of namedtuples
         """
@@ -1000,6 +1003,9 @@ class MessageArchiveStorage(AlchemyStorage):
 
         if fk_remote_pk is not None:
             stmt = stmt.where(Message.fk_remote_pk == fk_remote_pk)
+
+        if direction is not None:
+            stmt = stmt.where(Message.direction == direction.value)
 
         if from_users is not None:
             lowercase_users = list(map(str.lower, from_users))

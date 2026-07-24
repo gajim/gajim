@@ -37,10 +37,13 @@ from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_py_to_glib_datetime
 
 log = logging.getLogger("gajim.gtk.search_view")
+
+CSS_CLASS_FIELD_MISSING = "field-missing"
 
 
 class PlaceholderMode(Enum):
@@ -65,10 +68,10 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._jid: JID | None = None
         self._results_iterator: Iterator[Message] | None = None
 
+        self._search_params_changed = True
+        self._is_bare_contact = False
         self._first_date: dt.datetime | None = None
         self._last_date: dt.datetime | None = None
-
-        self._last_search_string = ""
 
         self._ui = get_builder("search_view.ui", ["search_box"])
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -106,6 +109,8 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._connect(self._ui.next_day_button, "clicked", self._on_next_date_selected)
         self._connect(self._ui.last_day_button, "clicked", self._on_last_date_selected)
         self._connect(self._ui.close_button, "clicked", self._on_hide_clicked)
+        self._connect(self._ui.search_button, "clicked", self._on_search_button_clicked)
+        self._connect(self._ui.search_entry, "changed", self._on_search_entry_changed)
         self._connect(self._ui.search_entry, "activate", self._on_search)
         self._connect(
             self._ui.search_checkbutton, "toggled", self._on_search_all_toggled
@@ -156,55 +161,126 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
         self._set_placeholder_mode(PlaceholderMode.INITIAL)
 
-    def _on_search_all_toggled(self, _checkbutton: Gtk.CheckButton) -> None:
-        # Reset state to allow changing scope while not changing search string
-        self._last_search_string = ""
+    def _search_state_changed(self) -> None:
+        self._search_params_changed = True
+        self._ui.search_button.set_sensitive(True)
 
-    def _on_search_filters_changed(self, _search_filters: SearchFilters) -> None:
-        # Reset search string to allow new searches after changed filters
-        self._last_search_string = ""
+    def _on_search_all_toggled(self, _checkbutton: Gtk.CheckButton) -> None:
+        self._search_state_changed()
+
+    def _on_search_filters_changed(self, search_filters: SearchFilters) -> None:
+        use_all = search_filters.get_filters().use_all_from_filter
+        self._ui.search_entry.set_sensitive(not use_all)
+
+        if use_all:
+            self._last_search_string = self._ui.search_entry.get_text()
+            self._ui.search_entry.set_text("")
+            self._ui.search_entry.set_placeholder_text(_("Searching all…"))
+        else:
+            self._ui.search_entry.set_text(self._last_search_string)
+            self._ui.search_entry.set_placeholder_text(_("Search…"))
+
+        self._search_state_changed()
 
     def _on_search_filters_activated(self, _search_filters: SearchFilters) -> None:
         self._ui.search_entry.activate()
+        self._search_state_changed()
+
+    def _on_search_entry_changed(self, entry: Gtk.Entry) -> None:
+        if not self._search_filters.get_filters().use_all_from_filter:
+            self._last_search_string = entry.get_text()
+        self._search_state_changed()
+
+    def _on_search_button_clicked(self, _button: Gtk.Button, *args: Any) -> None:
+        self._search(self._ui.search_entry.get_text())
 
     def _on_search(self, entry: Gtk.Entry) -> None:
-        text = entry.get_text()
-        if text == self._last_search_string:
-            # Return early if search string did not change
-            # (prevents burst of db queries when holding enter).
+        self._search(entry.get_text())
+
+    def _highlight_search_entry(self) -> None:
+        self._ui.search_entry.add_css_class(CSS_CLASS_FIELD_MISSING)
+
+    def _unhighlight_search_entry(self) -> None:
+        self._ui.search_entry.remove_css_class(CSS_CLASS_FIELD_MISSING)
+
+    def _validate_search(self) -> bool:
+        # Return early if search string did not change
+        # (prevents burst of db queries when holding enter).
+        if not self._search_params_changed:
+            return False
+
+        valid = True
+        if (
+            not self._search_filters.get_filters().use_all_from_filter
+            and not self._ui.search_entry.get_text()
+        ):
+            self._highlight_search_entry()
+            valid = False
+
+        filters = self._search_filters.get_filters()
+        if (
+            filters.direction is ChatDirection.INCOMING
+            and not self._is_bare_contact
+            and not filters.usernames
+        ):
+            self._search_filters.highlight_from_entry()
+            valid = False
+
+        return valid
+
+    def _search(self, text: str) -> None:
+        if not self._validate_search():
             return
 
-        self._last_search_string = text
+        self._search_params_changed = False
+        self._ui.search_button.set_sensitive(False)
+
+        search_filter = self._search_filters.get_filters()
+        if not text and not search_filter.use_all_from_filter:
+            return
+
+        if search_filter.use_all_from_filter:
+            text = ""
+        else:
+            self._last_search_string = text
 
         self._clear_results()
-        if not text:
-            return
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
-        if not context:
-            # Started search without context -> show in UI
+        is_bare_contact = False
+        if context:
+            assert self._account is not None
+            assert self._jid is not None
+            client = app.get_client(self._account)
+            contact = client.get_module("Contacts").get_contact(self._jid)
+            is_bare_contact = isinstance(contact, BareContact)
+        else:
             self._ui.search_checkbutton.set_active(True)
 
-        if not context or everywhere:
-            account = None
-            jid = None
-        else:
+        account = None
+        jid = None
+        if context and not everywhere and not is_bare_contact:
             account = self._account
+        if context and (not everywhere or is_bare_contact):
             jid = self._jid
 
-        search_filter = self._search_filters.get_filters()
+        from_users = (
+            search_filter.usernames
+            if search_filter.direction is ChatDirection.INCOMING
+            else None
+        )
 
         self._set_placeholder_mode(PlaceholderMode.SEARCHING)
         self._results_iterator = app.storage.archive.search_archive(
             account,
             jid,
             text,
-            from_users=search_filter.usernames,
+            from_users=from_users,
             before=search_filter.before,
             after=search_filter.after,
+            direction=search_filter.direction,
         )
-
         self._add_results()
 
     def _set_placeholder_mode(self, placeholder_mode: PlaceholderMode) -> None:
@@ -385,12 +461,15 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._jid = jid
         self._last_search_string = ""
 
+        if account is not None and jid is not None:
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid)
+            self._is_bare_contact = isinstance(contact, BareContact)
+        else:
+            self._is_bare_contact = False
+
         self._search_filters.set_context(account, jid)
-
-        if self._account is None and self._jid is None:
-            self._ui.calendar_button.set_sensitive(False)
-            return
-
+        self._ui.search_checkbutton.set_active(False)
         self._ui.calendar_button.set_sensitive(True)
 
 
@@ -505,8 +584,10 @@ class ResultRow(Gtk.ListBoxRow):
 @dataclass
 class SearchFilterData:
     usernames: list[str] | None
+    use_all_from_filter: bool | None
     before: dt.datetime | None
     after: dt.datetime | None
+    direction: ChatDirection | None
 
 
 class SearchFilters(Gtk.Expander, SignalManager):
@@ -523,6 +604,9 @@ class SearchFilters(Gtk.Expander, SignalManager):
         Gtk.Expander.__init__(self, label=_("Search Filters"))
         SignalManager.__init__(self)
 
+        self._direction = None
+        self._use_all_from_filter = False
+        self._is_bare_contact = False
         self._after: dt.datetime | None = None
         self._before: dt.datetime | None = None
 
@@ -531,11 +615,21 @@ class SearchFilters(Gtk.Expander, SignalManager):
         )
         self.set_child(self._ui.search_filters_grid)
 
+        self._update_dropdown()
+
         self._connect(
             self._ui.filter_from_entry, "changed", self._on_filter_from_changed
         )
         self._connect(
             self._ui.filter_from_entry, "activate", self._on_from_entry_activated
+        )
+        self._connect(
+            self._ui.filter_from_dropdown,
+            "notify::selected",
+            self._on_filter_from_dropdown_selected,
+        )
+        self._connect(
+            self._ui.search_all_from_checkbutton, "toggled", self._on_from_toggled
         )
         self._connect(
             self._ui.filter_date_before_calendar, "day-selected", self._on_date_selected
@@ -560,11 +654,32 @@ class SearchFilters(Gtk.Expander, SignalManager):
         Gtk.Expander.do_unroot(self)
         app.check_finalize(self)
 
+    def _update_dropdown(self) -> None:
+        self._ui.filter_from_dropdown.set_data(
+            {
+                None: _("All"),
+                ChatDirection.OUTGOING: _("Myself"),
+                ChatDirection.INCOMING: _("Contact")
+                if self._is_bare_contact
+                else _("Nick"),
+            }
+        )
+
     def _on_filter_from_changed(self, _entry: Gtk.Entry) -> None:
         self._update_state()
 
     def _on_from_entry_activated(self, _entry: Gtk.Entry) -> None:
         self.emit("filter-activated")
+
+    def _on_filter_from_dropdown_selected(
+        self, dropdown: GajimDropDown[ChatDirection | None], _pspec: GObject.ParamSpec
+    ) -> None:
+        self._ui.filter_from_entry.set_text("")
+        self._direction = dropdown.get_selected_key()
+        self._update_state()
+
+    def _on_from_toggled(self, _checkbox: Gtk.CheckButton) -> None:
+        self._update_state()
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
         g_datetime = calendar.get_date()
@@ -603,9 +718,28 @@ class SearchFilters(Gtk.Expander, SignalManager):
         self.emit("filter-activated")
 
     def _update_state(self) -> None:
-        from_filter = self._ui.filter_from_entry.get_text()
+        if self._is_bare_contact:
+            self._ui.filter_from_entry.set_text("")
 
-        if any((from_filter, self._before, self._after)):
+        show_entry = (
+            self._direction is ChatDirection.INCOMING and not self._is_bare_contact
+        )
+        self._ui.filter_from_entry.set_visible(show_entry)
+
+        consider_direction = self._direction is not None
+        self._ui.search_all_from_checkbutton.set_visible(consider_direction)
+
+        from_filter_entry = self._ui.filter_from_entry.get_text()
+
+        if self._direction is ChatDirection.OUTGOING:
+            self._ui.search_all_from_checkbutton.set_sensitive(True)
+
+        self._use_all_from_filter = (
+            self._ui.search_all_from_checkbutton.get_active()
+            and self._direction is not None
+        )
+
+        if any((from_filter_entry, consider_direction, self._before, self._after)):
             self.set_label(_("Search Filters (Active)"))
         else:
             self.set_label(_("Search Filters"))
@@ -613,6 +747,9 @@ class SearchFilters(Gtk.Expander, SignalManager):
         self.emit("filter-changed")
 
     def reset(self) -> None:
+        self._use_all_from_filter = False
+        self._ui.filter_from_dropdown.select_key(None)
+        self._direction = None
         self._before = None
         self._after = None
 
@@ -620,20 +757,39 @@ class SearchFilters(Gtk.Expander, SignalManager):
         self._ui.filter_after_label.set_text("-")
 
         self._ui.filter_from_entry.set_text("")
+        self._ui.search_all_from_checkbutton.set_active(False)
 
         self.set_label(_("Search Filters"))
+        self._update_state()
+
+    def highlight_from_entry(self) -> None:
+        self._ui.filter_from_entry.add_css_class(CSS_CLASS_FIELD_MISSING)
+
+    def unhighlight_from_entry(self) -> None:
+        self._ui.filter_from_entry.remove_css_class(CSS_CLASS_FIELD_MISSING)
 
     def set_context(self, account: str | None, jid: JID | None) -> None:
         if account is None or jid is None:
             self._ui.filter_from_desc_label.set_visible(False)
+            self._ui.filter_from_dropdown.set_visible(False)
             self._ui.filter_from_entry.set_visible(False)
+            self._ui.search_all_from_checkbutton.set_visible(False)
+            self.emit("filter-changed")
             return
 
         client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact(jid)
-        visible = not isinstance(contact, BareContact)
-        self._ui.filter_from_desc_label.set_visible(visible)
-        self._ui.filter_from_entry.set_visible(visible)
+        self._is_bare_contact = isinstance(contact, BareContact)
+
+        self._update_dropdown()
+
+        self._ui.filter_from_desc_label.set_visible(True)
+        self._ui.filter_from_dropdown.set_visible(True)
+
+        self._direction = None
+        self._ui.search_all_from_checkbutton.set_active(False)
+
+        self._update_state()
 
     def get_filters(self) -> SearchFilterData:
         usernames: list[str] = []
@@ -643,6 +799,8 @@ class SearchFilters(Gtk.Expander, SignalManager):
 
         return SearchFilterData(
             usernames=usernames or None,
+            use_all_from_filter=self._use_all_from_filter,
             before=self._before,
             after=self._after,
+            direction=self._direction,
         )
