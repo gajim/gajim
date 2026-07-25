@@ -11,6 +11,7 @@ import uuid
 from collections import defaultdict
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -62,6 +63,14 @@ log = logging.getLogger("gajim.gtk.messageactionsbox")
 
 
 class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
+    @GObject.Property(type=bool, default=False)
+    def compact(self) -> bool:  # pyright: ignore
+        return self._compact
+
+    @compact.setter
+    def compact(self, compact: bool) -> None:
+        self._set_compact(compact)
+
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
         EventHelper.__init__(self)
@@ -77,6 +86,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self.add_css_class("message-actions-box")
 
         self.attach(self._ui.box, 0, 0, 1, 1)
+
+        self._compact = False
 
         self._ui.state_box_image.set_size_request(AvatarSize.CHAT, -1)
         self._ui.edit_box_image.set_size_request(AvatarSize.CHAT, -1)
@@ -98,10 +109,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             "show_send_message_button", self._ui.send_message_button, "set_visible"
         )
 
-        voice_message_recorder_button = VoiceMessageRecorderButton()
-        self._ui.action_box.append(voice_message_recorder_button)
+        self._voice_recorder_button = VoiceMessageRecorderButton()
+        self._ui.action_box.append(self._voice_recorder_button)
         self._ui.action_box.reorder_child_after(
-            voice_message_recorder_button, self._ui.send_message_button
+            self._voice_recorder_button, self._ui.send_message_button
         )
 
         self._security_label_selector = SecurityLabelSelector()
@@ -154,6 +165,26 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         app.plugin_manager.gui_extension_point(
             "message_actions_box", self, self._ui.action_box
         )
+
+        # Watch the width of the action area itself and not the window's, the
+        # room the buttons have also depends on the chat list and the
+        # participants list being shown. Set up last, the breakpoint moves the
+        # buttons around as soon as it applies.
+        self._ui.box.remove(self._ui.action_box)
+        breakpoint_bin = Adw.BreakpointBin(child=self._ui.action_box)
+        # AdwBreakpointBin ignores the size of its child, it needs to be told
+        # how far it may shrink. This is what the folded row needs.
+        breakpoint_bin.set_size_request(320, 24)
+        condition = Adw.BreakpointCondition.parse("max-width: 400sp")
+        assert condition is not None
+        compact_breakpoint = Adw.Breakpoint.new(condition)
+        compact_breakpoint.add_setter(
+            self,
+            "compact",
+            GObject.Value(GObject.TYPE_BOOLEAN, True),
+        )
+        breakpoint_bin.add_breakpoint(compact_breakpoint)
+        self._ui.box.append(breakpoint_bin)
 
         self.register_events(
             [
@@ -606,6 +637,33 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         action.set_state(GLib.Variant("s", encryption))
         self._update_encryption_button(encryption, is_available=encryption_available)
         self._update_encryption_details_button(encryption)
+
+    def _get_overflow_widgets(self) -> list[Gtk.Widget]:
+        # The buttons next to the send button, in the order they appear in
+        return [
+            self._voice_recorder_button,
+            self._ui.sendfile_button,
+            self._ui.encryption_menu_button,
+            self._ui.encryption_details_button,
+        ]
+
+    def _set_compact(self, compact: bool) -> None:
+        if self._compact == compact:
+            return
+        self._compact = compact
+
+        if compact:
+            for widget in self._get_overflow_widgets():
+                self._ui.action_box.remove(widget)
+                self._ui.overflow_box.append(widget)
+        else:
+            after = self._ui.send_message_button
+            for widget in self._get_overflow_widgets():
+                self._ui.overflow_box.remove(widget)
+                self._ui.action_box.insert_child_after(widget, after)
+                after = widget
+
+        self._ui.overflow_menu_button.set_visible(compact)
 
     def _update_encryption_button(self, encryption: str, *, is_available: bool) -> None:
         contact = self.get_current_contact()

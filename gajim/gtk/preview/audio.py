@@ -121,7 +121,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
         self._visualizer = AudioWaveformNavigator(
             preview_state=self._preview_state, width=270
         )
-        self._visualizer.set_halign(Gtk.Align.CENTER)
         self._drawing_box.append(self._visualizer)
         self._connect(self._visualizer, "seeked", self._on_seek)
 
@@ -142,6 +141,8 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
 
     def do_unroot(self) -> None:
         Gtk.Box.do_unroot(self)
+
+    def run_destroy(self) -> None:
         self._disconnect_all()
         self._audio_player.stop(self._id)
         self._visualizer.run_destroy()

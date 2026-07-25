@@ -226,6 +226,7 @@ MAIN_WIN_ACTIONS = [
     ("start-voice-call", None, False),
     ("start-video-call", None, False),
     ("show-contact-info", None, True),
+    ("show-chat-share", None, True),
     ("chat-contact-info", "a{sv}", True),
     ("send-message", None, False),
     ("muc-change-nickname", None, False),

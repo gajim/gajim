@@ -99,6 +99,7 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
         timestamp_label = Gtk.Label(
             label=timestamp.strftime(format_string),
             margin_start=6,
+            ellipsize=Pango.EllipsizeMode.END,
         )
         timestamp_label.add_css_class("dimmed")
 

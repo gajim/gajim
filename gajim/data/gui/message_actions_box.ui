@@ -228,6 +228,35 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkMenuButton" id="overflow_menu_button">
+            <property name="valign">center</property>
+            <property name="visible">0</property>
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="yes">More Actions</property>
+            <property name="direction">up</property>
+            <property name="popover">
+              <object class="GtkPopover" id="overflow_popover">
+                <property name="child">
+                  <object class="GtkBox" id="overflow_box">
+                    <property name="spacing">6</property>
+                    <property name="halign">center</property>
+                  </object>
+                </property>
+                <style>
+                  <class name="p-6"/>
+                </style>
+              </object>
+            </property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-ellipsis-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </object>

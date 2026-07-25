@@ -30,7 +30,7 @@ from gajim.common.util.text import make_href_markup
 
 from gajim.gtk.contact_popover import ContactPopover
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
-from gajim.gtk.menus import get_groupchat_menu
+from gajim.gtk.menus import get_groupchat_menu, get_banner_narrow_menu
 from gajim.gtk.menus import get_private_chat_menu
 from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
@@ -70,6 +70,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._client: types.Client | None = None
         self._contact: types.ChatContactT | None = None
+        self._narrow = False
 
         self._last_message_from_phone: set[BareContact] = set()
 
@@ -124,6 +125,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._update_robot_image()
         self._update_roster_button()
         self._update_invite_button()
+        self._update_contact_info_button()
         self._update_avatar()
         self._update_avatar_button_sensitivity()
         self._update_name_label()
@@ -243,6 +245,29 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._update_phone_image()
 
+    def set_narrow(self, narrow: bool) -> None:
+        if self._narrow == narrow:
+            return
+        self._narrow = narrow
+
+        # In narrow mode contact-info/share/invite buttons are
+        # folded into the 3-dot menu.
+        if narrow:
+            self._share_menu_button.set_popover(None)
+            self._share_popover.set_parent(self._chat_menu_button)
+        else:
+            self._share_popover.unparent()
+            self._share_menu_button.set_popover(self._share_popover)
+
+        if self._contact is not None:
+            self._update_invite_button()
+            self._update_share_box()
+            self._update_contact_info_button()
+
+    def present_share_popover(self) -> None:
+        self._update_share_popover()
+        self._share_popover.popup()
+
     def _set_chat_menu(self, menu_button: Gtk.MenuButton) -> None:
         assert self._contact is not None
 
@@ -257,6 +282,11 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         else:
             menu = get_singlechat_menu(self._contact)
+
+        if self._narrow:
+            menu = get_banner_narrow_menu(
+                self._contact.account, self._contact.jid, menu
+            )
 
         menu_button.set_menu_model(menu)
 
@@ -277,7 +307,12 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         )
 
     def _update_invite_button(self) -> None:
-        self._muc_invite_button.set_visible(isinstance(self._contact, GroupchatContact))
+        self._muc_invite_button.set_visible(
+            isinstance(self._contact, GroupchatContact) and not self._narrow
+        )
+
+    def _update_contact_info_button(self) -> None:
+        self._contact_info_button.set_visible(not self._narrow)
 
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
@@ -343,6 +378,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         else:
             self._share_menu_button.set_tooltip_text(_("Share Contact…"))
         self._share_menu_button.set_sensitive(not self._contact.is_pm_contact)
+        self._share_menu_button.set_visible(not self._narrow)
         self._jid_label.set_text(str(self._contact.jid))
 
     def _get_share_uri(self) -> str:
@@ -355,6 +391,9 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
             return self._client.get_module("OMEMO").compose_trust_uri(jid)
 
     def _on_share_activated(self, _button: Gtk.MenuButton, *args: Any) -> None:
+        self._update_share_popover()
+
+    def _update_share_popover(self) -> None:
         assert self._contact is not None
         if isinstance(self._contact, GroupchatContact):
             share_text = _("Scan this QR code to join %s.")

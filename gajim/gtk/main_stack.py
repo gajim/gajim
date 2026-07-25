@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import cast
 
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
@@ -19,6 +20,8 @@ PageT = ChatPage | AccountPage
 class MainStack(Gtk.Stack):
     __gtype_name__ = "MainStack"
 
+    chat_list_collapsed = GObject.Property(type=bool, default=False)
+
     def __init__(self) -> None:
         Gtk.Stack.__init__(self)
 
@@ -28,6 +31,9 @@ class MainStack(Gtk.Stack):
         self._chat_page.connect("chat-selected", self._on_chat_selected)
         self.add_named(self._chat_page, "chats")
         self.add_named(AccountPage(), "account")
+
+    def get_chat_list_collapsed(self) -> bool:
+        return bool(self.get_property("chat-list-collapsed"))
 
     def _get_account_page(self) -> AccountPage:
         return cast(AccountPage, self.get_child_by_name("account"))

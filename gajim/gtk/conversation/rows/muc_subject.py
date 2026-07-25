@@ -32,8 +32,11 @@ class MUCSubject(BaseRow):
         self.timestamp = datetime.fromtimestamp(current_timestamp).astimezone()
         self.db_timestamp = current_timestamp
 
-        self.grid.set_halign(Gtk.Align.START)
-
+        # Don't align the grid itself: with a non-fill alignment GTK needs to
+        # ask the row for its width at the available height. The subject wraps,
+        # so its minimum height (measured at its minimum width) is far larger
+        # than the view, which makes GTK complain. subject_box below keeps the
+        # card at its natural width, which is what we actually want.
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)

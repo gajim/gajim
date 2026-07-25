@@ -2,11 +2,12 @@ from typing import Any
 from typing import Literal
 from typing import overload
 
-from gajim.common.storage.archive.const import ChatDirection
-from gajim.gtk.dropdown import GajimDropDown
 from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
+
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.gtk.dropdown import GajimDropDown
 
 class GajimBuilder:
     def __init__(
@@ -468,6 +469,9 @@ class MessageActionsBoxBuilder(Builder):
     encryption_image: Gtk.Image
     encryption_details_button: Gtk.Button
     encryption_details_image: Gtk.Image
+    overflow_menu_button: Gtk.MenuButton
+    overflow_popover: Gtk.Popover
+    overflow_box: Gtk.Box
     visitor_popover: Gtk.Popover
     request_voice_button: Gtk.Button
 

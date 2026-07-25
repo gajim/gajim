@@ -130,11 +130,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         )
 
     def do_unroot(self) -> None:
-        self._voice_message_recorder.cleanup()
-
-        self._disconnect_all()
-        app.settings.disconnect_signals(self)
         Gtk.MenuButton.do_unroot(self)
+
+    def run_destroy(self) -> None:
+        self._disconnect_all()
+        self._audio_player_widget.run_destroy()
+        app.settings.disconnect_signals(self)
+        app.check_finalize(self)
 
     def _on_register_actions(self, _event: events.RegisterActions) -> None:
         action = app.window.get_action("send-file-httpupload")

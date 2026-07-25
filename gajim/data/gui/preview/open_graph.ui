@@ -4,7 +4,6 @@
   <template class="OpenGraphPreviewWidget" parent="GtkBox">
     <property name="orientation">horizontal</property>
     <property name="halign">start</property>
-    <property name="width-request">450</property>
     <property name="spacing">12</property>
     <property name="overflow">hidden</property>
     <child>

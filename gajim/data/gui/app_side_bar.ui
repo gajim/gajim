@@ -13,6 +13,7 @@
             <property name="item-id">activity</property>
             <property name="icon-name">lucide-bell-symbolic</property>
             <property name="tooltip-text" translatable="yes">Activity Feed</property>
+            <property name="selectable">false</property>
             <child>
               <object class="GtkGestureClick">
                 <property name="button">0</property>

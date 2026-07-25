@@ -63,6 +63,7 @@ class ChatControl(EventHelper):
         self.handlers: dict[int, Any] = {}
         self._contact = None
         self._client = None
+        self._narrow = False
 
         self._ui = get_builder("chat_control.ui")
 
@@ -98,6 +99,10 @@ class ChatControl(EventHelper):
 
         self._widget = self._ui.control_box
 
+        app.settings.connect_signal(
+            "hide_groupchat_occupants_list", self._on_hide_roster_setting
+        )
+
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
         )
@@ -129,6 +134,20 @@ class ChatControl(EventHelper):
 
     def is_groupchat(self) -> bool:
         return isinstance(self._contact, GroupchatContact)
+
+    def set_narrow(self, narrow: bool) -> None:
+        self._narrow = narrow
+        self._roster.set_narrow(narrow)
+        self._update_roster_layout()
+
+    def _on_hide_roster_setting(self, *args: Any) -> None:
+        self._update_roster_layout()
+
+    def _update_roster_layout(self) -> None:
+        # In narrow mode the participant list replaces the message view
+        hide_roster = app.settings.get("hide_groupchat_occupants_list")
+        roster_shown = self.is_groupchat() and not hide_roster
+        self._ui.conv_view_overlay.set_visible(not (self._narrow and roster_shown))
 
     def is_chat_active(self, account: str, jid: JID | None) -> bool:
         if self._contact is None:
@@ -248,6 +267,7 @@ class ChatControl(EventHelper):
             self._request_history(None, "before")
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
+        self._update_roster_layout()
 
         self._reset_message_selection()
 

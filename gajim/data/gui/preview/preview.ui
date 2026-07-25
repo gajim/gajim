@@ -4,9 +4,10 @@
   <template class="PreviewWidget" parent="GtkBox">
     <child>
       <object class="GtkStack" id="_stack">
+        <property name="hhomogeneous">0</property>
+        <property name="vhomogeneous">0</property>
         <property name="halign">start</property>
         <property name="valign">center</property>
-        <property name="width-request">400</property>
         <property name="height-request">50</property>
         <child>
           <object class="GtkStackPage">

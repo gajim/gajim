@@ -23,6 +23,8 @@
               <object class="GtkLabel" id="transfer_description">
                 <property name="halign">start</property>
                 <property name="label">&lt;transfer description&gt;</property>
+                <property name="ellipsize">end</property>
+                <property name="max-width-chars">30</property>
               </object>
             </child>
             <child>

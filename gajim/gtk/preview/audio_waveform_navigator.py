@@ -36,6 +36,7 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
         AudioVisualizerWidget.__init__(
             self,
             width=width,
+            height=height,
             is_seekable=True,
         )
         SignalManager.__init__(self)
@@ -47,8 +48,6 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
 
         self._scroll_step = 1e9  # 1 second
 
-        self._width = width
-        self._height = height
         self._is_ltr = bool(self.get_direction() == Gtk.TextDirection.LTR)
 
         gesture_seek_click = Gtk.GestureClick(
@@ -74,6 +73,7 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
 
     def run_destroy(self) -> None:
         self._disconnect_all()
+        AudioVisualizerWidget.run_destroy(self)
         app.check_finalize(self)
 
     def update(self) -> None:
@@ -95,10 +95,8 @@ class AudioWaveformNavigator(AudioVisualizerWidget, SignalManager):
 
         if not self._is_ltr:
             x = x_max - x
-        x = max(0.0, x)
-        x = min(x, x_max)
-        timestamp = x / x_max * self._preview_state.duration
-        return timestamp
+
+        return self.convert_x_to_position(x) * self._preview_state.duration
 
     def _on_button_pressed(
         self,

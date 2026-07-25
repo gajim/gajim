@@ -11,6 +11,7 @@ from concurrent.futures import Future
 from functools import partial
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -41,6 +42,143 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preview.image")
 
 
+MIN_PREVIEW_WIDTH = 100
+
+# Previews are scaled down in steps of this many pixels.
+PREVIEW_WIDTH_STEP = 10
+
+
+class ImagePreviewLayout(Gtk.BinLayout):
+    """Scales the preview down to the available width in discrete steps.
+
+    do_measure() must report a height which does not depend on the width it is
+    offered. A row which grows taller as it gets wider makes the height-for-width
+    of the conversation's Gtk.ListBox non-monotonic, and GTK's size allocation
+    then under-allocates it ("gtk_distribute_natural_allocation: assertion
+    'extra_space >= 0' failed", triggered by an image preview followed by a
+    wrapping message).
+
+    The width the preview scales to is therefore not taken from the measured
+    for_size, but re-picked from the last allocation, in steps and with
+    hysteresis. Each individual measure pass stays self-consistent that way.
+    """
+
+    __gtype_name__ = "ImagePreviewLayout"
+
+    def __init__(self) -> None:
+        Gtk.BinLayout.__init__(self)
+        self._dimension: tuple[int, int] | None = None
+        self._preview_width: int | None = None
+        self._update_id: int | None = None
+
+    def set_preview_dimension(self, width: int, height: int) -> None:
+        self._dimension = (max(width, 1), max(height, 1))
+        self._preview_width = None
+        self.layout_changed()
+
+    def reset(self) -> None:
+        if self._update_id is not None:
+            GLib.source_remove(self._update_id)
+            self._update_id = None
+
+    def do_get_request_mode(self, widget: Gtk.Widget) -> Gtk.SizeRequestMode:
+        return Gtk.SizeRequestMode.HEIGHT_FOR_WIDTH
+
+    def _get_preview_size(self) -> tuple[int, int]:
+        assert self._dimension is not None
+        width, height = self._dimension
+
+        if self._preview_width is None:
+            # Nothing has been allocated yet, ask for the full size
+            return width, height
+
+        preview_width = min(
+            max(self._preview_width, min(width, MIN_PREVIEW_WIDTH)), width
+        )
+        return preview_width, round(preview_width * height / width)
+
+    def do_measure(
+        self, widget: Gtk.Widget, orientation: Gtk.Orientation, for_size: int
+    ) -> tuple[int, int, int, int]:
+        if self._dimension is None:
+            minimum, natural, *_ = Gtk.BinLayout.do_measure(
+                self, widget, orientation, for_size
+            )
+            return minimum, natural, -1, -1
+
+        width, _height = self._dimension
+        _, preview_height = self._get_preview_size()
+
+        if orientation == Gtk.Orientation.HORIZONTAL:
+            # Keep asking for the full width, otherwise the preview could never
+            # find out that there is room to grow again
+            return min(width, MIN_PREVIEW_WIDTH), width, -1, -1
+
+        return preview_height, preview_height, -1, -1
+
+    def do_allocate(
+        self, widget: Gtk.Widget, width: int, height: int, baseline: int
+    ) -> None:
+        available_width = width
+
+        if self._dimension is not None:
+            preview_width, _ = self._get_preview_size()
+            # The height we reported belongs to preview_width, don't let the
+            # image get any wider than that or it would be letterboxed
+            width = min(width, preview_width)
+
+        Gtk.BinLayout.do_allocate(self, widget, width, height, baseline)
+
+        self._queue_preview_width(available_width)
+
+    def _get_target_width(self, available_width: int) -> int:
+        assert self._dimension is not None
+        width, _height = self._dimension
+
+        if available_width >= width:
+            # There is room for the full size, don't round it down
+            target = width
+        else:
+            target = max(
+                available_width // PREVIEW_WIDTH_STEP * PREVIEW_WIDTH_STEP,
+                PREVIEW_WIDTH_STEP,
+            )
+
+        if self._preview_width is None:
+            return target
+
+        if available_width < self._preview_width:
+            # The preview does not fit anymore, it has to shrink
+            return target
+
+        if available_width - self._preview_width < 2 * PREVIEW_WIDTH_STEP:
+            # Stay as is, only grow once there is a step to spare. This is the
+            # hysteresis which keeps a scrollbar from toggling the size.
+            return self._preview_width
+
+        return target
+
+    def _queue_preview_width(self, available_width: int) -> None:
+        if self._dimension is None or self._update_id is not None:
+            return
+
+        target = self._get_target_width(available_width)
+        if target == self._preview_width:
+            return
+
+        # Resizing from within size allocation is not allowed, defer it
+        self._update_id = GLib.idle_add(self._apply_preview_width, target)
+
+    def _apply_preview_width(self, target: int) -> bool:
+        self._update_id = None
+
+        if target != self._preview_width:
+            self._preview_width = target
+            self.layout_changed()
+
+        return GLib.SOURCE_REMOVE
+
+
 @Gtk.Template.from_string(string=get_ui_string("preview/image.ui"))
 class ImagePreviewWidget(Gtk.Box, SignalManager):
     __gtype_name__ = "ImagePreviewWidget"
@@ -54,6 +192,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
     }
 
     _stack: Gtk.Stack = Gtk.Template.Child()
+    _content_clamp: Adw.Clamp = Gtk.Template.Child()
     _content_overlay: Gtk.Overlay = Gtk.Template.Child()
     _image_button: Gtk.Button = Gtk.Template.Child()
     _picture: Gtk.Picture = Gtk.Template.Child()
@@ -75,6 +214,9 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         self._thumb_path = thumb_path
         self._filename = filename
         self._mime_type = mime_type
+
+        self._layout = ImagePreviewLayout()
+        self.set_layout_manager(self._layout)
 
         if mime_type in IMAGE_MIME_TYPES:
             self._type = "image"
@@ -205,6 +347,11 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
 
         return width, height
 
+    def _set_preview_dimension(self, width: int, height: int) -> None:
+        self._content_clamp.set_maximum_size(width)
+        self._content_clamp.set_tightening_threshold(width)
+        self._layout.set_preview_dimension(width, height)
+
     def _display_static_image_preview(self) -> None:
         try:
             texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(self._thumbnail))
@@ -218,14 +365,12 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
 
         width, height = self._image_preview_dimension(texture_width, texture_height)
 
-        # Set minimum height of 100 to avoid button overlay covering entire image
-        self._content_overlay.set_size_request(width, max(height, 100))
+        self._set_preview_dimension(width, height)
         self._image_button.set_tooltip_text(self._filename)
         self._picture.set_paintable(texture)
 
         if self._type == "video":
             self._image_button.add_css_class("preview-video-overlay")
-            width, height = self._content_overlay.get_size_request()
             self._play_image.set_pixel_size(min(width, height) // 3)
             self._play_image.set_visible(True)
 
@@ -237,15 +382,13 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         image_width, image_height = image_size(self._orig_path)
         width, height = self._image_preview_dimension(image_width, image_height)
 
-        animated_image = AnimatedImage(
-            self._thumb_path, self._orig_path, width, height, backend
-        )
+        animated_image = AnimatedImage(self._thumb_path, self._orig_path, backend)
         pointer_cursor = Gdk.Cursor.new_from_name("pointer")
         animated_image.set_cursor(pointer_cursor)
 
         self._connect(animated_image, "error", self._on_animated_image_error)
 
-        self._content_overlay.set_size_request(width, height)
+        self._set_preview_dimension(width, height)
         self._content_overlay.set_child(animated_image)
         self._image_button.set_tooltip_text(self._filename)
         self._stack.set_visible_child_name("preview")
@@ -268,5 +411,6 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         self._file_control_buttons.set_visible(False)
 
     def do_unroot(self) -> None:
+        self._layout.reset()
         Gtk.Box.do_unroot(self)
         self._disconnect_all()

@@ -12,6 +12,7 @@ from urllib.parse import quote
 
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository.Gio import Menu
 from nbxmpp import JID
 
 from gajim.common import app
@@ -239,6 +240,29 @@ def get_encryption_menu() -> GajimMenu:
     ]
 
     return GajimMenu.from_list(menuitems)
+
+
+def get_banner_narrow_menu(
+    account: str, jid: JID | None, base_menu: Gio.Menu
+) -> Menu | None:
+    if jid is None:
+        return None
+
+    client = app.get_client(account)
+    contact = client.get_module("Contacts").get_contact(jid)
+
+    menuitems: MenuItemListT = [
+        (_("Chat Details and Settings"), "win.show-contact-info", None)
+    ]
+
+    if isinstance(contact, GroupchatContact):
+        menuitems.append((_("Invite to this chat…"), "win.muc-invite", None))
+    if not contact.is_pm_contact:
+        menuitems.append((_("Share…"), "win.show-chat-share", None))
+
+    combined = GajimMenu.from_list(menuitems)
+    combined.append_section(None, base_menu)
+    return combined
 
 
 def get_message_input_extra_context_menu() -> Gio.Menu:

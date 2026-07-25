@@ -74,6 +74,10 @@ class ConversationView(Gtk.ScrolledWindow):
         ),
     }
 
+    # Time without any scroll position change after which scrolling is
+    # considered to be finished
+    _SCROLL_END_DELAY = 100
+
     def __init__(
         self, message_row_actions: MessageRowActions, storage: MessageArchiveStorage
     ) -> None:
@@ -117,6 +121,8 @@ class ConversationView(Gtk.ScrolledWindow):
         self._scroll_hint_row = None
 
         self._current_upper: float = 0
+        self._block_upper_scroll = False
+        self._applying_anchor = False
         self._autoscroll: bool = True
         self._wait_for_map_after_scroll = False
         self._pk_for_scroll: int | None = None
@@ -125,6 +131,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._lower_complete: bool = True
         self._requesting: str | None = None
         self._block_signals = False
+        self._scroll_end_timeout_id: int | None = None
 
         self._signal_handlers_enabled = False
         self._signal_handler_ids = (0, 0)
@@ -222,6 +229,11 @@ class ConversationView(Gtk.ScrolledWindow):
     def clear(self) -> None:
         app.settings.disconnect_signals(self)
         self._enable_signal_handlers(False)
+
+        if self._scroll_end_timeout_id is not None:
+            GLib.source_remove(self._scroll_end_timeout_id)
+            self._scroll_end_timeout_id = None
+
         self._reset()
 
         self._contact = None
@@ -344,6 +356,94 @@ class ConversationView(Gtk.ScrolledWindow):
 
         idle_add_once(adj.set_value, value)
 
+    def do_size_allocate(self, width: int, height: int, baseline: int) -> None:
+        # Rows are height-for-width, so anything which changes their height
+        # moves the content the user is reading: a resize rewraps the text, and
+        # an image preview picks a new size an idle after that. Remember where
+        # the topmost visible row sits and put it back afterwards, otherwise
+        # the scroll position stays put while the content above it grows or
+        # shrinks, and the messages slide up and down.
+        anchor = self._get_scroll_anchor()
+
+        self._block_upper_scroll = anchor is not None
+        Gtk.ScrolledWindow.do_size_allocate(self, width, height, baseline)
+        self._block_upper_scroll = False
+
+        if anchor is None or not self._restore_scroll_anchor(anchor):
+            return
+
+        # Gtk.Viewport applies the scroll position when it allocates its child,
+        # so allocate a second time to make the correction part of this frame
+        # instead of the next one.
+        Gtk.ScrolledWindow.do_size_allocate(self, width, height, baseline)
+
+    def _get_scroll_anchor(self) -> tuple[Gtk.ListBoxRow | None, float] | None:
+        """Remember which row sits at the top of the viewport, and where.
+
+        Returns None if there is nothing to keep in place, and a row of None to
+        signal that the view should stay at the bottom.
+        """
+        if self._wait_for_map_after_scroll:
+            # A scroll to a specific message is pending, don't interfere
+            return None
+
+        if self._autoscroll:
+            return None, 0
+
+        adj = self.get_vadjustment()
+        value = adj.get_value()
+
+        row = self._list_box.get_row_at_y(round(value))
+        if row is None:
+            return None
+
+        coordinates = row.translate_coordinates(self._list_box, 0, 0)
+        if coordinates is None:
+            return None
+
+        row_y = coordinates[1]
+        if row_y < value:
+            # The row is partially scrolled out of view. Prefer the row below
+            # it, so that a rewrap of this row extends it upwards, out of the
+            # viewport, instead of pushing everything the user sees downwards.
+            next_row = row.get_next_sibling()
+            if next_row is not None:
+                coordinates = next_row.translate_coordinates(self._list_box, 0, 0)
+                if (
+                    coordinates is not None
+                    and coordinates[1] - value < adj.get_page_size()
+                ):
+                    row, row_y = cast(Gtk.ListBoxRow, next_row), coordinates[1]
+
+        return row, row_y - value
+
+    def _restore_scroll_anchor(
+        self, anchor: tuple[Gtk.ListBoxRow | None, float]
+    ) -> bool:
+        adj = self.get_vadjustment()
+        max_value = max(adj.get_upper() - adj.get_page_size(), 0)
+        row, offset = anchor
+
+        if row is None:
+            value = max_value
+        else:
+            coordinates = row.translate_coordinates(self._list_box, 0, 0)
+            if coordinates is None:
+                # The row is gone
+                return False
+            value = min(max(coordinates[1] - offset, 0), max_value)
+
+        if abs(value - adj.get_value()) < 1:
+            return False
+
+        # Keeping the content in place is not the user scrolling, don't let it
+        # turn into autoscroll. Otherwise content which shrinks enough to push
+        # the anchor against the bottom would latch the view there.
+        self._applying_anchor = True
+        adj.set_value(value)
+        self._applying_anchor = False
+        return True
+
     def _on_adj_upper_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
@@ -361,12 +461,13 @@ class ConversationView(Gtk.ScrolledWindow):
         if diff != 0:
             self._current_upper = upper
             if self._autoscroll:
-                self._scroll_to_pos_idle(adj, -1)
+                if not self._block_upper_scroll:
+                    self._scroll_to_pos_idle(adj, -1)
             else:
                 # Workaround
                 # https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
                 self.set_kinetic_scrolling(True)
-                if self._requesting == "before":
+                if self._requesting == "before" and not self._block_upper_scroll:
                     self._scroll_to_pos_idle(adj, adj.get_value() + diff)
 
         if upper == adj.get_page_size():
@@ -381,6 +482,8 @@ class ConversationView(Gtk.ScrolledWindow):
     def _on_adj_value_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
+        self._start_scrolling()
+
         if self._requesting is not None:
             return
 
@@ -394,8 +497,9 @@ class ConversationView(Gtk.ScrolledWindow):
         #     f"{self._autoscroll=}"
         # )
 
-        self._autoscroll = self._determine_autoscroll()
-        self._notify("at-bottom")
+        if not self._applying_anchor:
+            self._autoscroll = self._determine_autoscroll()
+            self._notify("at-bottom")
 
         if self._upper_complete:
             self._request_history_at_upper = None
@@ -431,6 +535,32 @@ class ConversationView(Gtk.ScrolledWindow):
             self.set_kinetic_scrolling(False)
             self._emit("request-history", "after")
             self._requesting = "after"
+
+    def _start_scrolling(self) -> None:
+        if self._scroll_end_timeout_id is None:
+            self._message_row_actions.set_scrolling(True)
+        else:
+            GLib.source_remove(self._scroll_end_timeout_id)
+
+        self._scroll_end_timeout_id = GLib.timeout_add(
+            self._SCROLL_END_DELAY, self._stop_scrolling
+        )
+
+    def _stop_scrolling(self) -> bool:
+        self._scroll_end_timeout_id = None
+
+        self._reposition_message_row_actions()
+        self._message_row_actions.set_scrolling(False)
+
+        return GLib.SOURCE_REMOVE
+
+    def _reposition_message_row_actions(self) -> None:
+        if not self._message_row_actions.get_visible():
+            return
+
+        row = self._message_row_actions.get_message_row()
+        if row is not None:
+            self._update_message_row_actions(row)
 
     @property
     def contact(self) -> types.ChatContactT:
@@ -878,15 +1008,22 @@ class ConversationView(Gtk.ScrolledWindow):
         if previous_flags & Gtk.StateFlags.PRELIGHT:
             self._message_row_actions.hide_actions()
         else:
-            try:
-                success, point = row.compute_point(self, Graphene.Point.zero())
-            except GLib.Error:
-                return
+            self._update_message_row_actions(row)
 
-            if not success:
-                return
+    def _update_message_row_actions(self, row: MessageRow) -> None:
+        try:
+            success, point = row.compute_point(self, Graphene.Point.zero())
+        except GLib.Error:
+            return
 
-            self._message_row_actions.update(point.y, row)
+        if not success:
+            return
+
+        if point.y + row.get_height() < 0 or point.y > self.get_height():
+            self._message_row_actions.hide_actions()
+            return
+
+        self._message_row_actions.update(point.y, row)
 
     def remove_message(self, pk: int) -> None:
         row = self._get_row_by_pk(pk)

@@ -527,14 +527,19 @@ entry.field-missing {
 
 /* MessageActionsBox */
 .message-actions-box { margin: 2px 13px 8px 8px; }
+/* The action box is wrapped in an AdwBreakpointBin, whose node is "widget" */
 .message-actions-box > box > box > button:not(:hover),
-.message-actions-box > box > box > menubutton > button:not(:hover) {
+.message-actions-box > box > box > menubutton > button:not(:hover),
+.message-actions-box > box > widget > box > button:not(:hover),
+.message-actions-box > box > widget > box > menubutton > button:not(:hover) {
     background: transparent;
     border: 1px solid transparent;
     box-shadow: none;
 }
 .message-actions-box > box > box > button:hover,
-.message-actions-box > box > box > menubutton > button:hover {
+.message-actions-box > box > box > menubutton > button:hover,
+.message-actions-box > box > widget > box > button:hover,
+.message-actions-box > box > widget > box > menubutton > button:hover {
     border: 1px solid transparent;
     border-radius: 8px;
 }

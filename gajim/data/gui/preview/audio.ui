@@ -43,8 +43,9 @@
                     </child>
                     <child>
                       <object class="GtkBox" id="_drawing_box">
-                        <property name="width-request">285</property>
                         <property name="height-request">50</property>
+                        <property name="hexpand">1</property>
+                        <property name="margin-end">8</property>
                         <property name="orientation">vertical</property>
                       </object>
                     </child>

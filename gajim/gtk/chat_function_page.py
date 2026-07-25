@@ -119,6 +119,9 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 
+    def reset(self) -> None:
+        self._reset()
+
     def process_escape(self) -> None:
         close_control = self._mode in (
             FunctionMode.CREATION_FAILED,

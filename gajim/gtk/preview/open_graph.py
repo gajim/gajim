@@ -141,3 +141,4 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         del self._menu_popover
         self._disconnect_all()
+        Gtk.Box.do_unroot(self)

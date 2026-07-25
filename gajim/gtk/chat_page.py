@@ -63,6 +63,7 @@ class ChatPage(Gtk.Paned):
 
         self._restore_occupants_list = False
         self._startup_finished: bool = False
+        self._narrow = False
         self._closed_chat_memory: list[tuple[str, JID, str]] = []
 
         self._chat_control = self._chat_stack.get_chat_control()
@@ -123,6 +124,23 @@ class ChatPage(Gtk.Paned):
     def get_activity_list(self) -> ActivityListView:
         return self._activity_list
 
+    def set_narrow(self, narrow: bool) -> None:
+        self._narrow = narrow
+        self._chat_stack.set_narrow(narrow)
+        self._update_search_layout()
+
+    def _update_search_layout(self) -> None:
+        searching = self._search_revealer.get_reveal_child()
+        self._search_revealer.set_hexpand(self._narrow and searching)
+        self._chat_stack.set_visible(not (self._narrow and searching))
+
+    def set_conversation_visible(self, visible: bool) -> None:
+        end_child = self.get_end_child()
+        assert end_child is not None
+        end_child.set_visible(visible)
+        if not visible:
+            self.hide_search()
+
     @Gtk.Template.Callback()
     def _on_handle_position_notify(self, paned: Gtk.Paned, *args: Any) -> None:
         position = paned.get_position()
@@ -168,6 +186,12 @@ class ChatPage(Gtk.Paned):
     def _on_search_history(
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:
+        self.show_search()
+
+    def is_search_active(self) -> bool:
+        return self._search_revealer.get_reveal_child()
+
+    def show_search(self) -> None:
         contact = self._chat_control.get_contact()
         if contact is not None:
             self._search_view.set_context(contact.account, contact.jid)
@@ -180,6 +204,7 @@ class ChatPage(Gtk.Paned):
 
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
+        self._update_search_layout()
 
     def _mark_all_activities_as_read(
         self, _action: Gio.SimpleAction, _param: Literal[None]
@@ -361,6 +386,7 @@ class ChatPage(Gtk.Paned):
     def hide_search(self) -> bool:
         if self._search_revealer.get_reveal_child():
             self._search_revealer.set_reveal_child(False)
+            self._update_search_layout()
 
             if self._restore_occupants_list and self._chat_control.is_groupchat():
                 # Restore GroupchatRoster only if a group chat is selected

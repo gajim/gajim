@@ -27,7 +27,6 @@ from gajim.gtk.sidebar_listbox import SideBarListBox
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.status_selector import StatusSelectorPopover
 from gajim.gtk.util.misc import get_ui_string
-from gajim.gtk.util.misc import transform_to_inverted_bool
 from gajim.gtk.widgets import GajimPopover
 from gajim.gtk.workspace_listbox import WorkspaceListBox
 
@@ -78,15 +77,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         )
 
     def _on_register_actions(self, _event: RegisterActions) -> None:
-        focus_action = app.window.lookup_action("focus-mode")
-        assert focus_action is not None
-        focus_action.bind_property(
-            "state",
-            self,
-            "visible",
-            transform_to=transform_to_inverted_bool,
-        )
-
         action = app.window.lookup_action("chat-list-visible")
         assert action is not None
         action.bind_property(
@@ -213,7 +203,7 @@ class AppSideBar(Gtk.Box, EventHelper):
     def _transform_to_icon_name(
         binding: GObject.Binding, is_visible: GLib.Variant
     ) -> str:
-        direction = "left" if is_visible.unpack() else "right"
+        direction = "right" if is_visible.unpack() else "left"
         return f"lucide-chevron-{direction}-symbolic"
 
     @staticmethod
@@ -230,18 +220,23 @@ class AppSideBar(Gtk.Box, EventHelper):
 
     def select_chat(self) -> None:
         self._top_listbox.unselect_all()
+        self._activity_row.set_selectable(False)
         self._bottom_listbox.unselect_all()
 
     def show_account_page(self) -> None:
         self._top_listbox.unselect_all()
+        self._activity_row.set_selectable(False)
         self._workspace_listbox.unselect_all()
 
     def show_activity_page(self) -> None:
+        self._activity_row.set_selectable(True)
+        self._top_listbox.select_row(self._activity_row)
         self._bottom_listbox.unselect_all()
         self._workspace_listbox.unselect_all()
 
     def activate_workspace(self, workspace_id: str) -> None:
         self._top_listbox.unselect_all()
+        self._activity_row.set_selectable(False)
         self._bottom_listbox.unselect_all()
         self._workspace_listbox.activate_workspace(workspace_id)
 

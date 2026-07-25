@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import math
+from dataclasses import dataclass
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -20,7 +21,23 @@ from gajim.gtk.audio_player import AudioSampleT
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 
 
+@dataclass(frozen=True)
+class SliderStyle:
+    fill_color: Gdk.RGBA
+    border_color: Gdk.RGBA
+    border_width: float
+
+
+@dataclass(frozen=True)
+class SliderGeometry:
+    x: float
+    y: float
+    radius: float
+
+
 class AudioVisualizerWidget(Gtk.Widget):
+    _MIN_WIDTH = 80
+
     def __init__(
         self,
         width: int = 340,
@@ -28,19 +45,17 @@ class AudioVisualizerWidget(Gtk.Widget):
         x_offset: int = 0,
         is_seekable: bool = False,
     ) -> None:
-        Gtk.Widget.__init__(
-            self,
-            margin_start=x_offset,
-            width_request=width,
-            height_request=height,
-            halign=Gtk.Align.START,
-        )
+        Gtk.Widget.__init__(self, margin_start=x_offset)
 
         self._bar_width = 2  # px
+        self._natural_width = width
+        self._natural_height = height
+
         self._width = width
         self._height = height
         self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
 
+        self._raw_samples: AudioSampleT = []
         self._samples: AudioSampleT = []
         self._is_seekable = is_seekable
         self._seek_position = -1.0
@@ -67,23 +82,72 @@ class AudioVisualizerWidget(Gtk.Widget):
         color_default.alpha = max(0.0, accent.alpha - 0.4)
         self._color_default = color_default
 
-    def do_unroot(self) -> None:
+    def do_unroot(self):
+        Gtk.Widget.do_unroot(self)
+
+    def run_destroy(self) -> None:
         app.check_finalize(self)
+
+    def do_measure(
+        self, orientation: Gtk.Orientation, for_size: int
+    ) -> tuple[int, int, int, int]:
+        if orientation == Gtk.Orientation.HORIZONTAL:
+            return self._MIN_WIDTH, self._natural_width, -1, -1
+
+        return self._natural_height, self._natural_height, -1, -1
+
+    def do_size_allocate(self, width: int, height: int, baseline: int) -> None:
+        if width == self._width and height == self._height:
+            return
+
+        self._width = width
+        self._height = height
+        self._rebuild_static_path()
 
     def get_effective_width(self) -> int:
         return self._width
+
+    @property
+    def _slider_radius(self) -> int:
+        return self._height // 5
+
+    @property
+    def _graph_x_offset(self) -> float:
+        # Inset the graph by the slider's radius, so that the slider can be
+        # centered on the first and the last bar without leaving our bounds.
+        if not self._is_seekable:
+            return 0.0
+        return float(self._slider_radius)
+
+    @property
+    def _graph_width(self) -> float:
+        return self._width - 2 * self._graph_x_offset
+
+    def convert_x_to_position(self, x: float) -> float:
+        if self._graph_width <= 0:
+            return 0.0
+
+        position = (x - self._graph_x_offset) / self._graph_width
+        return min(max(position, 0.0), 1.0)
 
     def set_parameters(self, position: float, live_mode: bool = False) -> None:
         self._position = position
         self._live_mode = live_mode
 
     def set_samples(self, samples: AudioSampleT) -> None:
-        if self._is_static:
-            samples = self._downsample(samples)
-            samples = self._normalize(samples)
-            samples = self._rescale(samples)
-            self._waveform_path = self._build_static_path(samples)
+        self._raw_samples = samples
         self._samples = samples
+        self._rebuild_static_path()
+
+    def _rebuild_static_path(self) -> None:
+        if not self._is_static or not self._raw_samples:
+            return
+
+        samples = self._downsample(self._raw_samples)
+        samples = self._normalize(samples)
+        samples = self._rescale(samples)
+        self._samples = samples
+        self._waveform_path = self._build_static_path(samples)
 
     def render_animated_graph(self, scroll_fraction: float = 0.0) -> None:
         if not self._samples:
@@ -115,7 +179,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         if not self._is_LTR:
             self._apply_rtl_transform(snapshot)
 
-        play_x = self._position * self._width
+        play_x = self._graph_x_offset + self._position * self._graph_width
 
         snapshot.push_clip(Graphene.Rect().init(0, 0, self._width, self._height))
         snapshot.append_fill(
@@ -130,7 +194,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         snapshot.pop()
 
         if self._seek_position >= 0:
-            seek_x = self._seek_position * self._width
+            seek_x = self._graph_x_offset + self._seek_position * self._graph_width
             x0 = min(play_x, seek_x)
             x1 = max(play_x, seek_x)
             snapshot.push_clip(Graphene.Rect().init(x0, 0, x1 - x0, self._height))
@@ -142,17 +206,19 @@ class AudioVisualizerWidget(Gtk.Widget):
         else:
             slider_pos = play_x
 
-        slider_pos = max(slider_pos, self._bar_width)
-        slider_pos = min(slider_pos, self._width - self._bar_width)
-        slider_radius = self._height // 5
+        # The position may run out of bounds while seeking
+        slider_pos = max(slider_pos, self._graph_x_offset)
+        slider_pos = min(slider_pos, self._graph_x_offset + self._graph_width)
         self._draw_slider(
             snapshot,
-            x=slider_pos,
-            y=self._height // 2,
-            radius=slider_radius,
-            fill_color=self._slider_color,
-            border_color=self._slider_border_color,
-            border_width=1,
+            SliderGeometry(
+                x=slider_pos, y=self._height // 2, radius=self._slider_radius
+            ),
+            SliderStyle(
+                fill_color=self._slider_color,
+                border_color=self._slider_border_color,
+                border_width=1,
+            ),
         )
 
     def _draw_animated(self, snapshot: Gtk.Snapshot) -> None:
@@ -160,8 +226,8 @@ class AudioVisualizerWidget(Gtk.Widget):
             self._apply_rtl_transform(snapshot)
 
         n = len(self._samples)
-        x_step = (self._width - 2 * self._bar_width) / n
-        x0 = x_step * (1.0 - self._scroll_fraction)
+        x_step = (self._graph_width - 2 * self._bar_width) / n
+        x0 = self._graph_x_offset + x_step * (1.0 - self._scroll_fraction)
         cy = self._height / 2
         fade_n = max(1, n // 8)
 
@@ -193,13 +259,16 @@ class AudioVisualizerWidget(Gtk.Widget):
     def _draw_slider(
         self,
         snapshot: Gtk.Snapshot,
-        x: float,
-        y: float,
-        radius: float,
-        fill_color: Gdk.RGBA,
-        border_color: Gdk.RGBA,
-        border_width: float,
+        geometry: SliderGeometry,
+        style: SliderStyle,
     ) -> None:
+        x = geometry.x
+        y = geometry.y
+        radius = geometry.radius
+        fill_color = style.fill_color
+        border_color = style.border_color
+        border_width = style.border_width
+
         rect = Graphene.Rect()
         rect.init(
             x - radius,
@@ -222,11 +291,11 @@ class AudioVisualizerWidget(Gtk.Widget):
         if not samples:
             return None
         n = len(samples)
-        x_step = (self._width - 2 * self._bar_width) / n
+        x_step = (self._graph_width - 2 * self._bar_width) / n
         cy = self._height / 2
         pb = Gsk.PathBuilder.new()
         for i, (s1, s2) in enumerate(samples):
-            self._add_bar(pb, x_step * (i + 1), cy, s1, s2)
+            self._add_bar(pb, self._graph_x_offset + x_step * (i + 1), cy, s1, s2)
         return pb.to_path()
 
     def _add_bar(
@@ -259,7 +328,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         pb.close()
 
     def _downsample(self, samples: AudioSampleT) -> AudioSampleT:
-        num_bars = int(self._width / (self._bar_width * 2))
+        num_bars = int(self._graph_width / (self._bar_width * 2))
         if num_bars == 0:
             log.error("Number of bars is zero")
             return []

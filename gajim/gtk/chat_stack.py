@@ -64,6 +64,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         EventHelper.__init__(self)
         SignalManager.__init__(self)
 
+        self.set_hhomogeneous(False)
+        self.set_vhomogeneous(False)
+
         self._current_contact: ChatContactT | None = None
         self._last_quoted_id: int | None = None
 
@@ -164,6 +167,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             "start-voice-call",
             "send-message",
             "show-contact-info",
+            "show-chat-share",
             "muc-change-nickname",
             "muc-invite",
             "muc-contact-info",
@@ -207,6 +211,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
     def get_chat_control(self) -> ChatControl:
         return self._chat_control
+
+    def set_narrow(self, narrow: bool) -> None:
+        self._chat_banner.set_narrow(narrow)
+        self._chat_control.set_narrow(narrow)
 
     def get_message_action_box(self) -> MessageActionsBox:
         return self._message_action_box
@@ -642,6 +650,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             else:
                 open_window("ContactInfo", account=contact.account, contact=contact)
 
+        elif action_name == "show-chat-share":
+            self._chat_banner.present_share_popover()
+
         elif action_name == "muc-contact-info":
             assert param is not None
             nick = param.get_string()
@@ -858,16 +869,18 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self.set_visible_child_name("function")
 
     def _on_function_finished(
-        self, _function_page: ChatFunctionPage, close_control: bool
+        self, function_page: ChatFunctionPage, close_control: bool
     ) -> None:
         if close_control:
             self._close_control()
             self.set_visible_child_name("empty")
             self.set_transition_type(Gtk.StackTransitionType.NONE)
+            function_page.reset()
             return
 
         self.set_visible_child_name("controls")
         self.set_transition_type(Gtk.StackTransitionType.NONE)
+        function_page.reset()
 
     def _on_function_message(
         self, _function_page: ChatFunctionPage, message: str

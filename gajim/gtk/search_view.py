@@ -121,6 +121,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def do_unroot(self) -> None:
         self._disconnect_all()
         self.unregister_events()
+        Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 
     def _on_account_state(self, _event: Any) -> None:

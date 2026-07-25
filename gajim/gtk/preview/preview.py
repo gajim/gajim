@@ -119,6 +119,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._info_message = None
         self._http_obj = None
         self._state = PreviewState.INIT
+        self._widget = None
 
         drag_source = Gtk.DragSource(actions=Gdk.DragAction.COPY)
         self._connect(drag_source, "prepare", self._on_drag_prepare)
@@ -191,6 +192,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
     def do_unroot(self) -> None:
         self._disconnect_all()
+        if isinstance(self._widget, AudioPreviewWidget):
+            self._widget.run_destroy()
         del self._menu_popover
         del self._http_obj
         Gtk.Box.do_unroot(self)
@@ -239,6 +242,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._progressbar.set_fraction(0)
 
     def _set_display_widget(self, widget: Gtk.Widget) -> None:
+        # Image and audio previews manage their own size, the card's minimum
+        # height must not be imposed on them.
+        self._stack.set_size_request(-1, -1)
         self._stack.add_named(widget, "widget")
         self._stack.set_visible_child_name("widget")
 
@@ -276,6 +282,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
             if widget is not None:
                 self._connect(widget, "display-error", self._on_display_error)
                 self._set_display_widget(widget)
+                self._widget = widget
 
             return
 

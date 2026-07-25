@@ -102,6 +102,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_reveal_child(not app.settings.get("hide_groupchat_occupants_list"))
         self.connect("notify::reveal-child", self._on_reveal)
 
+        self._narrow = False
+
         self._ui.search_entry.connect("search-changed", self._on_search_changed)
         self._ui.search_entry.connect(
             "stop-search",
@@ -115,6 +117,18 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             GObject.BindingFlags.SYNC_CREATE,
             transform_to=self._transform_count_to_label,
         )
+
+    def set_narrow(self, narrow: bool) -> None:
+        # When narrow, the roster replaces the message view and should fill the
+        # available width instead of keeping its fixed sidebar width.
+        self._narrow = narrow
+        if narrow:
+            self._contact_view.set_size_request(-1, -1)
+        else:
+            self._contact_view.set_size_request(
+                app.settings.get("groupchat_roster_width"), -1
+            )
+        self.set_hexpand(narrow)
 
     @GObject.Property(type=int)
     def total_count(self) -> int:

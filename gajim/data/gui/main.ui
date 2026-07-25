@@ -34,10 +34,26 @@
     </section>
   </menu>
   <template class="MainWindow" parent="AdwApplicationWindow">
+     <!-- Because of the AdwBreakpoints below, AdwApplicationWindow acts as the
+     breakpoint host. When using breakpoints, the window no longer gets a
+     minimum size from its content, so it must be told how small it may really
+     get. Otherwise the content can overflow and Adwaita warns about it
+     ("exceeds MainWindow height"). The height is dictated by AppSideBar,
+     whose rows don't scroll. -->
+    <property name="width-request">360</property>
+    <property name="height-request">360</property>
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar" id="_header_bar">
+            <child type="start">
+              <object class="GtkButton" id="_back_button">
+                <property name="visible">false</property>
+                <property name="margin-start">6</property>
+                <property name="icon-name">lucide-panel-left-close-symbolic</property>
+                <signal name="clicked" handler="_on_back_clicked"/>
+              </object>
+            </child>
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="tooltip-text">Help</property>
@@ -54,25 +70,22 @@
         <property name="content">
           <object class="AdwToastOverlay" id="_toast_overlay">
             <child>
-              <object class="GtkGrid">
+              <object class="AdwOverlaySplitView" id="_split_view">
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
-                <child>
-                  <object class="AppSideBar" id="_app_side_bar">
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="MainStack" id="_main_stack">
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
+                <property name="collapsed">false</property>
+                <property name="show-sidebar">true</property>
+                <property name="min-sidebar-width">50</property>
+                <property name="max-sidebar-width">50</property>
+                <property name="sidebar-width-unit">px</property>
+                <property name="enable-show-gesture">true</property>
+                <property name="enable-hide-gesture">true</property>
+                <property name="sidebar">
+                  <object class="AppSideBar" id="_app_side_bar"/>
+                </property>
+                <property name="content">
+                  <object class="MainStack" id="_main_stack"/>
+                </property>
                 <style>
                   <class name="mainwindow-grid"/>
                 </style>
@@ -82,5 +95,18 @@
         </property>
       </object>
     </property>
+    <child>
+      <object class="AdwBreakpoint">
+        <condition>max-width: 800sp</condition>
+        <setter object="_main_stack" property="chat-list-collapsed">true</setter>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBreakpoint">
+        <condition>max-width: 560sp</condition>
+        <setter object="_main_stack" property="chat-list-collapsed">true</setter>
+        <setter object="_split_view" property="collapsed">true</setter>
+      </object>
+    </child>
   </template>
 </interface>

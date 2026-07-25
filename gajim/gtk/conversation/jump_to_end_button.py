@@ -23,7 +23,7 @@ class JumpToEndButton(Gtk.Overlay):
         Gtk.Overlay.__init__(self)
         self.set_halign(Gtk.Align.END)
         self.set_valign(Gtk.Align.END)
-        self.set_margin_end(6)
+        self.set_margin_end(12)
         self.set_margin_bottom(12)
 
         icon = Gtk.Image.new_from_icon_name("lucide-chevrons-down-symbolic")

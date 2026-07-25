@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 import weakref
 from datetime import datetime
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -42,6 +43,8 @@ class SimpleLabel(Gtk.Label):
 
 
 class MessageRowActions(Gtk.Box):
+    _FADE_IN_DURATION = 150
+
     def __init__(self) -> None:
         Gtk.Box.__init__(
             self,
@@ -57,8 +60,17 @@ class MessageRowActions(Gtk.Box):
 
         self._has_cursor = False
         self._is_menu_open = False
+        self._is_scrolling = False
 
         self._timeout_id: int | None = None
+
+        self._fade_in_animation = Adw.TimedAnimation(
+            widget=self,
+            value_from=0,
+            value_to=1,
+            duration=self._FADE_IN_DURATION,
+            target=Adw.PropertyAnimationTarget.new(self, "opacity"),
+        )
 
         self._reaction_buttons: list[Gtk.Button | Gtk.MenuButton] = []
 
@@ -114,7 +126,22 @@ class MessageRowActions(Gtk.Box):
         # if the cursor enters (cursor changes from row to MessageRowActions)
         self._hide_with_timeout()
 
-    def _get_message_row(self) -> MessageRow | None:
+    def set_scrolling(self, scrolling: bool) -> None:
+        if self._is_scrolling == scrolling:
+            return
+
+        self._is_scrolling = scrolling
+
+        if self._is_menu_open:
+            return
+
+        if scrolling:
+            self._fade_in_animation.reset()
+            self.set_opacity(0)
+        else:
+            self._fade_in_animation.play()
+
+    def get_message_row(self) -> MessageRow | None:
         if self._message_row is None:
             return None
         return self._message_row()
@@ -164,6 +191,9 @@ class MessageRowActions(Gtk.Box):
     def switch_contact(self, contact: ChatContactT) -> None:
         self._message_row = None
         self._contact = contact
+        self._is_scrolling = False
+        self._fade_in_animation.reset()
+        self.set_opacity(1)
         self.set_visible(False)
 
     def _hide_with_timeout(self) -> None:
@@ -178,7 +208,7 @@ class MessageRowActions(Gtk.Box):
         if self._has_cursor or self._message_row is None:
             return
 
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             message_row.remove_css_class("conversation-row-hover")
 
         self.set_visible(False)
@@ -194,7 +224,7 @@ class MessageRowActions(Gtk.Box):
         if self._is_menu_open:
             return
 
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             # message_row may be None if MessageRowActions are entered without
             # hovering a MessageRow before (e.g. by switching chats via shortcut)
             message_row.add_css_class("conversation-row-hover")
@@ -207,11 +237,11 @@ class MessageRowActions(Gtk.Box):
             # but we don't want to hide MessageRowActions
             return
 
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             message_row.remove_css_class("conversation-row-hover")
 
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             app.window.activate_action("win.reply", GLib.Variant("u", message_row.pk))
 
     def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
@@ -230,11 +260,11 @@ class MessageRowActions(Gtk.Box):
         self._send_reaction(emoji, toggle=False)
 
     def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             message_row.send_reaction(emoji, toggle)
 
     def _on_create_more_popover(self, button: Gtk.MenuButton) -> None:
-        message_row = self._get_message_row()
+        message_row = self.get_message_row()
         if message_row is None:
             return
 
@@ -247,7 +277,7 @@ class MessageRowActions(Gtk.Box):
         if isinstance(popover, EmojiChooser):
             popover.disconnect_by_func(self._on_popover_closed)
 
-        if message_row := self._get_message_row():
+        if message_row := self.get_message_row():
             message_row.remove_css_class("conversation-row-hover")
 
         self._is_menu_open = False

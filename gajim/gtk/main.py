@@ -91,6 +91,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     __gtype_name__ = "MainWindow"
 
     _header_bar: Adw.HeaderBar = Gtk.Template.Child()
+    _back_button: Gtk.Button = Gtk.Template.Child()
+    _split_view: Adw.OverlaySplitView = Gtk.Template.Child()
     _app_side_bar: AppSideBar = Gtk.Template.Child()
     _main_stack: MainStack = Gtk.Template.Child()
     _toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
@@ -107,6 +109,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._startup_finished: bool = False
         self._chat_list_visible_before_focus: bool = True
+
+        self._restore_search_on_expand = False
+        self._restore_roster_on_expand = False
+        self._restore_chat_list_on_expand = False
+        self._chat_list_was_collapsed = False
 
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
@@ -126,6 +133,19 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._connect_actions()
 
         self._app_side_bar.set_chat_page(self._chat_page)
+
+        self._split_view.connect("notify::collapsed", self._on_layout_changed)
+        self._split_view.connect(
+            "notify::show-sidebar", self._on_sidebar_visibility_changed
+        )
+        self._main_stack.connect(
+            "notify::chat-list-collapsed", self._on_chat_list_collapsed_changed
+        )
+        self._main_stack.connect("notify::visible-child-name", self._on_layout_changed)
+        self.get_action("chat-list-visible").connect(
+            "notify::state", self._on_layout_changed
+        )
+        self._update_navigation()
 
         self.connect("notify::is-active", self._on_window_active)
         self.connect("close-request", self._on_close_request)
@@ -188,6 +208,128 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         action = self.lookup_action(name)
         assert action is not None
         action.change_state(GLib.Variant("b", value))
+
+    def _on_layout_changed(self, *args: Any) -> None:
+        self._update_navigation()
+
+    def _on_sidebar_visibility_changed(self, *args: Any) -> None:
+        self._update_sidebar_button()
+
+    def _get_chat_list_visible(self) -> bool:
+        if self._get_focus_mode():
+            # The action is forced to False, the layout's state is kept aside
+            return self._chat_list_visible_before_focus
+
+        state = self.get_action("chat-list-visible").get_state()
+        return True if state is None else state.get_boolean()
+
+    def _set_chat_list_visible(self, visible: bool) -> None:
+        # In Focus Mode the chat list stays hidden, no matter what the layout
+        # asks for. Remember the requested state, so that it can be restored
+        # once Focus Mode ends.
+        if self._get_focus_mode():
+            self._chat_list_visible_before_focus = visible
+            return
+
+        self.set_action_state("chat-list-visible", visible)
+
+    def _on_chat_list_collapsed_changed(self, *args: Any) -> None:
+        collapsed = self._main_stack.get_chat_list_collapsed()
+        if collapsed == self._chat_list_was_collapsed:
+            return
+        self._chat_list_was_collapsed = collapsed
+
+        if collapsed:
+            self._restore_search_on_expand = self._chat_page.is_search_active()
+            self._restore_roster_on_expand = not app.settings.get(
+                "hide_groupchat_occupants_list"
+            )
+            self._chat_page.hide_search()
+            app.settings.set("hide_groupchat_occupants_list", True)
+            chat_stack = self._chat_page.get_chat_stack()
+
+            # The chat stack wins over the chat list. Whatever it shows (a chat,
+            # a function page, an activity) stays visible, only the placeholder
+            # gives way to the list.
+            if chat_stack.get_visible_child_name() != "empty":
+                self._restore_chat_list_on_expand = self._get_chat_list_visible()
+                self._set_chat_list_visible(False)
+        else:
+            if self._restore_chat_list_on_expand:
+                self._set_chat_list_visible(True)
+            if self._restore_roster_on_expand:
+                app.settings.set("hide_groupchat_occupants_list", False)
+            if self._restore_search_on_expand:
+                self._chat_page.show_search()
+
+            self._restore_chat_list_on_expand = False
+            self._restore_roster_on_expand = False
+            self._restore_search_on_expand = False
+
+        self._update_navigation()
+
+    def _update_navigation(self) -> None:
+        """Adapt the layout to the current window width.
+
+        Two Adw.Breakpoints (declared in main.ui) drive the state:
+        below 800sp ``_main_stack.chat-list-collapsed`` becomes True, below
+        560sp ``_split_view.collapsed`` becomes True as well. In these narrow
+        bands the chat list and the conversation are shown one at a time, and
+        the header bar provides a sidebar toggle.
+
+        Focus Mode overrides all of this and hides the sidebar rail entirely.
+        """
+        focus_mode = self._get_focus_mode()
+        rail_collapsed = self._split_view.get_collapsed()
+        chat_list_collapsed = self._main_stack.get_chat_list_collapsed()
+        collapsed = rail_collapsed or chat_list_collapsed
+
+        state = self.get_action("chat-list-visible").get_state()
+        showing_list = True if state is None else state.get_boolean()
+
+        page = self._main_stack.get_visible_child_name()
+
+        self._chat_page.set_conversation_visible(
+            not chat_list_collapsed or not showing_list
+        )
+
+        self._chat_page.set_narrow(chat_list_collapsed)
+
+        if focus_mode:
+            self._split_view.set_show_sidebar(False)
+        elif not rail_collapsed:
+            self._split_view.set_show_sidebar(True)
+        elif page == "chats":
+            self._split_view.set_show_sidebar(showing_list)
+        elif page == "account":
+            self._split_view.set_show_sidebar(False)
+        else:
+            self._split_view.set_show_sidebar(True)
+
+        self._back_button.set_visible(not focus_mode and rail_collapsed)
+        self._update_sidebar_button()
+
+        # Keep the back button reachable even if the user hid the header bar.
+        if sys.platform not in ("win32", "darwin"):
+            if collapsed:
+                self._header_bar.set_visible(True)
+            else:
+                self._header_bar.set_visible(app.settings.get("show_header_bar"))
+
+    def _update_sidebar_button(self) -> None:
+        if self._split_view.get_show_sidebar():
+            icon_name = "lucide-panel-left-close-symbolic"
+            tooltip = _("Hide Sidebar")
+        else:
+            icon_name = "lucide-panel-left-open-symbolic"
+            tooltip = _("Show Sidebar")
+        self._back_button.set_icon_name(icon_name)
+        self._back_button.set_tooltip_text(tooltip)
+
+    @Gtk.Template.Callback()
+    def _on_back_clicked(self, _button: Gtk.Button) -> None:
+        show_sidebar = self._split_view.get_show_sidebar()
+        self._split_view.set_show_sidebar(not show_sidebar)
 
     def get_chat_stack(self) -> ChatStack:
         return self._chat_page.get_chat_stack()
@@ -413,6 +555,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         action.connect("notify::state", self._on_focus_mode_changed)
         self.add_action(action)
 
+    def _get_focus_mode(self) -> bool:
+        state = self.get_action("focus-mode").get_state()
+        return False if state is None else state.get_boolean()
+
     def _on_focus_mode_changed(self, action: Gio.SimpleAction, _param: Any) -> None:
         state = action.get_state()
         assert state is not None
@@ -425,6 +571,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.set_action_state(
                 "chat-list-visible", self._chat_list_visible_before_focus
             )
+
+        self._update_navigation()
 
     def _connect_actions(self) -> None:
         actions = [
@@ -817,6 +965,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def _on_chat_selected(self, *args: Any) -> None:
         self._app_side_bar.select_chat()
 
+        if self._main_stack.get_chat_list_collapsed():
+            self._set_chat_list_visible(False)
+
     def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> int:
         if app.settings.get("confirm_on_window_delete"):
             open_window("QuitDialog")
@@ -1066,6 +1217,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if not self.is_chat_active(account, message.remote.jid):
             message_type = MessageType(message.type).to_str()
             app.window.add_chat(account, message.remote.jid, message_type, select=True)
+
+        if self._main_stack.get_chat_list_collapsed():
+            self._chat_page.hide_search()
 
         control.scroll_to_message(message.pk, message.timestamp)
 
