@@ -25,6 +25,7 @@ def extract_video_thumbnail_and_properties(
     pipeline = Gst.Pipeline.new()
 
     uridecodebin = Gst.ElementFactory.make("uridecodebin3")
+    videoflip = Gst.ElementFactory.make("videoflip")
     videoconvert = Gst.ElementFactory.make("videoconvert")
     videoscale = Gst.ElementFactory.make("videoscale")
     capsfilter = Gst.ElementFactory.make("capsfilter")
@@ -33,6 +34,7 @@ def extract_video_thumbnail_and_properties(
 
     pipeline_elements = [
         uridecodebin,
+        videoflip,
         videoconvert,
         videoscale,
         capsfilter,
@@ -43,6 +45,7 @@ def extract_video_thumbnail_and_properties(
         raise Exception(f"\n{__name__}: Some pipeline elements were None")
 
     assert uridecodebin is not None
+    assert videoflip is not None
     assert videoconvert is not None
     assert videoscale is not None
     assert capsfilter is not None
@@ -54,8 +57,10 @@ def extract_video_thumbnail_and_properties(
     appsink.set_property("max-buffers", 1)
     appsink.set_property("drop", True)
     uridecodebin.set_property("uri", input_.as_uri())
+    videoflip.set_property("method", 8)  # automatic
 
     pipeline.add(uridecodebin)
+    pipeline.add(videoflip)
     pipeline.add(videoconvert)
     pipeline.add(videoscale)
     pipeline.add(capsfilter)
@@ -85,13 +90,14 @@ def extract_video_thumbnail_and_properties(
 
     def on_pad_added(_bin: Gst.Bin, pad: Gst.Pad) -> None:
         assert pad is not None
-        sink_pad = videoconvert.get_static_pad("sink")
+        sink_pad = videoflip.get_static_pad("sink")
         assert sink_pad is not None
         if not sink_pad.is_linked():
             pad.link(sink_pad)
 
     handler_id = uridecodebin.connect("pad-added", on_pad_added)
 
+    videoflip.link(videoconvert)
     videoconvert.link(videoscale)
     videoscale.link(capsfilter)
     capsfilter.link(pngenc)
