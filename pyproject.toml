@@ -105,6 +105,8 @@ reportMissingModuleSource = "none"
 exclude = [
   "**/__pycache__",
   ".flatpak-builder",
+  "flatpak_build",
+  "flatpak_repo",
   ".git",
   ".venv",
   "build",
