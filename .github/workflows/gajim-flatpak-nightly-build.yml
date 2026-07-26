@@ -1,0 +1,37 @@
+name: Gajim Flatpak Nightly Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
+
+jobs:
+  flatpak:
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            deb_arch: amd64
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            deb_arch: arm64
+
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install flatpak-builder
+        run: sudo apt install -y flatpak flatpak-builder
+      - name: Add flathub repository
+        run: flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      - name: Build flatpak
+        run: flatpak-builder --user --repo=flatpak_repo --install-deps-from=flathub --force-clean flatpak_build flatpak/org.gajim.Gajim.Devel.yaml
+      - name: Create single-file bundle
+        run: flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo flatpak_repo "gajim-nightly-${{ matrix.arch }}.flatpak" org.gajim.Gajim.Devel
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      - name: Upload flatpak bundle via FTPS
+        run: "curl -T gajim-*.flatpak --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/linux/Gajim-${{ steps.date.outputs.date }}-${{ matrix.arch }}.flatpak"
