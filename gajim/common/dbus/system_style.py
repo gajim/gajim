@@ -38,7 +38,7 @@ class SystemStyleListener:
                 None,
             )
         except GLib.Error as error:
-            log.info("Settings portal not found: %s", error)
+            log.warning("Settings portal not found: %s", error)
             return
 
         self.dbus_proxy.connect("g-signal", self._signal_setting_changed)
@@ -47,16 +47,19 @@ class SystemStyleListener:
     def read_color_scheme(self) -> None:
         try:
             result = self.dbus_proxy.call_sync(
-                "Read",
+                "ReadOne",
                 GLib.Variant("(ss)", ("org.freedesktop.appearance", "color-scheme")),
                 Gio.DBusCallFlags.NO_AUTO_START,
-                -1,
+                500,
                 None,
             )
-            self._prefer_dark = result[0] == 1
         except GLib.Error as error:
             log.error("Couldn’t read the color-scheme setting: %s", error.message)
-            return
+
+        else:
+            value = result[0] == 1
+            self._prefer_dark = value
+            log.info("Current color-scheme: %s", value)
 
     def _signal_setting_changed(
         self,
