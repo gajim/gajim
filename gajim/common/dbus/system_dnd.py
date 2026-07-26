@@ -11,6 +11,7 @@ import sys
 
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common.events import DndChanged
@@ -34,7 +35,7 @@ class DoNotDisturbListener:
             return
 
         try:
-            self.dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
+            self._dbus_proxy = Gio.DBusProxy.new_for_bus(
                 Gio.BusType.SESSION,
                 Gio.DBusProxyFlags.NONE,
                 None,
@@ -42,27 +43,48 @@ class DoNotDisturbListener:
                 "/org/freedesktop/Notifications",
                 "org.freedesktop.DBus.Properties",
                 None,
+                self._on_proxy_ready,
             )
         except GLib.Error as error:
             log.info("Notifications service not found: %s", error)
             return
 
-        self.dbus_proxy.connect("g-signal", self._signal_properties_changed)
+    def read_inhibited(self) -> None:
+        if self._dbus_proxy is None:
+            return
+
+        self._dbus_proxy.call(
+            "Get",
+            GLib.Variant(
+                "(ss)",
+                ("org.freedesktop.Notifications", "Inhibited"),
+            ),
+            Gio.DBusCallFlags.NO_AUTO_START,
+            1000,  # 1 second timeout
+            None,
+            self._on_read_inhibited,
+        )
+
+    def _on_proxy_ready(self, _source: GObject.Object, result: Gio.AsyncResult) -> None:
+        assert self._dbus_proxy is None
+
+        try:
+            self._dbus_proxy = Gio.DBusProxy.new_for_bus_finish(result)
+        except GLib.Error as error:
+            log.info("Notifications service not found: %s", error)
+            return
+
+        self._dbus_proxy.connect("g-signal", self._signal_properties_changed)
         self.read_inhibited()
 
-    def read_inhibited(self) -> None:
+    def _on_read_inhibited(
+        self, _source: GObject.Object, result: Gio.AsyncResult
+    ) -> None:
+        assert self._dbus_proxy is not None
+
         try:
-            result = self.dbus_proxy.call_sync(
-                "Get",
-                GLib.Variant(
-                    "(ss)",
-                    ("org.freedesktop.Notifications", "Inhibited"),
-                ),
-                Gio.DBusCallFlags.NO_AUTO_START,
-                -1,
-                None,
-            )
-            self._inhibited = result.unpack()[0]
+            value = self._dbus_proxy.call_finish(result)
+            self._inhibited = value.unpack()[0]
         except GLib.Error as error:
             log.error("Couldn't read Do Not Disturb state: %s", error.message)
 
