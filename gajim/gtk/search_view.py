@@ -146,6 +146,8 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._last_search_string = ""
         self._ui.search_entry.set_text("")
         self._search_filters.reset()
+        self._unhighlight_search_entry()
+        self._search_filters.unhighlight_from_entry()
         self._clear_results()
 
     def _clear_results(self) -> None:
@@ -176,9 +178,12 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
             self._last_search_string = self._ui.search_entry.get_text()
             self._ui.search_entry.set_text("")
             self._ui.search_entry.set_placeholder_text(_("Searching all…"))
+            self._unhighlight_search_entry()
         else:
             self._ui.search_entry.set_text(self._last_search_string)
             self._ui.search_entry.set_placeholder_text(_("Search…"))
+            if not self._last_search_string:
+                self._highlight_search_entry()
 
         self._search_state_changed()
 
@@ -189,6 +194,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def _on_search_entry_changed(self, entry: Gtk.Entry) -> None:
         if not self._search_filters.get_filters().use_all_from_filter:
             self._last_search_string = entry.get_text()
+        self._unhighlight_search_entry()
         self._search_state_changed()
 
     def _on_search_button_clicked(self, _button: Gtk.Button, *args: Any) -> None:
@@ -666,6 +672,7 @@ class SearchFilters(Gtk.Expander, SignalManager):
         )
 
     def _on_filter_from_changed(self, _entry: Gtk.Entry) -> None:
+        self.unhighlight_from_entry()
         self._update_state()
 
     def _on_from_entry_activated(self, _entry: Gtk.Entry) -> None:
