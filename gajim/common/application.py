@@ -30,7 +30,6 @@ from gajim.common import passwords
 from gajim.common.cert_store import CertificateStore
 from gajim.common.client import Client
 from gajim.common.commands import ChatCommands
-from gajim.common.dbus.system_dnd import DoNotDisturbListener
 from gajim.common.events import AccountCreated
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
@@ -103,7 +102,6 @@ class CoreApplication(ged.EventHelper):
             return False
 
         app.cert_store = CertificateStore()
-        app.dnd_status = DoNotDisturbListener.get()
         app.task_manager = TaskManager()
         app.pulse_manager = PulseManager()
 

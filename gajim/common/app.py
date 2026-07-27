@@ -41,7 +41,6 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common import types
 from gajim.common.const import Display
-from gajim.common.dbus.system_dnd import DoNotDisturbListener
 from gajim.common.i18n import get_default_lang
 from gajim.common.multiprocess import init_process
 
@@ -105,8 +104,6 @@ ftm = cast("FileTransferManager", None)
 
 task_manager = cast("TaskManager", None)
 pulse_manager = cast("PulseManager", None)
-
-dnd_status = cast("DoNotDisturbListener", None)
 
 gupnp_igd = None
 
