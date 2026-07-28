@@ -1,9 +1,19 @@
 # -*- mode: python -*-
 
-block_cipher = None
+import typing
+
+import sys
+import glob
+import os
+
+if typing.TYPE_CHECKING:
+    from PyInstaller.building.api import EXE, PYZ, COLLECT
+    from PyInstaller.building.build_main import Analysis
+
 
 cwd = os.getcwd()
 icon = os.path.join(cwd, "mac", "Gajim.icns")
+block_cipher = None
 
 info_plist = {
     "CFBundleDisplayName": "Gajim",
@@ -13,30 +23,6 @@ info_plist = {
     ],
     "NSUIElement": True,
 }
-
-import sys
-import glob
-import platform
-
-# Hidden libs to add because we remove PIL._imagingft to avoid non-system versions
-hidden_libs = ["libsoup-*.dylib", "libgtksourceview-*.dylib"]
-
-# Get homebrew lib path according to system arch
-if platform.machine() == "x86_64":
-    lib_path = "/usr/local/lib/"
-elif platform.machine() == "arm64":
-    lib_path = "/opt/homebrew/lib/"
-
-# Select the last libs found
-hidden_binaries = []
-for lib_name in hidden_libs:
-    lib_file = glob.glob(lib_path + lib_name)[-1]
-    hidden_binaries.append((lib_file, "."))
-
-# Collect GI-repository typelibs
-gi_typelib_files = glob.glob(lib_path + "girepository-*/*.typelib")
-for lib_file in gi_typelib_files:
-    hidden_binaries.append((lib_file, "gi_typelibs/"))
 
 sys.path.insert(0, os.path.join(cwd))
 
@@ -48,13 +34,56 @@ hiddenimports = ["gajim.common.modules." + m for m in modules_list]
 
 sys.path.pop(0)
 
+gst_include_plugins = [
+    "app",
+    "applemedia",
+    "audioconvert",
+    "audiofx",
+    "audioparsers",
+    "audioresample",
+    "audiotestsrc",
+    "autodetect",
+    "base",
+    "coreelements",
+    "flac",
+    "gtk4",
+    "id3demux",
+    "isomp4",
+    "level",
+    "matroska",
+    "mpg123",
+    "ogg",
+    "opengl",
+    "opus",
+    "osxaudio",
+    "playback",
+    "png",
+    "videoconvertscale",
+    "videofilter",
+    "videoparsersbad",
+    "videotestsrc",
+    "volume",
+    "vpx",
+    "wavenc",
+    "wavparse",
+    "webp",
+    "ximagesrc",
+]
+
 a = Analysis(
     ["launch.py"],
     pathex=[cwd],
-    binaries=hidden_binaries,
     datas=[("gajim", "gajim")],
     hiddenimports=hiddenimports,
-    hookspath=[],
+    hookspath=[os.path.join(os.getcwd(), "mac", "hooks")],
+    hooksconfig={
+        "gi": {
+            "module-versions": {"Gtk": "4.0", "GtkSource": "5"},
+        },
+        "gstreamer": {
+            "include_plugins": gst_include_plugins,
+        },
+    },
     runtime_hooks=[],
     excludes=["PIL._imagingft"],
     win_no_prefer_redirects=False,
@@ -62,7 +91,9 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
 exe = EXE(
     pyz,
     a.scripts,
@@ -75,10 +106,12 @@ exe = EXE(
     upx=True,
     console=False,
 )
+
 coll = COLLECT(
     exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name="launch"
 )
-app = BUNDLE(
+
+app = BUNDLE(  # pyright: ignore
     coll,
     name="Gajim.app",
     icon=icon,
