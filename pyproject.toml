@@ -90,7 +90,7 @@ gajim = ["py.typed"]
 version = {attr = "gajim.__version__"}
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,debian_build,flatpak_build,dist,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana"
+skip = "*__pycache__*,_build_root,build,debian_build,flatpak_build,dist,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana,hook-*.py"
 ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin,FLE"
 
 [tool.pyright]
@@ -148,6 +148,7 @@ exclude = [
   "typings/pystray/*",
   "typings/windows_toasts/*",
   "win/misc/depcheck.py",
+  "mac/hooks/*",
 ]
 
 [tool.ruff]
@@ -270,6 +271,7 @@ ignore = [
   "UP037",  # Remove quotes from type annotation
   "UP046",  # Generic class uses `Generic` subclass instead of type parameters
   "UP047",  # Generic should use type parameters
+  "N999",   # Invalid module name
 ]
 
 exclude = [
