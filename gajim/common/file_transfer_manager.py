@@ -179,7 +179,10 @@ class FileTransferManager:
         except Exception as error:
             output = obj.get_output_path()
             if output is not None:
-                output.unlink(missing_ok=True)
+                try:
+                    output.unlink(missing_ok=True)
+                except Exception:
+                    log.exception("Unable to remove file: %s", str(output))
             obj.set_exception(error)
 
         else:
