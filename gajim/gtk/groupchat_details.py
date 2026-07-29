@@ -143,7 +143,9 @@ class GroupchatDetails(GajimAppWindow):
 
     def _cleanup(self) -> None:
         self._switcher.run_destroy()
+        self._groupchat_blocks.run_destroy()
         del self._switcher
+        del self._groupchat_blocks
         del self._groupchat_manage
         del self._groupchat_info
 
@@ -207,8 +209,8 @@ class GroupchatDetails(GajimAppWindow):
         self._switcher.set_item_visible("encryption-openpgp", True)
 
     def _add_blocks(self) -> None:
-        blocks = GroupchatBlocks(self._client, self._contact)
-        self._ui.blocks_box.append(blocks)
+        self._groupchat_blocks = GroupchatBlocks(self._client, self._contact)
+        self._ui.blocks_box.append(self._groupchat_blocks)
         self._switcher.set_item_visible("blocks", True)
 
     def _add_affiliations(self) -> None:

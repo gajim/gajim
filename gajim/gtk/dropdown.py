@@ -145,8 +145,12 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
     def get_item_count(self) -> int:
         return self._model.get_n_items()
 
-    def do_unroot(self) -> None:
-        Gtk.DropDown.do_unroot(self)
+    def run_destroy(self) -> None:
+        # item can carry tooltips, and GTK hides a visible tooltip only via gtk_widget_unroot().
+        # Destroying the items while still rooted results in a leak.
+        if self.get_root() is not None:
+            self.unparent()
+
         self.set_model(None)
         self._model.remove_all()
         app.check_finalize(self._model)

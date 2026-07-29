@@ -468,6 +468,7 @@ class ListSingleField(Field):
 
         self._unique = treeview
         self._treeview = None
+        self._chat_type_drop_down: GajimDropDown[str] | None = None
 
         if self.read_only:
             self._widget = Gtk.Label(label=field.value, selectable=True)
@@ -481,6 +482,8 @@ class ListSingleField(Field):
 
     def destroy(self) -> None:
         Field.destroy(self)
+        if self._chat_type_drop_down is not None:
+            self._chat_type_drop_down.run_destroy()
         if self._treeview is not None:
             app.check_finalize(self._treeview)
         del self._treeview
@@ -492,10 +495,10 @@ class ListSingleField(Field):
                 label = value
             data[value] = label
 
-        dropdown: GajimDropDown[str] = GajimDropDown(data=data)
-        dropdown.set_valign(Gtk.Align.CENTER)
-        dropdown.select_key(field.value)
-        self._widget = dropdown
+        self._chat_type_drop_down = GajimDropDown(data=data)
+        self._chat_type_drop_down.set_valign(Gtk.Align.CENTER)
+        self._chat_type_drop_down.select_key(field.value)
+        self._widget = self._chat_type_drop_down
         self._connect(self._widget, "notify::selected", self._changed)
 
     def _changed(self, dropdown: GajimDropDown[str], *args: Any) -> None:

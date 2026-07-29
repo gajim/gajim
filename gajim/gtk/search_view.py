@@ -659,6 +659,7 @@ class SearchFilters(Gtk.Expander, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Expander.do_unroot(self)
+        self._ui.filter_from_dropdown.run_destroy()
         app.check_finalize(self)
 
     def _update_dropdown(self) -> None:

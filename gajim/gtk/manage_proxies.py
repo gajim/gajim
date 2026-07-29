@@ -98,6 +98,7 @@ class ManageProxies(GajimAppWindow):
         self._proxies_treeview.add_controller(controller)
 
     def _cleanup(self) -> None:
+        self._proxytype_dropdown.run_destroy()
         window_pref = get_app_window("Preferences")
         window_account_wizard = get_app_window("AccountWizard")
         if window_pref is not None:

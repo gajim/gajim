@@ -79,13 +79,16 @@ class GroupchatBlocks(Gtk.Box, SignalManager):
         self._connect(self._ui.search_entry, "search-changed", self._on_search_changed)
         self._connect(self._ui.remove_button, "clicked", self._on_remove_button_clicked)
 
-    def _cleanup(self, *args: Any) -> None:
+    def run_destroy(self) -> None:
+        self._disconnect_all()
         self._client.disconnect_all_from_obj(self)
+        self._ui.column_view.set_model(None)
         del self._selection_model
         del self._model
         del self._string_filter
         del self._client
         del self._contact
+        app.check_finalize(self)
 
     @staticmethod
     def _on_factory_setup(

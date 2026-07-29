@@ -82,9 +82,6 @@ class AudioVisualizerWidget(Gtk.Widget):
         color_default.alpha = max(0.0, accent.alpha - 0.4)
         self._color_default = color_default
 
-    def do_unroot(self):
-        Gtk.Widget.do_unroot(self)
-
     def run_destroy(self) -> None:
         app.check_finalize(self)
 

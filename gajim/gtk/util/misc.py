@@ -335,6 +335,13 @@ def iterate_children(widget: Gtk.Widget) -> Iterator[Gtk.Widget]:
         yield child
 
 
+# GTK maintains this as a single internal instance shared across all windows,
+# lazily parented onto whichever toplevel most recently queried a tooltip
+# It's not owned by the widget being unrooted, so it must not be tracked as
+# one of its children when checking for finalization.
+_GTK_INTERNAL_SINGLETON_WIDGETS = frozenset({"GtkTooltipWindow"})
+
+
 def iterate_widget_tree(
     widget: Gtk.Widget, parent: str | None = None, only_children: bool = False
 ) -> Iterator[tuple[Gtk.Widget, str | None]]:
@@ -350,9 +357,12 @@ def iterate_widget_tree(
     if child is None:
         return
 
-    yield from iterate_widget_tree(child, parent)
+    if child.__class__.__name__ not in _GTK_INTERNAL_SINGLETON_WIDGETS:
+        yield from iterate_widget_tree(child, parent)
 
     while child := child.get_next_sibling():
+        if child.__class__.__name__ in _GTK_INTERNAL_SINGLETON_WIDGETS:
+            continue
         yield from iterate_widget_tree(child, parent)
 
 

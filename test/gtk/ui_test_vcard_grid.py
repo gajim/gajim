@@ -141,7 +141,7 @@ class TestVCardGrid(GajimAppWindow):
         self._is_editable = not self._is_editable
 
     def _cleanup(self) -> None:
-        pass
+        self._vcard_grid.run_destroy()
 
 
 util.init_settings()

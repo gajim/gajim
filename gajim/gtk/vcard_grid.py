@@ -263,9 +263,8 @@ class VCardGrid(Gtk.Grid):
         self._vcard: VCard | None = None
         self._props: list[VCardPropertyGui] = []
 
-    def do_unroot(self) -> None:
+    def run_destroy(self) -> None:
         self.clear()
-        Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
 
     def set_editable(self, enabled: bool) -> None:
@@ -371,9 +370,8 @@ class ValueLabel(Gtk.Label, SignalManager):
         else:
             self.set_value(prop.value)
 
-    def do_unroot(self) -> None:
+    def run_destroy(self) -> None:
         self._disconnect_all()
-        Gtk.Label.do_unroot(self)
         app.check_finalize(self)
 
     def set_value(self, value: str) -> None:
@@ -634,7 +632,6 @@ class TypeDropDown(GajimDropDown[str], SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         super().do_unroot()
-        app.check_finalize(self)
 
     def _on_selected(
         self, _dropdown: GajimDropDown[str], _param: GObject.ParamSpec
@@ -735,6 +732,7 @@ class VCardPropertyGui(SignalManager):
         self._edit_widgets: list[Gtk.Widget] = [self._remove_button]
         self._read_widgets: list[Gtk.Widget] = []
 
+        self._type_dropdown: TypeDropDown | None = None
         if prop.name in PROPERTIES_WITH_TYPE:
             self._type_dropdown = TypeDropDown(prop.parameters)
             self._connect(
@@ -756,6 +754,8 @@ class VCardPropertyGui(SignalManager):
 
     def destroy(self) -> None:
         self._disconnect_all()
+        if self._type_dropdown is not None:
+            self._type_dropdown.run_destroy()
         app.check_finalize(self)
 
     @staticmethod
@@ -820,6 +820,10 @@ class TextEntryPropertyGui(VCardPropertyGui):
         self._read_widgets.append(self._value_label)
 
         self._third_column = [self._value_entry, self._value_label]
+
+    def destroy(self) -> None:
+        VCardPropertyGui.destroy(self)
+        self._value_label.run_destroy()
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
@@ -895,6 +899,10 @@ class DatePropertyGui(VCardPropertyGui):
         self._read_widgets.append(self._value_label)
 
         self._third_column = [self._box, self._value_label]
+
+    def destroy(self) -> None:
+        VCardPropertyGui.destroy(self)
+        self._value_label.run_destroy()
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
@@ -976,6 +984,10 @@ class GenderPropertyGui(VCardPropertyGui):
 
         self._third_column = [value_box, label_box]
 
+    def destroy(self) -> None:
+        VCardPropertyGui.destroy(self)
+        self._value_dropdown.run_destroy()
+
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
         assert isinstance(self._prop, GenderProperty)
@@ -1034,6 +1046,10 @@ class TzPropertyGui(VCardPropertyGui):
         self._read_widgets.append(self._read_box)
 
         self._third_column = [self._value_dropdown, self._read_box]
+
+    def destroy(self) -> None:
+        VCardPropertyGui.destroy(self)
+        self._value_dropdown.run_destroy()
 
     def _on_zone_selected(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()

@@ -91,6 +91,10 @@ class HistorySyncAssistant(Assistant):
             success_page.set_text(_("Gajim is fully synchronized with the archive."))
             self.show_page("success")
 
+    def _cleanup(self) -> None:
+        self.get_page("select").run_destroy()
+        Assistant._cleanup(self)
+
     def get_active_query_id(self) -> str | None:
         return self._query_id
 
@@ -191,7 +195,6 @@ class SelectTime(AssistantPage):
     def __init__(self, now: datetime, current_start: datetime) -> None:
         AssistantPage.__init__(self)
         self.title = _("Synchronize Chat History")
-
         self.complete = False
         self._timedelta: timedelta | None = None
 
@@ -235,6 +238,9 @@ class SelectTime(AssistantPage):
 
         self.complete = True
         self.update_page_complete()
+
+    def run_destroy(self) -> None:
+        self._dropdown.run_destroy()
 
     def get_timedelta(self) -> timedelta | None:
         key = self._dropdown.get_selected_key()

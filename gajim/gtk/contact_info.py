@@ -187,6 +187,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._switcher.run_destroy()
         del self._switcher
 
+        self._vcard_grid.run_destroy()
+        del self._vcard_grid
+
         self._client.disconnect_all_from_obj(self)
         self._disconnect_all()
         self.unregister_events()

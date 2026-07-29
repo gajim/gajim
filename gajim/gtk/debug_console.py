@@ -186,6 +186,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._set_account("AllAccounts", "")
 
     def _cleanup(self) -> None:
+        self._account_dropdown.run_destroy()
         self._shortcut.set_action(None)
         self.unregister_events()
         get_log_console_handler().set_callback(None)

@@ -129,9 +129,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
             "register-actions", ged.GUI1, self._on_register_actions
         )
 
-    def do_unroot(self) -> None:
-        Gtk.MenuButton.do_unroot(self)
-
     def run_destroy(self) -> None:
         self._disconnect_all()
         self._audio_player_widget.run_destroy()

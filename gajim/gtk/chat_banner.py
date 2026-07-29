@@ -30,7 +30,8 @@ from gajim.common.util.text import make_href_markup
 
 from gajim.gtk.contact_popover import ContactPopover
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
-from gajim.gtk.menus import get_groupchat_menu, get_banner_narrow_menu
+from gajim.gtk.menus import get_banner_narrow_menu
+from gajim.gtk.menus import get_groupchat_menu
 from gajim.gtk.menus import get_private_chat_menu
 from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu

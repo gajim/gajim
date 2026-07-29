@@ -940,6 +940,11 @@ class WizardAdvancedPage(AssistantPage):
 
         self.update_proxy_list()
 
+    def do_unroot(self) -> None:
+        AssistantPage.do_unroot(self)
+        self._proxies_dropdown.run_destroy()
+        self._con_type_dropdown.run_destroy()
+
     @staticmethod
     def _on_proxy_manager(_button: Gtk.Button) -> None:
         app.app.activate_action("manage-proxies", None)

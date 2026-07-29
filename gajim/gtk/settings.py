@@ -688,7 +688,7 @@ class DropDownSetting(GenericSetting):
     def do_unroot(self) -> None:
         self._dropdown.disconnect_by_func(self._on_selected)
         GenericSetting.do_unroot(self)
-        app.check_finalize(self._dropdown)
+        self._dropdown.run_destroy()
         del self._dropdown
 
     def _on_selected(self, dropdown: GajimDropDown[Any], *args: Any) -> None:

@@ -71,6 +71,7 @@ class ArchivingPreferences(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
+        self._default_dropdown.run_destroy()
         self._destroyed = True
         app.check_finalize(self)
 

@@ -204,6 +204,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if self._contact is not None:
             self._contact.disconnect_all_from_obj(self)
 
+        self._security_label_selector.run_destroy()
+
         Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
 

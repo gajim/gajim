@@ -51,13 +51,12 @@ class SecurityLabelSelector(GajimDropDown[str]):
 
         self._update_data()
 
-    def do_unroot(self) -> None:
+    def run_destroy(self) -> None:
         self.clear()
         app.ged.remove_event_handler(
             "sec-catalog-received", ged.GUI1, self._sec_labels_received
         )
-        super().do_unroot()
-        app.check_finalize(self)
+        super().run_destroy()
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState

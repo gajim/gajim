@@ -129,6 +129,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
     def do_unroot(self) -> None:
         Gtk.Overlay.do_unroot(self)
         self._disconnect_all()
+        self._chat_type_drop_down.run_destroy()
+        self._roster_groups_drop_down.run_destroy()
+        self._account_drop_down.run_destroy()
         app.check_finalize(self)
 
     def get_filters(self) -> ChatFilters:

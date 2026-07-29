@@ -139,9 +139,6 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
     def id(self) -> int:
         return self._id
 
-    def do_unroot(self) -> None:
-        Gtk.Box.do_unroot(self)
-
     def run_destroy(self) -> None:
         self._disconnect_all()
         self._audio_player.stop(self._id)

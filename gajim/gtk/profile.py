@@ -172,6 +172,7 @@ class ProfileWindow(GajimAppWindow):
         del self._avatar_edit_button
         self._running_tasks.clear()
         self._avatar_selector = None
+        self._vcard_grid.run_destroy()
         self._client.disconnect_all_from_obj(self)
         self._contact.disconnect_all_from_obj(self)
 

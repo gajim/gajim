@@ -99,6 +99,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         self._name_entry_row.props.enable_emoji_completion = False
         self._description_entry_row.props.enable_emoji_completion = False
 
+        self._account_dropdown.run_destroy()
         self.unregister_events()
         self._destroyed = True
 

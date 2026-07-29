@@ -65,6 +65,10 @@ class HistoryExport(Assistant):
 
         self._connect(self, "button-clicked", self._on_button_clicked)
 
+    def _cleanup(self) -> None:
+        self.get_page("start").run_destroy()
+        Assistant._cleanup(self)
+
     @overload
     def get_page(self, name: Literal["error"]) -> AssistantErrorPage: ...
 
@@ -216,6 +220,10 @@ class ExportSettings(AssistantPage):
         self._ui.settings_grid.attach(file_chooser_button, 1, 2, 1, 1)
 
         self._set_complete()
+
+    def run_destroy(self) -> None:
+        self._accounts_dropdown.run_destroy()
+        self._chats_dropdown.run_destroy()
 
     def _on_account_changed(self, dropdown: GajimDropDown[str], *args: Any) -> None:
         item = dropdown.get_selected_item()

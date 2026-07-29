@@ -262,6 +262,10 @@ class AddContactAddressPage(AssistantPage):
 
         self._set_complete()
 
+    def do_unroot(self) -> None:
+        AssistantPage.do_unroot(self)
+        self._dropdown.run_destroy()
+
     def get_visible_buttons(self) -> list[str]:
         return ["next"]
 
