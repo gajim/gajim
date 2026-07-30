@@ -12,6 +12,7 @@ import logging
 from collections import defaultdict
 from collections.abc import Generator
 from collections.abc import Iterable
+from dataclasses import dataclass
 from datetime import datetime
 
 from gi.repository import Gio
@@ -63,6 +64,15 @@ from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import iterate_listbox_children
 
 log = logging.getLogger("gajim.gtk.conversation_view")
+
+
+@dataclass
+class _ScrollTarget:
+    pk: int
+    # 'center' places the row in the middle of the viewport, 'top' aligns it
+    # with the top of the viewport
+    align: Literal["center", "top"]
+    highlight: bool
 
 
 class ConversationView(Gtk.ScrolledWindow):
@@ -124,8 +134,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._block_upper_scroll = False
         self._applying_anchor = False
         self._autoscroll: bool = True
-        self._wait_for_map_after_scroll = False
-        self._pk_for_scroll: int | None = None
+        self._scroll_target: _ScrollTarget | None = None
         self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
@@ -311,8 +320,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def _reset(self) -> None:
         self._current_upper = 0
         self._autoscroll = True
-        self._wait_for_map_after_scroll = False
-        self._pk_for_scroll = None
+        self._scroll_target = None
 
         self._request_history_at_upper = None
         self._upper_complete = False
@@ -383,7 +391,7 @@ class ConversationView(Gtk.ScrolledWindow):
         Returns None if there is nothing to keep in place, and a row of None to
         signal that the view should stay at the bottom.
         """
-        if self._wait_for_map_after_scroll:
+        if self._scroll_target is not None:
             # A scroll to a specific message is pending, don't interfere
             return None
 
@@ -1064,15 +1072,69 @@ class ConversationView(Gtk.ScrolledWindow):
         bottom = adj.get_upper() - adj.get_page_size()
         return bottom - adj.get_value() < 1
 
+    def get_anchor_message_id(self) -> str | None:
+        """Returns the id of the message the view is anchored to, which is the
+        topmost message currently visible in the viewport.
+
+        Returns None if the view is at the bottom, or if the position can not be
+        determined, e.g. because the view is not mapped.
+        """
+        if self._autoscroll:
+            return None
+
+        for row in self.iter_rows():
+            if not isinstance(row, MessageRow):
+                continue
+
+            point = self._compute_viewport_point(row)
+            if point is None:
+                continue
+
+            if point.y + row.get_height() < 0:
+                continue
+
+            if point.y > self.get_height():
+                break
+
+            if row.displayed_id is None:
+                continue
+
+            return row.displayed_id
+
+        return None
+
     def scroll_to_message(
         self, account: str, jid: JID, timestamp: datetime, pk: int
     ) -> None:
 
+        target = _ScrollTarget(pk=pk, align="center", highlight=True)
+
         row = self._get_row_by_pk(pk)
         if row is not None:
-            self._scroll_and_highlight(pk)
+            self._scroll_to_target(target)
             return
 
+        self._load_conversation_around(account, jid, timestamp, target, reset=True)
+
+    def restore_position(
+        self, account: str, jid: JID, timestamp: datetime, pk: int
+    ) -> None:
+        """Loads the conversation around a message and aligns it with the top of
+        the viewport. Must be called after switch_contact().
+        """
+        target = _ScrollTarget(pk=pk, align="top", highlight=False)
+
+        self._load_conversation_around(account, jid, timestamp, target, reset=False)
+
+    def _load_conversation_around(
+        self,
+        account: str,
+        jid: JID,
+        timestamp: datetime,
+        target: _ScrollTarget,
+        *,
+        reset: bool,
+    ) -> None:
         # The ListBox needs to be invisible, so we can set it visible again
         # after adding the messages. This allows us to receive the ::map signal
         # which tells us that layouting is done, and scrolling to a message
@@ -1083,12 +1145,12 @@ class ConversationView(Gtk.ScrolledWindow):
             self._storage.get_conversation_around_timestamp(account, jid, timestamp)
         )
 
-        self.reset()
+        if reset:
+            self.reset()
 
         self._enable_signal_handlers(False)
         self.block_signals(True)
-        self._wait_for_map_after_scroll = True
-        self._pk_for_scroll = pk
+        self._scroll_target = target
 
         self.add_messages(messages)
 
@@ -1098,50 +1160,86 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_visible(True)
 
     def _on_map(self, widget: Gtk.ListBox) -> None:
-        if not self._wait_for_map_after_scroll:
+        if self._scroll_target is None:
             return
 
-        assert self._pk_for_scroll is not None
-        idle_add_once(self._scroll_after_map, self._pk_for_scroll)
+        idle_add_once(self._scroll_after_map, self._scroll_target)
 
-        self._wait_for_map_after_scroll = False
-        self._pk_for_scroll = None
+        self._scroll_target = None
 
-    def _scroll_after_map(self, pk: int) -> None:
+    def _scroll_after_map(self, target: _ScrollTarget) -> None:
         log.debug("Scroll after map")
-        self._scroll_and_highlight(pk)
+        self._scroll_to_target(target)
         self._autoscroll = self._determine_autoscroll()
         timeout_add_once(50, self._enable_signal_handlers, True)
         timeout_add_once(50, self.block_signals, False)
         timeout_add_once(60, self._notify, "at-bottom")
 
-    def _scroll_and_highlight(self, pk: int) -> None:
-        highlight_row = None
+    def _scroll_to_target(self, target: _ScrollTarget) -> None:
+        row = self._find_row_by_pk(target.pk)
+        if row is None:
+            return
+
+        point = self._compute_viewport_point(row)
+        if point is None:
+            return
+
+        adjustment = self.get_vadjustment()
+
+        # point.y is relative to the viewport, scroll by that distance to align
+        # the row with the top of the viewport
+        offset = point.y
+        if target.align == "center":
+            offset -= (adjustment.get_page_size() - row.get_height()) / 2
+
+        # Gtk.Adjustment clamps the value to the allowed range
+        adjustment.set_value(adjustment.get_value() + offset)
+
+        if target.highlight:
+            self._highlight_row(row)
+
+    def _compute_viewport_point(self, row: BaseRow) -> Graphene.Point | None:
+        # Returns the position of the row relative to the viewport
+        try:
+            success, point = row.compute_point(self, Graphene.Point.zero())
+        except GLib.Error:
+            return None
+
+        if not success:
+            return None
+
+        return point
+
+    def _find_row_by_pk(self, pk: int) -> BaseRow | None:
+        # In contrast to _get_row_by_pk() this matches every row which is backed
+        # by a message, e.g. CallRow and FileTransferJingleRow
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if row.pk == pk:
-                highlight_row = row
-                break
+                return row
 
-        if highlight_row is None:
-            return
+        return None
 
-        # Scroll ListBox to row and highlight it
-        coordinates = highlight_row.translate_coordinates(self._list_box, 0, 0)
-        if coordinates is None:
-            return
+    def _find_first_incoming_after(self, pk: int) -> MessageRow | None:
+        reference = self._orig_pk_row_map.get(pk)
+        if reference is None:
+            return None
 
-        _x_coord, y_coord = coordinates
-        _mimimum_site, natural_size = highlight_row.get_preferred_size()
-        adjustment = self._list_box.get_adjustment()
-        assert adjustment is not None
-        adjustment.set_value(
-            y_coord - (adjustment.get_page_size() - natural_size.height) / 2
-        )
+        index = reference.get_index()
+        while row := self._list_box.get_row_at_index(index + 1):
+            index += 1
+            if (
+                isinstance(row, MessageRow)
+                and row.direction == ChatDirection.INCOMING
+                and not row.is_retracted
+            ):
+                return row
+        return None
 
-        highlight_row.remove_css_class("conversation-row-highlight")
-        highlight_row.add_css_class("conversation-row-highlight")
+    def _highlight_row(self, row: BaseRow) -> None:
+        row.remove_css_class("conversation-row-highlight")
+        row.add_css_class("conversation-row-highlight")
 
-        timeout_add_once(1500, self._remove_highligh_class, highlight_row)
+        timeout_add_once(1500, self._remove_highligh_class, row)
 
     def _remove_highligh_class(self, highlight_row: BaseRow) -> None:
         highlight_row.remove_css_class("conversation-row-highlight")
