@@ -10,7 +10,7 @@ gajim - a fully-featured XMPP chat client
 
 gajim -h\
 gajim \--start-chat\
-gajim [-q] [-v] [-w] [-l subsystem=level] [-u name] [-p name] [-s] [-c directory] [\--gdebug] [\--cprofile]
+gajim [-V] [-q] [-v] [-w] [-l subsystem=level] [-u name] [-c directory] [\--configure path] [\--export-settings path] [\--gdebug] [\--cprofile]
 
 # DESCRIPTION
 
@@ -36,31 +36,31 @@ protocol see https://xmpp.org/about/.
 `-q, --quiet`
 : Show only critical errors
 
-`-s, --separate`
-: DEPRECATED: Separate profile files completely (even history database and plugins)
-
 `-v, --verbose`
 : Print XML stanzas and other debug information
 
-`-u, --user-profile=NAME`
-: Use a profile to run multiple Gajim instances
-
-`-p, --profile=NAME`
-: DEPRECATED: Use defined profile in configuration directory
-
-`-c, --config-path=PATH`
-: Set configuration directory
+`-w, --warnings`
+: Show all warnings
 
 `-l, --loglevel=SUBSYSTEM=LEVEL`
-: Configure logging.
+: Configure logging
 
     SUBSYSTEM e.g. gajim.c.m\
     LEVEL (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
     Example: gajim.c.m=DEBUG
 
-`-w, --warnings`
-: Show all warnings
+`-u, --user-profile=NAME`
+: Use a profile to run multiple Gajim instances
+
+`-c, --config-path=PATH`
+: Set configuration directory
+
+`--configure=PATH`
+: Configure Gajim with values from a .json file
+
+`--export-settings=PATH`
+: Export settings to a .json file
 
 `--gdebug`
 : Sets an environment variable so GLib debug messages are printed
