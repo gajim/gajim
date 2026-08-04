@@ -149,6 +149,10 @@ def _set_env_vars() -> None:
 
 
 def _init_gtk() -> None:
+    from gi.repository import Gtk
+
+    Gtk.disable_setlocale()
+
     from gajim.gtk import exception
 
     exception.init()
