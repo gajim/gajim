@@ -141,12 +141,6 @@ def _set_env_vars() -> None:
     # https://github.com/msys2/MINGW-packages/issues/24812
     os.environ["GTK_A11Y"] = "none"
 
-    if "GTK_CSD" in os.environ:
-        # Respect user settings
-        return
-
-    os.environ["GTK_CSD"] = "0"
-
 
 def _init_gtk() -> None:
     from gi.repository import Gtk
