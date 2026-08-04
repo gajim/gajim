@@ -57,16 +57,6 @@ def get_paths(type_: PathType) -> Generator[Path, None, None]:
         yield _paths[key]  # noqa: PLR1733
 
 
-def set_separation(active: bool) -> None:
-    # Deprecated in Gajim 2.3.0
-    _paths.profile_separation = active
-
-
-def set_profile(profile: str) -> None:
-    # Deprecated in Gajim 2.3.0
-    _paths.profile = profile
-
-
 def set_user_profile(user_profile: str) -> None:
     _paths.user_profile = user_profile
 
@@ -114,9 +104,7 @@ class ConfigPaths:
         self._paths: dict[str, PathTupleT] = {}
         self._temp_dir: Path | None = None
 
-        self.profile = ""
         self.user_profile = ""
-        self.profile_separation = False
         self.custom_config_root: Path | None = None
 
         basedir = cast(Path, importlib.resources.files("gajim"))
@@ -146,12 +134,9 @@ class ConfigPaths:
     def items(self) -> Generator[tuple[str, PathTupleT], None, None]:
         yield from self._paths.items()
 
-    def _prepare(self, path: Path, unique: bool) -> Path:
-        if os.name == "nt":
+    def _prepare(self, path: Path) -> Path:
+        if sys.platform == "win32":
             path = Path(str(path).capitalize())
-        if self.profile:
-            if unique or self.profile_separation:
-                return Path(f"{path}.{self.profile}")
         return path
 
     def add(
@@ -160,13 +145,12 @@ class ConfigPaths:
         path: Path | str,
         location: PathLocation | None = None,
         path_type: PathType | None = None,
-        unique: bool = False,
     ) -> None:
 
         path = Path(path)
 
         if location != PathLocation.NONE:
-            path = self._prepare(path, unique)
+            path = self._prepare(path)
         self._paths[name] = (location, path, path_type)
 
     def init(self):
@@ -245,7 +229,7 @@ class ConfigPaths:
         unique_profile_paths.append(path)
 
         for path in unique_profile_paths:
-            self.add(*path, unique=True)
+            self.add(*path)
 
         # These paths are only unique per profile if the commandline arg
         # `separate` is passed

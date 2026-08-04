@@ -117,7 +117,6 @@ app.settings.set_account_setting(ACCOUNT, "address", "user@domain.org")
 app.storage.events = EventStorage()
 app.storage.events.init()
 
-configpaths.set_separation(True)
 configpaths.set_config_root(tempfile.gettempdir())
 configpaths.init()
 

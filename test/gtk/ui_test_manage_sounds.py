@@ -16,7 +16,6 @@ ACCOUNT = "test"
 
 util.init_settings()
 
-configpaths.set_separation(True)
 configpaths.set_config_root(tempfile.gettempdir())
 configpaths.init()
 

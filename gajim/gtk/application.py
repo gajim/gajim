@@ -115,28 +115,11 @@ class GajimApplication(Adw.Application, CoreApplication):
         )
 
         self.add_main_option(
-            "separate",
-            ord("s"),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _("Separate profile files completely (even history database and plugins)"),
-        )
-
-        self.add_main_option(
             "verbose",
             ord("v"),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
             _("Print XML stanzas and other debug information"),
-        )
-
-        self.add_main_option(
-            "profile",
-            ord("p"),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.STRING,
-            _("Use defined profile in configuration directory"),
-            "NAME",
         )
 
         self.add_main_option(
@@ -285,21 +268,6 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         main_window.init()
 
-        if self._deprecated_options_used:
-            migration_url = (
-                "https://dev.gajim.org/gajim/gajim/-/wikis/Profile-Migration"
-            )
-            InformationAlertDialog(
-                "Deprecation Warning",
-                (
-                    "The options <b>--profile</b> and <b>--separate</b> are deprecated "
-                    "and will be removed in a future version of Gajim. Visit our "
-                    f"<a href='{migration_url}'>Wiki</a> "
-                    "to find the instructions on how to migrate."
-                ),
-                body_use_markup=True,
-            )
-
         GLib.timeout_add(100, self._auto_connect)
 
     def _on_window_added(
@@ -372,23 +340,9 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         application_name = "Gajim"
 
-        # --profile is deprecated with Gajim 2.3.0
-        profile = options.lookup_value("profile")
         user_profile = options.lookup_value("user-profile")
         if user_profile is not None:
-            if options.contains("separate"):
-                print("--separate cannot be used with --user-profile")
-                return 0
-
-            if options.contains("profile"):
-                print("--profile cannot be used with --user-profile")
-                return 0
-
             configpaths.set_user_profile(user_profile.get_string())
-
-        elif profile is not None:
-            user_profile = profile
-            configpaths.set_profile(user_profile.get_string())
 
         if user_profile is not None:
             # Incorporate user_profile name into application id
@@ -419,10 +373,6 @@ class GajimApplication(Adw.Application, CoreApplication):
                 "The primary instance will handle remote commands"
             )
             return -1
-
-        self._deprecated_options_used = options.contains("profile") or options.contains(
-            "separate"
-        )
 
         options.insert_value("is-first-startup", GLib.Variant("b", True))
         self._core_command_line(options)

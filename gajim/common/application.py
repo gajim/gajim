@@ -154,9 +154,6 @@ class CoreApplication(ged.EventHelper):
         if options.contains("gdebug"):
             os.environ["G_MESSAGES_DEBUG"] = "all"
 
-        if options.contains("separate"):
-            configpaths.set_separation(True)
-
         config_path = options.lookup_value("config-path")
         if config_path is not None:
             config_path = config_path.get_string()
