@@ -612,10 +612,6 @@ class AvatarStorage(metaclass=Singleton):
                 texture = convert_surface_to_texture(surface)
                 return texture
 
-            # avatar_sha set, but image is missing
-            # (e.g. avatar cache deleted)
-            app.settings.set_workspace_setting(workspace_id, "avatar_sha", "")
-
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
         texture = make_workspace_avatar(name, rgba_to_float(rgba), size, scale)
 
