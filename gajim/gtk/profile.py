@@ -123,7 +123,7 @@ class ProfileWindow(GajimAppWindow):
         # False  - no change to avatar
         # None   - we want to delete the avatar
         # Avatar - upload new avatar
-        self._new_avatar: None | bool | Avatar = False
+        self._new_avatar: bool | Avatar | None = False
 
         self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
 

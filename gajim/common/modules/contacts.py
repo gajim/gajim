@@ -439,7 +439,7 @@ class BareContact(CommonContact):
         if not self._resources:
             return None
 
-        return sorted(self._resources.values(), key=operator.attrgetter("show"))[-1]
+        return max(self._resources.values(), key=operator.attrgetter("show"))
 
     def get_resources(self) -> list[ResourceContact]:
         resources: list[ResourceContact] = []
@@ -1125,7 +1125,7 @@ class GroupchatOfflineParticipant(CommonContact):
         jid: JID,
         room: GroupchatContact,
         affiliation: str,
-        occupant: mod.Occupant | None | ValueMissingT = VALUE_MISSING,
+        occupant: mod.Occupant | ValueMissingT | None = VALUE_MISSING,
     ) -> None:
         CommonContact.__init__(self, None, jid, account)
 

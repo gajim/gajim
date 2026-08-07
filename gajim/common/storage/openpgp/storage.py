@@ -175,7 +175,7 @@ class OpenPGPStorage(AlchemyStorage):
         jid: JID,
         fingerprints: Iterable[str] | None = None,
         *,
-        label: str | None | ValueMissingT = VALUE_MISSING,
+        label: str | ValueMissingT | None = VALUE_MISSING,
         trust: Trust | ValueMissingT = VALUE_MISSING,
         active: bool | ValueMissingT = VALUE_MISSING,
     ) -> None:

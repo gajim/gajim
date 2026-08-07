@@ -521,7 +521,7 @@ class StrValueMissingType(sa.types.TypeDecorator[Any]):
     cache_ok = True
 
     def process_bind_param(
-        self, value: str | None | ValueMissingT, dialect: Any
+        self, value: str | ValueMissingT | None, dialect: Any
     ) -> str | None:
         if isinstance(value, ValueMissingT):
             return None

@@ -154,7 +154,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     id: Mapped[str]
 
-    real_remote_jid_: JID | None | ValueMissingT = dataclasses.field(
+    real_remote_jid_: JID | ValueMissingT | None = dataclasses.field(
         default=VALUE_MISSING, repr=False
     )
     fk_real_remote_pk: Mapped[int | None] = mapped_column(

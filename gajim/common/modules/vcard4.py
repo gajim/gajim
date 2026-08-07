@@ -142,7 +142,7 @@ class VCard4(BaseModule):
 
     def request_vcard(
         self, jid: JID, callback: Any, max_cache_seconds: int = 0
-    ) -> None | VCard:
+    ) -> VCard | None:
         if max_cache_seconds > 0:
             cached_result = self._vcard_cache.get(jid)
             if cached_result is not None:
