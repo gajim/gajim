@@ -72,9 +72,11 @@ log = logging.getLogger("gajim.gtk.conversation_view")
 class _ScrollTarget:
     pk: int
     # 'center' places the row in the middle of the viewport, 'top' aligns it
-    # with the top of the viewport
+    # with the top of the viewport (or to y_offset when restoring a view)
     align: Literal["center", "top"]
     highlight: bool
+    # Viewport-relative Y of the row top after restore (0 = flush with top).
+    y_offset: float = 0.0
 
 
 class ConversationView(Gtk.ScrolledWindow):
@@ -1252,6 +1254,37 @@ class ConversationView(Gtk.ScrolledWindow):
         bottom = adj.get_upper() - adj.get_page_size()
         return bottom - adj.get_value() < 1
 
+    def get_last_view_state(self) -> tuple[str, float] | None:
+        """Topmost visible message id and its viewport-relative Y.
+
+        The Y is the distance from the viewport top to the row top (negative if
+        the row is partially scrolled above the viewport). Returns None when at
+        the bottom so reopen can use the default end-of-conversation scroll.
+        """
+        if self._autoscroll:
+            return None
+
+        for row in self.iter_rows():
+            if not isinstance(row, MessageRow):
+                continue
+
+            point = self._compute_viewport_point(row)
+            if point is None:
+                continue
+
+            if point.y + row.get_height() < 0:
+                continue
+
+            if point.y > self.get_height():
+                break
+
+            if row.orig_stanza_id is not None:
+                return row.orig_stanza_id, point.y
+            if row.message_id is not None:
+                return row.message_id, point.y
+
+        return None
+
     def scroll_to_message(
         self, account: str, jid: JID, timestamp: datetime, pk: int
     ) -> None:
@@ -1266,14 +1299,28 @@ class ConversationView(Gtk.ScrolledWindow):
         self._load_conversation_around(account, jid, timestamp, target, reset=True)
 
     def restore_position(
-        self, account: str, jid: JID, timestamp: datetime, pk: int
+        self,
+        account: str,
+        jid: JID,
+        timestamp: datetime,
+        pk: int,
+        *,
+        y_offset: float = 0.0,
     ) -> None:
         """Load conversation around a message and restore its viewport position.
 
         Must be called after switch_contact().
         """
-        target = _ScrollTarget(pk=pk, align="top", highlight=False)
-        self._load_conversation_around(account, jid, timestamp, target, reset=False)
+        target = _ScrollTarget(
+            pk=pk,
+            align="top",
+            highlight=False,
+            y_offset=y_offset,
+        )
+        new_messages_target = self._new_messages_target if reset else None
+        self._load_conversation_around(account, jid, timestamp, target, reset=reset)
+        if new_messages_target is not None:
+            self.set_new_messages_target(*new_messages_target, available=True)
 
     def _load_conversation_around(
         self,
@@ -1369,11 +1416,11 @@ class ConversationView(Gtk.ScrolledWindow):
         adjustment = self.get_vadjustment()
 
         # point.y is relative to the viewport; scroll so the row ends at the
-        # desired viewport Y (0 = top-aligned).
+        # desired viewport Y (0 = top-aligned, or a saved last-view offset).
         if target.align == "center":
             delta = point.y - (adjustment.get_page_size() - row.get_height()) / 2
         else:
-            delta = point.y
+            delta = point.y - target.y_offset
 
         # Gtk.Adjustment clamps the value to the allowed range
         adjustment.set_value(adjustment.get_value() + delta)

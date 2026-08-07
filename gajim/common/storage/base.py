@@ -528,6 +528,18 @@ class StrValueMissingType(sa.types.TypeDecorator[Any]):
         return value
 
 
+class FloatValueMissingType(sa.types.TypeDecorator[Any]):
+    impl = sa.types.REAL
+    cache_ok = True
+
+    def process_bind_param(
+        self, value: float | None | ValueMissingT, dialect: Any
+    ) -> float | None:
+        if isinstance(value, ValueMissingT):
+            return None
+        return value
+
+
 class EpochTimestampType(sa.types.TypeDecorator[Any]):
     impl = sa.types.FLOAT
     cache_ok = True

@@ -137,7 +137,8 @@ class Migration:
             self._v19()
         if user_version < 20:
             self._v20()
-        if user_version < 21:
+        if user_version < 21 or user_version in (22, 23):
+            # 22/23 were short-lived splits of this upgrade on the feature branch
             self._v21()
 
         app.ged.raise_event(DBMigrationFinished())
@@ -423,6 +424,14 @@ class Migration:
         statements = [
             (
                 'ALTER TABLE contact ADD COLUMN "last_read_id" TEXT',
+                "duplicate column",
+            ),
+            (
+                'ALTER TABLE contact ADD COLUMN "last_view_id" TEXT',
+                "duplicate column",
+            ),
+            (
+                'ALTER TABLE contact ADD COLUMN "last_view_offset" REAL',
                 "duplicate column",
             ),
         ]

@@ -34,6 +34,7 @@ from gajim.common.const import ValueMissingT
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import DraftType
 from gajim.common.storage.base import EpochTimestampType
+from gajim.common.storage.base import FloatValueMissingType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
 from gajim.common.storage.base import StrValueMissingType
@@ -1030,6 +1031,8 @@ class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         "draft",
         "avatar_sha",
         "last_read_id",
+        "last_view_id",
+        "last_view_offset",
     ]
     __table_args__ = (Index("idx_contact", *__index_cols__, unique=True),)
 
@@ -1061,6 +1064,12 @@ class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
     last_read_id: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
+    )
+    last_view_id: Mapped[str | None] = mapped_column(
+        StrValueMissingType, default=VALUE_MISSING
+    )
+    last_view_offset: Mapped[float | None] = mapped_column(
+        FloatValueMissingType, default=VALUE_MISSING
     )
 
     def get_name(self) -> str | None:

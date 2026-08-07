@@ -464,13 +464,20 @@ class ChatControl(EventHelper):
         self._contact.disconnect_all_from_obj(self)
 
     def save_state(self) -> None:
-        """Persist in-flight read state."""
+        """Persist viewport and in-flight read state."""
         if self._contact is None:
             return
+        state = self._scrolled_view.get_last_view_state()
+        app.storage.archive.set_last_view_state(
+            self._contact.account,
+            self._contact.jid,
+            None if state is None else state[0],
+            None if state is None else state[1],
+        )
         self._scrolled_view.flush_read_tracking()
 
     def _restore_scroll_position(self) -> bool:
-        """Restore to MDS read marker if there is unread."""
+        """Restore to MDS read marker if there is unread, else to last_view_id."""
         assert self._contact is not None
         account = self._contact.account
         jid = self._contact.jid
@@ -480,24 +487,36 @@ class ChatControl(EventHelper):
             return False
 
         last_read_id = state.last_read_id
-        if last_read_id is None:
+        if last_read_id is not None:
+            marker_state = app.storage.archive.get_marker_message_and_unread_count(
+                account, jid, last_read_id
+            )
+            if marker_state is not None:
+                message, unread_count = marker_state
+                if unread_count:
+                    self._scrolled_view.restore_position(
+                        account,
+                        jid,
+                        message.timestamp,
+                        message.pk,
+                    )
+                    return True
+
+        last_view_id = state.last_view_id
+        if last_view_id is None:
             return False
 
-        marker_state = app.storage.archive.get_marker_message_and_unread_count(
-            account, jid, last_read_id
-        )
-        if marker_state is None:
+        message = app.storage.archive.get_message_for_marker(account, jid, last_view_id)
+        if message is None:
             return False
 
-        message, unread_count = marker_state
-        if not unread_count:
-            return False
-
+        offset = state.last_view_offset or 0.0
         self._scrolled_view.restore_position(
             account,
             jid,
             message.timestamp,
             message.pk,
+            y_offset=offset,
         )
         return True
 
