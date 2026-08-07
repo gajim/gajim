@@ -70,7 +70,7 @@ dev = [
   "pytest>=9.0.2",
   "python-gitlab",
   "ruamel.yaml",
-  "ruff==0.15.7",
+  "ruff==0.16.2",
   "sentry-sdk",
 ]
 
@@ -239,6 +239,7 @@ ignore = [
   "PLR0912",# Too many branches
   "PLR0913",# Too many arguments to function call
   "PLR0915",# Too many statements
+  "PLR0917",# Too many positional arguments
   "PLR2004",# Magic value used in comparison, consider replacing x with a constant variable
   "PLR5501",# Consider using `elif` instead of `else` then `if` to remove one indentation level
   "PLW0603",# Using the global statement to update `x` is discouraged
