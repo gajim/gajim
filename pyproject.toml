@@ -72,6 +72,7 @@ dev = [
   "ruamel.yaml",
   "ruff==0.16.2",
   "sentry-sdk",
+  "ty",
 ]
 
 # [tool.uv.sources]
@@ -331,3 +332,60 @@ section-order = [
 [tool.ruff.lint.isort.sections]
 gtk = ["gajim.gtk"]
 typing = ["_typeshed", "typing", "typing_extensions"]
+
+[tool.ty.environment]
+python-version = "3.12"
+python-platform = "all"
+
+[tool.ty.rules]
+unused-type-ignore-comment = "ignore"
+
+[tool.ty.src]
+exclude = [
+  "**/__pycache__",
+  ".flatpak-builder",
+  "flatpak_build",
+  "flatpak_repo",
+  ".git",
+  ".venv",
+  "build",
+  "debian_build",
+  "dist",
+  "gajim/common/app.py",
+  "gajim/common/client.py",
+  "gajim/common/file_props.py",
+  "gajim/common/helpers.py",
+  "gajim/common/jingle_content.py",
+  "gajim/common/jingle_ft.py",
+  "gajim/common/jingle_ftstates.py",
+  "gajim/common/jingle_rtp.py",
+  "gajim/common/jingle_session.py",
+  "gajim/common/jingle_transport.py",
+  "gajim/common/modules/bits_of_binary.py",
+  "gajim/common/modules/bytestream.py",
+  "gajim/common/modules/contacts.py",
+  "gajim/common/modules/discovery.py",
+  "gajim/common/modules/gateway.py",
+  "gajim/common/modules/ibb.py",
+  "gajim/common/modules/jingle.py",
+  "gajim/common/modules/roster_item_exchange.py",
+  "gajim/common/modules/search.py",
+  "gajim/common/settings.py",
+  "gajim/common/socks5.py",
+  "gajim/common/structs.py",
+  "gajim/common/util/av.py",
+  "gajim/common/winapi/system_style.py",
+  "gajim/gtk/dataform.py",
+  "gajim/gtk/filetransfer.py",
+  "gajim/gtk/settings.py",
+  "gajim/gtk/start_chat.py",
+  "gajim/gtk/types.py",
+  "gajim/gtk/shortcut_manager.py",
+  "scripts/update_flatpak_manifest.py",
+  "test/common/test_uri_util.py",
+  "test/gui/test_menus.py",
+  "typings/pystray/*",
+  "typings/windows_toasts/*",
+  "win/misc/depcheck.py",
+  "mac/hooks/*",
+]
