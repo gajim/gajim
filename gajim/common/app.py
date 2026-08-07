@@ -67,9 +67,9 @@ connections: dict[str, types.Client] = {}
 avatar_cache: dict[str, dict[str, Any]] = {}
 bob_cache: dict[str, bytes] = {}
 services_cache: dict[str, Any] = {}
-app = cast(GajimApplication, None)
-window = cast(MainWindow, None)
-commands = cast(ChatCommands, None)
+app = cast("GajimApplication", None)
+window = cast("MainWindow", None)
+commands = cast("ChatCommands", None)
 logging_records: list[str] = []
 
 ged = ged_module.GlobalEventsDispatcher()  # Global Events Dispatcher
