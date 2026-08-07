@@ -349,10 +349,10 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
     def _on_event(self, event: EventT) -> None:
         list_item_cls = self._event_item_map[type(event)]
-        if not list_item_cls.can_create(event):  # pyright: ignore
+        if not list_item_cls.can_create(event):  # type: ignore
             return
 
-        item = list_item_cls.from_event(event)  # pyright: ignore
+        item = list_item_cls.from_event(event)  # type: ignore
         self._add(item)
 
         if item.should_notify():
@@ -402,21 +402,21 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 class ActivityListItem(Generic[E], GObject.Object):
     __gtype_name__ = "ActivityListItem"
 
-    context_id: str = GObject.Property(type=str)  # pyright: ignore
-    account: str = GObject.Property(type=str)  # pyright: ignore
-    jid: JID = GObject.Property(type=str)  # pyright: ignore
-    account_visible: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
-    activity_type: int = GObject.Property(type=int)  # pyright: ignore
-    activity_type_icon: str = GObject.Property(type=str)  # pyright: ignore
-    avatar: Gdk.Paintable = GObject.Property(type=Gdk.Paintable)  # pyright: ignore
-    timestamp: dt.datetime = GObject.Property(type=object)  # pyright: ignore
-    title: str = GObject.Property(type=str)  # pyright: ignore
-    subject: str = GObject.Property(type=str)  # pyright: ignore
-    read: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
-    search_text: str = GObject.Property(type=str)  # pyright: ignore
-    event: E = GObject.Property(type=object)  # pyright: ignore
+    context_id: str = GObject.Property(type=str)  # type: ignore
+    account: str = GObject.Property(type=str)  # type: ignore
+    jid: JID = GObject.Property(type=str)  # type: ignore
+    account_visible: bool = GObject.Property(type=bool, default=False)  # type: ignore
+    activity_type: int = GObject.Property(type=int)  # type: ignore
+    activity_type_icon: str = GObject.Property(type=str)  # type: ignore
+    avatar: Gdk.Paintable = GObject.Property(type=Gdk.Paintable)  # type: ignore
+    timestamp: dt.datetime = GObject.Property(type=object)  # type: ignore
+    title: str = GObject.Property(type=str)  # type: ignore
+    subject: str = GObject.Property(type=str)  # type: ignore
+    read: bool = GObject.Property(type=bool, default=False)  # type: ignore
+    search_text: str = GObject.Property(type=str)  # type: ignore
+    event: E = GObject.Property(type=object)  # type: ignore
     state = GObject.Property(type=object)
-    unique: bool = GObject.Property(type=bool, default=False)  # pyright: ignore
+    unique: bool = GObject.Property(type=bool, default=False)  # type: ignore
 
     def __init__(
         self,
@@ -501,7 +501,7 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
         self.__bindings: list[GObject.Binding] = []
 
     @GObject.Property(type=str)
-    def account(self) -> str:  # pyright: ignore
+    def account(self) -> str:  # type: ignore
         return self._account
 
     @account.setter
@@ -519,7 +519,7 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
         self._account_identifier.add_css_class(self._account_css_class)
 
     @GObject.Property(type=str)
-    def jid(self) -> JID | None:  # pyright: ignore
+    def jid(self) -> JID | None:  # type: ignore
         return self._jid
 
     @jid.setter
@@ -527,7 +527,7 @@ class ActivityViewItem(Gtk.Grid, SignalManager):
         self._jid = jid
 
     @GObject.Property(type=bool, default=False)
-    def read(self) -> bool:  # pyright: ignore
+    def read(self) -> bool:  # type: ignore
         return self._read
 
     @read.setter

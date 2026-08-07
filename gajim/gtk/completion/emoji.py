@@ -231,7 +231,7 @@ class EmojiCompletionViewItem(
         _x: float,
         _y: float,
     ) -> None:
-        if not self.props.has_skin_variation:  # pyright: ignore
+        if not self.props.has_skin_variation:  # type: ignore
             return
 
         gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
@@ -239,7 +239,7 @@ class EmojiCompletionViewItem(
 
     def _on_var_button_clicked(self, button: Gtk.Button) -> None:
         emoji = button.get_label()
-        view = cast(Gtk.Widget, self.get_parent().get_parent())  # pyright: ignore
+        view = cast(Gtk.Widget, self.get_parent().get_parent())  # type: ignore
         view.emit("extended-activate", emoji)
 
     def bind(self, obj: EmojiCompletionListItem) -> None:

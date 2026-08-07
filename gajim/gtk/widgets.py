@@ -64,7 +64,7 @@ class GroupBadgeBox(Gtk.Box):
         self._groups: list[str] = []
 
     @GObject.Property(type=object)
-    def groups(self) -> list[str]:  # pyright: ignore
+    def groups(self) -> list[str]:  # type: ignore
         return self._groups
 
     @groups.setter
@@ -125,7 +125,7 @@ class IdleBadge(Gtk.Label):
         self.add_css_class("caption")
 
     @GObject.Property(type=object)
-    def idle(self) -> str:  # pyright: ignore
+    def idle(self) -> str:  # type: ignore
         return self.get_text()
 
     @idle.setter
@@ -165,7 +165,7 @@ class AccountBadge(Gtk.Label):
         app.check_finalize(self)
 
     @GObject.Property(type=str)
-    def account(self) -> str:  # pyright: ignore
+    def account(self) -> str:  # type: ignore
         return self.get_text()
 
     @account.setter

@@ -222,7 +222,7 @@ class ExceptionDialog(GajimAppWindow):
             default_integrations=False,
             shutdown_timeout=0,
             auto_session_tracking=False,
-            before_send=self._before_send,  # pyright: ignore
+            before_send=self._before_send,  # type: ignore
             debug=False,
         )
 

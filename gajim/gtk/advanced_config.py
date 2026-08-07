@@ -244,9 +244,9 @@ class AdvancedConfig(GajimAppWindow):
                 continue
 
             for setting in settings:
-                value = app.settings.get(setting)  # pyright: ignore
+                value = app.settings.get(setting)  # type: ignore
                 default = APP_SETTINGS[setting]
-                is_default = bool(value == default)  # pyright: ignore
+                is_default = bool(value == default)  # type: ignore
 
                 if isinstance(value, bool):
                     value = BOOL_DICT[value]

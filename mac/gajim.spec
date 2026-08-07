@@ -111,7 +111,7 @@ coll = COLLECT(
     exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name="launch"
 )
 
-app = BUNDLE(  # pyright: ignore
+app = BUNDLE(  # type: ignore
     coll,
     name="Gajim.app",
     icon=icon,

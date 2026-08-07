@@ -66,7 +66,7 @@ log = logging.getLogger("gajim.c.storage.cache")
 class UnreadTableRow(NamedTuple):
     account: str
     jid: JID
-    count: int  # pyright: ignore
+    count: int  # type: ignore
     message_id: str
     timestamp: float
 
@@ -92,7 +92,7 @@ class CacheStorage(SqliteStorage):
     def _namedtuple_factory(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> NamedTuple:
         assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple("Row", fields)  # pyright: ignore
+        Row = namedtuple("Row", fields)  # type: ignore
         return Row(*row)
 
     def _migrate(self) -> None:
@@ -181,7 +181,7 @@ class CacheStorage(SqliteStorage):
         disco_info = self._disco_info_cache.get(jid)
         if disco_info is not None:
             max_timestamp = time.time() - max_age if max_age else 0
-            if max_timestamp > disco_info.timestamp:  # pyright: ignore
+            if max_timestamp > disco_info.timestamp:  # type: ignore
                 return None
         return disco_info
 

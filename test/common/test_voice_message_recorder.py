@@ -41,20 +41,20 @@ def _read_samples(path: Path) -> list[int]:
 class TestExtractFirstWord(unittest.TestCase):
     def test_single_word(self) -> None:
         self.assertEqual(
-            VoiceMessageRecorder._extract_first_word("autoaudiosrc"),  # pyright: ignore[reportPrivateUsage]
+            VoiceMessageRecorder._extract_first_word("autoaudiosrc"),  # type: ignore
             "autoaudiosrc",
         )
 
     def test_word_with_parameters(self) -> None:
         self.assertEqual(
-            VoiceMessageRecorder._extract_first_word(  # pyright: ignore[reportPrivateUsage]
+            VoiceMessageRecorder._extract_first_word(  # type: ignore
                 "pulsesrc volume=0.8 device=default"
             ),
             "pulsesrc",
         )
 
     def test_empty_string(self) -> None:
-        self.assertEqual(VoiceMessageRecorder._extract_first_word(""), "")  # pyright: ignore[reportPrivateUsage]
+        self.assertEqual(VoiceMessageRecorder._extract_first_word(""), "")  # type: ignore
 
 
 class TestBuildMergeCommand(unittest.TestCase):
@@ -74,7 +74,7 @@ class TestBuildMergeCommand(unittest.TestCase):
 
     def test_single_part_contains_required_elements(self) -> None:
         path = self._path
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(1, [], path))  # pyright: ignore[reportPrivateUsage]
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(1, [], path))  # type: ignore
         self.assertIn(f"location={path.as_posix()}.part1", cmd)
         self.assertIn("wavparse", cmd)
         self.assertIn("opusenc", cmd)
@@ -83,13 +83,13 @@ class TestBuildMergeCommand(unittest.TestCase):
 
     def test_multiple_parts_all_included(self) -> None:
         path = self._path
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [], path))  # pyright: ignore[reportPrivateUsage]
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [], path))  # type: ignore
         for i in (1, 2, 3):
             self.assertIn(f"location={path.as_posix()}.part{i}", cmd)
 
     def test_invalid_parts_excluded(self) -> None:
         path = self._path
-        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [2], path))  # pyright: ignore[reportPrivateUsage]
+        cmd = VoiceMessageRecorder._build_merge_command(self._make(3, [2], path))  # type: ignore
         self.assertIn(f"location={path.as_posix()}.part1", cmd)
         self.assertNotIn(f"location={path.as_posix()}.part2", cmd)
         self.assertIn(f"location={path.as_posix()}.part3", cmd)
@@ -108,7 +108,7 @@ class TestSmoothWavBoundaries(unittest.TestCase):
         self._tmpdir.cleanup()
 
     def _call(self, path: Path, silence_ms: int = 20, fade_ms: int = 30) -> None:
-        VoiceMessageRecorder._smooth_wav_boundaries(  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._smooth_wav_boundaries(  # type: ignore
             self._mock_self, path, silence_ms, fade_ms
         )
 
@@ -206,7 +206,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # type: ignore
 
         error_cb.assert_called_once()
         kind, msg = error_cb.call_args[0]
@@ -218,7 +218,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         mock_self._is_error.return_value = True
         mock_self._error_info.return_value = ("gst-resource-error-quark", 5)
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # type: ignore
 
         self.assertIn(3, mock_self._output_files_invalid)
 
@@ -228,7 +228,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # type: ignore
 
         error_cb.assert_not_called()
         self.assertEqual(mock_self._output_files_invalid, [])
@@ -240,7 +240,7 @@ class TestHandleErrorOnStart(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_start(mock_self, MagicMock())  # type: ignore
 
         self.assertIn(1, mock_self._output_files_invalid)
         error_cb.assert_not_called()
@@ -254,7 +254,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # type: ignore
 
         error_cb.assert_called_once()
         kind, msg = error_cb.call_args[0]
@@ -268,7 +268,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # type: ignore
 
         error_cb.assert_called_once()
         kind, _ = error_cb.call_args[0]
@@ -279,7 +279,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         mock_self._is_error.return_value = True
         mock_self._error_info.return_value = ("gst-resource-error-quark", 9)
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # type: ignore
 
         self.assertIn(2, mock_self._output_files_invalid)
 
@@ -288,7 +288,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         mock_self = _make_error_self()
         mock_self._error_info.return_value = (None, None)
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, None)  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, None)  # type: ignore
 
         self.assertIn(1, mock_self._output_files_invalid)
 
@@ -298,7 +298,7 @@ class TestHandleErrorOnRecording(unittest.TestCase):
         error_cb = MagicMock()
         mock_self._error_callback = error_cb
 
-        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # pyright: ignore[reportPrivateUsage]
+        VoiceMessageRecorder._handle_error_on_recording(mock_self, MagicMock())  # type: ignore
 
         error_cb.assert_not_called()
         self.assertEqual(mock_self._output_files_invalid, [])

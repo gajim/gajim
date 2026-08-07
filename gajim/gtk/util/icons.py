@@ -66,7 +66,7 @@ def load_icon_surface(
         size,
         scale,
         Gtk.TextDirection.NONE,
-        0,  # pyright: ignore
+        0,  # type: ignore
     )
 
     snapshot = Gtk.Snapshot()

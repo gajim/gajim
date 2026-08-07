@@ -158,11 +158,11 @@ class AddContact(Assistant):
 
     @as_task
     def _disco_info(self, account: str, address: str) -> Any:
-        _task = yield  # noqa: F841, # pyright: ignore
+        _task = yield  # noqa: F841, # type: ignore
 
         client = app.get_client(account)
 
-        result = yield client.get_module("Discovery").disco_info(address, timeout=10)  # pyright: ignore
+        result = yield client.get_module("Discovery").disco_info(address, timeout=10)  # type: ignore
         if is_error(result):
             assert isinstance(result, BaseError)
             self._process_error(account, result)

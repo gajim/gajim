@@ -193,7 +193,7 @@ class TestPluginRepository(Observable):
 
 
 class TestModule(MagicMock):
-    def __init__(self) -> None:  # pyright: ignore
+    def __init__(self) -> None:  # type: ignore
         super().__init__()
 
     def get_contact(self, jid: JID, groupchat: bool = False) -> MagicMock:
@@ -233,7 +233,7 @@ class TestModule(MagicMock):
 
 
 class TestClient(MagicMock):
-    def __init__(self) -> None:  # pyright: ignore
+    def __init__(self) -> None:  # type: ignore
         super().__init__()
 
     def get_module(self) -> TestModule:

@@ -43,7 +43,7 @@ class StatusMessageSelectorRow(Adw.EntryRow, EventHelper):
         )
 
     @GObject.Property(type=str)
-    def account(self) -> str | None:  # pyright: ignore
+    def account(self) -> str | None:  # type: ignore
         return self._account
 
     @account.setter

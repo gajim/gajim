@@ -244,7 +244,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
     @staticmethod
     def _build_from_stack(stack: Gtk.Stack) -> list[SideBarMenuItem]:
         menu: list[SideBarMenuItem] = []
-        for page in stack.get_pages():  # pyright: ignore
+        for page in stack.get_pages():  # type: ignore
             page = cast(Gtk.StackPage, page)
             name = page.get_name()
             if name is None:

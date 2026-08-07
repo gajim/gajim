@@ -95,7 +95,7 @@ class CompletionPopover(Gtk.Popover):
         list_item: Gtk.ListItem,
     ) -> None:
         assert self._widget_cls is not None
-        list_item.set_child(self._widget_cls())  # pyright: ignore
+        list_item.set_child(self._widget_cls())  # type: ignore
 
     @staticmethod
     def _on_factory_bind(

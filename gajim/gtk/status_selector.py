@@ -47,7 +47,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         )
 
     @GObject.Property(type=str)
-    def account(self) -> str | None:  # pyright: ignore
+    def account(self) -> str | None:  # type: ignore
         return self._account
 
     @account.setter
@@ -130,7 +130,7 @@ class StatusSelectorPopoverButton(Gtk.Button):
     _label: Gtk.Label = Gtk.Template.Child()
 
     @GObject.Property(type=str)
-    def status(self) -> str:  # pyright: ignore
+    def status(self) -> str:  # type: ignore
         return self._status
 
     @status.setter

@@ -109,7 +109,7 @@ def scroll_to(widget: Gtk.ScrolledWindow, pos: Literal["top", "bottom"]) -> bool
         bool: The return value is False so it can be used with GLib.idle_add.
     """
     adj_v = widget.get_vadjustment()
-    if adj_v is None:  # pyright: ignore
+    if adj_v is None:  # type: ignore
         # This can happen when the Widget is already destroyed when called
         # from GLib.idle_add
         return False

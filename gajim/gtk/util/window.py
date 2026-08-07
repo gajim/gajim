@@ -162,11 +162,11 @@ def get_app_windows(account: str) -> list[Gtk.Window]:
     windows: list[Gtk.Window] = []
     for win in app.app.get_windows():
         if hasattr(win, "wrapper"):
-            win = win.wrapper  # pyright: ignore
+            win = win.wrapper  # type: ignore
 
-        if hasattr(win, "account"):  # pyright: ignore
-            if win.account == account:  # pyright: ignore
-                windows.append(win)  # pyright: ignore
+        if hasattr(win, "account"):  # type: ignore
+            if win.account == account:  # type: ignore
+                windows.append(win)  # type: ignore
     return windows
 
 
@@ -436,17 +436,17 @@ def get_app_window(
             continue
 
         if hasattr(win, "wrapper"):
-            win = win.wrapper  # pyright: ignore
+            win = win.wrapper  # type: ignore
 
         if account is not None:
-            if account != win.account:  # pyright: ignore
+            if account != win.account:  # type: ignore
                 continue
 
         if jid is not None:
-            if jid != win.jid:  # pyright: ignore
+            if jid != win.jid:  # type: ignore
                 continue
 
-        return win  # pyright: ignore
+        return win  # type: ignore
 
     return None
 

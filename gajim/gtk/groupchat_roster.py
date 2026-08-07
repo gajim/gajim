@@ -462,14 +462,14 @@ class GroupchatContactListView(Gtk.ListView):
             assert isinstance(obj, GroupchatContactListItem)
             view_item.set_data(obj.group, obj.group_label)
         else:
-            view_item.bind(obj)  # pyright: ignore
+            view_item.bind(obj)  # type: ignore
 
     @staticmethod
     def _on_factory_unbind(
         _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
     ) -> None:
         view_item = list_item.get_child()
-        view_item.unbind()  # pyright: ignore
+        view_item.unbind()  # type: ignore
 
     @staticmethod
     def _section_sort_func(
@@ -539,11 +539,11 @@ class GroupchatContactListItem(GObject.Object):
 
     contact: GroupchatParticipant | GroupchatOfflineParticipant = GObject.Property(
         type=object
-    )  # pyright: ignore
-    nick: str = GObject.Property(type=str)  # pyright: ignore
-    group: str = GObject.Property(type=str)  # pyright: ignore
-    group_label: str = GObject.Property(type=str)  # pyright: ignore
-    status: str = GObject.Property(type=str)  # pyright: ignore
+    )  # type: ignore
+    nick: str = GObject.Property(type=str)  # type: ignore
+    group: str = GObject.Property(type=str)  # type: ignore
+    group_label: str = GObject.Property(type=str)  # type: ignore
+    status: str = GObject.Property(type=str)  # type: ignore
 
     def __init__(
         self, contact: GroupchatParticipant | GroupchatOfflineParticipant

@@ -55,7 +55,7 @@ class TestContactPopover(GajimAppWindow):
 
         button.set_popover(popover)
 
-        popover._on_vcard_received(  # pyright: ignore
+        popover._on_vcard_received(  # type: ignore
             JID.from_string("test@test.com"), self._get_vcard()
         )
 

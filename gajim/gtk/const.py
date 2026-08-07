@@ -59,10 +59,10 @@ class MuteState(IntEnum):
 
     @classmethod
     def iter(cls) -> Iterator[tuple[int, str]]:
-        yield from cls._labels.items()  # pyright: ignore
+        yield from cls._labels.items()  # type: ignore
 
 
-MuteState._labels = {  # pyright: ignore
+MuteState._labels = {  # type: ignore
     MuteState.MIN_30: _("30 minutes"),
     MuteState.MIN_60: _("1 hour"),
     MuteState.MIN_120: _("2 hours"),

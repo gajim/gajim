@@ -389,7 +389,7 @@ class CoreApplication(ged.EventHelper):
 
         app.settings.add_account(account)
         for opt, value in config.items():
-            app.settings.set_account_setting(account, opt, value)  # pyright: ignore  # noqa: E501
+            app.settings.set_account_setting(account, opt, value)  # type: ignore  # noqa: E501
 
         if not anonymous and password is not None:
             # Password module depends on existing config

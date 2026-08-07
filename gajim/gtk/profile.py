@@ -264,7 +264,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.nickname_label.set_visible(True)
         self._ui.nickname_entry.set_visible(False)
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
-        self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore
+        self._vcard_grid.set_vcard(self._current_vcard.copy())  # type: ignore
         self._new_avatar = False
 
     def _on_back_clicked(self, *args: Any) -> None:
@@ -289,7 +289,7 @@ class ProfileWindow(GajimAppWindow):
         self._vcard_grid.sort()
 
         vcard = self._vcard_grid.get_vcard()
-        self._current_vcard = vcard.copy()  # pyright: ignore
+        self._current_vcard = vcard.copy()  # type: ignore
 
         client = app.get_client(self.account)
         task = client.get_module("VCard4").set_vcard(

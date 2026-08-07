@@ -55,28 +55,28 @@ class UtilMixin:
     def get_upsert_values(self) -> dict[str, str]:
         values = {
             f.name: getattr(self, f.name)
-            for f in dataclasses.fields(self)  # pyright: ignore
+            for f in dataclasses.fields(self)  # type: ignore
         }
         for key, value in list(values.items()):
             if value is VALUE_MISSING:
                 values.pop(key)
                 continue
 
-            if key not in self.__upsert_cols__:  # pyright: ignore
+            if key not in self.__upsert_cols__:  # type: ignore
                 values.pop(key)
         return values
 
     def get_insert_values(self):
         values = {
             f.name: getattr(self, f.name)
-            for f in dataclasses.fields(self)  # pyright: ignore
+            for f in dataclasses.fields(self)  # type: ignore
         }
         for key, value in list(values.items()):
             if value is VALUE_MISSING:
                 values.pop(key)
                 continue
 
-            if key in self.__no_table_cols__:  # pyright: ignore
+            if key in self.__no_table_cols__:  # type: ignore
                 values.pop(key)
         return values
 
@@ -177,7 +177,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
     def validate(self) -> None:
-        if self.remote_jid_ is None:  # pyright: ignore
+        if self.remote_jid_ is None:  # type: ignore
             return
         if not self.remote_jid_.is_bare:
             raise ValueError("Remote JID must be a bare jid")

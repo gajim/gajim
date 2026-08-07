@@ -688,7 +688,7 @@ class ChatControl(EventHelper):
             return messages
 
         def sort_func(obj: HistoryRowT) -> float:
-            return obj.timestamp  # pyright: ignore
+            return obj.timestamp  # type: ignore
 
         return sorted(
             itertools.chain(messages, event_rows), key=sort_func, reverse=before

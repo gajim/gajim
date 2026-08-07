@@ -96,9 +96,9 @@ def colorize(text: str, color: str) -> str:
     return color + text + Colors.NONE
 
 
-class LogConsoleHandler(logging.StreamHandler):  # pyright: ignore
+class LogConsoleHandler(logging.StreamHandler):  # type: ignore
     def __init__(self) -> None:
-        super().__init__()  # pyright: ignore
+        super().__init__()  # type: ignore
         self._callback: LogCallback | None = None
 
     def emit(self, record: logging.LogRecord) -> None:

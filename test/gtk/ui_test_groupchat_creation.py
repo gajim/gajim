@@ -32,7 +32,7 @@ class TestModule(MagicMock):
 
 
 class TestClient(MagicMock):
-    def __init__(self):  # pyright: ignore
+    def __init__(self):  # type: ignore
         super().__init__()
 
     def get_module(self) -> TestModule:

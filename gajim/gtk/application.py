@@ -212,7 +212,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _get_remaining_entry():
         option = GLib.OptionEntry()
         # https://gitlab.gnome.org/GNOME/pygobject/-/issues/608
-        option.arg = int(GLib.OptionArg.STRING_ARRAY)  # pyright: ignore
+        option.arg = int(GLib.OptionArg.STRING_ARRAY)  # type: ignore
         option.arg_data = None
         option.arg_description = "[URI …]"
         option.flags = GLib.OptionFlags.NONE

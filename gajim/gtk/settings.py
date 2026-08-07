@@ -717,7 +717,7 @@ class DialogSetting(GenericSetting):
         self.add_suffix(image)
 
     def _on_activated(self, row: Adw.ActionRow) -> None:
-        open_window(self._dialog, account=self.account)  # pyright: ignore
+        open_window(self._dialog, account=self.account)  # type: ignore
 
 
 class SubPageSetting(GenericSetting):

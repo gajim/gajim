@@ -86,7 +86,7 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
             # Get the DNSName entries from the SAN extension
             alt_names = cast(
                 list[str],
-                subject_ext.value.get_values_for_type(DNSName),  # pyright: ignore
+                subject_ext.value.get_values_for_type(DNSName),  # type: ignore
             )
             self._it_subject_alt_names = "\n".join(alt_names)
         except ExtensionNotFound as err:

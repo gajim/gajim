@@ -34,7 +34,7 @@ from gajim.gtk.preview.animated_image_fallback_backend import (
     AnimatedImageFallbackBackend,
 )
 from gajim.gtk.preview.file_control_buttons import FileControlButtons
-from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # pyright: ignore
+from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # type: ignore
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 

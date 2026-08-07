@@ -125,7 +125,7 @@ sqlite3.register_adapter(JID, _jid_adapter)
 
 
 def _convert_disco_info(disco_info: bytes) -> DiscoInfo:
-    return parse_disco_info(Iq(node=disco_info))  # pyright: ignore
+    return parse_disco_info(Iq(node=disco_info))  # type: ignore
 
 
 def _adapt_disco_info(disco_info: DiscoInfo) -> str:
@@ -156,7 +156,7 @@ sqlite3.register_adapter(ValueMissingT, lambda _val: None)
 class Encoder(json.JSONEncoder):
     def default(self, o: Any) -> Any:
         if isinstance(o, set):
-            return list(o)  # pyright: ignore
+            return list(o)  # type: ignore
 
         if isinstance(o, datetime):
             return {"__type": "datetime", "value": o.isoformat()}
@@ -589,6 +589,6 @@ def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:
     if python_version("<3.11"):
         return "UNIQUE constraint failed" in error.args[0]
     return (
-        error.orig.sqlite_errorcode  # pyright: ignore
+        error.orig.sqlite_errorcode  # type: ignore
         == sqlite3.SQLITE_CONSTRAINT_UNIQUE
     )

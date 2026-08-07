@@ -904,7 +904,7 @@ class AgentBrowser:
             _("Browsing %(address)s using account %(account)s")
             % {"address": self._get_agent_address(), "account": self.account}
         )
-        self.window._set_window_banner_text(  # pyright: ignore
+        self.window._set_window_banner_text(  # type: ignore
             self._get_agent_address()
         )
 
@@ -987,7 +987,7 @@ class AgentBrowser:
                     name = identities[0].name
 
         if name:
-            self.window._set_window_banner_text(  # pyright: ignore
+            self.window._set_window_banner_text(  # type: ignore
                 self._get_agent_address(), name
             )
 
@@ -1028,7 +1028,7 @@ class AgentBrowser:
         self._clean_treemodel()
         self._clean_title()
 
-        self.window._initial_state()  # pyright: ignore
+        self.window._initial_state()  # type: ignore
 
     def on_browse_button_clicked(self, _button: Gtk.Button | None = None) -> None:
         """

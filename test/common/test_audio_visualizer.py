@@ -32,16 +32,16 @@ def _flat(n: int, v: float = 0.5) -> AudioSampleT:
 class TestIsStatic(unittest.TestCase):
     def test_static_when_not_live(self) -> None:
         mock = _make_self(live_mode=False)
-        self.assertTrue(AudioVisualizerWidget._is_static.fget(mock))  # type: ignore[attr-defined]
+        self.assertTrue(AudioVisualizerWidget._is_static.fget(mock))  # type: ignore
 
     def test_not_static_in_live_mode(self) -> None:
         mock = _make_self(live_mode=True)
-        self.assertFalse(AudioVisualizerWidget._is_static.fget(mock))  # type: ignore[attr-defined]
+        self.assertFalse(AudioVisualizerWidget._is_static.fget(mock))  # type: ignore
 
 
 class TestNormalize(unittest.TestCase):
     def _call(self, samples: AudioSampleT) -> AudioSampleT:
-        return AudioVisualizerWidget._normalize(_make_self(), samples)  # pyright: ignore[reportPrivateUsage]
+        return AudioVisualizerWidget._normalize(_make_self(), samples)  # type: ignore
 
     def test_empty_returns_empty(self) -> None:
         result = self._call([])
@@ -86,7 +86,7 @@ class TestNormalize(unittest.TestCase):
 
 class TestRescale(unittest.TestCase):
     def _call(self, samples: AudioSampleT) -> AudioSampleT:
-        return AudioVisualizerWidget._rescale(_make_self(), samples)  # pyright: ignore[reportPrivateUsage]
+        return AudioVisualizerWidget._rescale(_make_self(), samples)  # type: ignore
 
     def test_zero_maps_to_zero(self) -> None:
         result = self._call([(0.0, 0.0)])
@@ -131,7 +131,7 @@ class TestDownsample(unittest.TestCase):
         self, samples: AudioSampleT, width: int = 340, bar_width: int = 2
     ) -> AudioSampleT:
         mock = _make_self(width=width, bar_width=bar_width)
-        return AudioVisualizerWidget._downsample(mock, samples)  # pyright: ignore[reportPrivateUsage]
+        return AudioVisualizerWidget._downsample(mock, samples)  # type: ignore
 
     def test_short_input_returned_unchanged(self) -> None:
         # num_bars = 340 / (2*2) = 85; stride < 2 so no downsampling
@@ -176,8 +176,8 @@ class TestPipeline(unittest.TestCase):
 
     def _run(self, samples: AudioSampleT) -> AudioSampleT:
         mock = _make_self()
-        normalized = AudioVisualizerWidget._normalize(mock, samples)  # pyright: ignore[reportPrivateUsage]
-        return AudioVisualizerWidget._rescale(mock, normalized)  # pyright: ignore[reportPrivateUsage]
+        normalized = AudioVisualizerWidget._normalize(mock, samples)  # type: ignore
+        return AudioVisualizerWidget._rescale(mock, normalized)  # type: ignore
 
     def test_uniform_input_stays_in_range(self) -> None:
         result = self._run(_flat(50, 0.3))

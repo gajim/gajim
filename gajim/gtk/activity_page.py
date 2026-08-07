@@ -77,7 +77,7 @@ class ActivityPage(Gtk.Stack):
         if isinstance(item, Reaction):
             return
 
-        page = self._pages[type(item)](item)  # pyright: ignore
+        page = self._pages[type(item)](item)  # type: ignore
         page.connect("request-remove", self._on_request_remove)
 
         self.add_named(page, "activity")

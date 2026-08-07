@@ -22,7 +22,7 @@ from gajim.common.util.text import format_duration
 
 from gajim.gtk.audio_player import AudioPlayer
 from gajim.gtk.preview.audio_waveform_navigator import AudioWaveformNavigator
-from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # pyright: ignore
+from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # type: ignore
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 

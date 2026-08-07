@@ -1143,7 +1143,7 @@ class PresenceShowExt(Enum):
     def __lt__(self, other: PresenceShowExt | PresenceShow) -> bool:
         if isinstance(other, PresenceShowExt):
             return False
-        if not isinstance(other, PresenceShow):  # pyright: ignore
+        if not isinstance(other, PresenceShow):  # type: ignore
             return NotImplemented
         return True
 

@@ -176,7 +176,7 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         self._text: str = ""
 
     @GObject.Property(type=Gdk.Paintable)
-    def icon(self) -> Gdk.Paintable | None:  # pyright: ignore
+    def icon(self) -> Gdk.Paintable | None:  # type: ignore
         return self._icon
 
     @icon.setter
@@ -184,7 +184,7 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         self.set_icon(icon)
 
     @GObject.Property(type=str)
-    def icon_name(self) -> str | None:  # pyright: ignore
+    def icon_name(self) -> str | None:  # type: ignore
         return self._icon_name
 
     @icon_name.setter
@@ -192,7 +192,7 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         self.set_icon(icon_name)
 
     @GObject.Property(type=str)
-    def text(self) -> str:  # pyright: ignore
+    def text(self) -> str:  # type: ignore
         return self._text
 
     @text.setter

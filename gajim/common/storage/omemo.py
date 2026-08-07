@@ -80,7 +80,7 @@ class OMEMOStorage(Store):
                 fields.append(col_name.lower())
             else:
                 fields.append(col[0])
-        return namedtuple("Row", fields)(*row)  # pyright: ignore
+        return namedtuple("Row", fields)(*row)  # type: ignore
 
     def user_version(self) -> int:
         return self._con.execute("PRAGMA user_version").fetchone()[0]

@@ -237,7 +237,7 @@ def register_modules(client: "Client") -> None:
     if client.account in _modules:
         return
 
-    _modules[client.account] = {}  # pyright: ignore
+    _modules[client.account] = {}  # type: ignore
 
     for name, module_cls in ModuleDict.__annotations__.items():
         _modules[client.account][name] = module_cls.get_instance(client)

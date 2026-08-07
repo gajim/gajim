@@ -74,7 +74,7 @@ class TestListView(GajimAppWindow):
         self, factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
     ) -> None:
         cell = Gtk.Inscription()
-        cell._binding = None  # pyright: ignore
+        cell._binding = None  # type: ignore
         list_item.set_child(cell)
 
     def _on_factory_bind(
@@ -83,7 +83,7 @@ class TestListView(GajimAppWindow):
         country = list_item.get_item()
         cell = list_item.get_child()
         assert cell is not None
-        cell._binding = country.bind_property(  # pyright: ignore
+        cell._binding = country.bind_property(  # type: ignore
             what, cell, "text", GObject.BindingFlags.SYNC_CREATE
         )
 
@@ -91,9 +91,9 @@ class TestListView(GajimAppWindow):
         self, factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem, what: str
     ) -> None:
         cell = list_item.get_child()
-        if cell._binding:  # pyright: ignore
-            cell._binding.unbind()  # pyright: ignore
-            cell._binding = None  # pyright: ignore
+        if cell._binding:  # type: ignore
+            cell._binding.unbind()  # type: ignore
+            cell._binding = None  # type: ignore
 
     def _on_factory_teardown(
         self, factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem

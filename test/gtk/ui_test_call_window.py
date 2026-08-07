@@ -67,7 +67,7 @@ app.call_manager = CallManager()
 window = CallWindow(ACCOUNT, RESOURCE_JID)
 
 # Enable popover buttons for debugging
-window._ui.audio_buttons_box.set_sensitive(True)  # pyright: ignore
+window._ui.audio_buttons_box.set_sensitive(True)  # type: ignore
 window.show()
 
 util.run_app()

@@ -672,7 +672,7 @@ class RosterViewItemImage(Gtk.Image):
         self.__bindings: list[GObject.Binding] = []
 
     @GObject.Property(type=object)
-    def icon_data(self) -> tuple[str | None, str | None, str | None]:  # pyright: ignore
+    def icon_data(self) -> tuple[str | None, str | None, str | None]:  # type: ignore
         return self._icon_data
 
     @icon_data.setter
@@ -726,7 +726,7 @@ class HeaderViewItem(Gtk.Label):
         self.__bindings: list[GObject.Binding] = []
 
     @GObject.Property(type=str)
-    def group_data(self) -> str:  # pyright: ignore
+    def group_data(self) -> str:  # type: ignore
         return self._group_data
 
     @group_data.setter

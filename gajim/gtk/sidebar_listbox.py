@@ -83,7 +83,7 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
         app.window.highlight_dnd_targets(self, False)
 
     @GObject.Property(type=int)
-    def index(self) -> int:  # pyright: ignore
+    def index(self) -> int:  # type: ignore
         return self._index
 
     @index.setter
@@ -91,7 +91,7 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
         self._index = index
 
     @GObject.Property(type=str)
-    def item_id(self) -> str:  # pyright: ignore
+    def item_id(self) -> str:  # type: ignore
         return self._item_id
 
     @item_id.setter
@@ -99,7 +99,7 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
         self._item_id = item_id
 
     @GObject.Property(type=str)
-    def icon_name(self) -> str:  # pyright: ignore
+    def icon_name(self) -> str:  # type: ignore
         return self._icon_name
 
     @icon_name.setter
@@ -117,7 +117,7 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
 
     def set_unread_notify(self, obj: GObject.Object) -> None:
         def _on_notify(obj_: GObject.Object, _param: GObject.ParamSpec) -> None:
-            self.set_unread_count(obj_.unread_count)  # pyright: ignore
+            self.set_unread_count(obj_.unread_count)  # type: ignore
 
         self._connect(obj, "notify::unread-count", _on_notify)
 

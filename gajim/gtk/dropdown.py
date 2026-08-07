@@ -59,7 +59,7 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
         self.set_data(data)
 
     @GObject.Property(type=int, default=-1, flags=GObject.ParamFlags.READWRITE)
-    def fixed_width(self) -> int:  # pyright: ignore
+    def fixed_width(self) -> int:  # type: ignore
         return self._fixed_width
 
     @fixed_width.setter
@@ -110,7 +110,7 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
 
         if isinstance(data, list):
             for entry in data:
-                items.append(KeyValueItem(key=entry, value=entry))  # pyright: ignore
+                items.append(KeyValueItem(key=entry, value=entry))  # type: ignore
 
         self._model.splice(0, 0, items)
 
@@ -155,8 +155,8 @@ class GajimDropDown(Gtk.DropDown, Generic[_K]):
 
 
 class KeyValueItem(GObject.Object, Generic[_K]):
-    key: _K = GObject.Property(type=object, flags=GObject.ParamFlags.READWRITE)  # pyright: ignore
-    value: str = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE)  # pyright: ignore
+    key: _K = GObject.Property(type=object, flags=GObject.ParamFlags.READWRITE)  # type: ignore
+    value: str = GObject.Property(type=str, flags=GObject.ParamFlags.READWRITE)  # type: ignore
 
     def __init__(self, *, key: _K, value: str) -> None:
         GObject.Object.__init__(self, key=key, value=value)

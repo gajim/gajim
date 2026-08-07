@@ -172,7 +172,7 @@ class OpenPGPWizard(Assistant):
 
             case "overwrite":
                 self._client.get_module("OpenPGP").backup_secret_key(
-                    callback=self._on_overwrite_result  # pyright: ignore
+                    callback=self._on_overwrite_result  # type: ignore
                 )
                 self.show_page("progress")
 
