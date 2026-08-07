@@ -24,7 +24,7 @@ test-other:
   script:
     - ./make.py build
     - pyproject-build
-    - appstream-util validate dist/metadata/org.gajim.Gajim.metainfo.xml
+    - appstreamcli validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
 
 test-codespell:
