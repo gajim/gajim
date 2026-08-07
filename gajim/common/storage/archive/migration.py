@@ -137,6 +137,8 @@ class Migration:
             self._v19()
         if user_version < 20:
             self._v20()
+        if user_version < 21:
+            self._v21()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -415,6 +417,17 @@ class Migration:
         app.ged.raise_event(DBMigrationStart(version=20))
         self._archive.run_analyze()
         self._archive.set_user_version(20)
+
+    def _v21(self) -> None:
+        app.ged.raise_event(DBMigrationStart(version=21))
+        statements = [
+            (
+                'ALTER TABLE contact ADD COLUMN "last_read_id" TEXT',
+                "duplicate column",
+            ),
+        ]
+        self._execute_multiple_with_error(statements)
+        self._archive.set_user_version(21)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

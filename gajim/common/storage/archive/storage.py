@@ -75,7 +75,7 @@ from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 20
+CURRENT_USER_VERSION = 21
 
 _T = TypeVar("_T")
 
@@ -503,6 +503,50 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def get_message_for_marker(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        marker_id: str,
+    ) -> Message | None:
+        """Resolve a marker id (stanza-id or message-id) to its root message."""
+        return self._get_message_for_marker(session, account, jid, marker_id)
+
+    def _get_message_for_marker(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        marker_id: str,
+    ) -> Message | None:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        result = session.scalars(
+            select(Message).where(
+                sa.or_(Message.stanza_id == marker_id, Message.id == marker_id),
+                Message.fk_remote_pk == fk_remote_pk,
+                Message.fk_account_pk == fk_account_pk,
+            )
+        ).all()
+        if not result:
+            return None
+
+        # Preserve stanza-id precedence if an id collision exists
+        stanza_matches = [row for row in result if row.stanza_id == marker_id]
+        candidates = stanza_matches or result
+        roots = [row for row in candidates if row.correction_id is None]
+        message = max(roots or candidates, key=lambda row: row.pk)
+
+        if message.correction_id is not None:
+            original = self._get_corrected_message(session, message)
+            if original is not None:
+                return original
+        return message
+
+    @with_session
+    @timeit
     def delete_message(self, session: Session, pk: int) -> None:
         message = self._get_message_with_pk(
             session,
@@ -660,6 +704,7 @@ class MessageArchiveStorage(AlchemyStorage):
         direction: Literal["before", "after"],
         order: Literal["asc", "desc"] = "asc",
         include_timestamp: bool = False,
+        pk: int | None = None,
     ) -> tuple[Iterable[Message], bool]:
         """
         Load n messages from jid before or after timestamp
@@ -678,6 +723,9 @@ class MessageArchiveStorage(AlchemyStorage):
             How the result is ordered
         :param include_timestamp:
             If messages with the same timestamp are returned
+        :param pk:
+            When set with include_timestamp, ties are broken by primary key so
+            the window is exact around that message
         """
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -690,14 +738,29 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         if direction == "before":
-            if include_timestamp:
+            if include_timestamp and pk is not None:
+                where = stmt.where(
+                    sa.or_(
+                        Message.timestamp < timestamp,
+                        sa.and_(Message.timestamp == timestamp, Message.pk <= pk),
+                    )
+                )
+            elif include_timestamp:
                 where = stmt.where(Message.timestamp <= timestamp)
             else:
                 where = stmt.where(Message.timestamp < timestamp)
             stmt = where.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
 
         else:
-            if include_timestamp:
+            if pk is not None:
+                # Exclusive of the anchor when pk is known
+                where = stmt.where(
+                    sa.or_(
+                        Message.timestamp > timestamp,
+                        sa.and_(Message.timestamp == timestamp, Message.pk > pk),
+                    )
+                )
+            elif include_timestamp:
                 where = stmt.where(Message.timestamp >= timestamp)
             else:
                 where = stmt.where(Message.timestamp > timestamp)
@@ -721,18 +784,62 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def get_marker_message_and_unread_count(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        marker_id: str,
+    ) -> tuple[Message, int] | None:
+        """Resolve marker_id and count incoming root messages after it.
+
+        Returns None if marker_id cannot be resolved in the archive.
+        """
+        message = self._get_message_for_marker(session, account, jid, marker_id)
+        if message is None:
+            return None
+        assert message.pk is not None
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+        count_stmt = (
+            select(func.count())
+            .select_from(Message)
+            .where(
+                Message.fk_remote_pk == fk_remote_pk,
+                Message.fk_account_pk == fk_account_pk,
+                Message.correction_id.is_(None),
+                Message.direction == ChatDirection.INCOMING,
+                Message.text.is_not(None),
+                sa.or_(
+                    Message.timestamp > message.timestamp,
+                    sa.and_(
+                        Message.timestamp == message.timestamp,
+                        Message.pk > message.pk,
+                    ),
+                ),
+            )
+        )
+        return message, session.scalar(count_stmt) or 0
+
+    @timeit
     def get_conversation_around_timestamp(
-        self, session: Session, account: str, jid: JID, timestamp: datetime
+        self,
+        account: str,
+        jid: JID,
+        timestamp: datetime,
+        pk: int,
     ) -> tuple[Iterable[Message], bool, bool]:
         """
-        Loads messages around a primary key
+        Loads messages around a (timestamp, pk) anchor
 
         :param account:
             The account
         :param jid:
             The jid for which we request the conversation
         :param timestamp:
-            The timestamp in the conversation
+            The timestamp of the anchor message
+        :param pk:
+            The primary key of the anchor message
         """
 
         messages_before, before_complete = self.get_conversation_before_after(
@@ -743,9 +850,10 @@ class MessageArchiveStorage(AlchemyStorage):
             direction="before",
             order="asc",
             include_timestamp=True,
+            pk=pk,
         )
         messages_after, after_complete = self.get_conversation_before_after(
-            account, jid, timestamp, 50, direction="after"
+            account, jid, timestamp, 50, direction="after", pk=pk
         )
 
         return (
@@ -813,6 +921,11 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_corrected_message(
         self, session: Session, correction: Message
     ) -> Message | None:
+        return self._get_corrected_message(session, correction)
+
+    def _get_corrected_message(
+        self, session: Session, correction: Message
+    ) -> Message | None:
         stmt = select(Message).where(
             Message.id == correction.correction_id,
             Message.fk_remote_pk == correction.fk_remote_pk,
@@ -825,7 +938,7 @@ class MessageArchiveStorage(AlchemyStorage):
             stmt = stmt.where(Message.resource == correction.resource)
 
         stmt = (
-            stmt.order_by(sa.desc(Message.timestamp))
+            stmt.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .limit(1)
             .options(
                 selectinload(Message.corrections).options(
@@ -1502,7 +1615,12 @@ class MessageArchiveStorage(AlchemyStorage):
         self,
         account: str,
         jid: JID,
-        attr: Literal["custom_name", "remote_name", "fallback_name", "avatar_sha"],
+        attr: Literal[
+            "custom_name",
+            "remote_name",
+            "fallback_name",
+            "avatar_sha",
+        ],
         value: str | None,
     ) -> None: ...
 
@@ -1511,31 +1629,121 @@ class MessageArchiveStorage(AlchemyStorage):
         account: str,
         jid: JID,
         attr: Literal[
-            "custom_name", "remote_name", "fallback_name", "draft", "avatar_sha"
+            "custom_name",
+            "remote_name",
+            "fallback_name",
+            "draft",
+            "avatar_sha",
         ],
         value: str | Draft | None,
     ) -> None:
-
         cache_key = (account, jid)
         try:
             contact = self._contact_cache[cache_key]
         except KeyError:
             pass
-
         else:
             if contact is not None and getattr(contact, attr) == value:
                 return
 
-        args = {attr: value}
+        contact = self.upsert_row2(
+            Contact(account_=account, remote_jid_=jid, **{attr: value}),  # pyright:ignore
+            return_full=True,
+        )
+        if contact is not None:
+            self._contact_cache[cache_key] = contact
+
+    def set_read_state(self, account: str, jid: JID, marker_id: str) -> None:
+        self._set_state_values(account, jid, {"last_read_id": marker_id})
+
+    def set_last_view_state(
+        self,
+        account: str,
+        jid: JID,
+        view_id: str | None,
+        offset: float | None,
+    ) -> None:
+        """Atomically persist last_view_id and last_view_offset."""
+        self._set_state_values(
+            account,
+            jid,
+            {"last_view_id": view_id, "last_view_offset": offset},
+        )
+
+    def _set_state_values(
+        self,
+        account: str,
+        jid: JID,
+        values: dict[str, str | float | None],
+    ) -> None:
+        cache_key = (account, jid)
+        try:
+            contact = self._contact_cache[cache_key]
+        except KeyError:
+            pass
+        else:
+            if contact is not None and all(
+                getattr(contact, key) == value for key, value in values.items()
+            ):
+                return
+
+        args = {**values, "timestamp": utc_now()}
         contact = self.upsert_row2(
             Contact(account_=account, remote_jid_=jid, **args),  # pyright:ignore
             return_full=True,
         )
         if contact is None:
-            # Upsert did not insert or update any data
-            return None
+            # Upsert conflict guard (excluded.timestamp > timestamp) rejected the
+            # row. Force-update so values cannot stick on an older timestamp.
+            self._contact_cache.pop(cache_key, None)
+            contact = self._update_state_values(account, jid, values)
+            if contact is None:
+                return
 
         self._contact_cache[cache_key] = contact
+
+    @with_session
+    @timeit
+    def _update_state_values(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        values: dict[str, str | float | None],
+    ) -> Contact | None:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+        stmt = (
+            update(Contact)
+            .where(
+                Contact.fk_account_pk == fk_account_pk,
+                Contact.fk_remote_pk == fk_remote_pk,
+            )
+            .values({**values, "timestamp": utc_now()})
+            .returning(Contact)
+        )
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
+    def iter_last_read_ids(
+        self, session: Session, account: str
+    ) -> list[tuple[JID, str]]:
+        """Return (remote_jid, last_read_id) for contacts with a stored read id."""
+        fk_account_pk = self._get_account_pk(session, account)
+        stmt = (
+            select(Remote.jid, Contact.last_read_id)
+            .join(Remote, Contact.fk_remote_pk == Remote.pk)
+            .where(
+                Contact.fk_account_pk == fk_account_pk,
+                Contact.last_read_id.is_not(None),
+            )
+        )
+        return [
+            (jid, last_read_id)
+            for jid, last_read_id in session.execute(stmt).all()
+            if last_read_id is not None
+        ]
 
     @overload
     @timeit
@@ -1552,8 +1760,24 @@ class MessageArchiveStorage(AlchemyStorage):
         self,
         account: str,
         jid: JID,
-        attr: Literal["custom_name", "remote_name", "fallback_name", "avatar_sha"],
+        attr: Literal[
+            "custom_name",
+            "remote_name",
+            "fallback_name",
+            "avatar_sha",
+            "last_read_id",
+            "last_view_id",
+        ],
     ) -> str | None: ...
+
+    @overload
+    @timeit
+    def get_contact_value(
+        self,
+        account: str,
+        jid: JID,
+        attr: Literal["last_view_offset"],
+    ) -> float | None: ...
 
     @timeit
     def get_contact_value(
@@ -1561,7 +1785,7 @@ class MessageArchiveStorage(AlchemyStorage):
         account: str,
         jid: JID,
         attr: str,
-    ) -> str | Draft | None:
+    ) -> str | Draft | float | None:
 
         contact = self.get_contact(account, jid)
         if contact is None:

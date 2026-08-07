@@ -1029,6 +1029,7 @@ class Contact(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         "fallback_name",
         "draft",
         "avatar_sha",
+        "last_read_id",
     ]
     __table_args__ = (Index("idx_contact", *__index_cols__, unique=True),)
 
