@@ -437,23 +437,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             app.window.is_chat_active(event.account, event.jid)
             and self._chat_control.view_is_at_bottom()
         ):
-            if event.message.id is None:
-                return
-
-            client = app.get_client(event.account)
-            stanza_id = event.message.stanza_id
-            contact = client.get_module("Contacts").get_contact(event.jid)
-            assert isinstance(
-                contact, BareContact | GroupchatContact | GroupchatParticipant
-            )
-            mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
-                contact, event.message.id, stanza_id
-            )
-
-            if not mds_assist_sent and stanza_id is not None:
-                by = contact.jid if isinstance(contact, GroupchatContact) else None
-                client.get_module("MDS").set_mds(contact.jid, stanza_id, by)
-
+            # Chat is actively viewed at the bottom; viewport read-tracking
+            # will publish MDS. Skip the notification.
             return
 
         message = event.message

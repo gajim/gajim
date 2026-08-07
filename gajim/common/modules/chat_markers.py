@@ -21,7 +21,6 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common import types
 from gajim.common.events import DisplayedReceived
-from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -92,7 +91,10 @@ class ChatMarkers(BaseModule):
                 self._raise_event(properties)
                 return
 
-            self._raise_read_state_sync(jid, properties.marker.id)
+            # Own displayed marker in a MUC → MDS sync (stanza-id-by is the room)
+            self._raise_read_state_sync(
+                jid, properties.marker.id, by=properties.muc_jid
+            )
             return
 
         if properties.is_sent_carbon or (
@@ -103,11 +105,16 @@ class ChatMarkers(BaseModule):
 
         self._raise_event(properties)
 
-    def _raise_read_state_sync(self, jid: JID, marker_id: str) -> None:
+    def _raise_read_state_sync(
+        self, jid: JID, marker_id: str, *, by: JID | None = None
+    ) -> None:
+        """Persist another device's displayed state and notify the open chat UI.
+
+        XEP-0333 marker ids may be message-id or stanza-id; MDS stores stanza-id.
+        Unresolved targets are queued until the message is in the archive.
+        """
         self._log.info("Read state sync: %s - %s", jid, marker_id)
-        app.ged.raise_event(
-            ReadStateSync(account=self._account, jid=jid, marker_id=marker_id)
-        )
+        self._client.get_module("MDS").queue_remote_displayed(jid, marker_id, by=by)
 
     def _raise_event(self, properties: MessageProperties) -> None:
         assert properties.marker is not None
