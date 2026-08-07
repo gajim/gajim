@@ -45,6 +45,7 @@ from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import get_start_of_day
 
+from gajim.gtk.conversation.read_tracker import ReadTracker
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.call import CallRow
 from gajim.gtk.conversation.rows.command_output import CommandOutputRow
@@ -57,6 +58,7 @@ from gajim.gtk.conversation.rows.info import InfoMessage
 from gajim.gtk.conversation.rows.message import MessageRow
 from gajim.gtk.conversation.rows.muc_join_left import MUCJoinLeft
 from gajim.gtk.conversation.rows.muc_subject import MUCSubject
+from gajim.gtk.conversation.rows.read_marker import ReadMarkerOverlay
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
@@ -81,6 +83,11 @@ class ConversationView(Gtk.ScrolledWindow):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str,),
+        ),
+        "read-up-to": (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (str, str),
         ),
     }
 
@@ -117,16 +124,16 @@ class ConversationView(Gtk.ScrolledWindow):
         self._client = None
 
         self._list_box = Gtk.ListBox()
-
-        # Keeps track of the number of rows shown in ConversationView
-        self._row_count: int = 0
-        self._max_row_count: int = 100
+        self._content_overlay = Gtk.Overlay()
+        self._content_overlay.set_child(self._list_box)
+        self._read_marker_widget: ReadMarkerOverlay | None = None
 
         # Keeps track of date rows we have added to the list
         self._active_date_rows: set[datetime] = set()
 
         self._message_id_row_map: dict[str, MessageRow] = {}
         self._stanza_id_row_map: dict[str, MessageRow] = {}
+        self._orig_pk_row_map: dict[int, MessageRow] = {}
 
         self._scroll_hint_row = None
 
@@ -135,6 +142,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._applying_anchor = False
         self._autoscroll: bool = True
         self._scroll_target: _ScrollTarget | None = None
+        self._scroll_generation: int = 0
         self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
@@ -155,7 +163,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._last_occupant_messages: dict[str, mod.Message] = {}
 
-        self.set_child(self._list_box)
+        # Viewport dwell → MDS + open-time “Read up to this point” marker
+        self._read_tracker = ReadTracker(self)
+
+        self.set_child(self._content_overlay)
 
         app.ged.register_event_handler(
             "register-actions", ged.GUI1, self._on_register_actions
@@ -271,6 +282,12 @@ class ConversationView(Gtk.ScrolledWindow):
         if show_markers:
             self._load_displayed_marker()
 
+        self._read_tracker.bind(
+            self._storage.get_contact_value(
+                contact.account, contact.jid, "last_read_id"
+            )
+        )
+
         self._scroll_hint_row = ScrollHintRow(self._contact.account)
         self._list_box.append(self._scroll_hint_row)
 
@@ -318,6 +335,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_sort_func(self._sort_func)
 
     def _reset(self) -> None:
+        self._scroll_generation += 1
         self._current_upper = 0
         self._autoscroll = True
         self._scroll_target = None
@@ -330,16 +348,19 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._reset_list_box()
 
-        self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}
         self._stanza_id_row_map = {}
+        self._orig_pk_row_map = {}
         self._scroll_hint_row = None
 
         self._dm_id_occupant_markers.clear()
         self._dm_occupant_markers.clear()
         self._dm_rows.clear()
         self._last_occupant_messages.clear()
+
+        self.remove_read_marker()
+        self._read_tracker.reset()
 
     def reset(self) -> None:
         assert self._contact is not None
@@ -378,12 +399,14 @@ class ConversationView(Gtk.ScrolledWindow):
         self._block_upper_scroll = False
 
         if anchor is None or not self._restore_scroll_anchor(anchor):
+            self._update_read_marker_position()
             return
 
         # Gtk.Viewport applies the scroll position when it allocates its child,
         # so allocate a second time to make the correction part of this frame
         # instead of the next one.
         Gtk.ScrolledWindow.do_size_allocate(self, width, height, baseline)
+        self._update_read_marker_position()
 
     def _get_scroll_anchor(self) -> tuple[Gtk.ListBoxRow | None, float] | None:
         """Remember which row sits at the top of the viewport, and where.
@@ -486,11 +509,13 @@ class ConversationView(Gtk.ScrolledWindow):
             self._notify("at-bottom")
 
         self._requesting = None
+        self._update_read_marker_position()
 
     def _on_adj_value_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
         self._start_scrolling()
+        self._update_read_marker_position()
 
         if self._requesting is not None:
             return
@@ -508,6 +533,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if not self._applying_anchor:
             self._autoscroll = self._determine_autoscroll()
             self._notify("at-bottom")
+            self._read_tracker.schedule()
 
         if self._upper_complete:
             self._request_history_at_upper = None
@@ -621,9 +647,9 @@ class ConversationView(Gtk.ScrolledWindow):
 
     @staticmethod
     def _sort_func(row1: BaseRow, row2: BaseRow) -> int:
-        if row1.timestamp == row2.timestamp:
-            return 0
-        return -1 if row1.timestamp < row2.timestamp else 1
+        if row1.timestamp != row2.timestamp:
+            return -1 if row1.timestamp < row2.timestamp else 1
+        return 0
 
     @staticmethod
     def _get_occupant_id(obj: mod.Message | DisplayedMarkerData) -> str | None:
@@ -778,11 +804,14 @@ class ConversationView(Gtk.ScrolledWindow):
         for message_id in message.iter_message_ids():
             self._message_id_row_map[message_id] = message_row
 
+        self._orig_pk_row_map[message_row.orig_pk] = message_row
         self._insert_message(message_row)
 
         if occupant_id := self._get_occupant_id(message):
             self._record_last_occupant_message(occupant_id, message)
             self._update_displayed_markers(message)
+
+        self._read_tracker.schedule()
 
     def _update_displayed_markers(self, message: mod.Message) -> None:
         if message.direction == ChatDirection.INCOMING:
@@ -920,6 +949,146 @@ class ConversationView(Gtk.ScrolledWindow):
         self._dm_rows[displayed_id] = row
         self._list_box.append(row)
 
+    def update_read_marker(self, marker_id: str) -> None:
+        """Update the live read position from MDS. Does not move the visual marker."""
+        self._read_tracker.update_last_read(marker_id)
+
+    def can_track_reads(self) -> bool:
+        if self._contact is None or self._applying_anchor or not self.get_mapped():
+            return False
+        return app.window.is_chat_active(self._contact.account, self._contact.jid)
+
+    def get_message_row_by_pk(self, pk: int) -> MessageRow | None:
+        return self._orig_pk_row_map.get(pk)
+
+    def get_message_row_by_marker_id(self, marker_id: str) -> MessageRow | None:
+        return self._get_row_by_marker_id(marker_id)
+
+    def get_read_marker_reference_row(self, marker_id: str) -> MessageRow | None:
+        row = self._get_row_by_marker_id(marker_id)
+        if row is None:
+            return None
+
+        index = row.get_index()
+        reference = None if row.is_retracted else row
+        while reference is None and index > 0:
+            index -= 1
+            prev_row = self._list_box.get_row_at_index(index)
+            if isinstance(prev_row, MessageRow) and not prev_row.is_retracted:
+                reference = prev_row
+
+        if reference is None:
+            return None
+
+        # Outgoing messages may not have advanced MDS, but they are already read.
+        # Place the marker immediately before the first unread incoming row.
+        index = row.get_index()
+        while True:
+            index += 1
+            next_row = self._list_box.get_row_at_index(index)
+            if next_row is None:
+                return reference
+            if not isinstance(next_row, MessageRow) or next_row.is_retracted:
+                continue
+            if next_row.direction == ChatDirection.INCOMING:
+                return reference
+            reference = next_row
+
+    def get_row_visibility(
+        self, row: BaseRow, view_height: int
+    ) -> Literal["full", "partial", "outside"]:
+        point = self._compute_viewport_point(row)
+        if point is None:
+            return "outside"
+
+        top = point.y
+        row_height = row.get_height()
+        bottom = top + row_height
+        if bottom <= 0 or top >= view_height:
+            return "outside"
+
+        if row_height <= view_height:
+            return "full" if top >= 0 and bottom <= view_height else "partial"
+
+        # Taller than viewport: covering the viewport counts as fully seen
+        return "full" if top <= 0 and bottom >= view_height else "partial"
+
+    def show_read_marker(self, marker: ReadMarkerOverlay, after_pk: int) -> None:
+        """Show the marker as a list overlay (takes no message-row space)."""
+        self.remove_read_marker()
+        marker.after_pk = after_pk
+
+        self._content_overlay.add_overlay(marker)
+        self._content_overlay.set_measure_overlay(marker, False)
+        self._read_marker_widget = marker
+        # Position after allocate; also refresh on later scroll/resize
+        GLib.idle_add(self._update_read_marker_position)
+
+    def remove_read_marker(self, row: ReadMarkerOverlay | None = None) -> None:
+        marker = row if row is not None else self._read_marker_widget
+        if marker is None:
+            return
+
+        if self._read_marker_widget is marker:
+            self._read_marker_widget = None
+
+        # Stop fade callbacks before unparenting; Adw may emit "done" on reset
+        # during teardown and must not re-enter remove_overlay.
+        marker.stop_animation()
+        parent = marker.get_parent()
+        if parent is self._content_overlay:
+            self._content_overlay.remove_overlay(marker)
+
+    def _update_read_marker_position(self) -> None:
+        marker = self._read_marker_widget
+        if marker is None:
+            return
+
+        reference = self._orig_pk_row_map.get(marker.after_pk)
+        if reference is None or not reference.get_mapped():
+            marker.set_visible(False)
+            marker.update_fade(False)
+            return
+
+        # Prefer content (grid) edges so we sit in the visual gap between
+        # messages, not on the ListBoxRow border inside asymmetric padding.
+        ref_content = reference.get_child() or reference
+        top_y: float | None = None
+        bottom = ref_content.translate_coordinates(
+            self._content_overlay, 0, ref_content.get_height()
+        )
+        if bottom is None:
+            marker.set_visible(False)
+            return
+
+        next_row = self._list_box.get_row_at_index(reference.get_index() + 1)
+        if next_row is not None and next_row.get_mapped():
+            next_content = next_row.get_child() or next_row
+            top = next_content.translate_coordinates(self._content_overlay, 0, 0)
+            if top is not None:
+                top_y = top[1]
+
+        boundary_y = (bottom[1] + top_y) / 2 if top_y is not None else bottom[1]
+
+        marker.set_visible(True)
+        marker_height = marker.get_height()
+        if marker_height <= 0:
+            _min_h, marker_height, _, _ = marker.measure(
+                Gtk.Orientation.VERTICAL, self.get_width()
+            )
+        marker.set_margin_top(max(0, int(boundary_y - marker_height / 2)))
+
+    def flush_read_tracking(self) -> None:
+        self._read_tracker.flush()
+
+    def schedule_read_tracking(self) -> None:
+        self._read_tracker.schedule()
+
+    def _get_row_by_marker_id(self, marker_id: str) -> MessageRow | None:
+        return self._stanza_id_row_map.get(marker_id) or self._message_id_row_map.get(
+            marker_id
+        )
+
     def _insert_message(self, message: BaseRow) -> None:
         self._list_box.append(message)
 
@@ -1038,6 +1207,12 @@ class ConversationView(Gtk.ScrolledWindow):
         if row is None:
             return
 
+        if (
+            self._new_messages_target is not None
+            and self._new_messages_target[1] == row.orig_pk
+        ):
+            self.clear_new_messages_target()
+
         self._remove_from_maps(row)
         index = row.get_index()
         self._remove_row(row)
@@ -1048,7 +1223,11 @@ class ConversationView(Gtk.ScrolledWindow):
             # unset merged state.
             decendant_row.set_merged(False)
 
+        self._read_tracker.schedule()
+
     def _remove_from_maps(self, row: MessageRow) -> None:
+        self._orig_pk_row_map.pop(row.orig_pk, None)
+
         for key, val in dict(self._message_id_row_map).items():
             if val is row:
                 del self._message_id_row_map[key]
@@ -1066,42 +1245,12 @@ class ConversationView(Gtk.ScrolledWindow):
             self._stanza_id_row_map[event.stanza_id] = row
         row.set_acknowledged(event.pk)
         self._check_for_merge(row)
+        self._read_tracker.schedule()
 
     def _determine_autoscroll(self) -> bool:
         adj = self.get_vadjustment()
         bottom = adj.get_upper() - adj.get_page_size()
         return bottom - adj.get_value() < 1
-
-    def get_anchor_message_id(self) -> str | None:
-        """Returns the id of the message the view is anchored to, which is the
-        topmost message currently visible in the viewport.
-
-        Returns None if the view is at the bottom, or if the position can not be
-        determined, e.g. because the view is not mapped.
-        """
-        if self._autoscroll:
-            return None
-
-        for row in self.iter_rows():
-            if not isinstance(row, MessageRow):
-                continue
-
-            point = self._compute_viewport_point(row)
-            if point is None:
-                continue
-
-            if point.y + row.get_height() < 0:
-                continue
-
-            if point.y > self.get_height():
-                break
-
-            if row.displayed_id is None:
-                continue
-
-            return row.displayed_id
-
-        return None
 
     def scroll_to_message(
         self, account: str, jid: JID, timestamp: datetime, pk: int
@@ -1119,11 +1268,11 @@ class ConversationView(Gtk.ScrolledWindow):
     def restore_position(
         self, account: str, jid: JID, timestamp: datetime, pk: int
     ) -> None:
-        """Loads the conversation around a message and aligns it with the top of
-        the viewport. Must be called after switch_contact().
+        """Load conversation around a message and restore its viewport position.
+
+        Must be called after switch_contact().
         """
         target = _ScrollTarget(pk=pk, align="top", highlight=False)
-
         self._load_conversation_around(account, jid, timestamp, target, reset=False)
 
     def _load_conversation_around(
@@ -1142,7 +1291,9 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_visible(False)
 
         messages, before_complete, after_complete = (
-            self._storage.get_conversation_around_timestamp(account, jid, timestamp)
+            self._storage.get_conversation_around_timestamp(
+                account, jid, timestamp, target.pk
+            )
         )
 
         if reset:
@@ -1163,20 +1314,51 @@ class ConversationView(Gtk.ScrolledWindow):
         if self._scroll_target is None:
             return
 
-        idle_add_once(self._scroll_after_map, self._scroll_target)
-
+        target = self._scroll_target
+        generation = self._scroll_generation
         self._scroll_target = None
+        idle_add_once(self._scroll_after_map, target, generation)
 
-    def _scroll_after_map(self, target: _ScrollTarget) -> None:
+    def _scroll_after_map(self, target: _ScrollTarget, generation: int) -> None:
+        if generation != self._scroll_generation:
+            return
+
         log.debug("Scroll after map")
         self._scroll_to_target(target)
         self._autoscroll = self._determine_autoscroll()
-        timeout_add_once(50, self._enable_signal_handlers, True)
-        timeout_add_once(50, self.block_signals, False)
-        timeout_add_once(60, self._notify, "at-bottom")
+        timeout_add_once(
+            50,
+            self._run_if_scroll_generation,
+            generation,
+            self._finish_scroll_restore,
+        )
+        timeout_add_once(
+            60, self._run_if_scroll_generation, generation, self._notify, "at-bottom"
+        )
+        # Delay read-tracking so the open-time marker is not evaluated against
+        # an unfinished scroll position.
+        timeout_add_once(
+            100,
+            self._run_if_scroll_generation,
+            generation,
+            self._read_tracker.schedule,
+        )
+
+    def _finish_scroll_restore(self) -> None:
+        self._enable_signal_handlers(True)
+        self.block_signals(False)
+
+    def _run_if_scroll_generation(self, generation: int, func: Any, *args: Any) -> None:
+        if generation != self._scroll_generation:
+            return
+        func(*args)
 
     def _scroll_to_target(self, target: _ScrollTarget) -> None:
-        row = self._find_row_by_pk(target.pk)
+        row: BaseRow | None = (
+            self._find_first_incoming_after(target.pk)
+            if target.first_incoming
+            else self._find_row_by_pk(target.pk)
+        )
         if row is None:
             return
 
@@ -1186,14 +1368,16 @@ class ConversationView(Gtk.ScrolledWindow):
 
         adjustment = self.get_vadjustment()
 
-        # point.y is relative to the viewport, scroll by that distance to align
-        # the row with the top of the viewport
-        offset = point.y
+        # point.y is relative to the viewport; scroll so the row ends at the
+        # desired viewport Y (0 = top-aligned).
         if target.align == "center":
-            offset -= (adjustment.get_page_size() - row.get_height()) / 2
+            delta = point.y - (adjustment.get_page_size() - row.get_height()) / 2
+        else:
+            delta = point.y
 
         # Gtk.Adjustment clamps the value to the allowed range
-        adjustment.set_value(adjustment.get_value() + offset)
+        adjustment.set_value(adjustment.get_value() + delta)
+        self._update_read_marker_position()
 
         if target.highlight:
             self._highlight_row(row)
@@ -1287,11 +1471,26 @@ class ConversationView(Gtk.ScrolledWindow):
             return None
         return self._get_message_row_by_direction(pk, direction=Direction.NEXT)
 
+    def has_incoming_after_message(self, reference: MessageRow) -> bool:
+        """True if an incoming message row exists after reference in the list."""
+        index = reference.get_index()
+        while True:
+            index += 1
+            row = self._list_box.get_row_at_index(index)
+            if row is None:
+                return False
+            if (
+                isinstance(row, MessageRow)
+                and row.direction == ChatDirection.INCOMING
+                and not row.is_retracted
+            ):
+                return True
+
     def _get_row_by_pk(self, pk: int) -> MessageRow | None:
         for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if not isinstance(row, MessageRow):
                 continue
-            if pk in {row.pk, row.orig_pk}:
+            if pk in (row.pk, row.orig_pk):
                 return row
 
         return None
@@ -1334,6 +1533,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         if message_row is not None:
             message_row.update_retractions()
+            self._read_tracker.schedule()
 
     def update_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):

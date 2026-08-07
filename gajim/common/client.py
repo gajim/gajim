@@ -517,6 +517,7 @@ class Client(Observable, ClientModules):
         self.get_module("EntityTime").set_enabled(True)
         self.get_module("Annotations").request_annotations()
         self.get_module("Blocking").get_blocking_list()
+        self.get_module("MDS").request_mds()
         self.get_module("VCard4").subscribe_to_node()
 
         if app.settings.get_account_setting(self._account, "publish_tune"):

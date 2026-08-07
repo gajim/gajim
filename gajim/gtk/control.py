@@ -77,6 +77,7 @@ class ChatControl(EventHelper):
         )
         self._scrolled_view.connect("notify::at-bottom", self._on_at_bottom_changed)
         self._scrolled_view.connect("request-history", self._request_history)
+        self._scrolled_view.connect("read-up-to", self._on_read_up_to)
         self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
         self._groupchat_state = GroupchatState()
@@ -181,9 +182,7 @@ class ChatControl(EventHelper):
     def clear(self) -> None:
         log.info("Clear")
 
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
-
+        self._leave_contact()
         self._contact = None
         self._client = None
         self._scrolled_view.clear()
@@ -253,8 +252,7 @@ class ChatControl(EventHelper):
         self, contact: BareContact | GroupchatContact | GroupchatParticipant
     ) -> None:
         log.info("Switch to %s (%s)", contact.jid, contact.account)
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
+        self._leave_contact()
 
         self._contact = contact
 
@@ -263,7 +261,7 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.switch_contact(contact)
         self._message_row_actions.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)
-        if not self._set_prepare_for_scroll:
+        if not self._set_prepare_for_scroll and not self._restore_scroll_position():
             self._request_history(None, "before")
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
@@ -340,6 +338,7 @@ class ChatControl(EventHelper):
                 ("message-retracted", ged.GUI2, self._on_message_retracted),
                 ("receipt-received", ged.GUI2, self._on_receipt_received),
                 ("displayed-received", ged.GUI2, self._on_displayed_received),
+                ("read-state-sync", ged.GUI2, self._on_read_state_sync),
                 ("reaction-updated", ged.GUI2, self._on_reaction_updated),
                 ("message-error", ged.GUI2, self._on_message_error),
                 ("call-stopped", ged.GUI2, self._on_call_stopped),
@@ -436,6 +435,71 @@ class ChatControl(EventHelper):
             return
 
         self._scrolled_view.update_displayed_markers(event)
+
+    def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self._scrolled_view.update_read_marker(event.marker_id)
+
+    def _on_read_up_to(
+        self,
+        _view: ConversationView,
+        stanza_id: str,
+        message_id: str,
+    ) -> None:
+        if self._contact is None or self._client is None:
+            return
+
+        self._client.get_module("MDS").publish_displayed(
+            self._contact,
+            stanza_id,
+            message_id or None,
+        )
+
+    def _leave_contact(self) -> None:
+        if self._contact is None:
+            return
+        self.save_state()
+        self._contact.disconnect_all_from_obj(self)
+
+    def save_state(self) -> None:
+        """Persist in-flight read state."""
+        if self._contact is None:
+            return
+        self._scrolled_view.flush_read_tracking()
+
+    def _restore_scroll_position(self) -> bool:
+        """Restore to MDS read marker if there is unread."""
+        assert self._contact is not None
+        account = self._contact.account
+        jid = self._contact.jid
+
+        state = app.storage.archive.get_contact(account, jid)
+        if state is None:
+            return False
+
+        last_read_id = state.last_read_id
+        if last_read_id is None:
+            return False
+
+        marker_state = app.storage.archive.get_marker_message_and_unread_count(
+            account, jid, last_read_id
+        )
+        if marker_state is None:
+            return False
+
+        message, unread_count = marker_state
+        if not unread_count:
+            return False
+
+        self._scrolled_view.restore_position(
+            account,
+            jid,
+            message.timestamp,
+            message.pk,
+        )
+        return True
 
     def _on_reaction_updated(self, event: events.ReactionUpdated) -> None:
         if not self._is_event_processable(event):

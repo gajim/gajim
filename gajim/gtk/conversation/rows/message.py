@@ -90,6 +90,7 @@ class MessageRow(BaseRow):
         assert message.text is not None
         self._original_text = message.text
         self._original_message = message
+        self.stanza_id = message.stanza_id
 
         self._is_retracted = bool(message.moderation or message.retraction)
         self._is_blocked = False
@@ -142,6 +143,19 @@ class MessageRow(BaseRow):
             return None
         return self._message.occupant.id
 
+    @property
+    def orig_stanza_id(self) -> str | None:
+        """Root message stanza-id (stable for MDS ordering across corrections)."""
+        return self._original_message.stanza_id
+
+    @property
+    def message_id(self) -> str | None:
+        return self._message.id or self._original_message.id
+
+    @property
+    def is_retracted(self) -> bool:
+        return self._is_retracted
+
     def _redraw_content(self) -> None:
         self.set_merged(False)
         self.remove_css_class("retracted-message")
@@ -183,6 +197,7 @@ class MessageRow(BaseRow):
             self._message = corrected_message
 
         self.pk = message.pk
+        self.stanza_id = message.stanza_id or self._original_message.stanza_id
 
         self.encryption = message.encryption
         self.securitylabel = message.security_label
@@ -452,6 +467,7 @@ class MessageRow(BaseRow):
             raise ValueError("Acknowledged unknown message")
 
         app.storage.archive.refresh(message, ["stanza_id", "state"])
+        self.stanza_id = self._message.stanza_id or self._original_message.stanza_id
 
         if self._is_retracted:
             return
@@ -591,7 +607,6 @@ class MessageRow(BaseRow):
         self._merged = merged
         if merged:
             self.add_css_class("merged")
-            self._meta_box.set_visible(False)
             self._meta_box.set_visible(False)
         else:
             self.remove_css_class("merged")

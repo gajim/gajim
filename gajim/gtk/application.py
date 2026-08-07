@@ -773,7 +773,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_mark_as_read_action(
         self, _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-        app.window.mark_as_read(params.account, params.jid)
+        app.window.mark_as_read(params.account, params.jid, send_marker=True)
 
     @staticmethod
     def _on_open_link_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

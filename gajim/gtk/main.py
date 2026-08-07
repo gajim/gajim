@@ -375,7 +375,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         chat_list = chat_list_stack.get_chatlist(workspace)
         open_chats = chat_list.get_open_chats()
         for chat in open_chats:
-            self.mark_as_read(chat["account"], chat["jid"])
+            self.mark_as_read(chat["account"], chat["jid"], send_marker=True)
 
     def _mark_workspace_as_read(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -1003,6 +1003,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             chat_list_stack.set_chat_unread_count(chat.account, chat.jid, chat.count)
 
     def show_account_page(self, account: str) -> None:
+        control = self.get_control()
+        if control.has_active_chat():
+            control.get_conversation_view().flush_read_tracking()
+
         self._app_side_bar.show_account_page()
         self._main_stack.show_account(account)
 
@@ -1263,9 +1267,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         account: str,
         jid: JID,
         *,
-        is_sync: bool = False,
+        send_marker: bool = False,
     ) -> None:
-        unread_count = self.get_chat_unread_count(account, jid, include_silent=True)
+        unread_count = (
+            self.get_chat_unread_count(account, jid, include_silent=True)
+            if send_marker
+            else 0
+        )
 
         self.set_urgency_hint(False)
         control = self.get_control()
@@ -1281,41 +1289,38 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         activity_list = self._chat_page.get_activity_list()
         activity_list.mark_items_as_read(Reaction, account, jid)
 
-        if not unread_count or is_sync:
-            # Read marker must be sent only once
+        if not send_marker:
             return
 
-        if not app.account_is_connected(account):
+        if not unread_count:
             return
 
         client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact(jid)
         assert not isinstance(contact, ResourceContact)
 
-        if not client.get_module("MAM").is_catch_up_finished(contact):
-            # Dont set read state before we have all messages
-            return
-
         last_message = app.storage.archive.get_last_conversation_row(
             account, jid, incl_related_data=False
         )
-        if last_message is None or last_message.id is None:
+        if last_message is None or last_message.stanza_id is None:
             return
 
-        mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
-            contact, last_message.id, last_message.stanza_id
+        # Persist locally always; markers / MDS PEP wait for connectivity + catch-up
+        client.get_module("MDS").publish_displayed(
+            contact,
+            last_message.stanza_id,
+            last_message.id,
+            send_chat_marker=True,
         )
 
-        if not mds_assist_sent and last_message.stanza_id is not None:
-            by = contact.jid if isinstance(contact, GroupchatContact) else None
-            client.get_module("MDS").set_mds(contact.jid, last_message.stanza_id, by)
-
     def _on_window_active(self, window: Gtk.ApplicationWindow, _param: Any) -> None:
+        control = self.get_control()
         if not window.is_active():
+            if control.has_active_chat():
+                control.get_conversation_view().flush_read_tracking()
             return
 
         self.set_urgency_hint(False)
-        control = self.get_control()
         if not control.has_active_chat():
             return
 
@@ -1324,6 +1329,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         if control.view_is_at_bottom():
             self.mark_as_read(contact.account, contact.jid)
+
+        control.get_conversation_view().schedule_read_tracking()
 
     def get_preferred_ft_method(self, contact: types.ChatContactT) -> str | None:
         httpupload_enabled = app.window.get_action_enabled("send-file-httpupload")
@@ -1486,17 +1493,43 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.add_chat(event.account, event.jid, "chat")
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
-        last_message = app.storage.archive.get_last_conversation_row(
-            event.account, event.jid, incl_related_data=False
+        marker_state = app.storage.archive.get_marker_message_and_unread_count(
+            event.account,
+            event.jid,
+            event.marker_id,
         )
+        if marker_state is None:
+            # Marker not in archive yet — fall back to full-read check only
+            last_message = app.storage.archive.get_last_conversation_row(
+                event.account, event.jid, incl_related_data=False
+            )
+            if last_message is None:
+                return
+            if event.marker_id not in (last_message.id, last_message.stanza_id):
+                return
+            unread_after = 0
+        else:
+            unread_after = marker_state[1]
 
-        if last_message is None:
+        if unread_after == 0:
+            self.mark_as_read(event.account, event.jid)
+            # Clear cache even when no chat list row exists yet
+            app.storage.cache.reset_unread_count(event.account, event.jid)
             return
 
-        if event.marker_id not in (last_message.id, last_message.stanza_id):
+        # Never inflate or resurrect local unread from the archive heuristic
+        current = self.get_chat_unread_count(
+            event.account, event.jid, include_silent=True
+        )
+        if not current:
             return
 
-        self.mark_as_read(event.account, event.jid, is_sync=True)
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list_stack.update_chat_unread_count(
+            event.account,
+            event.jid,
+            min(unread_after, current),
+        )
 
     def _on_call_started(self, event: events.CallStarted) -> None:
         # Make sure there is only one window
@@ -1522,6 +1555,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def start_shutdown(self) -> None:
         self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
         app.ged.raise_event(events.PrepareForShutdown())
+
+        control = self.get_control()
+        if control.has_active_chat():
+            control.save_state()
 
         if self.is_visible():
             window_width, window_height = self.get_width(), self.get_height()

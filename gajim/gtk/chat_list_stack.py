@@ -231,7 +231,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def _mark_as_read(
         self, _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-        self.mark_as_read(params.account, params.jid)
+        app.window.mark_as_read(params.account, params.jid, send_marker=True)
 
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]
@@ -342,6 +342,10 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def set_chat_unread_count(self, account: str, jid: JID, count: int) -> None:
         for chat_list in self._chat_lists.values():
             chat_list.set_chat_unread_count(account, jid, count)
+
+    def update_chat_unread_count(self, account: str, jid: JID, count: int) -> None:
+        for chat_list in self._chat_lists.values():
+            chat_list.update_chat_unread_count(account, jid, count)
 
     def mark_as_read(self, account: str, jid: JID) -> None:
         for chat_list in self._chat_lists.values():

@@ -358,6 +358,27 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self.emit("unread-changed")
 
+    def update_unread_count(self, count: int) -> None:
+        """Set the unread badge to an absolute count (e.g. after MDS sync)."""
+        if count <= 0:
+            self.reset_unread()
+            return
+
+        self._unread_count = count
+        self._update_unread()
+        # Sync advanced read state on another device; drop stale mention highlight
+        self._needs_muc_highlight = False
+        self._ui.mention_indicator.set_visible(False)
+        if self.message_id is not None:
+            app.storage.cache.set_unread_count(
+                self.account,
+                self.jid,
+                count,
+                self.message_id,
+                self.timestamp,
+            )
+        self.emit("unread-changed")
+
     def reset_unread(self) -> None:
         self._needs_muc_highlight = False
         self._ui.mention_indicator.set_visible(False)

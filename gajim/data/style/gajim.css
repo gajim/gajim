@@ -642,6 +642,17 @@ entry.field-missing {
     padding: 12px;
 }
 
+/* ReadMarkerOverlay — floating over the list; not a ListBox row */
+.conversation-read-marker-separator {
+    min-height: 1px;
+    background-color: var(--accent-color);
+}
+
+.conversation-read-marker-label {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
 /* CommandRow */
 .conversation-command-row .gajim-command-error,
 .conversation-command-row .gajim-command-output {

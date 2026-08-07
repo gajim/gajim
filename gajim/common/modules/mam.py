@@ -69,7 +69,7 @@ class MAM(BaseModule):
         self._mam_query_ids: dict[JID, str] = {}
 
         # Holds archive jids where catch up was successful
-        self._catch_up_finished: list[JID] = []
+        self._catch_up_finished: set[JID] = set()
 
         self._con.connect_signal("state-changed", self._on_client_state_changed)
         self._con.connect_signal("resume-failed", self._on_client_resume_failed)
@@ -109,8 +109,8 @@ class MAM(BaseModule):
                 del self._mam_query_ids[jid]
                 return
 
-    def _is_catch_up_finished(self, jid: JID) -> bool:
-        return jid in self._catch_up_finished
+    def is_archive_catch_up_finished(self, archive_jid: JID) -> bool:
+        return archive_jid in self._catch_up_finished
 
     def is_catch_up_finished(self, contact: types.ChatContactT) -> bool:
         if isinstance(contact, BareContact):
@@ -123,7 +123,7 @@ class MAM(BaseModule):
             # GroupChatParticipant
             archive_jid = contact.room.jid
 
-        return self._is_catch_up_finished(archive_jid)
+        return self.is_archive_catch_up_finished(archive_jid)
 
     def _from_valid_archive(
         self, _stanza: Message, properties: MessageProperties
@@ -185,7 +185,7 @@ class MAM(BaseModule):
         if stanza_id is None:
             return
 
-        if not self._is_catch_up_finished(archive_jid):
+        if not self.is_archive_catch_up_finished(archive_jid):
             return
 
         if timestamp is not None:
@@ -427,8 +427,7 @@ class MAM(BaseModule):
     ) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
-        if jid in self._catch_up_finished:
-            self._catch_up_finished.remove(jid)
+        self._catch_up_finished.discard(jid)
 
         queryid = self._get_query_id(jid)
 
@@ -458,10 +457,11 @@ class MAM(BaseModule):
 
             raise_if_error(result)
 
-        self._catch_up_finished.append(result.jid)
+        self._catch_up_finished.add(result.jid)
         self._log.info(
             "Request finished: %s, last mam id: %s", result.jid, result.rsm.last
         )
+        self._client.get_module("MDS").flush_pending_publishes(result.jid)
         yield result
 
     def request_archive_interval(

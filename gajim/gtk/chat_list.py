@@ -144,12 +144,17 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if chat is not None:
             chat.unread_count = count
 
+    def update_chat_unread_count(self, account: str, jid: JID, count: int) -> None:
+        chat = self._chats.get((account, jid))
+        if chat is not None and count < chat.get_real_unread_count():
+            chat.update_unread_count(count)
+
     def set_filter(self, chat_filter: ChatFilters) -> None:
         self._current_filter = chat_filter
         self.invalidate_filter()
 
     def set_filter_text(self, text: str) -> None:
-        self._current_filter_text = text
+        self._current_filter_text = text.lower()
         self.invalidate_filter()
 
     def get_chat_type(
@@ -195,7 +200,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             row.position = -1
         else:
             self._chat_order.append(row)
-            row.position = self._chat_order.index(row)
+            row.position = len(self._chat_order) - 1
 
         row.toggle_pinned()
         self.invalidate_sort(force=True)
@@ -245,17 +250,18 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if unread_first:
             index = row.get_index()
             current = index
+            row_count = self.get_row_count()
 
             # Loop until finding a chat with unread count or completing a cycle
             while True:
                 if direction == Direction.NEXT:
                     index += 1
-                    if index >= self.get_row_count():
+                    if index >= row_count:
                         index = 0
                 else:
                     index -= 1
                     if index < 0:
-                        index = self.get_row_count() - 1
+                        index = row_count - 1
 
                 row = self.get_row_at_index(index)
                 if row is None:
@@ -437,8 +443,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._chat_order.remove(drag_row)
         self._chat_order.insert(target_row.position, drag_row)
 
-        for row in self._chat_order:
-            row.position = self._chat_order.index(row)
+        for position, row in enumerate(self._chat_order):
+            row.position = position
 
         self.emit("chat-order-changed")
         self.invalidate_sort(force=True)
@@ -473,8 +479,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if not self._current_filter_text:
             return True
 
-        text = self._current_filter_text.lower()
-        return text in row.contact_name.lower()
+        return self._current_filter_text in row.contact_name.lower()
 
     @staticmethod
     def _header_func(row: ChatListRow, before: ChatListRow | None) -> None:
@@ -533,6 +538,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def _schedule_sort(self) -> None:
         self._abort_scheduled_sort("schedule is renewed")
+        if not self._rows_need_sort or self._is_sort_inhibited():
+            return
         log.debug("Schedule sort")
         self._scheduled_sort_id = GLib.timeout_add(100, self._execute_scheduled_sort)
 
@@ -544,17 +551,10 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def _execute_scheduled_sort(self) -> bool:
         log.debug("Execute scheduled sort")
-        if not self._rows_need_sort:
-            log.debug("Abort scheduled sort, reason: no rows changed")
-            self._scheduled_sort_id = None
-            return GLib.SOURCE_REMOVE
-
-        sort_executed = self.invalidate_sort()
-        if sort_executed:
-            self._scheduled_sort_id = None
-            return GLib.SOURCE_REMOVE
-
-        return GLib.SOURCE_CONTINUE
+        self._scheduled_sort_id = None
+        if self._rows_need_sort:
+            self.invalidate_sort()
+        return GLib.SOURCE_REMOVE
 
     def _on_cursor_enter(
         self,
