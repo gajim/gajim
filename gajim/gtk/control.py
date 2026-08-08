@@ -68,6 +68,7 @@ class ChatControl(EventHelper):
         self._ui = get_builder("chat_control.ui")
 
         self._set_prepare_for_scroll = False
+        self._last_view_target: tuple[Message, float] | None = None
 
         self._message_row_actions = MessageRowActions()
         self._ui.conv_view_overlay.add_overlay(self._message_row_actions)
@@ -78,6 +79,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect("notify::at-bottom", self._on_at_bottom_changed)
         self._scrolled_view.connect("request-history", self._request_history)
         self._scrolled_view.connect("read-up-to", self._on_read_up_to)
+        self._scrolled_view.connect(
+            "new-messages-available", self._on_new_messages_available
+        )
         self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
         self._groupchat_state = GroupchatState()
@@ -91,6 +95,28 @@ class ChatControl(EventHelper):
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect("clicked", self._on_jump_to_end)
         self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
+
+        self._jump_to_last_view_button = Gtk.Revealer(
+            halign=Gtk.Align.END,
+            valign=Gtk.Align.START,
+            margin_top=12,
+            margin_end=24,
+            transition_type=Gtk.RevealerTransitionType.CROSSFADE,
+            transition_duration=150,
+        )
+        icon = Gtk.Image(
+            icon_name="lucide-chevron-up-symbolic",
+            margin_start=4,
+            margin_end=4,
+        )
+        button = Gtk.Button(
+            child=icon,
+            tooltip_text=_("Jump to Last Viewed Position"),
+            css_classes=["circular", "suggested-action"],
+        )
+        button.connect("clicked", self._on_jump_to_last_view)
+        self._jump_to_last_view_button.set_child(button)
+        self._ui.conv_view_overlay.add_overlay(self._jump_to_last_view_button)
 
         self._roster = GroupchatRoster()
         self._ui.conv_view_paned.set_end_child(self._roster)
@@ -183,6 +209,7 @@ class ChatControl(EventHelper):
         log.info("Clear")
 
         self._leave_contact()
+        self._reset_position_jumps()
         self._contact = None
         self._client = None
         self._scrolled_view.clear()
@@ -253,6 +280,7 @@ class ChatControl(EventHelper):
     ) -> None:
         log.info("Switch to %s (%s)", contact.jid, contact.account)
         self._leave_contact()
+        self._reset_position_jumps()
 
         self._contact = contact
 
@@ -477,7 +505,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.flush_read_tracking()
 
     def _restore_scroll_position(self) -> bool:
-        """Restore to MDS read marker if there is unread, else to last_view_id."""
+        """Restore the preferred chat-opening position."""
         assert self._contact is not None
         account = self._contact.account
         jid = self._contact.jid
@@ -486,39 +514,100 @@ class ChatControl(EventHelper):
         if state is None:
             return False
 
-        last_read_id = state.last_read_id
-        if last_read_id is not None:
-            marker_state = app.storage.archive.get_marker_message_and_unread_count(
-                account, jid, last_read_id
+        marker_state = (
+            app.storage.archive.get_marker_message_and_unread_count(
+                account, jid, state.last_read_id
             )
-            if marker_state is not None:
-                message, unread_count = marker_state
-                if unread_count:
-                    self._scrolled_view.restore_position(
-                        account,
-                        jid,
-                        message.timestamp,
-                        message.pk,
-                    )
-                    return True
+            if state.last_read_id is not None
+            else None
+        )
+        unread = (
+            marker_state[0] if marker_state is not None and marker_state[1] else None
+        )
+        last_view = (
+            app.storage.archive.get_message_for_marker(account, jid, state.last_view_id)
+            if state.last_view_id is not None
+            else None
+        )
+        prefer_last_view = app.settings.get("chat_opening_position") == "last_view"
+        if prefer_last_view and last_view is not None:
+            self._restore_position(
+                account,
+                jid,
+                last_view,
+                state.last_view_offset or 0.0,
+                show_marker=True,
+            )
+            if unread is not None:
+                self._scrolled_view.set_new_messages_target(
+                    unread.timestamp, unread.pk, available=True
+                )
+            return True
 
-        last_view_id = state.last_view_id
-        if last_view_id is None:
+        if unread is not None:
+            self._restore_position(account, jid, unread)
+            self._scrolled_view.set_new_messages_target(unread.timestamp, unread.pk)
+            if not prefer_last_view and last_view is not None:
+                self._last_view_target = (
+                    last_view,
+                    state.last_view_offset or 0.0,
+                )
+                self._jump_to_last_view_button.set_reveal_child(True)
+            return True
+
+        if last_view is None:
             return False
+        self._restore_position(account, jid, last_view, state.last_view_offset or 0.0)
+        return True
 
-        message = app.storage.archive.get_message_for_marker(account, jid, last_view_id)
-        if message is None:
-            return False
-
-        offset = state.last_view_offset or 0.0
+    def _restore_position(
+        self,
+        account: str,
+        jid: JID,
+        message: Message,
+        y_offset: float = 0.0,
+        *,
+        show_marker: bool = False,
+    ) -> None:
         self._scrolled_view.restore_position(
             account,
             jid,
             message.timestamp,
             message.pk,
-            y_offset=offset,
+            y_offset=y_offset,
+            show_view_marker=show_marker,
         )
-        return True
+
+    def _reset_position_jumps(self) -> None:
+        self._last_view_target = None
+        self._jump_to_last_view_button.set_reveal_child(False)
+        self._jump_to_end_button.reset()
+
+    def _on_jump_to_last_view(self, _button: Gtk.Button) -> None:
+        target = self._last_view_target
+        if target is None or self._contact is None:
+            return
+
+        self._last_view_target = None
+        self._jump_to_last_view_button.set_reveal_child(False)
+        message, offset = target
+        self._scrolled_view.restore_position(
+            self._contact.account,
+            self._contact.jid,
+            message.timestamp,
+            message.pk,
+            y_offset=offset,
+            show_view_marker=True,
+            reset=True,
+        )
+
+    def _on_new_messages_available(
+        self, _view: ConversationView, available: bool
+    ) -> None:
+        if available:
+            self._jump_to_end_button.show_new_messages()
+        else:
+            self._jump_to_end_button.show_end()
 
     def _on_reaction_updated(self, event: events.ReactionUpdated) -> None:
         if not self._is_event_processable(event):
@@ -616,6 +705,10 @@ class ChatControl(EventHelper):
         self.scroll_to_message(pk, dt.datetime.fromtimestamp(timestamp, dt.UTC))
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
+        if self._contact is not None and self._scrolled_view.jump_to_new_messages(
+            self._contact.account, self._contact.jid
+        ):
+            return
         self.reset_view()
 
     def _allow_add_message(self) -> bool:
@@ -636,7 +729,7 @@ class ChatControl(EventHelper):
 
     def _add_message(self, message: Message) -> None:
         if self._allow_add_message():
-            self._scrolled_view.add_message(message)
+            self._scrolled_view.add_message(message, live=True)
 
             if not self.view_is_at_bottom():
                 if message.direction == ChatDirection.OUTGOING:

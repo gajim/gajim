@@ -653,6 +653,11 @@ entry.field-missing {
     font-weight: bold;
 }
 
+.conversation-view-marker {
+    min-height: 1px;
+    border-top: 1px dotted var(--accent-color);
+}
+
 /* CommandRow */
 .conversation-command-row .gajim-command-error,
 .conversation-command-row .gajim-command-output {

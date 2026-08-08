@@ -13,19 +13,20 @@ from gi.repository import Gtk
 from gajim.common.i18n import _
 
 _FADE_DURATION_MS = 150
+READ_MARKER_FADE_MS = 5000
+VIEW_MARKER_FADE_MS = 1000
 
 
-class ReadMarkerOverlay(Gtk.Box):
-    """Floating “New” marker — not part of list layout."""
-
-    __gtype_name__ = "ConversationReadMarkerOverlay"
-
-    def __init__(self) -> None:
-        Gtk.Box.__init__(
-            self,
-            orientation=Gtk.Orientation.HORIZONTAL,
-            spacing=12,
-        )
+class MarkerOverlay(Gtk.Box):
+    def __init__(
+        self,
+        fade_ms: int,
+        on_timeout: Callable[[], None],
+        *,
+        orientation: Gtk.Orientation = Gtk.Orientation.HORIZONTAL,
+        spacing: int = 0,
+    ) -> None:
+        Gtk.Box.__init__(self, orientation=orientation, spacing=spacing)
         self.set_can_target(False)
         self.set_halign(Gtk.Align.FILL)
         self.set_valign(Gtk.Align.START)
@@ -33,26 +34,12 @@ class ReadMarkerOverlay(Gtk.Box):
         self.set_margin_start(14)
         self.set_margin_end(12)
         self.set_opacity(0.0)
-        self.add_css_class("conversation-read-marker")
+        self.after_pk: int = 0
+        self._fade_ms = fade_ms
+        self._fade_id: int | None = None
+        self._on_timeout = on_timeout
         self._animation: Adw.TimedAnimation | None = None
         self._finished: Callable[[], None] | None = None
-        self.after_pk: int = 0
-
-        separator = Gtk.Separator(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            halign=Gtk.Align.FILL,
-            valign=Gtk.Align.CENTER,
-            hexpand=True,
-        )
-        separator.add_css_class("conversation-read-marker-separator")
-        self.append(separator)
-
-        label = Gtk.Label(
-            label=_("New"),
-            valign=Gtk.Align.CENTER,
-        )
-        label.add_css_class("conversation-read-marker-label")
-        self.append(label)
 
     def fade_in(self) -> None:
         self._animate(1.0)
@@ -117,3 +104,45 @@ class ReadMarkerOverlay(Gtk.Box):
     def do_unroot(self) -> None:
         self.stop_animation()
         Gtk.Box.do_unroot(self)
+
+
+class ViewMarkerOverlay(MarkerOverlay):
+    """Floating marker for the previously viewed position."""
+
+    __gtype_name__ = "ConversationViewMarkerOverlay"
+
+    def __init__(self, on_timeout: Callable[[], None]) -> None:
+        MarkerOverlay.__init__(self, VIEW_MARKER_FADE_MS, on_timeout)
+        self.add_css_class("conversation-view-marker")
+
+
+class ReadMarkerOverlay(MarkerOverlay):
+    """Floating “New” marker — not part of list layout."""
+
+    __gtype_name__ = "ConversationReadMarkerOverlay"
+
+    def __init__(self, on_timeout: Callable[[], None]) -> None:
+        MarkerOverlay.__init__(
+            self,
+            READ_MARKER_FADE_MS,
+            on_timeout,
+            orientation=Gtk.Orientation.HORIZONTAL,
+            spacing=12,
+        )
+        self.add_css_class("conversation-read-marker")
+
+        separator = Gtk.Separator(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            halign=Gtk.Align.FILL,
+            valign=Gtk.Align.CENTER,
+            hexpand=True,
+        )
+        separator.add_css_class("conversation-read-marker-separator")
+        self.append(separator)
+
+        label = Gtk.Label(
+            label=_("New"),
+            valign=Gtk.Align.CENTER,
+        )
+        label.add_css_class("conversation-read-marker-label")
+        self.append(label)

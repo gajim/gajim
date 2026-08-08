@@ -21,8 +21,6 @@ if TYPE_CHECKING:
 log = logging.getLogger("gajim.gtk.conversation.read_tracker")
 
 READ_DWELL_MS = 3000
-# Open-time “Read up to this point” row fades after this while the chat is focused
-READ_MARKER_FADE_MS = 5000
 
 
 class ReadTracker:
@@ -69,6 +67,18 @@ class ReadTracker:
     def schedule(self) -> None:
         if self._idle_id is None:
             self._idle_id = GLib.idle_add(self._on_idle)
+
+    def message_added(self, row: MessageRow, show_marker: bool) -> None:
+        if (
+            show_marker
+            and row.direction == ChatDirection.INCOMING
+            and not row.is_retracted
+            and self._last_read_id is not None
+            and self._open_marker_id is None
+        ):
+            self._dismiss()
+            self._open_marker_id = self._last_read_id
+        self.schedule()
 
     def flush(self) -> None:
         """Cancel timers; persist the newest in-flight dwell first."""
@@ -229,33 +239,6 @@ class ReadTracker:
             row.orig_stanza_id,
             row.message_id or "",
         )
-
-    def _maybe_schedule_fade(self) -> None:
-        if self._marker is None:
-            self._cancel_fade()
-            return
-
-        if not self._view.can_track_reads():
-            # Pause while unfocused / inactive; restart on next schedule()
-            self._cancel_fade()
-            return
-
-        if self._fade_id is not None:
-            return
-
-        log.debug("Schedule read marker fade")
-        self._fade_id = GLib.timeout_add(READ_MARKER_FADE_MS, self._on_fade_timeout)
-
-    def _on_fade_timeout(self) -> bool:
-        self._fade_id = None
-        if self._marker is None:
-            return GLib.SOURCE_REMOVE
-        if not self._view.can_track_reads():
-            return GLib.SOURCE_REMOVE
-
-        log.debug("Remove read marker: focused timeout")
-        self._dismiss()
-        return GLib.SOURCE_REMOVE
 
     def _dismiss(self) -> None:
         if self._marker is None:

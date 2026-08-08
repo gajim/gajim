@@ -213,7 +213,20 @@ class ChatsGroup(GajimPreferencesGroup):
             title=_("Chats"),
         )
 
+        opening_position_items = {
+            "messages": _("New Messages"),
+            "last_view": _("Last View"),
+        }
+
         settings = [
+            Setting(
+                SettingKind.DROPDOWN,
+                _("Chat Opening Position"),
+                SettingType.CONFIG,
+                "chat_opening_position",
+                props={"data": opening_position_items},
+                desc=_("Preferred position when opening a chat"),
+            ),
             Setting(
                 SettingKind.SWITCH,
                 _("Message Receipts (✔)"),

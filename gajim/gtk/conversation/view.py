@@ -58,7 +58,9 @@ from gajim.gtk.conversation.rows.info import InfoMessage
 from gajim.gtk.conversation.rows.message import MessageRow
 from gajim.gtk.conversation.rows.muc_join_left import MUCJoinLeft
 from gajim.gtk.conversation.rows.muc_subject import MUCSubject
+from gajim.gtk.conversation.rows.read_marker import MarkerOverlay
 from gajim.gtk.conversation.rows.read_marker import ReadMarkerOverlay
+from gajim.gtk.conversation.rows.read_marker import ViewMarkerOverlay
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
@@ -77,6 +79,8 @@ class _ScrollTarget:
     highlight: bool
     # Viewport-relative Y of the row top after restore (0 = flush with top).
     y_offset: float = 0.0
+    show_view_marker: bool = False
+    first_incoming: bool = False
 
 
 class ConversationView(Gtk.ScrolledWindow):
@@ -90,6 +94,11 @@ class ConversationView(Gtk.ScrolledWindow):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str, str),
+        ),
+        "new-messages-available": (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (bool,),
         ),
     }
 
@@ -129,6 +138,10 @@ class ConversationView(Gtk.ScrolledWindow):
         self._content_overlay = Gtk.Overlay()
         self._content_overlay.set_child(self._list_box)
         self._read_marker_widget: ReadMarkerOverlay | None = None
+        self._view_marker_widget: ViewMarkerOverlay | None = None
+        self._read_marker_target_pk: int | None = None
+        self._new_messages_target: tuple[datetime, int] | None = None
+        self._new_messages_available = False
 
         # Keeps track of date rows we have added to the list
         self._active_date_rows: set[datetime] = set()
@@ -361,7 +374,11 @@ class ConversationView(Gtk.ScrolledWindow):
         self._dm_rows.clear()
         self._last_occupant_messages.clear()
 
+        self._read_marker_target_pk = None
+        self._new_messages_target = None
+        self._set_new_messages_available(False)
         self.remove_read_marker()
+        self.remove_view_marker()
         self._read_tracker.reset()
 
     def reset(self) -> None:
@@ -401,14 +418,14 @@ class ConversationView(Gtk.ScrolledWindow):
         self._block_upper_scroll = False
 
         if anchor is None or not self._restore_scroll_anchor(anchor):
-            self._update_read_marker_position()
+            self._update_marker_positions()
             return
 
         # Gtk.Viewport applies the scroll position when it allocates its child,
         # so allocate a second time to make the correction part of this frame
         # instead of the next one.
         Gtk.ScrolledWindow.do_size_allocate(self, width, height, baseline)
-        self._update_read_marker_position()
+        self._update_marker_positions()
 
     def _get_scroll_anchor(self) -> tuple[Gtk.ListBoxRow | None, float] | None:
         """Remember which row sits at the top of the viewport, and where.
@@ -511,13 +528,13 @@ class ConversationView(Gtk.ScrolledWindow):
             self._notify("at-bottom")
 
         self._requesting = None
-        self._update_read_marker_position()
+        self._update_marker_positions()
 
     def _on_adj_value_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
         self._start_scrolling()
-        self._update_read_marker_position()
+        self._update_marker_positions()
 
         if self._requesting is not None:
             return
@@ -793,7 +810,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
             self.add_message(message)
 
-    def add_message(self, message: mod.Message) -> None:
+    def add_message(self, message: mod.Message, *, live: bool = False) -> None:
         message_row = MessageRow.from_db_row(self.contact, message)
         message_row.connect(
             "state-flags-changed", self._on_message_row_state_flags_changed
@@ -813,7 +830,10 @@ class ConversationView(Gtk.ScrolledWindow):
             self._record_last_occupant_message(occupant_id, message)
             self._update_displayed_markers(message)
 
-        self._read_tracker.schedule()
+        show_marker = (
+            live and not self._autoscroll and self._read_marker_target_pk is None
+        )
+        self._read_tracker.message_added(message_row, show_marker)
 
     def _update_displayed_markers(self, message: mod.Message) -> None:
         if message.direction == ChatDirection.INCOMING:
@@ -1019,12 +1039,26 @@ class ConversationView(Gtk.ScrolledWindow):
         """Show the marker as a list overlay (takes no message-row space)."""
         self.remove_read_marker()
         marker.after_pk = after_pk
+        self._add_marker(marker)
+        self._read_marker_widget = marker
+        self._read_marker_target_pk = after_pk
+        reference = self._orig_pk_row_map[after_pk]
+        self._new_messages_target = reference.timestamp, after_pk
+        GLib.idle_add(self._update_marker_positions)
 
+    def show_view_marker(self, after_pk: int) -> None:
+        """Mark the destination of a jump to the previously viewed position."""
+        self.remove_view_marker()
+        marker = ViewMarkerOverlay(self._dismiss_view_marker)
+        marker.after_pk = after_pk
+        self._add_marker(marker)
+        self._view_marker_widget = marker
+        marker.fade_in()
+        GLib.idle_add(self._update_marker_positions)
+
+    def _add_marker(self, marker: MarkerOverlay) -> None:
         self._content_overlay.add_overlay(marker)
         self._content_overlay.set_measure_overlay(marker, False)
-        self._read_marker_widget = marker
-        # Position after allocate; also refresh on later scroll/resize
-        GLib.idle_add(self._update_read_marker_position)
 
     def remove_read_marker(self, row: ReadMarkerOverlay | None = None) -> None:
         marker = row if row is not None else self._read_marker_widget
@@ -1041,16 +1075,56 @@ class ConversationView(Gtk.ScrolledWindow):
         if parent is self._content_overlay:
             self._content_overlay.remove_overlay(marker)
 
-    def _update_read_marker_position(self) -> None:
-        marker = self._read_marker_widget
+    def remove_view_marker(self, row: ViewMarkerOverlay | None = None) -> None:
+        marker = row if row is not None else self._view_marker_widget
         if marker is None:
             return
 
-        reference = self._orig_pk_row_map.get(marker.after_pk)
-        if reference is None or not reference.get_mapped():
+        if self._view_marker_widget is marker:
+            self._view_marker_widget = None
+
+        marker.stop_animation()
+        parent = marker.get_parent()
+        if parent is self._content_overlay:
+            self._content_overlay.remove_overlay(marker)
+
+    def _dismiss_view_marker(self) -> None:
+        marker = self._view_marker_widget
+        if marker is not None:
+            marker.fade_out(lambda: self.remove_view_marker(marker))
+
+    def _update_marker_positions(self) -> None:
+        self._update_marker_position(self._read_marker_widget)
+        self._update_marker_position(self._view_marker_widget)
+        self._update_read_marker_target()
+
+    def _update_marker_position(self, marker: MarkerOverlay | None) -> None:
+        if marker is None:
+            return
+
+        boundary_y = self._get_marker_boundary(marker.after_pk)
+        if boundary_y is None:
             marker.set_visible(False)
             marker.update_fade(False)
             return
+
+        marker.set_visible(True)
+        marker_height = marker.get_height()
+        if marker_height <= 0:
+            _min_h, marker_height, _, _ = marker.measure(
+                Gtk.Orientation.VERTICAL, self.get_width()
+            )
+        marker.set_margin_top(max(0, int(boundary_y - marker_height / 2)))
+        adjustment = self.get_vadjustment()
+        viewport_y = boundary_y - adjustment.get_value()
+        marker.update_fade(
+            self.can_track_reads() and 0 <= viewport_y <= adjustment.get_page_size()
+        )
+
+    def _get_marker_boundary(self, after_pk: int) -> float | None:
+        reference = self._orig_pk_row_map.get(after_pk)
+        if reference is None or not reference.get_mapped():
+            return None
 
         # Prefer content (grid) edges so we sit in the visual gap between
         # messages, not on the ListBoxRow border inside asymmetric padding.
@@ -1060,8 +1134,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._content_overlay, 0, ref_content.get_height()
         )
         if bottom is None:
-            marker.set_visible(False)
-            return
+            return None
 
         next_row = self._list_box.get_row_at_index(reference.get_index() + 1)
         if next_row is not None and next_row.get_mapped():
@@ -1070,20 +1143,55 @@ class ConversationView(Gtk.ScrolledWindow):
             if top is not None:
                 top_y = top[1]
 
-        boundary_y = (bottom[1] + top_y) / 2 if top_y is not None else bottom[1]
+        return (bottom[1] + top_y) / 2 if top_y is not None else bottom[1]
 
-        marker.set_visible(True)
-        marker_height = marker.get_height()
-        if marker_height <= 0:
-            _min_h, marker_height, _, _ = marker.measure(
-                Gtk.Orientation.VERTICAL, self.get_width()
-            )
-        marker.set_margin_top(max(0, int(boundary_y - marker_height / 2)))
+    def _get_marker_viewport_y(self, after_pk: int) -> float | None:
+        boundary_y = self._get_marker_boundary(after_pk)
+        if boundary_y is None:
+            return None
+        return boundary_y - self.get_vadjustment().get_value()
+
+    def _update_read_marker_target(self) -> None:
+        if self._read_marker_target_pk is None:
+            return
+
+        boundary_y = self._get_marker_viewport_y(self._read_marker_target_pk)
+        if boundary_y is None:
+            return
+
+        if boundary_y <= self.get_vadjustment().get_page_size():
+            self._read_marker_target_pk = None
+            if self._new_messages_available:
+                self.clear_new_messages_target()
+            return
+
+        self._set_new_messages_available(True)
+
+    def _set_new_messages_available(self, available: bool) -> None:
+        if self._new_messages_available == available:
+            return
+        self._new_messages_available = available
+        self.emit("new-messages-available", available)
+
+    def set_new_messages_target(
+        self, timestamp: datetime, pk: int, *, available: bool = False
+    ) -> None:
+        self._new_messages_target = timestamp, pk
+        self._set_new_messages_available(available)
+
+    def clear_new_messages_target(self) -> None:
+        self._new_messages_target = None
+        self._read_marker_target_pk = None
+        self._set_new_messages_available(False)
 
     def flush_read_tracking(self) -> None:
+        for marker in (self._read_marker_widget, self._view_marker_widget):
+            if marker is not None:
+                marker.update_fade(False)
         self._read_tracker.flush()
 
     def schedule_read_tracking(self) -> None:
+        self._update_marker_positions()
         self._read_tracker.schedule()
 
     def _get_row_by_marker_id(self, marker_id: str) -> MessageRow | None:
@@ -1306,6 +1414,9 @@ class ConversationView(Gtk.ScrolledWindow):
         pk: int,
         *,
         y_offset: float = 0.0,
+        show_view_marker: bool = False,
+        reset: bool = False,
+        first_incoming: bool = False,
     ) -> None:
         """Load conversation around a message and restore its viewport position.
 
@@ -1316,11 +1427,30 @@ class ConversationView(Gtk.ScrolledWindow):
             align="top",
             highlight=False,
             y_offset=y_offset,
+            show_view_marker=show_view_marker,
+            first_incoming=first_incoming,
         )
         new_messages_target = self._new_messages_target if reset else None
         self._load_conversation_around(account, jid, timestamp, target, reset=reset)
         if new_messages_target is not None:
             self.set_new_messages_target(*new_messages_target, available=True)
+
+    def jump_to_new_messages(self, account: str, jid: JID) -> bool:
+        if self._new_messages_target is None:
+            return False
+
+        timestamp, pk = self._new_messages_target
+        self.clear_new_messages_target()
+        if pk in self._orig_pk_row_map:
+            self._scroll_to_target(
+                _ScrollTarget(pk, "top", highlight=False, first_incoming=True)
+            )
+            return True
+
+        self.restore_position(
+            account, jid, timestamp, pk, reset=True, first_incoming=True
+        )
+        return True
 
     def _load_conversation_around(
         self,
@@ -1424,7 +1554,9 @@ class ConversationView(Gtk.ScrolledWindow):
 
         # Gtk.Adjustment clamps the value to the allowed range
         adjustment.set_value(adjustment.get_value() + delta)
-        self._update_read_marker_position()
+        if target.show_view_marker:
+            self.show_view_marker(target.pk)
+        self._update_marker_positions()
 
         if target.highlight:
             self._highlight_row(row)
