@@ -1106,7 +1106,7 @@ class AdvancedGroup(GajimPreferencesGroup):
                 _("Debug Logging"),
                 SettingType.VALUE,
                 app.get_debug_mode(),
-                desc=_("Restart Gajim to start debug logging"),
+                desc=_("Let Gajim generate a log to trace errors (restart required)"),
                 props={
                     "button-icon-name": "lucide-folder-symbolic",
                     "button-callback": self._on_open_debug_logs,
@@ -1118,6 +1118,7 @@ class AdvancedGroup(GajimPreferencesGroup):
                 _("Debug Console"),
                 SettingType.VALUE,
                 None,
+                desc=_("Show Gajim's internal logs and XML protocol data"),
                 props={
                     "button-text": _("Open"),
                     "button-callback": self._on_debug,
