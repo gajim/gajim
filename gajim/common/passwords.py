@@ -17,6 +17,9 @@ from typing import cast
 import logging
 
 import keyring
+import keyring.backend
+import keyring.core
+import keyring.errors
 
 from gajim.common import app
 from gajim.common.util.version import package_version
@@ -55,7 +58,7 @@ class Interface:
             self.backend = keyring.get_keyring()
         log.info("Select %s backend", self.backend)
 
-        self._is_keyring_available = keyring.core.recommended(self.backend)
+        self._is_keyring_available = keyring.core.recommended(self.backend)  # type: ignore
 
 
 class SecretPasswordStorage:
@@ -75,7 +78,7 @@ class SecretPasswordStorage:
 
         try:
             log.info("Save password to keyring")
-            _interface.backend.set_password("gajim", account_jid, password)
+            _interface.backend.set_password("gajim", account_jid, password)  # type: ignore
             return True
         except Exception:
             log.exception("Save password failed")
