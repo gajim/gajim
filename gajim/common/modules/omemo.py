@@ -505,10 +505,6 @@ class OMEMO(BaseModule, CryptoModule):
     def _process_muc_message(self, properties: MessageProperties) -> str | None:
         assert properties.jid is not None
         resource = properties.jid.resource
-        if properties.muc_ofrom is not None:
-            # History Message from MUC
-            return properties.muc_ofrom.bare
-
         contact = self._client.get_module("Contacts").get_contact(properties.jid)
         assert isinstance(contact, GroupchatParticipant)
         if contact.real_jid is not None:
