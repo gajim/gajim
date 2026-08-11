@@ -6,7 +6,7 @@ import sys
 import unittest
 from unittest.mock import patch
 
-from gajim.common.helpers import sanitize_filename
+from gajim.common.util.filesystem import sanitize_filename
 
 
 class SanitizeTest(unittest.TestCase):

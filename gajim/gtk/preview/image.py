@@ -20,11 +20,11 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import IMAGE_MIME_TYPES
 from gajim.common.const import VIDEO_MIME_TYPES
-from gajim.common.helpers import load_file_async
 from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.multiprocess.video_thumbnail import (
     extract_video_thumbnail_and_properties,
 )
+from gajim.common.util.filesystem import load_file_async
 from gajim.common.util.image import image_size
 from gajim.common.util.image import is_image_animated
 

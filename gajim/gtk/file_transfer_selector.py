@@ -20,10 +20,10 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import Display
 from gajim.common.const import IMAGE_MIME_TYPES
-from gajim.common.helpers import load_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.multiprocess.thumbnail import create_thumbnail
+from gajim.common.util.filesystem import load_file_async
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.uri import get_file_path_from_uri

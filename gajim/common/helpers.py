@@ -27,8 +27,6 @@ import json
 import logging
 import os
 import socket
-import sys
-import unicodedata
 import uuid
 import weakref
 from collections import defaultdict
@@ -48,14 +46,13 @@ from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from qrcode.image.pil import PilImage as QrcPilImage
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common import types
+from gajim.common.util.filesystem import check_soundfile_path
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
@@ -76,82 +73,6 @@ if os.name == "nt":
 log = logging.getLogger("gajim.c.helpers")
 
 KeyType = TypeVar("KeyType")
-
-
-def sanitize_filename(filename: str, max_length: int = 50) -> str:
-    """
-    Sanitize filename of:
-     - characters used to obfuscate file names/extensions
-     - elements not allowed on Windows
-       https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-     - shorten to max length
-    """
-
-    # Remove right-to-left override U+202E (commonly used to spoof extensions)
-    filename = filename.replace("\u202e", "")
-
-    if sys.platform == "win32":
-        blacklist = ["\\", "/", ":", "*", "?", "？", '"', "<", ">", "|", "\0"]
-        reserved_filenames = [
-            "CON",
-            "PRN",
-            "AUX",
-            "NUL",
-            "COM1",
-            "COM2",
-            "COM3",
-            "COM4",
-            "COM5",
-            "COM6",
-            "COM7",
-            "COM8",
-            "COM9",
-            "LPT1",
-            "LPT2",
-            "LPT3",
-            "LPT4",
-            "LPT5",
-            "LPT6",
-            "LPT7",
-            "LPT8",
-            "LPT9",
-        ]
-        filename = "".join(char for char in filename if char not in blacklist)
-
-        filename = "".join(char for char in filename if ord(char) > 31)
-
-        filename = unicodedata.normalize("NFKD", filename)
-        filename = filename.rstrip(". ")
-        filename = filename.strip()
-
-        if all(char == "." for char in filename):
-            filename = f"__{filename}"
-        if filename.upper() in reserved_filenames:
-            filename = f"__{filename}"
-        if len(filename) == 0:
-            filename = "__"
-
-    extension = Path(filename).suffix[:10]
-    filename = Path(filename).stem
-
-    if max_length > 0:
-        final_length = max_length - len(extension)
-        filename = filename[:final_length]
-
-    return f"{filename}{extension}"
-
-
-def make_path_from_jid(base_path: Path, jid: JID) -> Path:
-    assert jid.domain is not None
-    domain = jid.domain[:50]
-
-    if jid.localpart is None:
-        return base_path / domain
-
-    path = base_path / domain / sanitize_filename(jid.localpart)
-    if jid.resource is not None:
-        return path / sanitize_filename(jid.resource, max_length=30)
-    return path
 
 
 def generate_qr_code(content: str) -> Gdk.Texture:
@@ -188,30 +109,6 @@ def play_sound(
         return
     if force or account is None or allow_sound_notification(account, sound_event):
         play_sound_file(app.settings.get_soundevent_settings(sound_event)["path"], loop)
-
-
-def check_soundfile_path(file_: str, dirs: list[Path] | None = None) -> Path | None:
-    """
-    Check if the sound file exists
-
-    :param file_: the file to check, absolute or relative to 'dirs' path
-    :param dirs: list of knows paths to fallback if the file doesn't exists
-                                     (eg: ~/.gajim/sounds/, DATADIR/sounds...).
-    :return      the path to file or None if it doesn't exists.
-    """
-    if not file_:
-        return None
-    if Path(file_).exists():
-        return Path(file_)
-
-    if dirs is None:
-        dirs = [configpaths.get("MY_DATA"), configpaths.get("DATA")]
-
-    for dir_ in dirs:
-        dir_ = dir_ / "sounds" / file_
-        if dir_.exists():
-            return dir_
-    return None
 
 
 def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
@@ -491,63 +388,6 @@ class Observable:
                 self._callbacks[signal_name].remove(weak_method)
                 continue
             func(self, signal_name, *args, **kwargs)
-
-
-def write_file_async(
-    path: Path,
-    data: bytes,
-    callback: Callable[[bool, GLib.Error | None, Any], Any],
-    user_data: Any | None = None,
-):
-
-    def _on_write_finished(
-        outputstream: Gio.OutputStream, result: Gio.AsyncResult, _data: bytes
-    ) -> None:
-        try:
-            successful, _bytes_written = outputstream.write_all_finish(result)
-        except GLib.Error as error:
-            callback(False, error, user_data)
-        else:
-            callback(successful, None, user_data)
-
-    def _on_file_created(file: Gio.File, result: Gio.AsyncResult) -> None:
-        try:
-            outputstream = file.create_finish(result)
-        except GLib.Error as error:
-            callback(False, error, user_data)
-            return
-
-        # Pass data as user_data to the callback, because
-        # write_all_async() takes no reference to the data
-        # and python gc collects it before the data is written
-        outputstream.write_all_async(
-            data, GLib.PRIORITY_DEFAULT, None, _on_write_finished, data
-        )
-
-    file = Gio.File.new_for_path(str(path))
-    file.create_async(
-        Gio.FileCreateFlags.PRIVATE, GLib.PRIORITY_DEFAULT, None, _on_file_created
-    )
-
-
-def load_file_async(
-    path: Path,
-    callback: Callable[[bytes | None, GLib.Error | None, Any], Any],
-    user_data: Any | None = None,
-) -> None:
-
-    def _on_load_finished(file: Gio.File, result: Gio.AsyncResult) -> None:
-
-        try:
-            _, contents, _ = file.load_contents_finish(result)
-        except GLib.Error as error:
-            callback(None, error, user_data)
-        else:
-            # "contents" may be an empty bytes object
-            callback(contents or None, None, user_data)
-
-    file = Gio.File.new_for_path(str(path))
-    file.load_contents_async(None, _on_load_finished)
 
 
 def get_x509_cert_from_gio_cert(cert: Gio.TlsCertificate) -> x509.Certificate:

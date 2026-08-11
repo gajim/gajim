@@ -31,7 +31,6 @@ from gajim.common.const import Draft
 from gajim.common.const import SimpleClientState
 from gajim.common.events import MessageSent
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -40,6 +39,7 @@ from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
+from gajim.common.util.filesystem import write_file_async
 
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
