@@ -39,11 +39,11 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import allow_showing_notification
-from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
 
+from gajim.gtk import sound
 from gajim.gtk.avatar import merge_avatars
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
@@ -106,7 +106,7 @@ class NotificationBackend(EventHelper):
                     return
 
         if event.sound is not None:
-            play_sound(event.sound, event.account)
+            sound.play(event.sound, event.account)
 
         if not allow_showing_notification(event.account):
             return

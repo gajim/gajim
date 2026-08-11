@@ -51,7 +51,6 @@ from qrcode.image.pil import PilImage as QrcPilImage
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.util.filesystem import check_soundfile_path
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
@@ -87,29 +86,6 @@ def generate_qr_code(content: str) -> Gdk.Texture:
     return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 
-def play_sound(
-    sound_event: str,
-    account: str | None = None,
-    force: bool = False,
-    loop: bool = False,
-) -> None:
-
-    if sound_event is None:
-        return
-    if force or account is None or allow_sound_notification(account, sound_event):
-        play_sound_file(app.settings.get_soundevent_settings(sound_event)["path"], loop)
-
-
-def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
-    path_to_soundfile = check_soundfile_path(str_path_to_soundfile)
-    if path_to_soundfile is None:
-        return
-
-    from gajim.common import sound
-
-    sound.play(path_to_soundfile, loop)
-
-
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     """
     Return sha of sid + initiator + target used for proxy auth
@@ -124,17 +100,6 @@ def allow_showing_notification(account: str) -> bool:
         return True
     client = app.get_client(account)
     return client.status == "online"
-
-
-def allow_sound_notification(account: str, sound_event: str) -> bool:
-    if not app.settings.get("sounds_on"):
-        return False
-    client = app.get_client(account)
-    if client.status != "online" and not app.settings.get("sounddnd"):
-        return False
-    if app.settings.get_soundevent_settings(sound_event)["enabled"]:  # noqa: SIM103
-        return True
-    return False
 
 
 def get_optional_features(account: str) -> list[str]:

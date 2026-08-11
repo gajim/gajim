@@ -12,13 +12,13 @@ from pathlib import Path
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
-from gajim.common.util.filesystem import check_soundfile_path
 
+from gajim.gtk import sound
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
+from gajim.gtk.sound import check_soundfile_path
 from gajim.gtk.window import GajimAppWindow
 
 SOUNDS = {
@@ -157,7 +157,7 @@ class ManageSounds(GajimAppWindow):
         assert iter_ is not None
 
         snd_event_config_name = model[iter_][Column.CONFIG]
-        play_sound(snd_event_config_name, None, force=True)
+        sound.play(snd_event_config_name, None, force=True)
 
     def _cleanup(self) -> None:
         pass

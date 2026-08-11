@@ -10,6 +10,9 @@ import logging
 import sys
 from pathlib import Path
 
+from gajim.common import app
+from gajim.common import configpaths
+
 from gajim.gtk.audio_player import AudioPlayer
 
 if sys.platform == "win32" or typing.TYPE_CHECKING:
@@ -107,6 +110,68 @@ class PlatformUnix(PlaySound):
         return self._loop_in_progress
 
 
+def check_soundfile_path(file_: str, dirs: list[Path] | None = None) -> Path | None:
+    """
+    Check if the sound file exists
+
+    :param file_: the file to check, absolute or relative to 'dirs' path
+    :param dirs: list of knows paths to fallback if the file doesn't exists
+                                     (eg: ~/.gajim/sounds/, DATADIR/sounds...).
+    :return      the path to file or None if it doesn't exists.
+    """
+    if not file_:
+        return None
+    if Path(file_).exists():
+        return Path(file_)
+
+    if dirs is None:
+        dirs = [configpaths.get("MY_DATA"), configpaths.get("DATA")]
+
+    for dir_ in dirs:
+        dir_ = dir_ / "sounds" / file_
+        if dir_.exists():
+            return dir_
+    return None
+
+
+def allow_sound_notification(account: str | None, sound_event: str) -> bool:
+    if not app.settings.get("sounds_on"):
+        return False
+
+    if account is None:
+        return True
+
+    client = app.get_client(account)
+    if client.status != "online" and not app.settings.get("sounddnd"):
+        return False
+    if app.settings.get_soundevent_settings(sound_event)["enabled"]:  # noqa: SIM103
+        return True
+    return False
+
+
+def play(
+    sound_event: str,
+    account: str | None,
+    *,
+    force: bool = False,
+    loop: bool = False,
+) -> None:
+
+    if force or allow_sound_notification(account, sound_event):
+        str_path_to_soundfile = typing.cast(
+            str, app.settings.get_soundevent_settings(sound_event)["path"]
+        )
+        path_to_soundfile = check_soundfile_path(str_path_to_soundfile)
+        if path_to_soundfile is None:
+            return
+
+        _platform_player.play(path_to_soundfile, loop)
+
+
+def stop():
+    _platform_player.stop()
+
+
 def _init_platform() -> PlaySound:
     if sys.platform == "win32":
         return PlatformWindows()
@@ -118,11 +183,3 @@ def _init_platform() -> PlaySound:
 
 
 _platform_player = _init_platform()
-
-
-def play(path: Path, loop: bool = False) -> None:
-    _platform_player.play(path, loop)
-
-
-def stop():
-    _platform_player.stop()

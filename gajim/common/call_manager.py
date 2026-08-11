@@ -9,12 +9,10 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common import sound
 from gajim.common import types
 from gajim.common.const import CallType
 from gajim.common.const import JingleState
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.jingle_session import JingleSession
@@ -24,6 +22,8 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
+
+from gajim.gtk import sound
 
 log = logging.getLogger("gajim.c.call_manager")
 
@@ -90,7 +90,7 @@ class CallManager(EventHelper):
             self._incoming_video_event = event
         else:
             # There is no voice call running running yet
-            play_sound("incoming-call-sound", event.account, loop=True)
+            sound.play("incoming-call-sound", event.account, loop=True)
 
             client = app.get_client(event.account)
             contact = client.get_module("Contacts").get_contact(event.jid)

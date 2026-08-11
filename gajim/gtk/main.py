@@ -28,7 +28,6 @@ from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -39,6 +38,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import XmppIri
 
+from gajim.gtk import sound
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.activity_list import ActivityListView
 from gajim.gtk.activity_list import Reaction
@@ -373,7 +373,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if enabled:
             if isinstance(event.jid, list) and len(event.jid) > 1:
                 return
-            play_sound("message_sent", event.account)
+            sound.play("message_sent", event.account)
 
     def _on_signed_in(self, event: events.SignedIn) -> None:
         if app.settings.get("ask_online_status"):

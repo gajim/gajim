@@ -15,8 +15,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 from nbxmpp.protocol import JID
 
-from gajim.common import configpaths
-
 WIN_PATH_BLACKLIST = ["\\", "/", ":", "*", "?", "？", '"', "<", ">", "|", "\0"]
 WIN_RESERVED_FILENAMES = [
     "CON",
@@ -155,27 +153,3 @@ def load_file_async(
 
     file = Gio.File.new_for_path(str(path))
     file.load_contents_async(None, _on_load_finished)
-
-
-def check_soundfile_path(file_: str, dirs: list[Path] | None = None) -> Path | None:
-    """
-    Check if the sound file exists
-
-    :param file_: the file to check, absolute or relative to 'dirs' path
-    :param dirs: list of knows paths to fallback if the file doesn't exists
-                                     (eg: ~/.gajim/sounds/, DATADIR/sounds...).
-    :return      the path to file or None if it doesn't exists.
-    """
-    if not file_:
-        return None
-    if Path(file_).exists():
-        return Path(file_)
-
-    if dirs is None:
-        dirs = [configpaths.get("MY_DATA"), configpaths.get("DATA")]
-
-    for dir_ in dirs:
-        dir_ = dir_ / "sounds" / file_
-        if dir_.exists():
-            return dir_
-    return None
