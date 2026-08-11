@@ -31,6 +31,7 @@ from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.classes import Singleton
+from gajim.common.util.hashes import is_valid_sha1
 from gajim.common.util.image import get_pixbuf_from_file
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.muc import get_groupchat_name
@@ -731,10 +732,21 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def get_avatar_path(filename: str) -> Path | None:
-        path = configpaths.get("AVATAR") / filename
-        if not path.is_file():
+        if not is_valid_sha1(filename):
             return None
-        return path
+
+        avatar_root = configpaths.get("AVATAR").resolve()
+        path = avatar_root / filename
+        try:
+            if path.is_symlink() or not path.is_file():
+                return None
+            resolved_path = path.resolve(strict=True)
+        except OSError:
+            return None
+
+        if resolved_path.parent != avatar_root:
+            return None
+        return resolved_path
 
     def avatar_exists(self, filename: str) -> bool:
         return self.get_avatar_path(filename) is not None

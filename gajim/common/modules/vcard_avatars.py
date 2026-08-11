@@ -31,6 +31,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
 from gajim.common.task_manager import Task
 from gajim.common.util.classes import TTLCache
+from gajim.common.util.hashes import is_valid_sha1
 
 VCardContactsT = BareContact | GroupchatContact | GroupchatParticipant
 NS_AVATAR_HASH = "muc#roominfo_avatarhash"
@@ -180,6 +181,10 @@ class VCardAvatars(BaseModule):
 
         else:
             assert avatar_sha
+            if not is_valid_sha1(avatar_sha):
+                self._log.warning("Ignore invalid avatar hash from %s", jid)
+                return
+
             self._log.info("Update: %s %s", jid, avatar_sha)
 
             if avatar_sha == contact.avatar_sha:
@@ -239,6 +244,10 @@ class VCardAvatars(BaseModule):
 
         else:
             assert avatar_sha
+            if not is_valid_sha1(avatar_sha):
+                self._log.warning("Ignore invalid avatar hash from %s", jid)
+                return
+
             self._log.info("Update: %s %s", jid, avatar_sha)
             if not app.app.avatar_storage.avatar_exists(avatar_sha):
                 if (jid, avatar_sha) in self._ignored_sha_cache:
