@@ -33,7 +33,6 @@ from collections.abc import Callable
 from pathlib import Path
 from string import Template
 
-import precis_i18n.codec  # noqa: F401
 import qrcode
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -159,10 +158,10 @@ def get_proxy(proxy_name: str) -> ProxyData | None:
         username, password = settings["user"], settings["pass"]
 
     return ProxyData(
-        type=settings["type"],
+        type=settings["type"],  # type: ignore
         host=f"{settings['host']}:{settings['port']}",
-        username=username,
-        password=password,
+        username=username,  # type: ignore
+        password=password,  # type: ignore
     )
 
 
@@ -231,6 +230,8 @@ def to_user_string(error: CommonError | StanzaError) -> str:
     condition = error.condition
     if error.app_condition is not None:
         return f"{condition} ({error.app_condition})"
+
+    assert condition is not None
     return condition
 
 
@@ -250,7 +251,7 @@ class Observable:
                 # can be called from inside notify(), this can lead
                 # to race conditions where later notfiy tries to remove
                 # a dead ref which is not anymore in the list.
-                if func is not None and func.__self__ is obj:
+                if func is not None and func.__self__ is obj:  # type: ignore
                     handlers.remove(handler)
 
         if signals is None:
@@ -313,8 +314,9 @@ class Observable:
 
 
 def get_x509_cert_from_gio_cert(cert: Gio.TlsCertificate) -> x509.Certificate:
-    glib_bytes = GLib.ByteArray.free_to_bytes(cert.props.certificate)
-    return x509.load_der_x509_certificate(glib_bytes.get_data(), default_backend())
+    cert_bytes = GLib.ByteArray.free_to_bytes(cert.props.certificate).get_data()
+    assert cert_bytes is not None
+    return x509.load_der_x509_certificate(cert_bytes, default_backend())
 
 
 def get_custom_host(

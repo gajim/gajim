@@ -115,7 +115,6 @@ exclude = [
   "gajim/common/app.py",
   "gajim/common/client.py",
   "gajim/common/file_props.py",
-  "gajim/common/helpers.py",
   "gajim/common/jingle_content.py",
   "gajim/common/jingle_ft.py",
   "gajim/common/jingle_ftstates.py",
