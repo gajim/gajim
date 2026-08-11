@@ -78,13 +78,13 @@ log = logging.getLogger("gajim.c.helpers")
 KeyType = TypeVar("KeyType")
 
 
-def sanitize_filename(filename: str) -> str:
+def sanitize_filename(filename: str, max_length: int = 50) -> str:
     """
     Sanitize filename of:
      - characters used to obfuscate file names/extensions
      - elements not allowed on Windows
        https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-    Limit filename length to 50 chars on all systems
+     - shorten to max length
     """
 
     # Remove right-to-left override U+202E (commonly used to spoof extensions)
@@ -133,10 +133,10 @@ def sanitize_filename(filename: str) -> str:
 
     extension = Path(filename).suffix[:10]
     filename = Path(filename).stem
-    final_length = 50 - len(extension)
 
-    # Many Filesystems have a limit on filename length: keep it short
-    filename = filename[:final_length]
+    if max_length > 0:
+        final_length = max_length - len(extension)
+        filename = filename[:final_length]
 
     return f"{filename}{extension}"
 
@@ -148,9 +148,9 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     if jid.localpart is None:
         return base_path / domain
 
-    path = base_path / domain / sanitize_filename(jid.localpart[:50])
+    path = base_path / domain / sanitize_filename(jid.localpart)
     if jid.resource is not None:
-        return path / sanitize_filename(jid.resource[:30])
+        return path / sanitize_filename(jid.resource, max_length=30)
     return path
 
 
