@@ -172,7 +172,10 @@ class AccountPage(Gtk.Box, SignalManager):
     def _on_vcard_received(self, event: VCard4Received) -> None:
         self._set_vcard_rows(event.vcard)
 
-    def _set_vcard_rows(self, vcard: VCard) -> None:
+    def _set_vcard_rows(self, vcard: VCard | None) -> None:
+        if vcard is None:
+            vcard = VCard()
+
         self._profile_org_row.set_visible(False)
         self._profile_role_row.set_visible(False)
         self._profile_email_row.set_visible(False)

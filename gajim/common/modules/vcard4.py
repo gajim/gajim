@@ -43,7 +43,7 @@ class VCard4(BaseModule):
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self._vcard_cache: dict[JID, tuple[dt.datetime, VCard]] = {}
-        self._own_vcard: VCard = VCard()
+        self._own_vcard: VCard | None = None
         self._register_pubsub_handler(self._vcard_event_received)
 
     @event_node(Namespace.VCARD4_PUBSUB)
@@ -82,6 +82,10 @@ class VCard4(BaseModule):
         if not app.settings.get_account_setting(self._account, "update_timezone"):
             return
 
+        if self._own_vcard is None:
+            self._log.info("Unable to check timezone, own vcard not found")
+            return
+
         vcard_timezone = get_timezone_from_vcard(self._own_vcard)
         local_timezone = get_local_timezone()
         if local_timezone is None:
@@ -106,6 +110,10 @@ class VCard4(BaseModule):
         )
 
     def update_timezone(self) -> None:
+        if self._own_vcard is None:
+            self._log.warning("Unable to update timezone, vcard is not available")
+            return
+
         local_timezone = get_local_timezone()
         if local_timezone is None:
             self._log.warning("Unable to determine timezone for update")
@@ -120,6 +128,8 @@ class VCard4(BaseModule):
         self.set_vcard(self._own_vcard)
 
     def is_timezone_published(self) -> bool:
+        if self._own_vcard is None:
+            return False
         return get_timezone_from_vcard(self._own_vcard) is not None
 
     def subscribe_to_node(self) -> None:
@@ -137,7 +147,7 @@ class VCard4(BaseModule):
             user_data=(jid, None),
         )
 
-    def get_own_vcard(self) -> VCard:
+    def get_own_vcard(self) -> VCard | None:
         return self._own_vcard
 
     def request_vcard(
@@ -165,17 +175,17 @@ class VCard4(BaseModule):
         )
 
     def _on_vcard_received(self, task: Task) -> None:
+        vcard = None
         try:
             vcard = cast(VCard | None, task.finish())
         except (StanzaError, TimeoutStanzaError) as err:
-            self._log.info("Error loading VCard: %s", err)
-            vcard = None
+            self._log.warning("Error loading VCard: %s", err)
+            if isinstance(err, StanzaError) and err.condition == "item-not-found":
+                vcard = VCard()
 
         jid, weak_callable = task.get_user_data()
 
-        if vcard is None:
-            vcard = VCard()
-        else:
+        if vcard is not None:
             self._log.info("Received VCard for %s", jid)
             self._vcard_cache[jid] = (utc_now(), vcard)
 

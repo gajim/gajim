@@ -206,7 +206,13 @@ class ProfileWindow(GajimAppWindow):
             self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
     @ensure_not_destroyed
-    def _on_vcard_received(self, jid: JID, vcard: VCard):
+    def _on_vcard_received(self, jid: JID, vcard: VCard | None) -> None:
+        if vcard is None:
+            # TODO: vard = None, means a error happened during request
+            # It would be better to show an error and block the dialog
+            # otherwise we risk to overwrite an existing vcard on the server
+            vcard = VCard()
+
         self._current_vcard = vcard
 
         self._load_avatar()

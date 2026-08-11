@@ -335,7 +335,7 @@ class BookmarksReceived(ApplicationEvent):
 class VCard4Received(ApplicationEvent):
     name: str = field(init=False, default="vcard4-received")
     account: str
-    vcard: VCard
+    vcard: VCard | None
 
 
 @dataclass

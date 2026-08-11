@@ -112,7 +112,9 @@ class ContactPopover(Gtk.Popover, SignalManager):
 
         app.plugin_manager.extension_point("contact_tooltip_populate", self, contact)
 
-    def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
+    def _on_vcard_received(self, jid: JID, vcard: VCard | None) -> None:
+        if vcard is None:
+            vcard = VCard()
         self._set_vcard_rows(vcard)
 
     def _set_vcard_rows(self, vcard: VCard) -> None:

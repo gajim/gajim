@@ -347,7 +347,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
         )
         self._tasks.append(task)
 
-    def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
+    def _on_vcard_received(self, jid: JID, vcard: VCard | None) -> None:
+        if vcard is None:
+            vcard = VCard()
         self._vcard_grid.set_vcard(vcard)
         self._ui.vcard_box.set_visible(self._vcard_grid.get_row_count() != 0)
 

@@ -57,8 +57,7 @@ class TimezoneHint(Gtk.Box):
             callback=self._on_vcard_received,
             max_cache_seconds=12 * 60 * 60,
         )
-        if vcard is not None:
-            self._process_vcard(vcard)
+        self._process_vcard(vcard)
 
     def _on_chatstate_update(
         self, _contact: types.ChatContactT, _signal_name: str
@@ -66,10 +65,13 @@ class TimezoneHint(Gtk.Box):
         # Hide as soon as there is a chat state update (user is present)
         self.set_visible(False)
 
-    def _on_vcard_received(self, jid: JID, vcard: VCard) -> None:
+    def _on_vcard_received(self, jid: JID, vcard: VCard | None) -> None:
         self._process_vcard(vcard)
 
-    def _process_vcard(self, vcard: VCard) -> None:
+    def _process_vcard(self, vcard: VCard | None) -> None:
+        if vcard is None:
+            return
+
         tz_prop = None
         for prop in vcard.get_properties():
             if isinstance(prop, TzProperty):
