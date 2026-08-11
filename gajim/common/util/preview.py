@@ -15,7 +15,6 @@ from urllib.parse import unquote
 from urllib.parse import urlparse
 
 from gi.repository import Gio
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.const import ALL_MIME_TYPES
@@ -84,24 +83,6 @@ def filename_from_uri(uri: str) -> str:
     path = Path(urlparts.path)
     # Remove right-to-left override U+202E (commonly used to spoof extensions)
     return path.name.replace("\u202e", "")
-
-
-def contains_audio_streams(file_path: Path) -> bool:
-    # Check if it is really an audio file
-
-    from gi.repository import GstPbutils
-
-    has_audio = False
-    discoverer = GstPbutils.Discoverer()
-    try:
-        info = discoverer.discover_uri(file_path.as_uri())
-        has_audio = bool(info.get_audio_streams())
-    except GLib.Error as err:
-        log.error("Error while reading %s: %s", str(file_path), err)
-        return False
-    if not has_audio:
-        log.warning("File does not contain audio stream: %s", str(file_path))
-    return has_audio
 
 
 def guess_mime_type(file_path: Path | str, data: bytes | None = None) -> str:

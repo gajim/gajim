@@ -12,7 +12,6 @@ from gajim.common.util.preview import get_preview_data
 from gajim.common.util.preview import UrlPreview
 
 gi.require_version("Gst", "1.0")
-gi.require_version("GstPbutils", "1.0")
 
 from gi.repository import Adw
 from gi.repository import Gst

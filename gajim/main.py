@@ -53,7 +53,6 @@ def gi_require_versions() -> None:
             "Graphene": "1.0",
             "Gsk": "4.0",
             "Gst": "1.0",
-            "GstPbutils": "1.0",
             "Gtk": "4.0",
             "GtkSource": "5",
             "Pango": "1.0",

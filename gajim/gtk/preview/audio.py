@@ -163,7 +163,9 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
                 partial(GLib.idle_add, self._get_audio_properties_finished)
             )
         except Exception as error:
-            log.warning("Creating thumbnail failed for: %s %s", self._orig_path, error)
+            log.warning(
+                "Creating audio preview failed for: %s %s", self._orig_path, error
+            )
 
     def _get_audio_properties_finished(
         self, future: Future[tuple[list[tuple[float, float]], int]]
@@ -172,8 +174,9 @@ class AudioPreviewWidget(Gtk.Box, SignalManager):
             samples, duration = future.result()
         except Exception as error:
             log.exception(
-                "Creating thumbnail failed for: %s %s", self._orig_path, error
+                "Creating audio preview failed for: %s %s", self._orig_path, error
             )
+            self.emit("display-error")
         else:
             self._preview_state.samples = samples
             self._preview_state.duration = duration

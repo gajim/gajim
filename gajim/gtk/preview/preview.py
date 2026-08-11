@@ -29,7 +29,6 @@ from gajim.common.multiprocess.http import CancelledError
 from gajim.common.multiprocess.http import ContentTypeNotAllowed
 from gajim.common.multiprocess.http import HTTPStatusError
 from gajim.common.multiprocess.http import MaxContentLengthExceeded
-from gajim.common.util.preview import contains_audio_streams
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import get_image_paths
 from gajim.common.util.preview import get_size_and_mime_type
@@ -266,14 +265,13 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 )
 
             elif is_audio(self._mime_type):
-                if contains_audio_streams(self._orig_path):
-                    assert app.audio_player is not None
-                    widget = AudioPreviewWidget(
-                        app.audio_player,
-                        self._filename,
-                        self._file_size,
-                        self._orig_path,
-                    )
+                assert app.audio_player is not None
+                widget = AudioPreviewWidget(
+                    app.audio_player,
+                    self._filename,
+                    self._file_size,
+                    self._orig_path,
+                )
 
             if widget is not None:
                 self._connect(widget, "display-error", self._on_display_error)

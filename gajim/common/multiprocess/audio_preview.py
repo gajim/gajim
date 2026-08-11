@@ -6,6 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import math
+import time
 from pathlib import Path
 
 import gi
@@ -19,10 +20,22 @@ except Exception:
 
 Gst.init(None)
 
+AUDIO_ANALYSIS_TIMEOUT_SECONDS = 15
+AUDIO_BUS_POLL_INTERVAL_MS = 250
+MAX_AUDIO_WAVEFORM_SAMPLES = 6_000
+
+
+def audio_analysis_timed_out(deadline: float, now: float) -> bool:
+    return now >= deadline
+
+
+def waveform_sample_limit_reached(sample_count: int) -> bool:
+    return sample_count >= MAX_AUDIO_WAVEFORM_SAMPLES
+
 
 def extract_audio_properties(
     input_path: Path,
-) -> tuple[list[tuple[float, float]], float] | None:
+) -> tuple[list[tuple[float, float]], int]:
     playbin = Gst.ElementFactory.make("playbin")
     audio_sink = Gst.Bin.new("audiosink")
     audioconvert = Gst.ElementFactory.make("audioconvert")
@@ -78,12 +91,16 @@ def extract_audio_properties(
         raise Exception(f"\n{__name__}: Could not get GST bus")
 
     samples: list[tuple[float, float]] = []
-    duration: float = 0.0
+    duration = 0
+    deadline = time.monotonic() + AUDIO_ANALYSIS_TIMEOUT_SECONDS
 
     try:
         while True:
+            if audio_analysis_timed_out(deadline, time.monotonic()):
+                raise TimeoutError("Audio preview analysis timed out")
+
             msg = bus.timed_pop_filtered(
-                Gst.CLOCK_TIME_NONE,
+                AUDIO_BUS_POLL_INTERVAL_MS * Gst.MSECOND,
                 Gst.MessageType.EOS
                 | Gst.MessageType.ERROR
                 | Gst.MessageType.DURATION_CHANGED
@@ -91,7 +108,7 @@ def extract_audio_properties(
             )
 
             if msg is None:
-                break
+                continue
 
             if msg.type == Gst.MessageType.ERROR:
                 err, debug = msg.parse_error()
@@ -123,7 +140,14 @@ def extract_audio_properties(
                             lin_val1 = math.pow(10, rms_values[0] / 10 / 2)
                             lin_val2 = math.pow(10, rms_values[1] / 10 / 2)
                             samples.append((lin_val1, lin_val2))
+
+                    if waveform_sample_limit_reached(len(samples)):
+                        _success, duration = playbin.query_duration(Gst.Format.TIME)
+                        break
     finally:
         playbin.set_state(Gst.State.NULL)
+
+    if not samples:
+        raise ValueError("File does not contain a decodable audio stream")
 
     return samples, duration
