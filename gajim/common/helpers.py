@@ -25,7 +25,6 @@ import hashlib
 import inspect
 import json
 import logging
-import os
 import socket
 import uuid
 import weakref
@@ -59,16 +58,6 @@ from gajim.common.util.text import get_random_string
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
 
-HAS_PYWIN32 = False
-if os.name == "nt":
-    try:
-        import pywintypes
-        import win32con
-        import win32file
-
-        HAS_PYWIN32 = True
-    except ImportError:
-        pass
 
 log = logging.getLogger("gajim.c.helpers")
 
@@ -255,38 +244,6 @@ def dump_json(path: Path, data: dict[Any, Any]) -> None:
             json.dump(data, file)
     except Exception:
         log.exception("Error while trying to dump JSON")
-
-
-def file_is_locked(path_to_file: str) -> bool:
-    """
-    Return True if file is locked
-    NOTE: Windows only.
-    """
-    if os.name != "nt":
-        return False
-
-    if not HAS_PYWIN32:
-        return False
-
-    secur_att = pywintypes.SECURITY_ATTRIBUTES()
-    secur_att.Initialize()
-
-    try:
-        # try create a handle for READING the file
-        hfile = win32file.CreateFile(
-            path_to_file,
-            win32con.GENERIC_READ,  # open for reading
-            0,  # do not share with other proc
-            secur_att,
-            win32con.OPEN_EXISTING,  # existing file only
-            win32con.FILE_ATTRIBUTE_NORMAL,  # normal file
-            0,
-        )  # no attr. template
-    except pywintypes.error:
-        return True
-    else:  # in case all went ok, close file handle
-        hfile.Close()
-        return False
 
 
 def get_resource(account: str) -> str | None:
