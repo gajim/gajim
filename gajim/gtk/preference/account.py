@@ -399,6 +399,7 @@ class AccountOmemoSettingsGroup(GajimPreferencesGroup):
                 SettingType.ACCOUNT_CONFIG,
                 "omemo_blind_trust",
                 desc=_("Blindly trust new devices until you verify them"),
+                keywords=[_("Fingerprint"), _("Verification"), _("Security")],
             )
         ]
 
@@ -904,6 +905,7 @@ class AccountOmemoPage(GajimPreferencePage):
     key = "encryption-omemo"
     icon_name = "lucide-lock-symbolic"
     label = _("Encryption (OMEMO)")
+    keywords = [_("Encryption"), _("Security"), _("Privacy"), _("End-to-End")]
 
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
@@ -921,6 +923,14 @@ class AccountOpenPGPPage(GajimPreferencePage):
     key = "encryption-openpgp"
     icon_name = "lucide-lock-symbolic"
     label = _("Encryption (OpenPGP)")
+    keywords = [
+        _("Encryption"),
+        _("Security"),
+        _("Privacy"),
+        _("End-to-End"),
+        _("GPG"),
+        _("PGP"),
+    ]
 
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(

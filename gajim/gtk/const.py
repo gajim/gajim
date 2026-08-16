@@ -40,6 +40,7 @@ class Setting(NamedTuple):
     bind: str | None = None
     inverted: bool | None = None
     enabled_func: Callable[..., bool] | None = None
+    keywords: list[str] | None = None
     props: dict[str, Any] | None = None
 
 

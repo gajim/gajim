@@ -18,6 +18,12 @@ from gajim.common.i18n import _
 
 from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
+
+
+@Gtk.Template.from_string(string=get_ui_string("preference/search_placeholder.ui"))
+class SearchPlaceholderBox(Gtk.Box):
+    __gtype_name__ = "SearchPlaceholderBox"
 
 
 class SideBarMenuItem(Gtk.ListBoxRow):
@@ -42,6 +48,9 @@ class SideBarMenuItem(Gtk.ListBoxRow):
         self.action = action
         self.action_param = action_param
         self.user_data = user_data
+
+        self.page_key: str | None = None
+        self.search_text = ""
 
         box = Gtk.Box(spacing=12)
         if icon_name is not None:
@@ -74,12 +83,14 @@ class SideBarMenuItem(Gtk.ListBoxRow):
         tag_prefix: str = "",
         user_data: Any = None,
     ) -> SideBarMenuItem:
-        return cls(
+        item = cls(
             key=f"{tag_prefix}{page.key}",
             title=page.label,
             icon_name=page.icon_name,
             user_data=user_data,
         )
+        item.page_key = page.key
+        return item
 
     def do_unroot(self) -> None:
         Gtk.ListBoxRow.do_unroot(self)
@@ -122,6 +133,8 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
 
         self._stack: Gtk.Stack | Adw.NavigationView | None = None
         self._menu: list[SideBarMenuItem] = []
+        self._listboxes: list[Gtk.ListBox] = []
+        self._search_query = ""
         self._last_visible_child_name = ""
         self._current_visible_child_name = ""
 
@@ -131,6 +144,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         self._disconnect_all()
         del self._stack
         self._menu.clear()
+        self._listboxes.clear()
         app.check_finalize(self)
 
     def get_menu(self) -> list[SideBarMenuItem]:
@@ -184,6 +198,8 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
             listbox = cast(Gtk.ListBox | None, self.get_child_by_name(menu.key))
             if listbox is not None:
                 self.remove(listbox)
+                if listbox in self._listboxes:
+                    self._listboxes.remove(listbox)
 
             if menu.children is None:
                 return
@@ -210,6 +226,7 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         pages = cast(list[Gtk.ListBox], self.get_pages())
         for page in pages:
             self.remove(page)
+        self._listboxes.clear()
 
     def _append_page(self, name: str) -> Gtk.ListBox:
         listbox = self.get_child_by_name(name)
@@ -221,9 +238,40 @@ class SideBarSwitcher(Gtk.Stack, SignalManager):
         listbox.add_css_class("navigation-sidebar")
         listbox.set_size_request(self.width, -1)
         listbox.set_header_func(self._sidebar_header_func)
+        listbox.set_filter_func(self._filter_func)
+        listbox.set_placeholder(SearchPlaceholderBox())
         self._connect(listbox, "row-activated", self._on_item_activated)
         self.add_named(listbox, name)
+        self._listboxes.append(listbox)
         return listbox
+
+    def set_search_query(self, query: str) -> None:
+        self._search_query = query.strip().lower()
+        for listbox in self._listboxes:
+            listbox.invalidate_filter()
+
+    def _filter_func(self, row: SideBarMenuItem) -> bool:
+        if not self._search_query:
+            return True
+
+        if row.key == "__back":
+            return True
+
+        return self._item_matches(row)
+
+    def _item_matches(self, item: SideBarMenuItem) -> bool:
+        query = self._search_query
+
+        if query in item.title.lower():
+            return True
+
+        if item.search_text and query in item.search_text:
+            return True
+
+        if item.children:
+            return any(self._item_matches(child) for child in item.children)
+
+        return False
 
     def _select_first_menu_item(self) -> None:
         listbox = cast(Gtk.ListBox, self.get_visible_child())

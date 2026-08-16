@@ -107,6 +107,7 @@ class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
         self.account = account
         self.jid = jid
         self.named_settings: dict[str, GenericSetting] = {}
+        self._rows: list[Gtk.Widget] = []
 
         self.settings_type_map: dict[SettingKind, GenericSetting] = {
             SettingKind.SWITCH: SwitchSetting,
@@ -127,7 +128,43 @@ class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
         self.unregister_events()
         Adw.PreferencesGroup.do_unroot(self)
         self.named_settings.clear()
+        self._rows.clear()
         app.check_finalize(self)
+
+    def add(self, widget: Gtk.Widget) -> None:
+        Adw.PreferencesGroup.add(self, widget)
+        self._rows.append(widget)
+
+    def get_search_text(self) -> str:
+        # Collect all user-visible text of this group so the preferences
+        # search can match against group titles, setting labels/descriptions
+        # and any additional keywords defined on a setting.
+        parts: list[str] = []
+
+        title = self.get_title()
+        if title:
+            parts.append(title)
+
+        description = self.get_description()
+        if description:
+            parts.append(description)
+
+        for row in self._rows:
+            if isinstance(row, Adw.PreferencesRow):
+                row_title = row.get_title()
+                if row_title:
+                    parts.append(row_title)
+
+            if isinstance(row, Adw.ActionRow):
+                subtitle = row.get_subtitle()
+                if subtitle:
+                    parts.append(subtitle)
+
+            keywords = getattr(row, "keywords", None)
+            if keywords:
+                parts.extend(keywords)
+
+        return " ".join(parts)
 
     def add_setting(self, setting: Setting | Adw.ActionRow) -> None:
         if isinstance(setting, Adw.ActionRow):
@@ -167,6 +204,7 @@ class GajimPreferencePage(Adw.NavigationPage):
     key: str = ""
     icon_name: str = ""
     label: str = ""
+    keywords: list[str] = []
 
     def __init__(
         self,
@@ -203,6 +241,13 @@ class GajimPreferencePage(Adw.NavigationPage):
             if group.key == key:
                 return group
 
+    def get_search_text(self) -> str:
+        parts: list[str] = [self.get_title(), self.label]
+        parts.extend(self.keywords)
+        for group in self._groups:
+            parts.append(group.get_search_text())
+        return " ".join(parts)
+
     def set_content(self, widget: Gtk.Widget) -> None:
         toolbar = cast(Adw.ToolbarView, self.get_child())
         toolbar.set_content(widget)
@@ -223,6 +268,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         bind: str | None = None,
         inverted: bool = False,
         enabled_func: Callable[..., bool] | None = None,
+        keywords: list[str] | None = None,
         **kwargs: Any,
     ) -> None:
         Adw.ActionRow.__init__(
@@ -241,6 +287,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         self.bind = bind
         self.inverted = inverted
         self.enabled_func = enabled_func
+        self.keywords = keywords or []
         self.setting_value = self.get_value()
 
         self.setting_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)

@@ -50,6 +50,7 @@ from gajim.gtk.preference.app import VisualNotificationsPage
 from gajim.gtk.preference.server_info import AccountProviderContactsPage
 from gajim.gtk.preference.server_info import AccountProviderPage
 from gajim.gtk.preference.shortcuts import ShortcutsPage
+from gajim.gtk.settings import GajimPreferencePage
 from gajim.gtk.sidebar_switcher import SideBarMenuItem
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.window import GajimAppWindow
@@ -78,6 +79,9 @@ ACCOUNT_PAGES = [
 
 
 class Preferences(GajimAppWindow, EventHelper):
+    _account_search_index: dict[str, str] = {}
+    _account_search_index_built = False
+
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
@@ -114,7 +118,9 @@ class Preferences(GajimAppWindow, EventHelper):
 
         for page in preferences:
             if page.label:
-                menu.append(SideBarMenuItem.from_pref_page(page=page))
+                item = SideBarMenuItem.from_pref_page(page=page)
+                item.search_text = page.get_search_text().lower()
+                menu.append(item)
             self._nav_view.add(page)
 
         menu.append(
@@ -138,8 +144,19 @@ class Preferences(GajimAppWindow, EventHelper):
         )
         scrolled.set_child(self._side_bar_switcher)
 
+        self._search_entry = Gtk.SearchEntry(
+            placeholder_text=_("Search…"),
+            hexpand=True,
+            margin_start=6,
+            margin_end=6,
+            margin_top=6,
+            margin_bottom=6,
+        )
+        self._connect(self._search_entry, "search-changed", self._on_search_changed)
+
         toolbar = Adw.ToolbarView(content=scrolled)
         toolbar.add_top_bar(Adw.HeaderBar())
+        toolbar.add_top_bar(self._search_entry)
 
         sidebar_page = Adw.NavigationPage(
             title=_("Preferences"), tag="sidebar", child=toolbar
@@ -169,6 +186,7 @@ class Preferences(GajimAppWindow, EventHelper):
         self._side_bar_switcher.run_destroy()
         del self._side_bar_switcher
         del self._nav_view
+        del self._search_entry
 
     def update_proxy_list(self) -> None:
         page = cast(AdvancedPage, self._nav_view.find_page("advanced"))
@@ -185,11 +203,11 @@ class Preferences(GajimAppWindow, EventHelper):
 
         for page_cls in ACCOUNT_PAGES:
             if page_cls.label:
-                account_menu.append_menu(
-                    SideBarMenuItem.from_pref_page(
-                        page=page_cls, tag_prefix=f"{account}-", user_data=account
-                    )
+                sub_item = SideBarMenuItem.from_pref_page(
+                    page=page_cls, tag_prefix=f"{account}-", user_data=account
                 )
+                sub_item.search_text = self._account_search_index.get(page_cls.key, "")
+                account_menu.append_menu(sub_item)
 
         self._side_bar_switcher.append_menu(account_menu)
         self._account_menu_items[account] = account_menu
@@ -214,14 +232,56 @@ class Preferences(GajimAppWindow, EventHelper):
         if not item.user_data:
             return
 
-        account = item.user_data
+        self._load_account_pages(item.user_data)
 
+    def _load_account_pages(self, account: str) -> None:
         if self._nav_view.find_page(f"{account}-general"):
-            # Pages where already added
             return
 
         for page_cls in ACCOUNT_PAGES:
             self._nav_view.add(page_cls(account))
+
+    def _ensure_search_index(self) -> None:
+        if not Preferences._account_search_index_built:
+            self._build_account_search_index()
+
+        self._apply_account_search_text()
+
+    def _build_account_search_index(self) -> None:
+        accounts = app.get_accounts_sorted()
+        if not accounts:
+            return
+
+        Preferences._account_search_index_built = True
+
+        account = accounts[0]
+        self._load_account_pages(account)
+
+        for page_cls in ACCOUNT_PAGES:
+            if not page_cls.label:
+                continue
+            page = self._nav_view.find_page(f"{account}-{page_cls.key}")
+            if page is None:
+                continue
+            page = cast(GajimPreferencePage, page)
+            Preferences._account_search_index[page_cls.key] = (
+                page.get_search_text().lower()
+            )
+
+    def _apply_account_search_text(self) -> None:
+        for account_menu in self._account_menu_items.values():
+            for sub_item in account_menu.children or []:
+                if sub_item.page_key is None:
+                    continue
+                sub_item.search_text = self._account_search_index.get(
+                    sub_item.page_key, ""
+                )
+
+    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
+        text = search_entry.get_text()
+        if text:
+            self._ensure_search_index()
+        self._side_bar_switcher.set_search_query(text)
 
     def _check_relogin(self) -> bool:
         for account, r_settings in self._need_relogin.items():
