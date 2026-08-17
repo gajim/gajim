@@ -16,31 +16,37 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
-from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.i18n import _
 from gajim.common.settings.types import AppBoolSettings
 
-# from gajim.common.util.av import AudioOutputManager
-# from gajim.common.util.av import VideoInputManager
-from gajim.common.util.av import AudioInputManager
-from gajim.common.util.version import package_version
-
 from gajim.gtk.alert import ConfirmationAlertDialog
-from gajim.gtk.const import Setting
-from gajim.gtk.const import SettingKind
-from gajim.gtk.const import SettingType
 from gajim.gtk.plugins import Plugins
-from gajim.gtk.settings import DropDownSetting
-from gajim.gtk.settings import GajimPreferencePage
-from gajim.gtk.settings import GajimPreferencesGroup
-from gajim.gtk.settings import SpinRange
+from gajim.gtk.settings.page import GajimPreferencePage
+from gajim.gtk.settings.page import GajimPreferencesGroup
+from gajim.gtk.settings.row import DropDownSetting
+from gajim.gtk.settings.row import GenericSetting
+from gajim.gtk.settings.row import register_rows
+from gajim.gtk.settings.row import SpinSetting
+from gajim.gtk.settings.row import SwitchSetting
 from gajim.gtk.util.misc import open_file
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 
-# from gajim.gtk.video_preview import VideoPreview
+
+class ShowInTaskbar(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_show_in_taskbar
+
+    @staticmethod
+    def _on_show_in_taskbar(value: bool, *args: Any) -> None:
+        app.window.set_skip_taskbar_hint(not value)
+
+
+class ShowHeaderBar(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.enabled_func = lambda: sys.platform not in ("win32", "darwin")
 
 
 class WindowBehaviourGroup(GajimPreferencesGroup):
@@ -51,59 +57,7 @@ class WindowBehaviourGroup(GajimPreferencesGroup):
             title=_("Behaviour of Application Window"),
         )
 
-        main_window_on_startup_items = {
-            "always": _("Always"),
-            "never": _("Never"),
-            "last_state": _("Restore last state"),
-        }
-
-        action_on_close_items = {
-            "hide": _("Hide"),
-            "minimize": _("Minimize"),
-            "quit": _("Quit"),
-        }
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Show on Startup"),
-                SettingType.CONFIG,
-                "show_main_window_on_startup",
-                props={"data": main_window_on_startup_items},
-                desc=_("Show window when starting Gajim"),
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Action on Close"),
-                SettingType.CONFIG,
-                "action_on_close",
-                props={"data": action_on_close_items},
-                desc=_("Action when closing Gajim’s window"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show in Taskbar"),
-                SettingType.CONFIG,
-                "show_in_taskbar",
-                desc=_("Show window in the taskbar"),
-                callback=self._on_show_in_taskbar,
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Title Bar"),
-                SettingType.CONFIG,
-                "show_header_bar",
-                desc=_("Show the window’s title bar"),
-                enabled_func=lambda: sys.platform not in ("win32", "darwin"),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _on_show_in_taskbar(value: bool, *args: Any) -> None:
-        app.window.set_skip_taskbar_hint(not value)
+        self.bind_settings_model(app.app.settings.get_single_model("window-behaviour"))
 
 
 class PluginSettingsGroup(GajimPreferencesGroup):
@@ -114,34 +68,16 @@ class PluginSettingsGroup(GajimPreferencesGroup):
             title=_("Plugin Settings"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Check for updates"),
-                SettingType.CONFIG,
-                "plugins_update_check",
-                desc=_("Check for updates periodically"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Update automatically"),
-                SettingType.CONFIG,
-                "plugins_auto_update",
-                desc=_("Update plugins automatically"),
-                bind="plugins_update_check",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Notify after update"),
-                SettingType.CONFIG,
-                "plugins_notify_after_update",
-                desc=_("Notify me when the automatic update was successful"),
-                bind="plugins_auto_update",
-            ),
-        ]
+        self.bind_settings_model(app.app.settings.get_single_model("plugin-settings"))
 
-        for setting in settings:
-            self.add_setting(setting)
+
+class UseSpeller(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.enabled_func = self._speller_available
+
+    @staticmethod
+    def _speller_available() -> bool:
+        return app.is_installed("SPELLING")
 
 
 class GeneralGroup(GajimPreferencesGroup):
@@ -152,59 +88,12 @@ class GeneralGroup(GajimPreferencesGroup):
             title=_("General"),
         )
 
-        speller_desc = None
-        if not app.is_installed("SPELLING"):
-            speller_desc = _("Needs libspelling to be installed")
+        self.bind_settings_model(app.app.settings.get_single_model("general"))
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Close with Escape"),
-                SettingType.CONFIG,
-                "escape_key_closes",
-                desc=_("Close a chat by pressing the Escape key"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Send Message Button"),
-                SettingType.CONFIG,
-                "show_send_message_button",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Voice Message Button"),
-                SettingType.CONFIG,
-                "show_voice_message_button",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Send Messages with Control+Enter"),
-                SettingType.CONFIG,
-                "send_on_ctrl_enter",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Spell Checking"),
-                SettingType.CONFIG,
-                "use_speller",
-                desc=speller_desc,
-                enabled_func=self._speller_available,
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Emoji Shortcodes"),
-                SettingType.CONFIG,
-                "enable_emoji_shortcodes",
-                desc=_("Show suggestions for shortcodes, e.g. :+1:"),
-            ),
-        ]
 
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _speller_available() -> bool:
-        return app.is_installed("SPELLING")
+class EnableLinkPreview(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = (app.window.reload_view,)
 
 
 class ChatsGroup(GajimPreferencesGroup):
@@ -215,131 +104,39 @@ class ChatsGroup(GajimPreferencesGroup):
             title=_("Chats"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Message Receipts (✔)"),
-                SettingType.CONFIG,
-                "positive_184_ack",
-                desc=_("Add a checkmark to received messages"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Status Changes"),
-                SettingType.CONFIG,
-                "print_status_in_chats",
-                desc=_('For example: "Julia is now online"'),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Link Preview"),
-                SettingType.CONFIG,
-                "enable_link_preview_default",
-                desc=_("Default for new chats"),
-                callback=app.window.reload_view,
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("chats"))
 
 
-class GroupChatsGroup(GajimPreferencesGroup):
-    def __init__(self) -> None:
-        GajimPreferencesGroup.__init__(
-            self,
-            key="group-chats",
-            title=_("Group Chats"),
-        )
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Default Sync Threshold"),
-                SettingType.CONFIG,
-                "gc_sync_threshold_public_default",
-                desc=_("Default for new public group chats"),
-                props={"data": THRESHOLD_OPTIONS},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Direct Messages"),
-                SettingType.CONFIG,
-                "muc_prefer_direct_msg",
-                desc=_("Prefer direct messages in private group chats "),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Sort Participant List by Status"),
-                SettingType.CONFIG,
-                "sort_by_show_in_muc",
-                callback=self._on_sort_by_show_in_muc,
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Status Messages in Participants List"),
-                SettingType.CONFIG,
-                "show_status_msgs_in_roster",
-                callback=self._on_show_status_in_roster,
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Subject on Join"),
-                SettingType.CONFIG,
-                "show_subject_on_join",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Joined / Left"),
-                SettingType.CONFIG,
-                "gc_print_join_left_default",
-                desc=_("Default for new group chats"),
-                props={
-                    "button-text": _("Reset"),
-                    "button-tooltip": _(
-                        "Reset all group chats to the current default value"
-                    ),
-                    "button-style": "destructive-action",
-                    "button-callback": self._reset_join_left,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Status Changes"),
-                SettingType.CONFIG,
-                "gc_print_status_default",
-                desc=_("Default for new group chats"),
-                props={
-                    "button-text": _("Reset"),
-                    "button-tooltip": _(
-                        "Reset all group chats to the current default value"
-                    ),
-                    "button-style": "destructive-action",
-                    "button-callback": self._reset_print_status,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show Link Preview"),
-                SettingType.CONFIG,
-                "gc_enable_link_preview_default",
-                desc=_("Default for new group chats"),
-                callback=app.window.reload_view,
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+class SortByShowInMuc(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_sort_by_show_in_muc
 
     @staticmethod
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
         roster = app.window.get_control().get_group_chat_roster()
         roster.invalidate_sort()
 
+
+class ShowStatusMsgInRoster(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_show_status_in_roster
+
     @staticmethod
     def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
         roster = app.window.get_control().get_group_chat_roster()
         roster.invalidate_sort()
+
+
+class PrintJoinLeft(SwitchSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Reset"),
+            "button-tooltip": _("Reset all group chats to the current default value"),
+            "button-style": "destructive-action",
+            "button-callback": self._reset_join_left,
+        }
+
+        self._add_action_button(props)
 
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:
@@ -353,6 +150,18 @@ class GroupChatsGroup(GajimPreferencesGroup):
         app.settings.set_group_chat_settings(
             None, "print_join_left", None, _context_match_func
         )
+
+
+class PrintStatus(SwitchSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Reset"),
+            "button-tooltip": _("Reset all group chats to the current default value"),
+            "button-style": "destructive-action",
+            "button-callback": self._reset_print_status,
+        }
+
+        self._add_action_button(props)
 
     @staticmethod
     def _reset_print_status(button: Gtk.Button) -> None:
@@ -368,6 +177,17 @@ class GroupChatsGroup(GajimPreferencesGroup):
         )
 
 
+class GroupChatsGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="group-chats",
+            title=_("Group Chats"),
+        )
+
+        self.bind_settings_model(app.app.settings.get_single_model("group-chats"))
+
+
 class FilePreviewGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(
@@ -376,64 +196,7 @@ class FilePreviewGroup(GajimPreferencesGroup):
             title=_("File Preview"),
         )
 
-        sizes = {
-            0: _("No automatic preview"),
-            262144: "256 KiB",
-            524288: "512 KiB",
-            1048576: "1 MiB",
-            5242880: "5 MiB",
-            10485760: "10 MiB",
-            26214400: "25 MiB",
-        }
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("File Size Limit"),
-                SettingType.CONFIG,
-                "preview_max_file_size",
-                desc=_("Maximum file size for preview downloads"),
-                props={"data": sizes},
-            ),
-            Setting(
-                SettingKind.SPIN,
-                _("Preview Size"),
-                SettingType.CONFIG,
-                "preview_size",
-                desc=_("Size of preview images in pixels"),
-                props={"range_": SpinRange(100, 1000, 50, 0)},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Preview in Public Group Chats"),
-                SettingType.CONFIG,
-                "preview_anonymous_muc",
-                desc=_(
-                    "Show previews automatically in public "
-                    "group chats (may disclose your data)"
-                ),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Preview all Image URLs"),
-                SettingType.CONFIG,
-                "preview_allow_all_images",
-                desc=_("Show previews for any URLs containing images (may be unsafe)"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("HTTPS Verification"),
-                SettingType.CONFIG,
-                "preview_verify_https",
-                desc=_(
-                    "Whether to check for a valid certificate before "
-                    "downloading (not safe to disable)"
-                ),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("file-preview"))
 
 
 class SystemNotificationsGroup(GajimPreferencesGroup):
@@ -444,39 +207,9 @@ class SystemNotificationsGroup(GajimPreferencesGroup):
             title=_("System"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("System Tray Icon"),
-                SettingType.CONFIG,
-                "show_trayicon",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("System Tray Notifications"),
-                SettingType.CONFIG,
-                "trayicon_notification_on_events",
-                desc=_("Show notifications on the system tray icon"),
-                bind="show_trayicon",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("System Notifications"),
-                SettingType.CONFIG,
-                "show_notifications",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("System Notifications When Away"),
-                SettingType.CONFIG,
-                "show_notifications_away",
-                desc=_("Show notifications even if you are Away, Busy, etc."),
-                bind="show_notifications",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(
+            app.app.settings.get_single_model("system-notifications")
+        )
 
 
 class NotificationsChatsGroup(GajimPreferencesGroup):
@@ -487,18 +220,9 @@ class NotificationsChatsGroup(GajimPreferencesGroup):
             title=_("Chats"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Reactions"),
-                SettingType.CONFIG,
-                "notify_on_reaction_default",
-                desc=_("Notify me when someone reacts to my message in a chat"),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(
+            app.app.settings.get_single_model("notifications-chats")
+        )
 
 
 class NotificationsGroupChatsGroup(GajimPreferencesGroup):
@@ -509,18 +233,25 @@ class NotificationsGroupChatsGroup(GajimPreferencesGroup):
             title=_("Group Chats"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Reactions"),
-                SettingType.CONFIG,
-                "gc_notify_on_reaction_default",
-                desc=_("Notify me when someone reacts to my message in a group chat"),
-            ),
-        ]
+        self.bind_settings_model(
+            app.app.settings.get_single_model("notifications-group-chats")
+        )
 
-        for setting in settings:
-            self.add_setting(setting)
+
+class EnableSounds(SwitchSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-icon-name": "lucide-settings-symbolic",
+            "button-callback": self._on_manage_sounds,
+        }
+
+        self._add_action_button(props)
+
+    @staticmethod
+    def _on_manage_sounds(_button: Gtk.Button) -> None:
+        window = get_app_window("Preferences")
+        assert window is not None
+        open_window("ManageSounds", transient_for=window)
 
 
 class SoundsGroup(GajimPreferencesGroup):
@@ -531,36 +262,7 @@ class SoundsGroup(GajimPreferencesGroup):
             title=_("Sounds"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Play Sounds"),
-                SettingType.CONFIG,
-                "sounds_on",
-                desc=_("Play sounds to notify about events"),
-                props={
-                    "button-icon-name": "lucide-settings-symbolic",
-                    "button-callback": self._on_manage_sounds,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Sounds When Away"),
-                SettingType.CONFIG,
-                "sounddnd",
-                desc=_("Play sounds even when you are Away, Busy, etc."),
-                bind="sounds_on",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _on_manage_sounds(_button: Gtk.Button) -> None:
-        window = get_app_window("Preferences")
-        assert window is not None
-        open_window("ManageSounds", transient_for=window)
+        self.bind_settings_model(app.app.settings.get_single_model("sounds"))
 
 
 class StatusMessageGroup(GajimPreferencesGroup):
@@ -571,17 +273,7 @@ class StatusMessageGroup(GajimPreferencesGroup):
             title=_("Ask For Status Message on…"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Sign In"),
-                SettingType.CONFIG,
-                "ask_online_status",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("status-message"))
 
 
 class AutomaticStatusGroup(GajimPreferencesGroup):
@@ -592,170 +284,54 @@ class AutomaticStatusGroup(GajimPreferencesGroup):
             title=_("Automatic Status Change"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Auto Away"),
-                SettingType.CONFIG,
-                "autoaway",
-                desc=_('Change your status to "Away" after a certain amount of time'),
-                props={"subpage": "auto-away"},
-            ),
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Auto Not Available"),
-                SettingType.CONFIG,
-                "autoxa",
-                desc=_(
-                    'Change your status to "Not Available" after a '
-                    "certain amount of time"
-                ),
-                props={"subpage": "auto-extended-away"},
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _get_auto_away() -> bool:
-        return app.settings.get("autoaway")
-
-    @staticmethod
-    def _get_auto_xa() -> bool:
-        return app.settings.get("autoxa")
+        self.bind_settings_model(app.app.settings.get_single_model("automatic-status"))
 
 
 class AutoAwayGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(self, key="auto-away")
 
-        settings = [
-            Setting(SettingKind.SWITCH, _("Auto Away"), SettingType.CONFIG, "autoaway"),
-            Setting(
-                SettingKind.SPIN,
-                _("Time Until Away"),
-                SettingType.CONFIG,
-                "autoawaytime",
-                desc=_("Minutes until your status gets changed"),
-                props={"range_": SpinRange(1, 720, 1, 0)},
-                bind="autoaway",
-            ),
-            Setting(
-                SettingKind.ENTRY,
-                _("Status Message"),
-                SettingType.CONFIG,
-                "autoaway_message",
-                bind="autoaway",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("auto-away"))
 
 
 class AutoExtendedAwayGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(self, key="auto-extended-away")
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Auto Not Available"),
-                SettingType.CONFIG,
-                "autoxa",
-            ),
-            Setting(
-                SettingKind.SPIN,
-                _("Time Until Not Available"),
-                SettingType.CONFIG,
-                "autoxatime",
-                desc=_("Minutes until your status gets changed"),
-                props={"range_": SpinRange(1, 720, 1, 0)},
-                bind="autoxa",
-            ),
-            Setting(
-                SettingKind.ENTRY,
-                _("Status Message"),
-                SettingType.CONFIG,
-                "autoxa_message",
-                bind="autoxa",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-
-class ThemesGroup(GajimPreferencesGroup):
-    def __init__(self) -> None:
-        GajimPreferencesGroup.__init__(
-            self,
-            key="themes",
-            title=_("Themes"),
+        self.bind_settings_model(
+            app.app.settings.get_single_model("auto-extended-away")
         )
 
-        theme_items = self._get_theme_items()
 
-        dark_theme_items = {
-            0: _("Disabled"),
-            1: _("Enabled"),
-            2: _("System"),
-        }
-
-        settings = [
-            Setting(
-                SettingKind.SPIN,
-                _("User Interface Font Size"),
-                SettingType.CONFIG,
-                "app_font_size",
-                props={"range_": SpinRange(0.5, 3.0, 0.10, 2)},
-                callback=self._on_app_font_size_changed,
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Dark Theme"),
-                SettingType.CONFIG,
-                "dark_theme",
-                props={"data": dark_theme_items},
-                callback=self._on_dark_theme,
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Theme"),
-                SettingType.CONFIG,
-                "roster_theme",
-                name="roster_theme",
-                props={
-                    "data": theme_items,
-                    "button-icon-name": "lucide-settings-symbolic",
-                    "button-callback": self._on_edit_themes,
-                },
-                callback=self._on_theme_changed,
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-        app.ged.register_event_handler("theme-update", ged.GUI1, self._on_theme_update)
-
-    def do_unroot(self) -> None:
-        app.ged.remove_event_handler("theme-update", ged.GUI1, self._on_theme_update)
-        GajimPreferencesGroup.do_unroot(self)
+class AppFontSize(SpinSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_app_font_size_changed
 
     @staticmethod
     def _on_app_font_size_changed(_value: float, *args: Any) -> None:
         app.css_config.apply_app_font_size()
 
-    @staticmethod
-    def _get_theme_items() -> list[str]:
-        return ["default", *app.css_config.themes]
 
-    def _on_theme_update(self, *args: Any) -> None:
-        dropdown_row = cast(DropDownSetting, self.get_setting("roster_theme"))
-        dropdown_row.update_entries(self._get_theme_items())
-        dropdown_row.select_key(app.settings.get("roster_theme"))
+class DarkTheme(DropDownSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_dark_theme
+
+    @staticmethod
+    def _on_dark_theme(value: str, *args: Any) -> None:
+        app.css_config.set_dark_theme(int(value))
+        app.css_config.reload_css()
+        app.ged.raise_event(StyleChanged())
+
+
+class RosterTheme(DropDownSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_theme_changed
+        props = {
+            "button-icon-name": "lucide-settings-symbolic",
+            "button-callback": self._on_edit_themes,
+        }
+
+        self._add_action_button(props)
 
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
         window = get_app_window("Preferences")
@@ -770,54 +346,21 @@ class ThemesGroup(GajimPreferencesGroup):
 
         app.ged.register_event_handler("theme-update", ged.GUI1, self._on_theme_update)
 
-    @staticmethod
-    def _on_dark_theme(value: str, *args: Any) -> None:
-        app.css_config.set_dark_theme(int(value))
-        app.css_config.reload_css()
-        app.ged.raise_event(StyleChanged())
+    def _on_theme_update(self, *args: Any) -> None:
+        dropdown_row = cast(DropDownSetting, self.get_setting("roster_theme"))
+        dropdown_row.update_entries(self._get_theme_items())
+        dropdown_row.select_key(app.settings.get("roster_theme"))
 
 
-# class ServerGroup(GajimPreferencesGroup):
-#     def __init__(self) -> None:
-#         GajimPreferencesGroup.__init__(self, key="server")
+class ThemesGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="themes",
+            title=_("Themes"),
+        )
 
-#         settings = [
-#             Setting(
-#                 SettingKind.SUBPAGE,
-#                 _("Use STUN Server"),
-#                 SettingType.DIALOG,
-#                 desc=_("Helps to establish calls through firewalls"),
-#                 props={"subpage": "stun"},
-#             ),
-#         ]
-
-#         for setting in settings:
-#             self.add_setting(setting)
-
-#         self.set_sensitive(app.is_installed("AV"))
-
-# class StunServerGroup(GajimPreferencesGroup):
-#     def __init__(self) -> None:
-#         GajimPreferencesGroup.__init__(self, key="stun")
-
-#         settings = [
-#             Setting(
-#                 SettingKind.SWITCH,
-#                 _("Use STUN Server"),
-#                 SettingType.CONFIG,
-#                 "use_stun_server",
-#             ),
-#             Setting(
-#                 SettingKind.ENTRY,
-#                 _("STUN Server"),
-#                 SettingType.CONFIG,
-#                 "stun_server",
-#                 bind="use_stun_server",
-#             ),
-#         ]
-
-#         for setting in settings:
-#             self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("themes"))
 
 
 class AudioGroup(GajimPreferencesGroup):
@@ -828,249 +371,16 @@ class AudioGroup(GajimPreferencesGroup):
             title=_("Audio"),
         )
 
-        audio_input_devices = AudioInputManager().get_devices()
-        # audio_output_devices = AudioOutputManager().get_devices()
-
-        audio_input_items = self._create_av_combo_items(audio_input_devices)
-        # audio_output_items = self._create_av_combo_items(audio_output_devices)
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Audio Input Device"),
-                SettingType.CONFIG,
-                "audio_input_device",
-                desc=_("Select your audio input (e.g. microphone)"),
-                props={"data": audio_input_items},
-            ),
-            # Setting(
-            #     SettingKind.DROPDOWN,
-            #     _("Audio Output Device"),
-            #     SettingType.CONFIG,
-            #     "audio_output_device",
-            #     desc=_("Select an audio output (e.g. speakers, headphones)"),
-            #     props={"data": audio_output_items},
-            # ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
-        items = enumerate(
-            sorted(
-                items_dict.items(),
-                key=lambda x: "" if x[1].startswith("auto") else x[0].lower(),
-            )
-        )
-        combo_items: dict[str, str] = {}
-        for _index, (name, value) in items:
-            combo_items[value] = name
-        return combo_items
+        self.bind_settings_model(app.app.settings.get_single_model("audio"))
 
 
-# class VideoGroup(GajimPreferencesGroup):
-#     def __init__(self) -> None:
-#         GajimPreferencesGroup.__init__(self)
-
-#         deps_installed = app.is_installed("AV")
-
-#         video_input_devices = {}
-#         if deps_installed:
-#             video_input_devices = VideoInputManager().get_devices()
-
-#         video_input_items = self._create_av_combo_items(video_input_devices)
-
-#         video_framerates = {
-#             "": _("Default"),
-#             "15/1": "15 fps",
-#             "10/1": "10 fps",
-#             "5/1": "5 fps",
-#             "5/2": "2.5 fps",
-#         }
-
-#         video_sizes = {
-#             "": _("Default"),
-#             "800x600": "800x600",
-#             "640x480": "640x480",
-#             "320x240": "320x240",
-#         }
-
-#         settings = [
-#             Setting(
-#                 SettingKind.DROPDOWN,
-#                 _("Video Input Device"),
-#                 SettingType.CONFIG,
-#                 "video_input_device",
-#                 props={"data": video_input_items},
-#                 desc=_("Select your video input device (e.g. webcam, screen capture)"),  # noqa: E501
-#                 callback=self._on_video_input_changed,
-#             ),
-#             Setting(
-#                 SettingKind.DROPDOWN,
-#                 _("Video Framerate"),
-#                 SettingType.CONFIG,
-#                 "video_framerate",
-#                 props={"data": video_framerates},
-#             ),
-#             Setting(
-#                 SettingKind.DROPDOWN,
-#                 _("Video Resolution"),
-#                 SettingType.CONFIG,
-#                 "video_size",
-#                 props={"data": video_sizes},
-#             ),
-#             Setting(
-#                 SettingKind.SWITCH,
-#                 _("Show My Video Stream"),
-#                 SettingType.CONFIG,
-#                 "video_see_self",
-#                 desc=_("Show your own video stream in calls"),
-#             ),
-#             Setting(
-#                 SettingKind.SWITCH,
-#                 _("Live Preview"),
-#                 SettingType.VALUE,
-#                 desc=_("Show a live preview to test your video source"),
-#                 callback=self._toggle_live_preview,
-#             ),
-#         ]
-
-#         for setting in settings:
-#             self.add_setting(setting)
-
-#         self.set_sensitive(deps_installed)
-
-#     @staticmethod
-#     def _on_video_input_changed(_value: str, *args: Any) -> None:
-#         window = get_app_window("Preferences")
-#         assert window is not None
-#         preview = window.get_video_preview()
-#         if preview is None or not preview.is_active:
-#             # changed signal gets triggered when we fill the dropdown
-#             return
-#         preview.refresh()
-
-#     @staticmethod
-#     def _toggle_live_preview(value: bool, *args: Any) -> None:
-#         window = get_app_window("Preferences")
-#         assert window is not None
-#         preview = window.get_video_preview()
-#         if preview is not None:
-#             preview.toggle_preview(value)
-
-#     @staticmethod
-#     def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
-#         items = enumerate(
-#             sorted(
-#                 items_dict.items(),
-#                 key=lambda x: "" if x[1].startswith("auto") else x[0].lower(),
-#             )
-#         )
-#         combo_items: dict[str, str] = {}
-#         for _index, (name, value) in items:
-#             combo_items[value] = name
-#         return combo_items
-
-
-class MiscellaneousGroup(GajimPreferencesGroup):
-    def __init__(self) -> None:
-        GajimPreferencesGroup.__init__(
-            self,
-            key="miscellaneous",
-            title=_("Miscellaneous"),
-        )
-
-        self._hints_list: list[AppBoolSettings] = [
-            "show_help_start_chat",
-        ]
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Global Proxy"),
-                SettingType.CONFIG,
-                "global_proxy",
-                name="global_proxy",
-                props={
-                    "data": self._get_proxies(),
-                    "button-icon-name": "lucide-settings-symbolic",
-                    "button-callback": self._on_proxy_edit,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Use System Keyring"),
-                SettingType.CONFIG,
-                "use_keyring",
-                desc=_("Use your system’s keyring to store passwords"),
-            ),
-        ]
-
-        if sys.platform not in ("win32", "darwin") and package_version(
-            "keyring>=23.8.1"
-        ):
-            settings.append(
-                Setting(
-                    SettingKind.SWITCH,
-                    _("Enable KeepassXC Integration"),
-                    SettingType.CONFIG,
-                    "enable_keepassxc_integration",
-                )
-            )
-
-        if sys.platform in ("win32", "darwin"):
-            settings.append(
-                Setting(
-                    SettingKind.SWITCH,
-                    _("Check For Updates"),
-                    SettingType.CONFIG,
-                    "check_for_update",
-                    desc=_("Check for Gajim updates periodically"),
-                )
-            )
-
-        settings.append(
-            Setting(
-                SettingKind.GENERIC,
-                _("Reset Hints"),
-                SettingType.VALUE,
-                None,
-                desc=_("This will reset all introduction hints"),
-                props={
-                    "button-text": _("Reset"),
-                    "button-style": "destructive-action",
-                    "button-callback": self._on_reset_hints,
-                    "button-sensitive": self._check_hints_reset(),
-                },
-            ),
-        )
-
-        settings.append(
-            Setting(
-                SettingKind.GENERIC,
-                _("Purge Chat History"),
-                SettingType.VALUE,
-                None,
-                desc=_("This will purge all locally stored chat history"),
-                props={
-                    "button-text": _("Purge"),
-                    "button-style": "destructive-action",
-                    "button-callback": self._on_purge_history_clicked,
-                },
-            ),
-        )
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _get_proxies() -> dict[str, str]:
-        proxies = {"": _("System")}
-        proxies.update({proxy: proxy for proxy in app.settings.get_proxies()})
-        proxies["no-proxy"] = _("No Proxy")
-        return proxies
+class GlobalProxy(DropDownSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-icon-name": "lucide-settings-symbolic",
+            "button-callback": self._on_proxy_edit,
+        }
+        self._add_action_button(props)
 
     @staticmethod
     def _on_proxy_edit(*args: Any) -> None:
@@ -1078,17 +388,39 @@ class MiscellaneousGroup(GajimPreferencesGroup):
         assert window is not None
         open_window("ManageProxies", transient_for=window)
 
-    def update_proxy_list(self) -> None:
-        dropdown_row = cast(DropDownSetting, self.get_setting("global_proxy"))
-        dropdown_row.update_entries(self._get_proxies())
 
-    def _check_hints_reset(self) -> bool:
-        return any(app.settings.get(hint) is False for hint in self._hints_list)
+class ResetHints(GenericSetting):
+    def __post_init__(self) -> None:
+
+        self._hints_list: list[AppBoolSettings] = [
+            "show_help_start_chat",
+        ]
+
+        props = {
+            "button-text": _("Reset"),
+            "button-style": "destructive-action",
+            "button-callback": self._on_reset_hints,
+            "button-sensitive": self._check_hints_reset(),
+        }
+        self._add_action_button(props)
 
     def _on_reset_hints(self, button: Gtk.Button) -> None:
         for hint in self._hints_list:
             app.settings.set(hint, True)
         button.set_sensitive(False)
+
+    def _check_hints_reset(self) -> bool:
+        return any(app.settings.get(hint) is False for hint in self._hints_list)
+
+
+class PurgeChatHistory(GenericSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Purge"),
+            "button-style": "destructive-action",
+            "button-callback": self._on_purge_history_clicked,
+        }
+        self._add_action_button(props)
 
     @staticmethod
     def _on_purge_history_clicked(button: Gtk.Button) -> None:
@@ -1110,64 +442,36 @@ class MiscellaneousGroup(GajimPreferencesGroup):
         )
 
 
-class AdvancedGroup(GajimPreferencesGroup):
+class MiscellaneousGroup(GajimPreferencesGroup):
     def __init__(self) -> None:
         GajimPreferencesGroup.__init__(
             self,
-            key="advanced",
-            title=_("Advanced Settings"),
+            key="miscellaneous",
+            title=_("Miscellaneous"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Debug Logging"),
-                SettingType.VALUE,
-                app.get_debug_mode(),
-                desc=_("Let Gajim generate a log to trace errors (restart required)"),
-                props={
-                    "button-icon-name": "lucide-folder-symbolic",
-                    "button-callback": self._on_open_debug_logs,
-                },
-                callback=self._on_debug_logging,
-            ),
-            Setting(
-                SettingKind.GENERIC,
-                _("Debug Console"),
-                SettingType.VALUE,
-                None,
-                desc=_("Show Gajim's internal logs and XML protocol data"),
-                props={
-                    "button-text": _("Open"),
-                    "button-callback": self._on_debug,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("D-Bus Interface"),
-                SettingType.CONFIG,
-                "remote_control",
-                desc=_(
-                    "Allow Gajim to broadcast useful information via "
-                    "D-Bus. It also allows other applications to "
-                    "control Gajim remotely."
-                ),
-            ),
-            Setting(
-                SettingKind.GENERIC,
-                _("Advanced Configuration Editor"),
-                SettingType.VALUE,
-                None,
-                desc=_("Please use these settings with caution!"),
-                props={
-                    "button-text": _("Open"),
-                    "button-callback": self._on_advanced_config_editor,
-                },
-            ),
-        ]
+        self.bind_settings_model(app.app.settings.get_single_model("miscellaneous"))
 
-        for setting in settings:
-            self.add_setting(setting)
+    @staticmethod
+    def _get_proxies() -> dict[str, str]:
+        proxies = {"": _("System")}
+        proxies.update({proxy: proxy for proxy in app.settings.get_proxies()})
+        proxies["no-proxy"] = _("No Proxy")
+        return proxies
+
+    def update_proxy_list(self) -> None:
+        dropdown_row = cast(DropDownSetting, self.get_setting("global_proxy"))
+        dropdown_row.update_entries(self._get_proxies())
+
+
+class DebugLogging(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = (self._on_debug_logging,)
+        props = {
+            "button-icon-name": "lucide-folder-symbolic",
+            "button-callback": self._on_open_debug_logs,
+        }
+        self._add_action_button(props)
 
     @staticmethod
     def _on_debug_logging(value: bool, *args: Any) -> None:
@@ -1177,15 +481,44 @@ class AdvancedGroup(GajimPreferencesGroup):
     def _on_open_debug_logs(*args: Any) -> None:
         open_file(configpaths.get("DEBUG"))
 
+
+class DebugConsole(GenericSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Open"),
+            "button-callback": self._on_debug,
+        }
+        self._add_action_button(props)
+
+    @staticmethod
+    def _on_debug(*args: Any) -> None:
+        open_window("DebugConsoleWindow")
+
+
+class AdvancedConfigEditor(GenericSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Open"),
+            "button-callback": self._on_advanced_config_editor,
+        }
+        self._add_action_button(props)
+
     @staticmethod
     def _on_advanced_config_editor(*args: Any) -> None:
         window = get_app_window("Preferences")
         assert window is not None
         open_window("AdvancedConfig", transient_for=window)
 
-    @staticmethod
-    def _on_debug(*args: Any) -> None:
-        open_window("DebugConsoleWindow")
+
+class AdvancedGroup(GajimPreferencesGroup):
+    def __init__(self) -> None:
+        GajimPreferencesGroup.__init__(
+            self,
+            key="advanced",
+            title=_("Advanced Settings"),
+        )
+
+        self.bind_settings_model(app.app.settings.get_single_model("advanced"))
 
 
 class GeneralPage(GajimPreferencePage):
@@ -1276,9 +609,7 @@ class AudioVideoPage(GajimPreferencePage):
             self,
             title=_("Audio"),
             groups=[
-                # ServerGroup,
                 AudioGroup,
-                # VideoGroup,
             ],
         )
 
@@ -1335,3 +666,28 @@ class AutoExtendedAwayPage(GajimPreferencePage):
             title=_("Auto Not Available"),
             groups=[AutoExtendedAwayGroup],
         )
+
+
+register_rows(
+    {
+        "show-in-taskbar": ShowInTaskbar,
+        "show-header-bar": ShowHeaderBar,
+        "use-speller": UseSpeller,
+        "enable-link-preview": EnableLinkPreview,
+        "sort_by_show_in_muc": SortByShowInMuc,
+        "show_status_msgs_in_roster": ShowStatusMsgInRoster,
+        "gc_print_join_left_default": PrintJoinLeft,
+        "gc_print_status_default": PrintStatus,
+        "gc_enable_link_preview_default": EnableLinkPreview,
+        "enable-sounds": EnableSounds,
+        "app-font-size": AppFontSize,
+        "dark-theme": DarkTheme,
+        "roster-theme": RosterTheme,
+        "global-proxy": GlobalProxy,
+        "reset-hints": ResetHints,
+        "purge-chat-history": PurgeChatHistory,
+        "debug-logging": DebugLogging,
+        "debug-console": DebugConsole,
+        "advanced-config-editor": AdvancedConfigEditor,
+    }
+)

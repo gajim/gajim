@@ -320,3 +320,63 @@ ONLINE_ACCOUNT_ACTIONS = {
 FEATURE_ACCOUNT_ACTIONS = {
     "block-contact",
 }
+
+
+CHATSTATE_SETTING_ENUM = {
+    "disabled": _("Disabled"),
+    "composing_only": _("Typing Only"),
+    "all": _("All"),
+}
+
+
+ENCRYPTION_SETTING_ENUM = {
+    "": _("Unencrypted"),
+    "OMEMO": "OMEMO",
+    "OpenPGP": "OpenPGP",
+    "PGP": "PGP",
+}
+
+
+HISTORYMAXAGE_SETTING_ENUM = {
+    -1: _("Forever"),
+    0: _("Until Gajim is Closed"),
+    86400: _("1 Day"),
+    604800: _("1 Week"),
+    2629743: _("1 Month"),
+    7889229: _("3 Months"),
+    15778458: _("6 Months"),
+    31556926: _("1 Year"),
+}
+
+
+CONNECTION_TYPE_ENUM = ["START TLS", "DIRECT TLS", "PLAIN"]
+
+WINDOW_STARTUP_ENUM = {
+    "always": _("Always"),
+    "never": _("Never"),
+    "last_state": _("Restore last state"),
+}
+
+CLOSE_ACTION_ENUM = {
+    "hide": _("Hide"),
+    "minimize": _("Minimize"),
+    "quit": _("Quit"),
+}
+
+
+FILE_PREVIEW_SIZE_ENUM = {
+    0: _("No automatic preview"),
+    262144: "256 KiB",
+    524288: "512 KiB",
+    1048576: "1 MiB",
+    5242880: "5 MiB",
+    10485760: "10 MiB",
+    26214400: "25 MiB",
+}
+
+
+STYLE_ENUM = {
+    0: _("Disabled"),
+    1: _("Enabled"),
+    2: _("System"),
+}

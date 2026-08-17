@@ -10,7 +10,7 @@ from gajim.common.i18n import _
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.settings.page import GajimPreferencesGroup
 
 
 class ContactSettings(GajimPreferencesGroup):

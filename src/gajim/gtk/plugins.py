@@ -33,7 +33,7 @@ from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.settings.page import GajimPreferencesGroup
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window

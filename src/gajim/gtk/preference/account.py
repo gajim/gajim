@@ -39,11 +39,14 @@ from gajim.gtk.preference.blocked_contacts import BlockedContacts
 from gajim.gtk.preference.manage_roster import ManageRoster
 from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.preference.widgets import PlaceholderBox
-from gajim.gtk.settings import GajimPreferencePage
-from gajim.gtk.settings import GajimPreferencesGroup
-from gajim.gtk.settings import SignalManager
-from gajim.gtk.settings import SpinRange
-from gajim.gtk.structs import ExportHistoryParam
+from gajim.gtk.settings.group import GajimPreferencesGroup
+from gajim.gtk.settings.page import GajimPreferencePage
+from gajim.gtk.settings.row import DialogSetting
+from gajim.gtk.settings.row import DropDownSetting
+from gajim.gtk.settings.row import GenericSetting
+from gajim.gtk.settings.row import register_rows
+from gajim.gtk.settings.row import SwitchSetting
+from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
 
@@ -54,78 +57,9 @@ class AccountGeneralGroup(GajimPreferencesGroup):
             self, key="account-general", account=account, title=_("General")
         )
 
-        workspaces = self._get_workspaces()
-
-        settings = [
-            Setting(
-                SettingKind.ENTRY,
-                _("Label"),
-                SettingType.ACCOUNT_CONFIG,
-                "account_label",
-                desc=_("Add a label to distinguish accounts in Gajim"),
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Default Workspace"),
-                SettingType.ACCOUNT_CONFIG,
-                "default_workspace",
-                props={"data": workspaces},
-                desc=_("Chats from this account will use this workspace by default"),
-            ),
-            Setting(
-                SettingKind.COLOR,
-                _("Color"),
-                SettingType.ACCOUNT_CONFIG,
-                "account_color",
-                desc=_("Recognize your account by color"),
-            ),
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Login"),
-                SettingType.DIALOG,
-                desc=_("Change your account’s password, etc."),
-                bind="account::anonymous_auth",
-                inverted=True,
-                props={"subpage": f"{self.account}-general-login"},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Connect on startup"),
-                SettingType.ACCOUNT_CONFIG,
-                "autoconnect",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Global Status"),
-                SettingType.ACCOUNT_CONFIG,
-                "sync_with_global_status",
-                desc=_("Synchronize the status of all accounts"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Remember Last Status"),
-                SettingType.ACCOUNT_CONFIG,
-                "restore_last_status",
-                desc=_("Restore status and status message of your last session"),
-            ),
-            # Setting(
-            #     SettingKind.SWITCH,
-            #     _("Use file transfer proxies"),
-            #     SettingType.ACCOUNT_CONFIG,
-            #     "use_ft_proxies",
-            # ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _get_workspaces() -> dict[str, str]:
-        workspaces: dict[str, str] = {"": _("Disabled")}
-        for workspace_id in app.settings.get_workspaces():
-            name = app.settings.get_workspace_setting(workspace_id, "name")
-            workspaces[workspace_id] = name
-        return workspaces
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-general", account)
+        )
 
 
 class AccountGeneralAdvancedGroup(GajimPreferencesGroup):
@@ -166,180 +100,57 @@ class AccountGeneralAdvancedGroup(GajimPreferencesGroup):
         open_window("RemoveAccount", account=self.account)
 
 
-class AccountPrivacyGroup(GajimPreferencesGroup):
-    def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(
-            self, key="account-privacy", account=account, title=_("Privacy")
-        )
+class SendIdleTime(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._send_idle_time
 
-        self._client: types.Client | None = None
-        if app.account_is_connected(account):
-            self._client = app.get_client(account)
+    def _send_idle_time(self, state: bool, _data: Any) -> None:
+        if self._client is not None:
+            self._client.get_module("LastActivity").set_enabled(state)
 
-        history_max_age = {
-            -1: _("Forever"),
-            0: _("Until Gajim is Closed"),
-            86400: _("1 Day"),
-            604800: _("1 Week"),
-            2629743: _("1 Month"),
-            7889229: _("3 Months"),
-            15778458: _("6 Months"),
-            31556926: _("1 Year"),
+
+class SendOsInfo(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._send_os_info
+
+    def _send_os_info(self, state: bool, _data: Any) -> None:
+        if self._client is not None:
+            self._client.get_module("SoftwareVersion").set_enabled(state)
+
+
+class PublishTune(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._publish_tune
+
+    def _publish_tune(self, state: bool, _data: Any) -> None:
+        if self._client is not None:
+            self._client.get_module("UserTune").set_enabled(state)
+
+
+class SendChatStateIndicators(DropDownSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Reset"),
+            "button-tooltip": _("Reset all chats to the current default value"),
+            "button-style": "destructive-action",
+            "button-callback": self._reset_send_chatstate,
         }
-
-        chatstate_entries = {
-            "disabled": _("Disabled"),
-            "composing_only": _("Typing Only"),
-            "all": _("All"),
-        }
-
-        encryption_entries = {
-            "": _("Unencrypted"),
-            "OMEMO": "OMEMO",
-            "OpenPGP": "OpenPGP",
-            "PGP": "PGP",
-        }
-
-        param = ExportHistoryParam(account=account, jid=None)
-
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Default Encryption"),
-                SettingType.ACCOUNT_CONFIG,
-                "encryption_default",
-                desc=_(
-                    "Encryption method to use unless overridden on a per-contact basis"
-                ),
-                props={"data": encryption_entries},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Idle Time"),
-                SettingType.ACCOUNT_CONFIG,
-                "send_idle_time",
-                callback=self._send_idle_time,
-                desc=_("Disclose the time of your last activity"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Operating System"),
-                SettingType.ACCOUNT_CONFIG,
-                "send_os_info",
-                callback=self._send_os_info,
-                desc=_(
-                    "Disclose information about the operating system you currently use"
-                ),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Media Playback"),
-                SettingType.ACCOUNT_CONFIG,
-                "publish_tune",
-                callback=self._publish_tune,
-                desc=_(
-                    "Disclose information about media that is "
-                    "currently being played on your system."
-                ),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Ignore Unknown Contacts"),
-                SettingType.ACCOUNT_CONFIG,
-                "ignore_unknown_contacts",
-                desc=_("Ignore everything from contacts not in your contact list"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Send Message Receipts"),
-                SettingType.ACCOUNT_CONFIG,
-                "answer_receipts",
-                desc=_("Tell your contacts if you received a message"),
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Send Chat Indicators"),
-                SettingType.ACCOUNT_CONFIG,
-                "send_chatstate_default",
-                desc=_("Default for chats (e.g. Contact is typing)"),
-                props={
-                    "data": chatstate_entries,
-                    "button-text": _("Reset"),
-                    "button-tooltip": _("Reset all chats to the current default value"),
-                    "button-style": "destructive-action",
-                    "button-callback": self._reset_send_chatstate,
-                },
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Send Chat Indicators in Group Chats"),
-                SettingType.ACCOUNT_CONFIG,
-                "gc_send_chatstate_default",
-                desc=_("Default for group chats (e.g. Contact is typing)"),
-                props={
-                    "data": chatstate_entries,
-                    "button-text": _("Reset"),
-                    "button-tooltip": _(
-                        "Reset all group chats to the current default value"
-                    ),
-                    "button-style": "destructive-action",
-                    "button-callback": self._reset_gc_send_chatstate,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Read Receipts"),
-                SettingType.VALUE,
-                app.settings.get_account_setting(account, "send_marker_default"),
-                callback=self._send_read_marker,
-                desc=_("Default for chats and private group chats"),
-                props={
-                    "button-text": _("Reset"),
-                    "button-tooltip": _("Reset all chats to the current default value"),
-                    "button-style": "destructive-action",
-                    "button-callback": self._reset_send_read_marker,
-                },
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Update Timezone"),
-                SettingType.ACCOUNT_CONFIG,
-                "update_timezone",
-                desc=_("Update your profile's timezone automatically"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Sync Group Chat Block List"),
-                SettingType.ACCOUNT_CONFIG,
-                "sync_muc_blocks",
-                callback=self._sync_blocks,
-                enabled_func=self._get_sync_blocks_enabled,
-                desc=_("Synchronize group chat block list with other devices"),
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Keep Chat History"),
-                SettingType.ACCOUNT_CONFIG,
-                "chat_history_max_age",
-                props={"data": history_max_age},
-                desc=_("How long Gajim should keep your chat history"),
-            ),
-            Setting(
-                SettingKind.ACTION,
-                _("Export Chat History"),
-                SettingType.ACTION,
-                "app.export-history",
-                props={"variant": param.to_variant()},
-                desc=_("Export your chat history from Gajim"),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self._add_action_button(props)
 
     def _reset_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_contact_settings(self.account, "send_chatstate", None)
+
+
+class SendGroupChatStateIndicators(DropDownSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Reset"),
+            "button-tooltip": _("Reset all group chats to the current default value"),
+            "button-style": "destructive-action",
+            "button-callback": self._reset_gc_send_chatstate,
+        }
+        self._add_action_button(props)
 
     def _reset_gc_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
@@ -353,17 +164,17 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             self.account, "send_chatstate", None, _context_match_func
         )
 
-    def _send_idle_time(self, state: bool, _data: Any) -> None:
-        if self._client is not None:
-            self._client.get_module("LastActivity").set_enabled(state)
 
-    def _send_os_info(self, state: bool, _data: Any) -> None:
-        if self._client is not None:
-            self._client.get_module("SoftwareVersion").set_enabled(state)
-
-    def _publish_tune(self, state: bool, _data: Any) -> None:
-        if self._client is not None:
-            self._client.get_module("UserTune").set_enabled(state)
+class SendReadMarker(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._send_read_marker
+        props = {
+            "button-text": _("Reset"),
+            "button-tooltip": _("Reset all chats to the current default value"),
+            "button-style": "destructive-action",
+            "button-callback": self._reset_send_read_marker,
+        }
+        self._add_action_button(props)
 
     def _send_read_marker(self, state: bool, _data: Any) -> None:
         assert self.account is not None
@@ -390,6 +201,12 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             self.account, "send_marker", None, _context_match_func
         )
 
+
+class SyncMucBlocks(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._sync_blocks
+        self.enabled_func = self._get_sync_blocks_enabled
+
     def _get_sync_blocks_enabled(self) -> bool:
         if self._client is None:
             return False
@@ -404,6 +221,17 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
             self._client.get_module("MucBlocking").merge_blocks()
 
 
+class AccountPrivacyGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-privacy", account=account, title=_("Privacy")
+        )
+
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-privacy", account)
+        )
+
+
 class AccountOmemoSettingsGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
@@ -414,18 +242,9 @@ class AccountOmemoSettingsGroup(GajimPreferencesGroup):
         link_text = _("Read more about blind trust")
         self.set_description(f'<a href="{GAJIM_OMEMO_WIKI_URI}">{link_text}</a>')
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Blind Trust"),
-                SettingType.ACCOUNT_CONFIG,
-                "omemo_blind_trust",
-                desc=_("Blindly trust new devices until you verify them"),
-            )
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-omemo-settings", account)
+        )
 
 
 class AccountOmemoTrustGroup(GajimPreferencesGroup):
@@ -444,48 +263,15 @@ class AccountOpenPGPSettingsGroup(GajimPreferencesGroup):
 
         self.set_title(_("Trust Management"))
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Blind Trust"),
-                SettingType.ACCOUNT_CONFIG,
-                "openpgp_blind_trust",
-                desc=_("Blindly trust new devices"),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-
-class AccountOpenPGPSecretGroup(GajimPreferencesGroup):
-    def __init__(self, account: str) -> None:
-        GajimPreferencesGroup.__init__(
-            self, key="account-openpgp-secret", account=account
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-openpgp-settings", account)
         )
 
-        self.set_title(_("Secret Key Management"))
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Backup Secret Key"),
-                SettingType.ACCOUNT_CONFIG,
-                "openpgp_backup_secret_key",
-                desc=_("Stores the secret key encrypted on the server"),
-                enabled_func=(lambda: app.account_is_connected(account)),
-                callback=self._on_backup,
-            ),
-            Setting(
-                SettingKind.DIALOG,
-                _("Export & Share Secret Key"),
-                SettingType.DIALOG,
-                props={"dialog": "OpenPGPSecret"},
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+class BackupSecretKey(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_backup
+        self.enabled_func = lambda: app.account_is_connected(self.account)
 
     def _on_backup(self, state: bool, _data: Any) -> None:
         if state:
@@ -508,6 +294,18 @@ class AccountOpenPGPSecretGroup(GajimPreferencesGroup):
         )
 
 
+class AccountOpenPGPSecretGroup(GajimPreferencesGroup):
+    def __init__(self, account: str) -> None:
+        GajimPreferencesGroup.__init__(
+            self, key="account-openpgp-secret", account=account
+        )
+
+        self.set_title(_("Secret Key Management"))
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-openpgp-secret", account)
+        )
+
+
 class AccountOpenPGPTrustGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
@@ -518,85 +316,27 @@ class AccountOpenPGPTrustGroup(GajimPreferencesGroup):
         self.add(crypto_trust_manager)
 
 
+class Proxy(DropDownSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-icon-name": "lucide-settings-symbolic",
+            "button-callback": self._on_proxy_edit,
+        }
+        self._add_action_button(props)
+
+    @staticmethod
+    def _on_proxy_edit(*args: Any) -> None:
+        open_window("ManageProxies")
+
+
 class AccountConnectionGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
             self, key="account-connection", account=account, title=_("Connection")
         )
-
-        settings = [
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Details"),
-                SettingType.DIALOG,
-                props={"subpage": f"{self.account}-connection-details"},
-            ),
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Certificate"),
-                SettingType.DIALOG,
-                desc=_("Details about the certificate used by this connection"),
-                props={"subpage": f"{self.account}-connection-certificate"},
-            ),
-            Setting(
-                SettingKind.SUBPAGE,
-                _("Hostname"),
-                SettingType.ACCOUNT_CONFIG,
-                "use_custom_host",
-                desc=_("Manually set the hostname for the server"),
-                props={"subpage": f"{self.account}-connection-hostname"},
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Proxy"),
-                SettingType.ACCOUNT_CONFIG,
-                "proxy",
-                name="proxy",
-                props={
-                    "data": self._get_proxies(),
-                    "button-icon-name": "lucide-settings-symbolic",
-                    "button-callback": self._on_proxy_edit,
-                },
-            ),
-            Setting(
-                SettingKind.ENTRY,
-                _("Resource"),
-                SettingType.ACCOUNT_CONFIG,
-                "resource",
-                desc=_(
-                    "Identifier for this device. "
-                    "Don’t change this unless you know what you are doing."
-                ),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Use Unencrypted Connection"),
-                SettingType.ACCOUNT_CONFIG,
-                "use_plain_connection",
-                desc=_("Use an unencrypted connection to the server"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Confirm Unencrypted Connection"),
-                SettingType.ACCOUNT_CONFIG,
-                "confirm_unencrypted_connection",
-                desc=_("Ask before connecting unencrypted"),
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    @staticmethod
-    def _get_proxies() -> dict[str, str]:
-        proxies = {"": _("System")}
-        proxies.update({proxy: proxy for proxy in app.settings.get_proxies()})
-        proxies["no-proxy"] = _("No Proxy")
-        return proxies
-
-    @staticmethod
-    def _on_proxy_edit(*args: Any) -> None:
-        open_window("ManageProxies")
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-connection", account)
+        )
 
 
 @Gtk.Template(string=get_ui_string("preference/connection_details.ui"))
@@ -705,30 +445,27 @@ class AccountBlockedContactsGroup(GajimPreferencesGroup):
         self.add(BlockedContacts(account))
 
 
+class SyncHistory(GenericSetting):
+    def __post_init__(self) -> None:
+        props = {
+            "button-text": _("Open"),
+            "button-callback": self._on_sync,
+        }
+        self._add_action_button(props)
+
+    def _on_sync(self, _button: Gtk.Button) -> None:
+        open_window("HistorySyncAssistant", account=self.account)
+
+
 class AccountArchivingGroup(GajimPreferencesGroup):
     def __init__(self, account: str) -> None:
         GajimPreferencesGroup.__init__(
             self, key="account-archiving", account=account, title=_("Archive")
         )
 
-        settings = [
-            Setting(
-                SettingKind.GENERIC,
-                _("Synchronize History…"),
-                SettingType.VALUE,
-                None,
-                props={
-                    "button-text": _("Open"),
-                    "button-callback": self._on_sync,
-                },
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    def _on_sync(self, _button: Gtk.Button) -> None:
-        open_window("HistorySyncAssistant", account=self.account)
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-archiving", account)
+        )
 
 
 class AccountArchivingPreferencesGroup(GajimPreferencesGroup):
@@ -754,51 +491,27 @@ class AccountAdvancedGroup(GajimPreferencesGroup):
             self, key="account-advanced", account=account, title=_("Advanced")
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Contact Information"),
-                SettingType.ACCOUNT_CONFIG,
-                "request_user_data",
-                desc=_("Request contact information (Tune, Location)"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Accept all Contact Requests"),
-                SettingType.ACCOUNT_CONFIG,
-                "autoauth",
-                desc=_("Automatically accept all contact requests"),
-            ),
-            # TODO Jingle FT
-            # Setting(SettingKind.DROPDOWN,
-            #         _('Filetransfer Preference'),
-            #         SettingType.ACCOUNT_CONFIG,
-            #         'filetransfer_preference',
-            #         props={'data': {'httpupload': _('Upload Files'),
-            #                         'jingle': _('Send Files Directly')}},
-            #         desc=_('Preferred file transfer mechanism for '
-            #                'file drag&drop on a chat window')),
-            Setting(
-                SettingKind.SWITCH,
-                _("Security Labels"),
-                SettingType.ACCOUNT_CONFIG,
-                "enable_security_labels",
-                desc=_(
-                    "Show labels describing confidentiality of "
-                    "messages, if the server supports XEP-0258"
-                ),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Synchronize joined group chats"),
-                SettingType.ACCOUNT_CONFIG,
-                "autojoin_sync",
-                desc=_("Synchronize joined group chats with other devices."),
-            ),
-        ]
+        self.bind_settings_model(
+            app.app.settings.get_single_model("account-advanced", account)
+        )
 
-        for setting in settings:
-            self.add_setting(setting)
+
+class SavePassword(SwitchSetting):
+    def __post_init__(self) -> None:
+        self.callback = self._on_save_password
+        self.enabled_func = lambda: (
+            not app.settings.get("use_keyring") or passwords.is_keyring_available()
+        )
+
+    def _on_save_password(self, state: bool, _data: Any) -> None:
+        if not state:
+            assert self.account is not None
+            passwords.delete_password(self.account)
+
+
+class ChangePassword(DialogSetting):
+    def __post_init__(self) -> None:
+        self.enabled_func = lambda: app.account_is_connected(self.account)
 
 
 class LoginGroup(GajimPreferencesGroup):
@@ -807,42 +520,7 @@ class LoginGroup(GajimPreferencesGroup):
             self, key="login", account=account, title=_("Login")
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Save Password"),
-                SettingType.ACCOUNT_CONFIG,
-                "savepass",
-                enabled_func=(
-                    lambda: (
-                        not app.settings.get("use_keyring")
-                        or passwords.is_keyring_available()
-                    )
-                ),
-                callback=self._on_save_password,
-            ),
-            Setting(
-                SettingKind.DIALOG,
-                _("Change Password"),
-                SettingType.DIALOG,
-                enabled_func=(lambda: app.account_is_connected(account)),
-                props={"dialog": "ChangePassword"},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Use GSSAPI"),
-                SettingType.ACCOUNT_CONFIG,
-                "enable_gssapi",
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
-
-    def _on_save_password(self, state: bool, _data: Any) -> None:
-        if not state:
-            assert self.account is not None
-            passwords.delete_password(self.account)
+        self.bind_settings_model(app.app.settings.get_single_model("login", account))
 
 
 class HostnameGroup(GajimPreferencesGroup):
@@ -851,42 +529,7 @@ class HostnameGroup(GajimPreferencesGroup):
             self, key="hostname", account=account, title=_("Hostname")
         )
 
-        type_values = ["START TLS", "DIRECT TLS", "PLAIN"]
-
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Enable"),
-                SettingType.ACCOUNT_CONFIG,
-                "use_custom_host",
-            ),
-            Setting(
-                SettingKind.ENTRY,
-                _("Hostname"),
-                SettingType.ACCOUNT_CONFIG,
-                "custom_host",
-                bind="account::use_custom_host",
-            ),
-            Setting(
-                SettingKind.SPIN,
-                _("Port"),
-                SettingType.ACCOUNT_CONFIG,
-                "custom_port",
-                bind="account::use_custom_host",
-                props={"range_": SpinRange(0, 65535, 1, 0)},
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Type"),
-                SettingType.ACCOUNT_CONFIG,
-                "custom_type",
-                bind="account::use_custom_host",
-                props={"data": type_values},
-            ),
-        ]
-
-        for setting in settings:
-            self.add_setting(setting)
+        self.bind_settings_model(app.app.settings.get_single_model("hostname", account))
 
 
 class AccountGeneralPage(GajimPreferencePage):
@@ -1214,3 +857,21 @@ class AccountActiveSwitch(Adw.ActionRow, SignalManager, EventHelper):
             app.app.disable_account(account)
 
         return Gdk.EVENT_PROPAGATE
+
+
+register_rows(
+    {
+        "send-idle-time": SendIdleTime,
+        "send-os-info": SendOsInfo,
+        "publish-tune": PublishTune,
+        "send-chat-state-indicator": SendChatStateIndicators,
+        "send-group-chat-state-indicator": SendGroupChatStateIndicators,
+        "send-read-marker": SendReadMarker,
+        "sync-muc-blocks": SyncMucBlocks,
+        "backup-secret-key": BackupSecretKey,
+        "proxy": Proxy,
+        "sync-history": SyncHistory,
+        "save-password": SavePassword,
+        "change-password": ChangePassword,
+    }
+)

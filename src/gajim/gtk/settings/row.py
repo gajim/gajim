@@ -11,7 +11,6 @@ from typing import get_args
 
 import logging
 from collections.abc import Callable
-from dataclasses import dataclass
 from pathlib import Path
 
 from gi.repository import Adw
@@ -21,190 +20,85 @@ from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common.ged import EventHelper
+from gajim.common import types
+from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.settings.types import AppFloatSettings
+from gajim.common.util.av import AudioInputManager
 
-from gajim.gtk.const import Setting
+from gajim.gtk.const import CHATSTATE_SETTING_ENUM
+from gajim.gtk.const import CLOSE_ACTION_ENUM
+from gajim.gtk.const import CONNECTION_TYPE_ENUM
+from gajim.gtk.const import ENCRYPTION_SETTING_ENUM
+from gajim.gtk.const import FILE_PREVIEW_SIZE_ENUM
+from gajim.gtk.const import HISTORYMAXAGE_SETTING_ENUM
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
+from gajim.gtk.const import STYLE_ENUM
+from gajim.gtk.const import WINDOW_STARTUP_ENUM
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.preference.widgets import CopyButton
+from gajim.gtk.settings.model import SettingGObj
+from gajim.gtk.settings.model import SpinRange
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.window import open_window
-from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.settings")
 
 
-class SettingsDialog(GajimAppWindow):
-    def __init__(
-        self,
-        parent: Gtk.Window,
-        title: str,
-        flags: Gtk.DialogFlags,
-        settings: list[Setting],
-        account: str,
-    ) -> None:
-        GajimAppWindow.__init__(
-            self,
-            name="SettingsDialog",
-            title=title,
-            default_width=250,
-            transient_for=parent,
+def _get_workspaces() -> dict[str, str]:
+    workspaces: dict[str, str] = {"": _("Disabled")}
+    for workspace_id in app.settings.get_workspaces():
+        name = app.settings.get_workspace_setting(workspace_id, "name")
+        workspaces[workspace_id] = name
+    return workspaces
+
+
+def _get_proxies() -> dict[str, str]:
+    proxies = {"": _("System")}
+    proxies.update({proxy: proxy for proxy in app.settings.get_proxies()})
+    proxies["no-proxy"] = _("No Proxy")
+    return proxies
+
+
+def _get_theme_items() -> list[str]:
+    return ["default", *app.css_config.themes]
+
+
+def _create_av_combo_items() -> dict[str, str]:
+    audio_input_devices = AudioInputManager().get_devices()
+    items = enumerate(
+        sorted(
+            audio_input_devices.items(),
+            key=lambda x: "" if x[1].startswith("auto") else x[0].lower(),
         )
-
-        self.account = account
-        if flags == Gtk.DialogFlags.MODAL:
-            self.set_modal(True)
-
-        elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
-            self.set_destroy_with_parent(True)
-
-        self._nav = Adw.NavigationView()
-        self._group = GajimPreferencesGroup("main")
-        page = GajimPreferencePage(title, groups=[self._group])
-        self._nav.add(page)
-
-        for setting in settings:
-            self._group.add_setting(setting)
-
-        self.set_child(self._nav)
-        self.show()
-
-    def _cleanup(self) -> None:
-        del self._group
-
-    def get_setting(self, name: str):
-        return self._group.get_setting(name)
+    )
+    combo_items: dict[str, str] = {}
+    for _index, (name, value) in items:
+        combo_items[value] = name
+    return combo_items
 
 
-class GajimPreferencesGroup(Adw.PreferencesGroup, SignalManager, EventHelper):
-    __gtype_name__ = "GajimPreferencesGroup"
-
-    def __init__(
-        self,
-        key: str,
-        *,
-        account: str | None = None,
-        jid: str | None = None,
-        description: str = "",
-        title: str = "",
-        header_suffix: Gtk.Widget | None = None,
-    ) -> None:
-        EventHelper.__init__(self)
-        SignalManager.__init__(self)
-        Adw.PreferencesGroup.__init__(
-            self, description=description, title=title, header_suffix=header_suffix
-        )
-
-        self.key = key
-        self.account = account
-        self.jid = jid
-        self.named_settings: dict[str, GenericSetting] = {}
-
-        self.settings_type_map: dict[SettingKind, GenericSetting] = {
-            SettingKind.SWITCH: SwitchSetting,
-            SettingKind.SPIN: SpinSetting,
-            SettingKind.DIALOG: DialogSetting,
-            SettingKind.SUBPAGE: SubPageSetting,
-            SettingKind.ENTRY: EntrySetting,
-            SettingKind.COLOR: ColorSetting,
-            SettingKind.ACTION: ActionSetting,
-            SettingKind.FILECHOOSER: FileChooserSetting,
-            SettingKind.CALLBACK: CallbackSetting,
-            SettingKind.DROPDOWN: DropDownSetting,
-            SettingKind.GENERIC: GenericSetting,
-        }
-
-    def do_unroot(self) -> None:
-        self._disconnect_all()
-        self.unregister_events()
-        Adw.PreferencesGroup.do_unroot(self)
-        self.named_settings.clear()
-        app.check_finalize(self)
-
-    def add_setting(self, setting: Setting | Adw.ActionRow) -> None:
-        if isinstance(setting, Adw.ActionRow):
-            self.add(setting)
-            return
-
-        if setting.props is not None:
-            row = self.settings_type_map[setting.kind](
-                self.account, self.jid, *setting[1:-1], **setting.props
-            )
-        else:
-            row = self.settings_type_map[setting.kind](
-                self.account, self.jid, *setting[1:-1]
-            )
-
-        if setting.name is not None:
-            self.named_settings[setting.name] = row
-        self.add(row)
-        row.update_activatable()
-
-    def get_setting(self, name: str) -> GenericSetting:
-        return self.named_settings[name]
-
-    def add_copy_button(self) -> None:
-        button = CopyButton()
-        self._connect(button, "clicked", self._on_clipboard_button_clicked)
-        self.set_header_suffix(button)
-
-    def _on_clipboard_button_clicked(self, _widget: Gtk.Button) -> None:
-        app.window.get_clipboard().set(self._get_clipboard_text())
-
-    def _get_clipboard_text(self) -> str:
-        raise NotImplementedError
-
-
-class GajimPreferencePage(Adw.NavigationPage):
-    key: str = ""
-    icon_name: str = ""
-    label: str = ""
-
-    def __init__(
-        self,
-        title: str,
-        groups: list[Any],
-        tag_prefix: str = "",
-    ) -> None:
-        Adw.NavigationPage.__init__(self, tag=f"{tag_prefix}{self.key}", title=title)
-
-        self._pref_page = Adw.PreferencesPage()
-        toolbar = Adw.ToolbarView(content=self._pref_page)
-        toolbar.add_top_bar(Adw.HeaderBar())
-        self.set_child(toolbar)
-
-        self._groups: list[GajimPreferencesGroup] = []
-
-        for group in groups:
-            if not isinstance(group, GajimPreferencesGroup):
-                group = group()
-            self._groups.append(group)
-            self._pref_page.add(group)
-
-    def do_unroot(self) -> None:
-        Adw.NavigationPage.do_unroot(self)
-        app.check_finalize(self)
-
-    def add(self, group: GajimPreferencesGroup | Adw.PreferencesGroup) -> None:
-        if isinstance(group, GajimPreferencesGroup):
-            self._groups.append(group)
-        self._pref_page.add(group)
-
-    def get_group(self, key: str) -> GajimPreferencesGroup | None:
-        for group in self._groups:
-            if group.key == key:
-                return group
-
-    def set_content(self, widget: Gtk.Widget) -> None:
-        toolbar = cast(Adw.ToolbarView, self.get_child())
-        toolbar.set_content(widget)
+DropDownValues = {
+    "default_workspace": _get_workspaces,
+    "send_chatstate_default": CHATSTATE_SETTING_ENUM,
+    "gc_send_chatstate_default": CHATSTATE_SETTING_ENUM,
+    "encryption_default": ENCRYPTION_SETTING_ENUM,
+    "chat_history_max_age": HISTORYMAXAGE_SETTING_ENUM,
+    "proxy": _get_proxies,
+    "custom_type": CONNECTION_TYPE_ENUM,
+    "show_main_window_on_startup": WINDOW_STARTUP_ENUM,
+    "action_on_close": CLOSE_ACTION_ENUM,
+    "gc_sync_threshold_public_default": THRESHOLD_OPTIONS,
+    "preview_max_file_size": FILE_PREVIEW_SIZE_ENUM,
+    "roster_theme": _get_theme_items,
+    "dark_theme": STYLE_ENUM,
+    "audio_input_device": _create_av_combo_items,
+    "global_proxy": _get_proxies,
+}
 
 
 class GenericSetting(Adw.ActionRow, SignalManager):
@@ -242,6 +136,10 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         self.enabled_func = enabled_func
         self.setting_value = self.get_value()
 
+        self._client: types.Client | None = None
+        if self.account and app.account_is_connected(self.account):
+            self._client = app.get_client(self.account)
+
         self.setting_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
 
         self._locked_icon = Gtk.Image.new_from_icon_name(
@@ -258,7 +156,30 @@ class GenericSetting(Adw.ActionRow, SignalManager):
 
         self._add_action_button(kwargs)
 
+        self.__post_init__()
+
         self._connect(self, "activated", self._on_activated)
+
+    def __post_init__(self) -> None:
+        return
+
+    @classmethod
+    def from_settingobj(cls, account: str, jid: JID, obj: SettingGObj) -> Any:
+        return cls(
+            account,
+            jid,
+            obj.props.label,
+            obj.props.type,
+            obj.props.value,
+            obj.props.name,
+            obj.props.callback,
+            obj.props.data,
+            obj.props.desc,
+            obj.props.bind,
+            obj.props.inverted,
+            obj.props.enabled_func,
+            **obj.props_,
+        )
 
     def do_unroot(self) -> None:
         Adw.ActionRow.do_unroot(self)
@@ -552,14 +473,6 @@ class ColorSetting(GenericSetting):
         app.css_config.refresh()
 
 
-@dataclass
-class SpinRange:
-    lower: float
-    upper: float
-    step: float
-    digits: int = 0
-
-
 class SpinSetting(GenericSetting):
     def __init__(
         self, *args: Any, range_: tuple[float, float, float] | SpinRange, **kwargs: Any
@@ -682,13 +595,18 @@ class ActionSetting(GenericSetting):
 
 class DropDownSetting(GenericSetting):
     def __init__(
-        self, *args: Any, data: list[str] | dict[str, Any], **kwargs: Any
+        self, *args: Any, data: list[str] | dict[str, Any] | None = None, **kwargs: Any
     ) -> None:
         GenericSetting.__init__(self, *args, **kwargs)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         box.set_halign(Gtk.Align.END)
         box.set_hexpand(True)
+
+        if data is None:
+            data = DropDownValues[self.value]
+            if callable(data):
+                data = data()
 
         self._dropdown: GajimDropDown[Any] = GajimDropDown(data=data, fixed_width=15)
         self._dropdown.select_key(self.setting_value)
@@ -767,3 +685,26 @@ class SubPageSetting(GenericSetting):
             return
 
         nav.activate_action("navigation.push", GLib.Variant("s", self._subpage))
+
+
+_registered_row_map: dict[str | int, Any] = {
+    SettingKind.SWITCH: SwitchSetting,
+    SettingKind.SPIN: SpinSetting,
+    SettingKind.DIALOG: DialogSetting,
+    SettingKind.SUBPAGE: SubPageSetting,
+    SettingKind.ENTRY: EntrySetting,
+    SettingKind.COLOR: ColorSetting,
+    SettingKind.ACTION: ActionSetting,
+    SettingKind.FILECHOOSER: FileChooserSetting,
+    SettingKind.CALLBACK: CallbackSetting,
+    SettingKind.DROPDOWN: DropDownSetting,
+    SettingKind.GENERIC: GenericSetting,
+}
+
+
+def register_rows(mapping: dict[str, Any]) -> None:
+    _registered_row_map.update(mapping)
+
+
+def get_registered_row(name: SettingKind | str) -> Any:
+    return _registered_row_map[name]

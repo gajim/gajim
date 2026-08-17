@@ -49,6 +49,7 @@ from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
 from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
+from gajim.gtk.settings.model import SettingModels
 from gajim.gtk.shortcut_manager import ShortcutManager
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import open_file
@@ -234,10 +235,13 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         self.systray = TrayIcon()
 
+        self.settings = SettingModels()
+
         self._add_app_actions()
         accounts = app.settings.get_accounts()
         for account in accounts:
             self.add_account_actions(account)
+            self.settings.add_account(account)
 
         self._active_accounts_count = len(app.settings.get_active_accounts())
 

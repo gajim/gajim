@@ -16,7 +16,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.settings import GajimPreferencePage
+from gajim.gtk.settings.page import GajimPreferencePage
 from gajim.gtk.util.classes import SignalManager
 
 

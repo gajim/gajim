@@ -16,8 +16,8 @@ from gajim.common.i18n import _
 
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
-from gajim.gtk.settings import GajimPreferencePage
-from gajim.gtk.settings import GajimPreferencesGroup
+from gajim.gtk.settings.page import GajimPreferencePage
+from gajim.gtk.settings.page import GajimPreferencesGroup
 from gajim.gtk.shortcut_manager import GajimShortcut
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string

@@ -32,7 +32,7 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.dropdown import GajimDropDown
-from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.settings.dialog import SettingsDialog
 from gajim.gtk.util.misc import at_the_end
 from gajim.gtk.util.misc import scroll_to
 from gajim.gtk.util.styling import get_source_view_style_scheme

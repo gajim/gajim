@@ -30,9 +30,9 @@ from gajim.common.i18n import _
 from gajim.gtk.const import SettingType
 from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.preference.widgets import PlaceholderBox
-from gajim.gtk.settings import GajimPreferencePage
-from gajim.gtk.settings import GajimPreferencesGroup
-from gajim.gtk.settings import SubPageSetting
+from gajim.gtk.settings.page import GajimPreferencePage
+from gajim.gtk.settings.page import GajimPreferencesGroup
+from gajim.gtk.settings.row import SubPageSetting
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import open_uri
