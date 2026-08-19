@@ -480,7 +480,8 @@ class OMEMOStorage(Store):
         )
         i_results = self._con.execute(query, recipient_ids).fetchall()
 
-        query = """SELECT device_id,
+        query = """SELECT recipient_id,
+                          device_id,
                           record as "record [session_record]",
                           active
                    FROM sessions WHERE recipient_id IN ({})""".format(
@@ -488,29 +489,28 @@ class OMEMOStorage(Store):
         )
         s_results = self._con.execute(query, recipient_ids).fetchall()
 
-        sessions: dict[IdentityKey, Any] = {}
+        sessions: dict[tuple[str, IdentityKey], list[Any]] = {}
         for s_result in s_results:
             if s_result.record.is_fresh():
                 continue
             ik = s_result.record.get_session_state().get_remote_identity_key()
-            sessions[ik] = s_result
+            key = (s_result.recipient_id, ik)
+            sessions.setdefault(key, []).append(s_result)
 
         identity_infos: list[IdentityInfo] = []
         for i_result in i_results:
-            session = sessions.get(i_result.public_key)
-            if session is None:
-                continue
-
-            info = IdentityInfo(
-                active=session.active,
-                address=i_result.recipient_id,
-                device_id=session.device_id,
-                public_key=i_result.public_key,
-                label="",
-                last_seen=i_result.timestamp,
-                trust=OMEMOTrust(i_result.trust),
-            )
-            identity_infos.append(info)
+            key = (i_result.recipient_id, i_result.public_key)
+            for session in sessions.get(key, []):
+                info = IdentityInfo(
+                    active=session.active,
+                    address=i_result.recipient_id,
+                    device_id=session.device_id,
+                    public_key=i_result.public_key,
+                    label="",
+                    last_seen=i_result.timestamp,
+                    trust=OMEMOTrust(i_result.trust),
+                )
+                identity_infos.append(info)
 
         return identity_infos
 

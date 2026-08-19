@@ -15,6 +15,7 @@ from typing import Literal
 import datetime as dt
 from collections.abc import Generator
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 
 import nbxmpp
@@ -26,12 +27,16 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.structs import EncryptionData
+from nbxmpp.structs import EncryptionErrorData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import OMEMOMessage
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.task import Task
 from omemo_dr.const import OMEMOTrust
+from omemo_dr.exceptions import BrokenSession
 from omemo_dr.exceptions import DecryptionFailed
 from omemo_dr.exceptions import DuplicateMessage
+from omemo_dr.exceptions import IdentityKeyChanged
 from omemo_dr.exceptions import KeyExchangeMessage
 from omemo_dr.exceptions import MessageNotForDevice
 from omemo_dr.exceptions import SelfMessage
@@ -91,6 +96,7 @@ ALLOWED_TAGS = [
 
 DeviceIdT = int
 IdentityT = tuple[DeviceIdT, IdentityKey]
+MAX_BROKEN_SESSION_HINTS = 1024
 
 
 @dataclass
@@ -118,6 +124,22 @@ class OMEMOPublicKeyData(PublicKeyData):
     def pretty_fingerprint(self, wrap: bool = True) -> str:
         fingerprint = self.public_key.get_fingerprint()
         return format_fingerprint(fingerprint, "OMEMO", wrap=wrap)
+
+
+class SessionRefreshStatus(Enum):
+    SUCCESS = "success"
+    BUNDLE_UNAVAILABLE = "bundle-unavailable"
+    IDENTITY_CHANGED = "identity-changed"
+    BUILD_FAILED = "build-failed"
+    TRANSPORT_FAILED = "transport-failed"
+
+
+@dataclass(frozen=True)
+class SessionRefreshResult:
+    status: SessionRefreshStatus
+    address: str
+    device_id: int
+    fingerprint: str | None = None
 
 
 class OMEMO(BaseModule, CryptoModule):
@@ -173,9 +195,12 @@ class OMEMO(BaseModule, CryptoModule):
 
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
+        self._broken_session_hints: set[tuple[str, int]] = set()
+        self._session_refresh_tasks: dict[tuple[str, int], Task] = {}
 
     @event_filter(["account"])
     def _on_signed_in(self, _event: SignedIn) -> None:
+        self._broken_session_hints.clear()
         self._log.info("Publish our bundle after sign in")
         self.set_bundle()
         self.request_devicelist()
@@ -283,6 +308,40 @@ class OMEMO(BaseModule, CryptoModule):
             public_key_data.device_id,
             delete_identity=True,
         )
+
+    def refresh_session(
+        self,
+        address: str,
+        device_id: int,
+        *,
+        expected_fingerprint: str | None = None,
+        destination: str | None = None,
+        message_type: Literal["chat", "groupchat"] = "chat",
+    ) -> Task:
+        key = (address, device_id)
+        task = self._session_refresh_tasks.get(key)
+        if task is not None:
+            return task
+
+        self._log.info("Refresh session for: %s (%s)", address, device_id)
+        task = cast(
+            Task,
+            cast(Any, self._refresh_session)(
+                address,
+                device_id,
+                expected_fingerprint=expected_fingerprint,
+                destination=destination,
+                message_type=message_type,
+                user_data=key,
+            ),
+        )
+        task.add_done_callback(self._on_session_refresh_finished)
+        self._session_refresh_tasks[key] = task
+        return task
+
+    def _on_session_refresh_finished(self, task: Task) -> None:
+        key = cast(tuple[str, int], task.get_user_data())
+        self._session_refresh_tasks.pop(key, None)
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)
@@ -420,17 +479,25 @@ class OMEMO(BaseModule, CryptoModule):
         return True
 
     def _send_key_transport_message(
-        self, typ: Literal["chat", "groupchat"], jid: str, devices: list[int]
-    ) -> None:
-
-        omemo_message = self.backend.encrypt_key_transport(jid, devices)
+        self,
+        typ: Literal["chat", "groupchat"],
+        jid: str,
+        devices: list[int],
+        *,
+        address: str | None = None,
+    ) -> bool:
+        session_owner = address or jid
+        omemo_message = self.backend.encrypt_key_transport(session_owner, devices)
         if omemo_message is None:
-            self._log.warning("Key transport message to %s (%s) failed", jid, devices)
-            return
+            self._log.warning(
+                "Key transport message to %s (%s) failed", session_owner, devices
+            )
+            return False
 
         transport_message = get_key_transport_message(typ, jid, omemo_message)  # type: ignore
         self._log.info("Send key transport message to %s (%s)", jid, devices)
         self._client.send_stanza(transport_message)
+        return True
 
     def _message_received(
         self,
@@ -448,7 +515,7 @@ class OMEMO(BaseModule, CryptoModule):
         elif properties.is_mam_message:
             from_jid = self._process_mam_message(properties)
 
-        elif properties.from_muc:
+        elif properties.from_muc or properties.is_muc_pm:
             from_jid = self._process_muc_message(properties)
 
         else:
@@ -466,6 +533,7 @@ class OMEMO(BaseModule, CryptoModule):
                 properties.omemo,  # type: ignore
                 from_jid,
             )
+            self._broken_session_hints.discard((from_jid, properties.omemo.sid))
         except (KeyExchangeMessage, DuplicateMessage):
             raise NodeProcessed
 
@@ -480,7 +548,29 @@ class OMEMO(BaseModule, CryptoModule):
             del self._muc_temp_store[properties.omemo.payload]
             return
 
-        except DecryptionFailed:
+        except BrokenSession as error:
+            address = error.address
+            device_id = error.device_id
+            assert address is not None
+            assert device_id is not None
+            self._set_decryption_failed_encryption(
+                properties,
+                address,
+                device_id,
+                reason="missing-session",
+            )
+            self._show_broken_session_hint(properties, address, device_id)
+            return
+
+        except DecryptionFailed as error:
+            self._set_decryption_failed_encryption(
+                properties,
+                error.address or from_jid,
+                error.device_id or properties.omemo.sid,
+                reason="decryption-failed",
+                fingerprint=error.fingerprint,
+                identity_authenticated=error.identity_authenticated,
+            )
             return
 
         except MessageNotForDevice:
@@ -495,11 +585,94 @@ class OMEMO(BaseModule, CryptoModule):
             # successfully decrypt the message
             trust = OMEMOTrust.UNTRUSTED
             fingerprint = None
+            properties.encryption_error = EncryptionErrorData(
+                protocol="OMEMO",
+                reason="not-for-device",
+                sender_jid=JID.from_string(from_jid),
+                device_id=properties.omemo.sid,
+            )
 
         prepare_stanza(stanza, plaintext)
         self._debug_print_stanza(stanza)
         properties.encrypted = EncryptionData(
             protocol="OMEMO", key=fingerprint or "Unknown", trust=GajimTrust[trust.name]
+        )
+
+    def _set_decryption_failed_encryption(
+        self,
+        properties: MessageProperties,
+        address: str,
+        device_id: int,
+        *,
+        reason: str,
+        fingerprint: str | None = None,
+        identity_authenticated: bool = False,
+    ) -> None:
+        assert isinstance(properties.omemo, OMEMOMessage)
+        if properties.omemo.payload is None:
+            return
+
+        if fingerprint is None:
+            try:
+                identity_info = next(
+                    (
+                        info
+                        for info in self.backend.get_identity_infos(address)
+                        if info.device_id == device_id
+                    ),
+                    None,
+                )
+                if identity_info is not None:
+                    fingerprint = identity_info.public_key.get_fingerprint()
+            except Exception as error:
+                self._log.warning(
+                    "Could not determine fingerprint for %s (%s): %s",
+                    address,
+                    device_id,
+                    error,
+                )
+
+        properties.encrypted = EncryptionData(
+            protocol="OMEMO", key=fingerprint or "Unknown", trust=GajimTrust.UNTRUSTED
+        )
+        properties.encryption_error = EncryptionErrorData(
+            protocol="OMEMO",
+            reason=reason,
+            sender_jid=JID.from_string(address),
+            device_id=device_id,
+            fingerprint=fingerprint,
+            identity_authenticated=identity_authenticated,
+        )
+
+    def _show_broken_session_hint(
+        self, properties: MessageProperties, address: str, device_id: int
+    ) -> None:
+        assert isinstance(properties.omemo, OMEMOMessage)
+        if properties.is_mam_message or properties.omemo.payload is None:
+            return
+
+        hint = (address, device_id)
+        if hint in self._broken_session_hints:
+            return
+
+        if properties.remote_jid is None:
+            return
+
+        if len(self._broken_session_hints) >= MAX_BROKEN_SESSION_HINTS:
+            self._broken_session_hints.pop()
+        self._broken_session_hints.add(hint)
+        self._log.info("Broken session detected: %s (%s)", address, device_id)
+        app.ged.raise_event(
+            EncryptionInfo(
+                account=self._account,
+                jid=properties.remote_jid,
+                type=EncryptionInfoMsg.BROKEN_SESSION,
+                message=EncryptionInfoMsg.BROKEN_SESSION.value.format(
+                    device_id=device_id
+                ),
+                repair_jid=JID.from_string(address),
+                device_id=device_id,
+            )
         )
 
     def _process_muc_message(self, properties: MessageProperties) -> str | None:
@@ -517,7 +690,7 @@ class OMEMO(BaseModule, CryptoModule):
         assert properties.mam is not None
         assert properties.from_ is not None
         self._log.info("Message received, archive: %s", properties.mam.archive)
-        if properties.from_muc:
+        if properties.from_muc or properties.is_muc_pm:
             self._log.info("MUC MAM Message received")
             if properties.muc_user is None or properties.muc_user.jid is None:
                 self._log.warning(
@@ -569,6 +742,82 @@ class OMEMO(BaseModule, CryptoModule):
     @cache_with_ttl(ttl=7200)
     def _request_bundle_ttl(self, jid: str, device_id: int) -> None:
         self.request_bundle(jid, device_id)
+
+    @as_task
+    def _refresh_session(
+        self,
+        address: str,
+        device_id: int,
+        *,
+        expected_fingerprint: str | None,
+        destination: str | None,
+        message_type: Literal["chat", "groupchat"],
+    ) -> Generator[Any, Any]:
+        _task = yield  # noqa: F841
+
+        bundle = yield self._nbxmpp("OMEMO").request_bundle(address, device_id)
+        if is_error(bundle) or bundle is None:
+            self._log.info(
+                "Session refresh bundle request failed: %s %s: %s",
+                address,
+                device_id,
+                bundle,
+            )
+            yield SessionRefreshResult(
+                SessionRefreshStatus.BUNDLE_UNAVAILABLE,
+                address,
+                device_id,
+            )
+            return
+
+        try:
+            build_result = self.backend.build_session(
+                address,
+                bundle,
+                expected_device_id=device_id,
+                expected_fingerprint=expected_fingerprint,
+            )
+        except IdentityKeyChanged as error:
+            self._log.warning(
+                "Session refresh identity changed: %s %s", address, device_id
+            )
+            yield SessionRefreshResult(
+                SessionRefreshStatus.IDENTITY_CHANGED,
+                address,
+                device_id,
+                fingerprint=error.received,
+            )
+            return
+        except Exception as error:
+            self._log.error("Session refresh build failed: %s", error)
+            yield SessionRefreshResult(
+                SessionRefreshStatus.BUILD_FAILED,
+                address,
+                device_id,
+            )
+            return
+
+        sent = self._send_key_transport_message(
+            message_type,
+            destination or address,
+            [device_id],
+            address=address,
+        )
+        if not sent:
+            yield SessionRefreshResult(
+                SessionRefreshStatus.TRANSPORT_FAILED,
+                address,
+                device_id,
+                fingerprint=build_result.fingerprint,
+            )
+            return
+
+        yield SessionRefreshResult(
+            SessionRefreshStatus.SUCCESS,
+            address,
+            device_id,
+            fingerprint=build_result.fingerprint,
+        )
 
     @as_task
     def request_bundle(self, jid: str, device_id: int) -> Generator[Any, Any]:
@@ -630,8 +879,11 @@ class OMEMO(BaseModule, CryptoModule):
         self._log.info("Request devicelist for %s", jid)
 
         devicelist = yield self._nbxmpp("OMEMO").request_devicelist(jid=jid)
-        if is_error(devicelist) or devicelist is None:
+        if is_error(devicelist):
             self._log.info("Devicelist request failed: %s %s", jid, devicelist)
+            return
+
+        if devicelist is None:
             devicelist = []
 
         self._process_devicelist_update(jid, cast(list[int], devicelist))
