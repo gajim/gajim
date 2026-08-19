@@ -898,6 +898,8 @@ class EncryptionInfo(ApplicationEvent):
     jid: JID
     type: EncryptionInfoMsg
     message: str
+    repair_jid: JID | None = None
+    device_id: int | None = None
 
 
 @dataclass

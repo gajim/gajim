@@ -145,6 +145,18 @@
               </object>
             </child>
             <child>
+              <object class="GtkLabel" id="refresh_session_hint">
+                <property name="visible">0</property>
+                <property name="label" translatable="yes">Refresh encryption if encrypted messages to or from a device stop working, for example after restoring a backup.</property>
+                <property name="wrap">1</property>
+                <property name="max-width-chars">42</property>
+                <property name="xalign">0</property>
+                <style>
+                  <class name="dimmed"/>
+                </style>
+              </object>
+            </child>
+            <child>
               <object class="GtkBox" id="list_heading_box">
                 <property name="spacing">12</property>
                 <child>

@@ -15,6 +15,7 @@ import logging
 
 from gi.repository import Adw
 from gi.repository import Gtk
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
@@ -29,10 +30,14 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.omemo import OMEMO
+from gajim.common.modules.omemo import OMEMOPublicKeyData
+from gajim.common.modules.omemo import SessionRefreshResult
+from gajim.common.modules.omemo import SessionRefreshStatus
 from gajim.common.modules.openpgp import OpenPGP
 from gajim.common.modules.util import PublicKeyData
 
 from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
@@ -125,6 +130,7 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
     def _update(self) -> None:
         client = app.get_client(self._account)
         self._crypto_module = client.get_module(self._encryption)
+        self._ui.refresh_session_hint.set_visible(self._encryption == "OMEMO")
 
         if self._contact is None:
             self._contact = client.get_module("Contacts").get_contact(
@@ -303,6 +309,11 @@ class DeviceRow(Adw.ActionRow, SignalManager):
             last_seen_data = _("Never")
         subtitle_entries.append(_("Last seen: %s") % last_seen_data)
 
+        if isinstance(self._public_key_data, OMEMOPublicKeyData):
+            subtitle_entries.insert(
+                0, _("Device: %s") % self._public_key_data.device_id
+            )
+
         if not self._public_key_data.active:
             subtitle_entries.append(_("(inactive)"))
 
@@ -314,6 +325,20 @@ class DeviceRow(Adw.ActionRow, SignalManager):
 
         self._trust_button = TrustButton(self)
         self.add_suffix(self._trust_button)
+
+        self._refresh_button: Gtk.Button | None = None
+        if isinstance(self._crypto_module, OMEMO):
+            self._refresh_button = Gtk.Button(
+                icon_name="lucide-refresh-cw-symbolic",
+                tooltip_text=_("Refresh Encryption"),
+                valign=Gtk.Align.CENTER,
+                halign=Gtk.Align.END,
+                sensitive=self._public_key_data.active,
+            )
+            self._connect(
+                self._refresh_button, "clicked", self._on_refresh_session_clicked
+            )
+            self.add_suffix(self._refresh_button)
 
         self._copy_button = Gtk.Button(
             icon_name="lucide-copy-symbolic",
@@ -360,6 +385,89 @@ class DeviceRow(Adw.ActionRow, SignalManager):
     @property
     def address(self) -> str:
         return str(self._public_key_data.address)
+
+    def _on_refresh_session_clicked(self, _button: Gtk.Button) -> None:
+        def _on_response() -> None:
+            crypto_module = cast(OMEMO, self._crypto_module)
+            public_key_data = cast(OMEMOPublicKeyData, self._public_key_data)
+            destination = None
+            message_type: Literal["chat", "groupchat"] = "chat"
+            if self._contact.is_groupchat:
+                destination = str(self._contact.jid)
+                message_type = "groupchat"
+
+            assert self._refresh_button is not None
+            self._refresh_button.set_sensitive(False)
+            self._refresh_button.set_tooltip_text(_("Refreshing Encryption…"))
+            task = crypto_module.refresh_session(
+                str(public_key_data.address),
+                public_key_data.device_id,
+                expected_fingerprint=public_key_data.fingerprint,
+                destination=destination,
+                message_type=message_type,
+            )
+            task.add_done_callback(self._on_refresh_session_finished)
+
+        ConfirmationAlertDialog(
+            _("Refresh Encryption?"),
+            _(
+                "This sets up encrypted messaging with this device again. This change "
+                "only applies to messages sent or received after refreshing. Messages "
+                "that could not be read before stay unreadable. Existing trust is "
+                "preserved if the device fingerprint is unchanged."
+            ),
+            confirm_label=_("_Refresh Encryption"),
+            callback=_on_response,
+        )
+
+    def _on_refresh_session_finished(self, task: Task) -> None:
+        assert self._refresh_button is not None
+        self._refresh_button.set_sensitive(self._public_key_data.active)
+        self._refresh_button.set_tooltip_text(_("Refresh Encryption"))
+
+        try:
+            result = cast(SessionRefreshResult, task.finish())
+        except Exception as error:
+            log.warning("Encryption refresh failed: %s", error)
+            result = SessionRefreshResult(
+                SessionRefreshStatus.BUILD_FAILED,
+                str(self._public_key_data.address),
+                cast(OMEMOPublicKeyData, self._public_key_data).device_id,
+            )
+
+        messages = {
+            SessionRefreshStatus.SUCCESS: (
+                _("Encryption Refresh Sent"),
+                _(
+                    "A new encryption handshake was sent. Future messages will "
+                    "confirm whether encryption works again."
+                ),
+            ),
+            SessionRefreshStatus.BUNDLE_UNAVAILABLE: (
+                _("Encryption Refresh Failed"),
+                _("The device’s current encryption information is unavailable."),
+            ),
+            SessionRefreshStatus.IDENTITY_CHANGED: (
+                _("Encryption Refresh Cancelled"),
+                _(
+                    "The device published a different fingerprint. Review its "
+                    "encryption settings before continuing."
+                ),
+            ),
+            SessionRefreshStatus.BUILD_FAILED: (
+                _("Encryption Refresh Failed"),
+                _("Gajim could not create new encryption state for this device."),
+            ),
+            SessionRefreshStatus.TRANSPORT_FAILED: (
+                _("Encryption Refresh Incomplete"),
+                _(
+                    "New local encryption state was created, but the handshake "
+                    "could not be sent."
+                ),
+            ),
+        }
+        heading, body = messages[result.status]
+        InformationAlertDialog(heading, body)
 
     def _on_copy_button_clicked(self, _button: Gtk.Button) -> None:
         app.window.get_clipboard().set(

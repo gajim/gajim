@@ -17,6 +17,7 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import EME_MESSAGES
 from gajim.common.const import RETRACTION_FALLBACK
 from gajim.common.const import Trust
 from gajim.common.events import MessageAcknowledged
@@ -233,6 +234,36 @@ class Message(BaseModule):
                 protocol=protocol, key="Unknown", trust=Trust.UNTRUSTED
             )
 
+        encryption_error = properties.encryption_error
+        if encryption_error is not None and encryption_data is None:
+            encryption_data = mod.Encryption(
+                protocol=encryption_error.protocol,
+                key=encryption_error.fingerprint or "Unknown",
+                trust=Trust.UNTRUSTED,
+            )
+
+        if encryption_error is not None and encryption_error.protocol == "OMEMO":
+            message_text = EME_MESSAGES["fallback"] % "OMEMO"
+        elif (
+            properties.eme is not None
+            and stanza.getTag("encrypted", namespace=Namespace.OMEMO_TEMP) is not None
+        ):
+            message_text = get_eme_message(properties.eme)
+
+        encryption_sender_jid = None
+        encryption_sender_resource = None
+        if encryption_error is not None:
+            encryption_sender_jid = encryption_error.sender_jid
+            if encryption_sender_jid is None and not (
+                properties.from_muc or properties.is_muc_pm
+            ):
+                if properties.from_ is not None:
+                    encryption_sender_jid = properties.from_.new_as_bare()
+
+            if not (properties.from_muc or properties.is_muc_pm):
+                if properties.from_ is not None:
+                    encryption_sender_resource = properties.from_.resource
+
         if not message_text:
             self._log.debug("Received message without text")
             return
@@ -262,6 +293,19 @@ class Message(BaseModule):
             user_delay_ts=user_delay_ts,
             correction_id=correction_id,
             encryption_=encryption_data,
+            encryption_error_condition=(
+                encryption_error.reason if encryption_error is not None else None
+            ),
+            encryption_device_id=(
+                encryption_error.device_id if encryption_error is not None else None
+            ),
+            encryption_sender_jid=encryption_sender_jid,
+            encryption_sender_resource=encryption_sender_resource,
+            encryption_identity_authenticated=(
+                encryption_error.identity_authenticated
+                if encryption_error is not None
+                else None
+            ),
             occupant_=occupant,
             oob=oob_data,
             security_label_=securitylabel_data,

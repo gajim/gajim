@@ -251,7 +251,12 @@ class MessageRow(BaseRow):
             self._original_message.get_reactions()
         )
 
-        encryption_data = self._get_encryption_data(message.encryption)
+        encryption_data = self._get_encryption_data(
+            message.encryption,
+            resource=message.encryption_sender_resource,
+            device_id=message.encryption_device_id,
+            identity_authenticated=message.encryption_identity_authenticated,
+        )
         if encryption_data is not None:
             self._message_icons.set_encrytion_icon_data(*encryption_data)
             self._message_icons.set_encryption_icon_visible(True)
@@ -422,6 +427,10 @@ class MessageRow(BaseRow):
     def _get_encryption_data(
         self,
         encryption_data: mod.Encryption | None,
+        *,
+        resource: str | None = None,
+        device_id: int | None = None,
+        identity_authenticated: bool | None = None,
     ) -> tuple[str, str, str] | None:
         contact_encryption = self._contact.settings.get("encryption")
         if encryption_data is None:
@@ -435,7 +444,16 @@ class MessageRow(BaseRow):
             tooltip = _("Encrypted (%s)") % (encryption_data.protocol)
             icon, trust_tooltip, color = TRUST_SYMBOL_DATA[Trust(encryption_data.trust)]
             tooltip = f"{tooltip}\n{trust_tooltip}"
+            if resource is not None:
+                resource = GLib.markup_escape_text(resource)
+                tooltip = f"{tooltip}\n{_('Resource: %s') % resource}"
+            if device_id is not None:
+                tooltip = f"{tooltip}\n{_('Device: %s') % device_id}"
             if encryption_data.key != "Unknown":
+                if identity_authenticated:
+                    tooltip = f"{tooltip}\n{_('Sender fingerprint:')}"
+                elif device_id is not None:
+                    tooltip = f"{tooltip}\n{_('Stored fingerprint:')}"
                 fingerprint = format_fingerprint(
                     encryption_data.key, encryption_data.protocol, wrap=True
                 )

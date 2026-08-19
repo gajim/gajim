@@ -53,7 +53,11 @@ class EncryptionInfoMsg(Enum):
     UNDECIDED_FINGERPRINTS = _(
         "There are devices for which you have not made a trust decision yet."
     )
-    SESSION_BUILD = _("Successfully built new session with device {device_id}.")
+    BROKEN_SESSION = _(
+        "Encryption state for device {device_id} is missing. "
+        "Refresh encryption to set it up again for future messages."
+    )
+    SESSION_BUILD = _("Sent a new encryption handshake to device {device_id}.")
 
 
 class Entity(NamedTuple):

@@ -200,6 +200,7 @@ class CryptoTrustManagerBuilder(Builder):
     qr_menu_button: Gtk.MenuButton
     manage_trust_button: Gtk.Button
     list_heading: Gtk.Label
+    refresh_session_hint: Gtk.Label
     list_heading_box: Gtk.Box
     show_inactive_switch: Gtk.Switch
     remove_public_keys_button: Gtk.Button
