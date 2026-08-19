@@ -76,7 +76,47 @@ class TestMigration(unittest.TestCase):
 
         version = archive.get_user_version()
         self.assertEqual(version, CURRENT_USER_VERSION)
+        columns = {
+            column["name"]
+            for column in sa.inspect(archive.get_engine()).get_columns("message")
+        }
+        self.assertTrue(
+            {
+                "encryption_error_condition",
+                "encryption_device_id",
+                "encryption_sender_jid",
+                "encryption_sender_resource",
+                "encryption_identity_authenticated",
+            }.issubset(columns)
+        )
 
+        archive.shutdown()
+
+    def test_v21_database_runs_decryption_failure_migration(self) -> None:
+        dbpath = Path("test.db")
+        engine = sa.create_engine(f"sqlite:///{dbpath}", echo=False)
+        with engine.begin() as connection:
+            connection.execute(sa.text("CREATE TABLE message (pk INTEGER PRIMARY KEY)"))
+            connection.execute(sa.text("PRAGMA user_version=21"))
+        engine.dispose()
+
+        archive = MessageArchiveStorage(path=dbpath)
+        migration.run(archive, 21)
+
+        self.assertEqual(archive.get_user_version(), CURRENT_USER_VERSION)
+        columns = {
+            column["name"]
+            for column in sa.inspect(archive.get_engine()).get_columns("message")
+        }
+        self.assertTrue(
+            {
+                "encryption_error_condition",
+                "encryption_device_id",
+                "encryption_sender_jid",
+                "encryption_sender_resource",
+                "encryption_identity_authenticated",
+            }.issubset(columns)
+        )
         archive.shutdown()
 
 

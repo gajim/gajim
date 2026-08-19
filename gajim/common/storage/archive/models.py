@@ -760,6 +760,11 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     fk_encryption_pk: Mapped[int | None] = mapped_column(
         ForeignKey("encryption.pk"), default=None, init=False
     )
+    encryption_error_condition: Mapped[str | None] = mapped_column(default=None)
+    encryption_device_id: Mapped[int | None] = mapped_column(default=None)
+    encryption_sender_jid: Mapped[JID | None] = mapped_column(JIDType, default=None)
+    encryption_sender_resource: Mapped[str | None] = mapped_column(default=None)
+    encryption_identity_authenticated: Mapped[bool | None] = mapped_column(default=None)
 
     security_label_: SecurityLabel | None = dataclasses.field(repr=False, default=None)
     security_label: Mapped[SecurityLabel | None] = relationship(

@@ -105,6 +105,38 @@ class EncryptionTest(unittest.TestCase):
             res = s.scalar(select(Encryption).where(Encryption.pk == pk1))
         assert res is not None
 
+    def test_decryption_failure_metadata_is_per_message(self):
+        message = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.fromtimestamp(0, UTC),
+            state=MessageState.ACKNOWLEDGED,
+            resource="conversation-resource",
+            text="Could not decrypt",
+            id="failure",
+            stanza_id=get_uuid(),
+            encryption_=Encryption(protocol="OMEMO", key="stored-key", trust=0),
+            encryption_error_condition="missing-session",
+            encryption_device_id=23,
+            encryption_sender_jid=JID.from_string("sender@example.test"),
+            encryption_sender_resource="sender-resource",
+            encryption_identity_authenticated=False,
+        )
+
+        pk = self._archive.insert_object(message)
+        stored = self._archive.get_message_with_pk(pk)
+
+        assert stored is not None
+        self.assertEqual(stored.encryption_error_condition, "missing-session")
+        self.assertEqual(stored.encryption_device_id, 23)
+        self.assertEqual(
+            stored.encryption_sender_jid, JID.from_string("sender@example.test")
+        )
+        self.assertEqual(stored.encryption_sender_resource, "sender-resource")
+        self.assertFalse(stored.encryption_identity_authenticated)
+
 
 if __name__ == "__main__":
     unittest.main()
