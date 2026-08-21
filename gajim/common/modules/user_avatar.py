@@ -78,10 +78,7 @@ class UserAvatar(BaseModule):
             self._log.info(
                 "Avatar found in cache, update: %s %s", jid, metadata.default
             )
-            app.storage.archive.set_contact_value(
-                self._account, contact.jid, "avatar_sha", metadata.default
-            )
-            contact.update_avatar(metadata.default)
+            self._set_avatar(contact, metadata.default)
             return
 
         # There are following cases this code is reached:
@@ -122,8 +119,20 @@ class UserAvatar(BaseModule):
 
         assert isinstance(avatar, AvatarData)
         self._log.info("Received Avatar: %s %s", contact.jid, avatar.sha)
-        app.app.avatar_storage.save_avatar(avatar.data)
+        if app.app.avatar_storage.save_avatar(avatar.data) is None:
+            return
+
+        self._set_avatar(contact, avatar.sha)
+
+    def _set_avatar(self, contact: types.ChatContactT, avatar_sha: str) -> None:
+        """Store an avatar and tell everything which shows it."""
         app.storage.archive.set_contact_value(
-            self._account, contact.jid, "avatar_sha", avatar.sha
+            self._account, contact.jid, "avatar_sha", avatar_sha
         )
-        contact.update_avatar(avatar.sha)
+        contact.update_avatar(avatar_sha)
+
+        if contact.jid != self._con.get_own_jid().new_as_bare():
+            return
+
+        for participant in self._con.get_module("Contacts").iter_self_occupants():
+            participant.update_avatar(avatar_sha)

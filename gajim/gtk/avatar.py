@@ -56,7 +56,7 @@ log = logging.getLogger("gajim.gtk.avatar")
 AvatarCacheT = dict[
     JID | str, dict[tuple[int, int, str | None, str | None], Gdk.Texture]
 ]
-OccupantAvatarCacheT = dict[JID, dict[tuple[str, int, int], Gdk.Texture]]
+OccupantAvatarCacheT = dict[JID, dict[tuple[str, str | None, int, int], Gdk.Texture]]
 
 CIRCLE_RATIO = 0.18
 CIRCLE_FILL_RATIO = 0.80
@@ -447,6 +447,8 @@ class AvatarStorage(metaclass=Singleton):
 
     def invalidate_cache(self, jid: JID | str) -> None:
         self._cache.pop(jid, None)
+        if isinstance(jid, JID):
+            self._occupant_cache.pop(jid.new_as_bare(), None)
 
     def remove_avatar(self, contact: types.ChatContactT) -> None:
         if not contact.avatar_sha:
@@ -575,14 +577,15 @@ class AvatarStorage(metaclass=Singleton):
             avatar_sha = occupant.avatar_sha
             real_remote = occupant.real_remote
 
-        texture = self._occupant_cache[jid].get((key, size, scale))
+        cache_key = (key, avatar_sha, size, scale)
+        texture = self._occupant_cache[jid].get(cache_key)
         if texture is not None:
             return texture
 
         surface = self._get_avatar_from_storage(avatar_sha, size, scale, style)
         if surface is not None:
             texture = convert_surface_to_texture(surface)
-            self._occupant_cache[jid][(key, size, scale)] = texture
+            self._occupant_cache[jid][cache_key] = texture
             return texture
 
         if real_remote is not None:
@@ -594,7 +597,7 @@ class AvatarStorage(metaclass=Singleton):
         surface = generate_default_avatar(letter, color, size, scale, style=style)
 
         texture = convert_surface_to_texture(surface)
-        self._occupant_cache[jid][(key, size, scale)] = texture
+        self._occupant_cache[jid][cache_key] = texture
         return texture
 
     def get_own_avatar_texture(

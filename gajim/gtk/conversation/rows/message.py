@@ -20,6 +20,7 @@ from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.open_graph_parser import OpenGraphData
@@ -115,6 +116,16 @@ class MessageRow(BaseRow):
         self.grid.attach(self._reactions_bar, 2, 2, 1, 1)
 
         self._redraw_content()
+        self._avatar_contact = self._get_avatar_contact()
+        if (
+            isinstance(self._avatar_contact, GroupchatContact)
+            and self._original_message.resource is not None
+        ):
+            self._avatar_contact.connect(
+                "user-avatar-update", self._on_muc_avatar_update
+            )
+        else:
+            self._avatar_contact.connect("avatar-update", self._on_avatar_update)
 
     @classmethod
     def from_db_row(cls, contact: ChatContactT, message: Message) -> MessageRow:
@@ -141,6 +152,50 @@ class MessageRow(BaseRow):
         if self._message.occupant is None:
             return None
         return self._message.occupant.id
+
+    def _get_avatar_contact(self) -> ChatContactT:
+        """Return the contact whose avatar this row shows."""
+        if self._is_outgoing:
+            client = app.get_client(self._contact.account)
+            contact = client.get_module("Contacts").get_contact(
+                client.get_own_jid().bare
+            )
+            assert isinstance(contact, BareContact)
+            return contact
+        if isinstance(self._contact, GroupchatContact):
+            return self._contact
+        if isinstance(self._contact, GroupchatParticipant):
+            return self._contact.room
+        return self._contact
+
+    def _on_avatar_update(self, *args: object) -> None:
+        self.update_avatar()
+
+    def _on_muc_avatar_update(
+        self,
+        _room: GroupchatContact,
+        _signal_name: str,
+        contact: GroupchatParticipant,
+        _avatar_sha: str | None,
+        *_args: object,
+    ) -> None:
+        occupant = self._original_message.occupant
+        matches_occupant = (
+            occupant is not None
+            and contact.occupant_id is not None
+            and occupant.id == contact.occupant_id
+        )
+        matches_resource = self._original_message.resource == contact.name
+        if not matches_occupant and not matches_resource:
+            return
+
+        if occupant is not None:
+            app.storage.archive.refresh(self._original_message, ["occupant"])
+        self.update_avatar()
+
+    def do_unroot(self) -> None:
+        self._avatar_contact.disconnect_all_from_obj(self)
+        BaseRow.do_unroot(self)
 
     def _redraw_content(self) -> None:
         self.set_merged(False)

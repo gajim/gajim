@@ -12,7 +12,10 @@ from gajim.common.client import BareContact
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.chat_markers import DisplayedMarkerData
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.types import ChatContactT
 from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.util.misc import container_remove_all
@@ -40,13 +43,17 @@ class AvatarStack(Gtk.MenuButton):
         self._scale_factor = self.get_scale_factor()
 
         self._markers: list[DisplayedMarkerData] = []
+        self._avatar_contacts: set[ChatContactT] = set()
 
     def do_unroot(self) -> None:
+        self._disconnect_avatar_contacts()
         self.set_create_popup_func(None)
         Gtk.MenuButton.do_unroot(self)
 
     def set_data(self, markers: list[DisplayedMarkerData]) -> None:
+        self._disconnect_avatar_contacts()
         self._markers = markers.copy()
+        self._connect_avatar_contacts()
         container_remove_all(self._avatar_box)
 
         if not markers:
@@ -80,6 +87,58 @@ class AvatarStack(Gtk.MenuButton):
             self.set_tooltip_text(_("Seen by %s") % nickname)
         else:
             self.set_tooltip_text(_("Seen by %s participants") % marker_count)
+
+    def _connect_avatar_contacts(self) -> None:
+        contacts = self._client.get_module("Contacts")
+        for marker in self._markers:
+            contact = contacts.get_contact_if_exists(marker.jid)
+            if contact is None or isinstance(contact, ResourceContact):
+                continue
+
+            if marker.occupant is None:
+                if isinstance(contact, BareContact):
+                    contact.connect("avatar-update", self._on_avatar_update)
+                    self._avatar_contacts.add(contact)
+                continue
+
+            if isinstance(contact, GroupchatContact):
+                contact.connect("user-avatar-update", self._on_muc_avatar_update)
+                self._avatar_contacts.add(contact)
+
+    def _disconnect_avatar_contacts(self) -> None:
+        for contact in self._avatar_contacts:
+            contact.disconnect_all_from_obj(self)
+        self._avatar_contacts.clear()
+
+    def _on_avatar_update(self, *args: object) -> None:
+        self.set_data(self._markers)
+
+    def _on_muc_avatar_update(
+        self,
+        _room: GroupchatContact,
+        _signal_name: str,
+        contact: GroupchatParticipant,
+        _avatar_sha: str | None,
+        *args: object,
+    ) -> None:
+        updated = False
+        for marker in self._markers:
+            occupant = marker.occupant
+            if occupant is None:
+                continue
+
+            matches_occupant = (
+                contact.occupant_id is not None and occupant.id == contact.occupant_id
+            )
+            matches_nickname = occupant.nickname == contact.name
+            if not matches_occupant and not matches_nickname:
+                continue
+
+            app.storage.archive.refresh(occupant, ["avatar_sha"])
+            updated = True
+
+        if updated:
+            self.set_data(self._markers)
 
     def _get_avatar_image(self, marker: DisplayedMarkerData) -> Gtk.Image:
         texture = None

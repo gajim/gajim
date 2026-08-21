@@ -243,6 +243,16 @@ class Contacts(BaseModule):
                 contacts.append(contact)
         return contacts
 
+    def iter_self_occupants(self) -> Iterator[GroupchatParticipant]:
+        """Yield the occupant which is us, for every group chat we are in."""
+        for contact in self._contacts.values():
+            if not isinstance(contact, GroupchatContact):
+                continue
+
+            participant = contact.get_self()
+            if participant is not None:
+                yield participant
+
     def _reset_presence(self) -> None:
         for contact in self._contacts.values():
             if contact.is_groupchat or contact.is_pm_contact:
@@ -806,10 +816,13 @@ class GroupchatContact(CommonContact):
                 yield contact
 
     def get_occupant(self, occupant_id: str) -> GroupchatParticipant | None:
+        unavailable_contact = None
         for contact in self._resources.values():
             if contact.occupant_id == occupant_id:
-                return contact
-        return None
+                if contact.is_available:
+                    return contact
+                unavailable_contact = contact
+        return unavailable_contact
 
     @property
     def name(self) -> str:
@@ -1072,6 +1085,13 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def avatar_sha(self) -> str | None:
+        if self.is_self:
+            own_contact = self._client.get_module("Contacts").get_contact(
+                self._client.get_own_jid().new_as_bare()
+            )
+            assert isinstance(own_contact, BareContact)
+            return own_contact.avatar_sha
+
         return self._client.get_module("VCardAvatars").get_avatar_sha(self._jid)
 
     def get_avatar(
@@ -1084,9 +1104,9 @@ class GroupchatParticipant(CommonContact):
     def update_presence(self, presence: MUCPresenceData) -> None:
         self._presence = presence
 
-    def update_avatar(self, *args: Any) -> None:
+    def update_avatar(self, sha: str | None = None) -> None:
         app.app.avatar_storage.invalidate_cache(self._jid)
-        self.notify("user-avatar-update")
+        self.notify("user-avatar-update", sha)
 
     @property
     def type_string(self) -> Literal["pm"]:
@@ -1099,7 +1119,8 @@ class GroupchatParticipant(CommonContact):
     @property
     def is_self(self) -> bool:
         data = self.get_module("MUC").get_muc_data(self.room.jid)
-        assert data is not None
+        if data is None:
+            return False
         return data.nick == self.name
 
     @property

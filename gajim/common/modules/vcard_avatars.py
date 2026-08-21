@@ -24,13 +24,16 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import VALUE_MISSING
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
+from gajim.common.storage.archive.models import Occupant
 from gajim.common.task_manager import Task
 from gajim.common.util.classes import TTLCache
+from gajim.common.util.datetime import utc_now
 
 VCardContactsT = BareContact | GroupchatContact | GroupchatParticipant
 NS_AVATAR_HASH = "muc#roominfo_avatarhash"
@@ -44,6 +47,7 @@ class VCardAvatars(BaseModule):
             ttl_seconds=60 * 60 * 6, extend_ttl_on_hit=False
         )
         self._muc_avatar_cache: dict[JID, str] = {}
+        self._muc_presence_avatar_cache: dict[JID, str] = {}
         self.avatar_conversion_available = False
 
         self.handlers = [
@@ -66,6 +70,7 @@ class VCardAvatars(BaseModule):
 
     def invalidate_cache(self, jid: JID) -> None:
         self._muc_avatar_cache.pop(jid, None)
+        self._muc_presence_avatar_cache.pop(jid, None)
 
     @as_task
     def _request_vcard(
@@ -75,7 +80,10 @@ class VCardAvatars(BaseModule):
 
         if app.app.avatar_storage.avatar_exists(expected_sha):
             # Check if avatar was already received while task was queued
-            contact.update_avatar(expected_sha)
+            if isinstance(contact, GroupchatParticipant):
+                self.update_occupant_avatar(contact, expected_sha)
+            else:
+                contact.update_avatar(expected_sha)
             self._log.info("Found avatar in storage: %s %s", contact.jid, expected_sha)
             return
 
@@ -103,17 +111,59 @@ class VCardAvatars(BaseModule):
             return
 
         self._log.info("Received: %s %s", contact.jid, avatar_sha)
-        app.app.avatar_storage.save_avatar(avatar)
+        if app.app.avatar_storage.save_avatar(avatar) is None:
+            return
 
-        if isinstance(contact, BareContact | GroupchatContact):
-            app.storage.archive.set_contact_value(
-                self._account, contact.jid, "avatar_sha", avatar_sha
-            )
+        if isinstance(contact, GroupchatParticipant):
+            self.update_occupant_avatar(contact, avatar_sha)
+            return
 
-        else:
-            self._muc_avatar_cache[contact.jid] = avatar_sha
-
+        app.storage.archive.set_contact_value(
+            self._account, contact.jid, "avatar_sha", avatar_sha
+        )
         contact.update_avatar(avatar_sha)
+
+    def update_occupant_avatar(
+        self,
+        contact: GroupchatParticipant,
+        avatar_sha: str,
+    ) -> None:
+        contact = self._get_current_participant(contact)
+        self._muc_avatar_cache[contact.jid] = avatar_sha
+        self._upsert_occupant_avatar(contact, avatar_sha)
+        contact.update_avatar(avatar_sha)
+
+    def _get_current_participant(
+        self, contact: GroupchatParticipant
+    ) -> GroupchatParticipant:
+        occupant_id = contact.occupant_id
+        if occupant_id is not None:
+            current_contact = contact.room.get_occupant(occupant_id)
+            if current_contact is not None:
+                return current_contact
+
+        current_contact = contact.room.get_resource_if_exists(contact.name)
+        if current_contact is not None and current_contact.is_available:
+            return current_contact
+
+        return contact
+
+    def _upsert_occupant_avatar(
+        self, contact: GroupchatParticipant, avatar_sha: str
+    ) -> None:
+        occupant_id = contact.occupant_id
+        if occupant_id is None:
+            return
+        occupant = Occupant(
+            account_=contact.account,
+            remote_jid_=contact.room.jid,
+            id=occupant_id,
+            real_remote_jid_=contact.real_jid or VALUE_MISSING,
+            nickname=contact.name,
+            avatar_sha=avatar_sha,
+            updated_at=utc_now(),
+        )
+        app.storage.archive.upsert_row(occupant)
 
     def _presence_received(
         self,
@@ -216,6 +266,10 @@ class VCardAvatars(BaseModule):
         )
         assert isinstance(contact, GroupchatParticipant)
 
+        if contact.is_self:
+            self._log.info("Ignore own avatar advertised by room: %s", contact.jid)
+            return
+
         if contact.is_blocked:
             self._log.info("Ignore avatar because contact is blocked: %s", contact.jid)
             return
@@ -235,6 +289,7 @@ class VCardAvatars(BaseModule):
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info("%s has no avatar published", jid)
             self._muc_avatar_cache.pop(jid, None)
+            self._muc_presence_avatar_cache.pop(jid, None)
             contact.update_avatar()
 
         else:
@@ -254,14 +309,14 @@ class VCardAvatars(BaseModule):
                 app.task_manager.add_task(task)
                 return
 
-            current_avatar_sha = self._muc_avatar_cache.get(jid)
-            if current_avatar_sha != avatar_sha:
-                self._log.info("%s changed their avatar: %s", jid, avatar_sha)
-                self._muc_avatar_cache[jid] = avatar_sha
-                contact.update_avatar()
-
-            else:
+            presence_avatar_sha = self._muc_presence_avatar_cache.get(jid)
+            if presence_avatar_sha == avatar_sha:
                 self._log.info("Avatar already known: %s", jid)
+                return
+
+            self._muc_presence_avatar_cache[jid] = avatar_sha
+            self._log.info("%s changed their avatar: %s", jid, avatar_sha)
+            self.update_occupant_avatar(contact, avatar_sha)
 
 
 class VCardAvatarsTask(Task):
