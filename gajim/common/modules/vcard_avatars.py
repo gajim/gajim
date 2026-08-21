@@ -292,7 +292,8 @@ class VCardAvatarsTask(Task):
 
         if isinstance(self._contact, GroupchatParticipant):
             if not self._contact.room.is_joined:
-                self.set_obsolete()
+                if self._contact.room.is_not_joined:
+                    self.set_obsolete()
                 return False
 
         return True
