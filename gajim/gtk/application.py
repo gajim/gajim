@@ -848,7 +848,10 @@ class GajimApplication(Adw.Application, CoreApplication):
             client.get_module("MUC").leave(params.jid)
             client.get_module("Bookmarks").remove(params.jid)
 
-            app.storage.archive.remove_history_for_jid(params.account, params.jid)
+            app.storage.archive.remove_history_for_jid(
+                params.account, params.jid, forget_groupchat=True
+            )
+            app.storage.events.remove_all(params.account, params.jid)
 
         ConfirmationAlertDialog(
             _("Forget this Group Chat?"),

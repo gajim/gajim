@@ -1248,7 +1248,9 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def remove_history_for_jid(self, session: Session, account: str, jid: JID) -> None:
+    def remove_history_for_jid(
+        self, session: Session, account: str, jid: JID, forget_groupchat: bool = False
+    ) -> None:
         """
         Remove messages and metadata for a specific jid.
         """
@@ -1270,6 +1272,12 @@ class MessageArchiveStorage(AlchemyStorage):
             Thread,
             SecurityLabel,
         ]
+
+        if forget_groupchat:
+            tables += [
+                Occupant,
+                MAMArchiveState,
+            ]
 
         for table in tables:
             stmt = delete(table).where(

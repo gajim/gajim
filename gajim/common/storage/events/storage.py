@@ -12,6 +12,7 @@ import json
 import logging
 
 import sqlalchemy as sa
+from nbxmpp.protocol import JID
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
@@ -126,3 +127,17 @@ class EventStorage(AlchemyStorage):
 
         complete = len(event_list) < n_lines
         return event_list, complete
+
+    @with_session
+    def remove_all(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+    ) -> None:
+
+        stmt = sa.delete(mod.Event).where(
+            mod.Event.account == account,
+            mod.Event.jid == jid,
+        )
+        session.execute(stmt)
