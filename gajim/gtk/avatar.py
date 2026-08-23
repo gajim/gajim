@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import colorsys
 import functools
 import hashlib
 import logging
@@ -66,7 +67,11 @@ def generate_avatar_letter(text: str) -> str:
 
 
 def generate_avatar(
-    letters: str, color: tuple[float, float, float], size: int, scale: int
+    letters: str,
+    color: tuple[float, float, float],
+    size: int,
+    scale: int,
+    check_contrast: bool = False,
 ) -> cairo.ImageSurface:
     # Get color for nickname with XEP-0392
     color_r, color_g, color_b = color
@@ -103,7 +108,14 @@ def generate_avatar(
     y_pos = (height - layout_height) / 2
 
     context.move_to(x_pos, y_pos)
-    context.set_source_rgb(0.95, 0.95, 0.95)
+
+    text_color = (0.95, 0.95, 0.95)
+    if check_contrast:
+        _hue, luminance, _saturation = colorsys.rgb_to_hls(*color)
+        if luminance > 0.6:
+            # Use dark text color if background luminance threshold is surpassed
+            text_color = (0.2, 0.2, 0.2)
+    context.set_source_rgb(*text_color)
     context.set_operator(cairo.Operator.OVER)
     PangoCairo.show_layout(context, layout)
 
@@ -132,7 +144,7 @@ def make_workspace_avatar(
     scale: int,
     style: str = "round-corners",
 ) -> Gdk.Texture:
-    surface = generate_avatar(letter, color, size, scale)
+    surface = generate_avatar(letter, color, size, scale, check_contrast=True)
     surface.set_device_scale(scale, scale)
     return convert_surface_to_texture(clip(surface, style))
 
