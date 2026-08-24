@@ -606,7 +606,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     @staticmethod
     def _on_profile_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
-        open_window("ProfileWindow", account=account)
+        app.window.show_account_page(account, edit_profile=True)
 
     @staticmethod
     def _on_services_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

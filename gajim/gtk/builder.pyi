@@ -503,33 +503,6 @@ class PepConfigBuilder(Builder):
     config_back_button: Gtk.Button
     save_button: Gtk.Button
 
-class ProfileBuilder(Builder):
-    privacy_popover: Gtk.Popover
-    avatar_nick_access: Gtk.Switch
-    vcard_access: Gtk.Switch
-    avatar_nick_access_label: Gtk.Label
-    vcard_access_label: Gtk.Label
-    profile_stack: Gtk.Stack
-    spinner: Adw.Spinner
-    scrolled: Gtk.ScrolledWindow
-    profile_box: Gtk.Box
-    avatar_overlay: Gtk.Overlay
-    avatar_image: Gtk.Image
-    remove_avatar_button: Gtk.Button
-    nickname_entry: Gtk.Entry
-    nickname_label: Gtk.Label
-    cancel_button: Gtk.Button
-    add_entry_button: Gtk.MenuButton
-    privacy_button: Gtk.MenuButton
-    save_button: Gtk.Button
-    edit_button: Gtk.Button
-    avatar_selector_box: Gtk.Box
-    avatar_cancel: Gtk.Button
-    avatar_update_button: Gtk.Button
-    error_label: Gtk.Label
-    error_title_label: Gtk.Label
-    back_button: Gtk.Button
-
 class QuitDialogBuilder(Builder):
     box: Gtk.Box
     remember_checkbutton: Gtk.CheckButton
@@ -889,10 +862,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> PepConfigBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["profile.ui"], instance: Any = None, widgets: list[str] = ...
-) -> ProfileBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["quit_dialog.ui"], instance: Any = None, widgets: list[str] = ...

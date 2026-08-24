@@ -751,6 +751,22 @@ class AvatarStorage(metaclass=Singleton):
     def avatar_exists(self, filename: str) -> bool:
         return self.get_avatar_path(filename) is not None
 
+    def avatar_is_valid(self, filename: str) -> bool:
+        path = self.get_avatar_path(filename)
+        if path is None:
+            return False
+
+        try:
+            sha = hashlib.sha1(path.read_bytes()).hexdigest()
+        except OSError:
+            log.exception("Reading cached avatar failed: %s", path)
+            return False
+
+        if sha != filename:
+            log.warning("Cached avatar is invalid: %s", path)
+            return False
+        return True
+
     def surface_from_filename(
         self, filename: str, size: int, scale: int
     ) -> cairo.ImageSurface | None:

@@ -356,10 +356,22 @@ button.flat.link { padding: 0; border: 0; }
 
 /* AccountPage */
 .account-page {
-    background: transparent;
+    background: var(--window-bg-color);
 }
 .account-page-box {
     padding: 18px;
+}
+toastoverlay.account-profile-toast > toast {
+    margin-bottom: 6px;
+}
+.profile-editor,
+.profile-editor textview,
+.profile-editor textview text {
+    background: transparent;
+}
+.profile-editor row.unsaved {
+    outline: 2px solid var(--warning-bg-color);
+    outline-offset: -2px;
 }
 
 /* ActivityListView */
@@ -868,20 +880,6 @@ list.sidebar-switcher .sidebar-row-header {
 
 /* Dialogs ================================================================= */
 
-/* ProfileWindow */
-#ProfileWindow grid { padding: 18px; }
-#ProfileWindow grid > button {
-    padding-left: 4px;
-    padding-right: 4px;
-}
-#ProfileWindow popover { padding: 6px; }
-#ProfileWindow actionbar > revealer > box  {
-    padding: 0px;
-    background-color: var(--window-bg-color);
-}
-#ProfileWindow actionbar button {
-   margin-top: 12px;
-}
 .profile-scrolled-read textview {
     background: transparent;
 }

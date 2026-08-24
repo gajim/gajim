@@ -2,200 +2,326 @@
 <interface>
   <requires lib="gtk" version="4.0" />
   <template class="AccountPage" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <style>
+      <class name="account-page"/>
+    </style>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="AdwBreakpointBin">
+        <property name="width-request">360</property>
+        <property name="height-request">300</property>
+        <property name="child">
+          <object class="AdwToastOverlay" id="_toast_overlay">
+            <style>
+              <class name="account-profile-toast"/>
+            </style>
+            <property name="child">
+          <object class="GtkScrolledWindow" id="_scrolled">
         <property name="focusable">true</property>
+        <property name="vexpand">true</property>
+        <property name="hscrollbar-policy">never</property>
         <property name="child">
           <object class="GtkViewport">
             <property name="child">
               <object class="AdwClamp">
+                <property name="maximum-size">900</property>
+                <property name="tightening-threshold">700</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="hexpand">true</property>
-                    <property name="orientation">1</property>
-                    <property name="spacing">36</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">1</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkImage" id="_avatar_image">
-                            <property name="pixel-size">150</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="_name_label">
-                            <property name="focusable">true</property>
-                            <property name="selectable">true</property>
-                            <style>
-                              <class name="title-1" />
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="_account_label">
-                            <property name="focusable">true</property>
-                            <property name="selectable">true</property>
-                            <style>
-                              <class name="title-4" />
-                              <class name="dimmed" />
-                            </style>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Account</property>
-                        <child type="header-suffix">
-                          <object class="GtkBox">
-                            <property name="spacing">12</property>
-                            <child>
-                              <object class="GtkButton" id="_settings_button">
-                                <property name="action-name">app.accounts</property>
-                                <property name="action-target">&apos;&apos;</property>
-                                <property name="label" translatable="yes">Settings</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkMenuButton" id="_menu_button">
-                                <property name="focusable">true</property>
-                                <property name="focus-on-click">false</property>
-                                <property name="sensitive">false</property>
-                                <property name="valign">3</property>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="icon-name">lucide-ellipsis-vertical-symbolic</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkListBox">
-                            <property name="selection-mode">none</property>
-                            <style>
-                              <class name="boxed-list" />
-                            </style>
-                            <child>
-                              <object class="AdwActionRow" id="_our_jid_row">
-                                <property name="title" translatable="yes">XMPP Address</property>
-                                <property name="subtitle-selectable">true</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow">
-                                <property name="title" translatable="yes">Status</property>
-                                <child>
-                                  <object class="StatusSelector" id="_status_selector">
-                                    <property name="valign">center</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="StatusMessageSelectorRow" id="_status_message_row"/>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Profile</property>
-                        <child type="header-suffix">
-                          <object class="GtkButton" id="_profile_button">
-                            <property name="label" translatable="yes">Edit</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkListBox">
-                            <property name="selection-mode">none</property>
-                            <style>
-                              <class name="boxed-list" />
-                            </style>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_name_row">
-                                <property name="subtitle-selectable">true</property>
-                                <property name="title" translatable="yes">Name</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_org_row">
-                                <property name="visible">false</property>
-                                <property name="subtitle-selectable">true</property>
-                                <property name="title" translatable="yes">Organization</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_role_row">
-                                <property name="visible">false</property>
-                                <property name="subtitle-selectable">true</property>
-                                <property name="title" translatable="yes">Role</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_email_row">
-                                <property name="visible">false</property>
-                                <property name="title" translatable="yes">Email</property>
-                                <property name="activatable">true</property>
-                                <property name="action-name">app.open-link</property>
-                                <property name="action-target">''</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                                <child>
-                                  <object class="CopyButton" id="_profile_email_clipboard_button"/>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_tel_row">
-                                <property name="visible">false</property>
-                                <property name="title" translatable="yes">Telephone</property>
-                                <property name="activatable">true</property>
-                                <property name="action-name">app.open-link</property>
-                                <property name="action-target">''</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                                <child>
-                                  <object class="CopyButton" id="_profile_tel_clipboard_button"/>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="AdwActionRow" id="_profile_timezone_row">
-                                <property name="visible">false</property>
-                                <property name="subtitle-selectable">true</property>
-                                <property name="title" translatable="yes">Time Zone</property>
-                                <style>
-                                  <class name="property" />
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">24</property>
                     <style>
-                      <class name="account-page-box" />
+                      <class name="account-page-box"/>
                     </style>
+                    <child>
+                      <object class="GtkBox" id="_content_box">
+                        <property name="hexpand">true</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">24</property>
+                        <child>
+                          <object class="AccountPageWrapBox">
+                            <property name="child-spacing">36</property>
+                            <property name="line-spacing">24</property>
+                            <property name="natural-line-length">900</property>
+                            <property name="justify">fill</property>
+                            <property name="wrap-policy">minimum</property>
+                            <child>
+                              <object class="GtkBox" id="_identity_box">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="halign">center</property>
+                                <property name="valign">start</property>
+                                <property name="margin-top">40</property>
+                                <property name="width-request">200</property>
+                                <child>
+                                  <object class="GtkOverlay">
+                                    <property name="halign">center</property>
+                                    <property name="child">
+                                      <object class="GtkImage" id="_avatar_image">
+                                        <property name="pixel-size">200</property>
+                                      </object>
+                                    </property>
+                                    <child type="overlay">
+                                      <object class="AvatarFileChooserButton" id="_avatar_edit_button">
+                                        <property name="tooltip-text" translatable="yes">Change your profile picture</property>
+                                        <property name="icon-name">lucide-square-pen-symbolic</property>
+                                        <property name="halign">end</property>
+                                        <property name="valign">end</property>
+                                        <style>
+                                          <class name="opaque"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child type="overlay">
+                                      <object class="GtkButton" id="_remove_avatar_button">
+                                        <property name="tooltip-text" translatable="yes">Remove your profile picture</property>
+                                        <property name="halign">start</property>
+                                        <property name="valign">end</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">lucide-trash-symbolic</property>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="opaque"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="_avatar_publish_status">
+                                    <property name="halign">center</property>
+                                    <property name="spacing">6</property>
+                                    <property name="visible">false</property>
+                                    <child>
+                                      <object class="GtkSpinner">
+                                        <property name="spinning">true</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">Publishing avatar…</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup" id="_account_group">
+                                <property name="title" translatable="yes">Account</property>
+                                <property name="hexpand">true</property>
+                                <child type="header-suffix">
+                                  <object class="GtkBox">
+                                    <property name="spacing">12</property>
+                                    <child>
+                                      <object class="GtkButton" id="_settings_button">
+                                        <property name="action-name">app.accounts</property>
+                                        <property name="action-target">&apos;&apos;</property>
+                                        <property name="label" translatable="yes">Settings</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton" id="_menu_button">
+                                        <property name="focusable">true</property>
+                                        <property name="focus-on-click">false</property>
+                                        <property name="sensitive">false</property>
+                                        <property name="valign">center</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">lucide-ellipsis-vertical-symbolic</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkListBox">
+                                    <property name="selection-mode">none</property>
+                                    <style>
+                                      <class name="boxed-list"/>
+                                    </style>
+                                    <child>
+                                      <object class="AdwActionRow" id="_our_jid_row">
+                                        <property name="title" translatable="yes">XMPP Address</property>
+                                        <property name="subtitle-selectable">true</property>
+                                        <style>
+                                          <class name="property"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="AdwActionRow" id="_account_label_row">
+                                        <property name="title" translatable="yes">Account Label</property>
+                                        <property name="subtitle-selectable">true</property>
+                                        <style>
+                                          <class name="property"/>
+                                        </style>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="AdwActionRow">
+                                        <property name="title" translatable="yes">Status</property>
+                                        <child>
+                                          <object class="StatusSelector" id="_status_selector">
+                                            <property name="valign">center</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="StatusMessageSelectorRow" id="_status_message_row"/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup" id="_privacy_group">
+                            <property name="title" translatable="yes">Privacy</property>
+                            <child type="header-suffix">
+                              <object class="GtkButton" id="_privacy_retry_button">
+                                <property name="label" translatable="yes">Retry</property>
+                                <property name="visible">false</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkListBox">
+                                <property name="selection-mode">none</property>
+                                <style>
+                                  <class name="boxed-list"/>
+                                </style>
+                                <child>
+                                  <object class="AdwActionRow" id="_avatar_nick_access_row">
+                                    <property name="title" translatable="yes">Picture and Name</property>
+                                    <property name="activatable-widget">_avatar_nick_access</property>
+                                    <child>
+                                      <object class="GtkSwitch" id="_avatar_nick_access">
+                                        <property name="valign">center</property>
+                                        <property name="focusable">true</property>
+                                        <property name="sensitive">false</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwActionRow" id="_vcard_access_row">
+                                    <property name="title" translatable="yes">Profile</property>
+                                    <property name="activatable-widget">_vcard_access</property>
+                                    <child>
+                                      <object class="GtkSwitch" id="_vcard_access">
+                                        <property name="valign">center</property>
+                                        <property name="focusable">true</property>
+                                        <property name="sensitive">false</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <property name="title" translatable="yes">Profile</property>
+                            <child type="header-suffix">
+                              <object class="GtkStack" id="_profile_header_stack">
+                                <property name="halign">end</property>
+                                <property name="hhomogeneous">false</property>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">preview</property>
+                                    <property name="child">
+                                      <object class="GtkButton" id="_profile_button">
+                                        <property name="halign">end</property>
+                                        <property name="tooltip-text" translatable="yes">Edit Profile</property>
+                                        <child>
+                                          <object class="GtkBox">
+                                            <property name="spacing">6</property>
+                                            <child>
+                                              <object class="GtkImage">
+                                                <property name="icon-name">lucide-square-pen-symbolic</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="label" translatable="yes">Edit</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">edit</property>
+                                    <property name="child">
+                                      <object class="GtkBox" id="_profile_editor_header_box"/>
+                                    </property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkStack" id="_profile_content_stack">
+                                <property name="vhomogeneous">false</property>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">preview</property>
+                                    <property name="child">
+                                      <object class="GtkListBox" id="_profile_preview_list">
+                                        <property name="selection-mode">none</property>
+                                        <style>
+                                          <class name="boxed-list"/>
+                                        </style>
+                                        <child>
+                                          <object class="AdwActionRow" id="_profile_name_row">
+                                            <property name="subtitle-selectable">true</property>
+                                            <property name="title" translatable="yes">Name</property>
+                                            <style>
+                                              <class name="property"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">edit</property>
+                                    <property name="child">
+                                      <object class="GtkBox" id="_profile_editor_box">
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="_avatar_editor_box">
+                        <property name="orientation">vertical</property>
+                        <property name="visible">false</property>
+                        <property name="vexpand">true</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
+              </object>
+            </property>
+          </object>
+        </property>
               </object>
             </property>
           </object>

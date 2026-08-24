@@ -45,7 +45,6 @@ if TYPE_CHECKING:
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
     from gajim.gtk.preference.dialog import Preferences
-    from gajim.gtk.profile import ProfileWindow
     from gajim.gtk.quit import QuitDialog
     from gajim.gtk.remove_account import RemoveAccount
     from gajim.gtk.roster_item_exchange import RosterItemExchange
@@ -79,7 +78,6 @@ if TYPE_CHECKING:
         | PasswordDialog
         | PEPConfig
         | Preferences
-        | ProfileWindow
         | QuitDialog
         | RemoveAccount
         | RosterItemExchange
@@ -114,7 +112,6 @@ if TYPE_CHECKING:
         | Literal["PasswordDialog"]
         | Literal["PEPConfig"]
         | Literal["Preferences"]
-        | Literal["ProfileWindow"]
         | Literal["QuitDialog"]
         | Literal["RemoveAccount"]
         | Literal["RosterItemExchange"]
@@ -352,14 +349,6 @@ def get_app_window(
 
 @overload
 def get_app_window(
-    name: Literal["ProfileWindow"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> ProfileWindow | None: ...
-
-
-@overload
-def get_app_window(
     name: Literal["QuitDialog"],
     account: str | None = None,
     jid: str | JID | None = None,
@@ -507,8 +496,6 @@ def open_window(name: Literal["PasswordDialog"], **kwargs: Any) -> PasswordDialo
 def open_window(name: Literal["PEPConfig"], **kwargs: Any) -> PEPConfig: ...
 @overload
 def open_window(name: Literal["Preferences"], **kwargs: Any) -> Preferences: ...
-@overload
-def open_window(name: Literal["ProfileWindow"], **kwargs: Any) -> ProfileWindow: ...
 @overload
 def open_window(name: Literal["QuitDialog"], **kwargs: Any) -> QuitDialog: ...
 @overload

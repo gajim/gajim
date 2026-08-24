@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AvatarLightbox" parent="AdwDialog">
+    <property name="content-width">500</property>
+    <property name="content-height">500</property>
+    <property name="presentation-mode">floating</property>
+    <property name="child">
+      <object class="GtkButton" id="_close_button">
+        <property name="tooltip-text" translatable="yes">Close</property>
+        <property name="child">
+          <object class="GtkPicture" id="_picture">
+            <property name="content-fit">contain</property>
+            <property name="can-shrink">true</property>
+          </object>
+        </property>
+        <style>
+          <class name="flat"/>
+        </style>
+      </object>
+    </property>
+  </template>
+</interface>

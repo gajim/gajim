@@ -11,14 +11,17 @@ from typing import Any
 from typing import cast
 
 import logging
+import math
 from enum import IntEnum
 from enum import unique
 from pathlib import Path
 
 import cairo
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -60,10 +63,15 @@ class Range(IntEnum):
 
 
 class AvatarSelector(Gtk.Box, SignalManager):
+    __gsignals__ = {
+        "prepared-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
+    }
+
     def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         SignalManager.__init__(self)
 
+        self._prepared = False
         self.add_css_class("avatar-selector")
 
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
@@ -93,13 +101,23 @@ class AvatarSelector(Gtk.Box, SignalManager):
         del self._file_chooser_button
         del self._crop_area
 
+    @GObject.Property(
+        type=bool,
+        default=False,
+        flags=GObject.ParamFlags.READABLE | GObject.ParamFlags.EXPLICIT_NOTIFY,
+    )
+    def prepared(self) -> bool:
+        return self._prepared
+
     def reset(self) -> None:
         self._crop_area.reset()
         self._file_chooser_button.reset()
         self._file_chooser_button.set_visible(True)
         self._helper_label.set_visible(True)
+        self._set_prepared(False)
 
     def prepare_crop_area(self, path: str) -> None:
+        self.reset()
         pixbuf = self._get_pixbuf_from_path(path)
         if pixbuf is None:
             log.info("Could not load from path %s", path)
@@ -109,6 +127,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self._file_chooser_button.set_visible(False)
         self._helper_label.set_visible(False)
         self._crop_area.set_visible(True)
+        self._set_prepared(True)
 
     def _on_path_picked(
         self, _button: AvatarFileChooserButton, paths: list[Path]
@@ -155,7 +174,14 @@ class AvatarSelector(Gtk.Box, SignalManager):
             return None
 
     def get_prepared(self) -> bool:
-        return bool(self._crop_area.get_pixbuf())
+        return self._prepared
+
+    def _set_prepared(self, prepared: bool) -> None:
+        if self._prepared == prepared:
+            return
+        self._prepared = prepared
+        self.notify("prepared")
+        self.emit("prepared-changed", prepared)
 
     @staticmethod
     def _scale_for_publish(
@@ -330,6 +356,23 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         Gdk.cairo_set_source_pixbuf(context, self._pixbuf, ix, iy)
         context.rectangle(crop.x, crop.y, crop.width, crop.height)
         context.fill()
+
+        circle_x = crop.x + crop.width / 2.0
+        circle_y = crop.y + crop.height / 2.0
+        circle_radius = min(crop.width, crop.height) / 2.0 - 3.0
+        context.save()
+        context.rectangle(crop.x, crop.y, crop.width, crop.height)
+        context.arc(circle_x, circle_y, circle_radius, 0, math.tau)
+        context.set_fill_rule(cairo.FillRule.EVEN_ODD)
+        context.set_source_rgba(0, 0, 0, 0.2)
+        context.fill()
+        context.restore()
+
+        color = Adw.StyleManager.get_default().get_accent_color_rgba()
+        context.set_source_rgba(color.red, color.green, color.blue, 0.55)
+        context.set_line_width(2.0)
+        context.arc(circle_x, circle_y, circle_radius, 0, math.tau)
+        context.stroke()
 
         if self._active_region != Loc.OUTSIDE:
             context.set_source_rgb(150, 150, 150)

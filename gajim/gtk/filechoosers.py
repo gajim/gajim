@@ -215,6 +215,8 @@ class FileChooserButton(Gtk.Button, SignalManager):
 
 
 class AvatarFileChooserButton(FileChooserButton):
+    __gtype_name__ = "AvatarFileChooserButton"
+
     _cls_filters = [
         Filter(name=_("PNG files"), suffixes=["png"], default=True),
         Filter(name=_("JPEG files"), suffixes=["jpg", "jpeg"]),

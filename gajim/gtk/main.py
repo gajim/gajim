@@ -413,8 +413,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._app_side_bar.get_first_workspace()
-        self.activate_workspace(workspace_id)
         self._main_stack.remove_account_page(event.account)
+        self.activate_workspace(workspace_id)
         self._main_stack.remove_chats_for_account(event.account)
 
     def _on_client_state_changed(
@@ -1002,9 +1002,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         for chat in chats:
             chat_list_stack.set_chat_unread_count(chat.account, chat.jid, chat.count)
 
-    def show_account_page(self, account: str) -> None:
+    def show_account_page(self, account: str, edit_profile: bool = False) -> None:
         self._app_side_bar.show_account_page()
-        self._main_stack.show_account(account)
+        self._main_stack.show_account(account, edit_profile)
 
     def get_active_workspace(self) -> str | None:
         return self._app_side_bar.get_active_workspace()
@@ -1134,11 +1134,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id: str) -> None:
-        self._app_side_bar.activate_workspace(workspace_id)
-        self._main_stack.show_chats(workspace_id)
+        def activate() -> None:
+            self._app_side_bar.activate_workspace(workspace_id)
+            self.set_action_state("focus-mode", False)
+            self.set_action_state("chat-list-visible", True)
 
-        self.set_action_state("focus-mode", False)
-        self.set_action_state("chat-list-visible", True)
+        self._main_stack.show_chats(workspace_id, activate)
 
     def update_workspace(self, workspace_id: str) -> None:
         self._chat_page.update_workspace(workspace_id)
@@ -1208,9 +1209,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             chat_list.clear_chat_list_row(account, jid)
 
     def select_chat(self, account: str, jid: JID) -> None:
-        self._app_side_bar.select_chat()
-        self._main_stack.show_chat_page()
-        self._chat_page.select_chat(account, jid)
+        def select() -> None:
+            self._app_side_bar.select_chat()
+            self._chat_page.select_chat(account, jid)
+
+        self._main_stack.show_chat_page(select)
 
     def scroll_to_message(self, account: str, message: Message) -> None:
         control = self._chat_page.get_control()
@@ -1228,20 +1231,27 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
     def select_next_chat(
         self, direction: Direction, unread_first: bool = False
     ) -> None:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        chat_list = chat_list_stack.get_current_chat_list()
-        if chat_list is not None:
-            chat_list.select_next_chat(direction, unread_first)
+        def select() -> None:
+            chat_list_stack = self._chat_page.get_chat_list_stack()
+            chat_list = chat_list_stack.get_current_chat_list()
+            if chat_list is not None:
+                chat_list.select_next_chat(direction, unread_first)
+
+        self._main_stack.show_chat_page(select)
 
     def select_chat_number(self, number: int) -> None:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        chat_list = chat_list_stack.get_current_chat_list()
-        if chat_list is not None:
-            chat_list.select_chat_number(number)
+        def select() -> None:
+            chat_list_stack = self._chat_page.get_chat_list_stack()
+            chat_list = chat_list_stack.get_current_chat_list()
+            if chat_list is not None:
+                chat_list.select_chat_number(number)
+
+        self._main_stack.show_chat_page(select)
 
     def show_activity_page(self, context_id: str | None = None) -> None:
-        self._app_side_bar.show_activity_page()
-        self._main_stack.show_activity_page(context_id)
+        self._main_stack.show_activity_page(
+            context_id, self._app_side_bar.show_activity_page
+        )
 
         self.set_action_state("focus-mode", False)
         self.set_action_state("chat-list-visible", True)

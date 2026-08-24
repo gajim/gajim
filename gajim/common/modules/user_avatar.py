@@ -40,6 +40,19 @@ class UserAvatar(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._avatar_metadata_received)
 
+    def refresh_avatar_if_invalid(self, contact: types.ChatContactT) -> bool:
+        sha = contact.avatar_sha
+        if (
+            sha is None
+            or not self._con.is_available()
+            or app.app.avatar_storage.avatar_is_valid(sha)
+        ):
+            return False
+
+        self._log.info("Refresh invalid cached avatar: %s %s", contact.jid, sha)
+        self._reset_and_request_avatar(contact, sha)
+        return True
+
     @event_node(Namespace.AVATAR_METADATA)
     def _avatar_metadata_received(
         self, _con: types.NBXMPPClient, _stanza: Message, properties: MessageProperties
@@ -68,13 +81,13 @@ class UserAvatar(BaseModule):
         assert metadata.default is not None
         sha = contact.avatar_sha
         if sha is not None:
-            if sha in metadata.avatar_shas and app.app.avatar_storage.avatar_exists(
+            if sha in metadata.avatar_shas and app.app.avatar_storage.avatar_is_valid(
                 sha
             ):
                 self._log.info("Avatar already known: %s %s", jid, sha)
                 return
 
-        if app.app.avatar_storage.avatar_exists(metadata.default):
+        if app.app.avatar_storage.avatar_is_valid(metadata.default):
             self._log.info(
                 "Avatar found in cache, update: %s %s", jid, metadata.default
             )
@@ -91,11 +104,14 @@ class UserAvatar(BaseModule):
         #
         # Reset the sha, because we don’t know if the avatar data query will
         # succeed. This forces an update of the avatar if the query succeeds.
+        self._reset_and_request_avatar(contact, metadata.default)
+
+    def _reset_and_request_avatar(self, contact: types.ChatContactT, sha: str) -> None:
         app.storage.archive.set_contact_value(
             self._account, contact.jid, "avatar_sha", None
         )
         contact.update_avatar(None)
-        self._request_avatar_data(contact, metadata.default)
+        self._request_avatar_data(contact, sha)
 
     @as_task
     def _request_avatar_data(

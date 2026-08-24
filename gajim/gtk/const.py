@@ -149,7 +149,6 @@ WINDOW_MODULES = {
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",
     "Preferences": "gajim.gtk.preference.dialog",
-    "ProfileWindow": "gajim.gtk.profile",
     "QuitDialog": "gajim.gtk.quit",
     "RemoveAccount": "gajim.gtk.remove_account",
     "RosterItemExchange": "gajim.gtk.roster_item_exchange",

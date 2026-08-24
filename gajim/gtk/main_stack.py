@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from typing import cast
 
+from collections.abc import Callable
+
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
@@ -50,20 +52,43 @@ class MainStack(Gtk.Stack):
     def get_visible_page_name(self) -> str | None:
         return self.get_visible_child_name()
 
-    def show_activity_page(self, context_id: str | None = None) -> None:
-        self.set_visible_child_name("chats")
-        self._chat_page.show_activity_page(context_id)
+    def show_activity_page(
+        self,
+        context_id: str | None = None,
+        callback: Callable[[], None] | None = None,
+    ) -> None:
+        def show_page() -> None:
+            self.set_visible_child_name("chats")
+            self._chat_page.show_activity_page(context_id)
+            if callback is not None:
+                callback()
 
-    def show_chats(self, workspace_id: str) -> None:
-        self._chat_page.show_workspace_chats(workspace_id)
-        self.set_visible_child_name("chats")
+        self._confirm_account_navigation(show_page)
 
-    def show_chat_page(self) -> None:
-        self.set_visible_child_name("chats")
+    def show_chats(
+        self,
+        workspace_id: str,
+        callback: Callable[[], None] | None = None,
+    ) -> None:
+        def show_page() -> None:
+            self._chat_page.show_workspace_chats(workspace_id)
+            self.set_visible_child_name("chats")
+            if callback is not None:
+                callback()
 
-    def show_account(self, account: str) -> None:
+        self._confirm_account_navigation(show_page)
+
+    def show_chat_page(self, callback: Callable[[], None] | None = None) -> None:
+        def show_page() -> None:
+            self.set_visible_child_name("chats")
+            if callback is not None:
+                callback()
+
+        self._confirm_account_navigation(show_page)
+
+    def show_account(self, account: str, edit_profile: bool = False) -> None:
         account_page = self._get_account_page()
-        account_page.set_account(account)
+        account_page.set_account(account, edit_profile)
         self.set_visible_child_name("account")
 
     def get_chat_page(self) -> ChatPage:
@@ -71,7 +96,13 @@ class MainStack(Gtk.Stack):
         assert isinstance(chat_page, ChatPage)
         return chat_page
 
+    def _confirm_account_navigation(self, callback: Callable[[], None]) -> None:
+        if self.get_visible_child_name() != "account":
+            callback()
+            return
+        self._get_account_page().confirm_navigation(callback)
+
     def _on_chat_selected(
         self, _chat_list: ChatList, _workspace_id: str, _account: str, _jid: JID
     ) -> None:
-        self.set_visible_child_name("chats")
+        self._confirm_account_navigation(lambda: self.set_visible_child_name("chats"))

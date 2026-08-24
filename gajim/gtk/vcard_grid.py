@@ -631,7 +631,7 @@ class TypeDropDown(GajimDropDown[str], SignalManager):
 
     def do_unroot(self) -> None:
         self._disconnect_all()
-        super().do_unroot()
+        Gtk.DropDown.do_unroot(self)
 
     def _on_selected(
         self, _dropdown: GajimDropDown[str], _param: GObject.ParamSpec
