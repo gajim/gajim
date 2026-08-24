@@ -436,9 +436,18 @@ class ConversationView(Gtk.ScrolledWindow):
         if abs(value - adj.get_value()) < 1:
             return False
 
-        # Keeping the content in place is not the user scrolling, don't let it
-        # turn into autoscroll. Otherwise content which shrinks enough to push
-        # the anchor against the bottom would latch the view there.
+        if row is None:
+            # We were already autoscrolling and are only keeping the view
+            # pinned to the bottom, so let the normal at-bottom bookkeeping
+            # (and the "mark as read" logic it triggers) run as usual.
+            adj.set_value(value)
+            return True
+
+        # Keeping a row in place while not autoscrolling is not the user
+        # scrolling, don't let it turn into autoscroll. Otherwise content
+        # which shrinks enough to push the anchor against the bottom would
+        # latch the view there, and firing "at-bottom" here would wrongly
+        # mark messages as read that the user hasn't actually seen.
         self._applying_anchor = True
         adj.set_value(value)
         self._applying_anchor = False
