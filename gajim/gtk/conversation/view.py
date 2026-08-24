@@ -132,6 +132,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._requesting: str | None = None
         self._block_signals = False
         self._scroll_end_timeout_id: int | None = None
+        self._at_bottom_notify_pending = False
 
         self._signal_handlers_enabled = False
         self._signal_handler_ids = (0, 0)
@@ -233,6 +234,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if self._scroll_end_timeout_id is not None:
             GLib.source_remove(self._scroll_end_timeout_id)
             self._scroll_end_timeout_id = None
+        self._at_bottom_notify_pending = False
 
         self._reset()
 
@@ -508,7 +510,14 @@ class ConversationView(Gtk.ScrolledWindow):
 
         if not self._applying_anchor:
             self._autoscroll = self._determine_autoscroll()
-            self._notify("at-bottom")
+            # Defer the actual notification until scrolling settles (see
+            # _stop_scrolling): do_size_allocate() re-runs this every time
+            # anything resizes while pinned to the bottom (window resizes,
+            # avatar/preview loads, rewraps, ...), not just on new messages.
+            # Notifying synchronously here would re-trigger "mark as read"
+            # dozens of times per second, e.g. while the user drags a window
+            # edge, even though at_bottom hasn't actually changed.
+            self._at_bottom_notify_pending = True
 
         if self._upper_complete:
             self._request_history_at_upper = None
@@ -557,6 +566,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _stop_scrolling(self) -> bool:
         self._scroll_end_timeout_id = None
+
+        if self._at_bottom_notify_pending:
+            self._at_bottom_notify_pending = False
+            self._notify("at-bottom")
 
         self._reposition_message_row_actions()
         self._message_row_actions.set_scrolling(False)
