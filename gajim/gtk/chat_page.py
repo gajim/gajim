@@ -324,6 +324,9 @@ class ChatPage(Gtk.Paned):
                 position=open_chat["position"],
             )
 
+    def is_chat_visible(self) -> bool:
+        return self._chat_stack.get_visible_child_name() in ("controls", "function")
+
     def is_chat_selected(self, account: str, jid: JID) -> bool:
         return self._chat_list_stack.is_chat_selected(account, jid)
 

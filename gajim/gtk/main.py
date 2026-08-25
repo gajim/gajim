@@ -1014,6 +1014,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return False
         if self._main_stack.get_visible_page_name() != "chats":
             return False
+        if not self._chat_page.is_chat_visible():
+            return False
         return self._chat_page.is_chat_selected(account, jid)
 
     def highlight_dnd_targets(self, dragged_object: Any, highlight: bool) -> None:
