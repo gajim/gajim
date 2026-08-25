@@ -1243,6 +1243,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._app_side_bar.show_activity_page()
         self._main_stack.show_activity_page(context_id)
 
+        self.set_action_state("focus-mode", False)
+        self.set_action_state("chat-list-visible", True)
+
     def get_control(self) -> ChatControl:
         return self._chat_page.get_control()
 
