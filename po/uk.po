@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2025-12-23 17:19+0000\n"
 "Last-Translator: Nomadic Entity <noiteluna@noleron.com>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -884,6 +884,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Ваш пароль"
+
 msgid "Ban"
 msgstr "Заборона"
 
@@ -1736,6 +1740,12 @@ msgstr "Бажаєте також видалити реєстрацію облі
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Це призведе до остаточного видалення цього відбитка пальця"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Завантажити"
 
@@ -1866,6 +1876,10 @@ msgstr "Уведіть новий пароль…"
 msgid "Enter Password"
 msgstr "Змінити пароль"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Змінити пароль"
+
 msgid "Enter a password to join this chat"
 msgstr "Введіть пароль, щоб приєднатися до цього чату"
 
@@ -1881,6 +1895,10 @@ msgstr "Введіть нове ім'я контакту"
 
 msgid "Enter new password..."
 msgstr "Уведіть новий пароль…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Введіть свій новий нікнейм"
@@ -1946,6 +1964,10 @@ msgstr "Термін придатності"
 
 msgid "Export"
 msgstr "Експортувати"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Вибрати пристрій"
 
 msgid "Export CSV"
 msgstr "Експорт CSV"
@@ -2368,6 +2390,9 @@ msgstr "Приховати"
 msgid "Hide Chat List"
 msgstr "Приховати список чатів"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Головна"
 
@@ -2430,6 +2455,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Час простою"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2667,6 +2695,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Зберігати історію чату"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s було заблоковано"
+
 msgid "Key usage does not include certificate signing"
 msgstr "До призначення ключа не належить підписування сертифікатів"
 
@@ -2696,6 +2728,9 @@ msgstr "Вийти з групового чату?"
 
 msgid "Leave _Permanently"
 msgstr "Виїхати _назавжди"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2914,6 +2949,10 @@ msgstr "Модератори"
 msgid "Modify"
 msgstr "Змінити"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Відпустка"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Більше інформації на providers.xmpp.net"
 
@@ -2940,6 +2979,9 @@ msgstr "Вимкнути звук"
 
 msgid "My Workspace"
 msgstr "Мій робочий простір"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "Назва"
@@ -2974,14 +3016,15 @@ msgstr "Нове повідомлення від"
 msgid "Next"
 msgstr "Далі"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Псевдонім"
+
 msgid "Nickname"
 msgstr "Псевдонім"
 
 msgid "Nickname contains invalid characters"
 msgstr "Нік містить недопустимі символи"
-
-msgid "Nickname…"
-msgstr "Нікнейм…"
 
 msgid "No"
 msgstr "Ні"
@@ -3015,6 +3058,9 @@ msgstr "Без порогу"
 #, fuzzy
 msgid "No Timezone"
 msgstr "Часовий пояс"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "Немає додаткових вимог"
@@ -3386,6 +3432,10 @@ msgstr "Слід ввести пароль"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Потрібен пароль"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Безпечне зберігання паролів"
 
 msgid "Passwords do not match"
 msgstr "Паролі не збігаються"
@@ -3994,9 +4044,6 @@ msgstr "Ресурс"
 msgid "Restart Gajim to finish this update"
 msgstr "Перезапустіть Gajim, щоб завершити оновлення"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Перезапустіть Gajim, щоб розпочати налагодження журналу"
-
 msgid "Restart Pending"
 msgstr "Очікується перезапуск"
 
@@ -4096,6 +4143,10 @@ msgstr "Відскануйте цей QR-код, щоб приєднатися �
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Відскануйте цей QR-код, щоб почати чат з %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Відскануйте цей QR-код, щоб почати чат з %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканування %(current)d / %(total)d ..."
@@ -4133,6 +4184,10 @@ msgstr "Результат пошуку"
 msgid "Search all Chats"
 msgstr "Шукати в усіх чатах"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "Шукати в усіх чатах"
+
 msgid "Search contacts..."
 msgstr "Пошук контактів..."
 
@@ -4152,6 +4207,10 @@ msgstr "Пошук в чатах…"
 msgid "Searching"
 msgstr "Шукаю"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "Шукаю…"
+
 msgid "Searching…"
 msgstr "Шукаю…"
 
@@ -4165,6 +4224,10 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Пошук…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "Довірче управління"
 
 msgid "Secure Password Storage"
 msgstr "Безпечне зберігання паролів"
@@ -4278,10 +4341,6 @@ msgstr "Відправлено контакт: «%(jid)s» (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Надіслати контакти:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Повністю розділити файли профілю (навіть базу даних історії та плагіни)"
-
 msgid "Serial Number: "
 msgstr "Серійний номер: "
 
@@ -4348,6 +4407,10 @@ msgstr "Поділитися контактами…"
 msgid "Share Group Chat…"
 msgstr "Поділитися груповим чатом…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "Вибрати пристрій"
+
 msgid "Share Status"
 msgstr "Статус акції"
 
@@ -4356,6 +4419,10 @@ msgstr "Поділитися відео"
 
 msgid "Share my online status"
 msgstr "Поділіться моїм статусом в Інтернеті"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Поділитися контактами…"
 
 msgid "Shortcuts"
 msgstr "Ярлики"
@@ -4379,6 +4446,9 @@ msgstr "Показати вміст"
 msgid "Show Details"
 msgstr "Показати деталі"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "Показати неактивні пристрої"
 
@@ -4397,6 +4467,10 @@ msgstr "Показати плагіни"
 
 msgid "Show Send Message Button"
 msgstr "Показати кнопку \"Надіслати повідомлення"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Показати рядок заголовка"
 
 msgid "Show Status Changes"
 msgstr "Показати зміни статусу"
@@ -5155,6 +5229,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Переключити список чату"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Переключити список учасників"
 
@@ -5302,6 +5379,10 @@ msgstr "Невідома мова"
 msgid "Unknown validation error"
 msgstr "Невідома помилка перевірки"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "Розблокувати"
+
 msgid "Unmute Chat"
 msgstr "Вимкнути звук у чаті"
 
@@ -5395,9 +5476,6 @@ msgstr "Використовуйте профіль для запуску дек
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Використовуйте незашифроване з'єднання з сервером"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Використовувати призначений профіль у каталозі налаштувань"
 
 msgid "Use proxy auth_entication"
 msgstr "Використовувати розпізнавання на проксі"
@@ -7082,6 +7160,9 @@ msgstr "...або киньте сюди."
 #~ msgid "News"
 #~ msgstr "Новини"
 
+#~ msgid "Nickname…"
+#~ msgstr "Нікнейм…"
+
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "З’єднання недоступне"
@@ -7261,6 +7342,9 @@ msgstr "...або киньте сюди."
 #~ msgid "Requires: libxss"
 #~ msgstr "Потрібно: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Перезапустіть Gajim, щоб розпочати налагодження журналу"
+
 #, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7324,6 +7408,11 @@ msgstr "...або киньте сюди."
 
 #~ msgid "Sender: "
 #~ msgstr "Відправник:"
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Повністю розділити файли профілю (навіть базу даних історії та плагіни)"
 
 #, fuzzy
 #~ msgid "Serial Number"
@@ -7476,6 +7565,10 @@ msgstr "...або киньте сюди."
 #~ msgid "The service could not be found"
 #~ msgstr "Не вдалося знайти службу"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Існують проблеми зі зв'язком"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Цей обліковий запис не з’єднано з сервером"
 
@@ -7545,6 +7638,9 @@ msgstr "...або киньте сюди."
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Сервер STUN:"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Використовувати призначений профіль у каталозі налаштувань"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Використовувати проксі передавання файлів"

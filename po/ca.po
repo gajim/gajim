@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -930,6 +930,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Desa la contrasenya"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Bandeja"
 
@@ -1850,6 +1854,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "_Canvia Missatge d'Estat"
@@ -1985,6 +1995,10 @@ msgstr "Desa la contrasenya"
 msgid "Enter Password"
 msgstr "Canviar contrasenya"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Canviar contrasenya"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2003,6 +2017,10 @@ msgstr "Sobrenom:"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Desa la contrasenya"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2073,6 +2091,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "_Exporta"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Connexió"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2541,6 +2563,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Accions Ocupant"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Pàgina d'inici:"
@@ -2603,6 +2628,9 @@ msgid ""
 msgstr ""
 
 msgid "Idle Time"
+msgstr ""
+
+msgid "If checked the search text is ignored."
 msgstr ""
 
 msgid ""
@@ -2867,6 +2895,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Historial"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "Sobrenom:"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2898,6 +2930,9 @@ msgid "Leave Group Chat?"
 msgstr "Grups de xat"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -3142,6 +3177,10 @@ msgstr "Moderadors"
 msgid "Modify"
 msgstr ""
 
+#, fuzzy
+msgid "More Actions"
+msgstr "_Afegeix Contacte..."
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3172,6 +3211,9 @@ msgid "Mute Sounds"
 msgstr ""
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3213,15 +3255,15 @@ msgid "Next"
 msgstr ""
 
 #, fuzzy
+msgid "Nick"
+msgstr "Sobrenom:"
+
+#, fuzzy
 msgid "Nickname"
 msgstr "Sobrenom:"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Sobrenom:"
 
 msgid "No"
 msgstr "No"
@@ -3258,6 +3300,9 @@ msgid "No Threshold"
 msgstr ""
 
 msgid "No Timezone"
+msgstr ""
+
+msgid "No account password found, unlocking not possible"
 msgstr ""
 
 msgid "No additional requirements"
@@ -3649,6 +3694,10 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Contrasenya:"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Desa la contrasenya"
 
 msgid "Passwords do not match"
 msgstr ""
@@ -4323,12 +4372,6 @@ msgstr ""
 "efecte"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
-"efecte"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "requereix"
 
@@ -4439,6 +4482,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Voldria afegir-te a la meva llista de contactes."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Voldria afegir-te a la meva llista de contactes."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
@@ -4484,6 +4531,10 @@ msgid "Search all Chats"
 msgstr "Cerca Base de Dades"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "Cerca Base de Dades"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "Cerca Base de Dades"
 
@@ -4504,6 +4555,10 @@ msgid "Searching"
 msgstr "Cerca:"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Cerca:"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Cerca:"
 
@@ -4516,6 +4571,9 @@ msgstr "Cerca:"
 #, fuzzy
 msgid "Search…"
 msgstr "Cerca:"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4638,9 +4696,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr ""
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4718,6 +4773,10 @@ msgid "Share Group Chat…"
 msgstr "Grups de xat"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Connexió"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Estat"
 
@@ -4728,6 +4787,10 @@ msgstr "Comença Xat"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Mostra els contactes desconnectats"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Afegeix Contacte..."
 
 #, fuzzy
 msgid "Shortcuts"
@@ -4757,6 +4820,9 @@ msgstr "Mostra Contactes Actius"
 msgid "Show Details"
 msgstr "Gajim"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Disponible per parlar"
@@ -4778,6 +4844,10 @@ msgstr "Connectors"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Envia missatge"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Mostra Transports"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5549,6 +5619,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Accions Ocupant"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Accions Ocupant"
@@ -5712,6 +5785,10 @@ msgid "Unknown validation error"
 msgstr ""
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Desbloquejar"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "_Veu"
 
@@ -5812,9 +5889,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Informació sobre tu, tal i com està guardada al servidor"
-
-msgid "Use defined profile in configuration directory"
-msgstr ""
 
 msgid "Use proxy auth_entication"
 msgstr "Fa ús d'autenticació proxy"
@@ -7103,6 +7177,10 @@ msgstr ""
 #~ msgstr "Afegeix un contacte nou"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Sobrenom:"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "_No Disponible"
 
@@ -7224,6 +7302,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "requereix"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
+#~ "efecte"
 
 #, fuzzy
 #~ msgctxt "proxy configuration"

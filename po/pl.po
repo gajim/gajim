@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-07-15 08:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-24 07:20+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -885,6 +885,9 @@ msgstr "Klucz tajny kopii zapasowej"
 msgid "Backup Successful"
 msgstr "Utworzenie kopii zapasowej powiodło się"
 
+msgid "Backup password copied"
+msgstr "Skopiowano hasło do kopii zapasowej"
+
 msgid "Ban"
 msgstr "Zbanuj"
 
@@ -1724,6 +1727,15 @@ msgstr "Czy chcesz również wyrejestrować Twoje konto na <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Ten odcisk palca zostanie całkowicie usunięty"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"Nie pokazuj hasła kopii zapasowej ani kodu QR na następnej stronie nikomu. "
+"Udostępnienie któregokolwiek skompromituje bezpieczeństwo Twoich "
+"szyfrowanych rozmów."
+
 msgid "Download"
 msgstr "Pobierz"
 
@@ -1853,6 +1865,9 @@ msgstr "Wprowadź hasło kopii zapasowej"
 msgid "Enter Password"
 msgstr "Wprowadź hasło"
 
+msgid "Enter Password to Unlock"
+msgstr "Wprowadź hasło do odblokowania"
+
 msgid "Enter a password to join this chat"
 msgstr "Wprowadź hasło, aby dołączyć do tej rozmowy"
 
@@ -1867,6 +1882,12 @@ msgstr "Podaj nową nazwę kontaktu"
 
 msgid "Enter new password..."
 msgstr "Wprowadź nowe hasło…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
+"Wprowadź hasło do Twojego konta aby odblokować tajny klucz i hasło kopii "
+"zapasowej."
 
 msgid "Enter your new nickname"
 msgstr "Podaj Twój nowy pseudonim"
@@ -1932,6 +1953,9 @@ msgstr "Data wygaśnięcia"
 
 msgid "Export"
 msgstr "Eksportuj"
+
+msgid "Export & Share Secret Key"
+msgstr "Eksportuj i udostępnij klucz tajny"
 
 msgid "Export CSV"
 msgstr "Eksport CSV"
@@ -2359,6 +2383,9 @@ msgstr "Ukryj"
 msgid "Hide Chat List"
 msgstr "Ukryj listę rozmów"
 
+msgid "Hide Sidebar"
+msgstr "Ukryj panel boczny"
+
 msgid "Home"
 msgstr "Dom"
 
@@ -2420,6 +2447,9 @@ msgstr "Identyfikator tego urządzenia. Nie zmieniaj jeśli nie wiesz co robisz.
 
 msgid "Idle Time"
 msgstr "Czas bezczynności"
+
+msgid "If checked the search text is ignored."
+msgstr "Jeśli zaznaczone, wyszukiwany tekst jest ignorowany."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2657,6 +2687,9 @@ msgstr "Zachowaj kopię zapasową"
 msgid "Keep Chat History"
 msgstr "Przechowuj historię rozmowy"
 
+msgid "Key has been saved"
+msgstr "Klucz został zapisany"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Tym kluczem nie można podpisywać certyfikatu"
 
@@ -2686,6 +2719,9 @@ msgstr "Opuścić rozmowę grupową?"
 
 msgid "Leave _Permanently"
 msgstr "Opuść _na stałe"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr "Niech Gajim generuje logi do rejestrowania błędów (wymagany restart)"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2904,6 +2940,9 @@ msgstr "Moderatorzy"
 msgid "Modify"
 msgstr "Edytuj"
 
+msgid "More Actions"
+msgstr "Więcej akcji"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Więcej informacji na providers.xmpp.net"
 
@@ -2930,6 +2969,9 @@ msgstr "Wyłącz dźwięki"
 
 msgid "My Workspace"
 msgstr "Mój obszar roboczy"
+
+msgid "Myself"
+msgstr "Ja"
 
 msgid "Name"
 msgstr "Nazwa"
@@ -2964,14 +3006,14 @@ msgstr "Nowa wiadomość od"
 msgid "Next"
 msgstr "Następne"
 
+msgid "Nick"
+msgstr "Pseudonim"
+
 msgid "Nickname"
 msgstr "Pseudonim"
 
 msgid "Nickname contains invalid characters"
 msgstr "Pseudonim zawiera niedozwolone znaki"
-
-msgid "Nickname…"
-msgstr "Pseudonim…"
 
 msgid "No"
 msgstr "Nie"
@@ -3003,6 +3045,9 @@ msgstr "Brak progu"
 
 msgid "No Timezone"
 msgstr "Brak strefy czasowej"
+
+msgid "No account password found, unlocking not possible"
+msgstr "Nie odnaleziono hasła do konta, odblokowanie nie jest możliwe"
 
 msgid "No additional requirements"
 msgstr "Brak dodatkowych wymagań"
@@ -3370,6 +3415,9 @@ msgstr "Hasło jest wymagane"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Hasło jest wymagane"
+
+msgid "Password incorrect"
+msgstr "Hasło nieprawidłowe"
 
 msgid "Passwords do not match"
 msgstr "Hasła nie zgadzają się"
@@ -3971,9 +4019,6 @@ msgstr "Zasób"
 msgid "Restart Gajim to finish this update"
 msgstr "Uruchom ponownie Gajima, żeby dokończyć tę aktualizację"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Uruchom ponownie Gajima, żeby rozpocząć logowanie dla debugowania"
-
 msgid "Restart Pending"
 msgstr "Restart w trakcie"
 
@@ -4072,6 +4117,9 @@ msgstr "Zeskanuj ten kod QR aby dołączyć do %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Zeskanuj ten kod QR aby rozpocząć rozmowę z %s."
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Zeskanuj ten kod QR aby przenieść klucz na inne urządzenie."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanowanie %(current)d / %(total)d…"
@@ -4109,6 +4157,9 @@ msgstr "Wynik wyszukiwania"
 msgid "Search all Chats"
 msgstr "Przeszukaj wszystkie rozmowy"
 
+msgid "Search all messages"
+msgstr "Przeszukaj wszystkie wiadomości"
+
 msgid "Search contacts..."
 msgstr "Szukaj kontaktów…"
 
@@ -4128,6 +4179,9 @@ msgstr "Szukaj w rozmowach…"
 msgid "Searching"
 msgstr "Wyszukiwanie"
 
+msgid "Searching all…"
+msgstr "Przeszukiwanie wszystkich…"
+
 msgid "Searching…"
 msgstr "Wyszukiwanie…"
 
@@ -4141,6 +4195,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Szukaj…"
+
+msgid "Secret Key Management"
+msgstr "Zarządzanie kluczem tajnym"
 
 msgid "Secure Password Storage"
 msgstr "Bezpieczny magazyn haseł"
@@ -4254,10 +4311,6 @@ msgstr "Wysłano kontakt: „%(jid)s” (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Wyślij kontakty:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Całkowicie odseparuj pliki profilu (nawet historię bazy danych i wtyczek)"
-
 msgid "Serial Number: "
 msgstr "Numer seryjny: "
 
@@ -4323,6 +4376,9 @@ msgstr "Udostępnij kontakt…"
 msgid "Share Group Chat…"
 msgstr "Udostępnij rozmowę grupową…"
 
+msgid "Share Secret Key"
+msgstr "Udostępnij klucz tajny"
+
 msgid "Share Status"
 msgstr "Udostępnij status"
 
@@ -4331,6 +4387,9 @@ msgstr "Udostępnij wideo"
 
 msgid "Share my online status"
 msgstr "Udostępnij mój status połączenia"
+
+msgid "Share…"
+msgstr "Udostępnij…"
 
 msgid "Shortcuts"
 msgstr "Skróty klawiszowe"
@@ -4353,6 +4412,9 @@ msgstr "Pokaż przyciski"
 msgid "Show Details"
 msgstr "Pokaż szczegóły"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "Pokaż wewnętrzne logi Gajima i dane protokołu XML"
+
 msgid "Show Inactive Devices"
 msgstr "Pokaż nieaktywne urządzenia"
 
@@ -4370,6 +4432,9 @@ msgstr "Pokaż wtyczki"
 
 msgid "Show Send Message Button"
 msgstr "Pokaż przycisk wysyłania wiadomości"
+
+msgid "Show Sidebar"
+msgstr "Pokaż panel boczny"
 
 msgid "Show Status Changes"
 msgstr "Pokazuj zmiany statusu"
@@ -5129,6 +5194,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Przełącz listę rozmów"
 
+msgid "Toggle Focus Mode"
+msgstr "Przełącz tryb skupienia"
+
 msgid "Toggle participants list"
 msgstr "Przełącz listę uczestników"
 
@@ -5276,6 +5344,9 @@ msgstr "Nieznany język"
 msgid "Unknown validation error"
 msgstr "Nieznany błąd walidacji"
 
+msgid "Unlock"
+msgstr "Odblokuj"
+
 msgid "Unmute Chat"
 msgstr "Wyłącz wyciszenie rozmowy"
 
@@ -5367,9 +5438,6 @@ msgstr "Użyj profilu aby uruchamiać wiele instancji Gajima"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Użyj niezaszyfrowanego połączenia do serwera"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Użyj profilu zdefiniowanego w katalogu konfiguracyjnym"
 
 msgid "Use proxy auth_entication"
 msgstr "Używaj aut_oryzacji serwera proxy"
@@ -7140,6 +7208,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "News"
 #~ msgstr "Wiadomości"
 
+#~ msgid "Nickname…"
+#~ msgstr "Pseudonim…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Połączenie sieciowe jest niedostępne"
 
@@ -7324,6 +7395,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Requires: libxss"
 #~ msgstr "Wymaga: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Uruchom ponownie Gajima, żeby rozpocząć logowanie dla debugowania"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA‑1"
 
@@ -7396,6 +7470,11 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Sender: "
 #~ msgstr "Nadawca: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Całkowicie odseparuj pliki profilu (nawet historię bazy danych i wtyczek)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Numer seryjny"
@@ -7574,6 +7653,10 @@ msgstr "…lub upuść tutaj"
 #~ msgid "The service could not be found"
 #~ msgstr "Nie można odnaleźć usługi"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Są problemy z połączeniem"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "To konto nie jest połączone z serwerem"
 
@@ -7643,6 +7726,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Użyj serwera STUN"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Użyj profilu zdefiniowanego w katalogu konfiguracyjnym"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Używaj serwerów proxy do przesyłania plików"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-07-15 03:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-24 01:20+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -870,6 +870,9 @@ msgstr "备份私钥"
 msgid "Backup Successful"
 msgstr "备份成功"
 
+msgid "Backup password copied"
+msgstr "备份密码已复制"
+
 msgid "Ban"
 msgstr "封禁"
 
@@ -1697,6 +1700,14 @@ msgstr "也要注销您在 <b>%s</b> 上的账号吗？"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "执行操作后将永久删除此指纹"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"请勿向任何人展示以下页面上的备份密码或二维码。共享其中任何一项都会危及您加密"
+"聊天的安全性。"
+
 msgid "Download"
 msgstr "下载"
 
@@ -1820,6 +1831,9 @@ msgstr "输入备份密码"
 msgid "Enter Password"
 msgstr "输入密码"
 
+msgid "Enter Password to Unlock"
+msgstr "输入密码以解锁"
+
 msgid "Enter a password to join this chat"
 msgstr "输入密码即可加入此聊天"
 
@@ -1834,6 +1848,10 @@ msgstr "输入新联系人名称"
 
 msgid "Enter new password..."
 msgstr "输入新密码…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr "输入您的账号密码以解锁私钥和备份密码。"
 
 msgid "Enter your new nickname"
 msgstr "输入您的新昵称"
@@ -1899,6 +1917,9 @@ msgstr "到期日期"
 
 msgid "Export"
 msgstr "导出"
+
+msgid "Export & Share Secret Key"
+msgstr "导出和分享私钥"
 
 msgid "Export CSV"
 msgstr "导出 CSV"
@@ -2317,6 +2338,9 @@ msgstr "隐藏"
 msgid "Hide Chat List"
 msgstr "隐藏聊天列表"
 
+msgid "Hide Sidebar"
+msgstr "隐藏侧边栏"
+
 msgid "Home"
 msgstr "住宅"
 
@@ -2378,6 +2402,9 @@ msgstr "此设备的标识符。除非您知道更改后的影响，否则请勿
 
 msgid "Idle Time"
 msgstr "空闲时间"
+
+msgid "If checked the search text is ignored."
+msgstr "如果已勾选，则忽略搜索文本。"
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2609,6 +2636,9 @@ msgstr "保留备份"
 msgid "Keep Chat History"
 msgstr "保留聊天记录"
 
+msgid "Key has been saved"
+msgstr "密钥已保存"
+
 msgid "Key usage does not include certificate signing"
 msgstr "密钥用途不包含证书签名"
 
@@ -2638,6 +2668,9 @@ msgstr "离开群聊？"
 
 msgid "Leave _Permanently"
 msgstr "永久离开(_P)"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr "让 Gajim 生成日志以追踪错误（需要重启）"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2854,6 +2887,9 @@ msgstr "主持人"
 msgid "Modify"
 msgstr "修改"
 
+msgid "More Actions"
+msgstr "更多操作"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "如需了解详情，请访问 providers.xmpp.net"
 
@@ -2880,6 +2916,9 @@ msgstr "静音"
 
 msgid "My Workspace"
 msgstr "我的工作区"
+
+msgid "Myself"
+msgstr "我自己"
 
 msgid "Name"
 msgstr "名称"
@@ -2914,14 +2953,14 @@ msgstr "新消息来自"
 msgid "Next"
 msgstr "下一步"
 
+msgid "Nick"
+msgstr "昵称"
+
 msgid "Nickname"
 msgstr "昵称"
 
 msgid "Nickname contains invalid characters"
 msgstr "昵称包含无效字符"
-
-msgid "Nickname…"
-msgstr "昵称…"
 
 msgid "No"
 msgstr "否"
@@ -2953,6 +2992,9 @@ msgstr "无阈值"
 
 msgid "No Timezone"
 msgstr "无时区"
+
+msgid "No account password found, unlocking not possible"
+msgstr "未找到账号密码，无法解锁"
 
 msgid "No additional requirements"
 msgstr "无额外要求"
@@ -3311,6 +3353,9 @@ msgstr "需要密码"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "需要密码"
+
+msgid "Password incorrect"
+msgstr "密码不正确"
 
 msgid "Passwords do not match"
 msgstr "密码不匹配"
@@ -3902,9 +3947,6 @@ msgstr "资源"
 msgid "Restart Gajim to finish this update"
 msgstr "重启 Gajim 以完成此更新"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "重启 Gajim 以开始调试日志记录"
-
 msgid "Restart Pending"
 msgstr "重启待处理"
 
@@ -4003,6 +4045,9 @@ msgstr "扫描此二维码加入 %s。"
 msgid "Scan this QR code to start a chat with %s."
 msgstr "扫描此二维码与 %s 开始聊天。"
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "扫描此二维码将密钥转移到另一台设备。"
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "正在扫描 %(current)d / %(total)d …"
@@ -4040,6 +4085,9 @@ msgstr "搜索结果"
 msgid "Search all Chats"
 msgstr "搜索所有聊天"
 
+msgid "Search all messages"
+msgstr "搜索所有消息"
+
 msgid "Search contacts..."
 msgstr "搜索联系人…"
 
@@ -4059,6 +4107,9 @@ msgstr "在聊天中搜索…"
 msgid "Searching"
 msgstr "正在搜索"
 
+msgid "Searching all…"
+msgstr "正在搜索全部…"
+
 msgid "Searching…"
 msgstr "正在搜索…"
 
@@ -4072,6 +4123,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "搜索…"
+
+msgid "Secret Key Management"
+msgstr "私钥管理"
 
 msgid "Secure Password Storage"
 msgstr "安全密码存储"
@@ -4183,9 +4237,6 @@ msgstr "已发送联系人：“%(jid)s”（%(name)s）"
 msgid "Sent contacts:"
 msgstr "已发送联系人："
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr "完全分离配置文件（甚至包括历史数据库和插件）"
-
 msgid "Serial Number: "
 msgstr "序列号： "
 
@@ -4250,6 +4301,9 @@ msgstr "分享联系人…"
 msgid "Share Group Chat…"
 msgstr "分享群聊…"
 
+msgid "Share Secret Key"
+msgstr "分享私钥"
+
 msgid "Share Status"
 msgstr "分享状态"
 
@@ -4258,6 +4312,9 @@ msgstr "分享视频"
 
 msgid "Share my online status"
 msgstr "分享我的在线状态"
+
+msgid "Share…"
+msgstr "分享…"
 
 msgid "Shortcuts"
 msgstr "快捷键"
@@ -4280,6 +4337,9 @@ msgstr "显示控制"
 msgid "Show Details"
 msgstr "显示详情"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "显示 Gajim 的内部日志和 XML 协议数据"
+
 msgid "Show Inactive Devices"
 msgstr "显示非活动设备"
 
@@ -4297,6 +4357,9 @@ msgstr "显示插件"
 
 msgid "Show Send Message Button"
 msgstr "显示发送消息按钮"
+
+msgid "Show Sidebar"
+msgstr "显示侧边栏"
 
 msgid "Show Status Changes"
 msgstr "显示状态更改"
@@ -5012,6 +5075,9 @@ msgstr "要设置 OpenPGP 加密，您可以导入现有密钥，或让 Gajim �
 msgid "Toggle Chat List"
 msgstr "切换聊天列表"
 
+msgid "Toggle Focus Mode"
+msgstr "切换专注模式"
+
 msgid "Toggle participants list"
 msgstr "切换参与者列表"
 
@@ -5159,6 +5225,9 @@ msgstr "未知语言"
 msgid "Unknown validation error"
 msgstr "未知验证错误"
 
+msgid "Unlock"
+msgstr "解锁"
+
 msgid "Unmute Chat"
 msgstr "取消静音聊天"
 
@@ -5250,9 +5319,6 @@ msgstr "使用配置文件运行多个 Gajim 实例"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "使用未加密的服务器连接"
-
-msgid "Use defined profile in configuration directory"
-msgstr "使用配置目录中定义的配置文件"
 
 msgid "Use proxy auth_entication"
 msgstr "使用代理身份验证(_E)"
@@ -6983,6 +7049,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "News"
 #~ msgstr "新闻"
 
+#~ msgid "Nickname…"
+#~ msgstr "昵称…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "无可用连接"
 
@@ -7165,6 +7234,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Requires: libxss"
 #~ msgstr "需要：libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "重启 Gajim 以开始调试日志记录"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7233,6 +7305,10 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Sender: "
 #~ msgstr "发送者： "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr "完全分离配置文件（甚至包括历史数据库和插件）"
 
 #~ msgid "Serial Number"
 #~ msgstr "序列号"
@@ -7406,6 +7482,10 @@ msgstr "…或将其拖放到此处"
 #~ msgid "The service could not be found"
 #~ msgstr "未找到此服务"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "存在连接问题"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "此账号没有连接到服务器"
 
@@ -7474,6 +7554,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "使用 STUN 服务器"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "使用配置目录中定义的配置文件"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "使用文件传输代理"

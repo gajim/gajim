@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-07-14 22:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-24 18:20+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -872,6 +872,9 @@ msgstr "Titkos kulcs mentése"
 msgid "Backup Successful"
 msgstr "Sikeres mentés"
 
+msgid "Backup password copied"
+msgstr "A helyreállításii jelszó másolása kész"
+
 msgid "Ban"
 msgstr "Kitiltás"
 
@@ -1714,6 +1717,15 @@ msgstr "A kiszolgálóról (<b>%s</b>) is törölhető a fiók?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Az ujjlenyomat végelegesen törlődni fog"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"A következő oldalon szereplő helyreállítási jelszót vagy QR-kódot titokban "
+"kell tartani, különben veszélybe kerülhet a titkosított beszélgetések "
+"biztonsága."
+
 msgid "Download"
 msgstr "Letöltés"
 
@@ -1840,6 +1852,9 @@ msgstr "A mentési jelszó megadása"
 msgid "Enter Password"
 msgstr "Jelszó megadása"
 
+msgid "Enter Password to Unlock"
+msgstr "Jelszó megadása a feloldáshoz"
+
 msgid "Enter a password to join this chat"
 msgstr "A társalgó jelszavának megadása"
 
@@ -1854,6 +1869,11 @@ msgstr "Az új név megadása"
 
 msgid "Enter new password..."
 msgstr "Ú jelszó…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
+"A fiókjelszó megadása a titkos kulcs és a helyreállítási jelszó feloldásához."
 
 msgid "Enter your new nickname"
 msgstr "Új becenév megadása"
@@ -1919,6 +1939,9 @@ msgstr "Lejárati dátum"
 
 msgid "Export"
 msgstr "Exportálás"
+
+msgid "Export & Share Secret Key"
+msgstr "Exportálás és kulcsmegosztás"
 
 msgid "Export CSV"
 msgstr "Exportálás CSV-fájlba"
@@ -2342,6 +2365,9 @@ msgstr "Elrejtés"
 msgid "Hide Chat List"
 msgstr "A beszélgetések elrejtése"
 
+msgid "Hide Sidebar"
+msgstr "Oldalsáv elrejtése"
+
 msgid "Home"
 msgstr "Otthoni"
 
@@ -2404,6 +2430,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Tétlenségi idő"
+
+msgid "If checked the search text is ignored."
+msgstr "Bekapcsolva a keresendő szöveg mellőzve lesz."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2638,6 +2667,9 @@ msgstr "Mentés megtartása"
 msgid "Keep Chat History"
 msgstr "A beszélgetések mentése"
 
+msgid "Key has been saved"
+msgstr "A kulcs mentése kész"
+
 msgid "Key usage does not include certificate signing"
 msgstr "A kulcshasználat nem tartalmaz tanúsítvány-aláírást"
 
@@ -2667,6 +2699,9 @@ msgstr "Távozás a társalgóból"
 
 msgid "Leave _Permanently"
 msgstr "_Végleges távozás"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr "Naplófájl létrehozása a hibák felderítéséhez (újraindítás szükséges)"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2883,6 +2918,9 @@ msgstr "Moderátorok"
 msgid "Modify"
 msgstr "Módosítás"
 
+msgid "More Actions"
+msgstr "További műveletek"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "További információ a providers.xmpp.net webhelyen"
 
@@ -2909,6 +2947,9 @@ msgstr "Hangok némítása"
 
 msgid "My Workspace"
 msgstr "Munkaterület"
+
+msgid "Myself"
+msgstr "Én"
 
 msgid "Name"
 msgstr "Név"
@@ -2943,14 +2984,14 @@ msgstr "Új üzenet tőle:"
 msgid "Next"
 msgstr "Következő"
 
+msgid "Nick"
+msgstr "Becenév"
+
 msgid "Nickname"
 msgstr "Becenév"
 
 msgid "Nickname contains invalid characters"
 msgstr "A becenév érvénytelen karaktereket tartalmaz"
-
-msgid "Nickname…"
-msgstr "Becenév…"
 
 msgid "No"
 msgstr "Nem"
@@ -2982,6 +3023,9 @@ msgstr "Korlátlan"
 
 msgid "No Timezone"
 msgstr "Nincs időzóna"
+
+msgid "No account password found, unlocking not possible"
+msgstr "Fiókjelszó hiányában a feloldás nem lehetséges"
 
 msgid "No additional requirements"
 msgstr "Nincs további követelmény"
@@ -3344,6 +3388,9 @@ msgstr "Jelszó szükséges"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Jelszó szükséges"
+
+msgid "Password incorrect"
+msgstr "Hibás jelszó"
 
 msgid "Passwords do not match"
 msgstr "A jelszavak nem egyeznek"
@@ -3942,9 +3989,6 @@ msgstr "Erőforrás"
 msgid "Restart Gajim to finish this update"
 msgstr "A frissítés befejezéséhez a Gajim újraindítása szükséges"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "A hibakereső naplózásához újra kell indítani a programot"
-
 msgid "Restart Pending"
 msgstr "Újraindításra vár"
 
@@ -4045,6 +4089,9 @@ msgstr "%s: belépés QR-kóddal."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "%s: beszélgetés kezdeményezése QR-kóddal."
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "A titkos kulcs a QR-kód beolvasásával vihető át másik eszközre."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Vizsgálat: %(current)d / %(total)d…"
@@ -4082,6 +4129,9 @@ msgstr "Találatok"
 msgid "Search all Chats"
 msgstr "Keresés az összes beszélgetésben"
 
+msgid "Search all messages"
+msgstr "Minden üzenet keresése"
+
 msgid "Search contacts..."
 msgstr "Névjegy keresése…"
 
@@ -4101,6 +4151,9 @@ msgstr "Keresés a beszélgetésekben…"
 msgid "Searching"
 msgstr "Keresés"
 
+msgid "Searching all…"
+msgstr "Az összes keresése…"
+
 msgid "Searching…"
 msgstr "Keresés…"
 
@@ -4114,6 +4167,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Keresés…"
+
+msgid "Secret Key Management"
+msgstr "Titkos kulcs kezelése"
 
 msgid "Secure Password Storage"
 msgstr "Biztonságos jelszótárolás"
@@ -4226,10 +4282,6 @@ msgstr "Továbbított névjegy: %(jid)s (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Továbbított névjegyek:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Teljesen különálló profilfájlok (a mentett beszélgetések és a bővítmények is)"
-
 msgid "Serial Number: "
 msgstr "Sorozatszám: "
 
@@ -4294,6 +4346,9 @@ msgstr "Névjegy megosztása…"
 msgid "Share Group Chat…"
 msgstr "A társalgó címének megosztása…"
 
+msgid "Share Secret Key"
+msgstr "Titkos kulcs megosztása"
+
 msgid "Share Status"
 msgstr "Jelenléti állapot megosztása"
 
@@ -4302,6 +4357,9 @@ msgstr "Videó megosztása"
 
 msgid "Share my online status"
 msgstr "Láthatja a jelenléti állapotomat"
+
+msgid "Share…"
+msgstr "Megosztás…"
 
 msgid "Shortcuts"
 msgstr "Billentyűparancsok"
@@ -4324,6 +4382,9 @@ msgstr "Vezérlők megjelenítése"
 msgid "Show Details"
 msgstr "Részletes információ"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "A naplóesemények és protokolladatok megjelenítése"
+
 msgid "Show Inactive Devices"
 msgstr "Inaktív eszközök megjelenítése"
 
@@ -4341,6 +4402,9 @@ msgstr "Bővítmények"
 
 msgid "Show Send Message Button"
 msgstr "Küldés gomb megjelenítése"
+
+msgid "Show Sidebar"
+msgstr "Oldalsáv megjelenítése"
 
 msgid "Show Status Changes"
 msgstr "Állapotváltozások jelzése"
@@ -5086,6 +5150,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Az oldalsáv mutatása/elrejtése"
 
+msgid "Toggle Focus Mode"
+msgstr "Fókuszmód váltása"
+
 msgid "Toggle participants list"
 msgstr "Résztvevők megjelenítése/elrejtése"
 
@@ -5233,6 +5300,9 @@ msgstr "Ismeretlen nyelv"
 msgid "Unknown validation error"
 msgstr "Ismeretlen érvényesítési hiba"
 
+msgid "Unlock"
+msgstr "Feloldás"
+
 msgid "Unmute Chat"
 msgstr "Némítás vége"
 
@@ -5324,9 +5394,6 @@ msgstr "Profil használata a többpéldányos indításhoz"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Titkosítás nélküli kapcsolódás a kiszolgálóhoz"
-
-msgid "Use defined profile in configuration directory"
-msgstr "A megadott nevű profil használata"
 
 msgid "Use proxy auth_entication"
 msgstr "Hit_elesítés szükséges"
@@ -7096,6 +7163,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "News"
 #~ msgstr "Hírek"
 
+#~ msgid "Nickname…"
+#~ msgstr "Becenév…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Nincs kapcsolat"
 
@@ -7277,6 +7347,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Requires: libxss"
 #~ msgstr "Követelmény: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "A hibakereső naplózásához újra kell indítani a programot"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7348,6 +7421,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Sender: "
 #~ msgstr "Feladó: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Teljesen különálló profilfájlok (a mentett beszélgetések és a bővítmények "
+#~ "is)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Sorozatszám"
@@ -7517,6 +7596,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "The service could not be found"
 #~ msgstr "A szolgáltatás nem található"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Csatlakozási probléma"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ez a fiók nem kapcsolódik a kiszolgálóhoz"
 
@@ -7585,6 +7668,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN-kiszolgáló használata"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "A megadott nevű profil használata"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Fájlküldő proxy használata"

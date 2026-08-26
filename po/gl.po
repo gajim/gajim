@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2025-11-18 17:19+0000\n"
 "Last-Translator: \"[1D*nxLf\\\"@373\" <correoxm@disroot.org>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -883,6 +883,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Insira o contrasinal novo:"
+
 msgid "Ban"
 msgstr "Vetar"
 
@@ -1736,6 +1740,12 @@ msgstr "Queres tamén dar de baixa a conta en <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Ao facelo tamén eliminas de xeito definitivo a súa Impresión Dixital"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Descargar"
 
@@ -1869,6 +1879,10 @@ msgstr "Escribe o novo contrainal..."
 msgid "Enter Password"
 msgstr "Cambiar o contrasinal"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Cambiar o contrasinal"
+
 msgid "Enter a password to join this chat"
 msgstr "Escribe o contrasinal para unirte a esta conversa"
 
@@ -1884,6 +1898,10 @@ msgstr "Escribe o nome do novo contacto"
 
 msgid "Enter new password..."
 msgstr "Escribe o novo contrainal..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Escribe o teu novo alcume"
@@ -1950,6 +1968,10 @@ msgstr "Data de caducidade"
 
 msgid "Export"
 msgstr "Exportar"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Elixe o dispositivo"
 
 msgid "Export CSV"
 msgstr "Exportar CSV"
@@ -2378,6 +2400,9 @@ msgstr "Ocultar"
 msgid "Hide Chat List"
 msgstr "Ocultar lista de conversas"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Inicio"
 
@@ -2445,6 +2470,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Tempo detido"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2680,6 +2708,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Manter historial da conversa"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "Vetouse a %s"
+
 msgid "Key usage does not include certificate signing"
 msgstr "O uso da clave non inclúe a sinatura do certificado"
 
@@ -2709,6 +2741,9 @@ msgstr "Saír da conversa en grupo?"
 
 msgid "Leave _Permanently"
 msgstr "Saír definitivamente"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2939,6 +2974,10 @@ msgstr "Moderadores"
 msgid "Modify"
 msgstr "_Modificar"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "De vacacións"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -2970,6 +3009,9 @@ msgid "Mute Sounds"
 msgstr "Sen sons"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3012,15 +3054,15 @@ msgstr "Mensaxe nova de %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Alcume"
+
 msgid "Nickname"
 msgstr "Alcume"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Alcume"
 
 #, fuzzy
 msgid "No"
@@ -3059,6 +3101,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Hora"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3459,6 +3504,10 @@ msgstr "É necesario o contrasinal"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "É necesario o contrasinal"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Gardar o contrasinal"
 
 msgid "Passwords do not match"
 msgstr "Os contrasinais non coinciden"
@@ -4144,11 +4193,6 @@ msgstr ""
 "<b>NOTA:</b> Debe reiniciar o Gajim para que algúns cambios teñan efecto"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>NOTA:</b> Debe reiniciar o Gajim para que algúns cambios teñan efecto"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "É necesario o contrasinal"
 
@@ -4264,6 +4308,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Gustaríame engadilo á miña listaxe de contactos"
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Gustaríame engadilo á miña listaxe de contactos"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Escaneando %d / %d.."
@@ -4309,6 +4357,10 @@ msgid "Search all Chats"
 msgstr "_Buscar na base de datos"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Buscar na base de datos"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Buscar na base de datos"
 
@@ -4329,6 +4381,10 @@ msgid "Searching"
 msgstr "Buscar"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Buscar"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Buscar"
 
@@ -4341,6 +4397,9 @@ msgstr "Buscar"
 #, fuzzy
 msgid "Search…"
 msgstr "Buscar"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4468,9 +4527,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Contactos"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Número de GG:"
@@ -4552,6 +4608,10 @@ msgid "Share Group Chat…"
 msgstr "Novo grupo de charla"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Elixe o dispositivo"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Estado"
 
@@ -4562,6 +4622,10 @@ msgstr "Iniciar a charla"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Un contacto cambiou o seu estado"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Engadir un contacto..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4590,6 +4654,9 @@ msgstr "Amosar os contactos desconectados"
 msgid "Show Details"
 msgstr "Detalles"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Mensaxes de estado por defecto"
@@ -4611,6 +4678,10 @@ msgstr "Fallou a conexión"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Enviar a mensaxe"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Amosar os trans_portes"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5432,6 +5503,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Participante"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Participante"
@@ -5597,6 +5671,10 @@ msgid "Unknown validation error"
 msgstr "Configuración da sala"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "Bloquear"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Solicitude de transferencia de ficheiro"
 
@@ -5703,10 +5781,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Non está conectado ao servidor"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Editor avanzado de configuración"
 
 msgid "Use proxy auth_entication"
 msgstr "Usar autenticación do mandatario"
@@ -7387,6 +7461,10 @@ msgstr ""
 #~ msgstr "Filme"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Alcume"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Conexión non dispoñíbel"
 
@@ -7548,6 +7626,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "É necesario o contrasinal"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NOTA:</b> Debe reiniciar o Gajim para que algúns cambios teñan efecto"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -7808,6 +7891,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Servidor:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Editor avanzado de configuración"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Usar proxies para as transferencias de ficheiros"

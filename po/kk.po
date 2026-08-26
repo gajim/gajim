@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-05-10 14:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-26 17:04+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
-">\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
+"\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -102,10 +102,10 @@ msgstr "%(actor)s %(nick)s дегенді шығарып жіберді"
 msgid "%(nick)s is now %(affiliation)s of this group chat"
 msgstr "%(nick)s енді осы топтық чаттың %(affiliation)s мәртебесіне ие"
 
-#, fuzzy, python-format
+#, python-format
 msgctxt "Group chat name"
 msgid "%(nickname)s and me"
-msgstr "%(nickname)s:"
+msgstr "%(nickname)s және мен"
 
 #, python-format
 msgid "%(nickname)s:"
@@ -264,7 +264,7 @@ msgstr "(себебі: жүйе жұмысын тоқтатты)"
 #, python-format
 msgctxt "Group chat name"
 msgid ", %(number of participants)s others"
-msgstr ""
+msgstr ", %(number of participants)s басқа"
 
 msgid "1 Day"
 msgstr "1 күн"
@@ -888,6 +888,9 @@ msgstr "Құпия кілттің сақтық көшірмесін жасау"
 msgid "Backup Successful"
 msgstr "Сақтық көшірме жасау сәтті аяқталды"
 
+msgid "Backup password copied"
+msgstr "Сақтық көшірме паролі көшірілді"
+
 msgid "Ban"
 msgstr "Банға салу"
 
@@ -1283,7 +1286,7 @@ msgid "Configure"
 msgstr "Баптау"
 
 msgid "Configure Gajim with values from a .json file"
-msgstr ""
+msgstr "Gajim-ді .json файлындағы мәндермен баптау"
 
 msgid "Configure logging system"
 msgstr "Журналдау жүйесін баптау"
@@ -1486,9 +1489,8 @@ msgstr "Тіркелгіні жасау..."
 msgid "Credentials expired"
 msgstr "Тіркелгі деректерінің мерзімі аяқталды"
 
-#, fuzzy
 msgid "Current password incorrect"
-msgstr "Парольді қауіпсіз сақтау"
+msgstr "Ағымдағы пароль қате"
 
 msgid "Custom"
 msgstr "Пайдаланушылық"
@@ -1731,6 +1733,15 @@ msgstr "<b>%s</b> жүйесінде тіркелгіңізді тіркеуде
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Бұл әрекет осы саусақ ізін біржола өшіреді"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"Келесі беттегі сақтық көшірме паролін немесе QR кодты ешкімге көрсетпеңіз. "
+"Олардың кез келгенімен бөлісу шифрленген чаттарыңыздың қауіпсіздігіне нұқсан "
+"келтіреді."
+
 msgid "Download"
 msgstr "Жүктеп алу"
 
@@ -1858,12 +1869,14 @@ msgstr "Сақтық көшірме паролін енгізу"
 msgid "Enter Password"
 msgstr "Парольді енгізу"
 
+msgid "Enter Password to Unlock"
+msgstr "Құлпын ашу үшін парольді енгізіңіз"
+
 msgid "Enter a password to join this chat"
 msgstr "Осы чатқа қосылу үшін парольді енгізіңіз"
 
-#, fuzzy
 msgid "Enter current password..."
-msgstr "Жаңа парольді енгізіңіз..."
+msgstr "Ағымдағы парольді енгізіңіз..."
 
 msgid "Enter group name"
 msgstr "Топ атын енгізіңіз"
@@ -1873,6 +1886,12 @@ msgstr "Жаңа контакт атын енгізіңіз"
 
 msgid "Enter new password..."
 msgstr "Жаңа парольді енгізіңіз..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
+"Құпия кілт пен сақтық көшірме паролінің құлпын ашу үшін тіркелгі паролін "
+"енгізіңіз."
 
 msgid "Enter your new nickname"
 msgstr "Жаңа лақап атыңызды енгізіңіз"
@@ -1940,6 +1959,9 @@ msgstr "Мерзімі аяқталу күні"
 msgid "Export"
 msgstr "Экспорт"
 
+msgid "Export & Share Secret Key"
+msgstr "Құпия кілтті экспорттау және ортақ пайдалану"
+
 msgid "Export CSV"
 msgstr "CSV экспорттау"
 
@@ -1959,7 +1981,7 @@ msgid "Export History…"
 msgstr "Тарихты экспорттау…"
 
 msgid "Export settings to a .json file"
-msgstr ""
+msgstr "Баптауларды .json файлына экспорттау"
 
 msgid "Export your chat history from Gajim"
 msgstr "Gajim ішінен чаттар тарихын экспорттау"
@@ -2365,6 +2387,9 @@ msgstr "Жасыру"
 msgid "Hide Chat List"
 msgstr "Чаттар тізімін жасыру"
 
+msgid "Hide Sidebar"
+msgstr "Бүйір панелін жасыру"
+
 msgid "Home"
 msgstr "Үй парағы"
 
@@ -2428,6 +2453,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Белсенді емес уақыты"
+
+msgid "If checked the search text is ignored."
+msgstr "Егер белгіленген болса, іздеу мәтіні еленбейді."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2665,6 +2693,9 @@ msgstr "Сақтық көшірмені сақтау"
 msgid "Keep Chat History"
 msgstr "Чат тарихын сақтау"
 
+msgid "Key has been saved"
+msgstr "Кілт сақталды"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Кілтті қолдану сертификаттарға қолтаңбаны қою қамтымайды"
 
@@ -2694,6 +2725,11 @@ msgstr "Топтық чаттан шығу керек пе?"
 
 msgid "Leave _Permanently"
 msgstr "Біржола _шығу"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
+"Қателерді бақылау үшін Gajim-ге журнал жасауға рұқсат ету (қайта іске қосу "
+"қажет)"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2910,6 +2946,9 @@ msgstr "Модераторлар"
 msgid "Modify"
 msgstr "Түзету"
 
+msgid "More Actions"
+msgstr "Көбірек әрекеттер"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Толығырақ ақпарат providers.xmpp.net сайтында"
 
@@ -2936,6 +2975,9 @@ msgstr "Дыбыстарды сөндіру"
 
 msgid "My Workspace"
 msgstr "Менің жұмыс кеңістігім"
+
+msgid "Myself"
+msgstr "Өзім"
 
 msgid "Name"
 msgstr "Аты"
@@ -2970,14 +3012,14 @@ msgstr "Келесіден жаңа хабарлама"
 msgid "Next"
 msgstr "Келесі"
 
+msgid "Nick"
+msgstr "Ник"
+
 msgid "Nickname"
 msgstr "Ник аты"
 
 msgid "Nickname contains invalid characters"
 msgstr "Никнеймде жарамсыз таңбалар бар"
-
-msgid "Nickname…"
-msgstr "Никнейм…"
 
 msgid "No"
 msgstr "Жоқ"
@@ -3009,6 +3051,9 @@ msgstr "Табалдырық мәні жоқ"
 
 msgid "No Timezone"
 msgstr "Уақыт белдеуі жоқ"
+
+msgid "No account password found, unlocking not possible"
+msgstr "Тіркелгі паролі табылмады, құлпын ашу мүмкін емес"
 
 msgid "No additional requirements"
 msgstr "Қосымша талаптар жоқ"
@@ -3373,6 +3418,9 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Пароль керек"
 
+msgid "Password incorrect"
+msgstr "Пароль қате"
+
 msgid "Passwords do not match"
 msgstr "Парольдер өзара сәйкес келмейді"
 
@@ -3394,9 +3442,8 @@ msgstr "Мазмұнды кірістіру сәтсіз аяқталды"
 msgid "Path length constraint exceeded"
 msgstr "Жол ұзындық шектеуі асырылған"
 
-#, fuzzy
 msgid "Pause"
-msgstr "Аялдатылған"
+msgstr "Аялдату"
 
 msgid "Pending"
 msgstr "Оқылмаған"
@@ -3439,7 +3486,7 @@ msgid "Pipewire"
 msgstr "Pipewire"
 
 msgid "Play"
-msgstr ""
+msgstr "Ойнату"
 
 msgid "Play Sound"
 msgstr "Дыбысты ойнату"
@@ -3973,9 +4020,6 @@ msgstr "Ресурс"
 msgid "Restart Gajim to finish this update"
 msgstr "Бұл жаңартуды аяқтау үшін Gajim бағдарламасын қайта іске қосыңыз"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Жөндеу журналын бастау үшін Gajim бағдарламасын қайта іске қосыңыз"
-
 msgid "Restart Pending"
 msgstr "Күтілетін қайта іске қосу"
 
@@ -4074,6 +4118,9 @@ msgstr "%s тобына қосылу үшін осы QR кодын сканер�
 msgid "Scan this QR code to start a chat with %s."
 msgstr "%s пайдаланушысымен чатты бастау үшін осы QR кодын сканерлеңіз."
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Кілтті басқа құрылғыға тасымалдау үшін осы QR кодты сканерлеңіз."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканерлеуде %(current)d / %(total)d ..."
@@ -4111,6 +4158,9 @@ msgstr "Іздеу нәтижесі"
 msgid "Search all Chats"
 msgstr "Барлық чаттардан іздеу"
 
+msgid "Search all messages"
+msgstr "Барлық хабарламалардан іздеу"
+
 msgid "Search contacts..."
 msgstr "Контакттарды іздеу..."
 
@@ -4130,6 +4180,9 @@ msgstr "Чаттардан іздеу…"
 msgid "Searching"
 msgstr "Іздеу"
 
+msgid "Searching all…"
+msgstr "Барлығы ізделуде…"
+
 msgid "Searching…"
 msgstr "Іздеу…"
 
@@ -4143,6 +4196,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Іздеу…"
+
+msgid "Secret Key Management"
+msgstr "Құпия кілттерді басқару"
 
 msgid "Secure Password Storage"
 msgstr "Парольді қауіпсіз сақтау"
@@ -4255,9 +4311,6 @@ msgstr "Жіберген контакт: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Жіберілген контакттар:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr "Профиль файлдарын толығымен бөлу (тіпті тарих дерекқоры мен плагиндер)"
-
 msgid "Serial Number: "
 msgstr "Сериялық нөмірі: "
 
@@ -4323,6 +4376,9 @@ msgstr "Контактіні бөлісу…"
 msgid "Share Group Chat…"
 msgstr "Топтық чатты бөлісу…"
 
+msgid "Share Secret Key"
+msgstr "Құпия кілтпен бөлісу"
+
 msgid "Share Status"
 msgstr "Қалып-күймен бөлісу"
 
@@ -4331,6 +4387,9 @@ msgstr "Видеомен бөлісу"
 
 msgid "Share my online status"
 msgstr "Менің қалып-күйіммен бөлісу"
+
+msgid "Share…"
+msgstr "Бөлісу…"
 
 msgid "Shortcuts"
 msgstr "Жарлықтар"
@@ -4347,12 +4406,14 @@ msgstr "Контакт ақпараттарын көрсету"
 msgid "Show Content"
 msgstr "Мазмұнды көрсету"
 
-#, fuzzy
 msgid "Show Controls"
-msgstr "Мазмұнды көрсету"
+msgstr "Басқару элементтерін көрсету"
 
 msgid "Show Details"
 msgstr "Ақпаратын көрсету"
+
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "Gajim-нің ішкі журналдарын және XML хаттамасының деректерін көрсету"
 
 msgid "Show Inactive Devices"
 msgstr "Белсенді емес құрылғыларды көрсету"
@@ -4371,6 +4432,9 @@ msgstr "Плагиндерді көрсету"
 
 msgid "Show Send Message Button"
 msgstr "Хабарламаны жіберу батырмасын көрсету"
+
+msgid "Show Sidebar"
+msgstr "Бүйір панелін көрсету"
 
 msgid "Show Status Changes"
 msgstr "Қалып-күй өзгерісін көрсету"
@@ -5119,6 +5183,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Чаттар тізімін көрсету/жасыру"
 
+msgid "Toggle Focus Mode"
+msgstr "Фокус режимін ауыстыру"
+
 msgid "Toggle participants list"
 msgstr "Қатысушылар тізімін көрсету/жасыру"
 
@@ -5266,6 +5333,9 @@ msgstr "Белгісіз тіл"
 msgid "Unknown validation error"
 msgstr "Белгісіз растау қатесі"
 
+msgid "Unlock"
+msgstr "Құлпын ашу"
+
 msgid "Unmute Chat"
 msgstr "Чат дыбысын қосу"
 
@@ -5339,7 +5409,7 @@ msgid "Use GSSAPI"
 msgstr "GSSAPI қолдану"
 
 msgid "Use HTTP2 for requests if there is server support"
-msgstr ""
+msgstr "Сервер қолдауы болса, сұраулар үшін HTTP2 пайдалану"
 
 msgid "Use Image"
 msgstr "Суретті пайдалану"
@@ -5358,9 +5428,6 @@ msgstr "Бірнеше Gajim данасын іске қосу үшін проф�
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Серверге шифрленбеген байланысты пайдалану"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Баптау бумасында анықталған профильді пайдалану"
 
 msgid "Use proxy auth_entication"
 msgstr "Прокси _аутентификациясын қолдану"
@@ -7058,6 +7125,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "News"
 #~ msgstr "Жаңалықтар"
 
+#~ msgid "Nickname…"
+#~ msgstr "Никнейм…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Байланыс қолжетімді емес"
 
@@ -7241,6 +7311,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Requires: libxss"
 #~ msgstr "Талап етеді: libxs"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Жөндеу журналын бастау үшін Gajim бағдарламасын қайта іске қосыңыз"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7309,6 +7382,11 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Sender: "
 #~ msgstr "Жіберуші: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Профиль файлдарын толығымен бөлу (тіпті тарих дерекқоры мен плагиндер)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Сериялық нөмір"
@@ -7475,6 +7553,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "The service could not be found"
 #~ msgstr "Қызмет табылмады"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Байланыс мәселелері бар"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
 
@@ -7548,6 +7630,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN серверін пайдалану"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Баптау бумасында анықталған профильді пайдалану"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Файлдармен алмасу үшін прокси қолдану"

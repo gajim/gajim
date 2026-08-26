@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -972,6 +972,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Uviadzi novy parol:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "Za_blakuj"
 
@@ -1929,6 +1933,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Ściahni"
@@ -2069,6 +2079,10 @@ msgstr "Uviadzi novy parol:"
 msgid "Enter Password"
 msgstr "Źmiani parol"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Źmiani parol"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2087,6 +2101,10 @@ msgstr "Ustaŭ mianušku"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Uviadzi novy parol:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2164,6 +2182,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Ekspartuj"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Abiary vyjavu"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2643,6 +2665,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Udzielnik"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Chatniaja staronka:"
@@ -2709,6 +2734,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " ad %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2979,6 +3007,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Niadaŭna:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s vyjšaŭ"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -3010,6 +3042,9 @@ msgid "Leave Group Chat?"
 msgstr "Pakiń pakoji"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3267,6 +3302,10 @@ msgstr "Maderatary"
 msgid "Modify"
 msgstr "_Madyfikuj"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Madyfikacyja kontu"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3298,6 +3337,9 @@ msgid "Mute Sounds"
 msgstr "Ściš huki"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3340,15 +3382,15 @@ msgstr "Novaje paviedamleńnie ad %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Mianuška"
+
 msgid "Nickname"
 msgstr "Mianuška"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Mianuška"
 
 #, fuzzy
 msgid "No"
@@ -3388,6 +3430,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Čas"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3788,6 +3833,10 @@ msgstr "Vymahaje parolu"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Vymahaje parolu"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Zachavaj parol"
 
 msgid "Passwords do not match"
 msgstr "Paroli roźniacca"
@@ -4481,10 +4530,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Vymahaje parolu"
 
@@ -4600,6 +4645,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Ja chaču dadać ciabie ŭ svoj śpis kantaktaŭ."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Ja chaču dadać ciabie ŭ svoj śpis kantaktaŭ."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanavańnie %d / %d.."
@@ -4645,6 +4694,10 @@ msgid "Search all Chats"
 msgstr "_Šukaj u bazie žurnałaŭ"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Šukaj u bazie žurnałaŭ"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Šukaj u bazie žurnałaŭ"
 
@@ -4665,6 +4718,10 @@ msgid "Searching"
 msgstr "Šukaj"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Šukaj"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Šukaj"
 
@@ -4677,6 +4734,9 @@ msgstr "Šukaj"
 #, fuzzy
 msgid "Search…"
 msgstr "Šukaj"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4804,9 +4864,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Kantakty"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Numer GG:"
@@ -4888,6 +4945,10 @@ msgid "Share Group Chat…"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Abiary vyjavu"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4898,6 +4959,10 @@ msgstr "Pačni razmovu"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Źmiani status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Dadaj kantakt..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4926,6 +4991,9 @@ msgstr "Pakažy _adłučanyja kantakty"
 msgid "Show Details"
 msgstr "Padrabiaznaści"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
@@ -4947,6 +5015,10 @@ msgstr "Niemahvyma dałučycca"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Dašli paviedamleńnie"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Pakažy _transparty"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5762,6 +5834,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Udzielnik"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Udzielnik"
@@ -5926,6 +6001,9 @@ msgstr "_Пасля мянушкі:"
 msgid "Unknown validation error"
 msgstr "Kanfihuracyja pakoju"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "Zapyt na pieradaču fajłu"
@@ -6033,10 +6111,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Niama złučeńnia z serveram"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Redaktar dadatkovych naładaŭ"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7695,6 +7769,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Mianuška"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Złučeńnia niama"
 
@@ -7851,6 +7929,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Vymahaje parolu"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8103,6 +8185,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Redaktar dadatkovych naładaŭ"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Skarystaj proxy dla pieradačy fajłaŭ"

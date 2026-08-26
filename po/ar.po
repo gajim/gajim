@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2026-05-11 01:20+0000\n"
 "Last-Translator: Ahmed Najmawi <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -882,6 +882,10 @@ msgstr "مفتاح النسخة الاحتياطية السري"
 msgid "Backup Successful"
 msgstr "نجح النسخ الاحتياطي"
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "كلمة سر نسختك الاحتياطية"
+
 msgid "Ban"
 msgstr "امنع"
 
@@ -1716,6 +1720,12 @@ msgstr "أتود إلغاء تسجيل حسابك على <b>%s</b> أيضًا؟"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "سيؤدي ذلك إلى حذف هذه البصمة نهائيًا"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "نزِّل"
 
@@ -1839,6 +1849,10 @@ msgstr "أدخِل كلمة سر النسخة الاحتياطية"
 msgid "Enter Password"
 msgstr "أدخِل كلمة السر"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "أدخِل كلمة السر"
+
 msgid "Enter a password to join this chat"
 msgstr "أدخِل كلمة سر للانضمام إلى هذه الدردشو"
 
@@ -1854,6 +1868,10 @@ msgstr "أدخِل اسم المتراسل الجديد"
 
 msgid "Enter new password..."
 msgstr "أدخِل كلمة السر الجديدة..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "أدخِل كنيتك الجديدة"
@@ -1919,6 +1937,10 @@ msgstr "تاريخ الانتهاء"
 
 msgid "Export"
 msgstr "صدِّر"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "اختر مفتاحًا سريًا"
 
 msgid "Export CSV"
 msgstr "صدِّر CSV"
@@ -2340,6 +2362,9 @@ msgstr "أخفِ"
 msgid "Hide Chat List"
 msgstr "أخفِ قائمة الدردشة"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "المنزل"
 
@@ -2401,6 +2426,9 @@ msgstr "معرِّف هذا الجهاز. لا تغيره إلا إذا كنت �
 
 msgid "Idle Time"
 msgstr "مدة الخمول"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2634,6 +2662,10 @@ msgstr "أبقِ النسخة الاحتياطية"
 msgid "Keep Chat History"
 msgstr "الاحتفاظ بتأريخ الدردشة"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "مُنِع %s"
+
 msgid "Key usage does not include certificate signing"
 msgstr "استخدام المفتاح لا يشمل توقيع الشهادات"
 
@@ -2663,6 +2695,9 @@ msgstr "ستغادر مجموعة الدردشة؟"
 
 msgid "Leave _Permanently"
 msgstr "غادِر _نهائيًا"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2879,6 +2914,10 @@ msgstr "المشرفون"
 msgid "Modify"
 msgstr "عدِّل"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "التفاعلات"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "معلومات إضافية على providers.xmpp.net"
 
@@ -2905,6 +2944,9 @@ msgstr "اكتم الأصوات"
 
 msgid "My Workspace"
 msgstr "مساحة عملي"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "الاسم"
@@ -2939,14 +2981,15 @@ msgstr "رسالة جديدة من"
 msgid "Next"
 msgstr "التالي"
 
+#, fuzzy
+msgid "Nick"
+msgstr "الكنية"
+
 msgid "Nickname"
 msgstr "الكنية"
 
 msgid "Nickname contains invalid characters"
 msgstr "تحوي الكنية حروفًا غير صالحة"
-
-msgid "Nickname…"
-msgstr "الكنية…"
 
 msgid "No"
 msgstr "لا"
@@ -2978,6 +3021,9 @@ msgstr "لا يوجد حد أدنى"
 
 msgid "No Timezone"
 msgstr "لا منطقة الزمنية"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "لا متطلبات إضافية"
@@ -3337,6 +3383,10 @@ msgstr "كلمة السر إلزامية"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "تتطلب كلمة سر"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "تخزين آمن لكلمات السر"
 
 msgid "Passwords do not match"
 msgstr "كلمتا السر غير متطابقتين"
@@ -3935,9 +3985,6 @@ msgstr "المورد"
 msgid "Restart Gajim to finish this update"
 msgstr "أعِد تشغيل غاجم لإنهاء هذا التحديث"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "أعِد تشغيل غاجم لبدء سجل التنقيح"
-
 msgid "Restart Pending"
 msgstr "إعادة التشغيل معلَّقة"
 
@@ -4036,6 +4083,10 @@ msgstr "امسح رمز الاستجابة السريعة (QR) هذا للانض
 msgid "Scan this QR code to start a chat with %s."
 msgstr "امسح رمز الاستجابة السريعة (QR) هذا لبدء دردشة مع %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "امسح رمز الاستجابة السريعة (QR) هذا لبدء دردشة مع %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "يمسح %(current)d \\ %(total)d ..."
@@ -4073,6 +4124,10 @@ msgstr "نتيجة البحث"
 msgid "Search all Chats"
 msgstr "ابحث في كل الدردشات"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "ابحث في كل الدردشات"
+
 msgid "Search contacts..."
 msgstr "ابحث عن متراسلين..."
 
@@ -4092,6 +4147,10 @@ msgstr "ابحث في الدردشات…"
 msgid "Searching"
 msgstr "يبحث"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "يبحث…"
+
 msgid "Searching…"
 msgstr "يبحث…"
 
@@ -4105,6 +4164,10 @@ msgstr ""
 
 msgid "Search…"
 msgstr "ابحث…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "إدارة الثقة"
 
 msgid "Secure Password Storage"
 msgstr "تخزين آمن لكلمات السر"
@@ -4216,9 +4279,6 @@ msgstr "المتراسل المُرسل: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "المتراسلون المُرسلون:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr "افصل ملفات اللاحات تمامًا (حتى قاعدة بيانات التأريخ والملحقات)"
-
 msgid "Serial Number: "
 msgstr "الرقم التسلسلي: "
 
@@ -4283,6 +4343,10 @@ msgstr "شارك المتراسل…"
 msgid "Share Group Chat…"
 msgstr "شارك مجموعة الدردشة…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "اختر مفتاحًا سريًا"
+
 msgid "Share Status"
 msgstr "شارك الحالة"
 
@@ -4291,6 +4355,10 @@ msgstr "شارك الفيديو"
 
 msgid "Share my online status"
 msgstr "مشاركة حالة الاتصال"
+
+#, fuzzy
+msgid "Share…"
+msgstr "شارك المتراسل…"
 
 msgid "Shortcuts"
 msgstr "الاختصارات"
@@ -4314,6 +4382,9 @@ msgstr "اعرض المحتوى"
 msgid "Show Details"
 msgstr "أظهر التفاصيل"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "إظهار الأجهزة غير النشطة"
 
@@ -4331,6 +4402,10 @@ msgstr "أظهر الملحقات"
 
 msgid "Show Send Message Button"
 msgstr "إظهار زر إرسال الرسالة"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "إظهار شريط العنوان"
 
 msgid "Show Status Changes"
 msgstr "إظهار تغييرات الحالة"
@@ -5056,6 +5131,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "بدِّل عرض قائمة الدردشات"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "بدِّل عرض قائمة المشاركين"
 
@@ -5203,6 +5281,10 @@ msgstr "لغة مجهولة"
 msgid "Unknown validation error"
 msgstr "خطأ تحقق مجهول"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "ارفع الحظر"
+
 msgid "Unmute Chat"
 msgstr "ألغِ كتم الدردشة"
 
@@ -5294,9 +5376,6 @@ msgstr "استخدم لاحة لتشغيل عدة نسخ من غاجم"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "يستخدم اتصالًا غير معمَّى بالخادوم"
-
-msgid "Use defined profile in configuration directory"
-msgstr "استخدم اللاحة المحدَّدة في دليل الضبط"
 
 msgid "Use proxy auth_entication"
 msgstr "استخدم استي_ثاق الوسيط"
@@ -6542,6 +6621,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "News"
 #~ msgstr "الأخبار"
 
+#~ msgid "Nickname…"
+#~ msgstr "الكنية…"
+
 #~ msgid "Not Connected"
 #~ msgstr "غير متصل"
 
@@ -6602,6 +6684,9 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Requires: libxss"
 #~ msgstr "يتطلب: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "أعِد تشغيل غاجم لبدء سجل التنقيح"
+
 #~ msgid "Save as…"
 #~ msgstr "احفظ باسم…"
 
@@ -6619,6 +6704,10 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Send the message"
 #~ msgstr "أرسِل الرسالة"
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr "افصل ملفات اللاحات تمامًا (حتى قاعدة بيانات التأريخ والملحقات)"
 
 #~ msgid "Server"
 #~ msgstr "الخادوم"
@@ -6685,6 +6774,10 @@ msgstr "…أو أفلِت هنا"
 #~ msgid "Team"
 #~ msgstr "فريق"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "هناك مشاكل في الاتصال"
+
 #~ msgid "This is your XMPP address"
 #~ msgstr "هذا هو عنوان XMPP الخاص بك"
 
@@ -6713,6 +6806,9 @@ msgstr "…أو أفلِت هنا"
 
 #~ msgid "Upload could not be completed."
 #~ msgstr "تعذَّر إكمال الرفع."
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "استخدم اللاحة المحدَّدة في دليل الضبط"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "استخدام وسطاء نقل الملفات"

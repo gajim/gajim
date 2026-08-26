@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -972,6 +972,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Увядзіце новы пароль:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Забараніць казанне"
 
@@ -1928,6 +1932,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Сцягнуць"
@@ -2068,6 +2078,10 @@ msgstr "Увядзіце новы пароль:"
 msgid "Enter Password"
 msgstr "Змяніць пароль"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Змяніць пароль"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2086,6 +2100,10 @@ msgstr "Уставіць мянушку"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Увядзіце новы пароль:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2163,6 +2181,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Экспартаваць"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Выберыце малюнак"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2642,6 +2664,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Удзельнік"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "У Сеціве:"
@@ -2708,6 +2733,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " ад %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2978,6 +3006,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Нядаўна:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s сышоў"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -3009,6 +3041,9 @@ msgid "Leave Group Chat?"
 msgstr "Сысці з групавых размоў"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3266,6 +3301,10 @@ msgstr "Мадэратары"
 msgid "Modify"
 msgstr "_Змяніць"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Змяненне рахунка"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3297,6 +3336,9 @@ msgid "Mute Sounds"
 msgstr "Адключыць гукі"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3339,15 +3381,15 @@ msgstr "Новае паведамленне ад %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Мянушка"
+
 msgid "Nickname"
 msgstr "Мянушка"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Мянушка"
 
 #, fuzzy
 msgid "No"
@@ -3387,6 +3429,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Час"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3787,6 +3832,10 @@ msgstr "Патрабуецца пароль"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Патрабуецца пароль"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Захаваць пароль"
 
 msgid "Passwords do not match"
 msgstr "Паролі розняцца"
@@ -4480,10 +4529,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>Увага:</b> Каб ужыць некаторыя змены, трэба перазапусціць Gajim"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>Увага:</b> Каб ужыць некаторыя змены, трэба перазапусціць Gajim"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Патрабуецца пароль"
 
@@ -4599,6 +4644,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Я хачу дадаць Вас у мой кантактны ліст."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Я хачу дадаць Вас у мой кантактны ліст."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Пошук у %d / %d.."
@@ -4644,6 +4693,10 @@ msgid "Search all Chats"
 msgstr "_Пошук у базе дадзеных"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Пошук у базе дадзеных"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Пошук у базе дадзеных"
 
@@ -4664,6 +4717,10 @@ msgid "Searching"
 msgstr "Пошук"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Пошук"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Пошук"
 
@@ -4676,6 +4733,9 @@ msgstr "Пошук"
 #, fuzzy
 msgid "Search…"
 msgstr "Пошук"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4803,9 +4863,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Людзі"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Нумар GG:"
@@ -4887,6 +4944,10 @@ msgid "Share Group Chat…"
 msgstr "Сысці з групавых размоў"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Выберыце малюнак"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Стан"
 
@@ -4897,6 +4958,10 @@ msgstr "Пачаць размову"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Змяніць стан"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Дадаць чалавека..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4925,6 +4990,9 @@ msgstr "Паказаць _адлучаных людзей"
 msgid "Show Details"
 msgstr "Падрабязнасці"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Стандартныя паведамленні стану"
@@ -4946,6 +5014,10 @@ msgstr "Памылка злучэння"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Адправіць паведамленне"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Паказаць _транспарты"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5763,6 +5835,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Удзельнік"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Удзельнік"
@@ -5927,6 +6002,9 @@ msgstr "_Пасля мянушкі:"
 msgid "Unknown validation error"
 msgstr "Настаўленні пакоя"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "Запыт на перадачу файла"
@@ -6034,10 +6112,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Вы не злучаны з серверам"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Адмысловы рэдактар настаўленняў"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7696,6 +7770,10 @@ msgstr ""
 #~ msgstr "Фільм"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Мянушка"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Няма злучэння"
 
@@ -7853,6 +7931,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Патрабуецца пароль"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "<b>Увага:</b> Каб ужыць некаторыя змены, трэба перазапусціць Gajim"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8105,6 +8187,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Сервер:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Адмысловы рэдактар настаўленняў"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Ужыць проксі для перадачы файлаў"

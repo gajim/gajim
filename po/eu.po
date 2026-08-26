@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -972,6 +972,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Sartu pasahitz berria:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Debekatu"
 
@@ -1927,6 +1931,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Deskargatu"
@@ -2067,6 +2077,10 @@ msgstr "Sartu pasahitz berria:"
 msgid "Enter Password"
 msgstr "Aldatu Pasahitza"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Aldatu Pasahitza"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2085,6 +2099,10 @@ msgstr "Sartu Izengoitia"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Sartu pasahitz berria:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2162,6 +2180,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Esportatu"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Aukeratu Irudia"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2641,6 +2663,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Partaidea"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Web Pertsonala:"
@@ -2707,6 +2732,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " %s-etik"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2977,6 +3005,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Berriki:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s deskonektatu da"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -3008,6 +3040,9 @@ msgid "Leave Group Chat?"
 msgstr "Txat Taldea Berria"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3265,6 +3300,10 @@ msgstr "Moderatzaileak"
 msgid "Modify"
 msgstr "_Eraldatu"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Kontu Eraldaketa"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3296,6 +3335,9 @@ msgid "Mute Sounds"
 msgstr "Soinua Kendu"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3338,15 +3380,15 @@ msgstr "Mezu Berria %(nickname)s -etik"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Izengoitia"
+
 msgid "Nickname"
 msgstr "Izengoitia"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Izengoitia"
 
 #, fuzzy
 msgid "No"
@@ -3386,6 +3428,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Denbora"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3786,6 +3831,10 @@ msgstr "Pasahitza behar da"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasahitza behar da"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Gorde pasahitza"
 
 msgid "Passwords do not match"
 msgstr "Pasahitzak desberdinak dira"
@@ -4479,12 +4528,6 @@ msgstr ""
 "sor dezaten"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua "
-"sor dezaten"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Pasahitza behar da"
 
@@ -4600,6 +4643,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Nire zerrendara gehitu nahi zaitut."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Nire zerrendara gehitu nahi zaitut."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Eskaneatzen  %d / %d.."
@@ -4645,6 +4692,10 @@ msgid "Search all Chats"
 msgstr "_Bilatu Datu Basean"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Bilatu Datu Basean"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Bilatu Datu Basean"
 
@@ -4665,6 +4716,10 @@ msgid "Searching"
 msgstr "Bilatu"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Bilatu"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Bilatu"
 
@@ -4677,6 +4732,9 @@ msgstr "Bilatu"
 #, fuzzy
 msgid "Search…"
 msgstr "Bilatu"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4804,9 +4862,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Kontaktua"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG zenbakia:"
@@ -4888,6 +4943,10 @@ msgid "Share Group Chat…"
 msgstr "Txat Taldea Berria"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Aukeratu Irudia"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Egoera"
 
@@ -4898,6 +4957,10 @@ msgstr "Elkarrizketa Hasi"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Kontaktu Egoera Aldaketa"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Kontaktua Gehitu..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4926,6 +4989,9 @@ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 msgid "Show Details"
 msgstr "Zehaztapenak"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Berezko Egoera Mezuak"
@@ -4947,6 +5013,10 @@ msgstr "Konexioak huts egin du"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Bidali mezua"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Trans_porteak Erakutsi"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5767,6 +5837,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Partaidea"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Partaidea"
@@ -5931,6 +6004,9 @@ msgstr "Izengoitiaren on_doren:"
 msgid "Unknown validation error"
 msgstr "D-Bus bertsioa aurkitugabea: %s"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "Fitxeroa Transferitzeko Baimena"
@@ -6038,10 +6114,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Ez zaude zerbitzarira konektatuta"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Konfigurazio Aurreratuaren Editorea"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7697,6 +7769,10 @@ msgstr ""
 #~ msgstr "Filmea"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Izengoitia"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Konexioa ez erablgarri"
 
@@ -7855,6 +7931,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Pasahitza behar da"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek "
+#~ "efektua sor dezaten"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8107,6 +8189,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Zerbitzaria:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Konfigurazio Aurreratuaren Editorea"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Erabili proxy fitxero transferentzia"

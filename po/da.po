@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -985,6 +985,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Skriv en ny adgangskode:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Udvis"
 
@@ -1943,6 +1947,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Hent"
@@ -2084,6 +2094,10 @@ msgstr "Skriv en ny adgangskode:"
 msgid "Enter Password"
 msgstr "Ændre Adgangskode"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Ændre Adgangskode"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2102,6 +2116,10 @@ msgstr "Indsæt Kælenavn"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Skriv en ny adgangskode:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2178,6 +2196,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Eksporter"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Vælg Billede"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2655,6 +2677,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Deltager"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Hjemmeside:</b>"
@@ -2721,6 +2746,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " siden %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2989,6 +3017,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "For nylig:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s har forladt samtalen"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Nøglebrug indeholder ikke certifikat signering"
 
@@ -3020,6 +3052,9 @@ msgid "Leave Group Chat?"
 msgstr "Forlad Gruppesamtaler"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3276,6 +3311,10 @@ msgstr "Moderatorer"
 msgid "Modify"
 msgstr "Ændre"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Påmindelse"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3307,6 +3346,9 @@ msgid "Mute Sounds"
 msgstr "Slå lyden af"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3349,15 +3391,15 @@ msgstr "Ny Besked fra %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Kælenavn"
+
 msgid "Nickname"
 msgstr "Kælenavn"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Kælenavn"
 
 #, fuzzy
 msgid "No"
@@ -3397,6 +3439,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Tid"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3796,6 +3841,10 @@ msgstr "Adgangskode er Påkrævet"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Adgangskode er Påkrævet"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Gem adgangskode"
 
 msgid "Passwords do not match"
 msgstr "Adgangskoderne er ikke ens"
@@ -4491,12 +4540,6 @@ msgstr ""
 "kraft"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan træde i "
-"kraft"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Kræver Gspell"
 
@@ -4612,6 +4655,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Du kan ikke tilføje dig selv til kontaktvinduet."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Du kan ikke tilføje dig selv til kontaktvinduet."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanner %(current)d / %(total)d.."
@@ -4657,6 +4704,10 @@ msgid "Search all Chats"
 msgstr "_Søg Database"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Søg Database"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Søg Database"
 
@@ -4677,6 +4728,10 @@ msgid "Searching"
 msgstr "Søg"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Søg"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Søg"
 
@@ -4689,6 +4744,9 @@ msgstr "Søg"
 #, fuzzy
 msgid "Search…"
 msgstr "Søg"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4815,9 +4873,6 @@ msgstr "Sendt kontakt: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Sendte kontakter:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Nummer:"
@@ -4899,6 +4954,10 @@ msgid "Share Group Chat…"
 msgstr "Forlad Gruppesamtaler"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Vælg Billede"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4909,6 +4968,10 @@ msgstr "Lyd / Billede"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Ændre status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Tilføj Kontakt..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4937,6 +5000,9 @@ msgstr "Vis Kun _Aktive Kontakter"
 msgid "Show Details"
 msgstr "Detaljer"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Standard Besked"
@@ -4958,6 +5024,10 @@ msgstr "Tilslutning fejlede"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Send besked"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Vis Trans_porter"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5784,6 +5854,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Deltager"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Deltager"
@@ -5950,6 +6023,10 @@ msgid "Unknown validation error"
 msgstr "Ukendt SSL fejl: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Fjern blokering"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Filoverførsel Forespørgsel"
 
@@ -6056,10 +6133,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Du er ikke tilsluttet til serveren"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Avanceret Konfigurations Behandler"
 
 msgid "Use proxy auth_entication"
 msgstr "Brug proxy godkendelse"
@@ -7748,6 +7821,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Kælenavn"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Tilslutning er ikke tilgængelig"
 
@@ -7913,6 +7990,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "Biblioteket libxss kræves"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan "
+#~ "træde i kraft"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8170,6 +8253,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Avanceret Konfigurations Behandler"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Brug fil transport proxy"

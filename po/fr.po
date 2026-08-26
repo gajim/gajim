@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-07-15 01:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-24 01:20+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -898,6 +898,9 @@ msgstr "Sauvegarder la clé secréte"
 msgid "Backup Successful"
 msgstr "Sauvegarde réussie"
 
+msgid "Backup password copied"
+msgstr "Mot de passe de sauvegarde copié"
+
 msgid "Ban"
 msgstr "Bannir"
 
@@ -1754,6 +1757,15 @@ msgstr "Voulez-vous également désinscrire votre compte sur <b>%s</b> ?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Cela supprimera définitivement cette empreinte"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"Ne montrez pas le mot de passe de sauvegarde our le QR Code sur la page "
+"suivante à qui que ce soi. Partager n'importe lequel compromettrait la "
+"sécurité de vos discussions chiffrées."
+
 msgid "Download"
 msgstr "Télécharger"
 
@@ -1884,6 +1896,9 @@ msgstr "Saisissez le mot de passe de sauvegarde"
 msgid "Enter Password"
 msgstr "Entrez le mot de passe"
 
+msgid "Enter Password to Unlock"
+msgstr "Entrez le mot de passe pour déverrouiller"
+
 msgid "Enter a password to join this chat"
 msgstr "Saisissez un mot de passe pour rejoindre cette discussion"
 
@@ -1898,6 +1913,12 @@ msgstr "Saisissez le nouveau nom du contact"
 
 msgid "Enter new password..."
 msgstr "Saisissez le nouveau mot de passe..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
+"Entrez votre mot de passe pour déverrouiller la clé secréte et le mot de "
+"passe de sauvegarde."
 
 msgid "Enter your new nickname"
 msgstr "Saisissez votre nouveau pseudonyme"
@@ -1965,6 +1986,9 @@ msgstr "Date d'expiration"
 
 msgid "Export"
 msgstr "Exporter"
+
+msgid "Export & Share Secret Key"
+msgstr "Exporter et Partager une clé secréte"
 
 msgid "Export CSV"
 msgstr "Exporter en CSV"
@@ -2392,6 +2416,9 @@ msgstr "Cacher"
 msgid "Hide Chat List"
 msgstr "Masquer la liste des discussions"
 
+msgid "Hide Sidebar"
+msgstr "Cacher la barre latérale"
+
 msgid "Home"
 msgstr "Domicile"
 
@@ -2457,6 +2484,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Durée d’inactivité"
+
+msgid "If checked the search text is ignored."
+msgstr "Si coché, le texte recherché est ignoré."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2697,6 +2727,9 @@ msgstr "Conserver la sauvegarde"
 msgid "Keep Chat History"
 msgstr "Conserver l'historique de discussion"
 
+msgid "Key has been saved"
+msgstr "La clé a été sauvegardée"
+
 msgid "Key usage does not include certificate signing"
 msgstr "L'utilisation de la clef n'inclut pas la signature d'un certificat"
 
@@ -2726,6 +2759,11 @@ msgstr "Quitter le salon de discussion ?"
 
 msgid "Leave _Permanently"
 msgstr "Quitter _Définitivement"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
+"Permettre à Gajim de générer un fichier de log pour suivre les erreurs "
+"(redémarrage nécessaire)"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2944,6 +2982,9 @@ msgstr "Modérateur·ices"
 msgid "Modify"
 msgstr "Modifier"
 
+msgid "More Actions"
+msgstr "Plus d'actions"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Plus d'infos sur providers.xmpp.net"
 
@@ -2970,6 +3011,9 @@ msgstr "Désactiver les sons"
 
 msgid "My Workspace"
 msgstr "Mon espace de travail"
+
+msgid "Myself"
+msgstr "Moi"
 
 msgid "Name"
 msgstr "Nom"
@@ -3004,14 +3048,14 @@ msgstr "Nouveau message de"
 msgid "Next"
 msgstr "Suivant"
 
+msgid "Nick"
+msgstr "Pseudo"
+
 msgid "Nickname"
 msgstr "Pseudonyme"
 
 msgid "Nickname contains invalid characters"
 msgstr "Le nom d'utilisateur⋅ice contient des caractères interdits"
-
-msgid "Nickname…"
-msgstr "Pseudonyme…"
 
 msgid "No"
 msgstr "Non"
@@ -3043,6 +3087,9 @@ msgstr "Pas de seuil"
 
 msgid "No Timezone"
 msgstr "Aucun fuseau horaire"
+
+msgid "No account password found, unlocking not possible"
+msgstr "Aucun mot de passe de compte trouvé, déverrouillage impossible"
 
 msgid "No additional requirements"
 msgstr "Pas d'exigences additionnelles"
@@ -3414,6 +3461,9 @@ msgstr "Mot de passe requis"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Mot de passe requis"
+
+msgid "Password incorrect"
+msgstr "Mot de passe incorrect"
 
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
@@ -4017,9 +4067,6 @@ msgstr "Ressource"
 msgid "Restart Gajim to finish this update"
 msgstr "Redémarrez Gajim pour terminer cette mise à jour"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Redémarrez Gajim pour lancer les journeaux de débogage"
-
 msgid "Restart Pending"
 msgstr "Redémarrage en attente"
 
@@ -4118,6 +4165,9 @@ msgstr "Scannez ce QR code pour rejoindre %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Scannez ce QR code pour discuter avec %s."
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Scannez ce QR code pour transférer la clé vers un autre appareil."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Analyse en cours %(current)d / %(total)d …"
@@ -4155,6 +4205,9 @@ msgstr "Résultat de la recherche"
 msgid "Search all Chats"
 msgstr "Rechercher dans toutes les discussions"
 
+msgid "Search all messages"
+msgstr "Rechercher parmis tous les messages"
+
 msgid "Search contacts..."
 msgstr "Rechercher des contacts..."
 
@@ -4174,6 +4227,9 @@ msgstr "Rechercher dans les discussions…"
 msgid "Searching"
 msgstr "Recherche en cours"
 
+msgid "Searching all…"
+msgstr "Recherche en cours…"
+
 msgid "Searching…"
 msgstr "Recherche en cours…"
 
@@ -4187,6 +4243,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Rechercher…"
+
+msgid "Secret Key Management"
+msgstr "Gestion de clé secrète"
 
 msgid "Secure Password Storage"
 msgstr "Stockage de mots de passe sécurisé"
@@ -4301,11 +4360,6 @@ msgstr "Contact envoyé : « %(jid)s » (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Contacts envoyés :"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Séparer les fichiers de profil complètement (même la base de données de "
-"l’historique et les extensions)"
-
 msgid "Serial Number: "
 msgstr "Numéro de série : "
 
@@ -4372,6 +4426,9 @@ msgstr "Partager un contact…"
 msgid "Share Group Chat…"
 msgstr "Partager le salon de discussion…"
 
+msgid "Share Secret Key"
+msgstr "Partager la clé secréte"
+
 msgid "Share Status"
 msgstr "Partager l'état"
 
@@ -4380,6 +4437,9 @@ msgstr "Partager la vidéo"
 
 msgid "Share my online status"
 msgstr "Partager mon état de connexion"
+
+msgid "Share…"
+msgstr "Partager…"
 
 msgid "Shortcuts"
 msgstr "Raccourcis clavier"
@@ -4402,6 +4462,9 @@ msgstr "Afficher les controles audio"
 msgid "Show Details"
 msgstr "Montrer les détails"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "Montrer les logs et les données du protocole XML interne de Gajim"
+
 msgid "Show Inactive Devices"
 msgstr "Afficher les appareils inactifs"
 
@@ -4419,6 +4482,9 @@ msgstr "Montrer les Extensions"
 
 msgid "Show Send Message Button"
 msgstr "Afficher le bouton \"Envoyer\""
+
+msgid "Show Sidebar"
+msgstr "Montrer la barre latérale"
 
 msgid "Show Status Changes"
 msgstr "Afficher les changements d’état"
@@ -5180,6 +5246,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Basculer l'affichage de la liste des discussions"
 
+msgid "Toggle Focus Mode"
+msgstr "Activer/désactiver le Mode Concentration"
+
 msgid "Toggle participants list"
 msgstr "Afficher/masquer la liste des participant·es"
 
@@ -5328,6 +5397,9 @@ msgstr "Langage inconnu"
 msgid "Unknown validation error"
 msgstr "Erreur de validation inconnue"
 
+msgid "Unlock"
+msgstr "Déverrouiller"
+
 msgid "Unmute Chat"
 msgstr "Annuler la mise en sourdine"
 
@@ -5419,9 +5491,6 @@ msgstr "Utilise un profil pour lancer plusieurs instances de Gajim"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Utiliser une connexion chiffrée avec le serveur"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Utilise un profil défini dans le dossier de configuration"
 
 msgid "Use proxy auth_entication"
 msgstr "Utiliser l'auth_entification"
@@ -7215,6 +7284,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "News"
 #~ msgstr "Nouvelles"
 
+#~ msgid "Nickname…"
+#~ msgstr "Pseudonyme…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Aucune connexion disponible"
 
@@ -7400,6 +7472,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Requires: libxss"
 #~ msgstr "Nécessite : libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Redémarrez Gajim pour lancer les journeaux de débogage"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7473,6 +7548,12 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Sender: "
 #~ msgstr "Expéditeur·ice : "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Séparer les fichiers de profil complètement (même la base de données de "
+#~ "l’historique et les extensions)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Numéro de série"
@@ -7648,6 +7729,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "The service could not be found"
 #~ msgstr "Le service n'a pu être trouvé"
 
+#~ msgid "There are connected accounts"
+#~ msgstr "Il y a des comptes connectés"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Ce compte n'est pas connecté au serveur"
 
@@ -7717,6 +7801,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Utiliser un serveur STUN"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Utilise un profil défini dans le dossier de configuration"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Utiliser les serveurs mandataires pour les transferts de fichiers"

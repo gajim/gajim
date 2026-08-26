@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -914,6 +914,10 @@ msgstr ""
 
 msgid "Backup Successful"
 msgstr ""
+
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Ange nytt lösenord:"
 
 msgid "Ban"
 msgstr "Bannlys"
@@ -1834,6 +1838,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Hämta hem"
 
@@ -1971,6 +1981,10 @@ msgstr "Ange ett nytt lösenord..."
 msgid "Enter Password"
 msgstr "Byt lösenord"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Byt lösenord"
+
 msgid "Enter a password to join this chat"
 msgstr "Ange ett lösenord för att gå med i den här chatten"
 
@@ -1988,6 +2002,10 @@ msgstr "Ange ditt nya smeknamn"
 
 msgid "Enter new password..."
 msgstr "Ange ett nytt lösenord..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Ange ditt nya smeknamn"
@@ -2054,6 +2072,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Exportera"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Välj enhet"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2509,6 +2531,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Deltagare"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Webbplats:</b>"
@@ -2575,6 +2600,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " sedan %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2834,6 +2862,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Behåll chatthistorik"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s har anslutit"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Nyckelanvändning inkluderar inte certifikatsignering"
 
@@ -2864,6 +2896,9 @@ msgstr "Lämna gruppchatt"
 
 msgid "Leave _Permanently"
 msgstr "Lämna _Permanent"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3096,6 +3131,10 @@ msgstr "Moderatorer"
 msgid "Modify"
 msgstr "Ändra"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Notifiering"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3127,6 +3166,9 @@ msgid "Mute Sounds"
 msgstr "Inga ljud"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3169,16 +3211,16 @@ msgstr "Nytt meddelande från %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Smeknamn"
+
 msgid "Nickname"
 msgstr "Smeknamn"
 
 #, fuzzy
 msgid "Nickname contains invalid characters"
 msgstr "Lösenordet innehåller förbjudna tecken"
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Smeknamn"
 
 #, fuzzy
 msgid "No"
@@ -3218,6 +3260,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Tid"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3596,6 +3641,10 @@ msgstr "Lösenord krävs"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Lösenord krävs"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Spara lösenord"
 
 msgid "Passwords do not match"
 msgstr "Lösenorden stämmer inte överens"
@@ -4264,10 +4313,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "Starta om Gajim för att ändringar ska träda i kraft"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "Starta om Gajim för att ändringar ska träda i kraft"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Kräver: Gspell"
 
@@ -4384,6 +4429,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Du kan inte lägga till dig själv i din kontaktlista."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Du kan inte lägga till dig själv i din kontaktlista."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Söker av %(current)d / %(total)d.."
@@ -4430,6 +4479,10 @@ msgid "Search all Chats"
 msgstr "_Sök i databasen"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Sök i databasen"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Sök i databasen"
 
@@ -4451,6 +4504,10 @@ msgid "Searching"
 msgstr "Sök"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Sök"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Sök"
 
@@ -4463,6 +4520,9 @@ msgstr "Sök"
 #, fuzzy
 msgid "Search…"
 msgstr "Sök"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4591,9 +4651,6 @@ msgstr "Skickade kontakt: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Bjud in _kontakter"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG-nummer:"
@@ -4675,6 +4732,10 @@ msgid "Share Group Chat…"
 msgstr "Lämna gruppchattar"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Välj enhet"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4685,6 +4746,10 @@ msgstr "Starta Chatt"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Ändra status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Lägg till kontakt..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4713,6 +4778,9 @@ msgstr "Visa endast _aktiva kontakter"
 msgid "Show Details"
 msgstr "Detaljer"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Standardmeddelande"
@@ -4734,6 +4802,10 @@ msgstr "Ti_llägg"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Skicka meddelande"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Visa _transporter"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5556,6 +5628,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Deltagare"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Deltagare"
@@ -5722,6 +5797,10 @@ msgid "Unknown validation error"
 msgstr "Okänt SSL-fel: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "A_vblockera"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Förfrågan om Filöverföring"
 
@@ -5828,10 +5907,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Du är inte ansluten till servern"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Avancerad konfigurationsredigerare"
 
 msgid "Use proxy auth_entication"
 msgstr "Använd autentiser_ing för proxyserver"
@@ -7564,6 +7639,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Smeknamn"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Anslutningen är inte tillgänglig"
 
@@ -7740,6 +7819,10 @@ msgstr ""
 
 #~ msgid "Requires: libxss"
 #~ msgstr "Kräver: libxss"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Starta om Gajim för att ändringar ska träda i kraft"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -7938,6 +8021,10 @@ msgstr ""
 #~ msgid "The service could not be found"
 #~ msgstr "Denna tjänst kunde inte hittas"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Andra enheter anslutna till ditt konto"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Detta konto är inte anslutet till servern"
 
@@ -7998,6 +8085,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Avancerad konfigurationsredigerare"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Använd proxyservrar för filöverföringar"

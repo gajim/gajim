@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -991,6 +991,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Unesite novu lozinku:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Zabrani"
 
@@ -1951,6 +1955,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Skidanje"
@@ -2093,6 +2103,10 @@ msgstr "Unesite novu lozinku:"
 msgid "Enter Password"
 msgstr "Promijeni Password"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Promijeni Password"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2111,6 +2125,10 @@ msgstr "Umetni _Nadimak"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Unesite novu lozinku:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2187,6 +2205,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Izvoz"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Odabir Slike"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2664,6 +2686,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Sudionik"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Osobna Stranica:</b>"
@@ -2730,6 +2755,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " od %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2998,6 +3026,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Nedavno:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s je napustio"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Korištenje ključa ne uključuje potpisivanje certifikata"
 
@@ -3029,6 +3061,9 @@ msgid "Leave Group Chat?"
 msgstr "Novi Grupni Razgovor"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3285,6 +3320,10 @@ msgstr "Moderatori"
 msgid "Modify"
 msgstr "Uredi"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Obavijest"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3316,6 +3355,9 @@ msgid "Mute Sounds"
 msgstr "Onemogući Zvukove"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3358,15 +3400,15 @@ msgstr "Nova poruka od %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Nadimak"
+
 msgid "Nickname"
 msgstr "Nadimak"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Nadimak"
 
 #, fuzzy
 msgid "No"
@@ -3406,6 +3448,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Vrijeme"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3805,6 +3850,10 @@ msgstr "Potrebna Lozinka"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Potrebna Lozinka"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Spremiti lozinku"
 
 msgid "Passwords do not match"
 msgstr "Lozinke se ne podudaraju"
@@ -4502,12 +4551,6 @@ msgstr ""
 "postale aktivne"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>NAPOMENA:</b> Trebali bi ste ponovno pokrenuti gajim da bi neke postavke "
-"postale aktivne"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Potreban je libgtkspell."
 
@@ -4623,6 +4666,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Nemoguće dodati samog sebe na vlastitu listu."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Nemoguće dodati samog sebe na vlastitu listu."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skeniranje %(current)d / %(total)d.."
@@ -4668,6 +4715,10 @@ msgid "Search all Chats"
 msgstr "_Pretraži Bazu Podataka"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Pretraži Bazu Podataka"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Pretraži Bazu Podataka"
 
@@ -4688,6 +4739,10 @@ msgid "Searching"
 msgstr "Pretraga"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Pretraga"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Pretraga"
 
@@ -4700,6 +4755,9 @@ msgstr "Pretraga"
 #, fuzzy
 msgid "Search…"
 msgstr "Pretraga"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4826,9 +4884,6 @@ msgstr "Poslan kontakt: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Poslani kontakti:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Broj:"
@@ -4910,6 +4965,10 @@ msgid "Share Group Chat…"
 msgstr "Novi Grupni Razgovor"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Odabir Slike"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4920,6 +4979,10 @@ msgstr "Započeti Razgovor"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Promjeni status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Dodaj Kontakt..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4948,6 +5011,9 @@ msgstr "Prikaži Samo _Aktivne Kontakte"
 msgid "Show Details"
 msgstr "Detalji"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Predefinirana Poruka"
@@ -4969,6 +5035,10 @@ msgstr "Registracija nije uspijela"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Pošalji poruku"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Prikaži _Prijenose"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5797,6 +5867,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Sudionik"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Sudionik"
@@ -5963,6 +6036,10 @@ msgid "Unknown validation error"
 msgstr "Nepoznata SSL greška: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Odblokiraj"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Zahtjev Razmjene Datoteka"
 
@@ -6069,10 +6146,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Niste spojeni na poslužitelj."
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Napredni Uređivač Postavki"
 
 msgid "Use proxy auth_entication"
 msgstr "Koristi proxy aut_entifikaciju"
@@ -7747,6 +7820,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Nadimak"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Veza nije dostupna"
 
@@ -7912,6 +7989,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "Zahtijeva biblioteku libxss."
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NAPOMENA:</b> Trebali bi ste ponovno pokrenuti gajim da bi neke "
+#~ "postavke postale aktivne"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8166,6 +8249,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Poslužitelj:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Napredni Uređivač Postavki"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Koristi proxy za prijenos datoteka"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2025-11-14 00:19+0000\n"
 "Last-Translator: نادکارو <nadkaro@riseup.net>\n"
 "Language-Team: Persian <https://translate.gajim.org/projects/gajim/master/fa/"
@@ -851,6 +851,9 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+msgid "Backup password copied"
+msgstr ""
+
 msgid "Ban"
 msgstr ""
 
@@ -1663,6 +1666,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr ""
 
@@ -1784,6 +1793,9 @@ msgstr ""
 msgid "Enter Password"
 msgstr ""
 
+msgid "Enter Password to Unlock"
+msgstr ""
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -1797,6 +1809,10 @@ msgid "Enter new contact name"
 msgstr ""
 
 msgid "Enter new password..."
+msgstr ""
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
 msgstr ""
 
 msgid "Enter your new nickname"
@@ -1862,6 +1878,9 @@ msgid "Expiry date"
 msgstr ""
 
 msgid "Export"
+msgstr ""
+
+msgid "Export & Share Secret Key"
 msgstr ""
 
 msgid "Export CSV"
@@ -2271,6 +2290,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr ""
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr ""
 
@@ -2328,6 +2350,9 @@ msgid ""
 msgstr ""
 
 msgid "Idle Time"
+msgstr ""
+
+msgid "If checked the search text is ignored."
 msgstr ""
 
 msgid ""
@@ -2555,6 +2580,9 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr ""
 
+msgid "Key has been saved"
+msgstr ""
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2583,6 +2611,9 @@ msgid "Leave Group Chat?"
 msgstr ""
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -2796,6 +2827,9 @@ msgstr ""
 msgid "Modify"
 msgstr ""
 
+msgid "More Actions"
+msgstr ""
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -2821,6 +2855,9 @@ msgid "Mute Sounds"
 msgstr ""
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -2856,13 +2893,13 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
+msgid "Nick"
+msgstr ""
+
 msgid "Nickname"
 msgstr ""
 
 msgid "Nickname contains invalid characters"
-msgstr ""
-
-msgid "Nickname…"
 msgstr ""
 
 msgid "No"
@@ -2894,6 +2931,9 @@ msgid "No Threshold"
 msgstr ""
 
 msgid "No Timezone"
+msgstr ""
+
+msgid "No account password found, unlocking not possible"
 msgstr ""
 
 msgid "No additional requirements"
@@ -3246,6 +3286,9 @@ msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Password Required"
+msgstr ""
+
+msgid "Password incorrect"
 msgstr ""
 
 msgid "Passwords do not match"
@@ -3827,9 +3870,6 @@ msgstr ""
 msgid "Restart Gajim to finish this update"
 msgstr ""
 
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-
 msgid "Restart Pending"
 msgstr ""
 
@@ -3928,6 +3968,9 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr ""
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr ""
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
@@ -3965,6 +4008,9 @@ msgstr ""
 msgid "Search all Chats"
 msgstr ""
 
+msgid "Search all messages"
+msgstr ""
+
 msgid "Search contacts..."
 msgstr ""
 
@@ -3982,6 +4028,9 @@ msgstr ""
 msgid "Searching"
 msgstr ""
 
+msgid "Searching all…"
+msgstr ""
+
 msgid "Searching…"
 msgstr ""
 
@@ -3992,6 +4041,9 @@ msgid ""
 msgstr ""
 
 msgid "Search…"
+msgstr ""
+
+msgid "Secret Key Management"
 msgstr ""
 
 msgid "Secure Password Storage"
@@ -4102,9 +4154,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr ""
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4169,6 +4218,9 @@ msgstr ""
 msgid "Share Group Chat…"
 msgstr ""
 
+msgid "Share Secret Key"
+msgstr ""
+
 msgid "Share Status"
 msgstr ""
 
@@ -4176,6 +4228,9 @@ msgid "Share Video"
 msgstr ""
 
 msgid "Share my online status"
+msgstr ""
+
+msgid "Share…"
 msgstr ""
 
 msgid "Shortcuts"
@@ -4199,6 +4254,9 @@ msgstr ""
 msgid "Show Details"
 msgstr ""
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr ""
 
@@ -4215,6 +4273,9 @@ msgid "Show Plugins"
 msgstr ""
 
 msgid "Show Send Message Button"
+msgstr ""
+
+msgid "Show Sidebar"
 msgstr ""
 
 msgid "Show Status Changes"
@@ -4908,6 +4969,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr ""
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr ""
 
@@ -5055,6 +5119,9 @@ msgstr ""
 msgid "Unknown validation error"
 msgstr ""
 
+msgid "Unlock"
+msgstr ""
+
 msgid "Unmute Chat"
 msgstr ""
 
@@ -5145,9 +5212,6 @@ msgid "Use a profile to run multiple Gajim instances"
 msgstr ""
 
 msgid "Use an unencrypted connection to the server"
-msgstr ""
-
-msgid "Use defined profile in configuration directory"
 msgstr ""
 
 msgid "Use proxy auth_entication"

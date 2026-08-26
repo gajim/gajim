@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2026-03-02 21:19+0000\n"
 "Last-Translator: Turingon <kopse@e.email>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -875,6 +875,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Enigu novan pasvorton:"
+
 msgid "Ban"
 msgstr "Forbari"
 
@@ -1725,6 +1729,12 @@ msgstr "Ĉu vi volas malregistriĝi vian konton ankaŭ ĉe <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Ĉi tiu fingrospuro estos porĉiame forigita"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Elŝuti"
 
@@ -1855,6 +1865,10 @@ msgstr "Enigi novan pasvorton..."
 msgid "Enter Password"
 msgstr "Ŝanĝi pasvorton"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Ŝanĝi pasvorton"
+
 msgid "Enter a password to join this chat"
 msgstr "Enigu pasvorton por aliĝi al ĉi tiu babilejo"
 
@@ -1870,6 +1884,10 @@ msgstr "Enigu novan kontaktonomon"
 
 msgid "Enter new password..."
 msgstr "Enigi novan pasvorton..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Enigi novan kromnomon"
@@ -1935,6 +1953,10 @@ msgstr "Eksvalidiĝdato"
 
 msgid "Export"
 msgstr "Eksporti"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Elekti aparaton"
 
 msgid "Export CSV"
 msgstr "Eksporti CSV-on"
@@ -2353,6 +2375,9 @@ msgstr "Kaŝi"
 msgid "Hide Chat List"
 msgstr "Kaŝi Babilejlisto"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Hejmo"
 
@@ -2414,6 +2439,9 @@ msgstr "Identilo por ĉi tiu aparato. Ne ŝanĝu ĝin krom se vi spertas."
 
 msgid "Idle Time"
 msgstr "Neaktiveco"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2648,6 +2676,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Teni mesaĝhistorion"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s forbariĝis"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Ŝlosiluzado ne inkluzivas atestilsubskribadon"
 
@@ -2677,6 +2709,9 @@ msgstr "Forlasi babilejon?"
 
 msgid "Leave _Permanently"
 msgstr "Foriri _porĉiame"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2918,6 +2953,10 @@ msgstr "Moderigistoj"
 msgid "Modify"
 msgstr "_Korekti"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Konta korektado"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -2949,6 +2988,9 @@ msgid "Mute Sounds"
 msgstr "Silentigi sonojn"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -2991,15 +3033,15 @@ msgstr "Nova mesaĝo de %(nickname)s"
 msgid "Next"
 msgstr "Apud"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Kaŝnomo"
+
 msgid "Nickname"
 msgstr "Kaŝnomo"
 
 msgid "Nickname contains invalid characters"
 msgstr "Kromnomo havas nevalidajn signojn"
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Kaŝnomo"
 
 #, fuzzy
 msgid "No"
@@ -3038,6 +3080,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Tempo"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3436,6 +3481,10 @@ msgstr "Pasvorto necesas"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasvorto necesas"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Konservi pasvorton"
 
 msgid "Passwords do not match"
 msgstr "Pasvortoj diversas"
@@ -4127,11 +4176,6 @@ msgstr ""
 "<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Pasvorto necesas"
 
@@ -4247,6 +4291,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Mi volus aldoni vin al mia kontaktlisto."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Mi volus aldoni vin al mia kontaktlisto."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skanas %d / %d.."
@@ -4292,6 +4340,10 @@ msgid "Search all Chats"
 msgstr "_Serĉi datumbaze"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Serĉi datumbaze"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Serĉi datumbaze"
 
@@ -4312,6 +4364,10 @@ msgid "Searching"
 msgstr "Serĉi"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Serĉi"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Serĉi"
 
@@ -4324,6 +4380,9 @@ msgstr "Serĉi"
 #, fuzzy
 msgid "Search…"
 msgstr "Serĉi"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4451,9 +4510,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Kontaktoj"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG numero:"
@@ -4535,6 +4591,10 @@ msgid "Share Group Chat…"
 msgstr "Nova babilejo"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Elekti aparaton"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Kontakto ŝanĝis sian staton"
 
@@ -4545,6 +4605,10 @@ msgstr "Video"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Kontakto ŝanĝis sian staton"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Aldoni kontakton..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4573,6 +4637,9 @@ msgstr "Montri _senkonektajn kontaktojn"
 msgid "Show Details"
 msgstr "Detalaĵoj"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Defaŭlta statmesaĝo"
@@ -4594,6 +4661,10 @@ msgstr "Kromaĵoj"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Sendi mesaĝon"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Montri Trans_portilojn"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5409,6 +5480,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Partoprenanto"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Partoprenanto"
@@ -5574,6 +5648,10 @@ msgid "Unknown validation error"
 msgstr "Nekonata versio de D-BUS: %s"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Grupo:"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Mendo de dosiera transmeto"
 
@@ -5680,10 +5758,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Vi nekonektitas al la servilo"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Detala agorda administrilo"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7359,6 +7433,10 @@ msgstr ""
 #~ msgstr "Kino"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Kaŝnomo"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Konekto mankas"
 
@@ -7517,6 +7595,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Pasvorto necesas"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
 
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
@@ -7789,6 +7872,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Servilo:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Detala agorda administrilo"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Uzi dosiertransmetan prokuran servilon"

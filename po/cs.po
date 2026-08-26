@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2026-05-07 15:20+0000\n"
 "Last-Translator: Aozora Mei <ineudorfl@gmail.com>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -888,6 +888,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Vaše heslo"
+
 msgid "Ban"
 msgstr "Zabanovat"
 
@@ -1738,6 +1742,12 @@ msgstr "Chcete také zrušit registraci svého účtu <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Tímto se tento otisk permanentně smaže"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Stáhnout"
 
@@ -1866,6 +1876,10 @@ msgstr "Zadejte nové heslo..."
 msgid "Enter Password"
 msgstr "Změnit heslo"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Změnit heslo"
+
 msgid "Enter a password to join this chat"
 msgstr "Zadejte heslo pro připojení k této konverzaci"
 
@@ -1881,6 +1895,10 @@ msgstr "Zadejte novou přezdívku kontaktu"
 
 msgid "Enter new password..."
 msgstr "Zadejte nové heslo..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Zadejte vaší novou přezdívku"
@@ -1947,6 +1965,10 @@ msgstr "Datum expirace"
 
 msgid "Export"
 msgstr "Exportovat"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Vyberte zařízení"
 
 msgid "Export CSV"
 msgstr "Exportovat CSV"
@@ -2370,6 +2392,9 @@ msgstr "Skrýt"
 msgid "Hide Chat List"
 msgstr "Schovat seznam konverzací"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Domov"
 
@@ -2431,6 +2456,9 @@ msgstr "Identifikátor pro toto zařízení. Neměňte ho pokud nevíte co děl�
 
 msgid "Idle Time"
 msgstr "Neaktivní od: %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2669,6 +2697,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Ponechat historii konverzace"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s byl zabanován"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Použítý klíč neobsahuje podpis certifikátu"
 
@@ -2698,6 +2730,9 @@ msgstr "Opustit skupinovou konverzaci?"
 
 msgid "Leave _Permanently"
 msgstr "Odejít _permanentně"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2914,6 +2949,10 @@ msgstr "Moderátoři"
 msgid "Modify"
 msgstr "Modifikovat"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Reakce"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Více informací na providers.xmpp.net"
 
@@ -2940,6 +2979,9 @@ msgstr "Vypnout zvuky"
 
 msgid "My Workspace"
 msgstr "Pracovní plocha"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "Jméno"
@@ -2974,14 +3016,15 @@ msgstr "Nová zpráva od"
 msgid "Next"
 msgstr "Další"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Přezdívka"
+
 msgid "Nickname"
 msgstr "Přezdívka"
 
 msgid "Nickname contains invalid characters"
 msgstr "Přezdívka obsahuje nepovolené znaky"
-
-msgid "Nickname…"
-msgstr "Přezdívka…"
 
 msgid "No"
 msgstr "Ne"
@@ -3013,6 +3056,9 @@ msgstr "Bez prahu"
 
 msgid "No Timezone"
 msgstr "Žádné časové pásmo"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "Žádné další požadavky"
@@ -3383,6 +3429,10 @@ msgstr "Zadejte heslo"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Je požadováno heslo"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Bezpečné ukládání hesla"
 
 msgid "Passwords do not match"
 msgstr "Hesla se neshodují"
@@ -3983,9 +4033,6 @@ msgstr "Zdroj"
 msgid "Restart Gajim to finish this update"
 msgstr "Restartujte Gajim pro dokončení aktualizace"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Restartujte Gajim pro spuštění logování ladění"
-
 msgid "Restart Pending"
 msgstr "Restart čeká na spuštění"
 
@@ -4085,6 +4132,10 @@ msgstr "Naskenujte tento QR kód pro vstup do %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Naskenujte tento QR kód a začněte konverzaci s %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Naskenujte tento QR kód a začněte konverzaci s %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skenuji %(current)d / %(total)d.."
@@ -4122,6 +4173,10 @@ msgstr "Výsledky hledání"
 msgid "Search all Chats"
 msgstr "Hledat ve všech konverzacích"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "Hledat ve všech konverzacích"
+
 msgid "Search contacts..."
 msgstr "Hledat kontakty..."
 
@@ -4141,6 +4196,10 @@ msgstr "Hledat ve všech konverzacích…"
 msgid "Searching"
 msgstr "Hledám"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "Hledám…"
+
 msgid "Searching…"
 msgstr "Hledám…"
 
@@ -4154,6 +4213,10 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Hledat…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "Správa důvěry"
 
 msgid "Secure Password Storage"
 msgstr "Bezpečné ukládání hesla"
@@ -4267,11 +4330,6 @@ msgstr "Odeslán kontakt: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Odeslány kontakty:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Kompletně oddělovat soubory profilu (dokonce i databázi historie a zásuvné "
-"moduly)"
-
 msgid "Serial Number: "
 msgstr "Sériové číslo: "
 
@@ -4338,6 +4396,10 @@ msgstr "Sdílet kontakt…"
 msgid "Share Group Chat…"
 msgstr "Sdílet skupinovou konverzaci…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "Vyberte zařízení"
+
 msgid "Share Status"
 msgstr "Sdílet stav"
 
@@ -4346,6 +4408,10 @@ msgstr "Sdílet video"
 
 msgid "Share my online status"
 msgstr "Sdílet stav připojení"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Sdílet kontakt…"
 
 msgid "Shortcuts"
 msgstr "Zkratky"
@@ -4369,6 +4435,9 @@ msgstr "Zobrazit obsah"
 msgid "Show Details"
 msgstr "Zobrazit podrobnosti"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "Zobrazit neaktivní zařízení"
 
@@ -4386,6 +4455,10 @@ msgstr "Ukázat zásuvné moduly"
 
 msgid "Show Send Message Button"
 msgstr "Zobrazit tlačítko pro odesílání zpráv"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Zobrazit hlavní panel"
 
 msgid "Show Status Changes"
 msgstr "Zaznamenávat změny stavu kontaktů"
@@ -5124,6 +5197,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Přepnout seznam konverzací"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Přepnout seznam účastníků"
 
@@ -5271,6 +5347,10 @@ msgstr "Neznámý jazyk"
 msgid "Unknown validation error"
 msgstr "Neznámá chyba ověření"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "Odblokovat"
+
 msgid "Unmute Chat"
 msgstr "Zrušit ztlumení konverzace"
 
@@ -5362,9 +5442,6 @@ msgstr "Použijte profil na spuštění více instancí Gajim"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Použít nezabezpečené spojení k serveru"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Použít určený profil v konfiguračním adresáři"
 
 msgid "Use proxy auth_entication"
 msgstr "Použít při_hlášení k proxy"
@@ -7119,6 +7196,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "News"
 #~ msgstr "Zprávy"
 
+#~ msgid "Nickname…"
+#~ msgstr "Přezdívka…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Není dostupné žádné připojení"
 
@@ -7304,6 +7384,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Requires: libxss"
 #~ msgstr "Vyžaduje: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Restartujte Gajim pro spuštění logování ladění"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7374,6 +7457,12 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Sender: "
 #~ msgstr "Odesílatel: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Kompletně oddělovat soubory profilu (dokonce i databázi historie a "
+#~ "zásuvné moduly)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Sériové číslo"
@@ -7537,6 +7626,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "The service could not be found"
 #~ msgstr "Tato služba nebyla nalezena"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Nastaly problémy s připojením"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Tento účet není připojen k serveru"
 
@@ -7610,6 +7703,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Použít server STUN"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Použít určený profil v konfiguračním adresáři"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Použij proxy při přenosu souborů"

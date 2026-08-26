@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -907,6 +907,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Parola dumneavoastră"
+
 msgid "Ban"
 msgstr "Interzis"
 
@@ -1796,6 +1800,12 @@ msgstr "Doriți să vă dezînregistrați contul și pe <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "În acest fel, această amprentă digitală va fi ștearsă definitiv"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Descărcați"
 
@@ -1935,6 +1945,10 @@ msgstr "Introduceți o nouă parolă..."
 msgid "Enter Password"
 msgstr "Schimbați parola"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Schimbați parola"
+
 msgid "Enter a password to join this chat"
 msgstr "Introduceți o parolă pentru a vă alătura acestui chat"
 
@@ -1952,6 +1966,10 @@ msgstr "Introduceți noul dumneavoastră pseudonim"
 
 msgid "Enter new password..."
 msgstr "Introduceți o nouă parolă..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Introduceți noul dumneavoastră pseudonim"
@@ -2019,6 +2037,10 @@ msgstr ""
 
 msgid "Export"
 msgstr "Exportați"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Alegeți dispozitivul"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2455,6 +2477,9 @@ msgstr "Ascundeți"
 msgid "Hide Chat List"
 msgstr "Ascundeți lista de chat"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Acasă"
 
@@ -2516,6 +2541,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Timp de inactivitate"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2772,6 +2800,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Păstrați istoricul chat-ului"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s s-a alăturat"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Utilizarea cheilor nu include semnarea certificatelor"
 
@@ -2803,6 +2835,9 @@ msgstr "Părăsiți grupul de chat"
 #, fuzzy
 msgid "Leave _Permanently"
 msgstr "Permanent"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3031,6 +3066,10 @@ msgstr "Moderatori"
 msgid "Modify"
 msgstr "Modificați"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Vacanță"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3060,6 +3099,9 @@ msgstr "Sunete silențioase"
 
 msgid "My Workspace"
 msgstr "Spațiul meu de lucru"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "Nume"
@@ -3096,16 +3138,16 @@ msgstr "Mesaj nou de la"
 msgid "Next"
 msgstr "Următorul"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Pseudonimul"
+
 msgid "Nickname"
 msgstr "Pseudonimul"
 
 #, fuzzy
 msgid "Nickname contains invalid characters"
 msgstr "Parola conține caractere interzise"
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Pseudonimul"
 
 msgid "No"
 msgstr "Nu"
@@ -3141,6 +3183,9 @@ msgstr "Fără prag"
 #, fuzzy
 msgid "No Timezone"
 msgstr "Timp"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "Nu există cerințe suplimentare"
@@ -3517,6 +3562,10 @@ msgstr "Parolă necesară"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Parolă Necesară"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Stocarea securizată a parolelor"
 
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
@@ -4152,10 +4201,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Necesită: Gspell"
 
@@ -4257,6 +4302,10 @@ msgstr "Scanați acest cod QR pentru a vă înscrie la %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Scanați acest cod QR pentru a începe un chat cu %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Scanați acest cod QR pentru a începe un chat cu %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Scanare %(current)d / %(total)d ..."
@@ -4299,6 +4348,10 @@ msgstr "Rezultatul căutării"
 msgid "Search all Chats"
 msgstr "Căutați toate chat-urile"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "Căutați toate chat-urile"
+
 msgid "Search contacts..."
 msgstr "Căutați contacte..."
 
@@ -4319,6 +4372,10 @@ msgstr "Căutare Participanți…"
 msgid "Searching"
 msgstr "Căutând"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "Căutând…"
+
 msgid "Searching…"
 msgstr "Căutând…"
 
@@ -4330,6 +4387,10 @@ msgstr "Căutând…"
 
 msgid "Search…"
 msgstr "Căutare…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "Managementul încrederii"
 
 msgid "Secure Password Storage"
 msgstr "Stocarea securizată a parolelor"
@@ -4442,11 +4503,6 @@ msgstr "Contact trimis: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Contacte trimise:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Fișiere de profil separate complet (chiar și baza de date cu istoricul și "
-"plugin-urile)"
-
 msgid "Serial Number: "
 msgstr "Număr de serie: "
 
@@ -4521,6 +4577,10 @@ msgstr "Distribuie Contact…"
 msgid "Share Group Chat…"
 msgstr "Împărtășiți Chat de Grup…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "Alegeți dispozitivul"
+
 msgid "Share Status"
 msgstr "Distribuie Starea"
 
@@ -4529,6 +4589,10 @@ msgstr "Distribuie Video"
 
 msgid "Share my online status"
 msgstr "Împărtășește statutul meu online"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Distribuie Contact…"
 
 #, fuzzy
 msgid "Shortcuts"
@@ -4554,6 +4618,9 @@ msgstr "Arată conținutul"
 msgid "Show Details"
 msgstr "Afișați detaliile"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "Afișarea Dispozitivelor Inactive"
 
@@ -4573,6 +4640,10 @@ msgstr "Plugin-uri"
 
 msgid "Show Send Message Button"
 msgstr "Afișați butonul Trimite mesaj"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Afișare în bara de activități"
 
 msgid "Show Status Changes"
 msgstr "Afișați modificările de stare"
@@ -5369,6 +5440,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Comutați lista participanților"
 
@@ -5520,6 +5594,10 @@ msgstr "Limbă necunoscută"
 msgid "Unknown validation error"
 msgstr "Eroare de validare necunoscută"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "Deblocați"
+
 msgid "Unmute Chat"
 msgstr "Dezactivați modul Silențios pentru Chat"
 
@@ -5615,9 +5693,6 @@ msgstr ""
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Utilizați o conexiune necriptată la server"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Utilizați profilul definit în directorul de configurare"
 
 msgid "Use proxy auth_entication"
 msgstr "Utilizați proxy auth_entication"
@@ -7381,6 +7456,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "News"
 #~ msgstr "Noutăți"
 
+#, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Pseudonimul"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Nici o conexiune disponibilă"
 
@@ -7565,6 +7644,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Requires: libxss"
 #~ msgstr "Necesită: libxss"
 
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7633,6 +7716,12 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Sender: "
 #~ msgstr "Expeditor: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Fișiere de profil separate complet (chiar și baza de date cu istoricul și "
+#~ "plugin-urile)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Număr de serie"
@@ -7806,6 +7895,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "The service could not be found"
 #~ msgstr "Serviciul nu a putut fi găsit"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Alte dispozitive conectate cu contul dumneavoastră"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Acest cont nu este conectat la server"
 
@@ -7877,6 +7970,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Utilizați serverul STUN"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Utilizați profilul definit în directorul de configurare"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Utilizați proxy-uri de transfer de fișiere"

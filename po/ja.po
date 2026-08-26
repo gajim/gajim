@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-07-03 05:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-07-18 04:20+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -883,6 +883,10 @@ msgstr "秘密鍵のバックアップ"
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "バックアップ用のパスワード"
+
 msgid "Ban"
 msgstr "締め出し"
 
@@ -1206,7 +1210,7 @@ msgid "Close with Escape"
 msgstr "エスケープで閉じる"
 
 msgid "Code"
-msgstr ""
+msgstr "コード"
 
 msgid "Code Block"
 msgstr "コードブロック"
@@ -1723,6 +1727,12 @@ msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "この指紋を完全に削除します"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -1847,6 +1857,10 @@ msgstr "バックアップのパスワードを入力してください"
 msgid "Enter Password"
 msgstr "パスワードを入力"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "パスワードを入力"
+
 msgid "Enter a password to join this chat"
 msgstr "この談話室に参加するにはパスワードを入れてください"
 
@@ -1861,6 +1875,10 @@ msgstr "新しい相手先の名前を入れてください"
 
 msgid "Enter new password..."
 msgstr "新しいパスワードを入力してください…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "新しいニックネームを入れてください"
@@ -1926,6 +1944,10 @@ msgstr "至"
 
 msgid "Export"
 msgstr "書き出し"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "秘密鍵を選択"
 
 msgid "Export CSV"
 msgstr "CSV を書き出す"
@@ -2355,6 +2377,9 @@ msgstr "隠す"
 msgid "Hide Chat List"
 msgstr "チャット一覧を隠す"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "自宅"
 
@@ -2418,6 +2443,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "操作のない時間"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2656,6 +2684,10 @@ msgstr "バックアップを保持"
 msgid "Keep Chat History"
 msgstr "会話の履歴を保存"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s さんは締め出されました"
+
 msgid "Key usage does not include certificate signing"
 msgstr "証明書署名に鍵の使い方が含まれていません"
 
@@ -2685,6 +2717,9 @@ msgstr "談話室から退出しますか ?"
 
 msgid "Leave _Permanently"
 msgstr "永久に退出 (_P)"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2907,6 +2942,10 @@ msgstr "司会者"
 msgid "Modify"
 msgstr "変更"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "リアクション"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "詳細は、providers.xmpp.net をご覧ください"
 
@@ -2933,6 +2972,9 @@ msgstr "サウンドのミュート"
 
 msgid "My Workspace"
 msgstr "My Workspace"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "名前"
@@ -2968,14 +3010,15 @@ msgstr "新規メッセージ"
 msgid "Next"
 msgstr "次へ"
 
+#, fuzzy
+msgid "Nick"
+msgstr "ニックネーム"
+
 msgid "Nickname"
 msgstr "ニックネーム"
 
 msgid "Nickname contains invalid characters"
 msgstr "ニックネームに禁止文字が含まれています"
-
-msgid "Nickname…"
-msgstr "ニックネーム…"
 
 # Auto の選択肢
 msgid "No"
@@ -3008,6 +3051,9 @@ msgstr "制限なし"
 
 msgid "No Timezone"
 msgstr "タイムゾーンなし"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "追加要件なし"
@@ -3377,6 +3423,10 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "要パスワード"
 
+#, fuzzy
+msgid "Password incorrect"
+msgstr "現在のパスワードは正しくありません"
+
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
 
@@ -3398,9 +3448,8 @@ msgstr "内容の貼り付けに失敗しました"
 msgid "Path length constraint exceeded"
 msgstr "パスの長さの制限を越えています"
 
-#, fuzzy
 msgid "Pause"
-msgstr "一時停止しました"
+msgstr "一時停止"
 
 msgid "Pending"
 msgstr "保留中"
@@ -3443,7 +3492,7 @@ msgid "Pipewire"
 msgstr "Pipewire"
 
 msgid "Play"
-msgstr ""
+msgstr "再生"
 
 msgid "Play Sound"
 msgstr "サウンドを鳴らす"
@@ -3975,9 +4024,6 @@ msgstr "リソース"
 msgid "Restart Gajim to finish this update"
 msgstr "この更新を完了するには Gajim を再起動してください"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "デバッグの記録を開始するには Gajim を再起動してください"
-
 #, fuzzy
 msgid "Restart Pending"
 msgstr "保留中の申し込み"
@@ -4081,6 +4127,10 @@ msgstr "%s に参加するにはこの QR コードをスキャンします。"
 msgid "Scan this QR code to start a chat with %s."
 msgstr "%s との会話を始めるにはこの QR コードをスキャンします。"
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "%s との会話を始めるにはこの QR コードをスキャンします。"
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "走査中 %(current)d / %(total)d..."
@@ -4118,6 +4168,10 @@ msgstr "検索結果"
 msgid "Search all Chats"
 msgstr "すべてのチャットを検索"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "すべてのチャットを検索"
+
 msgid "Search contacts..."
 msgstr "相手先を検索…"
 
@@ -4137,6 +4191,10 @@ msgstr "チャットを検索…"
 msgid "Searching"
 msgstr "検索"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "検索中…"
+
 msgid "Searching…"
 msgstr "検索中…"
 
@@ -4150,6 +4208,10 @@ msgstr ""
 
 msgid "Search…"
 msgstr "検索…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "信頼の管理"
 
 msgid "Secure Password Storage"
 msgstr "安全なパスワード保存"
@@ -4261,9 +4323,6 @@ msgstr "送った相手先: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "送った相手先:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr "プロフィールのファイルを完全に分離する(履歴データベースやプラグインも)"
-
 msgid "Serial Number: "
 msgstr "シリアル番号: "
 
@@ -4328,6 +4387,10 @@ msgstr "相手先を共有…"
 msgid "Share Group Chat…"
 msgstr "談話室を共有…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "秘密鍵を選択"
+
 msgid "Share Status"
 msgstr "在席状況を通知"
 
@@ -4336,6 +4399,10 @@ msgstr "動画を共有"
 
 msgid "Share my online status"
 msgstr "在席状況を知らせる"
+
+#, fuzzy
+msgid "Share…"
+msgstr "相手先を共有…"
 
 msgid "Shortcuts"
 msgstr "ショートカット"
@@ -4359,6 +4426,9 @@ msgstr "内容を表示"
 msgid "Show Details"
 msgstr "詳細を表示"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "休止中のデバイスを表示する"
 
@@ -4376,6 +4446,10 @@ msgstr "プラグインを表示"
 
 msgid "Show Send Message Button"
 msgstr "メッセージ送信ボタンを表示する"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "タイトルバーを表示"
 
 msgid "Show Status Changes"
 msgstr "状況変更を表示する"
@@ -5123,6 +5197,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "参加者一覧を表示/非表示"
 
@@ -5271,6 +5348,10 @@ msgstr "未知の言語"
 msgid "Unknown validation error"
 msgstr "未知の検証エラー"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "遮断の解除"
+
 msgid "Unmute Chat"
 msgstr "チャットのミュートを解除"
 
@@ -5362,9 +5443,6 @@ msgstr "プロファイルを使用して複数のGajimインスタンスを実�
 
 msgid "Use an unencrypted connection to the server"
 msgstr "サーバーに暗号化されていない接続を用います"
-
-msgid "Use defined profile in configuration directory"
-msgstr "設定ディレクトリ内の設定ファイルを指定"
 
 msgid "Use proxy auth_entication"
 msgstr "プロキシの認証を使用する (_E)"
@@ -7086,6 +7164,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "News"
 #~ msgstr "ニュース"
 
+#~ msgid "Nickname…"
+#~ msgstr "ニックネーム…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "接続していません"
 
@@ -7272,6 +7353,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Requires: libxss"
 #~ msgstr "libxss ライブラリが必要です"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "デバッグの記録を開始するには Gajim を再起動してください"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7341,6 +7425,11 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Sender: "
 #~ msgstr "送信者: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "プロフィールのファイルを完全に分離する(履歴データベースやプラグインも)"
 
 #~ msgid "Serial Number"
 #~ msgstr "シリアル番号"
@@ -7512,6 +7601,10 @@ msgstr "…またはここにドロップ"
 #~ msgid "The service could not be found"
 #~ msgstr "サービスが見つかりませんでした"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "接続性の問題があります"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "このアカウントはサーバーに接続していません"
 
@@ -7581,6 +7674,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN サーバーを使う"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "設定ディレクトリ内の設定ファイルを指定"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "ファイル転送のプロキシを使う"

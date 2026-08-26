@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2026-03-29 09:19+0000\n"
 "Last-Translator: Suiberis <suiberis@proton.me>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -982,6 +982,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Απαγόρευση πρόσβασης"
 
@@ -1938,6 +1942,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Λήψη"
@@ -2078,6 +2088,10 @@ msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
 msgid "Enter Password"
 msgstr "Αλλαγή κωδικού πρόσβασης"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Αλλαγή κωδικού πρόσβασης"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2096,6 +2110,10 @@ msgstr "Εισάγετε ψευδώνυμο"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2174,6 +2192,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Εξαγωγή"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Επιλογή εικόνας"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2654,6 +2676,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Συμμετέχων"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "_Ξένιος υπολογιστής:"
@@ -2721,6 +2746,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "από τις %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2989,6 +3017,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Καταγραφή ιστορικού"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "Ο %s έφυγε"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -3020,6 +3052,9 @@ msgid "Leave Group Chat?"
 msgstr "Ομαδικές συζητήσεις"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3277,6 +3312,10 @@ msgstr "Διαχειριστές"
 msgid "Modify"
 msgstr "_Τροποποίηση"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Τροποποίηση λογαριασμού"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3308,6 +3347,9 @@ msgid "Mute Sounds"
 msgstr "Σίγαση ήχων"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3350,15 +3392,15 @@ msgstr "Νέο μήνυμα από %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Υποκοριστικό (Nickname)"
+
 msgid "Nickname"
 msgstr "Υποκοριστικό (Nickname)"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Υποκοριστικό (Nickname)"
 
 #, fuzzy
 msgid "No"
@@ -3398,6 +3440,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Χρόνος"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3798,6 +3843,10 @@ msgstr "Απαιτείται κωδικός"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Απαιτείται κωδικός"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Αποθήκευση κωδικού"
 
 msgid "Passwords do not match"
 msgstr "Οι κωδικοί δεν ταιριάζουν"
@@ -4494,12 +4543,6 @@ msgstr ""
 "μερικές ρυθμίσεις"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>ΣΗΜΕΙΩΣΗ:</b> Θα πρέπει να επανεκκινήσετε το gajim για να εφαρμοστούν "
-"μερικές ρυθμίσεις"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Απαιτείται κωδικός"
 
@@ -4616,6 +4659,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Επιθυμώ να σε προσθέσω στη λίστα επαφών μου."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Επιθυμώ να σε προσθέσω στη λίστα επαφών μου."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Σάρωση %d / %d.."
@@ -4661,6 +4708,10 @@ msgid "Search all Chats"
 msgstr "_Αναζήτηση στη βάση δεδομένων"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Αναζήτηση στη βάση δεδομένων"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Αναζήτηση στη βάση δεδομένων"
 
@@ -4681,6 +4732,10 @@ msgid "Searching"
 msgstr "Αναζήτηση"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Αναζήτηση"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Αναζήτηση"
 
@@ -4693,6 +4748,9 @@ msgstr "Αναζήτηση"
 #, fuzzy
 msgid "Search…"
 msgstr "Αναζήτηση"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4820,9 +4878,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Επαφές"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Αριθμός χώρων εργασίας:"
@@ -4904,6 +4959,10 @@ msgid "Share Group Chat…"
 msgstr "Ομαδικές συζητήσεις"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Επιλογή εικόνας"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Κατάσταση"
 
@@ -4914,6 +4973,10 @@ msgstr "Έναρξη κουβέντας"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Αλλαγή κατάστασης"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Προσθήκη επαφής..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4942,6 +5005,9 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 msgid "Show Details"
 msgstr "<b>Λεπτομέρειες</b>"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
@@ -4963,6 +5029,10 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Αποστολή μηνύματος"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5776,6 +5846,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Συμμετέχων"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Συμμετέχων"
@@ -5942,6 +6015,9 @@ msgstr "Άγνωστος τύπος %s "
 msgid "Unknown validation error"
 msgstr "Άγνωστη έκδοση του D-Bus: %s"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "Αίτηση μεταφοράς αρχείου"
@@ -6049,10 +6125,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7715,6 +7787,10 @@ msgstr ""
 #~ msgstr "Ταινία"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Υποκοριστικό (Nickname)"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Σύνδεση μη διαθέσιμη"
 
@@ -7869,6 +7945,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Απαιτείται κωδικός"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>ΣΗΜΕΙΩΣΗ:</b> Θα πρέπει να επανεκκινήσετε το gajim για να εφαρμοστούν "
+#~ "μερικές ρυθμίσεις"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8125,6 +8207,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Εξυπηρετητής:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Επεξεργασία ρυθμίσεων για προχωρημένους"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Χρήση μεσολαβητών μεταφοράς αρχείων"

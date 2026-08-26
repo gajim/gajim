@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -905,6 +905,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Sua senha"
+
 msgid "Ban"
 msgstr "Banir"
 
@@ -1775,6 +1779,12 @@ msgstr "Você deseja cancelar também o registro sua conta em <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Fazer isso irá deletar esta Impressão Digital permanentemente"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr "Baixar"
 
@@ -1909,6 +1919,10 @@ msgstr "Digite uma nova senha..."
 msgid "Enter Password"
 msgstr "Modificar Senha"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Modificar Senha"
+
 msgid "Enter a password to join this chat"
 msgstr "Coloque a senha para se juntar a este chat"
 
@@ -1924,6 +1938,10 @@ msgstr "Inserir novo nome de contato"
 
 msgid "Enter new password..."
 msgstr "Digite uma nova senha..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Inserir seu novo apelido"
@@ -1990,6 +2008,10 @@ msgstr ""
 
 msgid "Export"
 msgstr "Exportar"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Escolha o Dispositivo"
 
 msgid "Export CSV"
 msgstr "Exportar CSV"
@@ -2414,6 +2436,9 @@ msgstr "Ocultar"
 msgid "Hide Chat List"
 msgstr "Ocultar lista de conversas"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Início"
 
@@ -2473,6 +2498,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Tempo ocioso"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2716,6 +2744,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Manter Histórico de Conversa"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s foi banido(a)"
+
 msgid "Key usage does not include certificate signing"
 msgstr "O uso das chaves não inclui assinatura de certificado"
 
@@ -2745,6 +2777,9 @@ msgstr "Sair do Bate-Papo em Grupo?"
 
 msgid "Leave _Permanently"
 msgstr "Sair_Permanentemente"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2967,6 +3002,10 @@ msgstr "Moderadores"
 msgid "Modify"
 msgstr "Modificar"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Férias"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Mais informações em providers.xmpp.net"
 
@@ -2993,6 +3032,9 @@ msgstr "Sons mudos"
 
 msgid "My Workspace"
 msgstr "Minha Área de Trabalho"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "Nome"
@@ -3027,14 +3069,15 @@ msgstr "Nova mensagem de"
 msgid "Next"
 msgstr "Próximo"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Apelido"
+
 msgid "Nickname"
 msgstr "Apelido"
 
 msgid "Nickname contains invalid characters"
 msgstr "O apelido contém caracteres inválidos"
-
-msgid "Nickname…"
-msgstr "Apelido…"
 
 msgid "No"
 msgstr "Não"
@@ -3069,6 +3112,9 @@ msgstr "Sem Limite"
 #, fuzzy
 msgid "No Timezone"
 msgstr "Tempo"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "Sem requisitos adicionais"
@@ -3441,6 +3487,10 @@ msgstr "Senha é obrigatória"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Senha é Obrigatória"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Armazenamento Seguro de Senha"
 
 msgid "Passwords do not match"
 msgstr "Senhas não conferem"
@@ -4046,10 +4096,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "Reinicie o Gajim para aplicar as alterações"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "Reinicie o Gajim para aplicar as alterações"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Solicitação pendente"
 
@@ -4150,6 +4196,10 @@ msgstr "Escaneie este código QR para se juntar a %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Escaneie este código QR para iniciar uma conversa com %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Escaneie este código QR para iniciar uma conversa com %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Escaneando %(current)d / %(total)d ..."
@@ -4190,6 +4240,10 @@ msgstr "Resultado da Pesquisa"
 msgid "Search all Chats"
 msgstr "Buscar em todas as Conversas"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "Buscar em todas as Conversas"
+
 msgid "Search contacts..."
 msgstr "Pesquisar contatos..."
 
@@ -4210,6 +4264,10 @@ msgstr "Pesquisar Participantes…"
 msgid "Searching"
 msgstr "Buscando"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "Buscando…"
+
 msgid "Searching…"
 msgstr "Buscando…"
 
@@ -4223,6 +4281,10 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Pesquisar…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "Gerenciamento de Confiança"
 
 msgid "Secure Password Storage"
 msgstr "Armazenamento Seguro de Senha"
@@ -4335,11 +4397,6 @@ msgstr "Enviar contato: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Enviar contatos:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Separar arquivos de perfil completamente (até mesmo banco de dados de "
-"histórico e plugins)"
-
 msgid "Serial Number: "
 msgstr "Número do Ticket: "
 
@@ -4411,6 +4468,10 @@ msgstr "Compartilhar Contato…"
 msgid "Share Group Chat…"
 msgstr "Compartilhar Bate-Papo em Grupo…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "Escolha o Dispositivo"
+
 msgid "Share Status"
 msgstr "Compartilhar Status"
 
@@ -4419,6 +4480,10 @@ msgstr "Compartilhar Vídeo"
 
 msgid "Share my online status"
 msgstr "Compartilhar meu status online"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Compartilhar Contato…"
 
 #, fuzzy
 msgid "Shortcuts"
@@ -4444,6 +4509,9 @@ msgstr "Mostrar Conteúdo"
 msgid "Show Details"
 msgstr "Mostrar Detalhes"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr "Mostrar Dispositivos Inativos"
 
@@ -4462,6 +4530,10 @@ msgstr "Mostrar Plugins"
 
 msgid "Show Send Message Button"
 msgstr "Mostrar Botão Enviar Mensagem"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Mostrar na Barra de Tarefas"
 
 msgid "Show Status Changes"
 msgstr "Mostrar as alterações de status"
@@ -5246,6 +5318,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Alternar Lista de Conversas"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Alternar lista de participantes"
 
@@ -5397,6 +5472,10 @@ msgstr "Idioma desconhecido"
 msgid "Unknown validation error"
 msgstr "Erro desconhecido de validação"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "Desbloquear"
+
 msgid "Unmute Chat"
 msgstr "Remover Mudo da Conversa"
 
@@ -5491,9 +5570,6 @@ msgstr ""
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Usar uma conexão não criptografada ao servidor"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Usar perfil definido no diretório de configuração"
 
 msgid "Use proxy auth_entication"
 msgstr "Usar aut_enticação de proxy"
@@ -7256,6 +7332,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "News"
 #~ msgstr "Notícias"
 
+#~ msgid "Nickname…"
+#~ msgstr "Apelido…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Nenhuma Conexão Disponível"
 
@@ -7450,6 +7529,10 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Requires: libxss"
 #~ msgstr "Requer: libxss"
 
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Reinicie o Gajim para aplicar as alterações"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7521,6 +7604,12 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Sender: "
 #~ msgstr "Remetente: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Separar arquivos de perfil completamente (até mesmo banco de dados de "
+#~ "histórico e plugins)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Número de Série"
@@ -7691,6 +7780,10 @@ msgstr "...ou solte-o aqui"
 #~ msgid "The service could not be found"
 #~ msgstr "O serviço não pode ser encontrado"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Há algum problema de conexão"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta conta não está conectada ao servidor"
 
@@ -7767,6 +7860,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Usar Servidor STUN"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Usar perfil definido no diretório de configuração"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Usar proxies de transferência de arquivos"

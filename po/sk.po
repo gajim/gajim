@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -980,6 +980,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Vložte nové heslo:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Zakázať"
 
@@ -1939,6 +1943,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Stiahnuť"
@@ -2081,6 +2091,10 @@ msgstr "Vložte nové heslo:"
 msgid "Enter Password"
 msgstr "Zmeniť heslo"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Zmeniť heslo"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2099,6 +2113,10 @@ msgstr "Vložiť prezývku"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Vložte nové heslo:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2175,6 +2193,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Exportovať"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Vybrať obrázok"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2652,6 +2674,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Prepnúť video reláciu"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Domovská stránka:</b>"
@@ -2718,6 +2743,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " od %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2986,6 +3014,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Posledné:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s odišiel"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -3017,6 +3049,9 @@ msgid "Leave Group Chat?"
 msgstr "Opustiť diskusnú skupinu"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -3269,6 +3304,10 @@ msgstr "Moderátori"
 msgid "Modify"
 msgstr "Upraviť"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Umiestnenie:"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3300,6 +3339,9 @@ msgid "Mute Sounds"
 msgstr "Stlmiť zvuky"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3342,15 +3384,15 @@ msgstr "Správa od %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Prezývka"
+
 msgid "Nickname"
 msgstr "Prezývka"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Prezývka"
 
 #, fuzzy
 msgid "No"
@@ -3390,6 +3432,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Čas"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3788,6 +3833,10 @@ msgstr "Heslo je požadované"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Heslo je požadované"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Uložiť heslo"
 
 msgid "Passwords do not match"
 msgstr "Heslá sa nezhodujú"
@@ -4481,10 +4530,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Vyžaduje libgtkspell."
 
@@ -4600,6 +4645,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Nemôžete pridať seba do vášho zoznamu kontaktov."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Nemôžete pridať seba do vášho zoznamu kontaktov."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Prieskúmava sa %(current)d / %(total)d.."
@@ -4645,6 +4694,10 @@ msgid "Search all Chats"
 msgstr "_Hľadať v databáze"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Hľadať v databáze"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Hľadať v databáze"
 
@@ -4665,6 +4718,10 @@ msgid "Searching"
 msgstr "Hľadať"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Hľadať"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Hľadať"
 
@@ -4677,6 +4734,9 @@ msgstr "Hľadať"
 #, fuzzy
 msgid "Search…"
 msgstr "Hľadať"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4803,9 +4863,6 @@ msgstr "Poslať kontakt: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Poslať kontakty:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG číslo:"
@@ -4887,6 +4944,10 @@ msgid "Share Group Chat…"
 msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Vybrať obrázok"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Stav"
 
@@ -4897,6 +4958,10 @@ msgstr "video"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Zmeniť stav"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Pridať kontakt..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4925,6 +4990,9 @@ msgstr "Zobraziť len _aktívne kontakty"
 msgid "Show Details"
 msgstr "Podrobnosti"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Vstupné zariadenie zvuku"
@@ -4946,6 +5014,10 @@ msgstr "Registrácia zlyhala"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Poslať správu"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Zobraziť trans_porty"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5776,6 +5848,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Prepnúť video reláciu"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Účastník"
@@ -5942,6 +6017,10 @@ msgid "Unknown validation error"
 msgstr "Neznáma chyba SSL: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Odblokovať"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Požiadavka na hlasový rozhovor"
 
@@ -6048,10 +6127,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Nie ste pripojený k serveru"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Editor rozšírenej konfigurácie"
 
 msgid "Use proxy auth_entication"
 msgstr "Použiť proxy aut_entifikáciu"
@@ -7715,6 +7790,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Prezývka"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Pripojenie nie je dostupné"
 
@@ -7879,6 +7958,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "Požaduje knižnicu libxss."
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8132,6 +8215,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN server:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Editor rozšírenej konfigurácie"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Použiť proxy pre prenos súborov"

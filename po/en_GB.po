@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -980,6 +980,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Enter new password:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Ban"
 
@@ -1940,6 +1944,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Download"
@@ -2081,6 +2091,10 @@ msgstr "Enter new password:"
 msgid "Enter Password"
 msgstr "Change Password"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Change Password"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2099,6 +2113,10 @@ msgstr "Insert Nickname"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Enter new password:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2175,6 +2193,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Export"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Choose Image"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2652,6 +2674,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Participant"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Homepage:"
@@ -2717,6 +2742,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Idle Time"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2985,6 +3013,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Recently:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s has left"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Key usage does not include certificate signing"
 
@@ -3016,6 +3048,9 @@ msgid "Leave Group Chat?"
 msgstr "Leave Groupchats"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3272,6 +3307,10 @@ msgstr "Moderators"
 msgid "Modify"
 msgstr "Modify"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Notification"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3303,6 +3342,9 @@ msgid "Mute Sounds"
 msgstr "Mute Sounds"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3345,15 +3387,15 @@ msgstr "New Message from %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Nickname"
+
 msgid "Nickname"
 msgstr "Nickname"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Nickname"
 
 #, fuzzy
 msgid "No"
@@ -3393,6 +3435,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Time"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3792,6 +3837,10 @@ msgstr "Password Required"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Required"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Save password"
 
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
@@ -4486,10 +4535,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Requires libgtkspell."
 
@@ -4605,6 +4650,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "You cannot add yourself to your roster."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "You cannot add yourself to your roster."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Scanning %(current)d / %(total)d.."
@@ -4650,6 +4699,10 @@ msgid "Search all Chats"
 msgstr "_Search Database"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Search Database"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Search Database"
 
@@ -4670,6 +4723,10 @@ msgid "Searching"
 msgstr "Search"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Search"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Search"
 
@@ -4682,6 +4739,9 @@ msgstr "Search"
 #, fuzzy
 msgid "Search…"
 msgstr "Search"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4808,9 +4868,6 @@ msgstr "Sent contact: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "Sent contacts:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Number:"
@@ -4892,6 +4949,10 @@ msgid "Share Group Chat…"
 msgstr "Leave Groupchats"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Choose Image"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4902,6 +4963,10 @@ msgstr "Start Chat"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Change status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Add Contact..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4930,6 +4995,9 @@ msgstr "Show Only _Active Contacts"
 msgid "Show Details"
 msgstr "Details"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Default Message"
@@ -4951,6 +5019,10 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Send message"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Show Trans_ports"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5778,6 +5850,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Participant"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Participant"
@@ -5944,6 +6019,10 @@ msgid "Unknown validation error"
 msgstr "Unknown SSL error: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Unblock"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "File Transfer Request"
 
@@ -6050,10 +6129,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "You are not connected to the server"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Advanced Configuration Editor"
 
 msgid "Use proxy auth_entication"
 msgstr "Use proxy auth_entication"
@@ -7724,6 +7799,10 @@ msgstr ""
 #~ msgstr "Movie"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Nickname"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Connection not available"
 
@@ -7889,6 +7968,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "Requires libxss library."
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8143,6 +8227,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Advanced Configuration Editor"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Use file transfer proxies"

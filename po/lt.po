@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -959,6 +959,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Įveskite naują slaptažodį:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Banas"
 
@@ -1909,6 +1913,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Do _not ask me again"
@@ -2048,6 +2058,10 @@ msgstr "Įveskite naują slaptažodį:"
 msgid "Enter Password"
 msgstr "Keisti slaptažodį"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Keisti slaptažodį"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2066,6 +2080,10 @@ msgstr "Insert Nickname"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Įveskite naują slaptažodį:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2142,6 +2160,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Eksportuoti"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Choose Image"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2617,6 +2639,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Participant"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Asmeninė svetainė:</b>"
@@ -2683,6 +2708,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr " since %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2951,6 +2979,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Nesenai:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "Įveskite naują prieigos %s pavadinimą"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2982,6 +3014,9 @@ msgid "Leave Group Chat?"
 msgstr "Leave Groupchats"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -3236,6 +3271,10 @@ msgstr "Moderators"
 msgid "Modify"
 msgstr "Keisti"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Padėtis:"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3267,6 +3306,9 @@ msgid "Mute Sounds"
 msgstr "Išjungti Garsus"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3310,15 +3352,15 @@ msgid "Next"
 msgstr ""
 
 #, fuzzy
+msgid "Nick"
+msgstr "B_efore nickname:"
+
+#, fuzzy
 msgid "Nickname"
 msgstr "B_efore nickname:"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "B_efore nickname:"
 
 #, fuzzy
 msgid "No"
@@ -3358,6 +3400,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Time"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3754,6 +3799,10 @@ msgstr "Password Required"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Required"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Save password"
 
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
@@ -4442,11 +4491,6 @@ msgstr ""
 "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Password Required"
 
@@ -4562,6 +4606,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
@@ -4607,6 +4655,10 @@ msgid "Search all Chats"
 msgstr "_Paieška duomenų bazėje"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Paieška duomenų bazėje"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Paieška duomenų bazėje"
 
@@ -4627,6 +4679,10 @@ msgid "Searching"
 msgstr "Ieškoti"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Ieškoti"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Ieškoti"
 
@@ -4639,6 +4695,9 @@ msgstr "Ieškoti"
 #, fuzzy
 msgid "Search…"
 msgstr "Ieškoti"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4765,9 +4824,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Siųsti kontaktus:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Number:"
@@ -4848,6 +4904,10 @@ msgid "Share Group Chat…"
 msgstr "Leave Groupchats"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Choose Image"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Būklė"
 
@@ -4858,6 +4918,10 @@ msgstr "Start Chat"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Change status"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Įtraukti asmenį..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4886,6 +4950,9 @@ msgstr "Rodyti Tik _Aktyvius Kontaktus"
 msgid "Show Details"
 msgstr "Gajim"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Žinutė pagal nutylėjimą"
@@ -4907,6 +4974,10 @@ msgstr "Registracija nesėkminga"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Siųsti žinutę"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Rodyti _Pernašas"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5718,6 +5789,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Participant"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Participant"
@@ -5881,6 +5955,9 @@ msgstr "A_fter nickname:"
 msgid "Unknown validation error"
 msgstr "Kambario nustatymai"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "File Transfer Request"
@@ -5988,10 +6065,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "You are not connected to the server"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Išplėstinis konfigūracijos redaktorius"
 
 msgid "Use proxy auth_entication"
 msgstr "Naudoti proksi _autentikaciją"
@@ -7606,6 +7679,10 @@ msgstr ""
 #~ msgstr "Movie"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "B_efore nickname:"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Connection not available"
 
@@ -7759,6 +7836,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Password Required"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -7994,6 +8076,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Serveris:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Išplėstinis konfigūracijos redaktorius"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Naudoti failų siuntimo proksius"

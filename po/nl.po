@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -968,6 +968,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Voer nieuw wachtwoord in:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "Ver_bannen"
 
@@ -1917,6 +1921,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "?Znw:Download"
@@ -2062,6 +2072,10 @@ msgstr "Voer nieuw wachtwoord in:"
 msgid "Enter Password"
 msgstr "Verander wachtwoord"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Verander wachtwoord"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2080,6 +2094,10 @@ msgstr "Bijnaam invoeren"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Voer nieuw wachtwoord in:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2156,6 +2174,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "_Exporteren"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Kies archief"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2642,6 +2664,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Videosessie in-/uitschakelen"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Website"
@@ -2707,6 +2732,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "Inactief sinds:"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2980,6 +3008,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Gespreksgeschiedenis"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s is toegetreden"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Sleutelgebruik bevat geen certificaatondertekening"
 
@@ -3011,6 +3043,9 @@ msgid "Leave Group Chat?"
 msgstr "Groepsgesprekken verlaten"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3270,6 +3305,10 @@ msgstr "Beheerders"
 msgid "Modify"
 msgstr "Bewerken"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Locatie:"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3301,6 +3340,9 @@ msgid "Mute Sounds"
 msgstr "Geluiden dempen"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3341,15 +3383,15 @@ msgstr "Nieuw bericht van %(nickname)s"
 msgid "Next"
 msgstr "Volgende"
 
+#, fuzzy
+msgid "Nick"
+msgstr "Bijnaam"
+
 msgid "Nickname"
 msgstr "Bijnaam"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Bijnaam"
 
 msgid "No"
 msgstr "Nee"
@@ -3387,6 +3429,9 @@ msgstr "Geen drempelwaarde"
 #, fuzzy
 msgid "No Timezone"
 msgstr "Duur"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr "Geen extra vereisten"
@@ -3784,6 +3829,10 @@ msgstr "Wachtwoord vereist"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Wachtwoord vereist"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Veilige wachtwoordopslag"
 
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
@@ -4463,11 +4512,6 @@ msgstr ""
 "Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Vereist: Gspell"
 
@@ -4586,6 +4630,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Je kan jezelf niet aan je rooster toevoegen."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Je kan jezelf niet aan je rooster toevoegen."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Onderzoeken van %(current)d / %(total)d…"
@@ -4634,6 +4682,10 @@ msgid "Search all Chats"
 msgstr "Zoeken in database"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "Zoeken in database"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "Database zoeken…"
 
@@ -4654,6 +4706,10 @@ msgid "Searching"
 msgstr "Zoeken"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Zoeken"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Zoeken"
 
@@ -4666,6 +4722,9 @@ msgstr "Zoeken"
 #, fuzzy
 msgid "Search…"
 msgstr "Zoeken"
+
+msgid "Secret Key Management"
+msgstr ""
 
 msgid "Secure Password Storage"
 msgstr "Veilige wachtwoordopslag"
@@ -4791,10 +4850,6 @@ msgstr "Contact verzonden: ‘%(jid)s’ (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Verzonden contacten:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Profielbestanden volledig scheiden (zelfs geschiedenisdatabase en plug-ins)"
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Serienummer"
@@ -4874,6 +4929,10 @@ msgid "Share Group Chat…"
 msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Kies archief"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4884,6 +4943,10 @@ msgstr "een video-"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Status veranderen"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Contact toevoegen…"
 
 #, fuzzy
 msgid "Shortcuts"
@@ -4913,6 +4976,9 @@ msgstr "Alleen actieve contacten weergeven"
 msgid "Show Details"
 msgstr "Details"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "_Audio-invoerapparaat"
@@ -4936,6 +5002,10 @@ msgstr "Plug-ins"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Bericht verzenden"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Transporten weergeven"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5758,6 +5828,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Videosessie in-/uitschakelen"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Deelnemer"
@@ -5924,6 +5997,10 @@ msgid "Unknown validation error"
 msgstr "Onbekende SSL-fout: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_Deblokkeren"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Audiogespreksverzoek"
 
@@ -6029,9 +6106,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Er is geen verbinding met de server"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Gebruik opgegeven profiel in configuratiemap"
 
 msgid "Use proxy auth_entication"
 msgstr "Gebruik proxy-auth_enticatie"
@@ -7821,6 +7895,10 @@ msgstr ""
 #~ msgstr "Mis nooit een bericht, en hou al je chatcliënten gesynchroniseerd"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Bijnaam"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Verbinding niet beschikbaar"
 
@@ -8013,6 +8091,11 @@ msgstr ""
 #~ msgid "Requires: libxss"
 #~ msgstr "Vereist: libxss"
 
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -8083,6 +8166,12 @@ msgstr ""
 
 #~ msgid "Sender: "
 #~ msgstr "Afzender: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Profielbestanden volledig scheiden (zelfs geschiedenisdatabase en plug-"
+#~ "ins)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Serienummer"
@@ -8315,6 +8404,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "STU_N-server"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Gebruik opgegeven profiel in configuratiemap"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Gebruik bestandsoverdrachtsproxies"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1011,6 +1011,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "הזן סיסמה חדשה:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "א_סור"
 
@@ -1980,6 +1984,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "הורדה"
@@ -2128,6 +2138,10 @@ msgstr "הזן סיסמה חדשה:"
 msgid "Enter Password"
 msgstr "שינוי סיסמה"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "שינוי סיסמה"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2148,6 +2162,10 @@ msgstr "שבץ שם כינוי"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "הזן סיסמה חדשה:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 # להכניס/להזין
 #, fuzzy
@@ -2226,6 +2244,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "יצא"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "בחירת ארכיון"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2716,6 +2738,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "הפעלת סשן וידאו"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "עמוד בית:"
@@ -2784,6 +2809,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "בחוסר פעילות מאז %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 # להבהב
 #, fuzzy
@@ -3064,6 +3092,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "אחרונים:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s עזב/ה"
+
 msgid "Key usage does not include certificate signing"
 msgstr "שימוש מפתח לא כולל חתימת תעודה"
 
@@ -3095,6 +3127,9 @@ msgid "Leave Group Chat?"
 msgstr "עזוב שיחות קבוצה"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 # תרגום כתובת/תיעול שערים
@@ -3355,6 +3390,10 @@ msgstr "אחראים"
 msgid "Modify"
 msgstr "התאמה"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "מיקום: "
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3387,6 +3426,9 @@ msgid "Mute Sounds"
 msgstr "דומם _צלילים"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3428,15 +3470,15 @@ msgstr "הודעה חדשה מאת %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "שם כינוי"
+
 msgid "Nickname"
 msgstr "שם כינוי"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "שם כינוי"
 
 msgid "No"
 msgstr "לא"
@@ -3475,6 +3517,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "זמן"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3875,6 +3920,10 @@ msgstr "נדרשת מילת מעבר"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "שמור סיסמה"
 
 msgid "Passwords do not match"
 msgstr "סיסמאות לא תואמות"
@@ -4582,10 +4631,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "יש צורך בהתקנת libgtkspell."
 
@@ -4706,6 +4751,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
+
 # Scanned/Identified/Detected/Discovered/Found %(current)d out of %(total)d..
 # אותרו, זוהו, נמצאו
 #, fuzzy, python-format
@@ -4756,6 +4805,10 @@ msgid "Search all Chats"
 msgstr "_חפש בתוך מסד נתונים"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_חפש בתוך מסד נתונים"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_חפש בתוך מסד נתונים"
 
@@ -4776,6 +4829,10 @@ msgid "Searching"
 msgstr "חיפוש"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "חיפוש"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "חיפוש"
 
@@ -4788,6 +4845,9 @@ msgstr "חיפוש"
 #, fuzzy
 msgid "Search…"
 msgstr "חיפוש"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4917,9 +4977,6 @@ msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
 msgid "Sent contacts:"
 msgstr "אנשי קשר אשר נשלחו:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "מספר GG:"
@@ -5002,6 +5059,10 @@ msgid "Share Group Chat…"
 msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "בחירת ארכיון"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "מצב"
 
@@ -5012,6 +5073,10 @@ msgstr "וידאו"
 #, fuzzy
 msgid "Share my online status"
 msgstr "שנה מצב"
+
+#, fuzzy
+msgid "Share…"
+msgstr "הוסף _איש קשר..."
 
 #, fuzzy
 msgid "Shortcuts"
@@ -5041,6 +5106,9 @@ msgstr "הצג אנשי קשר _פעילים בלבד"
 msgid "Show Details"
 msgstr "פרטים"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "התקן קלט שמע"
@@ -5062,6 +5130,10 @@ msgstr "תוספים"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "מסירת הודעה"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "הצג מו_בילים"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5893,6 +5965,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "הפעלת סשן וידאו"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "משתתף"
@@ -6061,6 +6136,10 @@ msgid "Unknown validation error"
 msgstr "שגיאת SSL לא מוכרת: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "_בטל חסימה"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "בקשה לשיחה קולית"
 
@@ -6169,10 +6248,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "אינך מחובר לשרת"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "cli"
 
 msgid "Use proxy auth_entication"
 msgstr "השתמש באימות _proxy"
@@ -7937,6 +8012,10 @@ msgstr ""
 #~ msgstr "סרט"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "שם כינוי"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "חיבור לא זמין"
 
@@ -8113,6 +8192,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "יש צורך בהתקנת ספריית libxss."
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8391,6 +8474,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "שרת STUN:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "cli"
 
 # BUG: _underline
 #~ msgid "Use file transfer proxies"

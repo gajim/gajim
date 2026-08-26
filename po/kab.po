@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2026-02-22 20:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
@@ -864,6 +864,10 @@ msgstr ""
 msgid "Backup Successful"
 msgstr ""
 
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Awal-ik·im uffir"
+
 msgid "Ban"
 msgstr "Gdel"
 
@@ -1691,6 +1695,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 msgid "Download"
 msgstr ""
 
@@ -1814,6 +1824,10 @@ msgstr "Sekcem awal uffir amaynut…"
 msgid "Enter Password"
 msgstr "Snifel awal n uɛeddi"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Snifel awal n uɛeddi"
+
 msgid "Enter a password to join this chat"
 msgstr "Sekcem awal uffir akken ad tedduḍ ɣer udiwenni-agi"
 
@@ -1829,6 +1843,10 @@ msgstr "Sekcem isem n unermis amaynut"
 
 msgid "Enter new password..."
 msgstr "Sekcem awal uffir amaynut…"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 msgid "Enter your new nickname"
 msgstr "Sekcem meffer isem-ik·im amaynut"
@@ -1896,6 +1914,10 @@ msgstr "Azemz n tagara"
 
 msgid "Export"
 msgstr "Sifed"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Fren ibenk"
 
 msgid "Export CSV"
 msgstr "Sifed CSV"
@@ -2311,6 +2333,9 @@ msgstr "Ffer"
 msgid "Hide Chat List"
 msgstr "Ffer tabdart n udiwenni usrid"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Agejdan"
 
@@ -2371,6 +2396,9 @@ msgid ""
 msgstr ""
 
 msgid "Idle Time"
+msgstr ""
+
+msgid "If checked the search text is ignored."
 msgstr ""
 
 msgid ""
@@ -2600,6 +2628,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Eǧǧ azray n udiwenni usrid"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s yettwagdel"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Aseqdec n tsarut ur yegbir ara azmul n uselkin"
 
@@ -2629,6 +2661,9 @@ msgstr "Ffeɣ seg ugraw n udiwenni usrid?"
 
 msgid "Leave _Permanently"
 msgstr "Ffeɣ i lebda"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2845,6 +2880,10 @@ msgstr ""
 msgid "Modify"
 msgstr "Senfel"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Rnu tasedmirt…"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Ugar n telɣut ɣef providers.xmpp.net"
 
@@ -2871,6 +2910,9 @@ msgstr "Sgugem Imesli"
 
 msgid "My Workspace"
 msgstr "Tallunt-iw n umahil"
+
+msgid "Myself"
+msgstr ""
 
 msgid "Name"
 msgstr "Isem"
@@ -2905,13 +2947,13 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
+msgid "Nick"
+msgstr ""
+
 msgid "Nickname"
 msgstr ""
 
 msgid "Nickname contains invalid characters"
-msgstr ""
-
-msgid "Nickname…"
 msgstr ""
 
 msgid "No"
@@ -2944,6 +2986,9 @@ msgid "No Threshold"
 msgstr ""
 
 msgid "No Timezone"
+msgstr ""
+
+msgid "No account password found, unlocking not possible"
 msgstr ""
 
 msgid "No additional requirements"
@@ -3309,6 +3354,10 @@ msgstr "Awal uffir yettwasra"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Awal uffir yettwasra"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Asekles n wawal uffir aɣelsan"
 
 msgid "Passwords do not match"
 msgstr "Awalen uffiren ur mṣadan ara"
@@ -3896,9 +3945,6 @@ msgstr ""
 msgid "Restart Gajim to finish this update"
 msgstr ""
 
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-
 msgid "Restart Pending"
 msgstr ""
 
@@ -3997,6 +4043,10 @@ msgstr "Semḍen tangalt-a QR akken ad tedduḍ ɣer %s."
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Semḍen tangalt-a QR akken ad tebduḍ adiwenni akked %s."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Semḍen tangalt-a QR akken ad tebduḍ adiwenni akked %s."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Aḍummu %(current)d / %(total)d …"
@@ -4034,6 +4084,10 @@ msgstr "Agmuḍ n unadi"
 msgid "Search all Chats"
 msgstr "Nadi akk idiwenniyen"
 
+#, fuzzy
+msgid "Search all messages"
+msgstr "Nadi akk idiwenniyen"
+
 msgid "Search contacts..."
 msgstr "Nadi inermisen..."
 
@@ -4053,6 +4107,10 @@ msgstr "Nadi deg idiwenniyen…"
 msgid "Searching"
 msgstr "Anadi"
 
+#, fuzzy
+msgid "Searching all…"
+msgstr "Anadi…"
+
 msgid "Searching…"
 msgstr "Anadi…"
 
@@ -4066,6 +4124,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Nadi…"
+
+msgid "Secret Key Management"
+msgstr ""
 
 msgid "Secure Password Storage"
 msgstr "Asekles n wawal uffir aɣelsan"
@@ -4179,9 +4240,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr ""
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4248,6 +4306,10 @@ msgstr "Bḍu Anermis…"
 msgid "Share Group Chat…"
 msgstr "Bḍu Agraw Udiwenni…"
 
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "Fren ibenk"
+
 msgid "Share Status"
 msgstr "Bḍu Addad"
 
@@ -4256,6 +4318,10 @@ msgstr "Bḍu Avidyu"
 
 msgid "Share my online status"
 msgstr "Bḍu addad-iw ɣef uẓeṭṭa"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Bḍu Anermis…"
 
 msgid "Shortcuts"
 msgstr "Inegzumen"
@@ -4279,6 +4345,9 @@ msgstr "Sken tiludna"
 msgid "Show Details"
 msgstr ""
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr ""
 
@@ -4296,6 +4365,10 @@ msgstr "Sken izegrar"
 
 msgid "Show Send Message Button"
 msgstr "Sken taqeffalt n wazen n yizen"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Sken afeggag n uzwel"
 
 msgid "Show Status Changes"
 msgstr "Sken asnifel n waddad"
@@ -5021,6 +5094,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr ""
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr ""
 
@@ -5168,6 +5244,10 @@ msgstr "Tutlayt ur nettwassen ara"
 msgid "Unknown validation error"
 msgstr "Tuccḍa n usentem d tarussint"
 
+#, fuzzy
+msgid "Unlock"
+msgstr "Kkes asekkeṛ"
+
 msgid "Unmute Chat"
 msgstr "Kkes asgugem i udiwenni"
 
@@ -5260,9 +5340,6 @@ msgstr "Seqdec amaɣnu i uselkem n wagut n tummanin n Gajim"
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Seqdec tuqqna war awgelhen ɣer uqeddac"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Seqdec amaɣnu yettusbadun deg ukaram n twila"
 
 msgid "Use proxy auth_entication"
 msgstr "Seqdec asesteb n upṛuksi"
@@ -6052,6 +6129,10 @@ msgstr ""
 #~ msgid "Start/stop playback"
 #~ msgstr "Bdu/seḥbes taɣuri"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Llan wuguren n tuqqna"
+
 #~ msgid ""
 #~ "This message was encrypted with OpenPGP for XMPP and could not be "
 #~ "decrypted. You can install the OpenPGP plugin to handle those messages."
@@ -6059,6 +6140,9 @@ msgstr ""
 #~ "Izen-agi yettwawgelhen s OpenPGP i XMPP yerna ur yezmir ara ad "
 #~ "yettwazmek. Tzemreḍ ad tesbeddeḍ azegrir OpenPGP akken ad tesferkeḍ iznan-"
 #~ "agi."
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Seqdec amaɣnu yettusbadun deg ukaram n twila"
 
 #~ msgid "Visual Notifications"
 #~ msgstr "Ilɣa s wudem tmeẓri"

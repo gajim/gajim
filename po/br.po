@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -968,6 +968,10 @@ msgid "Backup Successful"
 msgstr ""
 
 #, fuzzy
+msgid "Backup password copied"
+msgstr "Roit ur ger-kuzh nevez:"
+
+#, fuzzy
 msgid "Ban"
 msgstr "_Argas"
 
@@ -1919,6 +1923,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Pellgargañ"
@@ -2059,6 +2069,10 @@ msgstr "Roit ur ger-kuzh nevez:"
 msgid "Enter Password"
 msgstr "Cheñch ar ger-kuzh"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Cheñch ar ger-kuzh"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2077,6 +2091,10 @@ msgstr "Cheñch _lesanv"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Roit ur ger-kuzh nevez:"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2154,6 +2172,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Ezporzhiañ"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Dibabit ur skeudenn"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2634,6 +2656,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Perzhiad-ez"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "Lec'hienn hiniennel:"
@@ -2700,6 +2725,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "dibaoe %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2965,6 +2993,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Nevez 'zo:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "Aet eo kuit %s"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2996,6 +3028,9 @@ msgid "Leave Group Chat?"
 msgstr "Flap a-stroll"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -3251,6 +3286,10 @@ msgstr "Kasourien"
 msgid "Modify"
 msgstr "_Kemmañ"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Kemmañ ar gont"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3283,6 +3322,9 @@ msgid "Mute Sounds"
 msgstr "Sonioù wav"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3325,15 +3367,15 @@ msgstr "Kemennadenn nevez digant %(nickname)s"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Lesanv"
+
 msgid "Nickname"
 msgstr "Lesanv"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Lesanv"
 
 #, fuzzy
 msgid "No"
@@ -3373,6 +3415,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Mare"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3774,6 +3819,10 @@ msgstr "Ger-kuzh ret"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Ger-kuzh ret"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Enrollañ ar ger-kuzh"
 
 msgid "Passwords do not match"
 msgstr "Ne glot ket ar gerioù-kuzh"
@@ -4465,11 +4514,6 @@ msgstr ""
 "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-"<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "Ger-kuzh ret"
 
@@ -4584,6 +4628,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
@@ -4629,6 +4677,10 @@ msgid "Search all Chats"
 msgstr "_Klask en titourva"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "_Klask en titourva"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "_Klask en titourva"
 
@@ -4649,6 +4701,10 @@ msgid "Searching"
 msgstr "Klask"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Klask"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Klask"
 
@@ -4661,6 +4717,9 @@ msgstr "Klask"
 #, fuzzy
 msgid "Search…"
 msgstr "Klask"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4788,9 +4847,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr "Darempredoù"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4871,6 +4927,10 @@ msgid "Share Group Chat…"
 msgstr "Flap a-stroll"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Dibabit ur skeudenn"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Stad"
 
@@ -4881,6 +4941,10 @@ msgstr "Kregiñ da flapiñ"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Darempred diluget"
+
+#, fuzzy
+msgid "Share…"
+msgstr "_Ouzhpennañ un darempred..."
 
 msgid "Shortcuts"
 msgstr ""
@@ -4909,6 +4973,9 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 msgid "Show Details"
 msgstr "Munudoù"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Titour-stad"
@@ -4930,6 +4997,10 @@ msgstr "échec lors de la publication de votre vCard"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Kas ur gemennadenn"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Dorioù"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5741,6 +5812,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Perzhiad-ez"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Perzhiad-ez"
@@ -5905,6 +5979,9 @@ msgstr "Da _heul al lesanv:"
 msgid "Unknown validation error"
 msgstr "Aozadur D-Bus dianav: %s"
 
+msgid "Unlock"
+msgstr ""
+
 #, fuzzy
 msgid "Unmute Chat"
 msgstr "Goulenn treuzkas"
@@ -6012,10 +6089,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "N'oc'h ket luget d'ar servijer"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "Aozer kefluniañ dre ar munut"
 
 #, fuzzy
 msgid "Use proxy auth_entication"
@@ -7641,6 +7714,10 @@ msgstr ""
 #~ msgstr "Film"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Lesanv"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "N'eus ket tu en em lugañ"
 
@@ -7793,6 +7870,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Ger-kuzh ret"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr ""
+#~ "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
 
 #, fuzzy
 #~ msgid "STUN Server"
@@ -8040,6 +8122,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "Servijer:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Aozer kefluniañ dre ar munut"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Implij ar proksioù evit treuzkas restroù"

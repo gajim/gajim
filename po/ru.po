@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: 2026-06-09 07:20+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-08-09 20:20+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -893,6 +893,9 @@ msgstr "Секретный ключ резервной копии"
 msgid "Backup Successful"
 msgstr "Резервная копия успешно создана"
 
+msgid "Backup password copied"
+msgstr "Пароль резервной копии скопирован"
+
 msgid "Ban"
 msgstr "Забанить"
 
@@ -1736,6 +1739,15 @@ msgstr "Отменить регистрацию своей учётной зап
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Это приведет к необратимому удалению этого отпечатка устройства"
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+"Никому не показывайте пароль резервной копии или QR-код, приведенные на "
+"следующей странице. Компрометация любого из них может привести к нарушению "
+"безопасности ваших зашифрованных чатов."
+
 msgid "Download"
 msgstr "Скачать"
 
@@ -1862,6 +1874,9 @@ msgstr "Введите пароль резервной копии"
 msgid "Enter Password"
 msgstr "Введите пароль"
 
+msgid "Enter Password to Unlock"
+msgstr "Введите пароль для разблокировки"
+
 msgid "Enter a password to join this chat"
 msgstr "Введите пароль для входа в этот чат"
 
@@ -1876,6 +1891,12 @@ msgstr "Введите новое имя контакта"
 
 msgid "Enter new password..."
 msgstr "Введите новый пароль..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
+"Введите пароль своей учетной записи, чтобы разблокировать секретный ключ и "
+"пароль резервной копии."
 
 msgid "Enter your new nickname"
 msgstr "Введите новый псевдоним"
@@ -1942,6 +1963,9 @@ msgstr "Дата окончания"
 
 msgid "Export"
 msgstr "Экспорт"
+
+msgid "Export & Share Secret Key"
+msgstr "Экспортировать и поделиться секретным ключом"
 
 msgid "Export CSV"
 msgstr "Экспорт в CSV"
@@ -2369,6 +2393,9 @@ msgstr "Скрыть"
 msgid "Hide Chat List"
 msgstr "Скрыть список чатов"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 msgid "Home"
 msgstr "Дом"
 
@@ -2432,6 +2459,9 @@ msgstr ""
 
 msgid "Idle Time"
 msgstr "Время бездействия"
+
+msgid "If checked the search text is ignored."
+msgstr "Если этот флажок установлен, то искомый текст игнорируется."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2671,6 +2701,9 @@ msgstr "Продолжить резервирование"
 msgid "Keep Chat History"
 msgstr "Хранить историю чата"
 
+msgid "Key has been saved"
+msgstr "Ключ был сохранён"
+
 msgid "Key usage does not include certificate signing"
 msgstr "Назначение ключа не включает подписывание сертификата"
 
@@ -2700,6 +2733,11 @@ msgstr "Покинуть групповой чат?"
 
 msgid "Leave _Permanently"
 msgstr "Покинуть навсегда"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
+msgstr ""
+"Разрешить Gajim создавать журнал для отслеживания ошибок (требуется "
+"перезагрузка)"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -2917,6 +2955,10 @@ msgstr "Модераторы"
 msgid "Modify"
 msgstr "Изменить"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Реакции"
+
 msgid "More infos at providers.xmpp.net"
 msgstr "Подробнее на сайте providers.xmpp.net"
 
@@ -2943,6 +2985,9 @@ msgstr "Выключить звук"
 
 msgid "My Workspace"
 msgstr "Моя вкладка"
+
+msgid "Myself"
+msgstr "Моё"
 
 msgid "Name"
 msgstr "Имя"
@@ -2977,14 +3022,14 @@ msgstr "Новое сообщение от"
 msgid "Next"
 msgstr "Следующий"
 
+msgid "Nick"
+msgstr "Псевдоним"
+
 msgid "Nickname"
 msgstr "Псевдоним"
 
 msgid "Nickname contains invalid characters"
 msgstr "Псевдоним содержит некорректные символы"
-
-msgid "Nickname…"
-msgstr "Псевдоним…"
 
 msgid "No"
 msgstr "Нет"
@@ -3016,6 +3061,9 @@ msgstr "Без порога"
 
 msgid "No Timezone"
 msgstr "Не указан часовой пояс"
+
+msgid "No account password found, unlocking not possible"
+msgstr "Пароль аккаунта не найден, разблокировка невозможна"
 
 msgid "No additional requirements"
 msgstr "Никаких дополнительных требований"
@@ -3382,6 +3430,9 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Требуется пароль"
 
+msgid "Password incorrect"
+msgstr "Пароль неверен"
+
 msgid "Passwords do not match"
 msgstr "Пароли не совпадают"
 
@@ -3403,9 +3454,8 @@ msgstr "Не удалось вставить содержимое"
 msgid "Path length constraint exceeded"
 msgstr "Превышено ограничение по длине пути"
 
-#, fuzzy
 msgid "Pause"
-msgstr "Приостановлено"
+msgstr "Пауза"
 
 msgid "Pending"
 msgstr "Непросмотренное"
@@ -3448,7 +3498,7 @@ msgid "Pipewire"
 msgstr "Pipewire"
 
 msgid "Play"
-msgstr ""
+msgstr "Воспроизведение"
 
 msgid "Play Sound"
 msgstr "Воспроизвести звук"
@@ -3984,9 +4034,6 @@ msgstr "Ресурс"
 msgid "Restart Gajim to finish this update"
 msgstr "Перезапустите Gajim для завершения обновления"
 
-msgid "Restart Gajim to start debug logging"
-msgstr "Перезапустите Gajim, чтобы начать запись отладочного лога"
-
 msgid "Restart Pending"
 msgstr "Ожидание перезапуска"
 
@@ -4085,6 +4132,9 @@ msgstr "Отсканируйте QR-код чтобы присоединитьс
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Просканируйте этот QR-код для входа в чат с %s."
 
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Отсканируйте этот QR-код, чтобы перенести ключ на другое устройство."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканирование %(current)d / %(total)d …"
@@ -4122,6 +4172,9 @@ msgstr "Результаты поиска"
 msgid "Search all Chats"
 msgstr "Поиск во всех чатах"
 
+msgid "Search all messages"
+msgstr "Найти все сообщения"
+
 msgid "Search contacts..."
 msgstr "Поиск контактов..."
 
@@ -4141,6 +4194,9 @@ msgstr "Поиск в чате…"
 msgid "Searching"
 msgstr "Поиск"
 
+msgid "Searching all…"
+msgstr "Поиск всех…"
+
 msgid "Searching…"
 msgstr "Поиск…"
 
@@ -4154,6 +4210,9 @@ msgstr ""
 
 msgid "Search…"
 msgstr "Поиск…"
+
+msgid "Secret Key Management"
+msgstr "Управление секретными ключами"
 
 msgid "Secure Password Storage"
 msgstr "Безопасное хранилище паролей"
@@ -4268,11 +4327,6 @@ msgstr "Отправляемый контакт: «%(jid)s» (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Отправляемые контакты:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-"Разделить файлы профиля полностью (включая базу данных истории и "
-"подключаемые модули)"
-
 msgid "Serial Number: "
 msgstr "Серийный номер: "
 
@@ -4338,6 +4392,9 @@ msgstr "Поделиться контактом…"
 msgid "Share Group Chat…"
 msgstr "Поделиться групповым чатом…"
 
+msgid "Share Secret Key"
+msgstr "Поделиться секретным ключом"
+
 msgid "Share Status"
 msgstr "Поделиться статусом"
 
@@ -4346,6 +4403,10 @@ msgstr "Поделиться видео"
 
 msgid "Share my online status"
 msgstr "Показывать мой сетевой статус"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Поделиться контактом…"
 
 msgid "Shortcuts"
 msgstr "Сочетания клавиш"
@@ -4362,12 +4423,14 @@ msgstr "Показать информацию о контакте"
 msgid "Show Content"
 msgstr "Показать содержимое"
 
-#, fuzzy
 msgid "Show Controls"
-msgstr "Показать содержимое"
+msgstr "Показать элементы управления"
 
 msgid "Show Details"
 msgstr "Показать подробную информацию"
+
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr "Показывать внутренние журналы Gajim и XML данные протокола"
 
 msgid "Show Inactive Devices"
 msgstr "Показать неактивные устройства"
@@ -4386,6 +4449,10 @@ msgstr "Подключаемые модули"
 
 msgid "Show Send Message Button"
 msgstr "Отображать кнопку отправки сообщения"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "Показывать на панели задач"
 
 msgid "Show Status Changes"
 msgstr "Показывать изменения статуса"
@@ -5138,6 +5205,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Переключить список чатов"
 
+msgid "Toggle Focus Mode"
+msgstr "Сфокусировать"
+
 msgid "Toggle participants list"
 msgstr "Переключение вида списка участников"
 
@@ -5285,6 +5355,9 @@ msgstr "Неизвестный язык"
 msgid "Unknown validation error"
 msgstr "Неизвестная ошибка проверки сертификата"
 
+msgid "Unlock"
+msgstr "Разблокировать"
+
 msgid "Unmute Chat"
 msgstr "Включить уведомления"
 
@@ -5376,9 +5449,6 @@ msgstr "Использовать профиль для запуска неско
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Использовать незашифрованное соединение с сервером"
-
-msgid "Use defined profile in configuration directory"
-msgstr "Использовать определенный профиль из каталога с настройками"
 
 msgid "Use proxy auth_entication"
 msgstr "Использовать аут_ентификацию прокси"
@@ -7127,6 +7197,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "News"
 #~ msgstr "Новости"
 
+#~ msgid "Nickname…"
+#~ msgstr "Псевдоним…"
+
 #~ msgid "No Connection Available"
 #~ msgstr "Нет подключения"
 
@@ -7313,6 +7386,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Requires: libxss"
 #~ msgstr "Требуется: libxss"
 
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "Перезапустите Gajim, чтобы начать запись отладочного лога"
+
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
@@ -7383,6 +7459,12 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Sender: "
 #~ msgstr "Отправитель: "
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr ""
+#~ "Разделить файлы профиля полностью (включая базу данных истории и "
+#~ "подключаемые модули)"
 
 #~ msgid "Serial Number"
 #~ msgstr "Серийный номер"
@@ -7559,6 +7641,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "The service could not be found"
 #~ msgstr "Не удалось найти сервис"
 
+#, fuzzy
+#~ msgid "There are connected accounts"
+#~ msgstr "Имеются проблемы с подключением"
+
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Учётная запись не подключена к серверу"
 
@@ -7628,6 +7714,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Use STUN Server"
 #~ msgstr "Использовать STUN-сервер"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "Использовать определенный профиль из каталога с настройками"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Использовать прокси для передачи файла"

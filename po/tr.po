@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -961,6 +961,10 @@ msgstr ""
 
 msgid "Backup Successful"
 msgstr ""
+
+#, fuzzy
+msgid "Backup password copied"
+msgstr "Yeni parola girin: "
 
 #, fuzzy
 msgid "Ban"
@@ -1921,6 +1925,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Yükleme"
@@ -2060,6 +2070,10 @@ msgstr "Yeni parola girin: "
 msgid "Enter Password"
 msgstr "Parolayı Değiştir"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "Parolayı Değiştir"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2078,6 +2092,10 @@ msgstr "Takma Ad girdir"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Yeni parola girin: "
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2154,6 +2172,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "Dışa Aktar"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "Resim seç"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2634,6 +2656,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "Katılan"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "<b>Ana Sayfa:</b>"
@@ -2700,6 +2725,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "Üye olduğu süre:"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2964,6 +2992,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "Son Kullanılan:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s ayrıldı"
+
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2994,6 +3026,9 @@ msgid "Leave Group Chat?"
 msgstr "Tam-Ekrandan Çık"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
@@ -3247,6 +3282,10 @@ msgstr "Moderatör"
 msgid "Modify"
 msgstr "Düzenle"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "Yer:"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3278,6 +3317,9 @@ msgid "Mute Sounds"
 msgstr "Sesi Kapat"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3319,15 +3361,15 @@ msgstr "%(nickname)s den Yeni İlet alındı"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "Takma ad"
+
 msgid "Nickname"
 msgstr "Takma ad"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "Takma ad"
 
 #, fuzzy
 msgid "No"
@@ -3367,6 +3409,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "Süre"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3769,6 +3814,10 @@ msgstr "Şifre gerekli"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Şifre gerekli"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "Parolayı Değiştir"
 
 msgid "Passwords do not match"
 msgstr "Parolalar uyuşmuyor"
@@ -4460,9 +4509,6 @@ msgstr "Kaynak:"
 msgid "Restart Gajim to finish this update"
 msgstr ""
 
-msgid "Restart Gajim to start debug logging"
-msgstr ""
-
 #, fuzzy
 msgid "Restart Pending"
 msgstr " (yetki gerektirir)"
@@ -4579,6 +4625,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "Seni kişi listeme eklemek isterdim"
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "Seni kişi listeme eklemek isterdim"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "İndirilen dosya: %(current)li  / %(total)li"
@@ -4624,6 +4674,10 @@ msgid "Search all Chats"
 msgstr "Veritabanı _Ara"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "Veritabanı _Ara"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "Veritabanı _Ara"
 
@@ -4644,6 +4698,10 @@ msgid "Searching"
 msgstr "Ara"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "Ara"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "Ara"
 
@@ -4656,6 +4714,9 @@ msgstr "Ara"
 #, fuzzy
 msgid "Search…"
 msgstr "Ara"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4785,9 +4846,6 @@ msgstr "Kişinin bağlantısı kesildi"
 msgid "Sent contacts:"
 msgstr "Kişileri eşzamana getir"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG Numara:"
@@ -4869,6 +4927,10 @@ msgid "Share Group Chat…"
 msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "Resim seç"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Durum"
 
@@ -4879,6 +4941,10 @@ msgstr "bir video"
 #, fuzzy
 msgid "Share my online status"
 msgstr "Durumu Değiştir"
+
+#, fuzzy
+msgid "Share…"
+msgstr "Kişi _ekle"
 
 msgid "Shortcuts"
 msgstr ""
@@ -4907,6 +4973,9 @@ msgstr "Sadece _Çecredeki Kişileri Göster"
 msgid "Show Details"
 msgstr "Ayrıntılar"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Ses giriş aygıtı"
@@ -4928,6 +4997,10 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "Mesajı gönder"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5738,6 +5811,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Katılan"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Katılan"
@@ -5909,6 +5985,10 @@ msgid "Unknown validation error"
 msgstr "<b>Bir hata oluştu:</b>"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "Engellemeyi _Kaldır"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "Dosya Gönderme Soru"
 
@@ -6016,10 +6096,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "Şu anda bir veritabanına bağlı değilsiniz.\n"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "İlerlemiş Ayarlama Editörü"
 
 msgid "Use proxy auth_entication"
 msgstr "Vergil do_ğrulama kullan"
@@ -7652,6 +7728,10 @@ msgstr ""
 #~ msgstr "Filim"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "Takma ad"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Hiç bir hesap bulunmiyor"
 
@@ -8055,6 +8135,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN Sunuc:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "İlerlemiş Ayarlama Editörü"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "Dosya aktarım vekil sunucları kullan"

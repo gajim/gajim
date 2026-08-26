@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
 "PO-Revision-Date: 2025-07-07 16:12+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -872,6 +872,10 @@ msgstr ""
 
 msgid "Backup Successful"
 msgstr ""
+
+#, fuzzy
+msgid "Backup password copied"
+msgstr "輸入新的密碼"
 
 msgid "Ban"
 msgstr "封鎖"
@@ -1802,6 +1806,12 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "下載"
@@ -1943,6 +1953,10 @@ msgstr "輸入新的密碼"
 msgid "Enter Password"
 msgstr "變更密碼"
 
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "變更密碼"
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -1961,6 +1975,10 @@ msgstr "插入暱稱"
 #, fuzzy
 msgid "Enter new password..."
 msgstr "輸入新的密碼"
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
+msgstr ""
 
 #, fuzzy
 msgid "Enter your new nickname"
@@ -2038,6 +2056,10 @@ msgstr ""
 #, fuzzy
 msgid "Export"
 msgstr "匯出"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "選擇歸檔檔案"
 
 #, fuzzy
 msgid "Export CSV"
@@ -2515,6 +2537,9 @@ msgstr ""
 msgid "Hide Chat List"
 msgstr "切換視訊作業階段"
 
+msgid "Hide Sidebar"
+msgstr ""
+
 #, fuzzy
 msgid "Home"
 msgstr "首頁:"
@@ -2581,6 +2606,9 @@ msgstr ""
 #, fuzzy
 msgid "Idle Time"
 msgstr "閒置，自從 %s"
+
+msgid "If checked the search text is ignored."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -2854,6 +2882,10 @@ msgstr ""
 msgid "Keep Chat History"
 msgstr "最近:"
 
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s 已被封禁"
+
 msgid "Key usage does not include certificate signing"
 msgstr "密鑰用途中不包含證書籤名稱"
 
@@ -2886,6 +2918,9 @@ msgid "Leave Group Chat?"
 msgstr "離開聊天室"
 
 msgid "Leave _Permanently"
+msgstr ""
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 #, fuzzy
@@ -3141,6 +3176,10 @@ msgstr "主持人"
 msgid "Modify"
 msgstr "修改"
 
+#, fuzzy
+msgid "More Actions"
+msgstr "位置: %s"
+
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
@@ -3172,6 +3211,9 @@ msgid "Mute Sounds"
 msgstr "靜音"
 
 msgid "My Workspace"
+msgstr ""
+
+msgid "Myself"
 msgstr ""
 
 msgid "Name"
@@ -3213,15 +3255,15 @@ msgstr "來自 %(nickname)s 的新訊息"
 msgid "Next"
 msgstr ""
 
+#, fuzzy
+msgid "Nick"
+msgstr "暱稱"
+
 msgid "Nickname"
 msgstr "暱稱"
 
 msgid "Nickname contains invalid characters"
 msgstr ""
-
-#, fuzzy
-msgid "Nickname…"
-msgstr "暱稱"
 
 msgid "No"
 msgstr "No"
@@ -3260,6 +3302,9 @@ msgstr ""
 #, fuzzy
 msgid "No Timezone"
 msgstr "時間"
+
+msgid "No account password found, unlocking not possible"
+msgstr ""
 
 msgid "No additional requirements"
 msgstr ""
@@ -3659,6 +3704,10 @@ msgstr "需要密碼"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "需要密碼"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "儲存密碼"
 
 msgid "Passwords do not match"
 msgstr "密碼不符"
@@ -4351,10 +4400,6 @@ msgid "Restart Gajim to finish this update"
 msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
 
 #, fuzzy
-msgid "Restart Gajim to start debug logging"
-msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
-
-#, fuzzy
 msgid "Restart Pending"
 msgstr "需要 libgtkspell。"
 
@@ -4471,6 +4516,10 @@ msgstr ""
 msgid "Scan this QR code to start a chat with %s."
 msgstr "您不能將您自己加入到您的聯絡人清單中。"
 
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "您不能將您自己加入到您的聯絡人清單中。"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "已掃描 %(current)d / %(total)d.."
@@ -4516,6 +4565,10 @@ msgid "Search all Chats"
 msgstr "搜尋資料庫(_S)"
 
 #, fuzzy
+msgid "Search all messages"
+msgstr "搜尋資料庫(_S)"
+
+#, fuzzy
 msgid "Search contacts..."
 msgstr "搜尋資料庫(_S)"
 
@@ -4536,6 +4589,10 @@ msgid "Searching"
 msgstr "搜尋"
 
 #, fuzzy
+msgid "Searching all…"
+msgstr "搜尋"
+
+#, fuzzy
 msgid "Searching…"
 msgstr "搜尋"
 
@@ -4548,6 +4605,9 @@ msgstr "搜尋"
 #, fuzzy
 msgid "Search…"
 msgstr "搜尋"
+
+msgid "Secret Key Management"
+msgstr ""
 
 #, fuzzy
 msgid "Secure Password Storage"
@@ -4674,9 +4734,6 @@ msgstr "已傳送聯絡人: \"%s\" (%s)"
 msgid "Sent contacts:"
 msgstr "已傳送聯絡人:"
 
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "GG 號碼:"
@@ -4758,6 +4815,10 @@ msgid "Share Group Chat…"
 msgstr "離開聊天室"
 
 #, fuzzy
+msgid "Share Secret Key"
+msgstr "選擇歸檔檔案"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "狀態"
 
@@ -4768,6 +4829,10 @@ msgstr "一個視訊"
 #, fuzzy
 msgid "Share my online status"
 msgstr "變更狀態"
+
+#, fuzzy
+msgid "Share…"
+msgstr "加入聯絡人(_A)…"
 
 msgid "Shortcuts"
 msgstr ""
@@ -4796,6 +4861,9 @@ msgstr "只顯示活動的聯絡人(_A)"
 msgid "Show Details"
 msgstr "細節"
 
+msgid "Show Gajim's internal logs and XML protocol data"
+msgstr ""
+
 #, fuzzy
 msgid "Show Inactive Devices"
 msgstr "音訊輸入裝置"
@@ -4817,6 +4885,10 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Show Send Message Button"
 msgstr "傳送訊息"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "顯示代理(_P)"
 
 #, fuzzy
 msgid "Show Status Changes"
@@ -5638,6 +5710,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "切換視訊作業階段"
 
+msgid "Toggle Focus Mode"
+msgstr ""
+
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "參與者"
@@ -5804,6 +5879,10 @@ msgid "Unknown validation error"
 msgstr "不明的 SSL 錯誤: %d"
 
 #, fuzzy
+msgid "Unlock"
+msgstr "解除阻斷(_U)"
+
+#, fuzzy
 msgid "Unmute Chat"
 msgstr "語音聊天請求"
 
@@ -5910,10 +5989,6 @@ msgstr ""
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
 msgstr "尚未連線到伺服器"
-
-#, fuzzy
-msgid "Use defined profile in configuration directory"
-msgstr "進階設定編輯器"
 
 msgid "Use proxy auth_entication"
 msgstr "代理伺服器需要認證"
@@ -7637,6 +7712,10 @@ msgstr ""
 #~ msgstr "電影"
 
 #, fuzzy
+#~ msgid "Nickname…"
+#~ msgstr "暱稱"
+
+#, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "連線無法使用"
 
@@ -7807,6 +7886,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires: libxss"
 #~ msgstr "需要 libxss 函式庫。"
+
+#, fuzzy
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
 
 #, fuzzy
 #~ msgctxt "proxy configuration"
@@ -8068,6 +8151,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Use STUN Server"
 #~ msgstr "STUN 伺服器:"
+
+#, fuzzy
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "進階設定編輯器"
 
 #~ msgid "Use file transfer proxies"
 #~ msgstr "使用檔案傳輸代理伺服器"

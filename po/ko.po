@@ -2,329 +2,336 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim package.
 # Dongjin Ha <hadjin@gmail.com>, 2022.
+# "Woojae, Park" <nikescar@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-14 18:46+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"PO-Revision-Date: 2026-07-25 03:20+0000\n"
+"Last-Translator: \"Woojae, Park\" <nikescar@gmail.com>\n"
+"Language-Team: Korean <https://translate.gajim.org/projects/gajim/master/ko/"
+">\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
-msgstr ""
+msgstr " (영상 통화)"
 
 msgid " (Voice Call)"
-msgstr ""
+msgstr " (음성 통화)"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr ""
+msgstr "%(contact)s님이 %(chat)s 초대를 거절했습니다"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
-msgstr ""
+msgstr "%(contact)s님이 %(chat)s에 초대했습니다"
 
 #, python-format
 msgid "%(contact)s reacted with %(reaction)s to your message '%(message)s'"
-msgstr ""
+msgstr "%(contact)s님이 '%(message)s' 메시지에 %(reaction)s 반응을 보냈습니다"
 
 #, python-format
 msgid "%(count)s Participant"
 msgid_plural "%(count)s Participants"
-msgstr[0] ""
+msgstr[0] "참가자 %(count)s명"
 
 #, python-format
 msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
+"%(participant)s의 메시지 %(count)s개가 검토됩니다.\n"
+"이 메시지들을 검토하려는 이유는 무엇입니까?"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s일 %(hours)s시간"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr ""
+msgstr "%(minutes)s분 %(seconds)s초"
 
 #, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr ""
+msgstr "%(name)s %(jid)s님이 연락처 목록에 추가할 것을 제안했습니다."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr ""
+msgstr "%(name)s(%(jid)s)님이 연락처 목록에 일부 연락처를 추가하려고 합니다."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr ""
+msgstr "%(name)s(%(jid)s)님이 연락처 목록에서 일부 연락처를 삭제하려고 합니다."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
-msgstr ""
+msgstr "%(name)s(%(jid)s)님이 연락처 목록의 일부 연락처를 수정하려고 합니다."
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr ""
+msgstr "%(name)s님이 전송을 취소했습니다 (%(reason)s)"
 
 #, python-format
 msgid "%(nick)s has been banned by %(actor)s"
-msgstr ""
+msgstr "%(nick)s님이 %(actor)s님에 의해 차단되었습니다"
 
 #, python-format
 msgid "%(nick)s has been kicked by %(actor)s"
-msgstr ""
+msgstr "%(nick)s님이 %(actor)s님에 의해 강제 퇴장되었습니다"
 
 #, python-format
 msgid "%(nick)s is now %(affiliation)s of this group chat"
-msgstr ""
+msgstr "%(nick)s님은 이제 이 그룹 대화의 %(affiliation)s입니다"
 
 #, python-format
 msgctxt "Group chat name"
 msgid "%(nickname)s and me"
-msgstr ""
+msgstr "%(nickname)s님과 나"
 
 #, python-format
 msgid "%(nickname)s:"
-msgstr ""
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(number)s min ago"
 msgid_plural "%(number)s mins ago"
-msgstr[0] ""
+msgstr[0] "%(number)s분 전"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "이 그룹 대화의 %(owner_or_admin_or_member)s"
 
 #, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr ""
+msgstr "%(progress)s %% (%(time)s 남음)"
 
 #, python-format
 msgid "%(received)s of %(max)s"
-msgstr ""
+msgstr "%(max)s 중 %(received)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
+msgstr "%(type)s 암호화가 활성화됨 %(authenticated)s."
 
 #, python-format
 msgid "%(user)s is now %(role)s of this group chat"
-msgstr ""
+msgstr "%(user)s님은 이제 이 그룹 대화의 %(role)s입니다"
 
 #, python-format
 msgid "%(user)s now has the following hats: %(hats)s"
-msgstr ""
+msgstr "%(user)s님은 이제 다음 역할을 갖습니다: %(hats)s"
 
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (나)"
 
 #, python-format
 msgid "%s and %s are typing…"
-msgstr ""
+msgstr "%s님과 %s님이 입력 중…"
 
 #, python-format
 msgid "%s can be joined by invite only."
-msgstr ""
+msgstr "%s는 초대로만 참여할 수 있습니다."
 
 #, python-format
 msgid "%s has been banned"
-msgstr ""
+msgstr "%s님이 차단되었습니다"
 
 #, python-format
 msgid "%s has been invited to this group chat"
-msgstr ""
+msgstr "%s님이 이 그룹 대화에 초대되었습니다"
 
 #, python-format
 msgid "%s has been kicked"
-msgstr ""
+msgstr "%s님이 강제 퇴장되었습니다"
 
 #, python-format
 msgid "%s has been removed from this group chat"
-msgstr ""
+msgstr "%s님이 이 그룹 대화에서 제거되었습니다"
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
+msgstr "%s님이 참여했습니다"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
-msgstr ""
+msgstr "%s는 파일이지만 디렉터리여야 합니다"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr ""
+msgstr "%s는 이미 연락처 목록에 있습니다"
 
 #, python-format
 msgid "%s is calling"
-msgstr ""
+msgstr "%s님이 통화를 걸고 있습니다"
 
 #, python-format
 msgid "%s is not a valid loglevel"
-msgstr ""
+msgstr "%s는 유효한 로그 레벨이 아닙니다"
 
 #, python-format
 msgid "%s is typing…"
-msgstr ""
+msgstr "%s님이 입력 중…"
 
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s / %s"
 
 #, python-format
 msgid "%s participants are typing…"
-msgstr ""
+msgstr "%s명의 참가자가 입력 중…"
 
 #, python-format
 msgid "%s s"
-msgstr ""
+msgstr "%s초"
 
 #, python-format
 msgid "%s stopped sharing their status"
-msgstr ""
+msgstr "%s님이 상태 공유를 중단했습니다"
 
 #, python-format
 msgid "%s stopped the transfer"
-msgstr ""
+msgstr "%s님이 전송을 중단했습니다"
 
 #, python-format
 msgid "%s wants to add you."
-msgstr ""
+msgstr "%s님이 회원님을 추가하려고 합니다."
 
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
-msgstr ""
+msgstr "동경 %s"
 
 #, python-format
 msgctxt "positive latitude"
 msgid "%sN"
-msgstr ""
+msgstr "북위 %s"
 
 #, python-format
 msgctxt "negative latitude"
 msgid "%sS"
-msgstr ""
+msgstr "남위 %s"
 
 #, python-format
 msgctxt "negative longitude"
 msgid "%sW"
-msgstr ""
+msgstr "서경 %s"
 
 msgid "'@' is missing in address. Are you sure this is correct?"
-msgstr ""
+msgstr "주소에 '@'가 없습니다. 올바른 주소인가요?"
 
 #, python-format
 msgid "(changed by %s)"
-msgstr ""
+msgstr "(%s님이 변경함)"
 
 msgid "(inactive)"
-msgstr ""
+msgstr "(비활성)"
 
 #, python-format
 msgid "(reason: %s)"
-msgstr ""
+msgstr "(사유: %s)"
 
 msgid "(reason: affiliation changed)"
-msgstr ""
+msgstr "(사유: 소속 변경됨)"
 
 msgid "(reason: group chat configuration changed to members-only)"
-msgstr ""
+msgstr "(사유: 그룹 대화 설정이 회원 전용으로 변경됨)"
 
 msgid "(reason: system shutdown)"
-msgstr ""
+msgstr "(사유: 시스템 종료)"
 
 #, python-format
 msgctxt "Group chat name"
 msgid ", %(number of participants)s others"
-msgstr ""
+msgstr ", 외 %(number of participants)s명"
 
 msgid "1 Day"
-msgstr ""
+msgstr "1일"
 
 msgid "1 Month"
-msgstr ""
+msgstr "1개월"
 
 msgid "1 Week"
-msgstr ""
+msgstr "1주"
 
 msgid "1 Year"
-msgstr ""
+msgstr "1년"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1시간"
 
 msgid "2 Days"
-msgstr ""
+msgstr "2일"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2시간"
 
 msgid "3 Months"
-msgstr ""
+msgstr "3개월"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30분"
 
 msgid "6 Months"
-msgstr ""
+msgstr "6개월"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8시간"
 
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
 "from <i>%(source)s</i>"
 msgstr ""
+"<b>\"%(title)s\"</b> - <i>%(artist)s</i>\n"
+"출처: <i>%(source)s</i>"
 
 msgid "<b>#</b>"
-msgstr ""
+msgstr "<b>#</b>"
 
 msgid "<b>*</b>"
-msgstr ""
+msgstr "<b>*</b>"
 
 msgid "<b>0</b>"
-msgstr ""
+msgstr "<b>0</b>"
 
 msgid "<b>1</b>"
-msgstr ""
+msgstr "<b>1</b>"
 
 msgid "<b>2</b> abc"
-msgstr ""
+msgstr "<b>2</b> abc"
 
 msgid "<b>3</b> def"
-msgstr ""
+msgstr "<b>3</b> def"
 
 msgid "<b>4</b> ghi"
-msgstr ""
+msgstr "<b>4</b> ghi"
 
 msgid "<b>5</b> jkl"
-msgstr ""
+msgstr "<b>5</b> jkl"
 
 msgid "<b>6</b> mno"
-msgstr ""
+msgstr "<b>6</b> mno"
 
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>7</b> pqrs"
 
 msgid "<b>8</b> tuv"
-msgstr ""
+msgstr "<b>8</b> tuv"
 
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>9</b> wxyz"
 
 msgid ""
 "<b>XMPP Address</b>\n"
@@ -334,1947 +341,2024 @@ msgid ""
 "&lt;domain&gt; (the domain itself matches, as does any user@domain or domain/"
 "resource)\n"
 msgstr ""
+"<b>XMPP 주소</b>\n"
+"&lt;user@domain/resource&gt; (해당 리소스만 일치)\n"
+"&lt;user@domain&gt; (모든 리소스 일치)\n"
+"&lt;domain/resource&gt; (해당 리소스만 일치)\n"
+"&lt;domain&gt; (도메인 자체 일치, user@domain 또는 domain/resource도 포함)\n"
 
 msgid "<error>"
-msgstr ""
+msgstr "<오류>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
-msgstr ""
+msgstr "그룹 대화에는 최소 한 명의 소유자가 필요합니다"
 
 msgid "A feature comparison of various providers"
-msgstr ""
+msgstr "다양한 공급자의 기능 비교"
 
 msgid "A fully-featured XMPP chat client"
-msgstr ""
+msgstr "모든 기능을 갖춘 XMPP 채팅 클라이언트"
 
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
 "chats."
-msgstr ""
+msgstr "그룹 대화에서 강조 표시될 단어 목록(세미콜론으로 구분)."
 
 msgid "A new group chat has been created"
-msgstr ""
+msgstr "새 그룹 대화가 생성되었습니다"
 
 msgid "A restart may be required for some settings to take effect"
-msgstr ""
+msgstr "일부 설정을 적용하려면 재시작이 필요할 수 있습니다"
 
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "개인정보와 관련되지 않은 설정이 변경되었습니다"
 
 #, python-format
 msgid "ALSA: %s"
-msgstr ""
+msgstr "ALSA: %s"
 
 msgid "API Preferences. Possible values: \"http\", \"iq\""
-msgstr ""
+msgstr "API 환경설정. 가능한 값: \"http\", \"iq\""
 
 msgctxt "User status"
 msgid "A_way"
-msgstr ""
+msgstr "자리 비움(_W)"
 
 msgid "Abort"
-msgstr ""
+msgstr "중단"
 
 msgid "Abuse"
-msgstr ""
+msgstr "악용"
 
 msgid "Accept"
-msgstr ""
+msgstr "수락"
 
 msgid "Accept all Contact Requests"
-msgstr ""
+msgstr "모든 연락처 요청 수락"
 
 msgid "Account"
-msgstr ""
+msgstr "계정"
 
 #, python-format
 msgid ""
 "Account %(name)s is still connected\n"
 "All chat and group chat windows will be closed."
 msgstr ""
+"계정 %(name)s이(가) 아직 연결되어 있습니다\n"
+"모든 대화 및 그룹 대화 창이 닫힙니다."
 
 msgid "Account Added"
-msgstr ""
+msgstr "계정 추가됨"
 
 msgid "Account Address"
-msgstr ""
+msgstr "계정 주소"
 
 msgid "Account Label"
-msgstr ""
+msgstr "계정 레이블"
 
 msgid "Account Name..."
-msgstr ""
+msgstr "계정 이름..."
 
 msgid "Account Removal Failed"
-msgstr ""
+msgstr "계정 제거 실패"
 
 msgid "Account Removed"
-msgstr ""
+msgstr "계정 제거됨"
 
 msgid "Account Wizard"
-msgstr ""
+msgstr "계정 마법사"
 
 msgid "Account address: "
-msgstr ""
+msgstr "계정 주소: "
 
 msgid "Account disabled"
-msgstr ""
+msgstr "계정 비활성화됨"
 
 msgid "Account exists already"
-msgstr ""
+msgstr "계정이 이미 존재합니다"
 
 msgid "Account has been added successfully"
-msgstr ""
+msgstr "계정이 성공적으로 추가되었습니다"
 
 msgid "Account has to be connected"
-msgstr ""
+msgstr "계정이 연결되어 있어야 합니다"
 
 msgid "Account is being created"
-msgstr ""
+msgstr "계정 생성 중"
 
 msgid "Account name: "
-msgstr ""
+msgstr "계정 이름: "
 
 #, python-format
 msgid "Account: %s"
-msgstr ""
+msgstr "계정: %s"
 
 msgid "Accounts"
-msgstr ""
+msgstr "계정"
 
 msgid "Action on Close"
-msgstr ""
+msgstr "닫을 때 동작"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
+msgstr "Gajim 창을 닫을 때 동작"
 
 #, python-format
 msgid "Actions for \"%s\""
-msgstr ""
+msgstr "\"%s\"에 대한 동작"
 
 msgid "Activate"
-msgstr ""
+msgstr "활성화"
 
 msgid "Activated"
-msgstr ""
+msgstr "활성화됨"
 
 msgid "Active"
-msgstr ""
+msgstr "활성"
 
 msgid "Activity Feed"
-msgstr ""
+msgstr "활동 피드"
 
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 msgid "Add Account"
-msgstr ""
+msgstr "계정 추가"
 
 msgid "Add Account…"
-msgstr ""
+msgstr "계정 추가…"
 
 msgid "Add Contact"
-msgstr ""
+msgstr "연락처 추가"
 
 msgid "Add Contact to New Group?"
-msgstr ""
+msgstr "새 그룹에 연락처를 추가하시겠습니까?"
 
 msgid "Add Contact…"
-msgstr ""
+msgstr "연락처 추가…"
 
 msgid "Add Entry"
-msgstr ""
+msgstr "항목 추가"
 
 msgid "Add Files…"
-msgstr ""
+msgstr "파일 추가…"
 
 msgid "Add Group…"
-msgstr ""
+msgstr "그룹 추가…"
 
 msgid "Add Proxy"
-msgstr ""
+msgstr "프록시 추가"
 
 msgid "Add Reaction…"
-msgstr ""
+msgstr "반응 추가…"
 
 msgid "Add Setting"
-msgstr ""
+msgstr "설정 추가"
 
 msgid "Add Workspace"
-msgstr ""
+msgstr "작업 공간 추가"
 
 msgid "Add a checkmark to received messages"
-msgstr ""
+msgstr "받은 메시지에 체크 표시 추가"
 
 msgid "Add a label to distinguish accounts in Gajim"
-msgstr ""
+msgstr "Gajim에서 계정을 구별할 레이블 추가"
 
 msgid "Add a name and color for your account"
-msgstr ""
+msgstr "계정의 이름과 색상 추가"
 
 msgid "Add a setting you would like to change"
-msgstr ""
+msgstr "변경하려는 설정 추가"
 
 msgid "Add new Theme"
-msgstr ""
+msgstr "새 테마 추가"
 
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr ""
+msgstr "신뢰할 수 있는 인증서 목록에 이 인증서 추가(_T)"
 
 msgid "Add to Group"
-msgstr ""
+msgstr "그룹에 추가"
 
 #, python-format
 msgid "Added %(count)s contact"
 msgid_plural "Added %(count)s contacts"
-msgstr[0] ""
+msgstr[0] "%(count)s개의 연락처 추가됨"
 
 msgid "Additionally, you will lose your administrator affiliation."
-msgstr ""
+msgstr "또한 관리자 소속이 해제됩니다."
 
 msgid "Additionally, you will lose your owner affiliation."
-msgstr ""
+msgstr "또한 소유자 소속이 해제됩니다."
 
 msgid "Address"
-msgstr ""
+msgstr "주소"
 
 msgctxt "Profile"
 msgid "Address"
-msgstr ""
+msgstr "주소"
 
 msgid "Address does not belong to a group chat server"
-msgstr ""
+msgstr "주소가 그룹 대화 서버에 속하지 않습니다"
 
 msgid "Admin"
-msgstr ""
+msgstr "관리자"
 
 msgid "Administration"
-msgstr ""
+msgstr "관리"
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrator"
-msgstr ""
+msgstr "관리자"
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrators"
-msgstr ""
+msgstr "관리자"
 
 msgid "Advanced"
-msgstr ""
+msgstr "고급"
 
 msgid "Advanced Configuration Editor"
-msgstr ""
+msgstr "고급 구성 편집기"
 
 msgid "Advanced Configuration Editor (ACE)"
-msgstr ""
+msgstr "고급 구성 편집기 (ACE)"
 
 msgid "Advanced Settings"
-msgstr ""
+msgstr "고급 설정"
 
 msgid "Advanced settings"
-msgstr ""
+msgstr "고급 설정"
 
 #, python-format
 msgid "Advanced – %(account)s"
-msgstr ""
+msgstr "고급 – %(account)s"
 
 #, python-format
 msgid "Adw Version: %s"
-msgstr ""
+msgstr "Adw 버전: %s"
 
 msgid "Affiliation"
-msgstr ""
+msgstr "소속"
 
 msgid "Affiliations"
-msgstr ""
+msgstr "소속"
 
 #, python-format
 msgid "Affiliations of %(nick)s to this group chat have been removed"
-msgstr ""
+msgstr "%(nick)s님의 이 그룹 대화 소속이 제거되었습니다"
 
 msgid "After"
-msgstr ""
+msgstr "후"
 
 msgid "All"
-msgstr ""
+msgstr "모두"
 
 msgid "All Accounts"
-msgstr ""
+msgstr "모든 계정"
 
 msgid "All Chat States"
-msgstr ""
+msgstr "모든 대화 상태"
 
 msgid "All Chats"
-msgstr ""
+msgstr "모든 대화"
 
 msgid "All Messages"
-msgstr ""
+msgstr "모든 메시지"
 
 msgid "All files"
-msgstr ""
+msgstr "모든 파일"
 
 #, python-format
 msgid "All hats of %s have been removed"
-msgstr ""
+msgstr "%s님의 모든 역할이 제거되었습니다"
 
 msgid "All of these settings are optional and can be changed later"
-msgstr ""
+msgstr "모든 설정은 선택사항이며 나중에 변경할 수 있습니다"
 
 msgid "All of your hats have been removed"
-msgstr ""
+msgstr "회원님의 모든 역할이 제거되었습니다"
 
 msgid "All other group chat participants can see your XMPP address"
-msgstr ""
+msgstr "다른 모든 그룹 대화 참가자가 회원님의 XMPP 주소를 볼 수 있습니다"
 
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
+"Gajim이 D-Bus를 통해 유용한 정보를 브로드캐스트하도록 허용합니다. 또한 다른 "
+"애플리케이션이 Gajim을 원격으로 제어할 수 있도록 허용합니다."
 
 msgid "Alternate venue (optional)..."
-msgstr ""
+msgstr "대체 장소 (선택사항)..."
 
 msgid "Always"
-msgstr ""
+msgstr "항상"
 
 msgid "An Error Occurred"
-msgstr ""
+msgstr "오류 발생"
 
 msgid "An entry with this XMPP Address already exists"
-msgstr ""
+msgstr "이 XMPP 주소를 가진 항목이 이미 존재합니다"
 
 msgid "An error occurred"
-msgstr ""
+msgstr "오류가 발생했습니다"
 
 msgid "An error occurred during account creation"
-msgstr ""
+msgstr "계정 생성 중 오류가 발생했습니다"
 
 msgid "An error occurred while exporting your messages"
-msgstr ""
+msgstr "메시지 내보내기 중 오류가 발생했습니다"
 
 msgid "An error occurred while trying to change your password."
-msgstr ""
+msgstr "비밀번호 변경 중 오류가 발생했습니다."
 
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
-msgstr ""
+msgstr "%(path)s에 파일을 생성하는 중 오류가 발생했습니다: %(error)s"
 
 #, python-format
 msgid "An error occurred while trying to decrypt your backup: %s"
-msgstr ""
+msgstr "백업 복호화 중 오류가 발생했습니다: %s"
 
 #, python-format
 msgid "An error occurred while trying to import your OpenPGP key: %s"
-msgstr ""
+msgstr "OpenPGP 키를 가져오는 중 오류가 발생했습니다: %s"
 
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"그룹 \"{group}\"에서 {occupant_jid}을(를) {affiliation_or_role}(으)로 설정하"
+"는 중 오류가 발생했습니다"
 
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
 msgstr ""
+"{occupant_jid}을(를) {affiliation_or_role}(으)로 설정하는 중 오류가 발생했습"
+"니다: {error}"
 
 #, python-format
 msgid "An error occurred while trying to overwrite your backup: %s"
-msgstr ""
+msgstr "백업 덮어쓰기 중 오류가 발생했습니다: %s"
 
 msgid "And more..."
-msgstr ""
+msgstr "그 외..."
 
 msgid "Anonymous login not supported"
-msgstr ""
+msgstr "익명 로그인이 지원되지 않습니다"
 
 msgid "Any participant is allowed to see your full XMPP Address"
-msgstr ""
+msgstr "모든 참가자가 회원님의 전체 XMPP 주소를 볼 수 있습니다"
 
 msgid "Anyone can join"
-msgstr ""
+msgstr "누구나 참여 가능"
 
 msgid "Anyone can join this group chat"
-msgstr ""
+msgstr "누구나 이 그룹 대화에 참여할 수 있습니다"
 
 msgid "Application verification failure"
-msgstr ""
+msgstr "애플리케이션 확인 실패"
 
 msgid "Apply"
-msgstr ""
+msgstr "적용"
 
 msgid "Approve"
-msgstr ""
+msgstr "승인"
 
 msgid "Archive"
-msgstr ""
+msgstr "보관"
 
 msgid "Archive Malformed"
-msgstr ""
+msgstr "보관함 형식 오류"
 
 msgid "Archive corrupted"
-msgstr ""
+msgstr "보관함 손상됨"
 
 msgid "Archive empty"
-msgstr ""
+msgstr "보관함 비어있음"
 
 msgid "Archive is malformed"
-msgstr ""
+msgstr "보관함 형식이 잘못되었습니다"
 
 msgid "Archiving"
-msgstr ""
+msgstr "보관"
 
 msgctxt "Group chat feature"
 msgid "Archiving"
-msgstr ""
+msgstr "보관"
 
 #, python-format
 msgid "Archiving – %(account)s"
-msgstr ""
+msgstr "보관 – %(account)s"
 
 msgid "Ask For Status Message on…"
-msgstr ""
+msgstr "상태 메시지 요청 시점…"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "그룹 대화 탭/창을 닫기 전에 확인합니다."
 
 msgid "Ask before connecting unencrypted"
-msgstr ""
+msgstr "암호화되지 않은 연결 전에 확인"
 
 msgid "Ask before quitting when Gajim’s window is closed"
-msgstr ""
+msgstr "Gajim 창을 닫을 때 종료 전에 확인"
 
 msgid "Assign groups to this contact. You can filter chats by group."
-msgstr ""
+msgstr "이 연락처에 그룹을 할당합니다. 그룹별로 대화를 필터링할 수 있습니다."
 
 msgid "Attention Message Received"
-msgstr ""
+msgstr "주의 메시지 수신됨"
 
 msgid "Audio"
-msgstr ""
+msgstr "오디오"
 
 msgid "Audio File"
-msgstr ""
+msgstr "오디오 파일"
 
 msgid "Audio Input Device"
-msgstr ""
+msgstr "오디오 입력 장치"
 
 msgid "Audio test"
-msgstr ""
+msgstr "오디오 테스트"
 
 msgid "Authentication aborted"
-msgstr ""
+msgstr "인증 중단됨"
 
 msgid "Authentication currently not possible"
-msgstr ""
+msgstr "현재 인증할 수 없습니다"
 
 msgid "Authentication failed"
-msgstr ""
+msgstr "인증 실패"
 
 msgid "Authentication mechanism not supported"
-msgstr ""
+msgstr "인증 메커니즘이 지원되지 않습니다"
 
 msgid "Authentication mechanism too weak"
-msgstr ""
+msgstr "인증 메커니즘이 너무 약합니다"
 
 msgid "Authority and issuer serial number mismatch"
-msgstr ""
+msgstr "기관 및 발급자 일련번호 불일치"
 
 msgid "Authority and subject key identifier mismatch"
-msgstr ""
+msgstr "기관 및 주체 키 식별자 불일치"
 
 msgid "Authors"
-msgstr ""
+msgstr "작성자"
 
 msgid "Auto Away"
-msgstr ""
+msgstr "자동 자리 비움"
 
 msgid "Auto Not Available"
-msgstr ""
+msgstr "자동 부재중"
 
 msgid "Autodetect"
-msgstr ""
+msgstr "자동 감지"
 
 msgid "Automatic Status"
-msgstr ""
+msgstr "자동 상태"
 
 msgid "Automatic Status Change"
-msgstr ""
+msgstr "자동 상태 변경"
 
 msgid "Automatic preview disabled"
-msgstr ""
+msgstr "자동 미리보기 비활성화됨"
 
 msgid "Automatic preview disabled (file too big)"
-msgstr ""
+msgstr "자동 미리보기 비활성화됨 (파일이 너무 큼)"
 
 msgid "Automatically accept all contact requests"
-msgstr ""
+msgstr "모든 연락처 요청 자동 수락"
 
 msgid "Available"
-msgstr ""
+msgstr "사용 가능"
 
 msgctxt "User status"
 msgid "Available"
-msgstr ""
+msgstr "대화 가능"
 
 msgid "Available Features"
-msgstr ""
+msgstr "사용 가능한 기능"
 
 msgid "Avatar file size too big"
-msgstr ""
+msgstr "아바타 파일 크기가 너무 큽니다"
 
 msgctxt "User status"
 msgid "Away"
-msgstr ""
+msgstr "자리 비움"
 
 msgid "Back"
-msgstr ""
+msgstr "뒤로"
 
 msgid "Backup Error"
-msgstr ""
+msgstr "백업 오류"
 
 msgid "Backup Now"
-msgstr ""
+msgstr "지금 백업"
 
 msgid "Backup Secret Key"
-msgstr ""
+msgstr "비밀 키 백업"
 
 msgid "Backup Successful"
-msgstr ""
+msgstr "백업 성공"
+
+#, fuzzy
+msgid "Backup password copied"
+msgstr "백업 비밀번호"
 
 msgid "Ban"
-msgstr ""
+msgstr "차단"
 
 #, python-format
 msgid "Ban %s"
-msgstr ""
+msgstr "%s 차단"
 
 msgid "Ban…"
-msgstr ""
+msgstr "차단…"
 
 msgid "Before"
-msgstr ""
+msgstr "이전"
 
 msgid "Behaviour of Application Window"
-msgstr ""
+msgstr "애플리케이션 창 동작"
 
 msgid "Birthday"
-msgstr ""
+msgstr "생일"
 
 msgid "Blind Trust"
-msgstr ""
+msgstr "무조건 신뢰"
 
 msgid "Blindly trust new devices"
-msgstr ""
+msgstr "새 장치를 무조건 신뢰"
 
 msgid "Blindly trust new devices until you verify them"
-msgstr ""
+msgstr "확인할 때까지 새 장치를 무조건 신뢰"
 
 msgid "Block"
-msgstr ""
+msgstr "차단"
 
 msgid "Block Contact?"
-msgstr ""
+msgstr "연락처를 차단하시겠습니까?"
 
 msgid "Block Contact…"
-msgstr ""
+msgstr "연락처 차단…"
 
 msgid "Block Participant?"
-msgstr ""
+msgstr "참가자를 차단하시겠습니까?"
 
 msgid "Blocked Contacts"
-msgstr ""
+msgstr "차단된 연락처"
 
 #, python-format
 msgid "Blocked Contacts – %(account)s"
-msgstr ""
+msgstr "차단된 연락처 – %(account)s"
 
 msgid "Blocked Participants"
-msgstr ""
+msgstr "차단된 참가자"
 
 msgid "Block…"
-msgstr ""
+msgstr "차단…"
 
 msgid "Bold"
-msgstr ""
+msgstr "굵게"
 
 msgctxt "Configuration type"
 msgid "Boolean"
-msgstr ""
+msgstr "불린"
 
 msgctxt "Contact subscription"
 msgid "Both"
-msgstr ""
+msgstr "양방향"
 
 msgid "Browse"
-msgstr ""
+msgstr "찾아보기"
 
 msgid "Browse history by date"
-msgstr ""
+msgstr "날짜별로 기록 찾아보기"
 
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
-msgstr ""
+msgstr "%(account)s 계정으로 %(address)s 탐색 중"
 
 msgctxt "User status"
 msgid "Busy"
-msgstr ""
+msgstr "다른 용무 중"
 
 #, python-format
 msgid "By closing this chat, you will leave \"%s\"."
-msgstr ""
+msgstr "이 대화를 닫으면 \"%s\"에서 나가게 됩니다."
 
 msgid "CRL has expired"
-msgstr ""
+msgstr "CRL이 만료되었습니다"
 
 msgid "CRL is not yet valid"
-msgstr ""
+msgstr "CRL이 아직 유효하지 않습니다"
 
 msgid "CRL signature failure"
-msgstr ""
+msgstr "CRL 서명 실패"
 
 msgid "CSV files"
-msgstr ""
+msgstr "CSV 파일"
 
 msgid "C_opy"
-msgstr ""
+msgstr "복사(_O)"
 
 msgid "Call"
-msgstr ""
+msgstr "통화"
 
 msgid "Call Incoming"
-msgstr ""
+msgstr "수신 전화"
 
 msgid "Call Outgoing"
-msgstr ""
+msgstr "발신 전화"
 
 msgid "Call ended"
-msgstr ""
+msgstr "통화 종료됨"
 
 #, python-format
 msgid "Call with %s"
-msgstr ""
+msgstr "%s님과 통화"
 
 msgid "Calling (Video)…"
-msgstr ""
+msgstr "영상 통화 거는 중…"
 
 msgid "Calling…"
-msgstr ""
+msgstr "통화 거는 중…"
 
 msgid "Cancel"
-msgstr ""
+msgstr "취소"
 
 msgid "Cancel Download"
-msgstr ""
+msgstr "다운로드 취소"
 
 msgid "Certificate"
-msgstr ""
+msgstr "인증서"
 
 #, python-format
 msgid "Certificate - %(account)s"
-msgstr ""
+msgstr "인증서 - %(account)s"
 
 msgid "Certificate Verification Failed"
-msgstr ""
+msgstr "인증서 확인 실패"
 
 msgid "Certificate chain too long"
-msgstr ""
+msgstr "인증서 체인이 너무 깁니다"
 
 msgid "Certificate has expired"
-msgstr ""
+msgstr "인증서가 만료되었습니다"
 
 msgid "Certificate is not yet valid"
-msgstr ""
+msgstr "인증서가 아직 유효하지 않습니다"
 
 msgid "Certificate not trusted"
-msgstr ""
+msgstr "신뢰할 수 없는 인증서"
 
 msgid "Certificate rejected"
-msgstr ""
+msgstr "인증서 거부됨"
 
 msgid "Certificate revoked"
-msgstr ""
+msgstr "인증서 취소됨"
 
 msgid "Certificate signature failure"
-msgstr ""
+msgstr "인증서 서명 실패"
 
 msgid "Change"
-msgstr ""
+msgstr "변경"
 
 msgid "Change Nickname"
-msgstr ""
+msgstr "대화명 변경"
 
 msgid "Change Nickname…"
-msgstr ""
+msgstr "대화명 변경…"
 
 msgid "Change Password"
-msgstr ""
+msgstr "비밀번호 변경"
 
 msgid "Change Subject"
-msgstr ""
+msgstr "주제 변경"
 
 msgid "Change your account’s password, etc."
-msgstr ""
+msgstr "계정 비밀번호 등을 변경합니다."
 
 msgid "Change your profile picture"
-msgstr ""
+msgstr "프로필 사진 변경"
 
 msgid "Change your status to \"Away\" after a certain amount of time"
-msgstr ""
+msgstr "일정 시간 후 상태를 \"자리 비움\"으로 변경"
 
 msgid "Change your status to \"Not Available\" after a certain amount of time"
-msgstr ""
+msgstr "일정 시간 후 상태를 \"부재중\"으로 변경"
 
 #, python-format
 msgid "Changed by %s"
-msgstr ""
+msgstr "%s님이 변경함"
 
 msgid "Changing Password..."
-msgstr ""
+msgstr "비밀번호 변경 중..."
 
 msgid ""
 "Character to add after nickname when using nickname completion (tab) in "
 "group chat."
 msgstr ""
+"그룹 대화에서 대화명 자동 완성(탭)을 사용할 때 대화명 뒤에 추가할 문자."
 
 msgid "Chat"
-msgstr ""
+msgstr "대화"
 
 msgid "Chat Address"
-msgstr ""
+msgstr "대화 주소"
 
 msgid "Chat Banner: Background Color"
-msgstr ""
+msgstr "대화 배너: 배경색"
 
 msgid "Chat Banner: Foreground Color"
-msgstr ""
+msgstr "대화 배너: 전경색"
 
 msgid "Chat Banner: Text Font"
-msgstr ""
+msgstr "대화 배너: 텍스트 글꼴"
 
 msgid "Chat Details and Settings"
-msgstr ""
+msgstr "대화 세부정보 및 설정"
 
 msgid "Chat Type"
-msgstr ""
+msgstr "대화 유형"
 
 msgid ""
 "Chat freely: Take your chats where you want. Use a provider of your choice "
 "and synchronize chats between all your devices. Gajim is interoperable with "
 "many other chat apps – and it's free."
 msgstr ""
+"자유롭게 대화하세요: 원하는 곳에서 대화하세요. 선택한 공급자를 사용하고 모든 "
+"장치 간에 대화를 동기화하세요. Gajim은 다른 많은 채팅 앱과 상호 운용 가능하"
+"며 무료입니다."
 
 msgid "Chat window"
-msgstr ""
+msgstr "대화 창"
 
 msgid "Chats"
-msgstr ""
+msgstr "대화"
 
 msgid "Chats from this account will use this workspace by default"
-msgstr ""
+msgstr "이 계정의 대화는 기본적으로 이 작업 공간을 사용합니다"
 
 msgid "Check For Updates"
-msgstr ""
+msgstr "업데이트 확인"
 
 msgid "Check for Gajim updates periodically"
-msgstr ""
+msgstr "Gajim 업데이트를 주기적으로 확인"
 
 msgid "Check for updates"
-msgstr ""
+msgstr "업데이트 확인"
 
 msgid "Check for updates periodically"
-msgstr ""
+msgstr "주기적으로 업데이트 확인"
 
 msgid "Check which features are available"
-msgstr ""
+msgstr "사용 가능한 기능 확인"
 
 msgid "Choose Device"
-msgstr ""
+msgstr "장치 선택"
 
 msgid "Choose History Export Directory"
-msgstr ""
+msgstr "기록 내보내기 디렉터리 선택"
 
 msgid "Choose Secret Key"
-msgstr ""
+msgstr "비밀 키 선택"
 
 msgid "Choose Sound"
-msgstr ""
+msgstr "소리 선택"
 
 msgid "Choose a color or select an image"
-msgstr ""
+msgstr "색상 선택 또는 이미지 선택"
 
 msgid "Choose a group…"
-msgstr ""
+msgstr "그룹 선택…"
 
 msgid "Choose encryption"
-msgstr ""
+msgstr "암호화 선택"
 
 msgid "City"
-msgstr ""
+msgstr "도시"
 
 msgid "Clear"
-msgstr ""
+msgstr "지우기"
 
 msgid "Clear File"
-msgstr ""
+msgstr "파일 지우기"
 
 msgid "Clear Input"
-msgstr ""
+msgstr "입력 지우기"
 
 msgid "Clear Sound"
-msgstr ""
+msgstr "소리 지우기"
 
 msgid ""
 "Click messages to select them\n"
 "(Ctrl + Double Click to deselect)"
 msgstr ""
+"메시지를 클릭하여 선택\n"
+"(Ctrl + 더블 클릭으로 선택 해제)"
 
 msgid "Click on contacts you would like to invite to this group chat."
-msgstr ""
+msgstr "이 그룹 대화에 초대하려는 연락처를 클릭하세요."
 
 msgid "Click to view location"
-msgstr ""
+msgstr "클릭하여 위치 보기"
 
 msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
 msgstr ""
+"IANA에 등록된 하드코딩된 목록 외에 클릭 가능한 스킴. 공백으로 구분, 소문자, "
+"콜론 없음."
 
 msgid "Close"
-msgstr ""
+msgstr "닫기"
 
 msgid "Close Chat"
-msgstr ""
+msgstr "대화 닫기"
 
 msgid "Close a chat by pressing the Escape key"
-msgstr ""
+msgstr "Escape 키를 눌러 대화 닫기"
 
 msgid "Close this preview"
-msgstr ""
+msgstr "이 미리보기 닫기"
 
 msgid "Close with Escape"
-msgstr ""
+msgstr "Escape로 닫기"
 
 msgid "Code"
-msgstr ""
+msgstr "코드"
 
 msgid "Code Block"
-msgstr ""
+msgstr "코드 블록"
 
 msgid "Code snippet"
-msgstr ""
+msgstr "코드 스니펫"
 
 msgid "Color"
-msgstr ""
+msgstr "색상"
 
 msgid "Comma-separated list of emojis for quick reaction buttons"
-msgstr ""
+msgstr "빠른 반응 버튼용 이모지 목록(쉼표로 구분)"
 
 msgid "Command List"
-msgstr ""
+msgstr "명령 목록"
 
 msgid "Command executed successfully"
-msgstr ""
+msgstr "명령이 성공적으로 실행되었습니다"
 
 msgid "Commands"
-msgstr ""
+msgstr "명령"
 
 msgid "Common Name (CN): "
-msgstr ""
+msgstr "일반 이름 (CN): "
 
 #, python-format
 msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat with %s."
 msgstr ""
+"%s님과의 종단 간 암호화 대화의 안전을 보장하기 위해 이 코드를 연락처 화면에 "
+"표시된 코드와 비교하세요."
 
 msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat."
 msgstr ""
+"종단 간 암호화 대화의 안전을 보장하기 위해 이 코드를 연락처 화면에 표시된 코"
+"드와 비교하세요."
 
 msgid "Complete"
-msgstr ""
+msgstr "완료"
 
 msgid "Complete the OpenPGP setup"
-msgstr ""
+msgstr "OpenPGP 설정 완료"
 
 msgid "Complete the OpenPGP setup to chat encrypted."
-msgstr ""
+msgstr "암호화된 대화를 위해 OpenPGP 설정을 완료하세요."
 
 msgid "Completed"
-msgstr ""
+msgstr "완료됨"
 
 msgid "Composing Only"
-msgstr ""
+msgstr "작성 중만"
 
 msgid "Computer"
-msgstr ""
+msgstr "컴퓨터"
 
 msgid "Configuration"
-msgstr ""
+msgstr "구성"
 
 msgid "Configure"
-msgstr ""
+msgstr "구성"
 
 msgid "Configure Gajim with values from a .json file"
-msgstr ""
+msgstr ".json 파일의 값으로 Gajim 구성"
 
 msgid "Configure logging system"
-msgstr ""
+msgstr "로깅 시스템 구성"
 
 msgid ""
 "Configure which messages will be archived on the server. Not archiving "
 "messages on the server may prevent them from synchronizing between your "
 "devices."
 msgstr ""
+"서버에 보관할 메시지를 구성합니다. 서버에 메시지를 보관하지 않으면 장치 간 동"
+"기화가 방지될 수 있습니다."
 
 msgid "Confirm"
-msgstr ""
+msgstr "확인"
 
 msgid "Confirm Unencrypted Connection"
-msgstr ""
+msgstr "암호화되지 않은 연결 확인"
 
 msgid "Confirm new password..."
-msgstr ""
+msgstr "새 비밀번호 확인..."
 
 msgid "Connect"
-msgstr ""
+msgstr "연결"
 
 msgid "Connect on startup"
-msgstr ""
+msgstr "시작 시 연결"
 
 msgid "Connecting"
-msgstr ""
+msgstr "연결 중"
 
 msgid "Connecting to server..."
-msgstr ""
+msgstr "서버에 연결 중..."
 
 msgid "Connecting..."
-msgstr ""
+msgstr "연결 중..."
 
 msgid "Connection"
-msgstr ""
+msgstr "연결"
 
 msgid "Connection Error"
-msgstr ""
+msgstr "연결 오류"
 
 msgid "Connection failed"
-msgstr ""
+msgstr "연결 실패"
 
 #, python-format
 msgid "Connection with %s could not be established."
-msgstr ""
+msgstr "%s와(과)의 연결을 설정할 수 없습니다."
 
 #, python-format
 msgid "Connection – %(account)s"
-msgstr ""
+msgstr "연결 – %(account)s"
 
 msgid "Contact"
-msgstr ""
+msgstr "연락처"
 
 msgid "Contact Connected"
-msgstr ""
+msgstr "연락처 연결됨"
 
 msgid "Contact Details"
-msgstr ""
+msgstr "연락처 세부정보"
 
 msgid "Contact Disconnected"
-msgstr ""
+msgstr "연락처 연결 해제됨"
 
 msgid "Contact Information"
-msgstr ""
+msgstr "연락처 정보"
 
 msgid "Contact Infos"
-msgstr ""
+msgstr "연락처 정보"
 
 msgid "Contact List"
-msgstr ""
+msgstr "연락처 목록"
 
 msgid "Contact List Exchange"
-msgstr ""
+msgstr "연락처 목록 교환"
 
 #, python-format
 msgid "Contact List – %(account)s"
-msgstr ""
+msgstr "연락처 목록 – %(account)s"
 
 msgid "Contact Removed"
-msgstr ""
+msgstr "연락처 제거됨"
 
 msgid "Contact Request"
-msgstr ""
+msgstr "연락처 요청"
 
 msgid "Contacts"
-msgstr ""
+msgstr "연락처"
 
 msgid "Conversation: Nickname Color (Incoming)"
-msgstr ""
+msgstr "대화: 대화명 색상 (수신)"
 
 msgid "Conversation: Nickname Color (Outgoing)"
-msgstr ""
+msgstr "대화: 대화명 색상 (발신)"
 
 msgid "Conversation: Text Color"
-msgstr ""
+msgstr "대화: 텍스트 색상"
 
 msgid "Conversation: Text Font"
-msgstr ""
+msgstr "대화: 텍스트 글꼴"
 
 msgid "Conversations"
-msgstr ""
+msgstr "대화"
 
 msgid "Conversations are not stored on the server"
-msgstr ""
+msgstr "대화가 서버에 저장되지 않습니다"
 
 msgid "Conversations are stored on the server"
-msgstr ""
+msgstr "대화가 서버에 저장됩니다"
 
 msgid "Copy"
-msgstr ""
+msgstr "복사"
 
 msgctxt "Message row action"
 msgid "Copy"
-msgstr ""
+msgstr "복사"
 
 msgid "Copy Address"
-msgstr ""
+msgstr "주소 복사"
 
 msgid "Copy Text"
-msgstr ""
+msgstr "텍스트 복사"
 
 msgid "Copy XMPP Address"
-msgstr ""
+msgstr "XMPP 주소 복사"
 
 msgid "Copy XMPP Address/Email"
-msgstr ""
+msgstr "XMPP 주소/이메일 복사"
 
 msgid "Copy code snippet"
-msgstr ""
+msgstr "코드 스니펫 복사"
 
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "클립보드에 복사"
 
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "클립보드에 복사"
 
 msgid "Correct Message"
-msgstr ""
+msgstr "메시지 수정"
 
 msgid "Could Not Save File"
-msgstr ""
+msgstr "파일을 저장할 수 없습니다"
 
 msgid "Could not access file"
-msgstr ""
+msgstr "파일에 액세스할 수 없습니다"
 
 msgid "Could not find any messages for this participant."
-msgstr ""
+msgstr "이 참가자의 메시지를 찾을 수 없습니다."
 
 msgid "Could not generate link preview"
-msgstr ""
+msgstr "링크 미리보기를 생성할 수 없습니다"
 
 #, python-format
 msgid "Could not open file (%s)"
-msgstr ""
+msgstr "파일을 열 수 없습니다 (%s)"
 
 #, python-format
 msgid "Could not read content of %s. Only CSV files can be imported."
-msgstr ""
+msgstr "%s의 내용을 읽을 수 없습니다. CSV 파일만 가져올 수 있습니다."
 
 msgid "Could not save file to selected directory."
-msgstr ""
+msgstr "선택한 디렉터리에 파일을 저장할 수 없습니다."
 
 msgid "Could not select file or folder"
-msgstr ""
+msgstr "파일 또는 폴더를 선택할 수 없습니다"
 
 msgid "Could not update providers list"
-msgstr ""
+msgstr "공급자 목록을 업데이트할 수 없습니다"
 
 msgid "Country"
-msgstr ""
+msgstr "국가"
 
 msgid "Create Account"
-msgstr ""
+msgstr "계정 생성"
 
 msgid "Create Group Chat"
-msgstr ""
+msgstr "그룹 대화 생성"
 
 msgid "Create Group Chat…"
-msgstr ""
+msgstr "그룹 대화 생성…"
 
 msgid "Create New Account"
-msgstr ""
+msgstr "새 계정 생성"
 
 msgid "Create New Group Chat"
-msgstr ""
+msgstr "새 그룹 대화 생성"
 
 msgid "Create New Key"
-msgstr ""
+msgstr "새 키 생성"
 
 msgid "Create New OpenPGP Key"
-msgstr ""
+msgstr "새 OpenPGP 키 생성"
 
 msgid "Creating Account..."
-msgstr ""
+msgstr "계정 생성 중..."
 
 msgid "Credentials expired"
-msgstr ""
+msgstr "자격 증명 만료됨"
 
 msgid "Current password incorrect"
-msgstr ""
+msgstr "현재 비밀번호가 올바르지 않습니다"
 
 msgid "Custom"
-msgstr ""
+msgstr "사용자 지정"
 
 msgid "D-Bus Interface"
-msgstr ""
+msgstr "D-Bus 인터페이스"
 
 msgid "Danger Zone"
-msgstr ""
+msgstr "위험 구역"
 
 msgid "Dark Theme"
-msgstr ""
+msgstr "다크 테마"
 
 msgid "Database Migration"
-msgstr ""
+msgstr "데이터베이스 마이그레이션"
 
 msgid "Database migration failed"
-msgstr ""
+msgstr "데이터베이스 마이그레이션 실패"
 
 msgid "Deactivated"
-msgstr ""
+msgstr "비활성화됨"
 
 msgid "Debug Console"
-msgstr ""
+msgstr "디버그 콘솔"
 
 msgid "Debug Logging"
-msgstr ""
+msgstr "디버그 로깅"
 
 msgid "Decline"
-msgstr ""
+msgstr "거절"
 
 msgid "Decrease Font Size"
-msgstr ""
+msgstr "글꼴 크기 줄이기"
 
 msgid "Decrease playback speed"
-msgstr ""
+msgstr "재생 속도 줄이기"
 
 msgid "Decryption Error"
-msgstr ""
+msgstr "복호화 오류"
 
 msgid "Default Encryption"
-msgstr ""
+msgstr "기본 암호화"
 
 msgid "Default Sync Threshold"
-msgstr ""
+msgstr "기본 동기화 임계값"
 
 msgid "Default Workspace"
-msgstr ""
+msgstr "기본 작업 공간"
 
 msgid "Default device"
-msgstr ""
+msgstr "기본 장치"
 
 msgid "Default for chats (e.g. Contact is typing)"
-msgstr ""
+msgstr "대화용 기본값 (예: 연락처가 입력 중)"
 
 msgid "Default for chats and private group chats"
-msgstr ""
+msgstr "대화 및 비공개 그룹 대화용 기본값"
 
 msgid "Default for group chats (e.g. Contact is typing)"
-msgstr ""
+msgstr "그룹 대화용 기본값 (예: 연락처가 입력 중)"
 
 msgid "Default for new chats"
-msgstr ""
+msgstr "새 대화용 기본값"
 
 msgid "Default for new group chats"
-msgstr ""
+msgstr "새 그룹 대화용 기본값"
 
 msgid "Default for new public group chats"
-msgstr ""
+msgstr "새 공개 그룹 대화용 기본값"
 
 msgid "Delete"
-msgstr ""
+msgstr "삭제"
 
 msgid "Delete Fingerprint?"
-msgstr ""
+msgstr "지문을 삭제하시겠습니까?"
 
 msgid "Delete Message Locally?"
-msgstr ""
+msgstr "메시지를 로컬에서 삭제하시겠습니까?"
 
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
-msgstr ""
+msgstr "메시지를 로컬에서 삭제…"
 
 msgid "Delete Node?"
-msgstr ""
+msgstr "노드를 삭제하시겠습니까?"
 
 msgid "Delete Theme?"
-msgstr ""
+msgstr "테마를 삭제하시겠습니까?"
 
 msgid "Deny"
-msgstr ""
+msgstr "거부"
 
 msgid "Deny all contact requests"
-msgstr ""
+msgstr "모든 연락처 요청 거부"
 
 msgid "Description"
-msgstr ""
+msgstr "설명"
 
 msgid "Destroy Group Chat"
-msgstr ""
+msgstr "그룹 대화 파괴"
 
 msgid "Destroy This Chat"
-msgstr ""
+msgstr "이 대화 파괴"
 
 msgid "Destroy…"
-msgstr ""
+msgstr "파괴…"
 
 msgid "Details"
-msgstr ""
+msgstr "세부정보"
 
 #, python-format
 msgid "Details - %(account)s"
-msgstr ""
+msgstr "세부정보 - %(account)s"
 
 msgid "Details about the certificate used by this connection"
-msgstr ""
+msgstr "이 연결에 사용된 인증서에 대한 세부정보"
 
 #, python-format
 msgid "Device \"%s\""
-msgstr ""
+msgstr "장치 \"%s\""
 
 msgid "Devices"
-msgstr ""
+msgstr "장치"
 
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
-msgstr ""
+msgstr "사전 URL에 \"%s\"가 없습니다"
 
 msgid "Direct Messages"
-msgstr ""
+msgstr "다이렉트 메시지"
 
 msgid "Direct Message…"
-msgstr ""
+msgstr "다이렉트 메시지…"
 
 msgid "Directory"
-msgstr ""
+msgstr "디렉터리"
 
 #, python-format
 msgid ""
 "Directory \"%s\" is not writable. You do not have the proper permissions to "
 "create files in this directory."
 msgstr ""
+"디렉터리 \"%s\"에 쓸 수 없습니다. 이 디렉터리에 파일을 생성할 적절한 권한이 "
+"없습니다."
 
 msgid "Directory Not Writable"
-msgstr ""
+msgstr "디렉터리에 쓸 수 없음"
 
 msgid "Disable Account?"
-msgstr ""
+msgstr "계정을 비활성화하시겠습니까?"
 
 msgid "Disable Check"
-msgstr ""
+msgstr "확인 비활성화"
 
 msgid "Disable Update"
-msgstr ""
+msgstr "업데이트 비활성화"
 
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 msgid "Disabled in Preferences"
-msgstr ""
+msgstr "환경설정에서 비활성화됨"
 
 msgid ""
 "Disclose information about media that is currently being played on your "
 "system."
-msgstr ""
+msgstr "시스템에서 현재 재생 중인 미디어에 대한 정보를 공개합니다."
 
 msgid "Disclose information about the operating system you currently use"
-msgstr ""
+msgstr "현재 사용 중인 운영 체제에 대한 정보를 공개합니다"
 
 msgid "Disclose the time of your last activity"
-msgstr ""
+msgstr "마지막 활동 시간을 공개합니다"
 
 msgid "Discover Services…"
-msgstr ""
+msgstr "서비스 검색…"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
-msgstr ""
+msgstr "이 요청을 수락하시겠습니까 (계정: %s)?"
 
 msgid "Do you accept this request?"
-msgstr ""
+msgstr "이 요청을 수락하시겠습니까?"
 
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
+"정말 Gajim에서 모든 대화 메시지를 제거하시겠습니까?\n"
+"경고: 실행 취소할 수 없습니다!\n"
+"그 후 Gajim이 종료됩니다."
 
 #, python-format
 msgid "Do you want to block %(name)s?"
-msgstr ""
+msgstr "%(name)s님을 차단하시겠습니까?"
 
 msgid "Do you want to delete this PEP node?"
-msgstr ""
+msgstr "이 PEP 노드를 삭제하시겠습니까?"
 
 msgid "Do you want to delete this theme?"
-msgstr ""
+msgstr "이 테마를 삭제하시겠습니까?"
 
 msgid "Do you want to overwrite the currently installed version?"
-msgstr ""
+msgstr "현재 설치된 버전을 덮어쓰시겠습니까?"
 
 #, python-format
 msgid "Do you want to remove \"%(group)s\"?"
-msgstr ""
+msgstr "\"%(group)s\"을(를) 제거하시겠습니까?"
 
 msgid "Do you want to remove all chat history for this chat?"
-msgstr ""
+msgstr "이 대화의 모든 대화 기록을 제거하시겠습니까?"
 
 msgid "Do you want to remove the backup from your server?"
-msgstr ""
+msgstr "서버에서 백업을 제거하시겠습니까?"
 
 msgid "Do you want to remove this chat including its chat history?"
-msgstr ""
+msgstr "대화 기록을 포함하여 이 대화를 제거하시겠습니까?"
 
 msgid "Do you want to remove this proxy?"
-msgstr ""
+msgstr "이 프록시를 제거하시겠습니까?"
 
 msgid ""
 "Do you want to retract this message?\n"
 "Please note that retracting a message does not guarantee that your provider "
 "or your contact’s device will remove it."
 msgstr ""
+"이 메시지를 철회하시겠습니까?\n"
+"메시지를 철회해도 공급자나 연락처의 장치에서 메시지가 제거된다고 보장할 수 없"
+"습니다."
 
 #, python-format
 msgid "Do you want to unblock %(name)s?"
-msgstr ""
+msgstr "%(name)s님의 차단을 해제하시겠습니까?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
-msgstr ""
+msgstr "<b>%s</b>에서도 계정 등록을 취소하시겠습니까?"
 
 msgid "Doing so will permanently delete this Fingerprint"
+msgstr "그렇게 하면 이 지문이 영구적으로 삭제됩니다"
+
+msgid ""
+"Don't show the backup password or the QR Code on the following page to "
+"anyone. Sharing either one will compromise the security of your encrypted "
+"chats."
 msgstr ""
 
 msgid "Download"
-msgstr ""
+msgstr "다운로드"
 
 #, python-format
 msgid "Downloaded %s messages"
-msgstr ""
+msgstr "%s개의 메시지 다운로드됨"
 
 #, python-format
 msgid "Draft: %s"
-msgstr ""
+msgstr "임시 보관: %s"
 
 msgid "Drop files here"
-msgstr ""
+msgstr "여기에 파일을 끌어다 놓으세요"
 
 msgid "Edit"
-msgstr ""
+msgstr "편집"
 
 msgid "Edit Shortcut"
-msgstr ""
+msgstr "단축키 편집"
 
 msgid "Edit display name…"
-msgstr ""
+msgstr "표시 이름 편집…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "메시지 편집 (Esc로 취소)…"
 
 msgid "Edit…"
-msgstr ""
+msgstr "편집…"
 
 msgctxt "Message row action"
 msgid "Edit…"
-msgstr ""
+msgstr "편집…"
 
 #, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
 "\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
+"%%s가 포함된 사용자 지정 URL(%%s는 단어/구문) 또는 \"WIKTIONARY\"(위키낱말사"
+"전 사용을 의미)."
 
 msgid "Email"
-msgstr ""
+msgstr "이메일"
 
 msgid "Emoji Shortcodes"
-msgstr ""
+msgstr "이모지 단축 코드"
 
 msgid "Emojis"
-msgstr ""
+msgstr "이모지"
 
 msgid "Enable"
-msgstr ""
+msgstr "활성화"
 
 msgid "Enable Account"
-msgstr ""
+msgstr "계정 활성화"
 
 msgid "Enable KeepassXC Integration"
-msgstr ""
+msgstr "KeepassXC 통합 활성화"
 
 msgid "Enabled"
-msgstr ""
+msgstr "활성화됨"
 
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
+"Gajim이 컴퓨터의 유휴 시간을 측정하여 상태를 자동으로 설정할 수 있도록 합니다"
 
 msgid "Enables Gajim to spell check your messages while composing"
-msgstr ""
+msgstr "Gajim이 메시지 작성 중에 맞춤법을 검사할 수 있도록 합니다"
 
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr ""
+"Gajim이 비밀번호를 평문으로 저장하는 대신 안전하게 저장할 수 있도록 합니다"
 
 #, python-format
 msgid "Encrypted (%s)"
-msgstr ""
+msgstr "암호화됨 (%s)"
 
 msgid "Encrypting file…"
-msgstr ""
+msgstr "파일 암호화 중…"
 
 msgid "Encryption (OMEMO)"
-msgstr ""
+msgstr "암호화 (OMEMO)"
 
 #, python-format
 msgid "Encryption (OMEMO) – %(account)s"
-msgstr ""
+msgstr "암호화 (OMEMO) – %(account)s"
 
 msgid "Encryption (OpenPGP)"
-msgstr ""
+msgstr "암호화 (OpenPGP)"
 
 #, python-format
 msgid "Encryption (OpenPGP) – %(account)s"
-msgstr ""
+msgstr "암호화 (OpenPGP) – %(account)s"
 
 msgid "Encryption Error"
-msgstr ""
+msgstr "암호화 오류"
 
 msgid "Encryption error"
-msgstr ""
+msgstr "암호화 오류"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "비공개 대화에서는 암호화를 사용할 수 없습니다"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
-msgstr ""
+msgstr "연락처별로 재정의하지 않는 한 사용할 암호화 방법"
 
 msgid "Encryption required"
-msgstr ""
+msgstr "암호화 필요"
 
 msgid "End call"
-msgstr ""
+msgstr "통화 종료"
 
 msgid "Endpoint for retrieving a list of providers for sign up"
-msgstr ""
+msgstr "가입을 위한 공급자 목록을 검색하는 엔드포인트"
 
 msgid "Enter Backup Password"
-msgstr ""
+msgstr "백업 비밀번호 입력"
 
 msgid "Enter Password"
-msgstr ""
+msgstr "비밀번호 입력"
+
+#, fuzzy
+msgid "Enter Password to Unlock"
+msgstr "비밀번호 입력"
 
 msgid "Enter a password to join this chat"
-msgstr ""
+msgstr "이 대화에 참여하려면 비밀번호를 입력하세요"
 
 msgid "Enter current password..."
-msgstr ""
+msgstr "현재 비밀번호 입력..."
 
 msgid "Enter group name"
-msgstr ""
+msgstr "그룹 이름 입력"
 
 msgid "Enter new contact name"
-msgstr ""
+msgstr "새 연락처 이름 입력"
 
 msgid "Enter new password..."
+msgstr "새 비밀번호 입력..."
+
+msgid ""
+"Enter your account password to unlock the secret key and backup password."
 msgstr ""
 
 msgid "Enter your new nickname"
-msgstr ""
+msgstr "새 대화명 입력"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
-msgstr ""
+msgstr "대화명을 입력하세요. 이것이 연락처에 표시되는 이름입니다."
 
 msgid "Error"
-msgstr ""
+msgstr "오류"
 
 msgid "Error Loading Image"
-msgstr ""
+msgstr "이미지 로드 오류"
 
 msgid "Error opening file"
-msgstr ""
+msgstr "파일 열기 오류"
 
 msgid "Error while Exporting"
-msgstr ""
+msgstr "내보내기 중 오류 발생"
 
 msgid "Error while processing image"
-msgstr ""
+msgstr "이미지 처리 중 오류 발생"
 
 msgid "Error while receiving search results."
-msgstr ""
+msgstr "검색 결과를 받는 중 오류가 발생했습니다."
 
 msgid "Error while retrieving search form."
-msgstr ""
+msgstr "검색 양식을 검색하는 중 오류가 발생했습니다."
 
 msgid "Error while uploading avatar"
-msgstr ""
+msgstr "아바타 업로드 중 오류 발생"
 
 #, python-format
 msgid "Error: %s"
-msgstr ""
+msgstr "오류: %s"
 
 msgid "Event"
-msgstr ""
+msgstr "이벤트"
 
 msgid "Everyone"
-msgstr ""
+msgstr "모두"
 
 msgid "Everything"
-msgstr ""
+msgstr "모든 것"
 
 msgid "Exceptions from the above setting"
-msgstr ""
+msgstr "위 설정의 예외"
 
 msgid "Execute"
-msgstr ""
+msgstr "실행"
 
 msgid "Execute Command…"
-msgstr ""
+msgstr "명령 실행…"
 
 msgid "Executing…"
-msgstr ""
+msgstr "실행 중…"
 
 msgid "Expires on: "
-msgstr ""
+msgstr "만료일: "
 
 msgid "Expiry date"
-msgstr ""
+msgstr "만료일"
 
 msgid "Export"
-msgstr ""
+msgstr "내보내기"
+
+#, fuzzy
+msgid "Export & Share Secret Key"
+msgstr "비밀 키 선택"
 
 msgid "Export CSV"
-msgstr ""
+msgstr "CSV 내보내기"
 
 msgid "Export Chat History"
-msgstr ""
+msgstr "대화 기록 내보내기"
 
 msgid "Export Contacts"
-msgstr ""
+msgstr "연락처 내보내기"
 
 msgid "Export Error"
-msgstr ""
+msgstr "내보내기 오류"
 
 msgid "Export Finished"
-msgstr ""
+msgstr "내보내기 완료됨"
 
 msgid "Export History…"
-msgstr ""
+msgstr "기록 내보내기…"
 
 msgid "Export settings to a .json file"
-msgstr ""
+msgstr "설정을 .json 파일로 내보내기"
 
 msgid "Export your chat history from Gajim"
-msgstr ""
+msgstr "Gajim에서 대화 기록 내보내기"
 
 msgid "Exporting History..."
-msgstr ""
+msgstr "기록 내보내는 중..."
 
 msgid "Exporting your messages..."
-msgstr ""
+msgstr "메시지 내보내는 중..."
 
 msgid "Export…"
-msgstr ""
+msgstr "내보내기…"
 
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
 msgstr ""
+"자신을 표현하세요: 때로는 말로는 부족합니다. 반응, 답장을 사용하고, 음성 메시"
+"지를 녹음하고, 상태 업데이트를 보내어 자신을 완전히 표현하세요."
 
 msgid "Extended Address"
-msgstr ""
+msgstr "확장 주소"
 
 msgid "FA_Q (Online)"
-msgstr ""
+msgstr "FAQ (온라인)(_Q)"
 
 msgid "Failed to Configure Group Chat"
-msgstr ""
+msgstr "그룹 대화 구성 실패"
 
 msgid "Failed to Create Group Chat"
-msgstr ""
+msgstr "그룹 대화 생성 실패"
 
 msgid "Failed to Join Group Chat"
-msgstr ""
+msgstr "그룹 대화 참여 실패"
 
 msgid "Failed to generate avatar."
-msgstr ""
+msgstr "아바타 생성에 실패했습니다."
 
 msgid "Fake audio output"
-msgstr ""
+msgstr "가짜 오디오 출력"
 
 msgid "Features"
-msgstr ""
+msgstr "기능"
 
 msgid "Feedback"
-msgstr ""
+msgstr "피드백"
 
 msgid "Female"
-msgstr ""
+msgstr "여성"
 
 msgid "Fetching messages…"
-msgstr ""
+msgstr "메시지 가져오는 중…"
 
 msgid "File"
-msgstr ""
+msgstr "파일"
 
 msgid "File Offered…"
-msgstr ""
+msgstr "파일 제공됨…"
 
 msgid "File Preview"
-msgstr ""
+msgstr "파일 미리보기"
 
 msgid "File Size Limit"
-msgstr ""
+msgstr "파일 크기 제한"
 
 msgid "File Transfer"
-msgstr ""
+msgstr "파일 전송"
 
 msgid "File Transfer Cancelled"
-msgstr ""
+msgstr "파일 전송 취소됨"
 
 msgid "File Transfer Completed"
-msgstr ""
+msgstr "파일 전송 완료됨"
 
 msgid "File Transfer Stopped"
-msgstr ""
+msgstr "파일 전송 중지됨"
 
 msgid "File Verification Failed"
-msgstr ""
+msgstr "파일 확인 실패"
 
 msgid "File corrupted during transfer"
-msgstr ""
+msgstr "전송 중 파일 손상됨"
 
 msgid "File does not exist"
-msgstr ""
+msgstr "파일이 존재하지 않습니다"
 
 msgid "File is empty"
-msgstr ""
+msgstr "파일이 비어있습니다"
 
 #, python-format
 msgid "File is too large, maximum allowed file size is: %s"
-msgstr ""
+msgstr "파일이 너무 큽니다. 최대 허용 파일 크기: %s"
 
 msgid "File saved"
-msgstr ""
+msgstr "파일 저장됨"
 
 msgid "File too big"
-msgstr ""
+msgstr "파일이 너무 큽니다"
 
 #, python-format
 msgid "File: %s"
-msgstr ""
+msgstr "파일: %s"
 
 msgid "Filter"
-msgstr ""
+msgstr "필터"
 
 msgid "Filter Chats"
-msgstr ""
+msgstr "대화 필터"
 
 msgid "Filters"
-msgstr ""
+msgstr "필터"
 
 msgid "Filters (active)"
-msgstr ""
+msgstr "필터 (활성)"
 
 msgid "Fingerprint for this Device"
-msgstr ""
+msgstr "이 장치의 지문"
 
 msgid "Fingerprints"
-msgstr ""
+msgstr "지문"
 
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
-msgstr ""
+msgstr "\"%s\"에 연결된 장치의 지문"
 
 msgid "Finished"
-msgstr ""
+msgstr "완료됨"
 
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
+"대화 기록 동기화 완료:\n"
+"%s개의 메시지 다운로드됨"
 
 msgid "Focus Input"
-msgstr ""
+msgstr "입력에 포커스"
 
 msgid "Focus Search"
-msgstr ""
+msgstr "검색에 포커스"
 
 #, python-format
 msgid "Folder: %s"
-msgstr ""
+msgstr "폴더: %s"
 
 msgid "For example: \"Julia is now online\""
-msgstr ""
+msgstr "예: \"Julia가 이제 온라인입니다\""
 
 msgid "Force Bookmark 2 usage"
-msgstr ""
+msgstr "북마크 2 사용 강제"
 
 msgid "Forever"
-msgstr ""
+msgstr "영원히"
 
 msgid "Forget Group Chat"
-msgstr ""
+msgstr "그룹 대화 잊기"
 
 msgid "Forget this Group Chat?"
-msgstr ""
+msgstr "이 그룹 대화를 잊으시겠습니까?"
 
 msgid "Forget this Group Chat…"
-msgstr ""
+msgstr "이 그룹 대화 잊기…"
 
 msgid "Format Text Bold"
-msgstr ""
+msgstr "텍스트 굵게"
 
 msgid "Format Text Italic"
-msgstr ""
+msgstr "텍스트 기울임꼴"
 
 msgid "Format Text Strikethrough"
-msgstr ""
+msgstr "텍스트 취소선"
 
 msgid "Format error in CRL's lastUpdate field"
-msgstr ""
+msgstr "CRL의 lastUpdate 필드 형식 오류"
 
 msgid "Format error in CRL's nextUpdate field"
-msgstr ""
+msgstr "CRL의 nextUpdate 필드 형식 오류"
 
 msgid "Format error in certificate's notAfter field"
-msgstr ""
+msgstr "인증서의 notAfter 필드 형식 오류"
 
 msgid "Format error in certificate's notBefore field"
-msgstr ""
+msgstr "인증서의 notBefore 필드 형식 오류"
 
 msgid "Format your message"
-msgstr ""
+msgstr "메시지 서식 지정"
 
 msgid "Forward 10 seconds"
-msgstr ""
+msgstr "10초 빨리 감기"
 
 #, python-format
 msgid "Found %s contacts to import"
-msgstr ""
+msgstr "가져올 연락처 %s개 발견"
 
 msgctxt "User status"
 msgid "Free for Chat"
-msgstr ""
+msgstr "대화 가능"
 
 msgid "From"
-msgstr ""
+msgstr "보낸 사람"
 
 msgctxt "Contact subscription"
 msgid "From"
-msgstr ""
+msgstr "보낸 사람"
 
 msgid "Full Name"
-msgstr ""
+msgstr "전체 이름"
 
 msgctxt "Profile"
 msgid "Full Name"
-msgstr ""
+msgstr "전체 이름"
 
 msgid "Fully-featured XMPP chat client"
-msgstr ""
+msgstr "모든 기능을 갖춘 XMPP 채팅 클라이언트"
 
 #, python-format
 msgid "GLib Version: %s"
-msgstr ""
+msgstr "GLib 버전: %s"
 
 #, python-format
 msgid "GTK Version: %s"
-msgstr ""
+msgstr "GTK 버전: %s"
 
 #, python-format
 msgid "Gajim %s is available"
-msgstr ""
+msgstr "Gajim %s을(를) 사용할 수 있습니다"
 
 msgid "Gajim - Error"
-msgstr ""
+msgstr "Gajim - 오류"
 
 msgid "Gajim Themes"
-msgstr ""
+msgstr "Gajim 테마"
 
 msgid "Gajim Update"
-msgstr ""
+msgstr "Gajim 업데이트"
 
 msgid "Gajim Update Check"
-msgstr ""
+msgstr "Gajim 업데이트 확인"
 
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
+"Gajim은 사용하기 쉽고 모든 기능을 갖춘 XMPP 클라이언트를 목표로 합니다. 친구"
+"나 가족과 대화하고, 사진과 생각을 쉽게 공유하거나, 그룹과 함께 뉴스를 토론하"
+"세요."
 
 msgid ""
 "Gajim can automatically update your profile with your current timezone. This "
 "may help your contacts when they try to reach you."
 msgstr ""
+"Gajim은 현재 시간대로 프로필을 자동으로 업데이트할 수 있습니다. 이렇게 하면 "
+"연락처가 회원님에게 연락하려고 할 때 도움이 될 수 있습니다."
 
 msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
+"Gajim에서 오류가 발생했습니다.\n"
+"이 보고서를 보내 이 문제를 해결하는 데 도움을 주세요."
 
 msgid "Gajim is fully synchronized with the archive."
-msgstr ""
+msgstr "Gajim이 보관함과 완전히 동기화되었습니다."
 
 msgid "Gajim is quitting…"
-msgstr ""
+msgstr "Gajim을 종료하는 중…"
 
 msgid ""
 "Gajim tries to restore a backup of your OpenPGP key from the server. Please "
 "enter the password for your backup."
 msgstr ""
+"Gajim이 서버에서 OpenPGP 키 백업을 복원하려고 합니다. 백업 비밀번호를 입력하"
+"세요."
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
-msgstr ""
+msgstr "Gajim이 서버에 연결할 수 없습니다. XMPP 주소가 올바른지 확인하세요."
 
 msgid "Gajim will now exit"
-msgstr ""
+msgstr "Gajim이 이제 종료됩니다"
 
 msgid "Gathering information…"
-msgstr ""
+msgstr "정보 수집 중…"
 
 msgid "Gender"
-msgstr ""
+msgstr "성별"
 
 msgctxt "Profile"
 msgid "Gender"
-msgstr ""
+msgstr "성별"
 
 msgid "General"
-msgstr ""
+msgstr "일반"
 
 #, python-format
 msgid "General – %(account)s"
-msgstr ""
+msgstr "일반 – %(account)s"
 
 msgid "Global Group Chat Search"
-msgstr ""
+msgstr "전역 그룹 대화 검색"
 
 msgid "Global Proxy"
-msgstr ""
+msgstr "전역 프록시"
 
 msgid "Global Status"
-msgstr ""
+msgstr "전역 상태"
 
 msgid "Go"
-msgstr ""
+msgstr "이동"
 
 msgid "Grant Voice"
-msgstr ""
+msgstr "발언권 부여"
 
 msgid "Group"
-msgstr ""
+msgstr "그룹"
 
 msgid "Group Chat"
-msgstr ""
+msgstr "그룹 대화"
 
 msgid "Group Chat Details"
-msgstr ""
+msgstr "그룹 대화 세부정보"
 
 msgid "Group Chat Language"
-msgstr ""
+msgstr "그룹 대화 언어"
 
 msgid "Group Chat Message Highlight"
-msgstr ""
+msgstr "그룹 대화 메시지 강조"
 
 msgid "Group Chat Message Received"
-msgstr ""
+msgstr "그룹 대화 메시지 수신됨"
 
 msgid "Group Chat Settings"
-msgstr ""
+msgstr "그룹 대화 설정"
 
 msgid "Group Chats"
-msgstr ""
+msgstr "그룹 대화"
 
 msgid "Group chat already exists"
-msgstr ""
+msgstr "그룹 대화가 이미 존재합니다"
 
 msgid "Group chat can be found via search"
-msgstr ""
+msgstr "검색을 통해 그룹 대화를 찾을 수 있습니다"
 
 msgid "Group chat does not exist"
-msgstr ""
+msgstr "그룹 대화가 존재하지 않습니다"
 
 msgid "Group chat has been destroyed"
-msgstr ""
+msgstr "그룹 대화가 파괴되었습니다"
 
 msgid "Group chat is closed"
-msgstr ""
+msgstr "그룹 대화가 닫혔습니다"
 
 msgid "Group chat is now fully anonymous"
-msgstr ""
+msgstr "그룹 대화가 이제 완전히 익명입니다"
 
 msgid "Group chat is now non-anonymous"
-msgstr ""
+msgstr "그룹 대화가 이제 익명이 아닙니다"
 
 msgid "Group chat is now semi-anonymous"
-msgstr ""
+msgstr "그룹 대화가 이제 반익명입니다"
 
 msgid "Group chat now does not show unavailable members"
-msgstr ""
+msgstr "그룹 대화가 이제 사용 불가능한 구성원을 표시하지 않습니다"
 
 msgid "Group chat now shows unavailable members"
-msgstr ""
+msgstr "그룹 대화가 이제 사용 불가능한 구성원을 표시합니다"
 
 msgid "Groups"
-msgstr ""
+msgstr "그룹"
 
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
-msgstr ""
+msgstr "%(url)s에 대한 HTTP (%(method)s) 인증 (ID: %(id)s)"
 
 msgid "HTTP Authorization Request"
-msgstr ""
+msgstr "HTTP 인증 요청"
 
 msgid "HTTPS Verification"
-msgstr ""
+msgstr "HTTPS 확인"
 
 #, python-format
 msgid "Hello, I am $name. %s"
-msgstr ""
+msgstr "안녕하세요, 저는 $name입니다. %s"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
-msgstr ""
+msgstr "이 문제를 재현하는 데 도움이 되는 피드백을 여기에 추가할 수 있습니다."
 
 msgctxt "Group chat feature"
 msgid "Hidden"
-msgstr ""
+msgstr "숨김"
 
 msgid "Hide"
-msgstr ""
+msgstr "숨기기"
 
 msgid "Hide Chat List"
+msgstr "대화 목록 숨기기"
+
+msgid "Hide Sidebar"
 msgstr ""
 
 msgid "Home"
-msgstr ""
+msgstr "홈"
 
 msgid "Hostname"
-msgstr ""
+msgstr "호스트명"
 
 #, python-format
 msgid "Hostname – %(account)s"
-msgstr ""
+msgstr "호스트명 – %(account)s"
 
 #, python-format
 msgid ""
@@ -2282,1062 +2366,1108 @@ msgid ""
 "Software: %(software)s\n"
 "Uptime: %(uptime)s\n"
 msgstr ""
+"호스트명: %(hostname)s\n"
+"소프트웨어: %(software)s\n"
+"가동 시간: %(uptime)s\n"
 
 msgid "How far back should the chat history be synchronized?"
-msgstr ""
+msgstr "대화 기록을 얼마나 과거까지 동기화해야 합니까?"
 
 msgid "How long Gajim should keep your chat history"
-msgstr ""
+msgstr "Gajim이 대화 기록을 얼마나 오래 보관해야 하는지"
 
 msgid "How to install plugins with Flatpak"
-msgstr ""
+msgstr "Flatpak으로 플러그인을 설치하는 방법"
 
 msgid "I can see contact's online status"
-msgstr ""
+msgstr "연락처의 온라인 상태를 볼 수 있습니다"
 
 msgid "I would like to add you to my contact list."
-msgstr ""
+msgstr "회원님을 연락처 목록에 추가하고 싶습니다."
 
 msgid "I would like to add you to my roster."
-msgstr ""
+msgstr "회원님을 명단에 추가하고 싶습니다."
 
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
-msgstr ""
+msgstr "IEC 표준에 따르면 KiB = 1024바이트, KB = 1000바이트입니다."
 
 msgctxt "Profile"
 msgid "IM Address"
-msgstr ""
+msgstr "IM 주소"
 
 msgid "Id"
-msgstr ""
+msgstr "ID"
 
 msgid "Identified Error"
-msgstr ""
+msgstr "식별된 오류"
 
 msgid ""
 "Identifier for this device. Don’t change this unless you know what you are "
 "doing."
 msgstr ""
+"이 장치의 식별자입니다. 무엇을 하고 있는지 알지 못하는 한 변경하지 마세요."
 
 msgid "Idle Time"
-msgstr ""
+msgstr "유휴 시간"
+
+msgid "If checked the search text is ignored."
+msgstr "선택하면 검색 텍스트가 무시됩니다."
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
+"활성화하면 보류 중인 이벤트가 있을 때 Gajim이 창을 깜박이게 합니다(대부분의 "
+"창 관리자에서 기본 동작)."
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr ""
+msgstr "활성화하면 Gajim이 gajim.org에 호스팅된 플러그인 다운로드를 제안합니다"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
-msgstr ""
+msgstr "활성화하면 Gajim이 들어오는 주의 요청(\"wizz\")을 무시합니다."
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
+"활성화하면 Gajim이 Jingle을 사용할 때 STUN 서버를 사용하려고 시도합니다. "
+"\"stun_server\" 옵션의 서버 또는 XMPP 서버에서 제공한 서버를 사용합니다."
 
 msgid "Ignore Unknown Contacts"
-msgstr ""
+msgstr "알 수 없는 연락처 무시"
 
 msgid "Ignore everything from contacts not in your contact list"
-msgstr ""
+msgstr "연락처 목록에 없는 연락처의 모든 것을 무시합니다"
 
 msgid "Image"
-msgstr ""
+msgstr "이미지"
 
 msgid "Import"
-msgstr ""
+msgstr "가져오기"
 
 msgid "Import Contacts"
-msgstr ""
+msgstr "연락처 가져오기"
 
 msgid "Import Contacts?"
-msgstr ""
+msgstr "연락처를 가져오시겠습니까?"
 
 msgid "Import Error"
-msgstr ""
+msgstr "가져오기 오류"
 
 msgid "Import Key"
-msgstr ""
+msgstr "키 가져오기"
 
 msgid "Import OpenPGP Key"
-msgstr ""
+msgstr "OpenPGP 키 가져오기"
 
 msgid "Import from Account"
-msgstr ""
+msgstr "계정에서 가져오기"
 
 msgid "Import from File"
-msgstr ""
+msgstr "파일에서 가져오기"
 
 msgid "Imported key has expiration date"
-msgstr ""
+msgstr "가져온 키에 만료일이 있습니다"
 
 msgid "Imported key is not a secret key"
-msgstr ""
+msgstr "가져온 키가 비밀 키가 아닙니다"
 
 msgid "Import…"
-msgstr ""
+msgstr "가져오기…"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
 "A moderator will process your request."
 msgstr ""
+"이 대화에 메시지를 작성하려면 먼저 발언권을 요청해야 합니다.\n"
+"중재자가 요청을 처리합니다."
 
 msgid "In this group chat"
-msgstr ""
+msgstr "이 그룹 대화에서"
 
 msgid "Incoming Call"
-msgstr ""
+msgstr "수신 전화"
 
 msgid "Incoming Call (Video)"
-msgstr ""
+msgstr "수신 전화 (영상)"
 
 msgid "Increase Font Size"
-msgstr ""
+msgstr "글꼴 크기 늘리기"
 
 msgid "Increase playback speed"
-msgstr ""
+msgstr "재생 속도 늘리기"
 
 msgid "Information"
-msgstr ""
+msgstr "정보"
 
 msgid "Insecure Connection"
-msgstr ""
+msgstr "안전하지 않은 연결"
 
 msgid "Install"
-msgstr ""
+msgstr "설치"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
-msgstr ""
+msgstr "문제 보고를 더 쉽게 하려면 <tt>sentry-sdk</tt>를 설치하세요."
 
 msgid "Install Plugin from ZIP-File"
-msgstr ""
+msgstr "ZIP 파일에서 플러그인 설치"
 
 msgid "Install a keyring to store passwords on your system."
-msgstr ""
+msgstr "시스템에 비밀번호를 저장하려면 키링을 설치하세요."
 
 msgid "Install from Archive"
-msgstr ""
+msgstr "아카이브에서 설치"
 
 msgid "Installation failed"
-msgstr ""
+msgstr "설치 실패"
 
 msgctxt "Configuration type"
 msgid "Integer"
-msgstr ""
+msgstr "정수"
 
 msgid "Invalid Address"
-msgstr ""
+msgstr "유효하지 않은 주소"
 
 msgid "Invalid CA certificate"
-msgstr ""
+msgstr "유효하지 않은 CA 인증서"
 
 msgid "Invalid Name"
-msgstr ""
+msgstr "유효하지 않은 이름"
 
 msgid "Invalid Node"
-msgstr ""
+msgstr "유효하지 않은 노드"
 
 msgid "Invalid Server Name"
-msgstr ""
+msgstr "유효하지 않은 서버 이름"
 
 msgid "Invalid Stanza"
-msgstr ""
+msgstr "유효하지 않은 스탠자"
 
 msgid "Invalid XMPP Address"
-msgstr ""
+msgstr "유효하지 않은 XMPP 주소"
 
 #, python-format
 msgid "Invalid address: %s"
-msgstr ""
+msgstr "유효하지 않은 주소: %s"
 
 msgid "Invalid domain name"
-msgstr ""
+msgstr "유효하지 않은 도메인 이름"
 
 msgid "Invalid server response"
-msgstr ""
+msgstr "유효하지 않은 서버 응답"
 
 msgid "Invitation"
-msgstr ""
+msgstr "초대"
 
 msgid "Invitation Declined"
-msgstr ""
+msgstr "초대 거절됨"
 
 msgid "Invite"
-msgstr ""
+msgstr "초대"
 
 msgid "Invite Contacts"
-msgstr ""
+msgstr "연락처 초대"
 
 msgid "Invite to this chat…"
-msgstr ""
+msgstr "이 대화에 초대…"
 
 msgid "Invitees"
-msgstr ""
+msgstr "초대 대상자"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
+msgstr "마이크가 연결되어 있고 액세스할 수 있습니까?"
 
 msgid "Issue date"
-msgstr ""
+msgstr "발급일"
 
 msgid "Issued by"
-msgstr ""
+msgstr "발급자"
 
 msgid "Issued by\n"
-msgstr ""
+msgstr "발급자\n"
 
 msgid "Issued on: "
-msgstr ""
+msgstr "발급일: "
 
 msgid "Issued to"
-msgstr ""
+msgstr "발급 대상"
 
 msgid "Issued to\n"
-msgstr ""
+msgstr "발급 대상\n"
 
 msgid "Issues detected"
-msgstr ""
+msgstr "문제 감지됨"
 
 #, python-format
 msgid "It's <b>%(time)s</b> for %(name)s"
-msgstr ""
+msgstr "%(name)s님의 시간은 <b>%(time)s</b>입니다"
 
 msgid "Italic"
-msgstr ""
+msgstr "기울임꼴"
 
 msgid "JID"
-msgstr ""
+msgstr "JID"
 
 msgid "JPEG files"
-msgstr ""
+msgstr "JPEG 파일"
 
 msgid "Join"
-msgstr ""
+msgstr "참여"
 
 msgid "Join Group Chat"
-msgstr ""
+msgstr "그룹 대화 참여"
 
 msgid "Join Group Chat as…"
-msgstr ""
+msgstr "다음으로 그룹 대화 참여…"
 
 msgid "Join Group Chat?"
-msgstr ""
+msgstr "그룹 대화에 참여하시겠습니까?"
 
 msgid "Join Groupchat…"
-msgstr ""
+msgstr "그룹 대화 참여…"
 
 msgid "Joining Group Chat…"
-msgstr ""
+msgstr "그룹 대화 참여 중…"
 
 msgid "Joining…"
-msgstr ""
+msgstr "참여 중…"
 
 msgid "Join…"
-msgstr ""
+msgstr "참여…"
 
 msgid "Just now"
-msgstr ""
+msgstr "방금"
 
 msgid "Keep Backup"
-msgstr ""
+msgstr "백업 유지"
 
 msgid "Keep Chat History"
-msgstr ""
+msgstr "대화 기록 유지"
+
+#, fuzzy
+msgid "Key has been saved"
+msgstr "%s님이 차단되었습니다"
 
 msgid "Key usage does not include certificate signing"
-msgstr ""
+msgstr "키 사용에 인증서 서명이 포함되지 않습니다"
 
 msgid "Kick"
-msgstr ""
+msgstr "강제 퇴장"
 
 #, python-format
 msgid "Kick %s"
-msgstr ""
+msgstr "%s 강제 퇴장"
 
 msgid "Kick…"
-msgstr ""
+msgstr "강제 퇴장…"
 
 msgid "Label"
-msgstr ""
+msgstr "레이블"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "언어: %s"
 
 #, python-format
 msgid "Last seen: %s"
-msgstr ""
+msgstr "마지막으로 본 시간: %s"
 
 msgid "Leave Group Chat?"
-msgstr ""
+msgstr "그룹 대화에서 나가시겠습니까?"
 
 msgid "Leave _Permanently"
+msgstr "영구적으로 나가기(_P)"
+
+msgid "Let Gajim generate a log to trace errors (restart required)"
 msgstr ""
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
 msgstr ""
+"파일 전송을 위한 로컬 인터페이스 외에 전송 호스트 목록(쉼표로 구분)(주소 변"
+"환/포트 포워딩의 경우)."
 
 msgid "Listing of providers"
-msgstr ""
+msgstr "공급자 목록"
 
 msgid "Live Preview"
-msgstr ""
+msgstr "실시간 미리보기"
 
 msgid "Load Image"
-msgstr ""
+msgstr "이미지 로드"
 
 msgid "Loading Avatar Failed"
-msgstr ""
+msgstr "아바타 로드 실패"
 
 msgid "Loading Preview…"
-msgstr ""
+msgstr "미리보기 로드 중…"
 
 msgid "Loading avatar image failed"
-msgstr ""
+msgstr "아바타 이미지 로드 실패"
 
 msgid "Loading…"
-msgstr ""
+msgstr "로드 중…"
 
 msgid "Local Time"
-msgstr ""
+msgstr "현지 시간"
 
 #, python-format
 msgid "Location at %s"
-msgstr ""
+msgstr "%s의 위치"
 
 msgid "Log"
-msgstr ""
+msgstr "로그"
 
 msgid "Log In"
-msgstr ""
+msgstr "로그인"
 
 msgid "Log in with your credentials"
-msgstr ""
+msgstr "자격 증명으로 로그인"
 
 msgid "Login"
-msgstr ""
+msgstr "로그인"
 
 #, python-format
 msgid "Login – %(account)s"
-msgstr ""
+msgstr "로그인 – %(account)s"
 
 msgid "Look it up in _Dictionary"
-msgstr ""
+msgstr "사전에서 찾기(_D)"
 
 msgid "Make Admin"
-msgstr ""
+msgstr "관리자로 만들기"
 
 msgid "Make Member"
-msgstr ""
+msgstr "회원으로 만들기"
 
 msgid "Make Owner"
-msgstr ""
+msgstr "소유자로 만들기"
 
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr ""
+msgstr "프로필을 모든 사람 또는 연락처에만 표시되도록 설정합니다."
 
 msgid "Male"
-msgstr ""
+msgstr "남성"
 
 msgid "Manage"
-msgstr ""
+msgstr "관리"
 
 msgid "Manage Proxies"
-msgstr ""
+msgstr "프록시 관리"
 
 msgid "Manage Proxies..."
-msgstr ""
+msgstr "프록시 관리..."
 
 msgid "Manage Shortcuts"
-msgstr ""
+msgstr "단축키 관리"
 
 msgid "Manage Sounds"
-msgstr ""
+msgstr "소리 관리"
 
 msgid "Manage Trust"
-msgstr ""
+msgstr "신뢰 관리"
 
 msgid "Manage and configure Gajim plugins"
-msgstr ""
+msgstr "Gajim 플러그인 관리 및 구성"
 
 msgid "Manage your Devices…"
-msgstr ""
+msgstr "장치 관리…"
 
 msgid "Manually set the hostname for the server"
-msgstr ""
+msgstr "서버의 호스트명을 수동으로 설정"
 
 msgid "Mark all activities as read"
-msgstr ""
+msgstr "모든 활동을 읽음으로 표시"
 
 msgid "Mark as Read"
-msgstr ""
+msgstr "읽음으로 표시"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "읽음으로 표시"
 
 msgid "Maximum file size for preview downloads"
-msgstr ""
+msgstr "미리보기 다운로드의 최대 파일 크기"
 
 msgid "Me"
-msgstr ""
+msgstr "나"
 
 msgid "Media Playback"
-msgstr ""
+msgstr "미디어 재생"
 
 msgid "Member"
-msgstr ""
+msgstr "회원"
 
 msgctxt "Group chat contact affiliation"
 msgid "Member"
-msgstr ""
+msgstr "회원"
 
 msgctxt "Group chat contact affiliation"
 msgid "Members"
-msgstr ""
+msgstr "회원"
 
 msgctxt "Group chat feature"
 msgid "Members Only"
-msgstr ""
+msgstr "회원 전용"
 
 msgid "Message"
-msgstr ""
+msgstr "메시지"
 
 msgid "Message History"
-msgstr ""
+msgstr "메시지 기록"
 
 msgid "Message Receipts (✔)"
-msgstr ""
+msgstr "메시지 수신확인 (✔)"
 
 msgid "Message Received"
-msgstr ""
+msgstr "메시지 받음"
 
 msgid "Message Sent"
-msgstr ""
+msgstr "메시지 보냄"
 
 msgid "Message content unknown"
-msgstr ""
+msgstr "메시지 내용 알 수 없음"
 
 #, python-format
 msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
+"메시지 수정됨. 원본 메시지:\n"
+"%s"
 
 msgid "Messages"
-msgstr ""
+msgstr "메시지"
 
 msgid "Messages are archived on the server"
-msgstr ""
+msgstr "메시지가 서버에 보관됩니다"
 
 msgid "Messages from Contacts"
-msgstr ""
+msgstr "연락처의 메시지"
 
 msgid "Messages from this users are blocked"
-msgstr ""
+msgstr "이 사용자의 메시지가 차단되었습니다"
 
 #, python-format
 msgid "Migration to version %s"
-msgstr ""
+msgstr "버전 %s로 마이그레이션"
 
 msgid "Minimize"
-msgstr ""
+msgstr "최소화"
 
 msgid "Minutes until your status gets changed"
-msgstr ""
+msgstr "상태가 변경되기까지 남은 시간(분)"
 
 msgid "Miscellaneous"
-msgstr ""
+msgstr "기타"
 
 msgid "Missing necessary encryption plugin"
-msgstr ""
+msgstr "필요한 암호화 플러그인 누락"
 
 msgid "Moderate Message?"
-msgstr ""
+msgstr "메시지를 검토하시겠습니까?"
 
 msgid "Moderate Messages?"
-msgstr ""
+msgstr "메시지를 검토하시겠습니까?"
 
 msgctxt "Message row action"
 msgid "Moderate all messages…"
-msgstr ""
+msgstr "모든 메시지 검토…"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
-msgstr ""
+msgstr "검토됨"
 
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr ""
+msgstr "검토…"
 
 msgid "Moderation"
-msgstr ""
+msgstr "검토"
 
 msgctxt "Group chat contact role"
 msgid "Moderator"
-msgstr ""
+msgstr "중재자"
 
 msgctxt "Group chat contact role"
 msgid "Moderators"
-msgstr ""
+msgstr "중재자"
 
 msgid "Modify"
-msgstr ""
+msgstr "수정"
+
+#, fuzzy
+msgid "More Actions"
+msgstr "반응"
 
 msgid "More infos at providers.xmpp.net"
-msgstr ""
+msgstr "providers.xmpp.net에서 자세한 정보 확인"
 
 msgid "Move"
-msgstr ""
+msgstr "이동"
 
 msgid "Move Chat"
-msgstr ""
+msgstr "대화 이동"
 
 msgid "Move Contact to New Group?"
-msgstr ""
+msgstr "연락처를 새 그룹으로 이동하시겠습니까?"
 
 msgid "Move to Group"
-msgstr ""
+msgstr "그룹으로 이동"
 
 msgid "Must be a port number"
-msgstr ""
+msgstr "포트 번호여야 합니다"
 
 msgid "Mute Chat"
-msgstr ""
+msgstr "대화 음소거"
 
 msgid "Mute Sounds"
-msgstr ""
+msgstr "소리 음소거"
 
 msgid "My Workspace"
-msgstr ""
+msgstr "내 작업 공간"
+
+msgid "Myself"
+msgstr "나 자신"
 
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 msgid "Name <b>default</b> is not allowed"
-msgstr ""
+msgstr "이름 <b>default</b>는 허용되지 않습니다"
 
 msgid "Needs libspelling to be installed"
-msgstr ""
+msgstr "libspelling을 설치해야 합니다"
 
 msgid "Never"
-msgstr ""
+msgstr "안 함"
 
 msgid "New Contact"
-msgstr ""
+msgstr "새 연락처"
 
 msgid "New Group"
-msgstr ""
+msgstr "새 그룹"
 
 msgid "New Group…"
-msgstr ""
+msgstr "새 그룹…"
 
 msgid "New Search"
-msgstr ""
+msgstr "새 검색"
 
 msgid "New Workspace"
-msgstr ""
+msgstr "새 작업 공간"
 
 msgid "New message from"
-msgstr ""
+msgstr "새 메시지 보낸 사람"
 
 msgid "Next"
-msgstr ""
+msgstr "다음"
+
+msgid "Nick"
+msgstr "대화명"
 
 msgid "Nickname"
-msgstr ""
+msgstr "대화명"
 
 msgid "Nickname contains invalid characters"
-msgstr ""
-
-msgid "Nickname…"
-msgstr ""
+msgstr "대화명에 유효하지 않은 문자가 포함되어 있습니다"
 
 msgid "No"
-msgstr ""
+msgstr "아니오"
 
 msgid "No File Transfer available"
-msgstr ""
+msgstr "파일 전송을 사용할 수 없습니다"
 
 msgid "No Messages"
-msgstr ""
+msgstr "메시지 없음"
 
 msgid "No Messages Found"
-msgstr ""
+msgstr "메시지를 찾을 수 없습니다"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
-msgstr ""
+msgstr "비밀번호 필요 없음"
 
 msgid "No Proxy"
-msgstr ""
+msgstr "프록시 없음"
 
 msgid "No Results Found"
-msgstr ""
+msgstr "결과를 찾을 수 없습니다"
 
 msgid "No Sync"
-msgstr ""
+msgstr "동기화 안 함"
 
 msgid "No Threshold"
-msgstr ""
+msgstr "임계값 없음"
 
 msgid "No Timezone"
+msgstr "시간대 없음"
+
+msgid "No account password found, unlocking not possible"
 msgstr ""
 
 msgid "No additional requirements"
-msgstr ""
+msgstr "추가 요구사항 없음"
 
 msgid "No automatic preview"
-msgstr ""
+msgstr "자동 미리보기 없음"
 
 msgid "No certificate available"
-msgstr ""
+msgstr "사용 가능한 인증서 없음"
 
 msgid "No commands available"
-msgstr ""
+msgstr "사용 가능한 명령 없음"
 
 msgid "No contact addresses published for this server."
-msgstr ""
+msgstr "이 서버에 게시된 연락처 주소가 없습니다."
 
 msgid ""
 "No contacts found\n"
 "You can also type an XMPP address"
 msgstr ""
+"연락처를 찾을 수 없습니다\n"
+"XMPP 주소를 입력할 수도 있습니다"
 
 msgid "No contacts found to import"
-msgstr ""
+msgstr "가져올 연락처를 찾을 수 없습니다"
 
 msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
 msgstr ""
+"남은 연락처가 없습니다.\n"
+"XMPP 주소를 입력할 수도 있습니다."
 
 msgid "No devices found to encrypt this message to. Querying for devices now…"
-msgstr ""
+msgstr "이 메시지를 암호화할 장치를 찾을 수 없습니다. 지금 장치를 쿼리하는 중…"
 
 msgid "No devices online"
-msgstr ""
+msgstr "온라인 장치 없음"
 
 msgid "No group assigned"
-msgstr ""
+msgstr "할당된 그룹 없음"
 
 msgid "No info available"
-msgstr ""
+msgstr "사용 가능한 정보 없음"
 
 msgid "No key found"
-msgstr ""
+msgstr "키를 찾을 수 없습니다"
 
 msgid "No keys pressed"
-msgstr ""
+msgstr "누른 키 없음"
 
 #, python-format
 msgid "No permission to export file to %s"
-msgstr ""
+msgstr "%s로 파일을 내보낼 권한이 없습니다"
 
 msgid "No results"
-msgstr ""
+msgstr "결과 없음"
 
 msgid "No results found"
-msgstr ""
+msgstr "결과를 찾을 수 없습니다"
 
 msgid "No secret key found"
-msgstr ""
+msgstr "비밀 키를 찾을 수 없습니다"
 
 msgid "No undecided fingerprints"
-msgstr ""
+msgstr "결정되지 않은 지문 없음"
 
 msgid "Node"
-msgstr ""
+msgstr "노드"
 
 msgctxt "Configuration description"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgctxt "Contact subscription"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgctxt "Gender"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgctxt "Group chat contact affiliation"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgctxt "Group chat contact role"
 msgid "None"
-msgstr ""
+msgstr "없음"
 
 msgctxt "Group chat feature"
 msgid "Not Anonymous"
-msgstr ""
+msgstr "익명 아님"
 
 msgid "Not Available"
-msgstr ""
+msgstr "부재중"
 
 msgctxt "User status"
 msgid "Not Available"
-msgstr ""
+msgstr "부재중"
 
 msgid "Not Decided"
-msgstr ""
+msgstr "결정되지 않음"
 
 msgid "Not Joined"
-msgstr ""
+msgstr "참여하지 않음"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
-msgstr ""
+msgstr "검토되지 않음"
 
 msgid "Not accelerated"
-msgstr ""
+msgstr "가속화되지 않음"
 
 msgid "Not available"
-msgstr ""
+msgstr "사용할 수 없음"
 
 msgid "Not connected"
-msgstr ""
+msgstr "연결되지 않음"
 
 msgid "Not encrypted"
-msgstr ""
+msgstr "암호화되지 않음"
 
 msgctxt "Profile"
 msgid "Note"
-msgstr ""
+msgstr "메모"
 
 msgid "Note to myself"
-msgstr ""
+msgstr "나 자신에게 메모"
 
 msgid "Note: Anonymous accounts are not possible with all providers"
-msgstr ""
+msgstr "참고: 익명 계정은 모든 공급자에서 가능하지 않습니다"
 
 msgid "Notes"
-msgstr ""
+msgstr "메모"
 
 msgid "Notifications"
-msgstr ""
+msgstr "알림"
 
 msgid "Notify after update"
-msgstr ""
+msgstr "업데이트 후 알림"
 
 msgid "Notify me when someone reacts to my message in a chat"
-msgstr ""
+msgstr "누군가 대화에서 내 메시지에 반응할 때 알림"
 
 msgid "Notify me when someone reacts to my message in a group chat"
-msgstr ""
+msgstr "누군가 그룹 대화에서 내 메시지에 반응할 때 알림"
 
 msgid "Notify me when the automatic update was successful"
-msgstr ""
+msgstr "자동 업데이트가 성공했을 때 알림"
 
 msgid "Notify on all Messages"
-msgstr ""
+msgstr "모든 메시지에 대해 알림"
 
 msgid "OK"
-msgstr ""
+msgstr "확인"
 
 msgctxt "Switch"
 msgid "Off"
-msgstr ""
+msgstr "끄기"
 
 msgid "Offline"
-msgstr ""
+msgstr "오프라인"
 
 msgctxt "Switch"
 msgid "On"
-msgstr ""
+msgstr "켜기"
 
 msgid "One Month"
-msgstr ""
+msgstr "1개월"
 
 msgid "One Year"
-msgstr ""
+msgstr "1년"
 
 msgid "Only Admins and Owners can modify the affiliation"
-msgstr ""
+msgstr "관리자와 소유자만 소속을 수정할 수 있습니다"
 
 msgid "Only moderators can see your XMPP address"
-msgstr ""
+msgstr "중재자만 회원님의 XMPP 주소를 볼 수 있습니다"
 
 msgid "Open"
-msgstr ""
+msgstr "열기"
 
 msgctxt "Group chat feature"
 msgid "Open"
-msgstr ""
+msgstr "열림"
 
 #, python-format
 msgid "Open %s"
-msgstr ""
+msgstr "%s 열기"
 
 msgid "Open Email Composer"
-msgstr ""
+msgstr "이메일 작성 도구 열기"
 
 msgid "Open Emoji Chooser"
-msgstr ""
+msgstr "이모지 선택기 열기"
 
 msgid "Open File?"
-msgstr ""
+msgstr "파일을 여시겠습니까?"
 
 msgid "Open Folder"
-msgstr ""
+msgstr "폴더 열기"
 
 msgid "Open Link in _Browser"
-msgstr ""
+msgstr "브라우저에서 링크 열기(_B)"
 
 msgid "Open as _Link"
-msgstr ""
+msgstr "링크로 열기(_L)"
 
 msgid "Open folder"
-msgstr ""
+msgstr "폴더 열기"
 
 msgid "OpenGL accelerated"
-msgstr ""
+msgstr "OpenGL 가속화"
 
 msgid "OpenPGP Backup"
-msgstr ""
+msgstr "OpenPGP 백업"
 
 msgid "OpenPGP Backup Error"
-msgstr ""
+msgstr "OpenPGP 백업 오류"
 
 msgid "OpenPGP Key Backup"
-msgstr ""
+msgstr "OpenPGP 키 백업"
 
 msgid "OpenPGP Setup"
-msgstr ""
+msgstr "OpenPGP 설정"
 
 msgid "OpenPGP Setup is completed."
-msgstr ""
+msgstr "OpenPGP 설정이 완료되었습니다."
 
 msgid "OpenPGP key backup failed"
-msgstr ""
+msgstr "OpenPGP 키 백업 실패"
 
 msgid ""
 "Opening this file may be harmful for your computer. Do you really want to "
 "open this file?"
 msgstr ""
+"이 파일을 열면 컴퓨터에 해로울 수 있습니다. 정말 이 파일을 여시겠습니까?"
 
 msgid "Operating System"
-msgstr ""
+msgstr "운영 체제"
 
 msgctxt "Profile"
 msgid "Organisation"
-msgstr ""
+msgstr "조직"
 
 msgid "Organization"
-msgstr ""
+msgstr "조직"
 
 msgid "Organization (O): "
-msgstr ""
+msgstr "조직 (O): "
 
 msgctxt "Gender"
 msgid "Other"
-msgstr ""
+msgstr "기타"
 
 msgid "Other Options"
-msgstr ""
+msgstr "기타 옵션"
 
 msgid "Other devices connected with your account"
-msgstr ""
+msgstr "계정에 연결된 다른 장치"
 
 msgid "Others"
-msgstr ""
+msgstr "기타"
 
 msgid "Out of memory"
-msgstr ""
+msgstr "메모리 부족"
 
 msgid "Outcasts"
-msgstr ""
+msgstr "추방자"
 
 msgid "Overwrite"
-msgstr ""
+msgstr "덮어쓰기"
 
 msgid "Overwrite Plugin?"
-msgstr ""
+msgstr "플러그인을 덮어쓰시겠습니까?"
 
 msgid "Owner"
-msgstr ""
+msgstr "소유자"
 
 msgctxt "Group chat contact affiliation"
 msgid "Owner"
-msgstr ""
+msgstr "소유자"
 
 msgctxt "Group chat contact affiliation"
 msgid "Owners"
-msgstr ""
+msgstr "소유자"
 
 msgid "PEP Configuration"
-msgstr ""
+msgstr "PEP 구성"
 
 msgid "PEP Node Not Removed"
-msgstr ""
+msgstr "PEP 노드가 제거되지 않음"
 
 #, python-format
 msgid "PEP Service Configuration (%s)"
-msgstr ""
+msgstr "PEP 서비스 구성 (%s)"
 
 #, python-format
 msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
 msgstr ""
+"PEP 노드 %(node)s이(가) 제거되지 않았습니다:\n"
+"%(message)s"
 
 msgid "PNG files"
-msgstr ""
+msgstr "PNG 파일"
 
 msgid "Packages"
-msgstr ""
+msgstr "패키지"
 
 #, python-format
 msgid "Pango Version: %s"
-msgstr ""
+msgstr "Pango 버전: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
-msgstr ""
+msgstr "참가자"
 
 msgid "Participants"
-msgstr ""
+msgstr "참가자"
 
 msgctxt "Group chat contact role"
 msgid "Participants"
-msgstr ""
+msgstr "참가자"
 
 msgid "Participants Count"
-msgstr ""
+msgstr "참가자 수"
 
 msgid "Participants asking for voice:"
-msgstr ""
+msgstr "발언권을 요청하는 참가자:"
 
 msgid "Participants entering this group chat are allowed to send messages"
-msgstr ""
+msgstr "이 그룹 대화에 참여하는 참가자는 메시지를 보낼 수 있습니다"
 
 msgid ""
 "Participants entering this group chat need to request permission to send "
 "messages"
 msgstr ""
+"이 그룹 대화에 참여하는 참가자는 메시지를 보내려면 권한을 요청해야 합니다"
 
 msgid "Pass_word"
-msgstr ""
+msgstr "비밀번호(_W)"
 
 msgid "Password"
-msgstr ""
+msgstr "비밀번호"
 
 msgid "Password Change Failed"
-msgstr ""
+msgstr "비밀번호 변경 실패"
 
 msgid "Password Changed"
-msgstr ""
+msgstr "비밀번호 변경됨"
 
 msgid "Password Required"
-msgstr ""
+msgstr "비밀번호 필요"
 
 msgctxt "Group chat feature"
 msgid "Password Required"
-msgstr ""
+msgstr "비밀번호 필요"
+
+#, fuzzy
+msgid "Password incorrect"
+msgstr "현재 비밀번호가 올바르지 않습니다"
 
 msgid "Passwords do not match"
-msgstr ""
+msgstr "비밀번호가 일치하지 않습니다"
 
 msgid "Paste Last Input"
-msgstr ""
+msgstr "마지막 입력 붙여넣기"
 
 msgid "Paste as Code Block"
-msgstr ""
+msgstr "코드 블록으로 붙여넣기"
 
 msgid "Paste as Quote"
-msgstr ""
+msgstr "인용문으로 붙여넣기"
 
 msgid "Paste your OpenPGP key here"
-msgstr ""
+msgstr "여기에 OpenPGP 키를 붙여넣으세요"
 
 msgid "Pasting Content Failed"
-msgstr ""
+msgstr "콘텐츠 붙여넣기 실패"
 
 msgid "Path length constraint exceeded"
-msgstr ""
+msgstr "경로 길이 제약 초과"
 
 msgid "Pause"
-msgstr ""
+msgstr "일시 중지"
 
 msgid "Pending"
-msgstr ""
+msgstr "보류 중"
 
 msgid "Pending Voice Requests"
-msgstr ""
+msgstr "보류 중인 발언권 요청"
 
 msgid "Permanently"
-msgstr ""
+msgstr "영구적으로"
 
 msgid "Permanently remove this group chat from the server"
-msgstr ""
+msgstr "서버에서 이 그룹 대화를 영구적으로 제거"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
-msgstr ""
+msgstr "영구적"
 
 msgid "Personal Settings"
-msgstr ""
+msgstr "개인 설정"
 
 msgid "Personal notes about this contact"
-msgstr ""
+msgstr "이 연락처에 대한 개인 메모"
 
 msgid "Phone"
-msgstr ""
+msgstr "전화"
 
 msgid "Phone No."
-msgstr ""
+msgstr "전화번호."
 
 msgid "Picture and Name"
-msgstr ""
+msgstr "사진 및 이름"
 
 msgid "Pin Chat"
-msgstr ""
+msgstr "대화 고정"
 
 msgid "Pinned"
-msgstr ""
+msgstr "고정됨"
 
 msgid "Pipewire"
-msgstr ""
+msgstr "Pipewire"
 
 msgid "Play"
-msgstr ""
+msgstr "재생"
 
 msgid "Play Sound"
-msgstr ""
+msgstr "소리 재생"
 
 msgid "Play Sounds"
-msgstr ""
+msgstr "소리 재생"
 
 msgid "Play sounds even when you are Away, Busy, etc."
-msgstr ""
+msgstr "자리 비움, 다른 용무 중 등일 때도 소리 재생."
 
 msgid "Play sounds to notify about events"
-msgstr ""
+msgstr "이벤트를 알리기 위해 소리 재생"
 
 msgid "Please choose an account"
-msgstr ""
+msgstr "계정을 선택하세요"
 
 msgid ""
 "Please choose which of your OpenPGP keys Gajim should use for encrypting "
 "your chat."
-msgstr ""
+msgstr "대화를 암호화하는 데 Gajim이 사용할 OpenPGP 키를 선택하세요."
 
 msgid "Please enter an XMPP address"
-msgstr ""
+msgstr "XMPP 주소를 입력하세요"
 
 msgid "Please enter your credentials or Sign Up"
-msgstr ""
+msgstr "자격 증명을 입력하거나 가입하세요"
 
 msgid "Please enter your new password."
-msgstr ""
+msgstr "새 비밀번호를 입력하세요."
 
 #, python-format
 msgid ""
@@ -3345,435 +3475,445 @@ msgid ""
 "%(jid)s\n"
 "(Account: %(account)s)"
 msgstr ""
+"비밀번호를 입력하세요\n"
+"%(jid)s\n"
+"(계정: %(account)s)"
 
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
-msgstr ""
+msgstr "\"%s\"에 연결되어 있는지 확인하세요."
 
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
+"계정 중 하나를 선택하세요.\n"
+"Gajim은 선택한 계정과 대화의 모든 메시지를 선택한 디렉터리로 내보냅니다."
 
 msgid ""
 "Please store this password for your OpenPGP key backup somewhere safe. You "
 "will need this password if you want to restore the key or when using it with "
 "other devices."
 msgstr ""
+"OpenPGP 키 백업용 비밀번호를 안전한 곳에 저장하세요. 키를 복원하거나 다른 장"
+"치에서 사용할 때 이 비밀번호가 필요합니다."
 
 msgid "Please use these settings with caution!"
-msgstr ""
+msgstr "이 설정은 주의해서 사용하세요!"
 
 msgid "Plugin Failed"
-msgstr ""
+msgstr "플러그인 실패"
 
 msgid "Plugin Settings"
-msgstr ""
+msgstr "플러그인 설정"
 
 msgid "Plugin Update"
-msgstr ""
+msgstr "플러그인 업데이트"
 
 msgid "Plugin already exists"
-msgstr ""
+msgstr "플러그인이 이미 존재합니다"
 
 msgid "Plugin could not be loaded"
-msgstr ""
+msgstr "플러그인을 로드할 수 없습니다"
 
 msgid "Plugins"
-msgstr ""
+msgstr "플러그인"
 
 msgid "Plugins Updated Successfully"
-msgstr ""
+msgstr "플러그인이 성공적으로 업데이트됨"
 
 msgid "Port"
-msgstr ""
+msgstr "포트"
 
 msgid "Port must be a number between 0 and 65535"
-msgstr ""
+msgstr "포트는 0에서 65535 사이의 숫자여야 합니다"
 
 msgid "Post Office Box"
-msgstr ""
+msgstr "사서함"
 
 msgid "Postal Code"
-msgstr ""
+msgstr "우편번호"
 
 msgid "Prefer direct messages in private group chats "
-msgstr ""
+msgstr "비공개 그룹 대화에서 다이렉트 메시지 선호 "
 
 msgctxt "Configuration"
 msgid "Preference Name"
-msgstr ""
+msgstr "환경설정 이름"
 
 msgid "Preferences"
-msgstr ""
+msgstr "환경설정"
 
 msgid "Presets"
-msgstr ""
+msgstr "사전 설정"
 
 msgid ""
 "Press the keys you want to associate with this action. To disable this "
 "shortcut, click apply."
 msgstr ""
+"이 작업과 연결할 키를 누르세요. 이 단축키를 비활성화하려면 적용을 클릭하세요."
 
 msgid "Preview Size"
-msgstr ""
+msgstr "미리보기 크기"
 
 msgid "Preview all Image URLs"
-msgstr ""
+msgstr "모든 이미지 URL 미리보기"
 
 msgid "Preview in Public Group Chats"
-msgstr ""
+msgstr "공개 그룹 대화에서 미리보기"
 
 msgid "Preview new messages in notification popup?"
-msgstr ""
+msgstr "알림 팝업에서 새 메시지를 미리보시겠습니까?"
 
 msgid "Previous"
-msgstr ""
+msgstr "이전"
 
 msgid "Print XML stanzas and other debug information"
-msgstr ""
+msgstr "XML 스탠자 및 기타 디버그 정보 출력"
 
 msgid "Priority"
-msgstr ""
+msgstr "우선순위"
 
 msgid "Privacy"
-msgstr ""
+msgstr "개인정보"
 
 #, python-format
 msgid "Privacy – %(account)s"
-msgstr ""
+msgstr "개인정보 – %(account)s"
 
 msgid "Private"
-msgstr ""
+msgstr "비공개"
 
 msgid "Processing image…"
-msgstr ""
+msgstr "이미지 처리 중…"
 
 msgid "Profile"
-msgstr ""
+msgstr "프로필"
 
 msgid "Profile application with cprofile"
-msgstr ""
+msgstr "cprofile로 애플리케이션 프로파일링"
 
 msgid "Pronouns"
-msgstr ""
+msgstr "대명사"
 
 msgid "Protocol"
-msgstr ""
+msgstr "프로토콜"
 
 #, python-format
 msgid "Provider - %(account)s"
-msgstr ""
+msgstr "공급자 - %(account)s"
 
 #, python-format
 msgid "Provider Category: %s"
-msgstr ""
+msgstr "공급자 카테고리: %s"
 
 #, python-format
 msgid "Provider Contacts - %(account)s"
-msgstr ""
+msgstr "공급자 연락처 - %(account)s"
 
 msgid "Provider Infos"
-msgstr ""
+msgstr "공급자 정보"
 
 msgid "Providers list is up to date"
-msgstr ""
+msgstr "공급자 목록이 최신 상태입니다"
 
 msgid "Prox_y"
-msgstr ""
+msgstr "프록시(_Y)"
 
 msgid "Proxies"
-msgstr ""
+msgstr "프록시"
 
 msgid "Proxy"
-msgstr ""
+msgstr "프록시"
 
 msgid "Proxy, custom hostname and port"
-msgstr ""
+msgstr "프록시, 사용자 지정 호스트명 및 포트"
 
 msgid "Public"
-msgstr ""
+msgstr "공개"
 
 msgctxt "Group chat feature"
 msgid "Public"
-msgstr ""
+msgstr "공개"
 
 msgctxt "Profile"
 msgid "Public Encryption Key"
-msgstr ""
+msgstr "공개 암호화 키"
 
 msgid "Public Information"
-msgstr ""
+msgstr "공개 정보"
 
 msgid "Public Key Information"
-msgstr ""
+msgstr "공개 키 정보"
 
 msgid "Public Key: "
-msgstr ""
+msgstr "공개 키: "
 
 #, python-format
 msgid "Pulse: %s"
-msgstr ""
+msgstr "Pulse: %s"
 
 msgid "Purge"
-msgstr ""
+msgstr "삭제"
 
 msgid "Purge Chat History"
-msgstr ""
+msgstr "대화 기록 삭제"
 
 msgid "Purge all Chat History?"
-msgstr ""
+msgstr "모든 대화 기록을 삭제하시겠습니까?"
 
 #, python-format
 msgid "PyGObject Version: %s"
-msgstr ""
+msgstr "PyGObject 버전: %s"
 
 msgid "Quit"
-msgstr ""
+msgstr "종료"
 
 msgid "Quit Gajim"
-msgstr ""
+msgstr "Gajim 종료"
 
 msgid "Quitting…"
-msgstr ""
+msgstr "종료 중…"
 
 msgid "Quote Next Message"
-msgstr ""
+msgstr "다음 메시지 인용"
 
 msgid "Quote Previous Message"
-msgstr ""
+msgstr "이전 메시지 인용"
 
 msgid "Re-Login Now?"
-msgstr ""
+msgstr "지금 다시 로그인하시겠습니까?"
 
 msgid "Re_gister"
-msgstr ""
+msgstr "등록(_G)"
 
 #, python-format
 msgid "React with %s"
-msgstr ""
+msgstr "%s(으)로 반응"
 
 #, python-format
 msgid "Reaction from %(nickname)s (%(chat)s)"
-msgstr ""
+msgstr "%(nickname)s님의 반응 (%(chat)s)"
 
 #, python-format
 msgid "Reaction from %s"
-msgstr ""
+msgstr "%s님의 반응"
 
 msgid "Reactions"
-msgstr ""
+msgstr "반응"
 
 msgid "Read Receipts"
-msgstr ""
+msgstr "읽음 확인"
 
 msgid "Read _Wikipedia Article"
-msgstr ""
+msgstr "위키백과 문서 읽기(_W)"
 
 msgid "Read more about blind trust"
-msgstr ""
+msgstr "무조건 신뢰에 대해 자세히 알아보기"
 
 msgid "Reason"
-msgstr ""
+msgstr "사유"
 
 msgid "Reason (optional)"
-msgstr ""
+msgstr "사유 (선택사항)"
 
 msgid "Reason (optional)..."
-msgstr ""
+msgstr "사유 (선택사항)..."
 
 msgid "Reason for destruction"
-msgstr ""
+msgstr "파괴 사유"
 
 msgid "Received"
-msgstr ""
+msgstr "받음"
 
 msgctxt "Message state"
 msgid "Received"
-msgstr ""
+msgstr "받음"
 
 msgid "Recognize your account by color"
-msgstr ""
+msgstr "색상으로 계정 인식"
 
 msgid "Record"
-msgstr ""
+msgstr "녹음"
 
 msgid "Record Voice Message… (hold button to record directly)"
-msgstr ""
+msgstr "음성 메시지 녹음… (버튼을 길게 눌러 바로 녹음)"
 
 msgid "Redirect"
-msgstr ""
+msgstr "리디렉션"
 
 msgid "Register"
-msgstr ""
+msgstr "등록"
 
 msgid "Register on the Website"
-msgstr ""
+msgstr "웹사이트에서 등록"
 
 msgid "Registering…"
-msgstr ""
+msgstr "등록 중…"
 
 msgid "Registration failed"
-msgstr ""
+msgstr "등록 실패"
 
 msgid "Registration successful"
-msgstr ""
+msgstr "등록 성공"
 
 msgid "Reject file transfer"
-msgstr ""
+msgstr "파일 전송 거부"
 
 msgid "Reload"
-msgstr ""
+msgstr "다시 로드"
 
 msgid "Remember Last Status"
-msgstr ""
+msgstr "마지막 상태 기억"
 
 msgid "Remote server not found"
-msgstr ""
+msgstr "원격 서버를 찾을 수 없습니다"
 
 msgid "Remote server timeout"
-msgstr ""
+msgstr "원격 서버 시간 초과"
 
 msgid "Remove"
-msgstr ""
+msgstr "제거"
 
 #, python-format
 msgid "Remove %s contacts from your contact list?"
-msgstr ""
+msgstr "연락처 목록에서 %s개의 연락처를 제거하시겠습니까?"
 
 msgid "Remove Account"
-msgstr ""
+msgstr "계정 제거"
 
 msgid "Remove Backup"
-msgstr ""
+msgstr "백업 제거"
 
 msgid "Remove Chat History?"
-msgstr ""
+msgstr "대화 기록을 제거하시겠습니까?"
 
 msgid "Remove Contact"
-msgstr ""
+msgstr "연락처 제거"
 
 msgid "Remove Contacts?"
-msgstr ""
+msgstr "연락처를 제거하시겠습니까?"
 
 msgid "Remove Contact…"
-msgstr ""
+msgstr "연락처 제거…"
 
 msgid "Remove From Contact List?"
-msgstr ""
+msgstr "연락처 목록에서 제거하시겠습니까?"
 
 msgid "Remove Group?"
-msgstr ""
+msgstr "그룹을 제거하시겠습니까?"
 
 msgid "Remove Group…"
-msgstr ""
+msgstr "그룹 제거…"
 
 msgid "Remove History…"
-msgstr ""
+msgstr "기록 제거…"
 
 msgid "Remove Proxy"
-msgstr ""
+msgstr "프록시 제거"
 
 msgid "Remove Proxy?"
-msgstr ""
+msgstr "프록시를 제거하시겠습니까?"
 
 msgid "Remove Public Keys?"
-msgstr ""
+msgstr "공개 키를 제거하시겠습니까?"
 
 msgid "Remove Public Keys…"
-msgstr ""
+msgstr "공개 키 제거…"
 
 msgid "Remove Setting"
-msgstr ""
+msgstr "설정 제거"
 
 msgid "Remove Theme"
-msgstr ""
+msgstr "테마 제거"
 
 msgid "Remove Workspace?"
-msgstr ""
+msgstr "작업 공간을 제거하시겠습니까?"
 
 msgid "Remove from Contact List…"
-msgstr ""
+msgstr "연락처 목록에서 제거…"
 
 msgid "Remove from Group"
-msgstr ""
+msgstr "그룹에서 제거"
 
 msgid "Remove from Server"
-msgstr ""
+msgstr "서버에서 제거"
 
 msgid "Remove this workspace"
-msgstr ""
+msgstr "이 작업 공간 제거"
 
 msgid "Remove your group chat avatar"
-msgstr ""
+msgstr "그룹 대화 아바타 제거"
 
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "프로필 사진 제거"
 
 #, python-format
 msgid "Removed %(count)s contact"
 msgid_plural "Removed %(count)s contacts"
-msgstr[0] ""
+msgstr[0] "%(count)s개의 연락처 제거됨"
 
 msgid "Remove…"
-msgstr ""
+msgstr "제거…"
 
 msgid "Removing Account..."
-msgstr ""
+msgstr "계정 제거 중..."
 
 msgid ""
 "Removing the account will delete most related data. If you want to "
 "disconnect the account for a short time, use the status selector."
 msgstr ""
+"계정을 제거하면 관련 데이터 대부분이 삭제됩니다. 짧은 시간 동안 계정 연결을 "
+"끊으려면 상태 선택기를 사용하세요."
 
 msgid "Rename"
-msgstr ""
+msgstr "이름 바꾸기"
 
 msgid "Rename Contact?"
-msgstr ""
+msgstr "연락처 이름을 바꾸시겠습니까?"
 
 msgid "Rename…"
-msgstr ""
+msgstr "이름 바꾸기…"
 
 msgid "Reply…"
-msgstr ""
+msgstr "답장…"
 
 msgid "Request"
-msgstr ""
+msgstr "요청"
 
 msgid "Request Search Form"
-msgstr ""
+msgstr "검색 양식 요청"
 
 msgid "Request Voice"
-msgstr ""
+msgstr "발언권 요청"
 
 msgid "Request contact information (Tune, Location)"
-msgstr ""
+msgstr "연락처 정보 요청 (음악, 위치)"
 
 msgid "Request pending"
-msgstr ""
+msgstr "요청 보류 중"
 
 msgid "Request to see this contact's online status"
-msgstr ""
+msgstr "이 연락처의 온라인 상태를 보기 위한 요청"
 
 msgid "Requesting Command List"
-msgstr ""
+msgstr "명령 목록 요청 중"
 
 msgid "Requesting HTTP File Upload Slot…"
-msgstr ""
+msgstr "HTTP 파일 업로드 슬롯 요청 중…"
 
 msgid "Requesting Register Form"
-msgstr ""
+msgstr "등록 양식 요청 중"
 
 msgid "Requesting register form from server…"
-msgstr ""
+msgstr "서버에서 등록 양식 요청 중…"
 
 msgid "Requesting search form from server"
-msgstr ""
+msgstr "서버에서 검색 양식 요청 중"
 
 msgid "Required"
-msgstr ""
+msgstr "필수"
 
 msgid ""
 "Requires:\n"
@@ -3781,696 +3921,738 @@ msgid ""
 "org.gnome.Mutter.IdleMonitor or\n"
 "libxss"
 msgstr ""
+"필요:\n"
+"org.freedesktop.ScreenSaver 또는\n"
+"org.gnome.Mutter.IdleMonitor 또는\n"
+"libxss"
 
 msgid "Requires: gnome-keyring or kwallet"
-msgstr ""
+msgstr "필요: gnome-keyring 또는 kwallet"
 
 msgid "Requires: libspelling"
-msgstr ""
+msgstr "필요: libspelling"
 
 msgid "Reserved Name"
-msgstr ""
+msgstr "예약된 이름"
 
 msgid "Reset"
-msgstr ""
+msgstr "재설정"
 
 msgid "Reset Filters"
-msgstr ""
+msgstr "필터 재설정"
 
 msgid "Reset Font Size"
-msgstr ""
+msgstr "글꼴 크기 재설정"
 
 msgid "Reset Hints"
-msgstr ""
+msgstr "힌트 재설정"
 
 msgid "Reset all chats to the current default value"
-msgstr ""
+msgstr "모든 대화를 현재 기본값으로 재설정"
 
 msgid "Reset all group chats to the current default value"
-msgstr ""
+msgstr "모든 그룹 대화를 현재 기본값으로 재설정"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "원래 이름으로 재설정"
 
 msgid "Resets value to default"
-msgstr ""
+msgstr "값을 기본값으로 재설정"
 
 msgid "Resource"
-msgstr ""
+msgstr "리소스"
 
 msgid "Restart Gajim to finish this update"
-msgstr ""
-
-msgid "Restart Gajim to start debug logging"
-msgstr ""
+msgstr "이 업데이트를 완료하려면 Gajim을 다시 시작하세요"
 
 msgid "Restart Pending"
-msgstr ""
+msgstr "재시작 보류 중"
 
 msgid "Restore Backup"
-msgstr ""
+msgstr "백업 복원"
 
 msgid "Restore Closed Chat"
-msgstr ""
+msgstr "닫힌 대화 복원"
 
 msgid "Restore Key"
-msgstr ""
+msgstr "키 복원"
 
 msgid "Restore last state"
-msgstr ""
+msgstr "마지막 상태 복원"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
+msgstr "마지막 세션의 상태 및 상태 메시지 복원"
 
 msgid "Retract Message?"
-msgstr ""
+msgstr "메시지를 철회하시겠습니까?"
 
 msgctxt "Message row action"
 msgid "Retract…"
-msgstr ""
+msgstr "철회…"
 
 msgid "Revoke Member"
-msgstr ""
+msgstr "회원 해제"
 
 msgid "Revoke Voice"
-msgstr ""
+msgstr "발언권 해제"
 
 msgid "Rewind 10 seconds"
-msgstr ""
+msgstr "10초 되감기"
 
 msgid "Role"
-msgstr ""
+msgstr "역할"
 
 msgctxt "Profile"
 msgid "Role"
-msgstr ""
+msgstr "역할"
 
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
-msgstr ""
+msgstr "%s님의 역할이 이 그룹 대화에서 제거되었습니다"
 
 msgid "SHA-1:"
-msgstr ""
+msgstr "SHA-1:"
 
 msgid "SHA-256:"
-msgstr ""
+msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
-msgstr ""
+msgstr "SSL 인증서 확인 오류"
 
 msgid "SSL certificate error"
-msgstr ""
+msgstr "SSL 인증서 오류"
 
 msgid "STUN server to use when using Jingle"
-msgstr ""
+msgstr "Jingle 사용 시 사용할 STUN 서버"
 
 msgid "SVG files"
-msgstr ""
+msgstr "SVG 파일"
 
 msgid "Sales"
-msgstr ""
+msgstr "판매"
 
 msgid "Save"
-msgstr ""
+msgstr "저장"
 
 msgid "Save Password"
-msgstr ""
+msgstr "비밀번호 저장"
 
 msgid "Save as..."
-msgstr ""
+msgstr "다른 이름으로 저장..."
 
 msgid "Save display name"
-msgstr ""
+msgstr "표시 이름 저장"
 
 msgid "Saving Avatar Failed"
-msgstr ""
+msgstr "아바타 저장 실패"
 
 msgid "Saving avatar image failed"
-msgstr ""
+msgstr "아바타 이미지 저장 실패"
 
 msgid "Say hi to your new contact…"
-msgstr ""
+msgstr "새 연락처에게 인사하세요…"
 
 msgid "Scan QR Code"
-msgstr ""
+msgstr "QR 코드 스캔"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr ""
+msgstr "이 QR 코드를 스캔하여 %s에 참여하세요."
 
 #, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr ""
+msgstr "이 QR 코드를 스캔하여 %s님과 대화를 시작하세요."
+
+#, fuzzy
+msgid "Scan this QR code to transfer the key to another device."
+msgstr "이 QR 코드를 스캔하여 %s님과 대화를 시작하세요."
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
-msgstr ""
+msgstr "스캔 중 %(current)d / %(total)d ..."
 
 msgid "Scroll Down"
-msgstr ""
+msgstr "아래로 스크롤"
 
 msgid "Scroll Up"
-msgstr ""
+msgstr "위로 스크롤"
 
 msgid "Scroll to this message"
-msgstr ""
+msgstr "이 메시지로 스크롤"
 
 msgid "Scroll up to load more chat history…"
-msgstr ""
+msgstr "위로 스크롤하여 더 많은 대화 기록 불러오기…"
 
 msgid "Search"
-msgstr ""
+msgstr "검색"
 
 msgid "Search Chat History"
-msgstr ""
+msgstr "대화 기록 검색"
 
 msgid "Search Filters"
-msgstr ""
+msgstr "검색 필터"
 
 msgid "Search Filters (Active)"
-msgstr ""
+msgstr "검색 필터 (활성)"
 
 msgid "Search Participants…"
-msgstr ""
+msgstr "참가자 검색…"
 
 msgid "Search Result"
-msgstr ""
+msgstr "검색 결과"
 
 msgid "Search all Chats"
-msgstr ""
+msgstr "모든 대화 검색"
+
+msgid "Search all messages"
+msgstr "모든 메시지 검색"
 
 msgid "Search contacts..."
-msgstr ""
+msgstr "연락처 검색..."
 
 msgid "Search for Gajim updates periodically?"
-msgstr ""
+msgstr "Gajim 업데이트를 주기적으로 검색하시겠습니까?"
 
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+"그룹 대화를 전체에서 검색\n"
+"(Enter 키를 눌러 검색 시작)"
 
 msgid "Search in chats…"
-msgstr ""
+msgstr "대화에서 검색…"
 
 msgid "Searching"
-msgstr ""
+msgstr "검색 중"
+
+msgid "Searching all…"
+msgstr "전체 검색 중…"
 
 msgid "Searching…"
-msgstr ""
+msgstr "검색 중…"
 
 #, python-format
 msgid ""
 "Searching…\n"
 "%s results"
 msgstr ""
+"검색 중…\n"
+"%s개 결과"
 
 msgid "Search…"
-msgstr ""
+msgstr "검색…"
+
+#, fuzzy
+msgid "Secret Key Management"
+msgstr "신뢰 관리"
 
 msgid "Secure Password Storage"
-msgstr ""
+msgstr "보안 비밀번호 저장소"
 
 msgid ""
 "Secured conversations: State of the art end-to-end encryption for your "
 "conversations. Share messages, pictures, and files with your contacts – and "
 "only with them."
 msgstr ""
+"보안 대화: 귀하의 대화를 위한 최첨단 종단 간 암호화. 메시지, 사진, 파일을 연"
+"락처와만 공유하세요."
 
 msgid "Security"
-msgstr ""
+msgstr "보안"
 
 msgid "Security Labels"
-msgstr ""
+msgstr "보안 레이블"
 
 msgid "Security Warning"
-msgstr ""
+msgstr "보안 경고"
 
 #, python-format
 msgid "Seen by %s"
-msgstr ""
+msgstr "%s님이 읽음"
 
 #, python-format
 msgid "Seen by %s participants"
-msgstr ""
+msgstr "%s명의 참가자가 읽음"
 
 msgid "Select Account"
-msgstr ""
+msgstr "계정 선택"
 
 msgctxt "Message row action"
 msgid "Select Messages…"
-msgstr ""
+msgstr "메시지 선택…"
 
 msgid "Select Secret Key"
-msgstr ""
+msgstr "비밀 키 선택"
 
 msgid "Select a security label for your message…"
-msgstr ""
+msgstr "메시지에 대한 보안 레이블을 선택하세요…"
 
 msgid "Select an activity to see details."
-msgstr ""
+msgstr "세부 정보를 보려면 활동을 선택하세요."
 
 msgid "Select playback speed"
-msgstr ""
+msgstr "재생 속도 선택"
 
 msgid "Select the account you want to use to create a new group chat"
-msgstr ""
+msgstr "새 그룹 대화를 만들 때 사용할 계정을 선택하세요"
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
+msgstr "오디오 입력 선택 (예: 마이크)"
 
 msgid "Selected image could not be loaded."
-msgstr ""
+msgstr "선택한 이미지를 불러올 수 없습니다."
 
 msgid "Self signed certificate"
-msgstr ""
+msgstr "자체 서명된 인증서"
 
 msgid "Self signed certificate in certificate chain"
-msgstr ""
+msgstr "인증서 체인의 자체 서명된 인증서"
 
 msgctxt "Group chat feature"
 msgid "Semi-Anonymous"
-msgstr ""
+msgstr "반익명"
 
 msgid "Send Chat Indicators"
-msgstr ""
+msgstr "대화 표시기 전송"
 
 msgid "Send Chat Indicators in Group Chats"
-msgstr ""
+msgstr "그룹 대화에서 대화 표시기 전송"
 
 msgid "Send Chat State"
-msgstr ""
+msgstr "대화 상태 전송"
 
 msgid "Send File"
-msgstr ""
+msgstr "파일 전송"
 
 #, python-format
 msgid "Send File (max. %s)…"
-msgstr ""
+msgstr "파일 전송 (최대 %s)…"
 
 msgid "Send Files"
-msgstr ""
+msgstr "파일 전송"
 
 msgid "Send File…"
-msgstr ""
+msgstr "파일 전송…"
 
 msgid "Send Message"
-msgstr ""
+msgstr "메시지 전송"
 
 msgid "Send Message Receipts"
-msgstr ""
+msgstr "메시지 수신 확인 전송"
 
 msgid "Send Messages with Control+Enter"
-msgstr ""
+msgstr "Control+Enter로 메시지 전송"
 
 msgid "Send _Report"
-msgstr ""
+msgstr "보고서 전송(_R)"
 
 msgid "Send and receive read receipts"
-msgstr ""
+msgstr "읽음 확인 전송 및 수신"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
-msgstr ""
+msgstr "전송한 연락처: \"%(jid)s\" (%(name)s)"
 
 msgid "Sent contacts:"
-msgstr ""
-
-msgid "Separate profile files completely (even history database and plugins)"
-msgstr ""
+msgstr "전송한 연락처:"
 
 msgid "Serial Number: "
-msgstr ""
+msgstr "일련 번호: "
 
 msgid "Server Shutdown"
-msgstr ""
+msgstr "서버 종료"
 
 msgid "Service"
-msgstr ""
+msgstr "서비스"
 
 msgid "Service Discovery"
-msgstr ""
+msgstr "서비스 탐색"
 
 #, python-format
 msgid "Service Discovery using account %s"
-msgstr ""
+msgstr "%s 계정을 사용한 서비스 탐색"
 
 msgid "Service Gateway"
-msgstr ""
+msgstr "서비스 게이트웨이"
 
 msgid "Service Not Browsable"
-msgstr ""
+msgstr "서비스를 탐색할 수 없음"
 
 msgid "Service Not Found"
-msgstr ""
+msgstr "서비스를 찾을 수 없음"
 
 msgid "Service Provider"
-msgstr ""
+msgstr "서비스 제공자"
 
 msgid "Set Trust"
-msgstr ""
+msgstr "신뢰 설정"
 
 msgid "Set a subject for this chat"
-msgstr ""
+msgstr "이 대화의 주제 설정"
 
 msgid "Set configuration directory"
-msgstr ""
+msgstr "설정 디렉터리 설정"
 
 msgid "Set date…"
-msgstr ""
+msgstr "날짜 설정…"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
-msgstr ""
+msgstr "GLib 디버그 메시지가 출력되도록 환경 변수 설정"
 
 msgid "Setting is locked by the system"
-msgstr ""
+msgstr "설정이 시스템에 의해 잠겼습니다"
 
 msgid "Settings"
-msgstr ""
+msgstr "설정"
 
 msgid "Setup"
-msgstr ""
+msgstr "설정"
 
 msgid "Setup Complete"
-msgstr ""
+msgstr "설정 완료"
 
 msgid "Setup OpenPGP Encryption"
-msgstr ""
+msgstr "OpenPGP 암호화 설정"
 
 msgid "Share Contact…"
-msgstr ""
+msgstr "연락처 공유…"
 
 msgid "Share Group Chat…"
-msgstr ""
+msgstr "그룹 대화 공유…"
+
+#, fuzzy
+msgid "Share Secret Key"
+msgstr "비밀 키 선택"
 
 msgid "Share Status"
-msgstr ""
+msgstr "상태 공유"
 
 msgid "Share Video"
-msgstr ""
+msgstr "비디오 공유"
 
 msgid "Share my online status"
-msgstr ""
+msgstr "내 온라인 상태 공유"
+
+#, fuzzy
+msgid "Share…"
+msgstr "연락처 공유…"
 
 msgid "Shortcuts"
-msgstr ""
+msgstr "바로 가기"
 
 msgid "Show Chat List"
-msgstr ""
+msgstr "대화 목록 표시"
 
 msgid "Show Commands"
-msgstr ""
+msgstr "명령 표시"
 
 msgid "Show Contact Infos"
-msgstr ""
+msgstr "연락처 정보 표시"
 
 msgid "Show Content"
-msgstr ""
+msgstr "내용 표시"
 
 msgid "Show Controls"
-msgstr ""
+msgstr "컨트롤 표시"
 
 msgid "Show Details"
+msgstr "세부 정보 표시"
+
+msgid "Show Gajim's internal logs and XML protocol data"
 msgstr ""
 
 msgid "Show Inactive Devices"
-msgstr ""
+msgstr "비활성 기기 표시"
 
 msgid "Show Join/Leave"
-msgstr ""
+msgstr "참가/퇴장 표시"
 
 msgid "Show Joined / Left"
-msgstr ""
+msgstr "참가함 / 퇴장함 표시"
 
 msgid "Show Link Preview"
-msgstr ""
+msgstr "링크 미리 보기 표시"
 
 msgid "Show Plugins"
-msgstr ""
+msgstr "플러그인 표시"
 
 msgid "Show Send Message Button"
-msgstr ""
+msgstr "메시지 전송 버튼 표시"
+
+#, fuzzy
+msgid "Show Sidebar"
+msgstr "제목 표시줄 표시"
 
 msgid "Show Status Changes"
-msgstr ""
+msgstr "상태 변경 표시"
 
 msgid "Show Subject on Join"
-msgstr ""
+msgstr "참가 시 주제 표시"
 
 msgid "Show Title Bar"
-msgstr ""
+msgstr "제목 표시줄 표시"
 
 msgid "Show Transfers"
-msgstr ""
+msgstr "전송 표시"
 
 msgid "Show Voice Message Button"
-msgstr ""
+msgstr "음성 메시지 버튼 표시"
 
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
 "the dialog."
 msgstr ""
+"연락처를 차단할 때 확인 대화 상자를 표시하시겠습니까? 빈 문자열은 대화 상자"
+"를 표시하지 않음을 의미합니다."
 
 msgid "Show a list of emojis"
-msgstr ""
+msgstr "이모지 목록 표시"
 
 msgid "Show all reactions"
-msgstr ""
+msgstr "모든 반응 표시"
 
 msgid "Show all warnings"
-msgstr ""
+msgstr "모든 경고 표시"
 
 msgid "Show in Taskbar"
-msgstr ""
+msgstr "작업 표시줄에 표시"
 
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
+msgstr "서버가 XEP-0258을 지원하는 경우 메시지 기밀성을 설명하는 레이블 표시"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
 "multiple messages from the same sender within a specific timespan."
 msgstr ""
+"특정 시간 내에 동일한 발신자의 여러 메시지가 있는 경우 메시지 메타 데이터 (아"
+"바타, 닉네임, 타임스탬프)를 한 번만 표시합니다."
 
 msgid "Show notifications even if you are Away, Busy, etc."
-msgstr ""
+msgstr "자리 비움, 다른 용무 중 등의 상태에서도 알림 표시."
 
 msgid "Show notifications on the system tray icon"
-msgstr ""
+msgstr "시스템 트레이 아이콘에 알림 표시"
 
 msgid "Show on Startup"
-msgstr ""
+msgstr "시작 시 표시"
 
 msgid "Show only critical errors"
-msgstr ""
+msgstr "중요한 오류만 표시"
 
 msgid ""
 "Show previews automatically in public group chats (may disclose your data)"
-msgstr ""
+msgstr "공개 그룹 대화에서 자동으로 미리 보기 표시 (데이터가 노출될 수 있음)"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
-msgstr ""
+msgstr "이미지가 포함된 모든 URL에 대해 미리 보기 표시 (안전하지 않을 수 있음)"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
-msgstr ""
+msgstr "단축 코드 제안 표시, 예. :+1:"
 
 msgid "Show the application's version"
-msgstr ""
+msgstr "애플리케이션 버전 표시"
 
 msgid "Show the window’s title bar"
-msgstr ""
+msgstr "창의 제목 표시줄 표시"
 
 msgid "Show window in the taskbar"
-msgstr ""
+msgstr "작업 표시줄에 창 표시"
 
 msgid "Show window when starting Gajim"
-msgstr ""
+msgstr "Gajim 시작 시 창 표시"
 
 msgid "Show/Hide Window"
-msgstr ""
+msgstr "창 표시/숨기기"
 
 msgid "Sign In"
-msgstr ""
+msgstr "로그인"
 
 msgid "Sign Up"
-msgstr ""
+msgstr "가입"
 
 msgid "Sign up Anonymously"
-msgstr ""
+msgstr "익명으로 가입"
 
 msgid "Sign up for a new account with a provider of your choice"
-msgstr ""
+msgstr "원하는 제공자로 새 계정 가입"
 
 msgid "Signup not allowed"
-msgstr ""
+msgstr "가입이 허용되지 않음"
 
 msgid "Size of preview images in pixels"
-msgstr ""
+msgstr "미리 보기 이미지 크기 (픽셀)"
 
 msgid "Software"
-msgstr ""
+msgstr "소프트웨어"
 
 msgid "Something went wrong. Video feature disabled."
-msgstr ""
+msgstr "문제가 발생했습니다. 비디오 기능이 비활성화되었습니다."
 
 msgid "Sorry, that should not have happened"
-msgstr ""
+msgstr "죄송합니다. 이런 일이 발생해서는 안 됩니다"
 
 msgid "Sort Participant List by Status"
-msgstr ""
+msgstr "상태별로 참가자 목록 정렬"
 
 msgid "Sort by Status"
-msgstr ""
+msgstr "상태별 정렬"
 
 msgid "Sounds"
-msgstr ""
+msgstr "소리"
 
 msgid "Sounds When Away"
-msgstr ""
+msgstr "자리 비움 시 소리"
 
 msgid "Spaces are not allowed"
-msgstr ""
+msgstr "공백은 허용되지 않습니다"
 
 msgid "Spam"
-msgstr ""
+msgstr "스팸"
 
 #, python-format
 msgid "Speed: %s"
-msgstr ""
+msgstr "속도: %s"
 
 msgid "Spell Checker"
-msgstr ""
+msgstr "맞춤법 검사기"
 
 msgid "Spell Checking"
-msgstr ""
+msgstr "맞춤법 검사"
 
 msgid "Stage"
-msgstr ""
+msgstr "단계"
 
 msgid "Start / Join Chat"
-msgstr ""
+msgstr "대화 시작 / 참가"
 
 msgid "Start Chat"
-msgstr ""
+msgstr "대화 시작"
 
 msgid "Start Chatting…"
-msgstr ""
+msgstr "대화 시작…"
 
 msgid "Start Chat…"
-msgstr ""
+msgstr "대화 시작…"
 
 msgid "Start Search..."
-msgstr ""
+msgstr "검색 시작..."
 
 msgid "Start a new chat"
-msgstr ""
+msgstr "새 대화 시작"
 
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
 msgstr ""
+"새 대화를 시작하거나 그룹 대화에 참가하거나 전체에서 새 그룹 대화를 검색하세"
+"요. XMPP 주소를 입력할 수도 있습니다."
 
 msgid "Start/Stop recording"
-msgstr ""
+msgstr "녹음 시작/중지"
 
 msgid "State"
-msgstr ""
+msgstr "상태"
 
 msgid "Status"
-msgstr ""
+msgstr "상태"
 
 msgid "Status Message"
-msgstr ""
+msgstr "상태 메시지"
 
 msgid "Status Message: Text Color"
-msgstr ""
+msgstr "상태 메시지: 텍스트 색상"
 
 msgid "Status Message: Text Font"
-msgstr ""
+msgstr "상태 메시지: 텍스트 글꼴"
 
 msgid "Status Messages in Participants List"
-msgstr ""
+msgstr "참가자 목록의 상태 메시지"
 
 msgid "Status is not shared"
-msgstr ""
+msgstr "상태가 공유되지 않음"
 
 msgid "Status is shared"
-msgstr ""
+msgstr "상태가 공유됨"
 
 msgid "Status: Away Color"
-msgstr ""
+msgstr "상태: 자리 비움 색상"
 
 msgid "Status: DND Color"
-msgstr ""
+msgstr "상태: 다른 용무 중 색상"
 
 msgid "Status: Offline Color"
-msgstr ""
+msgstr "상태: 오프라인 색상"
 
 msgid "Status: Online Color"
-msgstr ""
+msgstr "상태: 온라인 색상"
 
 msgid ""
 "Stay in contact: Chats and groups help you keep in touch with your friends "
 "and family. Build communities by connecting to people with the same "
 "interests. Use groups to organize the little things or the next big event."
 msgstr ""
+"연락 유지: 대화와 그룹은 친구 및 가족과 연락을 유지하는 데 도움이 됩니다. 같"
+"은 관심사를 가진 사람들과 연결하여 커뮤니티를 구축하세요. 그룹을 사용하여 작"
+"은 일이나 다음 큰 이벤트를 조직하세요."
 
 msgid "Steps to reproduce the problem…"
-msgstr ""
+msgstr "문제 재현 단계…"
 
 msgid "Stop Sharing Online Status?"
-msgstr ""
+msgstr "온라인 상태 공유를 중지하시겠습니까?"
 
 msgid "Stores the secret key encrypted on the server"
-msgstr ""
+msgstr "암호화된 비밀 키를 서버에 저장"
 
 msgid "Street"
-msgstr ""
+msgstr "거리"
 
 msgid "Strike"
-msgstr ""
+msgstr "취소선"
 
 msgid "Style"
-msgstr ""
+msgstr "스타일"
 
 msgid "Subject"
-msgstr ""
+msgstr "주제"
 
 msgid "Subject Alt Names: "
-msgstr ""
+msgstr "주체 대체 이름: "
 
 msgid "Subject issuer mismatch"
-msgstr ""
+msgstr "주체 발급자 불일치"
 
 msgid "Subject last changed by"
-msgstr ""
+msgstr "주제를 마지막으로 변경한 사람"
 
 msgctxt "Contact subscription"
 msgid "Subscribe"
-msgstr ""
+msgstr "구독"
 
 msgid "Subscribed"
-msgstr ""
+msgstr "구독됨"
 
 msgid "Subscription"
-msgstr ""
+msgstr "구독"
 
 msgid "Successfully Added Contacts"
-msgstr ""
+msgstr "연락처 추가 완료"
 
 msgid "Successfully Removed Contacts"
-msgstr ""
+msgstr "연락처 제거 완료"
 
 #, python-brace-format
 msgid "Successfully built new session with device {device_id}."
-msgstr ""
+msgstr "기기 {device_id}와 새 세션을 성공적으로 구축했습니다."
 
 msgid "Successfully imported key from server."
-msgstr ""
+msgstr "서버에서 키를 성공적으로 가져왔습니다."
 
 msgid "Support"
-msgstr ""
+msgstr "지원"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4479,827 +4661,861 @@ msgid ""
 "Alternatively, you can either minimize Gajim’s window, or hide it "
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
+"Gajim을 종료하시겠습니까?\n"
+"종료하면 메시지를 보내고 받을 수 없습니다.\n"
+"\n"
+"또는 Gajim 창을 최소화하거나 완전히 숨길 수 있습니다. Gajim의 시스템 트레이 "
+"아이콘을 사용하여 창을 복원하세요."
 
 msgid "Switch to Chat 1"
-msgstr ""
+msgstr "대화 1로 전환"
 
 msgid "Switch to Chat 2"
-msgstr ""
+msgstr "대화 2로 전환"
 
 msgid "Switch to Chat 3"
-msgstr ""
+msgstr "대화 3로 전환"
 
 msgid "Switch to Chat 4"
-msgstr ""
+msgstr "대화 4로 전환"
 
 msgid "Switch to Chat 5"
-msgstr ""
+msgstr "대화 5로 전환"
 
 msgid "Switch to Chat 6"
-msgstr ""
+msgstr "대화 6로 전환"
 
 msgid "Switch to Chat 7"
-msgstr ""
+msgstr "대화 7로 전환"
 
 msgid "Switch to Chat 8"
-msgstr ""
+msgstr "대화 8로 전환"
 
 msgid "Switch to Chat 9"
-msgstr ""
+msgstr "대화 9로 전환"
 
 msgid "Switch to Next Chat"
-msgstr ""
+msgstr "다음 대화로 전환"
 
 msgid "Switch to Next Unread Chat"
-msgstr ""
+msgstr "다음 읽지 않은 대화로 전환"
 
 msgid "Switch to Previous Chat"
-msgstr ""
+msgstr "이전 대화로 전환"
 
 msgid "Switch to Previous Unread Chat"
-msgstr ""
+msgstr "이전 읽지 않은 대화로 전환"
 
 msgid "Switch to Workspace 1"
-msgstr ""
+msgstr "작업 공간 1로 전환"
 
 msgid "Switch to Workspace 2"
-msgstr ""
+msgstr "작업 공간 2로 전환"
 
 msgid "Switch to Workspace 3"
-msgstr ""
+msgstr "작업 공간 3로 전환"
 
 msgid "Switch to Workspace 4"
-msgstr ""
+msgstr "작업 공간 4로 전환"
 
 msgid "Switch to Workspace 5"
-msgstr ""
+msgstr "작업 공간 5로 전환"
 
 msgid "Switch to Workspace 6"
-msgstr ""
+msgstr "작업 공간 6로 전환"
 
 msgid "Switch to Workspace 7"
-msgstr ""
+msgstr "작업 공간 7로 전환"
 
 msgid "Switch to Workspace 8"
-msgstr ""
+msgstr "작업 공간 8로 전환"
 
 msgid "Switch to Workspace 9"
-msgstr ""
+msgstr "작업 공간 9로 전환"
 
 msgid "Sync Group Chat Block List"
-msgstr ""
+msgstr "그룹 대화 차단 목록 동기화"
 
 msgid "Sync Threshold"
-msgstr ""
+msgstr "동기화 임계값"
 
 msgid "Synchronize"
-msgstr ""
+msgstr "동기화"
 
 msgid "Synchronize Chat History"
-msgstr ""
+msgstr "대화 기록 동기화"
 
 msgid "Synchronize History…"
-msgstr ""
+msgstr "기록 동기화…"
 
 msgid "Synchronize group chat block list with other devices"
-msgstr ""
+msgstr "그룹 대화 차단 목록을 다른 기기와 동기화"
 
 msgid "Synchronize joined group chats"
-msgstr ""
+msgstr "참가한 그룹 대화 동기화"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "참가한 그룹 대화를 다른 기기와 동기화합니다."
 
 msgid "Synchronize the status of all accounts"
-msgstr ""
+msgstr "모든 계정의 상태 동기화"
 
 msgid "Synchronizing Chat History…"
-msgstr ""
+msgstr "대화 기록 동기화 중…"
 
 msgid "System"
-msgstr ""
+msgstr "시스템"
 
 msgid "System Notifications"
-msgstr ""
+msgstr "시스템 알림"
 
 msgid "System Notifications When Away"
-msgstr ""
+msgstr "자리 비움 시 시스템 알림"
 
 msgid "System Tray Icon"
-msgstr ""
+msgstr "시스템 트레이 아이콘"
 
 msgid "System Tray Notifications"
-msgstr ""
+msgstr "시스템 트레이 알림"
 
 msgid "Telephone"
-msgstr ""
+msgstr "전화"
 
 msgid "Tell your contacts if you received a message"
-msgstr ""
+msgstr "메시지를 받았는지 연락처에 알림"
 
 msgctxt "Group chat feature"
 msgid "Temporary"
-msgstr ""
+msgstr "임시"
 
 msgctxt "Configuration type"
 msgid "Text"
-msgstr ""
+msgstr "텍스트"
 
 msgid "Text File"
-msgstr ""
+msgstr "텍스트 파일"
 
 msgid "Thanks"
-msgstr ""
+msgstr "감사합니다"
 
 msgid "Thanks to all the package maintainers."
-msgstr ""
+msgstr "모든 패키지 관리자에게 감사드립니다."
 
 msgid "The certificate does not match the expected identity of the site"
-msgstr ""
+msgstr "인증서가 사이트의 예상 ID와 일치하지 않습니다"
 
 msgid "The certificate has been revoked"
-msgstr ""
+msgstr "인증서가 취소되었습니다"
 
 msgid "The certificate has expired"
-msgstr ""
+msgstr "인증서가 만료되었습니다"
 
 msgid "The certificate’s activation time is in the future"
-msgstr ""
+msgstr "인증서의 활성화 시간이 미래입니다"
 
 msgid "The certificate’s algorithm is insecure"
-msgstr ""
+msgstr "인증서의 알고리즘이 안전하지 않습니다"
 
 msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
+"연락처에 귀하의 상태 공유를 중지했음을 알립니다. 이로 인해 다른 부작용이 발생"
+"할 수 있습니다."
 
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
-msgstr ""
+msgstr "제공자의 인증서를 확인하는 동안 다음 경고가 발생했습니다"
 
 msgid "The last message was written on a mobile client"
-msgstr ""
+msgstr "마지막 메시지가 모바일 클라이언트에서 작성되었습니다"
 
 msgid "The referenced message is not available."
-msgstr ""
+msgstr "참조된 메시지를 사용할 수 없습니다."
 
 msgid "The server has assigned or modified your nickname in this group chat"
-msgstr ""
+msgstr "서버가 이 그룹 대화에서 귀하의 닉네임을 할당하거나 수정했습니다"
 
 msgid "The server rejected the registration without an error message"
-msgstr ""
+msgstr "서버가 오류 메시지 없이 등록을 거부했습니다"
 
 msgid "The server returned an insecure transport (HTTP)."
-msgstr ""
+msgstr "서버가 안전하지 않은 전송(HTTP)을 반환했습니다."
 
 msgid "The server was shut down."
-msgstr ""
+msgstr "서버가 종료되었습니다."
 
 msgid "The signing certificate authority is not known"
-msgstr ""
+msgstr "서명 인증 기관을 알 수 없습니다"
 
 msgid "Theme"
-msgstr ""
+msgstr "테마"
 
 msgid "Themes"
-msgstr ""
+msgstr "테마"
 
 msgid "There are connectivity issues"
-msgstr ""
+msgstr "연결 문제가 있습니다"
 
 msgid "There are devices for which you have not made a trust decision yet."
-msgstr ""
+msgstr "아직 신뢰 결정을 내리지 않은 기기가 있습니다."
 
 msgid ""
 "There are plenty of providers to choose from.\n"
 "Creating an account with one provider allows you to communicate with "
 "contacts from other providers as well."
 msgstr ""
+"선택할 수 있는 제공자가 많이 있습니다.\n"
+"한 제공자에서 계정을 만들면 다른 제공자의 연락처와도 통신할 수 있습니다."
 
 msgid "There are updates for Gajim’s plugins"
-msgstr ""
+msgstr "Gajim의 플러그인에 대한 업데이트가 있습니다"
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr ""
+msgstr "메시지를 가져오는 중 오류가 발생했습니다: %s"
 
 msgid "There is an update available for this plugin"
-msgstr ""
+msgstr "이 플러그인에 사용 가능한 업데이트가 있습니다"
 
 msgid "There is no encryption method available for the chosen encryption."
-msgstr ""
+msgstr "선택한 암호화에 사용할 수 있는 암호화 방법이 없습니다."
 
 msgid "There is no more history"
-msgstr ""
+msgstr "더 이상 기록이 없습니다"
 
 msgid ""
 "There is no service at the address you entered, or it is not responding. "
 "Check the address and try again."
 msgstr ""
+"입력한 주소에 서비스가 없거나 응답하지 않습니다. 주소를 확인하고 다시 시도하"
+"세요."
 
 #, python-format
 msgid ""
 "There was an error while attempting to verify the SSL certificate of your "
 "XMPP server (%s)."
-msgstr ""
+msgstr "XMPP 서버(%s)의 SSL 인증서를 확인하는 중 오류가 발생했습니다."
 
 #, python-format
 msgid ""
 "There was an error while trying to save the file.\n"
 "Error: %s."
 msgstr ""
+"파일을 저장하는 중 오류가 발생했습니다.\n"
+"오류: %s."
 
 msgid "This Device"
-msgstr ""
+msgstr "이 기기"
 
 msgid "This account has already been added"
-msgstr ""
+msgstr "이 계정이 이미 추가되었습니다"
 
 msgid "This address does not seem to offer any gateway service."
-msgstr ""
+msgstr "이 주소는 게이트웨이 서비스를 제공하지 않는 것 같습니다."
 
 msgid "This address is not reachable."
-msgstr ""
+msgstr "이 주소에 도달할 수 없습니다."
 
 #, python-brace-format
 msgid ""
 "This chat’s configuration is unsuitable for encryption with {encryption}. To "
 "use {encryption} in this chat, it should be non-anonymous and members-only."
 msgstr ""
+"이 대화의 구성은 {encryption} 암호화에 적합하지 않습니다. 이 대화에서 "
+"{encryption}을 사용하려면 비익명이어야 하며 회원 전용이어야 합니다."
 
 msgid "This contact does not share their status with you"
-msgstr ""
+msgstr "이 연락처는 귀하와 상태를 공유하지 않습니다"
 
 msgid "This contact is a bot"
-msgstr ""
+msgstr "이 연락처는 봇입니다"
 
 msgid "This device is not compatible."
-msgstr ""
+msgstr "이 기기는 호환되지 않습니다."
 
 msgid "This gateway does not support Ad-Hoc Commands."
-msgstr ""
+msgstr "이 게이트웨이는 임시 명령을 지원하지 않습니다."
 
 msgid "This gateway does not support direct registering."
-msgstr ""
+msgstr "이 게이트웨이는 직접 등록을 지원하지 않습니다."
 
 msgid "This group chat can not be found via search"
-msgstr ""
+msgstr "이 그룹 대화는 검색으로 찾을 수 없습니다"
 
 msgid "This group chat does not require a password upon entry"
-msgstr ""
+msgstr "이 그룹 대화는 입장 시 비밀번호가 필요하지 않습니다"
 
 msgid "This group chat does require a password upon entry"
-msgstr ""
+msgstr "이 그룹 대화는 입장 시 비밀번호가 필요합니다"
 
 msgid ""
 "This group chat is members-only, but you are not on the members list. An "
 "authorized person needs to invite you."
 msgstr ""
+"이 그룹 대화는 회원 전용이지만 귀하는 회원 목록에 없습니다. 권한이 있는 사람"
+"이 귀하를 초대해야 합니다."
 
 msgid "This group chat is restricted to members only"
-msgstr ""
+msgstr "이 그룹 대화는 회원으로만 제한됩니다"
 
 msgid "This group chat persists even if there are no participants"
-msgstr ""
+msgstr "이 그룹 대화는 참가자가 없어도 유지됩니다"
 
 msgid "This group chat will be destroyed once the last participant left"
-msgstr ""
+msgstr "이 그룹 대화는 마지막 참가자가 나가면 삭제됩니다"
 
 msgid "This information will be publicly visible."
-msgstr ""
+msgstr "이 정보는 공개적으로 표시됩니다."
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr ""
+msgstr "공개 그룹 대화입니다. 암호화를 사용할 수 없습니다."
 
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
 msgstr ""
+"현재 사용 중인 테마입니다.\n"
+"이 테마를 삭제하시겠습니까?"
 
 msgid "This message has been moderated"
-msgstr ""
+msgstr "이 메시지는 조정되었습니다"
 
 #, python-format
 msgid "This message has been moderated by %s"
-msgstr ""
+msgstr "이 메시지는 %s님에 의해 조정되었습니다"
 
 #, python-brace-format
 msgid "This message has been retracted on {date}"
-msgstr ""
+msgstr "이 메시지는 {date}에 철회되었습니다"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
-msgstr ""
+msgstr "이 메시지는 %s(으)로 암호화되었으며 복호화할 수 없습니다."
 
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
+"이 메시지는 레거시 OpenPGP로 암호화되었으며 복호화할 수 없습니다. PGP 플러그"
+"인을 설치하여 해당 메시지를 처리할 수 있습니다."
 
 msgid "This message was encrypted with OMEMO, but not for your device."
-msgstr ""
+msgstr "이 메시지는 OMEMO로 암호화되었지만 귀하의 기기용이 아닙니다."
 
 msgid "This message was encrypted with OTR and could not be decrypted."
-msgstr ""
+msgstr "이 메시지는 OTR로 암호화되었으며 복호화할 수 없습니다."
 
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
-msgstr ""
+msgstr "이 메시지는 XMPP용 OpenPGP로 암호화되었으며 복호화할 수 없습니다."
 
 msgid "This message will be deleted from your local chat history"
-msgstr ""
+msgstr "이 메시지는 로컬 대화 기록에서 삭제됩니다"
 
 msgid "This plugin is managed by your operating system"
-msgstr ""
+msgstr "이 플러그인은 운영 체제에서 관리합니다"
 
 msgid "This server does not allow signup."
-msgstr ""
+msgstr "이 서버는 가입을 허용하지 않습니다."
 
 msgid "This server does not support anonymous login."
-msgstr ""
+msgstr "이 서버는 익명 로그인을 지원하지 않습니다."
 
 msgid ""
 "This service could not respond with detailed information.\n"
 "It is most likely a legacy service or broken."
 msgstr ""
+"이 서비스가 자세한 정보로 응답할 수 없습니다.\n"
+"레거시 서비스이거나 손상되었을 가능성이 높습니다."
 
 msgid "This service does not contain any items to browse."
-msgstr ""
+msgstr "이 서비스에는 탐색할 항목이 없습니다."
 
 msgid "This service has not yet responded with detailed information"
-msgstr ""
+msgstr "이 서비스가 아직 자세한 정보로 응답하지 않았습니다"
 
 msgid "This type of service does not contain any items to browse."
-msgstr ""
+msgstr "이 유형의 서비스에는 탐색할 항목이 없습니다."
 
 msgid "This will purge all locally stored chat history"
-msgstr ""
+msgstr "로컬에 저장된 모든 대화 기록을 제거합니다"
 
 msgid "This will remove all published public keys from your account."
-msgstr ""
+msgstr "계정에서 게시된 모든 공개 키를 제거합니다."
 
 msgid "This will remove the account and delete all data"
-msgstr ""
+msgstr "계정을 제거하고 모든 데이터를 삭제합니다"
 
 msgid "This will remove your account from Gajim."
-msgstr ""
+msgstr "Gajim에서 계정을 제거합니다."
 
 msgid "This will reset all introduction hints"
-msgstr ""
+msgstr "모든 소개 힌트를 재설정합니다"
 
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
 "workspace. Remove anyway?"
 msgstr ""
+"이 작업 공간에 대화가 있습니다. 모든 대화가 다음 작업 공간으로 이동됩니다. 그"
+"래도 제거하시겠습니까?"
 
 msgid "Three Months"
-msgstr ""
+msgstr "3개월"
 
 msgid "Time Until Away"
-msgstr ""
+msgstr "자리 비움까지 시간"
 
 msgid "Time Until Not Available"
-msgstr ""
+msgstr "자리 비움까지 시간"
 
 msgid "Time Zone"
-msgstr ""
+msgstr "시간대"
 
 msgctxt "Profile"
 msgid "Timezone"
-msgstr ""
+msgstr "시간대"
 
 msgid "Timezone Update"
-msgstr ""
+msgstr "시간대 업데이트"
 
 msgctxt "Profile"
 msgid "Title"
-msgstr ""
+msgstr "직함"
 
 msgctxt "Contact subscription"
 msgid "To"
-msgstr ""
+msgstr "받음"
 
 msgid "To apply all changes instantly, you have to re-login."
-msgstr ""
+msgstr "모든 변경 사항을 즉시 적용하려면 다시 로그인해야 합니다."
 
 msgid ""
 "To secure your OpenPGP key for encrypted chats, Gajim can create an "
 "encrypted backup of your key on your server."
 msgstr ""
+"암호화된 대화를 위해 OpenPGP 키를 보호하기 위해 Gajim은 서버에 키의 암호화된 "
+"백업을 만들 수 있습니다."
 
 msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
-msgstr ""
+msgstr "암호화된 메시지를 보내려면 연락처의 기기를 신뢰할지 결정해야 합니다."
 
 msgid ""
 "To set up OpenPGP encryption you can either import an existing key or let "
 "Gajim create a new key."
 msgstr ""
+"OpenPGP 암호화를 설정하려면 기존 키를 가져오거나 Gajim이 새 키를 만들도록 할 "
+"수 있습니다."
 
 msgid "Toggle Chat List"
-msgstr ""
+msgstr "대화 목록 전환"
+
+msgid "Toggle Focus Mode"
+msgstr "집중 모드 전환"
 
 msgid "Toggle participants list"
-msgstr ""
+msgstr "참가자 목록 전환"
 
 msgid "Transferring File…"
-msgstr ""
+msgstr "파일 전송 중…"
 
 msgid "Transports"
-msgstr ""
+msgstr "전송"
 
 msgid "Trust Management"
-msgstr ""
+msgstr "신뢰 관리"
 
 msgid "Trust Not Decided"
-msgstr ""
+msgstr "신뢰 결정되지 않음"
 
 msgid "Try Again"
-msgstr ""
+msgstr "다시 시도"
 
 msgid "Try a different search"
-msgstr ""
+msgstr "다른 검색 시도"
 
 msgid "Trying to change password..."
-msgstr ""
+msgstr "비밀번호 변경 시도 중..."
 
 msgid "Trying to create account..."
-msgstr ""
+msgstr "계정 생성 시도 중..."
 
 msgid "Trying to gather information on this address…"
-msgstr ""
+msgstr "이 주소에 대한 정보 수집 시도 중…"
 
 msgid "Trying to remove account..."
-msgstr ""
+msgstr "계정 제거 시도 중..."
 
 msgid "Turn Camera off"
-msgstr ""
+msgstr "카메라 끄기"
 
 msgid "Turn Camera on"
-msgstr ""
+msgstr "카메라 켜기"
 
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 msgctxt "Configuration"
 msgid "Type"
-msgstr ""
+msgstr "유형"
 
 msgid "Type to search for values..."
-msgstr ""
+msgstr "값을 검색하려면 입력하세요..."
 
 msgid "Typing Only"
-msgstr ""
+msgstr "입력만"
 
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Unable to decode issuer public key"
-msgstr ""
+msgstr "발급자 공개 키를 디코딩할 수 없습니다"
 
 msgid "Unable to decrypt CRL's signature"
-msgstr ""
+msgstr "CRL의 서명을 복호화할 수 없습니다"
 
 msgid "Unable to decrypt certificate's signature"
-msgstr ""
+msgstr "인증서의 서명을 복호화할 수 없습니다"
 
 msgid "Unable to decrypt the backup with this password"
-msgstr ""
+msgstr "이 비밀번호로 백업을 복호화할 수 없습니다"
 
 msgid "Unable to get certificate CRL"
-msgstr ""
+msgstr "인증서 CRL을 가져올 수 없습니다"
 
 msgid "Unable to get issuer certificate"
-msgstr ""
+msgstr "발급자 인증서를 가져올 수 없습니다"
 
 msgid "Unable to get local issuer certificate"
-msgstr ""
+msgstr "로컬 발급자 인증서를 가져올 수 없습니다"
 
 msgid "Unable to properly remove the plugin"
-msgstr ""
+msgstr "플러그인을 제대로 제거할 수 없습니다"
 
 msgid "Unable to save profile"
-msgstr ""
+msgstr "프로필을 저장할 수 없습니다"
 
 msgid "Unable to use this key for encrypting messages"
-msgstr ""
+msgstr "이 키를 메시지 암호화에 사용할 수 없습니다"
 
 msgid "Unable to verify the first certificate"
-msgstr ""
+msgstr "첫 번째 인증서를 확인할 수 없습니다"
 
 msgid "Unblock"
-msgstr ""
+msgstr "차단 해제"
 
 msgid "Unblock Participant?"
-msgstr ""
+msgstr "참가자 차단을 해제하시겠습니까?"
 
 #, python-format
 msgid "Undecided fingerprints of devices connected with \"%s\""
-msgstr ""
+msgstr "\"%s\"과(와) 연결된 기기의 결정되지 않은 지문"
 
 msgid "Unencrypted"
-msgstr ""
+msgstr "암호화되지 않음"
 
 msgid "Uninstall"
-msgstr ""
+msgstr "제거"
 
 msgid "Unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 msgctxt "Contact subscription"
 msgid "Unknown"
-msgstr ""
+msgstr "알 수 없음"
 
 msgid "Unknown Artist"
-msgstr ""
+msgstr "알 수 없는 아티스트"
 
 msgid "Unknown Error"
-msgstr ""
+msgstr "알 수 없는 오류"
 
 #, python-format
 msgid "Unknown SSL error \"%s\""
-msgstr ""
+msgstr "알 수 없는 SSL 오류 \"%s\""
 
 msgid "Unknown Source"
-msgstr ""
+msgstr "알 수 없는 소스"
 
 #, python-format
 msgid "Unknown TLS error \"%s\""
-msgstr ""
+msgstr "알 수 없는 TLS 오류 \"%s\""
 
 msgid "Unknown Title"
-msgstr ""
+msgstr "알 수 없는 제목"
 
 #, python-format
 msgid "Unknown command: %s"
-msgstr ""
+msgstr "알 수 없는 명령: %s"
 
 msgid "Unknown error."
-msgstr ""
+msgstr "알 수 없는 오류."
 
 msgid "Unknown language"
-msgstr ""
+msgstr "알 수 없는 언어"
 
 msgid "Unknown validation error"
-msgstr ""
+msgstr "알 수 없는 유효성 검사 오류"
+
+#, fuzzy
+msgid "Unlock"
+msgstr "차단 해제"
 
 msgid "Unmute Chat"
-msgstr ""
+msgstr "대화 음소거 해제"
 
 msgid "Unpin Chat"
-msgstr ""
+msgstr "대화 고정 해제"
 
 msgid "Unsupported certificate purpose"
-msgstr ""
+msgstr "지원되지 않는 인증서 목적"
 
 msgid "Until Gajim is Closed"
-msgstr ""
+msgstr "Gajim을 닫을 때까지"
 
 msgid "Untrusted"
-msgstr ""
+msgstr "신뢰할 수 없음"
 
 msgid "Update"
-msgstr ""
+msgstr "업데이트"
 
 msgid "Update Avatar"
-msgstr ""
+msgstr "아바타 업데이트"
 
 msgid "Update Timezone"
-msgstr ""
+msgstr "시간대 업데이트"
 
 msgid "Update automatically"
-msgstr ""
+msgstr "자동 업데이트"
 
 #, python-format
 msgid "Update available: Version %s"
-msgstr ""
+msgstr "사용 가능한 업데이트: 버전 %s"
 
 msgid "Update plugins automatically"
-msgstr ""
+msgstr "플러그인 자동 업데이트"
 
 msgid "Update your profile's timezone automatically"
-msgstr ""
+msgstr "프로필의 시간대 자동 업데이트"
 
 msgid "Update your timezone?"
-msgstr ""
+msgstr "시간대를 업데이트하시겠습니까?"
 
 msgid "Updates"
-msgstr ""
+msgstr "업데이트"
 
 msgid "Updates will be installed next time Gajim is started"
-msgstr ""
+msgstr "다음에 Gajim을 시작할 때 업데이트가 설치됩니다"
 
 msgid "Updating Plugin…"
-msgstr ""
+msgstr "플러그인 업데이트 중…"
 
 msgid "Updating provider list…"
-msgstr ""
+msgstr "제공자 목록 업데이트 중…"
 
 msgid "Upload File…"
-msgstr ""
+msgstr "파일 업로드…"
 
 msgid "Uploading Avatar Failed"
-msgstr ""
+msgstr "아바타 업로드 실패"
 
 #, python-format
 msgid "Uploading avatar image failed: %s"
-msgstr ""
+msgstr "아바타 이미지 업로드 실패: %s"
 
 msgid "Uploading via HTTP File Upload…"
-msgstr ""
+msgstr "HTTP 파일 업로드를 통해 업로드 중…"
 
 msgid "Use \"//\" to start a message with a slash \"/\"."
-msgstr ""
+msgstr "슬래시 \"/\"로 메시지를 시작하려면 \"//\"를 사용하세요."
 
 msgid "Use GSSAPI"
-msgstr ""
+msgstr "GSSAPI 사용"
 
 msgid "Use HTTP2 for requests if there is server support"
-msgstr ""
+msgstr "서버가 지원하는 경우 요청에 HTTP2 사용"
 
 msgid "Use Image"
-msgstr ""
+msgstr "이미지 사용"
 
 msgid "Use My Own OpenPGP Key"
-msgstr ""
+msgstr "내 OpenPGP 키 사용"
 
 msgid "Use System Keyring"
-msgstr ""
+msgstr "시스템 키링 사용"
 
 msgid "Use Unencrypted Connection"
-msgstr ""
+msgstr "암호화되지 않은 연결 사용"
 
 msgid "Use a profile to run multiple Gajim instances"
-msgstr ""
+msgstr "프로필을 사용하여 여러 Gajim 인스턴스 실행"
 
 msgid "Use an unencrypted connection to the server"
-msgstr ""
-
-msgid "Use defined profile in configuration directory"
-msgstr ""
+msgstr "서버에 암호화되지 않은 연결 사용"
 
 msgid "Use proxy auth_entication"
-msgstr ""
+msgstr "프록시 인증 사용"
 
 msgid "Use your system’s keyring to store passwords"
-msgstr ""
+msgstr "시스템의 키링을 사용하여 비밀번호 저장"
 
 #, python-format
 msgid "User %s not found"
-msgstr ""
+msgstr "사용자 %s을(를) 찾을 수 없습니다"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "사용자 인터페이스 글꼴 크기"
 
 msgid "Users"
-msgstr ""
+msgstr "사용자"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
+msgstr "V4L2: %s"
 
 msgid "Validity"
-msgstr ""
+msgstr "유효성"
 
 msgid "Validity\n"
-msgstr ""
+msgstr "유효성\n"
 
 msgctxt "Configuration"
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 msgid "Verified"
-msgstr ""
+msgstr "확인됨"
 
 msgid "Version"
-msgstr ""
+msgstr "버전"
 
 msgid "Video"
-msgstr ""
+msgstr "비디오"
 
 msgid "Video test"
-msgstr ""
+msgstr "비디오 테스트"
 
 msgid "Visit Provider's Website"
-msgstr ""
+msgstr "제공자 웹사이트 방문"
 
 msgid "Visit Website"
-msgstr ""
+msgstr "웹사이트 방문"
 
 msgctxt "Group chat contact role"
 msgid "Visitor"
-msgstr ""
+msgstr "방문자"
 
 msgctxt "Group chat contact role"
 msgid "Visitors"
-msgstr ""
+msgstr "방문자"
 
 msgid "Voice Message"
-msgstr ""
+msgstr "음성 메시지"
 
 msgid "Voice Messages are not available"
-msgstr ""
+msgstr "음성 메시지를 사용할 수 없습니다"
 
 msgid "Voice message could not be saved. Please try again."
-msgstr ""
+msgstr "음성 메시지를 저장할 수 없습니다. 다시 시도하세요."
 
 msgid "WAV Sounds"
-msgstr ""
+msgstr "WAV 소리"
 
 msgid "Waiting…"
-msgstr ""
+msgstr "대기 중…"
 
 msgid "Warning"
-msgstr ""
+msgstr "경고"
 
 #, python-format
 msgid "Web Search URL is missing a \"%s\""
-msgstr ""
+msgstr "웹 검색 URL에 \"%s\"이(가) 없습니다"
 
 msgid "Web _Search for it"
-msgstr ""
+msgstr "웹 검색(_S)"
 
 msgid "Website"
-msgstr ""
+msgstr "웹사이트"
 
 msgid "Welcome"
-msgstr ""
+msgstr "환영합니다"
 
 msgid "What does this mean?"
-msgstr ""
+msgstr "이것이 무엇을 의미합니까?"
 
 msgid "Where participants should go"
-msgstr ""
+msgstr "참가자가 이동해야 하는 곳"
 
 msgid ""
 "Whether to check for a valid certificate before downloading (not safe to "
 "disable)"
 msgstr ""
+"다운로드하기 전에 유효한 인증서를 확인할지 여부 (비활성화는 안전하지 않음)"
 
 msgid "Which provider should I choose?"
-msgstr ""
+msgstr "어떤 제공자를 선택해야 합니까?"
 
 msgid "Why do you want to moderate this message?"
-msgstr ""
+msgstr "이 메시지를 조정하려는 이유는 무엇입니까?"
 
 msgid "Width of group chat roster in pixel"
-msgstr ""
+msgstr "그룹 대화 명단의 너비 (픽셀)"
 
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 msgid "Work"
-msgstr ""
+msgstr "직장"
 
 msgid "Workspace Settings"
-msgstr ""
+msgstr "작업 공간 설정"
 
 msgid "Workspace settings…"
-msgstr ""
+msgstr "작업 공간 설정…"
 
 msgid "X11"
-msgstr ""
+msgstr "X11"
 
 msgid "XMPP Address"
-msgstr ""
+msgstr "XMPP 주소"
 
 msgid "XMPP Address…"
-msgstr ""
+msgstr "XMPP 주소…"
 
 msgid "XMPP Chat Client"
-msgstr ""
+msgstr "XMPP 대화 클라이언트"
 
 msgid "YYYY-MM-DD"
-msgstr ""
+msgstr "YYYY-MM-DD"
 
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 msgid "Yesterday"
-msgstr ""
+msgstr "어제"
 
 #, python-format
 msgid "Yesterday (%s)"
-msgstr ""
+msgstr "어제 (%s)"
 
 msgid "You"
-msgstr ""
+msgstr "귀하"
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr ""
+msgstr "귀하(%s)가 그룹 대화에 참가했습니다"
 
 msgid "You are a visitor"
-msgstr ""
+msgstr "귀하는 방문자입니다"
 
 msgid "You are a visitor."
-msgstr ""
+msgstr "귀하는 방문자입니다."
 
 #, python-format
 msgid ""
@@ -5307,564 +5523,584 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
+"안전하지 않은 연결 방법을 사용하여 계정 %(account)s(%(server)s)에 연결하려고 "
+"합니다. 이는 대화가 암호화되지 않음을 의미합니다. PLAIN 연결은 권장되지 않습"
+"니다."
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
-msgstr ""
+msgstr "연락처 목록에서 %(name)s(%(jid)s)을(를) 제거하려고 합니다."
 
 msgid "You are currently not joined this group chat"
-msgstr ""
+msgstr "현재 이 그룹 대화에 참가하지 않았습니다"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
-msgstr ""
+msgstr "관리자 및 소유자의 소속을 수정할 수 없습니다"
 
 msgid ""
 "You are not connected to the server. Without a connection, you can not "
 "browse available services"
 msgstr ""
+"서버에 연결되어 있지 않습니다. 연결이 없으면 사용 가능한 서비스를 탐색할 수 "
+"없습니다"
 
 #, python-format
 msgid "You are now %(affiliation)s of this group chat"
-msgstr ""
+msgstr "이제 이 그룹 대화의 %(affiliation)s입니다"
 
 #, python-format
 msgid "You are now %(role)s of this group chat"
-msgstr ""
+msgstr "이제 이 그룹 대화의 %(role)s입니다"
 
 #, python-format
 msgid "You are now known as %s"
-msgstr ""
+msgstr "이제 %s(으)로 알려져 있습니다"
 
 #, python-brace-format
 msgid "You are now {show}{status}"
-msgstr ""
+msgstr "이제 {show}{status}입니다"
 
 msgid "You are offline"
-msgstr ""
+msgstr "오프라인입니다"
 
 msgid "You are offline. Go online to send messages…"
-msgstr ""
+msgstr "오프라인입니다. 메시지를 보내려면 온라인으로 전환하세요…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
-msgstr ""
+msgstr "대신 이 그룹 대화에 참가할 수 있습니다: %s"
 
 msgid "You can not join a group chat unless you are connected."
-msgstr ""
+msgstr "연결되어 있지 않으면 그룹 대화에 참가할 수 없습니다."
 
 msgid "You can see the contact's online status"
-msgstr ""
+msgstr "연락처의 온라인 상태를 볼 수 있습니다"
 
 msgid "You cancelled the transfer"
-msgstr ""
+msgstr "전송을 취소했습니다"
 
 msgid "You cannot add yourself to your contact list."
-msgstr ""
+msgstr "자신을 연락처 목록에 추가할 수 없습니다."
 
 msgid "You cannot see this contact's online status"
-msgstr ""
+msgstr "이 연락처의 온라인 상태를 볼 수 없습니다"
 
 msgid "You can’t send private messages to contacts if they are offline."
-msgstr ""
+msgstr "연락처가 오프라인이면 개인 메시지를 보낼 수 없습니다."
 
 msgid "You don't share your status with this contact"
-msgstr ""
+msgstr "이 연락처와 상태를 공유하지 않습니다"
 
 msgid "You have been banned"
-msgstr ""
+msgstr "차단되었습니다"
 
 #, python-format
 msgid "You have been banned by %s"
-msgstr ""
+msgstr "%s님에 의해 차단되었습니다"
 
 #, python-format
 msgid "You have been invited to %s"
-msgstr ""
+msgstr "%s에 초대되었습니다"
 
 msgid "You have been kicked"
-msgstr ""
+msgstr "추방되었습니다"
 
 #, python-format
 msgid "You have been kicked by %s"
-msgstr ""
+msgstr "%s님에 의해 추방되었습니다"
 
 msgid "You have been mentioned"
-msgstr ""
+msgstr "언급되었습니다"
 
 msgid "You have been removed from this group chat"
-msgstr ""
+msgstr "이 그룹 대화에서 제거되었습니다"
 
 #, python-format
 msgid "You have been removed from this group chat by %s"
-msgstr ""
+msgstr "%s님에 의해 이 그룹 대화에서 제거되었습니다"
 
 msgid "You have insufficient permissions"
-msgstr ""
+msgstr "권한이 부족합니다"
 
 msgid "You have left due to an error"
-msgstr ""
+msgstr "오류로 인해 나갔습니다"
 
 msgid "You have to be connected to create a group chat."
-msgstr ""
+msgstr "그룹 대화를 만들려면 연결되어 있어야 합니다."
 
 msgid "You have to invite people so they can join"
-msgstr ""
+msgstr "사람들이 참가할 수 있도록 초대해야 합니다"
 
 msgid "You left this group chat"
-msgstr ""
+msgstr "이 그룹 대화에서 나갔습니다"
 
 msgid ""
 "You may need an invite to join this group chat again, if you choose to leave "
 "it permanently."
 msgstr ""
+"영구적으로 나가기로 선택하면 이 그룹 대화에 다시 참가하려면 초대가 필요할 수 "
+"있습니다."
 
 msgid "You need Owner permission to change the configuration"
-msgstr ""
+msgstr "구성을 변경하려면 소유자 권한이 필요합니다"
 
 #, python-format
 msgid "You now have the following hats: %s"
-msgstr ""
+msgstr "이제 다음 역할을 갖습니다: %s"
 
 msgid "You requested to see this contact's online status"
-msgstr ""
+msgstr "이 연락처의 온라인 상태를 보도록 요청했습니다"
 
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
-msgstr ""
+msgstr "이 연락처에게 오프라인으로 표시되며 더 이상 메시지를 받지 않습니다."
 
 msgid "Your Backup Password"
-msgstr ""
+msgstr "백업 비밀번호"
 
 msgid "Your Nickname"
-msgstr ""
+msgstr "닉네임"
 
 msgid "Your OpenPGP key backup was successful."
-msgstr ""
+msgstr "OpenPGP 키 백업이 성공했습니다."
 
 msgid "Your OpenPGP key has been created. Your chat is now encrypted."
-msgstr ""
+msgstr "OpenPGP 키가 생성되었습니다. 이제 대화가 암호화됩니다."
 
 msgid "Your XMPP address (e.g. user@example.org)"
-msgstr ""
+msgstr "XMPP 주소 (예: user@example.org)"
 
 msgid "Your account has has been removed successfully."
-msgstr ""
+msgstr "계정이 성공적으로 제거되었습니다."
 
 msgid "Your affiliations to this group chat have been removed"
-msgstr ""
+msgstr "이 그룹 대화에 대한 소속이 제거되었습니다"
 
 msgid "Your chat history database has been migrated successfully."
-msgstr ""
+msgstr "대화 기록 데이터베이스가 성공적으로 마이그레이션되었습니다."
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"대화 기록을 마이그레이션하고 있습니다.\n"
+"시간이 걸릴 수 있습니다…"
 
 msgid "Your connection to the server is secured by this certificate"
-msgstr ""
+msgstr "서버에 대한 연결이 이 인증서로 보호됩니다"
 
 msgid "Your message can not be sent until you are connected."
-msgstr ""
+msgstr "연결될 때까지 메시지를 보낼 수 없습니다."
 
 msgid "Your messages have been exported successfully"
-msgstr ""
+msgstr "메시지가 성공적으로 내보내졌습니다"
 
 msgid "Your password"
-msgstr ""
+msgstr "비밀번호"
 
 msgid "Your password has successfully been changed."
-msgstr ""
+msgstr "비밀번호가 성공적으로 변경되었습니다."
 
 msgid "Your public key or authentication certificate"
-msgstr ""
+msgstr "공개 키 또는 인증 인증서"
 
 msgid "Your roles in this group chat have been removed"
-msgstr ""
+msgstr "이 그룹 대화의 역할이 제거되었습니다"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
 "of a different server."
 msgstr ""
+"서버가 그룹 대화 서비스를 제공하지 않습니다. 다른 서버의 주소를 지정하세요."
 
 msgid "Your service offers the following features"
-msgstr ""
+msgstr "서비스가 다음 기능을 제공합니다"
 
 msgid "ZIP files"
-msgstr ""
+msgstr "ZIP 파일"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[더 읽기]"
 
 msgid "_Abort"
-msgstr ""
+msgstr "중단(_A)"
 
 msgid "_About"
-msgstr ""
+msgstr "정보(_A)"
 
 msgid "_Accept"
-msgstr ""
+msgstr "수락(_A)"
 
 msgid "_Add to Trusted Certificates"
-msgstr ""
+msgstr "신뢰할 수 있는 인증서에 추가(_A)"
 
 msgid "_Address"
-msgstr ""
+msgstr "주소(_A)"
 
 msgid "_Advanced Settings"
-msgstr ""
+msgstr "고급 설정(_A)"
 
 msgctxt "User status"
 msgid "_Available"
-msgstr ""
+msgstr "대화 가능(_A)"
 
 msgid "_Back"
-msgstr ""
+msgstr "뒤로(_B)"
 
 msgid "_Block"
-msgstr ""
+msgstr "차단(_B)"
 
 msgctxt "User status"
 msgid "_Busy"
-msgstr ""
+msgstr "다른 용무 중(_B)"
 
 msgid "_Cancel"
-msgstr ""
+msgstr "취소(_C)"
 
 msgid "_Close"
-msgstr ""
+msgstr "닫기(_C)"
 
 msgid "_Command"
-msgstr ""
+msgstr "명령(_C)"
 
 msgid "_Connect"
-msgstr ""
+msgstr "연결(_C)"
 
 msgid "_Connect Anyway"
-msgstr ""
+msgstr "그래도 연결(_C)"
 
 msgid "_Copy Link"
-msgstr ""
+msgstr "링크 복사(_C)"
 
 msgid "_Create"
-msgstr ""
+msgstr "만들기(_C)"
 
 msgid "_Decline"
-msgstr ""
+msgstr "거부(_D)"
 
 msgid "_Delete"
-msgstr ""
+msgstr "삭제(_D)"
 
 msgid "_Destroy"
-msgstr ""
+msgstr "삭제(_D)"
 
 msgid "_Disable Account"
-msgstr ""
+msgstr "계정 비활성화(_D)"
 
 msgid "_Do not ask me again"
-msgstr ""
+msgstr "다시 묻지 않기(_D)"
 
 msgid "_Edit"
-msgstr ""
+msgstr "편집(_E)"
 
 msgid "_Features"
-msgstr ""
+msgstr "기능(_F)"
 
 msgctxt "User status"
 msgid "_Free for Chat"
-msgstr ""
+msgstr "자유롭게 대화 가능(_F)"
 
 msgid "_Hide (Tray Icon)"
-msgstr ""
+msgstr "숨기기 (트레이 아이콘)(_H)"
 
 msgid "_Host"
-msgstr ""
+msgstr "호스트(_H)"
 
 msgid "_Hostname"
-msgstr ""
+msgstr "호스트 이름(_H)"
 
 msgid "_Import"
-msgstr ""
+msgstr "가져오기(_I)"
 
 msgid "_Join"
-msgstr ""
+msgstr "참가(_J)"
 
 msgid "_Join Support Chat"
-msgstr ""
+msgstr "지원 대화 참가(_J)"
 
 msgid "_Keyboard Shortcuts"
-msgstr ""
+msgstr "키보드 단축키(_K)"
 
 msgid "_Later"
-msgstr ""
+msgstr "나중에(_L)"
 
 msgid "_Leave"
-msgstr ""
+msgstr "나가기(_L)"
 
 msgid "_Log In"
-msgstr ""
+msgstr "로그인(_L)"
 
 msgid "_Minimize"
-msgstr ""
+msgstr "최소화(_M)"
 
 msgid "_Moderate"
-msgstr ""
+msgstr "조정(_M)"
 
 msgid "_Name"
-msgstr ""
+msgstr "이름(_N)"
 
 msgid "_No"
-msgstr ""
+msgstr "아니요(_N)"
 
 msgctxt "User status"
 msgid "_Not Available"
-msgstr ""
+msgstr "자리 비움(_N)"
 
 msgid "_OK"
-msgstr ""
+msgstr "확인(_O)"
 
 msgid "_Offline"
-msgstr ""
+msgstr "오프라인(_O)"
 
 msgid "_Open"
-msgstr ""
+msgstr "열기(_O)"
 
 msgid "_Overwrite"
-msgstr ""
+msgstr "덮어쓰기(_O)"
 
 msgid "_Please choose a provider"
-msgstr ""
+msgstr "제공자를 선택하세요(_P)"
 
 msgid "_Port"
-msgstr ""
+msgstr "포트(_P)"
 
 msgid "_Privacy Policy (Online)"
-msgstr ""
+msgstr "개인 정보 보호 정책 (온라인)(_P)"
 
 msgid "_Purge"
-msgstr ""
+msgstr "제거(_P)"
 
 msgid "_Quit"
-msgstr ""
+msgstr "종료(_Q)"
 
 msgid "_Re-Login"
-msgstr ""
+msgstr "다시 로그인(_R)"
 
 msgid "_Remember my decision"
-msgstr ""
+msgstr "결정 기억(_R)"
 
 msgid "_Remove"
-msgstr ""
+msgstr "제거(_R)"
 
 msgid "_Remove Public Keys"
-msgstr ""
+msgstr "공개 키 제거(_R)"
 
 msgid "_Report Spam"
-msgstr ""
+msgstr "스팸 신고(_R)"
 
 msgid "_Request"
-msgstr ""
+msgstr "요청(_R)"
 
 msgid "_Reset Value"
-msgstr ""
+msgstr "값 재설정(_R)"
 
 msgid "_Retract"
-msgstr ""
+msgstr "철회(_R)"
 
 msgid "_Save"
-msgstr ""
+msgstr "저장(_S)"
 
 msgid "_Search"
-msgstr ""
+msgstr "검색(_S)"
 
 msgid "_Select"
-msgstr ""
+msgstr "선택(_S)"
 
 msgid "_Send"
-msgstr ""
+msgstr "전송(_S)"
 
 msgid "_Show Certificate"
-msgstr ""
+msgstr "인증서 표시(_S)"
 
 msgid "_Sign Up"
-msgstr ""
+msgstr "가입(_S)"
 
 msgid "_Stop Sharing"
-msgstr ""
+msgstr "공유 중지(_S)"
 
 msgid "_Subscribe"
-msgstr ""
+msgstr "구독(_S)"
 
 msgid "_Type"
-msgstr ""
+msgstr "유형(_T)"
 
 msgid "_Unblock"
-msgstr ""
+msgstr "차단 해제(_U)"
 
 msgid "_Unregister account from service"
-msgstr ""
+msgstr "서비스에서 계정 등록 해제(_U)"
 
 msgid "_Unsubscribe"
-msgstr ""
+msgstr "구독 취소(_U)"
 
 msgid "_Username"
-msgstr ""
+msgstr "사용자 이름(_U)"
 
 msgid "_View Certificate"
-msgstr ""
+msgstr "인증서 보기(_V)"
 
 msgid "_Wiki (Online)"
-msgstr ""
+msgstr "위키 (온라인)(_W)"
 
 msgid "accuracy"
-msgstr ""
+msgstr "정확도"
 
 msgid "alt"
-msgstr ""
+msgstr "고도"
 
 msgid "and NOT authenticated"
-msgstr ""
+msgstr "인증되지 않음"
 
 msgid "and authenticated"
-msgstr ""
+msgstr "인증됨"
 
 msgid "area"
-msgstr ""
+msgstr "지역"
 
 msgid "audio input"
-msgstr ""
+msgstr "오디오 입력"
 
 msgid "audio output"
-msgstr ""
+msgstr "오디오 출력"
 
 msgid "bearing"
-msgstr ""
+msgstr "방위"
 
 msgid "building"
-msgstr ""
+msgstr "건물"
 
 #, python-format
 msgid "cairo Version: %s"
-msgstr ""
+msgstr "cairo 버전: %s"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
-msgstr ""
+msgstr "채팅;메시징;메신저;xmpp;voip;대화;"
 
 msgid "column"
-msgstr ""
+msgstr "열"
 
 msgid "country"
-msgstr ""
+msgstr "국가"
 
 msgid "countrycode"
-msgstr ""
+msgstr "국가 코드"
 
 msgid "datum"
-msgstr ""
+msgstr "데이텀"
 
 msgid "description"
-msgstr ""
+msgstr "설명"
 
 msgid "error"
-msgstr ""
+msgstr "오류"
 
 msgid "example.org"
-msgstr ""
+msgstr "example.org"
 
 msgid "floor"
-msgstr ""
+msgstr "층"
 
 msgid "invites you to join a group chat"
-msgstr ""
+msgstr "그룹 대화에 참가하도록 초대합니다"
 
 msgid "is composing a message…"
-msgstr ""
+msgstr "메시지를 작성하고 있습니다…"
 
 msgid "is doing something else"
-msgstr ""
+msgstr "다른 작업을 하고 있습니다"
 
 #, python-format
 msgid "last seen: %s"
-msgstr ""
+msgstr "마지막 확인: %s"
 
 msgid "lat"
-msgstr ""
+msgstr "위도"
 
 #, python-format
 msgid "libsoup Version: %s"
-msgstr ""
+msgstr "libsoup 버전: %s"
 
 msgid "locality"
-msgstr ""
+msgstr "지역"
 
 msgid "lon"
-msgstr ""
+msgstr "경도"
 
 msgid "macOS"
-msgstr ""
+msgstr "macOS"
 
 msgid "or"
-msgstr ""
+msgstr "또는"
 
 msgid "paused composing a message"
-msgstr ""
+msgstr "메시지 작성을 일시 중지했습니다"
 
 msgid "postalcode"
-msgstr ""
+msgstr "우편번호"
 
 #, python-format
 msgid "pycairo Version: %s"
-msgstr ""
+msgstr "pycairo 버전: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
-msgstr ""
+msgstr "python-nbxmpp 버전: %s"
 
 msgid "region"
-msgstr ""
+msgstr "지역"
 
 msgid "room"
-msgstr ""
+msgstr "방"
 
 msgid "speed"
-msgstr ""
+msgstr "속도"
 
 msgid "street"
-msgstr ""
+msgstr "거리"
 
 msgid "text"
-msgstr ""
+msgstr "텍스트"
 
 msgid "timestamp"
-msgstr ""
+msgstr "타임스탬프"
 
 msgid "translator-credits"
-msgstr ""
+msgstr "번역자 정보"
 
 msgid "video input"
-msgstr ""
+msgstr "비디오 입력"
 
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
-msgstr ""
+msgstr "{nick}님이 오류로 인해 나갔습니다{reason}"
 
 #, python-brace-format
 msgid "{nick} has left{reason}"
-msgstr ""
+msgstr "{nick}님이 나갔습니다{reason}"
 
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
-msgstr ""
+msgstr "{nick}님은 이제 {new_nick}(으)로 알려져 있습니다"
 
 #, python-brace-format
 msgid "{nick} is now {show}"
-msgstr ""
+msgstr "{nick}님은 이제 {show}입니다"
 
 #, python-brace-format
 msgid "{nick} is now {show}{status}"
-msgstr ""
+msgstr "{nick}님은 이제 {show}{status}입니다"
 
 msgid "…or drop it here"
-msgstr ""
+msgstr "…또는 여기에 놓으세요"
+
+#~ msgid "Restart Gajim to start debug logging"
+#~ msgstr "디버그 로깅을 시작하려면 Gajim을 다시 시작하세요"
+
+#~ msgid ""
+#~ "Separate profile files completely (even history database and plugins)"
+#~ msgstr "프로필 파일 완전 분리 (기록 데이터베이스 및 플러그인 포함)"
+
+#~ msgid "Use defined profile in configuration directory"
+#~ msgstr "설정 디렉터리에 정의된 프로필 사용"
