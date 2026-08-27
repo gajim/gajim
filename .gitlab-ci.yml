@@ -300,6 +300,7 @@ deploy-flatpak:
     - git clone git@github.com:flathub/org.gajim.Gajim.git
     - cd org.gajim.Gajim
     - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
+    - mv ../flatpak/python3-modules.json python3-modules.json
     - mv ../flatpak/app-overrides.json app-overrides.json
     - git diff
     - git add --all
