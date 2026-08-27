@@ -1,3 +1,49 @@
+Gajim 2.6.0 (26 Aug 2026)
+
+  New
+
+  * Make Gajim's main window responsive
+  * OpenPGP: Add Share & Export settings dialog
+  * Add Focus Mode
+
+  Improvements
+
+  * Workspace avatars: Improve contrast of default avatar letters (#12784)
+  * Make "Forget Groupchat" remove also all metadata
+  * AudioPreviewAnalyzer: Bound analysis in worker
+  * Preferences: Improve description of logging actions
+  * Workspace: Don't reset avatar if file cannot be found
+  * Improve message search
+  * Avatars: Improve caching logic
+  * TrustManager: Don't include newlines when copying fingerprint (#12747)
+  * Don't inhibit logout the whole application runtime
+  * Application: Improve inhibit text on desktop session logout (#12745)
+  * CodeSnippets: Map python to python3 for syntax highlighting
+
+  Change
+
+  * Raise nbxmpp to 7.4.0
+  * Application: Remove deprecated --profile and --separate args
+
+  Performance
+
+  * Database: Remove analysis limit on shutdown (#12768)
+
+  Bug Fixes
+
+  * ActivityFeed: Fix clicking on reaction sometimes did not scroll to the message
+  * MUC: Don't obsolete avatar requests while joining
+  * MUC: Don't use ofrom attribute
+  * Windows: Correctly set the locale (#12689)
+  * Client: Rework connectivity check (#12690)
+  * Don't fail when trying to remove file on transfer errors (#12780)
+  * VideoPreview: Apply correct rotation
+  * StatusNotifierItemService: Re-register when watcher reappears
+  * Database: Add migration to run full ANALYZE (#12768)
+  * MessageInput: Close completion popover when switching chat (#12738)
+  * Store own nickname in database (#12741)
+  * GroupChat: Don't demote admins to members when inviting them (#12769)
+
 Gajim 2.5.0 (15 Jul 2026)
 
   Improvements
