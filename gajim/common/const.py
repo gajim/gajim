@@ -364,8 +364,8 @@ EME_PROTOCOLS = {
     "jabber:x:encrypted": "PGP",
     "urn:xmpp:openpgp:0": "OpenPGP",
     "eu.siacs.conversations.axolotl": "OMEMO",
-    "urn:xmpp:omemo:1": "OMEMO",
-    "urn:xmpp:omemo:2": "OMEMO",
+    "urn:xmpp:omemo:1": "OMEMO1",
+    "urn:xmpp:omemo:2": "OMEMO2",
 }
 
 
