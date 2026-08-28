@@ -372,7 +372,7 @@ class AccountPage(Gtk.Box, SignalManager):
             self._destroyed = True
             self._session += 1
             self._vcard_request = None
-            self._cancel_owned_tasks()
+            self._cancel_owned_tasks("account page was closed")
             self._disconnect_signals()
             self._disconnect_all()
             app.ged.remove_event_handler(
@@ -909,6 +909,18 @@ class AccountPage(Gtk.Box, SignalManager):
         if self._avatar_publish is not state:
             return
 
+        if isinstance(error, CancelledError):
+            assert self._account is not None
+            client = app.get_client(self._account)
+            log.debug(
+                "Avatar publish request reported cancellation: %s",
+                (
+                    "client is unavailable"
+                    if not client.is_available()
+                    else "underlying XMPP task was cancelled"
+                ),
+            )
+
         error_text: str | None = None
         missing_removal = False
         if error is not None:
@@ -1425,8 +1437,10 @@ class AccountPage(Gtk.Box, SignalManager):
     def _has_scoped_operations(self, *scopes: _TaskScope) -> bool:
         return any(scope in scopes for scope in self._tasks.values())
 
-    def _cancel_owned_tasks(self) -> None:
-        for task in list(self._tasks):
+    def _cancel_owned_tasks(self, reason: str) -> None:
+        for task, scope in list(self._tasks.items()):
+            if scope == "avatar":
+                log.debug("Cancelling avatar publish request: %s", reason)
             task.cancel()
 
     def _drain_deferred_actions(self) -> None:
@@ -1585,7 +1599,7 @@ class AccountPage(Gtk.Box, SignalManager):
 
     def _on_client_state_changed(self, client: Client, *_args: object) -> None:
         if not client.is_available():
-            self._cancel_owned_tasks()
+            self._cancel_owned_tasks("client became unavailable")
             if self._vcard_request is not None:
                 self._finish_vcard_request(None, failed=True)
         else:
