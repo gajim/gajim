@@ -63,7 +63,7 @@ PYTHON_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/omemo-dr.git
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 css_parser
-httpx[http2,socks]
+httpx2[http2,socks]
 truststore
 emoji
 pystray
