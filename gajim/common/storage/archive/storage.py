@@ -660,6 +660,7 @@ class MessageArchiveStorage(AlchemyStorage):
         direction: Literal["before", "after"],
         order: Literal["asc", "desc"] = "asc",
         include_timestamp: bool = False,
+        pk: int | None = None,
     ) -> tuple[Iterable[Message], bool]:
         """
         Load n messages from jid before or after timestamp
@@ -678,6 +679,8 @@ class MessageArchiveStorage(AlchemyStorage):
             How the result is ordered
         :param include_timestamp:
             If messages with the same timestamp are returned
+        :param pk:
+            When set with include_timestamp, ties are broken by primary key
         """
 
         fk_account_pk = self._get_account_pk(session, account)
@@ -690,14 +693,28 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         if direction == "before":
-            if include_timestamp:
+            if include_timestamp and pk is not None:
+                where = stmt.where(
+                    sa.or_(
+                        Message.timestamp < timestamp,
+                        sa.and_(Message.timestamp == timestamp, Message.pk <= pk),
+                    )
+                )
+            elif include_timestamp:
                 where = stmt.where(Message.timestamp <= timestamp)
             else:
                 where = stmt.where(Message.timestamp < timestamp)
             stmt = where.order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
 
         else:
-            if include_timestamp:
+            if pk is not None:
+                where = stmt.where(
+                    sa.or_(
+                        Message.timestamp > timestamp,
+                        sa.and_(Message.timestamp == timestamp, Message.pk > pk),
+                    )
+                )
+            elif include_timestamp:
                 where = stmt.where(Message.timestamp >= timestamp)
             else:
                 where = stmt.where(Message.timestamp > timestamp)
@@ -719,20 +736,25 @@ class MessageArchiveStorage(AlchemyStorage):
             case ("desc", "after") | ("asc", "before"):
                 return reversed(result), complete
 
-    @with_session
     @timeit
     def get_conversation_around_timestamp(
-        self, session: Session, account: str, jid: JID, timestamp: datetime
+        self,
+        account: str,
+        jid: JID,
+        timestamp: datetime,
+        pk: int,
     ) -> tuple[Iterable[Message], bool, bool]:
         """
-        Loads messages around a primary key
+        Loads messages around a (timestamp, pk) anchor
 
         :param account:
             The account
         :param jid:
             The jid for which we request the conversation
         :param timestamp:
-            The timestamp in the conversation
+            The timestamp of the anchor message
+        :param pk:
+            The primary key of the anchor message
         """
 
         messages_before, before_complete = self.get_conversation_before_after(
@@ -743,9 +765,10 @@ class MessageArchiveStorage(AlchemyStorage):
             direction="before",
             order="asc",
             include_timestamp=True,
+            pk=pk,
         )
         messages_after, after_complete = self.get_conversation_before_after(
-            account, jid, timestamp, 50, direction="after"
+            account, jid, timestamp, 50, direction="after", pk=pk
         )
 
         return (

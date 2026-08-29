@@ -1102,7 +1102,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_visible(False)
 
         messages, before_complete, after_complete = (
-            self._storage.get_conversation_around_timestamp(account, jid, timestamp)
+            self._storage.get_conversation_around_timestamp(account, jid, timestamp, pk)
         )
 
         self.reset()
