@@ -110,9 +110,7 @@ SupportedPropertiesT = (
     | GenderProperty
     | ImppProperty
     | KeyProperty
-    | NicknameProperty
     | NoteProperty
-    | NProperty
     | OrgProperty
     | PronounsProperty
     | RoleProperty
@@ -120,6 +118,24 @@ SupportedPropertiesT = (
     | TitleProperty
     | TzProperty
     | UrlProperty
+)
+
+SupportedProperties = (
+    AdrProperty,
+    BDayProperty,
+    EmailProperty,
+    FnProperty,
+    GenderProperty,
+    ImppProperty,
+    KeyProperty,
+    NoteProperty,
+    OrgProperty,
+    PronounsProperty,
+    RoleProperty,
+    TelProperty,
+    TitleProperty,
+    TzProperty,
+    UrlProperty,
 )
 
 TextEntryPropertiesT = (
@@ -136,7 +152,6 @@ TextEntryPropertiesT = (
 
 LABEL_DICT = {
     "fn": _("Full Name"),
-    "n": _("Name"),
     "bday": _("Birthday"),
     "gender": _("Gender"),
     "pronouns": _("Pronouns"),
@@ -629,9 +644,9 @@ class TypeDropDown(GajimDropDown[str], SignalManager):
 
         self._connect(self, "notify::selected", self._on_selected)
 
-    def do_unroot(self) -> None:
+    def run_destroy(self) -> None:
         self._disconnect_all()
-        Gtk.DropDown.do_unroot(self)
+        super().run_destroy()
 
     def _on_selected(
         self, _dropdown: GajimDropDown[str], _param: GObject.ParamSpec

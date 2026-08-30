@@ -362,6 +362,13 @@ button.flat.link { padding: 0; border: 0; }
     padding: 18px;
 }
 
+/* VCardEditor */
+.vcard-editor,
+.vcard-editor textview,
+.vcard-editor textview text {
+    background: transparent;
+}
+
 /* ActivityListView */
 .activity-list-view row {
     transition: none;
