@@ -222,7 +222,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     "preview_verify_https": True,
     "providers_list_url": "https://data.xmpp.net/providers/v2/providers-B.json",
     "print_status_in_chats": False,
-    "quick_reaction_emojis": "👍,❤,🤣",
+    "quick_reaction_emojis": "👍,❤,😂",
     "remote_control": False,
     "roster_theme": "default",
     "search_engine": "https://duckduckgo.com/?q=%s",
