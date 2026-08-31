@@ -67,7 +67,7 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder("chat_control.ui")
 
-        self._set_prepare_for_scroll = False
+        self._prepare_for_scroll = False
 
         self._message_row_actions = MessageRowActions()
         self._ui.conv_view_overlay.add_overlay(self._message_row_actions)
@@ -76,6 +76,9 @@ class ChatControl(EventHelper):
             self._message_row_actions, app.storage.archive
         )
         self._scrolled_view.connect("notify::at-bottom", self._on_at_bottom_changed)
+        self._scrolled_view.connect(
+            "newest-message-shown", self._on_newest_message_shown
+        )
         self._scrolled_view.connect("request-history", self._request_history)
         self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
@@ -201,10 +204,7 @@ class ChatControl(EventHelper):
         return self._scrolled_view.get_property("at-bottom")
 
     def set_prepare_for_scroll(self) -> None:
-        # This var is for telling the control to not load messages
-        # on switch_contact(). Instead the scroll_to_message() method
-        # will load the messages
-        self._set_prepare_for_scroll = True
+        self._prepare_for_scroll = True
 
     def scroll_to_date(self, date: dt.datetime) -> None:
         if self._contact is None:
@@ -220,6 +220,8 @@ class ChatControl(EventHelper):
         self.scroll_to_message(*meta)
 
     def scroll_to_message(self, pk: int, timestamp: dt.datetime) -> None:
+        self._prepare_for_scroll = False
+
         if self._contact is None:
             log.warning("scroll_to_message() called without active contact")
             return
@@ -227,8 +229,6 @@ class ChatControl(EventHelper):
         self._scrolled_view.scroll_to_message(
             self._contact.account, self._contact.jid, timestamp, pk
         )
-
-        self._set_prepare_for_scroll = False
 
     def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
@@ -260,10 +260,13 @@ class ChatControl(EventHelper):
 
         self._client = app.get_client(contact.account)
 
+        prepare_for_scroll = self._prepare_for_scroll
+        self._prepare_for_scroll = False
+
         self._jump_to_end_button.switch_contact(contact)
         self._message_row_actions.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)
-        if not self._set_prepare_for_scroll:
+        if not prepare_for_scroll:
             self._request_history(None, "before")
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
@@ -499,14 +502,17 @@ class ChatControl(EventHelper):
         self, view: ConversationView, param: GObject.ParamSpec
     ) -> None:
         at_bottom = cast(bool, view.get_property("at-bottom"))
-        if not at_bottom:
-            self._jump_to_end_button.toggle(True)
-            return
+        self._jump_to_end_button.toggle(not at_bottom)
 
-        self._jump_to_end_button.toggle(False)
+        if at_bottom:
+            self._mark_chat_as_read()
 
+    def _on_newest_message_shown(self, _view: ConversationView) -> None:
+        self._mark_chat_as_read()
+
+    def _mark_chat_as_read(self) -> None:
         if self._contact is None:
-            # This signal can be toggled without an active chat, see #12226
+            # This can happen without an active chat, see #12226
             return
 
         if app.window.is_chat_active(self._contact.account, self._contact.jid):

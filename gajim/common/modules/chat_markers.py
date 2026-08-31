@@ -219,6 +219,18 @@ class ChatMarkers(BaseModule):
 
         return stanza_id is not None
 
+    def publish_displayed(
+        self, contact: types.ChatContactT, message_id: str, stanza_id: str | None
+    ) -> None:
+        if self.send_displayed_marker(contact, message_id, stanza_id):
+            return
+
+        if stanza_id is None:
+            return
+
+        by = contact.jid if isinstance(contact, GroupchatContact) else None
+        self._client.get_module("MDS").set_mds(contact.jid, stanza_id, by)
+
     @staticmethod
     def _determine_marker_id(
         contact: types.ChatContactT, message_id: str, stanza_id: str | None

@@ -223,6 +223,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def get_message_input(self) -> MessageInputTextView:
         return self._message_action_box.get_message_input()
 
+    def show_chat_page(self) -> None:
+        self.set_transition_type(Gtk.StackTransitionType.NONE)
+        self.set_visible_child_name("controls")
+
     def show_chat(self, account: str, jid: JID) -> None:
         # Store (preserve) primary clipboard and restore it after switching
         clipboard = self.get_primary_clipboard()
@@ -437,26 +441,18 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if event.from_mam:
             return
 
-        if (
-            app.window.is_chat_active(event.account, event.jid)
-            and self._chat_control.view_is_at_bottom()
-        ):
+        if app.window.is_chat_being_read(event.account, event.jid):
             if event.message.id is None:
                 return
 
             client = app.get_client(event.account)
-            stanza_id = event.message.stanza_id
             contact = client.get_module("Contacts").get_contact(event.jid)
             assert isinstance(
                 contact, BareContact | GroupchatContact | GroupchatParticipant
             )
-            mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
-                contact, event.message.id, stanza_id
+            client.get_module("ChatMarkers").publish_displayed(
+                contact, event.message.id, event.message.stanza_id
             )
-
-            if not mds_assist_sent and stanza_id is not None:
-                by = contact.jid if isinstance(contact, GroupchatContact) else None
-                client.get_module("MDS").set_mds(contact.jid, stanza_id, by)
 
             return
 

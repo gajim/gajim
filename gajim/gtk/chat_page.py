@@ -257,6 +257,12 @@ class ChatPage(Gtk.Paned):
 
     def select_chat(self, account: str, jid: JID) -> None:
         self._list_stack.set_visible_child_name("chat-list-stack")
+        if self._chat_list_stack.is_chat_selected(account, jid):
+            if not self._chat_control.is_chat_active(account, jid):
+                self._chat_stack.show_chat(account, jid)
+            elif not self.is_chat_visible():
+                self._chat_stack.show_chat_page()
+            return
         self._chat_list_stack.select_chat(account, jid)
 
     def chat_exists_for_workspace(

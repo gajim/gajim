@@ -1017,6 +1017,16 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return False
         return self._chat_page.is_chat_selected(account, jid)
 
+    def is_chat_being_read(self, account: str, jid: JID) -> bool:
+        if not self.is_chat_active(account, jid):
+            return False
+
+        control = self.get_control()
+        if not control.is_chat_active(account, jid):
+            return False
+
+        return control.view_is_at_bottom()
+
     def highlight_dnd_targets(self, dragged_object: Any, highlight: bool) -> None:
         if isinstance(dragged_object, ChatListRow | PreviewWidget):
             chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -1306,13 +1316,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if last_message is None or last_message.id is None:
             return
 
-        mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
+        client.get_module("ChatMarkers").publish_displayed(
             contact, last_message.id, last_message.stanza_id
         )
-
-        if not mds_assist_sent and last_message.stanza_id is not None:
-            by = contact.jid if isinstance(contact, GroupchatContact) else None
-            client.get_module("MDS").set_mds(contact.jid, last_message.stanza_id, by)
 
     def _on_window_active(self, window: Gtk.ApplicationWindow, _param: Any) -> None:
         if not window.is_active():

@@ -583,8 +583,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             row.reset_unread()
             return
 
-        control = app.window.get_control()
-        if app.window.is_active() and row.is_selected() and control.view_is_at_bottom():
+        if app.window.is_chat_being_read(row.account, row.jid):
             return
 
         assert message.text is not None
