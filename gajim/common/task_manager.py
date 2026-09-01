@@ -121,3 +121,8 @@ class PulseManager:
                 log.exception("Unable to execute pulse")
 
         return GLib.SOURCE_CONTINUE
+
+    def shutdown(self) -> None:
+        log.info("Shutdown Pulse Manager")
+        GLib.source_remove(self._timeout_id)
+        self._callbacks.clear()

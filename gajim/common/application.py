@@ -264,6 +264,7 @@ class CoreApplication(ged.EventHelper):
         app.storage.archive.shutdown()
         app.settings.save()
         app.settings.shutdown()
+        app.pulse_manager.shutdown()
 
         self.end_profiling()
         configpaths.cleanup_temp()
