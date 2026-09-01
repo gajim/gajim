@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import colorsys
 import functools
 import hashlib
 import logging
@@ -111,7 +110,8 @@ def generate_avatar(
 
     text_color = (0.95, 0.95, 0.95)
     if check_contrast:
-        _hue, luminance, _saturation = colorsys.rgb_to_hls(*color)
+        # The constants are the CIE values of sRGB primaries for luminance Y
+        luminance = 0.2126 * color_r + 0.7152 * color_g + 0.0722 * color_b
         if luminance > 0.6:
             # Use dark text color if background luminance threshold is surpassed
             text_color = (0.2, 0.2, 0.2)
