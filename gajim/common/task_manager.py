@@ -71,6 +71,11 @@ class TaskManager:
         if self._timeout is None:
             self._start_worker()
 
+    def shutdown(self) -> None:
+        log.warning("Shutdown Task Manager")
+        if self._timeout is not None:
+            GLib.source_remove(self._timeout)
+
 
 @functools.total_ordering
 class Task:  # noqa: PLW1641
