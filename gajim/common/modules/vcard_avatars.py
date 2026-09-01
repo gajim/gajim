@@ -46,7 +46,6 @@ class VCardAvatars(BaseModule):
             ttl_seconds=60 * 60 * 6, extend_ttl_on_hit=False
         )
         self._muc_avatar_cache: dict[JID, str] = {}
-        self._muc_presence_avatar_cache: dict[JID, str] = {}
         self.avatar_conversion_available = False
 
         self.handlers = [
@@ -69,7 +68,6 @@ class VCardAvatars(BaseModule):
 
     def invalidate_cache(self, jid: JID) -> None:
         self._muc_avatar_cache.pop(jid, None)
-        self._muc_presence_avatar_cache.pop(jid, None)
 
     @as_task
     def _request_vcard(
@@ -282,7 +280,6 @@ class VCardAvatars(BaseModule):
             # Empty <photo/> tag, means no avatar is advertised
             self._log.info("%s has no avatar published", jid)
             self._muc_avatar_cache.pop(jid, None)
-            self._muc_presence_avatar_cache.pop(jid, None)
             contact.update_avatar()
 
         else:
@@ -302,12 +299,10 @@ class VCardAvatars(BaseModule):
                 app.task_manager.add_task(task)
                 return
 
-            presence_avatar_sha = self._muc_presence_avatar_cache.get(jid)
-            if presence_avatar_sha == avatar_sha:
+            if self._muc_avatar_cache.get(jid) == avatar_sha:
                 self._log.info("Avatar already known: %s", jid)
                 return
 
-            self._muc_presence_avatar_cache[jid] = avatar_sha
             self._log.info("%s changed their avatar: %s", jid, avatar_sha)
             self.update_occupant_avatar(contact, avatar_sha)
 
