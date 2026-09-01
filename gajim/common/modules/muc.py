@@ -763,7 +763,8 @@ class MUC(BaseModule):
 
                 elif muc_data.state == MUCJoinedState.CREATING:
                     if properties.is_new_room:
-                        muc_data.occupant_id = properties.occupant_id
+                        if room.supports(Namespace.OCCUPANT_ID):
+                            muc_data.occupant_id = properties.occupant_id
                         self.configure_room(room_jid)
 
             presence = self._process_user_presence(properties)
