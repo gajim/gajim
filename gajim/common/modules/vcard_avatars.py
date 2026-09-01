@@ -24,7 +24,6 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.const import VALUE_MISSING
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -158,8 +157,6 @@ class VCardAvatars(BaseModule):
             account_=contact.account,
             remote_jid_=contact.room.jid,
             id=occupant_id,
-            real_remote_jid_=contact.real_jid or VALUE_MISSING,
-            nickname=contact.name,
             avatar_sha=avatar_sha,
             updated_at=utc_now(),
         )
