@@ -282,7 +282,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         focus_mode = self._get_focus_mode()
         rail_collapsed = self._split_view.get_collapsed()
         chat_list_collapsed = self._main_stack.get_chat_list_collapsed()
-        collapsed = rail_collapsed or chat_list_collapsed
 
         state = self.get_action("chat-list-visible").get_state()
         showing_list = True if state is None else state.get_boolean()
@@ -311,7 +310,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         # Keep the back button reachable even if the user hid the header bar.
         if sys.platform not in ("win32", "darwin"):
-            if collapsed:
+            if rail_collapsed:
                 self._header_bar.set_visible(True)
             else:
                 self._header_bar.set_visible(app.settings.get("show_header_bar"))
