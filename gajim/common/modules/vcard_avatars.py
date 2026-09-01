@@ -141,10 +141,6 @@ class VCardAvatars(BaseModule):
             if current_contact is not None:
                 return current_contact
 
-        current_contact = contact.room.get_resource_if_exists(contact.name)
-        if current_contact is not None and current_contact.is_available:
-            return current_contact
-
         return contact
 
     def _upsert_occupant_avatar(
