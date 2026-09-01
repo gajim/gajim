@@ -46,6 +46,7 @@ from gajim.gtk.util.window import open_window
 class ActivityPage(Gtk.Stack):
     __gsignals__ = {
         "page-removed": (GObject.SignalFlags.RUN_LAST, None, (ActivityListItem,)),
+        "page-shown": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self) -> None:
@@ -82,6 +83,7 @@ class ActivityPage(Gtk.Stack):
 
         self.add_named(page, "activity")
         self.set_visible_child_name("activity")
+        self.emit("page-shown")
 
     def _on_request_remove(self, page: BaseActivityPage) -> None:
         self.show_default_page()

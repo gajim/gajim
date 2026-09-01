@@ -73,6 +73,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self.add_named(ChatPlaceholderBox(), "empty")
 
         self._activity_page = ActivityPage()
+        self._connect(self._activity_page, "page-shown", self._on_activity_page_shown)
         self.add_named(self._activity_page, "activity")
 
         self._chat_function_page = ChatFunctionPage()
@@ -328,6 +329,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def show_activity_page(self, context_id: str | None = None) -> None:
         if not context_id:
             self._activity_page.show_default_page()
+        self.set_visible_child_name("activity")
+
+    def _on_activity_page_shown(self, _activity_page: ActivityPage) -> None:
         self.set_visible_child_name("activity")
 
     def _on_room_password_required(
