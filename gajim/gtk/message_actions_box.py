@@ -605,8 +605,15 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         match new_state:
-            case "" | "OMEMO" | "OpenPGP":
+            case "" | "OMEMO":
                 pass
+
+            case "OpenPGP":
+                if isinstance(self._contact, GroupchatContact):
+                    assert self._client is not None
+                    self._client.get_module("OpenPGP").request_groupchat_members_keys(
+                        self._contact.jid
+                    )
 
             case _:
                 plugin = app.plugin_manager.encryption_plugins.get(new_state)

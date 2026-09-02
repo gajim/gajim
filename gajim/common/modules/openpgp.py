@@ -801,11 +801,9 @@ class OpenPGP(BaseModule, CryptoModule):
     def _on_muc_event(
         self, contact: GroupchatContact, _signal_name: str, *args: Any
     ) -> None:
-
-        if not self._is_compatible_muc(contact.jid):
+        if contact.settings.get("encryption") != "OpenPGP":
             return
-
-        self._check_groupchat_members_keys(contact.jid)
+        self.request_groupchat_members_keys(contact.jid)
 
     def _get_groupchat_members(self, remote_jid: JID) -> set[JID]:
         affiliations = self._client.get_module("MUC").get_affiliations(
@@ -815,7 +813,13 @@ class OpenPGP(BaseModule, CryptoModule):
         members.update(*affiliations.values())
         return members
 
+    def request_groupchat_members_keys(self, remote_jid: JID) -> None:
+        self._check_groupchat_members_keys(remote_jid)
+
     def _check_groupchat_members_keys(self, remote_jid: JID) -> None:
+        if not self._is_compatible_muc(remote_jid):
+            return
+
         for jid in self._get_groupchat_members(remote_jid):
             if not self._is_contact_in_roster(jid):
                 self._log.info("%s not in roster, query keylist...", jid)
