@@ -318,19 +318,20 @@ class Message(BaseModule):
         assert properties.error is not None
         assert properties.jid is not None
 
-        # Some servers do not include the original payload in the error
-        # This makes it hard to detect MUC PMs. Try to find the corresponding
-        # message in the database to narrow it down.
-        remotes = [properties.jid]
-        if not properties.jid.is_bare:
-            remotes.append(properties.jid.new_as_bare())
+        if not properties.is_muc_pm:
+            # Some servers do not include the original payload in the error
+            # This makes it hard to detect MUC PMs. Try to find the corresponding
+            # message in the database to narrow it down.
+            remotes = [properties.jid]
+            if not properties.jid.is_bare:
+                remotes.append(properties.jid.new_as_bare())
 
-        message = app.storage.archive.get_message_from_error_id(
-            self._account, remotes, message_id
-        )
+            message = app.storage.archive.get_message_from_error_id(
+                self._account, remotes, message_id
+            )
 
-        if message is not None:
-            remote_jid = message.remote.jid
+            if message is not None:
+                remote_jid = message.remote.jid
 
         error_data = mod.MessageError(
             account_=self._account,
