@@ -63,6 +63,11 @@ VCardRowsT = Union[
     "ReadOnlyRow",
 ]
 
+TYPE_DATA = {
+    "home": (_("Home"), "lucide-house"),
+    "work": (_("Work"), "lucide-briefcase"),
+}
+
 log = logging.getLogger("gajim.gtk.vcard_listbox")
 
 
@@ -70,7 +75,7 @@ def format_property_value(prop: SupportedPropertiesT) -> str:
     if isinstance(prop, OrgProperty):
         return ", ".join(value for value in prop.values if value)
     if isinstance(prop, AdrProperty):
-        return ", ".join(
+        return "\n".join(
             value for field in ADR_FIELDS for value in getattr(prop, field) if value
         )
     if isinstance(prop, GenderProperty):
@@ -505,6 +510,13 @@ class ReadOnlyRow(Adw.ActionRow, BaseRow):
 
             case _:
                 self.set_subtitle(value)
+
+        for supported_type in prop.parameters.get_types():
+            if supported_type in ("work", "home"):
+                type_text, type_icon_name = TYPE_DATA[supported_type]
+                icon = Gtk.Image(icon_name=type_icon_name, tooltip_text=type_text)
+                self.add_suffix(icon)
+                break
 
     def run_destroy(self):
         self._disconnect_all()

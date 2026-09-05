@@ -136,6 +136,7 @@ class TestVCardListBox(GajimAppWindow):
         main_box.append(self._scrolled)
 
         self._vcard_editor = VCardEditor()
+        self._vcard_editor.set_margin_end(18)
         self._vcard_editor.set_vcard(VCARD)
         self._scrolled.set_child(self._vcard_editor)
 
