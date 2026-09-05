@@ -72,7 +72,7 @@ VCARD_NODE = """
     <note>
         <text>More information about me is located on my personal website: https://stpeter.im/</text>
     </note>
-    <gender><sex><text>M</text></sex></gender>
+    <gender><sex>M</sex></gender>
     <lang>
         <parameters><pref><integer>1</integer></pref></parameters>
         <language-tag>en</language-tag>
