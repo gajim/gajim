@@ -100,12 +100,8 @@
           <object class="GtkStackPage">
             <property name="name">error</property>
             <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="AdwStatusPage" id="_error_page"/>
-                </child>
-                <child>
+              <object class="AdwStatusPage" id="_error_page">
+                <property name="child">
                   <object class="GtkButton" id="_back_button">
                     <property name="label" translatable="yes">_Back</property>
                     <property name="use-underline">true</property>
@@ -114,7 +110,7 @@
                       <class name="suggested-action"/>
                     </style>
                   </object>
-                </child>
+                </property>
               </object>
             </property>
           </object>
