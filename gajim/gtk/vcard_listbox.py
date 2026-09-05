@@ -145,7 +145,7 @@ class VCardListBox(Gtk.ListBox):
         self._vcard = vcard.copy()
         self._edit_mode = edit_mode
 
-        for prop in vcard.get_properties():
+        for prop in self._vcard.get_properties():
             if isinstance(prop, SupportedProperties):
                 self._append_property(prop)
 
