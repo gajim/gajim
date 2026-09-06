@@ -157,8 +157,7 @@ def get_groupchat_name(client: types.Client, jid: JID) -> str:
         if name := contact.get_name():
             return name
 
-    assert jid.localpart is not None
-    return jid.localpart
+    return jid.localpart or jid.domain
 
 
 def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
