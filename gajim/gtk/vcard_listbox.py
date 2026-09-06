@@ -317,6 +317,8 @@ class TextViewRow(Adw.ExpanderRow, BaseRow):
             top_margin=8,
             bottom_margin=8,
         )
+        text_view.add_css_class("frame")
+        text_view.add_css_class("card")
 
         text_buffer = text_view.get_buffer()
         text_buffer.set_text(prop.value)
@@ -330,9 +332,10 @@ class TextViewRow(Adw.ExpanderRow, BaseRow):
             propagate_natural_width=True,
         )
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled.add_css_class("p-6")
 
         content_row = Adw.ActionRow()
-        content_row.add_suffix(scrolled)
+        content_row.set_child(scrolled)
         self.add_row(content_row)
 
         self._dropdown = None
