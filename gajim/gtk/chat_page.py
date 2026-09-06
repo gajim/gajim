@@ -315,14 +315,17 @@ class ChatPage(Gtk.Paned):
             if account not in active_accounts:
                 continue
 
-            self.add_chat_for_workspace(
-                workspace_id,
-                account,
-                open_chat["jid"],
-                open_chat["type"],
-                pinned=open_chat["pinned"],
-                position=open_chat["position"],
-            )
+            try:
+                self.add_chat_for_workspace(
+                    workspace_id,
+                    account,
+                    open_chat["jid"],
+                    open_chat["type"],
+                    pinned=open_chat["pinned"],
+                    position=open_chat["position"],
+                )
+            except Exception:
+                log.exception("Error while adding chat to workspace")
 
     def is_chat_visible(self) -> bool:
         return self._chat_stack.get_visible_child_name() in ("controls", "function")
