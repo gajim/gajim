@@ -637,7 +637,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             type_ = "message"
         elif stanza.startswith("<iq"):
             type_ = "iq"
-        elif stanza.startswith(("<r", "<a")):
+        elif stanza.startswith(("<r ", "<a ")):
             type_ = "stream"
 
         text = "<!-- {kind} {time} ({account}) -->\n{stanza}\n\n".format(
