@@ -69,7 +69,6 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._results_iterator: Iterator[Message] | None = None
 
         self._search_params_changed = True
-        self._is_bare_contact = False
         self._first_date: dt.datetime | None = None
         self._last_date: dt.datetime | None = None
 
@@ -224,13 +223,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
             self._highlight_search_entry()
             valid = False
 
-        filters = self._search_filters.get_filters()
-        if (
-            filters.direction is ChatDirection.INCOMING
-            and not self._is_bare_contact
-            and not filters.usernames
-        ):
-            self._search_filters.highlight_from_entry()
+        if not self._search_filters.validate():
             valid = False
 
         return valid
@@ -255,22 +248,17 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
-        is_bare_contact = False
-        if context:
-            assert self._account is not None
-            assert self._jid is not None
-            client = app.get_client(self._account)
-            contact = client.get_module("Contacts").get_contact(self._jid)
-            is_bare_contact = isinstance(contact, BareContact)
-        else:
+        if not context:
             self._ui.search_checkbutton.set_active(True)
 
         account = None
         jid = None
-        if context and not everywhere and not is_bare_contact:
-            account = self._account
-        if context and (not everywhere or is_bare_contact):
+        if context and (not everywhere or search_filter.from_contact):
+            assert self._account is not None
+            assert self._jid is not None
             jid = self._jid
+            if not everywhere:
+                account = self._account
 
         from_users = (
             search_filter.usernames
@@ -468,13 +456,6 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._jid = jid
         self._last_search_string = ""
 
-        if account is not None and jid is not None:
-            client = app.get_client(account)
-            contact = client.get_module("Contacts").get_contact(jid)
-            self._is_bare_contact = isinstance(contact, BareContact)
-        else:
-            self._is_bare_contact = False
-
         self._search_filters.set_context(account, jid)
         self._ui.search_checkbutton.set_active(False)
         self._ui.calendar_button.set_sensitive(True)
@@ -589,6 +570,7 @@ class ResultRow(Gtk.ListBoxRow):
 @dataclass
 class SearchFilterData:
     usernames: list[str] | None
+    from_contact: bool
     use_all_from_filter: bool | None
     before: dt.datetime | None
     after: dt.datetime | None
@@ -775,8 +757,19 @@ class SearchFilters(Gtk.Expander, SignalManager):
     def unhighlight_from_entry(self) -> None:
         self._ui.filter_from_entry.remove_css_class(CSS_CLASS_FIELD_MISSING)
 
+    def validate(self) -> bool:
+        valid = (
+            self._direction is not ChatDirection.INCOMING
+            or self._is_bare_contact
+            or bool(self._ui.filter_from_entry.get_text())
+        )
+        if not valid:
+            self.highlight_from_entry()
+        return valid
+
     def set_context(self, account: str | None, jid: JID | None) -> None:
         if account is None or jid is None:
+            self._is_bare_contact = False
             self._ui.filter_from_desc_label.set_visible(False)
             self._ui.filter_from_dropdown.set_visible(False)
             self._ui.filter_from_entry.set_visible(False)
@@ -806,6 +799,9 @@ class SearchFilters(Gtk.Expander, SignalManager):
 
         return SearchFilterData(
             usernames=usernames or None,
+            from_contact=(
+                self._is_bare_contact and self._direction is ChatDirection.INCOMING
+            ),
             use_all_from_filter=self._use_all_from_filter,
             before=self._before,
             after=self._after,
