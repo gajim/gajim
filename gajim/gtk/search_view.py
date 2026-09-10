@@ -255,21 +255,14 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
-        is_bare_contact = False
-        if context:
-            assert self._account is not None
-            assert self._jid is not None
-            client = app.get_client(self._account)
-            contact = client.get_module("Contacts").get_contact(self._jid)
-            is_bare_contact = isinstance(contact, BareContact)
-        else:
+        if not context:
             self._ui.search_checkbutton.set_active(True)
 
-        account = None
-        jid = None
-        if context and not everywhere and not is_bare_contact:
+        if not context or everywhere:
+            account = None
+            jid = None
+        else:
             account = self._account
-        if context and (not everywhere or is_bare_contact):
             jid = self._jid
 
         from_users = (
