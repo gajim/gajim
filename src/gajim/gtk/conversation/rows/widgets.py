@@ -441,9 +441,9 @@ class MessageIcons(Gtk.Box):
         self._mention_image.set_visible(visible)
 
 
-class AvatarBox(Gtk.Box, SignalManager):
+class AvatarBox(Gtk.Overlay, SignalManager):
     def __init__(self, contact: ChatContactT) -> None:
-        Gtk.Box.__init__(self)
+        Gtk.Overlay.__init__(self)
         SignalManager.__init__(self)
 
         self.set_size_request(AvatarSize.ROSTER, -1)
@@ -453,13 +453,13 @@ class AvatarBox(Gtk.Box, SignalManager):
         self._name = ""
 
         self._image = Gtk.Image(pixel_size=AvatarSize.ROSTER)
-        self.append(self._image)
+        self.set_child(self._image)
 
         if self._contact.is_groupchat:
             self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
 
         self._menu_popover = GajimPopover(None)
-        self.append(self._menu_popover)
+        self.add_overlay(self._menu_popover)
 
         gesture_left_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
         self._connect(gesture_left_click, "pressed", self._on_avatar_clicked)
@@ -471,7 +471,7 @@ class AvatarBox(Gtk.Box, SignalManager):
 
     def do_unroot(self):
         self._disconnect_all()
-        Gtk.Box.do_unroot(self)
+        Gtk.Overlay.do_unroot(self)
 
     def set_from_paintable(self, texture: Gdk.Texture | None) -> None:
         self._image.set_from_paintable(texture)
