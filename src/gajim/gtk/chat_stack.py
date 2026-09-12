@@ -248,6 +248,12 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         )
         self._current_contact = contact
 
+        # Focus message input, otherwise (under some circumstances) GTK focuses the
+        # first newly added row and by focusing it, automatically scrolls it into view
+        message_input = self.get_message_input()
+        if message_input.get_mapped():
+            message_input.grab_focus()
+
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
