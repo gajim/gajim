@@ -25,7 +25,6 @@ from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
 from gajim.common.const import Display
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -248,6 +247,15 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         )
         self._current_contact = contact
 
+        # Focus message input, otherwise if a row in the ConversationView has focus
+        # the first new row that gets added gets the new focus and the listbox
+        # scrolls to that row, which ends with the listbox not at bottom.
+        # It is important that this call is before switch_contact() which triggers
+        # reloading of new messages.
+        message_input = self.get_message_input()
+        if message_input.get_mapped():
+            message_input.grab_focus()
+
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
@@ -309,8 +317,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self.set_visible_child_name("controls")
 
         app.plugin_manager.extension_point("switch_contact", self._current_contact)
-
-        idle_add_once(app.window.activate_action, "win.input-focus")
 
     def _on_primary_clipboard_read_text_finished(
         self,
