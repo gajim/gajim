@@ -3,13 +3,13 @@
 #
 # Mako N <mako@pasero.net>, 2022, 2023, 2024, 2025, 2026.
 # 翻訳者X <columbidae@memail.com>, 2024.
-# 翻訳者X <tairanto2@wail.ch>, 2025.
+# 翻訳者X <tairanto2@wail.ch>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-07-18 04:20+0000\n"
+"PO-Revision-Date: 2026-09-11 10:20+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -247,9 +247,8 @@ msgstr "アドレスに '@' が含まれていません。本当に正しいで�
 msgid "(changed by %s)"
 msgstr "(%s が変更)"
 
-#, fuzzy
 msgid "(inactive)"
-msgstr "有効"
+msgstr ""
 
 #, python-format
 msgid "(reason: %s)"
@@ -267,7 +266,7 @@ msgstr "(理由: システムがシャットダウンしました)"
 #, python-format
 msgctxt "Group chat name"
 msgid ", %(number of participants)s others"
-msgstr ""
+msgstr "、その他の %(number of participants)s 人"
 
 msgid "1 Day"
 msgstr "1日"
@@ -881,7 +880,7 @@ msgid "Backup Secret Key"
 msgstr "秘密鍵のバックアップ"
 
 msgid "Backup Successful"
-msgstr ""
+msgstr "バックアップ成功"
 
 #, fuzzy
 msgid "Backup password copied"
@@ -1732,6 +1731,8 @@ msgid ""
 "anyone. Sharing either one will compromise the security of your encrypted "
 "chats."
 msgstr ""
+"次のページのバックアップパスワードまたは QR コードを誰にも見せてはなりません"
+"。どちらかが共有されると、暗号化されたチャットの安全性が損なわれます。"
 
 msgid "Download"
 msgstr "ダウンロード"
@@ -1857,9 +1858,8 @@ msgstr "バックアップのパスワードを入力してください"
 msgid "Enter Password"
 msgstr "パスワードを入力"
 
-#, fuzzy
 msgid "Enter Password to Unlock"
-msgstr "パスワードを入力"
+msgstr "ロックを解除するためのパスワードを入力"
 
 msgid "Enter a password to join this chat"
 msgstr "この談話室に参加するにはパスワードを入れてください"
@@ -2636,7 +2636,7 @@ msgid "Issued to\n"
 msgstr "証明対象\n"
 
 msgid "Issues detected"
-msgstr ""
+msgstr "検出された問題"
 
 #, python-format
 msgid "It's <b>%(time)s</b> for %(name)s"
@@ -3053,7 +3053,7 @@ msgid "No Timezone"
 msgstr "タイムゾーンなし"
 
 msgid "No account password found, unlocking not possible"
-msgstr ""
+msgstr "アカウントのパスワードが見つかりません。ロック解除は不可能です"
 
 msgid "No additional requirements"
 msgstr "追加要件なし"
@@ -3423,9 +3423,8 @@ msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "要パスワード"
 
-#, fuzzy
 msgid "Password incorrect"
-msgstr "現在のパスワードは正しくありません"
+msgstr "パスワードが正しくありません"
 
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
@@ -4168,9 +4167,8 @@ msgstr "検索結果"
 msgid "Search all Chats"
 msgstr "すべてのチャットを検索"
 
-#, fuzzy
 msgid "Search all messages"
-msgstr "すべてのチャットを検索"
+msgstr "すべてのメッセージを検索"
 
 msgid "Search contacts..."
 msgstr "相手先を検索…"
@@ -4600,7 +4598,7 @@ msgid "Stage"
 msgstr ""
 
 msgid "Start / Join Chat"
-msgstr "チャットを開始"
+msgstr "チャットを開始/参加"
 
 msgid "Start Chat"
 msgstr "チャットを開始"
@@ -5348,9 +5346,8 @@ msgstr "未知の言語"
 msgid "Unknown validation error"
 msgstr "未知の検証エラー"
 
-#, fuzzy
 msgid "Unlock"
-msgstr "遮断の解除"
+msgstr "解除"
 
 msgid "Unmute Chat"
 msgstr "チャットのミュートを解除"

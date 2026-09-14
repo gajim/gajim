@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-08-24 11:20+0000\n"
-"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
+"PO-Revision-Date: 2026-09-14 00:20+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -181,7 +181,7 @@ msgstr "%s es un archivo pero podría ser un directorio"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr "%s ya está en tu roster"
+msgstr "%s ya está en tu lista de contactos"
 
 #, python-format
 msgid "%s is calling"
@@ -2973,7 +2973,7 @@ msgid "My Workspace"
 msgstr "Mi área de trabajo"
 
 msgid "Myself"
-msgstr "Yo"
+msgstr "Mí mismo"
 
 msgid "Name"
 msgstr "Nombre"
@@ -4158,7 +4158,7 @@ msgid "Search all Chats"
 msgstr "Buscar en todos los chats"
 
 msgid "Search all messages"
-msgstr "Buscar en todos los mensajes"
+msgstr "Buscar todos los mensajes"
 
 msgid "Search contacts..."
 msgstr "Buscar contactos..."
@@ -5522,7 +5522,7 @@ msgid "What does this mean?"
 msgstr "¿Qué significa esto?"
 
 msgid "Where participants should go"
-msgstr "Donde debería ir los participantes"
+msgstr "Dónde deberían ir los participantes"
 
 msgid ""
 "Whether to check for a valid certificate before downloading (not safe to "
@@ -5582,7 +5582,7 @@ msgstr "Tú"
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr "%s te has unido al grupo de chat"
+msgstr "%s, te has unido al grupo de chat"
 
 msgid "You are a visitor"
 msgstr "Eres un visitante"
@@ -5655,7 +5655,7 @@ msgid "You cancelled the transfer"
 msgstr "Has cancelado la transferencia"
 
 msgid "You cannot add yourself to your contact list."
-msgstr "No puedes añadirte a ti mismo a tu roster."
+msgstr "No puedes añadirte a ti mismo a tu lista de contactos."
 
 msgid "You cannot see this contact's online status"
 msgstr "No puedes ver el estado de este contacto"
@@ -5672,7 +5672,7 @@ msgstr "Has sido vetado"
 
 #, python-format
 msgid "You have been banned by %s"
-msgstr "Has sido silenciado por %s"
+msgstr "Has sido vetado por %s"
 
 #, python-format
 msgid "You have been invited to %s"
@@ -5777,7 +5777,7 @@ msgid "Your password"
 msgstr "Tu contraseña"
 
 msgid "Your password has successfully been changed."
-msgstr "Tu contraseña ha sido cambiado."
+msgstr "Tu contraseña ha sido cambiada."
 
 msgid "Your public key or authentication certificate"
 msgstr "Tu clave pública o certificado de autenticación"

@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-08-09 20:20+0000\n"
+"PO-Revision-Date: 2026-09-09 11:20+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -2394,7 +2394,7 @@ msgid "Hide Chat List"
 msgstr "Скрыть список чатов"
 
 msgid "Hide Sidebar"
-msgstr ""
+msgstr "Скрыть боковую панель"
 
 msgid "Home"
 msgstr "Дом"
@@ -2955,9 +2955,8 @@ msgstr "Модераторы"
 msgid "Modify"
 msgstr "Изменить"
 
-#, fuzzy
 msgid "More Actions"
-msgstr "Реакции"
+msgstr "Больше действий"
 
 msgid "More infos at providers.xmpp.net"
 msgstr "Подробнее на сайте providers.xmpp.net"
@@ -4404,9 +4403,8 @@ msgstr "Поделиться видео"
 msgid "Share my online status"
 msgstr "Показывать мой сетевой статус"
 
-#, fuzzy
 msgid "Share…"
-msgstr "Поделиться контактом…"
+msgstr "Поделиться…"
 
 msgid "Shortcuts"
 msgstr "Сочетания клавиш"
@@ -4450,9 +4448,8 @@ msgstr "Подключаемые модули"
 msgid "Show Send Message Button"
 msgstr "Отображать кнопку отправки сообщения"
 
-#, fuzzy
 msgid "Show Sidebar"
-msgstr "Показывать на панели задач"
+msgstr "Показать боковую панель"
 
 msgid "Show Status Changes"
 msgstr "Показывать изменения статуса"
