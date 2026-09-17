@@ -1,5 +1,5 @@
 gajim-nightly ({DATE}) unstable; urgency=low
 
-  * https://dev.gajim.org/gajim/gajim/-/commits/master
+  * https://gitlab.com/gajim/gajim/-/commits/master
 
  -- Gajim CI <ci@gajim.org>  {DATE_TIME}

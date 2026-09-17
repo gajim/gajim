@@ -2,7 +2,7 @@
 
 ## Preparations
 
-* [ ] Release new nbxmpp version and raise version in Gajim (if necessary) ([example](https://dev.gajim.org/gajim/gajim/-/commit/92afd65618923085d3392dcb5fb877b9bc71475e))
+* [ ] Release new nbxmpp version and raise version in Gajim (if necessary) ([example](https://gitlab.com/gajim/gajim/-/commit/92afd65618923085d3392dcb5fb877b9bc71475e))
 
 ## Build
 

@@ -64,7 +64,7 @@ class Plugins(GajimPreferencesGroup):
         description_text = _("Manage and configure Gajim plugins")
         if app.is_flatpak():
             flatpak_howto_text = _("How to install plugins with Flatpak")
-            flatpak_howto_url = "https://dev.gajim.org/gajim/gajim/wikis/help/flathub"
+            flatpak_howto_url = "https://gitlab.com/gajim/gajim/wikis/help/flathub"
             description_text += (
                 f"\n<a href='{flatpak_howto_url}'>{flatpak_howto_text}</a>"
             )

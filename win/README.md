@@ -6,10 +6,10 @@ We use [msys2](https://www.msys2.org/) for creating the Windows installer and de
 
 Download [msys2](https://www.msys2.org/) (`msys2-x86_64-xxx.exe`) and follow the install instructions on the [msys2](https://www.msys2.org/) startpage (**Important!**)
 
-* Fork the master branch on dev.gajim.org
+* Fork the master branch on gitlab.com
 * Execute `C:\msys64\msys2_shell.cmd -mingw64`
 * Run `pacman -S git` to install git
-* Run `git clone https://dev.gajim.org/USERNAME/gajim.git`
+* Run `git clone https://gitlab.com/USERNAME/gajim.git`
 * Run `cd gajim`
 * Create a virtual environment with access to MSYS packages: `python -m venv .venv --system-site-packages`
 * Activate the newly created environment: `source .venv/bin/activate`

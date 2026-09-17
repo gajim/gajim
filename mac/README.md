@@ -1,6 +1,6 @@
 # Build Gajim on macOS
 
-To build omemo-dr, nbxmpp and Gajim on macOS, you can follow [the wiki page](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS).
+To build omemo-dr, nbxmpp and Gajim on macOS, you can follow [the wiki page](https://gitlab.com/gajim/gajim/-/wikis/help/Gajim-on-macOS).
 
 But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help creating virtual environments for omemo-dr, nbxmpp and Gajim in Mac OS, build it, start it from the virtual environment, and also create a `.dmg` bundle.
 
@@ -16,7 +16,7 @@ Always run the `gajim-macos-helper.sh` script from within the directory where yo
 
 ### Build specific version of omemo-dr, nbxmpp and Gajim
 
-Always check the versions variables inside the `gajim-macos-helper.sh` script: check tags dates on Gitlab to make [omemo-dr](https://dev.gajim.org/gajim/omemo-dr/-/tags), [nbxmpp](https://dev.gajim.org/gajim/python-nbxmpp/-/tags) and [Gajim](https://dev.gajim.org/gajim/gajim/-/tags) versions match (example: Gajim version `2.4.1` match omemo-dr version `1.1.0` and nbxmpp version `7.0.0`)
+Always check the versions variables inside the `gajim-macos-helper.sh` script: check tags dates on Gitlab to make [omemo-dr](https://gitlab.com/gajim/omemo-dr/-/tags), [nbxmpp](https://gitlab.com/gajim/python-nbxmpp/-/tags) and [Gajim](https://gitlab.com/gajim/gajim/-/tags) versions match (example: Gajim version `2.4.1` match omemo-dr version `1.1.0` and nbxmpp version `7.0.0`)
 
 To build (or rebuild) a new version of omemo-dr, nbxmpp and Gajim, run:
 

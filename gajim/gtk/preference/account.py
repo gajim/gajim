@@ -388,7 +388,7 @@ class AccountOmemoSettingsGroup(GajimPreferencesGroup):
         )
 
         self.set_title(_("Trust Management"))
-        wiki_url = "https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO"
+        wiki_url = "https://gitlab.com/gajim/gajim/-/wikis/help/OMEMO"
         link_text = _("Read more about blind trust")
         self.set_description(f'<a href="{wiki_url}">{link_text}</a>')
 

@@ -41,7 +41,7 @@ PREVIEW_TYPES = {
     "Animated WebP URL": "https://gajim.org/img/gajim-test.webp",
     "Animated Avif URL": "https://gajim.org/img/gajim-test.avif",
     "Animated PNG URL": "https://gajim.org/img/gajim-test.png",
-    "Audio URL": "https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg",
+    "Audio URL": "https://gitlab.com/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg",
     "PDF URL": "https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf",
 }
 

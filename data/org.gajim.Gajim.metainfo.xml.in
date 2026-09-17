@@ -31,13 +31,13 @@
   </developer>
   <update_contact>gajim-devel_AT_gajim.org</update_contact>
   <url type="homepage">https://gajim.org/</url>
-  <url type="vcs-browser">https://dev.gajim.org/gajim/gajim</url>
-  <url type="bugtracker">https://dev.gajim.org/gajim/gajim/-/issues</url>
-  <url type="faq">https://dev.gajim.org/gajim/gajim/-/wikis/help/gajimfaq</url>
-  <url type="help">https://dev.gajim.org/gajim/gajim/-/wikis/help/Help</url>
+  <url type="vcs-browser">https://gitlab.com/gajim/gajim</url>
+  <url type="bugtracker">https://gitlab.com/gajim/gajim/-/issues</url>
+  <url type="faq">https://gitlab.com/gajim/gajim/-/wikis/help/gajimfaq</url>
+  <url type="help">https://gitlab.com/gajim/gajim/-/wikis/help/Help</url>
   <url type="donation">https://gajim.org/#donate</url>
-  <url type="translate">https://dev.gajim.org/gajim/gajim/-/wikis/development/devtranslate</url>
-  <url type="contribute">https://dev.gajim.org/gajim/gajim/-/wikis/development/IWantToStartHacking</url>
+  <url type="translate">https://gitlab.com/gajim/gajim/-/wikis/development/devtranslate</url>
+  <url type="contribute">https://gitlab.com/gajim/gajim/-/wikis/development/IWantToStartHacking</url>
   <translation type="gettext">gajim</translation>
   <content_rating type="oars-1.1">
     <content_attribute id="social-chat">intense</content_attribute>
@@ -49,133 +49,133 @@
   </recommends>
   <releases>
     <release version="2.6.0" date="2026-08-27">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.6.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.6.0/ChangeLog</url>
     </release>
     <release version="2.5.0" date="2026-07-15">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.5.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.5.0/ChangeLog</url>
     </release>
     <release version="2.4.7.1" date="2026-07-01">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.7.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.7.1/ChangeLog</url>
     </release>
     <release version="2.4.7" date="2026-06-18">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.7/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.7/ChangeLog</url>
     </release>
     <release version="2.4.6" date="2026-04-19">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.6/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.6/ChangeLog</url>
     </release>
     <release version="2.4.5" date="2026-03-30">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.5/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.5/ChangeLog</url>
     </release>
     <release version="2.4.4" date="2026-02-25">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.4/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.4/ChangeLog</url>
     </release>
     <release version="2.4.3" date="2026-01-20">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.3/ChangeLog</url>
     </release>
     <release version="2.4.2" date="2026-01-14">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.2/ChangeLog</url>
     </release>
     <release version="2.4.1" date="2025-12-13">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.1/ChangeLog</url>
     </release>
     <release version="2.4.0" date="2025-11-04">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.4.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.4.0/ChangeLog</url>
     </release>
     <release version="2.3.6" date="2025-09-30">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.6/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.6/ChangeLog</url>
     </release>
     <release version="2.3.5" date="2025-09-11">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.5/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.5/ChangeLog</url>
     </release>
     <release version="2.3.4" date="2025-08-11">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.4/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.4/ChangeLog</url>
     </release>
     <release version="2.3.3" date="2025-07-13">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.3/ChangeLog</url>
     </release>
     <release version="2.3.2" date="2025-07-02">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.2/ChangeLog</url>
     </release>
     <release version="2.3.1" date="2025-06-29">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.1/ChangeLog</url>
     </release>
     <release version="2.3.0" date="2025-06-29">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.3.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.3.0/ChangeLog</url>
     </release>
     <release version="2.2.0" date="2025-05-15">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.2.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.2.0/ChangeLog</url>
     </release>
     <release version="2.1.1" date="2025-04-17">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.1.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.1.1/ChangeLog</url>
     </release>
     <release version="2.1.0" date="2025-04-08">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.1.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.1.0/ChangeLog</url>
     </release>
     <release version="2.0.4" date="2025-03-20">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.4/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.0.4/ChangeLog</url>
     </release>
     <release version="2.0.3" date="2025-03-15">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.0.3/ChangeLog</url>
     </release>
     <release version="2.0.2" date="2025-03-10">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.0.2/ChangeLog</url>
     </release>
     <release version="2.0.1" date="2025-03-03">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.0.1/ChangeLog</url>
     </release>
     <release version="2.0.0" date="2025-02-28">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/2.0.0/ChangeLog</url>
     </release>
     <release version="1.9.5" date="2024-09-30">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.5/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.5/ChangeLog</url>
     </release>
     <release version="1.9.4" date="2024-09-19">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.4/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.4/ChangeLog</url>
     </release>
     <release version="1.9.3" date="2024-07-29">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.3/ChangeLog</url>
     </release>
     <release version="1.9.2" date="2024-07-19">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.2/ChangeLog</url>
     </release>
     <release version="1.9.1" date="2024-06-22">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.1/ChangeLog</url>
     </release>
     <release version="1.9.0" date="2024-06-10">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.9.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.9.0/ChangeLog</url>
     </release>
     <release version="1.8.4" date="2023-11-26">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.8.4/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.8.4/ChangeLog</url>
     </release>
     <release version="1.8.3" date="2023-11-06">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.8.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.8.3/ChangeLog</url>
     </release>
     <release version="1.8.2" date="2023-10-29">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.8.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.8.2/ChangeLog</url>
     </release>
     <release version="1.8.1" date="2023-08-07">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.8.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.8.1/ChangeLog</url>
     </release>
     <release version="1.8.0" date="2023-05-27">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.8.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.8.0/ChangeLog</url>
     </release>
     <release version="1.7.3" date="2023-04-04">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.7.3/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.7.3/ChangeLog</url>
     </release>
     <release version="1.7.2" date="2023-03-11">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.7.2/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.7.2/ChangeLog</url>
     </release>
     <release version="1.7.1" date="2023-02-08">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.7.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.7.1/ChangeLog</url>
     </release>
     <release version="1.7.0" date="2023-02-03">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.7.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.7.0/ChangeLog</url>
     </release>
     <release version="1.6.1" date="2023-01-14">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.6.1/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.6.1/ChangeLog</url>
     </release>
     <release version="1.6.0" date="2023-01-07">
-      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/1.6.0/ChangeLog</url>
+      <url type="details">https://gitlab.com/gajim/gajim/-/blob/1.6.0/ChangeLog</url>
     </release>
     <release version="1.5.4" date="2022-12-03" />
     <release version="1.5.3" date="2022-10-31" />

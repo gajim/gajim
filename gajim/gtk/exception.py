@@ -53,7 +53,7 @@ except Exception:
 
 _exception_in_progress = threading.Lock()
 
-ISSUE_URL = "https://dev.gajim.org/gajim/gajim/issues/new"
+ISSUE_URL = "https://gitlab.com/gajim/gajim/issues/new"
 
 ISSUE_TEXT = """## Versions
 - OS: {}

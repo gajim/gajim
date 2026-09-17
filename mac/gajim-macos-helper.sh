@@ -28,9 +28,9 @@ gajim_version="master"
 nbxmpp_version="master"
 omemo_dr_version="master"
 python_version="3.14"
-gajim_git="https://dev.gajim.org/gajim/gajim"
-nbxmpp_git="https://dev.gajim.org/gajim/python-nbxmpp"
-omemo_dr_git="https://dev.gajim.org/gajim/omemo-dr"
+gajim_git="https://gitlab.com/gajim/gajim"
+nbxmpp_git="https://gitlab.com/gajim/python-nbxmpp"
+omemo_dr_git="https://gitlab.com/gajim/omemo-dr"
 python_dependencies="\
 	pyobjc \
 	cryptography \
@@ -49,7 +49,7 @@ python_dependencies="\
 	httpx2 \
 	pysequoia"
 
-# Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://dev.gajim.org/gajim/gajim/-/issues/12365)
+# Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://gitlab.com/gajim/gajim/-/issues/12365)
 DEFAULT_PATH="$PATH"
 DEFAULT_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
 DEFAULT_XDG_DATA_DIRS="$XDG_DATA_DIRS"

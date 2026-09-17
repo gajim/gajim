@@ -54,7 +54,7 @@ gajim-remote is an application to control and communicate with a running instanc
 
 # BUGS
 
-Please submit bugs at https://dev.gajim.org/gajim/gajim/issues.
+Please submit bugs at https://gitlab.com/gajim/gajim/issues.
 
 # SUPPORT
 

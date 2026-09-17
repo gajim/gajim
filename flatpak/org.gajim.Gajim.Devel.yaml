@@ -87,7 +87,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: git
-        url: https://dev.gajim.org/gajim/omemo-dr.git
+        url: https://gitlab.com/gajim/omemo-dr.git
 
   - name: python3-nbxmpp
     buildsystem: simple
@@ -95,7 +95,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: git
-        url: https://dev.gajim.org/gajim/python-nbxmpp.git
+        url: https://gitlab.com/gajim/python-nbxmpp.git
 
   - name: gajim
     buildsystem: simple
@@ -106,7 +106,7 @@ modules:
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
       - type: git
-        url: https://dev.gajim.org/gajim/gajim.git
+        url: https://gitlab.com/gajim/gajim.git
       - type: file
         path: app-overrides.json
       - type: shell

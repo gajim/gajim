@@ -20,9 +20,9 @@
 
     <homepage rdf:resource="https://gajim.org/"/>
     <download-page rdf:resource="https://gajim.org/download"/>
-    <schema:documentation rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
-    <wiki rdf:resource="https://dev.gajim.org/gajim/gajim/-/wikis/home"/>
-    <bug-database rdf:resource="https://dev.gajim.org/gajim/gajim/issues"/>
+    <schema:documentation rdf:resource="https://gitlab.com/gajim/gajim/-/wikis/home"/>
+    <wiki rdf:resource="https://gitlab.com/gajim/gajim/-/wikis/home"/>
+    <bug-database rdf:resource="https://gitlab.com/gajim/gajim/issues"/>
     <developer-forum rdf:resource="xmpp:gajim@conference.gajim.org?join"/>
     <support-forum rdf:resource="xmpp:gajim@conference.gajim.org?join"/>
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client"/>
@@ -39,8 +39,8 @@
 
     <repository>
       <GitRepository>
-        <location rdf:resource="https://dev.gajim.org/gajim/gajim.git"/>
-        <browse rdf:resource="https://dev.gajim.org/gajim/"/>
+        <location rdf:resource="https://gitlab.com/gajim/gajim.git"/>
+        <browse rdf:resource="https://gitlab.com/gajim/"/>
       </GitRepository>
     </repository>
 

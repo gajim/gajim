@@ -42,8 +42,8 @@ test-pyright:
     - changes:
       - "**/*.py"
   script:
-    - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
-    - pip install git+https://dev.gajim.org/gajim/omemo-dr.git
+    - pip install git+https://gitlab.com/gajim/python-nbxmpp.git
+    - pip install git+https://gitlab.com/gajim/omemo-dr.git
     - pyright --version
     - pyright
   interruptible: true
@@ -77,8 +77,8 @@ test-unittest:
   image: gajim-test
   stage: test
   script:
-    - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
-    - pip install git+https://dev.gajim.org/gajim/omemo-dr.git
+    - pip install git+https://gitlab.com/gajim/python-nbxmpp.git
+    - pip install git+https://gitlab.com/gajim/omemo-dr.git
     - coverage run --source=gajim -m unittest discover -s test -v
     - coverage report -mi
     - coverage xml -i
@@ -157,7 +157,7 @@ build-windows:
     - >
       release-helper build-windows-pkg \
         --account=lovetox \
-        --repository=https://dev.gajim.org/gajim/gajim \
+        --repository=https://gitlab.com/gajim/gajim \
         --branch=master \
         --version=$GAJIM_VERSION \
         --commit-sha=$CI_COMMIT_SHA \
@@ -178,7 +178,7 @@ build-windows-nightly:
     - >
       release-helper build-windows-pkg \
         --account=lovetox \
-        --repository=https://dev.gajim.org/gajim/gajim \
+        --repository=https://gitlab.com/gajim/gajim \
         --branch=$CI_COMMIT_BRANCH \
         --version=$CURRENT_DATE_2 \
         --commit-sha=$CI_COMMIT_SHA \
@@ -315,9 +315,9 @@ publish-website:
     - if: '$CI_COMMIT_TAG'
   before_script:
     - eval $(ssh-agent -s)
-    - .ci/prepare_git.sh dev.gajim.org "${WEBSITE_DEPLOY_KEY}"
+    - .ci/prepare_git.sh gitlab.com "${WEBSITE_DEPLOY_KEY}"
   script:
-    - git clone git@dev.gajim.org:gajim/website.git
+    - git clone git@gitlab.com:gajim/website.git
     - cd website
     - git checkout master
     - python ./scripts/bump_version.py $CI_COMMIT_TAG

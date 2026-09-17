@@ -84,7 +84,7 @@ $XDG_DATA_HOME/gajim/
 
 # BUGS
 
-Please submit bugs at https://dev.gajim.org/gajim/gajim/issues.
+Please submit bugs at https://gitlab.com/gajim/gajim/issues.
 
 # SUPPORT
 

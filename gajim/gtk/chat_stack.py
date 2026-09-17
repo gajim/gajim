@@ -786,7 +786,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             return False
 
         # DND on X11 freezes due to a GTK bug:
-        # https://dev.gajim.org/gajim/gajim/-/issues/12313
+        # https://gitlab.com/gajim/gajim/-/issues/12313
         if app.is_display(Display.X11):
             return gi_gui_package_version("Gtk>=4.20.1")
 

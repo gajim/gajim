@@ -20,7 +20,7 @@ CUSTOM_ICONS_PATH = util.get_gajim_dir() / "data/icons"
 class TestCustomIcons(GajimAppWindow):
     """A test window which lists all of Gajim's custom scalable icons.
     This allows us to quickly check if symbolic display is working correctly, see:
-    https://dev.gajim.org/gajim/gajim/-/wikis/Icon-Resources#symbolic-svgs
+    https://gitlab.com/gajim/gajim/-/wikis/Icon-Resources#symbolic-svgs
     """
 
     def __init__(self):

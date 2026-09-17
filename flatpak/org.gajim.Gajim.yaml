@@ -86,7 +86,7 @@ modules:
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
       - type: git
-        url: https://dev.gajim.org/gajim/gajim.git
+        url: https://gitlab.com/gajim/gajim.git
         tag: 2.6.0
       - type: file
         path: app-overrides.json

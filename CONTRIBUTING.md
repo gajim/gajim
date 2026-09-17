@@ -28,7 +28,7 @@ to lower the maintenance burden and release faster.
 
 # Commit Messages
 
-If you are not familiar with Git please read the [HowTo](https://dev.gajim.org/gajim/gajim/wikis/development/howtogit)
+If you are not familiar with Git please read the [HowTo](https://gitlab.com/gajim/gajim/wikis/development/howtogit)
 
 A good article regarding [good commit messages](https://chris.beams.io/posts/git-commit/)
 

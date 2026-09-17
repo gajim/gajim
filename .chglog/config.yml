@@ -2,7 +2,7 @@ style: gitlab
 template: CHANGELOG.tpl.md
 info:
   title: CHANGELOG
-  repository_url: https://dev.gajim.org/gajim/gajim
+  repository_url: https://gitlab.com/gajim/gajim
 options:
   commits:
     filters:

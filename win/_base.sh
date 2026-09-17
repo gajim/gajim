@@ -60,8 +60,8 @@ ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
 "
 
 PYTHON_REQUIREMENTS="\
-git+https://dev.gajim.org/gajim/omemo-dr.git
-git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://gitlab.com/gajim/omemo-dr.git
+git+https://gitlab.com/gajim/python-nbxmpp.git
 css_parser
 httpx2[http2,socks]
 truststore
@@ -123,7 +123,7 @@ function create_root {
 }
 
 function install_mingw_deps {
-    # Downgrade pango https://dev.gajim.org/gajim/gajim/-/issues/12730
+    # Downgrade pango https://gitlab.com/gajim/gajim/-/issues/12730
     build_pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-pango-1.56.4-3-any.pkg.tar.zst
     build_pacman --noconfirm -S ${MINGW_DEPS}
 }

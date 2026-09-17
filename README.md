@@ -24,7 +24,7 @@ thoughts or discuss the news with your groups.
 - [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-base)
 - [keyring](https://pypi.org/project/keyring/)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.4.0)
-- [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.2.0)
+- [omemo-dr](https://gitlab.com/gajim/omemo-dr) (>=1.2.0)
 - [packaging](https://pypi.org/project/packaging/)
 - [httpx2](https://pypi.org/project/httpx2/)
 - [h2](https://pypi.org/project/h2/)
@@ -47,7 +47,7 @@ thoughts or discuss the news with your groups.
 ### Optional Runtime Requirements
 
 - D-Bus running to have gajim-remote working
-- [sentry-sdk](https://pypi.org/project/sentry-sdk/) for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
+- [sentry-sdk](https://pypi.org/project/sentry-sdk/) for Sentry error reporting to gitlab.com (users decide whether to send reports or not)
 - [libspelling](https://gitlab.gnome.org/GNOME/libspelling) and hunspell-LANG where lang is your locale eg. en, fr etc
 - [libsecret](https://gitlab.gnome.org/GNOME/libsecret/) for GNOME Keyring or KDE support as password storage
 - [GUPnP-IGD](https://gitlab.gnome.org/GNOME/gupnp) for better NAT traversing
@@ -144,7 +144,7 @@ see [README](./flatpak/README.md)
 
 ### Mac
 
-see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
+see [Wiki](https://gitlab.com/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 ## Developing
 
@@ -164,8 +164,8 @@ Execute gajim with `--verbose`
 
 ### Links
 
-- [FAQ](https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq)
-- [Wiki](https://dev.gajim.org/gajim/gajim/wikis/home)
+- [FAQ](https://gitlab.com/gajim/gajim/wikis/help/gajimfaq)
+- [Wiki](https://gitlab.com/gajim/gajim/wikis/home)
 
 That is all, **enjoy**!
 

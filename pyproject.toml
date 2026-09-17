@@ -55,7 +55,7 @@ sentry = [
 
 [project.urls]
 homepage = "https://gajim.org"
-repository = "https://dev.gajim.org/gajim/gajim"
+repository = "https://gitlab.com/gajim/gajim"
 
 [project.scripts]
 gajim-remote = "gajim.remote:run"
@@ -67,9 +67,9 @@ gajim = "gajim.main:run"
 dev = [
   "codespell==2.4.2",
   "distro",
-  "flatpak_pip_generator@git+https://dev.gajim.org/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
-  "nbxmpp@git+https://dev.gajim.org/gajim/python-nbxmpp.git",
-  "omemo-dr@git+https://dev.gajim.org/gajim/omemo-dr.git",
+  "flatpak_pip_generator@git+https://gitlab.com/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
+  "nbxmpp@git+https://gitlab.com/gajim/python-nbxmpp.git",
+  "omemo-dr@git+https://gitlab.com/gajim/omemo-dr.git",
   "pre-commit",
   "pygobject-stubs==2.17.0",
   "pygobject>=3.56.1",

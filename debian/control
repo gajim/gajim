@@ -27,8 +27,8 @@ Build-Depends:
 Rules-Requires-Root: no
 Standards-Version: 4.1.4
 Homepage: https://gajim.org/
-Vcs-Git: https://dev.gajim.org/gajim/gajim.git
-Vcs-Browser: https://dev.gajim.org/gajim/gajim/tree/master
+Vcs-Git: https://gitlab.com/gajim/gajim.git
+Vcs-Browser: https://gitlab.com/gajim/gajim/tree/master
 
 Package: gajim-nightly
 Architecture: all

@@ -53,7 +53,7 @@ def bump_appdata(new_version: str) -> None:
         lines = f.readlines()
 
     date = datetime.today().strftime("%Y-%m-%d")
-    release_url = f"https://dev.gajim.org/gajim/gajim/-/blob/{new_version}/ChangeLog"
+    release_url = f"https://gitlab.com/gajim/gajim/-/blob/{new_version}/ChangeLog"
     release_string = (
         f'    <release version="{new_version}" date="{date}">\n'
         f'      <url type="details">{release_url}</url>\n'
