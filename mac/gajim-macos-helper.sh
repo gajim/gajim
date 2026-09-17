@@ -49,7 +49,7 @@ python_dependencies="\
 	httpx2 \
 	pysequoia"
 
-# Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://gitlab.com/gajim/gajim/-/issues/12365)
+# Set PATH and DYLD_LIBRARY_PATH for Brew to use Brew Python version (see https://gitlab.com/gajim/gajim/-/work_items/12365)
 DEFAULT_PATH="$PATH"
 DEFAULT_DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
 DEFAULT_XDG_DATA_DIRS="$XDG_DATA_DIRS"

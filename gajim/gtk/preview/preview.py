@@ -257,7 +257,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         if state == PreviewState.DISPLAY:
             widget = None
             if is_video(self._mime_type) and sys.platform == "darwin":
-                # https://gitlab.com/gajim/gajim/-/issues/12625
+                # https://gitlab.com/gajim/gajim/-/work_items/12625
                 pass
 
             elif is_image(self._mime_type) or is_video(self._mime_type):

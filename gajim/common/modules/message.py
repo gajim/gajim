@@ -156,7 +156,7 @@ class Message(BaseModule):
         stanza_id = self._get_stanza_id(properties)
 
         # Fallback to message-id in case the MUC strips origin-id
-        # https://gitlab.com/gajim/gajim/-/issues/11837
+        # https://gitlab.com/gajim/gajim/-/work_items/11837
         origin_id = properties.origin_id or properties.id
 
         if (

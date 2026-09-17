@@ -314,7 +314,7 @@ class GioNotification(NotificationBackend):
         text = event.text
         if "<img" in event.text:
             # Escape text with img tags
-            # https://gitlab.com/gajim/gajim/-/issues/12349
+            # https://gitlab.com/gajim/gajim/-/work_items/12349
             # https://gitlab.gnome.org/GNOME/glib/-/issues/3720
             text = GLib.markup_escape_text(event.text)
 

@@ -41,7 +41,7 @@ class AboutDialog:
             copyright="Copyright © 2003-2026 Gajim Team",
             license_type=Gtk.License.GPL_3_0_ONLY,
             website="https://gajim.org/",
-            issue_url="https://gitlab.com/gajim/gajim/-/issues/",
+            issue_url="https://gitlab.com/gajim/gajim/-/work_items/",
             developer_name="\n".join(MAINTAINERS),
             developers=MAINTAINERS + DEVELOPERS,
             designers=ARTISTS,

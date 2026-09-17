@@ -32,7 +32,7 @@
   <update_contact>gajim-devel_AT_gajim.org</update_contact>
   <url type="homepage">https://gajim.org/</url>
   <url type="vcs-browser">https://gitlab.com/gajim/gajim</url>
-  <url type="bugtracker">https://gitlab.com/gajim/gajim/-/issues</url>
+  <url type="bugtracker">https://gitlab.com/gajim/gajim/-/work_items</url>
   <url type="faq">https://gitlab.com/gajim/gajim/-/wikis/help/gajimfaq</url>
   <url type="help">https://gitlab.com/gajim/gajim/-/wikis/help/Help</url>
   <url type="donation">https://gajim.org/#donate</url>

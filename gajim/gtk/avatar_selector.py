@@ -120,7 +120,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
 
     def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
         # DND on X11 freezes due to a GTK bug:
-        # https://gitlab.com/gajim/gajim/-/issues/12313
+        # https://gitlab.com/gajim/gajim/-/work_items/12313
         if app.is_display(Display.X11) and not gi_gui_package_version("Gtk>=4.20.1"):
             return False
 
