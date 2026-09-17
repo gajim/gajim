@@ -1,6 +1,6 @@
 #!/bin/bash
 
-runtime_version=50
+runtime_version=51
 
 cur_file_dir=$(dirname "${BASH_SOURCE[0]}")
 
