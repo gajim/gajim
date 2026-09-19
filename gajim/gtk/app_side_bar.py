@@ -203,7 +203,7 @@ class AppSideBar(Gtk.Box, EventHelper):
     def _transform_to_icon_name(
         binding: GObject.Binding, is_visible: GLib.Variant
     ) -> str:
-        direction = "right" if is_visible.unpack() else "left"
+        direction = "left" if is_visible.unpack() else "right"
         return f"lucide-chevron-{direction}-symbolic"
 
     @staticmethod
