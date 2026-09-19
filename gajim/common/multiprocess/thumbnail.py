@@ -18,6 +18,14 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
+MAX_PIXBUF_WIDTH = 8192
+MAX_PIXBUF_HEIGHT = 8192
+
+
+class ImageTooLarge(Exception):
+    pass
+
+
 def get_image_orientation(image: Image.Image) -> int:
     exif = image.getexif()
     exif_orientation_code = 274
@@ -103,8 +111,24 @@ def _create_thumbnail_with_pixbuf(
     except GLib.Error:
         loader = GdkPixbuf.PixbufLoader()
 
+    error_too_large: ImageTooLarge | None = None
+
+    def on_size_prepared(_loader: GdkPixbuf.PixbufLoader, w: int, h: int) -> None:
+        nonlocal error_too_large
+
+        if w > MAX_PIXBUF_WIDTH or h > MAX_PIXBUF_HEIGHT:
+            error_too_large = ImageTooLarge(
+                f"Image dimensions {w}x{h} exceed limits ({mime_type})"
+            )
+            loader.set_size(1, 1)
+
+    loader.connect("size-prepared", on_size_prepared)
+
     loader.write(data)
     loader.close()
+
+    if error_too_large is not None:
+        raise error_too_large
 
     pixbuf = loader.get_pixbuf()
     if pixbuf is None:
