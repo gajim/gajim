@@ -11,6 +11,7 @@ from typing import Union
 
 import datetime as dt
 import logging
+from collections import defaultdict
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -61,6 +62,7 @@ VCardRowsT = Union[
     "BirthdayRow",
     "TextRow",
     "ReadOnlyRow",
+    "ReadOnlyExpanderRow",
 ]
 
 TYPE_DATA = {
@@ -101,12 +103,22 @@ def add_remove_button(row: VCardRowsT) -> Gtk.Button:
 class GVCardProp(GObject.Object):
     __gtype_name__ = "GVCardProp"
 
-    def __init__(self, prop: SupportedPropertiesT) -> None:
+    def __init__(self, props: list[SupportedPropertiesT]) -> None:
         GObject.Object.__init__(self)
-        self._prop = prop
+        self._props = props
+        self._name = props[0].name
+
+    def get_props(self) -> list[SupportedPropertiesT]:
+        return self._props
 
     def get_prop(self) -> SupportedPropertiesT:
-        return self._prop
+        return self._props[0]
+
+    def get_name(self) -> str:
+        return self._name
+
+    def is_single_prop(self) -> bool:
+        return len(self._props) == 1
 
 
 class VCardListBox(Gtk.ListBox):
@@ -138,6 +150,7 @@ class VCardListBox(Gtk.ListBox):
         }
 
         self._model: Gio.ListStore[GVCardProp] = Gio.ListStore(item_type=GVCardProp)
+
         self.bind_model(self._model, self._create_widget_func)
 
     def run_destroy(self) -> None:
@@ -150,9 +163,15 @@ class VCardListBox(Gtk.ListBox):
         self._vcard = vcard.copy()
         self._edit_mode = edit_mode
 
+        self._prop_dict: dict[str, list[SupportedPropertiesT]] = defaultdict(list)
         for prop in self._vcard.get_properties():
-            if isinstance(prop, SupportedProperties):
-                self._append_property(prop)
+            if not isinstance(prop, SupportedProperties):
+                continue
+
+            self._prop_dict[prop.name].append(prop)
+
+        for _name, props in self._prop_dict.items():
+            self._append_properties(props)
 
     def get_vcard(self) -> VCard:
         return self._vcard.copy()
@@ -165,33 +184,43 @@ class VCardListBox(Gtk.ListBox):
             SupportedPropertiesT,
             self._vcard.add_property(name, **DEFAULT_KWARGS[name]),
         )
-        return self._append_property(prop)
+        return self._append_single_property(prop)
 
     def _create_widget_func(self, item: GVCardProp) -> VCardRowsT:
-        prop = item.get_prop()
         if self._edit_mode:
+            prop = item.get_props()[0]
             row_cls = self._class_mapping[prop.name]
             row = row_cls(prop)  # type: ignore
             row.connect("removed", self._on_remove_clicked)
         else:
-            row = ReadOnlyRow(prop)
+            if item.is_single_prop():
+                row = ReadOnlyRow(item.get_prop())
+            else:
+                row = ReadOnlyExpanderRow(item)
         return row
 
     @staticmethod
     def _sort_func(prop1: GVCardProp, prop2: GVCardProp, *_user_data: Any) -> int:
-        pos1 = ORDER.index(prop1.get_prop().name)
-        pos2 = ORDER.index(prop2.get_prop().name)
+        pos1 = ORDER.index(prop1.get_name())
+        pos2 = ORDER.index(prop2.get_name())
 
         if pos1 == pos2:
             return 0
         return 1 if pos2 < pos1 else -1
 
-    def _append_property(self, prop: SupportedPropertiesT) -> Gtk.ListBoxRow:
-        pos = cast(int, self._model.insert_sorted(GVCardProp(prop), self._sort_func))
+    def _append_single_property(self, prop: SupportedPropertiesT) -> Gtk.ListBoxRow:
+        pos = cast(int, self._model.insert_sorted(GVCardProp([prop]), self._sort_func))
         row = self.get_row_at_index(pos)
         assert row is not None
         row.grab_focus()
         return row
+
+    def _append_properties(self, props: list[SupportedPropertiesT]) -> None:
+        if self._edit_mode:
+            for prop in props:
+                self._model.insert_sorted(GVCardProp([prop]), self._sort_func)
+        else:
+            self._model.insert_sorted(GVCardProp(props), self._sort_func)
 
     def _remove_property(self, pos: int) -> None:
         row = cast(VCardRowsT, self.get_row_at_index(pos))
@@ -489,10 +518,12 @@ class TextRow(Adw.EntryRow, BaseRow):
 
 
 class ReadOnlyRow(Adw.ActionRow, BaseRow):
-    def __init__(self, prop: SupportedPropertiesT) -> None:
-        Adw.ActionRow.__init__(
-            self, title=LABEL_DICT[prop.name], subtitle_selectable=True
-        )
+    def __init__(self, prop: SupportedPropertiesT, show_title: bool = True) -> None:
+        title = ""
+        if show_title:
+            title = LABEL_DICT[prop.name]
+
+        Adw.ActionRow.__init__(self, title=title, subtitle_selectable=True)
         BaseRow.__init__(self, prop)
         self.add_css_class("property")
 
@@ -516,9 +547,9 @@ class ReadOnlyRow(Adw.ActionRow, BaseRow):
 
         for supported_type in prop.parameters.get_types():
             if supported_type in ("work", "home"):
-                type_text, type_icon_name = TYPE_DATA[supported_type]
-                icon = Gtk.Image(icon_name=type_icon_name, tooltip_text=type_text)
-                self.add_suffix(icon)
+                type_text, _ = TYPE_DATA[supported_type]
+                badge = TypeBadge(type_text)
+                self.add_suffix(badge)
                 break
 
     def run_destroy(self):
@@ -555,3 +586,35 @@ class ReadOnlyRow(Adw.ActionRow, BaseRow):
     def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
         open_uri(uri)
         return Gdk.EVENT_STOP
+
+
+class ReadOnlyExpanderRow(Adw.ExpanderRow):
+    def __init__(self, item: GVCardProp) -> None:
+        Adw.ExpanderRow.__init__(self, title=LABEL_DICT[item.get_name()])
+        self.add_css_class("property")
+
+        self._rows: list[ReadOnlyRow] = []
+
+        for prop in item.get_props():
+            row = ReadOnlyRow(prop, show_title=False)
+            self._rows.append(row)
+            self.add_row(row)
+
+    def run_destroy(self):
+        for row in self._rows:
+            row.run_destroy()
+        self._rows.clear()
+        check_finalize(self)
+
+
+class TypeBadge(Gtk.Label):
+    def __init__(self, label: str) -> None:
+        Gtk.Label.__init__(
+            self,
+            halign=Gtk.Align.END,
+            label=label,
+            valign=Gtk.Align.CENTER,
+        )
+
+        self.add_css_class("badge")
+        self.add_css_class("badge-group")
