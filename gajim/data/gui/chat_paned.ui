@@ -30,6 +30,7 @@
                   <object class="GtkStack" id="_list_stack">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="vhomogeneous">False</property>
                     <child>
                       <object class="GtkStackPage">
                         <property name="name">chat-list-stack</property>
