@@ -42,7 +42,8 @@ from gajim.gtk.util.misc import get_ui_string
 log = logging.getLogger("gajim.gtk.preview.image")
 
 
-MIN_PREVIEW_WIDTH = 100
+MIN_PREVIEW_WIDTH = 270
+MIN_PREVIEW_HEIGHT = 100
 
 # Previews are scaled down in steps of this many pixels.
 PREVIEW_WIDTH_STEP = 10
@@ -95,7 +96,8 @@ class ImagePreviewLayout(Gtk.BinLayout):
         preview_width = min(
             max(self._preview_width, min(width, MIN_PREVIEW_WIDTH)), width
         )
-        return preview_width, round(preview_width * height / width)
+        preview_height = max(round(preview_width * height / width), MIN_PREVIEW_HEIGHT)
+        return preview_width, preview_height
 
     def do_measure(
         self, widget: Gtk.Widget, orientation: Gtk.Orientation, for_size: int
@@ -112,7 +114,12 @@ class ImagePreviewLayout(Gtk.BinLayout):
         if orientation == Gtk.Orientation.HORIZONTAL:
             # Keep asking for the full width, otherwise the preview could never
             # find out that there is room to grow again
-            return min(width, MIN_PREVIEW_WIDTH), width, -1, -1
+            return (
+                min(width, MIN_PREVIEW_HEIGHT * app.window.get_scale_factor()),
+                width,
+                -1,
+                -1,
+            )
 
         return preview_height, preview_height, -1, -1
 
@@ -345,7 +352,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             width = image_width
             height = image_height
 
-        return width, height
+        return max(width, MIN_PREVIEW_WIDTH), max(height, MIN_PREVIEW_HEIGHT)
 
     def _set_preview_dimension(self, width: int, height: int) -> None:
         self._content_clamp.set_maximum_size(width)
@@ -368,6 +375,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         self._set_preview_dimension(width, height)
         self._image_button.set_tooltip_text(self._filename)
         self._picture.set_paintable(texture)
+        self._picture.set_size_request(MIN_PREVIEW_WIDTH, MIN_PREVIEW_HEIGHT)
 
         if self._type == "video":
             self._image_button.add_css_class("preview-video-overlay")
