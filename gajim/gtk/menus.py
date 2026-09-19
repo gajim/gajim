@@ -664,6 +664,7 @@ def get_groupchat_participant_menu(
     general_items: MenuItemListT = [
         (_("Details"), "win.muc-contact-info", value),
         (_("Execute Command…"), "win.muc-execute-command", value),
+        (_("Mention…"), "win.input-mention", value),
     ]
 
     if dm_params is not None:
