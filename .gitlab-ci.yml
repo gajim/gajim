@@ -336,13 +336,13 @@ publish-release:
     - >
       release-helper finish-milestone \
         $CI_PROJECT_ID \
-        $PROJECT_TOKEN \
+        $CI_RELEASE_TOKEN \
         --version=$GAJIM_VERSION \
         --title="Next Release"
     - >
       release-helper create-release \
         $CI_PROJECT_ID \
-        $PROJECT_TOKEN \
+        $CI_RELEASE_TOKEN \
         --version=$GAJIM_VERSION \
         --tag=$CI_COMMIT_TAG \
         --milestone=$GAJIM_VERSION
