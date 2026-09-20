@@ -617,4 +617,4 @@ class TypeBadge(Gtk.Label):
         )
 
         self.add_css_class("badge")
-        self.add_css_class("badge-group")
+        self.add_css_class("badge-accent")
