@@ -314,35 +314,33 @@ publish-website:
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
-    - eval $(ssh-agent -s)
-    - .ci/prepare_git.sh gitlab.com "${WEBSITE_DEPLOY_KEY}"
+    - git config --global user.email "$CI_GIT_USER_EMAIL"
+    - git config --global user.name "$CI_GIT_USER_USERNAME"
   script:
-    - git clone git@gitlab.com:gajim/website.git
+    - git clone https://gitlab.com/gajim/website.git
     - cd website
-    - git checkout master
     - python ./scripts/bump_version.py $CI_COMMIT_TAG
     - git diff
     - git add -u
     - git commit -m "Release Gajim $GAJIM_VERSION"
-    - git push
+    - git push https://gitlab-ci-token:$CI_JOB_TOKEN@gitlab.com/gajim/website.git master
 
 publish-release:
-  image: gajim-publish
+  image: registry.gitlab.com/gitlab-org/cli:v1.119.0
   stage: publish
   dependencies: ["prepare-build"]
+  variables:
+    GITLAB_TOKEN: '$CI_RELEASE_TOKEN'
+    GITLAB_HOST: gitlab.com
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
-    - >
-      release-helper finish-milestone \
-        $CI_PROJECT_ID \
-        $CI_RELEASE_TOKEN \
-        --version=$GAJIM_VERSION \
-        --title="Next Release"
-    - >
-      release-helper create-release \
-        $CI_PROJECT_ID \
-        $CI_RELEASE_TOKEN \
-        --version=$GAJIM_VERSION \
-        --tag=$CI_COMMIT_TAG \
-        --milestone=$GAJIM_VERSION
+    - MILESTONE_ID="$(glab milestone list --project $CI_PROJECT_PATH --title "Next Release" --output json | jq .[0].id)"
+    - glab milestone edit $MILESTONE_ID --title $GAJIM_VERSION --state close
+    - glab milestone create --title "Next Release"
+  release:
+    name: '$GAJIM_VERSION'
+    description: '$GAJIM_VERSION'
+    tag_name: '$GAJIM_VERSION'
+    milestones:
+      - '$GAJIM_VERSION'
