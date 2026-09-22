@@ -481,12 +481,16 @@ class BareContact(CommonContact):
 
     @property
     def idle_datetime(self) -> datetime | None:
-        if not self._resources:
-            return self._presence.idle_datetime
+        idle_datetime = None
+        for conctact in self._resources.values():
+            curr_idle_dt = conctact.idle_datetime
+            if curr_idle_dt is None:
+                return None
 
-        res = self.get_active_resource()
-        assert res is not None
-        return res.idle_datetime
+            if idle_datetime is None or curr_idle_dt > idle_datetime:
+                idle_datetime = curr_idle_dt
+
+        return idle_datetime
 
     @property
     def chatstate(self) -> Chatstate | None:
