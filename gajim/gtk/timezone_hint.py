@@ -95,6 +95,7 @@ class TimezoneHint(Gtk.Box):
 
         if time.hour > 5:
             # Show hint only between 0:00 and 6:00
+            self.set_visible(False)
             return
 
         time_string = time.strftime(app.settings.get("time_format"))
