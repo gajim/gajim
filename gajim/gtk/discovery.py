@@ -1,12 +1,4 @@
-# Copyright (C) 2005-2006 Stéphan Kochen <stephan AT kochen.nl>
-# Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-# Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
-# Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
-# Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

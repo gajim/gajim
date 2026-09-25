@@ -1,11 +1,4 @@
-# Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
-# Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
-#                    Julien Pivotto <roidelapluie AT gmail.com>
-# Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

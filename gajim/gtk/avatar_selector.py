@@ -1,9 +1,9 @@
-# This is a port of um-crop-area.c from GNOME’s 'Cheese' application, see
-# https://gitlab.gnome.org/GNOME/cheese/-/blob/3.34.0/libcheese/um-crop-area.c
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
+
+# This is a port of um-crop-area.c from GNOME’s 'Cheese' application, see
+# https://gitlab.gnome.org/GNOME/cheese/-/blob/3.34.0/libcheese/um-crop-area.c
 
 from __future__ import annotations
 

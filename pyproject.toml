@@ -9,7 +9,7 @@ name = "gajim"
 description = "A GTK XMPP Client"
 readme = "README.md"
 requires-python = ">=3.12"
-license = "GPL-3.0-or-later"
+license = "GPL-3.0-only"
 authors = [
   {name = "Philipp Hörist", email = "philipp@hoerist.com"},
   {name = "Yann Leboulanger", email = "yann@leboulanger.org"},

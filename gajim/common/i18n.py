@@ -1,10 +1,4 @@
-# Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2004 Vincent Hanquez <tab AT snarc.org>
-# Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
-# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

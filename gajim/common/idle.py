@@ -1,11 +1,4 @@
-# Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-# Copyright (C) 2008 Mateusz Biliński <mateusz AT bilinski.it>
-# Copyright (C) 2008 Thorsten P. 'dGhvcnN0ZW5wIEFUIHltYWlsIGNvbQ==\n'.decode("base64")  # noqa: E501
-# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

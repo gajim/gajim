@@ -1,6 +1,5 @@
 # Copyright (C) 2018 Emmanuel Gil Peyrot <linkmauve AT linkmauve.fr>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

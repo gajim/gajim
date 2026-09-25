@@ -1,7 +1,4 @@
-# Copyright (C) 2019 Philipp Hörist <philipp AT hoerist.com>
-# Copyright (C) 2015 Tarek Galal <tare2.galal@gmail.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

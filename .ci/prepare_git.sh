@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# SPDX-FileCopyrightText: NONE
+#
+# SPDX-License-Identifier: CC0-1.0
+
 echo "$2" | tr -d '\r' | ssh-add - > /dev/null
 ssh-add -l
 mkdir -p ~/.ssh

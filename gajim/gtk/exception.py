@@ -1,9 +1,4 @@
-# Copyright (C) 2016-2018 Philipp Hörist <philipp AT hoerist.com>
-# Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

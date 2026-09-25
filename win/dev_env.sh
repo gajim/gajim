@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 set -e
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"

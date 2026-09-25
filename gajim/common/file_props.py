@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 """
 This module is in charge of taking care of all the information related to
 individual files. Files are identified by the account name and its sid.

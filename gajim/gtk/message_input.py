@@ -1,9 +1,4 @@
-# Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-# Copyright (C) 2008-2009 Julien Pivotto <roidelapluie AT gmail.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

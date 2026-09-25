@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 # Reads all .ui files and creates builder.pyi
 # Execute this script from the repo root dir
 

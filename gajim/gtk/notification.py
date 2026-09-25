@@ -1,16 +1,4 @@
-# Copyright (C) 2005 Sebastian Estienne
-# Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
-# Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
-# Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
-# Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
-#                    Stephan Erb <steve-e AT h3c.de>
-# Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
-#                    Jonathan Schleifer <js-gajim AT webkeks.org>
-# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Copyright 2016 Christoph Reiter
 # Copyright 2017 Philipp Hörist
 #

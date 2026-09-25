@@ -1,8 +1,6 @@
-# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
-# This file is part of Gajim.
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-only
 
 from __future__ import annotations
 

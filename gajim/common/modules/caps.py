@@ -1,7 +1,6 @@
 # Copyright (C) 2009 Stephan Erb <steve-e AT h3c.de>
 # Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

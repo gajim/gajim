@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 from typing import Any
 from typing import Literal
 from typing import overload

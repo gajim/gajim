@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: NONE
+#
+# SPDX-License-Identifier: CC0-1.0
+
 cd ~/chroot2/home/asterix/gajim_snap_git
 
 flatpak-builder \

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 runtime_version=51
 
 cur_file_dir=$(dirname "${BASH_SOURCE[0]}")

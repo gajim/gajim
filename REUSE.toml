@@ -2,27 +2,48 @@ version = 1
 
 [[annotations]]
 path = [
-  ".chglog/**/*",
-  ".ci/*",
-  ".githooks/*",
-  ".gitlab/**/*",
-  "data/*",
-  "debian/**/*",
-  "flatpak/*",
-  "typings/**/*"
+  "**.json",
+  "**.md",
+  "**.patch",
+  "**.toml",
+  "**.yaml",
+  "**.yml",
+  ".gitattributes",
+  ".gitignore",
+  "ChangeLog",
+  "data/**",
+  "debian/**",
+  "MANIFEST.in",
+  "typings/**",
 ]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
-SPDX-License-Identifier = "GPL-3.0-or-later"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = [ "po/**/*" ]
+path = [
+  "po/**",
+  "gajim/data/gui/**",
+  "win/misc/**",
+  "mac/Gajim.icns",
+  "gajim/data/sounds/**",
+]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
-SPDX-License-Identifier = "GPL-3.0-or-later"
+SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"
+SPDX-License-Identifier = "GPL-3.0-only"
 
 [[annotations]]
-path = [ "gajim/data/gui/*.ui" ]
+path = [
+  "gajim/data/icons/**",
+]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
-SPDX-License-Identifier = "GPL-3.0-or-later"
+SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"
+SPDX-License-Identifier = "GPL-3.0-only"
+
+[[annotations]]
+path = [
+  "gajim/data/icons/hicolor/scalable/devices/**",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Copyright 2013-2017 Cole Bemis"
+SPDX-License-Identifier = "MIT"

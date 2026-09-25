@@ -1,6 +1,5 @@
 # Copyright (C) 2009-2014 Yann Leboulanger <asterix AT lagaule.org>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 

@@ -1,5 +1,9 @@
 #!/bin/bash
+
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
+# SPDX-License-Identifier: GPL-3.0-only
+
 # Helper script to build virtual environments for omemo-dr, nbxmpp and Gajim on Mac OS
 #
 # Requirements for this script:

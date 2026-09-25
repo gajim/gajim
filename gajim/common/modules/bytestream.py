@@ -1,16 +1,4 @@
-# Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-#                    Junglecow J <junglecow AT gmail.com>
-# Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
-#                         Travis Shirk <travis AT pobox.com>
-#                         Nikos Kouremenos <kourem AT gmail.com>
-# Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
-# Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>
-# Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
-#                         Jean-Marie Traissard <jim AT lapin.org>
-#                         Stephan Erb <steve-e AT h3c.de>
-# Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-#
-# This file is part of Gajim.
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
