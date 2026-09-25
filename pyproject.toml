@@ -75,7 +75,7 @@ dev = [
   "pygobject>=3.56.1",
   "pytest>=9.0.2",
   "python-gitlab",
-  "ruamel.yaml",
+  "reuse",
   "ruff==0.16.2",
   "sentry-sdk",
   "ty",

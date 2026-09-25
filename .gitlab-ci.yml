@@ -73,6 +73,16 @@ test-ruff-format:
     - ruff format --diff
   interruptible: true
 
+test-ruff-format:
+  image: gajim-test
+  stage: test
+  rules:
+    - changes:
+      - "**/*.py"
+  script:
+    - reuse lint -l
+  interruptible: true
+
 test-unittest:
   image: gajim-test
   stage: test
