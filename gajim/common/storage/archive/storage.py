@@ -504,6 +504,9 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def delete_message(self, session: Session, pk: int) -> None:
+        self._delete_message(session, pk)
+
+    def _delete_message(self, session: Session, pk: int) -> None:
         message = self._get_message_with_pk(
             session,
             pk,
@@ -514,9 +517,6 @@ class MessageArchiveStorage(AlchemyStorage):
             self._log.warning("Deletion failed, no message found with pk %s", pk)
             return
 
-        self._delete_message(session, message)
-
-    def _delete_message(self, session: Session, message: Message) -> None:
         # SecurityLabels, Encryption, Threads cannot be deleted because
         # there exists a Many-to-One relationship to these tables
 
@@ -540,7 +540,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         if message.corrections:
             for correction in message.corrections:
-                self.delete_message(correction.pk)
+                self._delete_message(session, correction.pk)
 
         session.delete(message)
 
