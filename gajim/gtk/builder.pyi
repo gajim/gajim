@@ -462,7 +462,7 @@ class MessageActionsBoxBuilder(Builder):
     cancel_correction_button: Gtk.Button
     action_box: Gtk.Box
     emoticons_button: Gtk.MenuButton
-    formattings_button: Gtk.MenuButton
+    formatting_button: Gtk.MenuButton
     input_wrapper: Gtk.Overlay
     input_scrolled: Gtk.ScrolledWindow
     input_overlay: Gtk.Box

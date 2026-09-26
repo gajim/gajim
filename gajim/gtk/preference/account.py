@@ -374,7 +374,7 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
         if not self._client.is_available():
             return False
 
-        return self._client.get_module("Bookmarks").nativ_bookmarks_used
+        return self._client.get_module("Bookmarks").native_bookmarks_used
 
     def _sync_blocks(self, state: bool, _data: Any) -> None:
         if self._client is not None and state:
@@ -697,7 +697,7 @@ class AccountArchivingGroup(GajimPreferencesGroup):
                 None,
                 props={
                     "button-text": _("Open"),
-                    "button-callback": self._on_snyc,
+                    "button-callback": self._on_sync,
                 },
             ),
         ]
@@ -705,7 +705,7 @@ class AccountArchivingGroup(GajimPreferencesGroup):
         for setting in settings:
             self.add_setting(setting)
 
-    def _on_snyc(self, _button: Gtk.Button) -> None:
+    def _on_sync(self, _button: Gtk.Button) -> None:
         open_window("HistorySyncAssistant", account=self.account)
 
 

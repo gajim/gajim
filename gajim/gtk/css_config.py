@@ -66,8 +66,8 @@ class CSSConfig:
         css here."""
 
         # Delete empty rules
-        css_parser.ser.prefs.keepEmptyRules = False
-        css_parser.ser.prefs.omitLastSemicolon = False
+        css_parser.ser.prefs.keepEmptyRules = False  # typos: ignore
+        css_parser.ser.prefs.omitLastSemicolon = False  # typos: ignore
 
         # Holds the currently selected theme in the Theme Editor
         self._pre_css: CSSStyleSheet | None = None

@@ -8,7 +8,7 @@ from . import stylesheets as stylesheets
 from .serialize import CSSSerializer
 from .stylesheets import MediaList
 
-ser: CSSSerializer
+ser: CSSSerializer  # typos: ignore
 
 def parseFile(
     filename: str | Path,

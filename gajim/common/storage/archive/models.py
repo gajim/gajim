@@ -525,7 +525,7 @@ class UrlData(FileTransferSource):
     scheme_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
 
     __mapper_args__ = {
-        "polymorphic_load": "selectin",
+        "polymorphic_load": "selectin",  # typos: ignore
         "polymorphic_identity": "urldata",
     }
 
@@ -539,7 +539,7 @@ class JingleFT(FileTransferSource):
     sid: Mapped[str]
 
     __mapper_args__ = {
-        "polymorphic_load": "selectin",
+        "polymorphic_load": "selectin",  # typos: ignore
         "polymorphic_identity": "jingleft",
     }
 
@@ -553,7 +553,7 @@ class JinglePub(FileTransferSource):
     id: Mapped[str]
 
     __mapper_args__ = {
-        "polymorphic_load": "selectin",
+        "polymorphic_load": "selectin",  # typos: ignore
         "polymorphic_identity": "jinglepub",
     }
 
@@ -583,7 +583,7 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     path: Mapped[str | None] = mapped_column(default=None, init=False)
 
     source: Mapped[list[FileTransferSource]] = relationship(
-        lazy="selectin",
+        lazy="selectin",  # typos: ignore
         default_factory=list,
         cascade="all, delete",
         passive_deletes=True,

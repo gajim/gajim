@@ -196,7 +196,7 @@ class OMEMO(BaseModule, CryptoModule):
             self._log.warning("%s is not a groupchat contact", contact)
             return
 
-        # Event is triggert on every join, avoid multiple connects
+        # Event is triggered on every join, avoid multiple connects
         contact.disconnect_all_from_obj(self)
         contact.connect("room-joined", self._on_room_joined)
         contact.connect("user-affiliation-changed", self._on_affiliation_change)

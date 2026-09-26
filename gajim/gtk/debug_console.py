@@ -437,13 +437,13 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             # Text scan may not be complete yet
             occurrences_count = "?"
 
-        occurrence_positon = self._search_context.get_occurrence_position(
+        occurrence_position = self._search_context.get_occurrence_position(
             match_start, match_end
         )
-        if occurrence_positon == -1:
-            occurrence_positon = 1
+        if occurrence_position == -1:
+            occurrence_position = 1
         self._ui.search_results_label.set_text(
-            _("%s of %s") % (occurrence_positon, occurrences_count)
+            _("%s of %s") % (occurrence_position, occurrences_count)
         )
 
         textbuffer = self._ui.protocol_view.get_buffer()

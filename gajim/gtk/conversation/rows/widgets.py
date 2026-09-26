@@ -391,7 +391,7 @@ class MessageIcons(Gtk.Box):
     def set_encryption_icon_visible(self, visible: bool) -> None:
         self._encryption_image.set_visible(visible)
 
-    def set_encrytion_icon_data(self, icon: str, color: str, tooltip: str) -> None:
+    def set_encryption_icon_data(self, icon: str, color: str, tooltip: str) -> None:
         for trust_data in TRUST_SYMBOL_DATA.values():
             self._encryption_image.remove_css_class(trust_data[2])
 

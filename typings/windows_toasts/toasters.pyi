@@ -39,7 +39,7 @@ class BaseWindowsToaster:
 
     def update_toast(self, toast: Toast) -> bool:
         """
-        Update the passed notification data with the new data in the clas
+        Update the passed notification data with the new data in the class
 
         :param toast: Toast to update
         :type toast: Toast

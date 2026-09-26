@@ -285,7 +285,7 @@ class LinuxTrayIcon(TrayIconBackend):
             self.update_state(init=True)
 
     def _get_menu(self) -> DBusMenu:
-        toogle_state = int(not app.settings.get("sounds_on"))
+        toggle_state = int(not app.settings.get("sounds_on"))
         return DBusMenu(
             items=[
                 DBusMenuItem(
@@ -331,7 +331,7 @@ class LinuxTrayIcon(TrayIconBackend):
                     id=10,
                     label=_("Mute Sounds"),
                     toggle_type="checkmark",
-                    toggle_state=toogle_state,
+                    toggle_state=toggle_state,
                     callback=self._on_sounds_mute,
                 ),
                 DBusMenuItem(

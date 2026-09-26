@@ -111,7 +111,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkMenuButton" id="formattings_button">
+          <object class="GtkMenuButton" id="formatting_button">
             <property name="valign">center</property>
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>

@@ -522,6 +522,7 @@ DEVELOPERS = [
 ]
 
 
+# typos: ignore-on
 RFC5646_LANGUAGE_TAGS = {
     "af": "Afrikaans",
     "af-ZA": "Afrikaans (South Africa)",
@@ -611,7 +612,7 @@ RFC5646_LANGUAGE_TAGS = {
     "fa-IR": "Farsi (Iran)",
     "fi": "Finnish",
     "fi-FI": "Finnish (Finland)",
-    "fo": "Faroese",  # codespell:ignore
+    "fo": "Faroese",
     "fo-FO": "Faroese (Faroe Islands)",
     "fr": "French",
     "fr-BE": "French (Belgium)",
@@ -723,7 +724,7 @@ RFC5646_LANGUAGE_TAGS = {
     "syr-SY": "Syriac (Syria)",
     "ta": "Tamil",
     "ta-IN": "Tamil (India)",
-    "te": "Telugu",  # codespell:ignore
+    "te": "Telugu",
     "te-IN": "Telugu (India)",
     "th": "Thai",
     "th-TH": "Thai (Thailand)",
@@ -756,7 +757,7 @@ RFC5646_LANGUAGE_TAGS = {
     "zu": "Zulu",
     "zu-ZA": "Zulu (South Africa)",
 }
-
+# typos: ignore-off
 
 GIO_TLS_ERRORS = {
     Gio.TlsCertificateFlags.UNKNOWN_CA: _(

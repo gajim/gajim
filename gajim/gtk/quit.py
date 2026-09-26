@@ -48,7 +48,7 @@ class QuitDialog(GajimAppWindow):
         elif action == "quit":
             # Call with idle because closing the Quit Dialog
             # writes window size to settings and this can only happen
-            # when the CoreApplicaton shutdown was not called first
+            # when the CoreApplication shutdown was not called first
             idle_add_once(app.app.start_shutdown)
 
         self.close()

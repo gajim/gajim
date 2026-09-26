@@ -489,7 +489,7 @@ WORKSPACE_SETTINGS: WorkspaceSettings = {
 }
 
 
-INITAL_WORKSPACE: dict[str, dict[str, WorkspaceSettings]] = {str(uuid.uuid4()): {}}
+INITIAL_WORKSPACE: dict[str, dict[str, WorkspaceSettings]] = {str(uuid.uuid4()): {}}
 
 
 PLUGIN_SETTINGS = {"active": False}

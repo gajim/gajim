@@ -99,7 +99,7 @@ def get_optional_features(account: str) -> list[str]:
 
     client = app.get_client(account)
 
-    if client.get_module("Bookmarks").nativ_bookmarks_used:
+    if client.get_module("Bookmarks").native_bookmarks_used:
         features.append(Namespace.BOOKMARKS_1 + "+notify")
     elif client.get_module("Bookmarks").pep_bookmarks_used:
         features.append(Namespace.BOOKMARKS + "+notify")
@@ -236,7 +236,7 @@ class Observable:
                 # Don’t remove dead weakrefs from the handler list
                 # notify() will remove dead refs, and __disconnect()
                 # can be called from inside notify(), this can lead
-                # to race conditions where later notfiy tries to remove
+                # to race conditions where later notify tries to remove
                 # a dead ref which is not anymore in the list.
                 if func is not None and func.__self__ is obj:  # type: ignore
                     handlers.remove(handler)

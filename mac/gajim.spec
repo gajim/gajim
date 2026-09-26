@@ -77,7 +77,7 @@ gst_include_plugins = [
 a = Analysis(
     ["launch.py"],
     pathex=[cwd],
-    datas=[("gajim", "gajim")],
+    datas=[("gajim", "gajim")],  # typos: ignore
     hiddenimports=hiddenimports,
     hookspath=[os.path.join(os.getcwd(), "mac", "hooks")],
     hooksconfig={
@@ -112,7 +112,7 @@ exe = EXE(
 )
 
 coll = COLLECT(
-    exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name="launch"
+    exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name="launch"  # typos: ignore
 )
 
 app = BUNDLE(  # type: ignore

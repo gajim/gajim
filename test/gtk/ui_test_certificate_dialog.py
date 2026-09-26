@@ -10,6 +10,7 @@ from gajim.gtk.certificate_dialog import CertificateDialog
 
 from . import util
 
+# typos: ignore-on
 cert = """
 -----BEGIN CERTIFICATE-----
 MIIFhDCCBGygAwIBAgISA4oUEifTr7Y+mcdiwu6KWpcVMA0GCSqGSIb3DQEBCwUA
@@ -43,6 +44,7 @@ JxbGMqRuw/sGiTLKlXc1xVil8WZjL3hokzrgI7K6np2skUjWuMZvhJgwi5QiE7/C
 ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 8xSTlUlCBTCozjzscZVeVDIojmejWclT
 -----END CERTIFICATE-----"""
+# typos: ignore-off
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 

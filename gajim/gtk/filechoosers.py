@@ -105,7 +105,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
             case _:
                 pass
 
-    def set_inital_path(self, path: Path | None) -> None:
+    def set_initial_path(self, path: Path | None) -> None:
         self._initial_path = path
 
     def reset(self) -> None:

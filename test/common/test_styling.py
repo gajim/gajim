@@ -163,7 +163,7 @@ STYLING = {
         "input": "****",
         "tokens": [PlainBlock(start=0, end=4, text="****", spans=[])],
     },
-    "invalid diretives ignored": {
+    "invalid directives ignored": {
         "input": "* plain *strong*",
         "tokens": [
             PlainBlock(
@@ -405,6 +405,7 @@ STYLING = {
 
 # Most of the URI/JID test sets belong in test_regex.py, and should be imported
 # here somehow (TODO).
+# typos: ignore-on
 URIS = [
     "a:b",
     "a-:b",
@@ -490,7 +491,7 @@ URIS = [
     "telnet://192.0.2.16:80/",
     "urn:oasis:names:specification:docbook:dtd:xml:4.1.2",
 ]
-
+# typos: ignore-off
 
 # * non-URI foos
 # * non-absolute URIs

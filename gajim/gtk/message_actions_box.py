@@ -143,7 +143,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._connect(self._message_input, "realize", self._on_view_realize)
 
         self._ui.sendfile_button.set_tooltip_text(_("No File Transfer available"))
-        self._ui.formattings_button.set_menu_model(get_format_menu())
+        self._ui.formatting_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
 
         self._ui.emoticons_button.set_create_popup_func(self._on_emoji_create_popover)

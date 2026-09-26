@@ -28,12 +28,12 @@ test-other:
     - appstreamcli validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
 
-test-codespell:
+test-typos:
   image: gajim-test
   stage: test
   script:
-    - codespell --version
-    - codespell
+    - typos --version
+    - typos
   interruptible: true
 
 test-pyright:

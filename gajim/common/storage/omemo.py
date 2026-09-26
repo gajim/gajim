@@ -70,7 +70,7 @@ class OMEMOStorage(Store):
             if col[0] == "_id":
                 fields.append("id")
             elif "strftime" in col[0]:
-                fields.append("formated_time")
+                fields.append("formatted_time")
             elif "MAX" in col[0] or "COUNT" in col[0]:
                 col_name = col[0].replace("(", "_")
                 col_name = col_name.replace(")", "")
@@ -399,7 +399,7 @@ class OMEMOStorage(Store):
                 "No such signedprekeyrecord! %s" % signed_pre_key_id
             )
 
-        return result.formated_time
+        return result.formatted_time
 
     def remove_old_signed_pre_keys(self, timestamp: int) -> None:
         query = """DELETE FROM signed_prekeys

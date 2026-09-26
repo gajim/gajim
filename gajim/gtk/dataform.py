@@ -440,7 +440,7 @@ class FixedField(Field):
 
         self._label.set_markup(make_href_markup(field.value))
 
-        # If the value is more than 40 chars it proabably isn’t
+        # If the value is more than 40 chars it probably isn’t
         # meant as a section header
         if len(field.value) < 40:
             self._label.add_css_class("field-fixed")
@@ -681,7 +681,7 @@ class JidMultiField(Field):
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
-        self._treeview = JidMutliTreeView(field, self)
+        self._treeview = JidMultiTreeView(field, self)
 
         self._add_button = Gtk.Button(icon_name="lucide-plus-symbolic")
         self._connect(self._add_button, "clicked", self._add_clicked)
@@ -748,7 +748,7 @@ class JidMultiField(Field):
         self._validate()
 
 
-class JidMutliTreeView(Gtk.TreeView, SignalManager):
+class JidMultiTreeView(Gtk.TreeView, SignalManager):
     def __init__(self, field: NBXMPPListMultiField, multi_field: JidMultiField) -> None:
         Gtk.TreeView.__init__(self)
         SignalManager.__init__(self)

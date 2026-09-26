@@ -269,7 +269,7 @@ class Bytestream(BaseModule):
             query = iq.setTag("query", namespace=Namespace.BYTESTREAM)
             query.setAttr("sid", file_props.sid)
 
-            self._add_addiditional_streamhosts_to_query(query, file_props)
+            self._add_additional_streamhosts_to_query(query, file_props)
             self._add_local_ips_as_streamhosts_to_query(query, file_props)
             self._add_proxy_streamhosts_to_query(query, file_props)
             self._add_upnp_igd_as_streamhost_to_query(query, file_props, iq)
@@ -315,7 +315,7 @@ class Bytestream(BaseModule):
         except socket.gaierror:
             log.error("wrong host, invalid local address?")
 
-    def _add_addiditional_streamhosts_to_query(
+    def _add_additional_streamhosts_to_query(
         self, query: nbxmpp.Node, file_props: FileProp
     ) -> None:
         sender = file_props.sender

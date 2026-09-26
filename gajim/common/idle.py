@@ -224,9 +224,9 @@ class Windows(IdleMonitor):
     def is_extended_away(self) -> bool:
         # Check if Screen Saver is running
         # 0x72 is SPI_GETSCREENSAVERRUNNING
-        saver_runing = ctypes.c_int(0)
-        info = self._SystemParametersInfo(0x72, 0, ctypes.byref(saver_runing), 0)
-        if info and saver_runing.value:
+        saver_running = ctypes.c_int(0)
+        info = self._SystemParametersInfo(0x72, 0, ctypes.byref(saver_running), 0)
+        if info and saver_running.value:
             return True
 
         # Check if Screen is locked

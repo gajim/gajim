@@ -219,10 +219,10 @@ class OpenPGP(BaseModule, CryptoModule):
         timeout_add_seconds_once(random.randint(30, 60), self.check_secret_key_backup)
 
         app.settings.connect_signal(
-            "openpgp_backup_secret_key", self._on_backup_settng_changed, self._account
+            "openpgp_backup_secret_key", self._on_backup_setting_changed, self._account
         )
 
-    def _on_backup_settng_changed(self, enabled: bool, *args: Any) -> None:
+    def _on_backup_setting_changed(self, enabled: bool, *args: Any) -> None:
         if enabled:
             self.check_secret_key_backup()
 
@@ -791,7 +791,7 @@ class OpenPGP(BaseModule, CryptoModule):
             self._log.warning("%s is not a groupchat contact", contact)
             return
 
-        # Event is triggert on every join, avoid multiple connects
+        # Event is triggered on every join, avoid multiple connects
         contact.disconnect_all_from_obj(self)
         contact.connect("room-joined", self._on_muc_event)
         contact.connect("user-affiliation-changed", self._on_muc_event)

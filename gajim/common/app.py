@@ -408,10 +408,10 @@ def get_transport_name_from_jid(
         return transport_type[host]
 
     # host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
-    host_splitted = host.split(".")
-    if host_splitted:
+    host_split = host.split(".")
+    if host_split:
         # now we support both 'icq.' and 'icq' but not icqsucks.org
-        host = host_splitted[0]
+        host = host_split[0]
 
     if host in ("irc", "icq", "sms", "weather", "mrim", "facebook"):
         return host

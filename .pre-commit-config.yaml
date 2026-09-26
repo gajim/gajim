@@ -8,15 +8,12 @@ repos:
       - id: ruff-check
         args: [--select, I, --fix]
 
-  - repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
-    hooks:
-    - id: codespell
-      pass_filenames: false
-      additional_dependencies:
-        - tomli
-
   - repo: https://codeberg.org/fsfe/reuse-tool
     rev: v6.2.0
     hooks:
       - id: reuse-lint-file
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.50.3
+    hooks:
+      - id: typos

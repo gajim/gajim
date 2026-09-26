@@ -134,7 +134,7 @@ class Discovery(BaseModule):
         self._con.get_module("Caps").update_caps()
 
     def discover_server_info(self) -> None:
-        # Calling this method starts the connect_maschine()
+        # Calling this method starts the connect_machine()
         server = self._con.get_own_jid().domain
         self.disco_info(server, callback=self._server_info_received)
 

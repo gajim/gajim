@@ -26,7 +26,7 @@ from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import make_pango_attributes
 from gajim.gtk.util.misc import open_uri
 
-log = logging.getLogger("gajim.gtk.conversaion.plain_widget")
+log = logging.getLogger("gajim.gtk.conversation.plain_widget")
 
 URI_TAGS = ["uri", "address", "xmppadr", "mailadr"]
 STYLE_TAGS = ["strong", "emphasis", "strike", "pre"]

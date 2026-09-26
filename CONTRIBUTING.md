@@ -49,7 +49,7 @@ Prefixes for development
 - cq        (code quality changes e.g. formatting, typing, codestyle)
 - cfix      (code fixes which should not show up in the changelog)
 - refactor  (code was changed, but the end user will not notice)
-- chore     (reoccuring tasks which need to be done)
+- chore     (reoccurring tasks which need to be done)
 - release   (only used for release commits)
 - revert    (used when a commit needs to be reverted)
 - other

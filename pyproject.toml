@@ -65,7 +65,6 @@ gajim = "gajim.main:run"
 
 [dependency-groups]
 dev = [
-  "codespell==2.4.2",
   "distro",
   "flatpak_pip_generator@git+https://gitlab.com/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
   "nbxmpp@git+https://gitlab.com/gajim/python-nbxmpp.git",
@@ -79,6 +78,7 @@ dev = [
   "ruff==0.16.2",
   "sentry-sdk",
   "ty",
+  "typos==1.50.3",
 ]
 
 # [tool.uv.sources]
@@ -95,9 +95,31 @@ gajim = ["py.typed"]
 [tool.setuptools.dynamic]
 version = {attr = "gajim.__version__"}
 
-[tool.codespell]
-skip = "*__pycache__*,_build_root,build,debian_build,flatpak_build,dist,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec,./gajim/common/iana,hook-*.py,ChangeLog"
-ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin,selectin,FLE"
+[tool.typos.files]
+extend-exclude = [
+  "*.patch",
+  "debian/control",
+  "po",
+  "win/misc/gajim*.nsi",
+]
+
+[tool.typos.default]
+# https://docs.rs/regex/latest/regex/index.html#syntax
+extend-ignore-re = [
+  "(?Rm)^.*(# typos: ignore)$",
+  "(?s)(# typos: ignore-file).*",
+  "(?s)(# typos: ignore-on).*(# typos: ignore-off)",
+]
+extend-ignore-words-re = [
+    "^[a-zA-Z]{1,2}$", # words with length <= 2 chars is likely noise
+]
+
+[tool.typos.default.extend-words]
+  certifi = "certifi" # A python package
+  fpr = "fpr" # Fingerprint
+  muc = "muc"
+  ofrom = "ofrom"
+  seeked = "seeked"
 
 [tool.pyright]
 pythonVersion = "3.12"

@@ -37,7 +37,7 @@ class MucBlocking(BaseModule):
             self._blocked_muc_users[occupant.remote.jid].add(occupant.id)
 
     def _sync_muc_blocks(self) -> bool:
-        if not self._client.get_module("Bookmarks").nativ_bookmarks_used:
+        if not self._client.get_module("Bookmarks").native_bookmarks_used:
             return False
 
         return app.settings.get_account_setting(self._account, "sync_muc_blocks")
@@ -178,7 +178,7 @@ class MucBlocking(BaseModule):
         self._client.get_module("Bookmarks").modify(jid, extensions=extensions)
 
     def merge_blocks(self) -> None:
-        if not self._client.get_module("Bookmarks").nativ_bookmarks_used:
+        if not self._client.get_module("Bookmarks").native_bookmarks_used:
             return
 
         for bookmark in self._client.get_module("Bookmarks").bookmarks:

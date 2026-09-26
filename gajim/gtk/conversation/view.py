@@ -1058,12 +1058,12 @@ class ConversationView(Gtk.ScrolledWindow):
         self._remove_from_maps(row)
         index = row.get_index()
         self._remove_row(row)
-        decendant_row = self._list_box.get_row_at_index(index)
-        if isinstance(decendant_row, MessageRow):
+        descendant_row = self._list_box.get_row_at_index(index)
+        if isinstance(descendant_row, MessageRow):
             # Unset possible merged state if we delete a 'top level' message.
             # Checks for same sender etc. are not necessary, since we simply
             # unset merged state.
-            decendant_row.set_merged(False)
+            descendant_row.set_merged(False)
 
     def _remove_from_maps(self, row: MessageRow) -> None:
         for key, val in dict(self._message_id_row_map).items():
@@ -1156,7 +1156,7 @@ class ConversationView(Gtk.ScrolledWindow):
             return
 
         _x_coord, y_coord = coordinates
-        _mimimum_site, natural_size = highlight_row.get_preferred_size()
+        _minimum_site, natural_size = highlight_row.get_preferred_size()
         adjustment = self._list_box.get_adjustment()
         assert adjustment is not None
         adjustment.set_value(
@@ -1166,9 +1166,9 @@ class ConversationView(Gtk.ScrolledWindow):
         highlight_row.remove_css_class("conversation-row-highlight")
         highlight_row.add_css_class("conversation-row-highlight")
 
-        timeout_add_once(1500, self._remove_highligh_class, highlight_row)
+        timeout_add_once(1500, self._remove_highlight_class, highlight_row)
 
-    def _remove_highligh_class(self, highlight_row: BaseRow) -> None:
+    def _remove_highlight_class(self, highlight_row: BaseRow) -> None:
         highlight_row.remove_css_class("conversation-row-highlight")
 
     def scroll_to_end(self) -> None:
