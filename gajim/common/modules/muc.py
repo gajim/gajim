@@ -677,8 +677,18 @@ class MUC(BaseModule):
             self._log.warning(stanza)
             return
 
-        muc_data = self._mucs[room_jid]
         assert properties.jid is not None
+        if properties.type.is_unavailable and properties.jid.resource is None:
+            # prosody allows broadcasting "unavailable" presences from
+            # offline room members
+            assert properties.muc_user is not None
+            self._log.info(
+                "Ignore unavailable presence for offline member: %s",
+                properties.muc_user.jid,
+            )
+            return
+
+        muc_data = self._mucs[room_jid]
         occupant = self._get_contact(properties.jid, groupchat=True)
         assert isinstance(occupant, GroupchatParticipant)
         room = self._get_contact(properties.jid.new_as_bare())
@@ -798,18 +808,20 @@ class MUC(BaseModule):
             # unavailable presence, because we left the MUC
             return
 
-        if properties.jid.resource is None:
-            # prosody allows broadcasting "unavailable" presences from
-            # offline room members
-            return
-
         try:
             presence = self._process_user_presence(properties)
         except KeyError:
-            # Sometimes it seems to happen that we get unavailable presence
-            # from occupants we don’t know
-            log.warning("Unexpected presence received")
-            log.warning(stanza)
+            if properties.type.is_unavailable:
+                # Prosody can broadcast offline members, if they have a nick registered
+                # the presence has also a resource
+                self._log.info(
+                    "Ignore unavailable presence for offline member: %s",
+                    properties.jid.resource,
+                )
+                return
+
+            self._log.warning("Unexpected presence received")
+            self._log.warning(stanza)
             return
 
         self._process_occupant_presence_change(properties, presence, occupant)
