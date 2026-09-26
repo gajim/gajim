@@ -51,6 +51,8 @@ class ChatMarkers(BaseModule):
             ),
         ]
 
+        self.mds_assist_supported = False
+
     def pass_disco(self, info: DiscoInfo) -> None:
         self.mds_assist_supported = Namespace.MDS_ASSIST in info.features
 
