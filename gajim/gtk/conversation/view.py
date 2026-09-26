@@ -185,6 +185,9 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self.disable_row_selection()
 
+    def get_selected_messages(self) -> list[MessageRow]:
+        return cast(list[MessageRow], self._list_box.get_selected_rows())
+
     def enable_row_selection(self, pk: int | None) -> None:
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 

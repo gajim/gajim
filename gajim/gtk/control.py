@@ -30,6 +30,7 @@ from gajim.common import types
 from gajim.common.const import XmppUriQuery
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.i18n import ngettext
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -40,6 +41,7 @@ from gajim.common.util.status import get_uf_show
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gtk.conversation.message_selection import MessageSelection
@@ -47,6 +49,8 @@ from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.view import ConversationView
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.groupchat_state import GroupchatState
+from gajim.gtk.structs import actionmethod
+from gajim.gtk.structs import SelectMessageParam
 
 HistoryRowT = events.ApplicationEvent | Message
 
@@ -83,8 +87,9 @@ class ChatControl(EventHelper):
         self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
         self._message_selection = MessageSelection()
-        self._message_selection.connect("copy", self._on_copy_selection)
-        self._message_selection.connect("cancel", self._reset_message_selection)
+        self._message_selection.connect("copy", self._on_selection_copy)
+        self._message_selection.connect("delete", self._on_selection_delete)
+        self._message_selection.connect("cancel", self._on_selection_cancel)
         self._ui.conv_view_overlay.add_overlay(self._message_selection)
 
         self._jump_to_end_button = JumpToEndButton()
@@ -512,19 +517,63 @@ class ChatControl(EventHelper):
         if app.window.is_chat_active(self._contact.account, self._contact.jid):
             app.window.mark_as_read(self._contact.account, self._contact.jid)
 
+    @actionmethod
     def _on_activate_message_selection(
-        self, _action: Gio.SimpleAction, param: GLib.Variant
+        self,
+        _action: Gio.SimpleAction,
+        params: SelectMessageParam,
     ) -> None:
-        pk = param.get_uint32()
-        self._scrolled_view.enable_row_selection(pk)
+        self._scrolled_view.enable_row_selection(params.pk)
+        self._message_selection.set_mode(params.mode)  # type: ignore
         self._message_selection.set_visible(True)
 
-    def _reset_message_selection(self, *args: Any) -> None:
+    def _reset_message_selection(self) -> None:
         self._scrolled_view.disable_row_selection()
         self._message_selection.set_visible(False)
 
-    def _on_copy_selection(self, _widget: MessageSelection) -> None:
+    def _on_selection_cancel(self, selection: MessageSelection) -> None:
+        self._reset_message_selection()
+
+    def _on_selection_copy(self, selection: MessageSelection) -> None:
         self.copy_selected_messages()
+
+    def _on_selection_delete(self, selection: MessageSelection) -> None:
+        selected_rows = self._scrolled_view.get_selected_messages()
+
+        def _on_response() -> None:
+            assert self._contact is not None
+
+            for row in selected_rows:
+                assert row.pk is not None
+                app.storage.archive.delete_message(row.orig_pk)
+                app.ged.raise_event(
+                    events.MessageDeleted(
+                        account=self._contact.account,
+                        jid=self._contact.jid,
+                        pk=row.pk,
+                    )
+                )
+
+            self._scrolled_view.disable_row_selection()
+            self._message_selection.set_visible(False)
+
+        row_count = len(selected_rows)
+        if not row_count:
+            return
+
+        msg = ngettext(
+            "1 message will be deleted from you local chat history",
+            "%(count)d messages will be deleted from your local chat history",
+            row_count,
+        ) % {"count": row_count}
+
+        ConfirmationAlertDialog(
+            _("Delete Message Locally?"),
+            msg,
+            confirm_label=_("_Delete"),
+            appearance="destructive",
+            callback=_on_response,
+        )
 
     def _on_jump_to_message(
         self, _action: Gio.SimpleAction, param: GLib.Variant

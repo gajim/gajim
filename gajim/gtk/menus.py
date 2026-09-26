@@ -40,13 +40,13 @@ from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
-from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ExportHistoryParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.structs import SelectMessageParam
 from gajim.gtk.util.misc import is_message_correctable
 
 MenuValueT = None | str | GLib.Variant | VariantMixin
@@ -752,19 +752,25 @@ def get_chat_row_menu(
         (
             p_("Message row action", "Select Messages…"),
             "win.activate-message-selection",
-            GLib.Variant("u", message.pk),
+            SelectMessageParam(
+                account=contact.account,
+                jid=contact.jid,
+                pk=message.pk,
+                mode="copy",
+            ),
         )
-    )
-
-    param = DeleteMessageParam(
-        account=contact.account, jid=contact.jid, pk=original_message.pk
     )
 
     menu_items.append(
         (
-            p_("Message row action", "Delete Message Locally…"),
-            "win.delete-message-locally",
-            param,
+            p_("Message row action", "Delete Messages Locally…"),
+            "win.activate-message-selection",
+            SelectMessageParam(
+                account=contact.account,
+                jid=contact.jid,
+                pk=message.pk,
+                mode="delete",
+            ),
         )
     )
 

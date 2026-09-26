@@ -61,7 +61,6 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
-from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
@@ -609,7 +608,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             ("retract-message", self._on_retract_message),
             ("moderate-message", self._on_moderate_message),
             ("moderate-all-messages", self._on_moderate_all_messages),
-            ("delete-message-locally", self._on_delete_message_locally),
             ("add-workspace", self._add_workspace),
             ("edit-workspace", self._edit_workspace),
             ("remove-workspace", self._remove_workspace),
@@ -873,26 +871,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             confirm_label=_("_Moderate"),
             appearance="destructive",
             extra_widget=DialogEntry(text=_("Spam")),
-            callback=_on_response,
-        )
-
-    @actionmethod
-    def _on_delete_message_locally(
-        self, _action: Gio.SimpleAction, params: DeleteMessageParam
-    ) -> None:
-        def _on_response() -> None:
-            app.storage.archive.delete_message(params.pk)
-            app.ged.raise_event(
-                events.MessageDeleted(
-                    account=params.account, jid=params.jid, pk=params.pk
-                )
-            )
-
-        ConfirmationAlertDialog(
-            _("Delete Message Locally?"),
-            _("This message will be deleted from your local chat history"),
-            confirm_label=_("_Delete"),
-            appearance="destructive",
             callback=_on_response,
         )
 

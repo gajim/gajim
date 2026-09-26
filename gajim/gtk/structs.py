@@ -100,10 +100,11 @@ class ModerateAllMessagesParam(VariantMixin):
 
 
 @dataclass
-class DeleteMessageParam(VariantMixin):
+class SelectMessageParam(VariantMixin):
     account: str
     jid: JID
     pk: int
+    mode: str
 
 
 @dataclass
