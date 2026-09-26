@@ -635,7 +635,7 @@ class MessageArchiveStorage(AlchemyStorage):
     @timeit
     def get_conversation_jids(
         self, session: Session, account: str
-    ) -> Sequence[Row[tuple[JID, int]]]:
+    ) -> Sequence[Row[JID, int]]:
         fk_account_pk = self._get_account_pk(session, account)
 
         subq = (
