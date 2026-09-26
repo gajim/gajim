@@ -18,15 +18,21 @@ class EmojiChooser(Gtk.EmojiChooser):
 
         self.connect("closed", self._on_closed)
 
-    def set_emoji_picked_func(self, func: Any) -> None:
+    def set_emoji_picked_func(self, func: Any | None) -> None:
+        if func is None:
+            self._cleanup()
+            return
+
         self._emoji_picked_func = func
         self.connect("emoji-picked", self._emoji_picked_func)
 
     def _on_closed(self, _popover: Gtk.EmojiChooser) -> None:
-        def _cleanup() -> None:
-            self.disconnect_by_func(self._emoji_picked_func)
-            self._emoji_picked_func = None
-
         # We don't want to assume the 'emoji-picked' signal
         # is raised before 'closed'
-        GLib.idle_add(_cleanup)
+        GLib.idle_add(self._cleanup)
+
+    def _cleanup(self) -> None:
+        if self._emoji_picked_func is None:
+            return
+        self.disconnect_by_func(self._emoji_picked_func)
+        self._emoji_picked_func = None

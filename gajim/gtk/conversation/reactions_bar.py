@@ -74,6 +74,9 @@ class ReactionsBar(Gtk.Box, SignalManager):
         self._contact.disconnect_all_from_obj(self)
         self._client.disconnect_all_from_obj(self)
         self._add_reaction_button.set_create_popup_func(None)
+        self._add_reaction_button.set_popover(None)
+        emoji_chooser = app.window.get_emoji_chooser()
+        emoji_chooser.set_emoji_picked_func(None)
         del self._add_reaction_button
         del self._message_row
         self._disconnect_all()
