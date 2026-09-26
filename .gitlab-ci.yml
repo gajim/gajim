@@ -5,6 +5,7 @@ workflow:
     - if: $WINDOWS_BUILD
     - if: $DEPLOY_FLATPAK
     - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 stages:
   - test
