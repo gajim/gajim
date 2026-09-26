@@ -73,7 +73,7 @@ test-ruff-format:
     - ruff format --diff
   interruptible: true
 
-test-ruff-format:
+test-reuse:
   image: gajim-test
   stage: test
   rules:
