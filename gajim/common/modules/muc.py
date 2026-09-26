@@ -266,11 +266,11 @@ class MUC(BaseModule):
         if not nick:
             nick = get_group_chat_nick(self._account, room_jid)
 
-        # Fetch data from bookmarks
-        bookmark = self._con.get_module("Bookmarks").get_bookmark(room_jid)
-        if bookmark is not None:
-            if bookmark.password is not None:
-                password = bookmark.password
+        if password is None:
+            bookmark = self._con.get_module("Bookmarks").get_bookmark(room_jid)
+            if bookmark is not None:
+                if bookmark.password is not None:
+                    password = bookmark.password
 
         return MUCData(str(room_jid), nick, None, password, config)
 
@@ -292,11 +292,13 @@ class MUC(BaseModule):
             self._mucs[jid] = muc_data
             self._push_muc_added_event(jid)
 
-        elif nick is not None:
+        else:
             # Currently MUCData is never discarded so if it exists it contains
-            # the nickname of a previous join. The user may chose now on a new
-            # join a different nickname, so update MUCData here.
-            muc_data.nick = nick
+            # the nickname/password of a previous join.
+            if nick:
+                muc_data.nick = nick
+            if password:
+                muc_data.password = password
 
         if muc_data.state not in (
             MUCJoinedState.NOT_JOINED,

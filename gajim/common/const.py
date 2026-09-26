@@ -915,7 +915,7 @@ SHOW_STRING_MNEMONIC = {
 GAJIM_FAQ_URI = "https://gitlab.com/gajim/gajim/wikis/help/gajimfaq"
 GAJIM_PRIVACY_POLICY_URI = "https://gajim.org/privacy/"
 GAJIM_WIKI_URI = "https://gitlab.com/gajim/gajim/wikis"
-GAJIM_SUPPORT_JID = "gajim@conference.gajim.org"
+GAJIM_SUPPORT_JID = JID.from_string("gajim@conference.gajim.org")
 
 
 # Clickable URI schemes not (yet) registered with IANA (see ./iana/uri_schemes.py)

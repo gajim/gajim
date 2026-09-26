@@ -39,6 +39,7 @@ from gajim.common.util.muc import message_needs_highlight
 from gajim.common.util.preview import get_preview_data
 from gajim.common.util.text import remove_invalid_xml_chars
 
+from gajim.gtk import structs
 from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.chat_banner import ChatBanner
@@ -1008,6 +1009,6 @@ class ChatPlaceholderBox(Gtk.Box):
             label=_("Start Chatting…"),
             halign=Gtk.Align.CENTER,
             action_name="app.start-chat",
-            action_target=GLib.Variant("as", ["", ""]),
+            action_target=structs.StartChatParam().to_variant(),
         )
         self.append(button)

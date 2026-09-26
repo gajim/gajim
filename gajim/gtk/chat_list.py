@@ -34,6 +34,7 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.user_strings import get_moderation_text
 from gajim.common.util.user_strings import get_retraction_text
 
+from gajim.gtk import structs
 from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.preview.preview import PreviewWidget
@@ -351,7 +352,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
             action_name="app.start-chat",
-            action_target=GLib.Variant("as", ["", ""]),
+            action_target=structs.StartChatParam().to_variant(),
         )
         button.add_css_class("suggested-action")
         self.set_placeholder(button)

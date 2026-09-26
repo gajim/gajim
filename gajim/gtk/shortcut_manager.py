@@ -21,6 +21,8 @@ from gajim.common.helpers import dump_json
 from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 
+from gajim.gtk import structs
+
 log = logging.getLogger("gajim.gtk.shortcut_manager")
 
 GroupsT = Literal["app", "main-win", "input", "input-global"]
@@ -240,7 +242,7 @@ APP_SHORTCUTS = GajimShortcutGroup(
             category="general",
             accelerators=["<Primary>N"],
             action_name="app.start-chat",
-            args=GLib.Variant("as", ["", ""]),
+            args=structs.StartChatParam().to_variant(),
         ),
         GajimShortcut(
             label=_("Create New Group Chat"),

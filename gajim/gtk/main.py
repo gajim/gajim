@@ -39,6 +39,7 @@ from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk import sound
+from gajim.gtk import structs
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.activity_list import ActivityListView
 from gajim.gtk.activity_list import Reaction
@@ -65,6 +66,7 @@ from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.structs import StartChatParam
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -897,25 +899,25 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             log.warning("No accounts active, unable to handle uri")
             return
 
-        jid_str = str(xmpp_iri.jid)
-
         match xmpp_iri.action:
             case "join":
-                if len(accounts) == 1:
-                    self.activate_action(
-                        "app.open-chat", GLib.Variant("as", [accounts[0], jid_str])
-                    )
-                else:
-                    self.activate_action(
-                        "app.start-chat", GLib.Variant("as", [jid_str, ""])
-                    )
+                params = structs.StartChatParam(
+                    jid=xmpp_iri.jid,
+                    password=xmpp_iri.params.get("password"),
+                )
+                self.activate_action("app.start-chat", params.to_variant())
 
             case "roster":
-                self.activate_action("app.add-contact", GLib.Variant("s", jid_str))
+                self.activate_action(
+                    "app.add-contact", GLib.Variant("s", str(xmpp_iri.jid))
+                )
 
             case "message" | "":
-                body = xmpp_iri.params.get("body")
-                app.window.start_chat_from_jid(accounts[0], jid_str, body or None)
+                params = structs.StartChatParam(
+                    jid=xmpp_iri.jid,
+                    message=xmpp_iri.params.get("body"),
+                )
+                self.activate_action("app.start-chat", params.to_variant())
 
             case _:
                 log.warning("No handler for action: %s", xmpp_iri)
@@ -1347,20 +1349,21 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self.add_group_chat(account, jid_, select=True)
 
-    def start_chat_from_jid(
-        self, account: str, jid: str, message: str | None = None
-    ) -> None:
-        jid_ = JID.from_string(jid)
-        if self.chat_exists(account, jid_):
-            self.select_chat(account, jid_)
-            if message is not None:
-                message_input = self.get_chat_stack().get_message_input()
-                message_input.insert_text(message)
-            return
+    def start_chat_from_jid(self, params: StartChatParam) -> None:
+        if (account := params.account) is None:
+            accounts = app.settings.get_active_accounts()
+            if len(accounts) == 1:
+                account = accounts[0]
 
-        app.app.activate_action(
-            "start-chat", GLib.Variant("as", [str(jid), message or ""])
-        )
+        if account is not None and params.jid is not None:
+            if self.chat_exists(account, params.jid):
+                self.select_chat(account, params.jid)
+                if params.message is not None:
+                    message_input = self.get_chat_stack().get_message_input()
+                    message_input.insert_text(params.message)
+                return
+
+        open_window("StartChatDialog", params=params)
 
     def block_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)

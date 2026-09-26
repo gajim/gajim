@@ -20,6 +20,7 @@ from nbxmpp.modules.dataforms import MultipleDataForm
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.dataforms import Uri
 from nbxmpp.protocol import InvalidJid
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -27,6 +28,7 @@ from gajim.common.util.image import get_texture_from_data
 from gajim.common.util.text import make_href_markup
 from gajim.common.util.text import process_non_spacing_marks
 
+from gajim.gtk import structs
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import open_uri
@@ -1061,7 +1063,13 @@ class DataFormReportedTable(Gtk.Grid, SignalManager):
             else:
                 dest = None
         if dest:
-            app.app.activate_action("start-chat", GLib.Variant("as", [dest, ""]))
+            try:
+                jid = JID.from_string(dest)
+            except Exception:
+                jid = None
+            app.app.activate_action(
+                "start-chat", structs.StartChatParam(jid=jid).to_variant()
+            )
 
     def validate(self, is_valid: bool) -> None:
         viewport = cast(Gtk.Viewport, self.get_parent())

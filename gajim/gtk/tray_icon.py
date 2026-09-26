@@ -28,6 +28,7 @@ from gajim.common.i18n import _
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
 
+from gajim.gtk import structs
 from gajim.gtk.util.icons import get_tray_icon_name
 from gajim.gtk.util.window import open_window
 
@@ -118,7 +119,7 @@ class TrayIconBackend(EventHelper):
 
     @staticmethod
     def _on_start_chat() -> None:
-        app.app.activate_action("start-chat", GLib.Variant("as", ["", ""]))
+        app.app.activate_action("start-chat", structs.StartChatParam().to_variant())
 
     @staticmethod
     def _on_sounds_mute() -> None:

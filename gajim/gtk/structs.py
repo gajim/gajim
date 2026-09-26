@@ -114,6 +114,14 @@ class SubscriptionAcceptParam(VariantMixin):
     nickname: Optional[str]  # noqa: UP007, UP045
 
 
+@dataclass
+class StartChatParam(VariantMixin):
+    account: Optional[str] = None  # noqa: UP007, UP045
+    jid: Optional[JID] = None  # noqa: UP007, UP045
+    message: Optional[str] = None  # noqa: UP007, UP045
+    password: Optional[str] = None  # noqa: UP007, UP045
+
+
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters

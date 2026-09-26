@@ -58,6 +58,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick_chooser import GroupChatNickChooser
 from gajim.gtk.menus import get_start_chat_menu
 from gajim.gtk.menus import get_start_chat_row_menu
+from gajim.gtk.structs import StartChatParam
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.misc import get_ui_string
@@ -78,9 +79,7 @@ log = logging.getLogger("gajim.gtk.start_chat")
 class StartChatDialog(GajimAppWindow):
     last_chat_filters = ChatFilters()
 
-    def __init__(
-        self, initial_jid: str | None = None, initial_message: str | None = None
-    ) -> None:
+    def __init__(self, params: StartChatParam | None = None) -> None:
         GajimAppWindow.__init__(
             self,
             name="StartChatDialog",
@@ -189,10 +188,10 @@ class StartChatDialog(GajimAppWindow):
             self.get_default_controller(), "key-pressed", self._on_key_pressed
         )
 
-        self._initial_message: dict[str, str | None] = {}
-        if initial_jid is not None:
-            self._initial_message[initial_jid] = initial_message
-            self._ui.search_entry.set_text(initial_jid)
+        self._params: dict[JID, StartChatParam] = {}
+        if params is not None and params.jid is not None:
+            self._params[params.jid] = params
+            self._ui.search_entry.set_text(str(params.jid))
 
         self._contact_view.set_loading_finished()
 
@@ -518,10 +517,8 @@ class StartChatDialog(GajimAppWindow):
             self._disco_muc(item.account, jid, request_vcard=item.is_new)
 
         else:
-            initial_message = self._initial_message.get(item.jid)
-            app.window.add_chat(
-                item.account, jid, "chat", select=True, message=initial_message
-            )
+            message = params.message if (params := self._params.get(item.jid)) else None
+            app.window.add_chat(item.account, jid, "chat", select=True, message=message)
             self.close()
 
     def _disco_info(self, item: ContactListItem) -> None:
@@ -622,7 +619,11 @@ class StartChatDialog(GajimAppWindow):
         jid = self._muc_info_box.get_jid()
         nickname = self._nick_chooser.get_text()
         assert account
-        app.window.show_add_join_groupchat(account, str(jid), nickname=nickname)
+        assert jid is not None
+        password = params.password if (params := self._params.get(jid)) else None
+        app.window.show_add_join_groupchat(
+            account, str(jid), nickname=nickname, password=password
+        )
 
         self.close()
 

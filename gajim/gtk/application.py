@@ -286,7 +286,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         options = command_line.get_options_dict()
 
         remote_commands = [
-            ("start-chat", GLib.Variant("as", ["", ""])),
+            ("start-chat", structs.StartChatParam().to_variant()),
         ]
 
         for cmd, parameter in remote_commands:
@@ -390,7 +390,7 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("about", self._on_about_action),
             ("faq", self._on_faq_action),
             ("privacy-policy", self._on_privacy_policy_action),
-            ("start-chat", self._on_new_chat_action),
+            ("start-chat", self._on_start_chat_action),
             ("accounts", self._on_accounts_action),
             ("add-contact", self._on_add_contact_action),
             ("copy-text", self._on_copy_text_action),
@@ -399,7 +399,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             ("remove-history", self._on_remove_history_action),
             ("create-groupchat", self._on_create_groupchat_action),
             ("forget-groupchat", self._on_forget_groupchat_action),
-            ("open-chat", self._on_open_chat_action),
             ("mute-chat", self._on_mute_chat_action),
             ("save-file-as", self._on_save_file_as),
             ("open-file", self._on_open_file_folder),
@@ -573,14 +572,11 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_quit_action(_action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:
         app.app.start_shutdown()
 
-    @staticmethod
-    def _on_new_chat_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        jid, initial_message = param.get_strv()
-        open_window(
-            "StartChatDialog",
-            initial_jid=jid or None,
-            initial_message=initial_message or None,
-        )
+    @structs.actionmethod
+    def _on_start_chat_action(
+        self, _action: Gio.SimpleAction, params: structs.StartChatParam
+    ) -> None:
+        app.window.start_chat_from_jid(params)
 
     @staticmethod
     def _on_profile_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
@@ -681,11 +677,8 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_join_support_chat(
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        accounts = app.settings.get_active_accounts()
-        if len(accounts) == 1:
-            app.window.show_add_join_groupchat(accounts[0], GAJIM_SUPPORT_JID)
-            return
-        open_window("StartChatDialog", initial_jid=GAJIM_SUPPORT_JID)
+        param = structs.StartChatParam(jid=GAJIM_SUPPORT_JID)
+        app.window.start_chat_from_jid(param)
 
     @staticmethod
     def _on_faq_action(_action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:
@@ -761,11 +754,6 @@ class GajimApplication(Adw.Application, CoreApplication):
     @staticmethod
     def _on_copy_text_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         app.window.get_clipboard().set(param.get_string())
-
-    @staticmethod
-    def _on_open_chat_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account, jid = param.get_strv()
-        app.window.start_chat_from_jid(account, jid)
 
     @staticmethod
     @structs.actionfunction

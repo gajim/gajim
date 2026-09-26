@@ -47,6 +47,7 @@ from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.structs import SelectMessageParam
+from gajim.gtk.structs import StartChatParam
 from gajim.gtk.util.misc import is_message_correctable
 
 MenuValueT = None | str | GLib.Variant | VariantMixin
@@ -345,13 +346,16 @@ def _xmpp_uri_context_menu(uri: XmppIri, account: str) -> UriMenuItemsT:
     menu_items: UriMenuItemsT = [
         ("copy-text", [str(uri.jid)], _("Copy XMPP Address")),
     ]
+
+    start_chat_params = StartChatParam(account=account, jid=uri.jid)
+    account_jid_params = AccountJidParam(account=account, jid=uri.jid)
+
     query_type = XmppUriQuery.from_str_or_none(uri.action)
     if query_type in (XmppUriQuery.NONE, XmppUriQuery.MESSAGE):
-        params = AccountJidParam(account=account, jid=uri.jid)
         menu_items.extend(
             [
-                ("open-chat", [account, str(uri.jid)], _("Start Chat…")),
-                (f"{account}-add-contact", params, _("Add Contact…")),
+                ("start-chat", start_chat_params, _("Start Chat…")),
+                (f"{account}-add-contact", account_jid_params, _("Add Contact…")),
             ]
         )
         return menu_items
@@ -359,8 +363,8 @@ def _xmpp_uri_context_menu(uri: XmppIri, account: str) -> UriMenuItemsT:
     if query_type == XmppUriQuery.JOIN:
         menu_items.append(
             (
-                "open-chat",
-                [account, str(uri.jid)],
+                "start-chat",
+                start_chat_params,
                 _("Join Groupchat…"),
             )
         )
@@ -371,19 +375,19 @@ def _xmpp_uri_context_menu(uri: XmppIri, account: str) -> UriMenuItemsT:
 def _ambiguous_addr_context_menu(uri: MailUri, account: str) -> UriMenuItemsT:
     mailto = "mailto:" + escape_iri_path_segment(uri.addr)
 
-    # addr could be a non valid jid
-    try:
-        params = AccountJidParam(account=account, jid=JID.from_string(uri.addr))
-    except Exception:
-        params = None
-
     items: UriMenuItemsT = [
         ("copy-text", [uri.addr], _("Copy XMPP Address/Email")),
         ("open-link", [mailto], _("Open Email Composer")),
-        ("open-chat", [account, uri.addr], _("Start Chat…")),
     ]
 
-    if params is not None:
+    try:
+        jid = JID.from_string(uri.addr)
+    except Exception:
+        pass
+    else:
+        start_chat_params = StartChatParam(account=account, jid=jid)
+        params = AccountJidParam(account=account, jid=jid)
+        items.append(("start-chat", start_chat_params, _("Start Chat…")))
         items.append((f"{account}-add-contact", params, _("Add Contact…")))
 
     return items
@@ -449,10 +453,8 @@ def get_activity_feed_menu() -> GajimMenu:
 
 
 def get_start_chat_button_menu() -> GajimMenu:
-    value = GLib.Variant("as", ["", ""])
-
     menuitems: MenuItemListT = [
-        (_("Start Chat…"), "app.start-chat", value),
+        (_("Start Chat…"), "app.start-chat", StartChatParam().to_variant()),
         (_("Create Group Chat…"), "app.create-groupchat", ""),
         (_("Add Contact…"), "app.add-contact", ""),
     ]
@@ -704,7 +706,8 @@ def get_component_search_menu(jid: str | None, copy_text: str) -> GajimMenu:
     ]
 
     if jid is not None:
-        menuitems.append((_("Start Chat…"), "app.start-chat", jid))
+        param = StartChatParam(jid=JID.from_string(jid)).to_variant()
+        menuitems.append((_("Start Chat…"), "app.start-chat", param))
 
     return GajimMenu.from_list(menuitems)
 
