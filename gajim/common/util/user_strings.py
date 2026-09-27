@@ -143,40 +143,46 @@ def get_uf_affiliation(affiliation: Affiliation | str, plural: bool = False) -> 
 
 
 def get_uf_relative_time(date_time: dt.datetime, now: dt.datetime | None = None) -> str:
-    # `date_time` must be an aware datetime object with timezone UTC
-    # The parameter `now` is only used by unittests
+    # `date_time` and `now` must be an aware datetime object with timezone UTC
+    # The parameter `now` should only be used by unittests
 
     if date_time.tzinfo != dt.UTC:
         raise ValueError("param 'date_time' with timezone =! UTC")
 
-    if now is None:  # used by unittest
+    if now is None:
         now = dt.datetime.now(dt.UTC).astimezone()
     else:
+        # used by unittest
         if now.tzinfo != dt.UTC:
             raise ValueError("param 'now' with timezone =! UTC")
+        now = now.astimezone()
 
     date_time = date_time.astimezone()
     timespan = now - date_time
 
     if timespan < dt.timedelta(minutes=1):
         return _("Just now")
+
     if timespan < dt.timedelta(minutes=15):
         minutes = int(timespan.seconds / 60)
         return ngettext("%(number)s min ago", "%(number)s mins ago", minutes) % {
             "number": minutes
         }
 
-    today = now.date()
-    if date_time.date() == today:
+    if date_time.date() == now.date():
         format_string = app.settings.get("time_format")
         return date_time.strftime(format_string)
+
     yesterday = now.date() - dt.timedelta(days=1)
     if date_time.date() == yesterday:
         return _("Yesterday")
+
     if timespan < dt.timedelta(days=7):  # this week
         return date_time.strftime("%a")  # weekday
+
     if timespan < dt.timedelta(days=365):  # this year
         return date_time.strftime("%b %d")
+
     return str(date_time.year)
 
 

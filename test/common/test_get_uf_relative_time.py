@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+import os
+import time
 import unittest
 from datetime import datetime
 from datetime import timedelta
@@ -15,6 +17,16 @@ from gajim.common.util.user_strings import get_uf_relative_time
 
 class GetRelativeTimeTest(unittest.TestCase):
     """Tests for the get_uf_relative_time function."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        os.environ["TZ"] = "Europe/Vienna"
+        time.tzset()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        os.environ.pop("TZ")
+        time.tzset()
 
     def test_sub_1_minute(self):
         """Test timedelta less than 1 minute"""
