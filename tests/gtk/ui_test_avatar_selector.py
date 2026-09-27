@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+from gi.repository import Gtk
+
+from tests.gtk import util
+
+from gajim.gtk.avatar_selector import AvatarSelector
+from gajim.gtk.window import GajimAppWindow
+
+DEFAULT_IMAGE_FILE_PATH = (
+    util.get_gajim_dir() / "data/icons/hicolor/96x96/apps/gajim.png"
+)
+
+
+class TestAvatarSelector(GajimAppWindow):
+    def __init__(self) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name="",
+            title=__class__.__name__,
+            default_width=800,
+            default_height=800,
+            add_window_padding=True,
+            header_bar=True,
+        )
+
+        box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
+        self.set_child(box)
+
+        avatar_selector = AvatarSelector()
+        avatar_selector.prepare_crop_area(str(DEFAULT_IMAGE_FILE_PATH))
+        box.append(avatar_selector)
+
+    def _cleanup(self) -> None:
+        pass
+
+
+util.init_settings()
+
+window = TestAvatarSelector()
+window.show()
+
+util.run_app()

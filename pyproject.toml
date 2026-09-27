@@ -95,6 +95,12 @@ gajim = ["py.typed"]
 [tool.setuptools.dynamic]
 version = {attr = "gajim.__version__"}
 
+[tool.pytest]
+minversion = "9.0"
+testpaths = [
+    "tests",
+]
+
 [tool.typos.files]
 extend-exclude = [
   "*.patch",
@@ -169,8 +175,8 @@ exclude = [
   "gajim/gtk/start_chat.py",
   "gajim/gtk/types.py",
   "gajim/gtk/shortcut_manager.py",
-  "test/common/test_uri_util.py",
-  "test/gui/test_menus.py",
+  "tests/common/test_uri_util.py",
+  "tests/gui/test_menus.py",
   "typings/pystray/*",
   "typings/windows_toasts/*",
   "win/misc/depcheck.py",
@@ -328,10 +334,10 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "gajim/common/modules/chatstates.py" = ["E501"]
 "gajim/gtk/types.py" = ["F401"]
 "gajim/gtk/*" = ["E501"]
-"test/*" = ["E402"]
-"test/common/test_styling.py" = ["RUF001", "E501"]
-"test/common/test_regex.py" = ["RUF001"]
-"test/database/*" = ["E501"]
+"tests/*" = ["E402"]
+"tests/common/test_styling.py" = ["RUF001", "E501"]
+"tests/common/test_regex.py" = ["RUF001"]
+"tests/database/*" = ["E501"]
 "make.py" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
 "win/*" = ["S603", "S605", "S607"]
@@ -410,8 +416,8 @@ exclude = [
   "gajim/gtk/types.py",
   "gajim/gtk/shortcut_manager.py",
   "scripts/update_flatpak_manifest.py",
-  "test/common/test_uri_util.py",
-  "test/gui/test_menus.py",
+  "tests/common/test_uri_util.py",
+  "tests/gui/test_menus.py",
   "typings/pystray/*",
   "typings/windows_toasts/*",
   "win/misc/depcheck.py",

@@ -4,5 +4,5 @@ include make.py
 recursive-include gajim *.in
 recursive-include po *
 recursive-include data *.1 *.in
-recursive-include test *
+recursive-include tests *
 prune */__pycache__

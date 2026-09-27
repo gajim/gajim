@@ -90,7 +90,7 @@ test-unittest:
   script:
     - pip install git+https://gitlab.com/gajim/python-nbxmpp.git
     - pip install git+https://gitlab.com/gajim/omemo-dr.git
-    - coverage run --source=gajim -m unittest discover -s test -v
+    - coverage run --source=gajim -m unittest discover -s tests -v
     - coverage report -mi
     - coverage xml -i
   coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
