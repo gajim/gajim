@@ -5,4 +5,4 @@ recursive-include gajim *.in
 recursive-include po *
 recursive-include data *.1 *.in
 recursive-include tests *
-prune */__pycache__
+global-exclude *.py[cod]
