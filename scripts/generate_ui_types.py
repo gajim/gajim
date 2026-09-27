@@ -21,8 +21,8 @@ cwd = Path.cwd()
 if cwd.name != "gajim":
     sys.exit("Script needs to be executed from gajim repository root directory")
 
-in_path = cwd / "gajim" / "data" / "gui"
-out_path = cwd / "gajim" / "gtk" / "builder.pyi"
+in_path = cwd / "src" / "gajim" / "data" / "gui"
+out_path = cwd / "src" / "gajim" / "gtk" / "builder.pyi"
 
 paths = list(in_path.iterdir())
 paths.sort()

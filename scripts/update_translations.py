@@ -18,8 +18,8 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 
 
 TRANSLATABLE_FILES = [
-    "gajim/**/*.py",
-    "gajim/**/*.ui",
+    "src/gajim/**/*.py",
+    "src/gajim/**/*.ui",
     "data/org.gajim.Gajim.desktop.in",
     "data/org.gajim.Gajim.metainfo.xml.in",
 ]

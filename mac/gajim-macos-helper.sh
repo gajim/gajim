@@ -153,7 +153,7 @@ function install_gajim() {
 function start_gajim() {
 	source ./gajim-venv/bin/activate
 	cd ./gajim-source/
-	python3 launch.py
+	gajim
 	deactivate
 }
 

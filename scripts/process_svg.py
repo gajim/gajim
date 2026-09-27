@@ -11,7 +11,9 @@ import sys
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent.parent
-ICONS_DIR = REPO_DIR / "gajim" / "data" / "icons" / "hicolor" / "scalable" / "devices"
+ICONS_DIR = (
+    REPO_DIR / "src" / "gajim" / "data" / "icons" / "hicolor" / "scalable" / "devices"
+)
 
 
 def convert_svg(input_path: Path, temp_path: Path) -> None:

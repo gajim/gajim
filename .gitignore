@@ -8,7 +8,7 @@ syntax: glob
 *~
 *#
 
-gajim/data/locale
+src/gajim/data/locale
 
 # Cache
 

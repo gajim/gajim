@@ -90,6 +90,7 @@ test-unittest:
   script:
     - pip install git+https://gitlab.com/gajim/python-nbxmpp.git
     - pip install git+https://gitlab.com/gajim/omemo-dr.git
+    - pip install .
     - python -m unittest discover -s tests -v
   interruptible: true
 

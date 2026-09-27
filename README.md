@@ -150,7 +150,7 @@ see [Wiki](https://gitlab.com/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 The easiest way to run the development version is to use [uv](https://docs.astral.sh/uv/)
 
-    uv run ./launch.py --user-profile dev
+    uv run gajim --user-profile dev
 
 ### Windows
 

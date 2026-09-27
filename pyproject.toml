@@ -86,7 +86,7 @@ dev = [
 # nbxmpp = { path = "../python-nbxmpp", editable = true}
 
 [tool.setuptools.packages.find]
-include = ["gajim*"]
+where = ["src"]
 
 [tool.setuptools.package-data]
 gajim = ["py.typed"]
@@ -146,35 +146,35 @@ exclude = [
   "build",
   "debian_build",
   "dist",
-  "gajim/common/app.py",
-  "gajim/common/client.py",
-  "gajim/common/file_props.py",
-  "gajim/common/jingle_content.py",
-  "gajim/common/jingle_ft.py",
-  "gajim/common/jingle_ftstates.py",
-  "gajim/common/jingle_rtp.py",
-  "gajim/common/jingle_session.py",
-  "gajim/common/jingle_transport.py",
-  "gajim/common/modules/bits_of_binary.py",
-  "gajim/common/modules/bytestream.py",
-  "gajim/common/modules/contacts.py",
-  "gajim/common/modules/discovery.py",
-  "gajim/common/modules/gateway.py",
-  "gajim/common/modules/ibb.py",
-  "gajim/common/modules/jingle.py",
-  "gajim/common/modules/roster_item_exchange.py",
-  "gajim/common/modules/search.py",
-  "gajim/common/settings.py",
-  "gajim/common/socks5.py",
-  "gajim/common/structs.py",
-  "gajim/common/util/av.py",
-  "gajim/common/winapi/system_style.py",
-  "gajim/gtk/dataform.py",
-  "gajim/gtk/filetransfer.py",
-  "gajim/gtk/settings.py",
-  "gajim/gtk/start_chat.py",
-  "gajim/gtk/types.py",
-  "gajim/gtk/shortcut_manager.py",
+  "src/gajim/common/app.py",
+  "src/gajim/common/client.py",
+  "src/gajim/common/file_props.py",
+  "src/gajim/common/jingle_content.py",
+  "src/gajim/common/jingle_ft.py",
+  "src/gajim/common/jingle_ftstates.py",
+  "src/gajim/common/jingle_rtp.py",
+  "src/gajim/common/jingle_session.py",
+  "src/gajim/common/jingle_transport.py",
+  "src/gajim/common/modules/bits_of_binary.py",
+  "src/gajim/common/modules/bytestream.py",
+  "src/gajim/common/modules/contacts.py",
+  "src/gajim/common/modules/discovery.py",
+  "src/gajim/common/modules/gateway.py",
+  "src/gajim/common/modules/ibb.py",
+  "src/gajim/common/modules/jingle.py",
+  "src/gajim/common/modules/roster_item_exchange.py",
+  "src/gajim/common/modules/search.py",
+  "src/gajim/common/settings.py",
+  "src/gajim/common/socks5.py",
+  "src/gajim/common/structs.py",
+  "src/gajim/common/util/av.py",
+  "src/gajim/common/winapi/system_style.py",
+  "src/gajim/gtk/dataform.py",
+  "src/gajim/gtk/filetransfer.py",
+  "src/gajim/gtk/settings.py",
+  "src/gajim/gtk/start_chat.py",
+  "src/gajim/gtk/types.py",
+  "src/gajim/gtk/shortcut_manager.py",
   "tests/common/test_uri_util.py",
   "tests/gui/test_menus.py",
   "typings/pystray/*",
@@ -319,21 +319,21 @@ exclude = [
   # Code Folders
   "typings",
   # legacy modules, will be removed
-  "gajim/common/jingle_ftstates.py",
-  "gajim/common/modules/bytestream.py",
-  "gajim/common/socks5.py",
+  "src/gajim/common/jingle_ftstates.py",
+  "src/gajim/common/modules/bytestream.py",
+  "src/gajim/common/socks5.py",
 ]
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
-"gajim/common/iana.py" = ["E501"]
-"gajim/common/storage/omemo.py" = ["N803"]
-"gajim/common/storage/*" = ["E501"]
-"gajim/common/modules/chatstates.py" = ["E501"]
-"gajim/gtk/types.py" = ["F401"]
-"gajim/gtk/*" = ["E501"]
+"src/gajim/common/iana.py" = ["E501"]
+"src/gajim/common/storage/omemo.py" = ["N803"]
+"src/gajim/common/storage/*" = ["E501"]
+"src/gajim/common/modules/chatstates.py" = ["E501"]
+"src/gajim/gtk/types.py" = ["F401"]
+"src/gajim/gtk/*" = ["E501"]
 "tests/*" = ["E402"]
 "tests/common/test_styling.py" = ["RUF001", "E501"]
 "tests/common/test_regex.py" = ["RUF001"]
@@ -385,36 +385,36 @@ exclude = [
   "build",
   "debian_build",
   "dist",
-  "gajim/common/app.py",
-  "gajim/common/client.py",
-  "gajim/common/file_props.py",
-  "gajim/common/helpers.py",
-  "gajim/common/jingle_content.py",
-  "gajim/common/jingle_ft.py",
-  "gajim/common/jingle_ftstates.py",
-  "gajim/common/jingle_rtp.py",
-  "gajim/common/jingle_session.py",
-  "gajim/common/jingle_transport.py",
-  "gajim/common/modules/bits_of_binary.py",
-  "gajim/common/modules/bytestream.py",
-  "gajim/common/modules/contacts.py",
-  "gajim/common/modules/discovery.py",
-  "gajim/common/modules/gateway.py",
-  "gajim/common/modules/ibb.py",
-  "gajim/common/modules/jingle.py",
-  "gajim/common/modules/roster_item_exchange.py",
-  "gajim/common/modules/search.py",
-  "gajim/common/settings.py",
-  "gajim/common/socks5.py",
-  "gajim/common/structs.py",
-  "gajim/common/util/av.py",
-  "gajim/common/winapi/system_style.py",
-  "gajim/gtk/dataform.py",
-  "gajim/gtk/filetransfer.py",
-  "gajim/gtk/settings.py",
-  "gajim/gtk/start_chat.py",
-  "gajim/gtk/types.py",
-  "gajim/gtk/shortcut_manager.py",
+  "src/gajim/common/app.py",
+  "src/gajim/common/client.py",
+  "src/gajim/common/file_props.py",
+  "src/gajim/common/helpers.py",
+  "src/gajim/common/jingle_content.py",
+  "src/gajim/common/jingle_ft.py",
+  "src/gajim/common/jingle_ftstates.py",
+  "src/gajim/common/jingle_rtp.py",
+  "src/gajim/common/jingle_session.py",
+  "src/gajim/common/jingle_transport.py",
+  "src/gajim/common/modules/bits_of_binary.py",
+  "src/gajim/common/modules/bytestream.py",
+  "src/gajim/common/modules/contacts.py",
+  "src/gajim/common/modules/discovery.py",
+  "src/gajim/common/modules/gateway.py",
+  "src/gajim/common/modules/ibb.py",
+  "src/gajim/common/modules/jingle.py",
+  "src/gajim/common/modules/roster_item_exchange.py",
+  "src/gajim/common/modules/search.py",
+  "src/gajim/common/settings.py",
+  "src/gajim/common/socks5.py",
+  "src/gajim/common/structs.py",
+  "src/gajim/common/util/av.py",
+  "src/gajim/common/winapi/system_style.py",
+  "src/gajim/gtk/dataform.py",
+  "src/gajim/gtk/filetransfer.py",
+  "src/gajim/gtk/settings.py",
+  "src/gajim/gtk/start_chat.py",
+  "src/gajim/gtk/types.py",
+  "src/gajim/gtk/shortcut_manager.py",
   "scripts/update_flatpak_manifest.py",
   "tests/common/test_uri_util.py",
   "tests/gui/test_menus.py",

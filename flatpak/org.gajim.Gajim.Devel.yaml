@@ -111,6 +111,6 @@ modules:
         path: app-overrides.json
       - type: shell
         commands:
-          - mv gajim/data/icons/hicolor/scalable/apps/gajim{-devel,}.svg
+          - mv src/gajim/data/icons/hicolor/scalable/apps/gajim{-devel,}.svg
     post-install:
       - install -d /app/plugins

@@ -14,7 +14,7 @@ from pathlib import Path
 REPO_DIR = Path(__file__).resolve().parent.parent
 
 
-INIT = REPO_DIR / "gajim" / "__init__.py"
+INIT = REPO_DIR / "src" / "gajim" / "__init__.py"
 FLATPAK = REPO_DIR / "flatpak" / "org.gajim.Gajim.yaml"
 APPDATA = REPO_DIR / "data" / "org.gajim.Gajim.metainfo.xml.in"
 CHANGELOG = REPO_DIR / "ChangeLog"

@@ -22,11 +22,11 @@ SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
 path = [
-  "po/**",
-  "gajim/data/gui/**",
-  "win/misc/**",
+  "src/gajim/data/gui/**",
+  "src/gajim/data/sounds/**",
   "mac/Gajim.icns",
-  "gajim/data/sounds/**",
+  "po/**",
+  "win/misc/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"
@@ -34,7 +34,7 @@ SPDX-License-Identifier = "GPL-3.0-only"
 
 [[annotations]]
 path = [
-  "gajim/data/icons/**",
+  "src/gajim/data/icons/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"
@@ -42,7 +42,7 @@ SPDX-License-Identifier = "GPL-3.0-only"
 
 [[annotations]]
 path = [
-  "gajim/data/icons/hicolor/scalable/devices/**",
+  "src/gajim/data/icons/hicolor/scalable/devices/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Copyright 2013-2017 Cole Bemis"

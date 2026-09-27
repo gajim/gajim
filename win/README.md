@@ -14,7 +14,8 @@ Download [msys2](https://www.msys2.org/) (`msys2-x86_64-xxx.exe`) and follow the
 * Create a virtual environment with access to MSYS packages: `python -m venv .venv --system-site-packages`
 * Activate the newly created environment: `source .venv/bin/activate`
 * Execute `./win/dev_env.sh` to install all the needed dependencies
-* Launch Gajim `./launch.py`
+* Run `pip install -e .` to install Gajim
+* Launch Gajim `gajim`
 
 ### GTK Inspector
 

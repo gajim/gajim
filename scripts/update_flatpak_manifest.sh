@@ -14,4 +14,3 @@ flatpak-pip-generator.py \
     --prefer-wheels "cryptography,pillow,pysequoia" \
     --pyproject-file ${cur_file_dir}/../pyproject.toml \
     --runtime="org.gnome.Sdk//${runtime_version}"
-

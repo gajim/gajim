@@ -75,7 +75,7 @@ gst_include_plugins = [
 ]
 
 a = Analysis(
-    ["launch.py"],
+    ["mac/launch.py"],
     pathex=[cwd],
     datas=[("gajim", "gajim")],  # typos: ignore
     hiddenimports=hiddenimports,
