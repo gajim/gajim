@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import math
 import random
 import re
@@ -16,6 +17,7 @@ from gi.repository import GLib
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
 
+from gajim.common import app
 from gajim.common import regex
 from gajim.common.const import LOCATION_DATA
 from gajim.common.i18n import _
@@ -93,6 +95,17 @@ def format_eta(time_: int | float) -> str:
         times["minutes"] = round(time_ % 60)
         return _("%(minutes)s min %(seconds)s s") % times
     return _("%s s") % times["seconds"]
+
+
+def format_last_seen(idle_datetime: dt.datetime | None) -> str:
+    if idle_datetime is None:
+        return ""
+    current = dt.datetime.now()
+    if idle_datetime.date() == current.date():
+        format_string = app.settings.get("time_format")
+    else:
+        format_string = app.settings.get("date_time_format")
+    return _("last seen: %s") % idle_datetime.strftime(format_string)
 
 
 def format_fingerprint(fingerprint: str, protocol: str, *, wrap: bool) -> str:

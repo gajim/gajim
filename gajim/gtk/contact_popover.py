@@ -6,8 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import datetime as dt
-
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -24,6 +22,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.text import format_last_seen
 from gajim.common.util.user_strings import get_time_zone_string
 
 from gajim.gtk.avatar import get_show_circle
@@ -86,7 +85,7 @@ class ContactPopover(Gtk.Popover, SignalManager):
         )
         icon = convert_surface_to_texture(surface)
         status_text = get_uf_show(self._contact.show.value)
-        if idle_time_text := self._get_idle_time():
+        if idle_time_text := format_last_seen(self._contact.idle_datetime):
             status_text += f" ({idle_time_text})"
 
         self._status.set_label(status_text)
@@ -134,19 +133,6 @@ class ContactPopover(Gtk.Popover, SignalManager):
                     self._timezone.set_label(get_time_zone_string(prop))
                 case _:
                     pass
-
-    def _get_idle_time(self) -> str | None:
-        if self._contact.idle_datetime is None:
-            return None
-
-        current = dt.datetime.now()
-        if self._contact.idle_datetime.date() == current.date():
-            format_string = app.settings.get("time_format")
-            formatted = self._contact.idle_datetime.strftime(format_string)
-        else:
-            format_string = app.settings.get("date_time_format")
-            formatted = self._contact.idle_datetime.strftime(format_string)
-        return _("last seen: %s") % formatted
 
     def _on_contact_details_clicked(self, _button: Gtk.Button) -> None:
         self.popdown()

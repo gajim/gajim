@@ -32,6 +32,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.text import format_last_seen
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
@@ -558,7 +559,11 @@ class DeviceInfo(Adw.PreferencesGroup):
 
         self.set_title(_('Device "%s"') % contact.resource)
 
-        self._status_row.set_subtitle(get_uf_show(contact.show.value))
+        status = get_uf_show(contact.show.value)
+        if last_seen := format_last_seen(contact.idle_datetime):
+            status += f" ({last_seen})"
+
+        self._status_row.set_subtitle(status)
 
         self._priority_row.set_subtitle(str(self._contact.priority))
         self._priority_row.set_visible(True)
