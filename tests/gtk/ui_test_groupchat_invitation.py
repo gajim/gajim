@@ -7,10 +7,10 @@ from nbxmpp import JID
 from nbxmpp.const import InviteType
 from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.protocol import Iq
-from test.gtk.application import GajimTestApplication
 
 from gajim.common import app
 from gajim.common.events import MucInvitation
+from tests.gtk.application import GajimTestApplication
 
 from gajim.gtk.groupchat_invitation import GroupChatInvitation
 from gajim.gtk.window import GajimAppWindow
