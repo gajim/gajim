@@ -912,10 +912,14 @@ SHOW_STRING_MNEMONIC = {
     "offline": _("_Offline"),
 }
 
-GAJIM_FAQ_URI = "https://gitlab.com/gajim/gajim/wikis/help/gajimfaq"
+FLATPAK_HOWTO_URL = "https://dev.gajim.org/gajim/gajim/wikis/help/flathub"
+GAJIM_FAQ_URI = "https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq"
+GAJIM_OMEMO_WIKI_URI = "https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO"
 GAJIM_PRIVACY_POLICY_URI = "https://gajim.org/privacy/"
-GAJIM_WIKI_URI = "https://gitlab.com/gajim/gajim/wikis"
+GAJIM_WIKI_URI = "https://dev.gajim.org/gajim/gajim/wikis"
 GAJIM_SUPPORT_JID = JID.from_string("gajim@conference.gajim.org")
+GAJIM_ISSUES_URI = "https://dev.gajim.org/gajim/gajim/-/work_items/"
+GAJIM_NEW_ISSUE_URI = "https://dev.gajim.org/gajim/gajim/issues/new"
 
 
 # Clickable URI schemes not (yet) registered with IANA (see ./iana/uri_schemes.py)

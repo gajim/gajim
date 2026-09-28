@@ -15,6 +15,7 @@ from gajim.common import ged
 from gajim.common import passwords
 from gajim.common import types
 from gajim.common.const import ClientState
+from gajim.common.const import GAJIM_OMEMO_WIKI_URI
 from gajim.common.const import TLS_VERSION_STRINGS
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
@@ -388,9 +389,8 @@ class AccountOmemoSettingsGroup(GajimPreferencesGroup):
         )
 
         self.set_title(_("Trust Management"))
-        wiki_url = "https://gitlab.com/gajim/gajim/-/wikis/help/OMEMO"
         link_text = _("Read more about blind trust")
-        self.set_description(f'<a href="{wiki_url}">{link_text}</a>')
+        self.set_description(f'<a href="{GAJIM_OMEMO_WIKI_URI}">{link_text}</a>')
 
         settings = [
             Setting(

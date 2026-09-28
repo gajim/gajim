@@ -12,6 +12,7 @@ from gi.repository import Pango
 
 from gajim.common.const import ARTISTS
 from gajim.common.const import DEVELOPERS
+from gajim.common.const import GAJIM_ISSUES_URI
 from gajim.common.const import MAINTAINERS
 from gajim.common.const import THANKS
 from gajim.common.i18n import _
@@ -41,7 +42,7 @@ class AboutDialog:
             copyright="Copyright © 2003-2026 Gajim Team",
             license_type=Gtk.License.GPL_3_0_ONLY,
             website="https://gajim.org/",
-            issue_url="https://gitlab.com/gajim/gajim/-/work_items/",
+            issue_url=GAJIM_ISSUES_URI,
             developer_name="\n".join(MAINTAINERS),
             developers=MAINTAINERS + DEVELOPERS,
             designers=ARTISTS,

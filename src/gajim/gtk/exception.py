@@ -23,6 +23,7 @@ from gi.repository import Gtk
 
 import gajim
 from gajim.common import app
+from gajim.common.const import GAJIM_NEW_ISSUE_URI
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
@@ -47,8 +48,6 @@ except Exception:
         import sentry_sdk
 
 _exception_in_progress = threading.Lock()
-
-ISSUE_URL = "https://gitlab.com/gajim/gajim/issues/new"
 
 ISSUE_TEXT = """## Versions
 - OS: {}
@@ -141,7 +140,7 @@ class ExceptionDialog(GajimAppWindow):
 
     def _report_with_browser(self):
         params = {"issue[description]": self._issue_text}
-        url = f"{ISSUE_URL}?{urlencode(params)}"
+        url = f"{GAJIM_NEW_ISSUE_URI}?{urlencode(params)}"
         webbrowser.open(url, new=2)
         self.close()
 

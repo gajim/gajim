@@ -19,6 +19,7 @@ from packaging.version import Version
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
+from gajim.common.const import FLATPAK_HOWTO_URL
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.i18n import _
 from gajim.common.types import PluginRepositoryT
@@ -64,9 +65,8 @@ class Plugins(GajimPreferencesGroup):
         description_text = _("Manage and configure Gajim plugins")
         if app.is_flatpak():
             flatpak_howto_text = _("How to install plugins with Flatpak")
-            flatpak_howto_url = "https://gitlab.com/gajim/gajim/wikis/help/flathub"
             description_text += (
-                f"\n<a href='{flatpak_howto_url}'>{flatpak_howto_text}</a>"
+                f"\n<a href='{FLATPAK_HOWTO_URL}'>{flatpak_howto_text}</a>"
             )
 
         self.set_description(description_text)
