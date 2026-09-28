@@ -3,24 +3,31 @@ repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.16.2
     hooks:
-      - id: ruff-check
-        exclude: ".githooks/"
       - id: ruff-format
+        stages: [pre-commit]
       - id: ruff-check
         args: [--select, I, --fix]
+        stages: [pre-commit]
+      - id: ruff-check
+        exclude: ".githooks/"
+        stages: [pre-commit]
 
   - repo: https://codeberg.org/fsfe/reuse-tool
     rev: v6.2.0
     hooks:
       - id: reuse-lint-file
+        stages: [pre-commit]
 
   - repo: https://github.com/crate-ci/typos
     rev: v1.50.3
     hooks:
       - id: typos
+        stages: [pre-commit]
 
   - repo: https://gitlab.com/gajim/gajim-pre-commit.git
     rev: v1.0.0
     hooks:
     - id: gajim-pc-msg
+      stages: [commit-msg]
     - id: gajim-pc-push
+      stages: [pre-push]
