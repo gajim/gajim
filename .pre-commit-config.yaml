@@ -22,6 +22,7 @@ repos:
     rev: v1.50.3
     hooks:
       - id: typos
+        args: [--force-exclude]
         stages: [pre-commit]
 
   - repo: https://gitlab.com/gajim/gajim-pre-commit.git
