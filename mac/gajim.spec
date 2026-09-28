@@ -77,7 +77,7 @@ gst_include_plugins = [
 a = Analysis(
     ["mac/launch.py"],
     pathex=[cwd],
-    datas=[("gajim", "gajim")],  # typos: ignore
+    datas=[],  # typos: ignore
     hiddenimports=hiddenimports,
     hookspath=[os.path.join(os.getcwd(), "mac", "hooks")],
     hooksconfig={
