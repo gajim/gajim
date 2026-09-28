@@ -27,7 +27,10 @@ out_path = cwd / "src" / "gajim" / "gtk" / "builder.pyi"
 paths = list(in_path.iterdir())
 paths.sort()
 
-IMPORTS = """
+IMPORTS = """# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 from typing import Any
 from typing import Literal
 from typing import overload
@@ -36,33 +39,43 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.gtk.dropdown import GajimDropDown
 
 class GajimBuilder:
-
     def __init__(
         self,
         filename: str | None = None,
         instance: Any = None,
         widgets: list[str] | None = None,
         domain: str | None = None,
-        gettext_: Any | None = None
+        gettext_: Any | None = None,
     ) -> None: ...
 
-
-class Builder(Gtk.Builder):
-    ...
+class Builder(Gtk.Builder): ...
 
 """
 
-CLASS_DEF = "\nclass %s(Builder):"
+CLASS_DEF = "class %s(Builder):"
 ATTR = "\n    %s: %s"
 
-GET_BUILDER_OVERLOAD = """
+GET_BUILDER_OVERLOAD = """\
 @overload
-def get_builder(file_name: Literal['%s'], instance: Any = None, widgets: list[str] = ...) -> %s: ...  # noqa"""  # noqa: E501
+def get_builder(
+    file_name: Literal["%s"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> %s: ...  # noqa\n"""  # noqa: E501
 
-GET_BUILDER = """\n\n
-def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ..."""  # noqa: E501
+GET_BUILDER = """\
+def get_builder(
+    file_name: str,
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> Builder: ..."""  # noqa: E501
+
+
+REPLACE = {"filter_from_dropdown": "GajimDropDown[ChatDirection | None]"}
 
 
 class InvalidFile(Exception):
@@ -99,7 +112,8 @@ def parse(path: Path, file: TextIOWrapper) -> str:
         else:
             klass = f"Gtk.{klass.removeprefix('Gtk')}"
 
-        lines.append(ATTR % (id_.replace("-", "_"), klass))
+        attr_name = id_.replace("-", "_")
+        lines.append(ATTR % (attr_name, REPLACE.get(attr_name, klass)))
 
     klass_name = make_class_name(path)
     file.write(CLASS_DEF % klass_name)

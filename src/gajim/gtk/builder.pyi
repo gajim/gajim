@@ -733,11 +733,15 @@ def get_builder(
 ) -> AdvancedConfigurationBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["assistant.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["assistant.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> AssistantBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["call_window.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["call_window.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> CallWindowBuilder: ...  # noqa
 @overload
 def get_builder(
@@ -891,15 +895,21 @@ def get_builder(
 ) -> PasswordDialogBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["pep_config.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> PepConfigBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["profile.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["profile.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> ProfileBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["quit_dialog.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["quit_dialog.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> QuitDialogBuilder: ...  # noqa
 @overload
 def get_builder(
@@ -909,7 +919,9 @@ def get_builder(
 ) -> RosterItemExchangeBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["search_view.ui"], instance: Any = None, widgets: list[str] = ...
+    file_name: Literal["search_view.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> SearchViewBuilder: ...  # noqa
 @overload
 def get_builder(
@@ -954,5 +966,7 @@ def get_builder(
     widgets: list[str] = ...,
 ) -> WorkspaceDialogBuilder: ...  # noqa
 def get_builder(
-    file_name: str, instance: Any = None, widgets: list[str] = ...
+    file_name: str,
+    instance: Any = None,
+    widgets: list[str] = ...,
 ) -> Builder: ...
