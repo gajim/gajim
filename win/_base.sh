@@ -175,14 +175,6 @@ function install_gajim {
     # Install language dicts
     curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip
     7z x -o"${MINGW_ROOT}"/share "${BUILD_ROOT}"/speller_dicts.zip
-
-    # Install our own icons
-    rm -Rf "${MINGW_ROOT}/share/icons/hicolor"
-    cp -r gajim/data/icons/hicolor "${MINGW_ROOT}"/share/icons
-
-    # Update icon cache
-    "${MINGW_ROOT}"/bin/gtk4-update-icon-cache.exe --force \
-        "${MINGW_ROOT}/share/icons/hicolor"
 }
 
 function cleanup_install {
@@ -256,12 +248,8 @@ function cleanup_install {
     find "${MINGW_ROOT}"/lib/"${PYTHON_ID}".* -type d -name "*_test*" \
         -prune -exec rm -rf {} \;
 
-    # Remove translations we don't support
-    for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do
-        if [ ! -f "${d}"/gajim.mo ]; then
-            rm -Rf "${d}"
-        fi
-    done
+    # Remove translations
+    rm -Rf "${MINGW_ROOT}"/share/locale/*
 
     # Remove EXE files
     echo "Removing .exe files"
