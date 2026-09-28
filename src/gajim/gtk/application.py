@@ -317,12 +317,11 @@ class GajimApplication(Adw.Application, CoreApplication):
             print(gajim.__version__)
             return 0
 
-        application_name = "Gajim"
-
         user_profile = options.lookup_value("user-profile")
         if user_profile is not None:
             configpaths.set_user_profile(user_profile.get_string())
 
+        application_name = "Gajim"
         if user_profile is not None:
             # Incorporate user_profile name into application id
             # to have a single app instance for each user_profile.
@@ -333,6 +332,8 @@ class GajimApplication(Adw.Application, CoreApplication):
             configpaths.set_user_profile(user_profile_str)
 
         GLib.set_application_name(application_name)
+        # GLib.set_prgname() sets WM_CLASS on X11, GTK would set it to python3
+        GLib.set_prgname("gajim")
 
         try:
             self.register()
