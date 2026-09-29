@@ -32,7 +32,7 @@ log = logging.getLogger("gajim.gtk.groupchat_creation")
 
 
 @Gtk.Template(string=get_ui_string("groupchat_creation.ui"))
-class CreateGroupchatWindow(GajimAppWindow, EventHelper):
+class CreateGroupchatWindow(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     __gtype_name__ = "CreateGroupchatWindow"
 
     _stack: Gtk.Stack = Gtk.Template.Child()

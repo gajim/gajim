@@ -30,7 +30,7 @@ log = logging.getLogger("gajim.gtk.db_migration")
 # which access Gajim settings.
 
 
-class DBMigration(Adw.ApplicationWindow, EventHelper, SignalManager):
+class DBMigration(Adw.ApplicationWindow, EventHelper, SignalManager):  # ty: ignore[invalid-method-override]
     def __init__(
         self,
     ) -> None:

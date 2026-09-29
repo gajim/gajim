@@ -20,7 +20,7 @@ from gajim.common.i18n import _
 from gajim.common.util.text import to_one_line
 
 
-class StatusMessageSelectorRow(Adw.EntryRow, EventHelper):
+class StatusMessageSelectorRow(Adw.EntryRow, EventHelper):  # ty: ignore[invalid-method-override]
     __gtype_name__ = "StatusMessageSelectorRow"
 
     def __init__(self) -> None:

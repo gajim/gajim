@@ -30,7 +30,7 @@ from gajim.gtk.window import GajimAppWindow
 log = logging.getLogger("gajim.gtk.call_window")
 
 
-class CallWindow(GajimAppWindow, EventHelper):
+class CallWindow(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     def __init__(self, account: str, resource_jid: JID) -> None:
         GajimAppWindow.__init__(
             self,

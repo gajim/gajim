@@ -63,7 +63,7 @@ STANZA_PRESETS = {
 }
 
 
-class DebugConsoleWindow(GajimAppWindow, EventHelper):
+class DebugConsoleWindow(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,

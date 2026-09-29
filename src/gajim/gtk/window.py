@@ -18,7 +18,7 @@ from gajim.gtk.util.misc import check_finalize
 log = logging.getLogger("gajim.gtk.window")
 
 
-class GajimAppWindow(Adw.ApplicationWindow, SignalManager):
+class GajimAppWindow(Adw.ApplicationWindow, SignalManager):  # ty: ignore[invalid-method-override]
     __gtype_name__ = "GajimAppWindow"
 
     def __init__(

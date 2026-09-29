@@ -61,7 +61,7 @@ class Column(IntEnum):
     GROUP_NAME = 1
 
 
-class ContactInfo(GajimAppWindow, EventHelper):
+class ContactInfo(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     def __init__(
         self,
         account: str,

@@ -33,7 +33,7 @@ from gajim.gtk.window import GajimAppWindow
 log = logging.getLogger("gajim.gtk.pep_config")
 
 
-class PEPConfig(GajimAppWindow, EventHelper):
+class PEPConfig(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     def __init__(self, account: str) -> None:
         GajimAppWindow.__init__(
             self,

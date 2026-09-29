@@ -88,7 +88,7 @@ log = logging.getLogger("gajim.gtk.main")
 
 
 @Gtk.Template(string=get_ui_string("main.ui"))
-class MainWindow(Adw.ApplicationWindow, EventHelper):
+class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-method-override]
     __gtype_name__ = "MainWindow"
 
     _header_bar: Adw.HeaderBar = Gtk.Template.Child()

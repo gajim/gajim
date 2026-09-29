@@ -77,7 +77,7 @@ ACCOUNT_PAGES = [
 ]
 
 
-class Preferences(GajimAppWindow, EventHelper):
+class Preferences(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
