@@ -1,7 +1,7 @@
 include COPYING
 include ChangeLog
 include make.py
-recursive-include gajim *.in
+recursive-include src/gajim *.in
 recursive-include po *
 recursive-include data *.1 *.in
 recursive-include tests *
