@@ -23,7 +23,7 @@ from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.window import GajimAppWindow
 
 
-class Assistant(GajimAppWindow, EventHelper):
+class Assistant(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-override]
     __gsignals__ = {
         "button-clicked": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
@@ -98,12 +98,12 @@ class Assistant(GajimAppWindow, EventHelper):
         page_name = self._ui.stack.get_visible_child_name()
         assert page_name is not None
         if self._button_visible_func is None:
-            buttons = self.get_page(page_name).get_visible_buttons()
+            buttons = self._pages[page_name].get_visible_buttons()
             if buttons is not None:
                 if len(buttons) == 1:
                     default = buttons[0]
                 else:
-                    default = self.get_page(page_name).get_default_button()
+                    default = self._pages[page_name].get_default_button()
                 if default is not None:
                     self.set_default_button(default)
         else:
@@ -187,9 +187,6 @@ class Assistant(GajimAppWindow, EventHelper):
             return
         self._hide_buttons()
         self._ui.stack.set_visible_child_full(name, transition)
-
-    def get_page(self, name: str) -> AssistantPage:
-        return self._pages[name]
 
     def _on_visible_child_name(self, stack: Gtk.Stack, _param: str) -> None:
         if stack.get_visible_child_name() is None:
