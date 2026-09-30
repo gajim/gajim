@@ -560,7 +560,7 @@ class DeviceInfo(Adw.PreferencesGroup):
         self.set_title(_('Device "%s"') % contact.resource)
 
         status = get_uf_show(contact.show.value)
-        if last_seen := format_last_seen(contact.idle_datetime):
+        if last_seen := format_last_seen(contact.idle_datetime, app.settings):
             status += f" ({last_seen})"
 
         self._status_row.set_subtitle(status)

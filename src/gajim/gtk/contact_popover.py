@@ -85,7 +85,9 @@ class ContactPopover(Gtk.Popover, SignalManager):
         )
         icon = convert_surface_to_texture(surface)
         status_text = get_uf_show(self._contact.show.value)
-        if idle_time_text := format_last_seen(self._contact.idle_datetime):
+        if idle_time_text := format_last_seen(
+            self._contact.idle_datetime, app.settings
+        ):
             status_text += f" ({idle_time_text})"
 
         self._status.set_label(status_text)

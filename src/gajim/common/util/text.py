@@ -17,12 +17,10 @@ from gi.repository import GLib
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
 
-from gajim.common import app
 from gajim.common import regex
 from gajim.common.const import LOCATION_DATA
 from gajim.common.i18n import _
-from gajim.common.regex import NON_SPACING_MARKS_REGEX
-from gajim.common.regex import URL_REGEX
+from gajim.common.types import SettingsT
 
 # from RFC 3986, 3.3. Path (pchar without unreserved and pct-encoded):
 _reserved_chars_allowed_in_path_segment = regex.sub_delims + ":@"
@@ -97,14 +95,14 @@ def format_eta(time_: int | float) -> str:
     return _("%s s") % times["seconds"]
 
 
-def format_last_seen(idle_datetime: dt.datetime | None) -> str:
+def format_last_seen(idle_datetime: dt.datetime | None, settings: SettingsT) -> str:
     if idle_datetime is None:
         return ""
     current = dt.datetime.now()
     if idle_datetime.date() == current.date():
-        format_string = app.settings.get("time_format")
+        format_string = settings.get("time_format")
     else:
-        format_string = app.settings.get("date_time_format")
+        format_string = settings.get("date_time_format")
     return _("last seen: %s") % idle_datetime.strftime(format_string)
 
 
@@ -160,7 +158,7 @@ def make_href_markup(string: str | None) -> str:
             url = f"https://{url}"
         return f'<a href="{url}">{match.group()}</a>'
 
-    return URL_REGEX.sub(_to_href, string)
+    return regex.URL_REGEX.sub(_to_href, string)
 
 
 def format_bytes_as_hex(bytes_: bytes, line_count: int = 1) -> str:
@@ -181,7 +179,7 @@ def process_non_spacing_marks(string: str) -> str:
     https://gitlab.gnome.org/GNOME/pango/-/issues/798
     Unbreaks spaces around non-spacing marks.
     """
-    return NON_SPACING_MARKS_REGEX.sub("\u00a0", string)
+    return regex.NON_SPACING_MARKS_REGEX.sub("\u00a0", string)
 
 
 def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
