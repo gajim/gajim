@@ -40,7 +40,6 @@ from gajim.common.const import ValueMissingT
 from gajim.common.helpers import idle_add_once
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.blocking import Blocking
 from gajim.common.modules.util import LogAdapter
 from gajim.common.setting_values import AllContactSettings
 from gajim.common.setting_values import AllContactSettingsT
@@ -605,6 +604,8 @@ class BareContact(CommonContact):
     @property
     def is_blocked(self) -> bool:
         module = self.get_module("Blocking")
+        from gajim.common.modules.blocking import Blocking
+
         assert isinstance(module, Blocking)
         return module.is_blocked(self._jid)
 
