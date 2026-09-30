@@ -13,9 +13,9 @@ from collections.abc import Iterator
 from datetime import datetime
 from datetime import timedelta
 from datetime import UTC
+from logging import Logger
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from nbxmpp import unescape_localpart
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
@@ -37,8 +37,10 @@ from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
 from gajim.common.const import VALUE_MISSING
 from gajim.common.const import ValueMissingT
+from gajim.common.helpers import idle_add_once
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.blocking import Blocking
 from gajim.common.modules.util import LogAdapter
 from gajim.common.setting_values import AllContactSettings
 from gajim.common.setting_values import AllContactSettingsT
@@ -256,9 +258,9 @@ class Contacts(BaseModule):
 
 
 class CommonContact(Observable):
-    def __init__(self, logger: LogAdapter | None, jid: JID, account: str) -> None:
-
+    def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         Observable.__init__(self, logger)
+
         self._jid = jid
         self._account = account
         self._gateway_type: str | None = None
@@ -336,19 +338,6 @@ class CommonContact(Observable):
     def chatstate_string(self) -> str:
         return chatstate_to_string(self.chatstate)
 
-    @property
-    def is_muted(self) -> bool:
-        mute_until = self.settings.get("mute_until")
-        if not mute_until:
-            return False
-
-        until = datetime.fromisoformat(mute_until)
-        is_muted = until > datetime.now(UTC)
-        if not is_muted:
-            # Reset the setting to default
-            GLib.idle_add(self.settings.set, "mute_until", None)
-        return is_muted
-
     def __repr__(self) -> str:
         return f"{self.jid} ({self._account})"
 
@@ -356,7 +345,9 @@ class CommonContact(Observable):
         if self._gateway_type is not None:
             return f"gateway-{self._gateway_type}"
 
-        domain_disco = app.storage.cache.get_last_disco_info(self._jid.domain)
+        domain_disco = app.storage.cache.get_last_disco_info(
+            JID.from_string(self._jid.domain)
+        )
         if domain_disco is None:
             return None
 
@@ -373,7 +364,7 @@ class CommonContact(Observable):
 
 
 class BareContact(CommonContact):
-    def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
+    def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
         self.settings = ContactSettings(account, jid)
@@ -415,7 +406,6 @@ class BareContact(CommonContact):
         # problems if we create a ResourceContact without resource
 
         jid = self._jid.new_with(resource=resource)
-        assert isinstance(self._log, LogAdapter)
         contact = ResourceContact(self._log, jid, self._account)
         self._resources[resource] = contact
         contact.connect("presence-update", self._on_signal)
@@ -572,6 +562,10 @@ class BareContact(CommonContact):
         self.notify("avatar-update")
 
     @property
+    def is_muted(self) -> bool:
+        return is_muted(self.settings)
+
+    @property
     def is_in_roster(self) -> bool:
         item = self.get_module("Roster").get_item(self._jid)
         return item is not None
@@ -610,7 +604,9 @@ class BareContact(CommonContact):
 
     @property
     def is_blocked(self) -> bool:
-        return self.get_module("Blocking").is_blocked(self._jid)
+        module = self.get_module("Blocking")
+        assert isinstance(module, Blocking)
+        return module.is_blocked(self._jid)
 
     def set_blocked(self) -> None:
         self.update_presence(UNKNOWN_PRESENCE)
@@ -644,14 +640,14 @@ class BareContact(CommonContact):
 
     @property
     def reactions_per_user(self) -> int | None:
-        disco = app.storage.cache.get_last_disco_info(self._jid.domain)
+        disco = app.storage.cache.get_last_disco_info(JID.from_string(self._jid.domain))
         if disco is None:
             return None
         return disco.reactions_per_user
 
 
 class ResourceContact(CommonContact):
-    def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
+    def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
         self._presence = UNKNOWN_PRESENCE
@@ -673,7 +669,7 @@ class ResourceContact(CommonContact):
             return None
 
         for identity in disco_info.identities:
-            if identity.type is not None:
+            if identity.type:
                 return identity.type
 
         return None
@@ -728,7 +724,7 @@ class ResourceContact(CommonContact):
 
 
 class GroupchatContact(CommonContact):
-    def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
+    def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
         self.settings = GroupChatSettings(account, jid)
@@ -890,7 +886,7 @@ class GroupchatContact(CommonContact):
 
             for jid in offline_jids:
                 yield GroupchatOfflineParticipant(
-                    self._account, jid, self, name, occupants.get(jid)
+                    self._log, self._account, jid, self, name, occupants.get(jid)
                 )
 
     @property
@@ -939,6 +935,10 @@ class GroupchatContact(CommonContact):
         for contact in self._resources.values():
             contact.update_presence(UNKNOWN_MUC_PRESENCE)
 
+    @property
+    def is_muted(self) -> bool:
+        return is_muted(self.settings)
+
     def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
         return client.get_module("MUC").get_joined_users(self._jid)
@@ -963,7 +963,7 @@ class GroupchatContact(CommonContact):
 
     @property
     def reactions_per_user(self) -> int | None:
-        for entity in (self._jid, self._jid.domain):
+        for entity in (self._jid, JID.from_string(self._jid.domain)):
             disco = app.storage.cache.get_last_disco_info(entity)
             if disco is None:
                 continue
@@ -975,7 +975,7 @@ class GroupchatContact(CommonContact):
 
 
 class GroupchatParticipant(CommonContact):
-    def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
+    def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
         self.settings = ContactSettings(account, jid)
@@ -1003,6 +1003,10 @@ class GroupchatParticipant(CommonContact):
     @property
     def is_pm_contact(self) -> bool:
         return True
+
+    @property
+    def is_muted(self) -> bool:
+        return is_muted(self.settings)
 
     @property
     def is_in_roster(self) -> bool:
@@ -1125,13 +1129,14 @@ class GroupchatParticipant(CommonContact):
 class GroupchatOfflineParticipant(CommonContact):
     def __init__(
         self,
+        logger: Logger | LogAdapter,
         account: str,
         jid: JID,
         room: GroupchatContact,
         affiliation: str,
         occupant: mod.Occupant | ValueMissingT | None = VALUE_MISSING,
     ) -> None:
-        CommonContact.__init__(self, None, jid, account)
+        CommonContact.__init__(self, logger, jid, account)
 
         self._affiliation = Affiliation[affiliation.upper()]
         self._room = room
@@ -1152,6 +1157,7 @@ class GroupchatOfflineParticipant(CommonContact):
         assert contact.real_jid is not None
 
         return cls(
+            contact.get_logger(),
             contact.account,
             contact.real_jid,
             contact.room,
@@ -1239,3 +1245,16 @@ def can_add_to_roster(contact: BareContact) -> bool:
     if contact.is_self:
         return False
     return not contact.is_in_roster
+
+
+def is_muted(settings: GroupChatSettings | ContactSettings) -> bool:
+    mute_until = settings.get("mute_until")
+    if not mute_until:
+        return False
+
+    until = datetime.fromisoformat(mute_until)
+    is_muted = until > datetime.now(UTC)
+    if not is_muted:
+        # Reset the setting to default
+        idle_add_once(settings.set, "mute_until", None)
+    return is_muted

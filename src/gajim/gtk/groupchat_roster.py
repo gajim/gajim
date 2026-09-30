@@ -362,7 +362,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         log.info("Affiliation changed %s -> %s", event.jid, event.affiliation)
         assert self._contact is not None
         user_contact = GroupchatOfflineParticipant(
-            contact.account, event.jid, self._contact, event.affiliation.value
+            contact.get_logger(),
+            contact.account,
+            event.jid,
+            self._contact,
+            event.affiliation.value,
         )
         self._remove_offline_contact(user_contact)
         if event.affiliation not in (Affiliation.OUTCAST, Affiliation.NONE):

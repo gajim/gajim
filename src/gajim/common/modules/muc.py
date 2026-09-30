@@ -55,6 +55,7 @@ from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.util import LogAdapter
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
 from gajim.common.util.datetime import utc_now
@@ -1430,9 +1431,8 @@ class MUC(BaseModule):
 
 
 class AffiliationManager(Observable):
-    def __init__(self, log: logging.LoggerAdapter[Any]) -> None:
-        Observable.__init__(self)
-        self._log = log
+    def __init__(self, logger: LogAdapter) -> None:
+        Observable.__init__(self, logger)
         self._affiliations: dict[JID, dict[str, list[JID]]] = defaultdict(
             lambda: defaultdict(list)
         )

@@ -102,7 +102,6 @@ class BaseActivityPage(Gtk.Box, SignalManager):
         SignalManager.__init__(self)
         self.add_css_class("mt-18")
 
-        self._ui = None
         self._item = item
 
         clamp = Adw.Clamp(hexpand=True)
@@ -121,7 +120,6 @@ class BaseActivityPage(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
-        del self._ui
         check_finalize(self)
 
 

@@ -224,8 +224,11 @@ def to_user_string(error: CommonError | StanzaError) -> str:
 
 class Observable:
     def __init__(self, log_: logging.Logger | LogAdapter | None = None):
-        self._log = log_
+        self._log = log_ or log
         self._callbacks: types.ObservableCbDict = defaultdict(list)
+
+    def get_logger(self) -> logging.Logger | LogAdapter:
+        return self._log
 
     def __disconnect(self, obj: Any, signals: set[str] | None = None) -> None:
 
@@ -289,8 +292,7 @@ class Observable:
         if not signal_callbacks:
             return
 
-        if self._log is not None:
-            self._log.info("Signal: %s", signal_name)
+        self._log.info("Signal: %s", signal_name)
 
         for weak_method in list(signal_callbacks):
             func = weak_method()
