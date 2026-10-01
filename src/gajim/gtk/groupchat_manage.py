@@ -50,7 +50,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
         self.append(self._ui.scrolled)
 
         self._avatar_chooser_button = AvatarFileChooserButton(
-            tooltip=_("Change your profile picture"),
+            tooltip=_("Change group chat’s picture"),
             icon_name="lucide-square-pen-symbolic",
         )
         self._avatar_chooser_button.set_halign(Gtk.Align.END)
