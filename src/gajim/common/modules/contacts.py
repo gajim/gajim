@@ -111,8 +111,8 @@ class Contacts(BaseModule):
         BaseModule.__init__(self, client)
 
         self._contacts: dict[JID, BareContact | GroupchatContact] = {}
-        self._con.connect_signal("state-changed", self._on_client_state_changed)
-        self._con.connect_signal("resume-failed", self._on_client_resume_failed)
+        self._con.connect("state-changed", self._on_client_state_changed)
+        self._con.connect("resume-failed", self._on_client_resume_failed)
 
     def _on_client_resume_failed(
         self, _client: types.Client, _signal_name: str

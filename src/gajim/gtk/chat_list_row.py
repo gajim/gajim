@@ -513,7 +513,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self.contact.connect("mam-sync-finished", self._on_mam_sync_changed)
             self.contact.connect("mam-sync-error", self._on_mam_sync_error)
 
-            self._client.connect_signal("state-changed", self._on_client_state_changed)
+            self._client.connect("state-changed", self._on_client_state_changed)
 
         elif isinstance(self.contact, GroupchatParticipant):
             self.contact.connect("user-joined", self._on_muc_user_update)

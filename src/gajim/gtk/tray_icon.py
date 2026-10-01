@@ -94,7 +94,7 @@ class TrayIconBackend(EventHelper):
         )
 
         for client in app.get_clients():
-            client.connect_signal("state-changed", self._on_client_state_changed)
+            client.connect("state-changed", self._on_client_state_changed)
 
     def update_state(self, init: bool = False) -> None:
         raise NotImplementedError
@@ -107,7 +107,7 @@ class TrayIconBackend(EventHelper):
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         client = app.get_client(event.account)
-        client.connect_signal("state-changed", self._on_client_state_changed)
+        client.connect("state-changed", self._on_client_state_changed)
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, _state: SimpleClientState

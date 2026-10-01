@@ -64,7 +64,7 @@ class GroupchatState(Gtk.Box, SignalManager):
         self._contact.connect("mam-sync-error", self._on_mam_sync_error)
 
         self._client = app.get_client(contact.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._update_state(contact)
 

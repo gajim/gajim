@@ -404,7 +404,7 @@ class OpenPGPEventPage(BaseActivityPage):
 
         self._event = item.get_event()
         self._client = app.get_client(self._event.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         if self._event.type == "setup":
             self._ui.title.set_text(_("OpenPGP Setup"))
@@ -453,7 +453,7 @@ class TimezoneChangedPage(BaseActivityPage):
 
         self._event = item.get_event()
         self._client = app.get_client(self._event.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._ui.old_timezone_label.set_text(self._event.vcard or _("No Timezone"))
         self._ui.new_timezone_label.set_text(self._event.local or "")

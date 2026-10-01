@@ -65,7 +65,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         if account is None:
             return
         client = app.get_client(account)
-        client.connect_signal("state-changed", self._on_client_state_changed)
+        client.connect("state-changed", self._on_client_state_changed)
 
     def _disconnect_signals(self, account: str | None) -> None:
         if account is None:

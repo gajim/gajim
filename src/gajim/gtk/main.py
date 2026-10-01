@@ -187,10 +187,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         chat_list_stack.connect("chat-selected", self._on_chat_selected)
 
         for client in app.get_clients():
-            client.connect_signal("state-changed", self._on_client_state_changed)
-            client.connect_signal(
-                "resume-successful", self._on_client_resume_successful
-            )
+            client.connect("state-changed", self._on_client_state_changed)
+            client.connect("resume-successful", self._on_client_resume_successful)
 
         manager = app.app.get_shortcut_manager()
         manager.install_shortcuts(self, "main-win")
@@ -408,8 +406,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         client = app.get_client(event.account)
-        client.connect_signal("state-changed", self._on_client_state_changed)
-        client.connect_signal("resume-successful", self._on_client_resume_successful)
+        client.connect("state-changed", self._on_client_state_changed)
+        client.connect("resume-successful", self._on_client_resume_successful)
 
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._app_side_bar.get_first_workspace()

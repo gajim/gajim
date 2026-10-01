@@ -68,7 +68,7 @@ class ContactNameEntry(Gtk.Box, SignalManager):
 
         if self._contact is not None:
             client = app.get_client(self._contact.account)
-            client.connect_signal("state-changed", self._on_client_state_changed)
+            client.connect("state-changed", self._on_client_state_changed)
 
     def do_unroot(self) -> None:
         Gtk.Box.do_unroot(self)

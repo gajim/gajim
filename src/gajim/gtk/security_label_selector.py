@@ -47,7 +47,7 @@ class SecurityLabelSelector(GajimDropDown[str]):
             self._on_setting_changed,
             account=self._contact.account,
         )
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._update_data()
 

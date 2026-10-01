@@ -328,7 +328,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._contact.disconnect_all_from_obj(self)
 
         self._client = app.get_client(contact.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._store_draft()
         self._disable_reply_mode()

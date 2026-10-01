@@ -165,7 +165,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
                 }
             )
 
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
     def _disconnect_signals(self) -> None:
         if self._contact is not None:

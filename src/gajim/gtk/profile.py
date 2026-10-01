@@ -74,10 +74,10 @@ class ProfileWindow(GajimAppWindow):
         self._destroyed = False
 
         self._client = app.get_client(self.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._contact = self._client.get_own_contact()
-        self._contact.connect_signal("nickname-update", self._on_nickname_update)
+        self._contact.connect("nickname-update", self._on_nickname_update)
 
         self._ui = get_builder("profile.ui")
 

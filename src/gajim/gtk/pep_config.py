@@ -52,7 +52,7 @@ class PEPConfig(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-overr
 
         self.account = account
         self._client = app.get_client(account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._result_node: Node | None = None
         self._dataform_widget: DataFormWidget | None = None

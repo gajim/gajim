@@ -53,7 +53,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
             self._contact.connect("state-changed", self._on_muc_state_changed)
 
         self._client = app.get_client(self._contact.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
         self.set_sensitive(self._get_reactions_enabled())
 
         self._reactions: list[mod.Reaction] = []

@@ -160,7 +160,7 @@ class ManageRoster(Gtk.Box, SignalManager, EventHelper):
         self._connect(self._search_entry, "search-changed", self._on_search_changed)
 
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
     def do_unroot(self) -> None:
         del self._selection_model

@@ -1158,7 +1158,7 @@ class AccountActiveSwitch(Adw.ActionRow, SignalManager, EventHelper):
         def _on_response(response_id: str) -> None:
             if response_id == "disable":
                 client = app.get_client(account)
-                client.connect_signal("state-changed", self._on_state_changed)
+                client.connect("state-changed", self._on_state_changed)
                 client.disconnect_immediate()
 
             switch.set_state(state)

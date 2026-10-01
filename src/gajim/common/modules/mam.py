@@ -71,8 +71,8 @@ class MAM(BaseModule):
         # Holds archive jids where catch up was successful
         self._catch_up_finished: list[JID] = []
 
-        self._con.connect_signal("state-changed", self._on_client_state_changed)
-        self._con.connect_signal("resume-failed", self._on_client_resume_failed)
+        self._con.connect("state-changed", self._on_client_state_changed)
+        self._con.connect("resume-failed", self._on_client_resume_failed)
 
     def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.MAM_2 not in info.features:

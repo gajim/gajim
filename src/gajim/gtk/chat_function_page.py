@@ -159,7 +159,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
 
         self._contact = contact
         self._client = app.get_client(contact.account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._mode = mode
         self._data = data

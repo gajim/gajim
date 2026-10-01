@@ -76,7 +76,7 @@ class NotificationBackend(EventHelper):
         )
 
         for client in app.get_clients():
-            client.connect_signal("state-changed", self._on_client_state_changed)
+            client.connect("state-changed", self._on_client_state_changed)
 
     def _on_notification(self, event: events.Notification) -> None:
         if event.account and event.jid:
@@ -106,7 +106,7 @@ class NotificationBackend(EventHelper):
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         client = app.get_client(event.account)
-        client.connect_signal("state-changed", self._on_client_state_changed)
+        client.connect("state-changed", self._on_client_state_changed)
 
     def _on_chat_read(self, event: events.ChatRead) -> None:
         self._withdraw(["new-message", event.account, event.jid])

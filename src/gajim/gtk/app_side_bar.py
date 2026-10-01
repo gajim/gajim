@@ -62,7 +62,7 @@ class AppSideBar(Gtk.Box, EventHelper):
             client = app.get_client(account)
             contact = client.get_own_contact()
 
-            client.connect_signal("state-changed", self._update_account_row)
+            client.connect("state-changed", self._update_account_row)
             contact.connect("avatar-update", self._update_account_row)
 
         self._update_account_row()
@@ -98,7 +98,7 @@ class AppSideBar(Gtk.Box, EventHelper):
         client = app.get_client(event.account)
         contact = client.get_own_contact()
 
-        client.connect_signal("state-changed", self._update_account_row)
+        client.connect("state-changed", self._update_account_row)
         contact.connect("avatar-update", self._update_account_row)
 
         self._update_account_row()

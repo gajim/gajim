@@ -98,8 +98,8 @@ class Chatstate(BaseModule):
         self._blocked: list[JID] = []
         self._enabled = False
 
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
-        self._client.connect_signal("resume-failed", self._on_client_resume_failed)
+        self._client.connect("state-changed", self._on_client_state_changed)
+        self._client.connect("resume-failed", self._on_client_resume_failed)
 
     def _on_client_resume_failed(
         self, _client: types.Client, _signal_name: str

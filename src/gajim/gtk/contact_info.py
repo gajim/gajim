@@ -92,7 +92,7 @@ class ContactInfo(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-ove
             self._is_in_roster = contact.is_in_roster
 
         self._client = app.get_client(account)
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect("state-changed", self._on_client_state_changed)
 
         self._ui = get_builder("contact_info.ui")
 

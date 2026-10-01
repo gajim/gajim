@@ -268,7 +268,7 @@ class Observable:
     def disconnect_signal(self, obj: Any, signal: str) -> None:
         self.__disconnect(obj, {signal})
 
-    def connect_signal(self, signal_name: str, func: types.AnyCallableT) -> None:
+    def connect(self, signal_name: str, func: types.AnyCallableT) -> None:
         if not inspect.ismethod(func):
             raise ValueError("Only bound methods allowed")
 
@@ -280,12 +280,9 @@ class Observable:
 
         self._callbacks[signal_name].append(weak_func)
 
-    def connect(self, signal_name: str, func: types.AnyCallableT) -> None:
-        self.connect_signal(signal_name, func)
-
     def multi_connect(self, signal_dict: dict[str, types.AnyCallableT]):
         for signal_name, func in signal_dict.items():
-            self.connect_signal(signal_name, func)
+            self.connect(signal_name, func)
 
     def notify(self, signal_name: str, *args: Any, **kwargs: Any):
         signal_callbacks = self._callbacks.get(signal_name)
