@@ -240,7 +240,9 @@ class Preferences(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-ove
         def _on_response(response_id: str) -> None:
             if response_id == "accept":
                 client = app.get_client(account)
-                client.disconnect(gracefully=True, reconnect=True, destroy_client=True)
+                client.start_disconnect(
+                    gracefully=True, reconnect=True, destroy_client=True
+                )
 
             self.close()
 

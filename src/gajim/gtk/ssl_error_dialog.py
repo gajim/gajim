@@ -96,5 +96,5 @@ class SSLErrorDialog(GajimAppWindow):
         if self._error == Gio.TlsCertificateFlags.EXPIRED:
             self._ignored_errors.add(Gio.TlsCertificateFlags.EXPIRED)
 
-        self._client.connect(ignored_tls_errors=self._ignored_errors)
+        self._client.start_connect(ignored_tls_errors=self._ignored_errors)
         self.close()

@@ -246,7 +246,7 @@ class Client(Observable, ClientModules):
         if self._state.is_connected or self._state.is_available:
             self._client.check_if_connected()
 
-    def disconnect(
+    def start_disconnect(
         self, gracefully: bool, reconnect: bool, destroy_client: bool = False
     ) -> None:
 
@@ -256,14 +256,14 @@ class Client(Observable, ClientModules):
         if self._state.is_reconnect_scheduled:
             self._abort_reconnect()
             if reconnect:
-                self.connect()
+                self.start_connect()
             return
 
         if self._state.is_disconnected:
             if destroy_client:
                 self._create_client()
             if reconnect:
-                self.connect()
+                self.start_connect()
             return
 
         if self._state.is_host_meta_request:
@@ -285,7 +285,7 @@ class Client(Observable, ClientModules):
         self._client.disconnect(immediate=not gracefully)
 
     def disconnect_immediate(self) -> None:
-        self.disconnect(gracefully=False, reconnect=False, destroy_client=True)
+        self.start_disconnect(gracefully=False, reconnect=False, destroy_client=True)
 
     def _on_disconnected(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._log.info("Disconnect")
@@ -342,7 +342,7 @@ class Client(Observable, ClientModules):
             if error in ("not-authorized", "no-password"):
 
                 def _on_password() -> None:
-                    self.connect()
+                    self.start_connect()
 
                 app.ged.raise_event(
                     PasswordRequired(client=self, on_password=_on_password)
@@ -445,7 +445,7 @@ class Client(Observable, ClientModules):
             if show == "offline":
                 return
 
-            self.connect()
+            self.start_connect()
             return
 
         if self._state.is_connecting:
@@ -458,7 +458,7 @@ class Client(Observable, ClientModules):
                 self._destroy_client = True
                 self._abort_reconnect()
             else:
-                self.connect()
+                self.start_connect()
             return
 
         # We are connected
@@ -470,7 +470,7 @@ class Client(Observable, ClientModules):
             )
 
             self.send_stanza(presence)
-            self.disconnect(gracefully=True, reconnect=False, destroy_client=True)
+            self.start_disconnect(gracefully=True, reconnect=False, destroy_client=True)
             return
 
         self.update_presence()
@@ -569,7 +569,7 @@ class Client(Observable, ClientModules):
         self.send_stanza(message.get_stanza())
         self.get_module("Message").store_message(message)
 
-    def connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
+    def start_connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
 
         self._log.info("Connect")
 
@@ -587,11 +587,11 @@ class Client(Observable, ClientModules):
 
         gssapi = app.settings.get_account_setting(self._account, "enable_gssapi")
         if gssapi:
-            self._client.set_mechs(["GSSAPI"])
+            self._client.set_mechs({"GSSAPI"})
 
         anonymous = app.settings.get_account_setting(self._account, "anonymous_auth")
         if anonymous:
-            self._client.set_mechs(["ANONYMOUS"])
+            self._client.set_mechs({"ANONYMOUS"})
 
         if app.settings.get_account_setting(self._account, "use_plain_connection"):
             self._client.set_connection_types([ConnectionType.PLAIN])
@@ -663,7 +663,7 @@ class Client(Observable, ClientModules):
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
         self._log.info("Reconnect in 3s")
-        self._reconnect_timer_source = GLib.timeout_add_seconds(3, self.connect)
+        self._reconnect_timer_source = GLib.timeout_add_seconds(3, self.start_connect)
 
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
@@ -688,7 +688,7 @@ class Client(Observable, ClientModules):
             self._update_status()
             return
 
-        if not app.settings.get(f"auto{state}"):
+        if not app.settings.get(f"auto{state}"):  # type: ignore
             return
 
         if (state in ("away", "xa") and self._status == "online") or (
@@ -761,4 +761,4 @@ class Client(Observable, ClientModules):
             ClientState.CONNECTED,
             ClientState.AVAILABLE,
         ):
-            self.disconnect(gracefully=True, reconnect=False)
+            self.start_disconnect(gracefully=True, reconnect=False)
