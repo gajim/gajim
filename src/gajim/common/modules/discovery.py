@@ -18,6 +18,7 @@ from nbxmpp.modules.muc.util import MucInfoResult
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoIdentity
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
@@ -28,7 +29,6 @@ from gajim.common import types
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import ServerDiscoReceived
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.util.muc import get_muc_name_from_disco
@@ -61,6 +61,7 @@ class Discovery(BaseModule):
 
         self._account_info: DiscoInfo | None = None
         self._server_info: DiscoInfo | None = None
+        self._available_transports: dict[JID, DiscoIdentity] = {}
 
     @property
     def account_info(self) -> DiscoInfo | None:
@@ -171,21 +172,13 @@ class Discovery(BaseModule):
                 "Found transport: %s %s %s", info.jid, identity.category, identity.type
             )
 
+            assert info.jid is not None
             for child in self._con.get_module("Contacts").get_contacts_with_domain(
                 info.jid.domain
             ):
-                if not isinstance(child, BareContact | GroupchatContact):
-                    continue
                 child.update_gateway_type(identity.type)
 
-            jid = str(info.jid)
-            if jid not in app.transport_type:
-                app.transport_type[jid] = identity.type
-
-            if identity.type in self._con.available_transports:
-                self._con.available_transports[identity.type].append(jid)
-            else:
-                self._con.available_transports[identity.type] = [jid]
+            self._available_transports[info.jid] = identity
 
     def _answer_disco_items(
         self, _con: types.NBXMPPClient, stanza: Iq, _properties: IqProperties
@@ -243,6 +236,7 @@ class Discovery(BaseModule):
         if result.vcard is not None:
             avatar, avatar_sha = result.vcard.get_avatar()
             if avatar is not None:
+                assert avatar_sha is not None
                 if not app.app.avatar_storage.avatar_exists(avatar_sha):
                     app.app.avatar_storage.save_avatar(avatar)
 
@@ -279,3 +273,14 @@ class Discovery(BaseModule):
 
         contact = self._con.get_module("Contacts").get_contact(result.jid)
         contact.notify("caps-update")
+
+    def get_transport_name_from_jid(self, jid: str | JID) -> str | None:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        host = JID.from_string(jid.domain)
+        identity = self._available_transports.get(host)
+        if identity is None:
+            return None
+
+        return identity.type

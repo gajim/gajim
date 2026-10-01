@@ -77,8 +77,6 @@ storage = Storage()
 
 css_config = cast(types.CSSConfigT, None)
 
-transport_type: dict[str, str] = {}
-
 # list of contacts that has just signed out
 to_be_removed: dict[str, list[str]] = {}
 
@@ -287,11 +285,6 @@ def detect_desktop_env() -> str | None:
 desktop_env = detect_desktop_env()
 
 
-def get_server_from_jid(jid: str) -> str:
-    pos = jid.find("@") + 1  # after @
-    return jid[pos:]
-
-
 def get_room_and_nick_from_fjid(jid: str) -> list[str]:
     # fake jid is the jid for a contact in a room
     # gaim@conference.jabber.no/nick/nick-continued
@@ -385,43 +378,6 @@ def account_is_available(account: str) -> bool:
     if account not in connections:
         return False
     return connections[account].state.is_available
-
-
-def get_transport_name_from_jid(
-    jid: str, use_config_setting: bool = True
-) -> str | None:
-    """
-    Returns 'gg', 'irc' etc
-
-    If JID is not from transport returns None.
-    """
-    # TODO: Rewrite/remove
-
-    # FIXME: jid can be None! one TB I saw had this problem:
-    # in the code block # it is a groupchat presence in handle_event_notify
-    # jid was None. Yann why?
-    if not jid:
-        return
-
-    host = get_server_from_jid(jid)
-    if host in transport_type:
-        return transport_type[host]
-
-    # host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
-    host_split = host.split(".")
-    if host_split:
-        # now we support both 'icq.' and 'icq' but not icqsucks.org
-        host = host_split[0]
-
-    if host in ("irc", "icq", "sms", "weather", "mrim", "facebook"):
-        return host
-    if host == "gg":
-        return "gadu-gadu"
-    if host == "jit":
-        return "icq"
-    if host == "facebook":
-        return "facebook"
-    return None
 
 
 def jid_is_transport(jid: str) -> bool:

@@ -1274,7 +1274,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         descr = f"<b>{addr}</b>"
         # Guess which kind of service this is
         identities: list[DiscoIdentity] = []
-        type_ = app.get_transport_name_from_jid(self.jid, use_config_setting=False)
+        client = app.get_client(self.account)
+        type_ = client.get_module("Discovery").get_transport_name_from_jid(self.jid)
         if type_:
             identity = DiscoIdentity(category="_jid", type=type_, name=None)
             identities.append(identity)
@@ -1502,7 +1503,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             # Guess what kind of service we're dealing with
             if self.browse_button:
                 jid = model[iter_][0]
-                type_ = app.get_transport_name_from_jid(jid, use_config_setting=False)
+                client = app.get_client(self.account)
+                type_ = client.get_module("Discovery").get_transport_name_from_jid(jid)
                 if type_:
                     identity = DiscoIdentity(category="_jid", type=type_)
                     klass = self.cache.get_browser([identity])
@@ -1684,7 +1686,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             descr = f"<b>{addr}</b>"
         # Guess which kind of service this is
         identities: list[DiscoIdentity] = []
-        type_ = app.get_transport_name_from_jid(jid, use_config_setting=False)
+        client = app.get_client(self.account)
+        type_ = client.get_module("Discovery").get_transport_name_from_jid(jid)
         if type_:
             identity = DiscoIdentity(category="_jid", type=type_)
             identities.append(identity)

@@ -97,8 +97,6 @@ class Client(Observable, ClientModules):
 
         self._destroyed = False
 
-        self.available_transports = {}
-
         modules.register_modules(self)
 
         self._create_client(init=True)
