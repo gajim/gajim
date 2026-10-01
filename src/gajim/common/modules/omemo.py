@@ -151,10 +151,10 @@ class OMEMO(BaseModule, CryptoModule):
 
         self.allow_groupchat = True
 
-        self._own_jid = self._client.get_own_jid().bare
+        self._own_jid_str = str(self._client.jid)
 
         data_dir = Path(configpaths.get("MY_DATA"))
-        db_path = data_dir / f"omemo_{self._own_jid}.db"
+        db_path = data_dir / f"omemo_{self._own_jid_str}.db"
         storage = OMEMOStorage(self._account, db_path, self._log)
 
         omemo_config = OMEMOConfig(
@@ -166,7 +166,7 @@ class OMEMO(BaseModule, CryptoModule):
         )
 
         self._backend = OMEMOSessionManager(
-            self._own_jid, storage, omemo_config, self._account
+            self._own_jid_str, storage, omemo_config, self._account
         )
         self._backend.register_signal("republish-bundle", self._on_republish_bundle)
 
@@ -247,7 +247,7 @@ class OMEMO(BaseModule, CryptoModule):
 
         return OMEMOPublicKeyData(
             active=True,
-            address=self._get_own_bare_jid(),
+            address=self._client.jid,
             label=None,
             last_seen=None,
             fingerprint=identity_key.get_fingerprint(),
@@ -442,7 +442,7 @@ class OMEMO(BaseModule, CryptoModule):
             return
 
         if properties.carbon is not None and properties.carbon.is_sent:
-            from_jid = self._own_jid
+            from_jid = self._own_jid_str
 
         elif properties.is_mam_message:
             from_jid = self._process_mam_message(properties)
@@ -527,7 +527,7 @@ class OMEMO(BaseModule, CryptoModule):
         return properties.from_.bare
 
     def _is_contact_in_roster(self, jid: str) -> bool:
-        if jid == self._own_jid:
+        if jid == self._own_jid_str:
             return True
 
         roster_item = self._client.get_module("Roster").get_item(JID.from_string(jid))
@@ -549,7 +549,7 @@ class OMEMO(BaseModule, CryptoModule):
             self._omemo_groupchats.discard(str(jid))
 
     def _request_bundles_for_new_devices(self, jid_: str) -> None:
-        for jid in [jid_, self._own_jid]:
+        for jid in [jid_, self._own_jid_str]:
             device_ids = self.backend.get_devices_without_sessions(jid)
             for device_id in device_ids:
                 self._request_bundle_ttl(jid, device_id)
@@ -612,7 +612,9 @@ class OMEMO(BaseModule, CryptoModule):
         self._nbxmpp("OMEMO").set_devicelist(devicelist_)
 
     def clear_keylist(self) -> None:
-        self.backend.update_devicelist(self._own_jid, [self.backend.get_our_device()])
+        self.backend.update_devicelist(
+            self._own_jid_str, [self.backend.get_our_device()]
+        )
         self.set_devicelist()
 
     @cache_with_ttl(ttl=7200)
@@ -624,7 +626,7 @@ class OMEMO(BaseModule, CryptoModule):
         _task = yield  # noqa: F841
 
         if jid is None:
-            jid = self._own_jid
+            jid = self._own_jid_str
 
         self._log.info("Request devicelist for %s", jid)
 
@@ -652,9 +654,9 @@ class OMEMO(BaseModule, CryptoModule):
         self._process_devicelist_update(str(properties.jid), devicelist)
 
     def _process_devicelist_update(self, jid: str, devicelist: list[int]) -> None:
-        own_devices = self._client.get_own_jid().bare_match(jid)
+        own_devices = self._client.jid.bare_match(jid)
         if own_devices:
-            jid = self._own_jid
+            jid = self._own_jid_str
 
         self._log.info("Received device list for %s: %s", jid, devicelist)
         # Pass a copy, we need the full list for potential set_devicelist()

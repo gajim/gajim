@@ -601,9 +601,7 @@ class AvatarStorage(metaclass=Singleton):
         self, account: str, size: int, scale: int, add_show: bool = False
     ) -> Gdk.Texture | None:
         client = app.get_client(account)
-        self_contact = client.get_module("Contacts").get_contact(
-            client.get_own_jid().bare
-        )
+        self_contact = client.get_module("Contacts").get_contact(client.jid)
         assert isinstance(self_contact, BareContact)
         return self_contact.get_avatar(size, scale, add_show=add_show)
 

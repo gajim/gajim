@@ -102,7 +102,6 @@ class Bytestream(BaseModule):
             return
         if app.settings.get_account_setting(self._account, "use_ft_proxies"):
             log.info("Discovered proxy: %s", info.jid)
-            our_fjid = self._con.get_own_jid()
             testit = app.settings.get_account_setting(
                 self._account, "test_ft_proxies_on_startup"
             )

@@ -131,7 +131,7 @@ class ChatMarkers(BaseModule):
                 return
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties
+            muc_data, self._client.jid, properties
         )
 
         if direction == ChatDirection.OUTGOING:
@@ -153,7 +153,7 @@ class ChatMarkers(BaseModule):
             occupant = get_occupant_info(
                 self._account,
                 remote_jid=remote_jid,
-                own_bare_jid=self._get_own_bare_jid(),
+                own_bare_jid=self._client.jid,
                 direction=ChatDirection.INCOMING,
                 m_type=m_type,
                 timestamp=timestamp,

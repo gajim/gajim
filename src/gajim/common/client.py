@@ -9,7 +9,6 @@ from typing import Any
 import logging
 import time
 
-import nbxmpp
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -136,6 +135,10 @@ class Client(Observable, ClientModules):
     @property
     def account(self) -> str:
         return self._account
+
+    @property
+    def jid(self) -> JID:
+        return self._address
 
     @property
     def status(self) -> str:
@@ -406,27 +409,12 @@ class Client(Observable, ClientModules):
         app.ged.raise_event(StanzaReceived(account=self._account, stanza=stanza))
 
     def is_own_jid(self, jid: JID | str) -> bool:
-        own_jid = self.get_own_jid()
-        return own_jid.bare_match(jid)
+        return self._address.bare_match(jid)
 
     def get_own_contact(self) -> BareContact:
-        jid = self.get_own_jid()
-        contact = self.get_module("Contacts").get_contact(jid.bare)
+        contact = self.get_module("Contacts").get_contact(self._address)
         assert isinstance(contact, BareContact)
         return contact
-
-    def get_own_jid(self) -> JID:
-        """
-        Return the last full JID we received on a bind event.
-        In case we were never connected it returns the bare JID from config.
-        """
-        if self._client is not None:
-            jid = self._client.get_bound_jid()
-            if jid is not None:
-                return jid
-
-        # This returns the bare jid
-        return nbxmpp.JID.from_string(app.get_jid_from_account(self._account))
 
     def get_bound_jid(self) -> JID:
         assert self._client is not None
@@ -538,7 +526,7 @@ class Client(Observable, ClientModules):
             self._log.warning("Trying to send message while offline")
             return
 
-        stanza = build_message_stanza(message, self.get_own_jid())
+        stanza = build_message_stanza(message, self._address)
         message.set_stanza(stanza)
 
         method = message.contact.settings.get("encryption")

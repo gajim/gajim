@@ -55,7 +55,7 @@ class VCard4(BaseModule):
     ) -> None:
 
         assert properties.jid is not None
-        if not properties.jid.bare_match(self._get_own_bare_jid()):
+        if not self._client.jid.bare_match(properties.jid):
             self._log.info(
                 "Ignore VCard4 event not from our account: %s", properties.jid
             )
@@ -135,7 +135,7 @@ class VCard4(BaseModule):
     def subscribe_to_node(self) -> None:
         self._log.info("Subscribe to node")
 
-        jid = self._get_own_bare_jid()
+        jid = self._client.jid
         # JID is necessary because ejabberd servers react weird to subscribe
         # to own nodes if 'to' attribute is not set
         self._client.get_module("PubSub").subscribe(Namespace.VCARD4_PUBSUB, jid)
@@ -189,7 +189,7 @@ class VCard4(BaseModule):
             self._log.info("Received VCard for %s", jid)
             self._vcard_cache[jid] = (utc_now(), vcard)
 
-        if jid.bare_match(self._get_own_bare_jid()):
+        if self._client.jid.bare_match(jid):
             self._own_vcard = vcard
             app.ged.raise_event(VCard4Received(self._account, self._own_vcard))
             self._check_for_timezone_change()

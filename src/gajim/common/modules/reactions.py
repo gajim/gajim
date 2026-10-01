@@ -82,7 +82,7 @@ class Reactions(BaseModule):
                 self._log.warning("Reaction message from unknown MUC: %s", remote_jid)
                 raise NodeProcessed
 
-        own_bare_jid = self._get_own_bare_jid()
+        own_bare_jid = self._client.jid
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, own_bare_jid, properties

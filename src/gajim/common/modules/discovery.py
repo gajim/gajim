@@ -70,8 +70,7 @@ class Discovery(BaseModule):
         return self._server_info
 
     def discover_server_items(self) -> None:
-        server = self._con.get_own_jid().domain
-        self.disco_items(server, callback=self._server_items_received)
+        self.disco_items(self._con.jid.domain, callback=self._server_items_received)
 
     def _server_items_received(self, task: Task) -> None:
         try:
@@ -109,8 +108,7 @@ class Discovery(BaseModule):
         app.ged.raise_event(ServerDiscoReceived(account=self._account))
 
     def discover_account_info(self) -> None:
-        own_jid = self._con.get_own_jid().bare
-        self.disco_info(own_jid, callback=self._account_info_received)
+        self.disco_info(self._con.jid, callback=self._account_info_received)
 
     def _account_info_received(self, task: Task) -> None:
         try:
@@ -135,8 +133,7 @@ class Discovery(BaseModule):
 
     def discover_server_info(self) -> None:
         # Calling this method starts the connect_machine()
-        server = self._con.get_own_jid().domain
-        self.disco_info(server, callback=self._server_info_received)
+        self.disco_info(self._con.jid.domain, callback=self._server_info_received)
 
     def _server_info_received(self, task: Task) -> None:
         try:

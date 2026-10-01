@@ -209,7 +209,7 @@ class OpenPGP(BaseModule, CryptoModule):
             ]
         )
 
-        self._own_jid = self._get_own_bare_jid()
+        self._own_jid = self._client.jid
         self._secret_cert = None
         self._backup_password = None
 

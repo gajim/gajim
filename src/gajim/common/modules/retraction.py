@@ -83,7 +83,7 @@ class Retraction(BaseModule):
         muc_data = self._client.get_module("MUC").get_muc_data(properties.remote_jid)
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties
+            muc_data, self._client.jid, properties
         )
 
         remote_jid = properties.remote_jid
@@ -105,7 +105,7 @@ class Retraction(BaseModule):
             occupant = get_occupant_info(
                 self._account,
                 remote_jid,
-                self._get_own_bare_jid(),
+                self._client.jid,
                 direction,
                 m_type,
                 timestamp,

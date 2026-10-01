@@ -114,7 +114,7 @@ class MAM(BaseModule):
 
     def is_catch_up_finished(self, contact: types.ChatContactT) -> bool:
         if isinstance(contact, BareContact):
-            archive_jid = self._get_own_bare_jid()
+            archive_jid = self._client.jid
 
         elif isinstance(contact, GroupchatContact):
             archive_jid = contact.jid
@@ -132,7 +132,7 @@ class MAM(BaseModule):
             assert properties.jid is not None
             expected_archive = properties.jid
         else:
-            expected_archive = self._con.get_own_jid()
+            expected_archive = self._con.jid
 
         assert properties.mam is not None
         return properties.mam.archive.bare_match(expected_archive)
@@ -175,7 +175,7 @@ class MAM(BaseModule):
             if not self.available:
                 return
 
-            archive_jid = self._con.get_own_jid().new_as_bare()
+            archive_jid = self._con.jid
             timestamp = None
 
         if not properties.stanza_ids:
@@ -246,7 +246,7 @@ class MAM(BaseModule):
         return query_id
 
     def _get_query_params(self) -> tuple[str | None, datetime | None]:
-        own_jid = self._con.get_own_jid().new_as_bare()
+        own_jid = self._con.jid
         archive = app.storage.archive.get_mam_archive_state(self._account, own_jid)
 
         mam_id = None
@@ -318,7 +318,7 @@ class MAM(BaseModule):
     def request_archive_on_signin(self) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
-        own_jid = self._con.get_own_jid().new_as_bare()
+        own_jid = self._con.jid
 
         if own_jid in self._mam_query_ids:
             self._log.warning("request already running for %s", own_jid)
@@ -472,7 +472,7 @@ class MAM(BaseModule):
         queryid: str | None = None,
     ) -> str:
 
-        jid = self._con.get_own_jid().new_as_bare()
+        jid = self._con.jid
 
         if after is None:
             self._log.info(

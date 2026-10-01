@@ -352,7 +352,7 @@ class MessageRow(BaseRow):
             return
 
         needs_highlight = message_needs_highlight(
-            text, self._contact.nickname, self._client.get_own_jid().bare
+            text, self._contact.nickname, str(self._client.jid)
         )
         self._mention_indicator.set_visible(needs_highlight)
         self._message_icons.set_mention_icon_visibe(needs_highlight)

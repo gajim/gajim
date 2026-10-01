@@ -48,9 +48,7 @@ class HistorySyncAssistant(Assistant):
         self._end: datetime | None = None
 
         mam_start = None
-        archive = app.storage.archive.get_mam_archive_state(
-            account, self._client.get_own_jid().new_as_bare()
-        )
+        archive = app.storage.archive.get_mam_archive_state(account, self._client.jid)
 
         if archive is not None and archive.from_stanza_ts is not None:
             mam_start = archive.from_stanza_ts
@@ -146,7 +144,7 @@ class HistorySyncAssistant(Assistant):
 
         # Archive count query
         self._client.get_module("MAM").make_query(
-            self._client.get_own_jid().bare,
+            self._client.jid,
             start=self._start,
             end=self._end,
             max_=0,

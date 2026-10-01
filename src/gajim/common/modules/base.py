@@ -155,9 +155,6 @@ class BaseModule(EventHelper):
     def _get_contact_if_exists(self, jid: JID) -> types.ContactT | None:
         return self._con.get_module("Contacts").get_contact_if_exists(jid)
 
-    def _get_own_bare_jid(self) -> JID:
-        return self._client.get_own_jid().new_as_bare()
-
     def cleanup(self) -> None:
         self._ttl_cache.clear()
         self.handlers.clear()

@@ -185,7 +185,7 @@ class Moderations(BaseModule):
             )
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties
+            muc_data, self._client.jid, properties
         )
 
         assert properties.id is not None

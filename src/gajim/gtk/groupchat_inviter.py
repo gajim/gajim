@@ -174,7 +174,7 @@ class GroupChatInviter(Gtk.Box, SignalManager):
                 if contact.is_groupchat:
                     continue
                 # Exclude our own jid
-                if contact.jid == client.get_own_jid().bare:
+                if client.is_own_jid(contact.jid):
                     continue
 
                 row = ContactRow(

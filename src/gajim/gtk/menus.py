@@ -217,7 +217,7 @@ def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
 
 def get_account_menu(account: str) -> GajimMenu:
     client = app.get_client(account)
-    server_jid = client.get_own_jid().domain
+    server_jid = client.jid.domain
     assert server_jid is not None
 
     params = GLib.Variant("(sas)", (account, [server_jid]))

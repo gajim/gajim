@@ -505,7 +505,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             title += f" {message.resource} ({contact.name})"
             assert contact.nickname is not None
             needs_highlight = message_needs_highlight(
-                text, contact.nickname, client.get_own_jid().bare
+                text, contact.nickname, str(client.jid)
             )
             if needs_highlight:
                 sound = "muc_message_highlight"

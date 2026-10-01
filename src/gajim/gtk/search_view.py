@@ -514,15 +514,15 @@ class ResultRow(Gtk.ListBoxRow):
         self.remote_jid = message.remote.jid
         self.direction = ChatDirection(message.direction)
 
-        jid = message.remote.jid
-        if message.direction == ChatDirection.OUTGOING:
-            jid = JID.from_string(self._client.get_own_jid().bare)
-
         self.pk = message.pk
         self.timestamp = message.timestamp
         self.local_timestamp = message.timestamp.astimezone()
 
         self.type = MessageType(message.type)
+
+        jid = message.remote.jid
+        if message.direction == ChatDirection.OUTGOING:
+            jid = self._client.jid
 
         self.contact = self._client.get_module("Contacts").get_contact(
             jid, groupchat=self.type == MessageType.GROUPCHAT
@@ -578,9 +578,7 @@ class ResultRow(Gtk.ListBoxRow):
             return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
         if direction == ChatDirection.OUTGOING:
-            contact = self._client.get_module("Contacts").get_contact(
-                self._client.get_own_jid().bare
-            )
+            contact = self._client.get_own_contact()
         else:
             contact = self.contact
 

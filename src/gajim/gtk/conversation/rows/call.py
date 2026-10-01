@@ -13,7 +13,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.events import JingleRequestReceived
 from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
-from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.util.datetime import utc_now
@@ -108,10 +107,7 @@ class CallRow(BaseRow):
         self._session = None
 
     def _add_history_call_widget(self) -> None:
-        contact = self._client.get_module("Contacts").get_contact(
-            self._client.get_own_jid().bare
-        )
-        assert isinstance(contact, BareContact)
+        contact = self._client.get_own_contact()
 
         is_self = True
         if self._message is not None:

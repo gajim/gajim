@@ -132,9 +132,8 @@ class PEPConfig(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-overr
         self._ui.show_content_button.set_sensitive(False)
         self._ui.delete_button.set_sensitive(False)
 
-        jid = self._client.get_own_jid().bare
         self._client.get_module("Discovery").disco_items(
-            jid, callback=self._items_received
+            self._client.jid, callback=self._items_received
         )
 
     def _items_received(self, task: Task) -> None:

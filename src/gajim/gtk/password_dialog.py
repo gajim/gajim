@@ -46,7 +46,7 @@ class PasswordDialog(GajimAppWindow):
         pass
 
     def _process_event(self) -> None:
-        own_jid = self._client.get_own_jid().bare
+        own_jid = self._client.jid
         account_label = app.get_account_label(self.account)
 
         self._ui.header.set_text(_("Password Required"))

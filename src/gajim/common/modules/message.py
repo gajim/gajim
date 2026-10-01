@@ -79,7 +79,7 @@ class Message(BaseModule):
         ):
             return
 
-        if self._con.get_own_jid().domain == str(properties.jid):
+        if self._con.jid.domain == str(properties.jid):
             # Server message
             return
 
@@ -138,7 +138,7 @@ class Message(BaseModule):
                 return
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, self._client.get_own_jid(), properties
+            muc_data, self._client.jid, properties
         )
 
         user_delay_ts = None
@@ -210,7 +210,7 @@ class Message(BaseModule):
             occupant = get_occupant_info(
                 self._account,
                 remote_jid,
-                self._get_own_bare_jid(),
+                self._client.jid,
                 direction,
                 m_type,
                 timestamp,
@@ -382,7 +382,7 @@ class Message(BaseModule):
             if not self._con.get_module("MAM").available:
                 return None
 
-            archive = self._con.get_own_jid().new_as_bare()
+            archive = self._con.jid
 
         for stanza_id in properties.stanza_ids:
             # Check if message is from expected archive
@@ -421,7 +421,7 @@ class Message(BaseModule):
                 return
 
             resource = muc_data.nick
-            real_jid = self._client.get_own_jid().new_as_bare()
+            real_jid = self._client.jid
             if message.type == MessageType.PM:
                 # Use real jid as occupant-id because sent MUC PMs which we
                 # receive via carbons or MAM do not have the occupant-id
@@ -647,7 +647,7 @@ def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Messa
 
     # XEP-0490
     if message.mds_id is not None:
-        stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
+        stanza.setMdsAssist(message.mds_id, own_jid)
 
     # Thread
     # Currently only supported for replies

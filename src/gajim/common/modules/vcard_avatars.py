@@ -126,7 +126,7 @@ class VCardAvatars(BaseModule):
             return
 
         assert properties.jid is not None
-        if self._con.get_own_jid().bare_match(properties.jid):
+        if self._con.is_own_jid(properties.jid):
             return
 
         if properties.from_muc:

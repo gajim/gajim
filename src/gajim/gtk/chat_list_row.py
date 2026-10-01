@@ -320,7 +320,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             return
 
         self.contact_name = self.contact.name
-        if self.jid == self._client.get_own_jid().bare:
+        if self.jid == self._client.jid:
             self.contact_name = _("Note to myself")
         self._ui.name_label.set_text(self.contact_name)
 
@@ -351,7 +351,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             and self.contact.nickname is not None
         ):
             if message_needs_highlight(
-                text, self.contact.nickname, self._client.get_own_jid().bare
+                text, self.contact.nickname, str(self._client.jid)
             ):
                 self._needs_muc_highlight = True
                 self._ui.mention_indicator.set_visible(True)

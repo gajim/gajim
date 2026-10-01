@@ -95,8 +95,7 @@ class AccountPage(Gtk.Box, SignalManager):
         self._contact = None
         if account is not None:
             client = app.get_client(account)
-            jid = client.get_own_jid().bare
-            contact = client.get_module("Contacts").get_contact(jid)
+            contact = client.get_module("Contacts").get_contact(client.jid)
             assert isinstance(contact, BareContact)
             self._contact = contact
 

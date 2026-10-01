@@ -376,8 +376,7 @@ class BareContact(CommonContact):
 
     @property
     def is_self(self):
-        own_jid = app.get_client(self._account).get_own_jid().new_as_bare()
-        return own_jid == self.jid
+        return app.get_client(self._account).is_own_jid(self.jid)
 
     def supports(self, requested_feature: str) -> bool:
         if not self._resources:

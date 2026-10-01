@@ -60,7 +60,7 @@ class AccountProviderInfoGroup(Adw.PreferencesGroup, SignalManager):
         self._hostname_row.set_subtitle(self._hostname)
 
         client = app.get_client(account)
-        domain = client.get_own_jid().domain
+        domain = client.jid.domain
         client.get_module("SoftwareVersion").request_software_version(
             domain, callback=self._software_version_received
         )

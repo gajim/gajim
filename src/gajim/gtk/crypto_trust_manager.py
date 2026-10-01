@@ -126,9 +126,7 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._crypto_module = client.get_module(self._encryption)
 
         if self._contact is None:
-            self._contact = client.get_module("Contacts").get_contact(
-                client.get_own_jid().bare
-            )
+            self._contact = client.get_module("Contacts").get_contact(client.jid)
 
         if isinstance(self._contact, BareContact) and self._contact.is_self:
             header_text = _("Other devices connected with your account")
@@ -235,7 +233,7 @@ class CryptoTrustManager(Gtk.Box, EventHelper, SignalManager):
 
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
-        uri = self._crypto_module.compose_trust_uri(client.get_own_jid())
+        uri = self._crypto_module.compose_trust_uri(client.jid)
         log.debug("Trust URI: %s", uri)
         self._ui.qr_code_image.set_from_paintable(
             generate_qr_code(uri) if uri else None

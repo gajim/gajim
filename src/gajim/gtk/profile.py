@@ -137,9 +137,8 @@ class ProfileWindow(GajimAppWindow):
         self._load_avatar()
 
         client = app.get_client(account)
-        own_jid = client.get_own_jid().new_as_bare()
         client.get_module("VCard4").request_vcard(
-            own_jid, callback=self._on_vcard_received
+            client.jid, callback=self._on_vcard_received
         )
 
         client.get_module("PubSub").get_access_model(

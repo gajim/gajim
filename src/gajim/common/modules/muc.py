@@ -1122,7 +1122,7 @@ class MUC(BaseModule):
         affiliations = self.get_affiliations(jid)
         members: set[JID] = set()
         members.update(*affiliations.values())
-        members.discard(self._get_own_bare_jid())
+        members.discard(self._client.jid)
 
         occupants = app.storage.archive.get_occupant_by_jids(
             self._account, jid, list(members), max_age=timedelta(minutes=60)
@@ -1320,7 +1320,7 @@ class MUC(BaseModule):
     ) -> None:
 
         assert properties.from_ is not None
-        if properties.from_.bare_match(self._get_own_bare_jid()):
+        if self._client.jid.bare_match(properties.from_):
             # Invite/Decline sent by us and received via MAM or Carbons
             # TODO: It could make sense to delete a pending invite
             # if another device of ours decline the invite

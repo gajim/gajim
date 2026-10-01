@@ -260,10 +260,7 @@ class StartChatDialog(GajimAppWindow):
 
                 self._contact_view.add(item)
 
-            self_contact = client.get_module("Contacts").get_contact(
-                client.get_own_jid().bare
-            )
-            assert isinstance(self_contact, BareContact)
+            self_contact = client.get_own_contact()
             item = ContactListItem(
                 account,
                 self_contact,
