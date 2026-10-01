@@ -215,7 +215,7 @@ class GajimShortcut(Gtk.Shortcut):
         self.set_trigger(trigger)
 
 
-class GajimShortcutGroup(Gio.ListStore):
+class GajimShortcutGroup(Gio.ListStore[GajimShortcut]):
     def __init__(self, name: str, shortcuts: list[GajimShortcut]) -> None:
         super().__init__(item_type=GajimShortcut)
 
