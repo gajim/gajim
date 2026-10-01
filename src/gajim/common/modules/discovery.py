@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from collections.abc import Callable
 from collections.abc import Generator
 
 import nbxmpp
@@ -131,9 +132,12 @@ class Discovery(BaseModule):
 
         self._con.get_module("Caps").update_caps()
 
-    def discover_server_info(self) -> None:
-        # Calling this method starts the connect_machine()
-        self.disco_info(self._con.jid.domain, callback=self._server_info_received)
+    def discover_server_info(self, callback: Callable[[], Any] | None = None) -> None:
+        self.disco_info(
+            self._con.jid.domain,
+            callback=self._server_info_received,
+            user_data=callback,
+        )
 
     def _server_info_received(self, task: Task) -> None:
         try:
@@ -154,7 +158,9 @@ class Discovery(BaseModule):
         self._con.get_module("HTTPUpload").pass_disco(result)
         self._con.get_module("Register").pass_disco(result)
 
-        self._con.connect_machine(restart=True)
+        callback = task.get_user_data()
+        if callback is not None:
+            callback()
 
     def _parse_transports(self, info: DiscoInfo) -> None:
         for identity in info.identities:

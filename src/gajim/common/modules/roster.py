@@ -6,8 +6,10 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import cast
 
+from collections.abc import Callable
 from collections.abc import Iterable
 from collections.abc import Iterator
 
@@ -72,11 +74,13 @@ class Roster(BaseModule):
     def get_size(self) -> int:
         return len(self._roster)
 
-    def request_roster(self) -> None:
+    def request_roster(self, callback: Callable[[], Any] | None = None) -> None:
         version = app.settings.get_account_setting(self._account, "roster_version")
 
         self._log.info("Request version: %s", version)
-        self._nbxmpp("Roster").request_roster(version, callback=self._on_request_roster)
+        self._nbxmpp("Roster").request_roster(
+            version, callback=self._on_request_roster, user_data=callback
+        )
 
     def _on_request_roster(self, task: Task) -> None:
         try:
@@ -106,7 +110,9 @@ class Roster(BaseModule):
 
         app.ged.raise_event(RosterReceived(account=self._account))
 
-        self._con.connect_machine()
+        callback = task.get_user_data()
+        if callback is not None:
+            callback()
 
     def _set_roster_from_data(self, items: list[RosterItem]) -> None:
         self._roster.clear()

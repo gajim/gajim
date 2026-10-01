@@ -25,6 +25,7 @@ from gajim.common import passwords
 from gajim.common.client_modules import ClientModules
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
+from gajim.common.const import StartupState
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import MessageNotSent
@@ -61,28 +62,19 @@ log = logging.getLogger("gajim.c.client")
 IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
 
 
-def call_counter(func: Any):
-    def helper(self, restart: bool = False) -> Any:
-        if restart:
-            self._connect_machine_calls = 0
-        self._connect_machine_calls += 1
-        return func(self)
-
-    return helper
-
-
 class Client(Observable, ClientModules):
     def __init__(self, account: str) -> None:
         self._log = LogAdapter(log, {"account": account})
         Observable.__init__(self, self._log)
         ClientModules.__init__(self, account)
-        self._client = None
+
         self._account = account
         self.name = account
 
         address = app.settings.get_account_setting(self._account, "address")
         self._address = JID.from_string(address)
 
+        self._startup_state = StartupState.START
         self._connect_machine_calls = 0
         self.addressing_supported = False
 
@@ -109,7 +101,7 @@ class Client(Observable, ClientModules):
 
         modules.register_modules(self)
 
-        self._create_client()
+        self._create_client(init=True)
 
         if Monitor.is_available():
             self._idle_handler_id = Monitor.connect(
@@ -180,32 +172,35 @@ class Client(Observable, ClientModules):
         # account is removed by the server and the connection is killed
         self._remove_account = value
 
-    def _create_client(self) -> None:
+    def _create_client(self, init: bool = False) -> None:
         self._log.info("Create new nbxmpp client")
 
-        if self._client is not None:
+        if not init:
             self._client.destroy()
             self._destroy_client = False
 
-        self._client = NBXMPPClient(log_context=self._account)
-        self.connection = self._client
-        self._client.set_lang(get_rfc5646_lang())
-        self._client.set_domain(self._address.domain)
-        self._client.set_username(self._address.localpart)
-        self._client.set_resource(get_resource(self._account))
-        self._client.set_supported_fallback_ns([Namespace.REPLY])
+        client = NBXMPPClient(log_context=self._account)
+        client.set_lang(get_rfc5646_lang())
+        client.set_domain(self._address.domain)
+        client.set_username(self._address.localpart)
+        client.set_resource(get_resource(self._account))
+        client.set_supported_fallback_ns([Namespace.REPLY])
 
-        self._client.subscribe("resume-failed", self._on_resume_failed)
-        self._client.subscribe("resume-successful", self._on_resume_successful)
-        self._client.subscribe("disconnected", self._on_disconnected)
-        self._client.subscribe("connection-failed", self._on_connection_failed)
-        self._client.subscribe("connected", self._on_connected)
+        client.subscribe("resume-failed", self._on_resume_failed)
+        client.subscribe("resume-successful", self._on_resume_successful)
+        client.subscribe("disconnected", self._on_disconnected)
+        client.subscribe("connection-failed", self._on_connection_failed)
+        client.subscribe("connected", self._on_connected)
 
-        self._client.subscribe("stanza-sent", self._on_stanza_sent)
-        self._client.subscribe("stanza-received", self._on_stanza_received)
+        client.subscribe("stanza-sent", self._on_stanza_sent)
+        client.subscribe("stanza-received", self._on_stanza_received)
 
         for handler in modules.get_handlers(self):
-            self._client.register_handler(handler)
+            client.register_handler(handler)
+
+        self._client = client
+        # legacy alias
+        self.connection = client
 
     def _on_resume_failed(self, _client: NBXMPPClient, _signal_name: str) -> None:
 
@@ -239,9 +234,6 @@ class Client(Observable, ClientModules):
             return
 
         self._log.info("Network status changed, %r", connectivity)
-
-        if self._client is None:
-            return
 
         if self._state.is_connected or self._state.is_available:
             self._client.check_if_connected()
@@ -302,6 +294,7 @@ class Client(Observable, ClientModules):
             self._destroy_client = True
 
             cert, errors = self._client.peer_certificate
+            assert errors is not None
 
             open_window(
                 "SSLErrorDialog",
@@ -354,7 +347,7 @@ class Client(Observable, ClientModules):
                     account=self._account,
                     type="connection-failed",
                     title=_("Authentication failed"),
-                    text=text or error,
+                    text=text or error or _("Unknown Error"),
                 )
             )
 
@@ -392,9 +385,54 @@ class Client(Observable, ClientModules):
 
     def _on_connected(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._set_state(ClientState.CONNECTED)
-        self.get_module("Discovery").discover_server_info()
-        self.get_module("Discovery").discover_account_info()
-        self.get_module("Discovery").discover_server_items()
+        self._update_startup_state()
+
+    def _update_startup_state(self) -> None:
+        if self._startup_state == StartupState.FINISHED:
+            self._startup_state = StartupState.START
+
+        self._log.info("Startup state: %r", self._startup_state)
+
+        if self._startup_state == StartupState.START:
+            self._startup_state = StartupState.SERVER_DISCO
+            self.get_module("Discovery").discover_server_info(
+                callback=self._update_startup_state
+            )
+            self.get_module("Discovery").discover_account_info()
+            self.get_module("Discovery").discover_server_items()
+
+        elif self._startup_state == StartupState.SERVER_DISCO:
+            self._startup_state = StartupState.ROSTER
+            self.get_module("Roster").request_roster(
+                callback=self._update_startup_state
+            )
+
+        elif self._startup_state == StartupState.ROSTER:
+            self._startup_state = StartupState.FINISHED
+
+            self._status_sync_on_resume = False
+            self._set_client_available()
+
+            # We did not resume the stream, so we are not joined any MUCs
+            self.update_presence(include_muc=False)
+
+            self.get_module("Bookmarks").request_bookmarks()
+            self.get_module("SoftwareVersion").set_enabled(True)
+            self.get_module("LastActivity").set_enabled(True)
+            self.get_module("EntityTime").set_enabled(True)
+            self.get_module("Annotations").request_annotations()
+            self.get_module("Blocking").get_blocking_list()
+            self.get_module("VCard4").subscribe_to_node()
+
+            if app.settings.get_account_setting(self._account, "publish_tune"):
+                self.get_module("UserTune").set_enabled(True)
+
+            self.notify("state-changed", SimpleClientState.CONNECTED)
+
+            app.ged.raise_event(SignedIn(account=self._account, conn=self))
+            modules.send_stored_publish(self._account)
+
+            self._log.info("Startup finished")
 
     def _on_stanza_sent(
         self, _client: NBXMPPClient, _signal_name: str, stanza: Any
@@ -484,38 +522,7 @@ class Client(Observable, ClientModules):
         if include_muc:
             self.get_module("MUC").update_presence()
 
-    @call_counter
-    def connect_machine(self) -> None:
-        self._log.info("Connect machine state: %s", self._connect_machine_calls)
-        if self._connect_machine_calls == 1:
-            self.get_module("Roster").request_roster()
-        elif self._connect_machine_calls == 2:
-            self._finish_connect()
-
-    def _finish_connect(self) -> None:
-        self._status_sync_on_resume = False
-        self._set_client_available()
-
-        # We did not resume the stream, so we are not joined any MUCs
-        self.update_presence(include_muc=False)
-
-        self.get_module("Bookmarks").request_bookmarks()
-        self.get_module("SoftwareVersion").set_enabled(True)
-        self.get_module("LastActivity").set_enabled(True)
-        self.get_module("EntityTime").set_enabled(True)
-        self.get_module("Annotations").request_annotations()
-        self.get_module("Blocking").get_blocking_list()
-        self.get_module("VCard4").subscribe_to_node()
-
-        if app.settings.get_account_setting(self._account, "publish_tune"):
-            self.get_module("UserTune").set_enabled(True)
-
-        self.notify("state-changed", SimpleClientState.CONNECTED)
-
-        app.ged.raise_event(SignedIn(account=self._account, conn=self))
-        modules.send_stored_publish(self._account)
-
-    def send_stanza(self, stanza: Any) -> None:
+    def send_stanza(self, stanza: Any) -> str:
         """
         Send a stanza untouched
         """
@@ -545,7 +552,7 @@ class Client(Observable, ClientModules):
 
                 app.ged.raise_event(
                     MessageNotSent(
-                        client=self._client,
+                        client=self,
                         jid=str(message.contact.jid),
                         message=text,
                         error=_("Encryption error"),
@@ -570,7 +577,6 @@ class Client(Observable, ClientModules):
         self.get_module("Message").store_message(message)
 
     def start_connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
-
         self._log.info("Connect")
 
         if self._state not in (
@@ -638,7 +644,7 @@ class Client(Observable, ClientModules):
 
     def _on_host_meta_response(self, obj: FileTransfer) -> None:
         self._host_meta_request = None
-        if self._client is None or self._state != ClientState.HOST_META_REQUEST:
+        if self._state != ClientState.HOST_META_REQUEST:
             self._log.warning("Invalid client state, host meta response not processed")
             return
 
@@ -751,8 +757,7 @@ class Client(Observable, ClientModules):
         monitor = Gio.NetworkMonitor.get_default()
         monitor.disconnect(self._network_monitor_id)
 
-        if self._client is not None:
-            self._client.destroy()
+        self._client.destroy()
         modules.unregister_modules(self)
 
     def quit(self, kill_core: bool) -> None:

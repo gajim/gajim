@@ -309,6 +309,13 @@ class SimpleClientState(Enum):
         return self == SimpleClientState.RESUME_IN_PROGRESS
 
 
+class StartupState(IntEnum):
+    START = 0
+    SERVER_DISCO = 1
+    ROSTER = 2
+    FINISHED = 3
+
+
 class JingleState(Enum):
     NULL = "stop"
     CONNECTING = "connecting"
