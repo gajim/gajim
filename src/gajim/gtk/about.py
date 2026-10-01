@@ -10,8 +10,10 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from gajim.common import app
 from gajim.common.const import ARTISTS
 from gajim.common.const import DEVELOPERS
+from gajim.common.const import Display
 from gajim.common.const import GAJIM_ISSUES_URI
 from gajim.common.const import MAINTAINERS
 from gajim.common.const import THANKS
@@ -19,6 +21,7 @@ from gajim.common.i18n import _
 from gajim.common.util.app import get_extended_app_version
 from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
+from gajim.common.util.version import get_os_info
 from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.util.misc import get_adw_version
@@ -58,18 +61,34 @@ class AboutDialog:
         return dialog
 
     def _get_debug_info(self) -> str:
-        debug_info = [
-            _("GTK Version: %s") % get_gtk_version(),
-            _("Adw Version: %s") % get_adw_version(),
-            _("GLib Version: %s") % get_glib_version(),
-            _("Pango Version: %s") % Pango.version_string(),
-            _("PyGObject Version: %s") % get_gobject_version(),
-            _("cairo Version: %s") % cairo.cairo_version_string(),
-            _("pycairo Version: %s") % cairo.version,
-            _("python-nbxmpp Version: %s") % nbxmpp.__version__,
-            _("libsoup Version: %s") % get_soup_version(),
-        ]
-        return "\n".join(debug_info)
+        debug_info = f"""
+## Versions
+
+- OS: {get_os_info()}
+- Display: {self._get_display()}
+- Gajim: {get_extended_app_version()}
+- python-nbxmpp: {nbxmpp.__version__}
+- GTK: {get_gtk_version()}
+- Adw: {get_adw_version()}
+- GLib: {get_glib_version()}
+- PyGObject: {get_gobject_version()}
+- libsoup: {get_soup_version()}
+- Pango: {Pango.version_string()}
+- cairo: {cairo.cairo_version_string()}
+- pycairo: {cairo.version}
+"""
+        return debug_info
+
+    def _get_display(self) -> str:
+        if app.is_display(Display.WAYLAND):
+            return "Wayland"
+        if app.is_display(Display.X11):
+            return "X11"
+        if app.is_display(Display.WIN32):
+            return "Win32"
+        if app.is_display(Display.QUARTZ):
+            return "Quartz"
+        return "Unknown"
 
     def _on_dialog_closed(self, _dialog: AboutDialog) -> None:
         self._dialog = None
