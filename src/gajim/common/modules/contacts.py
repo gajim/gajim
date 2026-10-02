@@ -675,7 +675,7 @@ class ResourceContact(CommonContact):
         return None
 
     @property
-    def is_phone(self):
+    def is_phone(self) -> bool:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         if disco_info is None:
             return False
@@ -683,7 +683,7 @@ class ResourceContact(CommonContact):
         return any(identity.type == "phone" for identity in disco_info.identities)
 
     @property
-    def is_bot(self):
+    def is_bot(self) -> bool:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         return disco_info is not None and disco_info.has_identity("client", "bot")
 
@@ -692,7 +692,7 @@ class ResourceContact(CommonContact):
         return self._presence.available
 
     @property
-    def show(self):
+    def show(self) -> PresenceShow | Literal[PresenceShowExt.OFFLINE]:
         if not self._presence.available:
             return PresenceShowExt.OFFLINE
         return self._presence.show
@@ -1036,7 +1036,7 @@ class GroupchatParticipant(CommonContact):
         return self._presence.available
 
     @property
-    def show(self):
+    def show(self) -> PresenceShow | Literal[PresenceShowExt.OFFLINE]:
         if not self._presence.available:
             return PresenceShowExt.OFFLINE
         return self._presence.show

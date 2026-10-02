@@ -348,7 +348,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         return self._current_filter_text in item.search_text
 
     def _on_event(self, event: EventT) -> None:
-        list_item_cls = self._event_item_map[type(event)]
+        list_item_cls = self._event_item_map[type(event)]  # ty: ignore
         if not list_item_cls.can_create(event):  # type: ignore
             return
 

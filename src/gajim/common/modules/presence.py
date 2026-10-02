@@ -80,8 +80,6 @@ class Presence(BaseModule):
             ),
         ]
 
-        self._presence_store: dict[JID, PresenceData] = {}
-
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to GUI
         self.automatically_added: set[JID] = set()
@@ -120,7 +118,6 @@ class Presence(BaseModule):
             return
 
         presence_data = PresenceData.from_presence(properties)
-        self._presence_store[properties.jid] = presence_data
 
         contact = self._client.get_module("Contacts").get_contact(properties.jid)
         assert isinstance(contact, BareContact | ResourceContact)

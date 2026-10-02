@@ -1,4 +1,3 @@
-# Copyright (C) 2009 Thibaut GIRKA <thib AT sitedethib.com>
 # SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
 #
 # SPDX-License-Identifier: GPL-3.0-only
@@ -7,10 +6,7 @@ from __future__ import annotations
 
 import logging
 
-try:
-    from gi.repository import Gst
-except Exception:
-    pass
+from gi.repository import Gst
 
 from gajim.common.i18n import _
 

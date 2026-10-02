@@ -5,6 +5,8 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
+from typing import Literal
 from typing import TypeVar
 
 import base64
@@ -38,7 +40,7 @@ from gajim.common.util.datetime import utc_now
 
 log = logging.getLogger("gajim.c.structs")
 
-_T = TypeVar("_T")
+_T = TypeVar("_T", bound="VariantMixin")
 
 
 class MUCData:
@@ -151,7 +153,7 @@ class OutgoingMessage:
 
 @dataclass(frozen=True)
 class PresenceData:
-    show: PresenceShow
+    show: PresenceShow | Literal[PresenceShowExt.OFFLINE]
     status: str
     priority: int
     idle_datetime: datetime | None
@@ -163,6 +165,10 @@ class PresenceData:
         idle_datetime = None
         if properties.idle_timestamp is not None:
             idle_datetime = convert_epoch_to_local_datetime(properties.idle_timestamp)
+
+        assert properties.show is not None
+        assert properties.priority is not None
+        assert properties.type is not None
 
         return cls(
             show=properties.show,
@@ -186,7 +192,7 @@ UNKNOWN_PRESENCE = PresenceData(
 
 @dataclass(frozen=True)
 class MUCPresenceData:
-    show: PresenceShow
+    show: PresenceShow | Literal[PresenceShowExt.OFFLINE]
     status: str
     idle_datetime: datetime | None
     available: bool
@@ -203,6 +209,12 @@ class MUCPresenceData:
         idle_datetime = None
         if properties.idle_timestamp is not None:
             idle_datetime = convert_epoch_to_local_datetime(properties.idle_timestamp)
+
+        assert properties.show is not None
+        assert properties.type is not None
+        assert properties.muc_user is not None
+        assert properties.muc_user.affiliation is not None
+        assert properties.muc_user.role is not None
 
         return cls(
             show=properties.show,
@@ -254,9 +266,10 @@ class VariantMixin:
     def to_variant(self) -> GLib.Variant:
         __types = {}
         vdict = {}
-        for field in fields(self):
+        for field in fields(self):  # type: ignore
             value = getattr(self, field.name)
-            field_t, variant_str = ANNOTATION_TO_VARIANT[field.type]
+            field_type = cast(str, field.type)
+            field_t, variant_str = ANNOTATION_TO_VARIANT[field_type]
             if value is None:
                 vdict[field.name] = GLib.Variant(variant_str, value)
                 continue
@@ -266,9 +279,9 @@ class VariantMixin:
                     f"invalid type: {value} type {type(value)} is not a {field_t}"
                 )
 
-            conversion_func = self._type_to_variant_funcs.get(field_t)
+            conversion_func = self._type_to_variant_funcs.get(field_t)  # type: ignore
             if conversion_func is not None:
-                value = conversion_func(value)
+                value = conversion_func(value)  # type: ignore
                 __types[field.name] = field_t.__name__
 
             vdict[field.name] = GLib.Variant(variant_str, value)

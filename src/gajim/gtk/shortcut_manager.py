@@ -188,7 +188,9 @@ class GajimShortcut(Gtk.Shortcut):
         name = "custom" if self.has_custom_accel() else "original"
         return self._accelerators[name]["accelerators"] or []
 
-    def _set_accelerators(self, name: str, accelerators: list[str] | None) -> None:
+    def _set_accelerators(
+        self, name: Literal["original", "custom"], accelerators: list[str] | None
+    ) -> None:
         if not accelerators:
             trigger = Gtk.NeverTrigger.get()
             self._accelerators[name]["accelerators"] = None
