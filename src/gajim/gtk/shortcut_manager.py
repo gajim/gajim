@@ -8,6 +8,7 @@ from typing import Literal
 from typing import TypedDict
 
 import logging
+import sys
 from collections.abc import Iterator
 
 from gi.repository import Gdk
@@ -108,10 +109,12 @@ class GajimShortcut(Gtk.Shortcut):
         self,
         label: str,
         category: str,
-        action_name: str,
+        action_name: str | None = None,
+        signal: str | None = None,
         accelerators: list[str] | None = None,
         args: GLib.Variant | None = None,
         allow_rebind: bool = True,
+        platform: str | None = None,
     ):
         Gtk.Shortcut.__init__(self)
 
@@ -119,6 +122,7 @@ class GajimShortcut(Gtk.Shortcut):
         self._category = category
         self._allow_rebind = allow_rebind
         self._action_name = action_name
+        self._platform = platform or sys.platform
 
         if accelerators is None:
             accelerators = []
@@ -130,7 +134,12 @@ class GajimShortcut(Gtk.Shortcut):
 
         self._set_accelerators("original", accelerators)
 
-        shortcut_action = Gtk.ShortcutAction.parse_string(f"action({action_name})")
+        if action_name:
+            action = f"action({action_name})"
+        else:
+            action = f"signal({signal})"
+
+        shortcut_action = Gtk.ShortcutAction.parse_string(action)
         self.set_action(shortcut_action)
 
         if args is not None:
@@ -149,8 +158,12 @@ class GajimShortcut(Gtk.Shortcut):
         return self._allow_rebind
 
     @GObject.Property(type=str, flags=GObject.ParamFlags.READABLE)
-    def action_name(self) -> str:
+    def action_name(self) -> str | None:
         return self._action_name
+
+    @GObject.Property(type=str, flags=GObject.ParamFlags.READABLE)
+    def platform(self) -> str:
+        return self._platform
 
     def reset(self) -> None:
         self._accelerators["custom"]["trigger"] = None
@@ -225,6 +238,8 @@ class GajimShortcutGroup(Gio.ListStore[GajimShortcut]):
         self._shortcuts: dict[str, GajimShortcut] = {}
 
         for shortcut in shortcuts:
+            if shortcut.platform != sys.platform:
+                continue
             self._shortcuts[shortcut.action_name] = shortcut
             self.append(shortcut)
 
@@ -578,6 +593,44 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
             category="messages",
             accelerators=None,
             action_name="win.input-paste-as-code-block",
+        ),
+        # Gtk.TextView on MacOS defines exactly these shortcuts but GtkSource.View overwrites them
+        # with move-words. So we overwrite them again here to get Gtk default behavior.
+        GajimShortcut(
+            label=_("Move cursor one word right"),
+            category="messages",
+            signal="move-cursor",
+            accelerators=["<Alt>Right"],
+            args=GLib.Variant("(iib)", (Gtk.MovementStep.WORDS, 1, False)),
+            allow_rebind=False,
+            platform="darwin",
+        ),
+        GajimShortcut(
+            label=_("Move cursor one word left"),
+            category="messages",
+            signal="move-cursor",
+            accelerators=["<Alt>Left"],
+            args=GLib.Variant("(iib)", (Gtk.MovementStep.WORDS, -1, False)),
+            allow_rebind=False,
+            platform="darwin",
+        ),
+        GajimShortcut(
+            label=_("Extend selection one word right"),
+            category="messages",
+            signal="move-cursor",
+            accelerators=["<Alt><Shift>Right"],
+            args=GLib.Variant("(iib)", (Gtk.MovementStep.WORDS, 1, True)),
+            allow_rebind=False,
+            platform="darwin",
+        ),
+        GajimShortcut(
+            label=_("Extend selection one word left"),
+            category="messages",
+            signal="move-cursor",
+            accelerators=["<Alt><Shift>Left"],
+            args=GLib.Variant("(iib)", (Gtk.MovementStep.WORDS, -1, True)),
+            allow_rebind=False,
+            platform="darwin",
         ),
     ],
 )
