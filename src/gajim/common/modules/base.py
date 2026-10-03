@@ -10,7 +10,6 @@ from typing import Literal
 from typing import overload
 
 import logging
-from functools import partial
 from unittest.mock import Mock
 
 from nbxmpp.dispatcher import NBXMPPModuleNameT
@@ -94,7 +93,6 @@ class BaseModule(EventHelper):
         self._client = con
         self._account = con.account
         self._log = self._set_logger(plugin)
-        self._nbxmpp_callbacks: dict[str, Any] = {}
         self._stored_publish: types.AnyCallableT | None = None
         self._ttl_cache: dict[Any, Any] = {}
         self.handlers: list[StanzaHandler] = []
@@ -130,13 +128,7 @@ class BaseModule(EventHelper):
             NBXMPPBaseModule, self._con.connection.get_module(self._nbxmpp_extends)
         )
 
-        callback = self._nbxmpp_callbacks.get(key)
-        if callback is None:
-            return getattr(module, key)
-        return partial(getattr(module, key), callback=callback)
-
-    def _register_callback(self, method: str, callback: types.AnyCallableT) -> None:
-        self._nbxmpp_callbacks[method] = callback
+        return getattr(module, key)
 
     def _register_pubsub_handler(self, callback: types.AnyCallableT) -> None:
         handler = StanzaHandler(
