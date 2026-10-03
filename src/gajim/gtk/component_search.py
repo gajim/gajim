@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -15,12 +16,11 @@ import logging
 from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.modules import dataforms
-from nbxmpp.simplexml import Node
+from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.structs import SearchFields
+from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common import ged
-from gajim.common.events import SearchFormReceivedEvent
-from gajim.common.events import SearchResultReceivedEvent
 from gajim.common.i18n import _
 
 from gajim.gtk.assistant import Assistant
@@ -28,6 +28,8 @@ from gajim.gtk.assistant import AssistantErrorPage
 from gajim.gtk.assistant import AssistantPage
 from gajim.gtk.assistant import AssistantProgressPage
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.dataform import FakeDataFormWidget
+from gajim.gtk.dataform import MultipleDataForm
 from gajim.gtk.menus import get_component_search_menu
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.widgets import GajimPopover
@@ -65,14 +67,9 @@ class ComponentSearch(Assistant):
 
         self._connect(self, "button-clicked", self._on_button_clicked)
 
-        self.register_events(
-            [
-                ("search-form-received", ged.GUI1, self._search_form_received),
-                ("search-result-received", ged.GUI1, self._search_result_received),
-            ]
+        self._client.get_module("Search").request_form(
+            self._jid, callback=self._search_form_received
         )
-
-        self._client.get_module("Search").request_search_fields(self._jid)
 
     @overload
     def get_page(self, name: Literal["prepare"]) -> RequestForm: ...
@@ -93,7 +90,9 @@ class ComponentSearch(Assistant):
         if button_name == "search":
             self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
             form = self.get_page("form").get_submit_form()
-            self._client.get_module("Search").send_search_form(self._jid, form, True)
+            self._client.get_module("Search").send_form(
+                self._jid, form, callback=self._on_search_result
+            )
             return
 
         if button_name == "new-search":
@@ -104,23 +103,29 @@ class ComponentSearch(Assistant):
             self.close()
 
     @ensure_not_destroyed
-    def _search_form_received(self, event: SearchFormReceivedEvent) -> None:
-        if not event.is_dataform:
+    def _search_form_received(self, task: Task) -> None:
+        try:
+            form = cast(SimpleDataForm | SearchFields, task.finish())
+        except Exception as error:
+            log.warning(error)
             self.get_page("error").set_text(_("Error while retrieving search form."))
             self.show_page("error")
             return
 
-        self.get_page("form").process_search_form(event.data)
+        self.get_page("form").process_search_form(form)
         self.show_page("form")
 
     @ensure_not_destroyed
-    def _search_result_received(self, event: SearchResultReceivedEvent) -> None:
-        if event.data is None:
+    def _on_search_result(self, task: Task) -> None:
+        try:
+            form = cast(MultipleDataForm, task.finish())
+        except Exception as error:
+            log.warning(error)
             self.get_page("error").set_text(_("Error while receiving search results."))
             self.show_page("error")
             return
 
-        self.get_page("result").process_result(event.data)
+        self.get_page("result").process_result(form)
         self.show_page("result")
 
     def _cleanup(self) -> None:
@@ -145,31 +150,23 @@ class SearchForm(AssistantPage):
 
         self.complete = False
 
-        self._dataform_widget = None
-
-    @property
-    def search_form(self) -> dataforms.SimpleDataForm:
-        assert self._dataform_widget is not None
-        return self._dataform_widget.get_submit_form()
-
     def clear(self) -> None:
-        self._show_form(None)
+        self.remove(self._dataform_widget)
 
-    def process_search_form(self, form: Node) -> None:
-        self._show_form(form)
+    def process_search_form(self, form: SimpleDataForm | SearchFields) -> None:
+        self.clear()
 
-    def _show_form(self, form: Node | None) -> None:
-        if self._dataform_widget is not None:
-            self.remove(self._dataform_widget)
-        if form is None:
-            return
-
+        is_dataform = isinstance(form, SimpleDataForm)
         options = {"form-width": 350, "entry-activates-default": True}
 
-        form = dataforms.extend_form(node=form)
-        self._dataform_widget = DataFormWidget(form, options=options)
+        if is_dataform:
+            self._dataform_widget = DataFormWidget(form, options=options)
+        else:
+            self._dataform_widget = FakeDataFormWidget(dict(form))
+
         self._dataform_widget.set_propagate_natural_height(True)
         self._connect(self._dataform_widget, "is-valid", self._on_is_valid)
+
         self._dataform_widget.validate()
         self.append(self._dataform_widget)
 
@@ -177,9 +174,13 @@ class SearchForm(AssistantPage):
         self.complete = is_valid
         self.update_page_complete()
 
-    def get_submit_form(self) -> dataforms.SimpleDataForm:
+    def get_submit_form(self) -> SimpleDataForm | SearchFields:
         assert self._dataform_widget is not None
-        return self._dataform_widget.get_submit_form()
+        if isinstance(self._dataform_widget, DataFormWidget):
+            return self._dataform_widget.get_submit_form()
+
+        fields = self._dataform_widget.get_submit_form()
+        return SearchFields(instructions="", **fields)
 
     def get_visible_buttons(self) -> list[str]:
         return ["close", "search"]
@@ -211,19 +212,12 @@ class Result(AssistantPage):
 
         self._treeview: Gtk.TreeView | None = None
 
-    def process_result(self, form: Node | None) -> None:
+    def process_result(self, form: MultipleDataForm) -> None:
         if self._treeview is not None:
             self._scrolled.set_child(None)
             self._treeview = None
             self._label.set_visible(False)
             self._scrolled.set_visible(False)
-
-        if not form:
-            self._label.set_visible(True)
-            return
-
-        form = dataforms.extend_form(node=form)
-        assert isinstance(form, dataforms.MultipleDataForm)
 
         fieldtypes: list[type[bool] | type[str]] = []
         fieldvars: list[Any] = []

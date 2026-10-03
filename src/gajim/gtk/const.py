@@ -135,6 +135,7 @@ WINDOW_MODULES = {
     "DebugConsoleWindow": "gajim.gtk.debug_console",
     "CertificateDialog": "gajim.gtk.certificate_dialog",
     "ChangePassword": "gajim.gtk.change_password",
+    "ComponentSearch": "gajim.gtk.component_search",
     "ContactInfo": "gajim.gtk.contact_info",
     "CreateGroupchatWindow": "gajim.gtk.groupchat_creation",
     "Features": "gajim.gtk.features",

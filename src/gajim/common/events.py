@@ -536,22 +536,6 @@ class RosterPush(ApplicationEvent):
 
 
 @dataclass
-class SearchFormReceivedEvent(ApplicationEvent):
-    name: str = field(init=False, default="search-form-received")
-    conn: "Client"
-    is_dataform: bool
-    data: Any
-
-
-@dataclass
-class SearchResultReceivedEvent(ApplicationEvent):
-    name: str = field(init=False, default="search-result-received")
-    conn: "Client"
-    is_dataform: bool
-    data: Any
-
-
-@dataclass
 class ReceiptReceived(ApplicationEvent):
     name: str = field(init=False, default="receipt-received")
     account: str

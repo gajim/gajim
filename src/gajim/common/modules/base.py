@@ -63,6 +63,7 @@ from nbxmpp.modules.register.register import Register
 from nbxmpp.modules.replies import Replies
 from nbxmpp.modules.retraction import Retraction
 from nbxmpp.modules.roster import Roster
+from nbxmpp.modules.search import Search
 from nbxmpp.modules.security_labels import SecurityLabels
 from nbxmpp.modules.software_version import SoftwareVersion
 from nbxmpp.modules.tune import Tune
@@ -255,6 +256,8 @@ class BaseModule(EventHelper):
     def _nbxmpp(self, name: Literal["Retraction"]) -> Retraction: ...
     @overload
     def _nbxmpp(self, name: Literal["Roster"]) -> Roster: ...
+    @overload
+    def _nbxmpp(self, name: Literal["Search"]) -> Search: ...
     @overload
     def _nbxmpp(self, name: Literal["SecurityLabels"]) -> SecurityLabels: ...
     @overload

@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from gajim.gtk.call_window import CallWindow
     from gajim.gtk.certificate_dialog import CertificateDialog
     from gajim.gtk.change_password import ChangePassword
+    from gajim.gtk.component_search import ComponentSearch
     from gajim.gtk.contact_info import ContactInfo
     from gajim.gtk.db_migration import DBMigration
     from gajim.gtk.debug_console import DebugConsoleWindow
@@ -65,6 +66,7 @@ if TYPE_CHECKING:
         | CallWindow
         | CertificateDialog
         | ChangePassword
+        | ComponentSearch
         | ContactInfo
         | CreateGroupchatWindow
         | Features
@@ -100,6 +102,7 @@ if TYPE_CHECKING:
         | Literal["CallWindow"]
         | Literal["CertificateDialog"]
         | Literal["ChangePassword"]
+        | Literal["ComponentSearch"]
         | Literal["ContactInfo"]
         | Literal["CreateGroupchatWindow"]
         | Literal["Features"]
@@ -240,6 +243,14 @@ def get_app_window(
     account: str | None = None,
     jid: str | JID | None = None,
 ) -> ChangePassword | None: ...
+
+
+@overload
+def get_app_window(
+    name: Literal["ComponentSearch"],
+    account: str | None = None,
+    jid: str | JID | None = None,
+) -> ComponentSearch | None: ...
 
 
 @overload
@@ -473,6 +484,8 @@ def open_window(
 ) -> CertificateDialog: ...
 @overload
 def open_window(name: Literal["ChangePassword"], **kwargs: Any) -> ChangePassword: ...
+@overload
+def open_window(name: Literal["ComponentSearch"], **kwargs: Any) -> ComponentSearch: ...
 @overload
 def open_window(name: Literal["ContactInfo"], **kwargs: Any) -> ContactInfo: ...
 @overload

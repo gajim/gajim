@@ -904,6 +904,10 @@ class ImageMediaField:
 
 
 class FakeDataFormWidget(Gtk.ScrolledWindow, SignalManager):
+    __gsignals__ = {
+        "is-valid": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
+    }
+
     def __init__(self, fields: dict[str, str]) -> None:
         Gtk.ScrolledWindow.__init__(self)
         SignalManager.__init__(self)
@@ -977,6 +981,9 @@ class FakeDataFormWidget(Gtk.ScrolledWindow, SignalManager):
         for name, entry in self._entries.items():
             fields[name] = entry.get_text()
         return fields
+
+    def validate(self) -> None:
+        pass
 
 
 class DataFormReportedTable(Gtk.Grid, SignalManager):

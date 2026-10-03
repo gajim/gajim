@@ -54,7 +54,6 @@ from gajim.common.util.jid import parse_jid
 
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.component_search import ComponentSearch
 from gajim.gtk.util.icons import icon_exists
 from gajim.gtk.util.window import open_window
 from gajim.gtk.window import GajimAppWindow
@@ -1439,7 +1438,12 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        ComponentSearch(self.account, service, self.window)
+        open_window(
+            "ComponentSearch",
+            account=self.account,
+            jid=service,
+            transient_for=self.window,
+        )
 
     def cleanup(self) -> None:
         AgentBrowser.cleanup(self)
