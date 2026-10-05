@@ -130,7 +130,7 @@ class VCardAvatars(BaseModule):
             return
 
         if properties.from_muc:
-            self._muc_update_received(properties)
+            self._participant_update_received(properties)
 
         else:
             jid = properties.jid.new_as_bare()
@@ -182,31 +182,31 @@ class VCardAvatars(BaseModule):
             assert avatar_sha
             self._log.info("Update: %s %s", jid, avatar_sha)
 
+            if not app.app.avatar_storage.avatar_exists(avatar_sha):
+                if (jid, avatar_sha) in self._ignored_sha_cache:
+                    self._log.info(
+                        "Avatar will be ignored because of cached error: %s %s",
+                        jid,
+                        avatar_sha,
+                    )
+                    return
+
+                self._log.info("Request avatar: %s %s", jid, avatar_sha)
+                task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
+                app.task_manager.add_task(task)
+                return
+
             if avatar_sha == contact.avatar_sha:
-                self._log.info("Avatar already known: %s %s", jid, avatar_sha)
+                self._log.info("Avatar known and present: %s %s", jid, avatar_sha)
                 return
 
-            if app.app.avatar_storage.avatar_exists(avatar_sha):
-                # Check if the avatar is already in storage
-                self._log.info("Found avatar in storage")
-                app.storage.archive.set_contact_value(
-                    self._account, contact.jid, "avatar_sha", avatar_sha
-                )
-                contact.update_avatar(avatar_sha)
-                return
+            self._log.info("Found avatar in storage")
+            app.storage.archive.set_contact_value(
+                self._account, contact.jid, "avatar_sha", avatar_sha
+            )
+            contact.update_avatar(avatar_sha)
 
-            if (jid, avatar_sha) in self._ignored_sha_cache:
-                self._log.info(
-                    "Avatar will be ignored because of cached error: %s %s",
-                    jid,
-                    avatar_sha,
-                )
-                return
-
-            task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
-            app.task_manager.add_task(task)
-
-    def _muc_update_received(self, properties: PresenceProperties) -> None:
+    def _participant_update_received(self, properties: PresenceProperties) -> None:
         assert properties.jid is not None
         jid = properties.jid
         avatar_sha = properties.avatar_sha
@@ -249,19 +249,18 @@ class VCardAvatars(BaseModule):
                     )
                     return
 
-                app.log("avatar").info("Request avatar: %s", jid)
+                self._log.info("Request avatar: %s %s", jid, avatar_sha)
                 task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
                 app.task_manager.add_task(task)
                 return
 
-            current_avatar_sha = self._muc_avatar_cache.get(jid)
-            if current_avatar_sha != avatar_sha:
-                self._log.info("%s changed their avatar: %s", jid, avatar_sha)
-                self._muc_avatar_cache[jid] = avatar_sha
-                contact.update_avatar()
+            if avatar_sha == self._muc_avatar_cache.get(jid):
+                self._log.info("Avatar known and present: %s %s", jid, avatar_sha)
+                return
 
-            else:
-                self._log.info("Avatar already known: %s", jid)
+            self._log.info("Found avatar in storage: %s, %s", jid, avatar_sha)
+            self._muc_avatar_cache[jid] = avatar_sha
+            contact.update_avatar()
 
 
 class VCardAvatarsTask(Task):
