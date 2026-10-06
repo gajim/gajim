@@ -104,23 +104,27 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         dnd_icon.set_valign(Gtk.Align.END)
         dnd_icon.set_pixel_size(64)
 
-        dnd_label = Gtk.Label(label=_("Drop files here"))
-        dnd_label.set_max_width_chars(40)
-        dnd_label.set_vexpand(True)
-        dnd_label.set_valign(Gtk.Align.START)
+        dnd_label = Gtk.Label(
+            label=_("Drop files here"),
+            max_width_chars=40,
+            vexpand=True,
+            valign=Gtk.Align.START,
+        )
         dnd_label.add_css_class("title-3")
 
-        self._drop_area = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        self._drop_area.set_visible(False)
-        self._drop_area.set_hexpand(True)
-        self._drop_area.set_vexpand(True)
+        self._drop_area = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=18,
+            visible=False,
+            hexpand=True,
+            vexpand=True,
+        )
         self._drop_area.add_css_class("background")
         self._drop_area.append(dnd_icon)
         self._drop_area.append(dnd_label)
 
-        overlay = Gtk.Overlay()
+        overlay = Gtk.Overlay(child=box)
         overlay.add_overlay(self._drop_area)
-        overlay.set_child(box)
 
         # TODO: support dnd for contacts (MUC invitations)
 
@@ -800,6 +804,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         _x: float,
         _y: float,
     ) -> bool:
+        self._drop_area.set_visible(False)
+
         if value is None:
             log.debug("Drop received, but value is None")
             return False
@@ -840,7 +846,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             return False
 
         self._chat_control.drag_data_file_transfer(files)
-        self._drop_area.set_visible(False)
         return True
 
     def _on_key_pressed(
