@@ -265,6 +265,9 @@ class DefaultPage(AssistantPage):
     ) -> None:
         AssistantPage.__init__(self)
 
+        # Use insert_after for adding heading, icon, and label instead of append.
+        # Classes inheriting from this base class may add widgets via template,
+        # and these widgets would be rendered first when using append here.
         self._heading = Gtk.Label(
             max_width_chars=30,
             wrap=True,
@@ -272,14 +275,15 @@ class DefaultPage(AssistantPage):
             justify=Gtk.Justification.CENTER,
         )
         self._heading.add_css_class("title-1")
-        self.append(self._heading)
+        self._heading.insert_after(self)
 
+        icon = None
         if icon_name is not None:
             icon = Gtk.Image.new_from_icon_name(icon_name)
             icon.set_pixel_size(64)
             if icon_css_class is not None:
                 icon.add_css_class(icon_css_class)
-            self.append(icon)
+            icon.insert_after(self, self._heading)
 
         self._label = Gtk.Label(
             wrap=True,
@@ -287,7 +291,7 @@ class DefaultPage(AssistantPage):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        self.append(self._label)
+        self._label.insert_after(self, icon if icon is not None else self._heading)
 
     def set_heading(self, heading: str) -> None:
         self._heading.set_text(heading)
