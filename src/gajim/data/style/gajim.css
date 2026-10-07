@@ -225,7 +225,6 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .badge {
-    color: var(--light-2);
     padding-left: 6px;
     padding-right: 6px;
     padding-top: 2px;
@@ -235,10 +234,12 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 .badge-hat {
-  background-color: var(--accent-teal);
-  font-size: 90%;
+    color: var(--light-2);
+    background-color: var(--accent-teal);
+    font-size: 90%;
 }
 .badge-update {
+    color: var(--light-2);
     background-color: var(--accent-slate);
 }
 .badge-restart {

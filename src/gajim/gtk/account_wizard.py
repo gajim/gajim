@@ -1264,7 +1264,7 @@ class WizardSuccessPage(AssistantSuccessPage):
         rgba.parse(get_color_for_account(self._our_jid))
         self._account_color_button.set_rgba(rgba)
         self._color = rgba.to_string()
-        self._set_badge_color(self._color)
+        self._set_badge_color(self._color, rgba)
         self._save_config()
 
     @property
@@ -1286,11 +1286,17 @@ class WizardSuccessPage(AssistantSuccessPage):
     def _on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any):
         rgba = color_button.get_rgba()
         self._color = rgba.to_string()
-        self._set_badge_color(self._color)
+        self._set_badge_color(self._color, rgba)
         self._save_config()
 
-    def _set_badge_color(self, color: str) -> None:
-        css = ".badge { background-color: %s; font-size: 100%%; }" % color
+    def _set_badge_color(self, color: str, rgba: Gdk.RGBA) -> None:
+        text_color = "rgb(242, 242, 242)"
+        luminance = 0.2126 * rgba.red + 0.7152 * rgba.green + 0.0722 * rgba.blue
+        if luminance > 0.6:
+            # Use dark text color if background luminance threshold is surpassed
+            text_color = "rgb(51, 51, 51)"
+
+        css = f".badge {{ color: {text_color}; background-color: {color}; }}"
         self._provider.load_from_bytes(GLib.Bytes.new(css.encode("utf-8")))
 
     def _save_config(self) -> None:

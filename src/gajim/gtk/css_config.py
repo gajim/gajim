@@ -23,6 +23,8 @@ from gajim.common import configpaths
 from gajim.common.const import CSSPriority
 from gajim.common.const import StyleAttr
 
+from gajim.gtk.util.styling import convert_rgb_string_to_float
+
 if sys.platform == "win32":
     from gajim.common.winapi.system_style import SystemStyleListener
 else:
@@ -639,9 +641,20 @@ class CSSConfig:
         css = ""
         accounts = app.settings.get_accounts()
         for index, account in enumerate(accounts):
+            text_color = "rgb(242, 242, 242)"
+
             color = app.settings.get_account_setting(account, "account_color")
+            color_r, color_g, color_b = convert_rgb_string_to_float(color)
+            # The constants are the CIE values of sRGB primaries for luminance Y
+            luminance = 0.2126 * color_r + 0.7152 * color_g + 0.0722 * color_b
+            if luminance > 0.6:
+                # Use dark text color if background luminance threshold is surpassed
+                text_color = "rgb(51, 51, 51)"
+
             css_class = f"gajim_class_{index}"
-            css += f".{css_class} {{ background-color: {color}; }}\n"
+            css += (
+                f".{css_class} {{ color: {text_color}; background-color: {color}; }}\n"
+            )
             self._dynamic_dict[account] = css_class
 
         self._dynamic_provider.load_from_bytes(GLib.Bytes.new(css.encode()))
