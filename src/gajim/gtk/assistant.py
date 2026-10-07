@@ -265,21 +265,9 @@ class DefaultPage(AssistantPage):
     ) -> None:
         AssistantPage.__init__(self)
 
-        self._heading = Gtk.Label(
-            max_width_chars=30,
-            wrap=True,
-            halign=Gtk.Align.CENTER,
-            justify=Gtk.Justification.CENTER,
-        )
-        self._heading.add_css_class("title-1")
-        self.append(self._heading)
-
-        if icon_name is not None:
-            icon = Gtk.Image.new_from_icon_name(icon_name)
-            icon.set_pixel_size(64)
-            if icon_css_class is not None:
-                icon.add_css_class(icon_css_class)
-            self.append(icon)
+        # Use prepend for adding heading, icon, and label instead of append.
+        # Classes inheriting from this base class may add widgets via template,
+        # and these widgets would be rendered first when using append here.
 
         self._label = Gtk.Label(
             wrap=True,
@@ -287,7 +275,25 @@ class DefaultPage(AssistantPage):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        self.append(self._label)
+        self.prepend(self._label)
+
+        top_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
+        self.prepend(top_box)
+        if icon_name is not None:
+            icon = Gtk.Image.new_from_icon_name(icon_name)
+            icon.set_pixel_size(24)
+            if icon_css_class is not None:
+                icon.add_css_class(icon_css_class)
+            top_box.append(icon)
+
+        self._heading = Gtk.Label(
+            max_width_chars=30,
+            wrap=True,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
+        self._heading.add_css_class("title-1")
+        top_box.append(self._heading)
 
     def set_heading(self, heading: str) -> None:
         self._heading.set_text(heading)
