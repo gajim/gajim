@@ -17,6 +17,7 @@ from nbxmpp.protocol import validate_resourcepart
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -77,19 +78,31 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
 
         self._widget: Gtk.Widget | None = None
 
-        self._heading = Gtk.Label()
-        self._heading.set_max_width_chars(30)
-        self._heading.set_ellipsize(Pango.EllipsizeMode.END)
-        self._heading.add_css_class("title-2")
-        self.append(self._heading)
+        context_grid = Gtk.Grid(column_spacing=12)
+        context_grid.add_css_class("card")
+        context_grid.add_css_class("p-12")
+        context_grid.add_css_class("mb-18")
+        self.append(context_grid)
+
+        self._avatar = Gtk.Image(pixel_size=AvatarSize.ROSTER)
+        context_grid.attach(self._avatar, 0, 0, 1, 2)
+
+        self._heading = Gtk.Label(
+            max_width_chars=30,
+            ellipsize=Pango.EllipsizeMode.END,
+            halign=Gtk.Align.START,
+        )
+        self._heading.add_css_class("title-3")
+        context_grid.attach(self._heading, 1, 0, 1, 1)
 
         self._subheading = Gtk.Label(
             max_width_chars=40,
             wrap=True,
             wrap_mode=Pango.WrapMode.WORD,
+            halign=Gtk.Align.START,
         )
-        self._subheading.add_css_class("pb-18")
-        self.append(self._subheading)
+        self._subheading.add_css_class("dimmed")
+        context_grid.attach(self._subheading, 1, 1, 1, 1)
 
         self._content_box = Gtk.Box(halign=Gtk.Align.CENTER)
         self._content_box.add_css_class("pb-12")
@@ -163,6 +176,10 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
 
         self._mode = mode
         self._data = data
+
+        self._avatar.set_from_paintable(
+            contact.get_avatar(AvatarSize.ROSTER, self.get_scale_factor())
+        )
 
         if isinstance(contact, BareContact) and contact.is_self:
             self._heading.set_text(_("Note to myself"))
@@ -414,12 +431,12 @@ class InputWidget(Gtk.Box, SignalManager):
         self._mode = mode
 
         heading_label = Gtk.Label()
-        heading_label.set_xalign(0)
         heading_label.add_css_class("title-3")
         self.append(heading_label)
 
-        sub_label = Gtk.Label()
-        sub_label.set_xalign(0)
+        sub_label = Gtk.Label(
+            max_width_chars=30, wrap=True, wrap_mode=Pango.WrapMode.WORD
+        )
         sub_label.add_css_class("dimmed")
         self.append(sub_label)
 
@@ -437,11 +454,19 @@ class InputWidget(Gtk.Box, SignalManager):
 
         elif mode == FunctionMode.KICK:
             heading_label.set_text(_("Kick %s") % data)
-            sub_label.set_text(_("Reason (optional)"))
+            sub_label.set_text(
+                _(
+                    "This participant will be removed from the chat, but they can join again later. You can specify a reason (optional)."
+                )
+            )
 
         elif mode == FunctionMode.BAN:
             heading_label.set_text(_("Ban %s") % data)
-            sub_label.set_text(_("Reason (optional)"))
+            sub_label.set_text(
+                _(
+                    "This participant will be prevented from joining the chat again. You can specify a reason (optional)."
+                )
+            )
 
         elif mode == FunctionMode.PASSWORD_REQUEST:
             heading_label.set_text(_("Password Required"))
