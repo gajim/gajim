@@ -249,6 +249,8 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
                 error_text=data,
             )
 
+        app.window.set_default_widget(self._confirm_button)
+
         assert self._widget is not None
         self._content_box.append(self._widget)
         if isinstance(self._widget, InputWidget):
