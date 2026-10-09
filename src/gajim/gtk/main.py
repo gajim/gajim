@@ -769,7 +769,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
         ConfirmationAlertDialog(
             _("Block Participant?"),
-            _("Do you want to block %(name)s?") % {"name": params.resource},
+            _(
+                "You will not see further messages from %(name)s, but they can still see your messages."
+            )
+            % {"name": params.resource},
             confirm_label=_("_Block"),
             callback=_on_response,
         )

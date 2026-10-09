@@ -464,7 +464,7 @@ class InputWidget(Gtk.Box, SignalManager):
             heading_label.set_text(_("Ban %s") % data)
             sub_label.set_text(
                 _(
-                    "This participant will be prevented from joining the chat again. You can specify a reason (optional)."
+                    "This participant will be removed and will be prevented from joining the chat again. You can specify a reason (optional)."
                 )
             )
 
