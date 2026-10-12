@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import Final
 
+import datetime as dt
 import random
 import secrets
 import subprocess
@@ -38,6 +39,7 @@ from nbxmpp.structs import PGPKeyMetadata
 from nbxmpp.structs import PGPPublicKey
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task
+from pysequoia import packet as pyspacket
 
 import gajim.common.storage.openpgp.models as mod
 from gajim.common import app
@@ -114,6 +116,64 @@ class EncryptionTestImportError(Exception):
 
 class DecryptionFailed(Exception):
     pass
+
+
+class SecretCert:
+    def __init__(self, data: bytes) -> None:
+        self._secret_cert = pys.Tsk.from_bytes(data)
+        self._public_cert = self._secret_cert.extract_certificate()
+        self._fingerprint = self._public_cert.fingerprint.upper()
+        self._creation_date = extract_creation_date(data)
+
+    @classmethod
+    def generate(cls, user_id: str) -> SecretCert:
+        cert = pys.Tsk.generate(
+            user_id, profile=pys.Profile.RFC4880, validity_seconds=None
+        )
+        return cls(bytes(cert))
+
+    @property
+    def fingerprint(self) -> str:
+        return self._fingerprint
+
+    @property
+    def creation_date(self) -> dt.datetime:
+        return self._creation_date
+
+    @property
+    def public(self) -> pys.Cert:
+        return self._public_cert
+
+    def get_secret_bytes(self) -> bytes:
+        return bytes(self._secret_cert)
+
+    def get_public_bytes(self) -> bytes:
+        return bytes(self._public_cert)
+
+    def decryptor(self) -> pys.PyDecryptor:
+        return self._secret_cert.decryptor()
+
+    def signer(self) -> pys.PySigner:
+        return self._secret_cert.signer()
+
+    def export_armored(self) -> str:
+        return str(self._secret_cert)
+
+    def __str__(self) -> str:
+        return repr(self)
+
+    def __repr__(self) -> str:
+        return f"<{self.fingerprint} ({self.creation_date.isoformat()})>"
+
+
+def extract_creation_date(cert_bytes: bytes) -> dt.datetime:
+    pile = pyspacket.PacketPile.from_bytes(cert_bytes)
+    for packet in pile:
+        if packet.tag == pyspacket.Tag.SecretKey:
+            if date := packet.key_created:
+                return date
+
+    return dt.datetime(1990, 1, 1, tzinfo=dt.UTC)
 
 
 def prepare_stanza(stanza: Node, payload: list[Node | str]) -> None:
@@ -210,7 +270,7 @@ class OpenPGP(BaseModule, CryptoModule):
         )
 
         self._own_jid = self._client.jid
-        self._secret_cert = None
+        self._secret_cert: SecretCert | None = None
         self._backup_password = None
 
         self._load_secret_keys()
@@ -227,16 +287,11 @@ class OpenPGP(BaseModule, CryptoModule):
             self.check_secret_key_backup()
 
     def _load_secret_keys(self) -> None:
-        if row := app.storage.openpgp.get_secret_key(self._account):
-            secret, self._secret_key_date = row
-            self._secret_cert = pys.Cert.from_bytes(secret.key)
+        if secret := app.storage.openpgp.get_secret_key(self._account):
+            self._secret_cert = SecretCert(secret.key)
             self._backup_password = secret.backup_password
 
-            self._log.info(
-                "Found secret key: %s, %s",
-                self._secret_cert.fingerprint.upper(),
-                self._secret_key_date,
-            )
+            self._log.info("Found secret key: %r", self._secret_cert)
 
     def _migrate_secret_keys(self) -> None:
         if self._secret_cert is not None:
@@ -281,7 +336,7 @@ class OpenPGP(BaseModule, CryptoModule):
             assert cert.secrets is not None
             backup_password = self.generate_backup_password()
             app.storage.openpgp.store_secret_key(
-                self._account, cert, backup_password=backup_password
+                self._account, bytes(cert.secrets), backup_password=backup_password
             )
             self._log.info(
                 "Successfully migrated secret key: %s", cert.fingerprint.upper()
@@ -300,16 +355,13 @@ class OpenPGP(BaseModule, CryptoModule):
 
     def generate_key(self) -> None:
         assert self._secret_cert is None
-        cert = pys.Cert.generate(
-            self._own_jid.to_iri(), profile=pys.Profile.RFC4880, validity_seconds=None
-        )
-        assert cert.secrets is not None
+        cert = SecretCert.generate(self._own_jid.to_iri())
 
         backup_password = self.generate_backup_password()
         app.storage.openpgp.store_secret_key(
-            self._account, cert, backup_password=backup_password
+            self._account, cert.get_secret_bytes(), backup_password=backup_password
         )
-        self._log.info("Generated key %s", cert.fingerprint.upper())
+        self._log.info("Generated key")
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
@@ -388,7 +440,9 @@ class OpenPGP(BaseModule, CryptoModule):
         if not backup_password:
             backup_password = self.generate_backup_password()
 
-        app.storage.openpgp.store_secret_key(self._account, cert, backup_password)
+        app.storage.openpgp.store_secret_key(
+            self._account, bytes(cert.secrets), backup_password
+        )
         self._load_secret_keys()
         self.set_public_key()
         self.request_keylist()
@@ -398,14 +452,11 @@ class OpenPGP(BaseModule, CryptoModule):
         self._log.info("Publish public key")
 
         assert self._secret_cert is not None
-        # Make sure we dont accidentally publish the secret key
-        public_cert = pys.Cert.from_bytes(bytes(self._secret_cert))
-        assert not public_cert.has_secret_keys
 
         self._nbxmpp("OpenPGP").set_public_key(
-            bytes(public_cert),
-            self._secret_cert.fingerprint.upper(),
-            self._secret_key_date.timestamp(),
+            self._secret_cert.get_public_bytes(),
+            self._secret_cert.fingerprint,
+            self._secret_cert.creation_date.timestamp(),
         )
 
     def request_public_key(self, jid: JID, fingerprint: str) -> None:
@@ -455,8 +506,8 @@ class OpenPGP(BaseModule, CryptoModule):
             keylist = [
                 PGPKeyMetadata(
                     self._own_jid,
-                    self._secret_cert.fingerprint.upper(),
-                    self._secret_key_date.timestamp(),
+                    self._secret_cert.fingerprint,
+                    self._secret_cert.creation_date.timestamp(),
                 )
             ]
 
@@ -515,7 +566,7 @@ class OpenPGP(BaseModule, CryptoModule):
 
             if (
                 self._secret_cert is not None
-                and self._secret_cert.fingerprint.upper() == key.fingerprint
+                and self._secret_cert.fingerprint == key.fingerprint
             ):
                 # Remove own fingerprint from the list
                 own_fpr_found = True
@@ -574,8 +625,8 @@ class OpenPGP(BaseModule, CryptoModule):
             keylist.append(
                 PGPKeyMetadata(
                     self._own_jid,
-                    self._secret_cert.fingerprint.upper(),
-                    self._secret_key_date.timestamp(),
+                    self._secret_cert.fingerprint,
+                    self._secret_cert.creation_date.timestamp(),
                 )
             )
             self.set_keylist(keylist)
@@ -644,8 +695,6 @@ class OpenPGP(BaseModule, CryptoModule):
 
         remote_jid = properties.remote_jid
         assert remote_jid is not None
-        assert self._secret_cert.secrets is not None
-        assert self._secret_cert.has_secret_keys
 
         signer_jid, direction = self._get_signer_from_message(remote_jid, properties)
         if signer_jid is None:
@@ -659,7 +708,7 @@ class OpenPGP(BaseModule, CryptoModule):
         )
         if self._own_jid == signer_jid:
             own_public_key = app.storage.openpgp.get_public_key_from_secret(
-                self._account, self._own_jid, self._secret_cert
+                self._account, self._own_jid, self._secret_cert.public
             )
             remote_public_keys.append(own_public_key)
 
@@ -669,7 +718,7 @@ class OpenPGP(BaseModule, CryptoModule):
         try:
             decrypted = pys.decrypt(
                 bytes=properties.openpgp,
-                decryptor=self._secret_cert.secrets.decryptor(),
+                decryptor=self._secret_cert.decryptor(),
                 store=_store,
             )
         except Exception as error:
@@ -679,7 +728,7 @@ class OpenPGP(BaseModule, CryptoModule):
             try:
                 decrypted = pys.decrypt(
                     bytes=properties.openpgp,
-                    decryptor=self._secret_cert.secrets.decryptor(),
+                    decryptor=self._secret_cert.decryptor(),
                 )
             except Exception as error:
                 self._log.warning(
@@ -873,7 +922,7 @@ class OpenPGP(BaseModule, CryptoModule):
         )
 
         recipient_certs = [public.key for public in recipients]
-        recipient_certs.append(self._secret_cert)
+        recipient_certs.append(self._secret_cert.public)
 
         self._log.info(
             "Encrypt to %s:\n%s",
@@ -886,10 +935,8 @@ class OpenPGP(BaseModule, CryptoModule):
         )
         payload = str(payload).encode("utf8")
 
-        assert self._secret_cert.secrets is not None
-
         encrypted_payload = pys.encrypt(
-            signer=self._secret_cert.secrets.signer(),
+            signer=self._secret_cert.signer(),
             recipients=recipient_certs,
             bytes=payload,
             armor=False,
@@ -904,7 +951,7 @@ class OpenPGP(BaseModule, CryptoModule):
         message.set_encryption(
             EncryptionData(
                 protocol="OpenPGP",
-                key=self._secret_cert.fingerprint.upper(),
+                key=self._secret_cert.fingerprint,
                 trust=Trust.VERIFIED,
             )
         )
@@ -919,10 +966,10 @@ class OpenPGP(BaseModule, CryptoModule):
         if self._secret_cert is None or self._backup_password is None:
             return None
 
-        assert self._secret_cert.secrets is not None
-        cert_bytes = bytes(self._secret_cert.secrets)
         encrypted_key = pys.encrypt(
-            passwords=[self._backup_password], bytes=cert_bytes, armor=False
+            passwords=[self._backup_password],
+            bytes=self._secret_cert.get_secret_bytes(),
+            armor=False,
         )
         query = (
             "openpgp",
@@ -936,7 +983,7 @@ class OpenPGP(BaseModule, CryptoModule):
     def export_secret_key(self) -> str | None:
         if self._secret_cert is None:
             return None
-        return str(self._secret_cert.secrets)
+        return self._secret_cert.export_armored()
 
     @as_task
     def backup_secret_key(
@@ -952,8 +999,7 @@ class OpenPGP(BaseModule, CryptoModule):
         assert self._backup_password is not None
 
         if cert_bytes is None:
-            assert self._secret_cert.secrets is not None
-            cert_bytes = bytes(self._secret_cert.secrets)
+            cert_bytes = self._secret_cert.get_secret_bytes()
 
         encrypted_payload = pys.encrypt(
             passwords=[self._backup_password], bytes=cert_bytes, armor=False
@@ -1040,7 +1086,6 @@ class OpenPGP(BaseModule, CryptoModule):
         self._log.info("Found certs in server backup: %s", secret_certs)
 
         assert self._secret_cert is not None
-        assert self._secret_cert.secrets is not None
 
         for cert in secret_certs:
             if not cert.has_secret_keys:
@@ -1054,8 +1099,7 @@ class OpenPGP(BaseModule, CryptoModule):
                 return
 
         self._log.info("Secret key not found in server backup")
-        our_cert_bytes = bytes(self._secret_cert.secrets)
-        self.backup_secret_key(decrypted.bytes + our_cert_bytes)
+        self.backup_secret_key(decrypted.bytes + self._secret_cert.get_secret_bytes())
 
     def get_our_public_key(self) -> OpenPGPPublicKeyData | None:
         if self._secret_cert is None:
@@ -1066,7 +1110,7 @@ class OpenPGP(BaseModule, CryptoModule):
             address=self._own_jid,
             label=None,
             last_seen=None,
-            fingerprint=self._secret_cert.fingerprint.upper(),
+            fingerprint=self._secret_cert.fingerprint,
             trust=Trust.VERIFIED,
         )
 

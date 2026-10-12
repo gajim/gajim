@@ -12,7 +12,6 @@ from pathlib import Path
 import pysequoia as pys
 import sqlalchemy as sa
 from nbxmpp.protocol import JID
-from pysequoia import packet as pyspacket
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -78,14 +77,13 @@ class OpenPGPStorage(AlchemyStorage):
     @with_session
     @timeit
     def store_secret_key(
-        self, session: Session, account: str, key: pys.Cert, backup_password: str | None
+        self, session: Session, account: str, key: bytes, backup_password: str | None
     ) -> None:
-        assert key.secrets is not None
 
         fk_account_pk = self._get_account_pk(session, account)
         secret = mod.Secret(
             fk_account_pk=fk_account_pk,
-            key=bytes(key.secrets),
+            key=key,
             backup_password=backup_password,
         )
         log.info("Store secret key for %s", fk_account_pk)
@@ -115,22 +113,11 @@ class OpenPGPStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def get_secret_key(
-        self, session: Session, account: str
-    ) -> tuple[mod.Secret, dt.datetime] | None:
-
+    def get_secret_key(self, session: Session, account: str) -> mod.Secret | None:
         fk_account_pk = self._get_account_pk(session, account)
         stmt = sa.select(mod.Secret).where(mod.Secret.fk_account_pk == fk_account_pk)
         if row := session.scalar(stmt):
-            date = None
-            pile = pyspacket.PacketPile.from_bytes(row.key)
-            for packet in pile:
-                if packet.tag == pyspacket.Tag.SecretKey:
-                    if date := packet.key_created:
-                        break
-
-            return row, date or dt.datetime(1990, 1, 1, tzinfo=dt.UTC)
-
+            return row
         return None
 
     @with_session
