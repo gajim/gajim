@@ -122,6 +122,8 @@ class OpenPGPWizard(Assistant):
                     self._show_error_page(
                         _("Import Error"), _("Import Error"), str(error)
                     )
+                else:
+                    self._show_success_page("imported")
 
             case "restore" | "choose":
                 fingerprint = None
@@ -209,7 +211,12 @@ class OpenPGPWizard(Assistant):
     def _show_success_page(
         self,
         mode: Literal[
-            "generate", "overwrite", "key-exists", "restored", "test-password"
+            "generate",
+            "overwrite",
+            "key-exists",
+            "restored",
+            "test-password",
+            "imported",
         ],
     ) -> None:
 
@@ -236,6 +243,10 @@ class OpenPGPWizard(Assistant):
             case "restored":
                 title = _("Setup Complete")
                 text = _("Successfully imported key from server.")
+
+            case "imported":
+                title = _("Setup Complete")
+                text = _("Successfully imported key.")
 
         success_page = self.get_page("success")
         success_page.set_title(title)
