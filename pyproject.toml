@@ -70,7 +70,7 @@ dev = [
   "nbxmpp@git+https://gitlab.com/gajim/python-nbxmpp.git",
   "omemo-dr@git+https://gitlab.com/gajim/omemo-dr.git",
   "pre-commit",
-  "pygobject-stubs==2.17.0",
+  "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
   "pygobject>=3.56.1",
   "pytest>=9.0.2",
   "python-gitlab",
