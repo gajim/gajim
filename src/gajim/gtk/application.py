@@ -192,7 +192,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         option = GLib.OptionEntry()
         # https://gitlab.gnome.org/GNOME/pygobject/-/issues/608
         option.arg = int(GLib.OptionArg.STRING_ARRAY)  # type: ignore
-        option.arg_data = None
+        option.arg_data = 0
         option.arg_description = "[URI …]"
         option.flags = GLib.OptionFlags.NONE
         option.long_name = GLib.OPTION_REMAINING

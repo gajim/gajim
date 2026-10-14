@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.audio_player import AudioSampleT
+from gajim.gtk.types import GtkOrientationValueType
 
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 
@@ -86,7 +87,7 @@ class AudioVisualizerWidget(Gtk.Widget):
         app.check_finalize(self)
 
     def do_measure(
-        self, orientation: Gtk.Orientation, for_size: int
+        self, orientation: GtkOrientationValueType, for_size: int
     ) -> tuple[int, int, int, int]:
         if orientation == Gtk.Orientation.HORIZONTAL:
             return self._MIN_WIDTH, self._natural_width, -1, -1

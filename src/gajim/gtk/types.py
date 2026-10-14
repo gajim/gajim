@@ -6,10 +6,12 @@
 
 from __future__ import annotations
 
+from typing import Literal
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
 import cairo
+from gi.repository import Gtk
 
 if TYPE_CHECKING:
     from gajim.gtk.control import ChatControl
@@ -29,3 +31,8 @@ if TYPE_CHECKING:
 
 
 SomeSurface = TypeVar("SomeSurface", bound=cairo.Surface)
+
+type _OrientationLiteralType = Literal[
+    "GTK_ORIENTATION_HORIZONTAL", "GTK_ORIENTATION_VERTICAL", "horizontal", "vertical"
+]
+type GtkOrientationValueType = Gtk.Orientation | _OrientationLiteralType

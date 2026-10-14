@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import typing
 from typing import Any
+from typing import cast
 
 import logging
 
@@ -356,7 +357,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         mark = buf.get_insert()
         iter_ = buf.get_iter_at_mark(mark)
         if buf.get_end_iter().equal(iter_):
-            GLib.idle_add(scroll_to, self.get_parent(), "bottom")
+            scrolled = cast(Gtk.ScrolledWindow, self.get_parent())
+            GLib.idle_add(scroll_to, scrolled, "bottom")
 
     @property
     def has_text(self) -> bool:
@@ -376,7 +378,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         mark = buf.get_insert()
         iter_ = buf.get_iter_at_mark(mark)
         if iter_.get_offset() == buf.get_end_iter().get_offset():
-            GLib.idle_add(scroll_to, textview.get_parent(), "bottom")
+            scrolled = cast(Gtk.ScrolledWindow, textview.get_parent())
+            GLib.idle_add(scroll_to, scrolled, "bottom")
 
     def _get_active_iters(self) -> tuple[Gtk.TextIter, Gtk.TextIter]:
         buf = self.get_buffer()

@@ -142,7 +142,7 @@ class MessageURLPreviews(Gtk.Box):
             log.warning("Unable to generate preview: %s %s", url, error)
             return
 
-        future.add_done_callback(partial(GLib.idle_add, self._on_request_finished, url))
+        future.add_done_callback(partial(GLib.idle_add, self._on_request_finished, url))  # pyright: ignore
 
         self._requests_in_progress[url] = event
 

@@ -153,10 +153,10 @@ class FileTransferManager:
             return None
 
         future.add_done_callback(
-            partial(
+            partial(  # pyright: ignore
                 GLib.idle_add,
                 self._on_http_result,
-                id_,
+                id_,  # pyright: ignore
             )
         )
 

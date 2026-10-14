@@ -103,11 +103,11 @@ class MusicTrackListener:
     def _signal_name_owner_changed(
         self,
         _connection: Gio.DBusConnection,
-        _sender_name: str,
+        _sender_name: str | None,
         _object_path: str,
         _interface_name: str,
         _signal_name: str,
-        parameters: tuple[str, str, str],
+        parameters: GLib.Variant,
         *_user_data: Any,
     ):
         name, old_owner, new_owner = parameters
@@ -151,11 +151,11 @@ class MusicTrackListener:
     def _signal_received(
         self,
         _connection: Gio.DBusConnection,
-        _sender_name: str,
+        _sender_name: str | None,
         _object_path: str,
         interface_name: str,
         _signal_name: str,
-        parameters: tuple[str, str, str],
+        parameters: GLib.Variant,
         *user_data: str,
     ):
         """Signal handler for PropertiesChanged event"""

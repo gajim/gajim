@@ -36,6 +36,7 @@ from gajim.gtk.preview.animated_image_fallback_backend import (
 )
 from gajim.gtk.preview.file_control_buttons import FileControlButtons
 from gajim.gtk.preview.misc import LoadingBox  # noqa: F401 # type: ignore
+from gajim.gtk.types import GtkOrientationValueType
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
@@ -100,7 +101,7 @@ class ImagePreviewLayout(Gtk.BinLayout):
         return preview_width, preview_height
 
     def do_measure(
-        self, widget: Gtk.Widget, orientation: Gtk.Orientation, for_size: int
+        self, widget: Gtk.Widget, orientation: GtkOrientationValueType, for_size: int
     ) -> tuple[int, int, int, int]:
         if self._dimension is None:
             minimum, natural, *_ = Gtk.BinLayout.do_measure(

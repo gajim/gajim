@@ -1087,7 +1087,7 @@ def get_pixbuf_mime_types() -> set[str]:
 
     for fmt in GdkPixbuf.Pixbuf.get_formats():
         mime_types = fmt.get_mime_types()
-        if mime_types is None:
+        if not mime_types:
             continue
         for mime_type in mime_types:
             pixbuf_mime_types.add(mime_type.lower())

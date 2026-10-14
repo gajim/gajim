@@ -824,7 +824,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 log.error("Error while trying to store dropped image: %s", e)
                 return False
 
-            if image_bytes is None:
+            if not image_bytes:
                 log.error("Could not process dropped image")
                 return False
 

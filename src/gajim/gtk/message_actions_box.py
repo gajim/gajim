@@ -941,7 +941,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             formats.get_gtypes(),
         )
 
-        if mime_types is None:
+        if not mime_types:
             log.warning("Could not determine clipboard mime types")
             return
 
@@ -1019,7 +1019,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         try:
             image = texture.save_to_png_bytes()
             image_bytes = image.get_data()
-            if image_bytes is None:
+            if not image_bytes:
                 log.error("Could not process pasted image")
                 self._ui.input_overlay.set_visible(False)
                 return

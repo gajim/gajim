@@ -90,7 +90,7 @@ def get_os_version() -> str:
 
 
 def get_gobject_version() -> str:
-    return ".".join(map(str, GObject.pygobject_version))  # type: ignore
+    return ".".join(map(str, GObject.pygobject_version))
 
 
 def get_glib_version() -> str:

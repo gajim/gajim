@@ -92,11 +92,11 @@ class DBusService:
         _object_path: str,
         _interface_name: str,
         property_name: str,
-    ) -> GLib.Variant | None:
+    ) -> GLib.Variant:
         property_info = self._interface_info.lookup_property(property_name)
         if property_info is None:
             log.warning("Unknown property requested: %s", property_name)
-            return
+            return  # type: ignore
 
         value = getattr(self, property_name)
         log.info(
