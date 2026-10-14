@@ -35,8 +35,11 @@ class AESGCMDecryptor:
     def decrypt(self, data: bytes) -> bytes:
         self._cache += data
         # Never use the last 16 bytes, because it could be the auth tag
-        ciphertext = self._cache[:-16]
-        self._cache = data[-16:]
+        if len(self._cache) > 16:
+            ciphertext = self._cache[:-16]
+            self._cache = self._cache[-16:]
+        else:
+            ciphertext = b""
         return self._cipher.update(ciphertext)
 
     def finalize(self) -> bytes:
