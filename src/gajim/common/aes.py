@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-import os
+import secrets
 from dataclasses import dataclass
 
 from cryptography.hazmat.backends import default_backend
@@ -20,8 +20,8 @@ class AESKeyData:
 
     @classmethod
     def init(cls, key_size: int = 32, iv_size: int = 12) -> AESKeyData:
-        key = os.urandom(key_size)
-        iv = os.urandom(iv_size)
+        key = secrets.token_bytes(key_size)
+        iv = secrets.token_bytes(iv_size)
         return cls(key=key, iv=iv)
 
 
