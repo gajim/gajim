@@ -11,13 +11,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from packaging.version import Version as V
+
 REPO_DIR = Path(__file__).resolve().parent.parent
-
-
 INIT = REPO_DIR / "src" / "gajim" / "__init__.py"
 FLATPAK = REPO_DIR / "flatpak" / "org.gajim.Gajim.yaml"
 APPDATA = REPO_DIR / "data" / "org.gajim.Gajim.metainfo.xml.in"
 CHANGELOG = REPO_DIR / "ChangeLog"
+APPVEYOR = REPO_DIR / ".ci" / "appveyor.yml"
 
 VERSION_RX = r"\d+\.\d+\.\d+"
 
@@ -88,6 +89,21 @@ def make_changelog(new_version: str) -> None:
         f.write(changes + current_changelog)
 
 
+def bump_appveyor(current_version: str, new_version: str) -> None:
+    with APPVEYOR.open("r", encoding="utf8") as f:
+        content = f.read()
+
+    c_ver = V(current_version)
+    n_ver = V(new_version)
+    cur_build_ver = f"version: {c_ver.major}.{c_ver.minor}"
+    new_build_ver = f"version: {n_ver.major}.{n_ver.minor}"
+
+    content = content.replace(cur_build_ver, new_build_ver, 1)
+
+    with APPVEYOR.open("w", encoding="utf8") as f:
+        f.write(content)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Bump Version")
     parser.add_argument("version", help="The new version, e.g. 1.5.0")
@@ -98,3 +114,4 @@ if __name__ == "__main__":
     bump_flatpak(current_version, args.version)
     bump_appdata(args.version)
     make_changelog(args.version)
+    bump_appveyor(current_version, args.version)
