@@ -275,6 +275,7 @@ class EmojiCompletionViewItem(
 
 class EmojiCompletionProvider(BaseCompletionProvider):
     trigger_char: Final = ":"
+    id: Final = "emoji"
     name = _("Emojis")
 
     def __init__(self) -> None:

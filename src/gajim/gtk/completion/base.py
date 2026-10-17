@@ -39,6 +39,7 @@ class BaseCompletionViewItem(Generic[L]):
 
 class BaseCompletionProvider:
     trigger_char = ""
+    id = ""
     name = ""
 
     def get_model(self) -> tuple[Gio.ListModel[Any], type[BaseCompletionViewItem[Any]]]:

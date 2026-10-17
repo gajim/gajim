@@ -73,6 +73,7 @@ class CommandsCompletionViewItem(
 
 class CommandsCompletionProvider(BaseCompletionProvider):
     trigger_char: Final = "/"
+    id: Final = "command"
     name = _("Commands")
 
     def __init__(self) -> None:

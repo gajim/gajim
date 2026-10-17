@@ -73,6 +73,10 @@ class CompletionPopover(Gtk.Popover):
 
         self.set_child(box)
 
+    def get_provider_id(self) -> str:
+        assert self._provider is not None
+        return self._provider.id
+
     def set_provider(self, provider: BaseCompletionProvider) -> None:
         if self._provider is provider:
             return

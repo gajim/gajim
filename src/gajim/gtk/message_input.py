@@ -271,13 +271,28 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         return False
 
     def _on_completion_picked(
-        self, popover: CompletionPopover, complete_string: str
+        self, popover: CompletionPopover, completion_string: str
     ) -> None:
+
         buf = self.get_buffer()
-        start, end = self._get_completion_candidate_bounds(buf)
-        buf.delete(start, end)
-        buf.insert(start, complete_string)
+        begin, end = self._get_completion_candidate_bounds(buf)
+        insert_string = self._get_completion_insert_string(
+            popover.get_provider_id(), begin.is_start(), completion_string
+        )
+        buf.delete(begin, end)
+        buf.insert(begin, insert_string)
         self.grab_focus()
+
+    @staticmethod
+    def _get_completion_insert_string(
+        provider_id: str, at_start: bool, completion_string: str
+    ) -> str:
+        match provider_id:
+            case "nickname":
+                ref_char = app.settings.get("gc_refer_to_nick_char") if at_start else ""
+                return f"{completion_string}{ref_char} "
+            case _:
+                return completion_string
 
     def _on_secondary_click(
         self,
@@ -457,9 +472,12 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             buf.redo()
 
     def _mention_participant(self, name: str) -> None:
-        gc_refer_to_nick_char = app.settings.get("gc_refer_to_nick_char")
-        text = f"{name}{gc_refer_to_nick_char} "
-        self.insert_text(text)
+        buf = self.get_buffer()
+        insert_iter = buf.get_iter_at_mark(buf.get_insert())
+        insert_string = self._get_completion_insert_string(
+            "nickname", insert_iter.is_start(), name
+        )
+        self.insert_text(insert_string)
         self.grab_focus()
 
     def insert_as_quote(self, text: str) -> None:

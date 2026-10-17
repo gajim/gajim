@@ -39,7 +39,7 @@ class NicknameCompletionListItem(BaseCompletionListItem, GObject.Object):
     avatar = GObject.Property(type=Gdk.Texture)
 
     def get_text(self) -> str:
-        return f"{self.nickname}{app.settings.get('gc_refer_to_nick_char')} "
+        return self.nickname
 
 
 class NicknameCompletionViewItem(
@@ -82,6 +82,7 @@ class NicknameCompletionViewItem(
 
 class NicknameCompletionProvider(BaseCompletionProvider):
     trigger_char: Final = "@"
+    id: Final = "nickname"
     name = _("Participants")
 
     def __init__(self) -> None:
