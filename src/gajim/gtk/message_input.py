@@ -31,6 +31,7 @@ from gajim.common.types import ChatContactT
 
 from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.completion.commands import CommandsCompletionProvider
+from gajim.gtk.completion.contact import ContactProvider
 from gajim.gtk.completion.emoji import EmojiCompletionProvider
 from gajim.gtk.completion.nickname import NicknameCompletionProvider
 from gajim.gtk.completion.popover import CompletionPopover
@@ -82,6 +83,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             EmojiCompletionProvider(),
             CommandsCompletionProvider(),
             NicknameCompletionProvider(),
+            ContactProvider(),
         ]
 
         self.add_css_class("gajim-conversation-text")

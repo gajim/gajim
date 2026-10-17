@@ -575,11 +575,13 @@ entry.field-missing {
 .completion-popover listview {
     background-color: transparent;
 }
+.contact-completion > row,
 .nickname-completion > row,
 .command-completion > row,
 .emoji-completion > row {
     padding: 6px 9px 6px 9px;
 }
+.contact-completion > row:selected,
 .nickname-completion > row:selected,
 .command-completion > row:selected,
 .emoji-completion > row:selected {
