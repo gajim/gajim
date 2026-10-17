@@ -74,7 +74,7 @@ def load_icon_surface(
 
     texture_node = find_texture_node(snapshot.to_node())
     if texture_node is None:
-        log.error("Could not find texture node")
+        log.error("Could not find texture node for %s", icon_name)
         return None
 
     texture = texture_node.get_texture()
