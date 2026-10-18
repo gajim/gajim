@@ -22,7 +22,7 @@ variables:
   MACOS_RELEASE: '/^(\d\.)*(\d){1}(\+macos)*?$/'
 
 test-other:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   script:
     - ./make.py build
@@ -31,7 +31,7 @@ test-other:
   interruptible: true
 
 test-typos:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   script:
     - typos --version
@@ -39,7 +39,7 @@ test-typos:
   interruptible: true
 
 test-pyright:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   rules:
     - changes:
@@ -52,7 +52,7 @@ test-pyright:
   interruptible: true
 
 test-ruff-lint:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   rules:
     - changes:
@@ -66,7 +66,7 @@ test-ruff-lint:
   interruptible: true
 
 test-ruff-format:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   rules:
     - changes:
@@ -77,7 +77,7 @@ test-ruff-format:
   interruptible: true
 
 test-reuse:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   rules:
     - changes:
@@ -87,7 +87,7 @@ test-reuse:
   interruptible: true
 
 test-unittest:
-  image: gajim-test
+  image: registry.gitlab.com/gajim/gajim/test:latest
   stage: test
   script:
     - pip install git+https://gitlab.com/gajim/python-nbxmpp.git
