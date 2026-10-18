@@ -97,6 +97,7 @@ test-unittest:
   interruptible: true
 
 prepare-build:
+  image: registry.gitlab.com/gajim/gajim/build:latest
   stage: prepare-build
   rules:
     - if: '$DEBIAN_BUILD'
@@ -115,7 +116,7 @@ prepare-build:
       dotenv: vars.env
 
 build-unix:
-  image: gajim-build
+  image: registry.gitlab.com/gajim/gajim/build:latest
   stage: build
   rules:
     - if: '$DEBIAN_BUILD'
@@ -133,7 +134,7 @@ build-unix:
       - dist/gajim-*.whl
 
 build-debian-nightly:
-  image: gajim-build
+  image: registry.gitlab.com/gajim/gajim/build:latest
   stage: build
   variables:
     REV: "1"
@@ -155,7 +156,7 @@ build-debian-nightly:
       - debian_build/*
 
 build-windows:
-  image: gajim-build
+  image: registry.gitlab.com/gajim/gajim/build:latest
   stage: build
   rules:
     - if: '$CI_COMMIT_TAG =~ $WINDOWS_RELEASE'
@@ -175,7 +176,7 @@ build-windows:
       - windows_build/*.json
 
 build-windows-nightly:
-  image: gajim-build
+  image: registry.gitlab.com/gajim/gajim/build:latest
   stage: build
   rules:
     - if: '$NIGHTLY_BUILD'
@@ -196,7 +197,7 @@ build-windows-nightly:
       - windows_build/*.json
 
 deploy-unix:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   needs: ["prepare-build", "build-unix"]
   rules:
@@ -212,7 +213,7 @@ deploy-unix:
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-unix-nightly:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   needs: ["prepare-build", "build-unix"]
   rules:
@@ -232,7 +233,7 @@ deploy-unix-nightly:
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-debian-nightly:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   needs: ["prepare-build", "build-debian-nightly"]
   rules:
@@ -254,7 +255,7 @@ deploy-debian-nightly:
         debian_build
 
 deploy-windows:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   needs: ["prepare-build", "build-windows"]
   rules:
@@ -271,7 +272,7 @@ deploy-windows:
         windows_build
 
 deploy-windows-nightly:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   needs: ["prepare-build", "build-windows-nightly"]
   rules:
@@ -293,7 +294,7 @@ deploy-windows-nightly:
         windows_build
 
 deploy-flatpak:
-  image: gajim-deploy
+  image: registry.gitlab.com/gajim/gajim/deploy:latest
   stage: deploy
   dependencies: []
   rules:
@@ -314,7 +315,7 @@ deploy-flatpak:
     - git push
 
 publish-website:
-  image: gajim-publish
+  image: registry.gitlab.com/gajim/gajim/publish:latest
   stage: publish
   dependencies: ["prepare-build"]
   rules:
