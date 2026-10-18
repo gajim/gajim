@@ -1,7 +1,5 @@
 # Project
 
-If you want to create a fork and use an external account (Github, Google) drop us a message at the Gajim support [group chat](xmpp:gajim@conference.gajim.org?join) so we can give you the necessary rights
-
 ## Versioning
 
 ┌────── Major (Will not change unless we switch GTK version)  
