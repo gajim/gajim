@@ -19,21 +19,21 @@ __pycache__/
 
 # Build folders
 
-flatpak_build
-flatpak_repo
-debian_build
-build
-dist
+/flatpak_build
+/flatpak_repo
+/debian_build
+/build
+/dist
 gajim.egg-info
-win/_build_root
-venv/
-.venv/
-node_modules
-.flatpak-builder
-mac/gajim-source
-mac/nbxmpp-source
-mac/omemo-dr-source
-mac/gajim-venv
+/win/_build_root
+/venv
+/.venv
+/node_modules
+/.flatpak-builder
+/mac/gajim-source
+/mac/nbxmpp-source
+/mac/omemo-dr-source
+/mac/gajim-venv
 
 # IDE files
 
