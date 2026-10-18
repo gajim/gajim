@@ -35,6 +35,7 @@ from gajim.gtk.completion.contact import ContactProvider
 from gajim.gtk.completion.emoji import EmojiCompletionProvider
 from gajim.gtk.completion.nickname import NicknameCompletionProvider
 from gajim.gtk.completion.popover import CompletionPopover
+from gajim.gtk.completion.tab_completer import OccupantsTabCompleter
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_message_input_extra_context_menu
 from gajim.gtk.util.misc import scroll_to
@@ -70,7 +71,10 @@ class MessageInputTextView(GtkSource.View, EventHelper):
     def __init__(self, parent: Gtk.Widget) -> None:
         GtkSource.View.__init__(
             self,
-            accepts_tab=True,
+            # accept-tab is disabled so that the tab key press reaches the
+            # key event controllers (in particular the tab completer)
+            # instead of being handled internally by the view
+            accepts_tab=False,
             wrap_mode=Gtk.WrapMode.WORD_CHAR,
             margin_top=3,
             margin_bottom=3,
@@ -98,6 +102,9 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self._completion_popover.connect(
             "completion-picked", self._on_completion_picked
         )
+
+        # Tab-based nickname completion for group chats
+        self._tab_completer = OccupantsTabCompleter(self)
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
         gesture_secondary_click.connect("pressed", self._on_secondary_click)
@@ -210,6 +217,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
     def switch_contact(self, contact: ChatContactT) -> None:
         self._completion_popover.popdown()
+        self._tab_completer.switch_contact(contact)
         self._text_buffer_manager.switch_contact(contact)
         self.clear()
         self._contact = contact

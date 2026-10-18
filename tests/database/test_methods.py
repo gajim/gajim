@@ -383,6 +383,25 @@ class MethodsTest(unittest.TestCase):
         self.assertEqual(len(nicknames), 10)
         self.assertNotIn("res101", nicknames)
 
+    def test_get_recent_muc_nicks_limit(self) -> None:
+        remote_jid = JID.from_string("remote1@jid.org")
+
+        for i in range(15):
+            self._insert_messages(
+                "testacc1",
+                remote_jid=remote_jid,
+                type=MessageType.GROUPCHAT,
+                resource=f"nick{i}",
+                timestamp=datetime.now(dt.UTC) - timedelta(minutes=i),
+                count=1,
+            )
+
+        nicknames = self._archive.get_recent_muc_nicks("testacc1", remote_jid, limit=10)
+        self.assertEqual(len(nicknames), 10)
+        # The most recent nicks are returned
+        self.assertEqual(nicknames[0], "nick0")
+        self.assertNotIn("nick14", nicknames)
+
     def test_get_mam_archive_state(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
         state = mod.MAMArchiveState(

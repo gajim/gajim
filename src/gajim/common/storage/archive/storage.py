@@ -1168,7 +1168,11 @@ class MessageArchiveStorage(AlchemyStorage):
     @with_session
     @timeit
     def get_recent_muc_nicks(
-        self, session: Session, account: str, jid: JID
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        limit: int | None = None,
     ) -> Sequence[str]:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -1187,6 +1191,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.correction_id.is_(None),
             )
             .order_by(sa.desc(Message.timestamp))
+            .limit(limit)
         )
 
         return cast(Sequence[str], session.scalars(stmt).all())
