@@ -15,6 +15,7 @@ path = [
   "debian/**",
   "MANIFEST.in",
   "typings/**",
+  "docker/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "NONE"

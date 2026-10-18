@@ -107,6 +107,7 @@ extend-exclude = [
   "debian/control",
   "po",
   "win/misc/gajim*.nsi",
+  "docker",
 ]
 
 [tool.typos.default]
