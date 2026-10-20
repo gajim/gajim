@@ -4,18 +4,13 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import logging
 
 import cairo
 from gi.repository import Gdk
-from gi.repository import Gsk
 from gi.repository import Gtk
 
 from gajim.common import app
-
-from gajim.gtk.util.misc import convert_texture_to_surface
 
 log = logging.getLogger("gajim.gtk.util.icons")
 
@@ -28,23 +23,6 @@ def get_icon_theme() -> Gtk.IconTheme:
     display = Gdk.Display.get_default()
     assert display is not None
     return Gtk.IconTheme.get_for_display(display)
-
-
-def find_texture_node(node: Any) -> Gsk.TextureNode | None:
-    if isinstance(node, Gsk.TextureNode):
-        return node
-
-    if isinstance(node, Gsk.TransformNode):
-        return find_texture_node(node.get_child())
-
-    if isinstance(node, Gsk.ContainerNode):
-        for i in range(node.get_n_children()):
-            child = node.get_child(i)
-            texture_node = find_texture_node(child)
-            if texture_node is not None:
-                return texture_node
-
-    return None
 
 
 def load_icon_surface(
@@ -69,16 +47,19 @@ def load_icon_surface(
         0,  # type: ignore
     )
 
+    pixel_size = size * scale
     snapshot = Gtk.Snapshot()
-    icon.snapshot(snapshot, size, size)
+    icon.snapshot(snapshot, pixel_size, pixel_size)
 
-    texture_node = find_texture_node(snapshot.to_node())
-    if texture_node is None:
-        log.error("Could not find texture node for %s", icon_name)
+    node = snapshot.to_node()
+    if node is None:
+        log.error("Could not render icon %s", icon_name)
         return None
 
-    texture = texture_node.get_texture()
-    return convert_texture_to_surface(texture)
+    surface = cairo.ImageSurface(cairo.Format.ARGB32, pixel_size, pixel_size)
+    node.draw(cairo.Context(surface))
+    surface.flush()
+    return surface
 
 
 def get_tray_icon_name(name: str) -> str:
