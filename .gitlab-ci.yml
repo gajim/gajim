@@ -59,6 +59,7 @@ test-ruff-lint:
     - ruff --version
     - ruff check --output-format=gitlab --output-file=code-quality-report.json
   artifacts:
+    expire_in: 1 week
     reports:
       codequality: $CI_PROJECT_DIR/code-quality-report.json
   interruptible: true
@@ -109,6 +110,7 @@ prepare-build:
     - cat vars.env
 
   artifacts:
+    expire_in: 1 day
     reports:
       dotenv: vars.env
 
