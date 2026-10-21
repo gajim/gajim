@@ -61,7 +61,6 @@ a = Analysis(
     pathex=[os.getcwd()],
     datas=[("../src/gajim", "gajim")],  # typos: ignore
     hiddenimports=hiddenimports,
-    hookspath=["hooks"],
     hooksconfig={
         "gi": {
             "module-versions": {"Gtk": "4.0", "GtkSource": "5"},
