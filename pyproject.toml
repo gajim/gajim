@@ -40,10 +40,10 @@ dependencies = [
   "qrcode>=7.3.1",
   "SQLAlchemy>=2.0.0",
   "truststore",
-  "winrt-Windows.ApplicationModel; platform_system == 'Windows'",
-  "winrt-Windows.Foundation; platform_system == 'Windows'",
-  "winrt-Windows.UI; platform_system == 'Windows'",
-  "winrt-Windows.UI.ViewManagement; platform_system == 'Windows'",
+  "winrt-Windows.ApplicationModel~=3.0; platform_system == 'Windows'",
+  "winrt-Windows.Foundation~=3.0; platform_system == 'Windows'",
+  "winrt-Windows.UI~=3.0; platform_system == 'Windows'",
+  "winrt-Windows.UI.ViewManagement~=3.0; platform_system == 'Windows'",
   "windows-toasts; platform_system == 'Windows'",
 ]
 dynamic = ["version"]

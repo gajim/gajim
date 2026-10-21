@@ -19,9 +19,7 @@ function main {
         ${MINGW_PACKAGE_PREFIX}-toolchain \
         ${MINGW_DEPS}
 
-    pip3 install --upgrade precis-i18n
-    pip3 install --upgrade $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
-    pip3 install pygobject-stubs --no-cache-dir
+    pip3 install -e .[sentry] --group=dev
 }
 
 main;

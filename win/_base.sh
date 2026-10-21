@@ -40,7 +40,6 @@ ${MINGW_PACKAGE_PREFIX}-libnice \
 ${MINGW_PACKAGE_PREFIX}-libspelling \
 ${MINGW_PACKAGE_PREFIX}-libsoup3 \
 ${MINGW_PACKAGE_PREFIX}-libwebp \
-${MINGW_PACKAGE_PREFIX}-python-certifi \
 ${MINGW_PACKAGE_PREFIX}-python-cryptography \
 ${MINGW_PACKAGE_PREFIX}-python-gobject \
 ${MINGW_PACKAGE_PREFIX}-python-gssapi \
@@ -63,19 +62,7 @@ ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
 PYTHON_REQUIREMENTS="\
 git+https://gitlab.com/gajim/omemo-dr.git
 git+https://gitlab.com/gajim/python-nbxmpp.git
-css_parser
-httpx2[http2,socks]
-truststore
-emoji
-pystray
 python-gnupg
-qrcode
-sentry-sdk
-windows-toasts
-winrt-Windows.ApplicationModel~=3.0
-winrt-Windows.Foundation~=3.0
-winrt-Windows.UI~=3.0
-winrt-Windows.UI.ViewManagement~=3.0
 "
 
 function set_build_root {
@@ -130,7 +117,6 @@ function install_mingw_deps {
 }
 
 function install_python_deps {
-    build_pip_install precis-i18n
     build_pip_install $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
 }
 
@@ -154,7 +140,7 @@ function install_gajim {
     cd ..
 
     build_python make.py build --dist=win
-    build_pip_install .
+    build_pip_install .[sentry]
 
     QL_VERSION=$(MSYSTEM= build_python -c \
         "import gajim; import sys; sys.stdout.write(gajim.__version__.split('+')[0])")
