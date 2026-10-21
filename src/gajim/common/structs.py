@@ -50,6 +50,7 @@ class MUCData:
         nick: str,
         occupant_id: str | None,
         password: str | None,
+        auto_rejoin: bool,
         config: dict[str, Any] | None = None,
     ) -> None:
 
@@ -66,6 +67,7 @@ class MUCData:
         self.error_text: str | None = None
         self.subject: MucSubject | None = None
         self.last_subject_timestamp: float | None = None
+        self.auto_rejoin = auto_rejoin
 
     @property
     def jid(self) -> JID:

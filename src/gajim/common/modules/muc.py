@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Any
 
 import copy
+import datetime as dt
 import logging
 import time
 from collections import defaultdict
@@ -65,7 +66,7 @@ from gajim.common.util.muc import get_group_chat_nick
 
 log = logging.getLogger("gajim.c.m.muc")
 
-
+REJOIN_TIMEOUT_SEC = 15
 REJOIN_STATUS_CODES = {StatusCode.REMOVED_SERVICE_SHUTDOWN, StatusCode.REMOVED_ERROR}
 
 
@@ -168,8 +169,8 @@ class MUC(BaseModule):
         self._con.connect("state-changed", self._on_client_state_changed)
         self._con.connect("resume-failed", self._on_client_resume_failed)
 
-        self._rejoin_muc: set[JID] = set()
-        self._rejoin_timeouts: dict[JID, int] = {}
+        self._rejoin_timeout_id = GLib.timeout_add_seconds(5, self._check_rejoin_queue)
+        self._rejoin_queue: dict[JID, dt.datetime] = {}
         self._muc_service_jid = None
         self._joined_users: defaultdict[JID, dict[str, MUCPresenceData]] = defaultdict(
             dict
@@ -246,7 +247,7 @@ class MUC(BaseModule):
         contact.notify("state-changed")
 
     def _reset_state(self) -> None:
-        self._remove_all_timeouts()
+        self._rejoin_queue.clear()
         for muc in self._mucs.values():
             self._joined_users.pop(muc.jid, None)
             self._set_muc_state(muc.jid, MUCJoinedState.NOT_JOINED)
@@ -262,6 +263,7 @@ class MUC(BaseModule):
         room_jid: JID,
         nick: str | None,
         password: str | None,
+        auto_rejoin: bool,
         config: dict[str, Any] | None,
     ) -> MUCData:
         if not nick:
@@ -273,13 +275,14 @@ class MUC(BaseModule):
                 if bookmark.password is not None:
                     password = bookmark.password
 
-        return MUCData(str(room_jid), nick, None, password, config)
+        return MUCData(str(room_jid), nick, None, password, auto_rejoin, config)
 
     def join(
         self,
         jid: JID,
         nick: str | None = None,
         password: str | None = None,
+        auto_rejoin: bool = False,
         config: dict[str, Any] | None = None,
     ) -> None:
         if not app.account_is_available(self._account):
@@ -289,7 +292,7 @@ class MUC(BaseModule):
 
         muc_data = self._mucs.get(jid)
         if muc_data is None:
-            muc_data = self._create_muc_data(jid, nick, password, config)
+            muc_data = self._create_muc_data(jid, nick, password, auto_rejoin, config)
             self._mucs[jid] = muc_data
             self._push_muc_added_event(jid)
 
@@ -323,7 +326,7 @@ class MUC(BaseModule):
             return
 
         self._con.get_module("Contacts").add_contact(jid, groupchat=True)
-        muc_data = self._create_muc_data(jid, None, None, config)
+        muc_data = self._create_muc_data(jid, None, None, False, config)
         self._mucs[jid] = muc_data
         self._create(muc_data)
         self._push_muc_added_event(jid, select_chat=True)
@@ -352,6 +355,8 @@ class MUC(BaseModule):
             self._set_muc_state(jid, MUCJoinedState.NOT_JOINED)
             room = self._get_contact(jid)
             room.notify("room-join-failed", error_text)
+            if muc_data.auto_rejoin:
+                self._queue_for_rejoin(muc_data.jid)
             return
 
         muc_data = self._mucs.get(result.info.jid)
@@ -376,16 +381,6 @@ class MUC(BaseModule):
         self._log.info("Join MUC: %s", muc_data.jid)
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINING)
         self._con.send_stanza(presence)
-
-    def _rejoin(self, room_jid: JID) -> bool:
-        if not self._client.is_available():
-            return True
-
-        muc_data = self._mucs[room_jid]
-        if muc_data.state.is_not_joined:
-            self._log.info("Rejoin %s", room_jid)
-            self._join(muc_data)
-        return True
 
     def _create(self, muc_data: MUCData) -> None:
         presence = self._con.get_module("Presence").get_presence(
@@ -414,7 +409,8 @@ class MUC(BaseModule):
         if muc_data is None:
             return
 
-        self._remove_rejoin_timeout(room_jid)
+        self._remove_from_rejoin_queue(room_jid)
+        muc_data.auto_rejoin = False
 
         if muc_data.state.is_not_joined:
             return
@@ -448,9 +444,11 @@ class MUC(BaseModule):
             )
 
     def abort_join(self, room_jid: JID) -> None:
-        self._remove_rejoin_timeout(room_jid)
+        self._remove_from_rejoin_queue(room_jid)
 
         muc = self._mucs[room_jid]
+        muc.auto_rejoin = False
+
         self._con.get_module("Presence").send_presence(
             muc.occupant_jid, typ="unavailable", caps=False
         )
@@ -621,7 +619,6 @@ class MUC(BaseModule):
 
         if muc_data.state == MUCJoinedState.JOINING:
             if properties.error.condition == "conflict":
-                self._remove_rejoin_timeout(room_jid)
                 muc_data.nick += "_"
                 self._log.info(
                     "Nickname conflict: %s change to %s", muc_data.jid, muc_data.nick
@@ -629,13 +626,14 @@ class MUC(BaseModule):
                 self._join(muc_data)
 
             elif properties.error.condition == "not-authorized":
-                self._remove_rejoin_timeout(room_jid)
                 self._set_muc_state(room_jid, MUCJoinedState.PASSWORD_REQUEST)
                 room.notify("room-password-required")
 
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
-                if room_jid not in self._rejoin_muc:
+                if muc_data.auto_rejoin:
+                    self._queue_for_rejoin(muc_data.jid)
+                else:
                     muc_data.error = "join-failed"
                     assert isinstance(properties.error, CommonError)
                     muc_data.error_text = helpers.to_user_string(properties.error)
@@ -801,7 +799,7 @@ class MUC(BaseModule):
 
             status_codes = properties.muc_status_codes or set()
             if REJOIN_STATUS_CODES & status_codes:
-                self._start_rejoin_timeout(room_jid)
+                self._queue_for_rejoin(room_jid)
             return
 
         if properties.is_muc_self_presence and properties.type.is_unavailable:
@@ -1029,20 +1027,51 @@ class MUC(BaseModule):
     def get_joined_users(self, jid: JID) -> list[str]:
         return list(self._joined_users[jid].keys())
 
-    def _start_rejoin_timeout(self, room_jid: JID) -> None:
-        self._remove_rejoin_timeout(room_jid)
-        self._rejoin_muc.add(room_jid)
-        self._log.info("Start rejoin timeout for: %s", room_jid)
-        id_ = GLib.timeout_add_seconds(10, self._rejoin, room_jid)
-        self._rejoin_timeouts[room_jid] = id_
+    def _queue_for_rejoin(self, room_jid: JID) -> None:
+        next_join_dt = utc_now() + timedelta(seconds=REJOIN_TIMEOUT_SEC)
+        self._rejoin_queue[room_jid] = next_join_dt
+        self._log.info(
+            "Add %s to rejoin queue, scheduled at %s", room_jid, next_join_dt
+        )
 
-    def _remove_rejoin_timeout(self, room_jid: JID) -> None:
-        self._rejoin_muc.discard(room_jid)
-        id_ = self._rejoin_timeouts.get(room_jid)
-        if id_ is not None:
-            self._log.info("Remove rejoin timeout for: %s", room_jid)
-            GLib.source_remove(id_)
-            del self._rejoin_timeouts[room_jid]
+    def _check_rejoin_queue(self) -> bool:
+        if not self._client.is_available():
+            return GLib.SOURCE_CONTINUE
+
+        now = utc_now()
+        for room_jid, rejoin_dt in list(self._rejoin_queue.items()):
+            muc_data = self._mucs.get(room_jid)
+            if muc_data is None:
+                self._log.warning(
+                    "No MUCData found for %s, removing from rejoin queue", room_jid
+                )
+                self._remove_from_rejoin_queue(room_jid)
+                continue
+
+            if rejoin_dt > now:
+                self._log.info(
+                    "%s not yet ready for rejoin %s > %s", room_jid, rejoin_dt, now
+                )
+                continue
+
+            if muc_data.state != MUCJoinedState.NOT_JOINED:
+                self._log.warning(
+                    "%s has unexpected state (%s) for rejoin, removing from rejoin queue",
+                    room_jid,
+                    muc_data.state,
+                )
+                self._remove_from_rejoin_queue(room_jid)
+                continue
+
+            self._remove_from_rejoin_queue(room_jid)
+            self._log.info("Rejoin %s", room_jid)
+            self.join(muc_data.jid)
+
+        return GLib.SOURCE_CONTINUE
+
+    def _remove_from_rejoin_queue(self, room_jid: JID) -> None:
+        self._rejoin_queue.pop(room_jid, None)
+        self._log.info("Remove %s from rejoin queue", room_jid)
 
     def _on_subject_change(
         self, _con: types.NBXMPPClient, _stanza: Message, properties: MessageProperties
@@ -1095,9 +1124,9 @@ class MUC(BaseModule):
         # disconnected from the room, the ChatFunctionPage will be shown
         muc_data.error = None
         muc_data.error_text = None
+        muc_data.auto_rejoin = True
 
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
-        self._remove_rejoin_timeout(muc_data.jid)
 
         # We successfully joined a MUC, set add bookmark with autojoin
         self._con.get_module("Bookmarks").add_or_modify(
@@ -1249,7 +1278,6 @@ class MUC(BaseModule):
         muc_data.captcha_form = properties.captcha.form
 
         self._set_muc_state(properties.jid, MUCJoinedState.CAPTCHA_REQUEST)
-        self._remove_rejoin_timeout(properties.jid)
 
         room = self._get_contact(properties.jid.new_as_bare())
         room.notify("room-captcha-challenge")
@@ -1421,13 +1449,10 @@ class MUC(BaseModule):
     ) -> None:
         self._reset_state()
 
-    def _remove_all_timeouts(self) -> None:
-        for room_jid in list(self._rejoin_timeouts.keys()):
-            self._remove_rejoin_timeout(room_jid)
-
     def cleanup(self) -> None:
         BaseModule.cleanup(self)
-        self._remove_all_timeouts()
+        self._rejoin_queue.clear()
+        GLib.source_remove(self._rejoin_timeout_id)
 
 
 class AffiliationManager(Observable):
