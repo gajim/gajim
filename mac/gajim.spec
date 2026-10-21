@@ -6,7 +6,6 @@
 
 import typing
 
-import sys
 import glob
 import os
 
@@ -15,28 +14,11 @@ if typing.TYPE_CHECKING:
     from PyInstaller.building.build_main import Analysis
 
 
-cwd = os.getcwd()
-icon = os.path.join(cwd, "mac", "Gajim.icns")
-block_cipher = None
-
-info_plist = {
-    "CFBundleDisplayName": "Gajim",
-    "NSHighResolutionCapable": True,
-    "CFBundleURLTypes": [
-        {"CFBundleURLName": "XMPP URI", "CFBundleURLSchemes": ["xmpp"]}
-    ],
-    "NSUIElement": True,
-}
-
-sys.path.insert(0, os.path.join(cwd))
-
-modules = glob.glob("src/gajim/common/modules/*.py")
+modules = glob.glob("../src/gajim/common/modules/*.py")
 modules_list = [
     os.path.basename(f)[:-3] for f in modules if not f.endswith("__init__.py")
 ]
 hiddenimports = ["gajim.common.modules." + m for m in modules_list]
-
-sys.path.pop(0)
 
 gst_include_plugins = [
     "app",
@@ -75,11 +57,11 @@ gst_include_plugins = [
 ]
 
 a = Analysis(
-    ["mac/launch.py"],
-    pathex=[cwd],
-    datas=[("src/gajim", "gajim")],  # typos: ignore
+    ["launch.py"],
+    pathex=[os.getcwd()],
+    datas=[("../src/gajim", "gajim")],  # typos: ignore
     hiddenimports=hiddenimports,
-    hookspath=[os.path.join(os.getcwd(), "mac", "hooks")],
+    hookspath=["hooks"],
     hooksconfig={
         "gi": {
             "module-versions": {"Gtk": "4.0", "GtkSource": "5"},
@@ -92,11 +74,11 @@ a = Analysis(
     excludes=["PIL._imagingft"],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
-    cipher=block_cipher,
+    cipher=None,
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
 exe = EXE(
     pyz,
@@ -118,7 +100,14 @@ coll = COLLECT(
 app = BUNDLE(  # type: ignore
     coll,
     name="Gajim.app",
-    icon=icon,
-    info_plist=info_plist,
+    icon="Gajim.icns",
+    info_plist={
+        "CFBundleDisplayName": "Gajim",
+        "NSHighResolutionCapable": True,
+        "CFBundleURLTypes": [
+            {"CFBundleURLName": "XMPP URI", "CFBundleURLSchemes": ["xmpp"]}
+        ],
+        "NSUIElement": True,
+    },
     bundle_identifier="org.gajim.gajim",
 )
