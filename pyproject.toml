@@ -49,9 +49,32 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[dependency-groups]
+source = [
+  "nbxmpp@git+https://gitlab.com/gajim/python-nbxmpp.git",
+  "omemo-dr@git+https://gitlab.com/gajim/omemo-dr.git",
+]
+dev = [
+  {include-group = "source"},
+  "distro",
+  "flatpak_pip_generator@git+https://gitlab.com/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
+  "pre-commit",
+  "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
+  "pytest>=9.0.2",
+  "python-gitlab",
+  "reuse",
+  "ruff==0.16.2",
+  "sentry-sdk",
+  "ty",
+  "typos==1.50.3",
+]
+
 [project.optional-dependencies]
 sentry = [
   "sentry-sdk",
+]
+distro = [
+  "distro",
 ]
 
 [project.urls]
@@ -63,24 +86,6 @@ gajim-remote = "gajim.remote:run"
 
 [project.gui-scripts]
 gajim = "gajim.main:run"
-
-[dependency-groups]
-dev = [
-  "distro",
-  "flatpak_pip_generator@git+https://gitlab.com/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
-  "nbxmpp@git+https://gitlab.com/gajim/python-nbxmpp.git",
-  "omemo-dr@git+https://gitlab.com/gajim/omemo-dr.git",
-  "pre-commit",
-  "pygobject-stubs@git+https://github.com/pygobject/pygobject-stubs.git",
-  "pygobject>=3.56.1",
-  "pytest>=9.0.2",
-  "python-gitlab",
-  "reuse",
-  "ruff==0.16.2",
-  "sentry-sdk",
-  "ty",
-  "typos==1.50.3",
-]
 
 # [tool.uv.sources]
 # pygobject-stubs = { path = "../pygobject-stubs" }
