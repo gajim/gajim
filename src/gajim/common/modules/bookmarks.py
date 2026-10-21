@@ -278,7 +278,7 @@ class Bookmarks(BaseModule):
         for bookmark in bookmarks:
             if bookmark.autojoin:
                 self._log.info("Autojoin Bookmark: %s", bookmark.jid)
-                self._con.get_module("MUC").join(bookmark.jid)
+                self._con.get_module("MUC").join(bookmark.jid, auto_rejoin=True)
 
     def modify(self, jid: JID, **kwargs: Any) -> None:
         bookmark = self._bookmarks.get(jid)

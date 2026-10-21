@@ -743,7 +743,7 @@ class Client(Observable, ClientModules):
                 if chat["account"] != self._account:
                     continue
                 if chat["type"] == "groupchat":
-                    self.get_module("MUC").join(chat["jid"])
+                    self.get_module("MUC").join(chat["jid"], auto_rejoin=True)
 
     def cleanup(self) -> None:
         self.disconnect_signals()
