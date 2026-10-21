@@ -35,6 +35,7 @@ dependencies = [
   "precis-i18n>=1.0.0",
   "pycairo>=1.16.0",
   "PyGObject>=3.53.0",
+  "pyobjc; platform_system == 'Darwin'",
   "pysequoia>=0.1.33",
   "pystray; platform_system == 'Windows'",
   "qrcode>=7.3.1",

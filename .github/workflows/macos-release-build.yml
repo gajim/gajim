@@ -1,0 +1,34 @@
+name: macOS Release Build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+env:
+  GAJIM_CI_BUILD: '1'
+
+jobs:
+  macos:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - os: macos-15
+            arch: arm64
+          - os: macos-15-intel
+            arch: x86_64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build Gajim
+        run: bash mac/gajim-macos-helper.sh build ${{ github.ref_name }}
+      - name: Create Gajim dmg
+        run: bash mac/gajim-macos-helper.sh create-dmg
+      - name: Get minor version
+        id: minor_version
+        run: echo "minor_version=$(echo '${{ github.ref_name }}' | cut -d '.' -f 1,2)" >> $GITHUB_OUTPUT
+      - name: Upload dmg file via FTPS
+        run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/${{ steps.minor_version.outputs.minor_version }}/Gajim-${{ github.ref_name }}-${{ matrix.arch }}.dmg"

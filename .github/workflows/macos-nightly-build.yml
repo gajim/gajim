@@ -1,0 +1,33 @@
+name: macOS Nightly Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
+
+env:
+  GAJIM_CI_BUILD: '1'
+
+jobs:
+  macos:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - os: macos-15
+            arch: arm64
+          - os: macos-15-intel
+            arch: x86_64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build Gajim
+        run: bash mac/gajim-macos-helper.sh build
+      - name: Create Gajim dmg
+        run: bash mac/gajim-macos-helper.sh create-dmg
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      - name: Upload dmg file via FTPS
+        run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/macos/Gajim-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.dmg"

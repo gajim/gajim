@@ -1,8 +1,8 @@
 # Build Gajim on macOS
 
-To build omemo-dr, nbxmpp and Gajim on macOS, you can follow [the wiki page](https://gitlab.com/gajim/gajim/-/wikis/help/Gajim-on-macOS).
+To build Gajim on macOS, you can follow [the wiki page](https://gitlab.com/gajim/gajim/-/wikis/help/Gajim-on-macOS).
 
-But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help creating virtual environments for omemo-dr, nbxmpp and Gajim in Mac OS, build it, start it from the virtual environment, and also create a `.dmg` bundle.
+But in this directory we also provide a Bash script (`gajim-macos-helper.sh`) to help build and run Gajim on Mac OS.
 
 ## Requirements for this script
 
@@ -10,60 +10,16 @@ You just need [Brew](https://brew.sh) (follow instructions on the website) and B
 
 ## Usage
 
-The `gajim-macos-helper.sh` script need to be copied alone in an empty directory of your choice, without anything else.
+Execute `gajim-macos-helper.sh build` from the root directory of this repository.
 
-Always run the `gajim-macos-helper.sh` script from within the directory where you placed it (`./gajim-macos-helper.sh <argument>` style).
+Afterwards run `gajim-macos-helper.sh start` to run Gajim or `gajim-macos-helper.sh build create-dmg` to create the dmg bundle.
 
-### Build specific version of omemo-dr, nbxmpp and Gajim
+You can pass a branch or tag to the `build` command to build a specific version.
 
-Always check the versions variables inside the `gajim-macos-helper.sh` script: check tags dates on Gitlab to make [omemo-dr](https://gitlab.com/gajim/omemo-dr/-/tags), [nbxmpp](https://gitlab.com/gajim/python-nbxmpp/-/tags) and [Gajim](https://gitlab.com/gajim/gajim/-/tags) versions match (example: Gajim version `2.4.1` match omemo-dr version `1.1.0` and nbxmpp version `7.0.0`)
-
-To build (or rebuild) a new version of omemo-dr, nbxmpp and Gajim, run:
-
+```bash
+gajim-macos-helper.sh build 2.6.0
 ```
-./gajim-macos-helper.sh build
-```
-
-> Note: If a previous build was done this way, it will be destroyed first. This command install dependencies via Brew, create a Python virtual environment and build omemo-dr, nbxmpp and Gajim.
 
 #### Build in CI mode
 
-The "CI mode" install all dependencies system side (without any virtual environment) and is used with the goal of building a `.dmg` file after this. It is used mostly in CI or containers, don't use it for dev purpose.
-
-```
-./gajim-macos-helper.sh build ci
-```
-
-You can also build a specific version of Gajim, `omemo-dr` and `nbxmpp` will installed via `pip` instead of git source:
-
-```
-./gajim-macos-helper.sh build ci 2.4.1
-```
-
-### Start the Gajim version you just built
-
-To start built version, run:
-
-```
-./gajim-macos-helper.sh start
-```
-
-> Note: This command enter inside the Python virtual environment and launch Gajim.
-
-### Create a DMG file (CI mode)
-
-The "CI mode" install all dependencies system side (without any virtual environment) and need to be run after the `build ci` command. It is used mostly in CI or containers, don't use it for dev purpose.
-
-To create a `.dmg` file, run:
-
-```
-./gajim-macos-helper.sh create-dmg ci
-```
-
-> Note: This command use PyInstaller to create a `gajim-<version>.dmg` file.
-
-You can also build a specific version of Gajim (mostly used for Gajim's CI):
-
-```
-./gajim-macos-helper.sh create-dmg ci 2.4.1
-```
+Define `GAJIM_CI_BUILD=1` when the script is run in CI, this executes all steps without virtual environment.

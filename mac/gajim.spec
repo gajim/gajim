@@ -30,7 +30,7 @@ info_plist = {
 
 sys.path.insert(0, os.path.join(cwd))
 
-modules = glob.glob("gajim/common/modules/*.py")
+modules = glob.glob("src/gajim/common/modules/*.py")
 modules_list = [
     os.path.basename(f)[:-3] for f in modules if not f.endswith("__init__.py")
 ]
@@ -77,7 +77,7 @@ gst_include_plugins = [
 a = Analysis(
     ["mac/launch.py"],
     pathex=[cwd],
-    datas=[("gajim", "gajim")],  # typos: ignore
+    datas=[("src/gajim", "gajim")],  # typos: ignore
     hiddenimports=hiddenimports,
     hookspath=[os.path.join(os.getcwd(), "mac", "hooks")],
     hooksconfig={
