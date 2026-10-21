@@ -10,16 +10,10 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 source "$DIR"/_base.sh
 
 function main {
-    pacman --noconfirm -S --needed \
-        git \
-        intltool \
-        p7zip \
-        wget \
-        ${MINGW_PACKAGE_PREFIX}-python \
-        ${MINGW_PACKAGE_PREFIX}-toolchain \
-        ${MINGW_DEPS}
-
-    pip3 install -e .[sentry] --group=dev
+    install_pre_deps
+    pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-pango-1.56.4-3-any.pkg.tar.zst
+    pacman --noconfirm -S ${MINGW_DEPS}
+    pip3 install -e . --group=dev
 }
 
 main;

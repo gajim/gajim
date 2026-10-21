@@ -59,12 +59,6 @@ ${MINGW_PACKAGE_PREFIX}-sqlite3 \
 ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
 "
 
-PYTHON_REQUIREMENTS="\
-git+https://gitlab.com/gajim/omemo-dr.git
-git+https://gitlab.com/gajim/python-nbxmpp.git
-python-gnupg
-"
-
 function set_build_root {
     BUILD_ROOT="${DIR}/_build_root"
     REPO_CLONE="${BUILD_ROOT}/${MSYSTEM_PREFIX:1}"/gajim
@@ -117,7 +111,7 @@ function install_mingw_deps {
 }
 
 function install_python_deps {
-    build_pip_install $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
+    build_pip_install python-gnupg  # for the gpg plugin
 }
 
 function post_install_deps {
@@ -140,7 +134,7 @@ function install_gajim {
     cd ..
 
     build_python make.py build --dist=win
-    build_pip_install .[sentry]
+    build_pip_install .[sentry,distro] --group=source
 
     QL_VERSION=$(MSYSTEM= build_python -c \
         "import gajim; import sys; sys.stdout.write(gajim.__version__.split('+')[0])")
