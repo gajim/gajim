@@ -85,7 +85,7 @@ function build_env() {
     install_brew_dependencies
 
     # Create env if it does not exist
-    if [[ ! -d ${VENV_FOLDER} && $GAJIM_CI_BUILD != 0 ]]; then
+    if [[ ! -d ${VENV_FOLDER} && $GAJIM_CI_BUILD == 0 ]]; then
         echo "Creating environment"
         python_v -m venv ${VENV_FOLDER}
     fi
@@ -104,6 +104,7 @@ function build_env() {
 function create_dmg() {
     activate_env
     pyinstaller mac/gajim.spec
+    rm -rf dist/launch
     hdiutil create -volname Gajim -srcfolder dist -ov -format UDZO gajim-build.dmg
     deactivate_env
 }
