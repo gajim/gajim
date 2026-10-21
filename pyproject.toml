@@ -253,6 +253,7 @@ ignore = [
   "BLE001", # Blind except Exception: statement
   "C901",   # too complex
   "COM812", # Trailing comma missing
+  "E501",   # Line to long
   "FBT003", # Boolean positional value in function call
   "ICN001", # Unconventional-import-alias
   "N802",   # Function name should be lower case
@@ -322,16 +323,11 @@ exclude = [
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.per-file-ignores]
-"src/gajim/common/iana.py" = ["E501"]
 "src/gajim/common/storage/omemo.py" = ["N803"]
-"src/gajim/common/storage/*" = ["E501"]
-"src/gajim/common/modules/chatstates.py" = ["E501"]
 "src/gajim/gtk/types.py" = ["F401"]
-"src/gajim/gtk/*" = ["E501"]
 "tests/*" = ["E402"]
-"tests/common/test_styling.py" = ["RUF001", "E501"]
+"tests/common/test_styling.py" = ["RUF001"]
 "tests/common/test_regex.py" = ["RUF001"]
-"tests/database/*" = ["E501"]
 "make.py" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
 "win/*" = ["S603", "S605", "S607"]
