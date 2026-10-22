@@ -618,7 +618,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             case _:
                 plugin = app.plugin_manager.encryption_plugins.get(new_state)
                 if plugin is None:
-                    # TODO: Add GUI error here
+                    InformationAlertDialog(
+                        _("Missing %s Plugin") % new_state,
+                        _("Install the %s Plugin to use this encryption method.")
+                        % new_state,
+                    )
                     return
 
                 if not plugin.activate_encryption(app.window.get_control()):

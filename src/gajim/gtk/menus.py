@@ -236,7 +236,7 @@ def get_encryption_menu() -> GajimMenu:
         (_("Disabled"), "win.set-encryption", ""),
         ("OMEMO", "win.set-encryption", "OMEMO"),
         ("OpenPGP", "win.set-encryption", "OpenPGP"),
-        ("PGP", "win.set-encryption", "PGP"),
+        ("Legacy PGP", "win.set-encryption", "PGP"),
     ]
 
     return GajimMenu.from_list(menuitems)
