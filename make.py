@@ -138,14 +138,13 @@ def build_app_icons() -> None:
 def build_translations() -> None:
     # Compile translation files and place them into "gajim/data/locale"
 
-    source_dir = Path.cwd() / "src"
-    translation_dir = source_dir / "po"
-    locale_dir = source_dir / "gajim" / "data" / "locale"
+    translation_dir = Path.cwd() / "po"
+    locale_dir = Path.cwd() / "src" / "gajim" / "data" / "locale"
 
     langs = sorted([lang.stem for lang in translation_dir.glob("*.po")])
 
     for lang in langs:
-        po_file = source_dir / "po" / f"{lang}.po"
+        po_file = translation_dir / f"{lang}.po"
         mo_file = locale_dir / lang / "LC_MESSAGES" / "gajim.mo"
         mo_file.parent.mkdir(parents=True, exist_ok=True)
 
