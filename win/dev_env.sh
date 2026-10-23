@@ -7,11 +7,10 @@
 set -e
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-source "$DIR"/_base.sh
+source "$DIR"/build.sh
 
 function main {
     install_pre_deps
-    pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-pango-1.56.4-3-any.pkg.tar.zst
     pacman --noconfirm -S ${MINGW_DEPS}
     pip3 install -e . --group=dev
 }

@@ -22,9 +22,9 @@ Var StartMenuFolder
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-uninstall.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "..\misc\nsis_header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
+!define MUI_HEADERIMAGE_BITMAP "win\misc\nsis_header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "win\misc\nsis_wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "win\misc\nsis_wizard.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
@@ -121,12 +121,6 @@ LangString DESC_SecURI ${LANG_HEBREW} "Enables Gajim to open xmpp links (e.g. a 
 Section "Gajim" SecGajim
 	SectionIn RO
 
-    Var /GLOBAL arch_name
-    StrCpy $arch_name "(64-Bit)"
-    StrCmp ${ARCH} "x86_64" continue
-    StrCpy $arch_name "(32-Bit)"
-    continue:
-
     ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
     ${If} ${FileExists} $R3
         ; If Gajim was installed before, run uninstaller (in silent mode)
@@ -134,46 +128,46 @@ Section "Gajim" SecGajim
     ${EndIf}
 
     SetOutPath "$INSTDIR"
-    File /r "${PREFIX}\*.*"
+    File /r "dist\win\*.*"
 
     WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION} $arch_name"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString" "$INSTDIR\Uninstall.exe"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\bin\Gajim.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\Gajim.exe"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "${VERSION}"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "URLInfoAbout" "https://www.gajim.org/"
     WriteUninstaller "$INSTDIR\Uninstall.exe"
 
-    SetOutPath "$INSTDIR\bin"
+    SetOutPath "$INSTDIR"
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
         SetShellVarContext current
         CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\Gajim.exe"
         SetShellVarContext all
         CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\Gajim.exe"
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section $(NAME_SecDesktopIcon) SecDesktopIcon
     SetShellVarContext current
-    SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$DESKTOP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+    SetOutPath "$INSTDIR"
+    CreateShortCut "$DESKTOP\Gajim.lnk" "$INSTDIR\Gajim.exe"
 SectionEnd
 
 Section $(NAME_SecAutostart) SecAutostart
     SetShellVarContext current
-    SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+    SetOutPath "$INSTDIR"
+    CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\Gajim.exe"
 SectionEnd
 
 Section $(NAME_SecURI) SecURI
     WriteRegStr HKCU "Software\Classes\xmpp" "" "URL:xmpp-uri"
     WriteRegStr HKCU "Software\Classes\xmpp" "URL Protocol" ""
-    WriteRegStr HKCU "Software\Classes\xmpp\DefaultIcon" "" "$INSTDIR\bin\Gajim.exe,1"
+    WriteRegStr HKCU "Software\Classes\xmpp\DefaultIcon" "" "$INSTDIR\Gajim.exe,1"
     WriteRegStr HKCU "Software\Classes\xmpp\shell" "" "open"
     WriteRegStr HKCU "Software\Classes\xmpp\shell\open\" "FriendlyAppName" "${myAppName}"
-    WriteRegStr HKCU "Software\Classes\xmpp\shell\open\command" "" '"$INSTDIR\bin\Gajim.exe" "%1"'
+    WriteRegStr HKCU "Software\Classes\xmpp\shell\open\command" "" '"$INSTDIR\Gajim.exe" "%1"'
 SectionEnd
 
 Section "Uninstall"
