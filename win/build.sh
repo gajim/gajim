@@ -4,8 +4,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-source "$DIR"/new_build.sh
+source win/new_build.sh
 
 function main {
     install_pre_deps

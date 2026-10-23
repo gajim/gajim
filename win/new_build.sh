@@ -7,17 +7,12 @@
 
 set -e
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-cd "${DIR}"
-
-export PIP_BREAK_SYSTEM_PACKAGES=1
-
 MAJOR_PY_VERSION="3"
 MINOR_PY_VERSION="14"
 PYTHON_VERSION="${MAJOR_PY_VERSION}.${MINOR_PY_VERSION}"
 BUILD_VERSION="0"
 
-MISC="${DIR}"/misc
+MISC=win/misc
 PYTHON_ID="python${MAJOR_PY_VERSION}"
 
 QL_VERSION="0.0.0"
@@ -122,12 +117,12 @@ function build_msix_installer {
         for size in {44,50,150}; do
             for scale in {100,125,150,200,400}; do
                 scaled_size=$(( (${size}*${scale}+100/2)/100 ))
-                rsvg-convert -w ${scaled_size} -h ${scaled_size} -o assets/gajim${size}x${size}.scale-${scale}.png ${DIR}/../src/gajim/data/icons/hicolor/scalable/apps/gajim.svg
+                rsvg-convert -w ${scaled_size} -h ${scaled_size} -o assets/gajim${size}x${size}.scale-${scale}.png src/gajim/data/icons/hicolor/scalable/apps/gajim.svg
                 echo "\"assets/gajim${size}x${size}.scale-${scale}.png\" \"assets/gajim${size}x${size}.scale-${scale}.png\"" >> filemapping.txt
             done
         done
         for size in {16,24,32,48,256}; do
-            rsvg-convert -w ${size} -h ${size} -o assets/gajim44x44.targetsize-${size}.png ${DIR}/../src/gajim/data/icons/hicolor/scalable/apps/gajim.svg
+            rsvg-convert -w ${size} -h ${size} -o assets/gajim44x44.targetsize-${size}.png src/gajim/data/icons/hicolor/scalable/apps/gajim.svg
             cp assets/gajim44x44.targetsize-${size}.png assets/gajim44x44.targetsize-${size}_altform-unplated.png
             cp assets/gajim44x44.targetsize-${size}.png assets/gajim44x44.targetsize-${size}_altform-lightunplated.png
             echo "\"assets/gajim44x44.targetsize-${size}.png\" \"assets/gajim44x44.targetsize-${size}.png\"" >> filemapping.txt

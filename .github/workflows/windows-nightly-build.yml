@@ -3,6 +3,9 @@ name: Windows Nightly Build
 on:
   workflow_dispatch:
 
+env:
+  GAJIM_CI_BUILD: '1'
+
 jobs:
   msys2:
     runs-on: windows-latest
