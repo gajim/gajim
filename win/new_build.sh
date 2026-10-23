@@ -75,7 +75,7 @@ function install_python_deps {
 
 function install_gajim {
     python make.py build --dist=win
-    pip .[sentry,distro] --group=source
+    pip install .[sentry,distro] --group=source
 
     QL_VERSION=$(MSYSTEM= python -c \
         "import gajim; import sys; sys.stdout.write(gajim.__version__.split('+')[0])")
