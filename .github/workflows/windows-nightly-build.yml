@@ -1,0 +1,80 @@
+name: Windows Nightly Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
+
+jobs:
+  macos:
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - os: macos-15
+            arch: arm64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build Gajim
+        run: bash mac/gajim-macos-helper.sh build
+      - name: Create Gajim dmg
+        run: bash mac/gajim-macos-helper.sh create-dmg
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      - name: Upload dmg file via FTPS
+        run: "PATH=/opt/homebrew/opt/curl/bin:$PATH curl -T gajim-*.dmg --ssl-reqd ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/macos/Gajim-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.dmg"
+
+  msys2:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - { sys: ucrt64,  env: ucrt-x86_64 }
+
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Setup msys2 environment
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: ${{matrix.sys}}
+          install: >-
+            mingw-w64-${{matrix.env}}-gcc
+            mingw-w64-${{matrix.env}}-python
+            mingw-w64-${{matrix.env}}-python-pip
+            mingw-w64-${{matrix.env}}-python-setuptools
+            mingw-w64-${{matrix.env}}-python-packaging
+            mingw-w64-${{matrix.env}}-python-pytest
+            mingw-w64-${{matrix.env}}-python-pytest-xdist
+            mingw-w64-${{matrix.env}}-python-pytest-timeout
+
+      - name: Checkout PyInstaller code
+        uses: actions/checkout@v6
+
+      - name: Show system and python information
+        run: |
+          uname -a
+          python --version
+
+      - name: Install PyInstaller
+        run: |
+          # Compile bootloader
+          cd bootloader
+          python waf --gcc --tests all
+          cd ..
+
+          # Install PyInstaller.
+          python -m pip install --progress-bar=off .[completion]
+
+          # Make sure the help options print.
+          python -m PyInstaller -h
+
+      - name: Run tests
+        run: >
+            pytest
+            -n 5 --maxfail 3 --durations 10 tests/unit tests/functional

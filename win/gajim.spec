@@ -1,5 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
 
 gst_include_plugins = [
     "app",
@@ -44,9 +47,9 @@ a = Analysis(
     pathex=[],
     binaries=[
         ("C:\\msys64\\ucrt64\\bin\\gdbus.exe", "."),
-        ("C:\\msys64\\ucrt64\\lib\\enchant-2\\enchant_winspell.dll", "share\\enchant-2"),
+        ("C:\\msys64\\ucrt64\\lib\\enchant-2\\enchant_winspell.dll", "lib\\enchant-2"),
     ],
-    datas=[
+    datas=[  # typos: ignore
         ("../src/gajim/data", "gajim/data"),
     ],
     hiddenimports=[
@@ -89,7 +92,7 @@ exe = EXE(
 coll = COLLECT(
     exe,
     a.binaries,
-    a.datas,
+    a.datas,  # typos: ignore
     strip=False,
     upx=False,
     upx_exclude=[],

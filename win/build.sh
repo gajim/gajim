@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-source "$DIR"/_base.sh
+source "$DIR"/new_build.sh
 
 function main {
     set_build_root
