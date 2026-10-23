@@ -160,7 +160,7 @@ class ConfigPaths:
 
                 application_path = Path(sys.executable).parent
                 self.config_root = self.cache_root = self.data_root = (
-                    application_path.parent / root_folder
+                    application_path / root_folder
                 )
             else:
                 # Documents and Settings\[User Name]\Application Data\Gajim

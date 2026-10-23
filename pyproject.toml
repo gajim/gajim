@@ -60,6 +60,7 @@ dev = [
   "flatpak_pip_generator@git+https://gitlab.com/gajim/flatpak-builder-tools.git#branch=gajim&subdirectory=pip",
   "pre-commit",
   "pygobject-stubs==2.20.0",
+  "pyinstaller@git+https://github.com/pyinstaller/pyinstaller.git",
   "pytest>=9.0.2",
   "python-gitlab",
   "reuse",
@@ -112,7 +113,7 @@ extend-exclude = [
   "*.patch",
   "debian/control",
   "po",
-  "win/misc/gajim*.nsi",
+  "win/nsis/gajim*.nsi",
   "docker",
 ]
 

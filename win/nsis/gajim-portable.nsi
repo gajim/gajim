@@ -6,7 +6,7 @@ ManifestDPIAware true
 !include "LogicLib.nsh"
 
 Name "Gajim"
-OutFile "Gajim-Portable.exe"
+OutFile "dist\Gajim-Portable-Installer.exe"
 SetCompressor /final /solid lzma
 SetCompressorDictSize 32
 
@@ -18,9 +18,9 @@ BrandingText "Gajim Setup"
 
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "..\misc\nsis_header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
+!define MUI_HEADERIMAGE_BITMAP "win\nsis\header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
@@ -80,26 +80,28 @@ Section "Gajim" SecGajim
 
     SetOutPath "$INSTDIR"
 
-    ${If} ${FileExists} "$InstDir\bin\Gajim.exe"
+    ${If} ${FileExists} "$INSTDIR\*.*"
         MessageBox MB_YESNO $(INST_NotEmpty) IDYES cleanup
         Abort
     cleanup:
+        ExecWait "TaskKill /IM gdbus.exe /F"
         ExecWait "TaskKill /IM gajim.exe /F"
         ExecWait "TaskKill /IM gajim-debug.exe /F"
-        RMDir /r "$InstDir\bin"
-        RMDir /r "$InstDir\etc"
-        RMDir /r "$InstDir\lib"
-        RMDir /r "$InstDir\share"
-        RMDir /r "$InstDir\ssl"
+        ; Contains also legacy dirs from previous versions of the installer
+        RMDir /r "$INSTDIR\_internal"
+        RMDir /r "$INSTDIR\bin"
+        RMDir /r "$INSTDIR\etc"
+        RMDir /r "$INSTDIR\lib"
+        RMDir /r "$INSTDIR\share"
+        RMDir /r "$INSTDIR\ssl"
+        Delete "$INSTDIR\*.lnk"
+        Delete "$INSTDIR\is_portable"
+        Delete "$INSTDIR\Gajim.exe"
     ${EndIf}
 
-    File /r "${PREFIX}\*.*"
+    File /r "dist\win\*.*"
 
-    SetOutPath "$INSTDIR\bin"
-    CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
-    "" "" "" SW_SHOWNORMAL "" "Gajim Portable"
-    CreateShortCut "$INSTDIR\Gajim-Portable-Debug.lnk" "$INSTDIR\bin\Gajim-Debug.exe" \
-    "" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
+    SetOutPath "$INSTDIR\_internal\gajim\data"
     FileOpen $0 "is_portable" w
     FileClose $0
 SectionEnd

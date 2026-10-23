@@ -2,10 +2,12 @@ version = 1
 
 [[annotations]]
 path = [
+  "**.in",
   "**.json",
   "**.md",
   "**.patch",
   "**.toml",
+  "**.xml",
   "**.yaml",
   "**.yml",
   ".gitattributes",
@@ -27,7 +29,8 @@ path = [
   "src/gajim/data/sounds/**",
   "mac/Gajim.icns",
   "po/**",
-  "win/misc/**",
+  "win/**/*.ico",
+  "win/nsis/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"
