@@ -23,8 +23,8 @@ jobs:
         with:
           update: true
           msystem: ${{matrix.sys}}
-          run: |
-            ./win/build.sh
+      - run: |
+          ./win/build.sh
 
       - name: Show system and python information
         run: |
