@@ -21,7 +21,7 @@ from gajim.gtk.window import GajimAppWindow
 
 
 def get_gajim_dir() -> Path:
-    gajim_path = Path(__file__) / ".." / ".." / ".." / "gajim"
+    gajim_path = Path(__file__) / ".." / ".." / ".." / "src" / "gajim"
     return gajim_path.resolve()
 
 
