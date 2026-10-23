@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+from PyInstaller.utils.hooks.gi import GiModuleInfo
+
+module_info = GiModuleInfo("GdkWin32", "4.0")
+if module_info.available:
+    binaries, datas, hiddenimports = module_info.collect_typelib_data()  # typos: ignore
