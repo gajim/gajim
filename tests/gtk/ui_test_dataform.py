@@ -5,6 +5,7 @@
 from base64 import b64decode
 from unittest.mock import MagicMock
 
+from gi.repository import Gtk
 from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.simplexml import Node
 
@@ -130,8 +131,19 @@ class TestDataFormWindow(GajimAppWindow):
             "left-width": 100,
             "form-width": 435,
         }
+        box = Gtk.Box(orientation="vertical")
         self._widget = DataFormWidget(extend_form(node=Node(node=FORM)), options)
-        self.set_child(self._widget)
+
+        self._button = Gtk.Button(label="Print Dataform", halign="center")
+        self._button.connect("clicked", self._on_click)
+
+        box.append(self._widget)
+        box.append(self._button)
+        self.set_child(box)
+
+    def _on_click(self, _button: Gtk.Button) -> None:
+        form = self._widget.get_submit_form()
+        print(form.topretty())
 
     def _cleanup(self) -> None:
         pass

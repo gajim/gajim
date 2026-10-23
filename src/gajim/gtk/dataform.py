@@ -357,6 +357,7 @@ class Field(GObject.GObject, SignalManager):
             "jid-single",
             "jid-multi",
             "text-single",
+            "list-single",
             "text-private",
             "text-multi",
             "list-multi",
@@ -491,7 +492,7 @@ class ListSingleField(Field):
         del self._treeview
 
     def _setup_dropdown(self, field: NBXMPPListField) -> None:
-        data: dict[str, str] = {}
+        data: dict[str, str] = {"": ""}
         for value, label in field.iter_options():
             if not label:
                 label = value
