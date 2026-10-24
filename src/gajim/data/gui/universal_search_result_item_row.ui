@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="UniversalSearchResultItemRow" parent="GtkListBoxRow">
+    <style>
+      <class name="rounded" />
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">12</property>
+        <property name="height-request">42</property>
+        <style>
+          <class name="p-6" />
+        </style>
+        <child>
+          <object class="GtkImage" id="_image">
+            <property name="pixel-size">32</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">start</property>
+            <property name="valign">center</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="_title">
+                <property name="halign">start</property>
+                <property name="ellipsize">end</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_description">
+                <property name="halign">start</property>
+                <property name="ellipsize">end</property>
+                <property name="visible">0</property>
+                <style>
+                  <class name="dimmed" />
+                  <class name="caption" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

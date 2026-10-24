@@ -67,6 +67,7 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.structs import StartChatParam
+from gajim.gtk.universal_search import UniversalSearch
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -96,6 +97,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
     _split_view: Adw.OverlaySplitView = Gtk.Template.Child()
     _app_side_bar: AppSideBar = Gtk.Template.Child()
     _main_stack: MainStack = Gtk.Template.Child()
+    _main_window_overlay: Gtk.Overlay = Gtk.Template.Child()
     _toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
 
     def __init__(self) -> None:
@@ -119,6 +121,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
         self._chat_page = self._main_stack.get_chat_page()
+
+        self._universal_search = UniversalSearch()
+        self._main_window_overlay.add_overlay(self._universal_search)
+        self._header_bar.set_title_widget(self._universal_search.get_search_entry())
 
         self._prepare_window()
 
@@ -640,6 +646,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         log.info("Activate action: %s", action_name)
 
         if action_name == "escape" and self._chat_page.hide_search():
+            return None
+
+        if action_name == "escape" and self._universal_search.hide_search():
             return None
 
         chat_stack = self._chat_page.get_chat_stack()

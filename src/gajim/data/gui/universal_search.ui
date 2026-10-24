@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <template class="UniversalSearch" parent="GtkBox">
+    <property name="visible">0</property>
+    <property name="hexpand">1</property>
+    <style>
+      <class name="bg-blur" />
+    </style>
+    <child>
+      <object class="AdwClamp">
+        <property name="hexpand">1</property>
+        <property name="maximum-size">500</property>
+        <child>
+          <object class="GtkBox" id="_dropdown">
+            <property name="valign">start</property>
+            <property name="height-request">400</property>
+            <style>
+              <class name="card" />
+              <class name="p-12" />
+              <class name="mt-6" />
+              <class name="mb-18" />
+            </style>
+            <child>
+              <object class="AdwStatusPage" id="_search_hint">
+                <property name="description" translatable="yes">Search for chats or messages</property>
+                <property name="icon-name">lucide-search-symbolic</property>
+                <property name="hexpand">1</property>
+                <style>
+                  <class name="compact" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="_results_scrolled">
+                <property name="visible">0</property>
+                <property name="focusable">true</property>
+                <property name="child">
+                  <object class="GtkViewport">
+                    <property name="child">
+                      <object class="GtkListBox" id="_results_listbox">
+                        <property name="hexpand">1</property>
+                        <property name="selection-mode">single</property>
+                        <child type="placeholder">
+                          <object class="AdwStatusPage">
+                            <property name="description" translatable="yes">No results.</property>
+                            <property name="icon-name">lucide-search-symbolic</property>
+                            <property name="hexpand">1</property>
+                            <style>
+                          <class name="compact" />
+                        </style>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

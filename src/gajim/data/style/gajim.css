@@ -131,6 +131,9 @@ button.flat.link { padding: 0; border: 0; }
 .bg-transparent {
     background-color: transparent;
 }
+.bg-blur {
+    backdrop-filter: blur(4px);
+}
 
 /* Generic animations */
 @keyframes pulse-opacity {
@@ -172,6 +175,9 @@ button.flat.link { padding: 0; border: 0; }
 }
 .opacity-0 {
     opacity: 0;
+}
+.rounded {
+  border-radius: 6px;
 }
 
 /* General purpose classes ================================================= */
