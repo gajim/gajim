@@ -1,0 +1,609 @@
+# SPDX-FileCopyrightText: Contributors to Gajim <https://gajim.org/>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+from __future__ import annotations
+
+from typing import Any
+from typing import cast
+
+import html
+import locale
+from collections.abc import Callable
+from enum import IntEnum
+
+from gi.repository import Adw
+from gi.repository import Gdk
+from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Graphene
+from gi.repository import Gtk
+from nbxmpp import JID
+
+from gajim.common import app
+from gajim.common.const import AvatarSize
+from gajim.common.const import Direction
+from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+
+from gajim.gtk.structs import StartChatParam
+from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.util.window import open_window
+from gajim.gtk.widgets import AccountBadge
+
+MAX_SEARCH_RESULTS = 15
+
+
+class UniversalSearchResultItemType(IntEnum):
+    MESSAGE_SEARCH = 0
+    CONTACT = 1
+    GROUP_CHAT = 2
+    ACTION = 3
+
+
+class UniversalSearchCurrentModel(IntEnum):
+    RESULTS = 0
+    SEARCH = 1
+
+
+@Gtk.Template(string=get_ui_string("universal_search.ui"))
+class UniversalSearch(Gtk.Box):
+    __gtype_name__ = "UniversalSearch"
+
+    _dropdown: Gtk.Box = Gtk.Template.Child()
+    _search_hint: Adw.StatusPage = Gtk.Template.Child()
+    _results_box: Gtk.Box = Gtk.Template.Child()
+    _filter_toggle_group: Adw.ToggleGroup = Gtk.Template.Child()
+    _results_listbox: Gtk.ListBox = Gtk.Template.Child()
+    _search_listbox: Gtk.ListBox = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self)
+
+        # Enabled when starting to hide the dropdown
+        self._block_visibility_signals = False
+
+        self._current_model = UniversalSearchCurrentModel.RESULTS
+
+        self._results_model = Gio.ListStore(item_type=UniversalSearchResultItem)
+
+        self._results_sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
+        self._results_sort_model = Gtk.SortListModel(
+            model=self._results_model, sorter=self._results_sorter
+        )
+
+        self._results_filter = Gtk.CustomFilter.new(self._filter_func)
+        self._results_filter_model = Gtk.FilterListModel(
+            model=self._results_sort_model, filter=self._results_filter
+        )
+        self._results_slice_model = Gtk.SliceListModel(
+            model=self._results_filter_model, size=MAX_SEARCH_RESULTS
+        )
+        self._results_selection_model = Gtk.SingleSelection(
+            model=self._results_slice_model
+        )
+
+        self._filter_toggle_group.connect(
+            "notify::active",
+            self._on_filter_toggle_changed,
+        )
+
+        self._results_listbox.connect(
+            "row-activated", self._on_item_row_activated, self._results_selection_model
+        )
+        self._results_listbox.set_header_func(self._header_func)
+        self._results_listbox.bind_model(
+            self._results_selection_model, self._row_create_func
+        )
+
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect("enter", self._on_search_focus_enter)
+        focus_controller.connect("leave", self._on_search_focus_leave)
+
+        self._search_entry = Gtk.SearchEntry(
+            placeholder_text=_("Search…"), width_request=300
+        )
+        self._search_entry.add_controller(focus_controller)
+        self._search_entry.connect("search-changed", self._on_search_changed)
+        self._search_entry.connect("next-match", self._select_new_match, Direction.NEXT)
+        self._search_entry.connect(
+            "previous-match", self._select_new_match, Direction.PREV
+        )
+        self._search_entry.connect("activate", self._on_search_activate)
+
+        self._search_bar = UniversalSearchBar(self._search_entry)
+
+        gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
+        gesture_primary_click.connect("pressed", self._on_button_pressed)
+        self.add_controller(gesture_primary_click)
+
+        event_controller_key = Gtk.EventControllerKey(
+            propagation_phase=Gtk.PropagationPhase.BUBBLE
+        )
+        event_controller_key.connect("key-pressed", self._on_search_key_pressed)
+        text = self._search_entry.get_delegate()
+        assert isinstance(text, Gtk.Text)
+        text.add_controller(event_controller_key)
+
+        # Second listbox containing advanced search items, e.g. message search
+        self._search_model = Gio.ListStore(item_type=UniversalSearchResultItem)
+        self._search_selection_model = Gtk.SingleSelection(model=self._search_model)
+        self._search_listbox.bind_model(
+            self._search_selection_model, self._row_create_func
+        )
+        self._search_listbox.connect(
+            "row-activated", self._on_item_row_activated, self._search_selection_model
+        )
+
+    def get_search_widget(self) -> UniversalSearchBar:
+        return self._search_bar
+
+    def hide_search(self, block_signals: bool = False) -> bool:
+        if self.is_visible():
+            self._block_signals(block_signals)
+            self._filter_toggle_group.set_active_name("all")
+            self._search_entry.set_text("")
+            self.set_visible(False)
+            app.window.set_focus()
+            GLib.timeout_add_seconds(1, self._block_signals, False)
+            return True
+        return False
+
+    def _block_signals(self, block: bool) -> bool:
+        self._block_visibility_signals = block
+        return GLib.SOURCE_REMOVE
+
+    def _on_button_pressed(
+        self,
+        _gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> None:
+        """Hide search if click is outside dropdown."""
+        if not self.is_visible():
+            return
+
+        success, bounds = self._dropdown.compute_bounds(self)
+        if not success:
+            return
+
+        if not bounds.contains_point(Graphene.Point().init(x, y)):
+            self.hide_search()
+
+    def _on_search_focus_enter(
+        self, _focus_controller: Gtk.EventControllerFocus
+    ) -> None:
+        # We set the focus away from the search box while hiding.
+        # Focus may come back when selecting a chat.
+        if not self.is_visible() and not self._block_visibility_signals:
+            self._search_bar.set_shortcut_label_visible(False)
+            self.set_visible(True)
+            self._update_results_data_model()
+
+    def _on_search_focus_leave(
+        self, _focus_controller: Gtk.EventControllerFocus
+    ) -> None:
+        self._search_bar.set_shortcut_label_visible(True)
+
+    @staticmethod
+    def _header_func(
+        row: UniversalSearchResultItemRow, before: UniversalSearchResultItemRow | None
+    ) -> None:
+        if before is None or row.item_type != before.item_type:
+            row.set_header(UniversalSearchResultItemRowHeader(row.item_type))
+        else:
+            row.set_header(None)
+
+    @staticmethod
+    def _sort_func(
+        obj1: Any,
+        obj2: Any,
+        _user_data: object | None,
+    ) -> int:
+        item1 = cast(UniversalSearchResultItem, obj1)
+        item2 = cast(UniversalSearchResultItem, obj2)
+        if item1.item_type == UniversalSearchResultItemType.ACTION:
+            return 1
+
+        if (
+            item1.item_type == UniversalSearchResultItemType.CONTACT
+            and item2.item_type != UniversalSearchResultItemType.CONTACT
+        ):
+            return -1 if item2.item_type == UniversalSearchResultItemType.CONTACT else 1
+
+        if (
+            item1.item_type == UniversalSearchResultItemType.GROUP_CHAT
+            and item2.item_type != UniversalSearchResultItemType.GROUP_CHAT
+        ):
+            return (
+                -1 if item2.item_type == UniversalSearchResultItemType.GROUP_CHAT else 1
+            )
+
+        return locale.strcoll(item1.title.casefold(), item2.title.casefold())
+
+    def _filter_func(self, obj: GObject.Object) -> bool:
+        item = cast(UniversalSearchResultItem, obj)
+        query = self._search_entry.get_text().strip().lower()
+        type_filter = self._filter_toggle_group.get_active_name()
+        match type_filter:
+            case "actions":
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.ACTION
+                )
+            case "contacts":
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.CONTACT
+                )
+            case "group_chats":
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.GROUP_CHAT
+                )
+            case _:
+                return query in item.search_string
+
+    def _row_create_func(self, obj: GObject.Object) -> UniversalSearchResultItemRow:
+        item = cast(UniversalSearchResultItem, obj)
+        return UniversalSearchResultItemRow(
+            item_type=item.item_type,
+            title=item.title,
+            description=item.description,
+            paintable=item.paintable,
+            icon_name=item.icon_name,
+            account=item.account,
+        )
+
+    def _update_results_data_model(self) -> None:
+        accounts = app.get_enabled_accounts_with_labels()
+
+        scale = self.get_scale_factor()
+        self._results_model.remove_all()
+
+        for account, _label in accounts:
+            client = app.get_client(account)
+            # Contacts
+            for jid, _data in client.get_module("Roster").iter():
+                contact = client.get_module("Contacts").get_contact(jid)
+
+                if isinstance(contact, GroupchatContact):
+                    # Workaround if groupchats are in the roster
+                    continue
+
+                assert isinstance(contact, BareContact)
+                avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
+                item = UniversalSearchResultItem(
+                    item_type=UniversalSearchResultItemType.CONTACT,
+                    search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    title=contact.name,
+                    description=str(contact.jid),
+                    account=account,
+                    jid=contact.jid,
+                    paintable=avatar,
+                )
+                self._results_model.append(item)
+
+            # Group chats
+            bookmarks = client.get_module("Bookmarks").bookmarks
+            for bookmark in bookmarks:
+                contact = client.get_module("Contacts").get_contact(
+                    bookmark.jid, groupchat=True
+                )
+                assert isinstance(contact, GroupchatContact)
+                avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
+                item = UniversalSearchResultItem(
+                    item_type=UniversalSearchResultItemType.GROUP_CHAT,
+                    search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    title=contact.name,
+                    description=str(contact.jid),
+                    account=account,
+                    jid=contact.jid,
+                    paintable=avatar,
+                )
+                self._results_model.append(item)
+
+            # Actions
+            profile_action = UniversalSearchResultItem(
+                item_type=UniversalSearchResultItemType.ACTION,
+                search_string=f"{_('Profile Picture')} {_('Avatar')}".casefold(),
+                title=_("Profile"),
+                description=_("Edit your contact details…"),
+                account=account,
+                icon_name="lucide-user-symbolic",
+                callback=self._show_profile,
+                callback_kwargs={"account": account},
+            )
+            self._results_model.append(profile_action)
+
+    def _on_filter_toggle_changed(
+        self, _toggle_group: Adw.ToggleGroup, _index: int
+    ) -> None:
+        self._results_filter.changed(Gtk.FilterChange.DIFFERENT)
+
+    def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
+        raw_query = entry.get_text().strip()
+        query = raw_query.casefold()
+        self._search_hint.set_visible(not query)
+        self._results_box.set_visible(bool(query))
+
+        if self._block_visibility_signals:
+            # We reset the search input while hiding. This triggers a delayed change event.
+            return
+
+        # The message search item needs to be updated with every change in order to
+        # reflect the current search query.
+        self._search_model.remove_all()
+        self._search_model.append(
+            UniversalSearchResultItem(
+                item_type=UniversalSearchResultItemType.MESSAGE_SEARCH,
+                search_string=query,
+                title=_("Search for %s") % f"<b>{html.escape(raw_query)}</b>",
+                description=_("Search your messages…"),
+                icon_name="lucide-search-symbolic",
+            )
+        )
+
+        self.set_visible(True)
+
+        self._results_filter.changed(Gtk.FilterChange.DIFFERENT)
+        self._select_result_row(0)
+
+    def _on_search_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType,
+    ) -> bool:
+        if keyval == Gdk.KEY_Down:
+            self._search_entry.emit("next-match")
+            return Gdk.EVENT_STOP
+
+        if keyval == Gdk.KEY_Up:
+            self._search_entry.emit("previous-match")
+            return Gdk.EVENT_STOP
+
+        if keyval == Gdk.KEY_Tab:
+            # Send focus to next widget
+            self._filter_toggle_group.grab_focus()
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
+
+    def _select_new_match(self, _entry: Gtk.Entry, direction: Direction) -> None:
+        if (
+            self._current_model == UniversalSearchCurrentModel.SEARCH
+            and direction == Direction.PREV
+        ):
+            results_count = self._results_selection_model.get_n_items()
+            if results_count > 0:
+                # Results may be empty
+                # Move selection from search listbox to results listbox
+                self._search_selection_model.unselect_all()
+                self._search_listbox.unselect_all()
+                self._select_result_row(results_count - 1)
+            return
+
+        selected_position = self._results_selection_model.get_selected()
+        if selected_position == Gtk.INVALID_LIST_POSITION:
+            # No search results in chats/actions
+            self._select_search_row(0)
+            return
+
+        if direction == Direction.NEXT:
+            selected_position += 1
+        else:
+            selected_position -= 1
+
+        if selected_position < 0:
+            return
+
+        if selected_position >= self._results_selection_model.get_n_items():
+            # Move selection from results listbox to search listbox
+            self._results_selection_model.unselect_all()
+            self._results_listbox.unselect_all()
+
+            self._select_search_row(0)
+            return
+
+        self._select_result_row(selected_position)
+
+    def _select_result_row(self, position: int) -> None:
+        self._current_model = UniversalSearchCurrentModel.RESULTS
+        self._results_selection_model.select_item(position, True)
+        row = self._results_listbox.get_row_at_index(position)
+        if row is not None:
+            self._results_listbox.select_row(row)
+            self._scroll_row_into_view(row)
+
+    def _select_search_row(self, position: int) -> None:
+        self._current_model = UniversalSearchCurrentModel.SEARCH
+        self._search_selection_model.select_item(position, True)
+        row = self._search_listbox.get_row_at_index(position)
+        if row is not None:
+            self._search_listbox.select_row(row)
+
+    def _scroll_row_into_view(self, row: Gtk.ListBoxRow) -> None:
+        """Scroll results ListBox to row without giving it focus."""
+        coordinates = row.translate_coordinates(self._results_listbox, 0, 0)
+        if coordinates is None:
+            return
+
+        _x_coord, y_coord = coordinates
+        _minimum_site, natural_size = row.get_preferred_size()
+        adjustment = self._results_listbox.get_adjustment()
+        assert adjustment is not None
+        adjustment.set_value(
+            y_coord - (adjustment.get_page_size() - natural_size.height) / 2
+        )
+
+    def _on_search_activate(self, _search_entry: Gtk.SearchEntry) -> None:
+        # Check which model has a selection and relay the selected item
+        if self._current_model == UniversalSearchCurrentModel.RESULTS:
+            model = self._results_selection_model
+        else:
+            model = self._search_selection_model
+
+        selected_position = model.get_selected()
+        if selected_position == Gtk.INVALID_LIST_POSITION:
+            return
+
+        item = cast(UniversalSearchResultItem, model.get_selected_item())
+        self._on_item_activated(item)
+
+    def _on_item_row_activated(
+        self,
+        _listbox: Gtk.ListBox,
+        row: UniversalSearchResultItemRow,
+        selection_model: Gtk.SingleSelection,
+    ) -> None:
+        position = row.get_index()
+        item = cast(UniversalSearchResultItem, selection_model.get_item(position))
+        self._on_item_activated(item)
+
+    def _on_item_activated(self, item: UniversalSearchResultItem) -> None:
+        self.hide_search(block_signals=True)
+
+        if item.item_type in (
+            UniversalSearchResultItemType.CONTACT,
+            UniversalSearchResultItemType.GROUP_CHAT,
+        ):
+            self._start_chat(item.account, item.jid)
+            return
+
+        if item.item_type == UniversalSearchResultItemType.ACTION:
+            item.callback(**item.callback_kwargs)
+            return
+
+        app.window.start_search(item.search_string)
+
+    def _start_chat(self, account: str, jid: JID) -> None:
+        app.window.start_chat_from_jid(StartChatParam(account=account, jid=jid))
+
+    def _show_profile(self, account: str) -> None:
+        open_window("ProfileWindow", account=account)
+
+
+class UniversalSearchBar(Gtk.Overlay):
+    def __init__(self, child: Gtk.Widget) -> None:
+        Gtk.Overlay.__init__(self, child=child)
+        self._child = child
+
+        self._shortcut_label = Adw.ShortcutLabel(
+            accelerator="<Primary>K", halign=Gtk.Align.END, valign=Gtk.Align.CENTER
+        )
+        self._shortcut_label.add_css_class("shortcut-label-small")
+        self.add_overlay(self._shortcut_label)
+
+    def set_shortcut_label_visible(self, visible: bool) -> None:
+        self._shortcut_label.set_visible(visible)
+
+    def grab_focus(self) -> bool:
+        self._child.grab_focus()
+        return True
+
+
+class UniversalSearchResultItem(GObject.Object):
+    __gtype_name__ = "UniversalSearchResultItem"
+
+    item_type = GObject.Property(type=int)
+    search_string = GObject.Property(type=str)
+    title = GObject.Property(type=str)
+    description = GObject.Property(type=str, default=None)
+    account = GObject.Property(type=str, default=None)
+    jid = GObject.Property(type=str, default=None)
+    paintable = GObject.Property(type=Gdk.Paintable, default=None)
+    icon_name = GObject.Property(type=str, default=None)
+    callback = GObject.Property(type=object, default=None)
+    callback_kwargs = GObject.Property(type=object, default=None)
+
+    def __init__(
+        self,
+        item_type: UniversalSearchResultItemType,
+        search_string: str,
+        title: str,
+        description: str | None = None,
+        account: str | None = None,
+        jid: JID | None = None,
+        paintable: Gdk.Paintable | None = None,
+        icon_name: str | None = None,
+        callback: Callable[..., Any] | None = None,
+        callback_kwargs: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(
+            item_type=item_type,
+            search_string=search_string,
+            title=title,
+            description=description,
+            account=account,
+            jid=jid,
+            paintable=paintable,
+            icon_name=icon_name,
+            callback=callback,
+            callback_kwargs=callback_kwargs,
+        )
+
+
+@Gtk.Template(string=get_ui_string("universal_search_result_item_row.ui"))
+class UniversalSearchResultItemRow(Gtk.ListBoxRow):
+    __gtype_name__ = "UniversalSearchResultItemRow"
+
+    _image: Gtk.Image = Gtk.Template.Child()
+    _title: Gtk.Label = Gtk.Template.Child()
+    _description: Gtk.Label = Gtk.Template.Child()
+    _account_badge: AccountBadge = Gtk.Template.Child()
+
+    def __init__(
+        self,
+        item_type: UniversalSearchResultItemType,
+        title: str,
+        description: str | None = None,
+        paintable: Gdk.Paintable | None = None,
+        icon_name: str | None = None,
+        account: str | None = None,
+    ) -> None:
+        Gtk.ListBoxRow.__init__(self)
+
+        self.item_type = item_type
+
+        if paintable is not None:
+            self._image.set_from_paintable(paintable)
+        if icon_name is not None:
+            self._image.set_from_icon_name(icon_name)
+            self._image.add_css_class("dimmed")
+
+        if item_type == UniversalSearchResultItemType.MESSAGE_SEARCH:
+            self._title.set_markup(title)
+        else:
+            self._title.set_text(title)
+            self._title.add_css_class("bold")
+
+        if description is not None:
+            self._description.set_text(description)
+            self._description.set_visible(True)
+
+        accounts = app.get_enabled_accounts_with_labels(connected_only=True)
+        if account is not None and len(accounts) > 1:
+            self._account_badge.set_account(account)
+            self._account_badge.set_visible(True)
+
+
+class UniversalSearchResultItemRowHeader(Gtk.Label):
+    def __init__(self, item_type: UniversalSearchResultItemType) -> None:
+        Gtk.Label.__init__(self, halign=Gtk.Align.START)
+        self.add_css_class("mt-12")
+        self.add_css_class("bold")
+
+        match item_type:
+            case UniversalSearchResultItemType.CONTACT:
+                self.set_text(_("Contacts"))
+            case UniversalSearchResultItemType.GROUP_CHAT:
+                self.set_text(_("Group Chats"))
+            case UniversalSearchResultItemType.ACTION:
+                self.set_text(_("Actions"))
+            case _:
+                self.set_visible(False)

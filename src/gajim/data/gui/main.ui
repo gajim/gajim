@@ -70,25 +70,29 @@
         <property name="content">
           <object class="AdwToastOverlay" id="_toast_overlay">
             <child>
-              <object class="AdwOverlaySplitView" id="_split_view">
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
-                <property name="collapsed">false</property>
-                <property name="show-sidebar">true</property>
-                <property name="min-sidebar-width">50</property>
-                <property name="max-sidebar-width">50</property>
-                <property name="sidebar-width-unit">px</property>
-                <property name="enable-show-gesture">true</property>
-                <property name="enable-hide-gesture">true</property>
-                <property name="sidebar">
-                  <object class="AppSideBar" id="_app_side_bar"/>
+              <object class="GtkOverlay" id="_main_window_overlay">
+                <property name="child">
+                  <object class="AdwOverlaySplitView" id="_split_view">
+                    <property name="hexpand">true</property>
+                    <property name="vexpand">true</property>
+                    <property name="collapsed">false</property>
+                    <property name="show-sidebar">true</property>
+                    <property name="min-sidebar-width">50</property>
+                    <property name="max-sidebar-width">50</property>
+                    <property name="sidebar-width-unit">px</property>
+                    <property name="enable-show-gesture">true</property>
+                    <property name="enable-hide-gesture">true</property>
+                    <property name="sidebar">
+                      <object class="AppSideBar" id="_app_side_bar"/>
+                    </property>
+                    <property name="content">
+                      <object class="MainStack" id="_main_stack"/>
+                    </property>
+                    <style>
+                      <class name="mainwindow-grid"/>
+                    </style>
+                  </object>
                 </property>
-                <property name="content">
-                  <object class="MainStack" id="_main_stack"/>
-                </property>
-                <style>
-                  <class name="mainwindow-grid"/>
-                </style>
               </object>
             </child>
           </object>

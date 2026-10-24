@@ -68,6 +68,7 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.structs import StartChatParam
+from gajim.gtk.universal_search import UniversalSearch
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -102,6 +103,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
     _split_view: Adw.OverlaySplitView = Gtk.Template.Child()
     _app_side_bar: AppSideBar = Gtk.Template.Child()
     _main_stack: MainStack = Gtk.Template.Child()
+    _main_window_overlay: Gtk.Overlay = Gtk.Template.Child()
     _toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
 
     def __init__(self) -> None:
@@ -125,6 +127,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
         self._chat_page = self._main_stack.get_chat_page()
+
+        self._universal_search = UniversalSearch()
+        self._universal_search_widget = self._universal_search.get_search_widget()
+        self._main_window_overlay.add_overlay(self._universal_search)
+        self._header_bar.set_title_widget(self._universal_search_widget)
 
         self._prepare_window()
 
@@ -606,6 +613,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
             ("switch-workspace-7", self._on_action),
             ("switch-workspace-8", self._on_action),
             ("switch-workspace-9", self._on_action),
+            ("focus-search", self._on_action),
             ("increase-app-font-size", self._on_app_font_size_action),
             ("decrease-app-font-size", self._on_app_font_size_action),
             ("reset-app-font-size", self._on_app_font_size_action),
@@ -647,8 +655,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         if action_name == "escape" and self._chat_page.hide_search():
             return None
 
+        if action_name == "escape" and self._universal_search.hide_search():
+            return None
+
         chat_stack = self._chat_page.get_chat_stack()
         if action_name == "escape" and chat_stack.process_escape():
+            return None
+
+        if action_name == "focus-search":
+            self._universal_search_widget.grab_focus()
             return None
 
         control = self.get_control()
@@ -1381,6 +1396,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
                 return
 
         open_window("StartChatDialog", params=params)
+
+    def start_search(
+        self,
+        query: str,
+        account: str | None = None,
+        jid: JID | None = None,
+        scope: Literal["everywhere", "contact"] = "everywhere",
+    ) -> None:
+        self._chat_page.start_search(query, account, jid, scope)
 
     def block_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
