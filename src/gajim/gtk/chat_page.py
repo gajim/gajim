@@ -98,7 +98,6 @@ class ChatPage(Gtk.Paned):
 
     def _add_actions(self):
         actions = [
-            ("focus-search", None, self._on_focus_search),
             ("remove-chat", "as", self._remove_chat),
             ("search-history", None, self._on_search_history),
             ("mark-all-activities-as-read", None, self._mark_all_activities_as_read),
@@ -177,12 +176,6 @@ class ChatPage(Gtk.Paned):
         self._chat_stack.clear()
         self._search_view.set_context(None, None)
 
-    def _on_focus_search(
-        self, _action: Gio.SimpleAction, _param: Literal[None]
-    ) -> None:
-        search_entry = self._chat_list_header.get_search_entry()
-        search_entry.grab_focus()
-
     def _on_search_history(
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:
@@ -205,6 +198,17 @@ class ChatPage(Gtk.Paned):
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
         self._update_search_layout()
+
+    def start_search(
+        self,
+        query: str,
+        account: str | None,
+        jid: JID | None,
+        scope: Literal["everywhere", "contact"],
+    ) -> None:
+        self.show_search()
+        self._search_view.set_context(account, jid)
+        self._search_view.start_search(query, scope)
 
     def _mark_all_activities_as_read(
         self, _action: Gio.SimpleAction, _param: Literal[None]

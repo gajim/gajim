@@ -268,6 +268,7 @@ MAIN_WIN_ACTIONS = [
     ("switch-workspace-7", None, True),
     ("switch-workspace-8", None, True),
     ("switch-workspace-9", None, True),
+    ("focus-search", None, True),
     ("increase-app-font-size", None, True),
     ("decrease-app-font-size", None, True),
     ("reset-app-font-size", None, True),

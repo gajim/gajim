@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 import datetime as dt
 import itertools
@@ -459,6 +460,11 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._search_filters.set_context(account, jid)
         self._ui.search_checkbutton.set_active(False)
         self._ui.calendar_button.set_sensitive(True)
+
+    def start_search(self, query: str, scope: Literal["everywhere", "contact"]) -> None:
+        self._ui.search_checkbutton.set_active(scope == "everywhere")
+        self._ui.search_entry.set_text(query)
+        self._search(query)
 
 
 class RowHeader(Gtk.Box):
