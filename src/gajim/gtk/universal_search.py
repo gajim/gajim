@@ -183,8 +183,8 @@ class UniversalSearch(Gtk.Box):
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
                     "contact",
-                    f"{contact.name} {contact.original_name} {contact.jid}",
-                    GLib.markup_escape_text(contact.name),
+                    f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    contact.name,
                     description=str(contact.jid),
                     account=account,
                     jid=contact.jid,
@@ -202,8 +202,8 @@ class UniversalSearch(Gtk.Box):
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
                     "group_chat",
-                    f"{contact.name} {contact.original_name} {contact.jid}",
-                    GLib.markup_escape_text(contact.name),
+                    f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    contact.name,
                     description=str(contact.jid),
                     account=account,
                     jid=contact.jid,
@@ -230,7 +230,7 @@ class UniversalSearch(Gtk.Box):
 
         message_search_item = UniversalSearchResultItem(
             "message_search",
-            query,
+            query.casefold(),
             _("Search for %s") % f"<b>{query}</b>",
             icon_name="lucide-search-symbolic",
         )
@@ -300,7 +300,7 @@ class UniversalSearch(Gtk.Box):
             self._start_chat(item.account, item.jid)
             return
 
-        print(item.title)
+        print(item.search_string)
 
     def _on_result_item_activated(
         self,
@@ -311,7 +311,7 @@ class UniversalSearch(Gtk.Box):
             self._start_chat(row.account, row.jid)
             return
 
-        print(row.title)
+        print(row.search_string)
 
     def _start_chat(self, account: str, jid: JID) -> None:
         self.hide_search(block_signals=True)
@@ -389,8 +389,10 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
             self._image.set_from_icon_name(icon_name)
             self._image.add_css_class("dimmed")
 
-        self._title.set_markup(title)
-        if item_type != "message_search":
+        if item_type == "message_search":
+            self._title.set_markup(title)
+        else:
+            self._title.set_text(title)
             self._title.add_css_class("bold")
 
         if description is not None:
