@@ -19,13 +19,25 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="halign">start</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
             <child>
-              <object class="GtkLabel" id="_title">
-                <property name="halign">start</property>
-                <property name="ellipsize">end</property>
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="_title">
+                    <property name="halign">start</property>
+                    <property name="hexpand">1</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AccountBadge" id="_account_badge">
+                    <property name="visible">0</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

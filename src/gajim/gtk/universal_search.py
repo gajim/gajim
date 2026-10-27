@@ -30,6 +30,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.structs import StartChatParam
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
+from gajim.gtk.widgets import AccountBadge
 
 MAX_SEARCH_RESULTS = 15
 
@@ -162,6 +163,7 @@ class UniversalSearch(Gtk.Box):
             description=item.description,
             paintable=item.paintable,
             icon_name=item.icon_name,
+            account=item.account,
         )
 
     def _update_data_model(self) -> None:
@@ -183,9 +185,9 @@ class UniversalSearch(Gtk.Box):
                 assert isinstance(contact, BareContact)
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
-                    "contact",
-                    f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
-                    contact.name,
+                    item_type="contact",
+                    search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    title=contact.name,
                     description=str(contact.jid),
                     account=account,
                     jid=contact.jid,
@@ -202,9 +204,9 @@ class UniversalSearch(Gtk.Box):
                 assert isinstance(contact, GroupchatContact)
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
-                    "group_chat",
-                    f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
-                    contact.name,
+                    item_type="group_chat",
+                    search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
+                    title=contact.name,
                     description=str(contact.jid),
                     account=account,
                     jid=contact.jid,
@@ -214,10 +216,11 @@ class UniversalSearch(Gtk.Box):
 
             # Actions
             profile_action = UniversalSearchResultItem(
-                "action",
-                f"{_('Profile Picture')} {_('Avatar')}".casefold(),
-                _("Profile"),
+                item_type="action",
+                search_string=f"{_('Profile Picture')} {_('Avatar')}".casefold(),
+                title=_("Profile"),
                 description=_("Edit your contact details…"),
+                account=account,
                 icon_name="lucide-user-symbolic",
                 callback=self._show_profile,
                 callback_kwargs={"account": account},
@@ -244,9 +247,9 @@ class UniversalSearch(Gtk.Box):
             self._model.remove(0)
 
         message_search_item = UniversalSearchResultItem(
-            "message_search",
-            query.casefold(),
-            _("Search for %s") % f"<b>{query}</b>",
+            item_type="message_search",
+            search_string=query.casefold(),
+            title=_("Search for %s") % f"<b>{query}</b>",
             icon_name="lucide-search-symbolic",
         )
         self._model.insert(0, message_search_item)
@@ -395,6 +398,7 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
     _image: Gtk.Image = Gtk.Template.Child()
     _title: Gtk.Label = Gtk.Template.Child()
     _description: Gtk.Label = Gtk.Template.Child()
+    _account_badge: AccountBadge = Gtk.Template.Child()
 
     def __init__(
         self,
@@ -403,6 +407,7 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
         description: str | None = None,
         paintable: Gdk.Paintable | None = None,
         icon_name: str | None = None,
+        account: str | None = None,
     ) -> None:
         Gtk.ListBoxRow.__init__(self)
 
@@ -421,3 +426,8 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
         if description is not None:
             self._description.set_text(description)
             self._description.set_visible(True)
+
+        accounts = app.get_enabled_accounts_with_labels(connected_only=True)
+        if account is not None and len(accounts) > 1:
+            self._account_badge.set_account(account)
+            self._account_badge.set_visible(True)
