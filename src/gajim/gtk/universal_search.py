@@ -41,7 +41,8 @@ class UniversalSearch(Gtk.Box):
 
     _dropdown: Gtk.Box = Gtk.Template.Child()
     _search_hint: Adw.StatusPage = Gtk.Template.Child()
-    _results_scrolled: Gtk.ScrolledWindow = Gtk.Template.Child()
+    _results_box: Gtk.Box = Gtk.Template.Child()
+    _filter_toggle_group: Adw.ToggleGroup = Gtk.Template.Child()
     _results_listbox: Gtk.ListBox = Gtk.Template.Child()
 
     def __init__(self) -> None:
@@ -63,6 +64,11 @@ class UniversalSearch(Gtk.Box):
             model=self._filter_model, size=MAX_SEARCH_RESULTS
         )
         self._selection_model = Gtk.SingleSelection(model=self._slice_model)
+
+        self._filter_toggle_group.connect(
+            "notify::active",
+            self._on_filter_toggle_changed,
+        )
 
         self._results_listbox.connect(
             "row-activated", self._on_result_item_row_activated
@@ -97,6 +103,7 @@ class UniversalSearch(Gtk.Box):
     def hide_search(self, block_signals: bool = False) -> bool:
         if self.is_visible():
             self._block_signals(block_signals)
+            self._filter_toggle_group.set_active_name("all")
             self._search_entry.set_text("")
             self.set_visible(False)
             app.window.set_focus()
@@ -153,7 +160,17 @@ class UniversalSearch(Gtk.Box):
     def _filter_func(self, obj: GObject.Object) -> bool:
         item = cast(UniversalSearchResultItem, obj)
         query = self._search_entry.get_text().strip().lower()
-        return query in item.search_string
+        type_filter = self._filter_toggle_group.get_active_name()
+        match type_filter:
+            case "actions":
+                return query in item.search_string and item.item_type == "action"
+            case "contacts":
+                return query in item.search_string and item.item_type in (
+                    "contact",
+                    "group_chat",
+                )
+            case _:
+                return query in item.search_string
 
     def _row_create_func(self, obj: GObject.Object) -> UniversalSearchResultItemRow:
         item = cast(UniversalSearchResultItem, obj)
@@ -229,10 +246,15 @@ class UniversalSearch(Gtk.Box):
 
         self._results_listbox.bind_model(self._selection_model, self._row_create_func)
 
+    def _on_filter_toggle_changed(
+        self, _toggle_group: Adw.ToggleGroup, _index: int
+    ) -> None:
+        self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
+
     def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
         query = entry.get_text().strip().lower()
         self._search_hint.set_visible(not query)
-        self._results_scrolled.set_visible(bool(query))
+        self._results_box.set_visible(bool(query))
 
         if self._block_visibility_signals:
             # We reset the search input while hiding. This triggers a delayed change event.

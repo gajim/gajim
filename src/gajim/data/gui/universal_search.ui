@@ -32,32 +32,66 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="_results_scrolled">
+              <object class="GtkBox" id="_results_box">
                 <property name="visible">0</property>
-                <property name="focusable">true</property>
-                <property name="child">
-                  <object class="GtkViewport">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="AdwToggleGroup" id="_filter_toggle_group">
+                    <property name="active-name">all</property>
+                    <property name="halign">center</property>
+                    <style>
+                      <class name="round" />
+                    </style>
+                    <child>
+                      <object class="AdwToggle">
+                        <property name="name">all</property>
+                        <property name="label" translatable="yes">All</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwToggle">
+                        <property name="name">contacts</property>
+                        <property name="label" translatable="yes">Contacts</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwToggle">
+                        <property name="name">actions</property>
+                        <property name="label" translatable="yes">Actions</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="focusable">1</property>
+                    <property name="vexpand">1</property>
                     <property name="child">
-                      <object class="GtkListBox" id="_results_listbox">
-                        <property name="hexpand">1</property>
-                        <property name="selection-mode">single</property>
-                        <style>
-                          <class name="bg-transparent" />
-                        </style>
-                        <child type="placeholder">
-                          <object class="AdwStatusPage">
-                            <property name="description" translatable="yes">No results.</property>
-                            <property name="icon-name">lucide-search-symbolic</property>
+                      <object class="GtkViewport">
+                        <property name="child">
+                          <object class="GtkListBox" id="_results_listbox">
                             <property name="hexpand">1</property>
+                            <property name="selection-mode">single</property>
                             <style>
-                          <class name="compact" />
-                        </style>
+                              <class name="bg-transparent" />
+                            </style>
+                            <child type="placeholder">
+                              <object class="AdwStatusPage">
+                                <property name="description" translatable="yes">No results.</property>
+                                <property name="icon-name">lucide-search-symbolic</property>
+                                <property name="hexpand">1</property>
+                                <style>
+                              <class name="compact" />
+                            </style>
+                              </object>
+                            </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </property>
                   </object>
-                </property>
+                </child>
               </object>
             </child>
           </object>
