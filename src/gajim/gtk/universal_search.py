@@ -9,6 +9,7 @@ from typing import cast
 from typing import Literal
 
 import locale
+from collections.abc import Callable
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -28,6 +29,7 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.structs import StartChatParam
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.util.window import open_window
 
 MAX_SEARCH_RESULTS = 15
 
@@ -61,7 +63,9 @@ class UniversalSearch(Gtk.Box):
         )
         self._selection_model = Gtk.SingleSelection(model=self._slice_model)
 
-        self._results_listbox.connect("row-activated", self._on_result_item_activated)
+        self._results_listbox.connect(
+            "row-activated", self._on_result_item_row_activated
+        )
 
         focus_controller = Gtk.EventControllerFocus()
         focus_controller.connect("enter", self._on_search_focus_enter)
@@ -153,12 +157,9 @@ class UniversalSearch(Gtk.Box):
     def _row_create_func(self, obj: GObject.Object) -> UniversalSearchResultItemRow:
         item = cast(UniversalSearchResultItem, obj)
         return UniversalSearchResultItemRow(
-            item.item_type,
-            item.search_string,
-            item.title,
+            item_type=item.item_type,
+            title=item.title,
             description=item.description,
-            account=item.account,
-            jid=item.jid,
             paintable=item.paintable,
             icon_name=item.icon_name,
         )
@@ -211,6 +212,18 @@ class UniversalSearch(Gtk.Box):
                 )
                 self._model.append(item)
 
+            # Actions
+            profile_action = UniversalSearchResultItem(
+                "action",
+                f"{_('Profile Picture')} {_('Avatar')}".casefold(),
+                _("Profile"),
+                description=_("Edit your contact details…"),
+                icon_name="lucide-user-symbolic",
+                callback=self._show_profile,
+                callback_kwargs={"account": account},
+            )
+            self._model.append(profile_action)
+
         self._results_listbox.bind_model(self._selection_model, self._row_create_func)
 
     def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
@@ -224,6 +237,8 @@ class UniversalSearch(Gtk.Box):
 
         self.set_visible(True)
 
+        # The message search item needs to be updated with every change in order to
+        # reflect the current search query.
         first_item = self._model.get_item(0)
         if first_item is not None and first_item.item_type == "message_search":
             self._model.remove(0)
@@ -296,29 +311,40 @@ class UniversalSearch(Gtk.Box):
         item = cast(
             UniversalSearchResultItem, self._selection_model.get_selected_item()
         )
-        if item.account is not None and item.jid is not None:
-            self._start_chat(item.account, item.jid)
-            return
+        self._on_item_activated(item)
 
-        print(item.search_string)
-
-    def _on_result_item_activated(
+    def _on_result_item_row_activated(
         self,
         _listbox: Gtk.ListBox,
         row: UniversalSearchResultItemRow,
     ) -> None:
-        if row.account is not None and row.jid is not None:
-            self._start_chat(row.account, row.jid)
+        position = row.get_index()
+        item = cast(UniversalSearchResultItem, self._selection_model.get_item(position))
+        self._on_item_activated(item)
+
+    def _on_item_activated(self, item: UniversalSearchResultItem) -> None:
+        self.hide_search(block_signals=True)
+
+        if item.account is not None and item.jid is not None:
+            self._start_chat(item.account, item.jid)
             return
 
-        print(row.search_string)
+        if item.item_type == "action":
+            item.callback(**item.callback_kwargs)
+            return
+
+        print(item.search_string)
 
     def _start_chat(self, account: str, jid: JID) -> None:
-        self.hide_search(block_signals=True)
         app.window.start_chat_from_jid(StartChatParam(account=account, jid=jid))
 
+    def _show_profile(self, account: str) -> None:
+        open_window("ProfileWindow", account=account)
 
-UniversalSearchResultItemType = Literal["contact", "group_chat", "message_search"]
+
+UniversalSearchResultItemType = Literal[
+    "contact", "group_chat", "message_search", "action"
+]
 
 
 class UniversalSearchResultItem(GObject.Object):
@@ -332,6 +358,8 @@ class UniversalSearchResultItem(GObject.Object):
     jid = GObject.Property(type=str, default=None)
     paintable = GObject.Property(type=Gdk.Paintable, default=None)
     icon_name = GObject.Property(type=str, default=None)
+    callback = GObject.Property(type=object, default=None)
+    callback_kwargs = GObject.Property(type=object, default=None)
 
     def __init__(
         self,
@@ -343,6 +371,8 @@ class UniversalSearchResultItem(GObject.Object):
         jid: JID | None = None,
         paintable: Gdk.Paintable | None = None,
         icon_name: str | None = None,
+        callback: Callable[..., Any] | None = None,
+        callback_kwargs: dict | None = None,
     ) -> None:
         super().__init__(
             item_type=item_type,
@@ -353,6 +383,8 @@ class UniversalSearchResultItem(GObject.Object):
             jid=jid,
             paintable=paintable,
             icon_name=icon_name,
+            callback=callback,
+            callback_kwargs=callback_kwargs,
         )
 
 
@@ -367,21 +399,12 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
     def __init__(
         self,
         item_type: UniversalSearchResultItemType,
-        search_string: str,
         title: str,
         description: str | None = None,
-        account: str | None = None,
-        jid: JID | None = None,
         paintable: Gdk.Paintable | None = None,
         icon_name: str | None = None,
     ) -> None:
         Gtk.ListBoxRow.__init__(self)
-        self.item_type = item_type
-        self.search_string = search_string
-
-        self.title = title
-        self.account = account
-        self.jid = jid
 
         if paintable is not None:
             self._image.set_from_paintable(paintable)
