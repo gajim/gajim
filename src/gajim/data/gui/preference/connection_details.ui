@@ -8,7 +8,8 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_domain">
-        <property name="title" translatable="yes">Domain</property>
+        <!-- Don't translate technical terms -->
+        <property name="title">Domain</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -17,7 +18,8 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_dns">
-        <property name="title" translatable="yes">DNS</property>
+        <!-- Don't translate technical terms -->
+        <property name="title">DNS</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -26,7 +28,8 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_ip_port">
-        <property name="title" translatable="yes">IP / Port</property>
+        <!-- Don't translate technical terms -->
+        <property name="title">IP / Port</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -35,7 +38,8 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_websocket">
-        <property name="title" translatable="yes">WebSocket URL</property>
+        <!-- Don't translate technical terms -->
+        <property name="title">WebSocket URL</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
