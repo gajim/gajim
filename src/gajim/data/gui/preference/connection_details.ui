@@ -8,7 +8,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_domain">
-        <property name="title">Domain</property>
+        <property name="title" translatable="yes">Domain</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -17,7 +17,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_dns">
-        <property name="title">DNS</property>
+        <property name="title" translatable="yes">DNS</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -26,7 +26,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_ip_port">
-        <property name="title">IP / Port</property>
+        <property name="title" translatable="yes">IP / Port</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -35,7 +35,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_websocket">
-        <property name="title">WebSocket URL</property>
+        <property name="title" translatable="yes">WebSocket URL</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -44,7 +44,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_connection_type">
-        <property name="title">Type</property>
+        <property name="title" translatable="yes">Type</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -53,7 +53,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_tls_version">
-        <property name="title">TLS Version</property>
+        <property name="title" translatable="yes">TLS Version</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -62,7 +62,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_cipher_suite">
-        <property name="title">Cipher Suite</property>
+        <property name="title" translatable="yes">Cipher Suite</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -71,7 +71,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_proxy_type">
-        <property name="title">Proxy Type</property>
+        <property name="title" translatable="yes">Proxy Type</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -80,7 +80,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_proxy_host">
-        <property name="title">Proxy Host</property>
+        <property name="title" translatable="yes">Proxy Host</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>

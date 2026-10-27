@@ -8,7 +8,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_hostname_row">
-        <property name="title">Hostname</property>
+        <property name="title" translatable="yes">Hostname</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -17,7 +17,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_software_row">
-        <property name="title">Software</property>
+        <property name="title" translatable="yes">Software</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
@@ -26,7 +26,7 @@
     </child>
     <child>
       <object class="AdwActionRow" id="_uptime_row">
-        <property name="title">Uptime</property>
+        <property name="title" translatable="yes">Uptime</property>
         <property name="subtitle-selectable">True</property>
         <style>
           <class name="property"/>
