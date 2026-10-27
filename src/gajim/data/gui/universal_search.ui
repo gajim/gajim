@@ -41,6 +41,9 @@
                       <object class="GtkListBox" id="_results_listbox">
                         <property name="hexpand">1</property>
                         <property name="selection-mode">single</property>
+                        <style>
+                          <class name="bg-transparent" />
+                        </style>
                         <child type="placeholder">
                           <object class="AdwStatusPage">
                             <property name="description" translatable="yes">No results.</property>
