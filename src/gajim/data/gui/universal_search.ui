@@ -57,6 +57,12 @@
                     </child>
                     <child>
                       <object class="AdwToggle">
+                        <property name="name">group_chats</property>
+                        <property name="label" translatable="yes">Group Chats</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwToggle">
                         <property name="name">actions</property>
                         <property name="label" translatable="yes">Actions</property>
                       </object>

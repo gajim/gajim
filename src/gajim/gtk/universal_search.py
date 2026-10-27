@@ -73,6 +73,7 @@ class UniversalSearch(Gtk.Box):
         self._results_listbox.connect(
             "row-activated", self._on_result_item_row_activated
         )
+        self._results_listbox.set_header_func(self._header_func)
 
         focus_controller = Gtk.EventControllerFocus()
         focus_controller.connect("enter", self._on_search_focus_enter)
@@ -146,6 +147,29 @@ class UniversalSearch(Gtk.Box):
             self._update_data_model()
 
     @staticmethod
+    def _header_func(
+        row: UniversalSearchResultItemRow, before: UniversalSearchResultItemRow | None
+    ) -> None:
+        if before is None:
+            row.set_header(ResultItemRowHeader(row.item_type))
+        else:
+            if row.item_type == "contact":
+                if before.item_type == "contact":
+                    row.set_header(None)
+                else:
+                    row.set_header(ResultItemRowHeader(row.item_type))
+            elif row.item_type == "group_chat":
+                if before.item_type == "group_chat":
+                    row.set_header(None)
+                else:
+                    row.set_header(ResultItemRowHeader(row.item_type))
+            else:
+                if before.item_type == row.item_type:
+                    row.set_header(None)
+                else:
+                    row.set_header(ResultItemRowHeader(row.item_type))
+
+    @staticmethod
     def _sort_func(
         obj1: Any,
         obj2: Any,
@@ -155,7 +179,17 @@ class UniversalSearch(Gtk.Box):
         item2 = cast(UniversalSearchResultItem, obj2)
         if item1.item_type == "message_search":
             return -1
-        return locale.strcoll(item1.title.lower(), item2.title.lower())
+
+        if item1.item_type == "action":
+            return 1
+
+        if item1.item_type == "contact" and obj2.item_type != "contact":
+            return -1 if item2.item_type == "contact" else 1
+
+        if item1.item_type == "group_chat" and obj2.item_type != "group_chat":
+            return -1 if item2.item_type == "group_chat" else 1
+
+        return locale.strcoll(item1.title.casefold(), item2.title.lower())
 
     def _filter_func(self, obj: GObject.Object) -> bool:
         item = cast(UniversalSearchResultItem, obj)
@@ -165,10 +199,9 @@ class UniversalSearch(Gtk.Box):
             case "actions":
                 return query in item.search_string and item.item_type == "action"
             case "contacts":
-                return query in item.search_string and item.item_type in (
-                    "contact",
-                    "group_chat",
-                )
+                return query in item.search_string and item.item_type == "contact"
+            case "group_chats":
+                return query in item.search_string and item.item_type == "group_chat"
             case _:
                 return query in item.search_string
 
@@ -368,7 +401,7 @@ class UniversalSearch(Gtk.Box):
 
 
 UniversalSearchResultItemType = Literal[
-    "contact", "group_chat", "message_search", "action"
+    "message_search", "contact", "group_chat", "action"
 ]
 
 
@@ -433,6 +466,8 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
     ) -> None:
         Gtk.ListBoxRow.__init__(self)
 
+        self.item_type = item_type
+
         if paintable is not None:
             self._image.set_from_paintable(paintable)
         if icon_name is not None:
@@ -453,3 +488,20 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
         if account is not None and len(accounts) > 1:
             self._account_badge.set_account(account)
             self._account_badge.set_visible(True)
+
+
+class ResultItemRowHeader(Gtk.Label):
+    def __init__(self, item_type: UniversalSearchResultItemType) -> None:
+        Gtk.Label.__init__(
+            self, halign=Gtk.Align.START, visible=item_type != "message_search"
+        )
+        self.add_css_class("mt-12")
+        self.add_css_class("bold")
+
+        match item_type:
+            case "contact":
+                self.set_text(_("Contacts"))
+            case "group_chat":
+                self.set_text(_("Group Chats"))
+            case "action":
+                self.set_text(_("Actions"))
