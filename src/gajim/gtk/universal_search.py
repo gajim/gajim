@@ -372,7 +372,7 @@ class UniversalSearchResultItem(GObject.Object):
         paintable: Gdk.Paintable | None = None,
         icon_name: str | None = None,
         callback: Callable[..., Any] | None = None,
-        callback_kwargs: dict | None = None,
+        callback_kwargs: dict[str, Any] | None = None,
     ) -> None:
         super().__init__(
             item_type=item_type,
