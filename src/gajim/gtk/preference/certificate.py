@@ -162,6 +162,7 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
         app.check_finalize(self)
 
     def _on_copy_button_clicked(self, _widget: Gtk.Button) -> None:
+        # Don't translate certificate details
         clipboard_text = (
             _("Certificate")
             + "\n"
@@ -171,42 +172,42 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
             + _("Account address: ")
             + self._account_address
             + "\n"
-            + _("Issued to\n")
-            + _("Common Name (CN): ")
+            + "Issued to\n"
+            + "Common Name (CN): "
             + self._it_common_name
             + "\n"
-            + _("Organization (O): ")
+            + "Organization (O): "
             + self._it_organization
             + "\n"
-            + _("Subject Alt Names: ")
+            + "Subject Alt Names: "
             + self._it_subject_alt_names
             + "\n"
-            + _("Serial Number: ")
+            + "Serial Number: "
             + self._it_serial_number
             + "\n\n"
-            + _("Issued by\n")
-            + _("Common Name (CN): ")
+            + "Issued by\n"
+            + "Common Name (CN): "
             + self._ib_common_name
             + "\n"
-            + _("Organization (O): ")
+            + "Organization (O): "
             + self._ib_organization
             + "\n"
-            + _("Validity\n")
-            + _("Issued on: ")
+            + "Validity\n"
+            + "Issued on: "
             + self._issued
             + "\n"
-            + _("Expires on: ")
+            + "Expires on: "
             + self._expires
             + "\n\n"
-            + _("SHA-1:")
+            + "SHA-1:"
             + "\n"
             + self._sha1
             + "\n"
-            + _("SHA-256:")
+            + "SHA-256:"
             + "\n"
             + self._sha256
             + "\n\n"
-            + _("Public Key: ")
+            + "Public Key: "
             + self._pk_algorithm
             + " "
             + self._pk_size

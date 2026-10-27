@@ -31,10 +31,12 @@
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <property name="title" translatable="yes">Issued to</property>
+        <!-- Don't translate certificate details -->
+        <property name="title">Issued to</property>
             <child>
               <object class="AdwActionRow" id="_issued_to_common_name_row">
-                <property name="title" translatable="yes">Common Name (CN)</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Common Name (CN)</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -43,7 +45,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_issued_to_organization_row">
-                <property name="title" translatable="yes">Organization (O)</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Organization (O)</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -52,7 +55,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_issued_to_subject_alt_names_row">
-                <property name="title" translatable="yes">Subject Alt Names</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Subject Alt Names</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -61,7 +65,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_issued_to_serial_number_row">
-                <property name="title" translatable="yes">Serial Number</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Serial Number</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -73,10 +78,12 @@
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <property name="title" translatable="yes">Issued by</property>
+        <!-- Don't translate certificate details -->
+        <property name="title">Issued by</property>
             <child>
               <object class="AdwActionRow" id="_issued_by_common_name_row">
-                <property name="title" translatable="yes">Common Name (CN)</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Common Name (CN)</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -85,7 +92,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_issued_by_organization_row">
-                <property name="title" translatable="yes">Organization (O)</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Organization (O)</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -96,10 +104,12 @@
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <property name="title" translatable="yes">Validity</property>
+        <!-- Don't translate certificate details -->
+        <property name="title">Validity</property>
             <child>
               <object class="AdwActionRow" id="_issue_date_row">
-                <property name="title" translatable="yes">Issue date</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Issue date</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -108,7 +118,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_expiry_date_row">
-                <property name="title" translatable="yes">Expiry date</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Expiry date</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -119,10 +130,12 @@
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <property name="title" translatable="yes">Fingerprints</property>
+        <!-- Don't translate certificate details -->
+        <property name="title">Fingerprints</property>
             <child>
               <object class="AdwActionRow" id="_fingerprint_sha1_row">
-                <property name="title" translatable="yes">SHA-1</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">SHA-1</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -132,7 +145,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_fingerprint_sha256_row">
-                <property name="title" translatable="yes">SHA-256</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">SHA-256</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -144,10 +158,12 @@
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <property name="title" translatable="yes">Public Key Information</property>
+        <!-- Don't translate certificate details -->
+        <property name="title">Public Key Information</property>
             <child>
               <object class="AdwActionRow" id="_algorithm_row">
-                <property name="title" translatable="yes">Algorithm</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Algorithm</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
@@ -156,7 +172,8 @@
             </child>
             <child>
               <object class="AdwActionRow" id="_key_size_row">
-                <property name="title" translatable="yes">Key Size</property>
+                <!-- Don't translate certificate details -->
+                <property name="title">Key Size</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
                   <class name="property"/>
