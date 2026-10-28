@@ -16,6 +16,7 @@ from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 
@@ -90,7 +91,9 @@ log = logging.getLogger("gajim.gtk.main")
 @Gtk.Template(string=get_ui_string("main.ui"))
 class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-method-override]
     __gtype_name__ = "MainWindow"
-
+    __gsignals__ = {
+        "unread-count-changed": (GObject.SignalFlags.RUN_LAST, None, (str, int)),
+    }
     _header_bar: Adw.HeaderBar = Gtk.Template.Child()
     _back_button: Gtk.Button = Gtk.Template.Child()
     _split_view: Adw.OverlaySplitView = Gtk.Template.Child()
@@ -183,7 +186,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         app.ged.raise_event(events.RegisterActions())
 
         chat_list_stack = self._chat_page.get_chat_list_stack()
-        app.app.systray.connect_unread_widget(chat_list_stack, "unread-count-changed")
         chat_list_stack.connect("chat-selected", self._on_chat_selected)
 
         for client in app.get_clients():

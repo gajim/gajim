@@ -12,7 +12,6 @@ import sys
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -41,8 +40,6 @@ if sys.platform == "win32" or TYPE_CHECKING:
 
 class TrayIcon:
     def __init__(self) -> None:
-        app.settings.connect_signal("show_trayicon", self._on_setting_changed)
-
         if sys.platform == "win32":
             self._backend = WindowsTrayIcon()
         elif sys.platform == "darwin":
@@ -50,11 +47,11 @@ class TrayIcon:
         else:
             self._backend = LinuxTrayIcon()
 
+        app.settings.connect_signal("show_trayicon", self._on_setting_changed)
+        app.window.connect("unread-count-changed", self._on_unread_count_changed)
+
     def _on_setting_changed(self, value: bool, *args: Any) -> None:
         self._backend.set_enabled(value)
-
-    def connect_unread_widget(self, widget: Gtk.Widget, signal: str) -> None:
-        widget.connect(signal, self._on_unread_count_changed)
 
     def _on_unread_count_changed(self, *args: Any) -> None:
         if not app.settings.get("trayicon_notification_on_events"):

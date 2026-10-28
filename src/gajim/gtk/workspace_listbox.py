@@ -60,8 +60,8 @@ class WorkspaceListBox(Gtk.ListBox):
 
     def set_chat_page(self, chat_page: ChatPage) -> None:
         chat_list_stack = chat_page.get_chat_list_stack()
-        chat_list_stack.connect("unread-count-changed", self._on_unread_count_changed)
         chat_list_stack.connect("chat-selected", self._on_chat_selected)
+        app.window.connect("unread-count-changed", self._on_unread_count_changed)
 
     def get_row_count(self) -> int:
         return get_listbox_row_count(self)

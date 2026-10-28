@@ -47,6 +47,7 @@ log = logging.getLogger("gajim.gtk.chatlist")
 
 
 class ChatList(Gtk.ListBox, EventHelper, SignalManager):
+    __gtype_name__ = "ChatList"
     __gsignals__ = {
         "chat-order-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
@@ -359,9 +360,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def _emit_unread_changed(self) -> None:
         count = self.get_unread_count()
-        chat_list_stack = self.get_parent()
-        assert chat_list_stack is not None
-        chat_list_stack.emit("unread-count-changed", self._workspace_id, count)
+        app.window.emit("unread-count-changed", self._workspace_id, count)
 
     def _get_row_before(self, row: ChatListRow) -> ChatListRow | None:
         row_before = self.get_row_at_index(row.get_index() - 1)

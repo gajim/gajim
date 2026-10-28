@@ -34,7 +34,6 @@ from gajim.gtk.chat_list_row import ChatListRow
 class ChatListStack(Gtk.Stack, EventHelper):
     __gtype_name__ = "ChatListStack"
     __gsignals__ = {
-        "unread-count-changed": (GObject.SignalFlags.RUN_LAST, None, (str, int)),
         "chat-selected": (GObject.SignalFlags.RUN_LAST, None, (str, str, object)),
         "chat-unselected": (GObject.SignalFlags.RUN_LAST, None, ()),
         "chat-removed": (GObject.SignalFlags.RUN_LAST, None, (str, object, str, bool)),
