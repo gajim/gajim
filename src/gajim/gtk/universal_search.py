@@ -501,11 +501,7 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
 
 class ResultItemRowHeader(Gtk.Label):
     def __init__(self, item_type: UniversalSearchResultItemType) -> None:
-        Gtk.Label.__init__(
-            self,
-            halign=Gtk.Align.START,
-            visible=item_type != UniversalSearchResultItemType.MESSAGE_SEARCH,
-        )
+        Gtk.Label.__init__(self, halign=Gtk.Align.START)
         self.add_css_class("mt-12")
         self.add_css_class("bold")
 
@@ -516,3 +512,5 @@ class ResultItemRowHeader(Gtk.Label):
                 self.set_text(_("Group Chats"))
             case UniversalSearchResultItemType.ACTION:
                 self.set_text(_("Actions"))
+            case _:
+                self.set_visible(False)
