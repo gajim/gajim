@@ -14,7 +14,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import CSSPriority
-from gajim.common.settings import Settings
+from gajim.common.settings.backend import Settings
 
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.window import GajimAppWindow

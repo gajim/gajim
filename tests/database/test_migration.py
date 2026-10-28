@@ -10,7 +10,7 @@ from pathlib import Path
 import sqlalchemy as sa
 
 from gajim.common import app
-from gajim.common.settings import Settings
+from gajim.common.settings.backend import Settings
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.storage import CURRENT_USER_VERSION
 from gajim.common.storage.archive.storage import MessageArchiveStorage

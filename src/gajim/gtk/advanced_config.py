@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 
+from typing import cast
+
 from enum import IntEnum
 from enum import unique
 
@@ -13,8 +15,8 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.setting_values import ADVANCED_SETTINGS
-from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.settings.schema import SettingSchema
+from gajim.common.settings.schema import SettingType
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.window import GajimAppWindow
@@ -36,6 +38,43 @@ SETTING_TYPES = {
     int: p_("Configuration type", "Integer"),
     str: p_("Configuration type", "Text"),
 }
+
+ADVANCED_SETTINGS: list[str] = [
+    "additional_uri_schemes",
+    "always_english_wikipedia",
+    "always_english_wiktionary",
+    "chat_merge_consecutive_nickname",
+    "confirm_block",
+    "confirm_close_muc",
+    "confirm_on_window_delete",
+    "date_format",
+    "date_time_format",
+    "dev_force_bookmark_2",
+    "dictionary_url",
+    "file_transfers_port",
+    "ft_add_hosts_to_send",
+    "gc_notify_on_all_messages_private_default",
+    "gc_notify_on_all_messages_public_default",
+    "gc_refer_to_nick_char",
+    "groupchat_roster_width",
+    "ignore_incoming_attention",
+    "muc_highlight_words",
+    "muclumbus_api_http_uri",
+    "muclumbus_api_jid",
+    "muclumbus_api_pref",
+    "notification_preview_message",
+    "notify_on_all_muc_messages",
+    "plugins_repository_enabled",
+    "providers_list_url",
+    "quick_reaction_emojis",
+    "search_engine",
+    "stun_server",
+    "time_format",
+    "use_http2",
+    "use_kib_mib",
+    "use_stun_server",
+    "use_urgency_hint",
+]
 
 
 class AdvancedConfig(GajimAppWindow):
@@ -64,6 +103,8 @@ class AdvancedConfig(GajimAppWindow):
         self._connect(
             self._ui.treeview_selection, "changed", self._on_treeview_selection_changed
         )
+
+        self._schema = SettingSchema.get_default()
 
         treeview = self._ui.advanced_treeview
         self.treeview = treeview
@@ -162,10 +203,13 @@ class AdvancedConfig(GajimAppWindow):
             self._ui.reset_button.set_sensitive(False)
             return
 
-        setting = model[iter_][Column.NAME]
-        desc = ADVANCED_SETTINGS["app"][setting]
+        key = cast(str, model[iter_][Column.NAME])
+        setting = self._schema.get_setting(SettingType.APP, key)
+        assert setting is not None
 
-        self._ui.description.set_text(desc or p_("Configuration description", "None"))
+        self._ui.description.set_text(
+            setting.desc or p_("Configuration description", "None")
+        )
         self._ui.reset_button.set_sensitive(not model[iter_][Column.IS_DEFAULT])
 
     def _on_treeview_row_activated(
@@ -174,20 +218,21 @@ class AdvancedConfig(GajimAppWindow):
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         assert modelpath
         modelrow = self.model[modelpath]
-        setting = modelrow[Column.NAME]
+        key = cast(str, modelrow[Column.NAME])
 
         if modelrow[Column.TYPE] != SETTING_TYPES[bool]:
             return
 
         setting_value = modelrow[Column.VALUE] != _("Activated")
         column_value = BOOL_DICT[setting_value]
-        default = APP_SETTINGS[setting]
+        app.settings.set_app_setting(key, setting_value)  # type: ignore
 
-        app.settings.set(setting, setting_value)
+        setting = self._schema.get_setting(SettingType.APP, key)
+        assert setting is not None
         modelrow[Column.VALUE] = column_value
-        modelrow[Column.IS_DEFAULT] = bool(setting_value == default)
+        modelrow[Column.IS_DEFAULT] = bool(setting_value == setting.default)
 
-        self._ui.reset_button.set_sensitive(setting_value != default)
+        self._ui.reset_button.set_sensitive(setting_value != setting.default)
 
     def _on_config_edited(
         self, _cell: Gtk.CellRendererText, path: str, text: str
@@ -197,8 +242,7 @@ class AdvancedConfig(GajimAppWindow):
         modelpath = self.modelfilter.convert_path_to_child_path(treepath)
         assert modelpath
         modelrow = self.model[modelpath]
-        setting = modelrow[Column.NAME]
-        default = APP_SETTINGS[setting]
+        key = cast(str, modelrow[Column.NAME])
 
         value = text
         if modelrow[Column.TYPE] == SETTING_TYPES[int]:
@@ -207,19 +251,27 @@ class AdvancedConfig(GajimAppWindow):
             except ValueError:
                 return
 
-        app.settings.set(setting, value)
-        modelrow[Column.VALUE] = text
-        modelrow[Column.IS_DEFAULT] = bool(value == default)
+        app.settings.set(key, value)  # type: ignore
 
-        self._ui.reset_button.set_sensitive(value != default)
+        setting = self._schema.get_setting(SettingType.APP, key)
+        assert setting is not None
+
+        modelrow[Column.VALUE] = text
+        modelrow[Column.IS_DEFAULT] = bool(value == setting.default)
+
+        self._ui.reset_button.set_sensitive(value != setting.default)
 
     def _on_reset_button_clicked(self, button: Gtk.Button) -> None:
         model, iter_ = self.treeview.get_selection().get_selected()
         if not iter_:
             return
 
-        setting = model[iter_][Column.NAME]
-        default = APP_SETTINGS[setting]
+        key = cast(str, model[iter_][Column.NAME])
+
+        setting = self._schema.get_setting(SettingType.APP, key)
+        assert setting is not None
+
+        default = setting.default
 
         if isinstance(default, bool):
             model[iter_][Column.VALUE] = BOOL_DICT[default]
@@ -228,34 +280,33 @@ class AdvancedConfig(GajimAppWindow):
 
         model[iter_][Column.IS_DEFAULT] = True
 
-        app.settings.set(setting, default)
+        app.settings.set(key, default)  # type: ignore
         button.set_sensitive(False)
 
     def _fill_model(self) -> None:
-        for category, settings in ADVANCED_SETTINGS.items():
-            if category != "app":
-                continue
+        for key in ADVANCED_SETTINGS:
+            value = app.settings.get(key)  # type: ignore
 
-            for setting in settings:
-                value = app.settings.get(setting)  # type: ignore
-                default = APP_SETTINGS[setting]
-                is_default = bool(value == default)  # type: ignore
+            setting = self._schema.get_setting(SettingType.APP, key)
+            assert setting is not None
 
-                if isinstance(value, bool):
-                    value = BOOL_DICT[value]
-                    type_ = SETTING_TYPES[bool]
+            is_default = value == setting.default  # type: ignore
 
-                elif isinstance(value, int):
-                    value = str(value)
-                    type_ = SETTING_TYPES[int]
+            if isinstance(value, bool):
+                value = BOOL_DICT[value]
+                type_ = SETTING_TYPES[bool]
 
-                elif isinstance(value, str):
-                    type_ = SETTING_TYPES[str]
+            elif isinstance(value, int):
+                value = str(value)
+                type_ = SETTING_TYPES[int]
 
-                else:
-                    raise ValueError
+            elif isinstance(value, str):
+                type_ = SETTING_TYPES[str]
 
-                self.model.append(None, [setting, value, type_, is_default])
+            else:
+                raise ValueError
+
+            self.model.append(None, [key, value, type_, is_default])
 
     @staticmethod
     def _visible_func(
@@ -265,10 +316,13 @@ class AdvancedConfig(GajimAppWindow):
         if not search_string:
             return True
 
-        setting = model[treeiter][Column.NAME]
-        desc = ADVANCED_SETTINGS["app"][setting]
+        key = cast(str, model[treeiter][Column.NAME])
 
-        return search_string in setting or search_string in desc.lower()
+        schema = SettingSchema.get_default()
+        setting = schema.get_setting(SettingType.APP, key)
+        assert setting is not None
+
+        return search_string in key or search_string in setting.desc.lower()
 
     def _on_search_entry_changed(self, _entry: Gtk.SearchEntry) -> None:
         self.modelfilter.refilter()

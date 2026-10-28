@@ -19,7 +19,6 @@ from gajim.common.events import AccountCreated
 from gajim.common.events import AccountRemoved
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
-from gajim.common.setting_values import AllSettingsT
 
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import DialogResponse
@@ -88,7 +87,7 @@ class Preferences(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-ove
         )
         EventHelper.__init__(self)
 
-        self._need_relogin: dict[str, list[AllSettingsT]] = {}
+        self._need_relogin: dict[str, list[Any]] = {}
         self._account_menu_items: dict[str, SideBarMenuItem] = {}
 
         self._side_bar_switcher = SideBarSwitcher()
@@ -259,8 +258,8 @@ class Preferences(GajimAppWindow, EventHelper):  # ty: ignore[invalid-method-ove
         )
 
     @staticmethod
-    def _get_relogin_settings(account: str) -> list[AllSettingsT]:
-        values: list[AllSettingsT] = []
+    def _get_relogin_settings(account: str) -> list[Any]:
+        values: list[Any] = []
         values.append(app.settings.get_account_setting(account, "client_cert"))
         values.append(app.settings.get_account_setting(account, "proxy"))
         values.append(app.settings.get_account_setting(account, "resource"))

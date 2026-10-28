@@ -41,15 +41,13 @@ from gajim.common.helpers import idle_add_once
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
-from gajim.common.setting_values import AllContactSettings
-from gajim.common.setting_values import AllContactSettingsT
-from gajim.common.setting_values import AllGroupChatSettings
-from gajim.common.setting_values import AllGroupChatSettingsT
-from gajim.common.setting_values import BoolContactSettings
-from gajim.common.setting_values import BoolGroupChatSettings
-from gajim.common.setting_values import IntGroupChatSettings
-from gajim.common.setting_values import StringContactSettings
-from gajim.common.setting_values import StringGroupChatSettings
+from gajim.common.settings.types import AllContactSettings
+from gajim.common.settings.types import AllGroupChatSettings
+from gajim.common.settings.types import ContactBoolSettings
+from gajim.common.settings.types import ContactStringSettings
+from gajim.common.settings.types import GroupChatBoolSettings
+from gajim.common.settings.types import GroupChatIntSettings
+from gajim.common.settings.types import GroupChatStringSettings
 from gajim.common.structs import MUCPresenceData
 from gajim.common.structs import PresenceData
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
@@ -64,20 +62,20 @@ class ContactSettings:
         self._jid = jid
 
     @overload
-    def get(self, setting: StringContactSettings) -> str: ...
+    def get(self, key: ContactStringSettings) -> str: ...
     @overload
-    def get(self, setting: BoolContactSettings) -> bool: ...
+    def get(self, key: ContactBoolSettings) -> bool: ...
 
-    def get(self, setting: AllContactSettings) -> AllContactSettingsT:
-        return app.settings.get_contact_setting(self._account, self._jid, setting)
+    def get(self, key: AllContactSettings) -> str | bool:
+        return app.settings.get_contact_setting(self._account, self._jid, key)
 
     @overload
-    def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501
+    def set(self, key: ContactStringSettings, value: str | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501
+    def set(self, key: ContactBoolSettings, value: bool | None) -> None: ...  # noqa: E501
 
-    def set(self, setting: Any, value: Any) -> None:
-        app.settings.set_contact_setting(self._account, self._jid, setting, value)
+    def set(self, key: AllContactSettings, value: Any) -> None:
+        app.settings.set_contact_setting(self._account, self._jid, key, value)
 
 
 class GroupChatSettings:
@@ -86,24 +84,24 @@ class GroupChatSettings:
         self._jid = jid
 
     @overload
-    def get(self, setting: StringGroupChatSettings) -> str: ...
+    def get(self, key: GroupChatStringSettings) -> str: ...
     @overload
-    def get(self, setting: BoolGroupChatSettings) -> bool: ...
+    def get(self, key: GroupChatBoolSettings) -> bool: ...
     @overload
-    def get(self, setting: IntGroupChatSettings) -> int: ...
+    def get(self, key: GroupChatIntSettings) -> int: ...
 
-    def get(self, setting: AllGroupChatSettings) -> AllGroupChatSettingsT:
-        return app.settings.get_group_chat_setting(self._account, self._jid, setting)
+    def get(self, key: AllGroupChatSettings) -> Any:
+        return app.settings.get_group_chat_setting(self._account, self._jid, key)
 
     @overload
-    def set(self, setting: StringGroupChatSettings, value: str | None) -> None: ...  # noqa: E501
+    def set(self, key: GroupChatStringSettings, value: str | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: BoolGroupChatSettings, value: bool | None) -> None: ...  # noqa: E501
+    def set(self, key: GroupChatBoolSettings, value: bool | None) -> None: ...  # noqa: E501
     @overload
-    def set(self, setting: IntGroupChatSettings, value: int | None) -> None: ...  # noqa: E501
+    def set(self, key: GroupChatIntSettings, value: int | None) -> None: ...  # noqa: E501
 
-    def set(self, setting: Any, value: Any) -> None:
-        app.settings.set_group_chat_setting(self._account, self._jid, setting, value)
+    def set(self, key: Any, value: Any) -> None:
+        app.settings.set_group_chat_setting(self._account, self._jid, key, value)
 
 
 class Contacts(BaseModule):

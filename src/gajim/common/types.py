@@ -28,7 +28,7 @@ if TYPE_CHECKING:
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.modules.contacts import ResourceContact
-    from gajim.common.settings import Settings
+    from gajim.common.settings.backend import Settings
     from gajim.plugins.pluginmanager import PluginManager
     from gajim.plugins.repository import PluginRepository
 

@@ -27,7 +27,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message_util import get_nickname_from_message
-from gajim.common.setting_values import OpenChatsSettingT
+from gajim.common.settings.types import OpenChatSettingDetails
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.muc import get_group_chat_nick
@@ -168,8 +168,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return None
         return row
 
-    def get_open_chats(self) -> OpenChatsSettingT:
-        open_chats: OpenChatsSettingT = []
+    def get_open_chats(self) -> list[OpenChatSettingDetails]:
+        open_chats: list[OpenChatSettingDetails] = []
         for key, row in self._chats.items():
             account, jid = key
             open_chats.append(

@@ -18,7 +18,7 @@ from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.i18n import _
-from gajim.common.setting_values import BoolSettings
+from gajim.common.settings.types import AppBoolSettings
 
 # from gajim.common.util.av import AudioOutputManager
 # from gajim.common.util.av import VideoInputManager
@@ -964,7 +964,7 @@ class MiscellaneousGroup(GajimPreferencesGroup):
             title=_("Miscellaneous"),
         )
 
-        self._hints_list: list[BoolSettings] = [
+        self._hints_list: list[AppBoolSettings] = [
             "show_help_start_chat",
         ]
 

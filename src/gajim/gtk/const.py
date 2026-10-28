@@ -19,7 +19,6 @@ from enum import unique
 from gi.repository import Gdk
 
 from gajim.common.i18n import _
-from gajim.common.setting_values import AllSettingsT
 
 if sys.byteorder == "little":
     gdk_memory_default = Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED
@@ -32,7 +31,7 @@ class Setting(NamedTuple):
     kind: SettingKind
     label: str
     type: SettingType
-    value: AllSettingsT | None = None
+    value: Any | None = None
     name: str | None = None
     callback: Callable[..., None] | None = None
     data: Any | None = None

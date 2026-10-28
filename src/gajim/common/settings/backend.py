@@ -28,40 +28,27 @@ from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import deep_update
-from gajim.common.setting_values import ACCOUNT_SETTINGS
-from gajim.common.setting_values import AllAccountSettings
-from gajim.common.setting_values import AllAccountSettingsT
-from gajim.common.setting_values import AllContactSettings
-from gajim.common.setting_values import AllContactSettingsT
-from gajim.common.setting_values import AllGroupChatSettings
-from gajim.common.setting_values import AllGroupChatSettingsT
-from gajim.common.setting_values import AllSettingsT
-from gajim.common.setting_values import AllWorkspaceSettings
-from gajim.common.setting_values import AllWorkspaceSettingsT
-from gajim.common.setting_values import APP_SETTINGS
-from gajim.common.setting_values import BoolAccountSettings
-from gajim.common.setting_values import BoolContactSettings
-from gajim.common.setting_values import BoolGroupChatSettings
-from gajim.common.setting_values import BoolSettings
-from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
-from gajim.common.setting_values import FloatSettings
-from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
-from gajim.common.setting_values import HAS_APP_DEFAULT
-from gajim.common.setting_values import INITIAL_WORKSPACE
-from gajim.common.setting_values import IntAccountSettings
-from gajim.common.setting_values import IntGroupChatSettings
-from gajim.common.setting_values import IntSettings
-from gajim.common.setting_values import OpenChatsSettingT
-from gajim.common.setting_values import PLUGIN_SETTINGS
-from gajim.common.setting_values import PROXY_EXAMPLES
-from gajim.common.setting_values import PROXY_SETTINGS
-from gajim.common.setting_values import StringAccountSettings
-from gajim.common.setting_values import StringContactSettings
-from gajim.common.setting_values import StringGroupChatSettings
-from gajim.common.setting_values import StringSettings
-from gajim.common.setting_values import StringWorkspaceSettings
-from gajim.common.setting_values import WORKSPACE_SETTINGS
-from gajim.common.setting_values import WorkspaceSettings
+from gajim.common.settings.schema import DEFAULT_SOUNDEVENT_SETTINGS
+from gajim.common.settings.schema import INITIAL_WORKSPACE
+from gajim.common.settings.schema import PROXY_EXAMPLES
+from gajim.common.settings.schema import SettingSchema
+from gajim.common.settings.schema import SettingT
+from gajim.common.settings.schema import SettingType
+from gajim.common.settings.schema import WorkspaceSettings
+from gajim.common.settings.types import AccountBoolSettings
+from gajim.common.settings.types import AccountIntSettings
+from gajim.common.settings.types import AccountStringSettings
+from gajim.common.settings.types import AppBoolSettings
+from gajim.common.settings.types import AppFloatSettings
+from gajim.common.settings.types import AppIntSettings
+from gajim.common.settings.types import AppStringSettings
+from gajim.common.settings.types import ContactBoolSettings
+from gajim.common.settings.types import ContactStringSettings
+from gajim.common.settings.types import GroupChatBoolSettings
+from gajim.common.settings.types import GroupChatIntSettings
+from gajim.common.settings.types import GroupChatStringSettings
+from gajim.common.settings.types import OpenChatSettingDetails
+from gajim.common.settings.types import WorkspaceStringSettings
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 from gajim.common.util.classes import SettingsAction
@@ -121,13 +108,17 @@ class SettingsDictT(TypedDict):
 
 
 class Settings:
-    def __init__(self, in_memory: bool = False):
+    def __init__(self, *, in_memory: bool = False, schema: SettingSchema | None = None):
         self._con = cast(sqlite3.Connection, None)
         self._commit_scheduled = None
         self._in_memory = in_memory
 
+        if schema is None:
+            schema = SettingSchema.get_default()
+
+        self._schema = schema
         self._settings: SettingsDictT = {}
-        self._app_overrides: dict[str, AllSettingsT] = {}
+        self._app_overrides: dict[str, Any] = {}
         self._account_settings: dict[str, Any | dict[str, dict[JID | str, Any]]] = {}
 
         self._callbacks: _CallbackDict = defaultdict(list)
@@ -159,7 +150,7 @@ class Settings:
                     if func is None or func.__self__ is object_:
                         handlers.remove(handler)
 
-    def create_action(self, setting: BoolSettings) -> SettingsAction:
+    def create_action(self, setting: AppBoolSettings) -> SettingsAction:
         # Currently only boolean app settings are supported
         value = self.get_app_setting(setting)
         action = SettingsAction(
@@ -238,13 +229,16 @@ class Settings:
         self._load_app_overrides()
         self._commit()
 
-    @staticmethod
-    def _setup_installation_defaults() -> None:
+    def _setup_installation_defaults(self) -> None:
         if IS_PORTABLE:
-            APP_SETTINGS["use_keyring"] = False
+            setting = self._schema.get_setting(SettingType.APP, "use_keyring")
+            assert setting is not None
+            setting.default = False
 
         if sys.platform == "win32":
-            APP_SETTINGS["app_font_size"] = 1.125
+            setting = self._schema.get_setting(SettingType.APP, "app_font_size")
+            assert setting is not None
+            setting.default = 1.125
 
     def _load_settings_from_path(self, path: Path | None) -> None:
         if path is None:
@@ -515,74 +509,75 @@ class Settings:
         return setting in self._app_overrides
 
     @overload
-    def get_app_setting(self, setting: BoolSettings) -> bool: ...
+    def get_app_setting(self, key: AppBoolSettings) -> bool: ...
 
     @overload
-    def get_app_setting(self, setting: StringSettings) -> str: ...
+    def get_app_setting(self, key: AppStringSettings) -> str: ...
 
     @overload
-    def get_app_setting(self, setting: IntSettings) -> int: ...
+    def get_app_setting(self, key: AppIntSettings) -> int: ...
 
     @overload
-    def get_app_setting(self, setting: FloatSettings) -> float: ...
+    def get_app_setting(self, key: AppFloatSettings) -> float: ...
 
-    def get_app_setting(self, setting: str) -> AllSettingsT:
-        if setting not in APP_SETTINGS:
-            raise ValueError(f"Invalid app setting: {setting}")
+    def get_app_setting(self, key: str) -> Any:
+        setting = self._schema.get_setting(SettingType.APP, key)
+        if setting is None:
+            raise ValueError(f"Invalid app setting: {key}")
 
         try:
-            return self._settings["app"][setting]
+            return self._settings["app"][key]
         except KeyError:
-            return APP_SETTINGS[setting]
+            return setting.default
 
     get = get_app_setting
 
     @overload
-    def set_app_setting(self, setting: BoolSettings, value: bool | None) -> None: ...
+    def set_app_setting(self, key: AppBoolSettings, value: bool | None) -> None: ...
 
     @overload
-    def set_app_setting(self, setting: StringSettings, value: str | None) -> None: ...
+    def set_app_setting(self, key: AppStringSettings, value: str | None) -> None: ...
 
     @overload
-    def set_app_setting(self, setting: IntSettings, value: int | None) -> None: ...
+    def set_app_setting(self, key: AppIntSettings, value: int | None) -> None: ...
 
     @overload
-    def set_app_setting(self, setting: FloatSettings, value: float | None) -> None: ...
+    def set_app_setting(self, key: AppFloatSettings, value: float | None) -> None: ...
 
     @overload
     def set_app_setting(
-        self, setting: Literal["workspace_order"], value: list[str]
+        self, key: Literal["workspace_order"], value: list[str]
     ) -> None: ...
 
-    def set_app_setting(self, setting: str, value: AllSettingsT | None) -> None:
+    def set_app_setting(self, key: str, value: Any | None) -> None:
+        setting = self._schema.get_setting(SettingType.APP, key)
+        if setting is None:
+            raise ValueError(f"Invalid app setting: {key}")
 
-        if setting not in APP_SETTINGS:
-            raise ValueError(f"Invalid app setting: {setting}")
-
-        if setting in self._app_overrides:
+        if key in self._app_overrides:
             log.warning(
-                "Changing %s is not allowed because there exists an override", setting
+                "Changing %s is not allowed because there exists an override", key
             )
             return
 
-        default = APP_SETTINGS[setting]
+        default = setting.default
         if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if value is None:
             try:
-                del self._settings["app"][setting]
+                del self._settings["app"][key]
             except KeyError:
                 pass
 
             self._commit_settings("app")
-            self._notify(default, setting)
+            self._notify(default, key)
             return
 
-        self._settings["app"][setting] = value
+        self._settings["app"][key] = value
 
         self._commit_settings("app")
-        self._notify(value, setting)
+        self._notify(value, key)
 
     set = set_app_setting
 
@@ -593,34 +588,35 @@ class Settings:
     def get_window_size(self, window_name: str) -> tuple[int, int] | None:
         return self._settings["window_sizes"].get(window_name)
 
-    def get_plugin_setting(self, plugin: str, setting: str) -> SETTING_TYPE:
-        if setting not in PLUGIN_SETTINGS:
-            raise ValueError(f"Invalid plugin setting: {setting}")
+    def get_plugin_setting(self, plugin: str, key: str) -> SETTING_TYPE:
+        setting = self._schema.get_setting(SettingType.PLUGIN, key)
+        if setting is None:
+            raise ValueError(f"Invalid plugin setting: {key}")
 
         if plugin not in self._settings["plugins"]:
             raise ValueError(f"Unknown plugin {plugin}")
 
         try:
-            return self._settings["plugins"][plugin][setting]
+            return self._settings["plugins"][plugin][key]
         except KeyError:
-            return PLUGIN_SETTINGS[setting]
+            return setting.default
 
     def get_plugins(self) -> list[str]:
         return list(self._settings["plugins"].keys())
 
-    def set_plugin_setting(self, plugin: str, setting: str, value: bool) -> None:
+    def set_plugin_setting(self, plugin: str, key: str, value: bool) -> None:
+        setting = self._schema.get_setting(SettingType.PLUGIN, key)
+        if setting is None:
+            raise ValueError(f"Invalid plugin setting: {key}")
 
-        if setting not in PLUGIN_SETTINGS:
-            raise ValueError(f"Invalid plugin setting: {setting}")
-
-        default = PLUGIN_SETTINGS[setting]
+        default = setting.default
         if not isinstance(value, type(default)):
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if plugin in self._settings["plugins"]:
-            self._settings["plugins"][plugin][setting] = value
+            self._settings["plugins"][plugin][key] = value
         else:
-            self._settings["plugins"][plugin] = {setting: value}
+            self._settings["plugins"][plugin] = {key: value}
 
         self._commit_settings("plugins")
 
@@ -680,229 +676,197 @@ class Settings:
         raise ValueError(f"No account found for: {jid}")
 
     @overload
-    def get_account_setting(
-        self, account: str, setting: StringAccountSettings
-    ) -> str: ...
-
+    def get_account_setting(self, account: str, key: AccountStringSettings) -> str: ...
     @overload
-    def get_account_setting(self, account: str, setting: IntAccountSettings) -> int: ...
-
+    def get_account_setting(self, account: str, key: AccountIntSettings) -> int: ...
     @overload
-    def get_account_setting(
-        self, account: str, setting: BoolAccountSettings
-    ) -> bool: ...
-
-    def get_account_setting(
-        self, account: str, setting: AllAccountSettings
-    ) -> AllAccountSettingsT:
+    def get_account_setting(self, account: str, key: AccountBoolSettings) -> bool: ...
+    def get_account_setting(self, account: str, key: str) -> Any:
+        setting = self._schema.get_setting(SettingType.ACCOUNT, key)
+        if setting is None:
+            raise ValueError(f"Invalid account setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
-
-        if setting not in ACCOUNT_SETTINGS["account"]:
-            raise ValueError(f"Invalid account setting: {setting}")
 
         try:
-            return self._account_settings[account]["account"][setting]
+            return self._account_settings[account]["account"][key]
         except KeyError:
-            return ACCOUNT_SETTINGS["account"][setting]
+            return setting.default
 
     @overload
     def set_account_setting(
-        self, account: str, setting: StringAccountSettings, value: str | None
+        self, account: str, key: AccountStringSettings, value: str | None
     ) -> None: ...
 
     @overload
     def set_account_setting(
-        self, account: str, setting: IntAccountSettings, value: int | None
+        self, account: str, key: AccountIntSettings, value: int | None
     ) -> None: ...
 
     @overload
     def set_account_setting(
-        self, account: str, setting: BoolAccountSettings, value: bool | None
+        self, account: str, key: AccountBoolSettings, value: bool | None
     ) -> None: ...
 
-    def set_account_setting(
-        self,
-        account: str,
-        setting: AllAccountSettings,
-        value: AllAccountSettingsT | None,
-    ) -> None:
+    def set_account_setting(self, account: str, key: str, value: Any | None) -> None:
+        setting = self._schema.get_setting(SettingType.ACCOUNT, key)
+        if setting is None:
+            raise ValueError(f"Invalid account setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        if setting not in ACCOUNT_SETTINGS["account"]:
-            raise ValueError(f"Invalid account setting: {setting}")
-
-        default = ACCOUNT_SETTINGS["account"][setting]
+        default = setting.default
         if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if value is None:
             try:
-                del self._account_settings[account]["account"][setting]
+                del self._account_settings[account]["account"][key]
             except KeyError:
                 pass
 
             self._commit_account_settings(account)
-            self._notify(default, setting, account)
+            self._notify(default, key, account)
             return
 
-        self._account_settings[account]["account"][setting] = value
+        self._account_settings[account]["account"][key] = value
 
         self._commit_account_settings(account)
-        self._notify(value, setting, account)
+        self._notify(value, key, account)
+
+    def _get_context(self, account: str, jid: JID) -> str:
+        client = app.get_client(account)
+        contact = client.get_module("Contacts").get_contact(jid)
+        context = contact.muc_context
+        if context is None:
+            # If there is no disco info available
+            # to determine the context assume public
+            log.warning("Unable to determine context for: %s", jid)
+            context = "public"
+        return context
+
+    def _get_default(
+        self, setting: SettingT, account: str, jid: JID | None = None
+    ) -> Any:
+        if not setting.context_default:
+            return setting.default
+
+        context = None
+        default_keys: list[tuple[SettingType, str]] = []
+
+        if setting.type == SettingType.GROUPCHAT:
+            assert jid is not None
+            context = self._get_context(account, jid)
+
+            default_keys += [
+                (SettingType.ACCOUNT, f"gc_{setting.key}_{context}_default"),
+                (SettingType.APP, f"gc_{setting.key}_{context}_default"),
+                (SettingType.ACCOUNT, f"gc_{setting.key}_default"),
+                (SettingType.APP, f"gc_{setting.key}_default"),
+            ]
+
+        default_keys += [
+            (SettingType.ACCOUNT, f"{setting.key}_default"),
+            (SettingType.APP, f"{setting.key}_default"),
+        ]
+
+        for setting_type, default_key in default_keys:
+            if self._schema.get_setting(setting_type, default_key) is None:
+                continue
+
+            if setting_type == SettingType.ACCOUNT:
+                return self.get_account_setting(account, default_key)
+            else:
+                return self.get_app_setting(default_key)
+
+        raise ValueError(f"No default setting found for {setting.key}")
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, setting: IntGroupChatSettings
+        self, account: str, jid: JID, key: GroupChatIntSettings
     ) -> int: ...
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, setting: BoolGroupChatSettings
+        self, account: str, jid: JID, key: GroupChatBoolSettings
     ) -> bool: ...
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, setting: StringGroupChatSettings
+        self, account: str, jid: JID, key: GroupChatStringSettings
     ) -> str: ...
 
-    def get_group_chat_setting(
-        self, account: str, jid: JID, setting: AllGroupChatSettings
-    ) -> AllGroupChatSettingsT:
+    def get_group_chat_setting(self, account: str, jid: JID, key: str) -> Any:
+        setting = self._schema.get_setting(SettingType.GROUPCHAT, key)
+        if setting is None:
+            raise ValueError(f"Invalid group chat setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        if setting not in ACCOUNT_SETTINGS["group_chat"]:
-            raise ValueError(f"Invalid group chat setting: {setting}")
-
         try:
-            return self._account_settings[account]["group_chat"][jid][setting]
+            return self._account_settings[account]["group_chat"][jid][key]
         except KeyError:
-            client = app.get_client(account)
-            contact = client.get_module("Contacts").get_contact(jid)
-            context = contact.muc_context
-            if context is None:
-                # If there is no disco info available
-                # to determine the context assume public
-                log.warning("Unable to determine context for: %s", jid)
-                context = "public"
-
-            default = ACCOUNT_SETTINGS["group_chat"][setting]
-            if default is HAS_APP_DEFAULT:
-                context_default_setting = f"gc_{setting}_{context}_default"
-                if context_default_setting in APP_SETTINGS:
-                    return self.get_app_setting(context_default_setting)
-                return self.get_app_setting(f"gc_{setting}_default")
-
-            if default is HAS_ACCOUNT_DEFAULT:
-                default_settings = [
-                    f"gc_{setting}_{context}_default",
-                    f"gc_{setting}_default",
-                    f"{setting}_default",
-                ]
-
-                for default_setting in default_settings:
-                    if default_setting in ACCOUNT_SETTINGS["account"]:
-                        return self.get_account_setting(account, default_setting)
-
-                raise ValueError(f"No default setting found for {setting}")
-
-            return default
+            return self._get_default(setting, account, jid)
 
     @overload
     def set_group_chat_setting(
         self,
         account: str,
         jid: JID,
-        setting: StringGroupChatSettings,
+        key: GroupChatStringSettings,
         value: str | None,
     ) -> None: ...
 
     @overload
     def set_group_chat_setting(
-        self, account: str, jid: JID, setting: IntGroupChatSettings, value: int | None
+        self, account: str, jid: JID, key: GroupChatIntSettings, value: int | None
     ) -> None: ...
 
     @overload
     def set_group_chat_setting(
-        self, account: str, jid: JID, setting: BoolGroupChatSettings, value: bool | None
+        self, account: str, jid: JID, key: GroupChatBoolSettings, value: bool | None
     ) -> None: ...
 
     def set_group_chat_setting(
-        self,
-        account: str,
-        jid: JID,
-        setting: AllGroupChatSettings,
-        value: AllGroupChatSettingsT | None,
+        self, account: str, jid: JID, key: str, value: Any | None
     ) -> None:
+        setting = self._schema.get_setting(SettingType.GROUPCHAT, key)
+        if setting is None:
+            raise ValueError(f"Invalid group chat setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        if setting not in ACCOUNT_SETTINGS["group_chat"]:
-            raise ValueError(f"Invalid group chat setting: {setting}")
-
-        default = ACCOUNT_SETTINGS["group_chat"][setting]
-        if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
-            context = "public"
-            if app.account_is_connected(account):
-                client = app.get_client(account)
-                contact = client.get_module("Contacts").get_contact(jid, groupchat=True)
-                context = contact.muc_context
-                if context is None:
-                    # If there is no disco info available
-                    # to determine the context assume public
-                    log.warning("Unable to determine context for: %s", jid)
-                    context = "public"
-
-            default_store = APP_SETTINGS
-            if default is HAS_ACCOUNT_DEFAULT:
-                default_store = ACCOUNT_SETTINGS["account"]
-
-            default_settings = [
-                f"gc_{setting}_{context}_default",
-                f"gc_{setting}_default",
-                f"{setting}_default",
-            ]
-
-            default = None
-            for default_setting in default_settings:
-                if default_setting in default_store:
-                    default = default_store.get(default_setting)
-                    break
-
-            if default is None:
-                raise ValueError(f"No default setting found for {setting}")
+        default = self._get_default(setting, account, jid)
 
         if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if value is None:
             try:
-                del self._account_settings[account]["group_chat"][jid][setting]
+                del self._account_settings[account]["group_chat"][jid][key]
             except KeyError:
                 pass
 
             self._commit_account_settings(account)
-            self._notify(default, setting, account, jid)
+            self._notify(default, key, account, jid)
             return
 
         group_chat_settings = self._account_settings[account]["group_chat"]
         if jid not in group_chat_settings:
-            group_chat_settings[str(jid)] = {setting: value}
+            group_chat_settings[str(jid)] = {key: value}
         else:
-            group_chat_settings[jid][setting] = value
+            group_chat_settings[jid][key] = value
 
         self._commit_account_settings(account)
-        self._notify(value, setting, account, jid)
+        self._notify(value, key, account, jid)
 
     def set_group_chat_settings(
         self,
-        setting: str,
+        key: str,
         account: str | None,
         value: SETTING_TYPE,
         context: str | None = None,
@@ -922,93 +886,74 @@ class Settings:
                     )
                     if contact.muc_context != context:
                         continue
-                self.set_group_chat_setting(acc, jid, setting, value)
+                self.set_group_chat_setting(acc, jid, key, value)
 
     @overload
     def get_contact_setting(
-        self, account: str, jid: JID, setting: BoolContactSettings
+        self, account: str, jid: JID, key: ContactBoolSettings
     ) -> bool: ...
 
     @overload
     def get_contact_setting(
-        self, account: str, jid: JID, setting: StringContactSettings
+        self, account: str, jid: JID, key: ContactStringSettings
     ) -> str: ...
+    def get_contact_setting(self, account: str, jid: JID, key: str) -> Any:
 
-    def get_contact_setting(
-        self, account: str, jid: JID, setting: AllContactSettings
-    ) -> AllContactSettingsT:
+        setting = self._schema.get_setting(SettingType.CONTACT, key)
+        if setting is None:
+            raise ValueError(f"Invalid contact setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
-
-        if setting not in ACCOUNT_SETTINGS["contact"]:
-            raise ValueError(f"Invalid contact setting: {setting}")
 
         try:
-            return self._account_settings[account]["contact"][jid][setting]
+            return self._account_settings[account]["contact"][jid][key]
         except KeyError:
-            default = ACCOUNT_SETTINGS["contact"][setting]
-            if default is HAS_APP_DEFAULT:
-                return self.get_app_setting(f"{setting}_default")
-
-            if default is HAS_ACCOUNT_DEFAULT:
-                return self.get_account_setting(account, f"{setting}_default")
-
-            return default
+            return self._get_default(setting, account)
 
     @overload
     def set_contact_setting(
-        self, account: str, jid: JID, setting: StringContactSettings, value: str | None
+        self, account: str, jid: JID, key: ContactStringSettings, value: str | None
     ) -> None: ...
 
     @overload
     def set_contact_setting(
-        self, account: str, jid: JID, setting: BoolContactSettings, value: bool | None
+        self, account: str, jid: JID, key: ContactBoolSettings, value: bool | None
     ) -> None: ...
 
     def set_contact_setting(
-        self,
-        account: str,
-        jid: JID,
-        setting: AllContactSettings,
-        value: AllContactSettingsT | None,
+        self, account: str, jid: JID, key: str, value: Any | None
     ) -> None:
+        setting = self._schema.get_setting(SettingType.CONTACT, key)
+        if setting is None:
+            raise ValueError(f"Invalid contact setting: {key}")
 
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        if setting not in ACCOUNT_SETTINGS["contact"]:
-            raise ValueError(f"Invalid contact setting: {setting}")
-
-        default = ACCOUNT_SETTINGS["contact"][setting]
-        if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
-            default_store = APP_SETTINGS
-            if default is HAS_ACCOUNT_DEFAULT:
-                default_store = ACCOUNT_SETTINGS["account"]
-
-            default = default_store[f"{setting}_default"]
+        default = self._get_default(setting, account)
 
         if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if value is None:
             try:
-                del self._account_settings[account]["contact"][jid][setting]
+                del self._account_settings[account]["contact"][jid][key]
             except KeyError:
                 pass
 
             self._commit_account_settings(account)
-            self._notify(default, setting, account, jid)
+            self._notify(default, key, account, jid)
             return
 
         contact_settings = self._account_settings[account]["contact"]
         if jid not in contact_settings:
-            contact_settings[str(jid)] = {setting: value}
+            contact_settings[str(jid)] = {key: value}
         else:
-            contact_settings[jid][setting] = value
+            contact_settings[jid][key] = value
 
         self._commit_account_settings(account)
-        self._notify(value, setting, account, jid)
+        self._notify(value, key, account, jid)
 
     def set_contact_settings(
         self, setting: str, account: str | None, value: SETTING_TYPE
@@ -1054,21 +999,19 @@ class Settings:
         settings.update(user_settings)
         return settings
 
-    def set_proxy_setting(
-        self, proxy_name: str, setting: str, value: SETTING_TYPE
-    ) -> None:
+    def set_proxy_setting(self, proxy_name: str, key: str, value: SETTING_TYPE) -> None:
 
-        if setting not in PROXY_SETTINGS:
-            raise ValueError(f"Invalid proxy setting: {setting}")
+        setting = self._schema.get_setting(SettingType.PROXY, key)
+        if setting is None:
+            raise ValueError(f"Invalid proxy setting: {key}")
 
-        default = PROXY_SETTINGS[setting]
-        if not isinstance(value, type(default)):
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+        if not isinstance(value, type(setting.default)):
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
         if proxy_name in self._settings["proxies"]:
-            self._settings["proxies"][proxy_name][setting] = value
+            self._settings["proxies"][proxy_name][key] = value
         else:
-            self._settings["proxies"][proxy_name] = {setting: value}
+            self._settings["proxies"][proxy_name] = {key: value}
 
         self._commit_settings("proxies")
 
@@ -1076,7 +1019,7 @@ class Settings:
         if proxy_name not in self._settings["proxies"]:
             raise ValueError(f"Unknown proxy: {proxy_name}")
 
-        settings = PROXY_SETTINGS.copy()
+        settings = self._schema.get_type_default_settings(SettingType.PROXY)
         user_settings = self._settings["proxies"][proxy_name]
         settings.update(user_settings)
         return settings
@@ -1110,58 +1053,57 @@ class Settings:
 
     @overload
     def set_workspace_setting(
-        self, workspace_id: str, setting: StringWorkspaceSettings, value: str
+        self, workspace_id: str, key: WorkspaceStringSettings, value: str
     ) -> None: ...
 
     @overload
     def set_workspace_setting(
-        self, workspace_id: str, setting: Literal["chats"], value: OpenChatsSettingT
+        self,
+        workspace_id: str,
+        key: Literal["chats"],
+        value: list[OpenChatSettingDetails],
     ) -> None: ...
 
     def set_workspace_setting(
         self,
         workspace_id: str,
-        setting: AllWorkspaceSettings,
-        value: AllWorkspaceSettingsT,
+        key: str,
+        value: Any,
     ) -> None:
 
-        if setting not in WORKSPACE_SETTINGS:
-            raise ValueError(f"Invalid workspace setting: {setting}")
+        setting = self._schema.get_setting(SettingType.WORKSPACE, key)
+        if setting is None:
+            raise ValueError(f"Invalid workspace setting: {key}")
 
         if workspace_id not in self._settings["workspaces"]:
             raise ValueError(f"Workspace does not exists: {workspace_id}")
 
-        default = WORKSPACE_SETTINGS[setting]
-        if not isinstance(value, type(default)):
-            raise TypeError(f"Invalid type for {setting}: {value} {type(value)}")
+        if not isinstance(value, type(setting.default)):
+            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
 
-        self._settings["workspaces"][workspace_id][setting] = value
+        self._settings["workspaces"][workspace_id][key] = value
         self._commit_settings("workspaces")
 
     @overload
     def get_workspace_setting(
-        self, workspace_id: str, setting: Literal["chats"]
-    ) -> OpenChatsSettingT: ...
-
+        self, workspace_id: str, key: Literal["chats"]
+    ) -> list[OpenChatSettingDetails]: ...
     @overload
     def get_workspace_setting(
-        self, workspace_id: str, setting: StringWorkspaceSettings
+        self, workspace_id: str, key: WorkspaceStringSettings
     ) -> str: ...
-
-    def get_workspace_setting(
-        self, workspace_id: str, setting: AllWorkspaceSettings
-    ) -> AllWorkspaceSettingsT:
-
-        if setting not in WORKSPACE_SETTINGS:
-            raise ValueError(f"Invalid workspace setting: {setting}")
+    def get_workspace_setting(self, workspace_id: str, key: str) -> Any:
+        setting = self._schema.get_setting(SettingType.WORKSPACE, key)
+        if setting is None:
+            raise ValueError(f"Invalid workspace setting: {key}")
 
         if workspace_id not in self._settings["workspaces"]:
             raise ValueError(f"Workspace does not exists: {workspace_id}")
 
         try:
-            return self._settings["workspaces"][workspace_id][setting]
+            return self._settings["workspaces"][workspace_id][key]
         except KeyError:
-            return WORKSPACE_SETTINGS[setting]
+            return setting.default
 
     def get_workspace_count(self) -> int:
         return len(self._settings["workspaces"].keys())

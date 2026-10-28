@@ -24,8 +24,7 @@ from gajim.common import app
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.setting_values import AllSettingsT
-from gajim.common.setting_values import FloatSettings
+from gajim.common.settings.types import AppFloatSettings
 
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
@@ -214,7 +213,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         jid: JID,
         label: str,
         type_: SettingType,
-        value: AllSettingsT | None,
+        value: Any | None,
         name: str | None,
         callback: Callable[..., None] | None = None,
         data: Any | None = None,
@@ -324,13 +323,13 @@ class GenericSetting(Adw.ActionRow, SignalManager):
             return SettingType.GROUP_CHAT, setting, self.account, self.jid
         raise ValueError(f"Invalid bind argument: {self.bind}")
 
-    def get_value(self) -> AllSettingsT | None:
+    def get_value(self) -> Any | None:
         return self.__get_value(self.type_, self.value, self.account, self.jid)
 
     @staticmethod
     def __get_value(
-        type_: SettingType, value: AllSettingsT | None, account: str, jid: JID
-    ) -> AllSettingsT | None:
+        type_: SettingType, value: Any | None, account: str, jid: JID
+    ) -> Any | None:
         if value is None:
             return None
 
@@ -357,7 +356,7 @@ class GenericSetting(Adw.ActionRow, SignalManager):
 
         raise ValueError("Wrong SettingType?")
 
-    def set_value(self, state: AllSettingsT) -> None:
+    def set_value(self, state: Any) -> None:
         if self.type_ == SettingType.CONFIG:
             app.settings.set(self.value, state)
 
@@ -592,7 +591,7 @@ class SpinSetting(GenericSetting):
         self.spin.set_value(value)
 
     def _on_value_change(self, spin: Gtk.SpinButton, *args: Any) -> None:
-        if self.value in list(get_args(FloatSettings)):
+        if self.value in list(get_args(AppFloatSettings)):
             value = spin.get_value()
         else:
             value = spin.get_value_as_int()

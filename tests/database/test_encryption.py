@@ -13,7 +13,7 @@ from sqlalchemy import select
 
 from gajim.common import app
 from gajim.common.helpers import get_uuid
-from gajim.common.settings import Settings
+from gajim.common.settings.backend import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType

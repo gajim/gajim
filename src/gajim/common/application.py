@@ -41,7 +41,7 @@ from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.file_transfer_manager import FileTransferManager
-from gajim.common.settings import Settings
+from gajim.common.settings.backend import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.events.storage import EventStorage
