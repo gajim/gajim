@@ -6,10 +6,10 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Literal
 
 import locale
 from collections.abc import Callable
+from enum import IntEnum
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -33,6 +33,13 @@ from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import AccountBadge
 
 MAX_SEARCH_RESULTS = 15
+
+
+class UniversalSearchResultItemType(IntEnum):
+    MESSAGE_SEARCH = 0
+    CONTACT = 1
+    GROUP_CHAT = 2
+    ACTION = 3
 
 
 @Gtk.Template(string=get_ui_string("universal_search.ui"))
@@ -160,17 +167,25 @@ class UniversalSearch(Gtk.Box):
     ) -> int:
         item1 = cast(UniversalSearchResultItem, obj1)
         item2 = cast(UniversalSearchResultItem, obj2)
-        if item1.item_type == "message_search":
+        if item1.item_type == UniversalSearchResultItemType.MESSAGE_SEARCH:
             return -1
 
-        if item1.item_type == "action":
+        if item1.item_type == UniversalSearchResultItemType.ACTION:
             return 1
 
-        if item1.item_type == "contact" and item2.item_type != "contact":
-            return -1 if item2.item_type == "contact" else 1
+        if (
+            item1.item_type == UniversalSearchResultItemType.CONTACT
+            and item2.item_type != UniversalSearchResultItemType.CONTACT
+        ):
+            return -1 if item2.item_type == UniversalSearchResultItemType.CONTACT else 1
 
-        if item1.item_type == "group_chat" and item2.item_type != "group_chat":
-            return -1 if item2.item_type == "group_chat" else 1
+        if (
+            item1.item_type == UniversalSearchResultItemType.GROUP_CHAT
+            and item2.item_type != UniversalSearchResultItemType.GROUP_CHAT
+        ):
+            return (
+                -1 if item2.item_type == UniversalSearchResultItemType.GROUP_CHAT else 1
+            )
 
         return locale.strcoll(item1.title.casefold(), item2.title.casefold())
 
@@ -180,11 +195,20 @@ class UniversalSearch(Gtk.Box):
         type_filter = self._filter_toggle_group.get_active_name()
         match type_filter:
             case "actions":
-                return query in item.search_string and item.item_type == "action"
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.ACTION
+                )
             case "contacts":
-                return query in item.search_string and item.item_type == "contact"
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.CONTACT
+                )
             case "group_chats":
-                return query in item.search_string and item.item_type == "group_chat"
+                return (
+                    query in item.search_string
+                    and item.item_type == UniversalSearchResultItemType.GROUP_CHAT
+                )
             case _:
                 return query in item.search_string
 
@@ -218,7 +242,7 @@ class UniversalSearch(Gtk.Box):
                 assert isinstance(contact, BareContact)
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
-                    item_type="contact",
+                    item_type=UniversalSearchResultItemType.CONTACT,
                     search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
                     title=contact.name,
                     description=str(contact.jid),
@@ -237,7 +261,7 @@ class UniversalSearch(Gtk.Box):
                 assert isinstance(contact, GroupchatContact)
                 avatar = contact.get_avatar(size=AvatarSize.START_CHAT, scale=scale)
                 item = UniversalSearchResultItem(
-                    item_type="group_chat",
+                    item_type=UniversalSearchResultItemType.GROUP_CHAT,
                     search_string=f"{contact.name} {contact.original_name} {contact.jid}".casefold(),
                     title=contact.name,
                     description=str(contact.jid),
@@ -249,7 +273,7 @@ class UniversalSearch(Gtk.Box):
 
             # Actions
             profile_action = UniversalSearchResultItem(
-                item_type="action",
+                item_type=UniversalSearchResultItemType.ACTION,
                 search_string=f"{_('Profile Picture')} {_('Avatar')}".casefold(),
                 title=_("Profile"),
                 description=_("Edit your contact details…"),
@@ -282,11 +306,14 @@ class UniversalSearch(Gtk.Box):
         # The message search item needs to be updated with every change in order to
         # reflect the current search query.
         first_item = self._model.get_item(0)
-        if first_item is not None and first_item.item_type == "message_search":
+        if (
+            first_item is not None
+            and first_item.item_type == UniversalSearchResultItemType.MESSAGE_SEARCH
+        ):
             self._model.remove(0)
 
         message_search_item = UniversalSearchResultItem(
-            item_type="message_search",
+            item_type=UniversalSearchResultItemType.MESSAGE_SEARCH,
             search_string=query,
             title=_("Search for %s") % f"<b>{raw_query}</b>",
             icon_name="lucide-search-symbolic",
@@ -367,11 +394,14 @@ class UniversalSearch(Gtk.Box):
     def _on_item_activated(self, item: UniversalSearchResultItem) -> None:
         self.hide_search(block_signals=True)
 
-        if item.account is not None and item.jid is not None:
+        if item.item_type in (
+            UniversalSearchResultItemType.CONTACT,
+            UniversalSearchResultItemType.GROUP_CHAT,
+        ):
             self._start_chat(item.account, item.jid)
             return
 
-        if item.item_type == "action":
+        if item.item_type == UniversalSearchResultItemType.ACTION:
             item.callback(**item.callback_kwargs)
             return
 
@@ -384,15 +414,10 @@ class UniversalSearch(Gtk.Box):
         open_window("ProfileWindow", account=account)
 
 
-UniversalSearchResultItemType = Literal[
-    "message_search", "contact", "group_chat", "action"
-]
-
-
 class UniversalSearchResultItem(GObject.Object):
     __gtype_name__ = "UniversalSearchResultItem"
 
-    item_type = GObject.Property(type=str)
+    item_type = GObject.Property(type=int)
     search_string = GObject.Property(type=str)
     title = GObject.Property(type=str)
     description = GObject.Property(type=str, default=None)
@@ -458,7 +483,7 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
             self._image.set_from_icon_name(icon_name)
             self._image.add_css_class("dimmed")
 
-        if item_type == "message_search":
+        if item_type == UniversalSearchResultItemType.MESSAGE_SEARCH:
             self._title.set_markup(title)
         else:
             self._title.set_text(title)
@@ -477,15 +502,17 @@ class UniversalSearchResultItemRow(Gtk.ListBoxRow):
 class ResultItemRowHeader(Gtk.Label):
     def __init__(self, item_type: UniversalSearchResultItemType) -> None:
         Gtk.Label.__init__(
-            self, halign=Gtk.Align.START, visible=item_type != "message_search"
+            self,
+            halign=Gtk.Align.START,
+            visible=item_type != UniversalSearchResultItemType.MESSAGE_SEARCH,
         )
         self.add_css_class("mt-12")
         self.add_css_class("bold")
 
         match item_type:
-            case "contact":
+            case UniversalSearchResultItemType.CONTACT:
                 self.set_text(_("Contacts"))
-            case "group_chat":
+            case UniversalSearchResultItemType.GROUP_CHAT:
                 self.set_text(_("Group Chats"))
-            case "action":
+            case UniversalSearchResultItemType.ACTION:
                 self.set_text(_("Actions"))
