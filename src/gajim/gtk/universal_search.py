@@ -127,15 +127,12 @@ class UniversalSearch(Gtk.Box):
         if not self.is_visible():
             return
 
-        success, result = self._dropdown.compute_bounds(self)
+        success, bounds = self._dropdown.compute_bounds(self)
         if not success:
             return
 
-        point = Graphene.Point().init(x, y)
-        if result.contains_point(point):
-            return
-
-        self.hide_search()
+        if not bounds.contains_point(Graphene.Point().init(x, y)):
+            self.hide_search()
 
     def _on_search_focus_enter(
         self, _focus_controller: Gtk.EventControllerFocus
@@ -150,24 +147,10 @@ class UniversalSearch(Gtk.Box):
     def _header_func(
         row: UniversalSearchResultItemRow, before: UniversalSearchResultItemRow | None
     ) -> None:
-        if before is None:
+        if before is None or row.item_type != before.item_type:
             row.set_header(ResultItemRowHeader(row.item_type))
         else:
-            if row.item_type == "contact":
-                if before.item_type == "contact":
-                    row.set_header(None)
-                else:
-                    row.set_header(ResultItemRowHeader(row.item_type))
-            elif row.item_type == "group_chat":
-                if before.item_type == "group_chat":
-                    row.set_header(None)
-                else:
-                    row.set_header(ResultItemRowHeader(row.item_type))
-            else:
-                if before.item_type == row.item_type:
-                    row.set_header(None)
-                else:
-                    row.set_header(ResultItemRowHeader(row.item_type))
+            row.set_header(None)
 
     @staticmethod
     def _sort_func(
@@ -183,13 +166,13 @@ class UniversalSearch(Gtk.Box):
         if item1.item_type == "action":
             return 1
 
-        if item1.item_type == "contact" and obj2.item_type != "contact":
+        if item1.item_type == "contact" and item2.item_type != "contact":
             return -1 if item2.item_type == "contact" else 1
 
-        if item1.item_type == "group_chat" and obj2.item_type != "group_chat":
+        if item1.item_type == "group_chat" and item2.item_type != "group_chat":
             return -1 if item2.item_type == "group_chat" else 1
 
-        return locale.strcoll(item1.title.casefold(), item2.title.lower())
+        return locale.strcoll(item1.title.casefold(), item2.title.casefold())
 
     def _filter_func(self, obj: GObject.Object) -> bool:
         item = cast(UniversalSearchResultItem, obj)
@@ -285,7 +268,8 @@ class UniversalSearch(Gtk.Box):
         self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
 
     def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
-        query = entry.get_text().strip().lower()
+        raw_query = entry.get_text().strip()
+        query = raw_query.casefold()
         self._search_hint.set_visible(not query)
         self._results_box.set_visible(bool(query))
 
@@ -303,8 +287,8 @@ class UniversalSearch(Gtk.Box):
 
         message_search_item = UniversalSearchResultItem(
             item_type="message_search",
-            search_string=query.casefold(),
-            title=_("Search for %s") % f"<b>{query}</b>",
+            search_string=query,
+            title=_("Search for %s") % f"<b>{raw_query}</b>",
             icon_name="lucide-search-symbolic",
         )
         self._model.insert(0, message_search_item)
