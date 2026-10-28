@@ -38,7 +38,7 @@ RUN apt-get install -y \
     libcairo2-dev \
     pkg-config
 
-RUN npm install -g pyright@1.1.411
+RUN npm install -g pyright@1.1.412
 
 ENV VIRTUAL_ENV=/opt/venv
 RUN python -m venv --system-site-packages $VIRTUAL_ENV
