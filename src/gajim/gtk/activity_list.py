@@ -93,7 +93,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_time)
 
-        self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
+        self._custom_filter = Gtk.CustomFilter.new(self._filter_func)  # type: ignore
 
         self._filter_model = Gtk.FilterListModel(
             model=self._model, filter=self._custom_filter
