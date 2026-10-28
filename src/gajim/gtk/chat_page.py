@@ -206,6 +206,17 @@ class ChatPage(Gtk.Paned):
         self._search_view.set_focus()
         self._update_search_layout()
 
+    def start_search(
+        self,
+        query: str,
+        account: str | None,
+        jid: JID | None,
+        scope: Literal["everywhere", "contact"],
+    ) -> None:
+        self.show_search()
+        self._search_view.set_context(account, jid)
+        self._search_view.start_search(query, scope)
+
     def _mark_all_activities_as_read(
         self, _action: Gio.SimpleAction, _param: Literal[None]
     ) -> None:

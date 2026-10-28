@@ -1375,6 +1375,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
         open_window("StartChatDialog", params=params)
 
+    def start_search(
+        self,
+        query: str,
+        account: str | None = None,
+        jid: JID | None = None,
+        scope: Literal["everywhere", "contact"] = "everywhere",
+    ) -> None:
+        self._chat_page.start_search(query, account, jid, scope)
+
     def block_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
 

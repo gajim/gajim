@@ -405,7 +405,7 @@ class UniversalSearch(Gtk.Box):
             item.callback(**item.callback_kwargs)
             return
 
-        print(item.search_string)
+        app.window.start_search(item.search_string)
 
     def _start_chat(self, account: str, jid: JID) -> None:
         app.window.start_chat_from_jid(StartChatParam(account=account, jid=jid))
