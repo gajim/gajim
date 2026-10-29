@@ -235,6 +235,12 @@ class GajimApplication(Adw.Application, CoreApplication):
         self.systray = TrayIcon()
 
         self._add_app_actions()
+
+        if sys.platform == "darwin":
+            from gajim.gtk.util.macos import register_url_handler
+
+            self._macos_url_handler = register_url_handler()
+
         accounts = app.settings.get_accounts()
         for account in accounts:
             self.add_account_actions(account)
