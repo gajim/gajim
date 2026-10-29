@@ -36,6 +36,83 @@ from gajim.common.settings.types import WorkspaceSettings
 from gajim.common.settings.types import WorkspaceStringListSettings
 from gajim.common.settings.types import WorkspaceStringSettings
 
+DarkThemeEnum = {
+    0: _("Disabled"),
+    1: _("Enabled"),
+    2: _("System"),
+}
+
+SyncThresholdEnum = {
+    -1: _("No Sync"),
+    1: _("1 Day"),
+    2: _("2 Days"),
+    7: _("1 Week"),
+    30: _("1 Month"),
+    0: _("No Threshold"),
+}
+
+PreviewMaxFileSizeEnum = {
+    0: _("No automatic preview"),
+    262144: "256 KiB",
+    524288: "512 KiB",
+    1048576: "1 MiB",
+    5242880: "5 MiB",
+    10485760: "10 MiB",
+    26214400: "25 MiB",
+}
+
+
+WindowStartupEnum = {
+    "always": _("Always"),
+    "never": _("Never"),
+    "last_state": _("Restore last state"),
+}
+
+
+CloseActionEnum = {
+    "hide": _("Hide"),
+    "minimize": _("Minimize"),
+    "quit": _("Quit"),
+}
+
+
+MaxHistoryAgeEnum = {
+    -1: _("Forever"),
+    0: _("Until Gajim is Closed"),
+    86400: _("1 Day"),
+    604800: _("1 Week"),
+    2629743: _("1 Month"),
+    7889229: _("3 Months"),
+    15778458: _("6 Months"),
+    31556926: _("1 Year"),
+}
+
+ConnectionTypeEnum = {
+    "START TLS": "START TLS",
+    "DIRECT TLS": "DIRECT TLS",
+    "PLAIN": "PLAIN",
+}
+
+
+EncryptionEnum = {
+    "": _("Unencrypted"),
+    "OMEMO": "OMEMO",
+    "OpenPGP": "OpenPGP",
+    "PGP": "PGP",
+}
+
+FileTransferMethodEnum = {
+    "httpupload": _("Upload Files"),
+    "jingle": _("Send Files Directly"),
+}
+
+
+SendChatStateEnum = {
+    "disabled": _("Disabled"),
+    "composing_only": _("Composing Only"),
+    "all": _("All Chat States"),
+}
+
 
 class SettingType(IntEnum):
     APP = 0
@@ -310,12 +387,25 @@ _APP_SETTINGS: list[SettingT] = [
     IntSetting(key="autoawaytime", type=SettingType.APP, default=5),
     IntSetting(key="autoxatime", type=SettingType.APP, default=15),
     IntSetting(key="chat_handle_position", type=SettingType.APP, default=350),
-    IntSetting(key="dark_theme", type=SettingType.APP, default=2),
-    IntSetting(key="file_transfers_port", type=SettingType.APP, default=28011),
+    IntSetting(key="dark_theme", type=SettingType.APP, default=2, enum=DarkThemeEnum),
     IntSetting(
-        key="gc_sync_threshold_private_default", type=SettingType.APP, default=0
+        key="file_transfers_port",
+        type=SettingType.APP,
+        default=28011,
+        range=SettingRange(1, 65535, 1, 0),
     ),
-    IntSetting(key="gc_sync_threshold_public_default", type=SettingType.APP, default=1),
+    IntSetting(
+        key="gc_sync_threshold_private_default",
+        type=SettingType.APP,
+        default=0,
+        enum=SyncThresholdEnum,
+    ),
+    IntSetting(
+        key="gc_sync_threshold_public_default",
+        type=SettingType.APP,
+        default=1,
+        enum=SyncThresholdEnum,
+    ),
     IntSetting(
         key="groupchat_roster_width",
         type=SettingType.APP,
@@ -324,7 +414,12 @@ _APP_SETTINGS: list[SettingT] = [
     ),
     IntSetting(key="mainwin_height", type=SettingType.APP, default=500),
     IntSetting(key="mainwin_width", type=SettingType.APP, default=1000),
-    IntSetting(key="preview_max_file_size", type=SettingType.APP, default=10485760),
+    IntSetting(
+        key="preview_max_file_size",
+        type=SettingType.APP,
+        default=10485760,
+        enum=PreviewMaxFileSizeEnum,
+    ),
     IntSetting(key="preview_size", type=SettingType.APP, default=400),
     StringSetting(
         key="time_format",
@@ -332,7 +427,12 @@ _APP_SETTINGS: list[SettingT] = [
         desc="https://docs.python.org/3/library/time.html#time.strftime",
         default="%H:%M",
     ),
-    StringSetting(key="action_on_close", type=SettingType.APP, default="hide"),
+    StringSetting(
+        key="action_on_close",
+        type=SettingType.APP,
+        default="hide",
+        enum=CloseActionEnum,
+    ),
     StringSetting(
         key="additional_uri_schemes",
         type=SettingType.APP,
@@ -447,7 +547,10 @@ _APP_SETTINGS: list[SettingT] = [
         default="https://duckduckgo.com/?q=%s",
     ),
     StringSetting(
-        key="show_main_window_on_startup", type=SettingType.APP, default="always"
+        key="show_main_window_on_startup",
+        type=SettingType.APP,
+        default="always",
+        enum=WindowStartupEnum,
     ),
     StringSetting(key="speller_language", type=SettingType.APP),
     StringSetting(
@@ -514,8 +617,18 @@ _ACCOUNT_SETTINGS: list[SettingT] = [
     BooleanSetting(key="use_custom_host", type=SettingType.ACCOUNT, default=False),
     BooleanSetting(key="use_ft_proxies", type=SettingType.ACCOUNT, default=False),
     BooleanSetting(key="use_plain_connection", type=SettingType.ACCOUNT, default=False),
-    IntSetting(key="chat_history_max_age", type=SettingType.ACCOUNT, default=-1),
-    IntSetting(key="custom_port", type=SettingType.ACCOUNT, default=5222),
+    IntSetting(
+        key="chat_history_max_age",
+        type=SettingType.ACCOUNT,
+        default=-1,
+        enum=MaxHistoryAgeEnum,
+    ),
+    IntSetting(
+        key="custom_port",
+        type=SettingType.ACCOUNT,
+        default=5222,
+        range=SettingRange(1, 65535, 1, 0),
+    ),
     StringSetting(
         key="account_color", type=SettingType.ACCOUNT, default="rgb(85, 85, 85)"
     ),
@@ -524,17 +637,28 @@ _ACCOUNT_SETTINGS: list[SettingT] = [
     StringSetting(key="avatar_sha", type=SettingType.ACCOUNT),
     StringSetting(key="client_cert", type=SettingType.ACCOUNT),
     StringSetting(key="custom_host", type=SettingType.ACCOUNT),
-    StringSetting(key="custom_type", type=SettingType.ACCOUNT, default="START TLS"),
+    StringSetting(
+        key="custom_type",
+        type=SettingType.ACCOUNT,
+        default="START TLS",
+        enum=ConnectionTypeEnum,
+    ),
     StringSetting(key="default_workspace", type=SettingType.ACCOUNT),
-    StringSetting(key="encryption_default", type=SettingType.ACCOUNT),
+    StringSetting(
+        key="encryption_default", type=SettingType.ACCOUNT, enum=EncryptionEnum
+    ),
     StringSetting(key="file_transfer_proxies", type=SettingType.ACCOUNT),
     StringSetting(
-        key="filetransfer_preference", type=SettingType.ACCOUNT, default="httpupload"
+        key="filetransfer_preference",
+        type=SettingType.ACCOUNT,
+        default="httpupload",
+        enum=FileTransferMethodEnum,
     ),
     StringSetting(
         key="gc_send_chatstate_default",
         type=SettingType.ACCOUNT,
         default="composing_only",
+        enum=SendChatStateEnum,
     ),
     StringSetting(key="http_auth", type=SettingType.ACCOUNT, default="ask"),
     StringSetting(key="last_status", type=SettingType.ACCOUNT, default="online"),
@@ -544,7 +668,10 @@ _ACCOUNT_SETTINGS: list[SettingT] = [
     StringSetting(key="resource", type=SettingType.ACCOUNT, default="gajim.$rand"),
     StringSetting(key="roster_version", type=SettingType.ACCOUNT),
     StringSetting(
-        key="send_chatstate_default", type=SettingType.ACCOUNT, default="composing_only"
+        key="send_chatstate_default",
+        type=SettingType.ACCOUNT,
+        default="composing_only",
+        enum=SendChatStateEnum,
     ),
     StringSetting(key="subscription_request_msg", type=SettingType.ACCOUNT),
 ]
@@ -559,9 +686,19 @@ _CONTACT_SETTINGS: list[SettingT] = [
     BooleanSetting(
         key="send_marker", type=SettingType.CONTACT, default=False, context_default=True
     ),
-    StringSetting(key="encryption", type=SettingType.CONTACT, context_default=True),
+    StringSetting(
+        key="encryption",
+        type=SettingType.CONTACT,
+        context_default=True,
+        enum=EncryptionEnum,
+    ),
     StringSetting(key="mute_until", type=SettingType.CONTACT),
-    StringSetting(key="send_chatstate", type=SettingType.CONTACT, context_default=True),
+    StringSetting(
+        key="send_chatstate",
+        type=SettingType.CONTACT,
+        context_default=True,
+        enum=SendChatStateEnum,
+    ),
     StringSetting(key="speller_language", type=SettingType.CONTACT),
 ]
 
@@ -601,11 +738,20 @@ _GROUPCHAT_SETTINGS: list[SettingT] = [
         type=SettingType.GROUPCHAT,
         default=1,
         context_default=True,
+        enum=SyncThresholdEnum,
     ),
-    StringSetting(key="encryption", type=SettingType.GROUPCHAT, context_default=True),
+    StringSetting(
+        key="encryption",
+        type=SettingType.GROUPCHAT,
+        context_default=True,
+        enum=EncryptionEnum,
+    ),
     StringSetting(key="mute_until", type=SettingType.GROUPCHAT),
     StringSetting(
-        key="send_chatstate", type=SettingType.GROUPCHAT, context_default=True
+        key="send_chatstate",
+        type=SettingType.GROUPCHAT,
+        context_default=True,
+        enum=SendChatStateEnum,
     ),
     StringSetting(key="speller_language", type=SettingType.GROUPCHAT),
 ]
