@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 
 from gi.repository import Adw
 from gi.repository import Gdk
@@ -102,6 +103,18 @@ class GajimAppWindow(Adw.ApplicationWindow, SignalManager):  # ty: ignore[invali
 
     def __on_close_request(self, _widget: Adw.ApplicationWindow) -> bool:
         log.debug("Initiate Cleanup: %s", self.get_name())
+
+        if (
+            sys.platform == "darwin"
+            and self.get_transient_for() is None
+            and app.window.is_visible()
+            and not app.window.is_suspended()
+        ):
+            # On macOS, GTK only returns focus to the transient parent when a
+            # window is closed. Without one, no window gets focus back and
+            # typing does not reach Gajim until the user clicks a window.
+            app.window.present()
+
         self._store_win_size()
         self._disconnect_all()
         self._cleanup()
