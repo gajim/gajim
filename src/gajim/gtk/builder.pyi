@@ -536,6 +536,7 @@ class ProfileBuilder(Builder):
 
 class QuitDialogBuilder(Builder):
     box: Gtk.Box
+    description_label: Gtk.Label
     remember_checkbutton: Gtk.CheckButton
     hide_button: Gtk.Button
     minimize_button: Gtk.Button

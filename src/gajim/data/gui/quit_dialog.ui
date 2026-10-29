@@ -13,11 +13,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkLabel">
-        <property name="label" translatable="yes">Sure you want to quit Gajim?
-You won’t be able to send and receive messages if you do.
-
-Alternatively, you can either minimize Gajim’s window, or hide it completely. Use Gajim’s system tray icon to restore the window.</property>
+      <object class="GtkLabel" id="description_label">
         <property name="justify">center</property>
         <property name="wrap">1</property>
         <property name="width-chars">48</property>
@@ -68,7 +64,6 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         </child>
         <child>
           <object class="GtkButton" id="hide_button">
-            <property name="label" translatable="yes">_Hide (Tray Icon)</property>
             <property name="name">hide</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>

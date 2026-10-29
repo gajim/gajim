@@ -85,6 +85,9 @@ if app.is_display(Display.WIN32):
     gi.require_version("GdkWin32", "4.0")
     from gi.repository import GdkWin32
 
+if sys.platform == "darwin" or TYPE_CHECKING:
+    from AppKit import NSApplication
+
 log = logging.getLogger("gajim.gtk.main")
 
 
@@ -967,9 +970,20 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
     def show_window(self) -> None:
         app.settings.set("is_window_visible", True)
+        if sys.platform == "darwin":
+            # The app may have been hidden natively, see hide_window()
+            NSApplication.sharedApplication().unhide_(None)
         self.set_visible(True)
 
     def hide_window(self) -> None:
+        if sys.platform == "darwin":
+            # macOS has no tray icon. Hide the app the same way Cmd+H does,
+            # so it can be restored from the Dock. macOS unhides the app
+            # without Gajim noticing, so the hidden state is not stored
+            # in is_window_visible (apps are not expected to start hidden).
+            NSApplication.sharedApplication().hide_(None)
+            return
+
         app.settings.set("is_window_visible", False)
         self.set_visible(False)
 

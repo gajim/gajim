@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import sys
+
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -31,6 +33,24 @@ class QuitDialog(GajimAppWindow):
         self._connect(self._ui.hide_button, "clicked", self._on_button_clicked)
         self._connect(self._ui.minimize_button, "clicked", self._on_button_clicked)
         self._connect(self._ui.quit_button, "clicked", self._on_button_clicked)
+
+        if sys.platform == "darwin":
+            # macOS has no system tray, the hidden app is restored from the Dock
+            hide_label = _("_Hide (Dock Icon)")
+            restore_hint = _("Click Gajim’s icon in the Dock to restore the window.")
+        else:
+            hide_label = _("_Hide (Tray Icon)")
+            restore_hint = _("Use Gajim’s system tray icon to restore the window.")
+
+        self._ui.hide_button.set_label(hide_label)
+        self._ui.description_label.set_text(
+            _(
+                "Sure you want to quit Gajim?\n"
+                "You won’t be able to send and receive messages if you do.\n\n"
+                "Alternatively, you can either minimize Gajim’s window, or hide "
+                "it completely. {restore_hint}"
+            ).format(restore_hint=restore_hint)
+        )
 
         self.set_child(self._ui.box)
 
