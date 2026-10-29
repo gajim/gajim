@@ -54,6 +54,9 @@ class SettingRange:
     step: float
     digit: int
 
+    def contains(self, value: float | int) -> bool:
+        return self.lower <= value <= self.upper
+
 
 @dataclass(kw_only=True)
 class BaseSetting:
@@ -62,7 +65,19 @@ class BaseSetting:
     label: str = ""
     desc: str = ""
     bind: str = ""
+    default: Any
     context_default: bool = False
+    enum: dict[Any, str] | None = None
+
+    def validate_value(self, value: Any) -> Any:
+        if self.enum is not None:
+            if value not in self.enum:
+                raise ValueError(f"Value {value} not allowed for {self.key}")
+
+        if type(self.default) is not type(value):
+            raise ValueError(f"Invalid type {type(self.default)}")
+
+        return value
 
 
 @dataclass(kw_only=True)
@@ -70,11 +85,27 @@ class IntSetting(BaseSetting):
     default: int
     range: SettingRange | None = None
 
+    def validate_value(self, value: Any) -> int:
+        BaseSetting.validate_value(self, value)
+        if self.range is not None:
+            if not self.range.contains(value):
+                raise ValueError(f"{value} not in allowed range")
+
+        return value
+
 
 @dataclass(kw_only=True)
 class FloatSetting(BaseSetting):
     default: float
     range: SettingRange | None = None
+
+    def validate_value(self, value: Any) -> float:
+        BaseSetting.validate_value(self, value)
+        if self.range is not None:
+            if not self.range.contains(value):
+                raise ValueError(f"{value} not in allowed range")
+
+        return value
 
 
 @dataclass(kw_only=True)

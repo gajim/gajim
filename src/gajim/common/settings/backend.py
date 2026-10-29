@@ -560,10 +560,6 @@ class Settings:
             )
             return
 
-        default = setting.default
-        if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
         if value is None:
             try:
                 del self._settings["app"][key]
@@ -571,10 +567,10 @@ class Settings:
                 pass
 
             self._commit_settings("app")
-            self._notify(default, key)
+            self._notify(setting.default, key)
             return
 
-        self._settings["app"][key] = value
+        self._settings["app"][key] = setting.validate_value(value)
 
         self._commit_settings("app")
         self._notify(value, key)
@@ -609,12 +605,8 @@ class Settings:
         if setting is None:
             raise ValueError(f"Invalid plugin setting: {key}")
 
-        default = setting.default
-        if not isinstance(value, type(default)):
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
         if plugin in self._settings["plugins"]:
-            self._settings["plugins"][plugin][key] = value
+            self._settings["plugins"][plugin][key] = setting.validate_value(value)
         else:
             self._settings["plugins"][plugin] = {key: value}
 
@@ -717,10 +709,6 @@ class Settings:
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        default = setting.default
-        if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
         if value is None:
             try:
                 del self._account_settings[account]["account"][key]
@@ -728,10 +716,10 @@ class Settings:
                 pass
 
             self._commit_account_settings(account)
-            self._notify(default, key, account)
+            self._notify(setting.default, key, account)
             return
 
-        self._account_settings[account]["account"][key] = value
+        self._account_settings[account]["account"][key] = setting.validate_value(value)
 
         self._commit_account_settings(account)
         self._notify(value, key, account)
@@ -842,21 +830,19 @@ class Settings:
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        default = self._get_default(setting, account, context)
-
-        if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
         if value is None:
             try:
                 del self._account_settings[account]["group_chat"][jid][key]
             except KeyError:
                 pass
 
+            default = self._get_default(setting, account, context)
+
             self._commit_account_settings(account)
             self._notify(default, key, account, jid)
             return
 
+        setting.validate_value(value)
         group_chat_settings = self._account_settings[account]["group_chat"]
         if jid not in group_chat_settings:
             group_chat_settings[str(jid)] = {key: value}
@@ -929,21 +915,18 @@ class Settings:
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        default = self._get_default(setting, account, None)
-
-        if not isinstance(value, type(default)) and value is not None:
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
         if value is None:
             try:
                 del self._account_settings[account]["contact"][jid][key]
             except KeyError:
                 pass
 
+            default = self._get_default(setting, account, None)
             self._commit_account_settings(account)
             self._notify(default, key, account, jid)
             return
 
+        setting.validate_value(value)
         contact_settings = self._account_settings[account]["contact"]
         if jid not in contact_settings:
             contact_settings[str(jid)] = {key: value}
@@ -988,7 +971,6 @@ class Settings:
         self._commit_settings("soundevents")
 
     def get_soundevent_settings(self, event_name: str) -> dict[str, SETTING_TYPE]:
-
         if event_name not in DEFAULT_SOUNDEVENT_SETTINGS:
             raise ValueError(f"Invalid soundevent: {event_name}")
 
@@ -998,14 +980,11 @@ class Settings:
         return settings
 
     def set_proxy_setting(self, proxy_name: str, key: str, value: SETTING_TYPE) -> None:
-
         setting = self._schema.get_setting(SettingType.PROXY, key)
         if setting is None:
             raise ValueError(f"Invalid proxy setting: {key}")
 
-        if not isinstance(value, type(setting.default)):
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
+        setting.validate_value(value)
         if proxy_name in self._settings["proxies"]:
             self._settings["proxies"][proxy_name][key] = value
         else:
@@ -1076,10 +1055,7 @@ class Settings:
         if workspace_id not in self._settings["workspaces"]:
             raise ValueError(f"Workspace does not exists: {workspace_id}")
 
-        if not isinstance(value, type(setting.default)):
-            raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
-
-        self._settings["workspaces"][workspace_id][key] = value
+        self._settings["workspaces"][workspace_id][key] = setting.validate_value(value)
         self._commit_settings("workspaces")
 
     @overload
