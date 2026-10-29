@@ -26,6 +26,17 @@ _SCHEMA_DEF = [
     BooleanSetting(
         key="send_marker", type=SettingType.CONTACT, default=False, context_default=True
     ),
+    StringSetting(
+        key="gc_encryption_public_default",
+        type=SettingType.ACCOUNT,
+        default="gc-public-default",
+    ),
+    StringSetting(
+        key="gc_encryption_private_default",
+        type=SettingType.ACCOUNT,
+        default="gc-private-default",
+    ),
+    StringSetting(key="encryption", type=SettingType.GROUPCHAT, context_default=True),
 ]
 
 
@@ -51,3 +62,13 @@ class SettingsTest(unittest.TestCase):
             self._account, self._contact_jid, "send_marker"
         )
         self.assertIs(value, True)
+
+        value = self._settings.get_group_chat_setting(
+            self._account, self._contact_jid, "encryption", "public"
+        )
+        self.assertEqual(value, "gc-public-default")
+
+        value = self._settings.get_group_chat_setting(
+            self._account, self._contact_jid, "encryption", "private"
+        )
+        self.assertEqual(value, "gc-private-default")

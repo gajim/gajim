@@ -79,9 +79,8 @@ class ContactSettings:
 
 
 class GroupChatSettings:
-    def __init__(self, account: str, jid: JID) -> None:
-        self._account = account
-        self._jid = jid
+    def __init__(self, contact: GroupchatContact) -> None:
+        self._contact = contact
 
     @overload
     def get(self, key: GroupChatStringSettings) -> str: ...
@@ -91,7 +90,9 @@ class GroupChatSettings:
     def get(self, key: GroupChatIntSettings) -> int: ...
 
     def get(self, key: AllGroupChatSettings) -> Any:
-        return app.settings.get_group_chat_setting(self._account, self._jid, key)
+        return app.settings.get_group_chat_setting(
+            self._contact.account, self._contact.jid, key, self._contact.muc_context
+        )
 
     @overload
     def set(self, key: GroupChatStringSettings, value: str | None) -> None: ...  # noqa: E501
@@ -101,7 +102,13 @@ class GroupChatSettings:
     def set(self, key: GroupChatIntSettings, value: int | None) -> None: ...  # noqa: E501
 
     def set(self, key: Any, value: Any) -> None:
-        app.settings.set_group_chat_setting(self._account, self._jid, key, value)
+        app.settings.set_group_chat_setting(
+            self._contact.account,
+            self._contact.jid,
+            key,
+            self._contact.muc_context,
+            value,
+        )
 
 
 class Contacts(BaseModule):
@@ -725,7 +732,7 @@ class GroupchatContact(CommonContact):
     def __init__(self, logger: Logger | LogAdapter, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
-        self.settings = GroupChatSettings(account, jid)
+        self.settings = GroupChatSettings(self)
         self._resources: dict[str, GroupchatParticipant] = {}
 
         self._avatar_sha = app.storage.archive.get_contact_value(

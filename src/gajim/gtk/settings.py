@@ -24,6 +24,7 @@ from gajim.common import app
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.settings.types import AppFloatSettings
 
 from gajim.gtk.const import Setting
@@ -293,7 +294,12 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         elif bind_setting_type == SettingType.GROUP_CHAT:
             assert account is not None
             assert jid is not None
-            value = app.settings.get_group_chat_setting(account, jid, setting)
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid, groupchat=True)
+            assert isinstance(contact, GroupchatContact)
+            value = app.settings.get_group_chat_setting(
+                account, jid, "setting", contact.muc_context
+            )
 
         elif bind_setting_type == SettingType.ACCOUNT_CONFIG:
             assert account is not None
@@ -340,7 +346,12 @@ class GenericSetting(Adw.ActionRow, SignalManager):
             return app.settings.get_contact_setting(account, jid, value)
 
         if type_ == SettingType.GROUP_CHAT:
-            return app.settings.get_group_chat_setting(account, jid, value)
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid, groupchat=True)
+            assert isinstance(contact, GroupchatContact)
+            return app.settings.get_group_chat_setting(
+                account, jid, value, contact.muc_context
+            )
 
         if type_ == SettingType.CONFIG:
             return app.settings.get(value)
@@ -367,8 +378,13 @@ class GenericSetting(Adw.ActionRow, SignalManager):
             app.settings.set_contact_setting(self.account, self.jid, self.value, state)
 
         elif self.type_ == SettingType.GROUP_CHAT:
+            client = app.get_client(self.account)
+            contact = client.get_module("Contacts").get_contact(
+                self.jid, groupchat=True
+            )
+            assert isinstance(contact, GroupchatContact)
             app.settings.set_group_chat_setting(
-                self.account, self.jid, self.value, state
+                self.account, self.jid, self.value, contact.muc_context, state
             )
 
         if self.callback is not None:

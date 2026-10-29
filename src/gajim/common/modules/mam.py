@@ -371,17 +371,18 @@ class MAM(BaseModule):
     def request_archive_on_muc_join(self, jid: JID) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
+        contact = self._get_contact(jid, groupchat=True)
+        assert isinstance(contact, GroupchatContact)
+
         threshold = app.settings.get_group_chat_setting(
-            self._account, jid, "sync_threshold"
+            self._account, jid, "sync_threshold", contact.muc_context
         )
         self._log.info("Threshold for %s: %s", jid, threshold)
 
         if threshold == SyncThreshold.NO_SYNC:
             return
 
-        contact = self._get_contact_if_exists(jid)
-        if contact is not None:
-            contact.notify("mam-sync-started")
+        contact.notify("mam-sync-started")
 
         mam_id, start_date = self._get_muc_query_params(jid, threshold)
 
@@ -389,8 +390,7 @@ class MAM(BaseModule):
         if is_error(result):
             if result.condition != "item-not-found":
                 self._log.warning(result)
-                if contact is not None:
-                    contact.notify("mam-sync-error", result.get_text())
+                contact.notify("mam-sync-error", result.get_text())
                 return
 
             self._log.warning(result)
@@ -400,8 +400,7 @@ class MAM(BaseModule):
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
                 self._log.warning(result)
-                if contact is not None:
-                    contact.notify("mam-sync-error", result.get_text())
+                contact.notify("mam-sync-error", result.get_text())
                 return
 
         assert isinstance(result, MAMQueryData)
@@ -418,8 +417,7 @@ class MAM(BaseModule):
                 )
             )
 
-        if contact is not None:
-            contact.notify("mam-sync-finished")
+        contact.notify("mam-sync-finished")
 
     @as_task
     def _execute_query(

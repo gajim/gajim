@@ -255,7 +255,10 @@ class ChatMarkers(BaseModule):
             )
 
         return app.settings.get_group_chat_setting(
-            contact.account, contact.jid.new_as_bare(), "send_marker"
+            contact.account,
+            contact.jid.new_as_bare(),
+            "send_marker",
+            context=contact.muc_context,
         )
 
 

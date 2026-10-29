@@ -736,29 +736,18 @@ class Settings:
         self._commit_account_settings(account)
         self._notify(value, key, account)
 
-    def _get_context(self, account: str, jid: JID) -> str:
-        client = app.get_client(account)
-        contact = client.get_module("Contacts").get_contact(jid)
-        context = contact.muc_context
-        if context is None:
-            # If there is no disco info available
-            # to determine the context assume public
-            log.warning("Unable to determine context for: %s", jid)
-            context = "public"
-        return context
-
-    def _get_default(
-        self, setting: SettingT, account: str, jid: JID | None = None
-    ) -> Any:
+    def _get_default(self, setting: SettingT, account: str, context: str | None) -> Any:
         if not setting.context_default:
             return setting.default
 
-        context = None
         default_keys: list[tuple[SettingType, str]] = []
 
         if setting.type == SettingType.GROUPCHAT:
-            assert jid is not None
-            context = self._get_context(account, jid)
+            if context is None:
+                # If there is no disco info available
+                # to determine the context assume public
+                log.warning("Unable to determine context for: %s")
+                context = "public"
 
             default_keys += [
                 (SettingType.ACCOUNT, f"gc_{setting.key}_{context}_default"),
@@ -785,20 +774,22 @@ class Settings:
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, key: GroupChatIntSettings
+        self, account: str, jid: JID, key: GroupChatIntSettings, context: str | None
     ) -> int: ...
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, key: GroupChatBoolSettings
+        self, account: str, jid: JID, key: GroupChatBoolSettings, context: str | None
     ) -> bool: ...
 
     @overload
     def get_group_chat_setting(
-        self, account: str, jid: JID, key: GroupChatStringSettings
+        self, account: str, jid: JID, key: GroupChatStringSettings, context: str | None
     ) -> str: ...
 
-    def get_group_chat_setting(self, account: str, jid: JID, key: str) -> Any:
+    def get_group_chat_setting(
+        self, account: str, jid: JID, key: str, context: str | None
+    ) -> Any:
         setting = self._schema.get_setting(SettingType.GROUPCHAT, key)
         if setting is None:
             raise ValueError(f"Invalid group chat setting: {key}")
@@ -809,7 +800,7 @@ class Settings:
         try:
             return self._account_settings[account]["group_chat"][jid][key]
         except KeyError:
-            return self._get_default(setting, account, jid)
+            return self._get_default(setting, account, context)
 
     @overload
     def set_group_chat_setting(
@@ -817,21 +808,32 @@ class Settings:
         account: str,
         jid: JID,
         key: GroupChatStringSettings,
+        context: str | None,
         value: str | None,
     ) -> None: ...
 
     @overload
     def set_group_chat_setting(
-        self, account: str, jid: JID, key: GroupChatIntSettings, value: int | None
+        self,
+        account: str,
+        jid: JID,
+        key: GroupChatIntSettings,
+        context: str | None,
+        value: int | None,
     ) -> None: ...
 
     @overload
     def set_group_chat_setting(
-        self, account: str, jid: JID, key: GroupChatBoolSettings, value: bool | None
+        self,
+        account: str,
+        jid: JID,
+        key: GroupChatBoolSettings,
+        context: str | None,
+        value: bool | None,
     ) -> None: ...
 
     def set_group_chat_setting(
-        self, account: str, jid: JID, key: str, value: Any | None
+        self, account: str, jid: JID, key: str, context: str | None, value: Any | None
     ) -> None:
         setting = self._schema.get_setting(SettingType.GROUPCHAT, key)
         if setting is None:
@@ -840,7 +842,7 @@ class Settings:
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        default = self._get_default(setting, account, jid)
+        default = self._get_default(setting, account, context)
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
@@ -866,10 +868,10 @@ class Settings:
 
     def set_group_chat_settings(
         self,
-        key: str,
         account: str | None,
+        key: str,
         value: SETTING_TYPE,
-        context: str | None = None,
+        context_match_func: Callable[[str, JID], Literal["public", "private"] | None],
     ) -> None:
 
         if account is None:
@@ -879,14 +881,10 @@ class Settings:
 
         for acc, acc_settings in settings:
             for jid in acc_settings["group_chat"]:
-                if context is not None:
-                    client = app.get_client(acc)
-                    contact = client.get_module("Contacts").get_contact(
-                        jid, groupchat=True
-                    )
-                    if contact.muc_context != context:
-                        continue
-                self.set_group_chat_setting(acc, jid, key, value)
+                context = context_match_func(acc, jid)
+                if context is None:
+                    continue
+                self.set_group_chat_setting(acc, jid, key, context, value)
 
     @overload
     def get_contact_setting(
@@ -909,7 +907,7 @@ class Settings:
         try:
             return self._account_settings[account]["contact"][jid][key]
         except KeyError:
-            return self._get_default(setting, account)
+            return self._get_default(setting, account, None)
 
     @overload
     def set_contact_setting(
@@ -931,7 +929,7 @@ class Settings:
         if account not in self._account_settings:
             raise ValueError(f"Account missing: {account}")
 
-        default = self._get_default(setting, account)
+        default = self._get_default(setting, account, None)
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f"Invalid type for {key}: {value} {type(value)}")
@@ -956,7 +954,7 @@ class Settings:
         self._notify(value, key, account, jid)
 
     def set_contact_settings(
-        self, setting: str, account: str | None, value: SETTING_TYPE
+        self, account: str | None, setting: str, value: SETTING_TYPE
     ) -> None:
 
         if account is None:

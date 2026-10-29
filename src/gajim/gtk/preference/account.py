@@ -5,10 +5,12 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gtk
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
@@ -22,6 +24,7 @@ from gajim.common.events import AccountEnabled
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import CancelDialogResponse
@@ -336,11 +339,19 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
 
     def _reset_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_contact_settings("send_chatstate", self.account, None)
+        app.settings.set_contact_settings(self.account, "send_chatstate", None)
 
     def _reset_gc_send_chatstate(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("send_chatstate", self.account, None)
+
+        def _context_match_func(account: str, jid: JID) -> Literal["public"]:
+            # send_chatstate has no context dependent setting
+            # so the context does not matter
+            return "public"
+
+        app.settings.set_group_chat_settings(
+            self.account, "send_chatstate", None, _context_match_func
+        )
 
     def _send_idle_time(self, state: bool, _data: Any) -> None:
         if self._client is not None:
@@ -363,9 +374,20 @@ class AccountPrivacyGroup(GajimPreferencesGroup):
 
     def _reset_send_read_marker(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_contact_settings("send_marker", self.account, None)
+        app.settings.set_contact_settings(self.account, "send_marker", None)
+
+        def _context_match_func(account: str, jid: JID) -> Literal["private"] | None:
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid, groupchat=True)
+            if not isinstance(contact, GroupchatContact):
+                return None
+
+            if contact.muc_context == "private":
+                return "private"
+            return None
+
         app.settings.set_group_chat_settings(
-            "send_marker", self.account, None, context="private"
+            self.account, "send_marker", None, _context_match_func
         )
 
     def _get_sync_blocks_enabled(self) -> bool:

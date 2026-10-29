@@ -204,7 +204,7 @@ class TestModule(MagicMock):
     def _get_contact(self, jid: JID, groupchat: bool = False) -> MagicMock:
         if groupchat:
             contact = MagicMock(spec=GroupchatContact)
-            contact.settings = GroupChatSettings(ACCOUNT, jid)
+            contact.settings = GroupChatSettings(contact)
         else:
             contact = MagicMock(spec=BareContact)
             contact.settings = ContactSettings(ACCOUNT, jid)

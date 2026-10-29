@@ -6,10 +6,12 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
 
 import sys
 
 from gi.repository import Gtk
+from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -342,12 +344,28 @@ class GroupChatsGroup(GajimPreferencesGroup):
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("print_join_left", None, None)
+
+        def _context_match_func(account: str, jid: JID) -> Literal["public"]:
+            # print_join_left has no context dependent setting
+            # so the context does not matter
+            return "public"
+
+        app.settings.set_group_chat_settings(
+            None, "print_join_left", None, _context_match_func
+        )
 
     @staticmethod
     def _reset_print_status(button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.settings.set_group_chat_settings("print_status", None, None)
+
+        def _context_match_func(account: str, jid: JID) -> Literal["public"]:
+            # print_status has no context dependent setting
+            # so the context does not matter
+            return "public"
+
+        app.settings.set_group_chat_settings(
+            None, "print_status", None, _context_match_func
+        )
 
 
 class FilePreviewGroup(GajimPreferencesGroup):
