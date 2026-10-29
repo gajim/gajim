@@ -134,6 +134,9 @@ button.flat.link { padding: 0; border: 0; }
 .bg-blur {
     backdrop-filter: blur(4px);
 }
+.bg-blur-64 {
+    backdrop-filter: blur(64px);
+}
 
 /* Generic animations */
 @keyframes pulse-opacity {

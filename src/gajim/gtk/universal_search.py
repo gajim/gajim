@@ -42,6 +42,11 @@ class UniversalSearchResultItemType(IntEnum):
     ACTION = 3
 
 
+class UniversalSearchCurrentModel(IntEnum):
+    RESULTS = 0
+    SEARCH = 1
+
+
 @Gtk.Template(string=get_ui_string("universal_search.ui"))
 class UniversalSearch(Gtk.Box):
     __gtype_name__ = "UniversalSearch"
@@ -51,6 +56,7 @@ class UniversalSearch(Gtk.Box):
     _results_box: Gtk.Box = Gtk.Template.Child()
     _filter_toggle_group: Adw.ToggleGroup = Gtk.Template.Child()
     _results_listbox: Gtk.ListBox = Gtk.Template.Child()
+    _search_listbox: Gtk.ListBox = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
@@ -58,19 +64,25 @@ class UniversalSearch(Gtk.Box):
         # Enabled when starting to hide the dropdown
         self._block_visibility_signals = False
 
-        self._model = Gio.ListStore(item_type=UniversalSearchResultItem)
+        self._current_model = UniversalSearchCurrentModel.RESULTS
 
-        self._sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
-        self._sort_model = Gtk.SortListModel(model=self._model, sorter=self._sorter)
+        self._results_model = Gio.ListStore(item_type=UniversalSearchResultItem)
 
-        self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
-        self._filter_model = Gtk.FilterListModel(
-            model=self._sort_model, filter=self._custom_filter
+        self._results_sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
+        self._results_sort_model = Gtk.SortListModel(
+            model=self._results_model, sorter=self._results_sorter
         )
-        self._slice_model = Gtk.SliceListModel(
-            model=self._filter_model, size=MAX_SEARCH_RESULTS
+
+        self._results_filter = Gtk.CustomFilter.new(self._filter_func)
+        self._results_filter_model = Gtk.FilterListModel(
+            model=self._results_sort_model, filter=self._results_filter
         )
-        self._selection_model = Gtk.SingleSelection(model=self._slice_model)
+        self._results_slice_model = Gtk.SliceListModel(
+            model=self._results_filter_model, size=MAX_SEARCH_RESULTS
+        )
+        self._results_selection_model = Gtk.SingleSelection(
+            model=self._results_slice_model
+        )
 
         self._filter_toggle_group.connect(
             "notify::active",
@@ -78,9 +90,12 @@ class UniversalSearch(Gtk.Box):
         )
 
         self._results_listbox.connect(
-            "row-activated", self._on_result_item_row_activated
+            "row-activated", self._on_item_row_activated, self._results_selection_model
         )
         self._results_listbox.set_header_func(self._header_func)
+        self._results_listbox.bind_model(
+            self._results_selection_model, self._row_create_func
+        )
 
         focus_controller = Gtk.EventControllerFocus()
         focus_controller.connect("enter", self._on_search_focus_enter)
@@ -104,6 +119,16 @@ class UniversalSearch(Gtk.Box):
         text = self._search_entry.get_delegate()
         assert isinstance(text, Gtk.Text)
         text.add_controller(event_controller_key)
+
+        # Second listbox containing advanced search items, e.g. message search
+        self._search_model = Gio.ListStore(item_type=UniversalSearchResultItem)
+        self._search_selection_model = Gtk.SingleSelection(model=self._search_model)
+        self._search_listbox.bind_model(
+            self._search_selection_model, self._row_create_func
+        )
+        self._search_listbox.connect(
+            "row-activated", self._on_item_row_activated, self._search_selection_model
+        )
 
     def get_search_entry(self) -> Gtk.SearchEntry:
         return self._search_entry
@@ -148,7 +173,7 @@ class UniversalSearch(Gtk.Box):
         # Focus may come back when selecting a chat.
         if not self.is_visible() and not self._block_visibility_signals:
             self.set_visible(True)
-            self._update_data_model()
+            self._update_results_data_model()
 
     @staticmethod
     def _header_func(
@@ -167,9 +192,6 @@ class UniversalSearch(Gtk.Box):
     ) -> int:
         item1 = cast(UniversalSearchResultItem, obj1)
         item2 = cast(UniversalSearchResultItem, obj2)
-        if item1.item_type == UniversalSearchResultItemType.MESSAGE_SEARCH:
-            return -1
-
         if item1.item_type == UniversalSearchResultItemType.ACTION:
             return 1
 
@@ -223,11 +245,11 @@ class UniversalSearch(Gtk.Box):
             account=item.account,
         )
 
-    def _update_data_model(self) -> None:
+    def _update_results_data_model(self) -> None:
         accounts = app.get_enabled_accounts_with_labels()
 
         scale = self.get_scale_factor()
-        self._model.remove_all()
+        self._results_model.remove_all()
 
         for account, _label in accounts:
             client = app.get_client(account)
@@ -250,7 +272,7 @@ class UniversalSearch(Gtk.Box):
                     jid=contact.jid,
                     paintable=avatar,
                 )
-                self._model.append(item)
+                self._results_model.append(item)
 
             # Group chats
             bookmarks = client.get_module("Bookmarks").bookmarks
@@ -269,7 +291,7 @@ class UniversalSearch(Gtk.Box):
                     jid=contact.jid,
                     paintable=avatar,
                 )
-                self._model.append(item)
+                self._results_model.append(item)
 
             # Actions
             profile_action = UniversalSearchResultItem(
@@ -282,14 +304,12 @@ class UniversalSearch(Gtk.Box):
                 callback=self._show_profile,
                 callback_kwargs={"account": account},
             )
-            self._model.append(profile_action)
-
-        self._results_listbox.bind_model(self._selection_model, self._row_create_func)
+            self._results_model.append(profile_action)
 
     def _on_filter_toggle_changed(
         self, _toggle_group: Adw.ToggleGroup, _index: int
     ) -> None:
-        self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
+        self._results_filter.changed(Gtk.FilterChange.DIFFERENT)
 
     def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
         raw_query = entry.get_text().strip()
@@ -301,27 +321,23 @@ class UniversalSearch(Gtk.Box):
             # We reset the search input while hiding. This triggers a delayed change event.
             return
 
-        self.set_visible(True)
-
         # The message search item needs to be updated with every change in order to
         # reflect the current search query.
-        first_item = self._model.get_item(0)
-        if (
-            first_item is not None
-            and first_item.item_type == UniversalSearchResultItemType.MESSAGE_SEARCH
-        ):
-            self._model.remove(0)
-
-        message_search_item = UniversalSearchResultItem(
-            item_type=UniversalSearchResultItemType.MESSAGE_SEARCH,
-            search_string=query,
-            title=_("Search for %s") % f"<b>{raw_query}</b>",
-            icon_name="lucide-search-symbolic",
+        self._search_model.remove_all()
+        self._search_model.append(
+            UniversalSearchResultItem(
+                item_type=UniversalSearchResultItemType.MESSAGE_SEARCH,
+                search_string=query,
+                title=_("Search for %s") % f"<b>{raw_query}</b>",
+                description=_("Search your messages…"),
+                icon_name="lucide-search-symbolic",
+            )
         )
-        self._model.insert(0, message_search_item)
-        self._select_row(0)
 
-        self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
+        self.set_visible(True)
+
+        self._results_filter.changed(Gtk.FilterChange.DIFFERENT)
+        self._select_result_row(0)
 
     def _on_search_key_pressed(
         self,
@@ -341,8 +357,23 @@ class UniversalSearch(Gtk.Box):
         return Gdk.EVENT_PROPAGATE
 
     def _select_new_match(self, _entry: Gtk.Entry, direction: Direction) -> None:
-        selected_position = self._selection_model.get_selected()
+        if (
+            self._current_model == UniversalSearchCurrentModel.SEARCH
+            and direction == Direction.PREV
+        ):
+            results_count = self._results_selection_model.get_n_items()
+            if results_count > 0:
+                # Results may be empty
+                # Move selection from search listbox to results listbox
+                self._search_selection_model.unselect_all()
+                self._search_listbox.unselect_all()
+                self._select_result_row(results_count - 1)
+            return
+
+        selected_position = self._results_selection_model.get_selected()
         if selected_position == Gtk.INVALID_LIST_POSITION:
+            # No search results in chats/actions
+            self._select_search_row(0)
             return
 
         if direction == Direction.NEXT:
@@ -350,20 +381,36 @@ class UniversalSearch(Gtk.Box):
         else:
             selected_position -= 1
 
-        if not 0 <= selected_position < self._selection_model.get_n_items():
+        if selected_position < 0:
             return
 
-        self._select_row(selected_position)
+        if selected_position >= self._results_selection_model.get_n_items():
+            # Move selection from results listbox to search listbox
+            self._results_selection_model.unselect_all()
+            self._results_listbox.unselect_all()
 
-    def _select_row(self, position: int) -> None:
-        self._selection_model.select_item(position, True)
+            self._select_search_row(0)
+            return
+
+        self._select_result_row(selected_position)
+
+    def _select_result_row(self, position: int) -> None:
+        self._current_model = UniversalSearchCurrentModel.RESULTS
+        self._results_selection_model.select_item(position, True)
         row = self._results_listbox.get_row_at_index(position)
         if row is not None:
             self._results_listbox.select_row(row)
             self._scroll_row_into_view(row)
 
+    def _select_search_row(self, position: int) -> None:
+        self._current_model = UniversalSearchCurrentModel.SEARCH
+        self._search_selection_model.select_item(position, True)
+        row = self._search_listbox.get_row_at_index(position)
+        if row is not None:
+            self._search_listbox.select_row(row)
+
     def _scroll_row_into_view(self, row: Gtk.ListBoxRow) -> None:
-        """Scroll ListBox to row without giving it focus."""
+        """Scroll results ListBox to row without giving it focus."""
         coordinates = row.translate_coordinates(self._results_listbox, 0, 0)
         if coordinates is None:
             return
@@ -377,18 +424,27 @@ class UniversalSearch(Gtk.Box):
         )
 
     def _on_search_activate(self, _search_entry: Gtk.SearchEntry) -> None:
-        item = cast(
-            UniversalSearchResultItem, self._selection_model.get_selected_item()
-        )
+        # Check which model has a selection and relay the selected item
+        if self._current_model == UniversalSearchCurrentModel.RESULTS:
+            model = self._results_selection_model
+        else:
+            model = self._search_selection_model
+
+        selected_position = model.get_selected()
+        if selected_position == Gtk.INVALID_LIST_POSITION:
+            return
+
+        item = cast(UniversalSearchResultItem, model.get_selected_item())
         self._on_item_activated(item)
 
-    def _on_result_item_row_activated(
+    def _on_item_row_activated(
         self,
         _listbox: Gtk.ListBox,
         row: UniversalSearchResultItemRow,
+        selection_model: Gtk.SingleSelection,
     ) -> None:
         position = row.get_index()
-        item = cast(UniversalSearchResultItem, self._selection_model.get_item(position))
+        item = cast(UniversalSearchResultItem, selection_model.get_item(position))
         self._on_item_activated(item)
 
     def _on_item_activated(self, item: UniversalSearchResultItem) -> None:

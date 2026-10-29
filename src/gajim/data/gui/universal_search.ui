@@ -17,6 +17,7 @@
             <property name="height-request">400</property>
             <style>
               <class name="card" />
+              <class name="bg-blur-64" />
               <class name="p-12" />
               <class name="mt-6" />
               <class name="mb-18" />
@@ -88,14 +89,23 @@
                                 <property name="icon-name">lucide-search-symbolic</property>
                                 <property name="hexpand">1</property>
                                 <style>
-                              <class name="compact" />
-                            </style>
+                                  <class name="compact" />
+                                </style>
                               </object>
                             </child>
                           </object>
                         </property>
                       </object>
                     </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="_search_listbox">
+                    <property name="hexpand">1</property>
+                    <property name="selection-mode">single</property>
+                    <style>
+                      <class name="bg-transparent" />
+                    </style>
                   </object>
                 </child>
               </object>
