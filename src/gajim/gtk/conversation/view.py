@@ -107,6 +107,11 @@ class ConversationView(Gtk.ScrolledWindow):
         self._client = None
 
         self._list_box = Gtk.ListBox()
+        # With activation on single click, GtkListBox ignores modifiers on
+        # click in selection mode and can only add rows. Row activation is
+        # not used, so disable it to make Shift + Click select a range and
+        # Ctrl/Cmd + Click toggle a row.
+        self._list_box.set_activate_on_single_click(False)
 
         # Keeps track of the number of rows shown in ConversationView
         self._row_count: int = 0

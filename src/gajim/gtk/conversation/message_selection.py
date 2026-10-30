@@ -22,7 +22,6 @@ class MessageSelection(Gtk.Grid):
     def __init__(self) -> None:
         Gtk.Grid.__init__(
             self,
-            row_spacing=18,
             column_spacing=6,
             visible=False,
             halign=Gtk.Align.CENTER,
@@ -32,24 +31,19 @@ class MessageSelection(Gtk.Grid):
         self.add_css_class("toolbar")
         self.add_css_class("osd")
 
-        label = Gtk.Label(
-            label=_("Click messages to select them\n(Ctrl + Double Click to deselect)")
-        )
-        self.attach(label, 0, 0, 2, 1)
-
         cancel_button = Gtk.Button(label=_("Cancel"))
         cancel_button.connect("clicked", self._emit, "cancel")
-        self.attach(cancel_button, 0, 1, 1, 1)
+        self.attach(cancel_button, 0, 0, 1, 1)
 
         self._copy_button = Gtk.Button(label=_("Copy Text"), visible=False)
         self._copy_button.add_css_class("suggested-action")
         self._copy_button.connect("clicked", self._emit, "copy")
-        self.attach(self._copy_button, 1, 1, 1, 1)
+        self.attach(self._copy_button, 1, 0, 1, 1)
 
         self._delete_button = Gtk.Button(label=_("Delete messages…"), visible=False)
         self._delete_button.add_css_class("destructive-action")
         self._delete_button.connect("clicked", self._emit, "delete")
-        self.attach(self._delete_button, 1, 1, 1, 1)
+        self.attach(self._delete_button, 1, 0, 1, 1)
 
     def set_mode(self, mode: Literal["delete", "copy"]) -> None:
         self._copy_button.set_visible(mode == "copy")
