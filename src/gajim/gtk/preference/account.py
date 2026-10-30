@@ -875,7 +875,8 @@ class AccountGeneralPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("General – %(account)s") % {"account": account},
+            title=_("General – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -892,7 +893,8 @@ class AccountPrivacyPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Privacy – %(account)s") % {"account": account},
+            title=_("Privacy – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -908,7 +910,8 @@ class AccountOmemoPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Encryption (OMEMO) – %(account)s") % {"account": account},
+            title=_("Encryption (OMEMO) – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -925,7 +928,8 @@ class AccountOpenPGPPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Encryption (OpenPGP) – %(account)s") % {"account": account},
+            title=_("Encryption (OpenPGP) – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -941,7 +945,8 @@ class AccountConnectionDetailsPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Details - %(account)s") % {"account": account},
+            title=_("Details - %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -959,7 +964,8 @@ class AccountConnectionCertificatePage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Certificate - %(account)s") % {"account": account},
+            title=_("Certificate - %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -986,7 +992,8 @@ class AccountConnectionPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Connection – %(account)s") % {"account": account},
+            title=_("Connection – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1002,7 +1009,8 @@ class AccountManageRosterPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Contact List – %(account)s") % {"account": account},
+            title=_("Contact List – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1022,7 +1030,8 @@ class AccountBlockedContactsPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Blocked Contacts – %(account)s") % {"account": account},
+            title=_("Blocked Contacts – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1042,7 +1051,8 @@ class AccountArchivingPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Archiving – %(account)s") % {"account": account},
+            title=_("Archiving – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1061,7 +1071,8 @@ class LoginPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Login – %(account)s") % {"account": account},
+            title=_("Login – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1075,7 +1086,8 @@ class HostnamePage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Hostname – %(account)s") % {"account": account},
+            title=_("Hostname – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
@@ -1091,7 +1103,8 @@ class AccountAdvancedPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Advanced – %(account)s") % {"account": account},
+            title=_("Advanced – %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )

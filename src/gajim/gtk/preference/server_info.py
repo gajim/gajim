@@ -404,7 +404,8 @@ class AccountProviderPage(GajimPreferencePage):
     def __init__(self, account: str) -> None:
         GajimPreferencePage.__init__(
             self,
-            title=_("Provider - %(account)s") % {"account": account},
+            title=_("Provider - %(account)s")
+            % {"account": app.get_account_label(account)},
             groups=[],
             tag_prefix=f"{account}-",
         )
