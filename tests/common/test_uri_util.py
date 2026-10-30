@@ -4,7 +4,10 @@
 
 import unittest
 
+from gajim.common.util.uri import Coords
 from gajim.common.util.uri import DataUri
+from gajim.common.util.uri import get_geo_choords
+from gajim.common.util.uri import split_geo_uri
 from gajim.common.util.uri import XmppIri
 
 
@@ -55,6 +58,39 @@ class TestUriUtil(unittest.TestCase):
 
         for uri, expected_res in test_uris.items():
             self.assertEqual(DataUri.from_string(uri), expected_res)
+
+    def test_split_geo_uri(self) -> None:
+        self.assertEqual(
+            split_geo_uri("geo:37.786971,-122.399677,122.3;u=20"),
+            Coords(
+                location="37.786971,-122.399677", lat="37.786971", lon="-122.399677"
+            ),
+        )
+        self.assertEqual(
+            split_geo_uri("geo:-90,180"),
+            Coords(location="-90,180", lat="-90", lon="180"),
+        )
+
+        invalid_uris = [
+            "geo:nan,nan",
+            "geo:NaN,0",
+            "geo:0,-nan",
+            "geo:inf,0",
+            "geo:0,-infinity",
+            "geo:1e1,0",
+            "geo:1_0,0",
+            "geo:+10,0",
+            "geo:10.,0",
+            "geo:91,0",
+            "geo:0,-181",
+            "geo:0",
+        ]
+        for uri in invalid_uris:
+            with self.subTest(uri=uri):
+                self.assertRaises(ValueError, split_geo_uri, uri)
+
+    def test_get_geo_choords_invalid(self) -> None:
+        self.assertIsNone(get_geo_choords("geo:nan,nan"))
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
 from gajim.common.iana.uri_schemes import URI_SCHEMES
+from gajim.common.regex import GEO_COORD_RX
 from gajim.common.regex import IRI_RX
 
 log = logging.getLogger("gajim.c.util.uri")
@@ -312,6 +313,13 @@ def split_geo_uri(uri: str) -> Coords:
         coords.pop(2)
 
     lat, lon = coords
+
+    # float() also accepts values like "nan", "inf" or "1e5", which are not
+    # valid coordinates (and "nan" would pass the range checks below)
+    for coord in (lat, lon):
+        if not GEO_COORD_RX.fullmatch(coord):
+            raise ValueError("Invalid geo uri: invalid coordinate %s" % coord)
+
     if float(lat) < -90 or float(lat) > 90:
         raise ValueError("Invalid geo_uri: invalid latitude %s" % lat)
 

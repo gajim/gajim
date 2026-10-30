@@ -98,6 +98,11 @@ HTTPS_URL = rf"https://{ihier_part}(?:\?{iquery})?(?:#{ifragment})?"
 IRI_RX = re.compile(IRI)
 HTTPS_URL_RX = re.compile(HTTPS_URL)
 
+# Coordinate in a geo URI, as defined in RFC 5870
+# <https://www.rfc-editor.org/rfc/rfc5870#section-3.3>:
+# coord = [ "-" ] 1*DIGIT [ "." 1*DIGIT ]
+GEO_COORD_RX = re.compile(r"-?[0-9]+(\.[0-9]+)?")
+
 
 # <https://rfc-editor.org/rfc/rfc7564#section-4.2>
 class PRECIS:
