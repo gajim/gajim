@@ -858,7 +858,13 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if not self._chat_control.message_selection_active():
             return Gdk.EVENT_PROPAGATE
 
-        if state & Gdk.ModifierType.CONTROL_MASK:
+        # Copy shortcut: Ctrl + C, or Cmd + C on macOS
+        if sys.platform == "darwin":
+            copy_modifier = Gdk.ModifierType.META_MASK
+        else:
+            copy_modifier = Gdk.ModifierType.CONTROL_MASK
+
+        if state & copy_modifier:
             if keyval == Gdk.KEY_c:
                 self._chat_control.copy_selected_messages()
                 return Gdk.EVENT_STOP
