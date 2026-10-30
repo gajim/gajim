@@ -106,6 +106,9 @@ function create_root {
 
 function install_mingw_deps {
     # Downgrade pango https://gitlab.com/gajim/gajim/-/work_items/12730
+    # https://gitlab.gnome.org/GNOME/pango/-/work_items/905
+    build_pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-gtk4-4.22.4-1-any.pkg.tar.zst
+    build_pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-libadwaita-1.9.3-1-any.pkg.tar.zst
     build_pacman --noconfirm -U https://repo.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-pango-1.56.4-3-any.pkg.tar.zst
     build_pacman --noconfirm -S ${MINGW_DEPS}
 }
