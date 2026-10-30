@@ -191,6 +191,11 @@ class VCardAvatars(BaseModule):
                     )
                     return
 
+                app.storage.archive.set_contact_value(
+                    self._account, contact.jid, "avatar_sha", None
+                )
+                contact.update_avatar(None)
+
                 self._log.info("Request avatar: %s %s", jid, avatar_sha)
                 task = VCardAvatarsTask(contact, avatar_sha, self._request_vcard)
                 app.task_manager.add_task(task)
