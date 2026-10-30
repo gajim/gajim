@@ -248,7 +248,7 @@ class WindowsToastNotification(NotificationBackend):
         if icon_name is None:
             return None
 
-        return ToastImage(_get_icon_path(icon_name, 32))
+        return ToastImage(_get_icon_path(icon_name, AvatarSize.NOTIFICATION))
 
     def _get_toast_buttons(self, event: events.Notification) -> list[ToastButton]:
         toast_buttons: list[ToastButton] = []
