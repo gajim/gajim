@@ -426,21 +426,28 @@ class SystemNotificationsGroup(GajimPreferencesGroup):
             title=_("System"),
         )
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("System Tray Icon"),
-                SettingType.CONFIG,
-                "show_trayicon",
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("System Tray Notifications"),
-                SettingType.CONFIG,
-                "trayicon_notification_on_events",
-                desc=_("Show notifications on the system tray icon"),
-                bind="show_trayicon",
-            ),
+        settings: list[Setting] = []
+
+        if sys.platform != "darwin":
+            # macOS has no system tray
+            settings += [
+                Setting(
+                    SettingKind.SWITCH,
+                    _("System Tray Icon"),
+                    SettingType.CONFIG,
+                    "show_trayicon",
+                ),
+                Setting(
+                    SettingKind.SWITCH,
+                    _("System Tray Notifications"),
+                    SettingType.CONFIG,
+                    "trayicon_notification_on_events",
+                    desc=_("Show notifications on the system tray icon"),
+                    bind="show_trayicon",
+                ),
+            ]
+
+        settings += [
             Setting(
                 SettingKind.SWITCH,
                 _("System Notifications"),

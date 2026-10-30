@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import TYPE_CHECKING
 
 import os
 import shutil
@@ -56,6 +57,9 @@ from gajim.gtk.util.misc import open_uri
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
 from gajim.gtk.util.window import open_window
+
+if sys.platform == "darwin" or TYPE_CHECKING:
+    from AppKit import NSApplication
 
 ActionListT = list[tuple[str, Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
@@ -234,6 +238,9 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         self.systray = TrayIcon()
 
+        if sys.platform == "darwin":
+            main_window.connect("unread-count-changed", self._update_desktop_dock)
+
         self._add_app_actions()
 
         if sys.platform == "darwin":
@@ -254,6 +261,11 @@ class GajimApplication(Adw.Application, CoreApplication):
         main_window.init()
 
         GLib.timeout_add(100, self._auto_connect)
+
+    def _update_desktop_dock(self, *args: Any) -> None:
+        count = app.window.get_total_unread_count()
+        dock = NSApplication.sharedApplication().dockTile()
+        dock.setBadgeLabel_(str(count) if count else None)
 
     def _on_window_added(
         self, _application: GajimApplication, window: Gtk.Window
