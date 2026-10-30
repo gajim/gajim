@@ -9,11 +9,13 @@ from typing import cast
 from typing import Literal
 
 import logging
+import sys
 from collections import defaultdict
 from collections.abc import Generator
 from collections.abc import Iterable
 from datetime import datetime
 
+from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -59,6 +61,7 @@ from gajim.gtk.conversation.rows.muc_subject import MUCSubject
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
+from gajim.gtk.structs import SelectMessageParam
 from gajim.gtk.util.misc import check_finalize
 from gajim.gtk.util.misc import iterate_listbox_children
 
@@ -152,6 +155,29 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._last_occupant_messages: dict[str, mod.Message] = {}
 
+        # Drag selection: dragging from one message onto another selects
+        # the messages in between (see _on_drag_event)
+        self._drag_start_row: MessageRow | None = None
+        self._drag_current_row: MessageRow | None = None
+        self._drag_pointer: Graphene.Point | None = None
+        self._drag_selecting = False
+        # With Cmd (macOS) or Ctrl held, the dragged range is added to the
+        # rows that were already selected
+        self._drag_add = False
+        self._drag_base_rows: list[MessageRow] = []
+        self._drag_autoscroll_id: int | None = None
+
+        # A legacy controller in the capture phase only observes events, so
+        # text selection inside a message keeps working as before
+        drag_controller = Gtk.EventControllerLegacy(
+            propagation_phase=Gtk.PropagationPhase.CAPTURE
+        )
+        drag_controller.connect("event", self._on_drag_event)
+        self.add_controller(drag_controller)
+        self.get_vadjustment().connect(
+            "value-changed", self._on_drag_scroll_value_changed
+        )
+
         self.set_child(self._list_box)
 
         app.ged.register_event_handler(
@@ -209,6 +235,230 @@ class ConversationView(Gtk.ScrolledWindow):
 
         for row in self.iter_rows():
             row.disable_selection_mode()
+
+    def _get_event_position(self, event: Gdk.Event) -> Graphene.Point | None:
+        # Event coordinates are relative to the surface, convert them
+        # to coordinates relative to this widget
+        native = self.get_native()
+        if native is None:
+            return None
+
+        has_position, x, y = event.get_position()
+        if not has_position:
+            return None
+
+        surface_x, surface_y = native.get_surface_transform()
+        point = Graphene.Point()
+        point.x = x - surface_x
+        point.y = y - surface_y
+        # The native is always a widget (the window)
+        has_point, point = cast(Gtk.Widget, native).compute_point(self, point)
+        if not has_point:
+            return None
+        return point
+
+    def _get_message_row_at(self, point: Graphene.Point) -> MessageRow | None:
+        has_point, list_point = self.compute_point(self._list_box, point)
+        if not has_point:
+            return None
+
+        height = self._list_box.get_height()
+        y = min(max(list_point.y, 0), height - 1)
+        row = self._list_box.get_row_at_y(int(y))
+        if isinstance(row, MessageRow):
+            return row
+        return None
+
+    def _on_drag_event(
+        self, controller: Gtk.EventControllerLegacy, _event: Gdk.Event | None
+    ) -> bool:
+        # PyGObject can't pass the event as signal argument (it arrives
+        # as None), so get it from the controller instead
+        event = controller.get_current_event()
+        if event is None:
+            log.warning("Drag selection: no current event")
+            return Gdk.EVENT_PROPAGATE
+
+        event_type = event.get_event_type()
+
+        if event_type == Gdk.EventType.BUTTON_PRESS:
+            self._end_drag()
+            if cast(Gdk.ButtonEvent, event).get_button() != Gdk.BUTTON_PRIMARY:
+                return Gdk.EVENT_PROPAGATE
+
+            if sys.platform == "darwin":
+                add_modifier = Gdk.ModifierType.META_MASK
+            else:
+                add_modifier = Gdk.ModifierType.CONTROL_MASK
+
+            state = event.get_modifier_state()
+            other_modifiers = (
+                Gdk.ModifierType.SHIFT_MASK
+                | Gdk.ModifierType.CONTROL_MASK
+                | Gdk.ModifierType.META_MASK
+            ) & ~add_modifier
+            if state & other_modifiers:
+                # Let GtkListBox handle Shift + Click
+                return Gdk.EVENT_PROPAGATE
+
+            # Without moving to another message, Cmd/Ctrl + Click is
+            # handled by GtkListBox (add or remove one message)
+            self._drag_add = bool(state & add_modifier)
+
+            point = self._get_event_position(event)
+            if point is None:
+                return Gdk.EVENT_PROPAGATE
+
+            self._drag_start_row = self._get_message_row_at(point)
+            self._drag_pointer = point
+            return Gdk.EVENT_PROPAGATE
+
+        if event_type == Gdk.EventType.MOTION_NOTIFY:
+            if self._drag_start_row is None:
+                return Gdk.EVENT_PROPAGATE
+
+            if not event.get_modifier_state() & Gdk.ModifierType.BUTTON1_MASK:
+                # Button was released without us seeing the release
+                self._end_drag()
+                return Gdk.EVENT_PROPAGATE
+
+            point = self._get_event_position(event)
+            if point is None:
+                return Gdk.EVENT_PROPAGATE
+
+            self._drag_pointer = point
+            self._update_drag_selection()
+            self._update_drag_autoscroll()
+            return Gdk.EVENT_PROPAGATE
+
+        if event_type == Gdk.EventType.BUTTON_RELEASE:
+            if self._drag_selecting and self._drag_current_row is not None:
+                # The message where the drag started had keyboard focus for
+                # text selection, which it loses in selection mode. Move focus
+                # to a row, so shortcuts like Ctrl + C reach the chat again.
+                self._drag_current_row.grab_focus()
+            self._end_drag()
+
+        return Gdk.EVENT_PROPAGATE
+
+    def _end_drag(self) -> None:
+        self._drag_add = False
+        self._drag_base_rows = []
+        self._drag_start_row = None
+        self._drag_current_row = None
+        self._drag_pointer = None
+        self._drag_selecting = False
+        if self._drag_autoscroll_id is not None:
+            GLib.source_remove(self._drag_autoscroll_id)
+            self._drag_autoscroll_id = None
+
+    def _update_drag_selection(self) -> None:
+        if self._drag_start_row is None or self._drag_pointer is None:
+            return
+
+        row = self._get_message_row_at(self._drag_pointer)
+        if row is None or row is self._drag_current_row:
+            return
+
+        if not self._drag_selecting:
+            if row is self._drag_start_row:
+                # Still inside the first message: normal text selection
+                return
+
+            if not self._start_drag_selection():
+                self._end_drag()
+                return
+
+        self._drag_current_row = row
+        self._select_message_range(self._drag_start_row, row)
+
+    def _start_drag_selection(self) -> bool:
+        assert self._drag_start_row is not None
+        self._drag_selecting = True
+
+        if self._list_box.get_selection_mode() == Gtk.SelectionMode.MULTIPLE:
+            # Selection mode is already active
+            if self._drag_add:
+                self._drag_base_rows = self.get_selected_messages()
+            return True
+
+        if self._contact is None or self._drag_start_row.pk is None:
+            return False
+
+        params = SelectMessageParam(
+            account=self._contact.account,
+            jid=self._contact.jid,
+            pk=self._drag_start_row.pk,
+            mode="copy",
+        )
+        app.window.activate_action(
+            "win.activate-message-selection", params.to_variant()
+        )
+        return self._list_box.get_selection_mode() == Gtk.SelectionMode.MULTIPLE
+
+    def _select_message_range(self, start: MessageRow, end: MessageRow) -> None:
+        start_index = start.get_index()
+        end_index = end.get_index()
+        if start_index > end_index:
+            start_index, end_index = end_index, start_index
+
+        self._list_box.unselect_all()
+        for row in self._drag_base_rows:
+            # Rows can be removed from the view meanwhile (e.g. when
+            # history is trimmed)
+            if row.get_parent() is self._list_box:
+                self._list_box.select_row(row)
+
+        for index in range(start_index, end_index + 1):
+            row = self._list_box.get_row_at_index(index)
+            if isinstance(row, MessageRow) and row is not start:
+                self._list_box.select_row(row)
+
+        # Select the start row last, so it is the anchor for Shift + Click
+        self._list_box.select_row(start)
+
+    def _on_drag_scroll_value_changed(self, _adjustment: Gtk.Adjustment) -> None:
+        # Content moved under the pointer (scrolling while dragging)
+        if self._drag_selecting:
+            self._update_drag_selection()
+
+    def _update_drag_autoscroll(self) -> None:
+        if not self._drag_selecting or self._drag_pointer is None:
+            return
+
+        if self._get_autoscroll_step() == 0:
+            if self._drag_autoscroll_id is not None:
+                GLib.source_remove(self._drag_autoscroll_id)
+                self._drag_autoscroll_id = None
+            return
+
+        if self._drag_autoscroll_id is None:
+            self._drag_autoscroll_id = GLib.timeout_add(30, self._on_drag_autoscroll)
+
+    def _get_autoscroll_step(self) -> float:
+        # Scroll while the pointer is near or beyond the top/bottom edge,
+        # faster the further away it is
+        if self._drag_pointer is None:
+            return 0
+
+        edge = 40
+        y = self._drag_pointer.y
+        height = self.get_height()
+        if y < edge:
+            return -min(edge - y, 200) / 2
+        if y > height - edge:
+            return min(y - (height - edge), 200) / 2
+        return 0
+
+    def _on_drag_autoscroll(self) -> bool:
+        step = self._get_autoscroll_step()
+        if not self._drag_selecting or step == 0:
+            self._drag_autoscroll_id = None
+            return GLib.SOURCE_REMOVE
+
+        adjustment = self.get_vadjustment()
+        adjustment.set_value(adjustment.get_value() + step)
+        return GLib.SOURCE_CONTINUE
 
     def _on_scroll_view(self, action: Gio.SimpleAction, _param: Literal[None]) -> None:
         action_name = action.get_name()
