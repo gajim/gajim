@@ -67,6 +67,7 @@ function install_mingw_deps {
 
 function install_python_deps {
     pip install python-gnupg  # for the gpg plugin
+    pip install git+https://github.com/pyinstaller/pyinstaller.git
 }
 
 function install_gajim {
