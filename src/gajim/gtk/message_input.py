@@ -70,7 +70,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
     def __init__(self, parent: Gtk.Widget) -> None:
         GtkSource.View.__init__(
             self,
-            accepts_tab=True,
+            accepts_tab=False,
             wrap_mode=Gtk.WrapMode.WORD_CHAR,
             margin_top=3,
             margin_bottom=3,
