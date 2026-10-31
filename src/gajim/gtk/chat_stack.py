@@ -252,9 +252,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         # scrolls to that row, which ends with the listbox not at bottom.
         # It is important that this call is before switch_contact() which triggers
         # reloading of new messages.
-        message_input = self.get_message_input()
-        if message_input.get_mapped():
-            message_input.grab_focus()
+        self.get_message_input().grab_focus()
 
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
