@@ -26,6 +26,8 @@ jobs:
         with:
           update: true
           msystem: ${{matrix.sys}}
+          install: >-
+            git
 
       - name: Install dependencies
         run: |
