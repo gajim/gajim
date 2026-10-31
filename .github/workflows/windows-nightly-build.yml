@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup msys2 environment
         uses: msys2/setup-msys2@v2
@@ -28,6 +30,7 @@ jobs:
           msystem: ${{matrix.sys}}
           install: >-
             git
+            curl
 
       - name: Install dependencies
         run: |
@@ -36,3 +39,13 @@ jobs:
       - name: Build Installer
         run: |
           ./win/build.sh create-installer
+
+      - name: Upload
+        run: |
+          curl -T dist/Gajim-Installer.exe --ssl-reqd \
+          ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.exe"
+
+      - name: Upload Portable
+        run: |
+          curl -T dist/Gajim-Portable-Installer.exe --ssl-reqd \
+          ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-Portable-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.exe"

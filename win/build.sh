@@ -152,10 +152,10 @@ function create_installer() {
     sed -i -e "s/@FILE_VERSION_FIXED@/$FILE_VERSION_FIXED/g" win/pyinstaller/version.txt
     sed -i -e "s/@FILE_VERSION_STRING@/$FILE_VERSION_STRING/g" win/pyinstaller/version.txt
 
-    # pyinstaller win/pyinstaller/gajim.spec
+    pyinstaller win/pyinstaller/gajim.spec
 
-    # makensis -NOCD win/nsis/gajim-portable.nsi
-    # makensis -NOCD -DVERSION=$GAJIM_VERSION win/nsis/gajim.nsi
+    makensis -NOCD -DVERSION=$APP_VERSION win/nsis/gajim.nsi
+    makensis -NOCD win/nsis/gajim-portable.nsi
 }
 
 function clean() {
