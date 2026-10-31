@@ -105,7 +105,6 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">
@@ -120,7 +119,6 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">lucide-trash-symbolic</property>
@@ -135,6 +133,7 @@
             <property name="halign">center</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="yes">Show matching rules for addresses</property>
             <property name="popover">info_popover</property>
             <child>
               <object class="GtkImage">

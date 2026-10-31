@@ -72,7 +72,11 @@ class GroupchatOutcasts(Gtk.Box, SignalManager):
 
         if self._own_affiliation in ("admin", "owner"):
             self._ui.add_button.set_sensitive(True)
-            self._ui.add_button.set_tooltip_text("")
+            self._ui.add_button.set_tooltip_text(_("Add affiliation"))
+        else:
+            self._ui.add_button.set_tooltip_text(
+                _("Only Admins and Owners can modify the affiliation")
+            )
 
         self._client.get_module("MUC").get_affiliation(
             self._contact.jid, "outcast", callback=self._on_outcasts_received
@@ -157,8 +161,14 @@ class GroupchatOutcasts(Gtk.Box, SignalManager):
         return any(row[Column.JID] == jid for row in self._store)
 
     def _set_remove_button_state(self, sensitive: bool) -> None:
-        value = self._own_affiliation in ("admin", "owner")
-        self._ui.remove_button.set_sensitive(sensitive and value)
+        can_modify = self._own_affiliation in ("admin", "owner")
+        self._ui.remove_button.set_sensitive(sensitive and can_modify)
+        if can_modify:
+            self._ui.remove_button.set_tooltip_text(_("Remove affiliation"))
+        else:
+            self._ui.remove_button.set_tooltip_text(
+                _("Only Admins and Owners can modify the affiliation")
+            )
 
     def _update_apply_button_state(self):
         if self._own_affiliation not in ("admin", "owner"):

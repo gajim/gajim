@@ -79,7 +79,11 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
 
         if self._own_affiliation in ("admin", "owner"):
             self._ui.add_button.set_sensitive(True)
-            self._ui.add_button.set_tooltip_text("")
+            self._ui.add_button.set_tooltip_text(_("Add affiliation"))
+        else:
+            self._ui.add_button.set_tooltip_text(
+                _("Only Admins and Owners can modify the affiliation")
+            )
 
         for affiliation in ("owner", "admin", "member"):
             self._client.get_module("MUC").get_affiliation(
@@ -211,9 +215,12 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
     ) -> None:
         if self._own_affiliation not in ("admin", "owner"):
             self._ui.remove_button.set_sensitive(False)
+            self._ui.remove_button.set_tooltip_text(
+                _("Only Admins and Owners can modify the affiliation")
+            )
             return
 
-        self._ui.remove_button.set_tooltip_text("")
+        self._ui.remove_button.set_tooltip_text(_("Remove affiliation"))
 
         if not sensitive:
             self._ui.remove_button.set_sensitive(False)
