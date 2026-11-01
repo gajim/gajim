@@ -91,7 +91,7 @@ coll = COLLECT(
     exe,
     a.binaries,
     a.datas,  # typos: ignore
+    name="dist",
     strip=False,
     upx=False,
-    name="win",
 )

@@ -6,7 +6,7 @@ ManifestDPIAware true
 !include "LogicLib.nsh"
 
 Name "Gajim"
-OutFile "dist\Gajim-Installer.exe"
+OutFile "${OUTPUT}\Gajim-Installer.exe"
 SetCompressor /final /solid lzma
 SetCompressorDictSize 32
 
@@ -22,9 +22,9 @@ Var StartMenuFolder
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-uninstall.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "win\nsis\header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
+!define MUI_HEADERIMAGE_BITMAP "${RESOURCES}\header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${RESOURCES}\wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${RESOURCES}\wizard.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
@@ -128,7 +128,7 @@ Section "Gajim" SecGajim
     ${EndIf}
 
     SetOutPath "$INSTDIR"
-    File /r "dist\win\*.*"
+    File /r "${SOURCE}\*.*"
 
     WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION}"

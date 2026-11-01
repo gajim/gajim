@@ -6,7 +6,7 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
   <Identity
     Name="2126Gajim.Gajim"
-    Version="QL_VERSION"
+    Version="@PROD_VERSION_STRING@"
     Publisher="CN=7BA5D718-F03F-4E0C-BC3A-3CBC8E87B36A"
     ProcessorArchitecture="x64" />
   <Properties>
@@ -25,7 +25,7 @@
     <rescap:Capability Name="runFullTrust"/>
   </Capabilities>
   <Applications>
-    <Application Id="Gajim" Executable="bin\Gajim.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="Gajim" Executable="Gajim.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
         BackgroundColor="transparent"
         DisplayName="Gajim"
@@ -34,7 +34,7 @@
         Description="Gajim">
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.startupTask" Executable="bin\Gajim.exe" EntryPoint="Windows.FullTrustApplication">
+        <desktop:Extension Category="windows.startupTask" Executable="Gajim.exe" EntryPoint="Windows.FullTrustApplication">
           <desktop:StartupTask TaskId="Gajim" Enabled="true" DisplayName="Gajim"/>
         </desktop:Extension>
         <uap:Extension Category="windows.protocol">

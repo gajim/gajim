@@ -154,7 +154,7 @@ The easiest way to run the development version is to use [uv](https://docs.astra
 
 ### Windows
 
-see [README](./win/README.md)
+see [README](./plaform/win/README.md)
 
 ## Miscellaneous
 

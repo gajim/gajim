@@ -29,8 +29,8 @@ path = [
   "src/gajim/data/sounds/**",
   "mac/Gajim.icns",
   "po/**",
-  "win/**/*.ico",
-  "win/nsis/**",
+  "platform/win/**/*.ico",
+  "platform/win/nsis/**",
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Contributors to Gajim <https://gajim.org/>"

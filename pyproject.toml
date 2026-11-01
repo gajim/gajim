@@ -113,7 +113,7 @@ extend-exclude = [
   "*.patch",
   "debian/control",
   "po",
-  "win/nsis/gajim*.nsi",
+  "platform/win/nsis/gajim*.nsi",
   "docker",
 ]
 
@@ -180,7 +180,6 @@ exclude = [
   "tests/gui/test_menus.py",
   "typings/pystray/*",
   "typings/windows_toasts/*",
-  "win/misc/depcheck.py",
   "mac/hooks/*",
 ]
 
@@ -337,7 +336,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "tests/common/test_regex.py" = ["RUF001"]
 "make.py" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
-"win/*" = ["S603", "S605", "S607"]
 "scripts/*" = ["S603", "S607"]
 "launch.py" = ["S603", "S607"]
 
@@ -410,6 +408,5 @@ exclude = [
   "tests/gui/test_menus.py",
   "typings/pystray/*",
   "typings/windows_toasts/*",
-  "win/misc/depcheck.py",
   "mac/hooks/*",
 ]

@@ -6,7 +6,7 @@ ManifestDPIAware true
 !include "LogicLib.nsh"
 
 Name "Gajim"
-OutFile "dist\Gajim-Portable-Installer.exe"
+OutFile "${OUTPUT}\Gajim-Portable-Installer.exe"
 SetCompressor /final /solid lzma
 SetCompressorDictSize 32
 
@@ -18,9 +18,9 @@ BrandingText "Gajim Setup"
 
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\nsis3-install-alt.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "win\nsis\header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "win\nsis\wizard.bmp"
+!define MUI_HEADERIMAGE_BITMAP "${RESOURCES}\header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "${RESOURCES}\wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "${RESOURCES}\wizard.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
@@ -99,7 +99,7 @@ Section "Gajim" SecGajim
         Delete "$INSTDIR\Gajim.exe"
     ${EndIf}
 
-    File /r "dist\win\*.*"
+    File /r "${SOURCE}\*.*"
 
     SetOutPath "$INSTDIR\_internal\gajim\data"
     FileOpen $0 "is_portable" w
