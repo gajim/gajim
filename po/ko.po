@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2026-07-25 03:20+0000\n"
 "Last-Translator: \"Woojae, Park\" <nikescar@gmail.com>\n"
 "Language-Team: Korean <https://translate.gajim.org/projects/gajim/master/ko/"
@@ -271,6 +271,11 @@ msgstr "1년"
 msgid "1 hour"
 msgstr "1시간"
 
+#, fuzzy, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "이 메시지는 로컬 대화 기록에서 삭제됩니다"
+
 msgid "2 Days"
 msgstr "2일"
 
@@ -532,6 +537,10 @@ msgstr "계정의 이름과 색상 추가"
 msgid "Add a setting you would like to change"
 msgstr "변경하려는 설정 추가"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "소속"
+
 msgid "Add new Theme"
 msgstr "새 테마 추가"
 
@@ -594,10 +603,6 @@ msgstr "고급 설정"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "고급 – %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw 버전: %s"
 
 msgid "Affiliation"
 msgstr "소속"
@@ -860,6 +865,10 @@ msgstr "백업 오류"
 msgid "Backup Now"
 msgstr "지금 백업"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "백업 비밀번호"
+
 msgid "Backup Secret Key"
 msgstr "비밀 키 백업"
 
@@ -1041,6 +1050,10 @@ msgstr "비밀번호 변경"
 msgid "Change Subject"
 msgstr "주제 변경"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "프로필 사진 변경"
+
 msgid "Change your account’s password, etc."
 msgstr "계정 비밀번호 등을 변경합니다."
 
@@ -1141,6 +1154,9 @@ msgstr "그룹 선택…"
 msgid "Choose encryption"
 msgstr "암호화 선택"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "도시"
 
@@ -1156,12 +1172,8 @@ msgstr "입력 지우기"
 msgid "Clear Sound"
 msgstr "소리 지우기"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"메시지를 클릭하여 선택\n"
-"(Ctrl + 더블 클릭으로 선택 해제)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "이 그룹 대화에 초대하려는 연락처를 클릭하세요."
@@ -1214,9 +1226,6 @@ msgstr "명령이 성공적으로 실행되었습니다"
 
 msgid "Commands"
 msgstr "명령"
-
-msgid "Common Name (CN): "
-msgstr "일반 이름 (CN): "
 
 #, python-format
 msgid ""
@@ -1541,8 +1550,9 @@ msgstr "지문을 삭제하시겠습니까?"
 msgid "Delete Message Locally?"
 msgstr "메시지를 로컬에서 삭제하시겠습니까?"
 
+#, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "메시지를 로컬에서 삭제…"
 
 msgid "Delete Node?"
@@ -1550,6 +1560,10 @@ msgstr "노드를 삭제하시겠습니까?"
 
 msgid "Delete Theme?"
 msgstr "테마를 삭제하시겠습니까?"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "메시지 선택…"
 
 msgid "Deny"
 msgstr "거부"
@@ -1654,10 +1668,6 @@ msgstr ""
 "정말 Gajim에서 모든 대화 메시지를 제거하시겠습니까?\n"
 "경고: 실행 취소할 수 없습니다!\n"
 "그 후 Gajim이 종료됩니다."
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "%(name)s님을 차단하시겠습니까?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "이 PEP 노드를 삭제하시겠습니까?"
@@ -1914,12 +1924,6 @@ msgstr "명령 실행…"
 msgid "Executing…"
 msgstr "실행 중…"
 
-msgid "Expires on: "
-msgstr "만료일: "
-
-msgid "Expiry date"
-msgstr "만료일"
-
 msgid "Export"
 msgstr "내보내기"
 
@@ -1966,6 +1970,12 @@ msgid ""
 msgstr ""
 "자신을 표현하세요: 때로는 말로는 부족합니다. 반응, 답장을 사용하고, 음성 메시"
 "지를 녹음하고, 상태 업데이트를 보내어 자신을 완전히 표현하세요."
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
+msgstr ""
 
 msgid "Extended Address"
 msgstr "확장 주소"
@@ -2065,9 +2075,6 @@ msgstr "필터 (활성)"
 msgid "Fingerprint for this Device"
 msgstr "이 장치의 지문"
 
-msgid "Fingerprints"
-msgstr "지문"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "\"%s\"에 연결된 장치의 지문"
@@ -2162,14 +2169,6 @@ msgstr "전체 이름"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "모든 기능을 갖춘 XMPP 채팅 클라이언트"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "GLib 버전: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "GTK 버전: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2333,6 +2332,9 @@ msgstr "HTTPS 확인"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "안녕하세요, 저는 $name입니다. %s"
+
+msgid "Help"
+msgstr ""
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr "이 문제를 재현하는 데 도움이 되는 피드백을 여기에 추가할 수 있습니다."
@@ -2521,6 +2523,10 @@ msgstr "시스템에 비밀번호를 저장하려면 키링을 설치하세요."
 msgid "Install from Archive"
 msgstr "아카이브에서 설치"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "설치 실패"
 
@@ -2579,24 +2585,6 @@ msgstr "초대 대상자"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "마이크가 연결되어 있고 액세스할 수 있습니까?"
-
-msgid "Issue date"
-msgstr "발급일"
-
-msgid "Issued by"
-msgstr "발급자"
-
-msgid "Issued by\n"
-msgstr "발급자\n"
-
-msgid "Issued on: "
-msgstr "발급일: "
-
-msgid "Issued to"
-msgstr "발급 대상"
-
-msgid "Issued to\n"
-msgstr "발급 대상\n"
 
 msgid "Issues detected"
 msgstr "문제 감지됨"
@@ -2813,6 +2801,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "회원 전용"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "반응 추가…"
+
 msgid "Message"
 msgstr "메시지"
 
@@ -2864,6 +2856,10 @@ msgstr "상태가 변경되기까지 남은 시간(분)"
 msgid "Miscellaneous"
 msgstr "기타"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
+
 msgid "Missing necessary encryption plugin"
 msgstr "필요한 암호화 플러그인 누락"
 
@@ -2914,6 +2910,12 @@ msgstr "대화 이동"
 
 msgid "Move Contact to New Group?"
 msgstr "연락처를 새 그룹으로 이동하시겠습니까?"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 msgid "Move to Group"
 msgstr "그룹으로 이동"
@@ -3257,9 +3259,6 @@ msgstr "조직"
 msgid "Organization"
 msgstr "조직"
 
-msgid "Organization (O): "
-msgstr "조직 (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "기타"
@@ -3319,10 +3318,6 @@ msgstr "PNG 파일"
 
 msgid "Packages"
 msgstr "패키지"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango 버전: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3627,6 +3622,14 @@ msgstr "프록시"
 msgid "Proxy"
 msgstr "프록시"
 
+#, fuzzy
+msgid "Proxy Host"
+msgstr "프록시"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "프록시"
+
 msgid "Proxy, custom hostname and port"
 msgstr "프록시, 사용자 지정 호스트명 및 포트"
 
@@ -3644,12 +3647,6 @@ msgstr "공개 암호화 키"
 msgid "Public Information"
 msgstr "공개 정보"
 
-msgid "Public Key Information"
-msgstr "공개 키 정보"
-
-msgid "Public Key: "
-msgstr "공개 키: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
@@ -3662,10 +3659,6 @@ msgstr "대화 기록 삭제"
 
 msgid "Purge all Chat History?"
 msgstr "모든 대화 기록을 삭제하시겠습니까?"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGObject 버전: %s"
 
 msgid "Quit"
 msgstr "종료"
@@ -3714,9 +3707,6 @@ msgstr "무조건 신뢰에 대해 자세히 알아보기"
 
 msgid "Reason"
 msgstr "사유"
-
-msgid "Reason (optional)"
-msgstr "사유 (선택사항)"
 
 msgid "Reason (optional)..."
 msgstr "사유 (선택사항)..."
@@ -3830,6 +3820,10 @@ msgstr "테마 제거"
 
 msgid "Remove Workspace?"
 msgstr "작업 공간을 제거하시겠습니까?"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "소속"
 
 msgid "Remove from Contact List…"
 msgstr "연락처 목록에서 제거…"
@@ -4009,12 +4003,6 @@ msgstr "역할"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s님의 역할이 이 그룹 대화에서 제거되었습니다"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "SSL 인증서 확인 오류"
@@ -4257,9 +4245,6 @@ msgstr "전송한 연락처: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "전송한 연락처:"
 
-msgid "Serial Number: "
-msgstr "일련 번호: "
-
 msgid "Server Shutdown"
 msgstr "서버 종료"
 
@@ -4422,6 +4407,9 @@ msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr "서버가 XEP-0258을 지원하는 경우 메시지 기밀성을 설명하는 레이블 표시"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4619,9 +4607,6 @@ msgstr "스타일"
 msgid "Subject"
 msgstr "주제"
 
-msgid "Subject Alt Names: "
-msgstr "주체 대체 이름: "
-
 msgid "Subject issuer mismatch"
 msgstr "주체 발급자 불일치"
 
@@ -4651,15 +4636,20 @@ msgstr "기기 {device_id}와 새 세션을 성공적으로 구축했습니다."
 msgid "Successfully imported key from server."
 msgstr "서버에서 키를 성공적으로 가져왔습니다."
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "서버에서 키를 성공적으로 가져왔습니다."
+
 msgid "Support"
 msgstr "지원"
 
+#, fuzzy, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "Gajim을 종료하시겠습니까?\n"
 "종료하면 메시지를 보내고 받을 수 없습니다.\n"
@@ -4777,6 +4767,10 @@ msgstr "시스템 트레이 아이콘"
 
 msgid "System Tray Notifications"
 msgstr "시스템 트레이 알림"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "버전"
 
 msgid "Telephone"
 msgstr "전화"
@@ -5011,8 +5005,15 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "이 메시지는 XMPP용 OpenPGP로 암호화되었으며 복호화할 수 없습니다."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "이 메시지는 로컬 대화 기록에서 삭제됩니다"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
 
 msgid "This plugin is managed by your operating system"
 msgstr "이 플러그인은 운영 체제에서 관리합니다"
@@ -5332,11 +5333,17 @@ msgstr "아바타 이미지 업로드 실패: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "HTTP 파일 업로드를 통해 업로드 중…"
 
+msgid "Uptime"
+msgstr ""
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr "슬래시 \"/\"로 메시지를 시작하려면 \"//\"를 사용하세요."
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI 사용"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr "서버가 지원하는 경우 요청에 HTTP2 사용"
@@ -5378,12 +5385,6 @@ msgstr "사용자"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "유효성"
-
-msgid "Validity\n"
-msgstr "유효성\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5656,6 +5657,12 @@ msgid ""
 "messages."
 msgstr "이 연락처에게 오프라인으로 표시되며 더 이상 메시지를 받지 않습니다."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 msgid "Your Backup Password"
 msgstr "백업 비밀번호"
 
@@ -5800,6 +5807,10 @@ msgstr "기능(_F)"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "자유롭게 대화 가능(_F)"
+
+#, fuzzy
+msgid "_Hide (Dock Icon)"
+msgstr "숨기기 (트레이 아이콘)(_H)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "숨기기 (트레이 아이콘)(_H)"
@@ -5970,10 +5981,6 @@ msgstr "방위"
 msgid "building"
 msgstr "건물"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "cairo 버전: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "채팅;메시징;메신저;xmpp;voip;대화;"
@@ -6018,10 +6025,6 @@ msgstr "마지막 확인: %s"
 msgid "lat"
 msgstr "위도"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup 버전: %s"
-
 msgid "locality"
 msgstr "지역"
 
@@ -6039,14 +6042,6 @@ msgstr "메시지 작성을 일시 중지했습니다"
 
 msgid "postalcode"
 msgstr "우편번호"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "pycairo 버전: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp 버전: %s"
 
 msgid "region"
 msgstr "지역"
@@ -6095,12 +6090,155 @@ msgstr "{nick}님은 이제 {show}{status}입니다"
 msgid "…or drop it here"
 msgstr "…또는 여기에 놓으세요"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw 버전: %s"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "계정 이름: "
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "메시지를 클릭하여 선택\n"
+#~ "(Ctrl + 더블 클릭으로 선택 해제)"
+
+#, fuzzy
+#~ msgid "Common Name (CN)"
+#~ msgstr "일반 이름 (CN): "
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "일반 이름 (CN): "
+
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "%(name)s님을 차단하시겠습니까?"
+
+#~ msgid "Expires on: "
+#~ msgstr "만료일: "
+
+#~ msgid "Expiry date"
+#~ msgstr "만료일"
+
+#~ msgid "Fingerprints"
+#~ msgstr "지문"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GLib 버전: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK 버전: %s"
+
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "포트"
+
+#~ msgid "Issue date"
+#~ msgstr "발급일"
+
+#~ msgid "Issued by"
+#~ msgstr "발급자"
+
+#~ msgid "Issued by\n"
+#~ msgstr "발급자\n"
+
+#~ msgid "Issued on: "
+#~ msgstr "발급일: "
+
+#~ msgid "Issued to"
+#~ msgstr "발급 대상"
+
+#~ msgid "Issued to\n"
+#~ msgstr "발급 대상\n"
+
+#, fuzzy
+#~ msgid "Key Size"
+#~ msgstr "미리보기 크기"
+
+#, fuzzy
+#~ msgid "Organization (O)"
+#~ msgstr "조직 (O): "
+
+#~ msgid "Organization (O): "
+#~ msgstr "조직 (O): "
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango 버전: %s"
+
+#~ msgid "Public Key Information"
+#~ msgstr "공개 키 정보"
+
+#~ msgid "Public Key: "
+#~ msgstr "공개 키: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGObject 버전: %s"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "사유 (선택사항)"
+
 #~ msgid "Restart Gajim to start debug logging"
 #~ msgstr "디버그 로깅을 시작하려면 Gajim을 다시 시작하세요"
+
+#, fuzzy
+#~ msgid "SHA-1"
+#~ msgstr "SHA-1:"
+
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
+#, fuzzy
+#~ msgid "SHA-256"
+#~ msgstr "SHA-256:"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgid ""
 #~ "Separate profile files completely (even history database and plugins)"
 #~ msgstr "프로필 파일 완전 분리 (기록 데이터베이스 및 플러그인 포함)"
 
+#, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "일련 번호: "
+
+#~ msgid "Serial Number: "
+#~ msgstr "일련 번호: "
+
+#, fuzzy
+#~ msgid "Subject Alt Names"
+#~ msgstr "주체 대체 이름: "
+
+#~ msgid "Subject Alt Names: "
+#~ msgstr "주체 대체 이름: "
+
 #~ msgid "Use defined profile in configuration directory"
 #~ msgstr "설정 디렉터리에 정의된 프로필 사용"
+
+#~ msgid "Validity"
+#~ msgstr "유효성"
+
+#~ msgid "Validity\n"
+#~ msgstr "유효성\n"
+
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "cairo 버전: %s"
+
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup 버전: %s"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "pycairo 버전: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp 버전: %s"

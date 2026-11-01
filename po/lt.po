@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -271,6 +271,12 @@ msgstr ""
 
 msgid "1 hour"
 msgstr ""
+
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "2 Days"
 msgstr ""
@@ -575,6 +581,10 @@ msgid "Add a setting you would like to change"
 msgstr ""
 
 #, fuzzy
+msgid "Add affiliation"
+msgstr "Affiliation:"
+
+#, fuzzy
 msgid "Add new Theme"
 msgstr "Kurti naują pranešimą"
 
@@ -650,10 +660,6 @@ msgstr "Išplėstiniai veiksmai"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "GTK+ Version:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -952,6 +958,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Back soon"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Įveskite naują slaptažodį:"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1154,6 +1164,10 @@ msgstr "Keisti slaptažodį"
 msgid "Change Subject"
 msgstr "Keisti _Temą..."
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Leave Groupchats"
+
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1265,6 +1279,9 @@ msgstr "Choose Image"
 msgid "Choose encryption"
 msgstr "Choose File to Send..."
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Miestas:"
@@ -1284,9 +1301,7 @@ msgstr "Choose Sound"
 msgid "Clear Sound"
 msgstr "Choose Sound"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
 
 #, fuzzy
@@ -1346,9 +1361,6 @@ msgstr "Account has been added successfully"
 #, fuzzy
 msgid "Commands"
 msgstr "Commands: %s"
-
-msgid "Common Name (CN): "
-msgstr ""
 
 #, python-format
 msgid ""
@@ -1733,7 +1745,7 @@ msgstr "Žinutė pagal nutylėjimą"
 
 #, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Žinutė pagal nutylėjimą"
 
 #, fuzzy
@@ -1743,6 +1755,10 @@ msgstr "Active"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Active"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Žinutė pagal nutylėjimą"
 
 msgid "Deny"
 msgstr "Atmesti"
@@ -1860,10 +1876,6 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Do you accept this request?"
 
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
@@ -2151,12 +2163,6 @@ msgstr "_Vykdyti komandą"
 msgid "Executing…"
 msgstr "_Vykdyti komandą"
 
-msgid "Expires on: "
-msgstr ""
-
-msgid "Expiry date"
-msgstr ""
-
 #, fuzzy
 msgid "Export"
 msgstr "Eksportuoti"
@@ -2210,6 +2216,12 @@ msgstr "Eksportuoti"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 #, fuzzy
@@ -2328,9 +2340,6 @@ msgstr "First Message Received"
 msgid "Fingerprint for this Device"
 msgstr ""
 
-msgid "Fingerprints"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Please make sure you are connected with \"%s\"."
@@ -2436,14 +2445,6 @@ msgstr "<b>Pilnas Vardas</b>"
 
 msgid "Fully-featured XMPP chat client"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "GLib Version: %s"
-msgstr "GTK+ Version:"
-
-#, fuzzy, python-format
-msgid "GTK Version: %s"
-msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2624,6 +2625,10 @@ msgstr ""
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr ""
+
+#, fuzzy
+msgid "Help"
+msgstr "_Pagalba"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2829,6 +2834,10 @@ msgstr ""
 msgid "Install from Archive"
 msgstr ""
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Registracija nesėkminga"
@@ -2900,24 +2909,6 @@ msgid "Invitees"
 msgstr "Pak_viesti"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
-
-msgid "Issue date"
-msgstr ""
-
-msgid "Issued by"
-msgstr ""
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-msgid "Issued to"
-msgstr ""
-
-msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
@@ -3169,6 +3160,10 @@ msgid "Members Only"
 msgstr "Member"
 
 #, fuzzy
+msgid "Mention…"
+msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
 msgid "Message"
 msgstr "Message Sent"
 
@@ -3227,6 +3222,10 @@ msgstr "_Registruoti asmenų būklės pakitimus"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Įvairūs</b>"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -3289,6 +3288,12 @@ msgstr "File Transfer Request"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "_Rodyti įvykį kontaktų sąraše"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3677,9 +3682,6 @@ msgstr "Administrator"
 msgid "Organization"
 msgstr "Administrator"
 
-msgid "Organization (O): "
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3743,10 +3745,6 @@ msgstr "All files"
 
 msgid "Packages"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Pango Version: %s"
-msgstr "GTK+ Version:"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -4088,6 +4086,14 @@ msgid "Proxy"
 msgstr "Proksis:"
 
 #, fuzzy
+msgid "Proxy Host"
+msgstr "Proksi _Serveris:"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "Proksis:"
+
+#, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Naudoti parinktą serverio adresą/prievadą"
 
@@ -4108,14 +4114,6 @@ msgstr "Encryption enabled"
 msgid "Public Information"
 msgstr "_Informacija"
 
-#, fuzzy
-msgid "Public Key Information"
-msgstr "_Informacija"
-
-#, fuzzy
-msgid "Public Key: "
-msgstr "Encryption enabled"
-
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "File: %s"
@@ -4130,10 +4128,6 @@ msgstr "Nesenai:"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Old stories"
-
-#, fuzzy, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGTK Version:"
 
 #, fuzzy
 msgid "Quit"
@@ -4190,9 +4184,6 @@ msgstr ""
 
 msgid "Reason"
 msgstr "Reason"
-
-msgid "Reason (optional)"
-msgstr ""
 
 #, fuzzy
 msgid "Reason (optional)..."
@@ -4334,6 +4325,10 @@ msgstr "Active"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Removes contact from roster"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Pranešimai"
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4543,12 +4538,6 @@ msgstr "Role"
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Įveskite naują prieigos %s pavadinimą"
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
-msgstr ""
 
 #, fuzzy
 msgid "SSL Certificate Verification Error"
@@ -4825,10 +4814,6 @@ msgid "Sent contacts:"
 msgstr "Siųsti kontaktus:"
 
 #, fuzzy
-msgid "Serial Number: "
-msgstr "GG Number:"
-
-#, fuzzy
 msgid "Server Shutdown"
 msgstr "Serverio teikiamos paslaugos"
 
@@ -5026,6 +5011,9 @@ msgstr "Rodyti _Pernašas"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
+msgstr ""
+
+msgid "Show matching rules for addresses"
 msgstr ""
 
 msgid ""
@@ -5252,9 +5240,6 @@ msgstr "Stilius"
 msgid "Subject"
 msgstr "Tema"
 
-msgid "Subject Alt Names: "
-msgstr ""
-
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5288,15 +5273,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Removes contact from roster"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5442,6 +5432,10 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Vizualinis informavimas</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Version:"
 
 msgid "Telephone"
 msgstr ""
@@ -5683,7 +5677,14 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-msgid "This message will be deleted from your local chat history"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
 msgstr ""
 
 msgid "This plugin is managed by your operating system"
@@ -6036,10 +6037,17 @@ msgstr "Sending private message failed"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Serveris atsakė: %s"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
@@ -6084,12 +6092,6 @@ msgstr "Users"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Validity\n"
 msgstr ""
 
 msgctxt "Configuration"
@@ -6389,6 +6391,12 @@ msgid ""
 "messages."
 msgstr "JID of the contact that will receive the message"
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Įveskite naują slaptažodį:"
@@ -6560,6 +6568,9 @@ msgstr "Savybės"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Laisvas Pokalbiams"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6757,10 +6768,6 @@ msgstr "marine"
 msgid "building"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "cairo Version: %s"
-msgstr "GTK+ Version:"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6811,10 +6818,6 @@ msgstr "Reason"
 msgid "lat"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "libsoup Version: %s"
-msgstr "GTK+ Version:"
-
 msgid "locality"
 msgstr ""
 
@@ -6833,14 +6836,6 @@ msgid "paused composing a message"
 msgstr "paused composing a message"
 
 msgid "postalcode"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "pycairo Version: %s"
-msgstr "GTK+ Version:"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
 msgstr ""
 
 msgid "region"
@@ -7168,6 +7163,14 @@ msgstr ""
 #~ msgid "Adjust to status"
 #~ msgstr "_Nustatyti būklei"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "GTK+ Version:"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Prieiga"
+
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Grupės"
@@ -7383,10 +7386,6 @@ msgstr ""
 #~ msgstr "Leave Groupchats"
 
 #, fuzzy
-#~ msgid "Create new group chat"
-#~ msgstr "Leave Groupchats"
-
-#, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Current Developers:"
 
@@ -7419,6 +7418,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Failo siuntimas sustabdytas"
+
+#, fuzzy, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Do you accept this request?"
 
 #, fuzzy
 #~ msgid "Don’t show this again"
@@ -7532,6 +7535,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Message Sent"
+
+#, fuzzy, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GTK+ Version:"
+
+#, fuzzy, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK+ Version:"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7742,6 +7753,10 @@ msgstr ""
 #~ msgid "Out"
 #~ msgstr "Out"
 
+#, fuzzy, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "GTK+ Version:"
+
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Atšaukti failo siuntimą"
@@ -7770,12 +7785,16 @@ msgstr ""
 #~ msgstr "Progress"
 
 #, fuzzy
-#~ msgid "Proxy Host"
-#~ msgstr "Proksi _Serveris:"
+#~ msgid "Public Key Information"
+#~ msgstr "_Informacija"
 
 #, fuzzy
-#~ msgid "Proxy Type"
-#~ msgstr "Proksis:"
+#~ msgid "Public Key: "
+#~ msgstr "Encryption enabled"
+
+#, fuzzy, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGTK Version:"
 
 #, fuzzy
 #~ msgid "Re-Login"
@@ -7803,10 +7822,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove Chat History"
 #~ msgstr "Nesenai:"
-
-#, fuzzy
-#~ msgid "Remove Notification"
-#~ msgstr "Pranešimai"
 
 #, fuzzy
 #~ msgid "Remove Transport"
@@ -7907,6 +7922,10 @@ msgstr ""
 #~ msgid "Serial Number"
 #~ msgstr "GG Number:"
 
+#, fuzzy
+#~ msgid "Serial Number: "
+#~ msgstr "GG Number:"
+
 #~ msgid "Server"
 #~ msgstr "Server"
 
@@ -7921,10 +7940,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Serverio teikiamos paslaugos"
-
-#, fuzzy
-#~ msgid "Server Uptime"
-#~ msgstr "Serveris atsakė: %s"
 
 #, fuzzy
 #~ msgid "Set status message"
@@ -8011,10 +8026,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Sinchronizuoti kontaktus"
-
-#, fuzzy
-#~ msgid "TLS Version"
-#~ msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 #~ msgid "TLS verification failed: %s"
@@ -8190,10 +8201,6 @@ msgstr ""
 #~ msgstr "Failų siuntimai"
 
 #, fuzzy
-#~ msgid "_Help"
-#~ msgstr "_Pagalba"
-
-#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Prisijungti"
 
@@ -8240,6 +8247,10 @@ msgstr ""
 #~ msgid "app.open-folder"
 #~ msgstr "_Atidaryti katalogą, kuriame yra failas"
 
+#, fuzzy, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "GTK+ Version:"
+
 #~ msgid "file transfers list"
 #~ msgstr "failų siuntimų sąrašas"
 
@@ -8248,6 +8259,14 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Choose the groupchats you want to leave"
+
+#, fuzzy, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "GTK+ Version:"
+
+#, fuzzy, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "GTK+ Version:"
 
 #, fuzzy
 #~ msgctxt "Group chat address"

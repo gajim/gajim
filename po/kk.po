@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-08-26 17:04+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
+"PO-Revision-Date: 2026-10-17 05:20+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
-"\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
+">\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -281,6 +281,12 @@ msgstr "1 жыл"
 msgid "1 hour"
 msgstr "1 сағат"
 
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "1 хабарлама жергілікті чат тарихынан өшіріледі"
+msgstr[1] "%(count)d хабарлама жергілікті чат тарихынан өшіріледі"
+
 msgid "2 Days"
 msgstr "2 күн"
 
@@ -545,6 +551,10 @@ msgstr "Тіркелгіңізге атау мен түс қосу"
 msgid "Add a setting you would like to change"
 msgstr "Өзгерткіңіз келетін баптауды қосыңыз"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Қатысуы"
+
 msgid "Add new Theme"
 msgstr "Жаңа теманы қосу"
 
@@ -608,10 +618,6 @@ msgstr "Кеңейтілген баптаулар"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "Кеңейтілген – %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw нұсқасы: %s"
 
 msgid "Affiliation"
 msgstr "Қатысуы"
@@ -882,6 +888,10 @@ msgstr "Сақтық көшірме қатесі"
 msgid "Backup Now"
 msgstr "Сақтық көшірмені қазір жасау"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Сіздің сақтық көшірме пароліңіз"
+
 msgid "Backup Secret Key"
 msgstr "Құпия кілттің сақтық көшірмесін жасау"
 
@@ -1062,6 +1072,9 @@ msgstr "Парольді өзгерту"
 msgid "Change Subject"
 msgstr "Тақырыпты өзгерту"
 
+msgid "Change group chat’s picture"
+msgstr "Топтық чаттың суретін өзгерту"
+
 msgid "Change your account’s password, etc."
 msgstr "Тіркелгіңіздің паролін өзгертіңіз, т.б."
 
@@ -1168,6 +1181,9 @@ msgstr "Топты таңдау…"
 msgid "Choose encryption"
 msgstr "Шифрлеуді таңдау"
 
+msgid "Cipher Suite"
+msgstr "Шифрлеу жиынтығы"
+
 msgid "City"
 msgstr "Қала"
 
@@ -1183,12 +1199,8 @@ msgstr "Енгізуді тазарту"
 msgid "Clear Sound"
 msgstr "Дыбысты тазарту"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"Хабарламаларды таңдау үшін оларға шертіңіз\n"
-"(Таңдауды алып тастау үшін Ctrl + Екі рет шерту)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Осы топтық чатқа шақырғыңыз келетін контакттарға шертіңіз."
@@ -1242,9 +1254,6 @@ msgstr "Команда сәтті орындалды"
 
 msgid "Commands"
 msgstr "Командалар"
-
-msgid "Common Name (CN): "
-msgstr "Ортақ аты (CN): "
 
 #, python-format
 msgid ""
@@ -1571,14 +1580,17 @@ msgid "Delete Message Locally?"
 msgstr "Хабарламаны жергілікті түрде өшіру керек пе?"
 
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
-msgstr "Хабарламаны жергілікті түрде өшіру…"
+msgid "Delete Messages Locally…"
+msgstr "Хабарламаларды жергілікті өшіру…"
 
 msgid "Delete Node?"
 msgstr "Түйінді өшіру керек пе?"
 
 msgid "Delete Theme?"
 msgstr "Теманы өшіру керек пе?"
+
+msgid "Delete messages…"
+msgstr "Хабарламаларды өшіру…"
 
 msgid "Deny"
 msgstr "Тайдыру"
@@ -1683,10 +1695,6 @@ msgstr ""
 "Gajim ішінен барлық чат хабарламаларын шынымен өшіргіңіз келе ме?\n"
 "Ескерту: мұны болдырмау мүмкін емес!\n"
 "Gajim одан кейін жабылады."
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "%(name)s блоктауды қалайсыз ба?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "Бұл PEP торабын өшіруді қалайсыз ба?"
@@ -1950,12 +1958,6 @@ msgstr "Команданы орындау…"
 msgid "Executing…"
 msgstr "Орындау…"
 
-msgid "Expires on: "
-msgstr "Аяқталу мерзімі: "
-
-msgid "Expiry date"
-msgstr "Мерзімі аяқталу күні"
-
 msgid "Export"
 msgstr "Экспорт"
 
@@ -2002,6 +2004,12 @@ msgstr ""
 "Өзіңізді көрсетіңіз: кейде сөздер жеткіліксіз болады. Толықтай өзіңізді "
 "білдіру үшін реакцияларды, жауаптарды қолданыңыз, дауыстық хабарламаларды "
 "жазыңыз және күй жаңартуларын жіберіңіз."
+
+msgid "Extend selection one word left"
+msgstr "Таңдауды бір сөз солға кеңейту"
+
+msgid "Extend selection one word right"
+msgstr "Таңдауды бір сөз оңға кеңейту"
 
 msgid "Extended Address"
 msgstr "Кеңейтілген адрес"
@@ -2101,9 +2109,6 @@ msgstr "Сүзгілер (белсенді)"
 msgid "Fingerprint for this Device"
 msgstr "Бұл құрылғы үшін саусақ ізі"
 
-msgid "Fingerprints"
-msgstr "Баспалар"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "\"%s\" арқылы қосылған құрылғылардың саусақ іздері"
@@ -2198,14 +2203,6 @@ msgstr "Аты-жөні"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Толық мүмкіндіктері бар XMPP чат клиенті"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "GLib нұсқасы: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "GTK нұсқасы: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2372,6 +2369,10 @@ msgstr "HTTPS тексеру"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Сәлем, мен - $name. %s"
+
+#, fuzzy
+msgid "Help"
+msgstr "_Көмек"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2567,6 +2568,10 @@ msgstr "Жүйеде парольдерді сақтау үшін кілттер
 msgid "Install from Archive"
 msgstr "Архивтен орнату"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "Орнату сәтсіз аяқталды"
 
@@ -2625,24 +2630,6 @@ msgstr "Шақырылғандар"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Микрофон қосулы және қолжетімді ме?"
-
-msgid "Issue date"
-msgstr "Берілген күні"
-
-msgid "Issued by"
-msgstr "Кім берген"
-
-msgid "Issued by\n"
-msgstr "Шығарған\n"
-
-msgid "Issued on: "
-msgstr "Шығарылған күні: "
-
-msgid "Issued to"
-msgstr "Кімге берілген"
-
-msgid "Issued to\n"
-msgstr "Кім үшін шығарылған\n"
 
 msgid "Issues detected"
 msgstr "Мәселелер табылды"
@@ -2860,6 +2847,9 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Тек мүшелер"
 
+msgid "Mention…"
+msgstr "Атап өту…"
+
 msgid "Message"
 msgstr "Хабарлама"
 
@@ -2911,6 +2901,10 @@ msgstr "Қалып-күйіңіздің өзгеруіне дейінгі мин
 msgid "Miscellaneous"
 msgstr "Әртүрлі"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
+
 msgid "Missing necessary encryption plugin"
 msgstr "Қажетті шифрлеу плагині жоқ"
 
@@ -2960,6 +2954,12 @@ msgstr "Чатты жылжыту"
 
 msgid "Move Contact to New Group?"
 msgstr "Контактіні жаңа топқа жылжыту керек пе?"
+
+msgid "Move cursor one word left"
+msgstr "Курсорды бір сөз солға жылжыту"
+
+msgid "Move cursor one word right"
+msgstr "Курсорды бір сөз оңға жылжыту"
 
 msgid "Move to Group"
 msgstr "Топқа жылжыту"
@@ -3305,9 +3305,6 @@ msgstr "Ұйым"
 msgid "Organization"
 msgstr "Ұйым"
 
-msgid "Organization (O): "
-msgstr "Ұйым (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Басқа"
@@ -3367,10 +3364,6 @@ msgstr "PNG файлдары"
 
 msgid "Packages"
 msgstr "Дестелер"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango нұсқасы: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3681,6 +3674,12 @@ msgstr "Проксилер"
 msgid "Proxy"
 msgstr "Прокси"
 
+msgid "Proxy Host"
+msgstr "Прокси хосты"
+
+msgid "Proxy Type"
+msgstr "Прокси түрі"
+
 msgid "Proxy, custom hostname and port"
 msgstr "Прокси, таңдауыңызша хост аты және порт"
 
@@ -3698,12 +3697,6 @@ msgstr "Жария шифрлеу кілті"
 msgid "Public Information"
 msgstr "Жария ақпарат"
 
-msgid "Public Key Information"
-msgstr "Ашық кілт ақпараты"
-
-msgid "Public Key: "
-msgstr "Ашық кілт: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
@@ -3716,10 +3709,6 @@ msgstr "Чат тарихын тазарту"
 
 msgid "Purge all Chat History?"
 msgstr "Барлық чат тарихын тазарту керек пе?"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGObject нұсқасы: %s"
 
 msgid "Quit"
 msgstr "Шығу"
@@ -3768,9 +3757,6 @@ msgstr "Blind trust туралы толығырақ оқу"
 
 msgid "Reason"
 msgstr "Себебі"
-
-msgid "Reason (optional)"
-msgstr "Себебі (міндетті емес)"
 
 msgid "Reason (optional)..."
 msgstr "Себебі (міндетті емес)..."
@@ -3884,6 +3870,10 @@ msgstr "Теманы өшіру"
 
 msgid "Remove Workspace?"
 msgstr "Жұмыс орнын өшіру керек пе?"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Хабарландыруды өшіру"
 
 msgid "Remove from Contact List…"
 msgstr "Контактілер тізімінен өшіру…"
@@ -4064,12 +4054,6 @@ msgstr "Ролі"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Осы топтық чатта %s рөлдері өшірілді"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "SSL сертификатын тексеру қатесі"
@@ -4311,9 +4295,6 @@ msgstr "Жіберген контакт: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Жіберілген контакттар:"
 
-msgid "Serial Number: "
-msgstr "Сериялық нөмірі: "
-
 msgid "Server Shutdown"
 msgstr "Серверді сөндіру"
 
@@ -4476,6 +4457,9 @@ msgid ""
 msgstr ""
 "Сервер XEP-0258 қолдаса, хабарламалардың құпиялылығын сипаттайтын белгілерді "
 "көрсету"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4681,9 +4665,6 @@ msgstr "Стиль"
 msgid "Subject"
 msgstr "Тақырып"
 
-msgid "Subject Alt Names: "
-msgstr "Тақырыптың балама атаулары: "
-
 msgid "Subject issuer mismatch"
 msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
@@ -4713,15 +4694,19 @@ msgstr "{device_id} құрылғысымен жаңа сеанс сәтті құ
 msgid "Successfully imported key from server."
 msgstr "Серверден кілт сәтті импортталды."
 
+msgid "Successfully imported key."
+msgstr "Кілт сәтті импортталды."
+
 msgid "Support"
 msgstr "Қолдау"
 
+#, fuzzy, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "Gajim-нен шығуға сенімдісіз бе?\n"
 "Шықсаңыз, хабарламаларды жібере және ала алмайсыз.\n"
@@ -4840,6 +4825,9 @@ msgstr "Жүйелік трей таңбашасы"
 
 msgid "System Tray Notifications"
 msgstr "Жүйелік трей хабарландырулары"
+
+msgid "TLS Version"
+msgstr "TLS нұсқасы"
 
 msgid "Telephone"
 msgstr "Телефон"
@@ -5079,8 +5067,19 @@ msgstr ""
 "Бұл хабарлама XMPP-ге арналған OpenPGP арқылы шифрленген және оның шифрын "
 "ашу мүмкін болмады."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Бұл хабарлама сіздің жергілікті чат тарихынан өшірілетін болады"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+"Бұл қатысушы өшіріледі және оның чатқа қайта қосылуына жол берілмейді. "
+"Себебін көрсетуге болады (міндетті емес)."
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
+"Бұл қатысушы чаттан өшіріледі, бірақ кейін қайта қосыла алады. Себебін "
+"көрсетуге болады (міндетті емес)."
 
 msgid "This plugin is managed by your operating system"
 msgstr "Бұл плагин амалдық жүйеңізбен басқарылады"
@@ -5401,12 +5400,19 @@ msgstr "Аватар суретін жүктеу сәтсіз аяқталды: 
 msgid "Uploading via HTTP File Upload…"
 msgstr "HTTP File Upload арқылы жүктеп салу…"
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Сервердің жұмыс уақыты"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 "Хабарламаны \"/\" (қиғаш сызық) белгісінен бастау үшін \"//\" пайдаланыңыз."
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI қолдану"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr "Сервер қолдауы болса, сұраулар үшін HTTP2 пайдалану"
@@ -5448,12 +5454,6 @@ msgstr "Пайдаланушылар"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Жарамдылығы"
-
-msgid "Validity\n"
-msgstr "Жарамдылық\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5728,6 +5728,14 @@ msgstr ""
 "Сіз бұл контакт үшін желіде емес режимінде көрінесіз және одан "
 "хабарламаларды алмайсыз."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+"Сіз %(name)s жіберген хабарламаларды бұдан былай көрмейсіз, бірақ ол сіздің "
+"хабарламаларыңызды көре алады."
+
 msgid "Your Backup Password"
 msgstr "Сіздің сақтық көшірме пароліңіз"
 
@@ -5872,6 +5880,10 @@ msgstr "_Мүмкіндіктері"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Чат үшін б_ос"
+
+#, fuzzy
+msgid "_Hide (Dock Icon)"
+msgstr "_Жасыру (трей таңбашасы)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "_Жасыру (трей таңбашасы)"
@@ -6042,10 +6054,6 @@ msgstr "бағдары"
 msgid "building"
 msgstr "ғимарат"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "cairo нұсқасы: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;чат;хабарласу;лезде хабарламалар;"
@@ -6090,10 +6098,6 @@ msgstr "соңғы рет көрген: %s"
 msgid "lat"
 msgstr "ендік"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup нұсқасы: %s"
-
 msgid "locality"
 msgstr "елді мекен"
 
@@ -6111,14 +6115,6 @@ msgstr "хабарлама жазуды аялдатқан"
 
 msgid "postalcode"
 msgstr "пошта индексі"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "pycairo нұсқасы: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp нұсқасы: %s"
 
 msgid "region"
 msgstr "аймақ"
@@ -6466,6 +6462,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Adjust to status"
 #~ msgstr "Қалып-күйге сәйкестеу"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw нұсқасы: %s"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Тіркелгі аты: "
+
 #~ msgid "Algorithm"
 #~ msgstr "Алгоритм"
 
@@ -6595,9 +6599,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Контакт топтарын таңдау"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "Шифрлеу жиынтығы"
-
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Құрылғылар тізімін қазір тазарту керек пе?"
 
@@ -6609,6 +6610,13 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Хабарламаны енгізу өрісін тазарту"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "Хабарламаларды таңдау үшін оларға шертіңіз\n"
+#~ "(Таңдауды алып тастау үшін Ctrl + Екі рет шерту)"
 
 #~ msgid "Click to change time display"
 #~ msgstr "Уақыт көрсетуін өзгерту үшін басыңыз"
@@ -6628,6 +6636,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Ортақ аты (CN)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "Ортақ аты (CN): "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "Команда немесе никті толықтыру"
@@ -6755,6 +6766,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Dismiss"
 #~ msgstr "Тайдыру"
 
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "%(name)s блоктауды қалайсыз ба?"
+
 #~ msgid "Don’t show this again"
 #~ msgstr "Бұны келесіде көрсетпеу"
 
@@ -6848,6 +6863,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Expires on"
 #~ msgstr "Аяқталу мерзімі"
 
+#~ msgid "Expires on: "
+#~ msgstr "Аяқталу мерзімі: "
+
+#~ msgid "Expiry date"
+#~ msgstr "Мерзімі аяқталу күні"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Отбасы"
@@ -6899,8 +6920,19 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Fingerprint"
 #~ msgstr "Баспалар"
 
+#~ msgid "Fingerprints"
+#~ msgstr "Баспалар"
+
 #~ msgid "Full Message View"
 #~ msgstr "Толық хабарлама көрінісі"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GLib нұсқасы: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK нұсқасы: %s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7003,8 +7035,26 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Invite friends to group chats or join one"
 #~ msgstr "Достарды топтық чаттарға шақырыңыз немесе біреуіне қосылыңыз"
 
+#~ msgid "Issue date"
+#~ msgstr "Берілген күні"
+
+#~ msgid "Issued by"
+#~ msgstr "Кім берген"
+
+#~ msgid "Issued by\n"
+#~ msgstr "Шығарған\n"
+
 #~ msgid "Issued on"
 #~ msgstr "Берілген күні"
+
+#~ msgid "Issued on: "
+#~ msgstr "Шығарылған күні: "
+
+#~ msgid "Issued to"
+#~ msgstr "Кімге берілген"
+
+#~ msgid "Issued to\n"
+#~ msgstr "Кім үшін шығарылған\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Бос файлдарды жіберу мүмкін емес"
@@ -7174,6 +7224,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Organization (O)"
 #~ msgstr "Ұйым (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Ұйым (O): "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Ұйым бөлімі (OU)"
 
@@ -7191,6 +7244,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "А_ялдату/Жалғастыру"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango нұсқасы: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Парольде рұқсат етілмеген таңбалар бар"
@@ -7229,11 +7286,15 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Project discussion"
 #~ msgstr "Жобаны талқылау"
 
-#~ msgid "Proxy Host"
-#~ msgstr "Прокси хосты"
+#~ msgid "Public Key Information"
+#~ msgstr "Ашық кілт ақпараты"
 
-#~ msgid "Proxy Type"
-#~ msgstr "Прокси түрі"
+#~ msgid "Public Key: "
+#~ msgstr "Ашық кілт: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGObject нұсқасы: %s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7248,6 +7309,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Бұл контактты шынымен блоктау керек пе?"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "Себебі (міндетті емес)"
 
 #~ msgid "Recent history"
 #~ msgstr "Жуырдағы тарих"
@@ -7264,9 +7328,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Remove Group..."
 #~ msgstr "Топты өшіру..."
-
-#~ msgid "Remove Notification"
-#~ msgstr "Хабарландыруды өшіру"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Көлікті өшіру"
@@ -7317,8 +7378,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7391,6 +7458,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Serial Number"
 #~ msgstr "Сериялық нөмір"
 
+#~ msgid "Serial Number: "
+#~ msgstr "Сериялық нөмірі: "
+
 #~ msgid "Server"
 #~ msgstr "Сервер"
 
@@ -7403,9 +7473,6 @@ msgstr "…немесе оны осында тастаңыз"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Сервер БҚ: %s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "Сервердің жұмыс уақыты"
 
 #~ msgid "Set status message"
 #~ msgstr "Қалып-күй хабарламасын орнату"
@@ -7500,6 +7567,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Stopped sharing their status with you"
 #~ msgstr "Өздерінің қалып-күйіңізбен сізбен бөлісуді тоқтатқан"
 
+#, fuzzy
+#~ msgid "Subject Alt Names"
+#~ msgstr "Тақырыптың балама атаулары: "
+
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Тақырыптың балама атаулары: "
+
 #~ msgid "Submit"
 #~ msgstr "Жіберу"
 
@@ -7529,9 +7603,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Тіркелгілерді синхрондау"
-
-#~ msgid "TLS Version"
-#~ msgstr "TLS нұсқасы"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7660,6 +7731,12 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "User name…"
 #~ msgstr "_Пайдаланушы аты"
 
+#~ msgid "Validity"
+#~ msgstr "Жарамдылығы"
+
+#~ msgid "Validity\n"
+#~ msgstr "Жарамдылық\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Видеоның кадр/сек қасиеті"
 
@@ -7766,9 +7843,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "_File Transfer"
 #~ msgstr "_Файлдармен алмасу"
 
-#~ msgid "_Help"
-#~ msgstr "_Көмек"
-
 #~ msgid "_Login"
 #~ msgstr "_Кіру"
 
@@ -7814,6 +7888,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "bold"
 #~ msgstr "жуан"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "cairo нұсқасы: %s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "күңгірт тері"
 
@@ -7838,6 +7916,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "help"
 #~ msgstr "көмек"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup нұсқасы: %s"
+
 #~ msgid "light skin tone"
 #~ msgstr "ақшыл тері"
 
@@ -7856,6 +7938,14 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "pycairo нұсқасы: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp нұсқасы: %s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

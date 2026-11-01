@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -285,6 +285,13 @@ msgstr "1 An"
 msgid "1 hour"
 msgstr "1 oră"
 
+#, fuzzy, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "Acest mesaj va fi șters din istoricul de chat local"
+msgstr[1] "Acest mesaj va fi șters din istoricul de chat local"
+msgstr[2] "Acest mesaj va fi șters din istoricul de chat local"
+
 msgid "2 Days"
 msgstr "2 Zile"
 
@@ -557,6 +564,10 @@ msgstr "Adăugați un nume și o culoare pentru contul dumneavoastră"
 msgid "Add a setting you would like to change"
 msgstr "Adăugați o setare pe care doriți să o modificați"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Afiliere"
+
 msgid "Add new Theme"
 msgstr "Adăugați o nouă temă"
 
@@ -623,10 +634,6 @@ msgstr "Setări avansate"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "Versiunea GTK: %s"
 
 msgid "Affiliation"
 msgstr "Afiliere"
@@ -901,6 +908,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Înapoi în curând"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Parola dumneavoastră"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1090,6 +1101,10 @@ msgstr "Schimbați parola"
 msgid "Change Subject"
 msgstr "Schimbă subiectul"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Schimbă-ți poza de profil"
+
 msgid "Change your account’s password, etc."
 msgstr "Schimbați parola contului dumneavoastră, etc."
 
@@ -1197,6 +1212,9 @@ msgstr "Alegeți un grup…"
 msgid "Choose encryption"
 msgstr "Alegeți criptarea"
 
+msgid "Cipher Suite"
+msgstr "Suita de cifrare"
+
 msgid "City"
 msgstr "Orașul"
 
@@ -1213,12 +1231,8 @@ msgstr "Sunet clar"
 msgid "Clear Sound"
 msgstr "Sunet clar"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"Faceți clic pe mesaje pentru a le selecta\n"
-"(Ctrl + dublu clic pentru a le deselecta)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1276,9 +1290,6 @@ msgstr "Comandă executată cu succes"
 
 msgid "Commands"
 msgstr "Comenzi"
-
-msgid "Common Name (CN): "
-msgstr "Denumire comună (NC): "
 
 #, python-format
 msgid ""
@@ -1622,8 +1633,9 @@ msgstr "Ștergeți amprenta digitală"
 msgid "Delete Message Locally?"
 msgstr "Ștergeți mesajul local…"
 
+#, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Ștergeți mesajul local…"
 
 #, fuzzy
@@ -1633,6 +1645,10 @@ msgstr "Ștergeți nodul PEP?"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Ștergeți tema"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Selectați Mesaje…"
 
 msgid "Deny"
 msgstr "Refuzați"
@@ -1748,10 +1764,6 @@ msgstr ""
 "Chiar vrei să elimini toate mesajele de chat din Gajim?\n"
 "Atenție: Acest lucru nu poate fi anulat!\n"
 "Gajim va ieși din joc după aceea."
-
-#, fuzzy, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Chiar doriți să eliminați \"%s\"?"
 
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
@@ -2029,12 +2041,6 @@ msgstr "Executați comanda…"
 msgid "Executing…"
 msgstr "Executarea…"
 
-msgid "Expires on: "
-msgstr "Expiră la: "
-
-msgid "Expiry date"
-msgstr ""
-
 msgid "Export"
 msgstr "Exportați"
 
@@ -2083,6 +2089,12 @@ msgstr "Exportați"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 msgid "Extended Address"
@@ -2187,9 +2199,6 @@ msgstr "Mesaj primit"
 msgid "Fingerprint for this Device"
 msgstr "Amprenta digitală pentru acest dispozitiv"
 
-msgid "Fingerprints"
-msgstr "Amprentele digitale"
-
 #, fuzzy, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Dispozitive conectate cu \"%s\""
@@ -2288,14 +2297,6 @@ msgstr "Nume Complet"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Client de chat XMPP complet echipat cu funcții complete"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "Versiunea GLib: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "Versiunea GTK: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2462,6 +2463,10 @@ msgstr "Verificarea HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Bună ziua, eu sunt $name. %s"
+
+#, fuzzy
+msgid "Help"
+msgstr "_Ajutor"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2667,6 +2672,10 @@ msgstr "Instalați un breloc pentru a stoca parolele pe sistemul dumneavoastră.
 msgid "Install from Archive"
 msgstr "Instalați Plugin-ul din fișierul ZIP"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "Instalarea a eșuat"
 
@@ -2730,25 +2739,6 @@ msgstr "Invitați"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Este un microfon conectat și accesibil?"
-
-#, fuzzy
-msgid "Issue date"
-msgstr "Eliberat pentru"
-
-msgid "Issued by"
-msgstr "Emis de"
-
-msgid "Issued by\n"
-msgstr "Emis de\n"
-
-msgid "Issued on: "
-msgstr "Eliberat la: "
-
-msgid "Issued to"
-msgstr "Eliberat pentru"
-
-msgid "Issued to\n"
-msgstr "Eliberat pentru\n"
 
 msgid "Issues detected"
 msgstr ""
@@ -2974,6 +2964,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Doar pentru Membrii"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "Adăugați Reacția…"
+
 msgid "Message"
 msgstr "Mesaj"
 
@@ -3027,6 +3021,10 @@ msgstr "Minute până când statutul tău se schimbă"
 
 msgid "Miscellaneous"
 msgstr "Diverse"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr "Lipsește plugin-ul de criptare necesar"
@@ -3083,6 +3081,12 @@ msgstr "Mutați chat-ul"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "Lista de contacte: Font de grup"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3444,9 +3448,6 @@ msgstr "Organizație"
 msgid "Organization"
 msgstr "Organizație"
 
-msgid "Organization (O): "
-msgstr "Organizație (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Altele"
@@ -3509,10 +3510,6 @@ msgstr "Fișiere PNG"
 
 msgid "Packages"
 msgstr ""
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Versiunea Pango: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3829,6 +3826,12 @@ msgstr "Gestionați proxy-urile"
 msgid "Proxy"
 msgstr "Proxy-ul"
 
+msgid "Proxy Host"
+msgstr "Gazdă Proxy"
+
+msgid "Proxy Type"
+msgstr "Tip Proxy"
+
 msgid "Proxy, custom hostname and port"
 msgstr "Proxy, nume de gazdă și port personalizat"
 
@@ -3847,12 +3850,6 @@ msgstr "Cheia publică de criptare"
 msgid "Public Information"
 msgstr "Informații despre Cheia Publică"
 
-msgid "Public Key Information"
-msgstr "Informații despre Cheia Publică"
-
-msgid "Public Key: "
-msgstr "Cheia Publică: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Puls: %s"
@@ -3868,10 +3865,6 @@ msgstr "Epurare Istoric chat…"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Curățați tot istoricul de chat"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "Versiunea PyGObject: %s"
 
 msgid "Quit"
 msgstr "Ieșiți"
@@ -3926,9 +3919,6 @@ msgstr "Citiți mai multe despre blind trust"
 
 msgid "Reason"
 msgstr "Motivul"
-
-msgid "Reason (optional)"
-msgstr "Motiv (opțional)"
 
 msgid "Reason (optional)..."
 msgstr "Motiv (opțional)..."
@@ -4056,6 +4046,10 @@ msgstr "Eliminați tema"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Eliminarea spațiului de lucru"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Eliminarea notificării"
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4248,12 +4242,6 @@ msgstr "Funcție"
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s a fost invitat la acest grup de chat"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "Eroare de verificare a certificatului SSL"
@@ -4503,9 +4491,6 @@ msgstr "Contact trimis: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Contacte trimise:"
 
-msgid "Serial Number: "
-msgstr "Număr de serie: "
-
 msgid "Server Shutdown"
 msgstr "Închiderea serverului"
 
@@ -4687,6 +4672,9 @@ msgid ""
 msgstr ""
 "Afișarea etichetelor care descriu confidențialitatea mesajelor, în cazul în "
 "care serverul acceptă XEP-0258"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4895,9 +4883,6 @@ msgstr "Stil"
 msgid "Subject"
 msgstr "Subiect"
 
-msgid "Subject Alt Names: "
-msgstr "Subiect Nume Alternativ "
-
 msgid "Subject issuer mismatch"
 msgstr "Necorelări între emitentul subiectului"
 
@@ -4931,15 +4916,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Eliminați contactul"
+
 msgid "Support"
 msgstr "Suport"
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5081,6 +5071,9 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Notificări vizuale"
+
+msgid "TLS Version"
+msgstr "Versiunea TLS"
 
 msgid "Telephone"
 msgstr ""
@@ -5331,8 +5324,15 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "Acest mesaj a fost criptat cu OTR și nu a putut fi decriptat."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Acest mesaj va fi șters din istoricul de chat local"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
 
 msgid "This plugin is managed by your operating system"
 msgstr ""
@@ -5667,11 +5667,18 @@ msgstr "Încărcarea imaginii avatar a eșuat: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Încărcarea prin HTTP File Upload…"
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Timp de funcționare a serverului"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
 msgstr "Utilizați GSSAPI"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr ""
@@ -5713,12 +5720,6 @@ msgstr "Utilizatori"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Validitate"
-
-msgid "Validity\n"
-msgstr "Valabilitate\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -6004,6 +6005,12 @@ msgid ""
 msgstr ""
 "Veți apărea offline pentru acest contact și nu veți mai primi alte mesaje."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Parola dumneavoastră"
@@ -6152,6 +6159,9 @@ msgstr "_Funcții"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Liber pentru Chat"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6331,10 +6341,6 @@ msgstr "rulment"
 msgid "building"
 msgstr "clădire"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "Versiunea cairo: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;mesagerie;im;xmpp;voip;"
@@ -6380,10 +6386,6 @@ msgstr "Ultima vizualizare: %s"
 msgid "lat"
 msgstr "latid"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "versiunea libsoup: %s"
-
 msgid "locality"
 msgstr "localitate"
 
@@ -6401,14 +6403,6 @@ msgstr "a fost întreruptă compunerea unui mesaj"
 
 msgid "postalcode"
 msgstr "cod poștal"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "Versiunea pycairo: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp Versiunea: %s"
 
 msgid "region"
 msgstr "regiune"
@@ -6779,6 +6773,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Adjust to status"
 #~ msgstr "Adaptarea la statut"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Versiunea GTK: %s"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Numele contului..."
+
 #~ msgid "Algorithm"
 #~ msgstr "Algoritm"
 
@@ -6913,9 +6915,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Alegeți grupurile de contacte"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "Suita de cifrare"
-
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Ștergeți dispozitivele acum?"
 
@@ -6928,6 +6927,13 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Introducerea mesajului de ștergere"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "Faceți clic pe mesaje pentru a le selecta\n"
+#~ "(Ctrl + dublu clic pentru a le deselecta)"
 
 #~ msgid "Click to change time display"
 #~ msgstr "Faceți clic pentru a schimba afișarea orei"
@@ -6947,6 +6953,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Denumire comună (NC)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "Denumire comună (NC): "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "Completați o comandă sau o poreclă"
@@ -7080,6 +7089,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Dismiss"
 #~ msgstr "Respingeți"
 
+#, fuzzy, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Chiar doriți să eliminați \"%s\"?"
+
 #~ msgid "Don’t show this again"
 #~ msgstr "Nu mai aratați asta din nou"
 
@@ -7172,6 +7185,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Expires on"
 #~ msgstr "Expiră la"
 
+#~ msgid "Expires on: "
+#~ msgstr "Expiră la: "
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Familie"
@@ -7223,8 +7239,19 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Fingerprint"
 #~ msgstr "Amprentele digitale"
 
+#~ msgid "Fingerprints"
+#~ msgstr "Amprentele digitale"
+
 #~ msgid "Full Message View"
 #~ msgstr "Vizualizare completă a mesajului"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "Versiunea GLib: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "Versiunea GTK: %s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7332,8 +7359,27 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Invite friends to group chats or join one"
 #~ msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
 
+#, fuzzy
+#~ msgid "Issue date"
+#~ msgstr "Eliberat pentru"
+
+#~ msgid "Issued by"
+#~ msgstr "Emis de"
+
+#~ msgid "Issued by\n"
+#~ msgstr "Emis de\n"
+
 #~ msgid "Issued on"
 #~ msgstr "Eliberat la"
+
+#~ msgid "Issued on: "
+#~ msgstr "Eliberat la: "
+
+#~ msgid "Issued to"
+#~ msgstr "Eliberat pentru"
+
+#~ msgid "Issued to\n"
+#~ msgstr "Eliberat pentru\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Nu este posibil să se trimită fișiere goale"
@@ -7506,6 +7552,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Organization (O)"
 #~ msgstr "Organizație (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Organizație (O): "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Unitatea organizațională (OU)"
 
@@ -7523,6 +7572,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_use/Rezumat"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Versiunea Pango: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Parola conține caractere interzise"
@@ -7561,11 +7614,15 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Project discussion"
 #~ msgstr "Discuția proiectului"
 
-#~ msgid "Proxy Host"
-#~ msgstr "Gazdă Proxy"
+#~ msgid "Public Key Information"
+#~ msgstr "Informații despre Cheia Publică"
 
-#~ msgid "Proxy Type"
-#~ msgstr "Tip Proxy"
+#~ msgid "Public Key: "
+#~ msgstr "Cheia Publică: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "Versiunea PyGObject: %s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7580,6 +7637,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Chiar blochezi acest contact?"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "Motiv (opțional)"
 
 #~ msgid "Recent history"
 #~ msgstr "Istoria recentă"
@@ -7596,9 +7656,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Remove Group..."
 #~ msgstr "Eliminați grupul..."
-
-#~ msgid "Remove Notification"
-#~ msgstr "Eliminarea notificării"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Îndepărtarea transportului"
@@ -7651,8 +7708,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7726,6 +7789,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Serial Number"
 #~ msgstr "Număr de serie"
 
+#~ msgid "Serial Number: "
+#~ msgstr "Număr de serie: "
+
 #~ msgid "Server"
 #~ msgstr "Serverul"
 
@@ -7738,9 +7804,6 @@ msgstr "...sau lăsați-o aici"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Software-ul serverului: %s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "Timp de funcționare a serverului"
 
 #~ msgid "Set status message"
 #~ msgstr "Setați mesajul de stare"
@@ -7842,6 +7905,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Subject Alt Names"
 #~ msgstr "Subiectul Alt Nume"
 
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Subiect Nume Alternativ "
+
 #~ msgid "Submit"
 #~ msgstr "Trimiteți"
 
@@ -7871,9 +7937,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Sincronizarea conturilor"
-
-#~ msgid "TLS Version"
-#~ msgstr "Versiunea TLS"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -8000,6 +8063,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "User name…"
 #~ msgstr "_Utilizator"
 
+#~ msgid "Validity"
+#~ msgstr "Validitate"
+
+#~ msgid "Validity\n"
+#~ msgstr "Valabilitate\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Framerate video"
 
@@ -8108,9 +8177,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_File Transfer"
 #~ msgstr "_Transfer de fișiere"
 
-#~ msgid "_Help"
-#~ msgstr "_Ajutor"
-
 #~ msgid "_Login"
 #~ msgstr "_Autentificare"
 
@@ -8155,6 +8221,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "bold"
 #~ msgstr "îngroșat"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "Versiunea cairo: %s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "tonul închis al pielii"
 
@@ -8179,6 +8249,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "help"
 #~ msgstr "ajutor"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "versiunea libsoup: %s"
+
 #~ msgid "light skin tone"
 #~ msgstr "ton deschis al pielii"
 
@@ -8197,6 +8271,14 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "Versiunea pycairo: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp Versiunea: %s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -276,6 +276,12 @@ msgstr "1 År"
 
 msgid "1 hour"
 msgstr "1 timme"
+
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "2 Days"
 msgstr "2 Dagar"
@@ -548,6 +554,10 @@ msgstr "Lägg till ett namn och en färg för ditt konto"
 msgid "Add a setting you would like to change"
 msgstr "Lägg till en inställning som du vill ändra"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Anknytning"
+
 msgid "Add new Theme"
 msgstr "Lägg till nytt tema"
 
@@ -613,10 +623,6 @@ msgstr "Avancerade inställningar"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "GTK+ version:"
 
 msgid "Affiliation"
 msgstr "Anknytning"
@@ -909,6 +915,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Snart tillbaka"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Ange nytt lösenord:"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1099,6 +1109,10 @@ msgstr "Byt lösenord"
 msgid "Change Subject"
 msgstr "Ändra ämnet"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Ändra din profilbild"
+
 msgid "Change your account’s password, etc."
 msgstr "Ändra lösenordet för ditt konto, med mera."
 
@@ -1204,6 +1218,9 @@ msgstr "Välj en grupp…"
 msgid "Choose encryption"
 msgstr "Välj fil att skicka..."
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Ort:"
@@ -1224,9 +1241,7 @@ msgstr "Välj ljud"
 msgid "Clear Sound"
 msgstr "Välj ljud"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
 
 #, fuzzy
@@ -1287,9 +1302,6 @@ msgstr "Kontot har lagts till"
 #, fuzzy
 msgid "Commands"
 msgstr "Kommandon: %s"
-
-msgid "Common Name (CN): "
-msgstr ""
 
 #, python-format
 msgid ""
@@ -1655,7 +1667,7 @@ msgstr "Standardmeddelande"
 
 #, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Standardmeddelande"
 
 #, fuzzy
@@ -1665,6 +1677,10 @@ msgstr "Aktiv"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Aktiv"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Standardmeddelande"
 
 msgid "Deny"
 msgstr "Neka"
@@ -1784,10 +1800,6 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Vill du verkligen stänga alla dem?"
 
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
@@ -2063,12 +2075,6 @@ msgstr "Kör kommando…"
 msgid "Executing…"
 msgstr "Kör…"
 
-msgid "Expires on: "
-msgstr "Upphör att gälla: "
-
-msgid "Expiry date"
-msgstr ""
-
 #, fuzzy
 msgid "Export"
 msgstr "Exportera"
@@ -2118,6 +2124,12 @@ msgstr "Exportera"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 msgid "Extended Address"
@@ -2224,10 +2236,6 @@ msgstr "Första meddelandet mottaget"
 msgid "Fingerprint for this Device"
 msgstr "Fingeravtryck för den här enheten"
 
-#, fuzzy
-msgid "Fingerprints"
-msgstr "Fingeravtryck"
-
 #, fuzzy, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Kontrollera att du är ansluten med \"%s\"."
@@ -2326,14 +2334,6 @@ msgstr "Fullständigt namn"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Funktionsrik chattklient för XMPP"
-
-#, fuzzy, python-format
-msgid "GLib Version: %s"
-msgstr "GTK+ version:"
-
-#, fuzzy, python-format
-msgid "GTK Version: %s"
-msgstr "GTK+ version:"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2516,6 +2516,10 @@ msgstr "Notifiering"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr ""
+
+#, fuzzy
+msgid "Help"
+msgstr "_Hjälp"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2723,6 +2727,10 @@ msgstr "Installera en nyckelring för att kunna lagra lösenord på ditt system.
 msgid "Install from Archive"
 msgstr "Installera tillägg från ZIP-fil"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "Installationen misslyckades"
 
@@ -2790,27 +2798,6 @@ msgstr "Bjud _in"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
-
-#, fuzzy
-msgid "Issue date"
-msgstr "Utfärdat till\n"
-
-#, fuzzy
-msgid "Issued by"
-msgstr "Utfärdat till\n"
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-#, fuzzy
-msgid "Issued to"
-msgstr "Utfärdat till\n"
-
-msgid "Issued to\n"
-msgstr "Utfärdat till\n"
 
 msgid "Issues detected"
 msgstr ""
@@ -3031,6 +3018,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Endast medlemmar"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "Lägg till reaktion…"
+
 msgid "Message"
 msgstr "Meddelande"
 
@@ -3087,6 +3078,10 @@ msgstr "_Logga statusändringar för kontakter"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -3149,6 +3144,12 @@ msgstr "Förfrågan om Filöverföring"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "_Visa händelse i kontaktlista"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3525,9 +3526,6 @@ msgstr "Organisation"
 msgid "Organization"
 msgstr "Organisation"
 
-msgid "Organization (O): "
-msgstr "Organisation (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Andra"
@@ -3590,10 +3588,6 @@ msgstr "PNG-filer"
 
 msgid "Packages"
 msgstr ""
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango-version: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3924,6 +3918,14 @@ msgid "Proxy"
 msgstr "Proxyserver:"
 
 #, fuzzy
+msgid "Proxy Host"
+msgstr "Proxyser_ver:"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "Proxyserver:"
+
+#, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Använd anpassat värdnamn/port"
 
@@ -3944,14 +3946,6 @@ msgstr "Kryptering aktiverad"
 msgid "Public Information"
 msgstr "_Information"
 
-#, fuzzy
-msgid "Public Key Information"
-msgstr "_Information"
-
-#, fuzzy
-msgid "Public Key: "
-msgstr "Kryptering aktiverad"
-
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "Fil: %s"
@@ -3966,10 +3960,6 @@ msgstr "Logghistorik"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Gamla berättelser"
-
-#, fuzzy, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGTK version:"
 
 #, fuzzy
 msgid "Quit"
@@ -4026,9 +4016,6 @@ msgstr ""
 
 msgid "Reason"
 msgstr "Anledning"
-
-msgid "Reason (optional)"
-msgstr ""
 
 #, fuzzy
 msgid "Reason (optional)..."
@@ -4166,6 +4153,10 @@ msgstr "Ta bort tema"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Byt namn på kontakt"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Ta bort notis"
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4366,12 +4357,6 @@ msgstr "Roll"
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s har blivit inbjuden till den här gruppchatten"
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
-msgstr ""
 
 #, fuzzy
 msgid "SSL Certificate Verification Error"
@@ -4652,10 +4637,6 @@ msgid "Sent contacts:"
 msgstr "Bjud in _kontakter"
 
 #, fuzzy
-msgid "Serial Number: "
-msgstr "GG-nummer:"
-
-#, fuzzy
 msgid "Server Shutdown"
 msgstr "Serverfunktioner"
 
@@ -4851,6 +4832,9 @@ msgstr "Visa _transporter"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
+msgstr ""
+
+msgid "Show matching rules for addresses"
 msgstr ""
 
 msgid ""
@@ -5079,9 +5063,6 @@ msgstr "Stil"
 msgid "Subject"
 msgstr "Ämne"
 
-msgid "Subject Alt Names: "
-msgstr ""
-
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5115,15 +5096,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Byt namn på kontakt"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5269,6 +5255,10 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Visuella notifieringar</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ version:"
 
 msgid "Telephone"
 msgstr ""
@@ -5519,7 +5509,14 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-msgid "This message will be deleted from your local chat history"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
 msgstr ""
 
 msgid "This plugin is managed by your operating system"
@@ -5878,10 +5875,17 @@ msgstr "Skicka privat meddelande misslyckades"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Servern svarade: %s"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
@@ -5926,12 +5930,6 @@ msgstr "Användare"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Validity\n"
 msgstr ""
 
 msgctxt "Configuration"
@@ -6237,6 +6235,12 @@ msgid ""
 "messages."
 msgstr "JID för kontakten som kommer ta emot meddelandet"
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Ange nytt lösenord:"
@@ -6408,6 +6412,9 @@ msgstr "Funktioner"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Ledig för chatt"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6610,10 +6617,6 @@ msgstr "marine"
 msgid "building"
 msgstr "Gömmer sig"
 
-#, fuzzy, python-format
-msgid "cairo Version: %s"
-msgstr "GTK+ version:"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6664,10 +6667,6 @@ msgstr "Senast sedd: %s"
 msgid "lat"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "libsoup Version: %s"
-msgstr "GTK+ version:"
-
 msgid "locality"
 msgstr ""
 
@@ -6686,14 +6685,6 @@ msgid "paused composing a message"
 msgstr "tog en paus i skrivandet"
 
 msgid "postalcode"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "pycairo Version: %s"
-msgstr "GTK+ version:"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
 msgstr ""
 
 msgid "region"
@@ -7064,6 +7055,14 @@ msgstr ""
 #~ msgid "Adjust to status"
 #~ msgstr "Justera till status"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "GTK+ version:"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Kontonamn..."
+
 #~ msgid "Algorithm"
 #~ msgstr "Algoritm"
 
@@ -7334,6 +7333,10 @@ msgstr ""
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Filöverföringen stoppad"
 
+#, fuzzy, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Vill du verkligen stänga alla dem?"
+
 #~ msgid "Don’t show this again"
 #~ msgstr "Visa inte det här igen"
 
@@ -7405,6 +7408,9 @@ msgstr ""
 #~ msgid "Expires on"
 #~ msgstr "Upphör att gälla"
 
+#~ msgid "Expires on: "
+#~ msgstr "Upphör att gälla: "
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Familj"
@@ -7458,8 +7464,20 @@ msgstr ""
 #~ msgid "Fingerprint"
 #~ msgstr "Fingeravtryck"
 
+#, fuzzy
+#~ msgid "Fingerprints"
+#~ msgstr "Fingeravtryck"
+
 #~ msgid "Full Message View"
 #~ msgstr "Fullständig meddelandevy"
+
+#, fuzzy, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GTK+ version:"
+
+#, fuzzy, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK+ version:"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7529,7 +7547,22 @@ msgstr ""
 #~ msgstr "Bjud in _kontakter"
 
 #, fuzzy
+#~ msgid "Issue date"
+#~ msgstr "Utfärdat till\n"
+
+#, fuzzy
+#~ msgid "Issued by"
+#~ msgstr "Utfärdat till\n"
+
+#, fuzzy
 #~ msgid "Issued on"
+#~ msgstr "Utfärdat till\n"
+
+#, fuzzy
+#~ msgid "Issued to"
+#~ msgstr "Utfärdat till\n"
+
+#~ msgid "Issued to\n"
 #~ msgstr "Utfärdat till\n"
 
 #~ msgid "It is not possible to send empty files"
@@ -7693,6 +7726,9 @@ msgstr ""
 #~ msgid "Organization (O)"
 #~ msgstr "Organisation (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Organisation (O): "
+
 #~ msgid "Organize your chats with workspaces"
 #~ msgstr "Organisera dina chattar med arbetsytor"
 
@@ -7704,6 +7740,10 @@ msgstr ""
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango-version: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Lösenordet innehåller förbjudna tecken"
@@ -7733,12 +7773,16 @@ msgstr ""
 #~ msgstr "Förlopp"
 
 #, fuzzy
-#~ msgid "Proxy Host"
-#~ msgstr "Proxyser_ver:"
+#~ msgid "Public Key Information"
+#~ msgstr "_Information"
 
 #, fuzzy
-#~ msgid "Proxy Type"
-#~ msgstr "Proxyserver:"
+#~ msgid "Public Key: "
+#~ msgstr "Kryptering aktiverad"
+
+#, fuzzy, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGTK version:"
 
 #, fuzzy
 #~ msgid "Re-Login"
@@ -7770,9 +7814,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove Group..."
 #~ msgstr "Ta bort grupp"
-
-#~ msgid "Remove Notification"
-#~ msgstr "Ta bort notis"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Ta bort transport"
@@ -7893,6 +7934,10 @@ msgstr ""
 #~ msgid "Serial Number"
 #~ msgstr "GG-nummer:"
 
+#, fuzzy
+#~ msgid "Serial Number: "
+#~ msgstr "GG-nummer:"
+
 #~ msgid "Server"
 #~ msgstr "Server"
 
@@ -7907,10 +7952,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Serverfunktioner"
-
-#, fuzzy
-#~ msgid "Server Uptime"
-#~ msgstr "Servern svarade: %s"
 
 #, fuzzy
 #~ msgid "Set status message"
@@ -8009,10 +8050,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Synkronisera kontakter"
-
-#, fuzzy
-#~ msgid "TLS Version"
-#~ msgstr "GTK+ version:"
 
 #, fuzzy, python-format
 #~ msgid "TLS verification failed: %s"
@@ -8214,10 +8251,6 @@ msgstr ""
 #~ msgstr "Filöverföringar"
 
 #, fuzzy
-#~ msgid "_Help"
-#~ msgstr "_Hjälp"
-
-#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Ans_lut"
 
@@ -8264,6 +8297,10 @@ msgstr ""
 #~ msgid "app.open-folder"
 #~ msgstr "Öppna mapp"
 
+#, fuzzy, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "GTK+ version:"
+
 #~ msgid "file transfers list"
 #~ msgstr "filöverföringslista"
 
@@ -8272,6 +8309,14 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Välj de gruppchattar som du vill lämna"
+
+#, fuzzy, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "GTK+ version:"
+
+#, fuzzy, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "GTK+ version:"
 
 #, fuzzy
 #~ msgctxt "Group chat address"

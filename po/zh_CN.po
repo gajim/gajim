@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2026-08-24 01:20+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
@@ -281,6 +281,11 @@ msgstr "1 年"
 msgid "1 hour"
 msgstr "1 小时"
 
+#, fuzzy, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "此消息将从您的本地聊天记录中删除"
+
 msgid "2 Days"
 msgstr "2 天"
 
@@ -542,6 +547,10 @@ msgstr "为您的账号添加名称和颜色"
 msgid "Add a setting you would like to change"
 msgstr "添加要更改的设置"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "从属关系"
+
 msgid "Add new Theme"
 msgstr "添加新主题"
 
@@ -604,10 +613,6 @@ msgstr "高级设置"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "高级 - %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw 版本：%s"
 
 msgid "Affiliation"
 msgstr "从属关系"
@@ -864,6 +869,10 @@ msgstr "备份错误"
 msgid "Backup Now"
 msgstr "立即备份"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "您的备份密码"
+
 msgid "Backup Secret Key"
 msgstr "备份私钥"
 
@@ -1044,6 +1053,10 @@ msgstr "更改密码"
 msgid "Change Subject"
 msgstr "更改主题"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "更改头像"
+
 msgid "Change your account’s password, etc."
 msgstr "更改您的账号密码等"
 
@@ -1142,6 +1155,9 @@ msgstr "选择分组…"
 msgid "Choose encryption"
 msgstr "选择加密"
 
+msgid "Cipher Suite"
+msgstr "密码套件"
+
 msgid "City"
 msgstr "城市"
 
@@ -1157,12 +1173,8 @@ msgstr "清除输入"
 msgid "Clear Sound"
 msgstr "清除声音"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"点击即可选择消息\n"
-"（Ctrl + 双击取消选择）"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "点击要邀请加入此群聊的联系人。"
@@ -1214,9 +1226,6 @@ msgstr "命令已成功执行"
 
 msgid "Commands"
 msgstr "命令"
-
-msgid "Common Name (CN): "
-msgstr "通用名称（CN）： "
 
 #, python-format
 msgid ""
@@ -1540,8 +1549,9 @@ msgstr "删除指纹？"
 msgid "Delete Message Locally?"
 msgstr "删除本地消息？"
 
+#, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "删除本地消息…"
 
 msgid "Delete Node?"
@@ -1549,6 +1559,10 @@ msgstr "删除节点？"
 
 msgid "Delete Theme?"
 msgstr "删除主题？"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "选择消息…"
 
 msgid "Deny"
 msgstr "拒绝"
@@ -1651,10 +1665,6 @@ msgstr ""
 "确定要从 Gajim 中移除所有聊天消息吗？\n"
 "警告：此操作无法撤销！\n"
 "Gajim 之后将退出。"
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "要屏蔽 %(name)s 吗？"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "要删除此 PEP 节点吗？"
@@ -1909,12 +1919,6 @@ msgstr "执行命令…"
 msgid "Executing…"
 msgstr "正在执行…"
 
-msgid "Expires on: "
-msgstr "截止日期： "
-
-msgid "Expiry date"
-msgstr "到期日期"
-
 msgid "Export"
 msgstr "导出"
 
@@ -1960,6 +1964,12 @@ msgid ""
 msgstr ""
 "自在表达：有时言语不足以传情达意。使用表情回应、回复引用、录制语音消息和发送"
 "状态更新，让您的表达更生动传神。"
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
+msgstr ""
 
 msgid "Extended Address"
 msgstr "扩展地址"
@@ -2059,9 +2069,6 @@ msgstr "筛选条件（使用中）"
 msgid "Fingerprint for this Device"
 msgstr "此设备的指纹"
 
-msgid "Fingerprints"
-msgstr "指纹"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "与“%s”连接设备的指纹"
@@ -2156,14 +2163,6 @@ msgstr "全名"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "功能齐全的 XMPP 聊天客户端"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "GLib 版本：%s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "GTK 版本：%s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2324,6 +2323,10 @@ msgstr "HTTPS 验证"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "您好，我是 $name。%s"
+
+#, fuzzy
+msgid "Help"
+msgstr "帮助(_H)"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr "您可以在此处添加一些有助于重现此问题的反馈。"
@@ -2510,6 +2513,10 @@ msgstr "安装密钥环以在您的系统上存储密码。"
 msgid "Install from Archive"
 msgstr "从归档文件安装"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "安装失败"
 
@@ -2568,24 +2575,6 @@ msgstr "受邀者"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "麦克风是否插好并可访问？"
-
-msgid "Issue date"
-msgstr "颁发日期"
-
-msgid "Issued by"
-msgstr "颁发者"
-
-msgid "Issued by\n"
-msgstr "颁发者\n"
-
-msgid "Issued on: "
-msgstr "颁发时间： "
-
-msgid "Issued to"
-msgstr "颁发给"
-
-msgid "Issued to\n"
-msgstr "颁发给\n"
 
 msgid "Issues detected"
 msgstr "检测到的问题"
@@ -2801,6 +2790,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "仅成员"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "添加回应…"
+
 msgid "Message"
 msgstr "消息"
 
@@ -2852,6 +2845,10 @@ msgstr "状态更改前的分钟数"
 msgid "Miscellaneous"
 msgstr "杂项"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
+
 msgid "Missing necessary encryption plugin"
 msgstr "缺少必要的加密插件"
 
@@ -2901,6 +2898,12 @@ msgstr "移动聊天"
 
 msgid "Move Contact to New Group?"
 msgstr "将联系人移动到新分组？"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 msgid "Move to Group"
 msgstr "移动到分组"
@@ -3243,9 +3246,6 @@ msgstr "组织"
 msgid "Organization"
 msgstr "组织"
 
-msgid "Organization (O): "
-msgstr "组织（O）： "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "其他"
@@ -3305,10 +3305,6 @@ msgstr "PNG 文件"
 
 msgid "Packages"
 msgstr "软件包"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango 版本：%s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3610,6 +3606,12 @@ msgstr "代理"
 msgid "Proxy"
 msgstr "代理"
 
+msgid "Proxy Host"
+msgstr "代理主机"
+
+msgid "Proxy Type"
+msgstr "代理类型"
+
 msgid "Proxy, custom hostname and port"
 msgstr "代理、自定义主机名和端口"
 
@@ -3627,12 +3629,6 @@ msgstr "公钥"
 msgid "Public Information"
 msgstr "公开信息"
 
-msgid "Public Key Information"
-msgstr "公钥信息"
-
-msgid "Public Key: "
-msgstr "公钥： "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "脉冲：%s"
@@ -3645,10 +3641,6 @@ msgstr "清空聊天记录"
 
 msgid "Purge all Chat History?"
 msgstr "清空所有聊天记录？"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGObject 版本：%s"
 
 msgid "Quit"
 msgstr "退出"
@@ -3697,9 +3689,6 @@ msgstr "详细了解盲目信任"
 
 msgid "Reason"
 msgstr "原因"
-
-msgid "Reason (optional)"
-msgstr "原因（选填）"
 
 msgid "Reason (optional)..."
 msgstr "原因（选填）…"
@@ -3813,6 +3802,10 @@ msgstr "移除主题"
 
 msgid "Remove Workspace?"
 msgstr "移除工作区？"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "移除通知"
 
 msgid "Remove from Contact List…"
 msgstr "从联系人列表移除…"
@@ -3991,12 +3984,6 @@ msgstr "角色"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s 在此群聊中的角色已被移除"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "SSL 证书验证错误"
@@ -4237,9 +4224,6 @@ msgstr "已发送联系人：“%(jid)s”（%(name)s）"
 msgid "Sent contacts:"
 msgstr "已发送联系人："
 
-msgid "Serial Number: "
-msgstr "序列号： "
-
 msgid "Server Shutdown"
 msgstr "服务器关闭"
 
@@ -4397,6 +4381,9 @@ msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr "如果服务器支持 XEP-0258，则显示描述消息机密性的标签"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4591,9 +4578,6 @@ msgstr "样式"
 msgid "Subject"
 msgstr "主题"
 
-msgid "Subject Alt Names: "
-msgstr "主题备用名称： "
-
 msgid "Subject issuer mismatch"
 msgstr "主题颁发者不匹配"
 
@@ -4623,15 +4607,20 @@ msgstr "已成功与设备 {device_id} 建立新会话。"
 msgid "Successfully imported key from server."
 msgstr "已成功从服务器导入密钥。"
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "已成功从服务器导入密钥。"
+
 msgid "Support"
 msgstr "支持"
 
+#, fuzzy, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "确定要退出 Gajim？\n"
 "退出后，您将无法发送和接收消息。\n"
@@ -4749,6 +4738,9 @@ msgstr "系统托盘图标"
 
 msgid "System Tray Notifications"
 msgstr "系统托盘通知"
+
+msgid "TLS Version"
+msgstr "TLS 版本"
 
 msgid "Telephone"
 msgstr "电话"
@@ -4977,8 +4969,15 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "此消息已使用新版 OpenPGP 加密且无法解密。"
 
-msgid "This message will be deleted from your local chat history"
-msgstr "此消息将从您的本地聊天记录中删除"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
 
 msgid "This plugin is managed by your operating system"
 msgstr "此插件由您的操作系统管理"
@@ -5293,11 +5292,18 @@ msgstr "上传头像图片失败：%s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "正在通过 HTTP 文件上传进行上传…"
 
+#, fuzzy
+msgid "Uptime"
+msgstr "服务器运行时间"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr "使用“//”以斜杠“/”开始消息。"
 
 msgid "Use GSSAPI"
 msgstr "使用 GSSAPI"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr "如果服务器支持，为请求使用 HTTP2"
@@ -5339,12 +5345,6 @@ msgstr "用户"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "有效期"
-
-msgid "Validity\n"
-msgstr "有效期\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5611,6 +5611,12 @@ msgid ""
 "messages."
 msgstr "您将对此联系人显示为离线，且不会继续接收其消息。"
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 msgid "Your Backup Password"
 msgstr "您的备份密码"
 
@@ -5754,6 +5760,10 @@ msgstr "功能(_F)"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "有空聊天(_F)"
+
+#, fuzzy
+msgid "_Hide (Dock Icon)"
+msgstr "隐藏(托盘图标)(_H)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "隐藏(托盘图标)(_H)"
@@ -5924,10 +5934,6 @@ msgstr "方位"
 msgid "building"
 msgstr "建筑"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "cairo 版本：%s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;聊天;消息;即时通讯;通话;"
@@ -5972,10 +5978,6 @@ msgstr "最后活跃：%s"
 msgid "lat"
 msgstr "纬度"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup 版本：%s"
-
 msgid "locality"
 msgstr "地方"
 
@@ -5993,14 +5995,6 @@ msgstr "已暂停撰写消息"
 
 msgid "postalcode"
 msgstr "邮政编码"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "pycairo 版本：%s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp 版本：%s"
 
 msgid "region"
 msgstr "地区"
@@ -6389,6 +6383,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Adjust to status"
 #~ msgstr "根据状态调整"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw 版本：%s"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "账号名称： "
+
 #~ msgid "Algorithm"
 #~ msgstr "算法"
 
@@ -6517,9 +6519,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "选择联系人分组"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "密码套件"
-
 #~ msgid "Clear Devices Now?"
 #~ msgstr "现在清除设备？"
 
@@ -6531,6 +6530,13 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Clear message entry"
 #~ msgstr "清除消息条目"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "点击即可选择消息\n"
+#~ "（Ctrl + 双击取消选择）"
 
 #~ msgid "Click to change time display"
 #~ msgstr "点击即可更改时间显示"
@@ -6548,6 +6554,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "通用名称 (CN)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "通用名称（CN）： "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "补全命令或昵称"
@@ -6680,6 +6689,10 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Dismiss"
 #~ msgstr "关闭"
 
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "要屏蔽 %(name)s 吗？"
+
 #~ msgid "Domain"
 #~ msgstr "域名"
 
@@ -6772,6 +6785,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Expires on"
 #~ msgstr "截止日期"
 
+#~ msgid "Expires on: "
+#~ msgstr "截止日期： "
+
+#~ msgid "Expiry date"
+#~ msgstr "到期日期"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "家人"
@@ -6822,12 +6841,23 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Fingerprint"
 #~ msgstr "指纹"
 
+#~ msgid "Fingerprints"
+#~ msgstr "指纹"
+
 #~ msgid ""
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr "您需要安装 <tt>python-qrcode</tt> 才能通过二维码来验证。"
 
 #~ msgid "Full Message View"
 #~ msgstr "完整消息视图"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GLib 版本：%s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK 版本：%s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -6930,8 +6960,26 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Invite friends to group chats or join one"
 #~ msgstr "邀请朋友加入群聊或自己加入群聊"
 
+#~ msgid "Issue date"
+#~ msgstr "颁发日期"
+
+#~ msgid "Issued by"
+#~ msgstr "颁发者"
+
+#~ msgid "Issued by\n"
+#~ msgstr "颁发者\n"
+
 #~ msgid "Issued on"
 #~ msgstr "颁发日期"
+
+#~ msgid "Issued on: "
+#~ msgstr "颁发时间： "
+
+#~ msgid "Issued to"
+#~ msgstr "颁发给"
+
+#~ msgid "Issued to\n"
+#~ msgstr "颁发给\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "无法发送空文件"
@@ -7101,6 +7149,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Organization (O)"
 #~ msgstr "组织 (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "组织（O）： "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "组织单元 (OU)"
 
@@ -7118,6 +7169,10 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "暂停(_U)/继续"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango 版本：%s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "密码包含禁用字符"
@@ -7154,11 +7209,15 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Project discussion"
 #~ msgstr "项目讨论"
 
-#~ msgid "Proxy Host"
-#~ msgstr "代理主机"
+#~ msgid "Public Key Information"
+#~ msgstr "公钥信息"
 
-#~ msgid "Proxy Type"
-#~ msgstr "代理类型"
+#~ msgid "Public Key: "
+#~ msgstr "公钥： "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGObject 版本：%s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7173,6 +7232,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "确定屏蔽此联系人？"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "原因（选填）"
 
 #~ msgid "Recent history"
 #~ msgstr "近期历史"
@@ -7189,9 +7251,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Remove Group..."
 #~ msgstr "移除分组…"
-
-#~ msgid "Remove Notification"
-#~ msgstr "移除通知"
 
 #~ msgid "Remove Transport"
 #~ msgstr "移除传输"
@@ -7240,8 +7299,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7313,6 +7378,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Serial Number"
 #~ msgstr "序列号"
 
+#~ msgid "Serial Number: "
+#~ msgstr "序列号： "
+
 #~ msgid "Server"
 #~ msgstr "服务器"
 
@@ -7325,9 +7393,6 @@ msgstr "…或将其拖放到此处"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "服务器软件：%s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "服务器运行时间"
 
 #~ msgid "Set status message"
 #~ msgstr "设置状态消息"
@@ -7432,6 +7497,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Subject Alt Names"
 #~ msgstr "主题备用名称"
 
+#~ msgid "Subject Alt Names: "
+#~ msgstr "主题备用名称： "
+
 #~ msgid "Submit"
 #~ msgstr "提交"
 
@@ -7458,9 +7526,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "同步账号"
-
-#~ msgid "TLS Version"
-#~ msgstr "TLS 版本"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7582,6 +7647,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "User name…"
 #~ msgstr "重命名…"
 
+#~ msgid "Validity"
+#~ msgstr "有效期"
+
+#~ msgid "Validity\n"
+#~ msgstr "有效期\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "视频帧速率"
 
@@ -7688,9 +7759,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "_File Transfer"
 #~ msgstr "文件传输(_F)"
 
-#~ msgid "_Help"
-#~ msgstr "帮助(_H)"
-
 #~ msgid "_Login"
 #~ msgstr "登录(_L)"
 
@@ -7737,6 +7805,10 @@ msgstr "…或将其拖放到此处"
 #~ msgid "bold"
 #~ msgstr "加粗"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "cairo 版本：%s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "较深肤色"
 
@@ -7761,6 +7833,10 @@ msgstr "…或将其拖放到此处"
 #~ msgid "help"
 #~ msgstr "帮助"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup 版本：%s"
+
 #~ msgid "light skin tone"
 #~ msgstr "较浅肤色"
 
@@ -7779,6 +7855,14 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "pycairo 版本：%s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp 版本：%s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

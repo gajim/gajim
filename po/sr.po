@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,6 +274,12 @@ msgstr ""
 
 msgid "1 hour"
 msgstr ""
+
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "2 Days"
 msgstr ""
@@ -589,6 +595,10 @@ msgid "Add a setting you would like to change"
 msgstr ""
 
 #, fuzzy
+msgid "Add affiliation"
+msgstr "<b>Везаност:</b>"
+
+#, fuzzy
 msgid "Add new Theme"
 msgstr "Направи нову објаву"
 
@@ -668,10 +678,6 @@ msgstr "Регистрација неуспела"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "ГТК+ верзија:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -975,6 +981,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Враћам се брзо"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Унесите нову лозинку:"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1178,6 +1188,10 @@ msgstr "Измени лозинку"
 msgid "Change Subject"
 msgstr "Промени _тему..."
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Промени надимак (Ctrl+N)"
+
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1291,6 +1305,9 @@ msgstr "Одаберите слику"
 msgid "Choose encryption"
 msgstr "Шифровање лозинком"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1310,9 +1327,7 @@ msgstr "Одаберите звук"
 msgid "Clear Sound"
 msgstr "Одаберите звук"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
 
 #, fuzzy
@@ -1372,9 +1387,6 @@ msgstr "Налог је успешно додат"
 #, fuzzy
 msgid "Commands"
 msgstr "наредба"
-
-msgid "Common Name (CN): "
-msgstr ""
 
 #, python-format
 msgid ""
@@ -1763,7 +1775,7 @@ msgstr "Подразумевана порука"
 
 #, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Подразумевана порука"
 
 #, fuzzy
@@ -1773,6 +1785,10 @@ msgstr "Активно"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Активно"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Подразумевана порука"
 
 msgid "Deny"
 msgstr "Одбиј"
@@ -1892,10 +1908,6 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Да ли заиста желите да их све затворите?"
 
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
@@ -2189,12 +2201,6 @@ msgstr "_Изврши наредбу"
 msgid "Executing…"
 msgstr "_Изврши наредбу"
 
-msgid "Expires on: "
-msgstr ""
-
-msgid "Expiry date"
-msgstr ""
-
 #, fuzzy
 msgid "Export"
 msgstr "Извези"
@@ -2248,6 +2254,12 @@ msgstr "Извези"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 #, fuzzy
@@ -2366,9 +2378,6 @@ msgstr "Примљена Прва Порука"
 msgid "Fingerprint for this Device"
 msgstr ""
 
-msgid "Fingerprints"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Молимо потврдите да сте спојени на \"%s\"."
@@ -2474,14 +2483,6 @@ msgstr "<b>Пуно име</b>"
 
 msgid "Fully-featured XMPP chat client"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "GLib Version: %s"
-msgstr "ГТК+ верзија:"
-
-#, fuzzy, python-format
-msgid "GTK Version: %s"
-msgstr "ГТК+ верзија:"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2664,6 +2665,10 @@ msgstr "Обавештење"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr ""
+
+#, fuzzy
+msgid "Help"
+msgstr "_Помоћ"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2869,6 +2874,10 @@ msgstr ""
 msgid "Install from Archive"
 msgstr ""
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Регистрација неуспела"
@@ -2940,24 +2949,6 @@ msgid "Invitees"
 msgstr "Позо_ви"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
-
-msgid "Issue date"
-msgstr ""
-
-msgid "Issued by"
-msgstr ""
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-msgid "Issued to"
-msgstr ""
-
-msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
@@ -3210,6 +3201,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Члан"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "_Додај контакт..."
+
 msgid "Message"
 msgstr "Порука"
 
@@ -3268,6 +3263,10 @@ msgstr "_Записуј у дневник статусне промене кон
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Остало</b>"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -3330,6 +3329,12 @@ msgstr "Захтев за преносом датотеке"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "Прикажи догађај у листи контаката"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3717,9 +3722,6 @@ msgstr "На одмору"
 msgid "Organization"
 msgstr "На одмору"
 
-msgid "Organization (O): "
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3786,10 +3788,6 @@ msgstr "Све датотеке"
 
 msgid "Packages"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Pango Version: %s"
-msgstr "ГТК+ верзија:"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -4134,6 +4132,14 @@ msgid "Proxy"
 msgstr "Прок_си:"
 
 #, fuzzy
+msgid "Proxy Host"
+msgstr "Прокси _хост:"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "Прок_си:"
+
+#, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Користи Ваше одређено име хоста/порт "
 
@@ -4154,14 +4160,6 @@ msgstr "Захтев за претплатом"
 msgid "Public Information"
 msgstr "Информације"
 
-#, fuzzy
-msgid "Public Key Information"
-msgstr "Информације"
-
-#, fuzzy
-msgid "Public Key: "
-msgstr "Захтев за претплатом"
-
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "Датотека: %s"
@@ -4176,10 +4174,6 @@ msgstr "Недавно:"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Недавно:"
-
-#, fuzzy, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyГТК верзија:"
 
 msgid "Quit"
 msgstr ""
@@ -4235,10 +4229,6 @@ msgstr ""
 
 msgid "Reason"
 msgstr "Разлог"
-
-#, fuzzy
-msgid "Reason (optional)"
-msgstr "Можете такође унети и алтернативну локацију:"
 
 #, fuzzy
 msgid "Reason (optional)..."
@@ -4381,6 +4371,10 @@ msgstr "Активно"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Преименуј контакт"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Обавештење"
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4593,12 +4587,6 @@ msgstr "Улога"
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(nick)s је избачен из собе (%(reason)s)"
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
-msgstr ""
 
 #, fuzzy
 msgid "SSL Certificate Verification Error"
@@ -4875,10 +4863,6 @@ msgid "Sent contacts:"
 msgstr "Послати контакти:"
 
 #, fuzzy
-msgid "Serial Number: "
-msgstr "ГГ Број:"
-
-#, fuzzy
 msgid "Server Shutdown"
 msgstr "Сервер"
 
@@ -5077,6 +5061,9 @@ msgstr "Прикажи транс_порте"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
+msgstr ""
+
+msgid "Show matching rules for addresses"
 msgstr ""
 
 msgid ""
@@ -5305,9 +5292,6 @@ msgstr "Стил"
 msgid "Subject"
 msgstr "Тема"
 
-msgid "Subject Alt Names: "
-msgstr ""
-
 msgid "Subject issuer mismatch"
 msgstr "Погрешна тема издавача сертификата"
 
@@ -5341,15 +5325,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Преименуј контакт"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5495,6 +5484,10 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Визуална обавештења</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "ГТК+ верзија:"
 
 msgid "Telephone"
 msgstr ""
@@ -5747,7 +5740,14 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-msgid "This message will be deleted from your local chat history"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
 msgstr ""
 
 msgid "This plugin is managed by your operating system"
@@ -6107,10 +6107,17 @@ msgstr "Неуспешно слање приватне поруке"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Сервер је одговорио: %s"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
@@ -6155,12 +6162,6 @@ msgstr "Корисници"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Validity\n"
 msgstr ""
 
 msgctxt "Configuration"
@@ -6466,6 +6467,12 @@ msgid ""
 "messages."
 msgstr "Џабер ИД контакта који ће примити поруку"
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Унесите нову лозинку:"
@@ -6638,6 +6645,9 @@ msgstr "Могућности"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Слободан за разговор"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6836,10 +6846,6 @@ msgstr "морска"
 msgid "building"
 msgstr "Крије се"
 
-#, fuzzy, python-format
-msgid "cairo Version: %s"
-msgstr "ГТК+ верзија:"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6890,10 +6896,6 @@ msgstr "Разлог"
 msgid "lat"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "libsoup Version: %s"
-msgstr "ГТК+ верзија:"
-
 msgid "locality"
 msgstr ""
 
@@ -6912,14 +6914,6 @@ msgid "paused composing a message"
 msgstr "пауза при писању поруке"
 
 msgid "postalcode"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "pycairo Version: %s"
-msgstr "ГТК+ верзија:"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
 msgstr ""
 
 msgid "region"
@@ -7268,6 +7262,14 @@ msgstr ""
 #~ msgid "Adjust to status"
 #~ msgstr "По_деси према статусу"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "ГТК+ верзија:"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Налог"
+
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Групе"
@@ -7536,6 +7538,10 @@ msgstr ""
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Пренос датотеке заустављен"
 
+#, fuzzy, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Да ли заиста желите да их све затворите?"
+
 #, fuzzy
 #~ msgid "Don’t show this again"
 #~ msgstr "_Не питај ме више"
@@ -7652,6 +7658,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Порука Послата"
+
+#, fuzzy, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "ГТК+ верзија:"
+
+#, fuzzy, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "ГТК+ верзија:"
 
 #~ msgid "Gajim"
 #~ msgstr "Гајим"
@@ -7871,6 +7885,10 @@ msgstr ""
 #~ msgid "Out"
 #~ msgstr "Напољу"
 
+#, fuzzy, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "ГТК+ верзија:"
+
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Прекини пренос датотеке"
@@ -7899,12 +7917,16 @@ msgstr ""
 #~ msgstr "Напредак"
 
 #, fuzzy
-#~ msgid "Proxy Host"
-#~ msgstr "Прокси _хост:"
+#~ msgid "Public Key Information"
+#~ msgstr "Информације"
 
 #, fuzzy
-#~ msgid "Proxy Type"
-#~ msgstr "Прок_си:"
+#~ msgid "Public Key: "
+#~ msgstr "Захтев за претплатом"
+
+#, fuzzy, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyГТК верзија:"
 
 #, fuzzy
 #~ msgid "Re-Login"
@@ -7917,6 +7939,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Really block this contact?"
 #~ msgstr "Да ли је OpenPGP омогућен за овај контакт?"
+
+#, fuzzy
+#~ msgid "Reason (optional)"
+#~ msgstr "Можете такође унети и алтернативну локацију:"
 
 #, fuzzy
 #~ msgid "Recent history"
@@ -7936,10 +7962,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove Group..."
 #~ msgstr "Уклони групу"
-
-#, fuzzy
-#~ msgid "Remove Notification"
-#~ msgstr "Обавештење"
 
 #, fuzzy
 #~ msgid "Remove Transport"
@@ -8053,6 +8075,10 @@ msgstr ""
 #~ msgid "Serial Number"
 #~ msgstr "ГГ Број:"
 
+#, fuzzy
+#~ msgid "Serial Number: "
+#~ msgstr "ГГ Број:"
+
 #~ msgid "Server"
 #~ msgstr "Сервер"
 
@@ -8066,10 +8092,6 @@ msgstr ""
 
 #, fuzzy, python-format
 #~ msgid "Server Software: %s\n"
-#~ msgstr "Сервер је одговорио: %s"
-
-#, fuzzy
-#~ msgid "Server Uptime"
 #~ msgstr "Сервер је одговорио: %s"
 
 #, fuzzy
@@ -8165,10 +8187,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Синхронизуј контакте"
-
-#, fuzzy
-#~ msgid "TLS Version"
-#~ msgstr "ГТК+ верзија:"
 
 #, fuzzy, python-format
 #~ msgid "TLS verification failed: %s"
@@ -8362,10 +8380,6 @@ msgstr ""
 #~ msgstr "Преноси датотека"
 
 #, fuzzy
-#~ msgid "_Help"
-#~ msgstr "_Помоћ"
-
-#, fuzzy
 #~ msgid "_Manage Account…"
 #~ msgstr "_Додај контакт..."
 
@@ -8408,6 +8422,10 @@ msgstr ""
 #~ msgid "app.open-folder"
 #~ msgstr "_Отвори садржавајућу фасциклу"
 
+#, fuzzy, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "ГТК+ верзија:"
+
 #~ msgid "file transfers list"
 #~ msgstr "листа преноса датотека"
 
@@ -8416,6 +8434,14 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Одаберите групне разговоре које желите да напустите"
+
+#, fuzzy, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "ГТК+ верзија:"
+
+#, fuzzy, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "ГТК+ верзија:"
 
 #, fuzzy
 #~ msgctxt "Group chat address"

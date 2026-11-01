@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-08-25 21:20+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
+"PO-Revision-Date: 2026-10-29 21:04+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -292,6 +292,14 @@ msgstr "1 Jahr"
 msgid "1 hour"
 msgstr "1 Stunde"
 
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+"Diese Nachricht wird aus deinem lokalen Unterhaltungsverlauf gelöscht"
+msgstr[1] ""
+"%(count)d Nachrichten werden aus deinem lokalen Unterhaltungsverlauf gelöscht"
+
 msgid "2 Days"
 msgstr "2 Tage"
 
@@ -559,6 +567,10 @@ msgstr "Gib deinem Konto einen Namen und eine Farbe"
 msgid "Add a setting you would like to change"
 msgstr "Füge eine Einstellung hinzu, die du ändern möchtest"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Gruppenzugehörigkeit"
+
 msgid "Add new Theme"
 msgstr "Neues Design hinzufügen"
 
@@ -622,10 +634,6 @@ msgstr "Erweiterte Einstellungen"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "Erweitert – %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw-Version: %s"
 
 msgid "Affiliation"
 msgstr "Gruppenzugehörigkeit"
@@ -896,6 +904,9 @@ msgstr "Backup-Fehler"
 msgid "Backup Now"
 msgstr "Backup starten"
 
+msgid "Backup Password"
+msgstr "Backup-Passwort"
+
 msgid "Backup Secret Key"
 msgstr "Geheimen Schlüssel sichern"
 
@@ -1076,6 +1087,9 @@ msgstr "Passwort ändern"
 msgid "Change Subject"
 msgstr "Thema ändern"
 
+msgid "Change group chat’s picture"
+msgstr "Bild für diesen Gruppenchat ändern"
+
 msgid "Change your account’s password, etc."
 msgstr "Das Passwort deines Kontos ändern, usw."
 
@@ -1178,6 +1192,9 @@ msgstr "Wähle eine Gruppe…"
 msgid "Choose encryption"
 msgstr "Verschlüsselung auswählen"
 
+msgid "Cipher Suite"
+msgstr "Cipher Suite"
+
 msgid "City"
 msgstr "Ort"
 
@@ -1193,12 +1210,8 @@ msgstr "Eingabefeld leeren"
 msgid "Clear Sound"
 msgstr "Klang löschen"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
-msgstr ""
-"Klicke auf Nachrichten, um sie auszuwählen\n"
-"(Strg + Doppelklick zum abwählen)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
+msgstr "Klicke auf Gajims Icon im Dock, um das Fenster wiederherzustellen."
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Klicke auf Kontakte, die du in diesen Gruppenchat einladen willst."
@@ -1251,9 +1264,6 @@ msgstr "Befehl erfolgreich ausgeführt"
 
 msgid "Commands"
 msgstr "Befehle"
-
-msgid "Common Name (CN): "
-msgstr "Allgemeiner Name (CN): "
 
 #, python-format
 msgid ""
@@ -1587,14 +1597,17 @@ msgid "Delete Message Locally?"
 msgstr "Nachricht lokal löschen?"
 
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
-msgstr "Nachricht lokal löschen…"
+msgid "Delete Messages Locally…"
+msgstr "Nachrichten lokal löschen…"
 
 msgid "Delete Node?"
 msgstr "PEP-Node löschen?"
 
 msgid "Delete Theme?"
 msgstr "Design löschen?"
+
+msgid "Delete messages…"
+msgstr "Nachrichten löschen…"
 
 msgid "Deny"
 msgstr "Ablehnen"
@@ -1701,10 +1714,6 @@ msgstr ""
 "Willst du wirklich alle Nachrichten aus Gajim löschen?\n"
 "Warnung: Das kann nicht rückgängig gemacht werden!\n"
 "Gajim wird danach beendet."
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Möchtest du \"%(name)s\" blockieren?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "Möchtest du diesen PEP-Node löschen?"
@@ -1974,12 +1983,6 @@ msgstr "Befehl ausführen…"
 msgid "Executing…"
 msgstr "Führe Befehl aus…"
 
-msgid "Expires on: "
-msgstr "Läuft ab am: "
-
-msgid "Expiry date"
-msgstr "Ablaufdatum"
-
 msgid "Export"
 msgstr "Exportieren"
 
@@ -2025,6 +2028,12 @@ msgid ""
 msgstr ""
 "Sei du selbst: Manchmal sind Worte nicht genug. Nutze Reaktionen, Antworten, "
 "Sprachnachrichten und Status-Updates, um dich auszudrücken, wie du es willst."
+
+msgid "Extend selection one word left"
+msgstr "Auswahl ein Wort nach links erweitern"
+
+msgid "Extend selection one word right"
+msgstr "Auswahl ein Wort nach rechts erweitern"
 
 msgid "Extended Address"
 msgstr "Zusatzadresse"
@@ -2124,9 +2133,6 @@ msgstr "Filter (aktiv)"
 msgid "Fingerprint for this Device"
 msgstr "Fingerabdruck für dieses Gerät"
 
-msgid "Fingerprints"
-msgstr "Fingerabdrücke"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Fingerabdrücke der Geräte, die mit \"%s\" verbunden sind"
@@ -2221,14 +2227,6 @@ msgstr "Vollständiger Name"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Ein vollwertiger XMPP-Chat-Client"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "GLib-Version: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "GTK-Version: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2395,6 +2393,9 @@ msgstr "HTTPS-Verifizierung"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Hallo, Ich bin $name. %s"
+
+msgid "Help"
+msgstr "Hilfe"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2596,6 +2597,10 @@ msgstr ""
 msgid "Install from Archive"
 msgstr "Aus ZIP-Datei installieren"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr "Installiere das %s Plugin, um diese Verschlüsselung nutzen zu können."
+
 msgid "Installation failed"
 msgstr "Installation fehlgeschlagen"
 
@@ -2654,24 +2659,6 @@ msgstr "Eingeladene"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Ist ein Mikrofon eingesteckt und verfügbar?"
-
-msgid "Issue date"
-msgstr "Ausgestellt am"
-
-msgid "Issued by"
-msgstr "Ausgestellt von"
-
-msgid "Issued by\n"
-msgstr "Ausgestellt von\n"
-
-msgid "Issued on: "
-msgstr "Ausgestellt am: "
-
-msgid "Issued to"
-msgstr "Ausgestellt für"
-
-msgid "Issued to\n"
-msgstr "Ausgestellt für\n"
 
 msgid "Issues detected"
 msgstr "Fehler festgestellt"
@@ -2892,6 +2879,9 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Nur für Mitglieder"
 
+msgid "Mention…"
+msgstr "Erwähnen…"
+
 msgid "Message"
 msgstr "Nachricht"
 
@@ -2943,6 +2933,10 @@ msgstr "Minuten bis der Status geändert wird"
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr "%s Plugin ist nicht vorhanden"
+
 msgid "Missing necessary encryption plugin"
 msgstr "Das für die Verschlüsselung notwendige Plugin fehlt"
 
@@ -2992,6 +2986,12 @@ msgstr "Chat verschieben"
 
 msgid "Move Contact to New Group?"
 msgstr "Kontakt in neue Gruppe verschieben?"
+
+msgid "Move cursor one word left"
+msgstr "Cursor ein Wort nach links bewegen"
+
+msgid "Move cursor one word right"
+msgstr "Cursor ein Wort nach rechts bewegen"
 
 msgid "Move to Group"
 msgstr "In Gruppe verschieben"
@@ -3342,9 +3342,6 @@ msgstr "Organisation"
 msgid "Organization"
 msgstr "Organisation"
 
-msgid "Organization (O): "
-msgstr "Organisation (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Anderes"
@@ -3404,10 +3401,6 @@ msgstr "PNG-Dateien"
 
 msgid "Packages"
 msgstr "Pakete"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango-Version: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3718,6 +3711,12 @@ msgstr "Proxies"
 msgid "Proxy"
 msgstr "Proxy"
 
+msgid "Proxy Host"
+msgstr "Proxy-Host"
+
+msgid "Proxy Type"
+msgstr "Proxy-Typ"
+
 msgid "Proxy, custom hostname and port"
 msgstr "Proxy, benutzerdefinierter Hostname und Port"
 
@@ -3735,12 +3734,6 @@ msgstr "Öffentlicher Schlüssel"
 msgid "Public Information"
 msgstr "Öffentliche Informationen"
 
-msgid "Public Key Information"
-msgstr "Informationen über öffentlichen Schlüssel"
-
-msgid "Public Key: "
-msgstr "Öffentlicher Schlüssel: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Puls: %s"
@@ -3753,10 +3746,6 @@ msgstr "Nachrichtenverlauf löschen"
 
 msgid "Purge all Chat History?"
 msgstr "Gesamten Nachrichtenverlauf löschen?"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGObject-Version: %s"
 
 msgid "Quit"
 msgstr "Beenden"
@@ -3805,9 +3794,6 @@ msgstr "Mehr über blindes Vertrauen lesen"
 
 msgid "Reason"
 msgstr "Begründung"
-
-msgid "Reason (optional)"
-msgstr "Begründung (optional)"
 
 msgid "Reason (optional)..."
 msgstr "Begründung (optional)..."
@@ -3921,6 +3907,10 @@ msgstr "Design entfernen"
 
 msgid "Remove Workspace?"
 msgstr "Arbeitsbereich entfernen?"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Benachrichtigung entfernen"
 
 msgid "Remove from Contact List…"
 msgstr "Aus der Kontaktliste entfernen…"
@@ -4102,12 +4092,6 @@ msgstr "Rolle"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Die Rollen von %s in diesem Gruppenchat wurden entfernt"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "Fehler bei SSL-Zertifikatüberprüfung"
@@ -4350,9 +4334,6 @@ msgstr "Kontakt gesendet: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Gesendete Kontakte:"
 
-msgid "Serial Number: "
-msgstr "Seriennummer: "
-
 msgid "Server Shutdown"
 msgstr "Server heruntergefahren"
 
@@ -4515,6 +4496,9 @@ msgid ""
 msgstr ""
 "Vertraulichkeitslabels für Nachrichten anzeigen, falls der Server XEP-0258 "
 "unterstützt"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4717,9 +4701,6 @@ msgstr "Design"
 msgid "Subject"
 msgstr "Thema"
 
-msgid "Subject Alt Names: "
-msgstr "Alternative Namen: "
-
 msgid "Subject issuer mismatch"
 msgstr "Themenaussteller unpassend"
 
@@ -4749,21 +4730,25 @@ msgstr "Neue Sitzung mit dem Gerät {device_id} erfolgreich eingerichtet."
 msgid "Successfully imported key from server."
 msgstr "Schlüssel erfolgreich vom Server importiert."
 
+msgid "Successfully imported key."
+msgstr "Schlüssel erfolgreich importiert."
+
 msgid "Support"
 msgstr "Hilfe"
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "Bist du dir sicher, Gajim zu beenden?\n"
 "Du kannst dann keine Nachrichten mehr empfangen.\n"
 "\n"
-"Alternativ kannst du Gajims Fenster minimieren oder es verstecken. Nutze "
-"Gajims Symbol im Benachrichtigungsbereich, um das Fenster wiederherzustellen."
+"Alternativ kannst du Gajims Fenster minimieren oder es verstecken. "
+"{restore_hint}"
 
 msgid "Switch to Chat 1"
 msgstr "Zu Chat 1 wechseln"
@@ -4876,6 +4861,9 @@ msgstr "Symbol im Benachrichtigungsbereich"
 
 msgid "System Tray Notifications"
 msgstr "Benachrichtigungen im Benachrichtigungsbereich"
+
+msgid "TLS Version"
+msgstr "TLS-Version"
 
 msgid "Telephone"
 msgstr "Telefon"
@@ -5134,8 +5122,19 @@ msgstr ""
 "Diese Nachricht wurde mit OpenPGP für XMPP verschlüsselt und konnte nicht "
 "entschlüsselt werden."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Diese Nachricht wird aus deinem lokalen Unterhaltungsverlauf gelöscht"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+"Dieser Teilnehmer wird entfernt und daran gehindert, diesem Chat erneut "
+"beizutreten. Du kannst einen Grund angeben (optional)."
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
+"Dieser Teilnehmer wird entfernt, kann dem Chat aber erneut beitreten. Du "
+"kannst einen Grund angeben (optional)."
 
 msgid "This plugin is managed by your operating system"
 msgstr "Dieses Plugin wird durch dein Betriebssystem verwaltet"
@@ -5467,6 +5466,9 @@ msgstr "Beim Hochladen des Kontaktbilds ist ein Fehler aufgetreten: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Sende via HTTP Datei-Upload…"
 
+msgid "Uptime"
+msgstr "Serverlaufzeit"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 "Du kannst \"//\" nutzen, um eine Nachricht mit Schrägstrich \"/\" zu "
@@ -5474,6 +5476,11 @@ msgstr ""
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI verwenden"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
+"Nutze Gajims Symbol im Benachrichtigungsbereich, um das Fenster "
+"wiederherzustellen."
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr "HTTP2 für Anfragen nutzen, wenn der Server dies unterstützt"
@@ -5515,12 +5522,6 @@ msgstr "Benutzer"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Gültigkeit"
-
-msgid "Validity\n"
-msgstr "Gültigkeit\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5802,6 +5803,14 @@ msgstr ""
 "Du wirst für diesen Kontakt offline erscheinen und keine weiteren "
 "Nachrichten erhalten."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+"Du wirst keine weiteren Nachrichten von %(name)s sehen, aber deine "
+"Nachrichten sind weiterhin für alle sichtbar."
+
 msgid "Your Backup Password"
 msgstr "Dein Backup Passwort"
 
@@ -5950,6 +5959,9 @@ msgstr "_Features"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Frei zum Chatten"
+
+msgid "_Hide (Dock Icon)"
+msgstr "_Verstecken (Dock-Icon)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "_Verstecken (Benachrichtigungsbereich)"
@@ -6120,10 +6132,6 @@ msgstr "Peilung"
 msgid "building"
 msgstr "Gebäude"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "cairo-Version: %s"
-
 # TODO mark as do not translate?
 # TODO look up if there are other keywords like this in German
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
@@ -6170,10 +6178,6 @@ msgstr "zuletzt gesehen: %s"
 msgid "lat"
 msgstr "Breitengrad"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup-Version: %s"
-
 msgid "locality"
 msgstr "Ortschaft"
 
@@ -6191,14 +6195,6 @@ msgstr "schreibt nicht mehr"
 
 msgid "postalcode"
 msgstr "Postleitzahl"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "pycairo-Version: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp-Version: %s"
 
 msgid "region"
 msgstr "Region"
@@ -6593,6 +6589,16 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Adjust to status"
 #~ msgstr "An Status anpassen"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw-Version: %s"
+
+#~ msgid "Agent JID - node"
+#~ msgstr "Agent-JID - Knoten"
+
+#~ msgid "Agent name"
+#~ msgstr "Agent-Name"
+
 #~ msgid "Algorithm"
 #~ msgstr "Algorithmus"
 
@@ -6727,9 +6733,6 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Wähle die Gruppen des Kontakts"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "Cipher Suite"
-
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Geräte jetzt löschen?"
 
@@ -6741,6 +6744,13 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Nachrichteneintrag entfernen"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "Klicke auf Nachrichten, um sie auszuwählen\n"
+#~ "(Strg + Doppelklick zum abwählen)"
 
 #~ msgid "Click to change time display"
 #~ msgstr "Klicken um Zeitdarstellung zu ändern"
@@ -6758,6 +6768,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Allgemeiner Name (CN)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "Allgemeiner Name (CN): "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "Einen Befehl oder einen Spitznamen vervollständigen"
@@ -6891,6 +6904,10 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Dismiss"
 #~ msgstr "Verwerfen"
 
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Möchtest du \"%(name)s\" blockieren?"
+
 #~ msgid "Domain"
 #~ msgstr "Domain"
 
@@ -6992,6 +7009,12 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Expires on"
 #~ msgstr "Läuft ab am"
 
+#~ msgid "Expires on: "
+#~ msgstr "Läuft ab am: "
+
+#~ msgid "Expiry date"
+#~ msgstr "Ablaufdatum"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Familie"
@@ -7042,6 +7065,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Fingerprint"
 #~ msgstr "Fingerabdruck"
 
+#~ msgid "Fingerprints"
+#~ msgstr "Fingerabdrücke"
+
 #~ msgid ""
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr ""
@@ -7050,6 +7076,14 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Full Message View"
 #~ msgstr "Vollständige Nachricht"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GLib-Version: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK-Version: %s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7159,8 +7193,26 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Invite friends to group chats or join one"
 #~ msgstr "Lade Freunde zum Gruppenchat ein oder tritt selbst einem bei"
 
+#~ msgid "Issue date"
+#~ msgstr "Ausgestellt am"
+
+#~ msgid "Issued by"
+#~ msgstr "Ausgestellt von"
+
+#~ msgid "Issued by\n"
+#~ msgstr "Ausgestellt von\n"
+
 #~ msgid "Issued on"
 #~ msgstr "Ausgestellt am"
+
+#~ msgid "Issued on: "
+#~ msgstr "Ausgestellt am: "
+
+#~ msgid "Issued to"
+#~ msgstr "Ausgestellt für"
+
+#~ msgid "Issued to\n"
+#~ msgstr "Ausgestellt für\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Es nicht möglich, leere Dateien zu versenden"
@@ -7332,6 +7384,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Organization (O)"
 #~ msgstr "Organisation (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Organisation (O): "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organizationseinheit (OU)"
 
@@ -7349,6 +7404,10 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pause/Fo_rtsetzen"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango-Version: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Password enthält unerlaubte Zeichen"
@@ -7387,11 +7446,15 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Project discussion"
 #~ msgstr "Projektdiskussion"
 
-#~ msgid "Proxy Host"
-#~ msgstr "Proxy-Host"
+#~ msgid "Public Key Information"
+#~ msgstr "Informationen über öffentlichen Schlüssel"
 
-#~ msgid "Proxy Type"
-#~ msgstr "Proxy-Typ"
+#~ msgid "Public Key: "
+#~ msgstr "Öffentlicher Schlüssel: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGObject-Version: %s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7406,6 +7469,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Diesen Kontakt wirklich sperren?"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "Begründung (optional)"
 
 #~ msgid "Recent history"
 #~ msgstr "Kürzlich gesendete Nachrichten"
@@ -7422,9 +7488,6 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Remove Group..."
 #~ msgstr "Gruppe entfernen…"
-
-#~ msgid "Remove Notification"
-#~ msgstr "Benachrichtigung entfernen"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Transport entfernen"
@@ -7475,8 +7538,14 @@ msgstr "… oder hierher ziehen"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7554,6 +7623,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Serial Number"
 #~ msgstr "Seriennummer"
 
+#~ msgid "Serial Number: "
+#~ msgstr "Seriennummer: "
+
 #~ msgid "Server"
 #~ msgstr "Server"
 
@@ -7566,9 +7638,6 @@ msgstr "… oder hierher ziehen"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Server-Software: %s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "Serverlaufzeit"
 
 #~ msgid "Set status message"
 #~ msgstr "Statusnachricht festlegen"
@@ -7672,6 +7741,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Subject Alt Names"
 #~ msgstr "Alternative Namen"
 
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Alternative Namen: "
+
 #~ msgid "Submit"
 #~ msgstr "Abschicken"
 
@@ -7698,9 +7770,6 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Konten synchronisieren"
-
-#~ msgid "TLS Version"
-#~ msgstr "TLS-Version"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7824,6 +7893,12 @@ msgstr "… oder hierher ziehen"
 #~ msgid "User name…"
 #~ msgstr "Umbenennen…"
 
+#~ msgid "Validity"
+#~ msgstr "Gültigkeit"
+
+#~ msgid "Validity\n"
+#~ msgstr "Gültigkeit\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Bildwiederholrate"
 
@@ -7936,9 +8011,6 @@ msgstr "… oder hierher ziehen"
 #~ msgid "_File Transfer"
 #~ msgstr "Date_iübertragung"
 
-#~ msgid "_Help"
-#~ msgstr "_Hilfe"
-
 #~ msgid "_Login"
 #~ msgstr "_Einloggen"
 
@@ -7982,6 +8054,10 @@ msgstr "… oder hierher ziehen"
 #~ msgid "bold"
 #~ msgstr "fett"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "cairo-Version: %s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "dunkle Hautfarbe"
 
@@ -8006,6 +8082,10 @@ msgstr "… oder hierher ziehen"
 #~ msgid "help"
 #~ msgstr "Hilfe"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup-Version: %s"
+
 #~ msgid "light skin tone"
 #~ msgstr "helle Hautfarbe"
 
@@ -8025,6 +8105,14 @@ msgstr "… oder hierher ziehen"
 # Don't translate icon file name.
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "pycairo-Version: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp-Version: %s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

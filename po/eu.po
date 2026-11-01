@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -274,6 +274,12 @@ msgstr ""
 
 msgid "1 hour"
 msgstr ""
+
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "2 Days"
 msgstr ""
@@ -586,6 +592,10 @@ msgid "Add a setting you would like to change"
 msgstr ""
 
 #, fuzzy
+msgid "Add affiliation"
+msgstr "Afizioak: "
+
+#, fuzzy
 msgid "Add new Theme"
 msgstr "Mezu berria sortu"
 
@@ -660,10 +670,6 @@ msgstr "Ekintza Aurreratuak"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "GTK+ Bertsioa:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -965,6 +971,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Laster etorriko naiz"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Sartu pasahitz berria:"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1167,6 +1177,10 @@ msgstr "Aldatu Pasahitza"
 msgid "Change Subject"
 msgstr "Aldatu _Gaia"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Aldatu _Izengoitia"
+
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1279,6 +1293,9 @@ msgstr "Aukeratu Irudia"
 msgid "Choose encryption"
 msgstr "Aukeratu Bidaltzeko Fitxeroa..."
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Hiria:"
@@ -1299,9 +1316,7 @@ msgstr "Aukeratu Soinua"
 msgid "Clear Sound"
 msgstr "Aukeratu Soinua"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
 
 #, fuzzy
@@ -1361,9 +1376,6 @@ msgstr "Kontua egoki sartua izan da"
 #, fuzzy
 msgid "Commands"
 msgstr "Azalpenak: %s"
-
-msgid "Common Name (CN): "
-msgstr ""
 
 #, python-format
 msgid ""
@@ -1752,7 +1764,7 @@ msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
@@ -1762,6 +1774,10 @@ msgstr "Aktibatuta"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Aktibatuta"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Berezko Egoera Mezuak"
 
 msgid "Deny"
 msgstr "Ukatu"
@@ -1877,10 +1893,6 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
@@ -2171,12 +2183,6 @@ msgstr "_Komandoa Exekutatu..."
 msgid "Executing…"
 msgstr "_Komandoa Exekutatu..."
 
-msgid "Expires on: "
-msgstr ""
-
-msgid "Expiry date"
-msgstr ""
-
 #, fuzzy
 msgid "Export"
 msgstr "Esportatu"
@@ -2230,6 +2236,12 @@ msgstr "Esportatu"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 #, fuzzy
@@ -2350,9 +2362,6 @@ msgstr "Lehen Mezu Jasoa"
 msgid "Fingerprint for this Device"
 msgstr ""
 
-msgid "Fingerprints"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
@@ -2458,14 +2467,6 @@ msgstr "<b>Bezeroak</b>"
 
 msgid "Fully-featured XMPP chat client"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "GLib Version: %s"
-msgstr "GTK+ Bertsioa:"
-
-#, fuzzy, python-format
-msgid "GTK Version: %s"
-msgstr "GTK+ Bertsioa:"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2648,6 +2649,10 @@ msgstr "Kontu Eraldaketa"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr ""
+
+#, fuzzy
+msgid "Help"
+msgstr "_Laguntza"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2853,6 +2858,10 @@ msgstr ""
 msgid "Install from Archive"
 msgstr ""
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Konexioak huts egin du"
@@ -2926,24 +2935,6 @@ msgid "Invitees"
 msgstr "Honera gonbidatu"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
-
-msgid "Issue date"
-msgstr ""
-
-msgid "Issued by"
-msgstr ""
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-msgid "Issued to"
-msgstr ""
-
-msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
@@ -3197,6 +3188,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Partaidea"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "_Kontaktua Gehitu..."
+
 msgid "Message"
 msgstr "Mezua"
 
@@ -3255,6 +3250,10 @@ msgstr "Kontaktuen egoera aldaketak gorde"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Denetatik</b>"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -3318,6 +3317,12 @@ msgstr "Fitxeroa Transferitzeko Baimena"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "_Ikusarazi gertaera zerrendan"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3707,9 +3712,6 @@ msgstr "Administratzailea"
 msgid "Organization"
 msgstr "Administratzailea"
 
-msgid "Organization (O): "
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3775,10 +3777,6 @@ msgstr "Fitxategi guztiak"
 
 msgid "Packages"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Pango Version: %s"
-msgstr "GTK+ Bertsioa:"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -4121,6 +4119,14 @@ msgid "Proxy"
 msgstr "Proxy:"
 
 #, fuzzy
+msgid "Proxy Host"
+msgstr "Proxy:"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "Proxy:"
+
+#, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Erabili bezeroaren hostname/portua"
 
@@ -4141,14 +4147,6 @@ msgstr "Enkriptazioa aktibatuta"
 msgid "Public Information"
 msgstr "Kontaktuaren Informazioa"
 
-#, fuzzy
-msgid "Public Key Information"
-msgstr "Kontaktuaren Informazioa"
-
-#, fuzzy
-msgid "Public Key: "
-msgstr "Enkriptazioa aktibatuta"
-
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "Fitxeroa: %s"
@@ -4163,10 +4161,6 @@ msgstr "Berriki:"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Old stories"
-
-#, fuzzy, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGTK Bertsioa:"
 
 #, fuzzy
 msgid "Quit"
@@ -4223,9 +4217,6 @@ msgstr ""
 
 msgid "Reason"
 msgstr "Arrazoia"
-
-msgid "Reason (optional)"
-msgstr ""
 
 #, fuzzy
 msgid "Reason (optional)..."
@@ -4368,6 +4359,10 @@ msgstr "Aktibatuta"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Berridatzi Kontaktua"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4580,12 +4575,6 @@ msgstr "Eginkizuna"
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
-msgstr ""
 
 #, fuzzy
 msgid "SSL Certificate Verification Error"
@@ -4863,10 +4852,6 @@ msgid "Sent contacts:"
 msgstr "Kontaktua"
 
 #, fuzzy
-msgid "Serial Number: "
-msgstr "GG zenbakia:"
-
-#, fuzzy
 msgid "Server Shutdown"
 msgstr "Zerbitzariaren Ezaugarriak:"
 
@@ -5065,6 +5050,9 @@ msgstr "Trans_porteak Erakutsi"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
+msgstr ""
+
+msgid "Show matching rules for addresses"
 msgstr ""
 
 msgid ""
@@ -5292,9 +5280,6 @@ msgstr "Stalled"
 msgid "Subject"
 msgstr "Gaia"
 
-msgid "Subject Alt Names: "
-msgstr ""
-
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5328,15 +5313,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Berridatzi Kontaktua"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5482,6 +5472,10 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "<b>Ikusizko Jakinarazketa</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Bertsioa:"
 
 msgid "Telephone"
 msgstr ""
@@ -5727,7 +5721,14 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-msgid "This message will be deleted from your local chat history"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
 msgstr ""
 
 msgid "This plugin is managed by your operating system"
@@ -6085,10 +6086,17 @@ msgstr "Mezu pribatua bidaltzeak huts egin du"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+#, fuzzy
+msgid "Uptime"
+msgstr "%s gordea"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
@@ -6134,12 +6142,6 @@ msgstr "Erabiltzaileak"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Validity\n"
 msgstr ""
 
 msgctxt "Configuration"
@@ -6439,6 +6441,12 @@ msgid ""
 "messages."
 msgstr "Mezua jaso dugun kontuaren JID-a"
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Sartu pasahitz berria:"
@@ -6610,6 +6618,9 @@ msgstr "Zerbitzariaren Ezaugarriak:"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Libre _Hitz Egiteko"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6811,10 +6822,6 @@ msgstr "arrantzale"
 msgid "building"
 msgstr "Botatzen %s"
 
-#, fuzzy, python-format
-msgid "cairo Version: %s"
-msgstr "GTK+ Bertsioa:"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6865,10 +6872,6 @@ msgstr "Arrazoia"
 msgid "lat"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "libsoup Version: %s"
-msgstr "GTK+ Bertsioa:"
-
 msgid "locality"
 msgstr ""
 
@@ -6887,14 +6890,6 @@ msgid "paused composing a message"
 msgstr "mezuaren sorrera gelditua"
 
 msgid "postalcode"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "pycairo Version: %s"
-msgstr "GTK+ Bertsioa:"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
 msgstr ""
 
 msgid "region"
@@ -7235,6 +7230,14 @@ msgstr ""
 #~ msgid "Adjust to status"
 #~ msgstr "Egoerarekin b_at egin"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Kontua"
+
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Taldea"
@@ -7499,6 +7502,10 @@ msgstr ""
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Fitxero Transferentzia Gelditua"
 
+#, fuzzy, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
 #, fuzzy
 #~ msgid "Don’t show this again"
 #~ msgstr "E_z galdetu berriro  "
@@ -7616,6 +7623,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Mezua Bidaltzean"
+
+#, fuzzy, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
+
+#, fuzzy, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7832,6 +7847,10 @@ msgstr ""
 #~ msgid "Out"
 #~ msgstr "kanpoan"
 
+#, fuzzy, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
+
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Fitxategi transferentzia kantzelatu"
@@ -7860,12 +7879,16 @@ msgstr ""
 #~ msgstr "Prozesua"
 
 #, fuzzy
-#~ msgid "Proxy Host"
-#~ msgstr "Proxy:"
+#~ msgid "Public Key Information"
+#~ msgstr "Kontaktuaren Informazioa"
 
 #, fuzzy
-#~ msgid "Proxy Type"
-#~ msgstr "Proxy:"
+#~ msgid "Public Key: "
+#~ msgstr "Enkriptazioa aktibatuta"
+
+#, fuzzy, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGTK Bertsioa:"
 
 #, fuzzy
 #~ msgid "Re-Login"
@@ -7897,10 +7920,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove Group..."
 #~ msgstr "Ezabatu Taldea"
-
-#, fuzzy
-#~ msgid "Remove Notification"
-#~ msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 #~ msgid "Remove Transport"
@@ -8003,6 +8022,10 @@ msgstr ""
 #~ msgid "Serial Number"
 #~ msgstr "GG zenbakia:"
 
+#, fuzzy
+#~ msgid "Serial Number: "
+#~ msgstr "GG zenbakia:"
+
 #~ msgid "Server"
 #~ msgstr "Zerbitzaria"
 
@@ -8017,10 +8040,6 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Zerbitzariaren Ezaugarriak:"
-
-#, fuzzy
-#~ msgid "Server Uptime"
-#~ msgstr "%s gordea"
 
 #, fuzzy
 #~ msgid "Set status message"
@@ -8116,10 +8135,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Ikusi _Deskonektatutako Kontaktuak"
-
-#, fuzzy
-#~ msgid "TLS Version"
-#~ msgstr "GTK+ Bertsioa:"
 
 #, fuzzy, python-format
 #~ msgid "TLS verification failed: %s"
@@ -8319,10 +8334,6 @@ msgstr ""
 #~ msgstr "Fitxero Transferentzia"
 
 #, fuzzy
-#~ msgid "_Help"
-#~ msgstr "_Laguntza"
-
-#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Log aktibatua"
 
@@ -8370,6 +8381,10 @@ msgstr ""
 #~ msgid "app.open-folder"
 #~ msgstr "_Ireki Fitxeroaren Edukia"
 
+#, fuzzy, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
+
 #~ msgid "file transfers list"
 #~ msgstr "fitxeroen transferentziaren lista"
 
@@ -8378,6 +8393,14 @@ msgstr ""
 #~ "has invited you to a group chat.\n"
 #~ "Do you want to join?"
 #~ msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
+
+#, fuzzy, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
+
+#, fuzzy, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "GTK+ Bertsioa:"
 
 #, fuzzy
 #~ msgctxt "Group chat address"

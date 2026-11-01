@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
-"PO-Revision-Date: 2026-08-24 18:20+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
+"PO-Revision-Date: 2026-10-31 18:20+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -274,6 +274,13 @@ msgstr "1 év"
 msgid "1 hour"
 msgstr "1 óra"
 
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "Egy üzenet törölve lesz a helyben tárolt beszélgetési előzményekből"
+msgstr[1] ""
+"%(count)d üzenet törölve lesz a helyben tárolt beszélgetési előzményekből"
+
 msgid "2 Days"
 msgstr "2 nap"
 
@@ -537,6 +544,9 @@ msgstr "A fiók nevének és színének beállítása"
 msgid "Add a setting you would like to change"
 msgstr "Módosítandó tulajdonság hozzáadása"
 
+msgid "Add affiliation"
+msgstr "Tagsági szint megadása"
+
 msgid "Add new Theme"
 msgstr "Új téma"
 
@@ -600,10 +610,6 @@ msgstr "Speciális beállítások"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "Speciális – %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw verzió: %s"
 
 msgid "Affiliation"
 msgstr "Tagsági szint"
@@ -866,6 +872,9 @@ msgstr "Mentési hiba"
 msgid "Backup Now"
 msgstr "Mentés most"
 
+msgid "Backup Password"
+msgstr "Mentési jelszó"
+
 msgid "Backup Secret Key"
 msgstr "Titkos kulcs mentése"
 
@@ -1046,6 +1055,9 @@ msgstr "Jelszócsere"
 msgid "Change Subject"
 msgstr "Témaváltás"
 
+msgid "Change group chat’s picture"
+msgstr "A társalgóbeli profilkép cseréje"
+
 msgid "Change your account’s password, etc."
 msgstr "A fiókjelszó módosítása stb."
 
@@ -1150,6 +1162,9 @@ msgstr "Csoport választása…"
 msgid "Choose encryption"
 msgstr "Titkosítási mód"
 
+msgid "Cipher Suite"
+msgstr "Titkosítási készlet"
+
 msgid "City"
 msgstr "Város"
 
@@ -1165,12 +1180,8 @@ msgstr "A beviteli mező törlése"
 msgid "Clear Sound"
 msgstr "Hang eltávolítása"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
-msgstr ""
-"További üzenetekre kattintva bővíthető,\n"
-"Ctrl + dupla kattintással szűkíthető a kijelölés."
+msgid "Click Gajim’s icon in the Dock to restore the window."
+msgstr "Az ablak a program Dock-ikonjával hozható elő."
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1225,9 +1236,6 @@ msgstr "A parancs végrehajtása sikerült"
 
 msgid "Commands"
 msgstr "Parancsok"
-
-msgid "Common Name (CN): "
-msgstr "Általános név (CN): "
 
 #, python-format
 msgid ""
@@ -1555,14 +1563,17 @@ msgid "Delete Message Locally?"
 msgstr "Üzenet törlése helyben"
 
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
-msgstr "Üzenet törlése helyben…"
+msgid "Delete Messages Locally…"
+msgstr "Üzenetek törlése helyben…"
 
 msgid "Delete Node?"
 msgstr "Elem törlése"
 
 msgid "Delete Theme?"
 msgstr "Téma törlése"
+
+msgid "Delete messages…"
+msgstr "Üzenetek törlése…"
 
 msgid "Deny"
 msgstr "Elutasítás"
@@ -1667,10 +1678,6 @@ msgstr ""
 "Biztosan törölhető az összes beszélgetés a Gajimból?\n"
 "Figyelem: ez a művelet nem vonható vissza!\n"
 "A Gajim ki fog lépni a művelet végeztével."
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Biztos letiltható „%(name)s”?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "Biztos törölhető ez a PEP-elem?"
@@ -1931,12 +1938,6 @@ msgstr "Parancsvégrehajtás…"
 msgid "Executing…"
 msgstr "Parancsvégrehajtás…"
 
-msgid "Expires on: "
-msgstr "Lejárat: "
-
-msgid "Expiry date"
-msgstr "Lejárati dátum"
-
 msgid "Export"
 msgstr "Exportálás"
 
@@ -1982,6 +1983,12 @@ msgid ""
 msgstr ""
 "Önkifejezés: Néha nem elég a szó. A teljes önkifejezéshez küldhető "
 "visszajelzés, válasz, hangüzenet és állapotüzenet is."
+
+msgid "Extend selection one word left"
+msgstr "Kijelölés bővítése egy szóval balra"
+
+msgid "Extend selection one word right"
+msgstr "Kijelölés bővítése egy szóval jobbra"
 
 msgid "Extended Address"
 msgstr "További cím"
@@ -2081,9 +2088,6 @@ msgstr "Szűrés (aktív)"
 msgid "Fingerprint for this Device"
 msgstr "Ujjlenyomat ehhez az eszközhöz"
 
-msgid "Fingerprints"
-msgstr "Ujjlenyomatok"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "„%s” eszközeinek ujjlenyomatai"
@@ -2178,14 +2182,6 @@ msgstr "Teljes név"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Funkciógazdag XMPP üzenetküldő"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "GLib verzió: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "GTK verzió: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2351,6 +2347,9 @@ msgstr "HTTPS ellenőrzése"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Szia! $name vagyok. %s"
+
+msgid "Help"
+msgstr "Súgó"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr "Itt lehet a hiba reprodukálását segítő visszajelzést adni."
@@ -2541,6 +2540,10 @@ msgstr "Ajánlott egy kulcstartót telepíteni a jelszavak tárolásához."
 msgid "Install from Archive"
 msgstr "Telepítés csomagból"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr "Ehhez a titkosításhoz telepíteni kell ezt a bővítményt: %s."
+
 msgid "Installation failed"
 msgstr "A telepítés nem sikerült"
 
@@ -2599,24 +2602,6 @@ msgstr "Meghívottak"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Be van dugva és használható a mikrofon?"
-
-msgid "Issue date"
-msgstr "Kibocsátási dátum"
-
-msgid "Issued by"
-msgstr "Kibocsátó"
-
-msgid "Issued by\n"
-msgstr "Kibocsátó\n"
-
-msgid "Issued on: "
-msgstr "Érvényesség kezdete: "
-
-msgid "Issued to"
-msgstr "Tulajdonos"
-
-msgid "Issued to\n"
-msgstr "Tulajdonos\n"
 
 msgid "Issues detected"
 msgstr "Probléma észlelhető"
@@ -2832,6 +2817,9 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Csak tagoknak"
 
+msgid "Mention…"
+msgstr "Említés…"
+
 msgid "Message"
 msgstr "Üzenet"
 
@@ -2883,6 +2871,10 @@ msgstr "Percben megadott tétlenség, miután a jelenléti állapot megváltozik
 msgid "Miscellaneous"
 msgstr "Vegyes"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr "Hiányzó bővítmény: %s"
+
 msgid "Missing necessary encryption plugin"
 msgstr "A titkosítás bővítménye hiányzik"
 
@@ -2932,6 +2924,12 @@ msgstr "Beszélgetés mozgatása"
 
 msgid "Move Contact to New Group?"
 msgstr "Névjegy áthelyezése új csoportba"
+
+msgid "Move cursor one word left"
+msgstr "Kurzor mozgatása egy szóval balra"
+
+msgid "Move cursor one word right"
+msgstr "Kurzor mozgatása egy szóval jobbra"
 
 msgid "Move to Group"
 msgstr "Áthelyezés csoportba"
@@ -3278,9 +3276,6 @@ msgstr "Szervezet"
 msgid "Organization"
 msgstr "Szervezet"
 
-msgid "Organization (O): "
-msgstr "Szervezet (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Egyéb"
@@ -3340,10 +3335,6 @@ msgstr "PNG-fájlok"
 
 msgid "Packages"
 msgstr "Csomagok"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Pango verzió: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3650,6 +3641,12 @@ msgstr "Proxyk"
 msgid "Proxy"
 msgstr "Proxy"
 
+msgid "Proxy Host"
+msgstr "Proxy gépneve"
+
+msgid "Proxy Type"
+msgstr "Proxy típusa"
+
 msgid "Proxy, custom hostname and port"
 msgstr "Proxy, egyéni gépnév/port"
 
@@ -3667,12 +3664,6 @@ msgstr "Nyilvános titkosítókulcs"
 msgid "Public Information"
 msgstr "Nyilvános információ"
 
-msgid "Public Key Information"
-msgstr "Nyilvánoskulcs-információ"
-
-msgid "Public Key: "
-msgstr "Nyilvános kulcs: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
@@ -3685,10 +3676,6 @@ msgstr "Beszélgetési előzmények törlése"
 
 msgid "Purge all Chat History?"
 msgstr "Beszélgetési előzmények törlése"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "PyGObject verzió: %s"
 
 msgid "Quit"
 msgstr "Kilépés"
@@ -3737,9 +3724,6 @@ msgstr "Bővebben a vak bizalomról"
 
 msgid "Reason"
 msgstr "Indoklás"
-
-msgid "Reason (optional)"
-msgstr "Indoklás (nem kötelező)"
 
 msgid "Reason (optional)..."
 msgstr "Indoklás (nem kötelező)…"
@@ -3853,6 +3837,9 @@ msgstr "Téma törlése"
 
 msgid "Remove Workspace?"
 msgstr "Munkaterület törlése"
+
+msgid "Remove affiliation"
+msgstr "Tagsági szint törlése"
 
 msgid "Remove from Contact List…"
 msgstr "Törlés a névjegyekből…"
@@ -4035,12 +4022,6 @@ msgstr "Szerepkör"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s szerepkörei ebben a társalgóban törölve lettek"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "Hiba az SSL-tanúsítvány ellenőrzésekor"
@@ -4282,9 +4263,6 @@ msgstr "Továbbított névjegy: %(jid)s (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Továbbított névjegyek:"
 
-msgid "Serial Number: "
-msgstr "Sorozatszám: "
-
 msgid "Server Shutdown"
 msgstr "Kiszolgálói üzemszünet"
 
@@ -4446,6 +4424,9 @@ msgid ""
 msgstr ""
 "Az üzenet bizalmasságát leíró címkék megjelenítése, ha a kiszolgáló "
 "támogatja a XEP-0258 bővítményt"
+
+msgid "Show matching rules for addresses"
+msgstr "Címek szabályainak megjelenítése"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4647,9 +4628,6 @@ msgstr "Stílus"
 msgid "Subject"
 msgstr "Téma"
 
-msgid "Subject Alt Names: "
-msgstr "Tárgy alternatív nevei: "
-
 msgid "Subject issuer mismatch"
 msgstr "A tárgy és a kibocsátó eltérő"
 
@@ -4679,21 +4657,25 @@ msgstr "Létre lett hozva egy új munkamenet ezzel az eszközzel: {device_id}."
 msgid "Successfully imported key from server."
 msgstr "A kulcs importálása a kiszolgálóról sikerült."
 
+msgid "Successfully imported key."
+msgstr "A kulcs importálása sikerült."
+
 msgid "Support"
 msgstr "Támogatás"
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "Kilépés a Gajimból?\n"
 "Kilépés után nem lehet üzenetet küldeni és fogadni.\n"
 "\n"
 "Kilépés helyett a Gajim ablaka minimalizálható vagy teljesen el is rejthető. "
-"A program tálcaikonjával lehet az ablakot ismét megjeleníteni."
+"{restore_hint}"
 
 msgid "Switch to Chat 1"
 msgstr "Váltás az 1. beszélgetésre"
@@ -4805,6 +4787,9 @@ msgstr "Rendszertálcaikon"
 
 msgid "System Tray Notifications"
 msgstr "Tálcaikon-értesítések"
+
+msgid "TLS Version"
+msgstr "TLS verzió"
 
 msgid "Telephone"
 msgstr "Telefon"
@@ -5045,8 +5030,19 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "Az üzenet OpenPGP-vel van titkosítva, és nem lehet visszafejteni."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Az üzenet törölve lesz a helyben tárolt beszélgetési előzményekből"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+"A résztvevő el lesz távolítva a társalgóból, és meg lesz előzve az ismételt "
+"belépése. Opcionálisan megindokolható."
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
+"A résztvevő el lesz távolítva a társalgóból, de később ismét beléphet. "
+"Opcionálisan megindokolható."
 
 msgid "This plugin is managed by your operating system"
 msgstr "Ezt a bővítményt az operációs rendszer kezeli"
@@ -5368,11 +5364,17 @@ msgstr "A profilkép feltöltése nem sikerült: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Fájl feltöltése HTTP protokollal…"
 
+msgid "Uptime"
+msgstr "Üzemidő"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr "Dupla perjellel („//”) lehet perjellel („/”) kezdődő üzenet írni."
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI használata"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr "Az ablak a program rendszertálcaikonjával hozható elő."
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr "Kiszolgálóoldali támogatás esetén HTTP2 kérések küldése"
@@ -5414,12 +5416,6 @@ msgstr "Felhasználók"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Érvényesség"
-
-msgid "Validity\n"
-msgstr "Érvényesség\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5696,6 +5692,14 @@ msgid ""
 msgstr ""
 "Az ismerős nem fog értesülni az elérhetőségről, és nem fog tudni üzenni sem."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+"Mostantól %(name)s üzenetei nem jelennek meg, de továbbra is lehet üzenni "
+"neki."
+
 msgid "Your Backup Password"
 msgstr "Mentési jelszó"
 
@@ -5841,6 +5845,9 @@ msgstr "_Funkciók"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Ráér beszélgetni"
+
+msgid "_Hide (Dock Icon)"
+msgstr "_Elrejtés (Dock-ikon)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "_Elrejtés (tálcaikon)"
@@ -6011,10 +6018,6 @@ msgstr "irány"
 msgid "building"
 msgstr "épület"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "cairo verzió: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "csevegés;üzenetküldés;azonnali üzenetküldő;xmpp;voip;"
@@ -6059,10 +6062,6 @@ msgstr "legutóbb látva: %s"
 msgid "lat"
 msgstr "szélesség"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup verzió: %s"
-
 msgid "locality"
 msgstr "fekvés"
 
@@ -6080,14 +6079,6 @@ msgstr "félbehagyta a gépelést"
 
 msgid "postalcode"
 msgstr "irányítószám"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "pycairo verzió: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp verzió: %s"
 
 msgid "region"
 msgstr "régió"
@@ -6478,6 +6469,16 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Adjust to status"
 #~ msgstr "Jelenléti állapot szerint"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw verzió: %s"
+
+#~ msgid "Agent JID - node"
+#~ msgstr "Ügynök JID – csomópont"
+
+#~ msgid "Agent name"
+#~ msgstr "Ügynöknév"
+
 #~ msgid "Algorithm"
 #~ msgstr "Algoritmus"
 
@@ -6611,9 +6612,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "A névjegy csoportjai"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "Titkosítási készlet"
-
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Eltávolíthatóak az eszközök?"
 
@@ -6625,6 +6623,13 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Az üzenetbeviteli mező törlése"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "További üzenetekre kattintva bővíthető,\n"
+#~ "Ctrl + dupla kattintással szűkíthető a kijelölés."
 
 #~ msgid "Click to change time display"
 #~ msgstr "A kijelzési mód kattintással váltható"
@@ -6644,6 +6649,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Általános név (CN)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "Általános név (CN): "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "Parancs vagy becenév kiegészítése"
@@ -6778,6 +6786,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Dismiss"
 #~ msgstr "Elutasítás"
 
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Biztos letiltható „%(name)s”?"
+
 #~ msgid "Domain"
 #~ msgstr "Tartomány"
 
@@ -6874,6 +6886,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Expires on"
 #~ msgstr "Vége"
 
+#~ msgid "Expires on: "
+#~ msgstr "Lejárat: "
+
+#~ msgid "Expiry date"
+#~ msgstr "Lejárati dátum"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Család"
@@ -6925,6 +6943,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Fingerprint"
 #~ msgstr "Ujjlenyomat"
 
+#~ msgid "Fingerprints"
+#~ msgstr "Ujjlenyomatok"
+
 #~ msgid ""
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr ""
@@ -6933,6 +6954,14 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Full Message View"
 #~ msgstr "Teljes üzenet"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "GLib verzió: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "GTK verzió: %s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7040,8 +7069,26 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "A barátokat meg lehet hívni társalgókba, csatlakozni lehet társalgókhoz"
 
+#~ msgid "Issue date"
+#~ msgstr "Kibocsátási dátum"
+
+#~ msgid "Issued by"
+#~ msgstr "Kibocsátó"
+
+#~ msgid "Issued by\n"
+#~ msgstr "Kibocsátó\n"
+
 #~ msgid "Issued on"
 #~ msgstr "Kezdete"
+
+#~ msgid "Issued on: "
+#~ msgstr "Érvényesség kezdete: "
+
+#~ msgid "Issued to"
+#~ msgstr "Tulajdonos"
+
+#~ msgid "Issued to\n"
+#~ msgstr "Tulajdonos\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Üres fájlokat nem lehet küldeni"
@@ -7212,6 +7259,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Organization (O)"
 #~ msgstr "Szervezet (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Szervezet (O): "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Szervezeti egység (OU)"
 
@@ -7229,6 +7279,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Szü_net/folytatás"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Pango verzió: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "A jelszó tiltott karaktereket tartalmaz"
@@ -7265,11 +7319,15 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Project discussion"
 #~ msgstr "Projektmegbeszélés"
 
-#~ msgid "Proxy Host"
-#~ msgstr "Proxy gépneve"
+#~ msgid "Public Key Information"
+#~ msgstr "Nyilvánoskulcs-információ"
 
-#~ msgid "Proxy Type"
-#~ msgstr "Proxy típusa"
+#~ msgid "Public Key: "
+#~ msgstr "Nyilvános kulcs: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "PyGObject verzió: %s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7284,6 +7342,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Biztos tiltható ez az ismerős?"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "Indoklás (nem kötelező)"
 
 #~ msgid "Recent history"
 #~ msgstr "Legutóbbii üzenetek"
@@ -7300,9 +7361,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Remove Group..."
 #~ msgstr "Csoport törlése…"
-
-#~ msgid "Remove Notification"
-#~ msgstr "Értesítés törlése"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Közvetített kapcsolat törlése"
@@ -7353,8 +7411,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7431,6 +7495,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Serial Number"
 #~ msgstr "Sorozatszám"
 
+#~ msgid "Serial Number: "
+#~ msgstr "Sorozatszám: "
+
 #~ msgid "Server"
 #~ msgstr "Kiszolgáló"
 
@@ -7443,9 +7510,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Kiszolgálószoftver: %s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "A kiszolgáló üzemideje"
 
 #~ msgid "Set status message"
 #~ msgstr "Állapotüzenet beállítása"
@@ -7545,6 +7609,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Subject Alt Names"
 #~ msgstr "Tárgy alternatív nevei"
 
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Tárgy alternatív nevei: "
+
 #~ msgid "Submit"
 #~ msgstr "Alkalmaz"
 
@@ -7572,9 +7639,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Fiókok szinkronizálása"
-
-#~ msgid "TLS Version"
-#~ msgstr "TLS verzió"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7696,6 +7760,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "User name…"
 #~ msgstr "Átnevezés…"
 
+#~ msgid "Validity"
+#~ msgstr "Érvényesség"
+
+#~ msgid "Validity\n"
+#~ msgstr "Érvényesség\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Képkockasebesség"
 
@@ -7804,9 +7874,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "_File Transfer"
 #~ msgstr "_Fájlátvitel"
 
-#~ msgid "_Help"
-#~ msgstr "_Súgó"
-
 #~ msgid "_Login"
 #~ msgstr "_Bejelentkezés"
 
@@ -7846,6 +7913,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "bold"
 #~ msgstr "Félkövér"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "cairo verzió: %s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "sötét bőrtónus"
 
@@ -7870,6 +7941,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "help"
 #~ msgstr "súgó"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup verzió: %s"
+
 #~ msgid "light skin tone"
 #~ msgstr "világos bőrtónus"
 
@@ -7888,6 +7963,14 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "pycairo verzió: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "python-nbxmpp verzió: %s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

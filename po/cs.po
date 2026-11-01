@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2026-05-07 15:20+0000\n"
 "Last-Translator: Aozora Mei <ineudorfl@gmail.com>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -286,6 +286,13 @@ msgstr "1 rok"
 msgid "1 hour"
 msgstr "1 hodina"
 
+#, fuzzy, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "Tato zpráva bude odstraněna z vaší místní historie konverzace"
+msgstr[1] "Tato zpráva bude odstraněna z vaší místní historie konverzace"
+msgstr[2] "Tato zpráva bude odstraněna z vaší místní historie konverzace"
+
 msgid "2 Days"
 msgstr "2 dny"
 
@@ -549,6 +556,10 @@ msgstr "Přidat jméno a barvu k vašemu účtu"
 msgid "Add a setting you would like to change"
 msgstr "Přidat nastavení, které byste chtěli změnit"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Vztah"
+
 msgid "Add new Theme"
 msgstr "Přidat nový motiv vzhledu"
 
@@ -613,10 +624,6 @@ msgstr "Pokročilá nastavení"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr "Pokročilé – %(account)s"
-
-#, python-format
-msgid "Adw Version: %s"
-msgstr "Adw Verze: %s"
 
 msgid "Affiliation"
 msgstr "Vztah"
@@ -882,6 +889,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr "Hned jsem zpět"
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Vaše heslo"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1064,6 +1075,10 @@ msgstr "Změnit heslo"
 msgid "Change Subject"
 msgstr "Změnit"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Změnit profilový obrázek"
+
 msgid "Change your account’s password, etc."
 msgstr "Změnit heslo účtu apod."
 
@@ -1168,6 +1183,9 @@ msgstr "Vyberte skupinu…"
 msgid "Choose encryption"
 msgstr "Zvolte šifrování"
 
+msgid "Cipher Suite"
+msgstr "Sada šifer"
+
 msgid "City"
 msgstr "Město"
 
@@ -1183,12 +1201,8 @@ msgstr "Vyčistit vstup"
 msgid "Clear Sound"
 msgstr "Vyčistit zvuk"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"Vyberte zprávy kliknutím\n"
-"(Ctrl + dvojklik pro zrušení výběru)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1242,9 +1256,6 @@ msgstr "Příkaz úspěšně proveden"
 
 msgid "Commands"
 msgstr "Příkazy"
-
-msgid "Common Name (CN): "
-msgstr "Běžné jméno (CN): "
 
 #, python-format
 msgid ""
@@ -1574,8 +1585,9 @@ msgstr "Smazat otisk?"
 msgid "Delete Message Locally?"
 msgstr "Odstranit místně uložené zprávy?"
 
+#, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Odstranit místně uložené zprávy…"
 
 msgid "Delete Node?"
@@ -1583,6 +1595,10 @@ msgstr "Smazat uzel?"
 
 msgid "Delete Theme?"
 msgstr "Smazat motiv vzhledu?"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Vyberte zprávy…"
 
 msgid "Deny"
 msgstr "Odmítnout"
@@ -1691,10 +1707,6 @@ msgstr ""
 "Skutečně si přejete odstranit všechny zprávy z Gajimu?\n"
 "Varování: Tuto akci nelze vrátit zpět!\n"
 "Gajim bude poté ukončen."
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Opravdu si přejete zablokovat %(name)s?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "Chcete smazat tento uzel PEP?"
@@ -1957,12 +1969,6 @@ msgstr "Spustit příkaz…"
 msgid "Executing…"
 msgstr "Spouštím…"
 
-msgid "Expires on: "
-msgstr "Vyprší: "
-
-msgid "Expiry date"
-msgstr "Datum expirace"
-
 msgid "Export"
 msgstr "Exportovat"
 
@@ -2009,6 +2015,12 @@ msgid ""
 msgstr ""
 "Vyjadřete se: Někdy slova nestačí. Použijte reakce, odpovědi, nahrajte "
 "hlasové zprávy a posílejte aktualizace stavu, abyste se plně vyjádřili."
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
+msgstr ""
 
 msgid "Extended Address"
 msgstr "Rozšířená adresa"
@@ -2108,9 +2120,6 @@ msgstr "Filtry (aktivní)"
 msgid "Fingerprint for this Device"
 msgstr "Otisk pro toto zařízení"
 
-msgid "Fingerprints"
-msgstr "Otisky"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Otisky zařízení připojených k \"%s\""
@@ -2205,14 +2214,6 @@ msgstr "Celé jméno"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Plně vybavený klient XMPP"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "Verze GLib: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "Verze GTK: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2377,6 +2378,10 @@ msgstr "Ověření HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Ahoj, já jsem $name. %s"
+
+#, fuzzy
+msgid "Help"
+msgstr "Nápověda"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2571,6 +2576,10 @@ msgstr "Nainstalovat klíčenku pro ukládání hesel do vašeho systému."
 msgid "Install from Archive"
 msgstr "Nainstalovat zásuvný modul z archivu"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "Instalace selhal"
 
@@ -2629,24 +2638,6 @@ msgstr "Pozvaní"
 
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Je mikrofon zapojen a přístupný?"
-
-msgid "Issue date"
-msgstr "Datum vystavení"
-
-msgid "Issued by"
-msgstr "Vystaveno"
-
-msgid "Issued by\n"
-msgstr "Vystaveno\n"
-
-msgid "Issued on: "
-msgstr "Vystaveno: "
-
-msgid "Issued to"
-msgstr "Vystaveno"
-
-msgid "Issued to\n"
-msgstr "Vystaveno\n"
 
 msgid "Issues detected"
 msgstr "Byly nalezeny problémy"
@@ -2863,6 +2854,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr "Pouze pro členy"
 
+#, fuzzy
+msgid "Mention…"
+msgstr "Přidat reakci…"
+
 msgid "Message"
 msgstr "Zpráva"
 
@@ -2914,6 +2909,10 @@ msgstr "Minuty, než se váš změní"
 msgid "Miscellaneous"
 msgstr "Ostatní"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
+
 msgid "Missing necessary encryption plugin"
 msgstr "Chybí nezbytný zásuvný modul pro šifrování"
 
@@ -2964,6 +2963,12 @@ msgstr "Přesunout konverzaci"
 
 msgid "Move Contact to New Group?"
 msgstr "Přesunout kontakt do nové skupiny?"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 msgid "Move to Group"
 msgstr "Přesunout do skupiny"
@@ -3314,9 +3319,6 @@ msgstr "Organizace"
 msgid "Organization"
 msgstr "Organizace"
 
-msgid "Organization (O): "
-msgstr "Organizace (O): "
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Ostatní"
@@ -3378,10 +3380,6 @@ msgstr "Soubory PNG"
 
 msgid "Packages"
 msgstr "Balíčky"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Verze Pango: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3689,6 +3687,12 @@ msgstr "Proxy"
 msgid "Proxy"
 msgstr "Proxy"
 
+msgid "Proxy Host"
+msgstr "Počítač proxy"
+
+msgid "Proxy Type"
+msgstr "Typ proxy"
+
 msgid "Proxy, custom hostname and port"
 msgstr "Proxy, použít vlastní jméno počítače / port"
 
@@ -3706,12 +3710,6 @@ msgstr "Veřejný šifrovací klíč"
 msgid "Public Information"
 msgstr "Veřejné informace"
 
-msgid "Public Key Information"
-msgstr "Informace o veřejném klíči"
-
-msgid "Public Key: "
-msgstr "Veřejný klíč: "
-
 #, python-format
 msgid "Pulse: %s"
 msgstr "Puls: %s"
@@ -3724,10 +3722,6 @@ msgstr "Smazat historii konverzace"
 
 msgid "Purge all Chat History?"
 msgstr "Smazat historii všech konverzací?"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr "Verze PyGObject: %s"
 
 msgid "Quit"
 msgstr "Ukončit"
@@ -3776,9 +3770,6 @@ msgstr "Přečtěte si více o slepé důvěře"
 
 msgid "Reason"
 msgstr "Důvod"
-
-msgid "Reason (optional)"
-msgstr "Důvod (nepovinné)"
 
 msgid "Reason (optional)..."
 msgstr "Důvod (nepovinné)..."
@@ -3895,6 +3886,10 @@ msgstr "Odstranit motiv vzhledu"
 
 msgid "Remove Workspace?"
 msgstr "Odstranit pracovní plochu?"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Odstranit upozornění"
 
 msgid "Remove from Contact List…"
 msgstr "Odstranit ze seznamu kontaktů…"
@@ -4078,12 +4073,6 @@ msgstr "Postavení"
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Role uživatelů %s byly v této skupinové konverzaci odebrány"
-
-msgid "SHA-1:"
-msgstr "SHA-1:"
-
-msgid "SHA-256:"
-msgstr "SHA-256:"
 
 msgid "SSL Certificate Verification Error"
 msgstr "Chyba při ověřování SSL certifikátu"
@@ -4330,9 +4319,6 @@ msgstr "Odeslán kontakt: \"%(jid)s\" (%(name)s)"
 msgid "Sent contacts:"
 msgstr "Odeslány kontakty:"
 
-msgid "Serial Number: "
-msgstr "Sériové číslo: "
-
 msgid "Server Shutdown"
 msgstr "Vypnutní serveru"
 
@@ -4499,6 +4485,9 @@ msgid ""
 "XEP-0258"
 msgstr ""
 "Zobrazovat štítky popisující důvěrnost zpráv, pokud server podporuje XEP-0258"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4697,9 +4686,6 @@ msgstr "Styl"
 msgid "Subject"
 msgstr "Předmět"
 
-msgid "Subject Alt Names: "
-msgstr "Alternativní jména subjektu: "
-
 msgid "Subject issuer mismatch"
 msgstr "Neshoduje se název vydavatele"
 
@@ -4729,15 +4715,20 @@ msgstr "Úspěšně vytvořena nová relace s zařízením {device_id}."
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Kontakt úspěšně odstraněn"
+
 msgid "Support"
 msgstr "Podpora"
 
+#, fuzzy, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 "Opravdu zavřít Gajim?\n"
 "Pokud tak učiníte, nebudete moci odesílat a přijímat zprávy.\n"
@@ -4857,6 +4848,9 @@ msgstr "Ikona systémové lišty"
 
 msgid "System Tray Notifications"
 msgstr "Oznámení na systémové liště"
+
+msgid "TLS Version"
+msgstr "Verze TLS"
 
 msgid "Telephone"
 msgstr "Telefon"
@@ -5096,8 +5090,15 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "Tato zpráva byla zašifrována pomocí OTR a nebylo možné ji dešifrovat."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Tato zpráva bude odstraněna z vaší místní historie konverzace"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
 
 msgid "This plugin is managed by your operating system"
 msgstr "Tento zásuvný modul je spravován vaším operačním systémem"
@@ -5416,11 +5417,18 @@ msgstr "Nahrávání profilového obrázku selhalo: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Odesílám přes HTTP…"
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Doba běhu serveru"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr "Použijte \"//\" pro napsání zprávy začínající s lomítkem \"/\"."
 
 msgid "Use GSSAPI"
 msgstr "Použít GSSAPI"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr ""
@@ -5462,12 +5470,6 @@ msgstr "Uživatelé"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Platnost"
-
-msgid "Validity\n"
-msgstr "Platnost\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5741,6 +5743,12 @@ msgstr ""
 "Tomuto kontaktu se budete zobrazovat jako nepřipojení a nebudete dostávat "
 "další zprávy."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Vaše heslo"
@@ -5887,6 +5895,10 @@ msgstr "Vlastnosti"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Otevřený konverzaci"
+
+#, fuzzy
+msgid "_Hide (Dock Icon)"
+msgstr "Schovat (ikona lišty) (_H)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "Schovat (ikona lišty) (_H)"
@@ -6058,10 +6070,6 @@ msgstr "způsob"
 msgid "building"
 msgstr "stavení"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "Verze cairo: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "konverzace;zprávy;im;xmpp;voip;"
@@ -6106,10 +6114,6 @@ msgstr "naposledy viděn: %s"
 msgid "lat"
 msgstr "zeměpisná šířka"
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "libsoup verze: %s"
-
 msgid "locality"
 msgstr "lokalita"
 
@@ -6127,14 +6131,6 @@ msgstr "pozastavil(a) psaní zprávy"
 
 msgid "postalcode"
 msgstr "PSČ"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr "Verze pycairo: %s"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr "Verze python-nbxmpp %s"
 
 msgid "region"
 msgstr "oblast"
@@ -6541,6 +6537,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Adjust to status"
 #~ msgstr "Nastavit podle stavu"
 
+#, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Adw Verze: %s"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Název účtu: "
+
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Skupiny"
@@ -6667,9 +6671,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Choose the contact's groups"
 #~ msgstr "Vyberte skupinové konverzace kontaktu"
 
-#~ msgid "Cipher Suite"
-#~ msgstr "Sada šifer"
-
 #~ msgid "Clear Devices?"
 #~ msgstr "Vyčistit zařízení?"
 
@@ -6679,6 +6680,13 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Clear message entry"
 #~ msgstr "Zpráva odeslána"
+
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "Vyberte zprávy kliknutím\n"
+#~ "(Ctrl + dvojklik pro zrušení výběru)"
 
 #~ msgid "Click to change time display"
 #~ msgstr "Kliknutím změníte zobrazení času"
@@ -6698,6 +6706,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Common Name (CN)"
 #~ msgstr "Common Name (CN)"
+
+#~ msgid "Common Name (CN): "
+#~ msgstr "Běžné jméno (CN): "
 
 #~ msgid "Complete a command or a nickname"
 #~ msgstr "Dokončeno"
@@ -6827,6 +6838,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Dismiss"
 #~ msgstr "Zrušit"
 
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Opravdu si přejete zablokovat %(name)s?"
+
 #~ msgid "Don’t show this again"
 #~ msgstr "Příště nezobrazovat"
 
@@ -6917,6 +6932,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Expires on"
 #~ msgstr "Vyprší"
 
+#~ msgid "Expires on: "
+#~ msgstr "Vyprší: "
+
+#~ msgid "Expiry date"
+#~ msgstr "Datum expirace"
+
 #~ msgctxt "Group chat name"
 #~ msgid "Family"
 #~ msgstr "Rodina"
@@ -6968,8 +6989,19 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Fingerprint"
 #~ msgstr "Otisky"
 
+#~ msgid "Fingerprints"
+#~ msgstr "Otisky"
+
 #~ msgid "Full Message View"
 #~ msgstr "Zobrazit celou zprávu"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "Verze GLib: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "Verze GTK: %s"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7072,8 +7104,26 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Invite friends to group chats or join one"
 #~ msgstr "Pozvěte přátele do skupinové konverzace, nebo se k jedné připojte"
 
+#~ msgid "Issue date"
+#~ msgstr "Datum vystavení"
+
+#~ msgid "Issued by"
+#~ msgstr "Vystaveno"
+
+#~ msgid "Issued by\n"
+#~ msgstr "Vystaveno\n"
+
 #~ msgid "Issued on"
 #~ msgstr "Vystaveno"
+
+#~ msgid "Issued on: "
+#~ msgstr "Vystaveno: "
+
+#~ msgid "Issued to"
+#~ msgstr "Vystaveno"
+
+#~ msgid "Issued to\n"
+#~ msgstr "Vystaveno\n"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Není možné posílat prázdné soubory"
@@ -7245,6 +7295,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Organization (O)"
 #~ msgstr "Organizace (O)"
 
+#~ msgid "Organization (O): "
+#~ msgstr "Organizace (O): "
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organizační jednotka (OJ)"
 
@@ -7262,6 +7315,10 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pozastavit/Pokračovat"
+
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Verze Pango: %s"
 
 #~ msgid "Password contains prohibited characters"
 #~ msgstr "Heslo obsahuje nepovolené znaky"
@@ -7300,11 +7357,15 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Project discussion"
 #~ msgstr "Diskuze o projektu"
 
-#~ msgid "Proxy Host"
-#~ msgstr "Počítač proxy"
+#~ msgid "Public Key Information"
+#~ msgstr "Informace o veřejném klíči"
 
-#~ msgid "Proxy Type"
-#~ msgstr "Typ proxy"
+#~ msgid "Public Key: "
+#~ msgstr "Veřejný klíč: "
+
+#, python-format
+#~ msgid "PyGObject Version: %s"
+#~ msgstr "Verze PyGObject: %s"
 
 #~ msgctxt "Message row action"
 #~ msgid "Quote…"
@@ -7319,6 +7380,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Really block this contact?"
 #~ msgstr "Opravdu si přejete zablokovat tento kontakt?"
+
+#~ msgid "Reason (optional)"
+#~ msgstr "Důvod (nepovinné)"
 
 #~ msgid "Recent history"
 #~ msgstr "Nedávná historie"
@@ -7335,9 +7399,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Remove Group..."
 #~ msgstr "Odstranit skupinu..."
-
-#~ msgid "Remove Notification"
-#~ msgstr "Odstranit upozornění"
 
 #~ msgid "Remove Transport"
 #~ msgstr "Odstranit přenosy"
@@ -7390,8 +7451,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "SHA-1"
 #~ msgstr "SHA-1"
 
+#~ msgid "SHA-1:"
+#~ msgstr "SHA-1:"
+
 #~ msgid "SHA-256"
 #~ msgstr "SHA-256"
+
+#~ msgid "SHA-256:"
+#~ msgstr "SHA-256:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -7467,6 +7534,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Serial Number"
 #~ msgstr "Sériové číslo"
 
+#~ msgid "Serial Number: "
+#~ msgstr "Sériové číslo: "
+
 #~ msgid "Server"
 #~ msgstr "Server"
 
@@ -7479,9 +7549,6 @@ msgstr "...nebo přetáhněte sem"
 #, python-format
 #~ msgid "Server Software: %s\n"
 #~ msgstr "Software serveru: %s\n"
-
-#~ msgid "Server Uptime"
-#~ msgstr "Doba běhu serveru"
 
 #~ msgid "Set status message"
 #~ msgstr "Nastavit zprávu o stavu"
@@ -7575,6 +7642,13 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Stopped sharing their status with you"
 #~ msgstr "Přestal/a s Vámi sdílet svůj stav"
 
+#, fuzzy
+#~ msgid "Subject Alt Names"
+#~ msgstr "Alternativní jména subjektu: "
+
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Alternativní jména subjektu: "
+
 #~ msgid "Submit"
 #~ msgstr "Předložit"
 
@@ -7602,9 +7676,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Synchronizovat účty"
-
-#~ msgid "TLS Version"
-#~ msgstr "Verze TLS"
 
 #, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7733,6 +7804,12 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "User name…"
 #~ msgstr "Uživatelské jméno"
 
+#~ msgid "Validity"
+#~ msgstr "Platnost"
+
+#~ msgid "Validity\n"
+#~ msgstr "Platnost\n"
+
 #~ msgid "Video Framerate"
 #~ msgstr "Snímková frekvence videa"
 
@@ -7838,9 +7915,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "_File Transfer"
 #~ msgstr "Přenos souborů"
 
-#~ msgid "_Help"
-#~ msgstr "Nápověda"
-
 #~ msgid "_Login"
 #~ msgstr "Přihlášení"
 
@@ -7886,6 +7960,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "bold"
 #~ msgstr "tučné"
 
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "Verze cairo: %s"
+
 #~ msgid "dark skin tone"
 #~ msgstr "tmavý motiv vzhledu"
 
@@ -7910,6 +7988,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "help"
 #~ msgstr "pomoc"
 
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "libsoup verze: %s"
+
 #~ msgid "light skin tone"
 #~ msgstr "světlý motiv vzhledu"
 
@@ -7928,6 +8010,14 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "Verze pycairo: %s"
+
+#, python-format
+#~ msgid "python-nbxmpp Version: %s"
+#~ msgstr "Verze python-nbxmpp %s"
 
 #~ msgctxt "Group chat address"
 #~ msgid "repairs"

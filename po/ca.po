@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -273,6 +273,12 @@ msgstr ""
 
 msgid "1 hour"
 msgstr ""
+
+#, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "2 Days"
 msgstr ""
@@ -557,6 +563,10 @@ msgid "Add a setting you would like to change"
 msgstr ""
 
 #, fuzzy
+msgid "Add affiliation"
+msgstr "_Accions"
+
+#, fuzzy
 msgid "Add new Theme"
 msgstr "Activa"
 
@@ -634,10 +644,6 @@ msgstr "Connectors"
 #, python-format
 msgid "Advanced – %(account)s"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Adw Version: %s"
-msgstr "Versió:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -923,6 +929,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr ""
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Desa la contrasenya"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1122,6 +1132,10 @@ msgstr "Canviar contrasenya"
 msgid "Change Subject"
 msgstr "Canvia Tema..."
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Canvia el teu nick (Ctrl+N)"
+
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1231,6 +1245,9 @@ msgstr ""
 msgid "Choose encryption"
 msgstr "Connexió"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1249,9 +1266,7 @@ msgstr "Neteja"
 msgid "Clear Sound"
 msgstr "Neteja"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
 
 #, fuzzy
@@ -1307,9 +1322,6 @@ msgid "Command executed successfully"
 msgstr "El compte s'ha configurat correctament"
 
 msgid "Commands"
-msgstr ""
-
-msgid "Common Name (CN): "
 msgstr ""
 
 #, python-format
@@ -1685,7 +1697,7 @@ msgstr "Missatges preconfigurats:"
 
 #, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Missatges preconfigurats:"
 
 #, fuzzy
@@ -1695,6 +1707,10 @@ msgstr "Activa"
 #, fuzzy
 msgid "Delete Theme?"
 msgstr "Activa"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Missatges preconfigurats:"
 
 msgid "Deny"
 msgstr ""
@@ -1806,10 +1822,6 @@ msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
-msgstr ""
-
-#, python-format
-msgid "Do you want to block %(name)s?"
 msgstr ""
 
 msgid "Do you want to delete this PEP node?"
@@ -2082,13 +2094,6 @@ msgid "Executing…"
 msgstr ""
 
 #, fuzzy
-msgid "Expires on: "
-msgstr "expira"
-
-msgid "Expiry date"
-msgstr ""
-
-#, fuzzy
 msgid "Export"
 msgstr "_Exporta"
 
@@ -2140,6 +2145,12 @@ msgstr "_Exporta"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 #, fuzzy
@@ -2255,9 +2266,6 @@ msgstr "Envia Missatge Privat"
 msgid "Fingerprint for this Device"
 msgstr ""
 
-msgid "Fingerprints"
-msgstr ""
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr ""
@@ -2362,14 +2370,6 @@ msgstr "Nom:"
 
 msgid "Fully-featured XMPP chat client"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "GLib Version: %s"
-msgstr "Versió:"
-
-#, fuzzy, python-format
-msgid "GTK Version: %s"
-msgstr "Versió:"
 
 #, fuzzy, python-format
 msgid "Gajim %s is available"
@@ -2548,6 +2548,10 @@ msgstr ""
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr ""
+
+#, fuzzy
+msgid "Help"
+msgstr "Ajuda"
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2746,6 +2750,10 @@ msgstr ""
 msgid "Install from Archive"
 msgstr "Instal·la des d'un zip"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Autenticació Anònima."
@@ -2817,24 +2825,6 @@ msgid "Invitees"
 msgstr "Con_vida"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
-
-msgid "Issue date"
-msgstr ""
-
-msgid "Issued by"
-msgstr ""
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-msgid "Issued to"
-msgstr ""
-
-msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
@@ -3078,6 +3068,10 @@ msgid "Members Only"
 msgstr "_Membre"
 
 #, fuzzy
+msgid "Mention…"
+msgstr "_Afegeix Contacte..."
+
+#, fuzzy
 msgid "Message"
 msgstr "Envia missatge"
 
@@ -3133,6 +3127,10 @@ msgstr "Mostra els canvis d'estat"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
+
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -3195,6 +3193,12 @@ msgstr "_Veu"
 #, fuzzy
 msgid "Move Contact to New Group?"
 msgstr "Fila del contacte"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 #, fuzzy
 msgid "Move to Group"
@@ -3575,9 +3579,6 @@ msgstr "Operacions d'Administració"
 msgid "Organization"
 msgstr "Operacions d'Administració"
 
-msgid "Organization (O): "
-msgstr ""
-
 msgctxt "Gender"
 msgid "Other"
 msgstr ""
@@ -3639,10 +3640,6 @@ msgstr "Perfil"
 
 msgid "Packages"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Pango Version: %s"
-msgstr "Versió:"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3973,6 +3970,14 @@ msgid "Proxy"
 msgstr "Prox_y:"
 
 #, fuzzy
+msgid "Proxy Host"
+msgstr "Port del servidor intermediari:"
+
+#, fuzzy
+msgid "Proxy Type"
+msgstr "Prox_y:"
+
+#, fuzzy
 msgid "Proxy, custom hostname and port"
 msgstr "Fa servir nomdeservidor/port"
 
@@ -3993,14 +3998,6 @@ msgstr "Connexió"
 msgid "Public Information"
 msgstr "Informació personal"
 
-#, fuzzy
-msgid "Public Key Information"
-msgstr "Informació personal"
-
-#, fuzzy
-msgid "Public Key: "
-msgstr "Connexió"
-
 #, python-format
 msgid "Pulse: %s"
 msgstr ""
@@ -4015,10 +4012,6 @@ msgstr "Historial"
 #, fuzzy
 msgid "Purge all Chat History?"
 msgstr "Historial"
-
-#, python-format
-msgid "PyGObject Version: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Quit"
@@ -4074,9 +4067,6 @@ msgstr ""
 #, fuzzy
 msgid "Reason"
 msgstr "Versió:"
-
-msgid "Reason (optional)"
-msgstr ""
 
 msgid "Reason (optional)..."
 msgstr ""
@@ -4214,6 +4204,10 @@ msgstr "Activa"
 #, fuzzy
 msgid "Remove Workspace?"
 msgstr "Afegeix un contacte nou"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
 msgid "Remove from Contact List…"
@@ -4422,12 +4416,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Sobrenom:"
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
-msgstr ""
 
 #, fuzzy
 msgid "SSL Certificate Verification Error"
@@ -4696,9 +4684,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr ""
 
-msgid "Serial Number: "
-msgstr ""
-
 #, fuzzy
 msgid "Server Shutdown"
 msgstr "Servidor:"
@@ -4892,6 +4877,9 @@ msgstr "Mostra Transports"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
+msgstr ""
+
+msgid "Show matching rules for addresses"
 msgstr ""
 
 msgid ""
@@ -5105,9 +5093,6 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-msgid "Subject Alt Names: "
-msgstr ""
-
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5140,15 +5125,20 @@ msgstr ""
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Afegeix un contacte nou"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 #, fuzzy
@@ -5293,6 +5283,10 @@ msgstr ""
 #, fuzzy
 msgid "System Tray Notifications"
 msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Versió:"
 
 msgid "Telephone"
 msgstr ""
@@ -5521,7 +5515,14 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-msgid "This message will be deleted from your local chat history"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
 msgstr ""
 
 msgid "This plugin is managed by your operating system"
@@ -5861,10 +5862,17 @@ msgstr ""
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+#, fuzzy
+msgid "Uptime"
+msgstr "Servidor:"
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Gajim’s system tray icon to restore the window."
 msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
@@ -5908,12 +5916,6 @@ msgstr ""
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Validity\n"
 msgstr ""
 
 msgctxt "Configuration"
@@ -6201,6 +6203,12 @@ msgid ""
 "messages."
 msgstr ""
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Desa la contrasenya"
@@ -6365,6 +6373,9 @@ msgstr "Característiques"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Disponible per parlar"
+
+msgid "_Hide (Dock Icon)"
+msgstr ""
 
 msgid "_Hide (Tray Icon)"
 msgstr ""
@@ -6562,10 +6573,6 @@ msgstr ""
 msgid "building"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "cairo Version: %s"
-msgstr "Versió:"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6611,10 +6618,6 @@ msgstr "Versió:"
 msgid "lat"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "libsoup Version: %s"
-msgstr "Versió:"
-
 msgid "locality"
 msgstr ""
 
@@ -6632,14 +6635,6 @@ msgid "paused composing a message"
 msgstr ""
 
 msgid "postalcode"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "pycairo Version: %s"
-msgstr "Versió:"
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
 msgstr ""
 
 msgid "region"
@@ -6893,6 +6888,14 @@ msgstr ""
 #~ msgid "Adjust to status"
 #~ msgstr "Ajustar a estat"
 
+#, fuzzy, python-format
+#~ msgid "Adw Version: %s"
+#~ msgstr "Versió:"
+
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Fila del compte "
+
 #, fuzzy
 #~ msgid "Archiving Preferences Error"
 #~ msgstr "Preferències"
@@ -7074,6 +7077,10 @@ msgstr ""
 #~ msgstr "expira"
 
 #, fuzzy
+#~ msgid "Expires on: "
+#~ msgstr "expira"
+
+#, fuzzy
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Transferència de Fitxers"
 
@@ -7100,6 +7107,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Full Message View"
 #~ msgstr "Envia Missatge Privat"
+
+#, fuzzy, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "Versió:"
+
+#, fuzzy, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "Versió:"
 
 #~ msgid "Gajim"
 #~ msgstr "Gajim"
@@ -7229,6 +7244,10 @@ msgstr ""
 #~ msgid "Organization (O)"
 #~ msgstr "Operacions d'Administració"
 
+#, fuzzy, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Versió:"
+
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Cancel.la la transferència de fitxer."
@@ -7250,12 +7269,12 @@ msgstr ""
 #~ msgstr "Preferències"
 
 #, fuzzy
-#~ msgid "Proxy Host"
-#~ msgstr "Port del servidor intermediari:"
+#~ msgid "Public Key Information"
+#~ msgstr "Informació personal"
 
 #, fuzzy
-#~ msgid "Proxy Type"
-#~ msgstr "Prox_y:"
+#~ msgid "Public Key: "
+#~ msgstr "Connexió"
 
 #, fuzzy, python-format
 #~ msgid "Reaction from %s (%s)"
@@ -7268,10 +7287,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove Chat History"
 #~ msgstr "Historial"
-
-#, fuzzy
-#~ msgid "Remove Notification"
-#~ msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
 #~ msgid "Remove Transport"
@@ -7363,10 +7378,6 @@ msgstr ""
 #~ msgstr "Servidor:"
 
 #, fuzzy
-#~ msgid "Server Uptime"
-#~ msgstr "Servidor:"
-
-#, fuzzy
 #~ msgid "Set status message"
 #~ msgstr "_Canvia Missatge d'Estat"
 
@@ -7440,10 +7451,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Synchronize Accounts"
 #~ msgstr "Sinc_ronitza l'estat del compte amb l'estat global"
-
-#, fuzzy
-#~ msgid "TLS Version"
-#~ msgstr "Versió:"
 
 #, fuzzy, python-format
 #~ msgid "TLS verification failed: %s"
@@ -7556,10 +7563,6 @@ msgstr ""
 #~ msgstr "Transferència de Fitxers"
 
 #, fuzzy
-#~ msgid "_Help"
-#~ msgstr "Ajuda"
-
-#, fuzzy
 #~ msgid "_Manage Account…"
 #~ msgstr "_Afegeix Contacte..."
 
@@ -7602,5 +7605,17 @@ msgstr ""
 #~ msgid "app.open-folder"
 #~ msgstr "_Obre Carpeta Contenidora"
 
+#, fuzzy, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "Versió:"
+
 #~ msgid "file transfers list"
 #~ msgstr "llista de trasferència de fitxers"
+
+#, fuzzy, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "Versió:"
+
+#, fuzzy, python-format
+#~ msgid "pycairo Version: %s"
+#~ msgstr "Versió:"

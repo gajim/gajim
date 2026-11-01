@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 20:34+0000\n"
+"POT-Creation-Date: 2026-10-31 11:52+0000\n"
 "PO-Revision-Date: 2026-02-22 20:19+0000\n"
 "Last-Translator: Agurzil n Ǧerǧer <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.gajim.org/projects/gajim/master/kab/"
@@ -277,6 +277,12 @@ msgstr "1 n useggas"
 msgid "1 hour"
 msgstr "1 usrag"
 
+#, fuzzy, python-format
+msgid "1 message will be deleted from you local chat history"
+msgid_plural "%(count)d messages will be deleted from your local chat history"
+msgstr[0] "Izen-agi ad yettwakkes seg uzray-ik·im adigan"
+msgstr[1] "Izen-agi ad yettwakkes seg uzray-ik·im adigan"
+
 msgid "2 Days"
 msgstr "2 n wussan"
 
@@ -533,6 +539,10 @@ msgstr "Rnu isem d yini i umiḍan-ik•im"
 msgid "Add a setting you would like to change"
 msgstr "Rnu iɣewwaren i tebɣiḍ ad tbeddeleḍ"
 
+#, fuzzy
+msgid "Add affiliation"
+msgstr "Rnu tasedmirt…"
+
 msgid "Add new Theme"
 msgstr "Rnu asentel amaynut"
 
@@ -595,10 +605,6 @@ msgstr ""
 
 #, python-format
 msgid "Advanced – %(account)s"
-msgstr ""
-
-#, python-format
-msgid "Adw Version: %s"
 msgstr ""
 
 msgid "Affiliation"
@@ -858,6 +864,10 @@ msgstr ""
 msgid "Backup Now"
 msgstr ""
 
+#, fuzzy
+msgid "Backup Password"
+msgstr "Awal-ik·im uffir"
+
 msgid "Backup Secret Key"
 msgstr ""
 
@@ -1040,6 +1050,10 @@ msgstr "Snifel awal n uɛeddi"
 msgid "Change Subject"
 msgstr "Snifel asentel"
 
+#, fuzzy
+msgid "Change group chat’s picture"
+msgstr "Snifel tugna n umaɣnu-ik·im"
+
 msgid "Change your account’s password, etc."
 msgstr "Snifel awal n uɛeddi n umiḍan-ik·im, atg."
 
@@ -1137,6 +1151,9 @@ msgstr "Fren agraw…"
 msgid "Choose encryption"
 msgstr "Fren awgelhen"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Tamdint"
 
@@ -1152,12 +1169,8 @@ msgstr "Sfeḍ inekcam"
 msgid "Clear Sound"
 msgstr "Sfeḍ imesli"
 
-msgid ""
-"Click messages to select them\n"
-"(Ctrl + Double Click to deselect)"
+msgid "Click Gajim’s icon in the Dock to restore the window."
 msgstr ""
-"Sit ɣef yiznan akken ad ten-tferneḍ\n"
-"(Ctrl + Sit snat tikal i ufran)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Sit ɣef yinermisen i tebɣiḍ ad d-tɛerḍeḍ ɣer ugraw-agi n udiwenni."
@@ -1209,9 +1222,6 @@ msgstr "Taladna tettwaselkem akken iwata"
 
 msgid "Commands"
 msgstr "Tiludna"
-
-msgid "Common Name (CN): "
-msgstr ""
 
 #, python-format
 msgid ""
@@ -1536,8 +1546,9 @@ msgstr "Kkes Adsil umḍin?"
 msgid "Delete Message Locally?"
 msgstr "Kkes izen s wudem adigan?"
 
+#, fuzzy
 msgctxt "Message row action"
-msgid "Delete Message Locally…"
+msgid "Delete Messages Locally…"
 msgstr "Kkes izen s wudem adigan…"
 
 msgid "Delete Node?"
@@ -1545,6 +1556,10 @@ msgstr "Kkes tikerrist?"
 
 msgid "Delete Theme?"
 msgstr "Kkes Asentel?"
+
+#, fuzzy
+msgid "Delete messages…"
+msgstr "Fren iznan…"
 
 msgid "Deny"
 msgstr "Agwi"
@@ -1648,10 +1663,6 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
-
-#, python-format
-msgid "Do you want to block %(name)s?"
-msgstr "Tebɣiḍ ad tesweḥleḍ %(name)s?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr ""
@@ -1906,12 +1917,6 @@ msgstr "Selkem taladna…"
 msgid "Executing…"
 msgstr "Aselkem…"
 
-msgid "Expires on: "
-msgstr "Ad ifat di: "
-
-msgid "Expiry date"
-msgstr "Azemz n tagara"
-
 msgid "Export"
 msgstr "Sifed"
 
@@ -1955,6 +1960,12 @@ msgstr "Sifeḍ…"
 msgid ""
 "Express yourself: Sometimes words are not enough. Use reactions, replies, "
 "record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
+msgid "Extend selection one word left"
+msgstr ""
+
+msgid "Extend selection one word right"
 msgstr ""
 
 msgid "Extended Address"
@@ -2055,9 +2066,6 @@ msgstr "Tistayin (yermden)"
 msgid "Fingerprint for this Device"
 msgstr "Adsil umḍin i yibenk-a"
 
-msgid "Fingerprints"
-msgstr "idsilen umḍinen"
-
 #, python-format
 msgid "Fingerprints of devices connected with \"%s\""
 msgstr "Idsilen umḍinen n yibenkan yeqqnen ɣer \"%s\""
@@ -2152,14 +2160,6 @@ msgstr "Isem ummid"
 
 msgid "Fully-featured XMPP chat client"
 msgstr "Amsaɣ ummid XMPP n udiwenni"
-
-#, python-format
-msgid "GLib Version: %s"
-msgstr "lqem GLib: %s"
-
-#, python-format
-msgid "GTK Version: %s"
-msgstr "lqem GTK: %s"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2319,6 +2319,9 @@ msgstr "Asenqed n HTTPS"
 #, python-format
 msgid "Hello, I am $name. %s"
 msgstr "Azul, nekk d $name. %s"
+
+msgid "Help"
+msgstr ""
 
 msgid "Here you can add some feedback which helps reproducing this problem."
 msgstr ""
@@ -2501,6 +2504,10 @@ msgstr "Sbedd azebg n tsura i uḥraz n wawalen uffiren deg unagraw-inek·inem."
 msgid "Install from Archive"
 msgstr "Sebded seg uɣbaṛ"
 
+#, python-format
+msgid "Install the %s Plugin to use this encryption method."
+msgstr ""
+
 msgid "Installation failed"
 msgstr "Asebded ur yeddi ara"
 
@@ -2558,24 +2565,6 @@ msgid "Invitees"
 msgstr ""
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
-
-msgid "Issue date"
-msgstr ""
-
-msgid "Issued by"
-msgstr ""
-
-msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on: "
-msgstr ""
-
-msgid "Issued to"
-msgstr ""
-
-msgid "Issued to\n"
 msgstr ""
 
 msgid "Issues detected"
@@ -2794,6 +2783,10 @@ msgctxt "Group chat feature"
 msgid "Members Only"
 msgstr ""
 
+#, fuzzy
+msgid "Mention…"
+msgstr "Rnu tasedmirt…"
+
 msgid "Message"
 msgstr ""
 
@@ -2845,6 +2838,10 @@ msgstr "Tisdanin i d-yeqqimen alamma ibeddel waddad-ik·im"
 msgid "Miscellaneous"
 msgstr "Ayen-nniḍen"
 
+#, python-format
+msgid "Missing %s Plugin"
+msgstr ""
+
 msgid "Missing necessary encryption plugin"
 msgstr "Azegrir n uwgelhen ulac-it"
 
@@ -2895,6 +2892,12 @@ msgstr "Smutti adiwenni usrid"
 
 msgid "Move Contact to New Group?"
 msgstr "Smutti anermis ɣer ugraw amaynut?"
+
+msgid "Move cursor one word left"
+msgstr ""
+
+msgid "Move cursor one word right"
+msgstr ""
 
 msgid "Move to Group"
 msgstr "Smutti ɣer ugraw"
@@ -3242,9 +3245,6 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
-msgid "Organization (O): "
-msgstr ""
-
 msgctxt "Gender"
 msgid "Other"
 msgstr ""
@@ -3304,10 +3304,6 @@ msgstr "Ifuyla PNG"
 
 msgid "Packages"
 msgstr "Ikemmusen"
-
-#, python-format
-msgid "Pango Version: %s"
-msgstr "Lqem Pango: %s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3606,6 +3602,12 @@ msgstr ""
 msgid "Proxy"
 msgstr ""
 
+msgid "Proxy Host"
+msgstr ""
+
+msgid "Proxy Type"
+msgstr ""
+
 msgid "Proxy, custom hostname and port"
 msgstr ""
 
@@ -3623,12 +3625,6 @@ msgstr ""
 msgid "Public Information"
 msgstr ""
 
-msgid "Public Key Information"
-msgstr ""
-
-msgid "Public Key: "
-msgstr ""
-
 #, python-format
 msgid "Pulse: %s"
 msgstr ""
@@ -3640,10 +3636,6 @@ msgid "Purge Chat History"
 msgstr ""
 
 msgid "Purge all Chat History?"
-msgstr ""
-
-#, python-format
-msgid "PyGObject Version: %s"
 msgstr ""
 
 msgid "Quit"
@@ -3695,9 +3687,6 @@ msgstr "Issin ugar ɣef teflest taderɣalt"
 
 msgid "Reason"
 msgstr "Tamentilt"
-
-msgid "Reason (optional)"
-msgstr "Tamentilt (afrayan)"
 
 msgid "Reason (optional)..."
 msgstr "Tamentilt (afrayan)…"
@@ -3814,6 +3803,10 @@ msgstr "Kkes asentel"
 
 msgid "Remove Workspace?"
 msgstr "Kkes tallunt n umahil?"
+
+#, fuzzy
+msgid "Remove affiliation"
+msgstr "Kkes asbadu"
 
 msgid "Remove from Contact List…"
 msgstr "Kkes seg tebdart n inermisen…"
@@ -3988,12 +3981,6 @@ msgstr ""
 
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
-msgstr ""
-
-msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256:"
 msgstr ""
 
 msgid "SSL Certificate Verification Error"
@@ -4240,9 +4227,6 @@ msgstr ""
 msgid "Sent contacts:"
 msgstr ""
 
-msgid "Serial Number: "
-msgstr ""
-
 msgid "Server Shutdown"
 msgstr "Yexsi uqeddac"
 
@@ -4410,6 +4394,9 @@ msgid ""
 msgstr ""
 "Sken tibzimin i d-yemmalen tabaḍnit n yiznan, ma yella aqeddac yessefrak "
 "XEP-0258"
+
+msgid "Show matching rules for addresses"
+msgstr ""
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4607,9 +4594,6 @@ msgstr "Aɣanib"
 msgid "Subject"
 msgstr "Amgay"
 
-msgid "Subject Alt Names: "
-msgstr "Ismawen imlellayen n umgay: "
-
 msgid "Subject issuer mismatch"
 msgstr "Amazan n umyag ur imṣada ara"
 
@@ -4639,15 +4623,20 @@ msgstr "Rnu tiɣimit tamaynutt s {device_id}."
 msgid "Successfully imported key from server."
 msgstr ""
 
+#, fuzzy
+msgid "Successfully imported key."
+msgstr "Inermisen ttwakksen akken iwata"
+
 msgid "Support"
 msgstr ""
 
+#, python-brace-format
 msgid ""
 "Sure you want to quit Gajim?\n"
 "You won’t be able to send and receive messages if you do.\n"
 "\n"
 "Alternatively, you can either minimize Gajim’s window, or hide it "
-"completely. Use Gajim’s system tray icon to restore the window."
+"completely. {restore_hint}"
 msgstr ""
 
 msgid "Switch to Chat 1"
@@ -4760,6 +4749,10 @@ msgstr ""
 
 msgid "System Tray Notifications"
 msgstr ""
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Lqem"
 
 msgid "Telephone"
 msgstr ""
@@ -4994,8 +4987,15 @@ msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr "Izen-agi yettwawgelhen s OTR yerna ur yezmir ara ad yettwazmek."
 
-msgid "This message will be deleted from your local chat history"
-msgstr "Izen-agi ad yettwakkes seg uzray-ik·im adigan"
+msgid ""
+"This participant will be removed and will be prevented from joining the chat "
+"again. You can specify a reason (optional)."
+msgstr ""
+
+msgid ""
+"This participant will be removed from the chat, but they can join again "
+"later. You can specify a reason (optional)."
+msgstr ""
 
 msgid "This plugin is managed by your operating system"
 msgstr "Azegrir-agi yessefrak-it unagraw n wammud-ik·im"
@@ -5314,11 +5314,17 @@ msgstr "Asali n tugna n avaṭar ur yeddi ara: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Asali s wudem n HTTP File Upload…"
 
+msgid "Uptime"
+msgstr ""
+
 msgid "Use \"//\" to start a message with a slash \"/\"."
 msgstr ""
 
 msgid "Use GSSAPI"
 msgstr "Seqdec GSSAPI"
+
+msgid "Use Gajim’s system tray icon to restore the window."
+msgstr ""
 
 msgid "Use HTTP2 for requests if there is server support"
 msgstr ""
@@ -5360,12 +5366,6 @@ msgstr "Iseqdacen"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid "Validity"
-msgstr "Aɣbal"
-
-msgid "Validity\n"
-msgstr "Aɣbal\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5641,6 +5641,12 @@ msgstr ""
 "Ad d-tbaneḍ deg uskar aruqqin i unermis-agi, ur d-tettaṭṭafeḍ ara iznan "
 "nniḍen."
 
+#, python-format
+msgid ""
+"You will not see further messages from %(name)s, but they can still see your "
+"messages."
+msgstr ""
+
 #, fuzzy
 msgid "Your Backup Password"
 msgstr "Awal-ik·im uffir"
@@ -5785,6 +5791,10 @@ msgstr "_Timahilin"
 msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_D ilelli i udiwenni"
+
+#, fuzzy
+msgid "_Hide (Dock Icon)"
+msgstr "_Ffer (Tignit n ufeggag n waddad)"
 
 msgid "_Hide (Tray Icon)"
 msgstr "_Ffer (Tignit n ufeggag n waddad)"
@@ -5955,10 +5965,6 @@ msgstr ""
 msgid "building"
 msgstr "azadaɣ"
 
-#, python-format
-msgid "cairo Version: %s"
-msgstr "Lqem n cairo: %s"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
@@ -6003,10 +6009,6 @@ msgstr "taskant taneggarut: %s"
 msgid "lat"
 msgstr ""
 
-#, python-format
-msgid "libsoup Version: %s"
-msgstr "Leqem libsoup: %s"
-
 msgid "locality"
 msgstr "tamnaṭ"
 
@@ -6024,14 +6026,6 @@ msgstr "ibedd tira n izen"
 
 msgid "postalcode"
 msgstr "angal n lbusṭa"
-
-#, python-format
-msgid "pycairo Version: %s"
-msgstr ""
-
-#, python-format
-msgid "python-nbxmpp Version: %s"
-msgstr ""
 
 msgid "region"
 msgstr ""
@@ -6083,6 +6077,10 @@ msgstr ""
 #~ msgid "Add some details…"
 #~ msgstr "Rnu kra n telqayt…"
 
+#, fuzzy
+#~ msgid "Agent name"
+#~ msgstr "Isem n umiḍan : "
+
 #~ msgid "Audio Preview"
 #~ msgstr "Taskant n umeslaw"
 
@@ -6095,6 +6093,17 @@ msgstr ""
 #~ msgid "Clear Devices…"
 #~ msgstr "Sfeḍ ibenkan…"
 
+#~ msgid ""
+#~ "Click messages to select them\n"
+#~ "(Ctrl + Double Click to deselect)"
+#~ msgstr ""
+#~ "Sit ɣef yiznan akken ad ten-tferneḍ\n"
+#~ "(Ctrl + Sit snat tikal i ufran)"
+
+#, python-format
+#~ msgid "Do you want to block %(name)s?"
+#~ msgstr "Tebɣiḍ ad tesweḥleḍ %(name)s?"
+
 #~ msgid "Eating"
 #~ msgstr "Učči"
 
@@ -6104,6 +6113,31 @@ msgstr ""
 #, python-format
 #~ msgid "Error: %s (mime types: %s)"
 #~ msgstr "Tuccḍa: %s (anawen n mim:%s)"
+
+#~ msgid "Expires on: "
+#~ msgstr "Ad ifat di: "
+
+#~ msgid "Expiry date"
+#~ msgstr "Azemz n tagara"
+
+#~ msgid "Fingerprints"
+#~ msgstr "idsilen umḍinen"
+
+#, python-format
+#~ msgid "GLib Version: %s"
+#~ msgstr "lqem GLib: %s"
+
+#, python-format
+#~ msgid "GTK Version: %s"
+#~ msgstr "lqem GTK: %s"
+
+#, fuzzy
+#~ msgid "IP / Port"
+#~ msgstr "Asagen"
+
+#, fuzzy
+#~ msgid "Key Size"
+#~ msgstr "Tiddi n teskant"
 
 #~ msgctxt "Group chat description"
 #~ msgid "Local help group"
@@ -6122,12 +6156,26 @@ msgstr ""
 #~ msgid "Notification Sounds"
 #~ msgstr "Imesli n tilɣa"
 
+#, python-format
+#~ msgid "Pango Version: %s"
+#~ msgstr "Lqem Pango: %s"
+
 #, fuzzy, python-format
 #~ msgid "Reaction from %s (%s)"
 #~ msgstr "Tigawin i \"%s\""
 
+#~ msgid "Reason (optional)"
+#~ msgstr "Tamentilt (afrayan)"
+
 #~ msgid "Start/stop playback"
 #~ msgstr "Bdu/seḥbes taɣuri"
+
+#, fuzzy
+#~ msgid "Subject Alt Names"
+#~ msgstr "Ismawen imlellayen n umgay: "
+
+#~ msgid "Subject Alt Names: "
+#~ msgstr "Ismawen imlellayen n umgay: "
 
 #, fuzzy
 #~ msgid "There are connected accounts"
@@ -6144,8 +6192,22 @@ msgstr ""
 #~ msgid "Use defined profile in configuration directory"
 #~ msgstr "Seqdec amaɣnu yettusbadun deg ukaram n twila"
 
+#~ msgid "Validity"
+#~ msgstr "Aɣbal"
+
+#~ msgid "Validity\n"
+#~ msgstr "Aɣbal\n"
+
 #~ msgid "Visual Notifications"
 #~ msgstr "Ilɣa s wudem tmeẓri"
 
 #~ msgid "bold"
 #~ msgstr "zur"
+
+#, python-format
+#~ msgid "cairo Version: %s"
+#~ msgstr "Lqem n cairo: %s"
+
+#, python-format
+#~ msgid "libsoup Version: %s"
+#~ msgstr "Leqem libsoup: %s"
