@@ -229,8 +229,8 @@ function main()
         setup_environment
 
     elif [ "$1" == "build-installer" ]; then
-        # pyinstaller_build
-        # msix_build
+        pyinstaller_build
+        msix_build
         nsis_build
 
     elif [ "$1" == "clean" ]; then
