@@ -34,18 +34,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          ./win/build.sh build
+          ./platform/win/build.sh setup
 
       - name: Build Installer
         run: |
-          ./win/build.sh create-installer
+          ./platform/win/build.sh build-installer
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Upload
         run: |
-          curl -T dist/Gajim-Installer.exe --ssl-reqd \
-          ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.exe"
+          curl -T dist/Gajim-Installer.exe --ssl-reqd "ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-${{ steps.date.outputs.date }}.exe"
 
       - name: Upload Portable
         run: |
-          curl -T dist/Gajim-Portable-Installer.exe --ssl-reqd \
-          ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-Portable-Nightly-${{ matrix.arch }}-${{ steps.date.outputs.date }}.exe"
+          curl -T dist/Gajim-Portable-Installer.exe --ssl-reqd "ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-${{ steps.date.outputs.date }}-Portable.exe"
+
+      - name: Upload MSIX
+        run: |
+          curl -T dist/Gajim.msixbundle --ssl-reqd "ftp://${{ secrets.ftp_user }}:${{ secrets.ftp_password }}@${{ secrets.ftp_server }}/./downloads/snap/win/Test-Gajim-${{ steps.date.outputs.date }}.msixbundle"
