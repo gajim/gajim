@@ -23,7 +23,7 @@ thoughts or discuss the news with your groups.
 - [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
 - [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-base)
 - [keyring](https://pypi.org/project/keyring/)
-- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.4.0)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=7.5.0)
 - [omemo-dr](https://gitlab.com/gajim/omemo-dr) (>=1.2.0)
 - [packaging](https://pypi.org/project/packaging/)
 - [httpx2](https://pypi.org/project/httpx2/)
