@@ -4,6 +4,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from pathlib import Path
+import subprocess
+
 gst_include_plugins = [
     "app",
     "applemedia",
@@ -43,13 +46,17 @@ gst_include_plugins = [
 ]
 
 
+CWD = Path.cwd().resolve()
+UCRT64_DIR = subprocess.check_output(["cygpath", "-w", os.environ["MSYSTEM_PREFIX"]], text=True).strip()
+
+
 a = Analysis(
     ['launch.py'],
     binaries=[
-        ("C:\\msys64\\ucrt64\\lib\\enchant-2\\enchant_winspell.dll", "lib\\enchant-2"),
+        (f"{UCRT64_DIR}/lib/enchant-2/enchant_winspell.dll", "lib/enchant-2"),
     ],
     datas=[  # typos: ignore
-        ("../../src/gajim/data", "gajim/data"),
+        (f"{CWD}/src/gajim/data", "gajim/data"),
     ],
     hooksconfig={
         "gi": {
