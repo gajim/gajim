@@ -1270,7 +1270,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def add_self_line(self):
         addr = get_agent_address(self.jid, self.node)
-        descr = f"<b>{addr}</b>"
+        descr = f"<b>{GLib.markup_escape_text(addr)}</b>"
         # Guess which kind of service this is
         identities: list[DiscoIdentity] = []
         client = app.get_client(self.account)
@@ -1684,10 +1684,11 @@ class ToplevelAgentBrowser(AgentBrowser):
 
         # Row text
         addr = get_agent_address(jid, node)
+        escaped_addr = GLib.markup_escape_text(addr)
         if item.name:
-            descr = f"<b>{item.name}</b>\n{addr}"
+            descr = f"<b>{GLib.markup_escape_text(item.name)}</b>\n{escaped_addr}"
         else:
-            descr = f"<b>{addr}</b>"
+            descr = f"<b>{escaped_addr}</b>"
         # Guess which kind of service this is
         identities: list[DiscoIdentity] = []
         client = app.get_client(self.account)
@@ -1721,14 +1722,15 @@ class ToplevelAgentBrowser(AgentBrowser):
         data: list[Any],
     ) -> None:
         addr = get_agent_address(jid, node)
+        escaped_addr = GLib.markup_escape_text(addr)
         if not identities:
-            descr = "<b>{addr}</b>"
+            descr = f"<b>{escaped_addr}</b>"
         else:
             name = identities[0].name or ""
             if name:
-                descr = f"<b>{name}</b>\n{addr}"
+                descr = f"<b>{GLib.markup_escape_text(name)}</b>\n{escaped_addr}"
             else:
-                descr = f"<b>{addr}</b>"
+                descr = f"<b>{escaped_addr}</b>"
 
         # Update progress
         self._progress += 1
@@ -2053,7 +2055,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         renderer = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(_("Node"))
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, "markup", 1)
+        # Node names come from the remote entity, show them as plain text
+        col.add_attribute(renderer, "text", 1)
         col.set_resizable(True)
         self.window.services_treeview.insert_column(col, -1)
 
