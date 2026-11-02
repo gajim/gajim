@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Any
 
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
@@ -164,6 +165,7 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         self._icon: Gdk.Paintable | None = None
         self._icon_name: str | None = None
         self._text: str = ""
+        self._uri: str | None = None
 
     @GObject.Property(type=Gdk.Paintable)
     def icon(self) -> Gdk.Paintable | None:  # type: ignore
@@ -206,10 +208,13 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
 
     def set_label(self, text: str, link_scheme: str | None = None) -> None:
         self._text = text
+        self._uri = f"{link_scheme}:{text}" if link_scheme else None
         self.set_visible(bool(text))
 
-        if link_scheme:
-            self._label.set_markup(f"<a href='{link_scheme}:{text}'>{text}</a>")
+        if self._uri is not None:
+            escaped_uri = GLib.markup_escape_text(self._uri)
+            escaped_text = GLib.markup_escape_text(text)
+            self._label.set_markup(f'<a href="{escaped_uri}">{escaped_text}</a>')
         else:
             self._label.set_text(text)
 
@@ -219,9 +224,10 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
             self._label.set_tooltip_text(text)
 
     @Gtk.Template.Callback()
-    @staticmethod
-    def _on_activate_link(label: Gtk.Label, *args: Any) -> int:
-        open_uri(label.get_current_uri() or label.get_text())
+    def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
+        # Open the URI built in set_label(), not the one reported by the
+        # label, so injected markup cannot change the link target
+        open_uri(self._uri or label.get_text())
         return Gdk.EVENT_STOP
 
     def do_unroot(self) -> None:
