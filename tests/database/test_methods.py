@@ -556,6 +556,14 @@ class MethodsTest(unittest.TestCase):
     def test_delete_message(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
 
+        occupant_data = mod.Occupant(
+            account_=self._account,
+            remote_jid_=remote_jid,
+            id="occupantid1",
+            nickname="nickname1",
+            updated_at=utc_now(),
+        )
+
         m = mod.Moderation(
             account_="testacc1",
             remote_jid_=remote_jid,
@@ -615,7 +623,7 @@ class MethodsTest(unittest.TestCase):
         retraction_data = mod.Retraction(
             account_=self._account,
             remote_jid_=remote_jid,
-            occupant_=None,
+            occupant_=occupant_data,
             id="stanzaid123",
             direction=ChatDirection.INCOMING,
             timestamp=utc_now(),
@@ -644,9 +652,10 @@ class MethodsTest(unittest.TestCase):
                 updated_at=utc_now(),
             ),
             thread_id_="testthreadid",
+            occupant_=occupant_data,
             encryption_=mod.Encryption(protocol="OMEMO", key="somekey", trust=1),
             call=mod.Call(sid="somesid", state=1),
-            oob=[mod.OOB(url="someurl", description="desc")],
+            oob=[mod.OOB(url="someurl123", description="desc")],
             og=[mod.OpenGraph(about="about", title="title")],
             reply=mod.Reply(id="132", to=None),
         )
@@ -665,8 +674,9 @@ class MethodsTest(unittest.TestCase):
             correction_id="123",
             text="corrected message",
             thread_id_="testthreadid",
+            occupant_=occupant_data,
             call=mod.Call(sid="somesid", state=1),
-            oob=[mod.OOB(url="someurl", description="desc")],
+            oob=[mod.OOB(url="someurl124", description="desc")],
             og=[mod.OpenGraph(about="about", title="title")],
             reply=mod.Reply(id="132", to=None),
         )
@@ -728,6 +738,16 @@ class MethodsTest(unittest.TestCase):
     def test_get_message_with_pk(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
 
+        occupant_data1 = mod.Occupant(
+            account_="testacc1",
+            remote_jid_=remote_jid,
+            id="someoccid",
+            real_remote_jid_=JID.from_string("real@remote.jid"),
+            nickname="peter",
+            avatar_sha="sha1",
+            updated_at=utc_now(),
+        )
+
         m = mod.Moderation(
             account_="testacc1",
             remote_jid_=remote_jid,
@@ -787,7 +807,7 @@ class MethodsTest(unittest.TestCase):
         retraction_data = mod.Retraction(
             account_=self._account,
             remote_jid_=remote_jid,
-            occupant_=None,
+            occupant_=occupant_data1,
             id="stanzaid123",
             direction=ChatDirection.INCOMING,
             timestamp=utc_now(),
@@ -816,15 +836,7 @@ class MethodsTest(unittest.TestCase):
                 updated_at=utc_now(),
             ),
             thread_id_="testthreadid",
-            occupant_=mod.Occupant(
-                account_="testacc1",
-                remote_jid_=remote_jid,
-                id="someoccid",
-                real_remote_jid_=JID.from_string("real@remote.jid"),
-                nickname="peter",
-                avatar_sha="sha1",
-                updated_at=utc_now(),
-            ),
+            occupant_=occupant_data1,
             encryption_=mod.Encryption(protocol="OMEMO", key="somekey", trust=1),
             call=mod.Call(sid="somesid", state=1),
             oob=[mod.OOB(url="someurl", description="desc")],
@@ -857,15 +869,7 @@ class MethodsTest(unittest.TestCase):
                 updated_at=utc_now(),
             ),
             thread_id_="testthreadid",
-            occupant_=mod.Occupant(
-                account_="testacc1",
-                remote_jid_=remote_jid,
-                id="someoccid",
-                real_remote_jid_=JID.from_string("real@remote.jid"),
-                nickname="peter",
-                avatar_sha="sha1",
-                updated_at=utc_now(),
-            ),
+            occupant_=occupant_data1,
             encryption_=mod.Encryption(protocol="OMEMO", key="some_cor_key", trust=1),
             call=mod.Call(sid="some_cor_sid", state=1),
             oob=[mod.OOB(url="some_cor_url", description="desc")],
@@ -934,7 +938,7 @@ class MethodsTest(unittest.TestCase):
         retraction_data = mod.Retraction(
             account_=self._account,
             remote_jid_=remote_jid,
-            occupant_=None,
+            occupant_=occupant_data1,
             id="stanzaid124",
             direction=ChatDirection.INCOMING,
             timestamp=utc_now(),
