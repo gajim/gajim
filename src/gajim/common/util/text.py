@@ -156,6 +156,11 @@ def make_href_markup(string: str | None) -> str:
         url = match.group()
         if "://" not in url:
             url = f"https://{url}"
+        elif not url.lower().startswith(("http://", "https://")):
+            # Labels using this markup are opened by GTK's default
+            # activate-link handler, which bypasses the scheme allowlist
+            # of open_uri(), so only link web URLs.
+            return url
         return f'<a href="{url}">{match.group()}</a>'
 
     return regex.URL_REGEX.sub(_to_href, string)
