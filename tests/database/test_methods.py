@@ -28,15 +28,16 @@ from gajim.common.util.datetime import utc_now
 
 class MethodsTest(unittest.TestCase):
     def setUp(self) -> None:
+        self._init_settings()
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
         self._account = "testacc1"
         self._occupant_id = "occupantid1"
-        self._init_settings()
 
     def tearDown(self) -> None:
         self._archive.shutdown()
+        app.settings = None
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)

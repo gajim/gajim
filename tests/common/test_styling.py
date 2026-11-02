@@ -4,8 +4,9 @@
 
 import unittest
 
-from gajim.common import app  # Avoids circular imports from common.helpers
+from gajim.common import app
 from gajim.common import styling
+from gajim.common.settings import Settings
 from gajim.common.styling import EmphasisSpan
 from gajim.common.styling import Hyperlink
 from gajim.common.styling import PlainBlock
@@ -16,9 +17,6 @@ from gajim.common.styling import QuoteBlock
 from gajim.common.styling import StrikeSpan
 from gajim.common.styling import StrongSpan
 from gajim.common.util.text import escape_iri_query
-
-app.settings.set("additional_uri_schemes", "a a- a. scheme")
-
 
 STYLING = {
     "pre cannot have children": {
@@ -623,7 +621,16 @@ URIS_WITH_TEXT = [
 ]
 
 
-class Test(unittest.TestCase):
+class StylingTest(unittest.TestCase):
+    def setUp(self) -> None:
+        app.settings = Settings(in_memory=True)
+        app.settings.init()
+
+        app.settings.set("additional_uri_schemes", "a a- a. scheme")
+
+    def tearDown(self) -> None:
+        app.settings = None
+
     @staticmethod
     def wrap(link: str) -> str:
         return f"Prologue (link: {link}), and epilogue!"

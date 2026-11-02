@@ -22,6 +22,7 @@ from gajim.common.storage.archive.storage import MessageArchiveStorage
 
 class ThreadsTest(unittest.TestCase):
     def setUp(self) -> None:
+        self._init_settings()
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
@@ -29,10 +30,10 @@ class ThreadsTest(unittest.TestCase):
         self._account_jid = JID.from_string("user@domain.org")
         self._remote_jid = JID.from_string("remote@jid.org")
         self._occupant_id = "occupantid1"
-        self._init_settings()
 
     def tearDown(self) -> None:
         self._archive.shutdown()
+        app.settings = None
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)

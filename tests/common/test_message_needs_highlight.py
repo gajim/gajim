@@ -5,17 +5,25 @@
 import unittest
 
 from gajim.common import app
+from gajim.common.settings import Settings
 from gajim.common.util.muc import message_needs_highlight
-
-app.settings.set("muc_highlight_words", "test;gajim")
-JID = "juliet@xmppserver"
-NICK = "Romeo"
 
 
 class HighlightTest(unittest.TestCase):
     """Tests for message_needs_highlight"""
 
+    def setUp(self) -> None:
+        app.settings = Settings(in_memory=True)
+        app.settings.init()
+        app.settings.set("muc_highlight_words", "test;gajim")
+
+    def tearDown(self) -> None:
+        app.settings = None
+
     def test_highlight(self):
+        JID = "juliet@xmppserver"
+        NICK = "Romeo"
+
         t_text1 = "Romeo: Does this work?"
         t_text2 = "Romeo:Does this work?"
         t_text3 = "Romeo Does this work?"

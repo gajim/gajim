@@ -25,16 +25,17 @@ from .util import mk_utc_dt
 
 class ReactionsTest(unittest.TestCase):
     def setUp(self) -> None:
+        self._init_settings()
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
         self._account = "testacc1"
         self._account_jid = JID.from_string("user@domain.org")
         self._remote_jid = JID.from_string("remote@jid.org")
-        self._init_settings()
 
     def tearDown(self) -> None:
         self._archive.shutdown()
+        app.settings = None
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)

@@ -24,6 +24,7 @@ class TestMigration(unittest.TestCase):
         Path("test.db").unlink(missing_ok=True)
         Path("test.db-shm").unlink(missing_ok=True)
         Path("test.db-wal").unlink(missing_ok=True)
+        app.settings = None
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)

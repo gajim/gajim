@@ -12,6 +12,7 @@ from datetime import UTC
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.settings import Settings
 from gajim.common.util.user_strings import get_uf_relative_time
 
 
@@ -23,10 +24,14 @@ class GetRelativeTimeTest(unittest.TestCase):
         os.environ["TZ"] = "Europe/Vienna"
         time.tzset()
 
+        app.settings = Settings(in_memory=True)
+        app.settings.init()
+
     @classmethod
     def tearDownClass(cls) -> None:
         os.environ.pop("TZ")
         time.tzset()
+        app.settings = None
 
     def test_sub_1_minute(self):
         """Test timedelta less than 1 minute"""

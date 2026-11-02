@@ -24,6 +24,7 @@ from gajim.common.storage.archive.storage import MessageArchiveStorage
 
 class CorrectionsTest(unittest.TestCase):
     def setUp(self) -> None:
+        self._init_settings()
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
@@ -31,17 +32,16 @@ class CorrectionsTest(unittest.TestCase):
         self._account_jid = JID.from_string("user@domain.org")
         self._remote_jid = JID.from_string("remote@jid.org")
         self._occupant_id = "occupantid1"
-        self._init_settings()
 
     def tearDown(self) -> None:
         self._archive.shutdown()
+        app.settings = None
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
         app.settings.add_account("testacc1")
         app.settings.set_account_setting("testacc1", "address", "user@domain.org")
-
         app.settings.add_account("testacc2")
         app.settings.set_account_setting("testacc2", "address", "user2@domain.org")
 

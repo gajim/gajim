@@ -12,7 +12,18 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.gtk.completion.nickname import NicknameCompletionProvider
 
 
-class Test(unittest.TestCase):
+class NickCompletionTest(unittest.TestCase):
+    def setUp(self) -> None:
+        app.get_client = MagicMock()
+        app.storage.archive = MagicMock()
+        app.storage.archive.get_recent_muc_nicks = MagicMock(
+            return_value=["Harry", "Joe"]
+        )
+
+    def tearDown(self) -> None:
+        del app.storage.archive
+        app.get_client = None
+
     def test_generate_suggestions(self):
         def _get_mock_participant(nick: str) -> GroupchatParticipant:
             participant = MagicMock(spec_set=GroupchatParticipant)
@@ -46,11 +57,6 @@ class Test(unittest.TestCase):
             ["Harry", "Joe", "7user", "Daisy", "Herbert", "Hugo", "Robert", "xavier"],
         )
 
-
-app.get_client = MagicMock()
-
-app.storage.archive = MagicMock()
-app.storage.archive.get_recent_muc_nicks = MagicMock(return_value=["Harry", "Joe"])
 
 if __name__ == "__main__":
     unittest.main()

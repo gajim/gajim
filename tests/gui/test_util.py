@@ -9,7 +9,7 @@ from gajim.common.util.muc import format_private_group_name
 from gajim.gtk.util.misc import get_first_grapheme
 
 
-class Test(unittest.TestCase):
+class UtilTest(unittest.TestCase):
     def disabled_test_get_first_grapheme(self):
         # This test fails on some machines
 
