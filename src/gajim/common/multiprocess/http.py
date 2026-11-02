@@ -9,9 +9,11 @@ from typing import Literal
 
 import hashlib
 import io
+import ipaddress
 import logging
 import math
 import queue
+import socket
 import ssl
 import threading
 from collections.abc import Iterable
@@ -31,6 +33,7 @@ from gajim.common.enum import FTState
 MIN_CHUNK_SIZE = 1024 * 100  # 100 KB
 DEFAULT_MAX_CONTENT_LENGTH = 1024 * 1024 * 10  # 10 MB
 NO_CONTENT_LENGTH_MAX_DOWNLOAD = 1024 * 1024  # 1 MB
+MAX_REDIRECTS = 5
 USER_AGENT = "Gajim 2.x"
 
 log = logging.getLogger("gajim.http")
@@ -81,6 +84,10 @@ class CancelledError(Exception):
     pass
 
 
+class RedirectNotAllowed(Exception):
+    pass
+
+
 class NonDecryptor:
     def decrypt(self, data: bytes) -> bytes:
         return data
@@ -109,6 +116,33 @@ def get_header_values(headers: httpx2.Headers) -> tuple[int | None, str | None]:
         content_type = None
 
     return content_length, content_type
+
+
+def is_global_host(host: str) -> bool:
+    try:
+        infos = socket.getaddrinfo(host, None)
+    except OSError:
+        return False
+
+    for info in infos:
+        address = ipaddress.ip_address(str(info[4][0]).split("%", 1)[0])
+        if not address.is_global:
+            return False
+    return bool(infos)
+
+
+def check_redirect(current: httpx2.URL, target: httpx2.URL, uses_proxy: bool) -> None:
+    if target.scheme not in ("http", "https"):
+        raise RedirectNotAllowed(f"Redirect to {target.scheme} not allowed")
+
+    if current.scheme == "https" and target.scheme != "https":
+        raise RedirectNotAllowed("Redirect from https to http not allowed")
+
+    if uses_proxy or target.host == current.host:
+        return
+
+    if is_global_host(current.host) and not is_global_host(target.host):
+        raise RedirectNotAllowed(f"Redirect to non-global host {target.host}")
 
 
 def get_chunk_size(content_length: int | None, max_download_size: int = 0) -> int:
@@ -157,7 +191,7 @@ def http_request(
         http2=http2,
         proxy=proxy,
         trust_env=trust_env,
-        follow_redirects=True,
+        follow_redirects=False,
     )
 
     if queue is not None:
@@ -247,6 +281,20 @@ def http_request(
         method, url=url, content=read_file_generator, params=params, headers=headers
     )
     resp = client.send(req, stream=True)
+
+    # Follow redirects manually, so every hop can be validated
+    redirects = 0
+    while resp.is_redirect and resp.next_request is not None:
+        redirects += 1
+        if redirects > MAX_REDIRECTS:
+            raise RedirectNotAllowed("Too many redirects")
+
+        next_request = resp.next_request
+        check_redirect(resp.request.url, next_request.url, proxy is not None)
+        resp.close()
+        if event.is_set():
+            raise CancelledError("HTTP Request was cancelled")
+        resp = client.send(next_request, stream=True)
 
     if event.is_set():
         raise CancelledError("HTTP Request was cancelled")
