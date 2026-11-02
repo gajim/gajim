@@ -52,6 +52,8 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.styling import PlainBlock
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.decorators import catch_exceptions
+from gajim.common.util.uri import filesystem_path_from_uri
+from gajim.common.util.uri import FileUri
 from gajim.common.util.uri import geo_provider_from_location
 from gajim.common.util.uri import GeoUri
 from gajim.common.util.uri import InvalidUri
@@ -442,6 +444,14 @@ def open_uri(uri: UriT | str) -> None:
                 open_uri_externally(uri.uri)
             else:
                 open_uri(geo_provider_from_location(uri.lat, uri.lon))
+
+        case FileUri():
+            # Go through open_file() so executables require confirmation
+            path = filesystem_path_from_uri(uri.uri)
+            if path is None:
+                log.warning("Refusing to open non-local file uri: %s", uri.uri)
+                return
+            open_file(path)
 
         case Uri():
             open_uri_externally(uri.uri)
