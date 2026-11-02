@@ -13,6 +13,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository.Gio import Menu
 from nbxmpp import JID
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import types
@@ -787,12 +788,15 @@ def _get_retract_param(
     if original_message.direction == ChatDirection.INCOMING:
         return
 
+    if isinstance(contact, GroupchatParticipant):
+        contact = contact.room
+
     if isinstance(contact, GroupchatContact):
         if not contact.is_joined:
             return
 
-    if isinstance(contact, GroupchatParticipant) and not contact.room.is_joined:
-        return
+        if not contact.supports(Namespace.OCCUPANT_ID):
+            return
 
     if not (retract_ids := original_message.get_ids_for_retract()):
         return

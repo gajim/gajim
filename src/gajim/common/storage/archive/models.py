@@ -1012,7 +1012,13 @@ Message.retraction = relationship(
         Retraction.fk_remote_pk == foreign(Message.fk_remote_pk),
         Retraction.fk_account_pk == foreign(Message.fk_account_pk),
         Retraction.direction == foreign(Message.direction),
-        Retraction.fk_occupant_pk.is_(Retraction.fk_occupant_pk),
+        expr.case(
+            (
+                foreign(Message.type).in_([2, 3]),  # Groupchat and PM
+                Retraction.fk_occupant_pk == Message.fk_occupant_pk,
+            ),
+            else_=Retraction.fk_occupant_pk.is_(None),
+        ),
     ),
     viewonly=True,
 )

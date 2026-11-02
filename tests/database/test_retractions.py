@@ -194,6 +194,73 @@ class RetractionTest(unittest.TestCase):
         assert message is not None
         self.assertIsNone(message.retraction)
 
+    def test_retractions_join_chat(self) -> None:
+        message_data1 = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            resource="someres1",
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.now(UTC),
+            state=MessageState.ACKNOWLEDGED,
+            id="1",
+            stanza_id="s1",
+            text="message",
+            occupant_=None,
+        )
+
+        message_data2 = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            resource="someres2",
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.now(UTC),
+            state=MessageState.ACKNOWLEDGED,
+            id="2",
+            stanza_id="s1",
+            text="message",
+            occupant_=None,
+        )
+
+        pk1 = self._archive.insert_object(message_data1)
+        pk2 = self._archive.insert_object(message_data2)
+
+        retraction_data1 = Retraction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=None,
+            id="1",
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.fromtimestamp(0, UTC),
+        )
+
+        retraction_data2 = Retraction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=None,
+            id="2",
+            direction=ChatDirection.OUTGOING,
+            timestamp=datetime.fromtimestamp(0, UTC),
+        )
+
+        self._archive.insert_row(retraction_data1, ignore_on_conflict=True)
+        self._archive.insert_row(retraction_data2, ignore_on_conflict=True)
+
+        message1 = self._archive.get_message_with_pk(pk1)
+        message2 = self._archive.get_message_with_pk(pk2)
+
+        assert message1 is not None
+        assert message1.retraction is not None
+        self.assertIsNone(message1.occupant)
+        self.assertEqual(message1.retraction.timestamp, datetime.fromtimestamp(0, UTC))
+        self.assertEqual(message1.retraction.id, "1")
+
+        # Retraction 1 is not joined with message 2 because of wrong id
+        # Retraction 2 is not joined with message 2 because of wrong direction
+        assert message2 is not None
+        self.assertIsNone(message2.retraction)
+
     def test_retractions_join_groupchat(self) -> None:
         occupant_data1 = Occupant(
             account_=self._account,
@@ -253,17 +320,7 @@ class RetractionTest(unittest.TestCase):
             timestamp=datetime.fromtimestamp(0, UTC),
         )
 
-        retraction_data2 = Retraction(
-            account_=self._account,
-            remote_jid_=self._remote_jid,
-            occupant_=occupant_data2,
-            id=uuid2,
-            direction=ChatDirection.INCOMING,
-            timestamp=datetime.fromtimestamp(0, UTC),
-        )
-
         self._archive.insert_row(retraction_data1, ignore_on_conflict=True)
-        self._archive.insert_row(retraction_data2, ignore_on_conflict=True)
 
         message1 = self._archive.get_message_with_pk(pk1)
         message2 = self._archive.get_message_with_pk(pk2)
@@ -275,12 +332,63 @@ class RetractionTest(unittest.TestCase):
         self.assertEqual(message1.retraction.id, uuid1)
         self.assertEqual(message1.retraction.occupant.id, "occupantid1")
 
+        # Retraction 1 is not joined with message 2
         assert message2 is not None
-        assert message2.retraction is not None
-        assert message2.retraction.occupant is not None
-        self.assertEqual(message2.retraction.timestamp, datetime.fromtimestamp(0, UTC))
-        self.assertEqual(message2.retraction.id, uuid2)
-        self.assertEqual(message2.retraction.occupant.id, "occupantid2")
+        self.assertIsNone(message2.retraction)
+
+        # Occupant 1 tries to retract message of Occupant 2
+        retraction_data2 = Retraction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=occupant_data1,
+            id=uuid2,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.fromtimestamp(0, UTC),
+        )
+
+        self._archive.insert_row(retraction_data2, ignore_on_conflict=True)
+
+        # Invalid retraction is not joined with message 2
+        message2 = self._archive.get_message_with_pk(pk2)
+        assert message2 is not None
+        self.assertIsNone(message2.retraction)
+
+        # Message in groupchat without occupant-id
+
+        uuid3 = get_uuid()
+        message_data3 = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            resource="someres1",
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.now(UTC),
+            state=MessageState.ACKNOWLEDGED,
+            id="1",
+            stanza_id=uuid3,
+            text="message",
+            occupant_=None,
+        )
+
+        pk3 = self._archive.insert_object(message_data3)
+
+        retraction_data3 = Retraction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=None,
+            id=uuid3,
+            direction=ChatDirection.INCOMING,
+            timestamp=datetime.fromtimestamp(0, UTC),
+        )
+
+        self._archive.insert_row(retraction_data3, ignore_on_conflict=True)
+
+        message3 = self._archive.get_message_with_pk(pk3)
+
+        # Retraction 3 is not joined because occupant-id is mandatory in group chats
+
+        assert message3 is not None
+        self.assertIsNone(message3.retraction)
 
 
 if __name__ == "__main__":

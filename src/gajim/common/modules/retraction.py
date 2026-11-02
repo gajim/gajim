@@ -100,7 +100,7 @@ class Retraction(BaseModule):
                 self._log.warning(
                     "Ignore unexpected retraction from: %s" % properties.jid
                 )
-                return
+                raise NodeProcessed
 
             occupant = get_occupant_info(
                 self._account,
@@ -112,6 +112,10 @@ class Retraction(BaseModule):
                 contact,
                 properties,
             )
+
+            if occupant is None:
+                self._log.warning("Ignore retraction in MUC without occupant-id")
+                raise NodeProcessed
 
         if properties.retraction.is_tombstone:
             assert properties.mam is not None
