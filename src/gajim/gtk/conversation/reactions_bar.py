@@ -12,6 +12,7 @@ import datetime as dt
 import logging
 from collections import defaultdict
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -201,7 +202,10 @@ class ReactionButton(Gtk.Button):
         emoji_presentation_form = f"{emoji}\ufe0f"
 
         format_string = app.settings.get("date_time_format")
-        tooltip_markup = f'<span size="200%">{emoji_presentation_form}</span>\n'
+        tooltip_markup = (
+            f'<span size="200%">'
+            f"{GLib.markup_escape_text(emoji_presentation_form)}</span>\n"
+        )
 
         self.from_us = False
         for reaction in reaction_data[:MAX_USERS]:
@@ -209,7 +213,8 @@ class ReactionButton(Gtk.Button):
                 self.from_us = True
 
             dt_str = reaction.timestamp.astimezone().strftime(format_string)
-            tooltip_markup += f"{reaction.username} ({dt_str})\n"
+            username = GLib.markup_escape_text(reaction.username)
+            tooltip_markup += f"{username} ({dt_str})\n"
         if len(reaction_data) > MAX_USERS:
             tooltip_markup += _("And more...")
 
