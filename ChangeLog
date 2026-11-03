@@ -1,3 +1,87 @@
+Gajim 2.7.0 (03 Nov 2026)
+
+  New
+
+  * Conversation: Select messages by dragging across them (#11752)
+  * MacOS: Show unread message count on Dock icon
+  * Chat: Add completion for xmpp: uris (#10789)
+  * ContactInfo: Show `last seen` info in the device tab
+  * GroupChat: Support password parameter in xmpp IRIs (#12814)
+  * Add message selection for deleting messages (#12575)
+
+  Improvements
+
+  * Conversation: Allow Shift + Click to select a range of messages (#11873)
+  * MUC: Improve rejoin logic
+  * Encryption: Improve information around the legacy PGP plugin
+  * Chat: Improve logic for nickname completion (#12828)
+  * Improve explanations for banning and blocking users
+  * Group chats: Show avatar for action context; add kick/ban explanation
+  * Account badge: Apply color contrast for text label (#12825)
+  * Show more debug information in About dialog (#12773)
+  * GroupChat: Improve logging for offline member presences
+  * Fix stale timezone hint (#12813)
+  * Chat: Show the most current "last seen" value (#12807)
+  * Group chats: Add 'Mention…' menu entry to participants list
+  * Shutdown Task Manager
+  * Avatar: Use the sRGB relative luminance
+  * Chat: Change default reaction emoji
+  * Improve encryption error message (#12790)
+
+  Change
+
+  * Raise nbxmpp to 7.5.0
+  * Switch Gajim to src layout
+  * Move tests to `tests` folder
+  * Switch from httpx to httpx2
+
+  Bug Fixes
+
+  * Retractions: Harden logic and make occupant-id mandatory
+  * Group chat management: Show correct tooltips for affiliation buttons (#12752)
+  * Message input: Don't accept tab; use Tab for focus switching (#12756)
+  * Chat: Fix conversations view not scrolling to bottom
+  * Notifications: Display group chat invite and subscribe icons
+  * Account preferences: Use account label in window title (not account id) (#12827)
+  * Assistant: Fix header position; improve icon position
+  * URI: Validate coordinates in geo URIs (#12843)
+  * MacOS: Copy selected messages with Cmd + C
+  * MacOS: Open xmpp URIs passed by the system (#12842)
+  * MacOS: Focus main window after closing a window (#12836)
+  * MacOS: Hide app natively so it can be restored from the Dock (#12834)
+  * MacOS: Avoid window flicker when dialogs open (#12835)
+  * Mark missing template strings as translatable
+  * Main window: Mark help button tooltip translatable
+  * Search View: Correct global scope and contact filtering
+  * Dataform: Allow empty value for list-single fields (#12838)
+  * FileTransfer: Decrypt fails if last file chunk is less than 16 bytes
+  * OpenPGPWizard: Show success page on successful import
+  * Group chats: Show full nickname/status when resizing participants list (#12826)
+  * Group chats: Fix confirming e.g. nick change via Enter (#12799)
+  * Drag and drop: Hide overlay before aborting file drop (#12770)
+  * Avatars: Request group chat avatar after cache removal (#12750)
+  * MacOS: Make moving cursor one word work again (#12823)
+  * Message Row: Prevent avatar context menu from shifting message content (#12588)
+  * Group chats: Fix avatar change button tooltip (#12816)
+  * X11: Call set_prgname() so WM_CLASS is set to `gajim`
+  * Unittests: Ensure fixed timezone during tests (#12775)
+  * ReactionsBar: Fix race condition when widget is destroyed
+  * ChatMarker: Init mds assist correctly (#12815)
+  * ArchiveStorage: Don't fail deleting message if corrections exist
+  * Preview: Avoid rendering insanely large images
+  * ImagePreview: Set minimum preview size
+  * ChatPage: Don't use save height for activity list/chat list (#12803)
+  * AppSideBar: Fix chat list toggle button icon direction (#12810)
+  * DebugConsole: Better discovery for sm nonzas
+  * GroupChat: Don't fail on determine groupchat name
+  * Application: Make startup more resilient
+  * OpenPGP: Query public keys only if encryption is active
+  * GroupChat: Fix attaching incorrect error messages in some cases
+  * Main: Only show titlebar if needed
+  * ActivityFeed: Correctly show activity page when needed
+  * Shutdown Pulse Manager on quit (#12727)
+  * VCardGrid: Correctly unroot dropdown
+
 Gajim 2.6.0 (26 Aug 2026)
 
   New
