@@ -248,11 +248,9 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             text = preview.text
             icon = preview.icon
 
-        text = GLib.markup_escape_text(text)
-        if text.startswith("/me ") and nickname is not None:
-            nickname = GLib.markup_escape_text(nickname)
+        is_me_message = text.startswith("/me ") and nickname is not None
+        if is_me_message:
             text = text.replace("/me", f"* {nickname}", 1)
-            text = f"<i>{text}</i>"
 
         # Split by newline and display last line (or first, if last is newline)
         lines = text.split("\n")
@@ -260,6 +258,11 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         if text.startswith("```"):
             text = _("Code snippet")
+
+        # Escape and wrap only the displayed line, so tags are always balanced
+        text = GLib.markup_escape_text(text)
+        if is_me_message:
+            text = f"<i>{text}</i>"
 
         self._ui.message_label.set_markup(text)
 
