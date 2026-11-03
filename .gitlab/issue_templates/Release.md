@@ -13,7 +13,6 @@
 * [ ] Push release tag `x.x.x`
 * [ ] Upload .msixbundle to Windows store
 * [ ] Check if macOS build has been [uploaded successfully](https://github.com/gajim/gajim/actions/workflows/gajim-macos-release-build.yml)
-* [ ] Close release milestone after new milestone has been created automatically
 
 ## Update
 
