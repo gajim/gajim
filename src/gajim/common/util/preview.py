@@ -8,6 +8,7 @@ import hashlib
 import logging
 import mimetypes
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import ParseResult
@@ -33,6 +34,10 @@ log = logging.getLogger("gajim.c.util.preview")
 
 MIME_TYPE_MAP = {"application/x-ext-webp": "image/webp"}
 
+# The extension is taken from a remote URL and becomes part of a local
+# filename, so only allow plain extensions
+SAFE_EXTENSION_RX = re.compile(r"\.[A-Za-z0-9]{1,10}")
+
 
 def get_image_paths(
     uri: str, urlparts: ParseResult, size: int, orig_dir: Path, thumb_dir: Path
@@ -40,6 +45,8 @@ def get_image_paths(
     path = Path(unquote(urlparts.path))
     web_stem = path.stem
     extension = path.suffix
+    if not SAFE_EXTENSION_RX.fullmatch(extension):
+        extension = ""
 
     web_stem = sanitize_filename(web_stem)
 
@@ -79,8 +86,10 @@ def format_geo_coords(coords: Coords) -> str:
 
 
 def filename_from_uri(uri: str) -> str:
-    urlparts = urlparse(unquote(uri))
-    path = Path(urlparts.path)
+    # Parse before unquoting, like get_image_paths(), so an encoded "?" or
+    # "#" cannot hide the real extension of the saved file
+    urlparts = urlparse(uri)
+    path = Path(unquote(urlparts.path))
     # Remove right-to-left override U+202E (commonly used to spoof extensions)
     return path.name.replace("\u202e", "")
 
