@@ -33,8 +33,8 @@
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/90/11/0e6f11117525ff0eec40ebac3d313376f102df93ca44ad9e893ee85e4f89/pycparser-3.11-py3-none-any.whl",
-                    "sha256": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80"
+                    "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+                    "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
                 }
             ]
         },
@@ -70,13 +70,13 @@
             "name": "python3-httpx2",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"httpx2[socks,http2]\" --no-build-isolation"
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"httpx2[http2,socks]\" --no-build-isolation"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/12/b8/4bd346e22b28902df4d651910f5242c28d84e4a5c2435ca5c3f797ed7e2e/anyio-4.15.1-py3-none-any.whl",
-                    "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101"
+                    "url": "https://files.pythonhosted.org/packages/a9/16/7757fb84c819accc7d7e9af5291b261e4abb8627ee040f99e7d35ef2457a/anyio-4.16.0-py3-none-any.whl",
+                    "sha256": "c66ae634e0b8228396b801741beb3294326d4b6102f7bba4041c0dfb58c29026"
                 },
                 {
                     "type": "file",
@@ -190,8 +190,8 @@
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/90/11/0e6f11117525ff0eec40ebac3d313376f102df93ca44ad9e893ee85e4f89/pycparser-3.11-py3-none-any.whl",
-                    "sha256": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80"
+                    "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+                    "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
                 },
                 {
                     "type": "file",
@@ -204,7 +204,7 @@
             "name": "python3-nbxmpp",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"nbxmpp>=7.4.0,<8.0.0\" --no-build-isolation"
+                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"nbxmpp>=7.5.0,<8.0.0\" --no-build-isolation"
             ],
             "sources": [
                 {
@@ -214,8 +214,8 @@
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/51/ef/a0935227bd25498fc81f0a717a3bd45b205dfb0d9ea885e61737fbadaddc/nbxmpp-7.4.0-py3-none-any.whl",
-                    "sha256": "5485285009c6471b19e1df55b431abf0822f7dc0e15ea3a6383833ae289ec506"
+                    "url": "https://files.pythonhosted.org/packages/48/5a/a351a1e981f1f9d20fbea675790d8b23b1bf5a9a8e4932fae30482974636/nbxmpp-7.5.0-py3-none-any.whl",
+                    "sha256": "d1b683cb459fb21f73367de5f92a0d91ac803756a5a61856c62a45896e0ad0a2"
                 },
                 {
                     "type": "file",
@@ -274,8 +274,8 @@
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/90/11/0e6f11117525ff0eec40ebac3d313376f102df93ca44ad9e893ee85e4f89/pycparser-3.11-py3-none-any.whl",
-                    "sha256": "51d5a8ba2be0bbe440b99d2112604c95bbbc3c2748a64260186c541e1729cd80"
+                    "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+                    "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
                 }
             ]
         },
@@ -360,16 +360,16 @@
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/8f/89/192d97b4296b3778c0f7ef7e098550f3c682edd1030e6ba6714e42b744ee/pysequoia-0.1.35-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
-                    "sha256": "95975adc23b8b81e8e6bcd531f6e72c23c336f7613c1f7055d7b7afa68c131a9",
+                    "url": "https://files.pythonhosted.org/packages/5d/e4/592d1ee246f1ff65dffa52e036b5137d9dabc50ea861bfa9f816f6aa1deb/pysequoia-0.1.36-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+                    "sha256": "252ed99d18dd01e63b0651a4049490468e67f4c50b096f34c9d7da9f3ca29f70",
                     "only-arches": [
                         "x86_64"
                     ]
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/72/0c/e617b065e55e0abfe3ab6cf17f7ab42d0d021c3bbc022074a139ab3d1f6a/pysequoia-0.1.35-cp314-cp314-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
-                    "sha256": "ee5e5fb8eaecfbd23fb9702fa3d4c3f1cd48afc4fd5cc92a442c9c6230ff70b3",
+                    "url": "https://files.pythonhosted.org/packages/42/27/a7fceb47fb52fd124f113d800385fb45e003bc25bb6c79ba9a902ca9c3b2/pysequoia-0.1.36-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.whl",
+                    "sha256": "0c7dbb5bc74297603273dc5ad1d92afef5f9c14e41ad9673b8cb47f0be83c71d",
                     "only-arches": [
                         "aarch64"
                     ]
@@ -399,8 +399,8 @@
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/de/e9/61176e4753f74ab5f6e72a56314ee654d25c31e6fc98c99060442998cccb/sqlalchemy-2.1.5-py3-none-any.whl",
-                    "sha256": "2f77b77b716f005b2dc3cc059d56df6a919bfb5b439e4149890a9df6c36be9e3"
+                    "url": "https://files.pythonhosted.org/packages/c1/69/c75534e336b06b3fd3f76de73d89736510800e60c77c58d4e4ce18389018/sqlalchemy-2.1.6-py3-none-any.whl",
+                    "sha256": "106878cf3795cd3d357e2e858609f9e44f20f19b2d8e48a3532bef3f90b03fbe"
                 },
                 {
                     "type": "file",
@@ -432,13 +432,13 @@
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/c4/51/29046e48f693c54e5b7412216d447a1d8362c9653148d98c02cdf65fa733/certifi-2026.10.19-py3-none-any.whl",
-                    "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"
+                    "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
+                    "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1"
                 },
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/d0/0b/0dd9686842d9dc49c3ee84cced31c54bceb0fb52a826be7d3d4fe30d882a/sentry_sdk-2.72.0-py3-none-any.whl",
-                    "sha256": "3e13ace4ffd0b3cc78288236edfc4e4bd90eb12a396cc5845fa10a58ff289f50"
+                    "url": "https://files.pythonhosted.org/packages/b2/88/cabf98d017d7b940720e514e5f8ee02e3e6f7495caf93c30735a38387ec4/sentry_sdk-2.73.0-py3-none-any.whl",
+                    "sha256": "0bcfa6928ea5adbb89591858b514d27adac27c7a3cccc31b20ed10e0b09eda9e"
                 },
                 {
                     "type": "file",
