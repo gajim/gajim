@@ -10,6 +10,7 @@ from typing import overload
 
 import logging
 
+from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
@@ -184,7 +185,8 @@ class RemoveChoice(AssistantPage):
             margin_top=40,
         )
         check_label.set_markup(
-            _("Do you want to unregister your account on <b>%s</b> as well?") % service
+            _("Do you want to unregister your account on <b>%s</b> as well?")
+            % GLib.markup_escape_text(service)
         )
 
         self._server = Gtk.CheckButton.new_with_mnemonic(
