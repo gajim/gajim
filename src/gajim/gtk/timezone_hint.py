@@ -7,6 +7,7 @@ from __future__ import annotations
 import datetime as dt
 from zoneinfo import ZoneInfo
 
+from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.modules.vcard4 import TzProperty
 from nbxmpp.modules.vcard4 import VCard
@@ -102,6 +103,9 @@ class TimezoneHint(Gtk.Box):
         assert self._contact is not None
         self._hint_label.set_markup(
             _("It's <b>%(time)s</b> for %(name)s")
-            % {"time": time_string, "name": self._contact.name}
+            % {
+                "time": GLib.markup_escape_text(time_string),
+                "name": GLib.markup_escape_text(self._contact.name),
+            }
         )
         self.set_visible(True)
