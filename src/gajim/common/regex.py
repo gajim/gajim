@@ -127,7 +127,8 @@ PRECIS.IdentifierClass = PRECISIdentifierClass
 class XMPP:
     _id = PRECIS.IdentifierClass
     _excl = "\"&'/:<>@"  # <#section-3.3.1>
-    localpart = rf"(?:(?![{_excl}{_id.Disallowed}])[{_id.Valid}])+"
+    localpart_char = rf"(?![{_excl}{_id.Disallowed}])[{_id.Valid}]"
+    localpart = rf"(?:{localpart_char})+"
     # ^ doesn't take into account "contextual rules" <rfc7564#section-4.2.2>
     ifqdn = rf"[{iunreserved}{sub_delims}]+"
     # ^ probably correct

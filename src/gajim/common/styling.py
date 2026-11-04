@@ -39,8 +39,11 @@ BLOCK_RX = re.compile(PRE_RX + "|" + QUOTE_RX, re.DOTALL | re.MULTILINE)
 BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + "|" + QUOTE_RX, re.DOTALL | re.MULTILINE)
 UNQUOTE_RX = re.compile(r"^> |^>", re.MULTILINE)
 
+# Like the URI, a JID may not start in the middle of a word. Without the
+# lookbehind, every position of a long word is tried, which takes O(n²).
 URI_OR_JID_RX = re.compile(
-    rf"(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})"
+    rf"(?P<uri>(?<![\w+.-]){regex.IRI})"
+    rf"|(?P<jid>(?<!{regex.XMPP.localpart_char}){regex.XMPP.jid})"
 )
 
 SD = 0
@@ -166,14 +169,12 @@ class ParsingResult:
     blocks: list[Block]
 
 
-def find_byte_index(text: str, index: int):
-    byte_index = -1
-    for index_, c in enumerate(text):
-        byte_index += len(c.encode())
-        if index == index_:
-            return byte_index
+def find_byte_index(text: str, index: int) -> int:
+    if not 0 <= index < len(text):
+        raise ValueError(f"index not in string: {text}, {index}")
 
-    raise ValueError(f"index not in string: {text}, {index}")
+    # Byte index of the last byte of the character at index
+    return len(text[: index + 1].encode()) - 1
 
 
 def process(text: str | bytes, level: int = 0) -> ParsingResult:
