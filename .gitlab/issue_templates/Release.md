@@ -12,12 +12,12 @@
 * [ ] Run `./scripts/bump_version.py x.x.x` (fetch tags from upstream first)
 * [ ] Push release tag `x.x.x`
 * [ ] Upload .msixbundle to Windows store
-* [ ] Check if macOS build has been [uploaded successfully](https://github.com/gajim/gajim/actions/workflows/gajim-macos-release-build.yml)
+* [ ] Check if macOS build has been [uploaded successfully](https://github.com/gajim/gajim/actions/workflows/macos-release-build.yml)
 
 ## Update
 
+* [ ] Website: Update screenshots if necessary
 * [ ] Website: Write announcement post with changelog
-* [ ] Website: Update screenshots
 * [ ] Website: Merge website translations from Weblate
 * [ ] MUC: Update MUC subject on gajim@conference.gajim.org
 * [ ] Publish release post on [Fosstodon](https://fosstodon.org/@gajim)
