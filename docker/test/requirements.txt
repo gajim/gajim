@@ -1,4 +1,4 @@
-ruff==0.16.2
+ruff==0.17.3
 codespell==2.4.2
 pycairo
 coverage

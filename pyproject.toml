@@ -63,7 +63,7 @@ dev = [
   "pytest>=9.0.2",
   "python-gitlab",
   "reuse",
-  "ruff==0.16.2",
+  "ruff==0.17.3",
   "sentry-sdk",
   "ty",
   "typos==1.50.3",
