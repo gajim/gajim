@@ -335,13 +335,14 @@ class MessageRow(BaseRow):
         ):
             return None
 
-        displaymarking = GLib.markup_escape_text(security_labels.displaymarking)
+        displaymarking = security_labels.displaymarking
         if displaymarking:
-            bgcolor = security_labels.bgcolor
-            fgcolor = security_labels.fgcolor
+            bgcolor = GLib.markup_escape_text(security_labels.bgcolor)
+            fgcolor = GLib.markup_escape_text(security_labels.fgcolor)
+            escaped_marking = GLib.markup_escape_text(displaymarking)
             markup = (
                 f'<span size="small" bgcolor="{bgcolor}" '
-                f'fgcolor="{fgcolor}"><tt>{displaymarking}</tt></span>'
+                f'fgcolor="{fgcolor}"><tt>{escaped_marking}</tt></span>'
             )
             return displaymarking, markup
         return None
