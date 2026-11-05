@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from gajim.common.util.image import get_pil_mime_types
+from gajim.common.util.image import get_pillow_mime_types
 from gajim.common.util.image import get_pixbuf_mime_types
 
 # This is an excerpt of Media Types from
@@ -106,7 +106,7 @@ VIDEO_MIME_TYPES = {
     "video/x-msvideo",
 }
 
-_PIL_IMAGE_MIME_TYPES = get_pil_mime_types()
+_PIL_IMAGE_MIME_TYPES = get_pillow_mime_types()
 _PIXBUF_IMAGE_MIME_TYPES = get_pixbuf_mime_types()
 IMAGE_MIME_TYPES = _PIL_IMAGE_MIME_TYPES | _PIXBUF_IMAGE_MIME_TYPES
 

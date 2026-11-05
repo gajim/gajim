@@ -14,7 +14,6 @@ from pathlib import Path
 
 import cairo
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import PangoCairo
 from nbxmpp.protocol import JID
@@ -31,8 +30,8 @@ from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.classes import Singleton
-from gajim.common.util.image import get_pixbuf_from_file
-from gajim.common.util.image import scale_with_ratio
+from gajim.common.util.image import load_image
+from gajim.common.util.image import ScalingType
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.status import get_client_status
 from gajim.common.util.status import get_global_show
@@ -59,6 +58,7 @@ OccupantAvatarCacheT = dict[JID, dict[tuple[str, int, int], Gdk.Texture]]
 
 CIRCLE_RATIO = 0.18
 CIRCLE_FILL_RATIO = 0.80
+MAX_AVATAR_PIXELS = 1024 * 1024
 
 
 def generate_avatar_letter(text: str) -> str:
@@ -705,18 +705,15 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def _load_for_publish(path: str) -> tuple[bool, bytes] | None:
-        pixbuf = get_pixbuf_from_file(path)
+        pixbuf = load_image(
+            Path(path),
+            size=AvatarSize.PUBLISH,
+            scaling=ScalingType.DOWN,
+            max_image_pixels=MAX_AVATAR_PIXELS,
+        )
         if pixbuf is None:
             return None
 
-        width = pixbuf.get_width()
-        height = pixbuf.get_height()
-        if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
-            # Scale only down, never up
-            width, height = scale_with_ratio(AvatarSize.PUBLISH, width, height)
-            pixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
-
-        assert pixbuf is not None
         return pixbuf.save_to_bufferv("png", [], [])
 
     @staticmethod
@@ -757,7 +754,7 @@ class AvatarStorage(metaclass=Singleton):
         if path is None:
             return None
 
-        pixbuf = get_pixbuf_from_file(path, size)
+        pixbuf = load_image(path, size=size, max_image_pixels=MAX_AVATAR_PIXELS)
         if pixbuf is None:
             return None
 

@@ -13,7 +13,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.open_graph_parser import OpenGraphData
-from gajim.common.util.image import get_texture_from_data
+from gajim.common.util.image import load_image
 from gajim.common.util.text import to_one_line
 
 from gajim.gtk.menus import get_preview_menu
@@ -85,7 +85,8 @@ class OpenGraphPreviewWidget(Gtk.Box, SignalManager):
             return
 
         if thumbnail := og_data.thumbnail:
-            texture = get_texture_from_data(thumbnail.data)
+            pixbuf = load_image(thumbnail.data)
+            texture = Gdk.Texture.new_for_pixbuf(pixbuf) if pixbuf is not None else None
             self._picture.set_paintable(texture)
             self._picture_clamp.set_visible(True)
             self._placeholder_image.set_visible(False)

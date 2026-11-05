@@ -279,7 +279,6 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
                 self._orig_path,
                 self._thumb_path,
                 app.settings.get("preview_size") * app.window.get_scale_factor(),
-                self._mime_type,
             )
             future.add_done_callback(
                 partial(GLib.idle_add, self._create_thumbnail_finished)
