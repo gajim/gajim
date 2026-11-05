@@ -1285,10 +1285,10 @@ class ConversationView(Gtk.ScrolledWindow):
             # Don't react to backdrop changes and focus changes when in background
             return
 
-        if previous_flags & Gtk.StateFlags.PRELIGHT:
-            self._message_row_actions.hide_actions()
-        else:
+        if current_flags & Gtk.StateFlags.PRELIGHT:
             self._update_message_row_actions(row)
+        else:
+            self._message_row_actions.hide_actions()
 
     def _update_message_row_actions(self, row: MessageRow) -> None:
         try:
