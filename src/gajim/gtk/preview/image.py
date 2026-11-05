@@ -19,8 +19,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.const import IMAGE_MIME_TYPES
-from gajim.common.const import VIDEO_MIME_TYPES
 from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.multiprocess.video_thumbnail import (
     extract_video_thumbnail_and_properties,
@@ -28,6 +26,8 @@ from gajim.common.multiprocess.video_thumbnail import (
 from gajim.common.util.filesystem import load_file_async
 from gajim.common.util.image import image_size
 from gajim.common.util.image import is_image_animated
+from gajim.common.util.media import IMAGE_MIME_TYPES
+from gajim.common.util.media import VIDEO_MIME_TYPES
 
 from gajim.gtk.preview.animated_image import AnimatedImage
 from gajim.gtk.preview.animated_image_backend import AnimatedImageBackend

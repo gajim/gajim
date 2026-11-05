@@ -17,15 +17,15 @@ from urllib.parse import urlparse
 from gi.repository import Gio
 
 from gajim.common import app
-from gajim.common.const import ALL_MIME_TYPES
-from gajim.common.const import AUDIO_MIME_TYPES
-from gajim.common.const import IMAGE_MIME_TYPES
-from gajim.common.const import VIDEO_MIME_TYPES
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.regex import IRI_RX
 from gajim.common.storage.archive import models as mod
 from gajim.common.util.filesystem import sanitize_filename
+from gajim.common.util.media import ALL_MIME_TYPES
+from gajim.common.util.media import AUDIO_MIME_TYPES
+from gajim.common.util.media import IMAGE_MIME_TYPES
+from gajim.common.util.media import VIDEO_MIME_TYPES
 from gajim.common.util.uri import Coords
 from gajim.common.util.uri import get_geo_choords
 

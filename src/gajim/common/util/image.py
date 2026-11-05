@@ -20,6 +20,29 @@ log = logging.getLogger("gajim.c.util.image")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
+def get_pixbuf_mime_types() -> set[str]:
+    pixbuf_mime_types: set[str] = set()
+
+    for fmt in GdkPixbuf.Pixbuf.get_formats():
+        mime_types = fmt.get_mime_types()
+        if not mime_types:
+            continue
+        for mime_type in mime_types:
+            pixbuf_mime_types.add(mime_type.lower())
+
+    return pixbuf_mime_types
+
+
+def get_pil_mime_types() -> set[str]:
+    pil_mime_types: set[str] = set()
+
+    Image.init()
+    for mime_type in Image.MIME.values():
+        pil_mime_types.add(mime_type.lower())
+
+    return set(filter(lambda mime_type: mime_type.startswith("image"), pil_mime_types))
+
+
 def get_texture_from_file(
     path: str | Path, size: int | None = None
 ) -> Gdk.Texture | None:

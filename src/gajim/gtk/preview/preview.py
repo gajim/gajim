@@ -19,7 +19,6 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import ALL_MIME_TYPES
 from gajim.common.enum import FTState
 from gajim.common.enum import PreviewState
 from gajim.common.file_transfer_manager import FileTransfer
@@ -30,6 +29,7 @@ from gajim.common.multiprocess.http import ContentEncodingNotAllowed
 from gajim.common.multiprocess.http import ContentTypeNotAllowed
 from gajim.common.multiprocess.http import HTTPStatusError
 from gajim.common.multiprocess.http import MaxContentLengthExceeded
+from gajim.common.util.media import ALL_MIME_TYPES
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import get_image_paths
 from gajim.common.util.preview import get_size_and_mime_type
