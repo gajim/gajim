@@ -31,6 +31,8 @@ def generate_url_preview(
         url=url,
         timeout=5,
         max_download_size=1024 * 150,
+        # Websites are usually compressed, only the beginning is read
+        allow_compression=True,
         proxy=proxy,
         http2=http2,
     )

@@ -88,6 +88,10 @@ class RedirectNotAllowed(Exception):
     pass
 
 
+class ContentEncodingNotAllowed(Exception):
+    pass
+
+
 class NonDecryptor:
     def decrypt(self, data: bytes) -> bytes:
         return data
@@ -171,6 +175,8 @@ def http_request(
     with_resp_progress: bool = False,
     max_content_length: int = DEFAULT_MAX_CONTENT_LENGTH,
     max_download_size: int = 0,
+    allow_compression: bool = False,
+    max_uncompressed_size: int = DEFAULT_MAX_CONTENT_LENGTH,
     allowed_content_types: Iterable[str] | None = None,
     hash_algo: str = "sha256",
     hash_value: str | None = None,
@@ -179,6 +185,13 @@ def http_request(
     proxy: str | None = None,
     http2: bool = False,
 ) -> HTTPResult:
+    """
+    Size limits (max_content_length, the fallback for responses without
+    Content-Length) apply to the bytes received. Without allow_compression,
+    compressed responses are refused. With it, the decoded data is limited
+    either by max_download_size (the data is returned up to that size) or,
+    if that is not set, by max_uncompressed_size (an exception is raised).
+    """
     trust_env = True
     if proxy == "direct://":
         proxy = None
@@ -214,6 +227,9 @@ def http_request(
     default_headers = {
         "User-Agent": USER_AGENT,
     }
+
+    if not allow_compression:
+        default_headers["Accept-Encoding"] = "identity"
 
     if content_type is not None:
         default_headers.update(
@@ -307,6 +323,12 @@ def http_request(
 
     content_length, content_type = get_header_values(resp.headers)
 
+    content_encoding = resp.headers.get("Content-Encoding", "identity").lower()
+    if not allow_compression and content_encoding != "identity":
+        # Limits are checked against the received bytes, a compressed
+        # response could decode to far more data
+        raise ContentEncodingNotAllowed(content_encoding)
+
     if queue is not None:
         queue.put(
             TransferMetadata(
@@ -352,6 +374,7 @@ def http_request(
 
     resp_hash_obj = hashlib.new(hash_algo)
     max_bytes_downloaded = content_length or NO_CONTENT_LENGTH_MAX_DOWNLOAD
+    decoded_bytes = 0
 
     with file_method() as output_file:
         chunk_size = get_chunk_size(content_length, max_download_size)
@@ -367,6 +390,16 @@ def http_request(
                     f"{resp.num_bytes_downloaded} > {max_bytes_downloaded}"
                 )
 
+            decoded_bytes += len(data)
+            if (
+                allow_compression
+                and max_download_size <= 0
+                and decoded_bytes > max_uncompressed_size >= 0
+            ):
+                raise MaxContentLengthExceeded(
+                    f"Uncompressed size {decoded_bytes} > {max_uncompressed_size}"
+                )
+
             resp_hash_obj.update(data)
             output_file.write(decryptor.decrypt(data))
             if with_resp_progress and queue is not None:
@@ -379,7 +412,7 @@ def http_request(
                     )
                 )
 
-            if resp.num_bytes_downloaded >= max_download_size > 0:
+            if decoded_bytes >= max_download_size > 0:
                 break
 
         data = decryptor.finalize()

@@ -26,6 +26,7 @@ from gajim.common.file_transfer_manager import FileTransfer
 from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
 from gajim.common.multiprocess.http import CancelledError
+from gajim.common.multiprocess.http import ContentEncodingNotAllowed
 from gajim.common.multiprocess.http import ContentTypeNotAllowed
 from gajim.common.multiprocess.http import HTTPStatusError
 from gajim.common.multiprocess.http import MaxContentLengthExceeded
@@ -418,6 +419,10 @@ class PreviewWidget(Gtk.Box, SignalManager):
 
         except OverflowError as error:
             log.info("Content-Length overflow for %s: %s", self._uri, error)
+            next_state = PreviewState.ERROR
+
+        except ContentEncodingNotAllowed as error:
+            log.info("Compressed response (%s) refused for %s", error, self._uri)
             next_state = PreviewState.ERROR
 
         except CancelledError:
