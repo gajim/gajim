@@ -216,6 +216,8 @@ class AccountProviderContactsGroup(GajimPreferencesGroup):
         return None
 
     def _get_address_label(self, address: str) -> Gtk.Label:
+        # Addresses come from the server
+        address = GLib.markup_escape_text(address)
         label = Gtk.Label(
             ellipsize=Pango.EllipsizeMode.END,
             halign=Gtk.Align.END,
