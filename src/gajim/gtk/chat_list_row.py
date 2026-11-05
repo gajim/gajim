@@ -134,10 +134,14 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         draft = app.storage.archive.get_contact_value(
             self.contact.account, self.contact.jid, "draft"
         )
-        if not self._set_draft_mode(draft):
-            self._display_last_conversation_row()
+        self._set_draft_mode(draft)
+        self.refresh_content()
 
-    def _display_last_conversation_row(self) -> None:
+    def refresh_content(self):
+        if not self.has_draft:
+            self._display_last_message()
+
+    def _display_last_message(self) -> None:
         message = app.storage.archive.get_last_conversation_row(
             self.contact.account, self.contact.jid, incl_related_data=True
         )
@@ -391,8 +395,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         _signal_name: str,
         draft: Draft | None,
     ) -> None:
-        if not self._set_draft_mode(draft):
-            self._display_last_conversation_row()
+        self._set_draft_mode(draft)
+        self.refresh_content()
         self.changed()
 
     def _set_draft_mode(self, draft: Draft | None) -> bool:

@@ -31,8 +31,6 @@ from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.muc import get_group_chat_nick
-from gajim.common.util.user_strings import get_moderation_text
-from gajim.common.util.user_strings import get_retraction_text
 
 from gajim.gtk import structs
 from gajim.gtk.chat_filter import ChatFilters
@@ -628,10 +626,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return
 
         if event.correction_id == row.message_id:
-            text = event.message.text
-            assert text is not None
-            _, text_nick = get_nickname_from_message(event.account, event.message)
-            row.set_message_text(text, nickname=text_nick)
+            row.refresh_content()
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         row = self._chats.get((event.account, event.jid))
@@ -639,8 +634,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return
 
         if event.moderation.stanza_id == row.stanza_id:
-            text = get_moderation_text(event.moderation.by, event.moderation.reason)
-            row.set_message_text(text)
+            row.refresh_content()
 
     def _on_message_retracted(self, event: events.MessageRetracted) -> None:
         row = self._chats.get((event.account, event.jid))
@@ -648,7 +642,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return
 
         if event.retraction.id in (row.message_id, row.stanza_id):
-            row.set_message_text(get_retraction_text(event.retraction.timestamp))
+            row.refresh_content()
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
