@@ -14,8 +14,6 @@ from html.parser import HTMLParser
 
 import nbxmpp.structs
 
-from gajim.common.util.text import to_one_line
-
 if typing.TYPE_CHECKING:
     from gajim.common.storage.archive import models as mod
 
@@ -26,6 +24,10 @@ ALLOWED_OG_PROPERTIES = [
     "og:description",
     "og:image",
 ]
+
+
+def _to_one_line(msg: str) -> str:
+    return " ".join(msg.splitlines())
 
 
 @dataclasses.dataclass
@@ -136,7 +138,7 @@ class OpenGraphParser(HTMLParser):
         return OpenGraphData(**self._attributes)
 
     def _cleanup(self, text: str) -> str:
-        return to_one_line(text).strip()
+        return _to_one_line(text).strip()
 
 
 class EOF(Exception):
