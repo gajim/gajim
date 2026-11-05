@@ -25,7 +25,8 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Display
 from gajim.common.i18n import _
-from gajim.common.util.image import scale_with_ratio
+from gajim.common.util.image import PixbufLoader
+from gajim.common.util.image import ScalingType
 from gajim.common.util.uri import get_file_path_from_uri
 
 from gajim.gtk.alert import InformationAlertDialog
@@ -157,38 +158,26 @@ class AvatarSelector(Gtk.Box, SignalManager):
     def get_prepared(self) -> bool:
         return bool(self._crop_area.get_pixbuf())
 
-    @staticmethod
-    def _scale_for_publish(
-        pixbuf: GdkPixbuf.Pixbuf,
-    ) -> tuple[GdkPixbuf.Pixbuf, int, int]:
-        width = pixbuf.get_width()
-        height = pixbuf.get_height()
-        if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
-            # Scale only down, never up
-            width, height = scale_with_ratio(AvatarSize.PUBLISH, width, height)
-            scaled_pixbuf = pixbuf.scale_simple(
-                width, height, GdkPixbuf.InterpType.BILINEAR
-            )
-            assert scaled_pixbuf is not None
-            return scaled_pixbuf, width, height
-        return pixbuf, width, height
-
     def get_avatar_texture(self) -> tuple[Gdk.Texture, int, int] | None:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
-        scaled, width, height = self._scale_for_publish(pixbuf)
 
-        return Gdk.Texture.new_for_pixbuf(scaled), width, height
+        pixbuf = PixbufLoader.scale(pixbuf, AvatarSize.PUBLISH, ScalingType.DOWN)
+        return (
+            Gdk.Texture.new_for_pixbuf(pixbuf),
+            pixbuf.get_width(),
+            pixbuf.get_height(),
+        )
 
     def get_avatar_bytes(self) -> tuple[bool, bytes | None, int, int]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return False, None, 0, 0
-        scaled, width, height = self._scale_for_publish(pixbuf)
 
-        success, data = scaled.save_to_bufferv("png", [], [])
-        return success, data, width, height
+        pixbuf = PixbufLoader.scale(pixbuf, AvatarSize.PUBLISH, ScalingType.DOWN)
+        success, data = pixbuf.save_to_bufferv("png", [], [])
+        return success, data, pixbuf.get_width(), pixbuf.get_height()
 
 
 class CropArea(Gtk.DrawingArea, SignalManager):

@@ -24,6 +24,7 @@ from gajim.common.dbus.menu import DBusMenuItem
 from gajim.common.dbus.statusnotifieritem import StatusNotifierItemService
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.util.image import PillowLoader
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
 
@@ -247,9 +248,7 @@ class WindowsTrayIcon(TrayIconBackend):
             / "status"
             / f"{tray_icon_name}.png"
         )
-        with Image.open(path) as image:
-            image.load()
-        return image
+        return PillowLoader.load_native(path)
 
 
 class LinuxTrayIcon(TrayIconBackend):

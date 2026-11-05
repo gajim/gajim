@@ -17,7 +17,7 @@ from gi.repository import GObject
 from gi.repository.Gdk import Paintable
 
 from gajim.common import app
-from gajim.common.multiprocess.animated_image_frames import extract_frames
+from gajim.common.util.image import PillowLoader
 
 try:
     from gi.repository import Gst
@@ -178,7 +178,9 @@ class AnimatedImageFallbackBackend(GObject.Object, SignalManager):
     def _get_frames(self) -> None:
         assert self._orig_path is not None
         try:
-            future = app.process_pool.submit(extract_frames, self._orig_path)
+            future = app.process_pool.submit(
+                PillowLoader.extract_frames, self._orig_path
+            )
             future.add_done_callback(
                 partial(GLib.idle_add, self._extracting_frames_finished)
             )

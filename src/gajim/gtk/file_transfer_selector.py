@@ -21,8 +21,8 @@ from gajim.common import types
 from gajim.common.const import Display
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
-from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.util.filesystem import load_file_async
+from gajim.common.util.image import create_thumbnail
 from gajim.common.util.media import IMAGE_MIME_TYPES
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import guess_mime_type
@@ -315,9 +315,7 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
             return
 
         try:
-            thumbnail_bytes, _metadata = create_thumbnail(
-                data, None, PREVIEW_SIZE, mime_type
-            )
+            thumbnail_bytes, _metadata = create_thumbnail(data, None, PREVIEW_SIZE)
         except Exception as error:
             log.error("Failed to create thumbnail: %s", error)
             self._set_icon_for_mime_type(mime_type)

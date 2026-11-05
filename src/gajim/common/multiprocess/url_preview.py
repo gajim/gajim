@@ -8,12 +8,12 @@ import io
 import threading
 
 from nbxmpp.util import utf8_decode
-from PIL import Image
 
 from gajim.common.multiprocess.http import http_request
 from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.open_graph_parser import OpenGraphParser
 from gajim.common.open_graph_parser import OpenGraphThumbnail
+from gajim.common.util.image import PillowLoader
 
 THUMBNAIL_SIZE = 256
 
@@ -24,6 +24,7 @@ def generate_url_preview(
     proxy: str | None,
     http2: bool,
 ) -> OpenGraphData | None:
+
     result = http_request(
         event=event,
         ft_id="preview",
@@ -63,7 +64,7 @@ def generate_url_preview(
 
 
 def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
-    image = Image.open(io.BytesIO(content))
+    image = PillowLoader.load_native(content)
     image.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE))
     if image.mode in ("RGBA", "P"):
         image = image.convert("RGB")

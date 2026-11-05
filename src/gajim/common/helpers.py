@@ -24,7 +24,6 @@ import qrcode
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
 from nbxmpp.const import ConnectionProtocol
@@ -37,6 +36,7 @@ from qrcode.image.pil import PilImage as QrcPilImage
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.util.image import PillowLoader
 from gajim.common.util.standards import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
@@ -59,16 +59,8 @@ def generate_qr_code(content: str) -> Gdk.Texture:
     qr.add_data(content)
     qr.make(fit=True)
 
-    img = qr.make_image(image_factory=QrcPilImage).convert("RGB")
-    pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-        GLib.Bytes.new(img.tobytes()),
-        GdkPixbuf.Colorspace.RGB,
-        False,
-        8,
-        img.width,
-        img.height,
-        img.width * 3,
-    )
+    image = qr.make_image(image_factory=QrcPilImage)
+    pixbuf = PillowLoader.to_pixbuf(image, has_alpha=False, rowstride=3)
     return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 

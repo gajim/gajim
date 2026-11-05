@@ -19,13 +19,12 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.multiprocess.video_thumbnail import (
     extract_video_thumbnail_and_properties,
 )
 from gajim.common.util.filesystem import load_file_async
-from gajim.common.util.image import image_size
-from gajim.common.util.image import is_image_animated
+from gajim.common.util.image import create_thumbnail
+from gajim.common.util.image import PillowLoader
 from gajim.common.util.media import IMAGE_MIME_TYPES
 from gajim.common.util.media import VIDEO_MIME_TYPES
 
@@ -279,7 +278,6 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
                 self._orig_path,
                 self._thumb_path,
                 app.settings.get("preview_size") * app.window.get_scale_factor(),
-                self._mime_type,
             )
             future.add_done_callback(
                 partial(GLib.idle_add, self._create_thumbnail_finished)
@@ -323,7 +321,9 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
         return GLib.SOURCE_REMOVE
 
     def _display_image_preview(self) -> None:
-        if self._mime_type == "image/gif" and is_image_animated(self._orig_path):
+        if self._mime_type == "image/gif" and PillowLoader.is_image_animated(
+            self._orig_path
+        ):
             self._display_animated_image_preview(AnimatedImageBackend)
             return
 
@@ -331,7 +331,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
             "image/webp",
             "image/avif",
             "image/png",
-        ] and is_image_animated(self._orig_path):
+        ] and PillowLoader.is_image_animated(self._orig_path):
             self._display_animated_image_preview(AnimatedImageFallbackBackend)
             return
 
@@ -388,7 +388,7 @@ class ImagePreviewWidget(Gtk.Box, SignalManager):
     def _display_animated_image_preview(
         self, backend: typing.Any[AnimatedImageBackend, AnimatedImageFallbackBackend]
     ) -> None:
-        image_width, image_height = image_size(self._orig_path)
+        image_width, image_height = PillowLoader.image_size(self._orig_path)
         width, height = self._image_preview_dimension(image_width, image_height)
 
         animated_image = AnimatedImage(self._thumb_path, self._orig_path, backend)
