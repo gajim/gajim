@@ -20,6 +20,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.events import MessageReceived
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.completion.base import BaseCompletionListItem
@@ -141,7 +142,7 @@ class NicknameCompletionProvider(BaseCompletionProvider):
 
     def _generate_suggestions(
         self, contact: GroupchatContact
-    ) -> list[GroupchatParticipant]:
+    ) -> list[GroupchatParticipant | GroupchatOfflineParticipant]:
         # Get recent nicknames from DB. This enables us to suggest
         # nicknames even if no message arrived since Gajim was started.
         recent_participants = list(
@@ -154,7 +155,10 @@ class NicknameCompletionProvider(BaseCompletionProvider):
         current_participants = list(contact.get_participants())
         current_participants.sort(key=lambda c: c.name.lower())
 
-        suggestions = recent_participants + current_participants
+        offline_members = list(contact.get_offline_members())
+        offline_members.sort(key=lambda c: c.name.lower())
+
+        suggestions = recent_participants + current_participants + offline_members
         # deduplicate
         return list(dict.fromkeys(suggestions))
 
