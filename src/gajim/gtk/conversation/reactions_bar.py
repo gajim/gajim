@@ -89,23 +89,11 @@ class ReactionsBar(Gtk.Box, SignalManager):
         self.set_sensitive(self._get_reactions_enabled())
 
     def _get_reactions_enabled(self) -> bool:
-        if not app.account_is_connected(self._contact.account):
-            return False
-
-        if isinstance(self._contact, GroupchatContact):
-            if not self._contact.is_joined:
-                return False
-
-            self_contact = self._contact.get_self()
-            assert self_contact is not None
-            if self_contact.role.is_visitor:
-                return False
-
-        return True
+        return self._message_row.can_react()
 
     def _aggregate_reactions(
         self, reactions: list[mod.Reaction]
-    ) -> dict[str, list[ReactionData]]:
+    ) -> list[tuple[str, list[ReactionData]]]:
         aggregated_reactions: dict[str, list[ReactionData]] = defaultdict(list)
         for reaction in reactions:
             if not reaction.emojis:
@@ -134,7 +122,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
         # Multisort dict, first for emojis, afterwards for count
         emoji_sorted = sorted(aggregated_reactions.items())
         count_sorted = sorted(emoji_sorted, reverse=True, key=lambda tup: len(tup[1]))
-        return dict(count_sorted)
+        return count_sorted
 
     def get_our_reactions(self) -> set[str]:
         our_reactions: set[str] = set()
@@ -172,20 +160,28 @@ class ReactionsBar(Gtk.Box, SignalManager):
             self.set_visible(False)
             return
 
-        more_reactions_button = None
-        for index, (emoji, data) in enumerate(aggregated_reactions.items()):
+        visible_reactions = aggregated_reactions[:MAX_VISIBLE_REACTIONS]
+        hidden_reactions = aggregated_reactions[
+            MAX_VISIBLE_REACTIONS:MAX_TOTAL_REACTIONS
+        ]
+
+        # reverse loop as we *prepend* reaction to the widget
+        for emoji, data in reversed(visible_reactions):
             reaction_button = ReactionButton(emoji, data)
             self._connect(reaction_button, "clicked", self._on_reaction_clicked)
-            if index + 1 <= MAX_VISIBLE_REACTIONS:
-                self.prepend(reaction_button)
-            elif index + 1 > MAX_VISIBLE_REACTIONS and index + 1 <= MAX_TOTAL_REACTIONS:
-                if more_reactions_button is None:
-                    more_reactions_button = MoreReactionsButton()
-                    self.append(more_reactions_button)
+            self.prepend(reaction_button)
+
+        if hidden_reactions:
+            more_reactions_button = MoreReactionsButton()
+            self.append(more_reactions_button)
+
+            for emoji, data in hidden_reactions:
+                reaction_button = ReactionButton(emoji, data)
+                self._connect(reaction_button, "clicked", self._on_reaction_clicked)
                 more_reactions_button.add_reaction(reaction_button)
-            else:
-                log.debug("Too many reactions: %s", len(aggregated_reactions))
-                break
+
+        if len(aggregated_reactions) > MAX_TOTAL_REACTIONS:
+            log.debug("Too many reactions: %s", len(aggregated_reactions))
 
         self.set_visible(True)
 
