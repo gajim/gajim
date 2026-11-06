@@ -240,6 +240,11 @@ class MessageRowActions(Gtk.Box):
         if message_row := self.get_message_row():
             message_row.remove_css_class("conversation-row-hover")
 
+        # The row stopped being hovered when the cursor entered us, so nothing
+        # else hides us if the cursor now leaves the conversation (e.g. to the
+        # chat list). If it goes back to a row, update() cancels this.
+        self._hide_with_timeout()
+
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
         if message_row := self.get_message_row():
             app.window.activate_action("win.reply", GLib.Variant("u", message_row.pk))

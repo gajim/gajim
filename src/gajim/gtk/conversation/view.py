@@ -1301,19 +1301,25 @@ class ConversationView(Gtk.ScrolledWindow):
             self._message_row_actions.hide_actions()
             return
 
-        current_flags = self.get_state_flags()
+        current_flags = row.get_state_flags()
 
-        if (
-            current_flags & Gtk.StateFlags.BACKDROP
-            or previous_flags & Gtk.StateFlags.BACKDROP
-        ):
-            # Don't react to backdrop changes and focus changes when in background
+        if not (current_flags ^ previous_flags) & Gtk.StateFlags.PRELIGHT:
+            # Only react to the row's hover state, not to backdrop, focus or
+            # selection changes
             return
 
-        if current_flags & Gtk.StateFlags.PRELIGHT:
-            self._update_message_row_actions(row)
-        else:
+        # Check the row's own hover state: when the cursor leaves a row, GTK
+        # updates the row before its ancestors, so the view may still be
+        # hovered at this point
+        if not current_flags & Gtk.StateFlags.PRELIGHT:
             self._message_row_actions.hide_actions()
+            return
+
+        if self.get_state_flags() & Gtk.StateFlags.BACKDROP:
+            # Don't show actions while the window is in the background
+            return
+
+        self._update_message_row_actions(row)
 
     def _update_message_row_actions(self, row: MessageRow) -> None:
         try:
