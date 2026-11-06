@@ -27,6 +27,8 @@ class WorkspaceDialog(GajimAppWindow):
             title=_("Workspace Settings"),
             default_width=500,
             default_height=600,
+            transient_for=app.window,
+            modal=True,
             add_window_padding=True,
             header_bar=True,
         )
