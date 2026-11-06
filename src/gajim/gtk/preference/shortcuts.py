@@ -93,7 +93,7 @@ class ShortcutRow(Adw.ActionRow, SignalManager):
     __gtype_name__ = "ShortcutRow"
 
     _accelerator_badge: Gtk.Label = Gtk.Template.Child()
-    _accelerator_label: Gtk.Label = Gtk.Template.Child()
+    _accelerator_label: Adw.ShortcutLabel = Gtk.Template.Child()
 
     def __init__(self, shortcut: GajimShortcut) -> None:
         Adw.ActionRow.__init__(self)
@@ -112,7 +112,14 @@ class ShortcutRow(Adw.ActionRow, SignalManager):
 
     def _update_fields(self):
         self._accelerator_badge.set_visible(self._shortcut.has_custom_accel())
-        self._accelerator_label.set_label(self._shortcut.get_accel_label())
+        accelerators = self._shortcut.get_accelerators()
+        if len(accelerators):
+            self._accelerator_label.set_accelerator(
+                " ".join(self._shortcut.get_accelerators())
+            )
+        else:
+            self._accelerator_label.set_accelerator("")
+            self._accelerator_label.set_disabled_text(_("Disabled"))
 
     def _on_trigger_changed(
         self, shortcut: GajimShortcut, _pspec: GObject.ParamSpec
@@ -149,7 +156,9 @@ class KeyEntryDialog(AlertDialog):
         controller.connect("key-pressed", self._on_key_pressed)
         self.add_controller(controller)
 
-        self._shortcut_label = Gtk.Label(label=_("No keys pressed"))
+        self._shortcut_label = Adw.ShortcutLabel(
+            disabled_text=_("No keys pressed"), halign=Gtk.Align.CENTER
+        )
         self._shortcut_label.add_css_class("bold")
         self._shortcut_label.add_css_class("accent")
         self._shortcut_label.add_css_class("py-6")
@@ -172,5 +181,5 @@ class KeyEntryDialog(AlertDialog):
             return Gdk.EVENT_STOP
 
         self._accelerator_name = Gtk.accelerator_name(keyval, state)
-        self._shortcut_label.set_label(Gtk.accelerator_get_label(keyval, state))
+        self._shortcut_label.set_accelerator(Gtk.accelerator_name(keyval, state))
         return Gdk.EVENT_STOP

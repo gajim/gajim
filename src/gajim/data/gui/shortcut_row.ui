@@ -18,10 +18,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel" id="_accelerator_label">
-            <style>
-              <class name="dimmed"/>
-            </style>
+          <object class="AdwShortcutLabel" id="_accelerator_label">
           </object>
         </child>
         <child>

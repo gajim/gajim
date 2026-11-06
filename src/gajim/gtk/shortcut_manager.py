@@ -11,7 +11,6 @@ import logging
 import sys
 from collections.abc import Iterator
 
-from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -176,19 +175,6 @@ class GajimShortcut(Gtk.Shortcut):
         self._accelerators["custom"]["trigger"] = None
         self._accelerators["custom"]["accelerators"] = None
         self.set_trigger(self._accelerators["original"]["trigger"])
-
-    def get_accel_label(self) -> str:
-        display = Gdk.Display.get_default()
-        assert display is not None
-
-        for name in ("custom", "original"):
-            trigger = self._accelerators[name]["trigger"]
-            if trigger is not None:
-                if isinstance(trigger, Gtk.NeverTrigger):
-                    return _("Disabled")
-                return trigger.to_label(display)
-
-        return _("Disabled")
 
     def set_custom_accelerators(self, accelerators: list[str] | None) -> None:
         self._set_accelerators("custom", accelerators)
