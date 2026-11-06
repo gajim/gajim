@@ -12,7 +12,7 @@ thoughts or discuss the news with your groups.
 
 ### Runtime Requirements
 
-- [libadwaita](https://gitlab.gnome.org/GNOME/libadwaita) (>=1.7.0)
+- [libadwaita](https://gitlab.gnome.org/GNOME/libadwaita) (>=1.8.0)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [cryptography](https://pypi.org/project/cryptography/) (>=43.0.0)
 - [css-parser](https://pypi.org/project/css-parser/)

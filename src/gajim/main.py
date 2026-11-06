@@ -19,7 +19,7 @@ from packaging.version import Version as V
 
 _MIN_NBXMPP_VER = "7.5.0"
 _MIN_GTK_VER = "4.17.5"
-_MIN_ADW_VER = "1.7.0"
+_MIN_ADW_VER = "1.8.0"
 _MIN_CAIRO_VER = "1.16.0"
 _MIN_PYGOBJECT_VER = "3.53.0"
 _MIN_GLIB_VER = "2.80.0"
