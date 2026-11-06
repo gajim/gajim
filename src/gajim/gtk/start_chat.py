@@ -86,6 +86,8 @@ class StartChatDialog(GajimAppWindow):
             title=_("Start / Join Chat"),
             default_height=600,
             default_width=550,
+            transient_for=app.window,
+            modal=True,
             header_bar=True,
         )
 
