@@ -22,6 +22,9 @@ from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.animated_image")
 
+MIN_PREVIEW_WIDTH = 270
+MIN_PREVIEW_HEIGHT = 100
+
 
 class AnimatedImage(Gtk.Box, SignalManager):
     __gtype_name__ = "AnimatedImage"
@@ -44,6 +47,7 @@ class AnimatedImage(Gtk.Box, SignalManager):
         self._picture.set_filename(str(thumbnail_path))
         self._picture.add_css_class("preview-image")
         self._picture.set_can_target(False)
+        self._picture.set_size_request(MIN_PREVIEW_WIDTH, MIN_PREVIEW_HEIGHT)
 
         self._static_paintable = self._picture.get_paintable()
         self._animated_paintable = None
