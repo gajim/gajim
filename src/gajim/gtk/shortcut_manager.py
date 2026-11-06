@@ -28,6 +28,10 @@ log = logging.getLogger("gajim.gtk.shortcut_manager")
 
 GroupsT = Literal["app", "main-win", "input", "input-global"]
 
+# A list applies to all platforms. A dict maps sys.platform values to
+# lists, with "*" as default for platforms that aren't listed.
+AcceleratorsT = list[str] | dict[str, list[str]] | None
+
 
 class ShortcutManager:
     def __init__(self) -> None:
@@ -111,7 +115,7 @@ class GajimShortcut(Gtk.Shortcut):
         category: str,
         action_name: str | None = None,
         signal: str | None = None,
-        accelerators: list[str] | None = None,
+        accelerators: AcceleratorsT = None,
         args: GLib.Variant | None = None,
         allow_rebind: bool = True,
         platform: str | None = None,
@@ -123,6 +127,9 @@ class GajimShortcut(Gtk.Shortcut):
         self._allow_rebind = allow_rebind
         self._action_name = action_name
         self._platform = platform or sys.platform
+
+        if isinstance(accelerators, dict):
+            accelerators = accelerators.get(sys.platform, accelerators.get("*"))
 
         if accelerators is None:
             accelerators = []
@@ -257,45 +264,45 @@ APP_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Start / Join Chat"),
             category="general",
-            accelerators=["<Primary>N"],
+            accelerators={"*": ["<Primary>N"], "darwin": ["<Meta>N"]},
             action_name="app.start-chat",
             args=structs.StartChatParam().to_variant(),
         ),
         GajimShortcut(
             label=_("Create New Group Chat"),
             category="general",
-            accelerators=["<Primary>G"],
+            accelerators={"*": ["<Primary>G"], "darwin": ["<Meta>G"]},
             action_name="app.create-groupchat",
             args=GLib.Variant("s", ""),
         ),
         GajimShortcut(
             label=_("Preferences"),
             category="general",
-            accelerators=["<Primary>P"],
+            accelerators={"*": ["<Primary>P"], "darwin": ["<Meta>P"]},
             action_name="app.preferences",
         ),
         GajimShortcut(
             label=_("Plugins"),
             category="general",
-            accelerators=["<Primary>E"],
+            accelerators={"*": ["<Primary>E"], "darwin": ["<Meta>E"]},
             action_name="app.plugins",
         ),
         GajimShortcut(
             label=_("Manage Shortcuts"),
             category="general",
-            accelerators=["<Primary>question"],
+            accelerators={"*": ["<Primary>question"], "darwin": ["<Meta>question"]},
             action_name="app.shortcuts",
         ),
         GajimShortcut(
             label=_("Debug Console"),
             category="general",
-            accelerators=["<Primary><Shift>X"],
+            accelerators={"*": ["<Primary><Shift>X"], "darwin": ["<Meta><Shift>X"]},
             action_name="app.xml-console",
         ),
         GajimShortcut(
             label=_("Quit Gajim"),
             category="general",
-            accelerators=["<Primary>Q"],
+            accelerators={"*": ["<Primary>Q"], "darwin": ["<Meta>Q"]},
             action_name="app.quit",
         ),
     ],
@@ -307,55 +314,64 @@ MAIN_WIN_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Increase Font Size"),
             category="general",
-            accelerators=["<Primary>plus", "<Primary>KP_Add"],
+            accelerators={
+                "*": ["<Primary>plus", "<Primary>KP_Add"],
+                "darwin": ["<Meta>plus", "<Meta>KP_Add"],
+            },
             action_name="win.increase-app-font-size",
         ),
         GajimShortcut(
             label=_("Decrease Font Size"),
             category="general",
-            accelerators=["<Primary>minus", "<Primary>KP_Subtract"],
+            accelerators={
+                "*": ["<Primary>minus", "<Primary>KP_Subtract"],
+                "darwin": ["<Meta>minus", "<Meta>KP_Subtract"],
+            },
             action_name="win.decrease-app-font-size",
         ),
         GajimShortcut(
             label=_("Reset Font Size"),
             category="general",
-            accelerators=["<Primary>0", "<Primary>KP_0"],
+            accelerators={
+                "*": ["<Primary>0", "<Primary>KP_0"],
+                "darwin": ["<Meta>0", "<Meta>KP_0"],
+            },
             action_name="win.reset-app-font-size",
         ),
         GajimShortcut(
             label=_("Toggle Focus Mode"),
             category="general",
-            accelerators=["<Primary><Shift>F"],
+            accelerators={"*": ["<Primary><Shift>F"], "darwin": ["<Meta><Shift>F"]},
             action_name="win.focus-mode",
         ),
         GajimShortcut(
             label=_("Focus Search"),
             category="chats",
-            accelerators=["<Primary>K"],
+            accelerators={"*": ["<Primary>K"], "darwin": ["<Meta>K"]},
             action_name="win.focus-search",
         ),
         GajimShortcut(
             label=_("Search Chat History"),
             category="chats",
-            accelerators=["<Primary>F"],
+            accelerators={"*": ["<Primary>F"], "darwin": ["<Meta>F"]},
             action_name="win.search-history",
         ),
         GajimShortcut(
             label=_("Contact Details"),
             category="chats",
-            accelerators=["<Primary>I"],
+            accelerators={"*": ["<Primary>I"], "darwin": ["<Meta>I"]},
             action_name="win.show-contact-info",
         ),
         GajimShortcut(
             label=_("Change Nickname"),
             category="chats",
-            accelerators=["<Primary><Shift>N"],
+            accelerators={"*": ["<Primary><Shift>N"], "darwin": ["<Meta><Shift>N"]},
             action_name="win.change-nickname",
         ),
         GajimShortcut(
             label=_("Change Subject"),
             category="chats",
-            accelerators=["<Primary><Shift>S"],
+            accelerators={"*": ["<Primary><Shift>S"], "darwin": ["<Meta><Shift>S"]},
             action_name="win.change-subject",
         ),
         GajimShortcut(
@@ -368,19 +384,19 @@ MAIN_WIN_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Close Chat"),
             category="chats",
-            accelerators=["<Primary>W"],
+            accelerators={"*": ["<Primary>W"], "darwin": ["<Meta>W"]},
             action_name="win.close-chat",
         ),
         GajimShortcut(
             label=_("Restore Closed Chat"),
             category="chats",
-            accelerators=["<Primary><Shift>W"],
+            accelerators={"*": ["<Primary><Shift>W"], "darwin": ["<Meta><Shift>W"]},
             action_name="win.restore-chat",
         ),
         GajimShortcut(
             label=_("Toggle Chat List"),
             category="chats",
-            accelerators=["<Primary>R"],
+            accelerators={"*": ["<Primary>R"], "darwin": ["<Meta>R"]},
             action_name="win.chat-list-visible",
         ),
         GajimShortcut(
@@ -464,55 +480,82 @@ MAIN_WIN_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Switch to Workspace 1"),
             category="chats",
-            accelerators=["<Primary>1", "<Primary>KP_1"],
+            accelerators={
+                "*": ["<Primary>1", "<Primary>KP_1"],
+                "darwin": ["<Meta>1", "<Meta>KP_1"],
+            },
             action_name="win.switch-workspace-1",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 2"),
             category="chats",
-            accelerators=["<Primary>2", "<Primary>KP_2"],
+            accelerators={
+                "*": ["<Primary>2", "<Primary>KP_2"],
+                "darwin": ["<Meta>2", "<Meta>KP_2"],
+            },
             action_name="win.switch-workspace-2",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 3"),
             category="chats",
-            accelerators=["<Primary>3", "<Primary>KP_3"],
+            accelerators={
+                "*": ["<Primary>3", "<Primary>KP_3"],
+                "darwin": ["<Meta>3", "<Meta>KP_3"],
+            },
             action_name="win.switch-workspace-3",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 4"),
             category="chats",
-            accelerators=["<Primary>4", "<Primary>KP_4"],
+            accelerators={
+                "*": ["<Primary>4", "<Primary>KP_4"],
+                "darwin": ["<Meta>4", "<Meta>KP_4"],
+            },
             action_name="win.switch-workspace-4",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 5"),
             category="chats",
-            accelerators=["<Primary>5", "<Primary>KP_5"],
+            accelerators={
+                "*": ["<Primary>5", "<Primary>KP_5"],
+                "darwin": ["<Meta>5", "<Meta>KP_5"],
+            },
             action_name="win.switch-workspace-5",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 6"),
             category="chats",
-            accelerators=["<Primary>6", "<Primary>KP_6"],
+            accelerators={
+                "*": ["<Primary>6", "<Primary>KP_6"],
+                "darwin": ["<Meta>6", "<Meta>KP_6"],
+            },
             action_name="win.switch-workspace-6",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 7"),
             category="chats",
-            accelerators=["<Primary>7", "<Primary>KP_7"],
+            accelerators={
+                "*": ["<Primary>7", "<Primary>KP_7"],
+                "darwin": ["<Meta>7", "<Meta>KP_7"],
+            },
             action_name="win.switch-workspace-7",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 8"),
             category="chats",
-            accelerators=["<Primary>8", "<Primary>KP_8"],
+            accelerators={
+                "*": ["<Primary>8", "<Primary>KP_8"],
+                "darwin": ["<Meta>8", "<Meta>KP_8"],
+            },
             action_name="win.switch-workspace-8",
         ),
         GajimShortcut(
             label=_("Switch to Workspace 9"),
             category="chats",
-            accelerators=["<Primary>9", "<Primary>KP_9"],
+            accelerators={
+                "*": ["<Primary>9", "<Primary>KP_9"],
+                "darwin": ["<Meta>9", "<Meta>KP_9"],
+            },
             action_name="win.switch-workspace-9",
         ),
         GajimShortcut(
@@ -549,7 +592,7 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Clear Input"),
             category="messages",
-            accelerators=["<Primary>U"],
+            accelerators={"*": ["<Primary>U"], "darwin": ["<Meta>U"]},
             action_name="win.input-clear",
         ),
         GajimShortcut(
@@ -561,7 +604,7 @@ INPUT_SHORTCUTS = GajimShortcutGroup(
         GajimShortcut(
             label=_("Format Text Bold"),
             category="messages",
-            accelerators=["<Primary>B"],
+            accelerators={"*": ["<Primary>B"], "darwin": ["<Meta>B"]},
             action_name="win.input-bold",
         ),
         GajimShortcut(
