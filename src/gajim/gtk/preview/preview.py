@@ -341,7 +341,11 @@ class PreviewWidget(Gtk.Box, SignalManager):
     ) -> None:
         gesture_click.set_state(Gtk.EventSequenceState.CLAIMED)
         encrypted = self._uri.startswith("aesgcm://")
-        menu = get_preview_menu(self._uri, encrypted=encrypted)
+        menu = get_preview_menu(
+            self._uri,
+            encrypted=encrypted,
+            orig_path=self._orig_path,
+        )
         self._menu_popover.set_menu_model(menu)
         self._menu_popover.set_pointing_to_coord(x, y)
         self._menu_popover.popup()
