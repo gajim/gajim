@@ -9,6 +9,7 @@ from typing import Any
 import datetime as dt
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -23,6 +24,7 @@ from gajim.common.util.user_strings import format_idle_time
 from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import get_ui_string
 
 # Backwards compat import for Plugins
 from gajim.gtk.window import GajimAppWindow as GajimAppWindow  # noqa: PLC0414
@@ -253,3 +255,8 @@ class TimeLabel(Gtk.Label):
             return
         rel_string = get_uf_relative_time(self._timestamp)
         self.set_text(rel_string)
+
+
+@Gtk.Template(string=get_ui_string("gajim_action_row.ui"))
+class GajimActionRow(Adw.ActionRow):
+    __gtype_name__ = "GajimActionRow"

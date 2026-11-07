@@ -28,6 +28,7 @@ from gajim.common.util.text import format_bytes_as_hex
 from gajim.gtk.preference.widgets import CopyButton
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.widgets import GajimActionRow
 
 log = logging.getLogger("gajim.gtk.preferences.certificate")
 
@@ -37,20 +38,20 @@ class CertificatePage(Adw.PreferencesPage, SignalManager):
     __gtype_name__ = "CertificatePage"
 
     _clipboard_button: CopyButton = Gtk.Template.Child()
-    _account_label_row: Adw.ActionRow = Gtk.Template.Child()
-    _account_address_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_to_common_name_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_to_organization_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_to_subject_alt_names_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_to_serial_number_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_by_common_name_row: Adw.ActionRow = Gtk.Template.Child()
-    _issued_by_organization_row: Adw.ActionRow = Gtk.Template.Child()
-    _issue_date_row: Adw.ActionRow = Gtk.Template.Child()
-    _expiry_date_row: Adw.ActionRow = Gtk.Template.Child()
-    _fingerprint_sha1_row: Adw.ActionRow = Gtk.Template.Child()
-    _fingerprint_sha256_row: Adw.ActionRow = Gtk.Template.Child()
-    _algorithm_row: Adw.ActionRow = Gtk.Template.Child()
-    _key_size_row: Adw.ActionRow = Gtk.Template.Child()
+    _account_label_row: GajimActionRow = Gtk.Template.Child()
+    _account_address_row: GajimActionRow = Gtk.Template.Child()
+    _issued_to_common_name_row: GajimActionRow = Gtk.Template.Child()
+    _issued_to_organization_row: GajimActionRow = Gtk.Template.Child()
+    _issued_to_subject_alt_names_row: GajimActionRow = Gtk.Template.Child()
+    _issued_to_serial_number_row: GajimActionRow = Gtk.Template.Child()
+    _issued_by_common_name_row: GajimActionRow = Gtk.Template.Child()
+    _issued_by_organization_row: GajimActionRow = Gtk.Template.Child()
+    _issue_date_row: GajimActionRow = Gtk.Template.Child()
+    _expiry_date_row: GajimActionRow = Gtk.Template.Child()
+    _fingerprint_sha1_row: GajimActionRow = Gtk.Template.Child()
+    _fingerprint_sha256_row: GajimActionRow = Gtk.Template.Child()
+    _algorithm_row: GajimActionRow = Gtk.Template.Child()
+    _key_size_row: GajimActionRow = Gtk.Template.Child()
 
     def __init__(self, account: str | None, certificate: Gio.TlsCertificate) -> None:
         Adw.PreferencesPage.__init__(self)

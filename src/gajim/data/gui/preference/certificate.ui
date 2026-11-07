@@ -10,7 +10,7 @@
           <object class="CopyButton" id="_clipboard_button"/>
         </child>
         <child>
-          <object class="AdwActionRow" id="_account_label_row">
+          <object class="GajimActionRow" id="_account_label_row">
             <property name="title" translatable="yes">Account Label</property>
             <property name="subtitle-selectable">True</property>
             <style>
@@ -19,7 +19,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="_account_address_row">
+          <object class="GajimActionRow" id="_account_address_row">
             <property name="title" translatable="yes">Account Address</property>
             <property name="subtitle-selectable">True</property>
             <style>
@@ -34,7 +34,7 @@
         <!-- Don't translate certificate details -->
         <property name="title">Issued to</property>
             <child>
-              <object class="AdwActionRow" id="_issued_to_common_name_row">
+              <object class="GajimActionRow" id="_issued_to_common_name_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Common Name (CN)</property>
                 <property name="subtitle-selectable">True</property>
@@ -44,7 +44,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_issued_to_organization_row">
+              <object class="GajimActionRow" id="_issued_to_organization_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Organization (O)</property>
                 <property name="subtitle-selectable">True</property>
@@ -54,7 +54,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_issued_to_subject_alt_names_row">
+              <object class="GajimActionRow" id="_issued_to_subject_alt_names_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Subject Alt Names</property>
                 <property name="subtitle-selectable">True</property>
@@ -64,7 +64,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_issued_to_serial_number_row">
+              <object class="GajimActionRow" id="_issued_to_serial_number_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Serial Number</property>
                 <property name="subtitle-selectable">True</property>
@@ -81,7 +81,7 @@
         <!-- Don't translate certificate details -->
         <property name="title">Issued by</property>
             <child>
-              <object class="AdwActionRow" id="_issued_by_common_name_row">
+              <object class="GajimActionRow" id="_issued_by_common_name_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Common Name (CN)</property>
                 <property name="subtitle-selectable">True</property>
@@ -91,7 +91,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_issued_by_organization_row">
+              <object class="GajimActionRow" id="_issued_by_organization_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Organization (O)</property>
                 <property name="subtitle-selectable">True</property>
@@ -107,7 +107,7 @@
         <!-- Don't translate certificate details -->
         <property name="title">Validity</property>
             <child>
-              <object class="AdwActionRow" id="_issue_date_row">
+              <object class="GajimActionRow" id="_issue_date_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Issue date</property>
                 <property name="subtitle-selectable">True</property>
@@ -117,7 +117,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_expiry_date_row">
+              <object class="GajimActionRow" id="_expiry_date_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Expiry date</property>
                 <property name="subtitle-selectable">True</property>
@@ -133,7 +133,7 @@
         <!-- Don't translate certificate details -->
         <property name="title">Fingerprints</property>
             <child>
-              <object class="AdwActionRow" id="_fingerprint_sha1_row">
+              <object class="GajimActionRow" id="_fingerprint_sha1_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">SHA-1</property>
                 <property name="subtitle-selectable">True</property>
@@ -144,7 +144,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_fingerprint_sha256_row">
+              <object class="GajimActionRow" id="_fingerprint_sha256_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">SHA-256</property>
                 <property name="subtitle-selectable">True</property>
@@ -161,7 +161,7 @@
         <!-- Don't translate certificate details -->
         <property name="title">Public Key Information</property>
             <child>
-              <object class="AdwActionRow" id="_algorithm_row">
+              <object class="GajimActionRow" id="_algorithm_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Algorithm</property>
                 <property name="subtitle-selectable">True</property>
@@ -171,7 +171,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="_key_size_row">
+              <object class="GajimActionRow" id="_key_size_row">
                 <!-- Don't translate certificate details -->
                 <property name="title">Key Size</property>
                 <property name="subtitle-selectable">True</property>
