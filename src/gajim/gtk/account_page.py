@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.modules.vcard4 import EmailProperty
@@ -30,6 +29,7 @@ from gajim.gtk.status_message_row import StatusMessageSelectorRow
 from gajim.gtk.status_selector import StatusSelector
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
+from gajim.gtk.widgets import GajimActionRow
 
 
 @Gtk.Template(string=get_ui_string("account_page.ui"))
@@ -43,20 +43,20 @@ class AccountPage(Gtk.Box, SignalManager):
     _settings_button: Gtk.Button = Gtk.Template.Child()
     _menu_button: Gtk.MenuButton = Gtk.Template.Child()
 
-    _our_jid_row: Adw.ActionRow = Gtk.Template.Child()
+    _our_jid_row: GajimActionRow = Gtk.Template.Child()
 
     _status_selector: StatusSelector = Gtk.Template.Child()
     _status_message_row: StatusMessageSelectorRow = Gtk.Template.Child()
 
     _profile_button: Gtk.Button = Gtk.Template.Child()
-    _profile_name_row: Adw.ActionRow = Gtk.Template.Child()
-    _profile_org_row: Adw.ActionRow = Gtk.Template.Child()
-    _profile_role_row: Adw.ActionRow = Gtk.Template.Child()
-    _profile_email_row: Adw.ActionRow = Gtk.Template.Child()
+    _profile_name_row: GajimActionRow = Gtk.Template.Child()
+    _profile_org_row: GajimActionRow = Gtk.Template.Child()
+    _profile_role_row: GajimActionRow = Gtk.Template.Child()
+    _profile_email_row: GajimActionRow = Gtk.Template.Child()
     _profile_email_clipboard_button: CopyButton = Gtk.Template.Child()
-    _profile_tel_row: Adw.ActionRow = Gtk.Template.Child()
+    _profile_tel_row: GajimActionRow = Gtk.Template.Child()
     _profile_tel_clipboard_button: CopyButton = Gtk.Template.Child()
-    _profile_timezone_row: Adw.ActionRow = Gtk.Template.Child()
+    _profile_timezone_row: GajimActionRow = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
