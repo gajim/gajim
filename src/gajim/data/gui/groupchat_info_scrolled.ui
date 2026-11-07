@@ -28,7 +28,7 @@
               <class name="mt-12"/>
             </style>
             <child>
-              <object class="AdwActionRow" id="address_row">
+              <object class="GajimActionRow" id="address_row">
                 <property name="title" translatable="yes">Address</property>
                 <property name="subtitle-selectable">True</property>
                 <style>
@@ -45,7 +45,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="description_row">
+              <object class="GajimActionRow" id="description_row">
                 <property name="title" translatable="yes">Description</property>
                 <property name="subtitle-selectable">True</property>
                 <property name="use-markup">True</property>
@@ -55,7 +55,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="subject_row">
+              <object class="GajimActionRow" id="subject_row">
                 <property name="title" translatable="yes">Subject</property>
                 <property name="subtitle-selectable">True</property>
                 <property name="use-markup">True</property>
@@ -66,7 +66,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="author_row">
+              <object class="GajimActionRow" id="author_row">
                 <property name="title" translatable="yes">Subject last changed by</property>
                 <property name="subtitle-selectable">True</property>
                 <property name="visible">False</property>
@@ -76,7 +76,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="users_row">
+              <object class="GajimActionRow" id="users_row">
                 <property name="title" translatable="yes">Participants</property>
                 <property name="visible">False</property>
                 <style>
@@ -94,7 +94,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="contact_row">
+              <object class="GajimActionRow" id="contact_row">
                 <property name="title" translatable="yes">Contact</property>
                 <property name="visible">False</property>
                 <child type="prefix">
@@ -117,9 +117,8 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="logs_row">
+              <object class="GajimActionRow" id="logs_row">
                 <property name="title" translatable="yes">Message History</property>
-                <property name="use-markup">True</property>
                 <property name="visible">False</property>
                 <child type="prefix">
                   <object class="GtkImage">
@@ -144,7 +143,7 @@
               </object>
             </child>
             <child>
-              <object class="AdwActionRow" id="lang_row">
+              <object class="GajimActionRow" id="lang_row">
                 <property name="title" translatable="yes">Group Chat Language</property>
                 <property name="visible">False</property>
                 <style>
