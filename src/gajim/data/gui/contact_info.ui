@@ -64,7 +64,7 @@
                             <property name="title" translatable="yes">In this group chat</property>
                             <property name="visible">0</property>
                             <child>
-                              <object class="AdwActionRow" id="role_info">
+                              <object class="GajimActionRow" id="role_info">
                                 <property name="title" translatable="yes">Role</property>
                                 <style>
                                   <class name="property"/>
@@ -72,7 +72,7 @@
                               </object>
                             </child>
                             <child>
-                              <object class="AdwActionRow" id="affiliation_info">
+                              <object class="GajimActionRow" id="affiliation_info">
                                 <property name="title" translatable="yes">Affiliation</property>
                                 <style>
                                   <class name="property"/>
@@ -147,7 +147,7 @@
                                   <class name="boxed-list"/>
                                 </style>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="GajimActionRow">
                                     <property name="activatable">0</property>
                                     <property name="title" translatable="yes">Share my online status</property>
                                     <child type="suffix">
@@ -159,7 +159,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="GajimActionRow">
                                     <property name="activatable">0</property>
                                     <property name="title" translatable="yes">I can see contact&apos;s online status</property>
                                     <child type="suffix">

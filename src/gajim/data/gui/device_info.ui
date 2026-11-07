@@ -13,7 +13,7 @@
           <class name="boxed-list"/>
         </style>
         <child>
-          <object class="AdwActionRow" id="_status_row">
+          <object class="GajimActionRow" id="_status_row">
             <property name="title" translatable="yes">Status</property>
             <property name="subtitle-selectable">True</property>
             <style>
@@ -22,7 +22,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="_priority_row">
+          <object class="GajimActionRow" id="_priority_row">
             <property name="title" translatable="yes">Priority</property>
             <property name="visible">0</property>
             <style>
@@ -31,7 +31,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="_software_row">
+          <object class="GajimActionRow" id="_software_row">
             <property name="title" translatable="yes">Software</property>
             <property name="subtitle-selectable">True</property>
             <property name="visible">0</property>
@@ -41,7 +41,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="_operating_system_row">
+          <object class="GajimActionRow" id="_operating_system_row">
             <property name="title" translatable="yes">Operating System</property>
             <property name="subtitle-selectable">True</property>
             <property name="visible">0</property>
@@ -51,7 +51,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwActionRow" id="_local_time_row">
+          <object class="GajimActionRow" id="_local_time_row">
             <property name="title" translatable="yes">Local Time</property>
             <property name="subtitle-selectable">True</property>
             <property name="visible">0</property>

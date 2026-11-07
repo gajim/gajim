@@ -48,6 +48,7 @@ from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.vcard_grid import VCardGrid
+from gajim.gtk.widgets import GajimActionRow
 from gajim.gtk.window import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.contact_info")
@@ -546,11 +547,11 @@ class DeviceInfo(Adw.PreferencesGroup):
     __gtype_name__ = "DeviceInfo"
 
     _spinner: Adw.Spinner = Gtk.Template.Child()
-    _status_row: Adw.ActionRow = Gtk.Template.Child()
-    _priority_row: Adw.ActionRow = Gtk.Template.Child()
-    _software_row: Adw.ActionRow = Gtk.Template.Child()
-    _operating_system_row: Adw.ActionRow = Gtk.Template.Child()
-    _local_time_row: Adw.ActionRow = Gtk.Template.Child()
+    _status_row: GajimActionRow = Gtk.Template.Child()
+    _priority_row: GajimActionRow = Gtk.Template.Child()
+    _software_row: GajimActionRow = Gtk.Template.Child()
+    _operating_system_row: GajimActionRow = Gtk.Template.Child()
+    _local_time_row: GajimActionRow = Gtk.Template.Child()
 
     def __init__(self, contact: ResourceContact) -> None:
         Adw.PreferencesGroup.__init__(self)
