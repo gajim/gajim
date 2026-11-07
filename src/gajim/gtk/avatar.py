@@ -31,6 +31,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.classes import Singleton
 from gajim.common.util.image import load_image
+from gajim.common.util.image import MAX_AVATAR_PIXELS
 from gajim.common.util.image import ScalingType
 from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.status import get_client_status
@@ -58,7 +59,6 @@ OccupantAvatarCacheT = dict[JID, dict[tuple[str, int, int], Gdk.Texture]]
 
 CIRCLE_RATIO = 0.18
 CIRCLE_FILL_RATIO = 0.80
-MAX_AVATAR_PIXELS = 1024 * 1024
 
 
 def generate_avatar_letter(text: str) -> str:

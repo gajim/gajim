@@ -26,6 +26,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.util.image import load_image
+from gajim.common.util.image import MAX_DATAFORM_PIXELS
 from gajim.common.util.text import make_href_markup
 from gajim.common.util.text import process_non_spacing_marks
 
@@ -34,8 +35,6 @@ from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import open_uri
 from gajim.gtk.widgets import MultiLineLabel
-
-MAX_MEDIA_PIXELS = 1024 * 1024
 
 # Options
 
@@ -897,7 +896,7 @@ class ImageMediaField:
             self._image = Gtk.Image()
             return
 
-        pixbuf = load_image(data, size=170, max_image_pixels=MAX_MEDIA_PIXELS)
+        pixbuf = load_image(data, size=170, max_image_pixels=MAX_DATAFORM_PIXELS)
         texture = Gdk.Texture.new_for_pixbuf(pixbuf) if pixbuf is not None else None
 
         self._image = Gtk.Image.new_from_paintable(texture)

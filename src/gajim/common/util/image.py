@@ -23,7 +23,10 @@ from gi.repository import GLib
 
 log = logging.getLogger("gajim.c.util.image")
 
-MAX_IMAGE_PIXELS = 4096 * 4096
+MAX_AVATAR_PIXELS = 1024 * 1024
+MAX_DATAFORM_PIXELS = 1024 * 1024
+MAX_IMAGE_PIXELS = 8192 * 8192
+MAX_OG_PIXELS = 512 * 512
 # If the number of pixels is greater than twice MAX_IMAGE_PIXELS,
 # then a DecompressionBombError will be raised instead.
 PIL.Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
@@ -291,11 +294,9 @@ def apply_embedded_orientation(image: PIL.Image.Image) -> PIL.Image.Image:
 def create_thumbnail_with_pillow(file: Path | bytes, size: int) -> bytes:
     image = load_image_with_pillow(file)
     image = apply_embedded_orientation(image)
-    if image.format == "PNG" and size >= image.width and size >= image.height:
-        # Fast path if there is no need for scaling or conversion
-        return image.tobytes()
 
     output = BytesIO()
+    # Thumbnail only resizes if the image is larger
     image.thumbnail((size, size))
     image.save(output, format="PNG", optimize=True, save_all=False)
     return output.getvalue()
