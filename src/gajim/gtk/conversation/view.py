@@ -257,6 +257,18 @@ class ConversationView(Gtk.ScrolledWindow):
             return None
         return point
 
+    def _is_on_scrollbar(self, point: Graphene.Point) -> bool:
+        # The controller sees clicks on the scrollbars too, dragging
+        # a scrollbar must only scroll
+        widget = self.pick(point.x, point.y, Gtk.PickFlags.DEFAULT)
+        if widget is None:
+            return False
+
+        for scrollbar in (self.get_vscrollbar(), self.get_hscrollbar()):
+            if widget is scrollbar or widget.is_ancestor(scrollbar):
+                return True
+        return False
+
     def _get_message_row_at(self, point: Graphene.Point) -> MessageRow | None:
         has_point, list_point = self.compute_point(self._list_box, point)
         if not has_point:
@@ -306,7 +318,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._drag_add = bool(state & add_modifier)
 
             point = self._get_event_position(event)
-            if point is None:
+            if point is None or self._is_on_scrollbar(point):
                 return Gdk.EVENT_PROPAGATE
 
             self._drag_start_row = self._get_message_row_at(point)
