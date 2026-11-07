@@ -30,7 +30,7 @@
                                   <class name="boxed-list"/>
                                 </style>
                                 <child>
-                                  <object class="AdwActionRow">
+                                  <object class="GajimActionRow">
                                     <property name="title" translatable="yes">Account</property>
                                     <child type="suffix">
                                       <object class="GajimDropDown" id="_account_dropdown">
@@ -69,7 +69,7 @@
                                   <object class="AdwExpanderRow" id="_advanced_expander_row">
                                     <property name="title" translatable="yes">Advanced Settings</property>
                                     <child>
-                                      <object class="AdwActionRow">
+                                      <object class="GajimActionRow">
                                         <property name="title" translatable="yes">Private</property>
                                         <property name="subtitle" translatable="yes">You have to invite people so they can join</property>
                                         <property name="activatable-widget">_private_radio</property>
@@ -82,7 +82,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="AdwActionRow">
+                                      <object class="GajimActionRow">
                                         <property name="title" translatable="yes">Public</property>
                                         <property name="subtitle" translatable="yes">Anyone can join</property>
                                         <property name="activatable-widget">_public_radio</property>
