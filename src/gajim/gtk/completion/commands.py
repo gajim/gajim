@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Final
 
 import logging
@@ -15,6 +16,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.commands import Command
 from gajim.common.commands import CommandContext
+from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
 
@@ -113,6 +115,7 @@ class CommandsCompletionProvider(BaseCompletionProvider):
         self._model = Gtk.SliceListModel(
             model=filter_model, size=MAX_COMPLETION_ENTRIES
         )
+        self._model.connect("items-changed", self._on_items_changed)
 
     def _load_commands(self) -> None:
         commands = [CommandsCompletionListItem(c) for c in app.commands.get_commands()]
@@ -150,3 +153,6 @@ class CommandsCompletionProvider(BaseCompletionProvider):
         candidate = candidate.lstrip(self.trigger_char)
         self._cmd_name_filter.set_search(candidate)
         return self._model.get_n_items() > 0
+
+    def _on_items_changed(self, *args: Any) -> None:
+        idle_add_once(self.emit, "suggestions-changed")
