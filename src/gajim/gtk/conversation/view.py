@@ -433,6 +433,14 @@ class ConversationView(Gtk.ScrolledWindow):
         # Content moved under the pointer (scrolling while dragging)
         if self._drag_selecting:
             self._update_drag_selection()
+            return
+
+        # The view scrolled after a press, before a drag started, e.g. a
+        # click on a reply jumped to another message. The press was meant
+        # for that, so moving the pointer afterwards must not select
+        # messages.
+        if self._drag_start_row is not None:
+            self._end_drag()
 
     def _update_drag_autoscroll(self) -> None:
         if not self._drag_selecting or self._drag_pointer is None:
