@@ -630,11 +630,16 @@ class ConversationView(Gtk.ScrolledWindow):
         return self._lower_complete
 
     def _scroll_to_pos_idle(self, adj: Gtk.Adjustment, value: float) -> None:
-        if value == -1:
-            # scroll to end
-            value = adj.get_upper() - adj.get_page_size()
+        def _scroll() -> None:
+            target = value
+            if target == -1:
+                # Scroll to end. Compute it when the idle runs, not now:
+                # a message that was just added has no height yet, so the
+                # current end would stop at the message before it.
+                target = adj.get_upper() - adj.get_page_size()
+            adj.set_value(target)
 
-        idle_add_once(adj.set_value, value)
+        idle_add_once(_scroll)
 
     def do_size_allocate(self, width: int, height: int, baseline: int) -> None:
         # Rows are height-for-width, so anything which changes their height
