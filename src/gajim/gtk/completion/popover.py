@@ -81,7 +81,13 @@ class CompletionPopover(Gtk.Popover):
         if self._provider is provider:
             return
 
+        if self._provider is not None:
+            self._provider.disconnect_by_func(self._on_suggestion_changed)
+
+        provider.connect("suggestions-changed", self._on_suggestion_changed)
+
         self._provider = provider
+
         model, widget_cls = self._provider.get_model()
         self._header_label.set_label(self._provider.name)
         self._widget_cls = widget_cls
@@ -177,6 +183,10 @@ class CompletionPopover(Gtk.Popover):
             return
 
         model.set_selected(new_pos)
+
+    def _on_suggestion_changed(self, *args: Any) -> None:
+        model = cast(Gtk.SingleSelection, self._view.get_model())
+        model.set_selected(0)
 
 
 class CompletionListView(Gtk.ListView):

@@ -77,6 +77,7 @@ class CommandsCompletionProvider(BaseCompletionProvider):
     name = _("Commands")
 
     def __init__(self) -> None:
+        BaseCompletionProvider.__init__(self)
         self._list_store = Gio.ListStore(item_type=CommandsCompletionListItem)
 
         for command, usage in app.commands.get_commands("chat"):  # TODO

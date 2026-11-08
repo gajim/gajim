@@ -99,6 +99,7 @@ class ContactProvider(BaseCompletionProvider):
     name = _("Contacts")
 
     def __init__(self) -> None:
+        BaseCompletionProvider.__init__(self)
         self._list_store = Gio.ListStore(item_type=ContactListItem)
         self._account: str | None = None
 

@@ -37,10 +37,18 @@ class BaseCompletionViewItem(Generic[L]):
         raise NotImplementedError
 
 
-class BaseCompletionProvider:
+class BaseCompletionProvider(GObject.Object):
     trigger_char = ""
     id = ""
     name = ""
+
+    __gsignals__ = {
+        "suggestions-changed": (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (),
+        )
+    }
 
     def get_model(self) -> tuple[Gio.ListModel[Any], type[BaseCompletionViewItem[Any]]]:
         raise NotImplementedError

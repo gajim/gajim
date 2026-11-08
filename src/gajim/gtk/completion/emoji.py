@@ -279,6 +279,7 @@ class EmojiCompletionProvider(BaseCompletionProvider):
     name = _("Emojis")
 
     def __init__(self) -> None:
+        BaseCompletionProvider.__init__(self)
         self._load_complete = False
 
         expression = Gtk.PropertyExpression.new(EmojiCompletionListItem, None, "search")

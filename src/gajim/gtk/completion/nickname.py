@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any
 from typing import Final
 
+import itertools
+import locale
 import logging
 
 from gi.repository import Gdk
@@ -18,8 +20,10 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.events import MessageReceived
+from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.completion.base import BaseCompletionListItem
@@ -36,7 +40,28 @@ class NicknameCompletionListItem(BaseCompletionListItem, GObject.Object):
     __gtype_name__ = "NicknameCompletionListItem"
 
     nickname = GObject.Property(type=str)
-    avatar = GObject.Property(type=Gdk.Texture)
+    nickname_cmp = GObject.Property(type=str)
+
+    def __init__(
+        self, contact: GroupchatParticipant | GroupchatOfflineParticipant, scale: int
+    ) -> None:
+        self._contact = contact
+        self._avatar = None
+        self._scale = scale
+
+        super().__init__(
+            nickname=contact.name,
+            nickname_cmp=contact.name.casefold(),
+        )
+
+    @GObject.Property(type=Gdk.Texture, flags=GObject.ParamFlags.READABLE)
+    def avatar(self) -> Gdk.Texture:
+        # Load avatar lazy
+        if self._avatar is None:
+            self._avatar = self._contact.get_avatar(
+                AvatarSize.SMALL, self._scale, add_show=False
+            )
+        return self._avatar
 
     def get_text(self) -> str:
         return self.nickname
@@ -85,7 +110,10 @@ class NicknameCompletionProvider(BaseCompletionProvider):
     id: Final = "nickname"
     name = _("Participants")
 
+    __gtype_name__ = "NicknameCompletionProvider"
+
     def __init__(self) -> None:
+        BaseCompletionProvider.__init__(self)
         self._list_store = Gio.ListStore(item_type=NicknameCompletionListItem)
         self._contact: GroupchatContact | None = None
 
@@ -97,14 +125,17 @@ class NicknameCompletionProvider(BaseCompletionProvider):
             NicknameCompletionListItem, None, "nickname"
         )
 
-        self._string_filter = Gtk.StringFilter(expression=expression)
-
-        filter_model = Gtk.FilterListModel(
+        self._string_filter = Gtk.StringFilter(expression=expression, ignore_case=True)
+        self._filter_model = Gtk.FilterListModel(
             model=self._list_store, filter=self._string_filter
         )
-        self._model = Gtk.SliceListModel(
-            model=filter_model, size=MAX_COMPLETION_ENTRIES
-        )
+
+        sorter = Gtk.CustomSorter()
+        sorter.set_sort_func(self._sort_func, self._string_filter)  # type: ignore
+        sort_model = Gtk.SortListModel(model=self._filter_model, sorter=sorter)
+
+        self._model = Gtk.SliceListModel(model=sort_model, size=MAX_COMPLETION_ENTRIES)
+        self._model.connect("items-changed", self._on_items_changed)
 
     def get_model(
         self,
@@ -120,43 +151,64 @@ class NicknameCompletionProvider(BaseCompletionProvider):
         if not isinstance(contact, GroupchatContact):
             return False
 
-        scale = app.window.get_scale_factor()
+        search = candidate.lstrip(self.trigger_char)
+        if not search:
+            return False
+
         if self._contact is not contact:
             # New contact, regenerate suggestions
-            self._list_store.remove_all()
-            for suggested_contact in self._generate_suggestions(contact):
-                self._list_store.append(
-                    NicknameCompletionListItem(
-                        nickname=suggested_contact.name,
-                        avatar=suggested_contact.get_avatar(
-                            AvatarSize.SMALL, scale, add_show=False
-                        ),
-                    )
-                )
+            # Remove model before doing operations on the ListStore so
+            # no changes need to propagate
+            self._filter_model.set_model(None)
+            # Use splice, this is more performant than remove/insert
+            self._list_store.splice(
+                0, self._list_store.get_n_items(), self._generate_suggestions(contact)
+            )
+
             self._contact = contact
 
-        candidate = candidate.lstrip(self.trigger_char)
-        self._string_filter.set_search(candidate)
+        self._string_filter.set_search(search.casefold())
+        self._filter_model.set_model(self._list_store)
         return self._model.get_n_items() > 0
 
+    @staticmethod
+    def _sort_func(
+        a: NicknameCompletionListItem,
+        b: NicknameCompletionListItem,
+        string_filter: Gtk.StringFilter,
+    ) -> int:
+        search = string_filter.get_search()
+
+        a_has_prefix = a.nickname_cmp.startswith(search)
+        b_has_prefix = b.nickname_cmp.startswith(search)
+
+        if a_has_prefix is b_has_prefix:
+            return locale.strcoll(a.nickname, b.nickname)
+
+        return -1 if a_has_prefix else 1
+
+    @staticmethod
     def _generate_suggestions(
-        self, contact: GroupchatContact
-    ) -> list[GroupchatParticipant]:
+        contact: GroupchatContact,
+    ) -> list[NicknameCompletionListItem]:
         # Get recent nicknames from DB. This enables us to suggest
-        # nicknames even if no message arrived since Gajim was started.
-        recent_participants = list(
-            map(
-                contact.get_resource,
-                app.storage.archive.get_recent_muc_nicks(contact.account, contact.jid),
-            )
+        # nicknames even if the user is not joined
+        recent_participants = map(
+            contact.get_resource,
+            app.storage.archive.get_recent_muc_nicks(contact.account, contact.jid),
         )
+        current_participants = contact.get_participants()
+        offline_members = contact.get_offline_members()
 
-        current_participants = list(contact.get_participants())
-        current_participants.sort(key=lambda c: c.name.lower())
+        suggestions = itertools.chain(
+            recent_participants, current_participants, offline_members
+        )
+        scale = app.window.get_scale_factor()
+        # Use set() for deduplication
+        return [NicknameCompletionListItem(c, scale) for c in set(suggestions)]
 
-        suggestions = recent_participants + current_participants
-        # deduplicate
-        return list(dict.fromkeys(suggestions))
+    def _on_items_changed(self, *args: Any) -> None:
+        idle_add_once(self.emit, "suggestions-changed")
 
     def _on_message_received(self, event: MessageReceived) -> None:
         if self._contact is None:

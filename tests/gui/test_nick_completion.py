@@ -7,6 +7,7 @@ from unittest.mock import MagicMock
 
 from gajim.common import app
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatOfflineParticipant
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.completion.nickname import NicknameCompletionProvider
@@ -14,15 +15,18 @@ from gajim.gtk.completion.nickname import NicknameCompletionProvider
 
 class NickCompletionTest(unittest.TestCase):
     def setUp(self) -> None:
+        app.window = MagicMock()
+        app.window.get_scale_factor = MagicMock(return_value=1)
         app.get_client = MagicMock()
         app.storage.archive = MagicMock()
         app.storage.archive.get_recent_muc_nicks = MagicMock(
-            return_value=["Harry", "Joe"]
+            return_value=["Harry", "Joe", "Bhuga"]
         )
 
     def tearDown(self) -> None:
         del app.storage.archive
         app.get_client = None
+        app.window = None
 
     def test_generate_suggestions(self):
         def _get_mock_participant(nick: str) -> GroupchatParticipant:
@@ -30,31 +34,46 @@ class NickCompletionTest(unittest.TestCase):
             participant.name = nick
             return participant
 
+        def _get_mock_offline_member(nick: str) -> GroupchatOfflineParticipant:
+            participant = MagicMock(spec_set=GroupchatOfflineParticipant)
+            participant.name = nick
+            return participant
+
         def _get_resource(nick: str) -> GroupchatParticipant:
             return _get_mock_participant(nick)
 
         participant_names = [
-            "Hugo",
-            "Herbert",
-            "Robert",
-            "Daisy",
             "xavier",
-            "7user",
+            "Hugo",
+            "Rhugbert",
+            "Ahugo",
+        ]
+
+        offline_members_names = [
+            "Yhuga",
         ]
 
         participants: list[GroupchatParticipant] = []
         for name in participant_names:
             participants.append(_get_mock_participant(name))
 
-        gen = NicknameCompletionProvider()
+        offline_members: list[GroupchatOfflineParticipant] = []
+        for name in offline_members_names:
+            offline_members.append(_get_mock_offline_member(name))
+
         groupchat_contact = MagicMock(spec_set=GroupchatContact)
         groupchat_contact.get_participants = MagicMock(return_value=participants)
+        groupchat_contact.get_offline_members = MagicMock(return_value=offline_members)
         groupchat_contact.get_resource = MagicMock(side_effect=_get_resource)
 
-        results = gen._generate_suggestions(groupchat_contact)  # type: ignore
+        provider = NicknameCompletionProvider()
+        provider.populate("@hug", groupchat_contact)
+        model, _widget_cls = provider.get_model()
+
+        results = [i.nickname for i in model]
         self.assertEqual(
-            [result.name for result in results],
-            ["Harry", "Joe", "7user", "Daisy", "Herbert", "Hugo", "Robert", "xavier"],
+            results,
+            ["Hugo", "Ahugo", "Bhuga", "Rhugbert", "Yhuga"],
         )
 
 
