@@ -11,6 +11,8 @@ import operator
 import shlex
 import sys
 from collections.abc import Callable
+from dataclasses import dataclass
+from enum import StrEnum
 
 from nbxmpp.protocol import JID
 
@@ -54,6 +56,12 @@ def get_usage_from_command(cmd: argparse.ArgumentParser, command_name: str) -> s
     return usage.strip()
 
 
+class CommandContext(StrEnum):
+    CHAT = "chat"
+    GROUPCHAT = "groupchat"
+    PM = "pm"
+
+
 class ArgumentParserError(Exception):
     pass
 
@@ -71,6 +79,13 @@ class ArgumentParser(argparse.ArgumentParser):
         raise ArgumentParserError(message)
 
 
+@dataclass
+class Command:
+    name: str
+    context: set[CommandContext]
+    usage: str
+
+
 class ChatCommands(Observable):
     def __init__(self) -> None:
         Observable.__init__(self)
@@ -83,26 +98,23 @@ class ChatCommands(Observable):
         else:
             self._parser = ArgumentParser(prog="ChatCommands")
         self._sub_parser = self._parser.add_subparsers(title="Commands")
-        self._commands: dict[str, tuple[list[str], str]] = {}
+        self._commands: dict[str, Command] = {}
 
         self._create_commands()
 
-    def get_commands(self, used_in: str) -> list[tuple[str, str]]:
-        commands: list[tuple[str, str]] = []
-        for cmd_name, cmd in self._commands.items():
-            if used_in in cmd[0]:
-                commands.append((cmd_name, cmd[1]))
-        commands.sort(key=operator.itemgetter(0))
-        return commands
+    def get_commands(self, context: CommandContext | None = None) -> list[Command]:
+        if context is not None:
+            return list(filter(lambda c: context in c.context, self._commands.values()))
+        return list(self._commands.values())
 
-    def _generate_help(self, used_in: str) -> str:
+    def _generate_help(self, context: CommandContext) -> str:
         help_text = "Commands:\n\n"
-        commands = self.get_commands(used_in)
-        for command in commands:
-            name, usage = command
-            if name == "help":
+        commands = self.get_commands(context)
+        commands.sort(key=operator.attrgetter("name"))
+        for cmd in commands:
+            if cmd.name == "help":
                 continue
-            help_text += f"  {name:<15} {usage}\n"
+            help_text += f"  {cmd.name:<15} {cmd.usage}\n"
         return help_text
 
     def make_parser(
@@ -117,21 +129,23 @@ class ChatCommands(Observable):
         return parser
 
     def add_command(
-        self, command_name: str, used_in: list[str], cmd: argparse.ArgumentParser
+        self, name: str, contexts: list[str], cmd: argparse.ArgumentParser
     ) -> None:
 
-        usage = get_usage_from_command(cmd, command_name)
-        self._commands[command_name] = (used_in, usage)
+        context = {CommandContext(c) for c in contexts}
+        usage = get_usage_from_command(cmd, name)
+        self._commands[name] = Command(name=name, context=context, usage=usage)
 
-    def parse(self, type_: str, arg_string: str) -> bool:
+    def parse(self, context_: str, arg_string: str) -> bool:
         if regex.COMMAND_REGEX.match(arg_string) is None:
             return False
 
         arg_list = split_argument_string(arg_string[1:])
 
+        context = CommandContext(context_)
         command_name = arg_list[0]
         command = self._commands.get(command_name)
-        if command is None or type_ not in command[0]:
+        if command is None or context not in command.context:
             unknown_command = _("Unknown command: %s") % command_name
             hint = _('Use "//" to start a message with a slash "/".')
             self.notify("command-not-found", f"{unknown_command}\n{hint}")
@@ -143,7 +157,7 @@ class ChatCommands(Observable):
             self.notify("command-error", str(error))
             raise CommandFailed
 
-        args.used_in = type_
+        args.context = context
 
         try:
             result = args.exec(args)
@@ -201,7 +215,7 @@ class ChatCommands(Observable):
         app.plugin_manager.extension_point("add_commands", self)
 
     def _help_command(self, args: Any) -> str:
-        return self._generate_help(args.used_in)
+        return self._generate_help(args.context)
 
     def _status_command(self, args: Any) -> None:
         for client in app.get_clients():

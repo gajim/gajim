@@ -267,6 +267,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             if not provider.check(candidate, start):
                 continue
 
+            assert self._contact is not None
             if provider.populate(candidate, self._contact):
                 self._completion_popover.set_provider(provider)
                 return True

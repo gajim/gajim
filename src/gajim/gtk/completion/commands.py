@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import Final
 
 import logging
@@ -14,7 +13,10 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.commands import Command
+from gajim.common.commands import CommandContext
 from gajim.common.i18n import _
+from gajim.common.types import ChatContactT
 
 from gajim.gtk.completion.base import BaseCompletionListItem
 from gajim.gtk.completion.base import BaseCompletionProvider
@@ -29,11 +31,19 @@ MAX_COMPLETION_ENTRIES = 10
 class CommandsCompletionListItem(BaseCompletionListItem, GObject.Object):
     __gtype_name__ = "CommandsCompletionListItem"
 
-    command = GObject.Property(type=str)
-    usage = GObject.Property(type=str)
+    name: str = GObject.Property(type=str)  # type: ignore
+    context: set[CommandContext] = GObject.Property(type=object)  # type: ignore
+    usage: str = GObject.Property(type=str)  # type: ignore
+
+    def __init__(self, command: Command) -> None:
+        super().__init__(
+            name=command.name,
+            context=command.context,
+            usage=f"/{command.name} {command.usage}",
+        )
 
     def get_text(self) -> str:
-        return f"/{self.command} "
+        return f"/{self.name} "
 
 
 class CommandsCompletionViewItem(
@@ -78,25 +88,39 @@ class CommandsCompletionProvider(BaseCompletionProvider):
 
     def __init__(self) -> None:
         BaseCompletionProvider.__init__(self)
+        self._commands_loaded = False
+        self._current_context: CommandContext | None = None
+
         self._list_store = Gio.ListStore(item_type=CommandsCompletionListItem)
 
-        for command, usage in app.commands.get_commands("chat"):  # TODO
-            self._list_store.append(
-                CommandsCompletionListItem(command=command, usage=f"/{command} {usage}")
-            )
-
         expression = Gtk.PropertyExpression.new(
-            CommandsCompletionListItem, None, "command"
+            CommandsCompletionListItem, None, "name"
         )
 
-        self._string_filter = Gtk.StringFilter(expression=expression)
+        multi_filter = Gtk.EveryFilter()
 
-        filter_model = Gtk.FilterListModel(
-            model=self._list_store, filter=self._string_filter
+        self._cmd_context_filter = Gtk.CustomFilter()
+        self._cmd_context_filter.set_filter_func(self._context_filter_func)  # type: ignore
+
+        self._cmd_name_filter = Gtk.StringFilter(
+            expression=expression, match_mode="prefix"
         )
+
+        multi_filter.append(self._cmd_context_filter)
+        multi_filter.append(self._cmd_name_filter)
+
+        filter_model = Gtk.FilterListModel(model=self._list_store, filter=multi_filter)
         self._model = Gtk.SliceListModel(
             model=filter_model, size=MAX_COMPLETION_ENTRIES
         )
+
+    def _load_commands(self) -> None:
+        commands = [CommandsCompletionListItem(c) for c in app.commands.get_commands()]
+        self._list_store.splice(0, 0, commands)
+        self._commands_loaded = True
+
+    def _context_filter_func(self, item: CommandsCompletionListItem) -> bool:
+        return self._current_context in item.context
 
     def get_model(
         self,
@@ -114,7 +138,15 @@ class CommandsCompletionProvider(BaseCompletionProvider):
 
         return start_iter.get_offset() == 0
 
-    def populate(self, candidate: str, contact: Any) -> bool:
+    def populate(self, candidate: str, contact: ChatContactT) -> bool:
+        if not self._commands_loaded:
+            self._load_commands()
+
+        new_context = CommandContext(contact.type_string)
+        if self._current_context != new_context:
+            self._current_context = new_context
+            self._cmd_context_filter.changed(Gtk.FilterChange.DIFFERENT)
+
         candidate = candidate.lstrip(self.trigger_char)
-        self._string_filter.set_search(candidate)
+        self._cmd_name_filter.set_search(candidate)
         return self._model.get_n_items() > 0
