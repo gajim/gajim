@@ -68,6 +68,7 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.structs import StartChatParam
+from gajim.gtk.unread_counter import UnreadCounters
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -125,6 +126,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
         self._chat_page = self._main_stack.get_chat_page()
+        self._unread_counters = UnreadCounters()
 
         self._prepare_window()
 
@@ -1249,8 +1251,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         return self._chat_page.chat_exists(account, jid)
 
     def get_total_unread_count(self) -> int:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        return chat_list_stack.get_total_unread_count()
+        return self._unread_counters.total
+
+    def get_workspace_unread_count(self, workspace_id: str) -> int:
+        return self._unread_counters.workspace_count(workspace_id)
 
     def get_chat_unread_count(
         self, account: str, jid: JID, include_silent: bool = False
@@ -1523,6 +1527,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
     def start_shutdown(self) -> None:
         self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
+        self._unread_counters.unregister_events()
         app.ged.raise_event(events.PrepareForShutdown())
 
         if self.is_visible():

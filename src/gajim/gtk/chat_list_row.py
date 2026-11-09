@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
@@ -84,6 +85,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
+        self._counted_contribution = 0
+        self._released_unread = False
         self._pinned: bool = pinned
 
         self.add_css_class("chatlist-row")
@@ -196,18 +199,13 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     @property
     def unread_count(self) -> int:
-        if (
-            isinstance(self.contact, GroupchatContact)
-            and not self.contact.can_notify()
-            and not self._needs_muc_highlight
-        ):
-            return 0
-        return self._unread_count
+        return self._counted_unread()
 
     @unread_count.setter
     def unread_count(self, value: int) -> None:
         self._unread_count = value
         self._update_unread()
+        self._publish_unread_messages()
         self.emit("unread-changed")
 
     def get_header_type(self) -> RowHeaderType | None:
@@ -360,6 +358,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 self._needs_muc_highlight = True
                 self._ui.mention_indicator.set_visible(True)
 
+        self._publish_unread_messages()
         self.emit("unread-changed")
 
     def reset_unread(self) -> None:
@@ -368,9 +367,61 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._unread_count = 0
         self._update_unread()
+        self._publish_unread_messages()
         self.emit("unread-changed")
 
         app.storage.cache.reset_unread_count(self.account, self.jid)
+
+    def release_unread(self) -> None:
+        """Drop this chat's contribution to the unread counters.
+
+        Called when the row leaves its workspace, so a later unroot does not
+        subtract the same messages again.
+        """
+        if self._released_unread:
+            return
+        self._released_unread = True
+        counted = self._counted_contribution
+        self._counted_contribution = 0
+        self._emit_message_events(counted, unread=False)
+
+    def _counted_unread(self) -> int:
+        """Messages that count toward workspace and global badges.
+
+        The row still shows silent group-chat unreads locally. Those stay out
+        of the badges until the room notifies, or a highlight arrives.
+        """
+        if self._unread_count == 0:
+            return 0
+        if not isinstance(self.contact, GroupchatContact):
+            return self._unread_count
+        if self._needs_muc_highlight or self.contact.can_notify():
+            return self._unread_count
+        return 0
+
+    def _publish_unread_messages(self) -> None:
+        if self._released_unread:
+            return
+        counted = self._counted_unread()
+        delta = counted - self._counted_contribution
+        self._counted_contribution = counted
+        if delta > 0:
+            self._emit_message_events(delta, unread=True)
+        elif delta < 0:
+            self._emit_message_events(-delta, unread=False)
+
+    def _emit_message_events(self, count: int, *, unread: bool) -> None:
+        if count <= 0:
+            return
+        event_class = events.MessageUnread if unread else events.MessageRead
+        for _ in range(count):
+            app.ged.raise_event(
+                event_class(
+                    account=self.account,
+                    jid=self.jid,
+                    workspace_id=self.workspace_id,
+                )
+            )
 
     def toggle_pinned(self) -> None:
         self._pinned = not self._pinned
@@ -422,6 +473,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.revealer.set_reveal_child(False)
 
     def do_unroot(self) -> None:
+        self.release_unread()
         self._disconnect_all()
 
         app.settings.disconnect_signals(self)
