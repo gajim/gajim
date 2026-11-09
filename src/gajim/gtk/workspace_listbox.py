@@ -20,6 +20,7 @@ from gajim.common.const import AvatarSize
 
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.menus import get_workspace_menu
+from gajim.gtk.preview.preview import PreviewWidget
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.util.misc import get_listbox_row_count
@@ -45,10 +46,17 @@ class WorkspaceListBox(Gtk.ListBox):
 
         formats_workspace = Gdk.ContentFormats.new_for_gtype(SideBarListBoxRow)
         formats_chat_list_row = Gdk.ContentFormats.new_for_gtype(ChatListRow)
-        formats = formats_workspace.union(formats_chat_list_row)
+        formats_image_preview = Gdk.ContentFormats.new_for_gtype(PreviewWidget)
+        formats = formats_workspace.union(formats_chat_list_row).union(
+            formats_image_preview
+        )
 
-        drop_target = Gtk.DropTarget(formats=formats, actions=Gdk.DragAction.MOVE)
+        drop_target = Gtk.DropTarget(
+            formats=formats, actions=Gdk.DragAction.MOVE | Gdk.DragAction.COPY
+        )
         drop_target.connect("drop", self._on_drop)
+        drop_target.connect("motion", self._on_drag_motion)
+        drop_target.connect("accept", self._on_drop_accept)
         self.add_controller(drop_target)
 
         self.set_sort_func(self._sort_func)
@@ -117,6 +125,40 @@ class WorkspaceListBox(Gtk.ListBox):
         # Reject drop
         log.debug("Unknown item type dropped")
         return False
+
+    def _on_drag_motion(
+        self, target: Gtk.DropTarget, _x: float, y: float
+    ) -> Gdk.DragAction:
+        """Switch to hovered workspace if dragged item is a PreviewWidget"""
+        drop = target.get_current_drop()
+        if drop is None:
+            return Gdk.DragAction.MOVE
+
+        offered_formats = drop.get_formats()
+        formats_image_preview = Gdk.ContentFormats.new_for_gtype(PreviewWidget)
+        if formats_image_preview.match(offered_formats):
+            target_workspace = self.get_row_at_y(int(y))
+            if isinstance(target_workspace, SideBarListBoxRow):
+                current_workspace = cast(
+                    SideBarListBoxRow | None, self.get_selected_row()
+                )
+                assert current_workspace is not None
+                if current_workspace.item_id != target_workspace.item_id:
+                    app.window.activate_workspace(target_workspace.item_id)
+                    return Gdk.DragAction.COPY
+
+        return Gdk.DragAction.MOVE
+
+    def _on_drop_accept(self, target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        # Accept handler needs to be here, the default accept handler
+        # always returns False here
+        allowed_formats = target.get_formats()
+        assert allowed_formats is not None
+
+        offered_formats = drop.get_formats()
+
+        log.debug("Offered formats for drop: %s", offered_formats.get_gtypes())
+        return allowed_formats.match(offered_formats)
 
     def _on_unread_count_changed(
         self, _chat_list_stack: ChatListStack, workspace_id: str, count: int

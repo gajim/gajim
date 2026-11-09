@@ -1015,13 +1015,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         return self._chat_page.is_chat_selected(account, jid)
 
     def highlight_dnd_targets(self, dragged_object: Any, highlight: bool) -> None:
-        if isinstance(dragged_object, ChatListRow | PreviewWidget):
-            chat_list_stack = self._chat_page.get_chat_list_stack()
-            workspace = self.get_active_workspace()
-            if workspace is None:
-                return
+        if not isinstance(dragged_object, ChatListRow | PreviewWidget):
+            return
 
-            chat_list = chat_list_stack.get_chatlist(workspace)
+        self._app_side_bar.highlight_dnd_targets(dragged_object, highlight)
+
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+
+        for workspace_id in app.settings.get_workspaces():
+            chat_list = chat_list_stack.get_chatlist(workspace_id)
             if isinstance(dragged_object, ChatListRow) and dragged_object.is_pinned:
                 for row in chat_list.get_chat_list_rows():
                     if not row.is_pinned:
@@ -1038,8 +1040,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
                         row.add_css_class("dnd-target-chatlist")
                     else:
                         row.remove_css_class("dnd-target-chatlist")
-
-        self._app_side_bar.highlight_dnd_targets(dragged_object, highlight)
 
     def _add_workspace(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         workspace_id = param.get_string()
