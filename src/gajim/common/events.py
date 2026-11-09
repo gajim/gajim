@@ -149,8 +149,6 @@ class ChatRead(ApplicationEvent):
 
 @dataclass
 class MessageUnread(ApplicationEvent):
-    """One message started counting toward the unread badges."""
-
     name: str = field(init=False, default="message-unread")
     account: str
     jid: JID
@@ -159,8 +157,6 @@ class MessageUnread(ApplicationEvent):
 
 @dataclass
 class MessageRead(ApplicationEvent):
-    """One message stopped counting toward the unread badges."""
-
     name: str = field(init=False, default="message-read")
     account: str
     jid: JID

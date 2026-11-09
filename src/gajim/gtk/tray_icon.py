@@ -33,6 +33,8 @@ from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.trayicon")
 
+_UNREAD_ICON_INTERVAL_MS = 1250
+
 if sys.platform == "win32" or TYPE_CHECKING:
     import pystray
     from PIL import Image
@@ -47,6 +49,8 @@ class TrayIcon:
         else:
             self._backend = LinuxTrayIcon()
 
+        self._unread_update_id: int | None = None
+
         app.settings.connect_signal("show_trayicon", self._on_setting_changed)
         app.window.connect("unread-count-changed", self._on_unread_count_changed)
 
@@ -56,12 +60,25 @@ class TrayIcon:
     def _on_unread_count_changed(self, *args: Any) -> None:
         if not app.settings.get("trayicon_notification_on_events"):
             return
-        self._backend.update_state()
+        if self._unread_update_id is not None:
+            return
+        self._unread_update_id = GLib.timeout_add(
+            _UNREAD_ICON_INTERVAL_MS, self._update_unread_icon
+        )
+
+    def _update_unread_icon(self) -> bool:
+        self._unread_update_id = None
+        if app.settings.get("trayicon_notification_on_events"):
+            self._backend.update_state()
+        return GLib.SOURCE_REMOVE
 
     def is_visible(self) -> bool:
         return self._backend.is_visible()
 
     def shutdown(self) -> None:
+        if self._unread_update_id is not None:
+            GLib.source_remove(self._unread_update_id)
+            self._unread_update_id = None
         self._backend.shutdown()
 
 

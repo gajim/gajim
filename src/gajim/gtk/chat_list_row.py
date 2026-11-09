@@ -44,7 +44,6 @@ from gajim.gtk.widgets import GajimPopover
 
 class ChatListRow(Gtk.ListBoxRow, SignalManager):
     __gsignals__ = {
-        "unread-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
         "context-menu-state-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
@@ -206,7 +205,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._unread_count = value
         self._update_unread()
         self._publish_unread_messages()
-        self.emit("unread-changed")
 
     def get_header_type(self) -> RowHeaderType | None:
         header = self.get_header()
@@ -359,7 +357,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 self._ui.mention_indicator.set_visible(True)
 
         self._publish_unread_messages()
-        self.emit("unread-changed")
 
     def reset_unread(self) -> None:
         self._needs_muc_highlight = False
@@ -368,7 +365,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._unread_count = 0
         self._update_unread()
         self._publish_unread_messages()
-        self.emit("unread-changed")
 
         app.storage.cache.reset_unread_count(self.account, self.jid)
 
@@ -405,10 +401,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         counted = self._counted_unread()
         delta = counted - self._counted_contribution
         self._counted_contribution = counted
-        if delta > 0:
-            self._emit_message_events(delta, unread=True)
-        elif delta < 0:
-            self._emit_message_events(-delta, unread=False)
+        self._emit_message_events(abs(delta), unread=delta > 0)
 
     def _emit_message_events(self, count: int, *, unread: bool) -> None:
         if count <= 0:

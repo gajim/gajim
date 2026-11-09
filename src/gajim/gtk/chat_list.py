@@ -126,9 +126,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         for row in iterate_listbox_children(self):
             yield cast(ChatListRow, row)
 
-    def get_unread_count(self) -> int:
-        return app.window.get_workspace_unread_count(self.workspace_id)
-
     def get_chat_unread_count(
         self, account: str, jid: JID, include_silent: bool = False
     ) -> int | None:
