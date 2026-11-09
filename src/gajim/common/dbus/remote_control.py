@@ -386,7 +386,7 @@ class GajimRemote(Server):
 
     @staticmethod
     def get_unread_msgs_number() -> str:
-        return str(app.window.get_total_unread_count())
+        return str(app.window.get_app_unread_count())
 
     @staticmethod
     def Introspect() -> str:  # pylint: disable=invalid-name

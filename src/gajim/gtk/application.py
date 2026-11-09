@@ -263,7 +263,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         GLib.timeout_add(100, self._auto_connect)
 
     def _update_desktop_dock(self, *args: Any) -> None:
-        count = app.window.get_total_unread_count()
+        count = app.window.get_app_unread_count()
         dock = NSApplication.sharedApplication().dockTile()
         dock.setBadgeLabel_(str(count) if count else None)
 

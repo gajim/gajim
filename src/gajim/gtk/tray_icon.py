@@ -172,7 +172,7 @@ class WindowsTrayIcon(TrayIconBackend):
             self._tray_icon.run_detached()
 
     def update_state(self, init: bool = False) -> None:
-        if not init and app.window.get_total_unread_count():
+        if not init and app.window.get_app_unread_count():
             self._tray_icon.icon = self._get_icon("message-new")
             return
 
@@ -366,7 +366,7 @@ class LinuxTrayIcon(TrayIconBackend):
             # Shutdown in progress, don't update icon
             return
 
-        if not init and app.window.get_total_unread_count():
+        if not init and app.window.get_app_unread_count():
             icon_name = get_tray_icon_name("message-new")
             self._tray_icon.set_icon(icon_name)
             return

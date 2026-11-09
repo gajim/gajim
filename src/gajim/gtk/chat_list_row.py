@@ -17,7 +17,6 @@ from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import events
 from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
@@ -70,6 +69,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._pinned_header = RowHeader(RowHeaderType.PINNED)
 
         self._client = app.get_client(account)
+        self._unread_counter = app.window.get_unread_counter()
 
         self.contact = self._client.get_module("Contacts").get_contact(jid)
         assert isinstance(
@@ -85,7 +85,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
         self._counted_contribution = 0
-        self._released_unread = False
         self._pinned: bool = pinned
 
         self.add_css_class("chatlist-row")
@@ -196,16 +195,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def has_draft(self) -> bool:
         return self._has_draft
 
-    @property
-    def unread_count(self) -> int:
-        return self._counted_unread()
-
-    @unread_count.setter
-    def unread_count(self, value: int) -> None:
-        self._unread_count = value
-        self._update_unread()
-        self._publish_unread_messages()
-
     def get_header_type(self) -> RowHeaderType | None:
         header = self.get_header()
         if header is None:
@@ -284,9 +273,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(_("%(nickname)s:") % {"nickname": nickname})
 
-    def get_real_unread_count(self) -> int:
-        return self._unread_count
-
     def set_stanza_id(self, stanza_id: str | None) -> None:
         self.stanza_id = stanza_id
 
@@ -334,14 +320,31 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.update_time()
         self._ui.mute_image.set_visible(self.contact.is_muted)
 
+    def get_unread_count(self, include_silent: bool) -> int:
+        if include_silent:
+            return self._unread_count
+
+        if self._unread_count == 0:
+            return 0
+        if not isinstance(self.contact, GroupchatContact):
+            return self._unread_count
+        if self._needs_muc_highlight or self.contact.can_notify():
+            return self._unread_count
+        return 0
+
+    def set_unread_count(self, count: int) -> None:
+        self._unread_count = count
+        self._update_unread()
+        self._update_unread_counter()
+
     def add_unread(self, text: str) -> None:
         assert self.message_id is not None
         self._unread_count += 1
-        self._update_unread()
+
         app.storage.cache.set_unread_count(
             self.account,
             self.jid,
-            self.get_real_unread_count(),
+            self.get_unread_count(include_silent=True),
             self.message_id,
             self.timestamp,
         )
@@ -356,68 +359,18 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 self._needs_muc_highlight = True
                 self._ui.mention_indicator.set_visible(True)
 
-        self._publish_unread_messages()
+        self._update_unread()
+        self._update_unread_counter()
 
     def reset_unread(self) -> None:
         self._needs_muc_highlight = False
         self._ui.mention_indicator.set_visible(False)
 
         self._unread_count = 0
-        self._update_unread()
-        self._publish_unread_messages()
-
         app.storage.cache.reset_unread_count(self.account, self.jid)
 
-    def release_unread(self) -> None:
-        """Drop this chat's contribution to the unread counters.
-
-        Called when the row leaves its workspace, so a later unroot does not
-        subtract the same messages again.
-        """
-        if self._released_unread:
-            return
-        self._released_unread = True
-        counted = self._counted_contribution
-        self._counted_contribution = 0
-        self._emit_message_events(counted, unread=False)
-
-    def _counted_unread(self) -> int:
-        """Messages that count toward workspace and global badges.
-
-        The row still shows silent group-chat unreads locally. Those stay out
-        of the badges until the room notifies, or a highlight arrives.
-        """
-        if self._unread_count == 0:
-            return 0
-        if not isinstance(self.contact, GroupchatContact):
-            return self._unread_count
-        if self._needs_muc_highlight or self.contact.can_notify():
-            return self._unread_count
-        return 0
-
-    def _publish_unread_messages(self) -> None:
-        if self._released_unread:
-            return
-        counted = self._counted_unread()
-        delta = counted - self._counted_contribution
-        self._counted_contribution = counted
-        self._emit_message_events(abs(delta), unread=delta > 0)
-
-    def _emit_message_events(self, count: int, *, unread: bool) -> None:
-        if count <= 0:
-            return
-        event_class = events.MessageUnread if unread else events.MessageRead
-        for _ in range(count):
-            app.ged.raise_event(
-                event_class(
-                    account=self.account,
-                    jid=self.jid,
-                    workspace_id=self.workspace_id,
-                )
-            )
-
-    def toggle_pinned(self) -> None:
-        self._pinned = not self._pinned
+        self._update_unread()
+        self._update_unread_counter()
 
     def _update_unread(self) -> None:
         unread_count = self._get_unread_string(self._unread_count)
@@ -429,6 +382,19 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if count < 1000:
             return str(count)
         return "999+"
+
+    def _update_unread_counter(self) -> None:
+        counted = self.get_unread_count(include_silent=False)
+        delta = counted - self._counted_contribution
+        self._counted_contribution = counted
+
+        if delta > 0:
+            self._unread_counter.add(self.workspace_id, abs(delta))
+        else:
+            self._unread_counter.remove(self.workspace_id, abs(delta))
+
+    def toggle_pinned(self) -> None:
+        self._pinned = not self._pinned
 
     def _on_mute_setting_changed(self, *args: Any) -> None:
         self._ui.mute_image.set_visible(self.contact.is_muted)
@@ -466,7 +432,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.revealer.set_reveal_child(False)
 
     def do_unroot(self) -> None:
-        self.release_unread()
+        self._unread_counter.remove(self.workspace_id, self._counted_contribution)
         self._disconnect_all()
 
         app.settings.disconnect_signals(self)

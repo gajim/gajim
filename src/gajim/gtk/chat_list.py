@@ -131,15 +131,13 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     ) -> int | None:
         chat = self._chats.get((account, jid))
         if chat is not None:
-            if include_silent:
-                return chat.get_real_unread_count()
-            return chat.unread_count
+            return chat.get_unread_count(include_silent=include_silent)
         return None
 
     def set_chat_unread_count(self, account: str, jid: JID, count: int) -> None:
         chat = self._chats.get((account, jid))
         if chat is not None:
-            chat.unread_count = count
+            chat.set_unread_count(count)
 
     def set_filter(self, chat_filter: ChatFilters) -> None:
         self._current_filter = chat_filter
@@ -180,7 +178,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
-        if chat is not None and chat.get_real_unread_count() > 0:
+        if chat is not None and chat.get_unread_count(include_silent=True) > 0:
             chat.reset_unread()
             app.ged.raise_event(events.ChatRead(account=account, jid=jid))
 
@@ -257,7 +255,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
                 if row is None:
                     return
                 assert isinstance(row, ChatListRow)
-                if row.unread_count > 0:
+                if row.get_unread_count(include_silent=False) > 0:
                     unread_found = True
                     break
                 if index == current:
@@ -296,7 +294,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def remove_chat(self, account: str, jid: JID) -> None:
         row = self._chats.pop((account, jid))
-        row.release_unread()
 
         if row.is_pinned:
             self._chat_order.remove(row)

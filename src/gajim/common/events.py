@@ -148,22 +148,6 @@ class ChatRead(ApplicationEvent):
 
 
 @dataclass
-class MessageUnread(ApplicationEvent):
-    name: str = field(init=False, default="message-unread")
-    account: str
-    jid: JID
-    workspace_id: str
-
-
-@dataclass
-class MessageRead(ApplicationEvent):
-    name: str = field(init=False, default="message-read")
-    account: str
-    jid: JID
-    workspace_id: str
-
-
-@dataclass
 class StanzaSent(ApplicationEvent):
     name: str = field(init=False, default="stanza-sent")
     account: str
