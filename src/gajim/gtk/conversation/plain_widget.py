@@ -6,13 +6,13 @@ from __future__ import annotations
 
 import logging
 
-import emoji
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from gajim.common.emoji import EmojiData
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
@@ -135,11 +135,8 @@ class MessageLabel(Gtk.Label, SignalManager):
         self.set_attributes(make_pango_attributes(block))
 
         stripped = text.strip()
-        # https://github.com/carpedm20/emoji/issues/300
-        # purely_emoji() return True for the empty string
-        if stripped and emoji.purely_emoji(stripped):
-            emoji_count = emoji.emoji_count(stripped)
-            if emoji_count == 1:
+        if EmojiData.contains_only_emojis(stripped, max_chars=20):
+            if EmojiData.is_emoji(stripped):
                 classname = "gajim-single-emoji-msg"
             else:
                 classname = "gajim-emoji-msg"
