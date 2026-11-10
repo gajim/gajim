@@ -84,7 +84,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
-        self._counted_contribution = 0
+        self._displayed_unread_count = 0
         self._pinned: bool = pinned
 
         self.add_css_class("chatlist-row")
@@ -386,8 +386,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     def _update_unread_counter(self) -> None:
         counted = self.get_unread_count(include_silent=False)
-        delta = counted - self._counted_contribution
-        self._counted_contribution = counted
+        delta = counted - self._displayed_unread_count
+        self._displayed_unread_count = counted
         self._unread_counter.update(self.workspace_id, delta)
 
     def toggle_pinned(self) -> None:
@@ -429,7 +429,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.revealer.set_reveal_child(False)
 
     def do_unroot(self) -> None:
-        self._unread_counter.update(self.workspace_id, -self._counted_contribution)
+        self._unread_counter.update(self.workspace_id, -self._displayed_unread_count)
         self._disconnect_all()
 
         app.settings.disconnect_signals(self)
