@@ -53,11 +53,8 @@ class UnreadCounter:
             del self._workspaces[workspace_id]
         return after
 
-    def add(self, workspace_id: str, count: int) -> None:
+    def update(self, workspace_id: str, count: int) -> None:
         self._count_message(workspace_id, count)
-
-    def remove(self, workspace_id: str, count: int) -> None:
-        self._count_message(workspace_id, -count)
 
     def _count_message(self, workspace_id: str, delta: int) -> None:
         count = self.apply(workspace_id, delta)

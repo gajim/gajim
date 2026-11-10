@@ -321,14 +321,15 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.mute_image.set_visible(self.contact.is_muted)
 
     def get_unread_count(self, include_silent: bool) -> int:
-        if include_silent:
-            return self._unread_count
-
         if self._unread_count == 0:
             return 0
-        if not isinstance(self.contact, GroupchatContact):
-            return self._unread_count
-        if self._needs_muc_highlight or self.contact.can_notify():
+
+        if (
+            include_silent
+            or not isinstance(self.contact, GroupchatContact)
+            or self._needs_muc_highlight
+            or self.contact.can_notify()
+        ):
             return self._unread_count
         return 0
 
@@ -387,11 +388,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         counted = self.get_unread_count(include_silent=False)
         delta = counted - self._counted_contribution
         self._counted_contribution = counted
-
-        if delta > 0:
-            self._unread_counter.add(self.workspace_id, abs(delta))
-        else:
-            self._unread_counter.remove(self.workspace_id, abs(delta))
+        self._unread_counter.update(self.workspace_id, delta)
 
     def toggle_pinned(self) -> None:
         self._pinned = not self._pinned
@@ -432,7 +429,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.revealer.set_reveal_child(False)
 
     def do_unroot(self) -> None:
-        self._unread_counter.remove(self.workspace_id, self._counted_contribution)
+        self._unread_counter.update(self.workspace_id, -self._counted_contribution)
         self._disconnect_all()
 
         app.settings.disconnect_signals(self)
