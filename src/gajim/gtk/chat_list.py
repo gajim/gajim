@@ -126,23 +126,18 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         for row in iterate_listbox_children(self):
             yield cast(ChatListRow, row)
 
-    def get_unread_count(self) -> int:
-        return sum(chats.unread_count for chats in self._chats.values())
-
     def get_chat_unread_count(
         self, account: str, jid: JID, include_silent: bool = False
     ) -> int | None:
         chat = self._chats.get((account, jid))
         if chat is not None:
-            if include_silent:
-                return chat.get_real_unread_count()
-            return chat.unread_count
+            return chat.get_unread_count(include_silent=include_silent)
         return None
 
     def set_chat_unread_count(self, account: str, jid: JID, count: int) -> None:
         chat = self._chats.get((account, jid))
         if chat is not None:
-            chat.unread_count = count
+            chat.set_unread_count(count)
 
     def set_filter(self, chat_filter: ChatFilters) -> None:
         self._current_filter = chat_filter
@@ -183,7 +178,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
-        if chat is not None and chat.get_real_unread_count() > 0:
+        if chat is not None and chat.get_unread_count(include_silent=True) > 0:
             chat.reset_unread()
             app.ged.raise_event(events.ChatRead(account=account, jid=jid))
 
@@ -219,7 +214,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if pinned:
             self._chat_order.insert(position, row)
 
-        row.connect("unread-changed", self._on_row_unread_changed)
         row.connect("context-menu-state-changed", self._on_context_menu_state_changed)
 
         self.append(row)
@@ -261,7 +255,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
                 if row is None:
                     return
                 assert isinstance(row, ChatListRow)
-                if row.unread_count > 0:
+                if row.get_unread_count(include_silent=False) > 0:
                     unread_found = True
                     break
                 if index == current:
@@ -298,22 +292,18 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     def get_chat_list_rows(self) -> list[ChatListRow]:
         return list(self._iterate_rows())
 
-    def remove_chat(self, account: str, jid: JID, emit_unread: bool = True) -> None:
+    def remove_chat(self, account: str, jid: JID) -> None:
         row = self._chats.pop((account, jid))
 
         if row.is_pinned:
             self._chat_order.remove(row)
         self.remove(row)
 
-        if emit_unread:
-            self._emit_unread_changed()
-
     def remove_chats_for_account(self, account: str) -> None:
         for row_account, jid in list(self._chats.keys()):
             if row_account != account:
                 continue
             self.remove_chat(account, jid)
-        self._emit_unread_changed()
 
     def clear_chat_list_row(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
@@ -356,10 +346,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         button.add_css_class("suggested-action")
         self.set_placeholder(button)
 
-    def _emit_unread_changed(self) -> None:
-        count = self.get_unread_count()
-        app.window.emit("unread-count-changed", self._workspace_id, count)
-
     def _get_row_before(self, row: ChatListRow) -> ChatListRow | None:
         row_before = self.get_row_at_index(row.get_index() - 1)
         if row_before is None:
@@ -377,9 +363,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         last_row = self.get_row_at_index(index)
         assert last_row is not None
         return cast(ChatListRow, last_row)
-
-    def _on_row_unread_changed(self, row: ChatListRow) -> None:
-        self._emit_unread_changed()
 
     def _on_context_menu_state_changed(
         self, row: ChatListRow, menu_is_visible: bool

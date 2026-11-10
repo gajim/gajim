@@ -43,7 +43,6 @@ from gajim.gtk.widgets import GajimPopover
 
 class ChatListRow(Gtk.ListBoxRow, SignalManager):
     __gsignals__ = {
-        "unread-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
         "context-menu-state-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
@@ -70,6 +69,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._pinned_header = RowHeader(RowHeaderType.PINNED)
 
         self._client = app.get_client(account)
+        self._unread_counter = app.window.get_unread_counter()
 
         self.contact = self._client.get_module("Contacts").get_contact(jid)
         assert isinstance(
@@ -84,6 +84,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
+        self._displayed_unread_count = 0
         self._pinned: bool = pinned
 
         self.add_css_class("chatlist-row")
@@ -194,22 +195,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def has_draft(self) -> bool:
         return self._has_draft
 
-    @property
-    def unread_count(self) -> int:
-        if (
-            isinstance(self.contact, GroupchatContact)
-            and not self.contact.can_notify()
-            and not self._needs_muc_highlight
-        ):
-            return 0
-        return self._unread_count
-
-    @unread_count.setter
-    def unread_count(self, value: int) -> None:
-        self._unread_count = value
-        self._update_unread()
-        self.emit("unread-changed")
-
     def get_header_type(self) -> RowHeaderType | None:
         header = self.get_header()
         if header is None:
@@ -288,9 +273,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(_("%(nickname)s:") % {"nickname": nickname})
 
-    def get_real_unread_count(self) -> int:
-        return self._unread_count
-
     def set_stanza_id(self, stanza_id: str | None) -> None:
         self.stanza_id = stanza_id
 
@@ -338,14 +320,32 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.update_time()
         self._ui.mute_image.set_visible(self.contact.is_muted)
 
+    def get_unread_count(self, include_silent: bool) -> int:
+        if self._unread_count == 0:
+            return 0
+
+        if (
+            include_silent
+            or not isinstance(self.contact, GroupchatContact)
+            or self._needs_muc_highlight
+            or self.contact.can_notify()
+        ):
+            return self._unread_count
+        return 0
+
+    def set_unread_count(self, count: int) -> None:
+        self._unread_count = count
+        self._update_unread()
+        self._update_unread_counter()
+
     def add_unread(self, text: str) -> None:
         assert self.message_id is not None
         self._unread_count += 1
-        self._update_unread()
+
         app.storage.cache.set_unread_count(
             self.account,
             self.jid,
-            self.get_real_unread_count(),
+            self.get_unread_count(include_silent=True),
             self.message_id,
             self.timestamp,
         )
@@ -360,20 +360,18 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
                 self._needs_muc_highlight = True
                 self._ui.mention_indicator.set_visible(True)
 
-        self.emit("unread-changed")
+        self._update_unread()
+        self._update_unread_counter()
 
     def reset_unread(self) -> None:
         self._needs_muc_highlight = False
         self._ui.mention_indicator.set_visible(False)
 
         self._unread_count = 0
-        self._update_unread()
-        self.emit("unread-changed")
-
         app.storage.cache.reset_unread_count(self.account, self.jid)
 
-    def toggle_pinned(self) -> None:
-        self._pinned = not self._pinned
+        self._update_unread()
+        self._update_unread_counter()
 
     def _update_unread(self) -> None:
         unread_count = self._get_unread_string(self._unread_count)
@@ -385,6 +383,15 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if count < 1000:
             return str(count)
         return "999+"
+
+    def _update_unread_counter(self) -> None:
+        counted = self.get_unread_count(include_silent=False)
+        delta = counted - self._displayed_unread_count
+        self._displayed_unread_count = counted
+        self._unread_counter.update(self.workspace_id, delta)
+
+    def toggle_pinned(self) -> None:
+        self._pinned = not self._pinned
 
     def _on_mute_setting_changed(self, *args: Any) -> None:
         self._ui.mute_image.set_visible(self.contact.is_muted)
@@ -422,6 +429,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.revealer.set_reveal_child(False)
 
     def do_unroot(self) -> None:
+        self._unread_counter.update(self.workspace_id, -self._displayed_unread_count)
         self._disconnect_all()
 
         app.settings.disconnect_signals(self)

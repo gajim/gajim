@@ -242,7 +242,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
             _remove(unregister=response_id == "leave_perm")
 
         def _remove(unregister: bool = False) -> None:
-            chat_list.remove_chat(account, jid, emit_unread=False)
+            chat_list.remove_chat(account, jid)
             self.store_open_chats(workspace_id)
             self.emit("chat-removed", account, jid, type_, unregister)
 
@@ -322,12 +322,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
-
-    def get_total_unread_count(self) -> int:
-        count = 0
-        for chat_list in self._chat_lists.values():
-            count += chat_list.get_unread_count()
-        return count
 
     def get_chat_unread_count(
         self, account: str, jid: JID, include_silent: bool = False

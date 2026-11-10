@@ -68,6 +68,7 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.structs import StartChatParam
+from gajim.gtk.unread_counter import UnreadCounter
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -125,6 +126,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         self._emoji_chooser: EmojiChooser | None = None
         self._about_dialog = None
         self._chat_page = self._main_stack.get_chat_page()
+        self._unread_counter = UnreadCounter()
 
         self._prepare_window()
 
@@ -333,6 +335,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
     def _on_back_clicked(self, _button: Gtk.Button) -> None:
         show_sidebar = self._split_view.get_show_sidebar()
         self._split_view.set_show_sidebar(not show_sidebar)
+
+    def get_unread_counter(self) -> UnreadCounter:
+        return self._unread_counter
 
     def get_chat_stack(self) -> ChatStack:
         return self._chat_page.get_chat_stack()
@@ -1248,9 +1253,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
     def chat_exists(self, account: str, jid: JID) -> bool:
         return self._chat_page.chat_exists(account, jid)
 
-    def get_total_unread_count(self) -> int:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        return chat_list_stack.get_total_unread_count()
+    def get_app_unread_count(self) -> int:
+        return self._unread_counter.total
 
     def get_chat_unread_count(
         self, account: str, jid: JID, include_silent: bool = False
@@ -1523,6 +1527,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
 
     def start_shutdown(self) -> None:
         self.show_toast(Adw.Toast(title=_("Gajim is quitting…"), timeout=0))
+        self._unread_counter.shutdown()
         app.ged.raise_event(events.PrepareForShutdown())
 
         if self.is_visible():
