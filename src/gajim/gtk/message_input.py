@@ -10,6 +10,7 @@ from typing import cast
 
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -24,6 +25,7 @@ from gajim.common import ged
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import get_default_lang
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
@@ -279,8 +281,21 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
         buf = self.get_buffer()
         begin, end = self._get_completion_candidate_bounds(buf)
+        provider_id = popover.get_provider_id()
+        if provider_id == "nickname":
+            # Group chat nickname completion: check if user is joined
+            assert isinstance(self._contact, GroupchatContact)
+            participant = self._contact.get_resource_if_exists(completion_string)
+            if participant is None or not participant.is_available:
+                app.window.show_toast(
+                    Adw.Toast(
+                        title=_("%s is not online at this moment") % completion_string,
+                        timeout=3,
+                    )
+                )
+
         insert_string = self._get_completion_insert_string(
-            popover.get_provider_id(), begin.is_start(), completion_string
+            provider_id, begin.is_start(), completion_string
         )
         buf.delete(begin, end)
         buf.insert(begin, insert_string)
