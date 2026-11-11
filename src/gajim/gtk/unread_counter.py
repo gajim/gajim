@@ -67,8 +67,8 @@ class UnreadCounter:
         self._count_message(workspace_id, count)
 
     def _emit_delayed(self, workspace_id: str, count: int) -> None:
+        self._signal_data[workspace_id] = count
         if self._signal_id is not None:
-            self._signal_data[workspace_id] = count
             return
 
         self._signal_id = timeout_add_once(1_000, self._emit)
