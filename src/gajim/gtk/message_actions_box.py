@@ -983,7 +983,15 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             clipboard.read_text_async(None, self._on_clipboard_text_fallback_finished)
             return
 
-        uris = [file.get_uri() for file in file_list.get_files()]
+        files = file_list.get_files()
+        if not files or not all(file.has_uri_scheme("file") for file in files):
+            # Not local files, e.g. a link copied in Safari, which GTK also
+            # offers as a file list: paste it as text
+            log.info("Clipboard URIs are not local files, trying text fallback")
+            clipboard.read_text_async(None, self._on_clipboard_text_fallback_finished)
+            return
+
+        uris = [file.get_uri() for file in files]
         app.window.activate_action("win.send-file", GLib.Variant("as", uris))
 
     def _on_clipboard_text_fallback_finished(
