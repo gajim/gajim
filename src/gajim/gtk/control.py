@@ -1224,6 +1224,10 @@ class ChatControl(EventHelper):
                     "actor": actor,
                 }
 
+            if event.reason:
+                reason = _("(reason: %s)") % event.reason
+                message = f"{message} {reason}"
+
         elif StatusCode.REMOVED_BANNED in status_codes:
             message = _("%s has been banned") % nick
             if actor:
@@ -1231,11 +1235,9 @@ class ChatControl(EventHelper):
                     "nick": nick,
                     "actor": actor,
                 }
-
-        reason = event.reason
-        if reason:
-            reason = _("(reason: %s)") % reason
-            message = f"{message} {reason}"
+            if event.reason:
+                reason = _("(reason: %s)") % event.reason
+                message = f"{message} {reason}"
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
             reason = _("(reason: affiliation changed)")
