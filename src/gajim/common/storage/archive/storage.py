@@ -476,6 +476,7 @@ class MessageArchiveStorage(AlchemyStorage):
         id_: str,
         *,
         default_options: bool,
+        options: list[Any] | None = None,
     ) -> Message | None:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -488,7 +489,10 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.fk_account_pk == fk_account_pk,
         )
 
-        if default_options:
+        if options:
+            stmt = stmt.options(*options)
+
+        elif default_options:
             stmt = stmt.options(
                 *load_all_relations,
                 selectinload(Message.corrections).options(*load_all_relations),

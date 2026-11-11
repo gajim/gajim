@@ -390,7 +390,6 @@ class ReactionUpdated(ApplicationEvent):
     jid: JID
     id: str
     direction: ChatDirection
-    occupant: mod.Occupant | None
     emojis: set[str] | None
     message: mod.Message | None
     is_mam_message: bool

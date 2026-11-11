@@ -474,7 +474,6 @@ class Message(BaseModule):
                     jid=remote_jid,
                     id=reactions_id,
                     direction=direction,
-                    occupant=occupant,
                     emojis=None,
                     message=None,
                     is_mam_message=False,
