@@ -29,6 +29,7 @@ from gajim.common.aes import AESGCMDecryptor
 from gajim.common.aes import AESGCMEncryptor
 from gajim.common.aes import AESKeyData
 from gajim.common.enum import FTState
+from gajim.common.util.quarantine import set_quarantine
 
 MIN_CHUNK_SIZE = 1024 * 100  # 100 KB
 DEFAULT_MAX_CONTENT_LENGTH = 1024 * 1024 * 10  # 10 MB
@@ -377,6 +378,10 @@ def http_request(
     decoded_bytes = 0
 
     with file_method() as output_file:
+        if output is not None:
+            # Received from the network: let macOS Gatekeeper check it
+            set_quarantine(output)
+
         chunk_size = get_chunk_size(content_length, max_download_size)
         for data in resp.iter_bytes(chunk_size=chunk_size):
             if event.is_set():

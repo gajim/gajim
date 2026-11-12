@@ -40,6 +40,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.image import print_image_debug_info
+from gajim.common.util.quarantine import copy_quarantine
 
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -898,6 +899,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
             try:
                 shutil.copyfile(orig_path, target_path)
+                copy_quarantine(orig_path, target_path)
             except Exception as e:
                 InformationAlertDialog(
                     _("Could Not Save File"),
