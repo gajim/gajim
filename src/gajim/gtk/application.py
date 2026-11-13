@@ -234,6 +234,10 @@ class GajimApplication(Adw.Application, CoreApplication):
             app.settings.get("autoawaytime") * 60, app.settings.get("autoxatime") * 60
         )
 
+        from gajim.common.emoji import EmojiData
+
+        EmojiData.init()
+
         from gajim.gtk.tray_icon import TrayIcon
 
         self.systray = TrayIcon()

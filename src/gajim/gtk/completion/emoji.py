@@ -13,14 +13,13 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gio
-from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.emoji import EmojiData
+from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
-from gajim.common.i18n import get_default_lang
-from gajim.common.i18n import get_short_lang_code
 
 from gajim.gtk.completion.base import BaseCompletionListItem
 from gajim.gtk.completion.base import BaseCompletionProvider
@@ -28,155 +27,16 @@ from gajim.gtk.completion.base import BaseCompletionViewItem
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import get_ui_string
 
+MAX_COMPLETION_ENTRIES = 12
+
 log = logging.getLogger("gajim.gtk.completion.emoji")
-
-EMOJI_DATA_ENTRY_T = tuple[list[int], str, str, list[str], list[str], int]
-MAX_COMPLETION_ENTRIES = 8
-FALLBACK_LOCALE = "en"
-
-SKIN_TONE_MODIFIERS = (0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF)
-
-
-def get_locale_fallbacks(desired: str) -> list[str]:
-    """
-    Returns full list of locales to try loading emoji data in, in the order of
-    decreasing preference and specificity.  E.g., ['de', 'en']
-    for desired == 'de'.
-    """
-    result = [desired]
-    if FALLBACK_LOCALE not in result:
-        result.append(FALLBACK_LOCALE)
-
-    return result
-
-
-def generate_unicode_sequence(c_sequence: list[int]) -> tuple[bool, str]:
-    """
-    Generates a unicode sequence from a list of codepoints
-    """
-    has_skin_tone_variation = False
-    u_sequence = ""
-    for codepoint in c_sequence:
-        if codepoint == 0:
-            has_skin_tone_variation = True
-            codepoint = 0xFE0F
-
-        if codepoint == 0x1F3FB:
-            has_skin_tone_variation = True
-            continue
-
-        u_sequence += chr(codepoint)
-    return has_skin_tone_variation, u_sequence
-
-
-def generate_skin_tone_sequence(c_sequence: list[int], modifier: int) -> str:
-    """
-    Replaces GTKs placeholder '0' for skin tone modifiers
-    with a given modifier
-    """
-    u_sequence = ""
-    for codepoint in c_sequence:
-        if codepoint in (0, 0x1F3FB):
-            codepoint = modifier
-        u_sequence += chr(codepoint)
-    return u_sequence
-
-
-def try_load_raw_emoji_data(locale: str) -> GLib.Bytes | None:
-    # Sources of emoji data can be found at:
-    # https://gitlab.gnome.org/GNOME/gtk/-/tree/main/gtk/emoji
-    emoji_data_resource = f"/org/gtk/libgtk/emoji/{locale}.data"
-
-    # some distribution do not register locale emoji resources, so let's do it
-    try:
-        res = Gio.resource_load(f"/usr/share/gtk-4.0/emoji/{locale}.gresource")
-    except GLib.Error:
-        pass
-    else:
-        Gio.resources_register(res)
-
-    try:
-        bytes_ = Gio.resources_lookup_data(
-            emoji_data_resource, Gio.ResourceLookupFlags.NONE
-        )
-        assert bytes_ is not None
-        log.info("Loaded emoji data resource for locale %s", locale)
-        return bytes_
-    except GLib.Error as error:
-        log.info("Loading emoji data resource for locale %s failed: %s", locale, error)
-        return None
-
-
-def parse_emoji_data(
-    bytes_data: GLib.Bytes, loc: str
-) -> Gio.ListStore[EmojiCompletionListItem]:
-    variant = GLib.Variant.new_from_bytes(
-        # Reference for the data format:
-        # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/emoji/convert-emoji.c#L25
-        GLib.VariantType("a(aussasasu)"),
-        bytes_data,
-        True,
-    )
-
-    iterable: list[EMOJI_DATA_ENTRY_T] = variant.unpack()
-
-    store = Gio.ListStore(item_type=EmojiCompletionListItem)
-    for (
-        c_sequence,
-        _short_name,
-        trans_short_name,
-        _keywords,
-        trans_keywords,
-        _group,
-    ) in iterable:
-        # Example item:
-        # (
-        #     [128515],
-        #     'grinning face with big eyes',
-        #     'grinsendes Gesicht mit großen Augen',
-        #     ['face', 'mouth', 'open', 'smile'],
-        #     ['gesicht', 'grinsendes gesicht mit großen augen', 'lol', 'lustig', 'lächeln'],  # noqa: E501
-        #     1
-        # )
-        # If '0' is in c_sequence its a placeholder for skin tone modifiers
-
-        has_skin_variation, u_sequence = generate_unicode_sequence(c_sequence)
-        keywords_string = ", ".join(trans_keywords)
-
-        u_mod_sequences: dict[str, str] = {}
-        if has_skin_variation:
-            for index, modifier in enumerate(SKIN_TONE_MODIFIERS, start=1):
-                u_mod_sequences[f"var{index}"] = generate_skin_tone_sequence(
-                    c_sequence, modifier
-                )
-
-        item = EmojiCompletionListItem(
-            emoji=u_sequence,
-            short_name=trans_short_name,
-            keywords=f"[ {keywords_string} ]",
-            search=f"{trans_short_name}|{'|'.join(trans_keywords)}",
-            has_skin_variation=has_skin_variation,
-            **u_mod_sequences,
-        )
-        store.append(item)
-
-    store.sort(_sort_short_name)
-    return store
-
-
-@staticmethod
-def _sort_short_name(
-    item1: EmojiCompletionListItem, item2: EmojiCompletionListItem
-) -> int:
-    return locale.strcoll(item1.short_name, item2.short_name)
 
 
 class EmojiCompletionListItem(BaseCompletionListItem, GObject.Object):
     __gtype_name__ = "EmojiCompletionListItem"
 
     emoji = GObject.Property(type=str)
-    short_name = GObject.Property(type=str)
-    keywords = GObject.Property(type=str)
+    name = GObject.Property(type=str)
     search = GObject.Property(type=str)
     has_skin_variation = GObject.Property(type=bool, default=False)
     var1 = GObject.Property(type=str, default="")
@@ -198,7 +58,6 @@ class EmojiCompletionViewItem(
 
     _emoji_label: Gtk.Label = Gtk.Template.Child()
     _short_name_label: Gtk.Label = Gtk.Template.Child()
-    _keywords_label: Gtk.Label = Gtk.Template.Child()
     _var1_button: Gtk.Button = Gtk.Template.Child()
     _var2_button: Gtk.Button = Gtk.Template.Child()
     _var3_button: Gtk.Button = Gtk.Template.Child()
@@ -246,8 +105,7 @@ class EmojiCompletionViewItem(
         bind_spec = [
             ("has_skin_variation", self, "has_skin_variation"),
             ("emoji", self._emoji_label, "label"),
-            ("short_name", self._short_name_label, "label"),
-            ("keywords", self._keywords_label, "label"),
+            ("name", self._short_name_label, "label"),
             ("var1", self._var1_button, "label"),
             ("var2", self._var2_button, "label"),
             ("var3", self._var3_button, "label"),
@@ -281,47 +139,70 @@ class EmojiCompletionProvider(BaseCompletionProvider):
     def __init__(self) -> None:
         BaseCompletionProvider.__init__(self)
         self._load_complete = False
+        self._list_store = Gio.ListStore(item_type=EmojiCompletionListItem)
 
         expression = Gtk.PropertyExpression.new(EmojiCompletionListItem, None, "search")
         self._string_filter = Gtk.StringFilter(expression=expression)
-
         self._filter_model = Gtk.FilterListModel(filter=self._string_filter)
-        self._model = Gtk.SliceListModel(
-            model=self._filter_model, size=MAX_COMPLETION_ENTRIES
-        )
+
+        sorter = Gtk.CustomSorter()
+        sorter.set_sort_func(self._sort_func, self._string_filter)  # type: ignore
+        sort_model = Gtk.SortListModel(model=self._filter_model, sorter=sorter)
+
+        self._model = Gtk.SliceListModel(model=sort_model, size=MAX_COMPLETION_ENTRIES)
+        self._model.connect("items-changed", self._on_items_changed)
 
     def get_model(
         self,
     ) -> tuple[Gio.ListModel[EmojiCompletionListItem], type[EmojiCompletionViewItem]]:
         return self._model, EmojiCompletionViewItem
 
-    @staticmethod
-    def _load_emoji_data() -> Gio.ListStore[EmojiCompletionListItem]:
-        app_locale = get_default_lang()
-        log.info("Loading emoji data; application locale is %s", app_locale)
-        short_locale = get_short_lang_code(app_locale)
-        locales = get_locale_fallbacks(short_locale)
-        try:
-            log.debug("Trying locales %s", locales)
-            raw_emoji_data: GLib.Bytes | None = None
-            for loc in locales:
-                raw_emoji_data = try_load_raw_emoji_data(loc)
-                if raw_emoji_data:
-                    break
-            else:
-                raise RuntimeError(f"No resource could be loaded; tried {locales}")
-
-            return parse_emoji_data(raw_emoji_data, loc)
-        except Exception as err:
-            log.warning("Unable to load emoji data: %s", err)
-            return Gio.ListStore(item_type=EmojiCompletionListItem)
-
     def check(self, candidate: str, start_iter: Gtk.TextIter) -> bool:
         return candidate.startswith(self.trigger_char)
 
+    @staticmethod
+    def _sort_func(
+        a: EmojiCompletionListItem,
+        b: EmojiCompletionListItem,
+        string_filter: Gtk.StringFilter,
+    ) -> int:
+        search = string_filter.get_search()
+
+        a_has_prefix = a.search.startswith(search)
+        b_has_prefix = b.search.startswith(search)
+
+        if a_has_prefix is b_has_prefix:
+            return locale.strcoll(a.search, b.search)
+
+        return -1 if a_has_prefix else 1
+
+    @staticmethod
+    def _load_model_data() -> list[EmojiCompletionListItem]:
+        items: list[EmojiCompletionListItem] = []
+
+        for sequence, emoji in EmojiData:
+            if isinstance(emoji, str):
+                continue
+
+            u_mod_sequences: dict[str, str] = {}
+            if variations := emoji.skin_tone_variations:
+                for index, var_sequence in enumerate(variations, start=1):
+                    u_mod_sequences[f"var{index}"] = var_sequence
+
+            item = EmojiCompletionListItem(
+                emoji=sequence,
+                name=f":{emoji.trans_short_name}:",
+                search=f"{emoji.trans_short_name}|{emoji.short_name}|{'|'.join(emoji.trans_keywords)}",
+                has_skin_variation=bool(emoji.skin_tone_variations),
+                **u_mod_sequences,
+            )
+            items.append(item)
+
+        return items
+
     def populate(self, candidate: str, contact: Any) -> bool:
         candidate = candidate.lstrip(self.trigger_char)
-        if not candidate or not len(candidate) > 1:
+        if len(candidate) < 2:
             # Don't activate until a sufficient # of chars have been typed,
             # which is chosen to be > 1 to not interfere with ASCII smilies
             # consisting of a colon and 1 single other char.
@@ -330,10 +211,14 @@ class EmojiCompletionProvider(BaseCompletionProvider):
         if not app.settings.get("enable_emoji_shortcodes"):
             return False
 
+        self._string_filter.set_search(candidate.casefold())
+
         if not self._load_complete:
-            model = self._load_emoji_data()
-            self._filter_model.set_model(model)
+            self._list_store.splice(0, 0, self._load_model_data())
+            self._filter_model.set_model(self._list_store)
             self._load_complete = True
 
-        self._string_filter.set_search(candidate)
         return self._model.get_n_items() > 0
+
+    def _on_items_changed(self, *args: Any) -> None:
+        idle_add_once(self.emit, "suggestions-changed")

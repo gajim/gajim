@@ -12,7 +12,6 @@ index 24ae76d42..b9f4d8d0e 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -29,7 +29,6 @@ dependencies = [
-   "emoji>=2.6.0",
    "httpx2[http2,socks]",
    "keyring",
 -  "nbxmpp>=7.5.0,<8.0.0",

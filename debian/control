@@ -19,7 +19,6 @@ Build-Depends:
     python3-cryptography (>=43.0.0),
     python3-pil (>=9.1.0),
     python3-sqlalchemy (>=2.0.19),
-    python3-emoji (>=2.6.0),
     gir1.2-gtk-4.0,
     gir1.2-gtksource-5,
     gir1.2-gstreamer-1.0,

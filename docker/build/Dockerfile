@@ -26,7 +26,6 @@ RUN apt-get -y install \
     python3-qrcode \
     python3-setuptools \
     python3-venv \
-    python3-emoji \
     python3-sqlalchemy \
     python3-keyring \
     python3-httpx2 \

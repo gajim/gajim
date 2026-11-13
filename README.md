@@ -16,7 +16,6 @@ thoughts or discuss the news with your groups.
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [cryptography](https://pypi.org/project/cryptography/) (>=43.0.0)
 - [css-parser](https://pypi.org/project/css-parser/)
-- [emoji](https://pypi.org/project/emoji/) (>=2.6.0)
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.80.0)
 - [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.17.5)
 - [GtkSourceView5](https://gitlab.gnome.org/GNOME/gtksourceview)

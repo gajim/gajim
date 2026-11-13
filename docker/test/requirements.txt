@@ -7,7 +7,6 @@ pygobject-stubs==2.20.0
 git+https://github.com/pyca/cryptography.git
 pillow>=10.4.0
 sentry-sdk>=2.3.1
-emoji>=2.13.2
 keyring
 httpx2[http2,socks]
 truststore

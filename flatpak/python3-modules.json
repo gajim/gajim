@@ -53,20 +53,6 @@
             ]
         },
         {
-            "name": "python3-emoji",
-            "buildsystem": "simple",
-            "build-commands": [
-                "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"emoji>=2.6.0\" --no-build-isolation"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/fd/8a/75e3177f374877b19dd3112820b071836ad1100f9f58424630b4783519bc/emoji-2.16.0-py3-none-any.whl",
-                    "sha256": "c4230d80640def9071599ff56b1b5950fe13a2a94c0da98c5deab12431b24330"
-                }
-            ]
-        },
-        {
             "name": "python3-httpx2",
             "buildsystem": "simple",
             "build-commands": [

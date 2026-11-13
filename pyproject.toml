@@ -25,7 +25,6 @@ classifiers = [
 dependencies = [
   "cryptography>=43.0.0",
   "css-parser",
-  "emoji>=2.6.0",
   "httpx2[http2,socks]",
   "keyring",
   "nbxmpp>=7.5.0,<8.0.0",

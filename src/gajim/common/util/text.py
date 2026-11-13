@@ -12,13 +12,13 @@ import string
 import textwrap
 from re import Match
 
-import emoji
 from gi.repository import GLib
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
 
 from gajim.common import regex
 from gajim.common.const import LOCATION_DATA
+from gajim.common.emoji import EmojiData
 from gajim.common.i18n import _
 from gajim.common.types import SettingsT
 
@@ -198,7 +198,7 @@ def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
         # reactions are required to be shown as emoji representation.
         # Furthermore it allows us to unify both versions.
         reaction = reaction.strip("\ufe0e\ufe0f")
-        if not emoji.is_emoji(reaction):
+        if not EmojiData.is_emoji(reaction):
             invalid.add(reaction)
             continue
         valid.add(reaction)
