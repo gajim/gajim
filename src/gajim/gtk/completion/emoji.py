@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import Final
 
+import locale
 import logging
 
 from gi.repository import Gdk
@@ -35,8 +36,7 @@ class EmojiCompletionListItem(BaseCompletionListItem, GObject.Object):
     __gtype_name__ = "EmojiCompletionListItem"
 
     emoji = GObject.Property(type=str)
-    short_name = GObject.Property(type=str)
-    keywords = GObject.Property(type=str)
+    name = GObject.Property(type=str)
     search = GObject.Property(type=str)
     has_skin_variation = GObject.Property(type=bool, default=False)
     var1 = GObject.Property(type=str, default="")
@@ -58,7 +58,6 @@ class EmojiCompletionViewItem(
 
     _emoji_label: Gtk.Label = Gtk.Template.Child()
     _short_name_label: Gtk.Label = Gtk.Template.Child()
-    _keywords_label: Gtk.Label = Gtk.Template.Child()
     _var1_button: Gtk.Button = Gtk.Template.Child()
     _var2_button: Gtk.Button = Gtk.Template.Child()
     _var3_button: Gtk.Button = Gtk.Template.Child()
@@ -106,8 +105,7 @@ class EmojiCompletionViewItem(
         bind_spec = [
             ("has_skin_variation", self, "has_skin_variation"),
             ("emoji", self._emoji_label, "label"),
-            ("short_name", self._short_name_label, "label"),
-            ("keywords", self._keywords_label, "label"),
+            ("name", self._short_name_label, "label"),
             ("var1", self._var1_button, "label"),
             ("var2", self._var2_button, "label"),
             ("var3", self._var3_button, "label"),
@@ -145,11 +143,13 @@ class EmojiCompletionProvider(BaseCompletionProvider):
 
         expression = Gtk.PropertyExpression.new(EmojiCompletionListItem, None, "search")
         self._string_filter = Gtk.StringFilter(expression=expression)
-
         self._filter_model = Gtk.FilterListModel(filter=self._string_filter)
-        self._model = Gtk.SliceListModel(
-            model=self._filter_model, size=MAX_COMPLETION_ENTRIES
-        )
+
+        sorter = Gtk.CustomSorter()
+        sorter.set_sort_func(self._sort_func, self._string_filter)  # type: ignore
+        sort_model = Gtk.SortListModel(model=self._filter_model, sorter=sorter)
+
+        self._model = Gtk.SliceListModel(model=sort_model, size=MAX_COMPLETION_ENTRIES)
         self._model.connect("items-changed", self._on_items_changed)
 
     def get_model(
@@ -159,6 +159,22 @@ class EmojiCompletionProvider(BaseCompletionProvider):
 
     def check(self, candidate: str, start_iter: Gtk.TextIter) -> bool:
         return candidate.startswith(self.trigger_char)
+
+    @staticmethod
+    def _sort_func(
+        a: EmojiCompletionListItem,
+        b: EmojiCompletionListItem,
+        string_filter: Gtk.StringFilter,
+    ) -> int:
+        search = string_filter.get_search()
+
+        a_has_prefix = a.search.startswith(search)
+        b_has_prefix = b.search.startswith(search)
+
+        if a_has_prefix is b_has_prefix:
+            return locale.strcoll(a.search, b.search)
+
+        return -1 if a_has_prefix else 1
 
     @staticmethod
     def _load_model_data() -> list[EmojiCompletionListItem]:
@@ -175,9 +191,8 @@ class EmojiCompletionProvider(BaseCompletionProvider):
 
             item = EmojiCompletionListItem(
                 emoji=sequence,
-                short_name=emoji.trans_short_name,
-                keywords=f"[ {', '.join(emoji.trans_keywords)} ]",
-                search=f"{emoji.trans_short_name}|{'|'.join(emoji.trans_keywords)}",
+                name=f":{emoji.trans_short_name}:",
+                search=f"{emoji.trans_short_name}|{emoji.short_name}|{'|'.join(emoji.trans_keywords)}",
                 has_skin_variation=bool(emoji.skin_tone_variations),
                 **u_mod_sequences,
             )
@@ -196,12 +211,13 @@ class EmojiCompletionProvider(BaseCompletionProvider):
         if not app.settings.get("enable_emoji_shortcodes"):
             return False
 
+        self._string_filter.set_search(candidate.casefold())
+
         if not self._load_complete:
             self._list_store.splice(0, 0, self._load_model_data())
             self._filter_model.set_model(self._list_store)
             self._load_complete = True
 
-        self._string_filter.set_search(candidate)
         return self._model.get_n_items() > 0
 
     def _on_items_changed(self, *args: Any) -> None:

@@ -154,8 +154,8 @@ def _load_gtk_emoji_data(
                 codepoints.update(var_sequence)
 
         emojis[u_sequence] = EmojiSequenceData(
-            short_name=short_name,
-            trans_short_name=trans_short_name,
+            short_name=short_name.replace(" ", "_"),
+            trans_short_name=trans_short_name.replace(" ", "_"),
             keywords=keywords,
             trans_keywords=trans_keywords,
             skin_tone_variations=var_sequences,

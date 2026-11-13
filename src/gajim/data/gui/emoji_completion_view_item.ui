@@ -18,12 +18,6 @@
                 <property name="max-width-chars">40</property>
               </object>
             </child>
-            <child>
-              <object class="GtkLabel" id="_keywords_label">
-                <property name="ellipsize">end</property>
-                <property name="max-width-chars">40</property>
-              </object>
-            </child>
           </object>
         </property>
       </object>
