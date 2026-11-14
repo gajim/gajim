@@ -4,8 +4,7 @@
 
 from __future__ import annotations
 
-from gajim.common.util.image import PillowLoader
-from gajim.common.util.image import PixbufLoader
+from gajim.common.util.image import get_supported_mime_types
 
 # This is an excerpt of Media Types from
 # https://www.iana.org/assignments/media-types/media-types.xhtml
@@ -108,9 +107,7 @@ VIDEO_MIME_TYPES = {
     "video/x-msvideo",
 }
 
-_PIL_IMAGE_MIME_TYPES = PillowLoader.get_mime_types()
-_PIXBUF_IMAGE_MIME_TYPES = PixbufLoader.get_mime_types()
-IMAGE_MIME_TYPES = _PIL_IMAGE_MIME_TYPES | _PIXBUF_IMAGE_MIME_TYPES
+IMAGE_MIME_TYPES = get_supported_mime_types()
 
 ALL_MIME_TYPES = (
     OTHER_MIME_TYPES | IMAGE_MIME_TYPES | AUDIO_MIME_TYPES | VIDEO_MIME_TYPES

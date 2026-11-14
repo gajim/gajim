@@ -203,6 +203,7 @@ ignore = [
   "D",      # pydocstyle
   "DOC",    # pydoclint
   "DTZ",    # flake8-datetimez
+  "E402",   # Top level import
   "E501",   # Line to long
   "EM",     # flake8-errmsg
   "ERA",    # eradicate

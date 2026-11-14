@@ -39,6 +39,7 @@ from gajim.common.helpers import idle_add_once
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.util.image import print_image_debug_info
 
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
@@ -237,6 +238,8 @@ class GajimApplication(Adw.Application, CoreApplication):
         from gajim.common.emoji import EmojiData
 
         EmojiData.init()
+
+        print_image_debug_info()
 
         from gajim.gtk.tray_icon import TrayIcon
 

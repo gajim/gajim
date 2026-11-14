@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import Literal
 from typing import overload
+from typing import TYPE_CHECKING
 
 import io
 import logging
@@ -16,11 +17,31 @@ from enum import IntEnum
 from io import BytesIO
 from pathlib import Path
 
+import gi
 import PIL
 import PIL.Image
 import PIL.ImageFile
+
+gi.require_version("Gdk", "4.0")
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+from gi.repository import Gio
 from gi.repository import GLib
+
+try:
+    gi.require_versions(
+        {
+            "Gly": "2",
+            "GlyGtk4": "2",
+        }
+    )
+    from gi.repository import Gly
+    from gi.repository import GlyGtk4
+except Exception:
+    if TYPE_CHECKING:
+        from gi.repository import Gly
+        from gi.repository import GlyGtk4
+
 
 log = logging.getLogger("gajim.c.util.image")
 
@@ -66,7 +87,7 @@ def load_image(
     scaling: ScalingType = ScalingType.UP_DOWN,
     max_image_pixels: int = MAX_IMAGE_PIXELS,
     onerror: Literal[ErrorType.LOG],
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> GdkPixbuf.Pixbuf | None: ...
 @overload
 def load_image(
@@ -76,7 +97,7 @@ def load_image(
     scaling: ScalingType = ScalingType.UP_DOWN,
     max_image_pixels: int = MAX_IMAGE_PIXELS,
     onerror: Literal[ErrorType.RAISE],
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> GdkPixbuf.Pixbuf: ...
 @overload
 def load_image(
@@ -86,7 +107,7 @@ def load_image(
     scaling: ScalingType = ScalingType.UP_DOWN,
     max_image_pixels: int = MAX_IMAGE_PIXELS,
     onerror: ... = ErrorType.LOG,
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> GdkPixbuf.Pixbuf | None: ...
 def load_image(
     file: Path | bytes,
@@ -95,7 +116,7 @@ def load_image(
     scaling: ScalingType = ScalingType.UP_DOWN,
     max_image_pixels: int = MAX_IMAGE_PIXELS,
     onerror: ErrorType = ErrorType.LOG,
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> GdkPixbuf.Pixbuf | None:
 
     try:
@@ -120,7 +141,7 @@ def create_thumbnail(
     output: Path | None,
     size: int,
     *,
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> tuple[bytes, dict[str, Any]]:
     pixbuf = _try_loaders(file, with_loader=with_loader)
     pixbuf = PixbufLoader.scale(pixbuf, size, ScalingType.DOWN)
@@ -134,20 +155,38 @@ def create_thumbnail(
 def _try_loaders(
     file: Path | bytes,
     max_image_pixels: int = MAX_IMAGE_PIXELS,
-    with_loader: type[PillowLoader | PixbufLoader] | None = None,
+    with_loader: type[PillowLoader | PixbufLoader | GlycinLoader] | None = None,
 ) -> GdkPixbuf.Pixbuf:
     for loader in _LOADERS:
-        if not loader.is_available():
+        if with_loader is not None:
+            if not isinstance(loader, with_loader):
+                continue
+
+        elif not loader.is_available():
             continue
 
-        if with_loader is not None and not isinstance(loader, with_loader):
-            continue
         try:
             return loader.load_pixbuf(file, max_image_pixels=max_image_pixels)
         except UnknownImageFormat:
             pass
 
     raise NoLoaderFound
+
+
+def get_supported_mime_types() -> set[str]:
+    mime_types: set[str] = set()
+    for loader in _LOADERS:
+        if not loader.is_available():
+            continue
+        mime_types.update(loader.get_mime_types())
+    return mime_types
+
+
+def print_image_debug_info() -> None:
+    for loader in _LOADERS:
+        log.debug("%s loader available: %s", loader.name, loader.is_available())
+
+    log.debug("Supported image mime/types\n%s", "\n".join(get_supported_mime_types()))
 
 
 class PixbufLoader:
@@ -414,7 +453,56 @@ class PillowLoader:
         return frames
 
 
+class GlycinLoader:
+    name = "glycin"
+
+    def is_available(self) -> bool:
+        return "GlyGtk4" in globals()
+
+    @classmethod
+    def get_mime_types(cls) -> set[str]:
+        return set(Gly.Loader.get_mime_types())
+
+    @staticmethod
+    def load_native(
+        file: Path | bytes, *, max_image_pixels: int = MAX_IMAGE_PIXELS
+    ) -> Gdk.Texture:
+
+        if isinstance(file, bytes):
+            loader = Gly.Loader(bytes=GLib.Bytes(file))
+        else:
+            loader = Gly.Loader(file=Gio.File.new_for_path(str(file)))
+
+        try:
+            image = loader.load()
+        except GLib.Error as error:
+            if error.matches(
+                Gly.loader_error_quark(), Gly.LoaderError.UNKNOWN_IMAGE_FORMAT
+            ):
+                raise UnknownImageFormat
+            raise
+
+        width = image.get_width()
+        height = image.get_height()
+        if width * height > max_image_pixels:
+            raise ImageTooLarge(f"Image too large: {width}x{height}")
+
+        frame = image.next_frame()
+        return GlyGtk4.frame_get_texture(frame)
+
+    def load_pixbuf(
+        self, file: Path | bytes, *, max_image_pixels: int = MAX_IMAGE_PIXELS
+    ) -> GdkPixbuf.Pixbuf:
+        texture = self.load_native(file, max_image_pixels=max_image_pixels)
+        pixbuf = Gdk.pixbuf_get_from_texture(texture)
+        assert pixbuf is not None
+        pixbuf = pixbuf.apply_embedded_orientation()
+        assert pixbuf is not None
+        return pixbuf
+
+
 _LOADERS = [
     PillowLoader(),
+    GlycinLoader(),
     PixbufLoader(),
 ]

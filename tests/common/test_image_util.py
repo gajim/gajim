@@ -13,6 +13,7 @@ import PIL.Image
 
 from gajim.common.util.image import create_thumbnail
 from gajim.common.util.image import ErrorType
+from gajim.common.util.image import GlycinLoader
 from gajim.common.util.image import ImageTooLarge
 from gajim.common.util.image import load_image
 from gajim.common.util.image import MAX_OG_PIXELS
@@ -96,53 +97,70 @@ class TempFileMixin:
         return path
 
 
-class TestLoadImageWithPillow(unittest.TestCase):
+class TestLoadImageWithLoader(unittest.TestCase):
+    LOADERS = (PillowLoader, PixbufLoader, GlycinLoader)
+
+    def test_svg(self) -> None:
+        for loader in self.LOADERS:
+            with self.subTest(loader.__name__), self.assertRaises(ImageTooLarge):
+                load_image(_svg(), onerror=ErrorType.RAISE)
+
     def test_png(self) -> None:
-        pixbuf = load_image(
-            _png(30, 20), onerror=ErrorType.RAISE, with_loader=PillowLoader
-        )
-        self.assertEqual((pixbuf.get_width(), pixbuf.get_height()), (30, 20))
+        for loader in self.LOADERS:
+            with self.subTest(loader.__name__):
+                pixbuf = load_image(
+                    _png(30, 20), onerror=ErrorType.RAISE, with_loader=loader
+                )
+                self.assertEqual((pixbuf.get_width(), pixbuf.get_height()), (30, 20))
 
     def test_unknown_format(self) -> None:
-        with self.assertRaises(NoLoaderFound):
-            load_image(
-                b"this is not an image",
-                onerror=ErrorType.RAISE,
-                with_loader=PillowLoader,
-            )
+        for loader in self.LOADERS:
+            with self.subTest(loader.__name__), self.assertRaises(NoLoaderFound):
+                load_image(
+                    b"this is not an image",
+                    onerror=ErrorType.RAISE,
+                    with_loader=loader,
+                )
 
     def test_max_image_pixels(self) -> None:
-        with self.assertRaises(ImageTooLarge):
-            load_image(
-                _png(300, 300),
-                max_image_pixels=256 * 256,
-                onerror=ErrorType.RAISE,
-                with_loader=PillowLoader,
-            )
+        for loader in self.LOADERS:
+            with self.subTest(loader.__name__):
+                with self.assertRaises(ImageTooLarge):
+                    load_image(
+                        _png(300, 300),
+                        max_image_pixels=256 * 256,
+                        onerror=ErrorType.RAISE,
+                        with_loader=loader,
+                    )
 
-        pixbuf = load_image(
-            _png(256, 256),
-            max_image_pixels=256 * 256,
-            onerror=ErrorType.RAISE,
-            with_loader=PillowLoader,
-        )
-        self.assertEqual((pixbuf.get_width(), pixbuf.get_height()), (256, 256))
+                pixbuf = load_image(
+                    _png(256, 256),
+                    max_image_pixels=256 * 256,
+                    onerror=ErrorType.RAISE,
+                    with_loader=loader,
+                )
+                self.assertEqual((pixbuf.get_width(), pixbuf.get_height()), (256, 256))
 
     def test_declared_size_too_large(self) -> None:
         # 9000x9000 is above MAX_IMAGE_PIXELS (8192x8192)
-        with self.assertRaises(ImageTooLarge):
+        for loader in (PillowLoader, GlycinLoader):
+            with self.subTest(loader.__name__), self.assertRaises(ImageTooLarge):
+                load_image(
+                    _truncated_png(9000, 9000),
+                    onerror=ErrorType.RAISE,
+                    with_loader=loader,
+                )
+
+        with self.subTest(PixbufLoader.__name__), self.assertRaises(Exception):  # noqa: B017
+            # Depending on what loader Pixbuf uses it will raise different errors
             load_image(
                 _truncated_png(9000, 9000),
                 onerror=ErrorType.RAISE,
-                with_loader=PillowLoader,
+                with_loader=PixbufLoader,
             )
 
 
 class TestLoadImage(TempFileMixin, unittest.TestCase):
-    def test_svg(self) -> None:
-        with self.assertRaises(ImageTooLarge):
-            load_image(_svg(), onerror=ErrorType.RAISE)
-
     def test_bytes(self) -> None:
         pixbuf = load_image(_png(30, 20), onerror=ErrorType.RAISE)
         self.assertEqual((pixbuf.get_width(), pixbuf.get_height()), (30, 20))
@@ -198,7 +216,7 @@ class TestLoadImage(TempFileMixin, unittest.TestCase):
 
 
 class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
-    LOADERS = (PillowLoader, PixbufLoader)
+    LOADERS = (PillowLoader, PixbufLoader, GlycinLoader)
 
     def test_small_png_is_not_enlarged(self) -> None:
         # Images smaller than the thumbnail size keep their size, and the
@@ -260,12 +278,16 @@ class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
 
     def test_declared_size_too_large(self) -> None:
         path = self._write("bomb.png", _truncated_png(9000, 9000))
-        for loader in self.LOADERS:
+        for loader in (PillowLoader, GlycinLoader):
             with (
                 self.subTest(create_thumbnail.__name__),
-                self.assertRaises(Exception),  # noqa: B017
+                self.assertRaises(ImageTooLarge),
             ):
                 create_thumbnail(path, None, 300, with_loader=loader)
+
+        with self.subTest(PixbufLoader.__name__), self.assertRaises(Exception):  # noqa: B017
+            # Depending on what loader Pixbuf uses it will raise different errors
+            create_thumbnail(path, None, 300, with_loader=PixbufLoader)
 
 
 class TestAnimatedImages(TempFileMixin, unittest.TestCase):
