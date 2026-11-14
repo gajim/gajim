@@ -33,6 +33,8 @@ RUN apt-get -y install \
     python3-truststore \
     python3-pysequoia \
     gir1.2-adw-1 \
+    gir1.2-gly-2 \
+    gir1.2-glygtk4-2 \
     gir1.2-gst-plugins-base-1.0 \
     gir1.2-gstreamer-1.0 \
     gir1.2-gtk-4.0 \
