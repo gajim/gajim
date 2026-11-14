@@ -22,6 +22,7 @@ RUN apt-get install -y \
     python3-pip \
     python3-precis-i18n \
     python3-protobuf \
+    python3-pytest \
     python3-qrcode \
     python3-sentry-sdk \
     python3-setuptools \
