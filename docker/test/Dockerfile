@@ -6,6 +6,7 @@ RUN apt-get install -y \
     apt-utils \
     appstream \
     gettext \
+    git \
     nodejs \
     npm \
     python-is-python3 \
