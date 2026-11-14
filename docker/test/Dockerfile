@@ -26,6 +26,7 @@ RUN apt-get install -y \
     python3-setuptools \
     gir1.2-adw-1 \
     gir1.2-geoclue-2.0 \
+    gir1.2-glygtk4-2 \
     gir1.2-gst-plugins-base-1.0 \
     gir1.2-gstreamer-1.0 \
     gir1.2-gtk-4.0 \
