@@ -62,6 +62,14 @@ thoughts or discuss the news with your groups.
 - [gst-plugins-bad](https://gitlab.freedesktop.org/gstreamer/gstreamer/-/tree/main/subprojects/gst-plugins-bad)
 - [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
 
+#### HEIF Support
+
+Only one of these dependencies are needed to provide HEIF support
+
+- [pillow-heif](https://pypi.org/project/pillow-heif/)
+- [libheif](https://github.com/strukturag/libheif/tree/master/gdk-pixbuf) (GdkPixbuf Loader)
+- [glycin-heif](https://github.com/GNOME/glycin/tree/main/glycin-loaders/glycin-heif) (Glycin Loader)
+
 ### Build Requirements
 
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)

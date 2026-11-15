@@ -22,6 +22,13 @@ import PIL
 import PIL.Image
 import PIL.ImageFile
 
+try:
+    from pillow_heif import register_heif_opener  # type: ignore
+except Exception:
+    pass
+else:
+    register_heif_opener()
+
 gi.require_version("Gdk", "4.0")
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf

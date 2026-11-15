@@ -66,6 +66,7 @@ dev = [
   "sentry-sdk",
   "ty",
   "typos==1.50.3",
+  "pillow-heif",
 ]
 
 [project.optional-dependencies]
@@ -74,6 +75,9 @@ sentry = [
 ]
 distro = [
   "distro",
+]
+pillow-heif = [
+  "pillow-heif",
 ]
 
 [project.urls]
