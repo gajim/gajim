@@ -74,6 +74,7 @@ AUDIO_MIME_TYPES = {
     "audio/aac",
     "audio/ac3",
     "audio/flac",
+    "audio/matroska",
     "audio/mp3",
     "audio/mp4",
     "audio/mpeg",
@@ -95,6 +96,7 @@ AUDIO_MIME_TYPES = {
 VIDEO_MIME_TYPES = {
     "video/H264",
     "video/H265",
+    "video/matroska",
     "video/mp4",
     "video/mpeg4-generic",
     "video/ogg",
