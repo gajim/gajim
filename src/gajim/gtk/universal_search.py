@@ -314,10 +314,34 @@ class UniversalSearch(Gtk.Box):
                 description=_("Edit your contact details…"),
                 account=account,
                 icon_name="lucide-user-symbolic",
-                callback=self._show_profile,
+                callback=self._show_profile_dialog,
                 callback_kwargs={"account": account},
             )
             self._results_model.append(profile_action)
+
+            discover_services_action = UniversalSearchResultItem(
+                item_type=UniversalSearchResultItemType.ACTION,
+                search_string=_("Discover Services…").casefold(),
+                title=_("Discover Services…"),
+                description=_("Browse services offered by your provider"),
+                account=account,
+                icon_name="lucide-server-symbolic",
+                callback=self._show_disco_dialog,
+                callback_kwargs={"account": account},
+            )
+            self._results_model.append(discover_services_action)
+
+            commands_action = UniversalSearchResultItem(
+                item_type=UniversalSearchResultItemType.ACTION,
+                search_string=_("Execute Command…").casefold(),
+                title=_("Execute Command…"),
+                description=_("Browse commands offered by your provider"),
+                account=account,
+                icon_name="lucide-terminal-symbolic",
+                callback=self._show_commands_dialog,
+                callback_kwargs={"account": account},
+            )
+            self._results_model.append(commands_action)
 
     def _on_filter_toggle_changed(
         self, _toggle_group: Adw.ToggleGroup, _index: int
@@ -484,8 +508,17 @@ class UniversalSearch(Gtk.Box):
     def _start_chat(self, account: str, jid: JID) -> None:
         app.window.start_chat_from_jid(StartChatParam(account=account, jid=jid))
 
-    def _show_profile(self, account: str) -> None:
+    def _show_profile_dialog(self, account: str) -> None:
         open_window("ProfileWindow", account=account)
+
+    def _show_disco_dialog(self, account: str) -> None:
+        open_window("ServiceDiscoveryWindow", account=account, address_entry=True)
+
+    def _show_commands_dialog(self, account: str) -> None:
+        client = app.get_client(account)
+        open_window(
+            "AdHocCommands", account=account, jids=[client.get_bound_jid().domain]
+        )
 
 
 class UniversalSearchBar(Gtk.Overlay):
