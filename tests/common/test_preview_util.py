@@ -11,6 +11,8 @@ from urllib.parse import urlparse
 
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths
+from gajim.common.util.preview import guess_mime_type
+from gajim.common.util.preview import is_audio
 
 ORIG_DIR = Path("downloads")
 THUMB_DIR = Path("thumbs")
@@ -126,6 +128,20 @@ class TestGetImagePaths(unittest.TestCase):
         self.assertEqual(orig.parent, ORIG_DIR)
         self.assertEqual(thumb.parent, THUMB_DIR)
         self.assertEqual(orig.name, f"passwd_{_hash(uri)}.jpg")
+
+
+class TestGuessMimeType(unittest.TestCase):
+    def test_m4a_on_macos(self) -> None:
+        # Python's mimetypes reads /etc/apache2/mime.types on macOS,
+        # which maps .m4a to audio/mp4a-latm
+        with patch("mimetypes.guess_type", return_value=("audio/mp4a-latm", None)):
+            mime_type = guess_mime_type("voice.m4a")
+        self.assertEqual(mime_type, "audio/mp4")
+        self.assertTrue(is_audio(mime_type))
+
+    def test_m4a_received_as_mp4a_latm(self) -> None:
+        # Files uploaded by macOS clients may carry this content type
+        self.assertTrue(is_audio("audio/mp4a-latm"))
 
 
 if __name__ == "__main__":

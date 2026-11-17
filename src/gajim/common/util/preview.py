@@ -32,7 +32,11 @@ from gajim.common.util.uri import get_geo_choords
 
 log = logging.getLogger("gajim.c.util.preview")
 
-MIME_TYPE_MAP = {"application/x-ext-webp": "image/webp"}
+MIME_TYPE_MAP = {
+    "application/x-ext-webp": "image/webp",
+    # macOS maps .m4a to audio/mp4a-latm (/etc/apache2/mime.types)
+    "audio/mp4a-latm": "audio/mp4",
+}
 
 # The extension is taken from a remote URL and becomes part of a local
 # filename, so only allow plain extensions

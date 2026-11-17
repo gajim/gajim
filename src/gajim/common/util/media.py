@@ -76,6 +76,7 @@ AUDIO_MIME_TYPES = {
     "audio/matroska",
     "audio/mp3",
     "audio/mp4",
+    "audio/mp4a-latm",
     "audio/mpeg",
     "audio/ogg",
     "audio/opus",
