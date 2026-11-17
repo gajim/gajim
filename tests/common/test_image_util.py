@@ -262,7 +262,7 @@ class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
         # like photos from current phone cameras
         path = self._write("photo_20mp.png", _png(5000, 4000, mode="L"))
         for loader in self.LOADERS:
-            with self.subTest(create_thumbnail.__name__):
+            with self.subTest(loader.__name__):
                 thumbnail, _metadata = create_thumbnail(
                     path, None, 300, with_loader=loader
                 )
@@ -271,7 +271,7 @@ class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
     def test_embedded_orientation(self) -> None:
         path = self._write("rotated.jpg", _jpeg(400, 200, orientation=6))
         for loader in self.LOADERS:
-            with self.subTest(create_thumbnail.__name__):
+            with self.subTest(loader.__name__):
                 thumbnail, _metadata = create_thumbnail(
                     path, None, 300, with_loader=loader
                 )
@@ -290,7 +290,7 @@ class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
         path = self._write("bomb.png", _truncated_png(9000, 9000))
         for loader in _loaders(PillowLoader, GlycinLoader):
             with (
-                self.subTest(create_thumbnail.__name__),
+                self.subTest(loader.__name__),
                 self.assertRaises(ImageTooLarge),
             ):
                 create_thumbnail(path, None, 300, with_loader=loader)
