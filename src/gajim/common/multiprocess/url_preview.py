@@ -7,9 +7,12 @@ from __future__ import annotations
 import io
 import threading
 
+import httpx2
 from nbxmpp.util import utf8_decode
 
+from gajim.common.multiprocess.http import check_redirect
 from gajim.common.multiprocess.http import http_request
+from gajim.common.multiprocess.http import RedirectNotAllowed
 from gajim.common.open_graph_parser import OpenGraphData
 from gajim.common.open_graph_parser import OpenGraphParser
 from gajim.common.open_graph_parser import OpenGraphThumbnail
@@ -45,6 +48,9 @@ def generate_url_preview(
     if og_data is None or not og_data.image:
         return og_data
 
+    if not is_og_image_allowed(url, og_data.image, proxy is not None):
+        return og_data
+
     try:
         image_result = http_request(
             event=event,
@@ -61,6 +67,16 @@ def generate_url_preview(
         pass
 
     return og_data
+
+
+def is_og_image_allowed(page_url: str, image: str, uses_proxy: bool) -> bool:
+    # The page chooses the image URL, so apply the same rules as for a
+    # redirect from the page: http(s) only, no downgrade, no public -> private
+    try:
+        check_redirect(httpx2.URL(page_url), httpx2.URL(image), uses_proxy)
+    except (RedirectNotAllowed, httpx2.InvalidURL):
+        return False
+    return True
 
 
 def _make_thumbnail(content: bytes) -> OpenGraphThumbnail:
