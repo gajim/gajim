@@ -111,8 +111,12 @@ class VoiceMessageRecorder(GObject.GObject):
 
         audiolevel.set_property("message", True)
         audiolevel.set_property("interval", 10 * 1_000_000)  # 10 ms in nanoseconds
-        # Force S16LE so wavenc writes standard integer PCM (format 1)
-        capsfilt.set_property("caps", Gst.Caps.from_string("audio/x-raw,format=S16LE"))
+        # Force S16LE so wavenc writes standard integer PCM (format 1), and
+        # mono: some sources (e.g. the built-in microphone on macOS) deliver
+        # two channels with the signal on the first one only
+        capsfilt.set_property(
+            "caps", Gst.Caps.from_string("audio/x-raw,format=S16LE,channels=1")
+        )
         self._filesink.set_property("location", str(self._file_path))
         self._filesink.set_property("async", False)
 
