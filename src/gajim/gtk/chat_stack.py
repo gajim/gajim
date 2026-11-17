@@ -901,6 +901,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self.set_visible_child_name("controls")
         self.set_transition_type(Gtk.StackTransitionType.NONE)
         function_page.reset()
+        app.window.activate_action("win.input-focus")
 
     def _on_function_message(
         self, _function_page: ChatFunctionPage, message: str
