@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 import struct
+import sys
 import tempfile
 import unittest
 import zlib
@@ -24,6 +25,15 @@ from gajim.common.util.image import ScalingType
 
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 EXIF_ORIENTATION = 274
+
+
+def _loaders(
+    *loaders: type[PillowLoader | PixbufLoader | GlycinLoader],
+) -> tuple[type[PillowLoader | PixbufLoader | GlycinLoader], ...]:
+    # Glycin is not available on macOS
+    if sys.platform == "darwin":
+        return tuple(loader for loader in loaders if loader is not GlycinLoader)
+    return loaders
 
 
 def _svg() -> bytes:
@@ -98,7 +108,7 @@ class TempFileMixin:
 
 
 class TestLoadImageWithLoader(unittest.TestCase):
-    LOADERS = (PillowLoader, PixbufLoader, GlycinLoader)
+    LOADERS = _loaders(PillowLoader, PixbufLoader, GlycinLoader)
 
     def test_svg(self) -> None:
         for loader in self.LOADERS:
@@ -143,7 +153,7 @@ class TestLoadImageWithLoader(unittest.TestCase):
 
     def test_declared_size_too_large(self) -> None:
         # 9000x9000 is above MAX_IMAGE_PIXELS (8192x8192)
-        for loader in (PillowLoader, GlycinLoader):
+        for loader in _loaders(PillowLoader, GlycinLoader):
             with self.subTest(loader.__name__), self.assertRaises(ImageTooLarge):
                 load_image(
                     _truncated_png(9000, 9000),
@@ -216,7 +226,7 @@ class TestLoadImage(TempFileMixin, unittest.TestCase):
 
 
 class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
-    LOADERS = (PillowLoader, PixbufLoader, GlycinLoader)
+    LOADERS = _loaders(PillowLoader, PixbufLoader, GlycinLoader)
 
     def test_small_png_is_not_enlarged(self) -> None:
         # Images smaller than the thumbnail size keep their size, and the
@@ -278,7 +288,7 @@ class TestCreateThumbnail(TempFileMixin, unittest.TestCase):
 
     def test_declared_size_too_large(self) -> None:
         path = self._write("bomb.png", _truncated_png(9000, 9000))
-        for loader in (PillowLoader, GlycinLoader):
+        for loader in _loaders(PillowLoader, GlycinLoader):
             with (
                 self.subTest(create_thumbnail.__name__),
                 self.assertRaises(ImageTooLarge),
