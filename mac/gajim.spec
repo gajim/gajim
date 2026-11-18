@@ -107,7 +107,6 @@ app = BUNDLE(  # type: ignore
         "CFBundleURLTypes": [
             {"CFBundleURLName": "XMPP URI", "CFBundleURLSchemes": ["xmpp"]}
         ],
-        "NSUIElement": True,
         "NSMicrophoneUsageDescription": "Gajim uses the microphone to record voice messages.",
     },
     bundle_identifier="org.gajim.gajim",
