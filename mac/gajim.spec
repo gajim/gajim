@@ -44,6 +44,7 @@ gst_include_plugins = [
     "osxaudio",
     "playback",
     "png",
+    "typefindfunctions",
     "videoconvertscale",
     "videofilter",
     "videoparsersbad",
@@ -107,6 +108,7 @@ app = BUNDLE(  # type: ignore
             {"CFBundleURLName": "XMPP URI", "CFBundleURLSchemes": ["xmpp"]}
         ],
         "NSUIElement": True,
+        "NSMicrophoneUsageDescription": "Gajim uses the microphone to record voice messages.",
     },
     bundle_identifier="org.gajim.gajim",
 )

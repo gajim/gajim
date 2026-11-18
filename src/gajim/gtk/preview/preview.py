@@ -7,7 +7,6 @@ from typing import cast
 
 import hashlib
 import logging
-import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -257,11 +256,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         # all other widget states remain as in PreviewState.DOWNLOADED
         if state == PreviewState.DISPLAY:
             widget = None
-            if is_video(self._mime_type) and sys.platform == "darwin":
-                # https://gitlab.com/gajim/gajim/-/work_items/12625
-                pass
-
-            elif is_image(self._mime_type) or is_video(self._mime_type):
+            if is_image(self._mime_type) or is_video(self._mime_type):
                 assert self._mime_type is not None
                 widget = ImagePreviewWidget(
                     self._filename,
