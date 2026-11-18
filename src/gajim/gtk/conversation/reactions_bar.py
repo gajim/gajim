@@ -51,11 +51,10 @@ class ReactionsBar(Gtk.Box, SignalManager):
         self._message_row = message_row
         self._contact = contact
         if isinstance(self._contact, GroupchatContact):
-            self._contact.connect("state-changed", self._on_muc_state_changed)
+            self._contact.connect("state-changed", self.update_state)
 
         self._client = app.get_client(self._contact.account)
-        self._client.connect("state-changed", self._on_client_state_changed)
-        self.set_sensitive(self._get_reactions_enabled())
+        self._client.connect("state-changed", self.update_state)
 
         self._reactions: list[mod.Reaction] = []
 
@@ -69,6 +68,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
         self._add_reaction_button.add_css_class("reaction-add-show-all")
 
         self.append(self._add_reaction_button)
+        self.update_state()
 
     def do_unroot(self) -> None:
         self._reactions.clear()
@@ -83,14 +83,8 @@ class ReactionsBar(Gtk.Box, SignalManager):
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
 
-    def _on_client_state_changed(self, *args: Any) -> None:
-        self.set_sensitive(self._get_reactions_enabled())
-
-    def _on_muc_state_changed(self, *args: Any) -> None:
-        self.set_sensitive(self._get_reactions_enabled())
-
-    def _get_reactions_enabled(self) -> bool:
-        return self._message_row.can_react()
+    def update_state(self, *args: Any) -> None:  # type: ignore
+        self.set_sensitive(self._message_row.can_react())
 
     def _aggregate_reactions(
         self, reactions: list[mod.Reaction]

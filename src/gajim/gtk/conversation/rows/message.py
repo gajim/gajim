@@ -458,6 +458,7 @@ class MessageRow(BaseRow):
             return
 
         self._message_icons.set_message_state_icon(MessageState(message.state))
+        self._reactions_bar.update_state()
 
     def set_blocked(self, blocked: bool) -> None:
         if blocked != self._is_blocked:
