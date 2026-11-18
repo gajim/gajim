@@ -400,6 +400,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):  # ty: ignore[invalid-meth
         window_height = app.settings.get("mainwin_height")
         resize_window(self, window_width, window_height)
 
+        if sys.platform == "darwin":
+            from gajim.gtk.util.macos import remember_window_frame
+
+            remember_window_frame(self, "MainWindow")
+
         self.set_visible(True)
 
         if app.is_display(Display.X11):
