@@ -11,7 +11,6 @@ from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
-from sqlalchemy.orm import joinedload
 
 from gajim.common import app
 from gajim.common import types
@@ -130,6 +129,7 @@ class Reactions(BaseModule):
                     jid=remote_jid,
                     id=properties.reactions.id,
                     direction=direction,
+                    occupant=occupant,
                     emojis=None,
                     message=None,
                     is_mam_message=properties.is_mam_message,
@@ -173,7 +173,6 @@ class Reactions(BaseModule):
             id_type,
             properties.reactions.id,
             default_options=False,
-            options=[joinedload(mod.Message.occupant)],
         )
 
         app.ged.raise_event(
@@ -182,6 +181,7 @@ class Reactions(BaseModule):
                 jid=remote_jid,
                 id=properties.reactions.id,
                 direction=direction,
+                occupant=occupant,
                 emojis=valid,
                 message=message,
                 is_mam_message=properties.is_mam_message,

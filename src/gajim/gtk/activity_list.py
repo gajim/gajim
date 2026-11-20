@@ -872,11 +872,11 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
 
             groupchat_name = get_groupchat_name(client, muc_jid)
 
-            assert event.message.occupant is not None
+            assert event.occupant is not None
             texture = app.app.avatar_storage.get_occupant_texture(
-                event.jid, event.message.occupant, AvatarSize.ROSTER, scale
+                event.jid, event.occupant, AvatarSize.ROSTER, scale
             )
-            nickname = event.message.occupant.nickname
+            nickname = event.occupant.nickname
             title = _("Reaction from %(nickname)s (%(chat)s)") % {
                 "nickname": nickname,
                 "chat": groupchat_name,
