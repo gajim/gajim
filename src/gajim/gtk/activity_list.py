@@ -868,7 +868,7 @@ class Reaction(ActivityListItem[events.ReactionUpdated]):
         if event.message.type in (MessageType.GROUPCHAT, MessageType.PM):
             muc_jid = event.message.remote.jid
             if event.message.type == MessageType.PM:
-                muc_jid.new_as_bare()
+                muc_jid = muc_jid.new_as_bare()
 
             groupchat_name = get_groupchat_name(client, muc_jid)
 

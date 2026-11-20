@@ -166,16 +166,10 @@ class Reactions(BaseModule):
 
         app.storage.archive.refresh(reaction, ["occupant"])
 
-        id_type = (
-            "stanza-id"
-            if m_type in (MessageType.GROUPCHAT, MessageType.PM)
-            else "message-id"
-        )
-
         message = app.storage.archive.get_message_with_id(
             self._account,
             remote_jid,
-            id_type,
+            "stanza-id" if m_type == MessageType.GROUPCHAT else "message-id",
             properties.reactions.id,
             default_options=False,
         )
