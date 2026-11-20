@@ -129,7 +129,7 @@ class Reactions(BaseModule):
                     jid=remote_jid,
                     id=properties.reactions.id,
                     direction=direction,
-                    occupant=occupant,
+                    occupant=None,
                     emojis=None,
                     message=None,
                     is_mam_message=properties.is_mam_message,
@@ -159,7 +159,12 @@ class Reactions(BaseModule):
         )
 
         self._log.info("Received reactions: %s", reaction)
-        app.storage.archive.upsert_row2(reaction, return_full=False)
+        reaction = app.storage.archive.upsert_row2(reaction, return_full=True)
+        if reaction is None:
+            self._low.warning("Unable to store reaction")
+            raise NodeProcessed
+
+        app.storage.archive.refresh(reaction, ["occupant"])
 
         id_type = (
             "stanza-id"
@@ -181,7 +186,7 @@ class Reactions(BaseModule):
                 jid=remote_jid,
                 id=properties.reactions.id,
                 direction=direction,
-                occupant=occupant,
+                occupant=reaction.occupant,
                 emojis=valid,
                 message=message,
                 is_mam_message=properties.is_mam_message,
