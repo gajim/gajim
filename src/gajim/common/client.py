@@ -263,6 +263,7 @@ class Client(Observable, ClientModules):
             self._host_meta_request.cancel()
             self._set_state(ClientState.DISCONNECTED)
             self.notify("state-changed", SimpleClientState.DISCONNECTED)
+            app.ged.raise_event(AccountDisconnected(account=self._account))
             return
 
         if self._state.is_disconnecting:
@@ -380,6 +381,7 @@ class Client(Observable, ClientModules):
         else:
             self._set_state(ClientState.DISCONNECTED)
             self.notify("state-changed", SimpleClientState.DISCONNECTED)
+            app.ged.raise_event(AccountDisconnected(account=self._account))
 
     def _on_connected(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._set_state(ClientState.CONNECTED)
@@ -677,6 +679,7 @@ class Client(Observable, ClientModules):
             self._create_client()
 
         self.notify("state-changed", SimpleClientState.DISCONNECTED)
+        app.ged.raise_event(AccountDisconnected(account=self._account))
 
     def _disable_reconnect_timer(self) -> None:
         if self._reconnect_timer_source is not None:

@@ -118,6 +118,7 @@ class RemoveAccount(Assistant):
             self.close()
 
     def _on_remove(self, *args: Any) -> None:
+        log.info("Try to remove account")
         remove_choice_page = self.get_page("remove_choice")
         if remove_choice_page.remove_from_server:
             assert self._client is not None
@@ -132,8 +133,8 @@ class RemoveAccount(Assistant):
             self.show_page("success")
             return
 
-        self._client.disconnect_immediate()
         self._account_removed = True
+        self._client.disconnect_immediate()
 
     def _on_remove_response(self, task: Task) -> None:
         try:
