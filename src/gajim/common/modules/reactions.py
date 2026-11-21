@@ -161,7 +161,7 @@ class Reactions(BaseModule):
         self._log.info("Received reactions: %s", reaction)
         reaction = app.storage.archive.upsert_row2(reaction, return_full=True)
         if reaction is None:
-            self._low.warning("Unable to store reaction")
+            self._log.warning("Reaction upsert returned no modified rows")
             raise NodeProcessed
 
         app.storage.archive.refresh(reaction, ["occupant"])
