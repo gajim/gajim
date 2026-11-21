@@ -49,7 +49,7 @@ class ComponentSearch(Assistant):
         self._destroyed = False
 
         self.add_button("close", _("Close"))
-        self.add_button("search", _("Search"), "suggested-action")
+        self.add_button("search", _("Search"), "suggested-action", complete=True)
         self.add_button("new-search", _("New Search"))
 
         self.add_pages(
