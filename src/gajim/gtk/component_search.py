@@ -149,9 +149,11 @@ class SearchForm(AssistantPage):
         self.title = _("Search")
 
         self.complete = False
+        self._dataform_widget = None
 
     def clear(self) -> None:
-        self.remove(self._dataform_widget)
+        if self._dataform_widget is not None:
+            self.remove(self._dataform_widget)
 
     def process_search_form(self, form: SimpleDataForm | SearchFields) -> None:
         self.clear()
