@@ -153,6 +153,7 @@ class BaseModule(EventHelper):
         self.handlers.clear()
         self.unregister_events()
         self._client.disconnect_all_from_obj(self)
+        app.cancel_tasks(self)
 
     @overload
     def _nbxmpp(self, name: Literal["Activity"]) -> Activity: ...

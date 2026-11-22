@@ -259,6 +259,12 @@ def unregister_modules(client: "Client") -> None:
     del _modules[client.account]
 
 
+def cancel_tasks(client: "Client") -> None:
+    for instance in _modules[client.account].values():
+        instance = cast(ModulesT, instance)
+        app.cancel_tasks(instance)
+
+
 def unregister_single_module(client: "Client", name: str) -> None:
     if client.account not in _modules:
         return

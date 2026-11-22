@@ -273,6 +273,17 @@ class Client(Observable, ClientModules):
         self._set_state(ClientState.DISCONNECTING)
 
         self._log.info("Starting to disconnect")
+
+        # The nbxmpp client disconnect() call closes the output channel
+        # Disconnect all handlers so we dont receive stanzas anymore which we cannot
+        # ackknowledge. Also these stanzas could trigger sending out more stanzas.
+        for handler in modules.get_handlers(self):
+            self._client.unregister_handler(handler)
+
+        self._client.cancel_tasks()
+
+        modules.cancel_tasks(self)
+
         self._client.disconnect(immediate=not gracefully)
 
     def disconnect_immediate(self) -> None:
