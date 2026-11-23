@@ -338,6 +338,10 @@ def http_request(
         )
 
     if content_length == 0:
+        empty_digest = hashlib.new(hash_algo).hexdigest()
+        if hash_value is not None and hash_value != empty_digest:
+            raise InvalidHash(f"{empty_digest} != {hash_value}")
+
         return HTTPResult(
             hash_algo=hash_algo,
             req_hash_value=req_hash_obj.hexdigest(),
