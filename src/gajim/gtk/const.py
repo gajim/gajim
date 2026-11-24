@@ -47,6 +47,9 @@ DEFAULT_WORKSPACE_COLOR = "rgb(191,15,167)"
 
 MAX_MESSAGE_LENGTH = 1000
 
+# Text with longer words is wrapped by character
+MAX_WORD_LENGTH = 300
+
 
 @unique
 class MuteState(IntEnum):

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+import re
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -20,6 +21,7 @@ from gajim.common.util.text import process_non_spacing_marks
 from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
+from gajim.gtk.const import MAX_WORD_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
 from gajim.gtk.menus import get_uri_context_menu
 from gajim.gtk.util.classes import SignalManager
@@ -30,6 +32,8 @@ log = logging.getLogger("gajim.gtk.conversation.plain_widget")
 
 URI_TAGS = ["uri", "address", "xmppadr", "mailadr"]
 STYLE_TAGS = ["strong", "emphasis", "strike", "pre"]
+
+LONG_WORD_RX = re.compile(rf"\S{{{MAX_WORD_LENGTH},}}")
 
 
 class PlainWidget(Gtk.Box):
@@ -114,6 +118,15 @@ class MessageLabel(Gtk.Label, SignalManager):
         self.set_extra_menu(extra_menu)
         return
 
+    def _set_wrap_mode(self, text: str) -> None:
+        # Pango needs quadratic time to wrap a very long word with WORD_CHAR,
+        # and GTK lays out a label several times, so a long message without
+        # spaces could freeze the UI for many seconds
+        if LONG_WORD_RX.search(text) is not None:
+            self.set_wrap_mode(Pango.WrapMode.CHAR)
+        else:
+            self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
+
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:
         markup_text = ""
         after = GLib.markup_escape_text(text.strip())
@@ -126,12 +139,15 @@ class MessageLabel(Gtk.Label, SignalManager):
         return markup_text
 
     def print_text_with_styling(self, block: PlainBlock) -> None:
-        text = self._build_link_markup(block.text, block.uris)
-        self.set_markup(process_non_spacing_marks(text))
-        if len(self.get_text()) > MAX_MESSAGE_LENGTH:
-            # Limit message styling processing
+        self._set_wrap_mode(block.text)
+        if len(block.text) > MAX_MESSAGE_LENGTH:
+            # Show long text as plain text, without links, styling and
+            # emoji detection
+            self.set_text(process_non_spacing_marks(block.text.strip()))
             return
 
+        text = self._build_link_markup(block.text, block.uris)
+        self.set_markup(process_non_spacing_marks(text))
         self.set_attributes(make_pango_attributes(block))
 
         stripped = text.strip()
