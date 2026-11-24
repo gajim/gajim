@@ -304,6 +304,30 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _on_shutdown(self, _application: GajimApplication) -> None:
         app.log("app").info("Shutdown Application")
+        if self._inhibit_cookie is None:
+            # The logout inhibitor is only set on query-end, and
+            # _shutdown_complete() releases it after the core shutdown.
+            # If it's not set, the core shutdown has already completed.
+            return
+
+        # With the XDG portal, GTK calls g_application_quit() as soon as the
+        # session state changes to ENDING, without waiting for the shutdown
+        # started on query-end (gtkapplication-dbus.c). The accounts never
+        # finish disconnecting, so _shutdown_core() and _shutdown_complete()
+        # don't run. GTK doesn't close the portal inhibit request when the
+        # application ends either, so the session would wait until its
+        # timeout. Save the state and release the inhibitor here.
+        app.log("app").warning("Main loop ended before the shutdown completed")
+        self._shutdown_core()
+        self.uninhibit(self._inhibit_cookie)
+        self._inhibit_cookie = None
+
+        # The main loop has ended, so no async work runs anymore in this
+        # handler. uninhibit() only queues the portal's Close call on the
+        # D-Bus connection; flush it so the call is sent before the process
+        # exits.
+        if (connection := self.get_dbus_connection()) is not None:
+            connection.flush_sync(None)
 
     def _command_line(
         self, _application: GajimApplication, command_line: Gio.ApplicationCommandLine
