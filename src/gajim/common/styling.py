@@ -183,6 +183,14 @@ def process(text: str | bytes, level: int = 0) -> ParsingResult:
     blocks = _parse_blocks(text, level)
     for block in blocks:
         if isinstance(block, PlainBlock):
+            # The label shows the text without surrounding whitespace, so
+            # compute the span offsets on that text. Move the block start
+            # by the stripped whitespace, so block.start plus a span offset
+            # still points into the original text (used by the message input)
+            stripped = block.text.lstrip()
+            block.start += len(block.text) - len(stripped)
+            block.text = stripped.rstrip()
+            block.end = block.start + len(block.text)
             offset = 0
             offset_bytes = 0
             for line in block.text.splitlines(keepends=True):

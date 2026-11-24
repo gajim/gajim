@@ -231,7 +231,7 @@ STYLING = {
     },
     "pre block no body EOF": {
         "input": "```newtoken\n",
-        "tokens": [PlainBlock(start=0, end=12, text="```newtoken\n", spans=[])],
+        "tokens": [PlainBlock(start=0, end=11, text="```newtoken", spans=[])],
     },
     "single level block quote": {
         "input": ">  quoted\nnot quoted",
@@ -240,7 +240,7 @@ STYLING = {
                 start=0,
                 end=10,
                 text=">  quoted\n",
-                blocks=[PlainBlock(start=0, end=8, text=" quoted\n", spans=[])],
+                blocks=[PlainBlock(start=1, end=7, text="quoted", spans=[])],
             ),
             PlainBlock(start=10, end=20, text="not quoted", spans=[]),
         ],
@@ -253,19 +253,19 @@ STYLING = {
                 end=34,
                 text=">  quoted\n>>   quote > 2\n>quote 1\n",
                 blocks=[
-                    PlainBlock(start=0, end=8, text=" quoted\n", spans=[]),
+                    PlainBlock(start=1, end=7, text="quoted", spans=[]),
                     QuoteBlock(
                         start=8,
                         end=22,
                         text=">   quote > 2\n",
                         blocks=[
-                            PlainBlock(start=0, end=12, text="  quote > 2\n", spans=[])
+                            PlainBlock(start=2, end=11, text="quote > 2", spans=[])
                         ],
                     ),
-                    PlainBlock(start=22, end=30, text="quote 1\n", spans=[]),
+                    PlainBlock(start=22, end=29, text="quote 1", spans=[]),
                 ],
             ),
-            PlainBlock(start=34, end=45, text="\nnot quoted", spans=[]),
+            PlainBlock(start=35, end=45, text="not quoted", spans=[]),
         ],
     },
     "quote start then EOF": {
