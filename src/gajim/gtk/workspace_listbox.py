@@ -163,7 +163,8 @@ class WorkspaceListBox(Gtk.ListBox):
     def _on_unread_count_changed(
         self, _chat_list_stack: ChatListStack, workspace_id: str, count: int
     ) -> None:
-        workspace = self._workspaces[workspace_id]
+        if (workspace := self._workspaces.get(workspace_id)) is None:
+            return
         workspace.set_unread_count(count)
 
     def _on_chat_selected(
