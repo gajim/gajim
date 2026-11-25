@@ -61,6 +61,9 @@ from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
 
 log = logging.getLogger("gajim.gtk.messageactionsbox")
 
+# Seconds to wait for an image from the clipboard, see _on_paste_clipboard()
+PASTE_IMAGE_TIMEOUT = 10
+
 
 class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     @GObject.Property(type=bool, default=False)
@@ -78,6 +81,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
+        # Pending clipboard image read, see _on_paste_clipboard()
+        self._paste_cancellable: Gio.Cancellable | None = None
+        self._paste_timeout_id: int | None = None
         # XEP-0308 Message Correction
         self._correcting: dict[ChatContactT, str | None] = defaultdict(lambda: None)
         self._last_message_id: dict[ChatContactT, str | None] = {}
@@ -320,6 +326,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self.toggle_message_correction()
 
     def switch_contact(self, contact: ChatContactT) -> None:
+        self._reset_image_paste()
+
         if self._client is not None:
             self._set_chatstate(False)
             self._client.disconnect_all_from_obj(self)
@@ -418,6 +426,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._store_draft()
             self._contact.disconnect_all_from_obj(self)
 
+        self._reset_image_paste()
         self._security_label_selector.clear()
 
         if self._wait_queue_resize is not None:
@@ -950,10 +959,24 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         if "image/png" in mime_types or "image/bmp" in mime_types:
+            textview.stop_emission_by_name("paste-clipboard")
+            self._reset_image_paste()
             self._ui.input_overlay.set_visible(True)
             self._ui.input_overlay_label.set_text(_("Processing image…"))
-            textview.stop_emission_by_name("paste-clipboard")
-            clipboard.read_texture_async(None, self._on_clipboard_read_texture_finished)
+
+            # GDK has no timeout for clipboard reads. On X11, large images are
+            # transferred in chunks (INCR), and if a chunk never arrives, the
+            # read never finishes and the "Processing image…" overlay stays.
+            # Give up after a timeout. The timeout resets the UI itself, as it
+            # is not guaranteed that the stalled read reacts to the cancellable.
+            cancellable = Gio.Cancellable()
+            self._paste_cancellable = cancellable
+            self._paste_timeout_id = GLib.timeout_add_seconds(
+                PASTE_IMAGE_TIMEOUT, self._on_paste_image_timeout
+            )
+            clipboard.read_texture_async(
+                cancellable, self._on_clipboard_read_texture_finished, cancellable
+            )
             return
 
         if "text/uri-list" in mime_types:
@@ -965,6 +988,30 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             return
 
         log.info("Could not process clipboard mime type %s", mime_types)
+
+    def _reset_image_paste(self) -> None:
+        # Stops a pending clipboard image read and hides the overlay. Also
+        # called when switching chats, so the image isn't sent to another
+        # chat once the read finishes.
+        if self._paste_timeout_id is not None:
+            GLib.source_remove(self._paste_timeout_id)
+            self._paste_timeout_id = None
+
+        if self._paste_cancellable is not None:
+            self._paste_cancellable.cancel()
+            self._paste_cancellable = None
+
+        self._ui.input_overlay.set_visible(False)
+
+    def _on_paste_image_timeout(self) -> bool:
+        self._paste_timeout_id = None
+        log.warning("Reading the image from the clipboard timed out")
+        self._reset_image_paste()
+        InformationAlertDialog(
+            _("Pasting Content Failed"),
+            _("The image could not be read from the clipboard."),
+        )
+        return GLib.SOURCE_REMOVE
 
     def _on_clipboard_read_value_finished(
         self,
@@ -1012,17 +1059,34 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self,
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
+        cancellable: Gio.Cancellable,
     ) -> None:
+        if cancellable is not self._paste_cancellable:
+            # The read was given up (timeout or chat switch) and the UI was
+            # already reset: finish it to free its resources, then ignore it
+            try:
+                clipboard.read_texture_finish(result)
+            except GLib.Error:
+                pass
+            log.info("Ignoring clipboard image read that was given up")
+            return
+
+        # The read finished in time: the timeout must not fire while the
+        # image is being saved
+        if self._paste_timeout_id is not None:
+            GLib.source_remove(self._paste_timeout_id)
+            self._paste_timeout_id = None
+
         try:
             texture = clipboard.read_texture_finish(result)
         except GLib.Error as e:
-            self._ui.input_overlay.set_visible(False)
+            self._reset_image_paste()
             InformationAlertDialog(_("Pasting Content Failed"), _("Error: %s") % e)
             return
 
         if texture is None:
             log.info("No image pasted")
-            self._ui.input_overlay.set_visible(False)
+            self._reset_image_paste()
             return
 
         temp_dir = configpaths.get_temp_dir()
@@ -1033,12 +1097,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             image_bytes = image.get_data()
             if not image_bytes:
                 log.error("Could not process pasted image")
-                self._ui.input_overlay.set_visible(False)
+                self._reset_image_paste()
                 return
 
         except GLib.Error as e:
             log.error("Error while trying to store pasted image: %s", e)
-            self._ui.input_overlay.set_visible(False)
+            self._reset_image_paste()
             return
 
         write_file_async(
@@ -1048,7 +1112,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_paste_image_saved(
         self, _successful: bool, error: GLib.Error | None, image_path: Path
     ) -> None:
-        self._ui.input_overlay.set_visible(False)
+        if self._paste_cancellable is None:
+            # The paste was given up (chat switch) while the image was saved
+            return
+
+        self._reset_image_paste()
 
         if error is not None:
             log.error("Error while trying to store pasted image: %s", error.message)
