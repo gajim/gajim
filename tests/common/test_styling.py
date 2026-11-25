@@ -411,7 +411,6 @@ URIS = [
     "xmpp:conference.gajim.org",
     "xmpp:asd@at",
     "xmpp:asd@asd.at",
-    "xmpp:asd-asd@asd.asdasd.at.",
     # 'xmpp:me@%5B::1%5D', FIXME
     "xmpp:myself@127.13.42.69",
     "xmpp:myself@127.13.42.69/localhost",
@@ -552,7 +551,6 @@ JIDS = [
     "asd@asd.asd-asd.at",
     "asd.asd@asd.asd-asd.at",
     "asd-asd@asd.asdasd.at",
-    "asd-asd@asd.asdasd.at.",
     "me@[::1]",
     "myself@127.13.42.69",
     "#room%irc.example@biboumi.xmpp.example",
@@ -618,6 +616,21 @@ URIS_WITH_TEXT = [
     ("(scheme:body)", ["scheme:body"]),
     ("/scheme:body", ["scheme:body"]),
     ("!scheme:body", ["scheme:body"]),
+    # Punctuation that ends the sentence is not part of the link
+    ("look at https://example.com. Thanks", ["https://example.com"]),
+    ("really? https://example.com?", ["https://example.com"]),
+    ("wow https://example.com!", ["https://example.com"]),
+    ("what?! https://example.com?!", ["https://example.com"]),
+    ("see https://example.com: it works", ["https://example.com"]),
+    ("first https://example.com; then more", ["https://example.com"]),
+    ("(see https://example.com).", ["https://example.com"]),
+    ("(see https://example.com.)", ["https://example.com"]),
+    ("https://example.com/file.tar.gz.", ["https://example.com/file.tar.gz"]),
+    ("https://example.com/?q=a.b;c", ["https://example.com/?q=a.b;c"]),
+    ("mail me: user@example.com.", ["user@example.com"]),
+    # RFC 7622, section 3.2: a trailing dot in a domainpart is stripped
+    ("xmpp:asd-asd@asd.asdasd.at.", ["xmpp:asd-asd@asd.asdasd.at"]),
+    ("asd-asd@asd.asdasd.at.", ["asd-asd@asd.asdasd.at"]),
 ]
 
 

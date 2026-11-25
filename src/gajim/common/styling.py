@@ -298,17 +298,29 @@ def _parse_line(line: str, offset: int, offset_bytes: int) -> list[Span]:
     return spans
 
 
+# Characters that end a sentence rather than a URI, see _parse_uris()
+URI_TRAILING_PUNCTUATION = ".,:;!?"
+
+
 def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseHyperlink]:
     uris: list[BaseHyperlink] = []
 
     def make(start: int, end: int, is_jid: bool) -> BaseHyperlink | None:
-        if line[end - 1] == ",":
-            # Trim one trailing comma
+        # Punctuation at the end of a match almost always belongs to the
+        # sentence, not to the URI, e.g. the dot in "see https://example.com."
+        # (RFC 7622, section 3.2: a trailing dot in a domainpart is stripped
+        # anyway, so "user@example.com." is the same address)
+        while end > start and line[end - 1] in URI_TRAILING_PUNCTUATION:
             end -= 1
-        if "(" in line[:start] and line[end - 1] == ")":
+        if end > start and "(" in line[:start] and line[end - 1] == ")":
             # Trim one trailing closing parenthesis if the match is preceded
-            # by an opening one somewhere on the line
+            # by an opening one somewhere on the line, then any punctuation
+            # before it, e.g. "(see https://example.com.)"
             end -= 1
+            while end > start and line[end - 1] in URI_TRAILING_PUNCTUATION:
+                end -= 1
+        if end <= start:
+            return None
         if re.fullmatch("[^:]+:", line[start:end]):
             # URIs that consist only of a scheme are thusly excluded
             return None
