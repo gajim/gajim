@@ -59,6 +59,8 @@ class CoreApplication(ged.EventHelper):
         ged.EventHelper.__init__(self)
         self._profiling_session = None
         self._cmd_line_options: dict[str, Any] = {}
+        self._shutdown_started = False
+        self._core_shutdown_done = False
 
     def _init_core(self, *, in_memory: bool) -> bool:
         # Create and initialize Application Paths & Databases
@@ -230,6 +232,7 @@ class CoreApplication(ged.EventHelper):
 
     def _start_shutdown(self) -> None:
         self._log.info("Start Shutdown")
+        self._shutdown_started = True
         accounts_to_disconnect: dict[str, Client] = {}
 
         for client in app.get_clients():
@@ -256,6 +259,10 @@ class CoreApplication(ged.EventHelper):
             client.change_status("offline", "")
 
     def _shutdown_core(self) -> None:
+        if self._core_shutdown_done:
+            return
+        # Set before the work starts, so a failed shutdown is not repeated
+        self._core_shutdown_done = True
         self._log.info("Shutdown core")
         # Commit any outstanding SQL transactions
         app.process_pool.shutdown(cancel_futures=True)

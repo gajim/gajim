@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 import os
 import shutil
+import signal
 import sys
 from collections.abc import Callable
 from datetime import datetime
@@ -287,13 +288,35 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _shutdown_complete(self) -> None:
         CoreApplication._shutdown_complete(self)
-        if self._inhibit_cookie is not None:
-            self.uninhibit(self._inhibit_cookie)
-            self._inhibit_cookie = None
+        self._release_inhibitor()
         self.quit()
+
+    def _release_inhibitor(self) -> None:
+        if self._inhibit_cookie is None:
+            return
+
+        app.log("app").info("Release logout inhibitor")
+        self.uninhibit(self._inhibit_cookie)
+        self._inhibit_cookie = None
+
+        # uninhibit() only queues the D-Bus call (with the XDG portal, Close on
+        # the inhibit request). Flush it, so it is sent even if the main loop
+        # does not run anymore before the process exits.
+        connection = self.get_dbus_connection()
+        if connection is None:
+            return
+
+        try:
+            connection.flush_sync(None)
+        except GLib.Error as error:
+            app.log("app").warning("Unable to flush D-Bus connection: %s", error)
 
     def _on_query_end(self, _application: GajimApplication) -> None:
         app.log("app").info("Session end signal received")
+        if self._inhibit_cookie is not None:
+            # query-end can be emitted more than once per session
+            return
+
         self._inhibit_cookie = self.inhibit(
             app.window,
             Gtk.ApplicationInhibitFlags.LOGOUT,
@@ -304,30 +327,35 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def _on_shutdown(self, _application: GajimApplication) -> None:
         app.log("app").info("Shutdown Application")
-        if self._inhibit_cookie is None:
-            # The logout inhibitor is only set on query-end, and
-            # _shutdown_complete() releases it after the core shutdown.
-            # If it's not set, the core shutdown has already completed.
-            return
+
+        # The main loop has ended. The SIGTERM/SIGINT handlers start an async
+        # shutdown, which can't complete anymore, and they keep the process
+        # alive. Restore the default handlers, so the session can terminate
+        # the process if anything below or at interpreter exit blocks.
+        signal.signal(signal.SIGTERM, signal.SIG_DFL)
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+        ended_early = self._inhibit_cookie is not None or (
+            self._shutdown_started and not self._core_shutdown_done
+        )
 
         # With the XDG portal, GTK calls g_application_quit() as soon as the
         # session state changes to ENDING, without waiting for the shutdown
         # started on query-end (gtkapplication-dbus.c). The accounts never
         # finish disconnecting, so _shutdown_core() and _shutdown_complete()
-        # don't run. GTK doesn't close the portal inhibit request when the
-        # application ends either, so the session would wait until its
-        # timeout. Save the state and release the inhibitor here.
-        app.log("app").warning("Main loop ended before the shutdown completed")
-        self._shutdown_core()
-        self.uninhibit(self._inhibit_cookie)
-        self._inhibit_cookie = None
-
-        # The main loop has ended, so no async work runs anymore in this
-        # handler. uninhibit() only queues the portal's Close call on the
-        # D-Bus connection; flush it so the call is sent before the process
-        # exits.
-        if (connection := self.get_dbus_connection()) is not None:
-            connection.flush_sync(None)
+        # don't run. Run the core shutdown while still holding the logout
+        # inhibitor, so the session waits for the outstanding transactions to
+        # be committed instead of terminating the process.
+        try:
+            if ended_early:
+                app.log("app").warning("Main loop ended before the shutdown completed")
+                self._shutdown_core()
+        except Exception:
+            app.log("app").exception("Core shutdown failed")
+        finally:
+            # Release the inhibitor even if the core shutdown failed, so the
+            # session does not wait for its timeout
+            self._release_inhibitor()
 
     def _command_line(
         self, _application: GajimApplication, command_line: Gio.ApplicationCommandLine
