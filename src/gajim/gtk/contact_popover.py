@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Any
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -27,11 +28,13 @@ from gajim.common.util.text import format_last_seen
 from gajim.common.util.user_strings import get_time_zone_string
 
 from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.menus import get_contact_popover_link_menu
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import open_uri
+from gajim.gtk.widgets import GajimPopover
 
 
 @Gtk.Template(string=get_ui_string("contact_popover.ui"))
@@ -157,6 +160,7 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow, SignalManager):
     __gtype_name__ = "ContactPopoverInfoRow"
 
     _image: Gtk.Image = Gtk.Template.Child()
+    _box: Gtk.Box = Gtk.Template.Child()
     _label: Gtk.Label = Gtk.Template.Child()
 
     def __init__(self) -> None:
@@ -169,6 +173,20 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow, SignalManager):
         self._uri: str | None = None
 
         self._connect(self._label, "activate-link", self._on_activate_link)
+
+        # Listen to all buttons (0): on macOS, Ctrl+click is the primary
+        # button with Ctrl, which triggers_context_menu() also accepts
+        gesture = Gtk.GestureClick(
+            button=0, propagation_phase=Gtk.PropagationPhase.CAPTURE
+        )
+        self._connect(gesture, "pressed", self._on_pressed)
+        self._box.add_controller(gesture)
+
+        open_link = Gio.SimpleAction.new("open-link", None)
+        self._connect(open_link, "activate", self._on_open_link)
+        actions = Gio.SimpleActionGroup()
+        actions.add_action(open_link)
+        self.insert_action_group("row", actions)
 
     @GObject.Property(type=Gdk.Paintable)
     def icon(self) -> Gdk.Paintable | None:  # type: ignore
@@ -236,6 +254,36 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow, SignalManager):
         # label, so injected markup cannot change the link target
         open_uri(self._uri or label.get_text())
         return Gdk.EVENT_STOP
+
+    def _on_pressed(
+        self, gesture: Gtk.GestureClick, _n_press: int, x: float, y: float
+    ) -> None:
+        # Replace the label's default context menu, which also lists
+        # Cut, Paste, Delete and Select All, with the link actions and an
+        # item that copies the value without the URI scheme
+        event = gesture.get_current_event()
+        if self._uri is None or event is None or not event.triggers_context_menu():
+            gesture.set_state(Gtk.EventSequenceState.DENIED)
+            return
+
+        gesture.set_state(Gtk.EventSequenceState.CLAIMED)
+
+        menu = get_contact_popover_link_menu(self._text, self._uri)
+
+        popover = GajimPopover(menu)
+        popover.connect("closed", self._on_menu_closed)
+        self._box.append(popover)
+        popover.set_pointing_to_coord(x, y)
+        popover.popup()
+
+    def _on_open_link(
+        self, _action: Gio.SimpleAction, _param: GLib.Variant | None
+    ) -> None:
+        # Same as a left-click, so the popover closes as well
+        self._on_activate_link(self._label)
+
+    def _on_menu_closed(self, popover: Gtk.PopoverMenu) -> None:
+        GLib.idle_add(self._box.remove, popover)
 
     def do_unroot(self) -> None:
         self._disconnect_all()

@@ -421,6 +421,27 @@ def get_uri_context_menu(account: str, uri: UriT) -> Gio.Menu | None:
     return GajimMenu.from_list(menuitems)
 
 
+def get_contact_popover_link_menu(text: str, uri: str) -> GajimMenu:
+    labels = {
+        "xmpp": _("Copy XMPP Address"),
+        "mailto": _("Copy Email Address"),
+        "tel": _("Copy Phone Number"),
+    }
+    scheme = uri.split(":", 1)[0]
+
+    open_section = GajimMenu()
+    open_section.add_item(_("Open Link"), "row.open-link")
+
+    copy_section = GajimMenu()
+    copy_section.add_item(labels.get(scheme, _("Copy")), "app.copy-text", text)
+    copy_section.add_item(_("Copy Link Address"), "app.copy-text", uri)
+
+    menu = GajimMenu()
+    menu.append_section(None, open_section)
+    menu.append_section(None, copy_section)
+    return menu
+
+
 def get_account_notifications_menu(account: str) -> GajimMenu:
     menuitems: MenuItemListT = [
         (

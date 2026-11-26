@@ -8,7 +8,7 @@
       <class name="py-3" />
     </style>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="_box">
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage" id="_image"/>
