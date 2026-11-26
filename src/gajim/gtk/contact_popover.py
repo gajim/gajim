@@ -153,7 +153,7 @@ class ContactPopover(Gtk.Popover, SignalManager):
 
 
 @Gtk.Template(string=get_ui_string("contact_popover_info_row.ui"))
-class ContactPopoverInfoRow(Gtk.ListBoxRow):
+class ContactPopoverInfoRow(Gtk.ListBoxRow, SignalManager):
     __gtype_name__ = "ContactPopoverInfoRow"
 
     _image: Gtk.Image = Gtk.Template.Child()
@@ -161,11 +161,14 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
 
     def __init__(self) -> None:
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
 
         self._icon: Gdk.Paintable | None = None
         self._icon_name: str | None = None
         self._text: str = ""
         self._uri: str | None = None
+
+        self._connect(self._label, "activate-link", self._on_activate_link)
 
     @GObject.Property(type=Gdk.Paintable)
     def icon(self) -> Gdk.Paintable | None:  # type: ignore
@@ -223,7 +226,6 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         if len(text) > 30:
             self._label.set_tooltip_text(text)
 
-    @Gtk.Template.Callback()
     def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
         # Don't leave the popover open behind what the link opens
         popover = self.get_ancestor(Gtk.Popover)
@@ -236,5 +238,6 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
         return Gdk.EVENT_STOP
 
     def do_unroot(self) -> None:
+        self._disconnect_all()
         Gtk.ListBoxRow.do_unroot(self)
         app.check_finalize(self)
