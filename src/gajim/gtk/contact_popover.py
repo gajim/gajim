@@ -225,6 +225,11 @@ class ContactPopoverInfoRow(Gtk.ListBoxRow):
 
     @Gtk.Template.Callback()
     def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
+        # Don't leave the popover open behind what the link opens
+        popover = self.get_ancestor(Gtk.Popover)
+        if popover is not None:
+            popover.popdown()
+
         # Open the URI built in set_label(), not the one reported by the
         # label, so injected markup cannot change the link target
         open_uri(self._uri or label.get_text())
