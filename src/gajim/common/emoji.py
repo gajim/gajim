@@ -17,6 +17,7 @@ from gajim.common.i18n import get_short_lang_code
 log = logging.getLogger("gajim.c.emoji")
 
 EMOJI_DATA_ENTRY_T = tuple[list[int], str, str, list[str], list[str], int]
+_EmojiTrie = dict[str | None, "_EmojiTrie"]
 FALLBACK_LOCALE = "en"
 
 SKIN_TONE_MODIFIERS = (0x1F3FB, 0x1F3FC, 0x1F3FD, 0x1F3FE, 0x1F3FF)
@@ -112,7 +113,7 @@ def _load_gtk_emoji_resource(lang: str) -> list[EMOJI_DATA_ENTRY_T] | None:
 
 def _load_gtk_emoji_data(
     languages: list[str],
-) -> tuple[dict[str, str | EmojiSequenceData], set[str]]:
+) -> dict[str, str | EmojiSequenceData]:
     log.debug("Trying locales %s", languages)
     for lang in languages:
         emoji_data = _load_gtk_emoji_resource(lang)
@@ -121,7 +122,6 @@ def _load_gtk_emoji_data(
     else:
         raise RuntimeError(f"No resource could be loaded; tried {languages}")
 
-    codepoints: set[str] = set()
     emojis: dict[str, str | EmojiSequenceData] = {}
 
     for (
@@ -151,7 +151,6 @@ def _load_gtk_emoji_data(
                 var_sequence = generate_skin_tone_sequence(c_sequence, modifier)
                 var_sequences.append(var_sequence)
                 emojis[var_sequence] = u_sequence
-                codepoints.update(var_sequence)
 
         emojis[u_sequence] = EmojiSequenceData(
             short_name=short_name.replace(" ", "_"),
@@ -160,12 +159,11 @@ def _load_gtk_emoji_data(
             trans_keywords=trans_keywords,
             skin_tone_variations=var_sequences,
         )
-        codepoints.update(u_sequence)
 
-    return emojis, codepoints
+    return emojis
 
 
-def _load_emoji_data() -> tuple[dict[str, str | EmojiSequenceData], set[str]]:
+def _load_emoji_data() -> dict[str, str | EmojiSequenceData]:
     app_locale = get_default_lang()
     log.info("Loading emoji data, application locale is %s", app_locale)
     short_locale = get_short_lang_code(app_locale)
@@ -174,17 +172,20 @@ def _load_emoji_data() -> tuple[dict[str, str | EmojiSequenceData], set[str]]:
         return _load_gtk_emoji_data(languages)
     except Exception as err:
         log.critical("Unable to load emoji data: %s", err)
-        return {}, set()
+        return {}
 
 
 class _EmojiData:
     def __init__(self) -> None:
         self._emoji_data: dict[str, str | EmojiSequenceData] = {}
+        self._emoji_trie: _EmojiTrie = {}
 
     def init(self) -> None:
-        self._emoji_data, self._emoji_codepoints = _load_emoji_data()
+        self._emoji_data = _load_emoji_data()
         if not self._emoji_data:
             raise RuntimeError("Unable to load emoji data")
+
+        self._emoji_trie = self._build_emoji_trie(self._emoji_data)
 
         log.info("Loaded %s emojis", len(self._emoji_data))
 
@@ -199,16 +200,59 @@ class _EmojiData:
     def contains_only_emojis(self, string: str, max_chars: int = -1) -> bool:
         if not string:
             return False
-        if max_chars > 0 and len(string) > max_chars:
-            return False
-        return set(string).issubset(self._emoji_codepoints)
+
+        pos = 0
+        count = 0
+        length = len(string)
+
+        while pos < length:
+            if string[pos].isspace():
+                pos += 1
+                continue
+
+            # Starting at the trie root, we traverse the tree
+            # following a valid emoji sequence
+            node = self._emoji_trie
+            last_match = -1
+
+            # The next emoji sequence could be a prefix of string[pos:length]
+            for i in range(pos, length):
+                node = node.get(string[i])
+
+                # The character is not part of an emoji sequence, but
+                # any char, including a valid whitespace or linebreak
+                if node is None:
+                    break
+
+                # One possible emoji sequence has been found
+                if None in node:
+                    last_match = i + 1
+
+            if last_match == -1:
+                return False
+
+            pos = last_match
+            count += 1
+
+            if 0 < max_chars < count:
+                return False
+
+        return count > 0
+
+    @staticmethod
+    def _build_emoji_trie(sequences: dict[str, str | EmojiSequenceData]) -> _EmojiTrie:
+        root: _EmojiTrie = {}
+
+        for sequence in sequences:
+            node = root
+            for char in sequence:
+                node = node.setdefault(char, {})
+            node[None] = {}
+
+        return root
 
     def __iter__(self) -> Iterator[tuple[str, str | EmojiSequenceData]]:
         yield from self._emoji_data.items()
-
-    def iter_sequences(self) -> Iterator[str]:
-        for seq, _ in self:
-            yield " ".join("%08x" % ord(c) for c in seq)
 
 
 EmojiData = _EmojiData()

@@ -41,11 +41,16 @@ class EmojiTest(unittest.TestCase):
         self.assertTrue(EmojiData.is_emoji("\U0001f577"))
 
         self.assertFalse(EmojiData.contains_only_emojis("A"))
+        self.assertFalse(EmojiData.contains_only_emojis("0"))
         self.assertFalse(EmojiData.contains_only_emojis(""))
-        self.assertFalse(EmojiData.contains_only_emojis("😃😃 😃"))
+        self.assertFalse(EmojiData.contains_only_emojis("😃\r\n😃", max_chars=1))
         self.assertFalse(EmojiData.contains_only_emojis("😃😃", max_chars=1))
 
         self.assertTrue(EmojiData.contains_only_emojis("😃😃"))
+        self.assertTrue(EmojiData.contains_only_emojis("😃😃 😃"))
+        self.assertTrue(EmojiData.contains_only_emojis("😃", max_chars=1))
+        self.assertTrue(EmojiData.contains_only_emojis("😃 ", max_chars=1))
+        self.assertTrue(EmojiData.contains_only_emojis(" \r\n😃", max_chars=1))
         self.assertTrue(
             EmojiData.contains_only_emojis(
                 "\U0001f3f4\U000e0067\U000e0062\U000e0065\U000e006e\U000e0067\U000e007f"
